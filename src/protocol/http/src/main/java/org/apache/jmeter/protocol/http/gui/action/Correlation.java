@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +61,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -92,6 +95,8 @@ public class Correlation {
     private static final String APPLICATION_JSON = "application/json"; //$NON-NLS-1$
     private static final String TEXT_HTML = "text/html"; //$NON-NLS-1$
     private static final String TEXT_XML = "text/xml"; //$NON-NLS-1$
+
+    private static final String BEARER_AUTH = "Bearer"; // $NON-NLS-1$
 
     private Correlation() {}
 
@@ -208,16 +213,13 @@ public class Correlation {
         Map<String, String> jmxParameterMap = new HashMap<>();
         for (HTTPSamplerBase testElement : httpSamplerBaseList) {
             // extract the parameters from body
-            extractParametersFromBody(testElement)
-                    .forEach((key, value) -> addCorrelatableParameterToMap(jmxParameterMap, key, value));
+            extractParametersFromBody(testElement, jmxParameterMap);
             // extract the query parameters from API path
-            extractParametersFromApiPath(testElement)
-                    .forEach((key, value) -> addCorrelatableParameterToMap(jmxParameterMap, key, value));
+            extractParametersFromApiPath(testElement, jmxParameterMap);
         }
         for (HeaderManager header : headerManagerList) {
             // extract the parameters from Header
-            extractParametersFromHeader(header)
-                    .forEach((key, value) -> addCorrelatableParameterToMap(jmxParameterMap, key, value));
+            extractParametersFromHeader(header, jmxParameterMap);
         }
         return jmxParameterMap;
     }
@@ -242,24 +244,28 @@ public class Correlation {
         return name + PARANTHESES_OPEN + keyCount.toString() + PARANTHESES_CLOSED;
     }
 
-    private static Map<String, String> extractParametersFromHeader(HeaderManager header) {
-        Map<String, String> jmxParameterMap = new HashMap<>();
+    private static void extractParametersFromHeader(HeaderManager header, Map<String, String> jmxParameterMap) {
         PropertyIterator itr = header.getHeaders().iterator();
         while (itr.hasNext()) {
             Header headerObj = (Header) itr.next().getObjectValue();
             // Get the Authorization header
-            if (headerObj.getName().equals("Authorization") && headerObj.getValue().split(" ").length == 2) {
-                jmxParameterMap.put(headerObj.getName(), headerObj.getValue().split(" ")[1].trim());
-                break;
+            if (headerObj.getName().equals(HTTPConstants.HEADER_AUTHORIZATION)
+                    && headerObj.getValue().split(" ").length >= 2) {
+                String authHeaderType = headerObj.getValue().trim().split(" ")[0];
+                // Correlate the Bearer Type
+                if (authHeaderType.equals(BEARER_AUTH)) {
+                    addCorrelatableParameterToMap(jmxParameterMap, headerObj.getName(),
+                            headerObj.getValue().trim().split(" ")[1]);
+                }
+                // check only authorization header and return
+                return;
             }
         }
-        return jmxParameterMap;
     }
 
-    private static Map<String, String> extractParametersFromBody(HTTPSamplerBase testElement) {
+    private static void extractParametersFromBody(HTTPSamplerBase testElement, Map<String, String> jmxParameterMap) {
         Arguments arguments = testElement.getArguments();
         PropertyIterator iter = arguments.iterator();
-        Map<String, String> jmxParameterMap = new HashMap<>();
         while (iter.hasNext()) {
             HTTPArgument item = null;
             Object objectValue = iter.next().getObjectValue();
@@ -277,22 +283,41 @@ public class Correlation {
             }
             addCorrelatableParameterToMap(jmxParameterMap, name, item.getValue());
         }
-        return jmxParameterMap;
     }
 
-    private static Map<String, String> extractParametersFromApiPath(HTTPSamplerBase testElement) {
+    private static void extractParametersFromApiPath(HTTPSamplerBase testElement, Map<String, String> jmxParameterMap) {
         String path = testElement.getPath();
+        // Use sampler's content encoding to decode the path
+        // DefaultSamplerCreator#computePath
+        String contentEncoding = testElement.getContentEncoding();
+        Charset charset = getCharset(contentEncoding);
         List<NameValuePair> params = new ArrayList<>();
-        Map<String, String> jmxParameterMap = new HashMap<>();
         try {
-            params = URLEncodedUtils.parse(new URI(path), StandardCharsets.UTF_8);
+            params = URLEncodedUtils.parse(new URI(path), charset);
         } catch (URISyntaxException e) {
             log.error(e.getMessage());
-            // return empty map
-            return jmxParameterMap;
+            return;
         }
         params.forEach(param -> addCorrelatableParameterToMap(jmxParameterMap, param.getName(), param.getValue()));
-        return jmxParameterMap;
+    }
+
+    /**
+     * Get the charset for the specified string. Default to UTF_8
+     *
+     * @param contentEncoding String name
+     * @return Charset
+     */
+    private static Charset getCharset(String contentEncoding) {
+        // try to create Charset for contentEncoding
+        // If failed, return UTF_8
+        if (StringUtils.isBlank(contentEncoding)) {
+            return StandardCharsets.UTF_8;
+        }
+        try {
+            return Charset.forName(contentEncoding);
+        } catch (IllegalArgumentException e) {
+            return StandardCharsets.UTF_8;
+        }
     }
 
     /**
@@ -461,18 +486,34 @@ public class Correlation {
         if (StringUtils.isBlank(path)) {
             return;
         }
-        Optional<String> keyToReplace = parameterMap.entrySet().stream().filter(en -> path.contains(en.getValue()))
-                .map(Map.Entry::getKey).findFirst();
+        String encoding = getCharset(sample.getContentEncoding()).name();
+        // path contains URL encoded parameter values so encode the value and find
+        Optional<String> keyToReplace = parameterMap.entrySet().stream().filter(en -> {
+            try {
+                return path.contains(en.getValue()) || path.contains(URLEncoder.encode(en.getValue(), encoding));
+            } catch (UnsupportedEncodingException e) {
+                return path.contains(en.getValue());
+            }
+        }).map(Map.Entry::getKey).findFirst();
         if (keyToReplace.isPresent()) {
-            sample.setPath(path.replace(parameterMap.get(keyToReplace.get()), "${" + keyToReplace.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$
+            String valueToReplace = parameterMap.get(keyToReplace.get());
+            String encodedValue = null;
+            try {
+                encodedValue = URLEncoder.encode(valueToReplace, encoding);
+            } catch (UnsupportedEncodingException e) {
+                encodedValue = valueToReplace;
+            }
+            sample.setPath(path.replace(path.contains(valueToReplace) ? valueToReplace : encodedValue,
+                    "${" + keyToReplace.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
     private static void replaceParameterValuesInBody(HTTPSamplerProxy sample, Map<String, String> parameterMap)
             throws UnsupportedEncodingException {
         Set<Entry<String, String>> entrySet = sample.getArguments().getArgumentsAsMap().entrySet();
+        String encoding = getCharset(sample.getContentEncoding()).name();
         for (Entry<String, String> entry : entrySet) {
-            String encodedValue = java.net.URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.name());
+            String encodedValue = URLEncoder.encode(entry.getValue(), encoding);
             // find the http argument whose value equals to the correlated parameter
             Optional<String> firstKey = parameterMap.entrySet().stream()
                     .filter(en -> Objects.equals(entry.getValue(), en.getValue())

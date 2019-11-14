@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,14 +64,13 @@ public class TestCorrelationExtractor {
         parameterMap.put("_csrf", "7d1de481-34af-4342-a9b4-b8288c451f7c");
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testCreateExtractorHtmlExtractor() {
         CorrelationExtractor.getListOfMap().clear();
         // Case 1: Parameter in value attribute
         sampleResult.setResponseData("<html><body><form>"
                 + "<input name=\"_csrf\" type=\"hidden\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
-                + "</form></body></html>");
+                + "</form></body></html>", StandardCharsets.UTF_8.name());
         sampleResult.setContentType(HTML_CONTENT_TYPE);
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
@@ -89,7 +89,7 @@ public class TestCorrelationExtractor {
         // Case 2: Parameter in content attribute
         sampleResult.setResponseData("<html><head>"
                 + "<meta name=\"_csrf\" content=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
-                + "</head></html>");
+                + "</head></html>", StandardCharsets.UTF_8.name());
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
             private static final long serialVersionUID = 1L;
@@ -107,7 +107,7 @@ public class TestCorrelationExtractor {
         // Case 3: css selector is id selector with id containing (.) or (:)
         sampleResult.setResponseData("<html><body><form>"
                 + "<input name=\"_csrf\" id=\"csrf.token\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
-                + "</form></body></html>");
+                + "</form></body></html>", StandardCharsets.UTF_8.name());
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
             private static final long serialVersionUID = 1L;
@@ -125,7 +125,7 @@ public class TestCorrelationExtractor {
         // Case 4: css selector is id selector
         sampleResult.setResponseData("<html><body><form>"
                 + "<input name=\"_csrf\" id=\"csrfToken\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />"
-                + "</form></body></html>");
+                + "</form></body></html>", StandardCharsets.UTF_8.name());
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
             private static final long serialVersionUID = 1L;
@@ -142,24 +142,23 @@ public class TestCorrelationExtractor {
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
         // Case 5: no parameter in response data
         // This case shouldn't occur but it is still tested
-        sampleResult.setResponseData("<html><head><title>Response</title></head></html>");
+        sampleResult.setResponseData("<html><head><title>Response</title></head></html>", StandardCharsets.UTF_8.name());
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, TEXT_HTML);
         // No change in result
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
         // Case 6: invalid/null response data
-        sampleResult.setResponseData("");
+        sampleResult.setResponseData("", StandardCharsets.UTF_8.name());
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, TEXT_HTML);
         // No change in result
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testCreateExtractorXPath2Extractor() {
         CorrelationExtractor.getListOfMap().clear();
         // Case 1: Parameter in XML text
         sampleResult.setResponseData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                + "<token><_csrf>7d1de481-34af-4342-a9b4-b8288c451f7c</_csrf></token>");
+                + "<token><_csrf>7d1de481-34af-4342-a9b4-b8288c451f7c</_csrf></token>", StandardCharsets.UTF_8.name());
         sampleResult.setContentType(XML_CONTENT_TYPE);
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
@@ -176,7 +175,7 @@ public class TestCorrelationExtractor {
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
         // Case 2: Parameter in XML tag's attribute
         sampleResult.setResponseData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                + "<token value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\">_csrf</token>");
+                + "<token value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\">_csrf</token>", StandardCharsets.UTF_8.name());
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
             private static final long serialVersionUID = 1L;
@@ -193,23 +192,22 @@ public class TestCorrelationExtractor {
         // Case 3: Parameter not present in response
         // This case shouldn't occur but it is still tested
         sampleResult.setResponseData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                + "<token>Response</token>");
+                + "<token>Response</token>", StandardCharsets.UTF_8.name());
         // No change in result
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_XML);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
         // Case 4: Invalid response
-        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342-a9b4-b8288c451f7c\" }");
+        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342-a9b4-b8288c451f7c\" }", StandardCharsets.UTF_8.name());
         // No change in result and throws TransformerException
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_XML);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testCreateExtractorJsonExtractor() {
         CorrelationExtractor.getListOfMap().clear();
         // Case 1: Parameter in JSON text
-        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342-a9b4-b8288c451f7c\" }");
+        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342-a9b4-b8288c451f7c\" }", StandardCharsets.UTF_8.name());
         sampleResult.setContentType(JSON_CONTENT_TYPE);
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
@@ -226,26 +224,25 @@ public class TestCorrelationExtractor {
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
         // Case 2: Parameter not present in json
         // This case shouldn't occur but it is still tested
-        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342\" }");
+        sampleResult.setResponseData("{ \"_csrf\": \"7d1de481-34af-4342\" }", StandardCharsets.UTF_8.name());
         // No change in result, throws PathNotFoundException
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_JSON);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
         // Case 3: Invalid response
         sampleResult.setResponseData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                + "<token value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\">_csrf</token>");
+                + "<token value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\">_csrf</token>", StandardCharsets.UTF_8.name());
         // No change in result
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, APPLICATION_JSON);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testCreateExtractorRegexExtractorForBody() {
         CorrelationExtractor.getListOfMap().clear();
         // Case 1: Parameter in response
         sampleResult.setResponseData(
                 "<input name=\"_csrf\" type=\"hidden\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />\r\n"
-                + "<test data>");
+                + "<test data>", StandardCharsets.UTF_8.name());
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
             private static final long serialVersionUID = 1L;
@@ -261,7 +258,7 @@ public class TestCorrelationExtractor {
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
         // Case 2: Parameter in response with two occurrences of the parameter name
         sampleResult.setResponseData(
-                "<input name=\"_csrf\" id=\"_csrf\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />");
+                "<input name=\"_csrf\" id=\"_csrf\" value=\"7d1de481-34af-4342-a9b4-b8288c451f7c\" />", StandardCharsets.UTF_8.name());
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
             private static final long serialVersionUID = 1L;
@@ -276,7 +273,7 @@ public class TestCorrelationExtractor {
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, OTHER);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
         // Case 3: Parameter not in response
-        sampleResult.setResponseData("response data");
+        sampleResult.setResponseData("response data", StandardCharsets.UTF_8.name());
         // No change in result
         CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, OTHER);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
@@ -289,14 +286,14 @@ public class TestCorrelationExtractor {
         sampleResult.setResponseHeaders("HTTP/1.1 200 OK\r\n" +
                 "Authorization: Bearer hfkjdsafbdzjhkdkjsv\r\n" +
                 "Content-Language: en-US");
-        parameterMap.put("access_token", "Bearer hfkjdsafbdzjhkdkjsv");
+        parameterMap.put("access_token", "hfkjdsafbdzjhkdkjsv");
         argument = "access_token";
         // Result Data
         listOfMap.add(new HashMap<String, String>() {
             private static final long serialVersionUID = 1L;
             {
                 put("RegexExtractor.refname", "access_token");
-                put("RegexExtractor.expr", "Authorization: (.*?)$");
+                put("RegexExtractor.expr", "Authorization: Bearer (.*?)$");
                 put("RegexExtractor.match_number", "1");
                 put("RegexExtractor.useHeaders", "true");
                 put("testname", "2 /login");
@@ -329,7 +326,7 @@ public class TestCorrelationExtractor {
         // This case shouldn't occur but it is still tested
         sampleResult.setResponseHeaders("response data");
         // No change in result
-        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, OTHER);
+        CorrelationExtractor.createExtractor(sampleResult, argument, parameterMap, HEADER);
         Assertions.assertEquals(listOfMap, CorrelationExtractor.getListOfMap());
     }
 

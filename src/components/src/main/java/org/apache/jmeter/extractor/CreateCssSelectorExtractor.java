@@ -19,7 +19,6 @@
 package org.apache.jmeter.extractor;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,13 +55,11 @@ public class CreateCssSelectorExtractor {
      * @throws UnsupportedEncodingException when URL decoding failed
      */
     public static Map<String, String> createCssSelectorExtractor(String html, String attributeValue,
-            String correlationVariableName, String requestUrl, String contentType) throws UnsupportedEncodingException {
+            String correlationVariableName, String requestUrl, String contentType) {
         // parse the HTML string
         Document doc = getDocument(html);
         Map<String, String> cssSelectorExtractor = new HashMap<>();
         String attribute = ""; //$NON-NLS-1$
-        // decode the value string if encoded
-        attributeValue = java.net.URLDecoder.decode(attributeValue, StandardCharsets.UTF_8.name());
         // get all elements with specified attibuteValue with keys: value and content
         // & return empty Map if the parameter isn't found in html
         Elements values;

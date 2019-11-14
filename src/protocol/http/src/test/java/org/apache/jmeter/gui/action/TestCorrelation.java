@@ -151,7 +151,7 @@ public class TestCorrelation {
     public void testCreateJmxParameterMapRequestHeader() {
         // Data in request header
         HeaderManager headerManager = new HeaderManager();
-        headerManager.add(new Header("Authorization", "Basic bhdvjhsavsj"));
+        headerManager.add(new Header("Authorization", "Bearer bhdvjhsavsj"));
         headerManager.add(new Header("Content-Type", "application/json"));
         headers.add(headerManager);
         // Results data

@@ -19,13 +19,14 @@
 package org.apache.jmeter.protocol.http.gui.action;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.extractor.BoundaryExtractor;
 import org.apache.jmeter.extractor.CreateBoundaryExtractor;
 import org.apache.jmeter.extractor.CreateCssSelectorExtractor;
@@ -94,30 +95,39 @@ public class CorrelationExtractor {
         // Find parameter in current Response (Do not process null response
         // data(Body/Header))
         for (String parameter : parameters) {
-            // TODO: support more content encodings
-            String decodedParameter = "";
+            // parameter is in decoded form in parameters List and parameters map
+            // parameter value can be found in response body in
+            // encoded or decoded form both
+            String decodedParameterValue = parameterMap.get(parameter);
+            String encodedParameterValue = "";
             try {
-                decodedParameter = URLDecoder.decode(parameterMap.get(parameter),
+                // try to encode the parameter with response's encoding
+                encodedParameterValue = URLEncoder.encode(parameterMap.get(parameter),
                         sampleResult.getDataEncodingWithDefault());
             } catch (UnsupportedEncodingException e) {
                 log.error("Cannot decode parameter {}", parameter);
-                continue;
             }
+            String responseHeader = sampleResult.getResponseHeaders();
+            String responseData = sampleResult.getResponseDataAsString();
             // Check if the parameter is found in response header
             // If found in response header then create regex extractor
-            if (sampleResult.getResponseHeaders() != null
-                    && sampleResult.getResponseHeaders().contains(decodedParameter)) {
+            if (StringUtils.isNotBlank(responseHeader) && responseHeader.contains(decodedParameterValue)) {
                 createExtractor(sampleResult, parameter, parameterMap, HEADER);
             }
-            // Check if the parameter is found in response body and create extractors
-            // accordingly
-            else if (sampleResult.getResponseDataAsString() != null
-                    && sampleResult.getResponseDataAsString().contains(decodedParameter)) {
+            // Check if the parameter (encoded/decoded) is found in response body
+            // and create extractors accordingly
+            else if (StringUtils.isNotBlank(responseData)
+                    && (responseData.contains(decodedParameterValue)
+                            || (responseData.contains(encodedParameterValue)
+                                    && StringUtils.isNotBlank(encodedParameterValue)))) {
                 int numberOfExtractors = getListOfMap().size();
                 // create extractor tag list
                 if (contentType.contains(TEXT_HTML)) {
                     log.debug("Try to create HTML extractor for parameters in response of {}",
                             sampleResult.getSampleLabel());
+                    // Note: It checks for only URL decoded parameter value
+                    // If html contains URL encoded parameter value then it will be
+                    // correlated by regex or boundary extractor
                     createExtractor(sampleResult, parameter, parameterMap, TEXT_HTML);
                 } else if (contentType.contains(APPLICATION_XML) || contentType.contains(TEXT_XML)) {
                     log.debug("Try to create XPath2 extractor for parameters in response of {}",
@@ -128,6 +138,8 @@ public class CorrelationExtractor {
                             sampleResult.getSampleLabel());
                     createExtractor(sampleResult, parameter, parameterMap, APPLICATION_JSON);
                 } else {
+                    // create Regex extractor which matches by name and value both
+                    // More accurate than Boundary extractor which matches by value only
                     log.debug("Try to create Regex extractor for parameters in response of {}",
                             sampleResult.getSampleLabel());
                     createExtractor(sampleResult, parameter, parameterMap, OTHER);
@@ -155,12 +167,8 @@ public class CorrelationExtractor {
             String contentType) {
         switch (contentType) {
         case TEXT_HTML:
-            try {
-                // Create CSS Selector Extractor, also called HTML Extractor
-                createHtmlExtractor(sampleResult, parameter, parameterMap);
-            } catch (UnsupportedEncodingException e) {
-                log.error("Unable to create HTML Extractor for parameter {}, {}", parameter, e.getMessage());
-            }
+            // Create CSS Selector Extractor, also called HTML Extractor
+            createHtmlExtractor(sampleResult, parameter, parameterMap);
             break;
         case APPLICATION_XML:
             try {
@@ -196,7 +204,7 @@ public class CorrelationExtractor {
     }
 
     private static void createHtmlExtractor(SampleResult sampleResult, String parameter,
-            Map<String, String> parameterMap) throws UnsupportedEncodingException {
+            Map<String, String> parameterMap) {
         Map<String, String> htmlExtractor = CreateCssSelectorExtractor.createCssSelectorExtractor(
                 sampleResult.getResponseDataAsString(), parameterMap.get(parameter), parameter,
                 sampleResult.getSampleLabel(), sampleResult.getContentType());
@@ -230,20 +238,20 @@ public class CorrelationExtractor {
 
     private static void createRegexExtractor(SampleResult sampleResult, String parameter,
             Map<String, String> parameterMap) {
-        List<Map<String, String>> regexExtractors = CreateRegexExtractor.createRegularExtractor(sampleResult, parameter,
+        Map<String, String> regexExtractor = CreateRegexExtractor.createRegularExtractor(sampleResult, parameter,
                 parameterMap);
-        if (!regexExtractors.isEmpty()) {
-            getListOfMap().addAll(regexExtractors);
+        if (!regexExtractor.isEmpty()) {
+            getListOfMap().add(regexExtractor);
             log.debug("Regex Extractor created for {} in {}", parameter, sampleResult.getSampleLabel());
         }
     }
 
     private static void createRegexExtractorForHeaderParameter(SampleResult sampleResult, String parameter,
             Map<String, String> parameterMap) {
-        List<Map<String, String>> regexExtractorsForHeader = CreateRegexExtractor
+        Map<String, String> regexExtractorForHeader = CreateRegexExtractor
                 .createRegularExtractorForHeaderParameter(sampleResult, parameter, parameterMap);
-        if (!regexExtractorsForHeader.isEmpty()) {
-            getListOfMap().addAll(regexExtractorsForHeader);
+        if (!regexExtractorForHeader.isEmpty()) {
+            getListOfMap().add(regexExtractorForHeader);
             log.debug("Regex Extractor created for parameter in header {} in {}", parameter,
                     sampleResult.getSampleLabel());
         }

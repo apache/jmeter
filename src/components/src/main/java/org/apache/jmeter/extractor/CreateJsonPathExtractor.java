@@ -93,6 +93,8 @@ public class CreateJsonPathExtractor {
      */
     private static String getJsonPath(String key, String value, String json) {
         Configuration conf = Configuration.builder().options(Option.AS_PATH_LIST).build();
+        // No need to provide charset here as json string is already converted according
+        // to encoding
         List<String> pathList = JsonPath.using(conf).parse(json).read("$..[?(@." + key + " == '" + value + "')]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         String jsonPath = ""; //$NON-NLS-1$
         if (!pathList.isEmpty()) {
