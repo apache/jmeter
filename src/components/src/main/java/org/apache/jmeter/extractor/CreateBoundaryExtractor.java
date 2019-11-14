@@ -31,8 +31,13 @@ public class CreateBoundaryExtractor {
             String testname) {
         int startIndex = responseData.indexOf(value);
         int endIndex = responseData.indexOf(value) + value.length();
-        String lBoundary = responseData.substring(startIndex - 4, startIndex);
-        String rBoundary = responseData.substring(endIndex, endIndex + 4);
+        if (startIndex == -1 || endIndex == -1 || responseData.equals(value)) {
+            // return empty map
+            return new HashMap<>();
+        }
+        String lBoundary = responseData.substring(startIndex < 4 ? 0 : startIndex - 4, startIndex);
+        String rBoundary = responseData.substring(endIndex,
+                responseData.length() - endIndex < 4 ? responseData.length() : endIndex + 4);
         Map<String, String> boundaryExtractor = new HashMap<>();
         boundaryExtractor.put(BOUNDARY_EXTRACTOR_VARIABLE_NAME, parameter);
         boundaryExtractor.put(BOUNDARY_EXTRACTOR_LBOUNDARY, lBoundary);
