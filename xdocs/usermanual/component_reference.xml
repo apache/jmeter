@@ -4032,6 +4032,7 @@ instead. (see figures 12 and 13).</p>
         </property>
         <property name="Username" required="No">Name of user to connect as.</property>
         <property name="Password" required="No">Password to connect with. (N.B. this is stored unencrypted in the test plan)</property>
+        <property name="Connection Properties" required="No">Connection Properties to set when establishing connection (like <code>internal_logon=sysdba</code> for Oracle for example)</property>
     </properties>
 <p>Different databases and JDBC drivers require different JDBC settings. 
 The Database URL and JDBC Driver class are defined by the provider of the JDBC implementation.</p>

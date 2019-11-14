@@ -52,6 +52,7 @@ public class DataSourceElement extends AbstractTestElement
     private transient String username;
     private transient String password;
     private transient String checkQuery;
+    private transient String connectionProperties;
     private transient String initQuery;
     private transient String poolMax;
     private transient String connectionAge;
@@ -234,6 +235,9 @@ public class DataSourceElement extends AbstractTestElement
             dataSource.setConnectionInitSqls(Arrays.asList(sqls));
         } else {
             dataSource.setConnectionInitSqls(Collections.emptyList());
+        }
+        if(StringUtils.isNotEmpty(connectionProperties)) {
+            dataSource.setConnectionProperties(connectionProperties);
         }
         dataSource.setRollbackOnReturn(false);
         dataSource.setMaxIdle(poolSize);
@@ -623,5 +627,19 @@ public class DataSourceElement extends AbstractTestElement
      */
     public void setInitQuery(String initQuery) {
         this.initQuery = initQuery;
+    }
+
+    /**
+     * @return the connectionProperties
+     */
+    public String getConnectionProperties() {
+        return connectionProperties;
+    }
+
+    /**
+     * @param connectionProperties the connectionProperties to set
+     */
+    public void setConnectionProperties(String connectionProperties) {
+        this.connectionProperties = connectionProperties;
     }
 }

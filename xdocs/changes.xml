@@ -86,6 +86,7 @@ to view the last release notes of version 5.2.
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>63926</bug>JDBC Connection Configuration: Add ability to set connection properties</li>
 </ul>
 
 <h3>Controllers</h3>

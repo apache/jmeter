@@ -55,7 +55,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
 
         createPropertyGroup("keep-alive", new String[] { "keepAlive", "connectionAge", "checkQuery" });
 
-        createPropertyGroup("database", new String[] { "dbUrl", "driver", "username", "password" });
+        createPropertyGroup("database", new String[] { "dbUrl", "driver", "username", "password", "connectionProperties" });
 
         PropertyDescriptor p = property("dataSource");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -106,6 +106,9 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
         p = property("password", TypeEditor.PasswordEditor);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
+        p = property("connectionProperties");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
     }
