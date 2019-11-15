@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.extractor;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +51,6 @@ public class CreateCssSelectorExtractor {
      *                                parameter required to correlate
      * @param contentType             responseData content type
      * @return HTML Extractor values in a map or empty map
-     * @throws UnsupportedEncodingException when URL decoding failed
      */
     public static Map<String, String> createCssSelectorExtractor(String html, String attributeValue,
             String correlationVariableName, String requestUrl, String contentType) {
