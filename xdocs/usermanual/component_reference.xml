@@ -3948,7 +3948,7 @@ instead. (see figures 12 and 13).</p>
 </component>
 
 <component name="JDBC Connection Configuration" index="&sect-num;.4.10" 
-                 width="687" height="669" screenshot="jdbc-config/jdbc-conn-config.png">
+                 width="1055" height="738" screenshot="jdbc-config/jdbc-conn-config.png">
     <description>Creates a database connection (used by <complink name="JDBC Request"/>Sampler)
      from the supplied JDBC Connection settings. The connection may be optionally pooled between threads.
      Otherwise each thread gets its own connection.
@@ -4955,7 +4955,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
         <property name="Invert assertion (will fail if above conditions met)" required="No">Invert assertion (will fail if above conditions met)</property>
     </properties>
 </component>
-<component name="JSON JMESPath Assertion" index="&sect-num;.5.15" anchor="JSON_JMESPath_Assertion" width="1095" height="307" screenshot="assertion/jmespath_assertion.png">
+<component name="JSON JMESPath Assertion" index="&sect-num;.5.15" anchor="JSON_JMESPath_Assertion" width="903" height="305" screenshot="assertion/jmespath_assertion.png">
     <description>
         <p>
             This component allows you to perform assertion on JSON documents content using <a href="http://jmespath.org/" target="blank">JMESPath</a>.
@@ -6060,7 +6060,7 @@ by:
 where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.(not applicable if Tidy is selected)
 </component>
 
-<component name="JSON JMESPath Extractor" index="&sect-num;.8.4" anchor="JSON_JMESPath_Extractor" width="729" height="317" screenshot="jmes_extractor.png">
+<component name="JSON JMESPath Extractor" index="&sect-num;.8.4" anchor="JSON_JMESPath_Extractor" width="896" height="205" screenshot="extractor/jmespath_extractor.png">
     <description>This test element allows the user to extract value(s) from 
         structured response - XML or (X)HTML - using JMESPath
         query language.
