@@ -103,6 +103,10 @@ val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     exclude(rootDir.resolve(".ratignore").readLines())
 }
 
+tasks.validateBeforeBuildingReleaseArtifacts {
+    dependsOn(rat)
+}
+
 releaseArtifacts {
     fromProject(":src:dist")
     previewSite {
@@ -138,7 +142,7 @@ releaseParams {
             stagingProfileId.set("4d29c092016673")
         }
     }
-    validateReleaseParams += Runnable {
+    validateBeforeBuildingReleaseArtifacts += Runnable {
         if (useGpgCmd && findProperty("signing.gnupg.keyName") == null) {
             throw GradleException("Please specify signing key id via signing.gnupg.keyName " +
                     "(see https://github.com/gradle/gradle/issues/8657)")
