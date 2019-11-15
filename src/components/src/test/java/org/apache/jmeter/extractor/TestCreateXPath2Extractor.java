@@ -35,8 +35,8 @@ public class TestCreateXPath2Extractor {
     }
 
     @Test
-    public void testCheckIfXLSTTransformResourceExists() {
-        InputStream in = CreateXPath2Extractor.class.getResourceAsStream("CreateXPath2ExtractorXLSTransform.xml");
+    public void testCheckIfXSLTransformResourceExists() {
+        InputStream in = CreateXPath2Extractor.class.getResourceAsStream("CreateXPath2ExtractorXSLTransform.xml");
         Assertions.assertNotEquals(null, in);
     }
 

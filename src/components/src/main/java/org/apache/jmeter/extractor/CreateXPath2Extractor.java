@@ -58,7 +58,7 @@ public class CreateXPath2Extractor {
      *                                parameter required to correlate
      * @param contentType             responseData content type
      * @return XPath2Extractor values in a map
-     * @throws TransformerException when XLS transform failed
+     * @throws TransformerException when XSL transform failed
      */
     public static Map<String, String> createXPath2Extractor(String xml, String value, String correlationVariableName,
             String requestUrl, String contentType) throws TransformerException {
@@ -68,10 +68,10 @@ public class CreateXPath2Extractor {
         }
         StringReader xmlResponse = new StringReader(xml);
         InputStream xslt = null;
-        // fetch XLST resource
-        xslt = CreateXPath2Extractor.class.getResourceAsStream("CreateXPath2ExtractorXLSTransform.xml"); //$NON-NLS-1$
+        // fetch XSLT resource
+        xslt = CreateXPath2Extractor.class.getResourceAsStream("CreateXPath2ExtractorXSLTransform.xml"); //$NON-NLS-1$
         if (xslt == null) {
-            throw new IllegalArgumentException("Cannot find XLS Transform");
+            throw new IllegalArgumentException("Cannot find XSL Transform");
         }
         String xPathQuery = getXPath(value, xmlResponse, xslt);
         if (xPathQuery == null) {
@@ -89,12 +89,12 @@ public class CreateXPath2Extractor {
     }
 
     /**
-     * Perform XLS transform
+     * Perform XSL transform
      *
      * @param xml  document
-     * @param xslt is XLS transform which creates XPath for all XML nodes
+     * @param xslt is XSL transform which creates XPath for all XML nodes
      * @return transformed XML
-     * @throws TransformerException when XLS transformation failed
+     * @throws TransformerException when XSL transformation failed
      */
     public static String transform(StringReader xml, InputStream xslt) throws TransformerException {
         Source xmlSource = new javax.xml.transform.stream.StreamSource(xml);
@@ -112,9 +112,9 @@ public class CreateXPath2Extractor {
      *
      * @param value of Attribute/Text content in XML to create XPath
      * @param xml   document
-     * @param xslt  is XLS transform which creates XPath for all XML nodes
+     * @param xslt  is XSL transform which creates XPath for all XML nodes
      * @return XPath query expression or null if unable to find value in xml
-     * @throws TransformerException when XLS transformation failed
+     * @throws TransformerException when XSL transformation failed
      */
     public static String getXPath(String value, StringReader xml, InputStream xslt) throws TransformerException {
         // split the transformed xml and convert it to an array
