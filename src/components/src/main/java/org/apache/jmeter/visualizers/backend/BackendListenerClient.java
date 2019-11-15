@@ -112,7 +112,9 @@ public interface BackendListenerClient {
      * @return a specification of the parameters used by this test which should
      *         be listed in the GUI, or null if no parameters should be listed.
      */
-    Arguments getDefaultParameters();
+    default Arguments getDefaultParameters() {
+        return null;
+    }
 
     /**
      * Create a copy of SampleResult, this method is here to allow customizing

@@ -95,14 +95,6 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SampleResult createSampleResult(BackendListenerContext context, SampleResult result) {
-        return result;
-    }
-
-    /**
      * @param sampleLabel Name of sample used as key
      * @return {@link SamplerMetric}
      */
