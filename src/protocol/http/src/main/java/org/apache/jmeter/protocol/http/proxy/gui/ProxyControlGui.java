@@ -18,29 +18,29 @@
 
 package org.apache.jmeter.protocol.http.proxy.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
-import java.awt.Window;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.IOException;
-import java.net.BindException;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.control.gui.LogicControllerGui;
+import org.apache.jmeter.control.gui.TreeNodeWrapper;
+import org.apache.jmeter.engine.util.ValueReplacer;
+import org.apache.jmeter.functions.InvalidVariableException;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.UnsharedComponent;
+import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.*;
+import org.apache.jmeter.protocol.http.control.RecordingController;
+import org.apache.jmeter.protocol.http.proxy.ProxyControl;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.exec.KeyToolUtils;
+import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.gui.JLabeledTextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -59,37 +59,27 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-
-import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.control.gui.LogicControllerGui;
-import org.apache.jmeter.control.gui.TreeNodeWrapper;
-import org.apache.jmeter.engine.util.ValueReplacer;
-import org.apache.jmeter.functions.InvalidVariableException;
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.UnsharedComponent;
-import org.apache.jmeter.gui.action.ActionNames;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
-import org.apache.jmeter.gui.util.HorizontalPanel;
-import org.apache.jmeter.gui.util.JMeterToolBar;
-import org.apache.jmeter.gui.util.MenuFactory;
-import org.apache.jmeter.gui.util.PowerTableModel;
-import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.protocol.http.control.RecordingController;
-import org.apache.jmeter.protocol.http.proxy.ProxyControl;
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.exec.KeyToolUtils;
-import org.apache.jorphan.gui.GuiUtils;
-import org.apache.jorphan.gui.JLabeledTextField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
+import java.awt.Window;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.*;
+import java.io.IOException;
+import java.net.BindException;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * GUI of HTTP(s) Test Script Recorder
@@ -180,6 +170,21 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      */
     private JTextField prefixHTTPSampleName;
 
+    /*
+    * to choose between no number, prefix number or sufix number
+     */
+    private JComboBox<String> httpSampleNumberingMode;
+
+    /**
+     * start value for the next futur http sampler
+     */
+    private transient JTextField httpSamplerNumberingStartValue;
+
+    /*
+     * Integer format with String.format like : %03d for numbering
+     */
+    private JTextField httpSamplerNumberingIntegerFormat;
+
     /**
      * Delay between HTTP requests
      */
@@ -255,6 +260,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     static final String PREFIX_HTTP_SAMPLER_NAME = "proxy_prefix_http_sampler_name"; // $NON-NLS-1$
 
+    static final String HTTP_SAMPLER_NUMBERING_MODE = "proxy_http_sampler_numbering_mode"; // $NON-NLS-1$
+    static final String HTTP_SAMPLER_NUMBERING_START_VALUE = "proxy_http_sampler_numbering_start_value"; // $NON-NLS-1$
+    static final String HTTP_SAMPLER_NUMBERING_INTEGER_FORMAT = "proxy_http_sampler_numbering_integer_format"; // $NON-NLS-1$
+
     static final String PROXY_PAUSE_HTTP_SAMPLER = "proxy_pause_http_sampler"; // $NON-NLS-1$
     //- action names
 
@@ -315,6 +324,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setUseKeepAlive(useKeepAlive.isSelected());
             model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
             model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
+
+            model.setHttpSampleNumberingMode(httpSampleNumberingMode.getSelectedIndex());
+            int iStartValue = Integer.parseInt(httpSamplerNumberingStartValue.getText());
+            model.setHttpSamplerNumberingStartValue(iStartValue);
+            model.setHttpSamplerNumberingIntegerFormat(httpSamplerNumberingIntegerFormat.getText());
+
             model.setDefaultEncoding(defaultEncoding.getText());
             model.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
             model.setProxyPauseHTTPSample(proxyPauseHTTPSample.getText());
@@ -328,6 +343,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             } else {
                 model.setTarget(nw.getTreeNode());
             }
+
         }
     }
 
@@ -380,6 +396,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
         httpSampleNamingMode.setSelectedIndex(model.getHTTPSampleNamingMode());
         prefixHTTPSampleName.setText(model.getPrefixHTTPSampleName());
+
+        httpSampleNumberingMode.setSelectedIndex(model.getHttpSampleNumberingMode());
+        httpSamplerNumberingStartValue.setText("" + model.getHttpSamplerNumberingStartValue());
+        httpSamplerNumberingIntegerFormat.setText(model.getHttpSamplerNumberingIntegerFormat());
+
         defaultEncoding.setText(model.getDefaultEncoding());
         proxyPauseHTTPSample.setText(model.getProxyPauseHTTPSample());
         notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(model.getNotifyChildSamplerListenerOfFilteredSamplers());
@@ -413,10 +434,13 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() instanceof JComboBox) {
             JComboBox combo = (JComboBox) e.getSource();
-            if(HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
+            if(HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())) {
                 model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
-                }
             }
+            if(HTTP_SAMPLER_NUMBERING_MODE.equals(combo.getName())) {
+                model.setHttpSampleNumberingMode(httpSampleNumberingMode.getSelectedIndex());
+            }
+        }
         else {
             enableRestart();
         }
@@ -443,6 +467,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             }
         } else if (command.equals(ACTION_RESTART)) {
             model.stopProxy();
+            // what is the last number for numbering samplers, ex : 96
+            int iRequestNumber = model.getRequestNumberFromSamplerCreator();
+            model.setHttpSamplerNumberingStartValue(iRequestNumber);
+            // the next value is the current value add 1
+            httpSamplerNumberingStartValue.setText("" + (iRequestNumber + 1));
+
             if(startProxy()) {
                 recorderDialog.setVisible(true);
             }
@@ -489,6 +519,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         start.setEnabled(true);
         restart.setEnabled(false);
         recorderDialog.setVisible(false);
+
+        // what is the last number use in the label numbering of sampler, ex : 96
+        int iRequestNumber = model.getRequestNumberFromSamplerCreator();
+        model.setHttpSamplerNumberingStartValue(iRequestNumber);
+        // the next value is the current value add 1
+        httpSamplerNumberingStartValue.setText("" + (iRequestNumber + 1));
     }
 
     /**
@@ -598,6 +634,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             replacer.replaceValues(model);
+
+            // set value to numbering request for the next request,
+            // the value must be decreased by 1 because the counter will increase 1
+            model.setHttpSamplerNumberingStartForSamplerCreator(model.getHttpSamplerNumberingStartValue() - 1);
+
             model.startProxy();
             start.setEnabled(false);
             stop.setEnabled(true);
@@ -706,6 +747,25 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             enableRestart();
         } else if(fieldName.equals(PREFIX_HTTP_SAMPLER_NAME)) {
             model.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
+        } else if(fieldName.equals(HTTP_SAMPLER_NUMBERING_INTEGER_FORMAT)) {
+            model.setHttpSamplerNumberingIntegerFormat(httpSamplerNumberingIntegerFormat.getText());
+            enableRestart();
+        }
+        else if(fieldName.equals(HTTP_SAMPLER_NUMBERING_START_VALUE)) {
+            try {
+                Integer.parseInt(httpSamplerNumberingStartValue.getText());
+            } catch (NumberFormatException nfe) {
+                int length = httpSamplerNumberingStartValue.getText().length();
+                if (length > 0) {
+                    JOptionPane.showMessageDialog(this, JMeterUtils.getResString("sample_numbering_start_value_error_digits"), // $NON-NLS-1$
+                            JMeterUtils.getResString("sample_numbering_start_value_error_invalid_data"), // $NON-NLS-1$
+                            JOptionPane.WARNING_MESSAGE);
+                    // Drop the last character:
+                    httpSamplerNumberingStartValue.setText(httpSamplerNumberingStartValue.getText().substring(0, length - 1));
+                }
+            }
+            model.setHttpSamplerNumberingStartValue(Integer.parseInt(httpSamplerNumberingStartValue.getText()));
+            enableRestart();
         } else if(fieldName.equals(PROXY_PAUSE_HTTP_SAMPLER)) {
             try {
                 Long.parseLong(proxyPauseHTTPSample.getText());
@@ -928,6 +988,46 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         prefixHTTPSampleName.addKeyListener(this);
         prefixHTTPSampleName.setName(PREFIX_HTTP_SAMPLER_NAME);
 
+        DefaultComboBoxModel<String> choiceNumbering = new DefaultComboBoxModel<>();
+        choiceNumbering.addElement(JMeterUtils.getResString("sample_numbering_mode_prefix")); // $NON-NLS-1$
+        choiceNumbering.addElement(JMeterUtils.getResString("sample_numbering_mode_suffix")); // $NON-NLS-1$
+        choiceNumbering.addElement(JMeterUtils.getResString("sample_numbering_mode_no_number")); // $NON-NLS-1$
+        String sNumberingMode = JMeterUtils.getPropDefault("proxy.number.mode", "prefix"); // $NON-NLS-1$
+        if ("prefix".equalsIgnoreCase(sNumberingMode)) {
+            choiceNumbering.setSelectedItem(JMeterUtils.getResString("sample_numbering_mode_prefix"));
+        }
+        if ("suffix".equalsIgnoreCase(sNumberingMode)) {
+            choiceNumbering.setSelectedItem(JMeterUtils.getResString("sample_numbering_mode_suffix"));
+        }
+        boolean bWithNumbering = JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
+        if (!bWithNumbering) {
+            choiceNumbering.setSelectedItem(JMeterUtils.getResString("sample_numbering_mode_no_number"));
+        }
+        httpSampleNumberingMode = new JComboBox<>(choiceNumbering);
+        httpSampleNumberingMode.setName(HTTP_SAMPLER_NUMBERING_MODE);
+        httpSampleNumberingMode.addItemListener(this);
+        JLabel labelHttpSampleNumberingMode = new JLabel(JMeterUtils.getResString("sample_numbering_mode_example")); // $NON-NLS-1$
+        labelHttpSampleNumberingMode.setLabelFor(httpSamplerNumberingStartValue);
+        labelHttpSampleNumberingMode.setHorizontalAlignment(SwingConstants.LEFT);
+
+        httpSamplerNumberingStartValue = new JTextField(6);
+        httpSamplerNumberingStartValue.addKeyListener(this);
+        httpSamplerNumberingStartValue.setText("1");
+        httpSamplerNumberingStartValue.addKeyListener(this);
+        httpSamplerNumberingStartValue.setName(HTTP_SAMPLER_NUMBERING_START_VALUE);
+        JLabel labelHttpSamplerNumberingStartValue = new JLabel(JMeterUtils.getResString("sample_numbering_start_value")); // $NON-NLS-1$
+        labelHttpSamplerNumberingStartValue.setLabelFor(httpSamplerNumberingStartValue);
+        labelHttpSamplerNumberingStartValue.setHorizontalAlignment(SwingConstants.LEFT);
+
+
+        httpSamplerNumberingIntegerFormat = new JTextField(6);
+        String sNumberingFormat = JMeterUtils.getPropDefault("proxy.number.value_format", "%03d"); // $NON-NLS-1$
+        httpSamplerNumberingIntegerFormat.setText(sNumberingFormat);
+        httpSamplerNumberingIntegerFormat.addKeyListener(this);
+        httpSamplerNumberingIntegerFormat.setName(HTTP_SAMPLER_NUMBERING_INTEGER_FORMAT);
+        JLabel labelHttpSamplerNumberingIntegerFormat = new JLabel(JMeterUtils.getResString("sample_numbering_number_format")); // $NON-NLS-1$
+        labelHttpSamplerNumberingIntegerFormat.setHorizontalAlignment(SwingConstants.LEFT);
+
         proxyPauseHTTPSample = new JTextField(10);
         proxyPauseHTTPSample.addKeyListener(this);
         proxyPauseHTTPSample.setName(PROXY_PAUSE_HTTP_SAMPLER);
@@ -952,10 +1052,37 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
         panel.add(httpSampleNamingMode, gbc.clone());
+
         gbc.gridx++;
         gbc.weightx = 3;
         gbc.fill=GridBagConstraints.HORIZONTAL;
         panel.add(prefixHTTPSampleName, gbc.clone());
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(httpSampleNumberingMode, gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 3;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(labelHttpSampleNumberingMode, gbc.clone());
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.weightx = 0;
+        panel.add(labelHttpSamplerNumberingStartValue, gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 3;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(httpSamplerNumberingStartValue, gbc.clone());
+
+        gbc.gridx++;
+        gbc.weightx = 6;
+        panel.add(labelHttpSamplerNumberingIntegerFormat, gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 9;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(httpSamplerNumberingIntegerFormat, gbc.clone());
+
         gbc.gridx = 0;
         gbc.gridy++;
         panel.add(labelProxyPause, gbc.clone());
@@ -1240,6 +1367,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         return httpSampleNamingMode.getSelectedIndex();
     }
 
+    int getHttpSampleNumberingMode() {
+        return httpSampleNumberingMode.getSelectedIndex();
+    }
+
     String getProxyPauseHTTPSample() {
         return proxyPauseHTTPSample.getText();
     }
@@ -1251,6 +1382,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     void setHTTPSampleNamingMode(int selectedIndex) {
         httpSampleNamingMode.setSelectedIndex(selectedIndex);
         model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
+    }
+
+    void setHttpSampleNumberingMode(int selectedIndex) {
+        httpSampleNumberingMode.setSelectedIndex(selectedIndex);
+        model.setHttpSampleNumberingMode(httpSampleNumberingMode.getSelectedIndex());
     }
 
     void setProxyPauseHTTPSample(String text) {

@@ -18,6 +18,11 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -25,11 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Base class for SamplerCreator
@@ -56,8 +56,18 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     /*
      * Optionally number the requests
      */
-    private static final boolean NUMBER_REQUESTS =
+    private final boolean NUMBER_REQUESTS =
         JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
+
+    /*
+     *  numbering mode : prefix or suffix
+     */
+    private final String NUMBER_MODE = JMeterUtils.getPropDefault("proxy.number.mode", "prefix"); // $NON-NLS-1$
+
+    /*
+     *  format numbering  (String.format) like %03d
+     */
+    private final String  NUMBER_VALUE_FORMAT = JMeterUtils.getPropDefault("proxy.number.value_format", "%03d"); // $NON-NLS-1$
 
     private static AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
 
@@ -87,8 +97,16 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     /**
      * @return int request number
      */
-    protected static int getRequestNumber() {
+    public static int getRequestNumber() {
         return REQUEST_NUMBER.get();
+    }
+
+    /**
+     * set the RequestNumber to a specify value
+     * @param iValue
+     */
+    public static void setRequestNumber(int iValue) {
+        REQUEST_NUMBER.set(iValue);
     }
 
     /**
@@ -109,8 +127,19 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     /**
      * @return boolean is numbering requests is required
      */
-    protected static boolean isNumberRequests() {
-        return NUMBER_REQUESTS;
+    protected boolean isNumberRequests() {
+        boolean bNumberRequest = JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$;
+        return bNumberRequest;
+    }
+
+    protected String getNumberValueFormat() {
+        String sNumberValueFormat = JMeterUtils.getPropDefault("proxy.number.value_format", "%03d");
+       return sNumberValueFormat;
+    }
+
+    protected String getNumberMode() {
+        String sMumberMode = JMeterUtils.getPropDefault("proxy.number.mode", "prefix");
+        return sMumberMode;
     }
 
     /**

@@ -62,6 +62,15 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private static final int SAMPLER_NAME_NAMING_MODE_PREFIX = 0;  // $NON-NLS-1$
     private static final int SAMPLER_NAME_NAMING_MODE_COMPLETE = 1;  // $NON-NLS-1$
 
+    /*
+     * Must be the same order than in org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui class in createHTTPSamplerPanel method
+     */
+    private static final int SAMPLER_NUMBERING_MODE_PREFIX = 0;  // $NON-NLS-1$
+    private static final int SAMPLER_NUMBERING_MODE_SUFFIX = 1;  // $NON-NLS-1$
+    private static final int SAMPLER_NUMBERING_MODE_NO_NUMBER = 2;  // $NON-NLS-1$
+
+    private static final String  SAMPLER_NUMBERING_MODE_NAME_PREFIX = "prefix";  // $NON-NLS-1$
+    private static final String  SAMPLER_NUMBERING_MODE_NAME_SUFFIX = "suffix";  // $NON-NLS-1$
     /**
      *
      */
@@ -284,32 +293,56 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
      */
-    protected void computeSamplerName(HTTPSamplerBase sampler,
-            HttpRequestHdr request) {
-        String prefix = request.getPrefix();
+    protected void computeSamplerName(HTTPSamplerBase sampler, HttpRequestHdr request) {
+        String prefix = request.getPrefix(); // ppp
         int httpSampleNameMode = request.getHttpSampleNameMode();
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
             if(StringUtils.isNotEmpty(prefix)) {
                 if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
-                    sampler.setName(prefix + sampler.getPath()+ "-" + incrementRequestNumberAndGet());
+                    if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
+                        // ppp/img.png-001
+                        sampler.setName(prefix + sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
+                    }
+                    if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
+                        // ppp-001 /img.png
+                        sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()) + " " + sampler.getPath());
+                    }
                 } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
-                    sampler.setName(prefix + "-" + incrementRequestNumberAndGet());
+                    if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
+                        // ppp-001
+                        sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
+                    }
+                    if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
+                        // 001-ppp
+                        sampler.setName(formatNumberingInteger(incrementRequestNumberAndGet()) + "-" + prefix);
+                    }
                 } else {
                     log.debug("Sampler name naming mode not recognized");
                 }
             } else {
-                sampler.setName(sampler.getPath()+"-"+incrementRequestNumberAndGet());
+                // no prefix name
+                if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
+                    // /img.png-001
+                    sampler.setName(sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
+                }
+                if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
+                    // 001 /img.png
+                    sampler.setName(formatNumberingInteger(incrementRequestNumberAndGet()) + " " + sampler.getPath());
+                }
             }
-        } else {
+        } else { // no numbering
             if(StringUtils.isNotEmpty(prefix)) {
                 if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
+                    // ppp/img.png
                     sampler.setName(prefix + sampler.getPath());
                 } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+                    // ppp
                     sampler.setName(prefix);
                 } else {
                     log.debug("Sampler name naming mode not recognized");
                 }
             } else {
+                // /img.png
                 sampler.setName(sampler.getPath());
             }
         }
@@ -448,5 +481,11 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         if (log.isDebugEnabled()) {
             log.debug("Proxy: setting server: {}", sampler.getDomain());
         }
+    }
+
+    protected String formatNumberingInteger(int iValue) {
+        // format like %03d
+        String sReturn = String.format(getNumberValueFormat(), iValue);
+        return sReturn;
     }
 }

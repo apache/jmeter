@@ -100,4 +100,8 @@ public class SamplerCreatorFactory {
         }
         return creator;
     }
+
+    public SamplerCreator getDefaultSamplerCreator() {
+        return DEFAULT_SAMPLER_CREATOR;
+    }
 }
