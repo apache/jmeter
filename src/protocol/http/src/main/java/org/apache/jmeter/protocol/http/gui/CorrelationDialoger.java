@@ -61,7 +61,7 @@ public class CorrelationDialoger extends AbstractActionWithNoRunningTest {
             // create the JFrame for showing the list
             // of correlation candidates variables.
             log.debug("Creating Correlation table");
-            CorrelationGui.createCorrelationGui(chooser);
+            CorrelationGui.createCorrelationGui();
         }
     }
 

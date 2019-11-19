@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,7 +42,7 @@ public class CorrelationGui {
 
     private CorrelationGui() {}
 
-    public static void createCorrelationGui(JFileChooser chooser) {
+    public static void createCorrelationGui() {
         // create the j-frame
         JFrame frame = new JFrame(JMeterUtils.getResString("correlation")); //$NON-NLS-1$
         frame.setSize(800, 600);
