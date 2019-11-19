@@ -54,7 +54,8 @@
   <li><a href="#hints">+</a>...<a href="hints_and_tips.html">22. Hints and Tips</a></li>
   <li><a href="#glossary">+</a>...<a href="glossary.html">23. Glossary</a></li>
   <li><a href="#curl">+</a>...<a href="curl.html">24. Curl</a></li>
-  <li><a href="#history_future">+</a>...<a href="history_future.html">25. History / Future</a></li>  
+  <li><a href="#correlation">+</a>...<a href="correlation.html">25. Auto-Correlation</a></li>
+  <li><a href="#history_future">+</a>...<a href="history_future.html">26. History / Future</a></li>
 </ul>
 </subsection>
 <subsection name="Detailed Section List" anchor="details">
@@ -214,8 +215,19 @@
      <li><a href="curl.html#example">24.4 Some Examples</a></li>
    </ul>
  </li>
- <li><a name="history_future"/><a href="history_future.html">25. History / Future</a></li>
- 
+  <li><a name="correlation"/><a href="correlation.html">25. Auto-Correlation</a>
+  <ul>
+     <li><a href="correlation.html#correlation_process">25.1 How to perform Auto-Correlation</a></li>
+     <ul>
+        <li><a href="correlation.html#jmx_file">25.1.1 JMX File</a></li>
+        <li><a href="correlation.html#import_rule">25.1.2 Import/Export Rule</a></li>
+     </ul>
+     <li><a href="correlation.html#naming_convention">25.2 Correlatable Parameter Naming convention</a></li>
+     <li><a href="correlation.html#rule_file_format">25.3 Rule File format</a></li>
+     <li><a href="correlation.html#limitations">25.4 Limitations</a></li>
+   </ul>
+ </li>
+ <li><a name="history_future"/><a href="history_future.html">26. History / Future</a></li>
 </ul>
 </subsection>
 
