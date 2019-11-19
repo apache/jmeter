@@ -306,7 +306,7 @@ public class CorrelationExtractor {
                 Correlation.updateJxmFileWithExtractors(getListOfMap(), parameterMap);
             } else {
                 JMeterUtils.reportErrorToUser(
-                        "Could not find parameters in response data. Please check the logs for more information.",
+                        "Unable to correlate script. Please check the logs for more information.",
                         "Failure");
             }
         } catch (UnsupportedEncodingException e) {
