@@ -40,7 +40,6 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class CorrelationGui {
 
-    private static JTable jTable = null;
 
     private CorrelationGui() {}
 
@@ -64,7 +63,7 @@ public class CorrelationGui {
         TableModel model = new CorrelationTableModel();
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        jTable = new JTable(model);
+        JTable jTable = new JTable(model);
         jTable.setDefaultRenderer(String.class, centerRenderer);
         jTable.getSelectionModel();
         JScrollPane sp = new JScrollPane(jTable);
