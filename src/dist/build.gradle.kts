@@ -403,6 +403,7 @@ fun CrLfSpec.binaryLayout() = copySpec {
         from(rootDir) {
             gitignore(gitProps)
             exclude("bin/testfiles")
+            exclude("bin/rmi_keystore.jks")
             include("bin/**")
             include("lib/ext/**")
             include("lib/junit/**")
