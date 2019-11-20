@@ -290,7 +290,7 @@ public final class FileDialoger {
     public static JFileChooser promptToCorrelationFile(String[] exts) {
         // create the file chooser dialog
         JFileChooser jfc = new JFileChooser();
-        jfc.setDialogTitle(JMeterUtils.getResString("correlation"));
+        jfc.setDialogTitle(JMeterUtils.getResString("correlation_title"));
         jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         String start = System.getProperty("user.dir", "");

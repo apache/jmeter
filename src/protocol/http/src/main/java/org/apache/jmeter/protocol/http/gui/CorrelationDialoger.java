@@ -40,7 +40,7 @@ public class CorrelationDialoger extends AbstractActionWithNoRunningTest {
     private static final Logger log = LoggerFactory.getLogger(CorrelationDialoger.class);
 
     static {
-        commands.add(ActionNames.CORRELATION);
+        commands.add(ActionNames.CORRELATION_JMX_FILE);
     }
 
     public CorrelationDialoger() {
@@ -53,7 +53,7 @@ public class CorrelationDialoger extends AbstractActionWithNoRunningTest {
         if (chooser == null) {
             return;
         }
-        int retVal = chooser.showDialog(null, JMeterUtils.getResString("correlation")); //$NON-NLS-1$
+        int retVal = chooser.showDialog(null, JMeterUtils.getResString("correlation_title")); //$NON-NLS-1$
         if (retVal == JFileChooser.APPROVE_OPTION) {
             // extract the candidates variables for
             // correlation by comparing the JMX request objects.

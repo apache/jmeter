@@ -39,12 +39,11 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class CorrelationGui {
 
-
     private CorrelationGui() {}
 
     public static void createCorrelationGui() {
         // create the j-frame
-        JFrame frame = new JFrame(JMeterUtils.getResString("correlation")); //$NON-NLS-1$
+        JFrame frame = new JFrame(JMeterUtils.getResString("correlation_title")); //$NON-NLS-1$
         frame.setSize(800, 600);
         frame.setLocation(300, 100);
         // create the j-panel
