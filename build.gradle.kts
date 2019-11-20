@@ -23,6 +23,8 @@ import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.crlf.filter
 import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
+import com.github.vlsi.gradle.properties.dsl.lastEditYear
+import com.github.vlsi.gradle.properties.dsl.props
 import com.github.vlsi.gradle.release.RepositoryType
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -40,7 +42,6 @@ plugins {
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.ide")
     id("com.github.vlsi.stage-vote-release")
-    signing
     publishing
 }
 
@@ -77,16 +78,7 @@ println("Building JMeter $version")
 
 fun reportsForHumans() = !(System.getenv()["CI"]?.toBoolean() ?: boolProp("CI") ?: false)
 
-val lastEditYear by extra {
-    file("$rootDir/NOTICE")
-        .readLines()
-        .first { it.contains("Copyright") }
-        .let {
-            """Copyright \d{4}-(\d{4})""".toRegex()
-                .find(it)?.groupValues?.get(1)
-                ?: throw IllegalStateException("Unable to identify copyright year from $rootDir/NOTICE")
-        }
-}
+val lastEditYear by extra(lastEditYear().toString())
 
 // This task scans the project for gitignore / gitattributes, and that is reused for building
 // source/binary artifacts with the appropriate eol/executable file flags
@@ -143,15 +135,7 @@ releaseParams {
             stagingProfileId.set("4d29c092016673")
         }
     }
-    validateBeforeBuildingReleaseArtifacts += Runnable {
-        if (useGpgCmd && findProperty("signing.gnupg.keyName") == null) {
-            throw GradleException("Please specify signing key id via signing.gnupg.keyName " +
-                    "(see https://github.com/gradle/gradle/issues/8657)")
-        }
-    }
 }
-
-val isReleaseVersion = rootProject.releaseParams.release.get()
 
 val jacocoReport by tasks.registering(JacocoReport::class) {
     group = "Coverage reports"
@@ -163,37 +147,15 @@ val jacocoEnabled by extra {
 }
 
 // Do not enable spotbugs by default. Execute it only when -Pspotbugs is present
-val enableSpotBugs by extra {
-    boolProp("spotbugs") ?: false
-}
-
-val ignoreSpotBugsFailures by extra {
-    boolProp("ignoreSpotBugsFailures") ?: false
-}
-
-val skipCheckstyle by extra {
-    boolProp("skipCheckstyle") ?: false
-}
-
-val skipSpotless by extra {
-    boolProp("skipSpotless") ?: false
-}
-
+val enableSpotBugs = props.bool("spotbugs", default = false)
+val ignoreSpotBugsFailures by props()
+val skipCheckstyle by props()
+val skipSpotless by props()
 // Allow to skip building source/binary distributions
 val skipDist by extra {
     boolProp("skipDist") ?: false
 }
-
-// By default use Java implementation to sign artifacts
-// When useGpgCmd=true, then gpg command line tool is used for signing
-val useGpgCmd by extra {
-    boolProp("useGpgCmd") ?: false
-}
-
-// Signing is required for RELEASE version
-val skipSigning by extra {
-    boolProp("skipSigning") ?: boolProp("skipSign") ?: false
-}
+// Inherited from stage-vote-release-plugin: skipSign, useGpgCmd
 
 allprojects {
     if (project.path != ":src") {
@@ -334,7 +296,7 @@ allprojects {
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {
                 tasks.register("checkstyleAll") {
-                    dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
+                    dependsOn(tasks.withType<Checkstyle>())
                 }
                 tasks.register("checkstyle") {
                     group = LifecycleBasePlugin.VERIFICATION_GROUP
@@ -455,32 +417,6 @@ allprojects {
         isReproducibleFileOrder = true
         dirMode = "775".toInt(8)
         fileMode = "664".toInt(8)
-    }
-
-    // Not all the modules use publishing plugin
-    if (isReleaseVersion && !skipSigning) {
-        plugins.withType<PublishingPlugin> {
-            apply<SigningPlugin>()
-            // Sign all the published artifacts
-            signing {
-                sign(publishing.publications)
-            }
-        }
-    }
-
-    plugins.withType<SigningPlugin> {
-        if (useGpgCmd) {
-            signing {
-                useGpgCmd()
-            }
-        }
-        afterEvaluate {
-            signing {
-                // Note it would still try to sign the artifacts,
-                // however it would fail only when signing a RELEASE version fails
-                isRequired = isReleaseVersion && !skipSigning
-            }
-        }
     }
 
     plugins.withType<JavaPlugin> {

@@ -25,7 +25,6 @@ import org.gradle.api.internal.TaskOutputsInternal
 plugins {
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.stage-vote-release")
-    signing
 }
 
 var jars = arrayOf(
