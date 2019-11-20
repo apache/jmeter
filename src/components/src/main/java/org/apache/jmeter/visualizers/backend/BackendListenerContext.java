@@ -185,7 +185,7 @@ public class BackendListenerContext {
         }
         final String valueString = params.get(name);
         try {
-            return Long.decode(valueString).longValue();
+            return Long.decode(valueString);
         } catch (NumberFormatException e) {
             log.warn("Value for parameter '{}' not a long: '{}'.  Using default: '{}'.", name, valueString,
                     defaultValue, e);

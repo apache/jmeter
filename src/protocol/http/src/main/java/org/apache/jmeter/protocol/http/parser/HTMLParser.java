@@ -193,7 +193,7 @@ public abstract class HTMLParser extends BaseParser {
     protected final boolean isEnableConditionalComments(Float ieVersion) {
         // Conditional comment have been dropped in IE10
         // http://msdn.microsoft.com/en-us/library/ie/hh801214%28v=vs.85%29.aspx
-        return ieVersion != null && ieVersion.floatValue() < IE_10;
+        return ieVersion != null && ieVersion < IE_10;
     }
 
     /**

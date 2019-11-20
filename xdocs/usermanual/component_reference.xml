@@ -3948,7 +3948,7 @@ instead. (see figures 12 and 13).</p>
 </component>
 
 <component name="JDBC Connection Configuration" index="&sect-num;.4.10" 
-                 width="687" height="669" screenshot="jdbc-config/jdbc-conn-config.png">
+                 width="1055" height="738" screenshot="jdbc-config/jdbc-conn-config.png">
     <description>Creates a database connection (used by <complink name="JDBC Request"/>Sampler)
      from the supplied JDBC Connection settings. The connection may be optionally pooled between threads.
      Otherwise each thread gets its own connection.
@@ -4032,6 +4032,7 @@ instead. (see figures 12 and 13).</p>
         </property>
         <property name="Username" required="No">Name of user to connect as.</property>
         <property name="Password" required="No">Password to connect with. (N.B. this is stored unencrypted in the test plan)</property>
+        <property name="Connection Properties" required="No">Connection Properties to set when establishing connection (like <code>internal_logon=sysdba</code> for Oracle for example)</property>
     </properties>
 <p>Different databases and JDBC drivers require different JDBC settings. 
 The Database URL and JDBC Driver class are defined by the provider of the JDBC implementation.</p>
@@ -4954,7 +4955,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
         <property name="Invert assertion (will fail if above conditions met)" required="No">Invert assertion (will fail if above conditions met)</property>
     </properties>
 </component>
-<component name="JSON JMESPath Assertion" index="&sect-num;.5.15" anchor="JSON_JMESPath_Assertion" width="1095" height="307" screenshot="assertion/jmespath_assertion.png">
+<component name="JSON JMESPath Assertion" index="&sect-num;.5.15" anchor="JSON_JMESPath_Assertion" width="903" height="305" screenshot="assertion/jmespath_assertion.png">
     <description>
         <p>
             This component allows you to perform assertion on JSON documents content using <a href="http://jmespath.org/" target="blank">JMESPath</a>.
@@ -5946,7 +5947,7 @@ extracting the node as text or attribute value and store the result into the giv
      <dt><code>compare(/book[1]/page[2],/book[2]/page[2])</code></dt>
     <dd>return Integer value equal 0 to if the 2<sup>nd</sup> page of the first book is equal to the 2<sup>nd</sup> page of the 2<sup>nd</sup> book, else return -1.</dd>
  </dl>
- <p>To see more informations about thoses fuctions, please check <a href="http://saxon.sourceforge.net/saxon7.9.1/functions.html">xPath2 functions</a></p>
+ <p>To see more information about these functions, please check <a href="http://saxon.sourceforge.net/saxon7.9.1/functions.html">xPath2 functions</a></p>
 </component>
 
 <component name="XPath Extractor" index="&sect-num;.8.3"  width="729" height="317" screenshot="xpath_extractor.png">
@@ -6059,7 +6060,7 @@ by:
 where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.(not applicable if Tidy is selected)
 </component>
 
-<component name="JSON JMESPath Extractor" index="&sect-num;.8.4" anchor="JSON_JMESPath_Extractor" width="729" height="317" screenshot="jmes_extractor.png">
+<component name="JSON JMESPath Extractor" index="&sect-num;.8.4" anchor="JSON_JMESPath_Extractor" width="896" height="205" screenshot="extractor/jmespath_extractor.png">
     <description>This test element allows the user to extract value(s) from 
         structured response - XML or (X)HTML - using JMESPath
         query language.

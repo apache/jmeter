@@ -44,7 +44,7 @@
                         <figure image="templates/templates_xml.png">Figure 2 - recording template declaration</figure>
                         A template declaration is made as follow :<br/>
                         <ul>
-                            <li><code>template</code> element which contains the informations described in the followings tags</li>
+                            <li><code>template</code> element which contains the information described in the following tags</li>
                             <li><code>name</code> element which contains the template name the user will see</li>
                             <li><code>fileName</code> element which contains the relative path of the template.</li>
                             <li><code>description</code> element which uses html to describe the template</li>

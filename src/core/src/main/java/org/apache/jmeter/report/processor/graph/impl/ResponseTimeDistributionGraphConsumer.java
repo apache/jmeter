@@ -68,7 +68,7 @@ public class ResponseTimeDistributionGraphConsumer extends
     protected final GraphKeysSelector createKeysSelector() {
         return sample -> {
             long elapsed = sample.getElapsedTime();
-            return Double.valueOf((double) elapsed - elapsed % granularity);
+            return (double) elapsed - elapsed % granularity;
         };
     }
 
@@ -98,6 +98,6 @@ public class ResponseTimeDistributionGraphConsumer extends
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(
                 AbstractOverTimeGraphConsumer.RESULT_CTX_GRANULARITY,
-                new ValueResultData(Long.valueOf(granularity)));
+                new ValueResultData(granularity));
     }
 }

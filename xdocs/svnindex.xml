@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+
+  <properties>
+    <author email="dev.AT.jmeter.DOT.apache.DOT.org">Apache JMeter Project</author>
+    <title>Source Repositories</title>
+  </properties>
+
+<body>
+
+<section name="Download the Source">
+
+<p>Most users of the source code probably don't need to have day to
+day access to the source code as it changes. For these users we
+provide easy to unpack source code downloads via our <a
+href="download_jmeter.cgi">download page</a>.  </p>
+
+</section>
+
+<section name="Access the GIT Version Controlled Source Code">
+
+<note>With Apache JMeter 5.2 the sources have been
+<a href="https://www.apache.org/dev/writable-git">migrated to Git.</a>
+</note>
+
+<subsection name="Git" anchor="git">
+
+<p>The sources for JMeter are accessible at the urls below.</p>
+
+<table>
+ <tr>
+  <th>Project</th>
+  <th>GIT (read-only)</th>
+  <th>GITHUB (read-only)</th>
+ </tr>
+ <tr>
+  <td>Apache JMeter</td>
+  <td><a href="https://gitbox.apache.org/repos/asf/jmeter.git">https://gitbox.apache.org/repos/asf/jmeter.git</a></td>
+  <td><a href="https://github.com/apache/jmeter">https://github.com/apache/jmeter</a></td>
+ </tr>
+</table>
+
+</subsection>
+
+</section>
+
+</body>
+</document>

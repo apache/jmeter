@@ -62,7 +62,7 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
             }
         }
         try {
-            return Long.decode(ret).longValue();
+            return Long.decode(ret);
         } catch (NumberFormatException e){
             log.warn("Number format exception while decoding number: '{}'", ret);
             return 0;

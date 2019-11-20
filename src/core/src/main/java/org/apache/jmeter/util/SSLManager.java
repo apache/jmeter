@@ -132,7 +132,7 @@ public abstract class SSLManager {
               // https://docs.oracle.com/javase/8/docs/technotes/guides/security/p11guide.html#JSSE
               if ("NONE".equalsIgnoreCase(fileName)) {
                  this.keyStore.load(null, Validate.notNull(getPassword(), "Password should not be null"));
-                 log.info("Total of {} aliases loaded OK from PKCS11", Integer.valueOf(keyStore.getAliasCount()));
+                 log.info("Total of {} aliases loaded OK from PKCS11", keyStore.getAliasCount());
               } else {
                  File initStore = new File(fileName);
                  if (fileName.length() > 0 && initStore.exists()) {
@@ -142,7 +142,7 @@ public abstract class SSLManager {
                         if (log.isInfoEnabled()) {
                             log.info(
                                     "Total of {} aliases loaded OK from keystore",
-                                    Integer.valueOf(keyStore.getAliasCount()));
+                                    keyStore.getAliasCount());
                         }
                     }
                  } else {

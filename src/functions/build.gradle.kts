@@ -22,8 +22,8 @@ dependencies {
 
     implementation("org.mozilla:rhino")
     implementation("commons-codec:commons-codec")
-    implementation("org.apache.commons:commons-jexl:2.1.1")
-    implementation("org.apache.commons:commons-jexl3:3.1")
+    implementation("org.apache.commons:commons-jexl")
+    implementation("org.apache.commons:commons-jexl3")
     implementation("org.apache.commons:commons-lang3") {
         because("StringUtils")
     }
@@ -35,6 +35,6 @@ dependencies {
     }
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("oro:oro")
-    testImplementation("org.hamcrest:hamcrest-core:1.3")
-    testImplementation("org.exparity:hamcrest-date:2.0.4")
+    testImplementation("org.hamcrest:hamcrest-core")
+    testImplementation("org.exparity:hamcrest-date")
 }

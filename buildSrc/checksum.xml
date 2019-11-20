@@ -29,6 +29,7 @@
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.intellij.deps' />
+    <trusted-key id='6a0975f8b1127b83' group='org.jetbrains.kotlin' />
     <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
     <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
@@ -39,6 +40,9 @@
     </dependency>
     <dependency group='org.gradle.kotlin' module='plugins' version='1.2.9'>
       <sha512>F672FEB39919B2A78E0AEFA95E8BE023C856EA802FBB652EE97FF6BC935BB6E29B9E5E36CC62B9B52D970DE6C49AC0D07C1EC5588771FC2B89787AB94CAE6AC7</sha512>
+    </dependency>
+    <dependency group='org.gradle.kotlin' module='plugins' version='1.3.1'>
+      <sha512>8563C160EF97CF2E2C62875B438177212AC247304E4A94466C687F3E4D354E34D69BC31E790F8409BE55C16A25F2B0BABFC9C6311ECA64ADF932F68AB8B2B484</sha512>
     </dependency>
     <dependency group='org.slf4j' module='jcl-over-slf4j' version='1.6.2'>
       <sha512>3BA508C96EE0985865C9E86EBE803D1903835F7C198EB15723CDC86B028D6C82DBB7E96ECB01CEFAD7CC6EC7023155676D034B6B730A911D0FFE9F91FE532592</sha512>

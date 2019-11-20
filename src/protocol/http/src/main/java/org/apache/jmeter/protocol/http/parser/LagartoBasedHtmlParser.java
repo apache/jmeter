@@ -94,7 +94,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
          */
         @Override
         public void script(Tag tag, CharSequence body) {
-            if (!enabled.peek().booleanValue()) {
+            if (!enabled.peek()) {
                 return;
             }
             extractAttribute(tag, ATT_SRC);
@@ -107,7 +107,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
          */
         @Override
         public void tag(Tag tag) {
-            if (!enabled.peek().booleanValue()) {
+            if (!enabled.peek()) {
                 return;
             }
             TagType tagType = tag.getType();
@@ -188,8 +188,8 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                     htmlCCommentExpressionMatcher = new HtmlCCommentExpressionMatcher();
                 }
                 String expressionString = expression.toString().trim();
-                enabled.push(Boolean.valueOf(htmlCCommentExpressionMatcher.match(ieVersion.floatValue(),
-                        expressionString)));
+                enabled.push(htmlCCommentExpressionMatcher.match(ieVersion,
+                        expressionString));
             }
         }
 

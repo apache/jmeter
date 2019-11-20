@@ -20,7 +20,7 @@ dependencies {
     api(project(":src:core"))
     testCompile(project(":src:core", "testClasses"))
 
-    api("org.apache-extras.beanshell:bsh:2.0b6") {
+    api("org.apache-extras.beanshell:bsh") {
         because("""
             BeanShell is not required for JMeter, however it is commonly used in the jmx scripts.
             New scripts should refrain from using BeanShell though and migrate to Groovy or other
@@ -28,7 +28,7 @@ dependencies {
         """.trimIndent())
     }
 
-    api("javax.mail:mail:1.5.0-b01") {
+    api("javax.mail:mail") {
         exclude("javax.activation", "activation")
     }
     // There's no javax.activation:activation:1.2.0, so we use com.sun...
@@ -36,7 +36,6 @@ dependencies {
     // This is an API-only jar. javax.activation is present in Java 8,
     // however it is not there in Java 9
     compileOnly("javax.activation:javax.activation-api")
-
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("io.burt:jmespath-core")
     implementation("io.burt:jmespath-jackson")
@@ -46,6 +45,7 @@ dependencies {
     implementation("net.minidev:accessors-smart")
     implementation("org.apache.commons:commons-pool2")
     implementation("commons-codec:commons-codec")
+    implementation("org.ow2.asm:asm")
     implementation("org.jodd:jodd-log")
     implementation("org.jodd:jodd-lagarto")
     implementation("com.jayway.jsonpath:json-path")

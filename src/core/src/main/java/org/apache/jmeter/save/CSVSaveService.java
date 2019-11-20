@@ -287,7 +287,7 @@ public final class CSVSaveService {
             if (saveConfig.saveSuccess()) {
                 field = SUCCESSFUL;
                 text = parts[i++];
-                result.setSuccessful(Boolean.valueOf(text).booleanValue());
+                result.setSuccessful(Boolean.valueOf(text));
             }
 
             if (saveConfig.saveAssertionResultsFailureMessage()) {

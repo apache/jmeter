@@ -720,7 +720,7 @@ public class BasicCurlParser {
                     request.addHeader("Referer", option.getArgument(0));
                 } else if (option.getDescriptor().getId() == CONNECT_TIMEOUT_OPT) {
                     String value = option.getArgument(0);
-                    request.setConnectTimeout(Double.valueOf(value) * 1000);
+                    request.setConnectTimeout(Double.parseDouble(value) * 1000);
                 } else if (option.getDescriptor().getId() == COOKIE_OPT) {
                     String value = option.getArgument(0);
                     if (isValidCookie(value)) {
@@ -754,7 +754,7 @@ public class BasicCurlParser {
                     setProxyServerUserInfo(request, value);
                 } else if (option.getDescriptor().getId() == MAX_TIME_OPT) {
                     String value = option.getArgument(0);
-                    request.setMaxTime(Double.valueOf(value) * 1000);
+                    request.setMaxTime(Double.parseDouble(value) * 1000);
                 } else if (option.getDescriptor().getId() == HEAD_OPT) {
                     request.setMethod("HEAD");
                 } else if (option.getDescriptor().getId() == INTERFACE_OPT) {

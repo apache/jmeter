@@ -720,7 +720,7 @@ public final class JOrphanUtils {
             return 0;
         }
         Object[] result = replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
-        int nbReplaced = ((Integer) result[1]).intValue();
+        int nbReplaced = (Integer) result[1];
         if (nbReplaced <= 0) {
             return 0;
         }

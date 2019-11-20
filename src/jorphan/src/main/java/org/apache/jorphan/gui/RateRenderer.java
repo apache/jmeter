@@ -44,7 +44,7 @@ public class RateRenderer extends NumberRenderer{ // NOSONAR 7 parents is OK in 
             setText("#N/A");
             return;
         }
-        double rate = ((Double) value).doubleValue();
+        double rate = (Double) value;
         if (Double.compare(rate,Double.MAX_VALUE)==0){
             setText("#N/A");
             return;

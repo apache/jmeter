@@ -189,7 +189,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private void addCookieToTable(Cookie cookie) {
         tableModel.addRow(new Object[] { cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
-                Boolean.valueOf(cookie.getSecure()) });
+                cookie.getSecure()});
     }
 
     /**
@@ -243,7 +243,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
                 (String) rowData[1],
                 (String) rowData[2],
                 (String) rowData[3],
-                ((Boolean) rowData[4]).booleanValue(),
+                (Boolean) rowData[4],
                 0); // Non-expiring
         return cookie;
     }

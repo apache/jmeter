@@ -122,7 +122,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     }
 
     /**
-     * Compute sampler informations from Request Header
+     * Compute sampler information from Request Header
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
      * @param pageEncodings Map of page encodings
@@ -149,7 +149,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     }
 
     /**
-     * Compute sampler informations from Request Header
+     * Compute sampler information from Request Header
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
      * @throws Exception when something fails

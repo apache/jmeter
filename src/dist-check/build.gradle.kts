@@ -16,9 +16,9 @@
  *
  */
 
+import java.time.Duration
 import org.apache.jmeter.buildtools.batchtest.BatchTest
 import org.apache.jmeter.buildtools.batchtest.BatchTestServer
-import java.time.Duration
 
 plugins {
     jmeterbuild.batchtest

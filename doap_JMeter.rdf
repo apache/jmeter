@@ -1,0 +1,282 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"?>
+<rdf:RDF xml:lang="en"
+         xmlns="http://usefulinc.com/ns/doap#" 
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+         xmlns:asfext="http://projects.apache.org/ns/asfext#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+   
+         http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+  <Project rdf:about="http://jmeter.apache.org">
+    <created>2006-02-17</created>
+    <license rdf:resource="http://spdx.org/licenses/Apache-2.0" />
+    <name>Apache JMeter</name>
+    <homepage rdf:resource="http://jmeter.apache.org/index.html" />
+    <asfext:pmc rdf:resource="http://jmeter.apache.org/" />
+    <shortdesc>Pure Java application for load and functional testing</shortdesc>
+    <description>Apache JMeter may be used to test performance both on static and dynamic resources (files, Servlets, Perl scripts, Java Objects, Data Bases and Queries, FTP Servers and more). It can be used to simulate a heavy load on a server, network or object to test its strength or to analyze overall performance under different load types. You can use it to make a graphical analysis of performance or to test your server/script/object behavior under heavy concurrent load. </description>
+    <bug-database rdf:resource="https://bz.apache.org/bugzilla/" />
+    <mailing-list rdf:resource="http://jmeter.apache.org/mail2.html" />
+    <download-page rdf:resource="http://jmeter.apache.org/download_jmeter.cgi" />
+    <programming-language>Java</programming-language>
+    <category rdf:resource="http://projects.apache.org/category/testing" />
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2003-08-07</created>
+        <revision>1.9</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2004-04-04</created>
+        <revision>2.0.0</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2004-05-24</created>
+        <revision>2.0.1</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2004-11-19</created>
+        <revision>2.0.2</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2005-03-23</created>
+        <revision>2.0.3</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2005-08-24</created>
+        <revision>2.1</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2005-10-04</created>
+        <revision>2.1.1</revision>
+      </Version>
+   </release>
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2006-06-14</created>
+        <revision>2.2</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2007-09-04</created>
+        <revision>2.3RC4</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2007-09-29</created>
+        <revision>2.3 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2007-11-30</created>
+        <revision>2.3.1 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2008-06-14</created>
+        <revision>2.3.2 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2009-05-24</created>
+        <revision>2.3.3 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2009-06-21</created>
+        <revision>2.3.4 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2010-07-12</created>
+        <revision>2.4 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2011-08-17</created>
+        <revision>2.5 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2011-10-03</created>
+        <revision>2.5.1 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2012-02-01</created>
+        <revision>2.6 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2012-05-27</created>
+        <revision>2.7 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2012-10-06</created>
+        <revision>2.8 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2013-01-28</created>
+        <revision>2.9 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2013-10-21</created>
+        <revision>2.10 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2014-01-05</created>
+        <revision>2.11 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2014-11-10</created>
+        <revision>2.12 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2015-03-14</created>
+        <revision>2.13 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2016-05-17</created>
+        <revision>3.0 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2016-11-19</created>
+        <revision>3.1 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2017-04-13</created>
+        <revision>3.2 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2017-09-21</created>
+        <revision>3.3 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2018-02-10</created>
+        <revision>4.0 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2018-09-18</created>
+        <revision>5.0 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2019-02-18</created>
+        <revision>5.1 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2019-03-13</created>
+        <revision>5.1.1 final</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2019-11-03</created>
+        <revision>5.2 final</revision>
+      </Version>
+    </release>
+    <repository>
+      <GitRepository>
+        <location rdf:resource="https://gitbox.apache.org/repos/asf/jmeter.git"/>
+        <browse rdf:resource="https://gitbox.apache.org/repos/asf?p=jmeter.git"/>
+      </GitRepository>
+    </repository>
+  </Project>
+</rdf:RDF>

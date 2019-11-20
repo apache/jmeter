@@ -67,7 +67,7 @@ public class TestDataStrippingSampleSender extends JMeterTestCase implements JMe
         SimpleSender nextSender = new SimpleSender();
         DataStrippingSampleSender sut = new DataStrippingSampleSender(nextSender);
         sut.readResolve();
-        SampleResult sample = result(successfulParent.booleanValue(), result(result(result())));
+        SampleResult sample = result(successfulParent, result(result(result())));
         sut.sampleOccurred(event(sample));
         assertResultsHaveContent(content, sample);
         assertThat(sample, CoreMatchers.is(nextSender.getResult()));

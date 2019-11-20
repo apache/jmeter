@@ -83,7 +83,7 @@ public class BeanShellServer implements Runnable {
             Method source = interpreter.getMethod("source", string);//$NON-NLS-1$
 
             setObj.invoke(instance, "t", this );//$NON-NLS-1$
-            setInt.invoke(instance, "portnum", Integer.valueOf(serverport));//$NON-NLS-1$
+            setInt.invoke(instance, "portnum", serverport);//$NON-NLS-1$
 
             if (serverfile.length() > 0) {
                 try {

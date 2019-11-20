@@ -130,7 +130,7 @@ build only the required jars and files.
 
 ## Site
 
-      # Creates preview of a site to build/docs/site
+      # Creates preview of a site to src/dist/build/site
       gw :src:dist:previewSite
 
       # Builds and publishes site preview to a Git repository
@@ -141,8 +141,8 @@ build only the required jars and files.
       # publishes Maven artifact to local repository
       gw publishToMavenLocal
 
-      # Generate all pom files
-      # The resulting files are placed under build/publications folder
+      # Generate all pom files (pom-default.xml)
+      # The files are placed under the individual src/**/build/publications folders
       gw generatePom
 
 ## Release Artifacts

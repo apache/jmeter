@@ -194,7 +194,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         public boolean checkResult(DataContext dataContext, ResultData result) {
             boolean supportsControllerDiscrimination = findValue(Boolean.class,
                     AbstractGraphConsumer.RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-                    result).booleanValue();
+                    result);
 
             if (supportsControllerDiscrimination
                     && showControllerSeriesOnly
@@ -233,7 +233,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                     // Is the current series a controller series ?
                     boolean isController = findValue(Boolean.class,
                             AbstractGraphConsumer.RESULT_SERIES_IS_CONTROLLER,
-                            seriesData).booleanValue();
+                            seriesData);
 
                     matches = filterPattern.matcher(name).matches();
                     if (matches) {
@@ -336,7 +336,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         final boolean filtersOnlySampleSeries = exportCfg.filtersOnlySampleSeries();
         addToContext(
                 DATA_CTX_FILTERS_ONLY_SAMPLE_SERIES,
-                Boolean.valueOf(filtersOnlySampleSeries),
+                filtersOnlySampleSeries,
                 dataContext);
 
         // Add the series filter to the context
@@ -355,7 +355,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         final boolean showControllerSeriesOnly = exportCfg.showControllerSeriesOnly();
         addToContext(
                 DATA_CTX_SHOW_CONTROLLERS_ONLY,
-                Boolean.valueOf(showControllerSeriesOnly),
+                showControllerSeriesOnly,
                 dataContext);
 
         JsonizerVisitor jsonizer = new JsonizerVisitor();
@@ -429,7 +429,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         TimeZone timezone = TimeZone.getDefault();
         addToContext(
                 DATA_CTX_TIMEZONE_OFFSET,
-                Integer.valueOf(timezone.getOffset(oldTimestamp)),
+                timezone.getOffset(oldTimestamp),
                 dataContext);
 
         // Add report title to the context

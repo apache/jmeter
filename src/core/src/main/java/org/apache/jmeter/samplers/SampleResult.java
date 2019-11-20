@@ -1582,7 +1582,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     }
 
     /**
-     * @return String first non null assertion failure message
+     * @return String first non null assertion failure message if assertionResults is not null, null otherwise
      */
     public String getFirstAssertionFailureMessage() {
         String message = null;

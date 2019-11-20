@@ -41,7 +41,7 @@ public class BooleanProperty extends AbstractProperty {
     @Override
     public void setObjectValue(Object v) {
         if (v instanceof Boolean) {
-            value = ((Boolean) v).booleanValue();
+            value = (Boolean) v;
         } else {
             value = Boolean.parseBoolean(v.toString());
         }
@@ -60,7 +60,7 @@ public class BooleanProperty extends AbstractProperty {
      */
     @Override
     public Object getObjectValue() {
-        return Boolean.valueOf(value);
+        return value;
     }
 
     @Override

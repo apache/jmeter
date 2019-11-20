@@ -38,7 +38,7 @@ tasks.named<Jar>(JavaPlugin.JAR_TASK_NAME) {
             from(files(srcLicense))
         }
     }
-    into("run") {
+    into("bin") {
         filteringCharset = "UTF-8"
         CrLfSpec(LineEndings.LF).run {
             textFrom("$rootDir/bin") {
@@ -55,7 +55,11 @@ tasks.named<Jar>(JavaPlugin.JAR_TASK_NAME) {
                 text("users.xml")
             }
             into("templates") {
-                textFrom("templates/templates.dtd")
+                textFrom("$rootDir/bin/templates") {
+                    text("templates.dtd")
+                    text("templates.xml")
+                    text("*.jmx")
+                }
             }
             into("report-template") {
                 textFrom("$rootDir/bin/report-template") {

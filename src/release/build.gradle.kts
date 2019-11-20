@@ -26,10 +26,10 @@ rootProject.configure<ReleaseExtension> {
 val String.prop: String? get() = System.getProperty(this)
 
 fun ReleaseParams.voteTextGen(): String = """
-The first release candidate for JMeter $version ($shortGitSha) has been
+The [RC NUMBER] release candidate for JMeter $version ($shortGitSha) has been
 prepared, and your votes are solicited.
 
-This release is mainly a bugfix
+This release... TO BE COMPLETED
 
 Please, test this release candidate (with load tests and/or functional
 tests) using Java 8+ on Linux/Windows/macOS, especially on the changes.
@@ -44,7 +44,7 @@ behavior and measure performance. The current version targets Java 8+
 
 Download - Archives/hashes/sigs:
 $svnStagingUri
-(dist revision TBD:SVN revision of svnmucc stage result)
+(dist revision $svnStagingRevision)
 
 RAT report:
 $previewSiteUri/rat/rat-report.txt

@@ -69,7 +69,7 @@ public class CounterConfig extends AbstractTestElement
     private static final Logger log = LoggerFactory.getLogger(CounterConfig.class);
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        perTheadNumber = ThreadLocal.withInitial(()-> Long.valueOf(getStart()));
+        perTheadNumber = ThreadLocal.withInitial(this::getStart);
         perTheadLastIterationNumber = ThreadLocal.withInitial(() -> Long.valueOf(1));
     }
 
@@ -102,22 +102,22 @@ public class CounterConfig extends AbstractTestElement
                 globalCounter += increment;
             }
         } else {
-            long current = perTheadNumber.get().longValue();
+            long current = perTheadNumber.get();
             if(isResetOnThreadGroupIteration()) {
                 int iteration = variables.getIteration();
                 Long lastIterationNumber = perTheadLastIterationNumber.get();
-                if(iteration != lastIterationNumber.longValue()) {
+                if(iteration != lastIterationNumber) {
                     // reset
                     current = getStart();
                 }
-                perTheadLastIterationNumber.set(Long.valueOf(iteration));
+                perTheadLastIterationNumber.set((long) iteration);
             }
             variables.put(getVarName(), formatNumber(current));
             current += increment;
             if (current > end) {
                 current = start;
             }
-            perTheadNumber.set(Long.valueOf(current));
+            perTheadNumber.set(current);
         }
     }
 

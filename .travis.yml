@@ -7,10 +7,13 @@ install: true
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -rf $HOME/.m2/repository/org/apache/jmeter
+
 cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.m2/repository
 
 env:
   global:
@@ -19,6 +22,9 @@ env:
     - ORG_GRADLE_PROJECT_checksumPrint=true
 
 matrix:
+  allow_failures:
+    # j-m-p does not seem to download all the dependencies: https://github.com/jmeter-maven-plugin/jmeter-maven-plugin/issues/187
+    - name: jmeter-maven-plugin tests
   include:
     - name: Tests with OpenJDK 8 + code coverage
       jdk: openjdk8
@@ -44,12 +50,22 @@ matrix:
     # Tests with Java 12 do not surface much new, so Java 11 (LTS) and Java 13 (non-LTS) are enough for "post Java 9" testing
     - name: Tests with OpenJDK 13
       jdk: openjdk13
+      addons:
+        apt:
+          packages:
+            - language-pack-fr
+      env:
+        - TZ=America/New_York # flips between −05:00 and −04:00
+        - LANG=fr_FR.UTF-8
+        - LC_ALL=fr_FR.UTF-8
       script:
-        # ./gradlew wrapper task kills license header from gradle-wrapper.properties, so we use grep/echo to update the file
-        - grep -v Sha256 gradle/wrapper/gradle-wrapper.properties | grep -v Url > gradle/wrapper/gradle-wrapper.properties2
-        - echo 'distributionUrl=https\://services.gradle.org/distributions-snapshots/gradle-6.0-20191001230020+0000-bin.zip' >> gradle/wrapper/gradle-wrapper.properties2
-        - mv gradle/wrapper/gradle-wrapper.properties2 gradle/wrapper/gradle-wrapper.properties
-        # Spotless and Checkstyle are executed here as well to test if the plugins are compatible with Gradle 6.0 / Java 13
-        - xvfb-run ./gradlew build -PchecksumFailOn=never -PchecksumPrint=false $SKIP_TAR
-        # Show difference between the new dependencies and old ones. It is expected that new Gradle version might bring new dependencies
-        - diff -u checksum.xml build/checksum/checksum.xml || true
+        # Spotless, Checksyle, and JaCoCo are verified here to ensure they all work with the latest supported Java
+        - xvfb-run ./gradlew build jacocoReport -Duser.language=fr -Duser.country=FR $SKIP_TAR
+    - name: jmeter-maven-plugin tests
+      jdk: openjdk8
+      script:
+        - ./gradlew -PskipJavadoc publishToMavenLocal -Pjmeter.version=42.0 -PchecksumIgnore
+        - cd ..
+        - git clone --depth 100 https://github.com/jmeter-maven-plugin/jmeter-maven-plugin.git
+        - cd jmeter-maven-plugin
+        - mvn verify -Djmeter.version=42.0-SNAPSHOT

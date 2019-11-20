@@ -31,11 +31,11 @@ public class SyncTimerBeanInfo extends BeanInfoSupport {
 
         PropertyDescriptor p = property("groupSize");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Integer.valueOf(0));
+        p.setValue(DEFAULT, 0);
 
         p = property("timeoutInMs");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Long.valueOf(0));
+        p.setValue(DEFAULT, 0L);
 
     }
 

@@ -125,7 +125,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
                 if (log.isDebugEnabled()) {
                     log.debug(
                             "matchNumber({}) exceeds number of items found({}), default value will be used",
-                            Integer.valueOf(matchNumber), Integer.valueOf(resultList.size()));
+                            matchNumber, resultList.size());
                 }
                 vars.put(refName, defaultValue);
             } else {

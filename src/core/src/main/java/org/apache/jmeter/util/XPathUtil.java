@@ -707,7 +707,7 @@ public class XPathUtil {
                    if (length == 0) {
                        resultOfEval = false;
                    } else if (xObject.getType() == XObject.CLASS_BOOLEAN) {
-                       resultOfEval = Boolean.valueOf(nodes.itemAt(0).getStringValue());
+                       resultOfEval = Boolean.parseBoolean(nodes.itemAt(0).getStringValue());
                    }
                    result.setFailure(isNegated ? resultOfEval : !resultOfEval);
                    result.setFailureMessage(

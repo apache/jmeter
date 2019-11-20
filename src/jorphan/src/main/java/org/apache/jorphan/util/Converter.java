@@ -48,19 +48,19 @@ public class Converter {
         } else if (toType.isAssignableFrom(value.getClass())) {
             convertedValue = value;
         } else if (toType.equals(float.class) || toType.equals(Float.class)) {
-            convertedValue = Float.valueOf(getFloat(value));
+            convertedValue = getFloat(value);
         } else if (toType.equals(double.class) || toType.equals(Double.class)) {
-            convertedValue = Double.valueOf(getDouble(value));
+            convertedValue = getDouble(value);
         } else if (toType.equals(String.class)) {
             convertedValue = getString(value);
         } else if (toType.equals(int.class) || toType.equals(Integer.class)) {
-            convertedValue = Integer.valueOf(getInt(value));
+            convertedValue = getInt(value);
         } else if (toType.equals(char.class) || toType.equals(Character.class)) {
-            convertedValue = Character.valueOf(getChar(value));
+            convertedValue = getChar(value);
         } else if (toType.equals(long.class) || toType.equals(Long.class)) {
-            convertedValue = Long.valueOf(getLong(value));
+            convertedValue = getLong(value);
         } else if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
-            convertedValue = Boolean.valueOf(getBoolean(value));
+            convertedValue = getBoolean(value);
         } else if (toType.equals(java.util.Date.class)) {
             convertedValue = getDate(value);
         } else if (toType.equals(Calendar.class)) {
@@ -271,7 +271,7 @@ public class Converter {
         if (o == null) {
             return defaultValue;
         } else if (o instanceof Boolean) {
-            return ((Boolean) o).booleanValue();
+            return (Boolean) o;
         }
         return Boolean.parseBoolean(o.toString());
     }
@@ -328,7 +328,7 @@ public class Converter {
                 return defaultValue;
             }
             if (o instanceof Character) {
-                return ((Character) o).charValue();
+                return (Character) o;
             } else if (o instanceof Byte) {
                 return (char) ((Byte) o).byteValue();
             } else if (o instanceof Integer) {

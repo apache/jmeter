@@ -143,7 +143,7 @@ public class SampleMetadata {
         this.columns = columns;
         int size = columns.size();
         for (int i = 0; i < size; i++) {
-            index.put(this.columns.get(i).trim(), Integer.valueOf(i));
+            index.put(this.columns.get(i).trim(), i);
         }
     }
 
@@ -188,7 +188,7 @@ public class SampleMetadata {
      *             <code>getColumnCount()</code>)
      */
     public String getColumnName(Integer i) {
-        return columns.get(i.intValue());
+        return columns.get(i);
     }
 
     /**
@@ -201,7 +201,7 @@ public class SampleMetadata {
      */
     public int indexOf(String col) {
         Integer out = index.get(col);
-        return out == null ? -1 : out.intValue();
+        return out == null ? -1 : out;
     }
 
     /**

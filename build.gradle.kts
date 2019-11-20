@@ -100,7 +100,11 @@ val gitProps by tasks.registering(FindGitAttributes::class) {
 val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     gitignore(gitProps)
     // Note: patterns are in non-standard syntax for RAT, so we use exclude(..) instead of excludeFile
-    exclude(rootDir.resolve("rat-excludes.txt").readLines())
+    exclude(rootDir.resolve(".ratignore").readLines())
+}
+
+tasks.validateBeforeBuildingReleaseArtifacts {
+    dependsOn(rat)
 }
 
 releaseArtifacts {
@@ -125,8 +129,11 @@ releaseParams {
         // All the release versions are put under release/jmeter/{source,binary}
         releaseFolder.set("release/jmeter")
         releaseSubfolder.apply {
-            put(Regex("_src\\."), "sources")
+            put(Regex("_src\\."), "source")
             put(Regex("."), "binaries")
+        }
+        staleRemovalFilters {
+            excludes.add(Regex("release/.*/HEADER\\.html"))
         }
     }
     nexus {
@@ -135,7 +142,15 @@ releaseParams {
             stagingProfileId.set("4d29c092016673")
         }
     }
+    validateBeforeBuildingReleaseArtifacts += Runnable {
+        if (useGpgCmd && findProperty("signing.gnupg.keyName") == null) {
+            throw GradleException("Please specify signing key id via signing.gnupg.keyName " +
+                    "(see https://github.com/gradle/gradle/issues/8657)")
+        }
+    }
 }
+
+val isReleaseVersion = rootProject.releaseParams.release.get()
 
 val jacocoReport by tasks.registering(JacocoReport::class) {
     group = "Coverage reports"
@@ -269,6 +284,7 @@ if (enableSpotBugs) {
 val licenseHeaderFile = file("config/license.header.java")
 allprojects {
     group = "org.apache.jmeter"
+    version = rootProject.version
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
     // so we should produce jars without versions names for now
     // version = rootProject.version
@@ -438,26 +454,27 @@ allprojects {
     }
 
     // Not all the modules use publishing plugin
-    plugins.withType<PublishingPlugin> {
-        apply<SigningPlugin>()
-        // Sign all the published artifacts
-        signing {
-            sign(publishing.publications)
+    if (isReleaseVersion && !skipSigning) {
+        plugins.withType<PublishingPlugin> {
+            apply<SigningPlugin>()
+            // Sign all the published artifacts
+            signing {
+                sign(publishing.publications)
+            }
         }
     }
 
     plugins.withType<SigningPlugin> {
         if (useGpgCmd) {
-            configure<SigningExtension> {
+            signing {
                 useGpgCmd()
             }
         }
         afterEvaluate {
-            configure<SigningExtension> {
-                val release = rootProject.releaseParams.release.get()
+            signing {
                 // Note it would still try to sign the artifacts,
                 // however it would fail only when signing a RELEASE version fails
-                isRequired = release && !skipSigning
+                isRequired = isReleaseVersion && !skipSigning
             }
         }
     }

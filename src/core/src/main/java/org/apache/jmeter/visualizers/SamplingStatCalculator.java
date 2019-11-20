@@ -199,8 +199,8 @@ public class SamplingStatCalculator {
             rtime = res.getTime();
             cmean = (long)calculator.getMean();
             cstdv = (long)calculator.getStandardDeviation();
-            cmedian = calculator.getMedian().longValue();
-            cpercent = calculator.getPercentPoint( 0.500 ).longValue();
+            cmedian = calculator.getMedian();
+            cpercent = calculator.getPercentPoint(0.500);
 // TODO cpercent is the same as cmedian here - why? and why pass it to "distributionLine"?
             rbool = res.isSuccessful();
         }
@@ -290,7 +290,7 @@ public class SamplingStatCalculator {
     }
 
     public Number getMeanAsNumber() {
-        return Long.valueOf((long) calculator.getMean());
+        return (long) calculator.getMean();
     }
 
     public Number getMedian() {
@@ -298,8 +298,8 @@ public class SamplingStatCalculator {
     }
 
     public Number getMin() {
-        if (calculator.getMin().longValue() < 0) {
-            return Long.valueOf(0);
+        if (calculator.getMin() < 0) {
+            return 0L;
         }
         return calculator.getMin();
     }

@@ -104,9 +104,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private static final String PCT2_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct2", "95");
     private static final String PCT3_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct3", "99");
 
-    private static final Float PCT1_VALUE = Float.valueOf(Float.parseFloat(PCT1_LABEL)/100);
-    private static final Float PCT2_VALUE =  Float.valueOf(Float.parseFloat(PCT2_LABEL)/100);
-    private static final Float PCT3_VALUE =  Float.valueOf(Float.parseFloat(PCT3_LABEL)/100);
+    private static final Float PCT1_VALUE = Float.parseFloat(PCT1_LABEL) / 100;
+    private static final Float PCT2_VALUE = Float.parseFloat(PCT2_LABEL) / 100;
+    private static final Float PCT3_VALUE = Float.parseFloat(PCT3_LABEL) / 100;
 
     private static final Logger log = LoggerFactory.getLogger(StatGraphVisualizer.class);
 
@@ -623,16 +623,16 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         graphPanel.setShowGrouping(numberShowGrouping.isSelected());
         graphPanel.setValueOrientation(valueLabelsVertical.isSelected());
         graphPanel.setLegendPlacement(StatGraphProperties.getPlacementNameMap()
-                .get(legendPlacementList.getSelectedItem()).intValue());
+                .get(legendPlacementList.getSelectedItem()));
 
         graphPanel.setTitleFont(new Font(StatGraphProperties.getFontNameMap().get(titleFontNameList.getSelectedItem()),
-                StatGraphProperties.getFontStyleMap().get(titleFontStyleList.getSelectedItem()).intValue(),
+                StatGraphProperties.getFontStyleMap().get(titleFontStyleList.getSelectedItem()),
                 Integer.parseInt((String) titleFontSizeList.getSelectedItem())));
         graphPanel.setLegendFont(new Font(StatGraphProperties.getFontNameMap().get(fontNameList.getSelectedItem()),
-                StatGraphProperties.getFontStyleMap().get(fontStyleList.getSelectedItem()).intValue(),
+                StatGraphProperties.getFontStyleMap().get(fontStyleList.getSelectedItem()),
                 Integer.parseInt((String) fontSizeList.getSelectedItem())));
         graphPanel.setValueFont(new Font(StatGraphProperties.getFontNameMap().get(valueFontNameList.getSelectedItem()),
-                StatGraphProperties.getFontStyleMap().get(valueFontStyleList.getSelectedItem()).intValue(),
+                StatGraphProperties.getFontStyleMap().get(valueFontStyleList.getSelectedItem()),
                 Integer.parseInt((String) valueFontSizeList.getSelectedItem())));
 
         graphPanel.setHeight(height);

@@ -40,6 +40,327 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <p><b>Changes sections are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>
 
+<!--  =================== 5.2 =================== -->
+
+<h1>Version 5.2</h1>
+<p>
+Summary
+</p>
+<ul>
+<li><a href="#New and Noteworthy">New and Noteworthy</a></li>
+<li><a href="#Incompatible changes">Incompatible changes</a></li>
+<li><a href="#Bug fixes">Bug fixes</a></li>
+<li><a href="#Improvements">Improvements</a></li>
+<li><a href="#Non-functional changes">Non-functional changes</a></li>
+<li><a href="#Known problems and workarounds">Known problems and workarounds</a></li>
+<li><a href="#Thanks">Thanks</a></li>
+
+</ul>
+
+<ch_section>New and Noteworthy</ch_section>
+<p>
+This release is a major release. Please see the <a href="changes_history.html">Changes history page</a>
+to view the last release notes of version 5.1.1.
+</p>
+<!--
+<ch_title>Core improvements</ch_title>
+<ch_title>UX improvements</ch_title>
+<ch_title>Test Plan</ch_title>
+<ch_title>Scripting / Debugging enhancements</ch_title>
+-->
+<!--
+<ch_title>Functions</ch_title>
+-->
+<!-- =================== Incompatible changes =================== -->
+
+<ch_section>Incompatible changes</ch_section>
+<ul>
+    <li>HTTP(S) Test Script Recorder now appends number at end of names, while previously it added it at beginning. See <bugzilla>63450</bugzilla></li>
+    <li>When using XPath Assertion with an XPath expression returning a boolean, <code>True if nothing matches</code> had no effect and always returned true, see <bugzilla>63455</bugzilla></li>
+    <li>XML parsing now refuses unsecure XML, this has impacts on the following features:
+        <ul>
+            <li>XMLAssertion</li>
+            <li>XMLSchemAssertion</li>
+            <li>XPath function</li>
+            <li>XPath 1 &amp; 2 Extractors</li>
+            <li>XPath 1 &amp; 2 Assertions</li>
+        </ul>
+    
+     </li>
+</ul>
+<!-- =================== Improvements =================== -->
+
+<ch_section>Improvements</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+    <li><bug>63450</bug>HTTP(S) Test Script Recorder: Put number at end instead of beginning</li>
+    <li><bug>63790</bug>Embedded Resources download: Optimize CSS parsing by removing source location</li>
+</ul>
+
+<h3>Other samplers</h3>
+<ul>
+    <li><bug>63406</bug>JDBC connection configuration: new option for pre-initialize to initialize the connection pool. Contributed by Franz Schwab (franz.schwab at exasol.com)</li>
+    <li><bug>63561</bug>JDBC Request: Allow to only fetch a certain number of rows. Contributed by Franz Schwab (franz.schwab at exasol.com)</li>
+    <li><bug>63801</bug>Add Bolt protocol support for Neo4j database. Contributed by GraphAware (www.graphaware.com)</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+    <li><bug>63565</bug>If Controller: GC issue with JMeter during the endurance run when using with "Interpret Condition as Variable Expression?" unchecked => Improve documentation</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+    <li><bug>63720</bug>BackendListener: InfluxDBBackendListenerClient Add support for InfluxDB 2. Contributed by Jakub Bednář (https://github.com/bednar)</li>
+    <li><bug>63770</bug>View Results Tree: Add JMESPath Tester. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+  <li><bug>62863</bug>Enable PKCS11 keystores for usage with KeyStore Manager. Based on patch by Clifford Harms (clifford.harms at gmail.com).</li>
+  <li><pr>457</pr>Slight performance improvement in PoissonRandomTimer by using ThreadLocalRandom. Based on a patch by Xia Li.</li>
+  <li><bug>62787</bug>New <code>XPath2 Assertion</code> supporting XPath2 with better performances than <code>XPath Assertion</code>. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <li><bug>63643</bug>Skip BOM on files opened through <code>FileServer</code> and use the BOM to detect the character encoding,
+      if none is given explicitly. Reported by Havlicek Honza (havlicek.honza at gmail.com)</li>
+  <li><bug>63727</bug>New <code>JMESPath Extractor</code> element to ease extraction from JSON using <a href="http://jmespath.org">JMESPath</a> technology. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <li><bug>63763</bug>New <code>JMESPath Assertion</code> element to ease assertion on JSON using <a href="http://jmespath.org">JMESPath</a> technology. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <li><bug>63775</bug>Allow Boundary Extractor to accept empty boundaries</li>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+  <li><bug>63219</bug>New function <code>__StringToFile</code> to save/append a string into a file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+  <li>Use <code>AtomicInteger</code> for <code>__counter</code> instead of synchronization on our own</li>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>Report / Dashboard</h3>
+<ul>
+  <li><bug>63471</bug><code>StringConverter</code>s used for report generation should ignore white space around numbers.</li>
+</ul>
+
+<h3>General</h3>
+<ul>
+    <li><bug>63396</bug>JSR223 Test Elements: Description of Parameters is misleading, same for Script</li>
+    <li><bug>63480</bug>XPathAssertion and XPathAssertion2: Improve test coverage for input coming from variable. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63452</bug>Tools / Import from cURL: Complete coverage of all command line options that are valid in JMeter use case. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63419</bug>Tools / Import from cURL: Add ability to import a set of cURL commands from a file. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63760</bug>JOrphanUtils: add random alphanumeric password generator</li>
+    <li><bug>63355</bug>View Results Tree: Browser view option is not Available since Java 11, document how to make it available, see <a href="./usermanual/hints_and_tips.html#browser_renderer_view_results_tree">this</a></li>
+    <li><bug>62861</bug>Thread Group: Provide ability to configure whether a new iteration is a new user or same user (Would be applied on Cookie Manager, Cache Manager and httpclient.reset_state_on_thread_group_iteration). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63616</bug>Fix Javadoc: <source>JMeterContext#getThreadNum()</source> starts at 0 and not 1. Contributed by Ori Marko (orimarko at gmail.com)</li>
+    <li>Updated to httpclient/httpmime 4.5.10 (from 4.5.7)</li>
+    <li>Updated to dnsjava 2.1.9 (from 2.1.8)</li>
+    <li>Updated to jsoup 1.12.1 (from 1.11.3)</li>
+    <li>Updated to rsyntaxtextarea 3.0.4 (from 3.0.2)</li>
+    <li>Updated to caffeine 2.8.0 (from 2.6.2)</li>
+    <li>Updated to commons-codec 1.13 (from 1.11)</li>
+    <li>Updated to commons-lang3 3.9 (from 3.8.1)</li>
+    <li>Updated to commons-pool 2.7 (from 2.6)</li>
+    <li>Updated to commons-text 1.8 (from 1.6)</li>
+    <li>Updated to freemarker 2.3.29 (from 2.3.28)</li>
+    <li>Updated to httpcore/httpcore-nio 4.12 (from 4.11)</li>
+    <li>Updated to jodd 5.0.13 (from 5.0.6)</li>
+    <li>Updated to log4j 2.12.1 (from 2.11.1)</li>
+    <li>Updated to ph-commons 9.3.7 (from 9.2.1)</li>
+    <li>Updated to ph-css 6.2.0 (from 6.1.1)</li>
+    <li>Updated to Mozilla Rhino 1.7.11 (from 1.7.10)</li>
+    <li>Updated to Saxon-HE 9.9.1-5 (from 9.9.1-1)</li>
+    <li>Updated to slf4j 1.7.28 (from 1.7.25)</li>
+    <li>Updated to tika-core and tika-parsers 1.22 (from 1.21)</li>
+    <li>Updated jackson-annotations, jackson-core and jackson-databind to 2.9.10 (from 2.9.8)</li>
+</ul>
+
+<ch_section>Non-functional changes</ch_section>
+<ul>
+    <li>Migrated from subversion to <a href="https://github.com/apache/jmeter">Git</a></li>
+    <li><bug>63630</bug>Switch build from Apache Ant to Gradle</li>
+    <li><bug>63529</bug>Add more unit tests for org.apache.jorphan.util.JOrphanUtils. Contributed by John Bergqvist(John.Bergqvist at diffblue.com)</li>
+    <li>Updated to latest checkstyle (version 8.22)</li>
+    <li>Clean-up of code in <code>CompareAssertion</code> and other locations. Based on patch by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>491</pr>Increase Graphite metrics coverage. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>520</pr>Replace anonymous classes with lambda expressions. Contributed by Graham Russell (graham at ham1.co.uk).</li>
+    <li><pr>524</pr>Migration from JUnit 4 to JUnit 5. Contributed by Graham Russell (graham at ham1.co.uk).</li>
+</ul>
+
+ <!-- =================== Bug fixes =================== -->
+
+<ch_section>Bug fixes</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+    <li><bug>63298</bug>HTTP Requests with encoded URLs are being sent in decoded format</li>
+    <li><bug>63364</bug>When setting <code>subresults.disable_renaming=true</code>, sub results are still renamed using their parent SampleLabel while they shouldn't. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63129</bug>JMeter can not identify encoding during first time page submission. Based partly on analysis and PR made by Naveen Nandwani (naveen.nandwani at india.nec.com)</li>
+    <li><bug>62672</bug>HTTP Request sends double requests when using proxy with authentication. Based on patch by Artem Fedorov (artem.fedorov at blazemeter.com) and contributed by BlazeMeter.</li>
+    <li><bug>63574</bug>HTTP Cache Manager does not cache resource if <code>Cache-Control</code> header is missing.</li>
+</ul>
+
+<h3>Other Samplers</h3>
+<ul>
+    <li><bug>63442</bug>Reduce scanning for <code>LogParser</code> implementations in AccessLogSamplerBeanInfo.</li>
+    <li><bug>63563</bug>LdapExtSampler: When sampler fails with exception differing from NamingException, no SampleResult is generated</li>
+    <li><bug>63469</bug>JMSPublisher: Race condition in jms.client.ClientPool#clearClient</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+    <li><bug>63319</bug><code>ArrayIndexOutOfBoundsException</code> in Aggregate Graph when selecting 90&nbsp;% or 95&nbsp;% columns</li>
+    <li><bug>63423</bug>Selection of table rows in Aggregate Graph gets lost too often</li>
+    <li><bug>63347</bug>View result tree: The search field is so small that even a single character is not visible on Windows 7</li>
+    <li><bug>63433</bug>ListenerNotifier: Detected problem in Listener NullPointerException if filename is null. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63674</bug>Strip results with subresults deeper in their hierarchy when DataStripping is enabled</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+    <li><bug>63455</bug>XPath Assertion: <code>True if nothing matches</code> does not work if XPath expression returns a boolean. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>Report / Dashboard</h3>
+<ul>
+</ul>
+
+<h3>Documentation</h3>
+<ul>
+    <li><bug>63513</bug>Add MariaDB examples to JDBC documentation. Contributed by Ori Marko (orimarko at gmail.com)</li>
+    <li><bug>63484</bug>Add notes to use Apache Velocity as JSR223 script language. Based on a patch by Ori Marko (orimarko at gmail.com)</li>
+    <li><bug>63519</bug><pr>471</pr>Use correct method <code>getLabelResource()</code> in JMeter tutorial. Contributed by Sun Tao (buzzerrookie at hotmail.com>)</li>
+</ul>
+
+<h3>General</h3>
+<ul>
+    <li><bug>63394</bug>JMeter should fail with non-zero when test execution fails (due to missing test plan or other reason). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>63464</bug>image/svg+xml is wrongly considered as binary</li>
+    <li><bug>63490</bug>At end of scheduler duration lots of Samplers gets executed at the same time</li>
+    <li><pr>480</pr><pr>482</pr>Fix a few typos in comments and log messages. Based on patch by Anass Benomar (anassbenomar at gmail.com)</li>
+    <li><bug>63751</bug>Correct a typo in Chinese translations. Reported by Jinliang Wang (wjl31802 at 126.com)</li>
+    <li><bug>63723</bug>Distributed testing: JMeter master ends distributed test though some threads still are active</li>
+    <li><bug>63614</bug>Distributed testing: Unable to generate Dashboard report at end of load test</li>
+    <li><bug>63862</bug> Search Dialog / Search in View Results Tree: Uncaught exception if regex is checked and regex is invalid</li> 
+    <li><bug>63793</bug>Fix unsecure XML Parsing</li>
+</ul>
+
+ <!--  =================== Thanks =================== -->
+
+<ch_section>Thanks</ch_section>
+<p>We thank all contributors mentioned in bug and improvement sections above:
+</p>
+<ul>
+  <li>Clifford Harms (clifford.harms at gmail.com)</li>
+  <li><a href="https://ubikloadpack.com">Ubik Load Pack</a></li>
+  <li>Xia Li</li>
+  <li>Naveen Nandwani (naveen.nandwani at india.nec.com)</li>
+  <li>Artem Fedorov (artem.fedorov at blazemeter.com)</li>
+  <li>Ori Marko (orimarko at gmail.com)</li>
+  <li>Sun Tao (buzzerrookie at hotmail.com)</li>
+  <li>John Bergqvist (John.Bergqvist at diffblue.com)</li>
+  <li>Franz Schwab (franz.schwab at exasol.com)</li>
+  <li>Graham Russell (graham at ham1.co.uk)</li>
+  <li>Anass Benomar (anassbenomar at gmail.com)</li>
+  <li><a href="https://github.com/bednar">Jakub Bednář</a></li>
+  <li>Pascal Schumacher (pascalschumacher at apache.org)</li>
+  <li><a href="https://graphaware.com/">GraphAware</a></li>
+</ul>
+<p>We also thank bug reporters who helped us improve JMeter.</p>
+<ul>
+    <li>Sergiy Iampol (sergiy.iampol at playtech.com)</li>
+    <li>Brian Tully (brian.tully at acquia.com)</li>
+    <li>Amer Ghazal (amerghazal at gmail.com)</li>
+    <li>Stefan Seide (stefan at trilobyte-se.de)</li>
+    <li>Havlicek Honza (havlicek.honza at gmail.com)</li>
+    <li>Pierre Astruc (pierre.astruc at evertest.com)</li>
+    <li>Jinliang Wang (wjl31802 at 126.com)</li>
+</ul>
+<p>
+Apologies if we have omitted anyone else.
+</p>
+ <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
+
+<ch_section>Known problems and workarounds</ch_section>
+<ul>
+<li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</li>
+
+<li>
+The numbers that appear to the left of the green box are the number of active threads / total number of threads,
+the total number of threads only applies to a locally run test, otherwise it will show <code>0</code> (see <bugzilla>55510</bugzilla>).
+</li>
+
+<li>
+Note that under some windows systems you may have this WARNING:
+<source>
+java.util.prefs.WindowsPreferences
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
+x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
+</source>
+The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
+</li>
+
+<li>
+You may encounter the following error:
+<source>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</source>
+ if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
+ algorithm using MD2 (like <code>md2WithRSAEncryption</code>) or with a SSL certificate with a size lower than 1024 bits.
+This error is related to increased security in Java 8+.
+<br></br>
+To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
+the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.
+<br></br>
+This property is in this file:
+<source>JAVA_HOME/jre/lib/security/java.security</source>
+See  <bugzilla>56357</bugzilla> for details.
+</li>
+
+<li>
+Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
+This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a>
+The fix is to use JDK8_u45 or later.
+</li>
+
+<li>
+View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
+This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
+See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
+The fix is to use JDK9 b65 or later.
+</li>
+
+<li>
+JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down</keysym></keycombo>) is totally unusable with Java 7 on Mac OSX.
+This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a>
+The fix is to use JDK 8 b132 or later.
+</li>
+
+<li>
+Since Java 11 the JavaScript implementation <a href="https://openjdk.java.net/jeps/335">Nashorn has been deprecated</a>.
+Java will emit the following deprecation warnings, if you are using JavaScript based on Nashorn.
+<source>
+Warning: Nashorn engine is planned to be removed from a future JDK release
+</source>
+To silence these warnings, add <code>-Dnashorn.args=--no-deprecation-warning</code> to your Java arguments.
+That can be achieved by setting the enviroment variable <code>JVM_ARGS</code>
+<source>
+export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
+</source>
+</li>
+</ul>
+
 <!--  =================== 5.1.1 =================== -->
 
 <h1>Version 5.1.1</h1>

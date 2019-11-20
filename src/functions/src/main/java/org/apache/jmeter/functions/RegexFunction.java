@@ -224,7 +224,7 @@ public class RegexFunction extends AbstractFunction {
             if (t instanceof String) {
                 result.append(t);
             } else {
-                result.append(match.group(((Integer) t).intValue()));
+                result.append(match.group((Integer) t));
             }
         }
         if (namep.length() > 0){

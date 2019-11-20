@@ -367,7 +367,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
             Boolean success = (Boolean) super.invoke(pInvokee);
 
             if (success != null) {
-                if (success.booleanValue()) {
+                if (success) {
                     return imageSuccess;
                 } else {
                     return imageFailure;

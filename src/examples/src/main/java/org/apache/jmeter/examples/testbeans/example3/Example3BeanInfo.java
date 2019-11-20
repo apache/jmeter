@@ -43,12 +43,12 @@ public class Example3BeanInfo extends BeanInfoSupport {
         getprop("mybool", Boolean.TRUE); // Must use defaults for primitive types
         getprop("myBoolean1");
         getprop("myBoolean2", Boolean.TRUE);
-        getprop("myInt", Integer.valueOf(77)); // Must use defaults for primitive types
+        getprop("myInt", 77); // Must use defaults for primitive types
         getprop("myInteger1");
-        getprop("myInteger2", Integer.valueOf(123));
-        getprop("mylong", Long.valueOf(99)); // Must use defaults for primitive types
+        getprop("myInteger2", 123);
+        getprop("mylong", 99L); // Must use defaults for primitive types
         getprop("myLong1");
-        getprop("myLong2", Long.valueOf(456));
+        getprop("myLong2", 456L);
         getprop("myString1");
         getprop("myString2","abcd");
         getprop("myFile1");

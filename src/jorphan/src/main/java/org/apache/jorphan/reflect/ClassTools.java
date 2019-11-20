@@ -61,7 +61,7 @@ public class ClassTools {
         try {
             Class<?> clazz = ClassUtils.getClass(className);
             Constructor<?> constructor = clazz.getConstructor(Integer.TYPE);
-            instance = constructor.newInstance(Integer.valueOf(parameter));
+            instance = constructor.newInstance(parameter);
         } catch (ClassNotFoundException | InvocationTargetException
                 | IllegalArgumentException | NoSuchMethodException
                 | SecurityException | IllegalAccessException

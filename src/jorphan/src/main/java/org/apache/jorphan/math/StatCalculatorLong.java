@@ -24,7 +24,7 @@ package org.apache.jorphan.math;
 public class StatCalculatorLong extends StatCalculator<Long> {
 
     public StatCalculatorLong() {
-        super(Long.valueOf(0L), Long.valueOf(Long.MIN_VALUE), Long.valueOf(Long.MAX_VALUE));
+        super(0L, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
     /**
@@ -33,7 +33,7 @@ public class StatCalculatorLong extends StatCalculator<Long> {
      * @param val the value to add, which should correspond with a single sample
      */
     public void addValue(long val){
-        super.addValue(Long.valueOf(val));
+        super.addValue(val);
     }
 
     /**
@@ -43,16 +43,16 @@ public class StatCalculatorLong extends StatCalculator<Long> {
      * @param sampleCount the number of samples contributing to the aggregate value
      */
     public void addValue(long val, int sampleCount){
-        super.addValue(Long.valueOf(val), sampleCount);
+        super.addValue(val, sampleCount);
     }
 
     @Override
     protected Long divide(Long val, int n) {
-        return Long.valueOf(val.longValue() / n);
+        return val / n;
     }
 
     @Override
     protected Long divide(Long val, long n) {
-        return Long.valueOf(val.longValue() / n);
+        return val / n;
     }
 }

@@ -224,7 +224,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             for (Map.Entry<String, Float> entry : okPercentiles.entrySet()) {
                 graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                         entry.getKey(),
-                        Double.toString(metric.getOkPercentile(entry.getValue().floatValue())));
+                        Double.toString(metric.getOkPercentile(entry.getValue())));
             }
         }
         if (metric.getFailures() > 0) {
@@ -240,7 +240,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             for (Map.Entry<String, Float> entry : koPercentiles.entrySet()) {
                 graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                         entry.getKey(),
-                        Double.toString(metric.getKoPercentile(entry.getValue().floatValue())));
+                        Double.toString(metric.getKoPercentile(entry.getValue())));
             }
         }
         graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
@@ -255,7 +255,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         for (Map.Entry<String, Float> entry : allPercentiles.entrySet()) {
             graphiteMetricsManager.addMetric(timestampInSeconds, contextName,
                     entry.getKey(),
-                    Double.toString(metric.getAllPercentile(entry.getValue().floatValue())));
+                    Double.toString(metric.getAllPercentile(entry.getValue())));
         }
     }
 
