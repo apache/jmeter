@@ -63,8 +63,9 @@ interface InfluxdbMetricsSender {
 
     /**
      * Setup sender using influxDBUrl
-     * @param influxDBUrl url pointing to influxdb
-     * @param influxDBToken authorization token to influxdb 2.0
+     *
+     * @param influxDBUrl   url pointing to InfluxDB
+     * @param influxDBToken authorization token to InfluxDB 2.0
      * @throws Exception when setup fails
      */
     public void setup(String influxDBUrl, String influxDBToken) throws Exception; // NOSONAR

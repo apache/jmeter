@@ -127,8 +127,8 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     /**
-     * @param url   {@link URL} Influxdb Url
-     * @param token Influxdb 2.0 authorization token
+     * @param url   {@link URL} InfluxDB Url
+     * @param token InfluxDB 2.0 authorization token
      * @return {@link HttpPost}
      * @throws URISyntaxException
      */
