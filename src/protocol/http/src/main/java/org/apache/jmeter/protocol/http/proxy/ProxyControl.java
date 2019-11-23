@@ -143,7 +143,6 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
 
     private static final String HTTP_SAMPLER_NUMBERING_MODE = "ProxyControlGui.proxy_http_sampler_numbering_mode"; // $NON-NLS-1$
-    // private static final String HTTP_SAMPLER_NUMBERING_START_VALUE = "ProxyControlGui.proxy_http_sampler_numbering_start_value"; // $NON-NLS-1$
     private static final String HTTP_SAMPLER_NUMBERING_INTEGER_FORMAT = "ProxyControlGui.proxy_http_sampler_numbering_integer_format"; // $NON-NLS-1$
 
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
@@ -171,10 +170,19 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC4 = "2";
 
-    private static final int HTTP_SAMPLER_NUMBERING_MODE_PREFIX = 0;
-    private static final int HTTP_SAMPLER_NUMBERING_MODE_SUFFIX = 1;
-    private static final int HTTP_SAMPLER_NUMBERING_MODE_NO_NUMBER = 2;
+    public enum HttpSamplerNumberingMode {
+        PREFIX(0), SUFFIX(1), NO_NUMBER(2);
 
+        private final int value;
+
+        private HttpSamplerNumberingMode(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return this.value;
+        }
+    }
     private long sampleGap;
 
     // for ssl connection
@@ -308,16 +316,16 @@ public class ProxyControl extends GenericController implements NonTestElement {
         String sNumberingMode = JMeterUtils.getPropDefault("proxy.number.mode", HTTP_SAMPLER_NUMBERING_MODE_DEFAULT);
 
         if ("prefix".equals(sNumberingMode)) {
-            setHttpSampleNumberingMode(HTTP_SAMPLER_NUMBERING_MODE_PREFIX);
+            setHttpSampleNumberingMode(HttpSamplerNumberingMode.PREFIX.getValue());
         }
         if ("suffix".equals(sNumberingMode)) {
-            setHttpSampleNumberingMode(HTTP_SAMPLER_NUMBERING_MODE_SUFFIX);
+            setHttpSampleNumberingMode(HttpSamplerNumberingMode.SUFFIX.getValue());
         }
 
         boolean bWihtNumber = JMeterUtils.getPropDefault("proxy.number.requests", true);
         if (!bWihtNumber) {
             // no numbering request because proxy.number.requests = false
-            setHttpSampleNumberingMode(HTTP_SAMPLER_NUMBERING_MODE_NO_NUMBER);
+            setHttpSampleNumberingMode(HttpSamplerNumberingMode.NO_NUMBER.getValue());
         }
     }
 
