@@ -162,6 +162,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>General</h3>
 <ul>
+  <li><bug>63945</bug>NPE when opening a file after file system change</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -173,6 +174,7 @@ to view the last release notes of version 5.2.1.
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
+  <li>Michael McDermott (mcdermott.michaelj at gmail.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
