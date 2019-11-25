@@ -222,9 +222,10 @@
         <li><a href="correlation.html#jmx_file">25.1.1 JMX File</a></li>
         <li><a href="correlation.html#import_rule">25.1.2 Import/Export Rule</a></li>
      </ul>
-     <li><a href="correlation.html#naming_convention">25.2 Correlatable Parameter Naming convention</a></li>
-     <li><a href="correlation.html#rule_file_format">25.3 Rule File format</a></li>
-     <li><a href="correlation.html#limitations">25.4 Limitations</a></li>
+     <li><a href="correlation.html#avoid_mistakes">25.2 Mistakes to avoid and Best Practices</a></li>
+     <li><a href="correlation.html#naming_convention">25.3 Correlatable Parameter Naming convention</a></li>
+     <li><a href="correlation.html#rule_file_format">25.4 Rule File format</a></li>
+     <li><a href="correlation.html#limitations">25.5 Limitations</a></li>
    </ul>
  </li>
  <li><a name="history_future"/><a href="history_future.html">26. History / Future</a></li>
