@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.jmeter.protocol.http.gui;
+package org.apache.jmeter.protocol.http.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
@@ -28,22 +28,23 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.action.AbstractActionWithNoRunningTest;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.protocol.http.gui.action.Correlation;
+import org.apache.jmeter.protocol.http.correlation.Correlation;
+import org.apache.jmeter.protocol.http.gui.CorrelationGui;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CorrelationDialoger extends AbstractActionWithNoRunningTest {
+public class CorrelationJMXFile extends AbstractActionWithNoRunningTest {
 
     private static final String[] exts = new String[] { ".jmx" }; //$NON-NLS-1$
     private static final Set<String> commands = new HashSet<>();
-    private static final Logger log = LoggerFactory.getLogger(CorrelationDialoger.class);
+    private static final Logger log = LoggerFactory.getLogger(CorrelationJMXFile.class);
 
     static {
         commands.add(ActionNames.CORRELATION_JMX_FILE);
     }
 
-    public CorrelationDialoger() {
+    public CorrelationJMXFile() {
         super();
     }
 

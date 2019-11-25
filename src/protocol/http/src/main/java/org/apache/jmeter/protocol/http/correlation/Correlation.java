@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.jmeter.protocol.http.gui.action;
+package org.apache.jmeter.protocol.http.correlation;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,11 +112,6 @@ public class Correlation {
         if (null == file) {
             throw new NullPointerException("JMX file is null. Please check the file and try again"); //$NON-NLS-1$
         }
-        // Check if response buffer is empty
-        if (CorrelationRecorder.buffer == null || CorrelationRecorder.buffer.isEmpty()) {
-            throw new IllegalUserActionException(
-                    "No Response data found. Make sure you have recorded the script and not opened it.");
-        }
         // Load the imported JMX file and create a list of HTTP sample requests and
         // HeaderManagers
         HashTree tree = null;
@@ -142,6 +137,11 @@ public class Correlation {
         if (sampleList.isEmpty()) {
             throw new IllegalUserActionException(
                     "Current GUI TestPlan doesn't have any HTTP(S) Requests. Please record a plan and try again.");
+        }
+        // Check if response buffer is empty
+        if (CorrelationRecorder.buffer == null || CorrelationRecorder.buffer.isEmpty()) {
+            throw new IllegalUserActionException(
+                    "No Response data found. Make sure you have recorded the script and not opened it.");
         }
         List<HTTPSamplerBase> currentGuiSampleRequestList = sampleList.stream()
                 .map(node -> (HTTPSamplerBase) node.getTestElement()).collect(Collectors.toList());

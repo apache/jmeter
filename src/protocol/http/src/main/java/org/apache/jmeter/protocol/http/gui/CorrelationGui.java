@@ -34,7 +34,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import org.apache.jmeter.gui.CorrelationTableModel;
-import org.apache.jmeter.protocol.http.gui.action.CorrelationExtractor;
+import org.apache.jmeter.protocol.http.correlation.CorrelationExtractor;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class CorrelationGui {

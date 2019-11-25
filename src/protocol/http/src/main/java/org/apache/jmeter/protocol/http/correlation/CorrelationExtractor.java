@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.jmeter.protocol.http.gui.action;
+package org.apache.jmeter.protocol.http.correlation;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
