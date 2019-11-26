@@ -119,6 +119,7 @@ to view the last release notes of version 5.2.
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Updated jackson-databind to 2.9.10.1 (from 2.9.10)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
