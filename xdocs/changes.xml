@@ -40,9 +40,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 5.2.1 =================== -->
+<!--  =================== 5.3 =================== -->
 
-<h1>Version 5.2.1</h1>
+<h1>Version 5.3</h1>
 <p>
 Summary
 </p>
@@ -60,7 +60,7 @@ Summary
 <ch_section>New and Noteworthy</ch_section>
 <p>
 This release is a minor bugfix release. Please see the <a href="changes_history.html">Changes history page</a>
-to view the last release notes of version 5.2.
+to view the last release notes of version 5.2.1.
 </p>
 <!--
 <ch_title>Core improvements</ch_title>
@@ -86,7 +86,6 @@ to view the last release notes of version 5.2.
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>63926</bug>JDBC Connection Configuration: Add ability to set connection properties</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -139,7 +138,6 @@ to view the last release notes of version 5.2.
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>63906</bug>NPE for InfluxDB backend listener during failover testing</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -164,8 +162,6 @@ to view the last release notes of version 5.2.
 
 <h3>General</h3>
 <ul>
-    <li><bug>63910</bug>Broken maven poms in released 5.2 version </li>
-    <li><bug>63911</bug>ApacheJMeter_config.jar content has changed (bin moved to run and missing files)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -174,7 +170,6 @@ to view the last release notes of version 5.2.
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-    <li><a href="https://github.com/vincentclee">Vincent Lee</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
