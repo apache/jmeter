@@ -118,6 +118,7 @@ to view the last release notes of version 5.2.1.
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li><bug>63963</bug><pr>546</pr>Updated jackson to 2.10.1 (from 2.9.10)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -171,6 +172,7 @@ to view the last release notes of version 5.2.1.
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+  <li>Stefan Seide (stefan at trilobyte-se.de)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
