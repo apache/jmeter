@@ -326,6 +326,9 @@ allprojects {
             apply<CheckstylePlugin>()
             checkstyle {
                 toolVersion = "checkstyle".v
+                configProperties = mapOf(
+                    "cache_file" to buildDir.resolve("checkstyle/cacheFile")
+                )
             }
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {
