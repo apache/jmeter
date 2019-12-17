@@ -159,6 +159,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>Documentation</h3>
 <ul>
+  <li><pr>547</pr>Correct Log level documentation. Contributed by jmetertea</li>
 </ul>
 
 <h3>General</h3>
@@ -177,6 +178,7 @@ to view the last release notes of version 5.2.1.
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
   <li>Michael McDermott (mcdermott.michaelj at gmail.com)</li>
+  <li>jmetertea</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
