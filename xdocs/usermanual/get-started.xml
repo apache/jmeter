@@ -672,12 +672,13 @@ LoggerFactory.getLogger(Foo.class);</source>
               <li>WARN</li>
               <li>ERROR</li>
               <li>ERROR</li>
-              <li>NONE</li>
+              <li>OFF</li>
             </ul>
             <div>
               <em><b>Note:</b></em>
               Since 'FATAL_ERROR' is not supported by SLF4J API,
-              it is treated as 'ERROR' instead for existing code not to break.
+              it is treated as 'ERROR' instead for existing code not to break. 
+              There's also 'FATAL' log level option.
             </div>
             <div>
               <em><b>Note:</b></em>
