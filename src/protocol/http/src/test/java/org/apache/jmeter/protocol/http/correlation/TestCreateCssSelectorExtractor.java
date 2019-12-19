@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.jmeter.extractor;
+package org.apache.jmeter.protocol.http.correlation;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

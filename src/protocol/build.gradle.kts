@@ -53,6 +53,9 @@ project("http") {
         api("com.thoughtworks.xstream:xstream") {
             because("HTTPResultConverter uses XStream in public API")
         }
+        api("net.sf.saxon:Saxon-HE") {
+            because("CorrelationRuleFile: throws SaxonApiException")
+        }
 
         compileOnly("javax.activation:javax.activation-api") {
             because("ParseCurlCommandAction uses new MimetypesFileTypeMap()")
@@ -85,6 +88,11 @@ project("http") {
         implementation("org.apache.httpcomponents:httpmime")
         implementation("org.apache.httpcomponents:httpcore")
         implementation("org.brotli:dec")
+        implementation("net.minidev:json-smart")
+        implementation("com.fasterxml.jackson.core:jackson-annotations")
+        implementation("com.fasterxml.jackson.core:jackson-core")
+        implementation("com.fasterxml.jackson.core:jackson-databind")
+        implementation("com.jayway.jsonpath:json-path")
         testImplementation(testFixtures(project(":src:testkit-wiremock")))
         testImplementation("com.github.tomakehurst:wiremock-jre8")
     }

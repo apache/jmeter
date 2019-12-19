@@ -16,28 +16,20 @@
  *
  */
 
-package org.apache.jmeter.extractor;
-
-import java.io.InputStream;
+package org.apache.jmeter.protocol.http.correlation;
 
 import javax.xml.transform.TransformerException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TestCreateXPath2Extractor {
+public class TestCreateJsonPathExtractor {
 
     @Test
-    public void testCreateXPath2ExtractorThrowsException() throws TransformerException {
+    public void testCreateJsonPathExtractorThrowsException() throws TransformerException {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            CreateXPath2Extractor.createXPath2Extractor(null, null, "_csrf", "2 /login", "application/xml");
+            CreateJsonPathExtractor.createJsonPathExtractor(null, null, "_csrf", "2 /login", "application/xml");
         });
-    }
-
-    @Test
-    public void testCheckIfXSLTransformResourceExists() {
-        InputStream in = CreateXPath2Extractor.class.getResourceAsStream("CreateXPath2ExtractorXSLTransform.xml");
-        Assertions.assertNotEquals(null, in);
     }
 
 }
