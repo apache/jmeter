@@ -16,14 +16,12 @@
  *
  */
 
-package org.apache.jmeter.extractor;
+package org.apache.jmeter.protocol.http.correlation;
 
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.transform.Result;
@@ -31,18 +29,14 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 
+import org.apache.jmeter.extractor.XPath2Extractor;
+import org.apache.jmeter.protocol.http.correlation.extractordata.XPath2ExtractorData;
 import org.apache.jmeter.testelement.TestElement;
 
 import net.sf.saxon.TransformerFactoryImpl;
 
 public class CreateXPath2Extractor {
 
-    public static final String XPATH2_EXTRACTOR_VARIABLE_NAME = "XPathExtractor2.refname"; //$NON-NLS-1$
-    public static final String XPATH2_EXTRACTOR_MATCH_NO = "XPathExtractor2.matchNumber"; //$NON-NLS-1$
-    public static final String XPATH2_EXTRACTOR_XPATHQUERY = "XPathExtractor2.xpathQuery"; //$NON-NLS-1$
-
-    private static final String CONTENT_TYPE = "contentType"; //$NON-NLS-1$
-    private static final String TEST_NAME = "testname"; //$NON-NLS-1$
     private static final String ONE = "1"; //$NON-NLS-1$
 
     private CreateXPath2Extractor() {}
@@ -60,9 +54,9 @@ public class CreateXPath2Extractor {
      * @return XPath2Extractor values in a map
      * @throws TransformerException when XSL transform failed
      */
-    public static Map<String, String> createXPath2Extractor(String xml, String value, String correlationVariableName,
+    public static XPath2ExtractorData createXPath2Extractor(String xml, String value, String correlationVariableName,
             String requestUrl, String contentType) throws TransformerException {
-        Map<String, String> xPath2Extractor = new HashMap<>();
+        XPath2ExtractorData xPath2Extractor = null;
         if (xml == null || value == null) {
             throw new IllegalArgumentException("Response Data or value to be searched is null"); //$NON-NLS-1$
         }
@@ -78,12 +72,8 @@ public class CreateXPath2Extractor {
             // return empty map
             return xPath2Extractor;
         } else {
-            xPath2Extractor.put(XPATH2_EXTRACTOR_VARIABLE_NAME, correlationVariableName);
-            xPath2Extractor.put(XPATH2_EXTRACTOR_XPATHQUERY, xPathQuery);
             // Match No. = 1, as we are getting first occurrence of the element
-            xPath2Extractor.put(XPATH2_EXTRACTOR_MATCH_NO, ONE);
-            xPath2Extractor.put(CONTENT_TYPE, contentType);
-            xPath2Extractor.put(TEST_NAME, requestUrl);
+            xPath2Extractor = new XPath2ExtractorData(correlationVariableName, xPathQuery, ONE, contentType, requestUrl);
             return xPath2Extractor;
         }
     }
@@ -136,12 +126,12 @@ public class CreateXPath2Extractor {
      * @param testElement empty testElement object
      * @return XPath2 extractor TestElement
      */
-    public static TestElement createXPath2ExtractorTestElement(Map<String, String> extractor, TestElement testElement) {
+    public static TestElement createXPath2ExtractorTestElement(XPath2ExtractorData extractor, TestElement testElement) {
         XPath2Extractor xPath2Extractor = (XPath2Extractor) testElement;
-        xPath2Extractor.setName(extractor.get(XPATH2_EXTRACTOR_VARIABLE_NAME));
-        xPath2Extractor.setRefName(extractor.get(XPATH2_EXTRACTOR_VARIABLE_NAME));
-        xPath2Extractor.setXPathQuery(extractor.get(XPATH2_EXTRACTOR_XPATHQUERY));
-        xPath2Extractor.setMatchNumber(extractor.get(XPATH2_EXTRACTOR_MATCH_NO));
+        xPath2Extractor.setName(extractor.getRefname());
+        xPath2Extractor.setRefName(extractor.getRefname());
+        xPath2Extractor.setXPathQuery(extractor.getxPathQuery());
+        xPath2Extractor.setMatchNumber(extractor.getMatchNumber());
         return xPath2Extractor;
     }
 }

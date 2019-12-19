@@ -16,11 +16,10 @@
  *
  */
 
-package org.apache.jmeter.extractor;
+package org.apache.jmeter.protocol.http.correlation;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.jmeter.extractor.HtmlExtractor;
+import org.apache.jmeter.protocol.http.correlation.extractordata.HtmlExtractorData;
 import org.apache.jmeter.testelement.TestElement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,16 +27,9 @@ import org.jsoup.select.Elements;
 
 public class CreateCssSelectorExtractor {
 
-    public static final String CSS_SELECTOR_ATTRIBUTE = "HtmlExtractor.attribute"; //$NON-NLS-1$
-    public static final String CSS_SELECTOR_EXPRESSION = "HtmlExtractor.expr"; //$NON-NLS-1$
-    public static final String CSS_SELECTOR_MATCH_NO = "HtmlExtractor.match_number"; //$NON-NLS-1$
-    public static final String CSS_SELECTOR_VARIABLE_NAME = "HtmlExtractor.refname"; //$NON-NLS-1$
-
     private static final String ATTRIBUTE_KEY_VALUE = "value"; //$NON-NLS-1$
     private static final String ATTRIBUTE_KEY_CONTENT = "content"; //$NON-NLS-1$
-    private static final String CONTENT_TYPE = "contentType"; //$NON-NLS-1$
     private static final String ONE = "1"; //$NON-NLS-1$
-    private static final String TEST_NAME = "testname"; //$NON-NLS-1$
 
     private CreateCssSelectorExtractor() {}
 
@@ -50,13 +42,13 @@ public class CreateCssSelectorExtractor {
      * @param requestUrl              URL of the request whose response yields the
      *                                parameter required to correlate
      * @param contentType             responseData content type
-     * @return HTML Extractor values in a map or empty map
+     * @return HtmlExtractrData object or null
      */
-    public static Map<String, String> createCssSelectorExtractor(String html, String attributeValue,
+    public static HtmlExtractorData createCssSelectorExtractor(String html, String attributeValue,
             String correlationVariableName, String requestUrl, String contentType) {
         // parse the HTML string
         Document doc = getDocument(html);
-        Map<String, String> cssSelectorExtractor = new HashMap<>();
+        HtmlExtractorData cssSelectorExtractor = null;
         String attribute = ""; //$NON-NLS-1$
         // get all elements with specified attibuteValue with keys: value and content
         // & return empty Map if the parameter isn't found in html
@@ -65,7 +57,7 @@ public class CreateCssSelectorExtractor {
         Elements valuesForAttributeContent = doc.getElementsByAttributeValue(ATTRIBUTE_KEY_CONTENT, attributeValue);
         if (valuesForAttributeValue.isEmpty()) {
             if (valuesForAttributeContent.isEmpty()) {
-                // return empty cssSelectorExtractor
+                // return null object
                 return cssSelectorExtractor;
             } else {
                 values = valuesForAttributeContent;
@@ -88,13 +80,9 @@ public class CreateCssSelectorExtractor {
         }
         // check if created cssSelectorExtractor gives the correct value on evaluation
         if (doc.select(cssSelectorExpression).attr(attribute).equals(attributeValue)) {
-            cssSelectorExtractor.put(CSS_SELECTOR_VARIABLE_NAME, correlationVariableName);
-            cssSelectorExtractor.put(CSS_SELECTOR_EXPRESSION, cssSelectorExpression);
-            cssSelectorExtractor.put(CSS_SELECTOR_ATTRIBUTE, attribute);
             // Match No. = 1, as we are getting first occurrence of the element
-            cssSelectorExtractor.put(CSS_SELECTOR_MATCH_NO, ONE);
-            cssSelectorExtractor.put(CONTENT_TYPE, contentType);
-            cssSelectorExtractor.put(TEST_NAME, requestUrl);
+            cssSelectorExtractor = new HtmlExtractorData(correlationVariableName, cssSelectorExpression, attribute, ONE,
+                    contentType, requestUrl);
             return cssSelectorExtractor;
         } else {
             return cssSelectorExtractor;
@@ -126,17 +114,17 @@ public class CreateCssSelectorExtractor {
     /**
      * Create CSS Selector extractor TestElement
      *
-     * @param extractor Map containing extractor data
+     * @param extractor HtmlExtractorData object
      * @param testElement empty testElement object
      * @return CSS selector extractor TestElement
      */
-    public static TestElement createHtmlExtractorTestElement(Map<String, String> extractor, TestElement testElement) {
+    public static TestElement createHtmlExtractorTestElement(HtmlExtractorData extractor, TestElement testElement) {
         HtmlExtractor htmlExtractor = (HtmlExtractor) testElement;
-        htmlExtractor.setName(extractor.get(CSS_SELECTOR_VARIABLE_NAME));
-        htmlExtractor.setRefName(extractor.get(CSS_SELECTOR_VARIABLE_NAME));
-        htmlExtractor.setExpression(extractor.get(CSS_SELECTOR_EXPRESSION));
-        htmlExtractor.setAttribute(extractor.get(CSS_SELECTOR_ATTRIBUTE));
-        htmlExtractor.setMatchNumber(extractor.get(CSS_SELECTOR_MATCH_NO));
+        htmlExtractor.setName(extractor.getRefname());
+        htmlExtractor.setRefName(extractor.getRefname());
+        htmlExtractor.setExpression(extractor.getExpr());
+        htmlExtractor.setAttribute(extractor.getAttribute());
+        htmlExtractor.setMatchNumber(extractor.getMatchNumber());
         return htmlExtractor;
     }
 

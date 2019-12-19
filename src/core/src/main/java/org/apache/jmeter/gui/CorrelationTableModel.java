@@ -25,6 +25,7 @@ public class CorrelationTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 5071306820857374637L;
 
     protected static Object[][] rowData = null;
+    protected static String[] columnNames = null;
 
     public static Object[][] getRowData() {
         return rowData;
@@ -34,8 +35,13 @@ public class CorrelationTableModel extends AbstractTableModel {
         CorrelationTableModel.rowData = rowData;
     }
 
-    // strings can be externalized?
-    String[] columnNames = { "Select parameters to correlate", "Parameter", "value 1", "value 2" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+    public String[] getColumnNames() {
+        return columnNames;
+    }
+
+    public static void setColumnNames(String... columnNames) {
+        CorrelationTableModel.columnNames = columnNames;
+    }
 
     public int getColumnCount() {
         return columnNames.length;

@@ -47,7 +47,6 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.extractor.CreateRegexExtractor;
 import org.apache.jmeter.extractor.gui.BoundaryExtractorGui;
 import org.apache.jmeter.extractor.gui.HtmlExtractorGui;
 import org.apache.jmeter.extractor.gui.RegexExtractorGui;
@@ -58,6 +57,12 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.correlation.extractordata.BoundaryExtractorData;
+import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
+import org.apache.jmeter.protocol.http.correlation.extractordata.HtmlExtractorData;
+import org.apache.jmeter.protocol.http.correlation.extractordata.JsonPathExtractorData;
+import org.apache.jmeter.protocol.http.correlation.extractordata.RegexExtractorData;
+import org.apache.jmeter.protocol.http.correlation.extractordata.XPath2ExtractorData;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -75,33 +80,25 @@ public class Correlation {
 
     private static final Logger log = LoggerFactory.getLogger(Correlation.class);
 
-    private static int count = 0;
+    private static int addedExtractorCount = 0;
 
-    public static int getCount() {
-        return count;
+    public static int getAddedExtractorCount() {
+        return addedExtractorCount;
     }
 
-    public static void setCount(int count) {
-        Correlation.count = count;
+    public static void setAddedExtractorCount(int addedExtractorCount) {
+        Correlation.addedExtractorCount = addedExtractorCount;
     }
 
     private static final String PARANTHESES_OPEN = "("; //$NON-NLS-1$
     private static final String PARANTHESES_CLOSED = ")"; //$NON-NLS-1$
-
-    private static final String CONTENT_TYPE = "contentType"; //$NON-NLS-1$
-    private static final String TESTNAME = "testname"; //$NON-NLS-1$
-
-    private static final String APPLICATION_XML = "application/xml"; //$NON-NLS-1$
-    private static final String APPLICATION_JSON = "application/json"; //$NON-NLS-1$
-    private static final String TEXT_HTML = "text/html"; //$NON-NLS-1$
-    private static final String TEXT_XML = "text/xml"; //$NON-NLS-1$
 
     private static final String BEARER_AUTH = "Bearer"; // $NON-NLS-1$
 
     private Correlation() {}
 
     /**
-     * Compare the list of http-request objects from two TestPlans(one imported and
+     * Compare the list of HTTP-request objects from two TestPlans(one imported and
      * one currently in GUI) and prepare the map containing the parameter list which
      * are candidates for correlation.
      *
@@ -112,8 +109,7 @@ public class Correlation {
         if (null == file) {
             throw new NullPointerException("JMX file is null. Please check the file and try again"); //$NON-NLS-1$
         }
-        // Load the imported JMX file and create a list of HTTP sample requests and
-        // HeaderManagers
+        // Load the imported JMX file
         HashTree tree = null;
         try {
             tree = SaveService.loadTree(file);
@@ -121,6 +117,7 @@ public class Correlation {
             throw new IllegalUserActionException("Could not load the JMX file. Please check the file and try again.",
                     e);
         }
+        // Create a list of HTTP sample requests and HeaderManagers
         List<HTTPSamplerBase> importedJmxSampleRequestList = new ArrayList<>();
         getHttpSampleRequests(tree, importedJmxSampleRequestList);
         if (importedJmxSampleRequestList.isEmpty()) {
@@ -130,8 +127,7 @@ public class Correlation {
         List<HeaderManager> importedJmxHeaderManagerList = new ArrayList<>();
         getHeaderManagers(tree, importedJmxHeaderManagerList);
 
-        // Create a list of HTTP sample requests and HeaderManagers from currently open
-        // JMX TestPlan
+        // Find the HTTPSamplerProxy Nodes in currently open JMX test plan
         GuiPackage guiPackage = GuiPackage.getInstance();
         List<JMeterTreeNode> sampleList = guiPackage.getTreeModel().getNodesOfType(HTTPSamplerProxy.class);
         if (sampleList.isEmpty()) {
@@ -143,17 +139,16 @@ public class Correlation {
             throw new IllegalUserActionException(
                     "No Response data found. Make sure you have recorded the script and not opened it.");
         }
+        // Create List of HTTPSamplerBase and HeaderManager
         List<HTTPSamplerBase> currentGuiSampleRequestList = sampleList.stream()
                 .map(node -> (HTTPSamplerBase) node.getTestElement()).collect(Collectors.toList());
         List<HeaderManager> currentGuiheaderList = guiPackage.getTreeModel().getNodesOfType(HeaderManager.class)
                 .stream().map(node -> (HeaderManager) node.getTestElement()).collect(Collectors.toList());
-
         // Extract API parameters from HTTPSamplerProxy objects
         Map<String, String> importedJmxHttpParameters = createJmxParameterMap(importedJmxSampleRequestList,
                 importedJmxHeaderManagerList);
         Map<String, String> currentGuiHttpParameters = createJmxParameterMap(currentGuiSampleRequestList,
                 currentGuiheaderList);
-
         // Compare the maps of API requests to identify the list of correlation
         // candidates.
         Object[][] correlationCandidates = extractCorrelationCandidates(importedJmxHttpParameters,
@@ -165,12 +160,18 @@ public class Correlation {
         // display data into Correlation table
         CorrelationTableModel.setRowData(correlationCandidates);
         // Set number of extractors added to zero
-        setCount(0);
+        setAddedExtractorCount(0);
     }
 
+    /**
+     * Prepare a list of HeaderManager objects from the browsed TestPlan Hashtree
+     *
+     * @param tree                         Hashtree containing all the TestElements
+     * @param importedJmxHeaderManagerList List of HeaderManager elements
+     */
     private static void getHeaderManagers(HashTree tree, List<HeaderManager> importedJmxHeaderManagerList) {
-        // traverse the testplan Hashtree and add the sampler proxy elements to
-        // samplerSet
+        // traverse the testplan Hashtree and add the HeaderManager elements to
+        // importedJmxHeaderManagerList
         for (Object o : new LinkedList<>(tree.list())) {
             TestElement item = (TestElement) o;
             if (item instanceof HeaderManager) {
@@ -182,7 +183,7 @@ public class Correlation {
     }
 
     /**
-     * Prepare a list of HTTPSamplerProxy objects from the browsed TestPlan Hashtree
+     * Prepare a list of HTTPSamplerBase objects from the browsed TestPlan Hashtree
      *
      * @param tree        Hashtree containing all the TestElements
      * @param samplerList List of HTTPSamplerBase elements
@@ -201,10 +202,10 @@ public class Correlation {
     }
 
     /**
-     * Create a map which contain all the parameters from the list of HTTP sampler
-     * test elements
+     * Create a map which contain all the parameters from the list of
+     * HTTPSamplerBase test elements
      *
-     * @param httpSamplerBaseList List of HTTP Sampler Test Elements
+     * @param httpSamplerBaseList List of HTTPSamplerBase Test Elements
      * @param headerManagerList   List of HeaderManager Test Elements
      * @return Map with HTTP API parameters (name, value)
      */
@@ -229,15 +230,15 @@ public class Correlation {
         if (jmxParameterMap.get(key) == null) {
             jmxParameterMap.put(key, value);
         } else if (!jmxParameterMap.get(key).equals(value)) {
-            // Change the parameter name if it already exists in the map and doesn't have
-            // the same value as the already present parameter
+            // Change the parameter name if it exists in the map and doesn't have
+            // the same value as existing parameter
             String modifiedName = changeCorrelatableParameterName(jmxParameterMap, key);
             jmxParameterMap.put(modifiedName, value);
         }
     }
 
     private static String changeCorrelatableParameterName(Map<String, String> jmxParameterMap, String name) {
-        // count the number of parameters already present in the map with the same name
+        // count the number of parameters present in the map with the same name
         Integer keyCount = jmxParameterMap.keySet().stream().filter(s -> s.startsWith(name + PARANTHESES_OPEN))
                 .collect(Collectors.toSet()).size();
         keyCount++;
@@ -288,7 +289,7 @@ public class Correlation {
     private static void extractParametersFromApiPath(HTTPSamplerBase testElement, Map<String, String> jmxParameterMap) {
         String path = testElement.getPath();
         // Use sampler's content encoding to decode the path
-        // DefaultSamplerCreator#computePath
+        // Ref: DefaultSamplerCreator#computePath
         String contentEncoding = testElement.getContentEncoding();
         Charset charset = getCharset(contentEncoding);
         List<NameValuePair> params = new ArrayList<>();
@@ -305,7 +306,7 @@ public class Correlation {
      * Get the charset for the specified string. Default to UTF_8
      *
      * @param contentEncoding String name
-     * @return Charset
+     * @return Charset or UTF_8 charset
      */
     private static Charset getCharset(String contentEncoding) {
         // try to create Charset for contentEncoding
@@ -339,6 +340,7 @@ public class Correlation {
                 candidatesList.add(Arrays.asList(Boolean.FALSE, key, value, secondJmxMap.get(key)));
             }
         });
+        // convert it to 2D array (as JTable takes it) and return
         return candidatesList.stream().map(u -> u.toArray(new Object[0])).toArray(Object[][]::new);
     }
 
@@ -348,34 +350,58 @@ public class Correlation {
      * @param extractors   list of extractors
      * @param parameterMap Map containing parameter name and values which are a
      *                     candidate for correlation
-     * @throws UnsupportedEncodingException when variable replacement failed
      */
-    public static void updateJxmFileWithExtractors(List<Map<String, String>> extractors,
-            Map<String, String> parameterMap) throws UnsupportedEncodingException {
+    public static void updateJxmFileWithExtractors(List<ExtractorData> extractors, Map<String, String> parameterMap) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         extractors.forEach(extractor -> {
-            // Add extractors in TestPlan GUI based on content Type
-            if (extractor.get(CONTENT_TYPE) != null) {
-                if (extractor.get(CONTENT_TYPE).contains(TEXT_HTML)) {
-                    addExtractor(extractor.get(TESTNAME), HtmlExtractorGui.class.getName(), extractor);
-                } else if (extractor.get(CONTENT_TYPE).contains(APPLICATION_XML)
-                        || extractor.get(CONTENT_TYPE).contains(TEXT_XML)) {
-                    addExtractor(extractor.get(TESTNAME), XPath2ExtractorGui.class.getName(), extractor);
-                } else if (extractor.get(CONTENT_TYPE).contains(APPLICATION_JSON)) {
-                    addExtractor(extractor.get(TESTNAME), JSONPostProcessorGui.class.getName(), extractor);
-                }
-            } else if (extractor.get(CreateRegexExtractor.REGEX_EXTRACTOR_EXPRESSION) != null) {
-                addExtractor(extractor.get(TESTNAME), RegexExtractorGui.class.getName(), extractor);
-            } else {
-                addExtractor(extractor.get(TESTNAME), BoundaryExtractorGui.class.getName(), extractor);
+            // Add extractors in TestPlan GUI based on their Type
+            if (extractor instanceof HtmlExtractorData) {
+                addExtractor(extractor.getTestName(), HtmlExtractorGui.class.getName(), extractor);
+            } else if (extractor instanceof XPath2ExtractorData) {
+                addExtractor(extractor.getTestName(), XPath2ExtractorGui.class.getName(), extractor);
+            } else if (extractor instanceof JsonPathExtractorData) {
+                addExtractor(extractor.getTestName(), JSONPostProcessorGui.class.getName(), extractor);
+            } else if (extractor instanceof RegexExtractorData) {
+                addExtractor(extractor.getTestName(), RegexExtractorGui.class.getName(), extractor);
+            } else if (extractor instanceof BoundaryExtractorData) {
+                addExtractor(extractor.getTestName(), BoundaryExtractorGui.class.getName(), extractor);
             }
         });
         // Replace existing correlated parameter values by their correlated variable
         // alias
         replaceParameterValues((JMeterTreeNode) guiPackage.getTreeModel().getRoot(), parameterMap, guiPackage);
-        JMeterUtils.reportInfoToUser("Correlation successful. Added " + getCount() + " extractors.", "Successful");
+        // Show Success/Failure information
+        int expectedExtractorsToBeAdded = parameterMap.size();
+        // Case 1: There can be parameters which are identified as a correlatable
+        // parameter but
+        // are not found in response, in that case extractors list won't have extractors
+        // for those
+        // parameters but the parameters will be present in parameterMap
+        // Check if one extractor for all the selected parameters has been created
+        int identifiedExtractorCount = 0;
+        for (Entry<String, String> entry : parameterMap.entrySet()) {
+            if (extractors.stream().filter(extractor -> extractor.getRefname().equals(entry.getKey())).count() >= 1) {
+                identifiedExtractorCount++;
+            }
+        }
+        // Case 2: It is not necessary that all the identified extractors will be added
+        // to GUI
+        // Check if the created extractors are added
+        // Show the user only the final number of extractors which were added
+        if (expectedExtractorsToBeAdded != getAddedExtractorCount()) {
+            JMeterUtils.reportInfoToUser(getAddedExtractorCount() + " extractors added.\n"
+                    + (expectedExtractorsToBeAdded - getAddedExtractorCount()) + " extractors not added.\n"
+                    + "Please check logs for more information.", "Partially Correlated Script");
+        } else {
+            JMeterUtils.reportInfoToUser("Correlation successful. Added " + getAddedExtractorCount() + " extractors.",
+                    "Successful");
+        }
+        // print granular information in logs
+        log.info("Expected Extractors to be added: {}", expectedExtractorsToBeAdded);
+        log.info("Identified Extractors to be added: {}", identifiedExtractorCount);
+        log.info("Actual Extractors added: {}", getAddedExtractorCount());
         // clear the extractors map
-        CorrelationExtractor.getListOfMap().clear();
+        CorrelationExtractor.getListOfExtractor().clear();
     }
 
     /**
@@ -383,9 +409,9 @@ public class Correlation {
      *
      * @param testName               Node's name where the extractor should be added
      * @param extractorTypeClassName Type of extractor to be added
-     * @param extractor              Map containing data to create Extractor
+     * @param extractor              ExtractorData object
      */
-    public static void addExtractor(String testName, String extractorTypeClassName, Map<String, String> extractor) {
+    public static void addExtractor(String testName, String extractorTypeClassName, ExtractorData extractor) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         guiPackage.updateCurrentNode();
         // create testElement
@@ -410,7 +436,7 @@ public class Correlation {
             log.error("Exception while adding a component to tree. {}", err.getMessage());
             return;
         }
-        setCount(getCount() + 1);
+        setAddedExtractorCount(getAddedExtractorCount() + 1);
     }
 
     /**
@@ -442,10 +468,9 @@ public class Correlation {
      * @param node         TestPlan root node
      * @param parameterMap Map containing correlation candidates and their values
      * @param guiPackage   Current TestPlan GuiPackage object
-     * @throws UnsupportedEncodingException when decoding value failed
      */
     private static void replaceParameterValues(JMeterTreeNode node, Map<String, String> parameterMap,
-            GuiPackage guiPackage) throws UnsupportedEncodingException {
+            GuiPackage guiPackage) {
         guiPackage.updateCurrentNode();
         Enumeration<?> enumNode = node.children();
         while (enumNode.hasMoreElements()) {
@@ -508,19 +533,24 @@ public class Correlation {
         }
     }
 
-    private static void replaceParameterValuesInBody(HTTPSamplerProxy sample, Map<String, String> parameterMap)
-            throws UnsupportedEncodingException {
+    private static void replaceParameterValuesInBody(HTTPSamplerProxy sample, Map<String, String> parameterMap) {
         Set<Entry<String, String>> entrySet = sample.getArguments().getArgumentsAsMap().entrySet();
         String encoding = getCharset(sample.getContentEncoding()).name();
         for (Entry<String, String> entry : entrySet) {
-            String encodedValue = URLEncoder.encode(entry.getValue(), encoding);
-            // find the http argument whose value equals to the correlated parameter
+            String encodedValue;
+            try {
+                encodedValue = URLEncoder.encode(entry.getValue(), encoding);
+            } catch (UnsupportedEncodingException e) {
+                log.error("Could not encode value {}", entry.getValue());
+                continue;
+            }
+            // find the HTTPArgument whose value equals to the correlated parameter
             Optional<String> firstKey = parameterMap.entrySet().stream()
                     .filter(en -> Objects.equals(entry.getValue(), en.getValue())
                             || Objects.equals(encodedValue, en.getValue()))
                     .map(Map.Entry::getKey).findFirst();
             if (firstKey.isPresent()) {
-                // Remove the existing http argument and replace its value with the correlated
+                // Remove the existing HTTPArgument and replace its value with the correlated
                 // parameter alias
                 sample.getArguments().removeArgument(entry.getKey());
                 sample.getArguments().addArgument(new HTTPArgument(entry.getKey(), "${" + firstKey.get() + "}")); //$NON-NLS-1$ //$NON-NLS-2$

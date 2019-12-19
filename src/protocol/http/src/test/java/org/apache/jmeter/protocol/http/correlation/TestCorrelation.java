@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.jmeter.gui.action;
+package org.apache.jmeter.protocol.http.correlation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +27,6 @@ import java.util.Map;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.correlation.Correlation;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;

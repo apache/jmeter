@@ -16,14 +16,13 @@
  *
  */
 
-package org.apache.jmeter.extractor;
+package org.apache.jmeter.protocol.http.correlation;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
 import org.apache.jmeter.functions.CorrelationFunction;
+import org.apache.jmeter.protocol.http.correlation.extractordata.JsonPathExtractorData;
 import org.apache.jmeter.testelement.TestElement;
 
 import com.jayway.jsonpath.Configuration;
@@ -33,13 +32,7 @@ import com.jayway.jsonpath.PathNotFoundException;
 
 public class CreateJsonPathExtractor {
 
-    public static final String JSONPATH_EXTRACTOR_EXPRESSION = "JSONPostProcessor.jsonPathExprs"; //$NON-NLS-1$
-    public static final String JSONPATH_EXTRACTOR_MATCH_NO = "JSONPostProcessor.match_numbers"; //$NON-NLS-1$
-    public static final String JSONPATH_EXTRACTOR_VARIABLE_NAME = "JSONPostProcessor.referenceNames"; //$NON-NLS-1$
-
-    private static final String CONTENT_TYPE = "contentType"; //$NON-NLS-1$
     private static final String ONE = "1"; //$NON-NLS-1$
-    private static final String TEST_NAME = "testname"; //$NON-NLS-1$
 
     private CreateJsonPathExtractor() {}
 
@@ -55,9 +48,9 @@ public class CreateJsonPathExtractor {
      * @param contentType             responseData content type
      * @return JSONPath extractor in a map
      */
-    public static Map<String, String> createJsonPathExtractor(String json, String value, String correlationVariableName,
-            String requestUrl, String contentType) {
-        Map<String, String> jsonPathExtractor = new HashMap<>();
+    public static JsonPathExtractorData createJsonPathExtractor(String json, String value,
+            String correlationVariableName, String requestUrl, String contentType) {
+        JsonPathExtractorData jsonPathExtractor = null;
         if (json == null || value == null) {
             throw new IllegalArgumentException("Response Data or value to be searched is null"); //$NON-NLS-1$
         }
@@ -65,19 +58,16 @@ public class CreateJsonPathExtractor {
         try {
             jsonPathExpression = getJsonPath(CorrelationFunction.extractVariable(correlationVariableName), value, json);
         } catch (PathNotFoundException e) {
-            // return empty map
+            // return null
             return jsonPathExtractor;
         }
         if (jsonPathExpression == null) {
-            // return empty map
+            // return null
             return jsonPathExtractor;
         } else {
-            jsonPathExtractor.put(JSONPATH_EXTRACTOR_VARIABLE_NAME, correlationVariableName);
-            jsonPathExtractor.put(JSONPATH_EXTRACTOR_EXPRESSION, jsonPathExpression);
             // Match No. = 1, as we are getting first occurrence of the element
-            jsonPathExtractor.put(JSONPATH_EXTRACTOR_MATCH_NO, ONE);
-            jsonPathExtractor.put(CONTENT_TYPE, contentType);
-            jsonPathExtractor.put(TEST_NAME, requestUrl);
+            jsonPathExtractor = new JsonPathExtractorData(correlationVariableName, jsonPathExpression, ONE, contentType,
+                    requestUrl);
             return jsonPathExtractor;
         }
 
@@ -114,16 +104,16 @@ public class CreateJsonPathExtractor {
     /**
      * Create the JSONExtractor TestElement
      *
-     * @param extractor Map containing extractor data
+     * @param extractor   Map containing extractor data
      * @param testElement empty testElement object
      * @return JSONExtractor TestElement
      */
-    public static TestElement createJsonExtractorTestElement(Map<String, String> extractor, TestElement testElement) {
+    public static TestElement createJsonExtractorTestElement(JsonPathExtractorData extractor, TestElement testElement) {
         JSONPostProcessor jsonExtractor = (JSONPostProcessor) testElement;
-        jsonExtractor.setName(extractor.get(JSONPATH_EXTRACTOR_VARIABLE_NAME));
-        jsonExtractor.setRefNames(extractor.get(JSONPATH_EXTRACTOR_VARIABLE_NAME));
-        jsonExtractor.setJsonPathExpressions(extractor.get(JSONPATH_EXTRACTOR_EXPRESSION));
-        jsonExtractor.setMatchNumbers(extractor.get(JSONPATH_EXTRACTOR_MATCH_NO));
+        jsonExtractor.setName(extractor.getRefname());
+        jsonExtractor.setRefNames(extractor.getRefname());
+        jsonExtractor.setJsonPathExpressions(extractor.getExpr());
+        jsonExtractor.setMatchNumbers(extractor.getMatchNumber());
         return jsonExtractor;
     }
 }

@@ -310,6 +310,34 @@ public final class FileDialoger {
         lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
         return jfc;
     }
+    /**
+     * Get a JFileChooser to choose files with provided extensions
+     * @param exts file extension array
+     * @return the JFileChooser
+     */
+    public static JFileChooser promptToOpenRuleFile(String[] exts) {
+        // create the file chooser dialog
+        JFileChooser jfc = new JFileChooser();
+        jfc.setDialogTitle(JMeterUtils.getResString("correlation_import_rule"));
+        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        String start = System.getProperty("user.dir", "");
+        if (start.length() > 0) {
+            jfc.setCurrentDirectory(new File(start));
+        }
+        if (exts != null && exts.length > 0) {
+            JMeterFileFilter currentFilter = new JMeterFileFilter(exts);
+            jfc.addChoosableFileFilter(currentFilter);
+            jfc.setAcceptAllFileFilterUsed(true);
+            jfc.setFileFilter(currentFilter);
+        }
+        if (lastJFCDirectory == null) {
+            lastJFCDirectory = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
+        }
+        jfc.setCurrentDirectory(new File(lastJFCDirectory));
+        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+        return jfc;
+    }
 
     /**
      *

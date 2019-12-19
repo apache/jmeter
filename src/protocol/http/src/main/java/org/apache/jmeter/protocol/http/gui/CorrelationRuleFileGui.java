@@ -34,14 +34,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import org.apache.jmeter.gui.CorrelationTableModel;
-import org.apache.jmeter.protocol.http.correlation.CorrelationExtractor;
+import org.apache.jmeter.protocol.http.correlation.Correlation;
+import org.apache.jmeter.protocol.http.correlation.CorrelationRule;
+import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class CorrelationGui {
+public class CorrelationRuleFileGui {
 
-    private CorrelationGui() {}
-
-    public static void createCorrelationGui() {
+    public static void createCorrelationRuleFileGui(Map<CorrelationRule, List<ExtractorData>> ruleExtractorDataMap) {
         // create the j-frame
         JFrame frame = new JFrame(JMeterUtils.getResString("correlation_title")); //$NON-NLS-1$
         frame.setSize(800, 600);
@@ -58,7 +58,7 @@ public class CorrelationGui {
         // add panel into JFrame
         frame.add(panel, BorderLayout.SOUTH);
         // create the correlation table
-        CorrelationTableModel.setColumnNames("Select parameters to correlate", "Parameter", "value 1", "value 2");
+        CorrelationTableModel.setColumnNames("Select parameters to correlate", "Parameter", "value");
         TableModel model = new CorrelationTableModel();
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -72,19 +72,23 @@ public class CorrelationGui {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // OK event of JFrame
         ok.addActionListener(event -> {
-            // Initialize local variables
-            int rowCount = jTable.getRowCount();
-            List<String> parametersList = new ArrayList<>();
-            Map<String, String> parameterMap = new LinkedHashMap<>();
+            // Reset the extractors count
+            Correlation.setAddedExtractorCount(0);
             // prepare the list parameters which the user wants to correlate
+            int rowCount = jTable.getRowCount();
+            Map<String, String> parameterMap = new LinkedHashMap<>();
             for (int i = 0; i < rowCount; i++) {
                 if ((Boolean) jTable.getValueAt(i, 0) && jTable.getValueAt(i, 1) != null) {
-                    parametersList.add(jTable.getValueAt(i, 1).toString());
-                    parameterMap.put(jTable.getValueAt(i, 1).toString(), jTable.getValueAt(i, 3).toString());
+                    parameterMap.put(jTable.getValueAt(i, 1).toString(), jTable.getValueAt(i, 2).toString());
                 }
             }
-            // Read API response data and find parameters in them to create extractors
-            CorrelationExtractor.readResponse(parametersList, parameterMap);
+            List<ExtractorData> extractorsToAdd = new ArrayList<>();
+            ruleExtractorDataMap.forEach((rule, extractors) -> extractors.forEach(extractor -> {
+                if (parameterMap.containsKey(extractor.getRefname())) {
+                    extractorsToAdd.add(extractor);
+                }
+            }));
+            Correlation.updateJxmFileWithExtractors(extractorsToAdd, parameterMap);
             frame.dispose();
         });
         // Cancel event of JFrame
