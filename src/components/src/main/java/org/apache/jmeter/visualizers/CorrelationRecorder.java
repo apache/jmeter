@@ -28,6 +28,14 @@ public class CorrelationRecorder {
     // followed by a Correlation template(?)
     // Also, based on the recorded data in correlation template,
     // enable/disable or show/hide(?) the correlation option
-    public static Buffer buffer;
+    private static Buffer buffer;
+
+    public static Buffer getBuffer() {
+        return buffer;
+    }
+
+    public static void setBuffer(Buffer buffer) {
+        CorrelationRecorder.buffer = buffer;
+    }
 
 }

@@ -139,7 +139,7 @@ public class Correlation {
                     "Current GUI TestPlan doesn't have any HTTP(S) Requests. Please record a plan and try again.");
         }
         // Check if response buffer is empty
-        if (CorrelationRecorder.buffer == null || CorrelationRecorder.buffer.isEmpty()) {
+        if (CorrelationRecorder.getBuffer() == null || CorrelationRecorder.getBuffer().isEmpty()) {
             throw new IllegalUserActionException(
                     "No Response data found. Make sure you have recorded the script and not opened it.");
         }
