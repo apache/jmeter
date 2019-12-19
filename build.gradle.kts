@@ -99,6 +99,7 @@ val gitProps by tasks.registering(FindGitAttributes::class) {
 
 val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     gitignore(gitProps)
+    verbose.set(true)
     // Note: patterns are in non-standard syntax for RAT, so we use exclude(..) instead of excludeFile
     exclude(rootDir.resolve(".ratignore").readLines())
 }
@@ -326,6 +327,9 @@ allprojects {
             apply<CheckstylePlugin>()
             checkstyle {
                 toolVersion = "checkstyle".v
+                configProperties = mapOf(
+                    "cache_file" to buildDir.resolve("checkstyle/cacheFile")
+                )
             }
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {

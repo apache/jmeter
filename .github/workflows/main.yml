@@ -15,7 +15,7 @@ jobs:
     name: 'Windows (JDK 13)'
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v1.1.0
       with:
         fetch-depth: 50
     - name: 'Set up JDK 13'
@@ -31,7 +31,7 @@ jobs:
     name: 'macOS (JDK 13)'
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v1.1.0
       with:
         fetch-depth: 50
     - name: 'Set up JDK 13'

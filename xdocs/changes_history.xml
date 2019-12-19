@@ -40,6 +40,218 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <p><b>Changes sections are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>
 
+<!--  =================== 5.2.1 =================== -->
+
+<h1>Version 5.2.1</h1>
+<p>
+Summary
+</p>
+<ul>
+<li><a href="#New and Noteworthy">New and Noteworthy</a></li>
+<li><a href="#Incompatible changes">Incompatible changes</a></li>
+<li><a href="#Bug fixes">Bug fixes</a></li>
+<li><a href="#Improvements">Improvements</a></li>
+<li><a href="#Non-functional changes">Non-functional changes</a></li>
+<li><a href="#Known problems and workarounds">Known problems and workarounds</a></li>
+<li><a href="#Thanks">Thanks</a></li>
+
+</ul>
+
+<ch_section>New and Noteworthy</ch_section>
+<p>
+This release is a minor bugfix release. Please see the <a href="changes_history.html">Changes history page</a>
+to view the last release notes of version 5.2.
+</p>
+<!--
+<ch_title>Core improvements</ch_title>
+<ch_title>UX improvements</ch_title>
+<ch_title>Test Plan</ch_title>
+<ch_title>Scripting / Debugging enhancements</ch_title>
+-->
+<!--
+<ch_title>Functions</ch_title>
+-->
+<!-- =================== Incompatible changes =================== -->
+
+<ch_section>Incompatible changes</ch_section>
+<ul>
+</ul>
+<!-- =================== Improvements =================== -->
+
+<ch_section>Improvements</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+</ul>
+
+<h3>Other samplers</h3>
+<ul>
+    <li><bug>63926</bug>JDBC Connection Configuration: Add ability to set connection properties</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>Report / Dashboard</h3>
+<ul>
+</ul>
+
+<h3>General</h3>
+<ul>
+</ul>
+
+<ch_section>Non-functional changes</ch_section>
+<ul>
+</ul>
+
+ <!-- =================== Bug fixes =================== -->
+
+<ch_section>Bug fixes</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+</ul>
+
+<h3>Other Samplers</h3>
+<ul>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+    <li><bug>63906</bug>NPE for InfluxDB backend listener during failover testing</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>Report / Dashboard</h3>
+<ul>
+</ul>
+
+<h3>Documentation</h3>
+<ul>
+</ul>
+
+<h3>General</h3>
+<ul>
+    <li><bug>63910</bug>Broken maven poms in released 5.2 version </li>
+    <li><bug>63911</bug>ApacheJMeter_config.jar content has changed (bin moved to run and missing files)</li>
+</ul>
+
+ <!--  =================== Thanks =================== -->
+
+<ch_section>Thanks</ch_section>
+<p>We thank all contributors mentioned in bug and improvement sections above:
+</p>
+<ul>
+    <li><a href="https://github.com/vincentclee">Vincent Lee</a></li>
+</ul>
+<p>We also thank bug reporters who helped us improve JMeter.</p>
+<ul>
+</ul>
+<p>
+Apologies if we have omitted anyone else.
+</p>
+ <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
+
+<ch_section>Known problems and workarounds</ch_section>
+<ul>
+<li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</li>
+
+<li>
+The numbers that appear to the left of the green box are the number of active threads / total number of threads,
+the total number of threads only applies to a locally run test, otherwise it will show <code>0</code> (see <bugzilla>55510</bugzilla>).
+</li>
+
+<li>
+Note that under some windows systems you may have this WARNING:
+<source>
+java.util.prefs.WindowsPreferences
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
+x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
+</source>
+The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
+</li>
+
+<li>
+You may encounter the following error:
+<source>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</source>
+ if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
+ algorithm using MD2 (like <code>md2WithRSAEncryption</code>) or with a SSL certificate with a size lower than 1024 bits.
+This error is related to increased security in Java 8+.
+<br></br>
+To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
+the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.
+<br></br>
+This property is in this file:
+<source>JAVA_HOME/jre/lib/security/java.security</source>
+See  <bugzilla>56357</bugzilla> for details.
+</li>
+
+<li>
+Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
+This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a>
+The fix is to use JDK8_u45 or later.
+</li>
+
+<li>
+View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
+This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
+See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
+The fix is to use JDK9 b65 or later.
+</li>
+
+<li>
+JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down</keysym></keycombo>) is totally unusable with Java 7 on Mac OSX.
+This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a>
+The fix is to use JDK 8 b132 or later.
+</li>
+
+<li>
+Since Java 11 the JavaScript implementation <a href="https://openjdk.java.net/jeps/335">Nashorn has been deprecated</a>.
+Java will emit the following deprecation warnings, if you are using JavaScript based on Nashorn.
+<source>
+Warning: Nashorn engine is planned to be removed from a future JDK release
+</source>
+To silence these warnings, add <code>-Dnashorn.args=--no-deprecation-warning</code> to your Java arguments.
+That can be achieved by setting the enviroment variable <code>JVM_ARGS</code>
+<source>
+export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
+</source>
+</li>
+</ul>
+
 <!--  =================== 5.2 =================== -->
 
 <h1>Version 5.2</h1>

@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -28,6 +29,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class implementing a file open dialogue
@@ -39,6 +42,8 @@ public final class FileDialoger {
     private static String lastJFCDirectory = null;
 
     private static JFileChooser jfc = new JFileChooser();
+
+    private static final Logger LOG = LoggerFactory.getLogger(FileDialoger.class);
 
     /**
      * Prevent instantiation of utility class.
@@ -181,19 +186,7 @@ public final class FileDialoger {
        } else {
            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
        }
-       if(!StringUtils.isEmpty(existingFileName)) {
-           File existingFileStart = new File(existingFileName);
-           if(existingFileStart.exists() && existingFileStart.canRead()) {
-               jfc.setCurrentDirectory(new File(existingFileName));
-           }
-       }
-       else if (lastJFCDirectory == null) {
-           String start = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
-
-           if (start.length() > 0) {
-               jfc.setCurrentDirectory(new File(start));
-           }
-       }
+       setCurrentDirOnJFC(existingFileName, lastJFCDirectory, System.getProperty("user.dir"));
        clearFileFilters();
        if(exts != null && exts.length > 0) {
            JMeterFileFilter currentFilter = new JMeterFileFilter(exts);
@@ -201,10 +194,6 @@ public final class FileDialoger {
            jfc.setAcceptAllFileFilterUsed(true);
            jfc.setFileFilter(currentFilter);
        }
-       if(lastJFCDirectory==null) {
-           lastJFCDirectory = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
-       }
-       jfc.setCurrentDirectory(new File(lastJFCDirectory));
        int retVal = jfc.showOpenDialog(parentComponent);
        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
@@ -213,6 +202,22 @@ public final class FileDialoger {
        }
        return null;
    }
+
+    private static void setCurrentDirOnJFC(String... dirNames) {
+        for (String dirName : dirNames) {
+            if (StringUtils.isBlank(dirName)) {
+                continue;
+            }
+            File possibleDir = new File(dirName);
+            if (possibleDir.exists() && possibleDir.canRead()) {
+                jfc.setCurrentDirectory(possibleDir);
+                return;
+            }
+        }
+        LOG.info("No valid initial directory found for: {}",
+                    Arrays.asList(dirNames));
+        jfc.setCurrentDirectory(null);
+    }
 
     private static void clearFileFilters() {
         FileFilter[] filters = jfc.getChoosableFileFilters();
