@@ -656,35 +656,33 @@ LoggerFactory.getLogger(Foo.class);</source>
           <td>
             Old Log Levels:
             <ul>
-              <li>DEBUG</li>
-              <li>INFO</li>
-              <li>WARN</li>
-              <li>ERROR</li>
-              <li>FATAL_ERROR</li>
-              <li>NONE</li>
+              <li><code>DEBUG</code></li>
+              <li><code>INFO</code></li>
+              <li><code>WARN</code></li>
+              <li><code>ERROR</code></li>
+              <li><code>FATAL_ERROR</code></li>
+              <li><code>NONE</code></li>
             </ul>
           </td>
           <td>
             Mapping to New Levels through SLF4J/Log4j2:
             <ul>
-              <li>DEBUG</li>
-              <li>INFO</li>
-              <li>WARN</li>
-              <li>ERROR</li>
-              <li>ERROR</li>
-              <li>OFF</li>
+              <li><code>DEBUG</code></li>
+              <li><code>INFO</code></li>
+              <li><code>WARN</code></li>
+              <li><code>ERROR</code></li>
+              <li><code>ERROR</code></li>
+              <li><code>OFF</code></li>
             </ul>
-            <div>
-              <em><b>Note:</b></em>
-              Since 'FATAL_ERROR' is not supported by SLF4J API,
-              it is treated as 'ERROR' instead for existing code not to break.
-              There's also 'FATAL' log level option.
-            </div>
-            <div>
-              <em><b>Note:</b></em>
-              'TRACE' level, which is less specific than 'DEBUG', is supported additionally since 3.2.
+            <note>
+              Since <code>FATAL_ERROR</code> is not supported by SLF4J API,
+              it is treated as <code>ERROR</code> instead for existing code not to break.
+              There is also the <code>FATAL</code> log level option.
+            </note>
+            <note>
+              <code>TRACE</code> level, which is less specific than <code>DEBUG</code>, is supported additionally since 3.2.
               Look up SLF4J or Apache Log4J 2 documentations for details.
-            </div>
+            </note>
           </td>
         </tr>
       </tbody>
