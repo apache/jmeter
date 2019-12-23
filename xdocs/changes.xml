@@ -160,6 +160,7 @@ to view the last release notes of version 5.2.1.
 <h3>Documentation</h3>
 <ul>
   <li><pr>547</pr>Correct Log level documentation. Contributed by jmetertea</li>
+  <li><bug>64022</bug>Correct Chinese translation for "Ignore Sub-Controller blocks". Provided by yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -179,6 +180,7 @@ to view the last release notes of version 5.2.1.
 <ul>
   <li>Michael McDermott (mcdermott.michaelj at gmail.com)</li>
   <li>jmetertea</li>
+  <li>yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
