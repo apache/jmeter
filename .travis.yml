@@ -87,7 +87,7 @@ matrix:
     - name: jmeter-maven-plugin tests on s390x
       os: linux  
       arch: s390x  
-      jdk: openjdk8 
+      jdk: openjdk11 
       script: 
         - wget http://www.eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz  
         - tar -xvzf apache-maven-3.6.3-bin.tar.gz  
