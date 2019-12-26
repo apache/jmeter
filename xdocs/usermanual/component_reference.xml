@@ -5121,8 +5121,8 @@ the required load.</p>
     <code>Ramp-up Period</code> and <code>Delay</code> to <code>0</code>.</p>
 
 <h4>Multiple thread groups starting at the same time</h4>
-<p>A variation of <code>Ramp-up</code> issue might appear when <complink name="Test Plan" /> includes multiple <complink name="Thead Group" />s. To mitigate that issue
-    one typically adds "random" delay to each <complink name="Thead Group" /> so threads start at different times.</p>
+<p>A variation of <code>Ramp-up</code> issue might appear when <complink name="Test Plan" /> includes multiple <complink name="Thread Group" />s. To mitigate that issue
+    one typically adds "random" delay to each <complink name="Thread Group" /> so threads start at different times.</p>
 <p><code>Precise Throughput Timer</code> avoids that issue since it schedules executions in a random way. You do not need to add extra random delays to mitigate startup spike</p>
 
 <h4>Number of iterations per hour</h4>
