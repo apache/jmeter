@@ -727,9 +727,9 @@ This leads to creation of match number variable called <code>varName_matchNr</co
                 computed by this function.</property>
 </properties>
 <p>Examples:
-<source>${__RandomFromMultipleVars(val)}</source> will return a random string based on content of variable val taking into account wether they are multi-value or not<br/>
-<source>${__RandomFromMultipleVars(val1|val2)}</source> will return a random string based on content of variables val1 and val2 taking into account wether they are multi-value or not<br/>
-<source>${__RandomFromMultipleVars(val1|val2, MYVAR)}</source> will return a random string based on content of variables val1 and val2 taking into account wether they are multi-value or not and store the result in <code>MYVAR</code><br/>
+<source>${__RandomFromMultipleVars(val)}</source> will return a random string based on content of variable val taking into account whether they are multi-value or not<br/>
+<source>${__RandomFromMultipleVars(val1|val2)}</source> will return a random string based on content of variables val1 and val2 taking into account whether they are multi-value or not<br/>
+<source>${__RandomFromMultipleVars(val1|val2, MYVAR)}</source> will return a random string based on content of variables val1 and val2 taking into account whether they are multi-value or not and store the result in <code>MYVAR</code><br/>
 </p>
 </component>
 
