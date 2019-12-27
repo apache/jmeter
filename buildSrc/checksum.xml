@@ -5,6 +5,7 @@
   <trusted-keys>
     <trusted-key id='379ce192d401ab61' group='com.diffplug.durian' />
     <trusted-key id='379ce192d401ab61' group='com.diffplug.spotless' />
+    <trusted-key id='105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='461a804f2609fd89' group='com.github.shyiko.klob' />
     <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
     <trusted-key id='abe9f3126bb741c1' group='com.google.guava' />
@@ -17,6 +18,7 @@
     <trusted-key id='a41f13c999945293' group='commons-logging' />
     <trusted-key id='6449005f96bc97a3' group='de.undercouch' />
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
+    <trusted-key id='efe8086f9e93774e' group='junit' />
     <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
     <trusted-key id='9daadc1c9fcc82d0' group='org.apache.commons' />
     <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
@@ -25,8 +27,10 @@
     <trusted-key id='b341ddb020fcb6ab' group='org.bouncycastle' />
     <trusted-key id='41321490758aad6f' group='org.codehaus.groovy' />
     <trusted-key id='466caed6e0747d50' group='org.codehaus.plexus' />
+    <trusted-key id='0e91c2de43b72bb1' group='org.ec4j.core' />
     <trusted-key id='c7bf26d0bb617866' group='org.eclipse.aether' />
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
+    <trusted-key id='a6adfc93ef34893e' group='org.hamcrest' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.intellij.deps' />
     <trusted-key id='6a0975f8b1127b83' group='org.jetbrains.kotlin' />

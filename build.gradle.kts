@@ -36,7 +36,7 @@ plugins {
     checkstyle
     id("org.jetbrains.gradle.plugin.idea-ext") apply false
     id("org.nosphere.apache.rat")
-    id("com.diffplug.gradle.spotless")
+    id("com.github.autostyle")
     id("com.github.spotbugs")
     id("org.sonarqube")
     id("com.github.vlsi.crlf")
@@ -150,7 +150,7 @@ val jacocoEnabled by extra {
 val enableSpotBugs = props.bool("spotbugs", default = false)
 val ignoreSpotBugsFailures by props()
 val skipCheckstyle by props()
-val skipSpotless by props()
+val skipAutostyle by props()
 // Allow to skip building source/binary distributions
 val skipDist by extra {
     boolProp("skipDist") ?: false
@@ -244,33 +244,54 @@ if (enableSpotBugs) {
     }
 }
 
-val licenseHeaderFile = file("config/license.header.java")
+fun com.github.autostyle.gradle.BaseFormatExtension.license() {
+    licenseHeader(rootProject.ide.licenseHeader) {
+        copyrightStyle("bat", com.github.autostyle.generic.DefaultCopyrightStyle.REM)
+        copyrightStyle("cmd", com.github.autostyle.generic.DefaultCopyrightStyle.REM)
+        addBlankLineAfter.set(true)
+    }
+    trimTrailingWhitespace()
+    endWithNewline()
+}
+
 allprojects {
     group = "org.apache.jmeter"
     version = rootProject.version
+
+    repositories {
+        // RAT and Autostyle dependencies
+        mavenCentral()
+    }
+
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
     // so we should produce jars without versions names for now
     // version = rootProject.version
-    if (!skipSpotless) {
-        apply(plugin = "com.diffplug.gradle.spotless")
-        spotless {
+    if (!skipAutostyle) {
+        apply(plugin = "com.github.autostyle")
+        autostyle {
             kotlinGradle {
+                license()
                 ktlint()
-                trimTrailingWhitespace()
-                endWithNewline()
             }
-            if (project == rootProject) {
-                // Spotless does not exclude subprojects when using target(...)
-                // So **/*.md is enough to scan all the md files in JMeter codebase
-                // See https://github.com/diffplug/spotless/issues/468
-                format("markdown") {
-                    target("**/*.md")
-                    // Flot is known to have trailing whitespace, so the files
-                    // are kept in their original format (e.g. to simplify diff on library upgrade)
-                    targetExclude("bin/report-template/**/flot*/*.md")
-                    trimTrailingWhitespace()
-                    endWithNewline()
+            format("configs") {
+                filter {
+                    include("**/*.sh", "**/*.bsh", "**/*.cmd", "**/*.bat")
+                    include("**/*.properties", "**/*.yml")
+                    include("**/*.xsd", "**/*.xsl", "**/*.xml")
+                    // Autostyle does not support gitignore yet https://github.com/autostyle/autostyle/issues/13
+                    exclude("out/**")
+                    if (project == rootProject) {
+                        exclude(rootDir.resolve(".ratignore").readLines())
+                        exclude("gradlew*")
+                    } else {
+                        exclude("bin/**")
+                    }
                 }
+                license()
+            }
+            format("markdown") {
+                filter.include("**/*.md")
+                endWithNewline()
             }
         }
     }
@@ -302,14 +323,14 @@ allprojects {
                     group = LifecycleBasePlugin.VERIFICATION_GROUP
                     description = "Executes Checkstyle verifications"
                     dependsOn("checkstyleAll")
-                    dependsOn("spotlessCheck")
+                    dependsOn("autostyleCheck")
                 }
-                // Spotless produces more meaningful error messages, so we ensure it is executed before Checkstyle
-                if (!skipSpotless) {
+                // Autostyle produces more meaningful error messages, so we ensure it is executed before Checkstyle
+                if (!skipAutostyle) {
                     for (s in sourceSets.names) {
                         tasks.named("checkstyle" + s.capitalize()) {
-                            mustRunAfter("spotlessApply")
-                            mustRunAfter("spotlessCheck")
+                            mustRunAfter("autostyleApply")
+                            mustRunAfter("autostyleCheck")
                         }
                     }
                 }
@@ -322,23 +343,21 @@ allprojects {
             isIgnoreFailures = ignoreSpotBugsFailures
         }
 
-        if (!skipSpotless) {
-            spotless {
+        if (!skipAutostyle) {
+            autostyle {
                 java {
-                    licenseHeaderFile(licenseHeaderFile)
+                    license()
                     importOrder("static ", "java.", "javax", "org", "net", "com", "")
                     removeUnusedImports()
-                    trimTrailingWhitespace()
                     indentWithSpaces(4)
-                    endWithNewline()
                 }
             }
         }
         tasks.register("style") {
             group = LifecycleBasePlugin.VERIFICATION_GROUP
             description = "Formats code (license header, import order, whitespace at end of line, ...) and executes Checkstyle verifications"
-            if (!skipSpotless) {
-                dependsOn("spotlessApply")
+            if (!skipAutostyle) {
+                dependsOn("autostyleApply")
             }
             if (!skipCheckstyle) {
                 dependsOn("checkstyleAll")
@@ -346,14 +365,12 @@ allprojects {
         }
     }
     plugins.withId("groovy") {
-        if (!skipSpotless) {
-            spotless {
+        if (!skipAutostyle) {
+            autostyle {
                 groovy {
-                    licenseHeaderFile(licenseHeaderFile)
+                    license()
                     importOrder("static ", "java.", "javax", "org", "net", "com", "")
-                    trimTrailingWhitespace()
                     indentWithSpaces(4)
-                    endWithNewline()
                 }
             }
         }

@@ -21,7 +21,7 @@ pluginManagement {
         fun String.v() = extra["$this.version"].toString()
         fun PluginDependenciesSpec.idv(id: String, key: String = id) = id(id) version key.v()
 
-        idv("com.diffplug.gradle.spotless")
+        idv("com.github.autostyle")
         idv("com.github.spotbugs")
         idv("com.github.vlsi.crlf", "com.github.vlsi.vlsi-release-plugins")
         idv("com.github.vlsi.ide", "com.github.vlsi.vlsi-release-plugins")
@@ -141,3 +141,9 @@ if (violations.isNotBlank()) {
 }
 
 apply(plugin = "com.github.vlsi.checksum-dependency")
+
+// This enables to try local Autostyle
+property("localAutostyle")?.ifBlank { "../autostyle" }?.let {
+    println("Importing project '$it'")
+    includeBuild("../autostyle")
+}
