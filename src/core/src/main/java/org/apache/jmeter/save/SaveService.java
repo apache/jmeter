@@ -19,7 +19,6 @@
 package org.apache.jmeter.save;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,10 +29,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -156,7 +156,7 @@ public class SaveService {
     private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
     // Must match the sha1 checksum of the file saveservice.properties (without newline character),
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "6fd03656cf4997fe6b0af17fa8dc8469e563c93a"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "56ae8319b2b02d33eb1028c4460db770cf246b5c"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
@@ -201,29 +201,29 @@ public class SaveService {
         return nameMap;
     }
 
-    private static String getChecksumForPropertiesFile()
-            throws NoSuchAlgorithmException, IOException {
+    private static String checksum(Properties nameMap) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
-        File saveServiceFile = getSaveServiceFile();
-        try (BufferedReader reader =
-                Files.newBufferedReader(saveServiceFile.toPath(), Charset.defaultCharset())) {
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                md.update(line.getBytes());
-            }
-        }
+        // This checksums the actual entries, and it ignores comments and blank lines
+        nameMap.entrySet().stream().sorted(
+                Comparator.comparing((Map.Entry<Object, Object> e) -> e.getKey().toString())
+                        .thenComparing(e -> e.getValue().toString())
+        ).forEachOrdered(e -> {
+            md.update(e.getKey().toString().getBytes(StandardCharsets.UTF_8));
+            md.update(e.getValue().toString().getBytes(StandardCharsets.UTF_8));
+        });
         return JOrphanUtils.baToHexString(md.digest());
     }
+
     private static void initProps() {
         // Load the alias properties
         try {
-            fileVersion = getChecksumForPropertiesFile();
-        } catch (IOException | NoSuchAlgorithmException e) {
-            log.error("Can't compute checksum for saveservice properties file", e);
-            throw new JMeterError("JMeter requires the checksum of saveservice properties file to continue", e);
-        }
-        try {
             Properties nameMap = loadProperties();
+            try {
+                fileVersion = checksum(nameMap);
+            } catch (NoSuchAlgorithmException e) {
+                log.error("Can't compute checksum for saveservice properties file", e);
+                throw new JMeterError("JMeter requires the checksum of saveservice properties file to continue", e);
+            }
             // now create the aliases
             for (Map.Entry<Object, Object> me : nameMap.entrySet()) {
                 String key = (String) me.getKey();
