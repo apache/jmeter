@@ -1,19 +1,20 @@
 @echo off
-
-rem   Licensed to the Apache Software Foundation (ASF) under one or more
-rem   contributor license agreements.  See the NOTICE file distributed with
-rem   this work for additional information regarding copyright ownership.
-rem   The ASF licenses this file to You under the Apache License, Version 2.0
-rem   (the "License"); you may not use this file except in compliance with
-rem   the License.  You may obtain a copy of the License at
-rem 
-rem       http://www.apache.org/licenses/LICENSE-2.0
-rem 
-rem   Unless required by applicable law or agreed to in writing, software
-rem   distributed under the License is distributed on an "AS IS" BASIS,
-rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-rem   See the License for the specific language governing permissions and
-rem   limitations under the License.
+rem
+rem Licensed to the Apache Software Foundation (ASF) under one or more
+rem contributor license agreements.  See the NOTICE file distributed with
+rem this work for additional information regarding copyright ownership.
+rem The ASF licenses this file to you under the Apache License, Version 2.0
+rem (the "License"); you may not use this file except in compliance with
+rem the License.  You may obtain a copy of the License at
+rem
+rem http://www.apache.org/licenses/LICENSE-2.0
+rem
+rem Unless required by applicable law or agreed to in writing, software
+rem distributed under the License is distributed on an "AS IS" BASIS,
+rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+rem See the License for the specific language governing permissions and
+rem limitations under the License.
+rem
 
 rem   =====================================================
 rem   Environment variables that can be defined externally:
@@ -39,7 +40,7 @@ rem
 rem   JVM_ARGS    - (Optional) Java options used when starting JMeter, e.g. -Dprop=val
 rem                 Defaults to '-Duser.language="en" -Duser.region="EN"'
 rem
-rem   GC_ALGO     - (Optional) JVM garbage collector options 
+rem   GC_ALGO     - (Optional) JVM garbage collector options
 rem                 Defaults to '-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20'
 rem
 rem   HEAP        - (Optional) JVM memory settings used when starting JMeter
@@ -150,7 +151,7 @@ if not defined HEAP (
     set HEAP=-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m
 )
 
-rem Uncomment this to generate GC verbose file with Java prior to 9 
+rem Uncomment this to generate GC verbose file with Java prior to 9
 rem set VERBOSE_GC=-verbose:gc -Xloggc:gc_jmeter_%%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps -XX:+PrintAdaptiveSizePolicy
 
 rem Uncomment this to generate GC verbose file with Java 9 and above
@@ -210,4 +211,3 @@ echo errorlevel=%ERRORLEVEL%
 pause
 
 :end
-

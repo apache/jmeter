@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-    
-       http://www.apache.org/licenses/LICENSE-2.0
-    
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <project name="ant-jmeter" default="all">
     <description>
 
@@ -39,19 +40,19 @@
         -Djmeter.home=.. - path to JMeter home directory (defaults to parent of this build file)
         -Dreport.title="My Report" - title for html report (default is 'Load Test Results')
     </description>
-    
+
     <property name="testpath" value="${user.dir}"/>
     <property name="jmeter.home" value="${basedir}/.."/>
     <property name="report.title" value="Load Test Results"/>
-    
+
     <!-- Name of test (without .jmx) -->
     <property name="test" value="Test"/>
-    
+
     <!-- Should report include response data for failures? -->
     <property name="show-data" value="n"/>
 
     <property name="format" value="2.1"/>
-    
+
     <condition property="style_version" value="_21">
         <equals arg1="${format}" arg2="2.1"/>
     </condition>
@@ -59,7 +60,7 @@
     <condition property="funcMode">
         <equals arg1="${show-data}" arg2="y"/>
     </condition>
-    
+
     <condition property="funcMode" value="false">
       <not>
         <equals arg1="${show-data}" arg2="y"/>
@@ -77,7 +78,7 @@
         name="jmeter"
         classpathref="jmeter.classpath"
         classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
-    
+
     <target name="all" depends="run,report"/>
 
     <target name="run">

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-Licensed to the Apache Software Foundation (ASF) under one or more
-contributor license agreements.  See the NOTICE file distributed with
-this work for additional information regarding copyright ownership.
-The ASF licenses this file to You under the Apache License, Version 2.0
-(the "License"); you may not use this file except in compliance with
-the License.  You may obtain a copy of the License at
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
 <document>
 
   <properties>
@@ -75,16 +76,16 @@ all.</p>
 <strong>
       Join the lists that are appropriate for your discussion.
 </strong><br/>
-Please make sure that you are joining the list that is appropriate for the 
-topic or product that you would like to discuss. For example, 
-please do not join the Regexp mailing list and ask questions about Tomcat. 
+Please make sure that you are joining the list that is appropriate for the
+topic or product that you would like to discuss. For example,
+please do not join the Regexp mailing list and ask questions about Tomcat.
 Instead, you should join the Tomcat User list and ask your questions
-there. 
+there.
 </p>
 
 <p>
 <strong>
-    Ask smart questions.  </strong><br/> 
+    Ask smart questions.  </strong><br/>
 
 Every volunteer project obtains its strength from the people involved
 in it. You are welcome to join any of our mailing lists.  You can
@@ -100,12 +101,12 @@ militant, it is definitely worth reading.<br/>
 
 <p>
 <strong>
-    Give feedback when you get a good answer.  </strong><br/> 
+    Give feedback when you get a good answer.  </strong><br/>
 
 If an answer given to you helped you solve your problem then send a mail saying so and don't forget to say <b>THANKS</b>.
 If you fixed the problem yourself then contribute to the mailing list by writing how you solved your issue.
-Giving feedback is useful to people who faced/will face same problems as you and will be your way 
-to contribute to the project. Don't forget that people answering your questions are volunteers 
+Giving feedback is useful to people who faced/will face same problems as you and will be your way
+to contribute to the project. Don't forget that people answering your questions are volunteers
 doing so on their personal time.<br/>
 </p>
 
@@ -140,7 +141,7 @@ If you are using Outlook or Outlook Express or Eudora, chances are that
 you are sending HTML email by default. There is usually a setting that
 will allow you to send "Plain Text" email. If you are using Microsoft
 products to send email, there are several bugs in the software that
-prevent you from turning off the sending of HTML email. 
+prevent you from turning off the sending of HTML email.
 </p>
 
 <p>
@@ -151,27 +152,27 @@ Some mailing lists are set up to drop them.
 If you need to send more than a few lines of code, ask first.
 Note that code is often mangled by word-wrapping, so it is better to provide a link to a downloadable file.
 If necessary, arrange with the person(s) responding to the posting how best to give access to the data,
-should it prove necessary. 
+should it prove necessary.
 </p>
 
 <p>
 <strong>
     Watch where you are sending email.
 </strong><br/>
-The majority of our mailing lists have set the Reply-To to go back to the 
+The majority of our mailing lists have set the Reply-To to go back to the
 list. That means that when you Reply to a message, it will go to the list
 and not to the original author directly. The reason is because it helps
-facilitate discussion on the list for everyone to benefit from. Be careful 
-of this as sometimes you may intend to reply to a message directly to someone 
+facilitate discussion on the list for everyone to benefit from. Be careful
+of this as sometimes you may intend to reply to a message directly to someone
 instead of the entire list.
 <em>
 The appropriate contents of the Reply-To header is an age-old debate that
 should not be brought up on the mailing lists.  You can
 examine opposing points of view
 <a href="http://www.unicom.com/pw/reply-to-harmful.html">condemning</a>
-our convention and 
+our convention and
 <a href="http://www.metasystema.net/essays/reply-to.mhtml">
-condoning</a> 
+condoning</a>
 it.  Bringing this up for debate on a mailing list will add nothing
 new and is considered off-topic.
 </em>
@@ -181,9 +182,9 @@ new and is considered off-topic.
 <strong>
     Do not cross post messages.
 </strong><br/>
-In other words, pick a mailing list and send your messages to that mailing 
-list only. Do not send your messages to multiple mailing lists. The reason is 
-that people may be subscribed to one list and not to the other. Therefore, 
+In other words, pick a mailing list and send your messages to that mailing
+list only. Do not send your messages to multiple mailing lists. The reason is
+that people may be subscribed to one list and not to the other. Therefore,
 some people will only see part of the conversation.
 </p>
 </section>

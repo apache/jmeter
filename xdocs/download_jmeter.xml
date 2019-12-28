@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <!DOCTYPE document
 [
 <!ENTITY release '5.2.1'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
-    
-<document>   
-<properties>     
-    <title>Download Apache JMeter</title>   
-</properties> 
+
+<document>
+<properties>
+    <title>Download Apache JMeter</title>
+</properties>
 <body>
     <section name="Download Apache JMeter">
       <p>
         We recommend you use a mirror to download our release
         builds, but you <strong>must</strong> <a href="http://www.apache.org/info/verification.html">verify the integrity</a> of
-        the downloaded files using signatures downloaded from our main 
+        the downloaded files using signatures downloaded from our main
         distribution directories. Recent releases (48 hours) may not yet
         be available from all the mirrors.
       </p>
@@ -48,7 +48,7 @@
 
       <form action="[location]" method="get" id="SelectMirror">
         <p>
-          Other mirrors: 
+          Other mirrors:
           <select name="Preferred">
           [if-any http]
             [for http]<option value="[http]">[http]</option>[end]
@@ -66,13 +66,13 @@
 
       <p>
         The <code>KEYS</code> link links to the code signing keys used to sign the product.
-        The <code>PGP</code> link downloads the OpenPGP compatible signature from our main site. 
+        The <code>PGP</code> link downloads the OpenPGP compatible signature from our main site.
         The <code>SHA-512</code> link downloads the sha512 checksum from the main site.
         Please <a href="http://www.apache.org/info/verification.html">verify the integrity</a>
         of the downloaded file.
       </p>
       <p>
-      For more information concerning Apache JMeter, see the <a href="http://jmeter.apache.org/">Apache JMeter</a> site. 
+      For more information concerning Apache JMeter, see the <a href="http://jmeter.apache.org/">Apache JMeter</a> site.
       </p>
       <p>
       <a href="https://www.apache.org/dist/jmeter/KEYS">KEYS</a>
@@ -120,7 +120,7 @@
     </section>
     <section name="Verification of downloads">
     <p>
-    It is essential that you verify the integrity of the downloaded files using the PGP signature. 
+    It is essential that you verify the integrity of the downloaded files using the PGP signature.
     Please read <a href="http://www.apache.org/info/verification.html">Verifying Apache Software Foundation Releases</a> for more information on why you should verify our releases.
     </p>
     </section>

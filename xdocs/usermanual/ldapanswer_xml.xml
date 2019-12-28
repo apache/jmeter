@@ -1,32 +1,33 @@
-<?xml version="1.0"?> 
+<?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
-<document>   
-<properties>     
-    <title>User's Manual: LDAP answer XML description</title>   
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<document>
+<properties>
+    <title>User's Manual: LDAP answer XML description</title>
     <author email="dev@jmeter.apache.org">Apache JMeter developers</author>
-  </properties> 
-<body> 
+  </properties>
+<body>
 
 <section name="description of the ldapanswer XML definition" anchor="ldapans_xml">
 <p>
     The extended LDAP sampler was built to support testing for very complex testpurposes.
     It was aimed at supporting the LDAP operations as close as possible.
-    As the results are not passed back in a user-readable form, I invented my own xml definition to 
+    As the results are not passed back in a user-readable form, I invented my own xml definition to
     construct an answer in xml encoding, so the results may be parsed with regextracter or alike functions.
 </p>
 
@@ -40,9 +41,9 @@
 
 </li>
 <li>
-    each ldapanswer contains 4 sections, an "operation" section (enclosed by 
-    &lt;operation&gt; tags) a response code section (enclosed by &lt;responsecode&gt; tags), a 
-    response message (enclosed by &lt;responsemessage&gt; tags and (only with a search 
+    each ldapanswer contains 4 sections, an "operation" section (enclosed by
+    &lt;operation&gt; tags) a response code section (enclosed by &lt;responsecode&gt; tags), a
+    response message (enclosed by &lt;responsemessage&gt; tags and (only with a search
     request) a searchresult section (enclosed with &ltsearchresult&gt tags>
 </li>
 </ol>
@@ -50,7 +51,7 @@
 </p>
 <subsection name="1.1 The operation section" anchor="operation">
 <p>
-The operation section defines the operation as it is sent to the LDAP Server. The 
+The operation section defines the operation as it is sent to the LDAP Server. The
 following tags (with a short explanation) are used
 <!--
 <ol>
@@ -97,7 +98,7 @@ This value is given for any "thread bind" and "thread unbind" operation
 </li>
 <li>
 &lt;binddn&gt;
-This is the DN of the user that is binding to the directory, it is used in the 
+This is the DN of the user that is binding to the directory, it is used in the
 "thread bind", "thread unbind" and "single bind" operations.
 </li>
 <li>
@@ -121,7 +122,7 @@ It is used in Add, Delete, Modify and ModifyDN operations
 </li>
 <li>
 &lt;newdn&gt;
-This is the new distinghuised name of an object to which the object will be renamed 
+This is the new distinghuised name of an object to which the object will be renamed
 or moved, it is used in de ModifyDN operation
 </li>
 <li>
@@ -186,7 +187,7 @@ This contains the number of returned attributes.
 </li>
 <li>
 &lt;attribute&gt;
-Each returned attribute is given between these tags, it always consists of an 
+Each returned attribute is given between these tags, it always consists of an
 attribute name and attribute value pair
 <ol>
 <li>

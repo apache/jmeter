@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
 <document>
 <properties>
     <title>Issues</title>
@@ -55,7 +56,7 @@ Bugzilla - Enhancements only</a>
 <p>
 In most cases it is worth starting a discussion on the mailing list first.
 Bugzilla is good for tracking progress and supplying patches, but is unwieldy for longer discussions.
-</p> 
+</p>
 <p>
 If you have not already done so, you need to register an account first, using the "<code>New Account</code>" link at the top of the
 main Bugzilla page: <a href="https://bz.apache.org/bugzilla/">https://bz.apache.org/bugzilla/</a>.
@@ -110,7 +111,7 @@ Use the checklist below to guide you.
 Does it happen every time?
 </li>
 <li>Add yourself in <code>CC</code> List to be notified when JMeter Team requires more information (in this case bug will be marked as <code>NEEDINFO</code>)</li>
-<li>When a bug is market as <code>NEEDINFO</code>, please provide as soon as possible the required information so that bug can be understood and fixed. Be aware that if 
+<li>When a bug is market as <code>NEEDINFO</code>, please provide as soon as possible the required information so that bug can be understood and fixed. Be aware that if
 no information is provided after team requires more information and bug is not reproducible, then bug will be closed as <code>WORKSFORME</code>. You can always reopen it later once you provide the required information.</li>
 <li>Select accurately the IMPORTANCE level, <code>ENHANCEMENT</code> means it's not a BUG while others mean it's a BUG</li>
 <li>If you are providing a patch to fix a bug, please ensure it is in unified diff format.

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-Licensed to the Apache Software Foundation (ASF) under one or more
-contributor license agreements.  See the NOTICE file distributed with
-this work for additional information regarding copyright ownership.
-The ASF licenses this file to You under the Apache License, Version 2.0
-(the "License"); you may not use this file except in compliance with
-the License.  You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <document>
 
@@ -49,7 +49,7 @@ The following mailing lists are available:
 </p>
 <subsection name="Apache JMeter User" anchor="JMeterUser">
 <p>
-This is the list where users of Apache JMeter meet and discuss issues. 
+This is the list where users of Apache JMeter meet and discuss issues.
 </p>
 <p>
 Developers are also expected to be lurking on this list to offer support to users of JMeter.
@@ -88,7 +88,7 @@ For earlier postings, please see below.
 <p>
 SVN commit messages are sent here.
 </p>
-Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below. 
+Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 <ul>
 <li>Subscribe at <a href="mailto:commits-subscribe@jmeter.apache.org">commits-subscribe@jmeter.apache.org</a></li>
 <li>Unsubscribe at <a href="mailto:commits-unsubscribe@jmeter.apache.org">commits-unsubscribe@jmeter.apache.org</a></li>
@@ -101,7 +101,7 @@ Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 </p>
 <p>
 Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
-</p> 
+</p>
 
 <ul>
 <li>Subscribe at <a href="mailto:issues-subscribe@jmeter.apache.org">issues-subscribe@jmeter.apache.org</a></li>

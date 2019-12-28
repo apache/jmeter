@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <!DOCTYPE document[
 <!ENTITY sect-num '2'>
@@ -113,7 +113,7 @@ If Shutdown is taking too long. Close the Shutdown dialog box and select <code>R
 <p>
 When running JMeter in CLI mode, there is no Menu, and JMeter does not react to keystrokes such as <keycombo><keysym>Control</keysym><keysym>.</keysym></keycombo>.
 So JMeter CLI mode will listen for commands on a specific port (default <code>4445</code>, see the JMeter property <code>jmeterengine.nongui.port</code>).
-JMeter supports automatic choice of an alternate port if the default port is being used 
+JMeter supports automatic choice of an alternate port if the default port is being used
 (for example by another JMeter instance). In this case, JMeter will try the next higher port, continuing until
 it reaches the JMeter property <code>jmeterengine.nongui.maxport</code>) which defaults to <code>4455</code>.
 If <code>maxport</code> is less than or equal to <code>port</code>, port scanning will not take place.
@@ -134,13 +134,13 @@ The commands will only be accepted if the script is run from the same host.
 <subsection name="&sect-num;.7 Error reporting" anchor="error_reporting">
 <p>
 JMeter reports warnings and errors to the <code>jmeter.log</code> file, as well as some information on the test run itself.
-JMeter shows the number of warnings/errors found in <code>jmeter.log</code> file next to the warning icon (triangle) at the right hand end of its window. 
+JMeter shows the number of warnings/errors found in <code>jmeter.log</code> file next to the warning icon (triangle) at the right hand end of its window.
 Click on the warning icon to show the <code>jmeter.log</code> file at the bottom of JMeter's window.
 Just occasionally there may be some errors that JMeter is unable to trap and log; these will appear on the command console.
 If a test is not behaving as you expect, please check the log file in case any errors have been reported (e.g. perhaps a syntax error in a function call).
 </p>
 <p>
-Sampling errors (e.g. HTTP 404 - file not found) are not normally reported in the log file. 
+Sampling errors (e.g. HTTP 404 - file not found) are not normally reported in the log file.
 Instead these are stored as attributes of the sample result.
 The status of a sample result can be seen in the various different Listeners.
 </p>
@@ -150,4 +150,3 @@ The status of a sample result can be seen in the various different Listeners.
 
 </body>
 </document>
-

@@ -1,14 +1,20 @@
 <?xml version="1.0"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-    license agreements. See the NOTICE file distributed with this work for additional 
-    information regarding copyright ownership. The ASF licenses this file to 
-    You under the Apache License, Version 2.0 (the "License"); you may not use 
-    this file except in compliance with the License. You may obtain a copy of 
-    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-    by applicable law or agreed to in writing, software distributed under the 
-    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-    OF ANY KIND, either express or implied. See the License for the specific 
-    language governing permissions and limitations under the License. -->
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <!DOCTYPE document[
 <!ENTITY hellip   "&#x02026;" >
@@ -77,14 +83,14 @@
                         A template file is just the saving of a JMeter test plan.
                     </p>
                 </subsection>
-                
+
                 <subsection name="3.2 Customizable template file" anchor="customizable_template_file">
                     <p>
                         In the 2.2 section we saw that a custom template file is a .jmx.fmkr file.<br/>
                         The single difference between them is the .jmx.fmkr will be analyzed by JMeter to<br/>
                         detect customs tag. If a custom tag is found, JMeter will try to replace it by the corresponding
                         given value from the user.<br/><br/>
-                        A custom tag is defined as follow : 
+                        A custom tag is defined as follow :
                         <source><![CDATA[[=<key>]]]></source>
                         This is based on <a href="https://freemarker.apache.org/docs/dgui_misc_alternativesyntax.html#dgui_misc_alternativesyntax_interpolation">Freemarker alternative Interpolation syntax</a>.
                         Let's illustrate how it works with an example.<br/>
@@ -94,7 +100,7 @@
                         As it is, when you use the template you will always have the same saving filename : <code>recording.xml</code>.<br/><br/>
                         To make it customizable, change your recording template declaration in the templates.xml files by the<br/>
                         one shown in the 2.2 section. Then, rename the recording.jmx file to recording.jmx.fmkr.<br/><br/>
-                        When it's done, Change the above selected line by this one : 
+                        When it's done, Change the above selected line by this one :
                         <source><![CDATA[<stringProp name="filename">[=xmlFileName]</stringProp>]]></source>
                         <br/>
                         It's over ! With this configuration, if you chose to use the recording template, JMeter will ask you

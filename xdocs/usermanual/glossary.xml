@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!DOCTYPE document
 [
 <!ENTITY sect-num '23'>
@@ -49,8 +50,8 @@ browser or other application client.
 
 <p>
 <a name="Connect"><b>Connect Time</b></a>. JMeter measures the time it took to establish the connection, including SSL handshake. Note that connect time is not automatically subtracted from <a href="#Latency">latency</a>.
-In case of connection error, the metric will be equal to the time it took to face the error, for example in case of Timeout, it should be equal to connection timeout. 
-<note>As of JMeter 3.1, this metric is only computed for TCP Sampler, HTTP Request and JDBC Request.</note> 
+In case of connection error, the metric will be equal to the time it took to face the error, for example in case of Timeout, it should be equal to connection timeout.
+<note>As of JMeter 3.1, this metric is only computed for TCP Sampler, HTTP Request and JDBC Request.</note>
 </p>
 
 <p>
@@ -99,7 +100,7 @@ Thread Group 2-2
 <p>
 <a name="Throughput"><b>Throughput</b></a> is calculated as requests/unit of time.
 The time is calculated from the start of the first sample to the end of the last sample.
-This includes any intervals between samples, as it is supposed to represent the load on the server.<br/> 
+This includes any intervals between samples, as it is supposed to represent the load on the server.<br/>
 The formula is: Throughput = (number of requests) / (total time).
 </p>
 

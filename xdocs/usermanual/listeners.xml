@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <!DOCTYPE document
 [
@@ -39,7 +39,7 @@ samples. The results can be shown in a tree, tables, graphs or simply written to
 file. To view the contents of a response from any given sampler, add either of the Listeners "<code>View
 Results Tree</code>" or "<code>View Results in table</code>" to a test plan. To view the response time graphically, add
 graph results.
-The <complink name="listeners">Listeners</complink> 
+The <complink name="listeners">Listeners</complink>
 section of the components page has full descriptions of all the listeners.</p>
 
 <note>
@@ -85,7 +85,7 @@ output results like:.</p>
 <source>
 timeStamp|time|label|responseCode|threadName|dataType|success|failureMessage
 02/06/03 08:21:42|1187|Home|200|Thread Group-1|text|true|
-02/06/03 08:21:42|47|Login|200|Thread Group-1|text|false|Test Failed: 
+02/06/03 08:21:42|47|Login|200|Thread Group-1|text|false|Test Failed:
     expected to contain: password etc.
 </source>
 <p>
@@ -210,13 +210,13 @@ JMeter (2.9+) will try the following formats:
 <li><code>yyyy-MM-dd HH:mm:ss.SSS</code></li>
 <li><code>yyyy-MM-dd HH:mm:ss</code></li>
 <li><code>MM/dd/yy HH:mm:ss</code> (this is for compatibility with previous versions; it is not recommended as a format)</li>
-</ul> 
+</ul>
 Matching is now also strict (non-lenient).
-JMeter 2.8 and earlier used lenient mode which could result in timestamps with incorrect dates 
+JMeter 2.8 and earlier used lenient mode which could result in timestamps with incorrect dates
 (times were usually correct).</p>
 <subsection name="&sect-num;.1.1 Sample Variables" anchor="sample_variables">
 <p>
-JMeter supports the <code>sample_variables</code> 
+JMeter supports the <code>sample_variables</code>
 property to define a list of additional JMeter variables which are to be saved with
 each sample in the JTL files. The values are written to CSV files as additional columns,
 and as additional attributes in XML files. See above for an example.
@@ -254,7 +254,7 @@ jmeter -n -t testplan.jmx -l testplan_02.jtl -j testplan_02.log
 <p>
 Note that JMeter logging messages are written to the file <code>jmeter.log</code> by default.
 This file is recreated each time, so if you want to keep the log files for each run,
-you will need to rename it using the <code>-j</code> option as above. 
+you will need to rename it using the <code>-j</code> option as above.
 </p>
 <p>JMeter supports variables in the log file name.
 If the filename contains  paired single-quotes, then the name is processed
@@ -330,13 +330,13 @@ The format of the updated XML (2.1) is as follows (line breaks will be different
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;testResults version="1.2"&gt;
 
--- HTTP Sample, with nested samples 
+-- HTTP Sample, with nested samples
 
-&lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" 
-     lb="HTTP Request" rc="200" rm="OK" 
+&lt;httpSample t="1392" lt="351" ts="1144371014619" s="true"
+     lb="HTTP Request" rc="200" rm="OK"
      tn="Listen 1-1" dt="text" de="iso-8859-1" by="12407"&gt;
-  &lt;httpSample t="170" lt="170" ts="1144371015471" s="true" 
-        lb="http://www.apache.org/style/style.css" rc="200" rm="OK" 
+  &lt;httpSample t="170" lt="170" ts="1144371015471" s="true"
+        lb="http://www.apache.org/style/style.css" rc="200" rm="OK"
         tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002"&gt;
     &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
@@ -357,8 +357,8 @@ Content-Type: text/css
     &lt;queryString class="java.lang.String"&gt;&lt;/queryString&gt;
     &lt;url&gt;http://www.apache.org/style/style.css&lt;/url&gt;
   &lt;/httpSample&gt;
-  &lt;httpSample t="200" lt="180" ts="1144371015641" s="true" 
-     lb="http://www.apache.org/images/asf_logo_wide.gif" 
+  &lt;httpSample t="200" lt="180" ts="1144371015641" s="true"
+     lb="http://www.apache.org/images/asf_logo_wide.gif"
      rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866"&gt;
     &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
@@ -386,7 +386,7 @@ Content-Type: text/html; charset=ISO-8859-1
  &lt;head&gt;
 &vellip;
  &lt;/head&gt;
- &lt;body&gt;        
+ &lt;body&gt;
 &vellip;
  &lt;/body&gt;
 &lt;/html&gt;

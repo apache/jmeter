@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
-<!-- 
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- -->
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!DOCTYPE document
 [
 <!ENTITY sect-num '19'>
@@ -39,7 +39,7 @@
     which are passed unchanged into the HTML output, e.g. <br/>, not just <br>.
 
     Unfortunately Java does not currently allow for this - it outputs the trailing > -
-    which messes up the Help display. 
+    which messes up the Help display.
     To avoid these artifacts, use the form <br></br>, which Java does seem to handle OK.
 
  -->
@@ -85,7 +85,7 @@ These properties are only taken into account after restarting JMeter as they are
 </properties>
 </section>
 <section name="&sect-num;.3 SSL configuration" anchor="ssl_config">
-<note>SSL (Java) System properties are now in <code>system.properties</code><br/> 
+<note>SSL (Java) System properties are now in <code>system.properties</code><br/>
 JMeter no longer converts <code>javax.<em>xxx</em></code> property entries in
 <code>jmeter.properties</code> into System properties. These must now be
 defined in the <code>system.properties</code> file or on the command-line. The
@@ -127,7 +127,7 @@ Reset HTTP State when starting a new Thread Group iteration.
 In summary<code>true</code> means next iteration is associated to a new user.
 <code>false</code> means next iteration is associated to same user.
 <code>true</code> involves:
- <ul> 
+ <ul>
     <li>Closing opened connection</li>
     <li>resetting SSL State</li>
 </ul>
@@ -177,7 +177,7 @@ Defaults to: <code>true</code>
         This is because the <code>CrossPlatform</code> LAF generally looks better than the <code>System</code> LAF.
         See <bugzilla>52026</bugzilla> for details.
     </note>
-    <note>When you change Look and Feel (LAF) from JMeter GUI through menu Options &gt; Look and Feel, 
+    <note>When you change Look and Feel (LAF) from JMeter GUI through menu Options &gt; Look and Feel,
     you should restart JMeter to ensure change is fully effective.</note>
  </property>
 <property name="jmeter.loggerpanel.display">
@@ -213,7 +213,7 @@ Defaults to: <code>true</code>
     Defaults to: <code>22x22</code>
 </property>
 <property name="jmeter.icons">
-    Icon definitions. Alternate set: 
+    Icon definitions. Alternate set:
     <source>jmeter.icons=org/apache/jmeter/images/icon_1.properties</source>
     Historical icon set (deprecated):
     <source>jmeter.icons=org/apache/jmeter/images/icon_old.properties</source>
@@ -279,7 +279,7 @@ gui.quick_9=ViewResultsFullVisualizer
     Backup file names are built after the jmx file being saved. For example,
     saving <code>test-plan.jmx</code> will create a <code>test-plan-000012.jmx</code> in the backup
     directory provided that the last created backup file is <code>test-plan-000011.jmx</code>.<br/>
-    Default value is <code>true</code> indicating that auto backups are enabled.<br/> 
+    Default value is <code>true</code> indicating that auto backups are enabled.<br/>
     Defaults to: <code>true</code>
 </property>
 <property name="jmeter.gui.action.save.backup_directory">
@@ -505,7 +505,7 @@ JMETER-SERVER</source>
 </property>
 <property name="httpclient4.retrycount">
     Number of retries to attempt.
-    Retry will be done on Idempotent Http Methods by default. 
+    Retry will be done on Idempotent Http Methods by default.
     If you want to retry for all methods, see property <code>httpclient4.request_sent_retry_enabled</code>
     <br/>
     Defaults to: <code>0</code>
@@ -1137,9 +1137,9 @@ JMETER-SERVER</source>
     Defaults to: <code>100</code>
 </property>
 <property name="backend_metrics_large_window">
-    Backend metrics sliding window size  for <code>Percentiles</code>, <code>Min</code> 
+    Backend metrics sliding window size  for <code>Percentiles</code>, <code>Min</code>
     and <code>Max</code>. when <code>backend_metrics_window_mode=timed</code><br/>
-    Setting this value too high can lead to OOM Backend metrics sliding window size 
+    Setting this value too high can lead to OOM Backend metrics sliding window size
     Defaults to: <code>5000</code>
 </property>
 
@@ -1835,7 +1835,7 @@ JMETER-SERVER</source>
     Defaults to: <code>1.0f</code>
 </property>
 <property name="think_time_creator.impl">
-    Default implementation that create the Timer structure to add to Test Plan. 
+    Default implementation that create the Timer structure to add to Test Plan.
     Implementation of interface <a href="../api/org/apache/jmeter/gui/action/thinktime/ThinkTimeCreator.html"><code>org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator</code></a>
     Defaults to: <a href="../api/org/apache/jmeter/thinktime/DefaultThinkTimeCreator.html"><code>org.apache.jmeter.thinktime.DefaultThinkTimeCreator</code></a>
 </property>
@@ -1868,7 +1868,7 @@ JMETER-SERVER</source>
 </property>
 <property name="naming_policy.impl">
     Implementation of interface <a href="../api/org/apache/jmeter/gui/action/TreeNodeNamingPolicy.html"><code>org.apache.jmeter.gui.action.TreeNodeNamingPolicy</code></a>
-    Default implementation that create the Timer structure to add to Test Plan. 
+    Default implementation that create the Timer structure to add to Test Plan.
     Implementation of interface org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator
     Defaults to: <a href="../api/org/apache/jmeter/gui/action/impl/DefaultTreeNodeNamingPolicy.html"><code>org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy</code></a>
 </property>
@@ -1892,7 +1892,7 @@ JMETER-SERVER</source>
 <properties>
     <property name="groovy.utilities">
     Path to Groovy file containing utility functions to make available to <code><funclink name="__groovy"/></code> function.<br/>
-    Defaults to <code>bin/utility.groovy</code> 
+    Defaults to <code>bin/utility.groovy</code>
     </property>
 </properties>
 </section>
@@ -1929,7 +1929,7 @@ JMETER-SERVER</source>
     No default value</property>
 </properties>
 </section>
-<!-- 
+<!--
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>
         <br></br>
@@ -1965,4 +1965,3 @@ JMETER-SERVER</source>
  -->
 </body>
 </document>
-

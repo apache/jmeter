@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:jmeter="http://jmeter.apache.org/"
 >
@@ -11,9 +28,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,8 +62,8 @@ ul.tree li {
     background:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIJYVaFGwAAAARSURBVAjXY2hgQIf/GTDFGgDSkwqATqpCHAAAAABJRU5ErkJggg==') no-repeat;
     color: #369;
 }
-ul.tree li:last-child { 
-    background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIIhs+gc8AAAAQSURBVAjXY2hgQIf/GbAAAKCTBYBUjWvCAAAAAElFTkSuQmCC') no-repeat; 
+ul.tree li:last-child {
+    background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIIhs+gc8AAAAQSURBVAjXY2hgQIf/GbAAAKCTBYBUjWvCAAAAAElFTkSuQmCC') no-repeat;
 }
 </style>
 </head>
@@ -78,7 +95,7 @@ ul.tree li:last-child {
         <xsl:value-of select='stringProp[@name="Argument.metadata"]'/>
         "<xsl:value-of select='stringProp[@name="Argument.value"]'/>"
         <xsl:if test="position() != last()">,</xsl:if>
-    </xsl:for-each>], 
+    </xsl:for-each>],
     executeTearDownThreadsOnShutdown: <xsl:value-of select='boolProp[@name="TestPlan.tearDown_on_shutdown"]'/>)
     <xsl:call-template name="comment"/>
     </li>
@@ -112,7 +129,7 @@ ul.tree li:last-child {
 <xsl:template match="CSVDataSet">
 <li>
     <xsl:call-template name="header"/>
-    (file: "<xsl:value-of select='stringProp[@name="filename"]'/>", 
+    (file: "<xsl:value-of select='stringProp[@name="filename"]'/>",
     vars:"<xsl:value-of select='stringProp[@name="variableNames"]'/>",
     sharing:"<xsl:value-of select='stringProp[@name="shareMode"]'/>",
     recycleOnEof:<xsl:value-of select='boolProp[@name="recycle"]'/>,
@@ -242,7 +259,7 @@ ul.tree li:last-child {
             is not equal to
         </xsl:when>
         <xsl:when test='intProp[@name="Assertion.test_type"] = 16'>
-            contains 
+            contains
         </xsl:when>
         <xsl:when test='intProp[@name="Assertion.test_type"] = 20'>
             does not contain as substring
@@ -280,7 +297,7 @@ ul.tree li:last-child {
     <b>
     <xsl:choose>
         <xsl:when test='intProp[@name="ActionProcessor.action"] = 0'>
-            stop 
+            stop
         </xsl:when>
         <xsl:when test='intProp[@name="ActionProcessor.action"] = 1'>
             pause for <xsl:value-of select='stringProp[@name="ActionProcessor.duration"]'/>ms
@@ -317,7 +334,7 @@ ul.tree li:last-child {
     <b>
     <xsl:choose>
         <xsl:when test='intProp[@name="OnError.action"] = 0'>
-            continue 
+            continue
         </xsl:when>
         <xsl:when test='intProp[@name="OnError.action"] = 1'>
             stop thread now
@@ -366,7 +383,7 @@ ul.tree li:last-child {
     (
     <xsl:for-each select='collectionProp/stringProp'>
         <xsl:if test="position()!=1 and position() != last()">
-            <xsl:value-of select='.'/> 
+            <xsl:value-of select='.'/>
         </xsl:if>
         <xsl:if test="position() = last()">
             <a><xsl:attribute name="href">#<xsl:value-of select='.'/></xsl:attribute><xsl:value-of select='.'/></a>
@@ -387,8 +404,8 @@ ul.tree li:last-child {
     policy: "<xsl:value-of select='stringProp[@name="CookieManager.policy"]'/>",
     cookies: [
     <xsl:for-each select='collectionProp[@name="CookieManager.cookies"]/elementProp[@elementType="Cookie"]'>
-      { name:"<xsl:value-of select='@name'/>", 
-      value:"<xsl:value-of select='stringProp[@name="Cookie.value"]'/>", 
+      { name:"<xsl:value-of select='@name'/>",
+      value:"<xsl:value-of select='stringProp[@name="Cookie.value"]'/>",
       domain:"<xsl:value-of select='stringProp[@name="Cookie.domain"]'/>",
       path:"<xsl:value-of select='stringProp[@name="Cookie.path"]'/>",
       secure:<xsl:value-of select='boolProp[@name="Cookie.secury"]'/>}
@@ -437,7 +454,7 @@ ul.tree li:last-child {
         </xsl:when>
     </xsl:choose>
 </xsl:function>
-  
+
 <xsl:template match="XPath2Extractor">
 <li>
     <xsl:call-template name="header"/>
@@ -526,7 +543,7 @@ ul.tree li:last-child {
 <xsl:template match="UniformRandomTimer|GaussianRandomTimer|PoissonRandomTimer">
 <li>
     <xsl:call-template name="header"/>
-    (const:<xsl:value-of select='stringProp[@name="ConstantTimer.delay"]'/>ms, 
+    (const:<xsl:value-of select='stringProp[@name="ConstantTimer.delay"]'/>ms,
     variation:<xsl:value-of select='stringProp[@name="RandomTimer.range"]'/>ms)
     <xsl:call-template name="comment"/>
 </li>
@@ -551,110 +568,110 @@ ul.tree li:last-child {
 <xsl:template name="header">
     <xsl:choose>
         <xsl:when test="name() = 'GenericController'">
-            <a> 
+            <a>
             <xsl:attribute name="id">
                 <xsl:value-of select="@testname"/>
             </xsl:attribute>
-            <b>container</b></a> 
+            <b>container</b></a>
         </xsl:when>
         <xsl:when test="name() = 'HTTPSamplerProxy'">
-            <b>http request</b> 
+            <b>http request</b>
         </xsl:when>
         <xsl:when test="name() = 'SetupThreadGroup'">
-            <b>run before</b> 
+            <b>run before</b>
         </xsl:when>
         <xsl:when test="name() = 'ThreadGroup'">
-            <b>run</b> 
+            <b>run</b>
         </xsl:when>
         <xsl:when test="name() = 'PostThreadGroup'">
-            <b>run after</b> 
+            <b>run after</b>
         </xsl:when>
         <xsl:when test="name() = 'TestFragmentController'">
-            <b>declare reusable Elements</b> 
+            <b>declare reusable Elements</b>
         </xsl:when>
         <xsl:when test="name() = 'ResponseAssertion'">
-            <b>assert as</b> 
+            <b>assert as</b>
         </xsl:when>
         <xsl:when test="name() = 'TransactionController'">
             <a>
             <xsl:attribute name="id">
                 <xsl:value-of select="@testname"/>
             </xsl:attribute>
-            <b>transaction</b></a> 
+            <b>transaction</b></a>
         </xsl:when>
         <xsl:when test="name() = 'ModuleController'">
-            <b>reuse controller</b> 
+            <b>reuse controller</b>
         </xsl:when>
         <xsl:when test="name() = 'UserParameters'">
-            <b>set variables for thread</b> 
+            <b>set variables for thread</b>
         </xsl:when>
         <xsl:when test="name() = 'RandomController'">
             <a>
             <xsl:attribute name="id">
                 <xsl:value-of select="@testname"/>
             </xsl:attribute>
-            <b>randomly run children</b></a> 
+            <b>randomly run children</b></a>
         </xsl:when>
         <xsl:when test="name() = 'ThroughputController'">
             <a>
             <xsl:attribute name="id">
                 <xsl:value-of select="@testname"/>
             </xsl:attribute>
-            <b>run at percentage</b></a> 
+            <b>run at percentage</b></a>
         </xsl:when>
         <xsl:when test="name() = 'IfController'">
             <a>
             <xsl:attribute name="id">
                 <xsl:value-of select="@testname"/>
             </xsl:attribute>
-            <b>if</b></a> 
+            <b>if</b></a>
         </xsl:when>
         <xsl:when test="name() = 'ResultCollector'">
-            <b>write samples</b> 
+            <b>write samples</b>
         </xsl:when>
         <xsl:when test="name() = 'ConstantTimer'">
-            <b>think-time Constant</b> 
+            <b>think-time Constant</b>
         </xsl:when>
         <xsl:when test="name() = 'UniformRandomTimer'
             or name() = 'GaussianRandomTimer'
             or name() = 'PoissonRandomTimer'">
-            <b>think-time <xsl:value-of select="substring-before(name(),'RandomTimer')" /></b> 
+            <b>think-time <xsl:value-of select="substring-before(name(),'RandomTimer')" /></b>
         </xsl:when>
         <xsl:when test="name() = 'JSR223Sampler'">
-            <b>jsr223 sampler</b> 
+            <b>jsr223 sampler</b>
         </xsl:when>
         <xsl:when test="name() = 'JSR223PreProcessor'">
-            <b>jsr223 pre-process</b> 
+            <b>jsr223 pre-process</b>
         </xsl:when>
         <xsl:when test="name() = 'JSR223PostProcessor'">
-            <b>jsr223 post-process</b> 
+            <b>jsr223 post-process</b>
         </xsl:when>
         <xsl:when test="name() = 'CSVDataSet'">
-            <b>read csv into vars</b> 
+            <b>read csv into vars</b>
         </xsl:when>
         <xsl:when test="name() = 'HeaderManager'">
-            <b>add headers</b> 
+            <b>add headers</b>
         </xsl:when>
         <xsl:when test="name() = 'CookieManager'">
-            <b>handle cookies</b> 
+            <b>handle cookies</b>
         </xsl:when>
         <xsl:when test="name() = 'Arguments'">
-            <b>globalVars</b> 
+            <b>globalVars</b>
         </xsl:when>
         <xsl:when test="name() = 'TestAction'">
-            <b>flow control</b> 
+            <b>flow control</b>
         </xsl:when>
         <xsl:when test="name() = 'ResultAction'">
-            <b>action after sampler error </b> 
+            <b>action after sampler error </b>
         </xsl:when>
         <xsl:when test="name() = 'ConfigTestElement' and @guiclass = 'HttpDefaultsGui'">
-            <b>http defaults</b> 
+            <b>http defaults</b>
         </xsl:when>
         <xsl:when test="name() = 'CacheManager'">
-            <b>simulate browser cache</b> 
+            <b>simulate browser cache</b>
         </xsl:when>
         <xsl:when test="name() = 'RegexExtractor'">
-            <b>extract-regexp </b> 
+            <b>extract-regexp </b>
         </xsl:when>
         <xsl:when test="name() = 'BoundaryExtractor'">
             <b>extract-boundary </b>
@@ -675,7 +692,7 @@ ul.tree li:last-child {
             <b>load test </b>
         </xsl:when>
         <xsl:otherwise>
-             <b><xsl:value-of select="name()"/></b> 
+             <b><xsl:value-of select="name()"/></b>
         </xsl:otherwise>
     </xsl:choose>
     "<xsl:value-of select="@testname"/>" <xsl:call-template name="disabledElement"/>
