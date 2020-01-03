@@ -154,6 +154,22 @@
             </ul>
         ]]></description>
     </template>
+	<template isTestPlan="true">
+        <name>Functional Testing Test Plan [01]</name>
+        <fileName>/bin/templates/functional-testing-01-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Building a Functional Testing Test Plan [01]</h1>
+		<p>You can use JMeter to automate API Testing</p>
+		<p>This template of Test Plan contains first step when starting creating JMeter script</p>
+        <h2>Useful links</h2>
+            <ul>
+                <li><a href="https://jmeter.apache.org/usermanual/test_plan.html" >https://jmeter.apache.org/usermanual/test_plan.html</a></li>
+				<li><a href="https://jmeter.apache.org/usermanual/listeners.html" >https://jmeter.apache.org/usermanual/listeners.html</a></li>
+				<li><a href="https://jmeter.apache.org/usermanual/component_reference.html#View_Results_Tree" >https://jmeter.apache.org/usermanual/component_reference.html#View_Results_Tree</a></li>
+
+            </ul>
+        ]]></description>
+    </template>
     <template isTestPlan="true">
         <name>Building an Advanced Web Test Plan</name>
         <fileName>/bin/templates/build-adv-web-test-plan.jmx</fileName>
