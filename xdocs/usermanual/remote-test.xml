@@ -92,10 +92,10 @@ there is no need to start RMI registry separately.
 To revert to the previous behaviour, define the JMeter property <source>server.rmi.create=false</source> on the server host systems.
 </p>
 <p>
-By default, RMI uses dynamic ports for the JMeter server engine. This can cause problems for firewalls,
+By default, RMI uses a dynamic port for the JMeter server engine. This can cause problems for firewalls,
 so you can define the JMeter property <code>server.rmi.localport</code>
-to control this port numbers.
-If this is non-zero, it will be used as the base for local port numbers for the server engine. At the moment JMeter will open up to three ports beginning with the port defined in <code>server.rmi.localport</code>.
+to control this port number.
+If this is non-zero, it will be used as the local port number for the server engine.
 </p>
 <p><b>Step 2: Add the server IP to your client's Properties File</b></p>
 <p>Edit the properties file <i>on the controlling JMeter machine</i>.  In <code>JMETER_HOME/bin/jmeter.properties</code>,
@@ -203,6 +203,8 @@ JMeter/RMI requires a connection from the client to the server. This will use th
 JMeter/RMI also requires a reverse connection in order to return sample results from the server to the client.<br/>
 This will use a high-numbered port. <br/>
 This port can be controlled by jmeter property called <code>client.rmi.localport</code> in <code>jmeter.properties</code>.<br/>
+If this is non-zero, it will be used as the base for local port numbers for the client engine. At the moment JMeter will open
+up to three ports beginning with the port defined in <code>client.rmi.localport</code>.
 If there are any firewalls or other network filters between JMeter client and server,
 you will need to make sure that they are set up to allow the connections through.
 If necessary, use monitoring software to show what traffic is being generated.
