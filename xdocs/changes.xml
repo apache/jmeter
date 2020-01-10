@@ -103,6 +103,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>Functions</h3>
 <ul>
+  <li><bug>64070</bug><code>_timeshift</code> function does not work with offset formatters</li>
 </ul>
 
 <h3>I18N</h3>
@@ -187,6 +188,7 @@ to view the last release notes of version 5.2.1.
 <ul>
   <li>Michael McDermott (mcdermott.michaelj at gmail.com)</li>
   <li>yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
+  <li>Markus Wolf (wolfm at t-systems.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

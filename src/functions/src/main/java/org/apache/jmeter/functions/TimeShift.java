@@ -19,10 +19,9 @@ package org.apache.jmeter.functions;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
@@ -47,16 +46,21 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * timeShifting Function permit to shift a date
- *
- * Parameters: - format date @see
+ * <p>
+ * Parameters:
+ * <ul>
+ * <li>format date @see
  * https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
- * (optional - defaults to epoch time in millisecond) - date to shift formatted
- * as first param (optional - defaults now) - amount of (seconds, minutes,
- * hours, days ) to add (optional - default nothing is add ) - a string of the locale for the format
- * ( optional ) - variable name ( optional )
- *
- * Returns: a formatted date with the specified number of (seconds, minutes,
- * hours, days or months ) added. - value is also saved in the variable for
+ * (optional - defaults to epoch time in millisecond)</li>
+ * <li>date to shift formatted
+ * as first param (optional - defaults now)</li>
+ * <li>amount of (seconds, minutes, hours, days ) to add (optional - default nothing is add)</li>
+ * <li>a string of the locale for the format ( optional )</li>
+ * <li>variable name ( optional )</li>
+ * </ul>
+ * Returns:
+ * <p>a formatted date with the specified number of (seconds, minutes,
+ * hours, days or months ) added. Value is also saved in the variable for
  * later re-use.
  *
  * @since 3.3
@@ -136,7 +140,7 @@ public class TimeShift extends AbstractFunction {
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String amountToShift = amountToShiftCompound.execute().trim();
         String dateToShift = dateToShiftCompound.execute().trim();
-        LocalDateTime localDateTimeToShift = LocalDateTime.now(systemDefaultZoneID);
+        ZonedDateTime zonedDateTimeToShift = ZonedDateTime.now(systemDefaultZoneID);
 
         DateTimeFormatter formatter = null;
         if (!StringUtils.isEmpty(format)) {
@@ -154,9 +158,9 @@ public class TimeShift extends AbstractFunction {
         if (!dateToShift.isEmpty()) {
             try {
                 if (formatter != null) {
-                    localDateTimeToShift = LocalDateTime.parse(dateToShift, formatter);
+                    zonedDateTimeToShift = ZonedDateTime.parse(dateToShift, formatter);
                 } else {
-                    localDateTimeToShift = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(dateToShift)),
+                    zonedDateTimeToShift = ZonedDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(dateToShift)),
                             systemDefaultZoneID);
                 }
             } catch (DateTimeParseException | NumberFormatException ex) {
@@ -169,7 +173,7 @@ public class TimeShift extends AbstractFunction {
         if (!StringUtils.isEmpty(amountToShift)) {
             try {
                 Duration duration = Duration.parse(amountToShift);
-                localDateTimeToShift = localDateTimeToShift.plus(duration);
+                zonedDateTimeToShift = zonedDateTimeToShift.plus(duration);
             } catch (DateTimeParseException ex) {
                 log.error(
                         "Failed to parse the amount duration '{}' to shift "
@@ -179,10 +183,9 @@ public class TimeShift extends AbstractFunction {
         }
         String dateString;
         if (formatter != null) {
-            dateString = localDateTimeToShift.format(formatter);
+            dateString = zonedDateTimeToShift.format(formatter);
         } else {
-            ZoneOffset offset = systemDefaultZoneID.getRules().getOffset(localDateTimeToShift);
-            dateString = String.valueOf(localDateTimeToShift.toInstant(offset).toEpochMilli());
+            dateString = String.valueOf(zonedDateTimeToShift.toInstant().toEpochMilli());
         }
 
         if (!StringUtils.isEmpty(variableName)) {
@@ -205,6 +208,7 @@ public class TimeShift extends AbstractFunction {
                 .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
                 .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
                 .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
+                .parseDefaulting(ChronoField.OFFSET_SECONDS, ZonedDateTime.now().getOffset().getTotalSeconds())
                 .toFormatter(format.getLocale());
 
     }
