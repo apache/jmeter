@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <!DOCTYPE document[
 <!ENTITY sect-num '4'>
@@ -217,7 +217,7 @@ To do this in JMeter, add an HTTP Request, and set the method to POST.
 You'll need to know the names of the fields used by the form, and the target page.
 These can be found out by inspecting the code of the login page.
 [If this is difficult to do, you can use the <a href="component_reference.html#HTTP_Proxy_Server">JMeter Proxy Recorder</a> to record the login sequence.]
-Set the path to the target of the submit button. 
+Set the path to the target of the submit button.
 Click the Add button twice and enter the username and password details.
 Sometimes the login form contains additional hidden fields.
 These will need to be added as well.
@@ -229,10 +229,10 @@ Figure &sect-num;.8. Sample HTTP login request</figure>
 
 <section name="&sect-num;.7 choose the same user or different users" anchor="choose_users">
 <p>
-When creating a Test Plan, on each Thread Group iteration, we can choose to simulate the same user running multiple iterations, 
+When creating a Test Plan, on each Thread Group iteration, we can choose to simulate the same user running multiple iterations,
 or different users running one iteration.
 You can configure this behaviour on Thread Group element, and have HTTP Cache Manager, HTTP Cookie Manager, HTTP Authorization Manager
-controlled by this setting. 
+controlled by this setting.
 </p>
 <figure image="webtest/threadgroup3.png">
 Figure &sect-num;.9. Choose the same user or different users</figure>

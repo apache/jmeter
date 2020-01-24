@@ -2,18 +2,17 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The ASF licenses this file to you under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package org.apache.jmeter.functions;
@@ -28,6 +27,7 @@ import static org.junit.Assert.assertThat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -127,6 +127,22 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         LocalDateTime baseDate = LocalDateTime.parse("2017-12-21 12:00:00", dateFormat);
         LocalDateTime futureDate = baseDate.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
+    }
+
+    @Test
+    void testShiftWithTimeZone() throws Exception {
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+        String timeString = "2017-12-21T12:00:00.000+0100";
+        Collection<CompoundVariable> params = makeParams(pattern, timeString, "P10DT-1H-5M5S", "");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        ZonedDateTime futureDateFromFunction = ZonedDateTime.parse(value, DateTimeFormatter.ofPattern(pattern));
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(pattern);
+        LocalDateTime baseDate = ZonedDateTime.parse(timeString, dateFormat).toLocalDateTime();
+        LocalDateTime futureDate = baseDate.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
+        assertThat(futureDateFromFunction.toLocalDateTime(), within(1, ChronoUnit.SECONDS, futureDate));
+
     }
 
     public static void main(String[] args) {

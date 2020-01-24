@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!DOCTYPE document
 [
 <!ENTITY sect-num '24'>
@@ -30,7 +31,7 @@
 
 <section name="&sect-num;. Curl" anchor="hints">
 <p>This method is to create http requests from curl command. If you want to know more about curl, please click the <a href="https://curl.haxx.se/">
-Curl document</a>. 
+Curl document</a>.
 </p>
 <subsection name="&sect-num;.1 How to enter (a) command(s)" anchor="enter_command">
 <p>
@@ -38,7 +39,7 @@ Create a Test Plan From a cURL Command
 </p>
 1. To create an import from a cURL, open the ‘Tools’ menu and click ‘Import from cURL’.
 <figure width="768" height="339" image="curl/choose_curl.png">Figure 1 - The menu where curl is located</figure>
-2.There are two ways to enter the curl command line. Firstly, we can enter it manually. Secondly, we can import a file containing the curl command line. 
+2.There are two ways to enter the curl command line. Firstly, we can enter it manually. Secondly, we can import a file containing the curl command line.
 This tool supports input of multiple curl command lines at the same time.
 <figure width="767" height="316" image="curl/enter_command.png">Figure 2.1 - Enter curl command in text panel</figure>
 <figure width="767" height="316" image="curl/enter_command_from_file.png">Figure 2.2 - Enter curl command from file</figure>
@@ -55,7 +56,7 @@ This tool supports input of multiple curl command lines at the same time.
 <p><b>-b, --cookie &lt;name=data&gt;</b>:Pass the data to the HTTP server as a cookie.</p>
 
 <b>Sends the specified data in a POST request to the HTTP server. If this option is used more than
- once on the same command line, the data pieces specified will be merged together with a 
+ once on the same command line, the data pieces specified will be merged together with a
 separating "&amp;" character. Thus, using '-d name=daniel -d skill=lousy' would generate a POST
  chunk that looks like 'name=daniel&amp;skill=lousy'.</b>
 <ul><li>-d,--data &lt;data&gt;  --data-ascii &lt;data&gt;  :use @ to upload the file</li>
@@ -85,11 +86,11 @@ of the @ character. </li>
 <p><b>-G, --get</b>:put the post data in the url and use get to replace post.</p>
 <p><b>--no-keepalive</b>:Disables the use of keepalive messages on the TCP connection.</p>
 <p><b>-e, --referer &lt;URL&gt;</b>:Sends the "Referer Page" information to the HTTP server.</p>
-<p><b>-L, --location</b>:If the server reports that the requested page has moved to a different location 
+<p><b>-L, --location</b>:If the server reports that the requested page has moved to a different location
 this option will make curl redo the request on the new place.</p>
 <p><b>-i, --include</b>:Include the HTTP-header in the output.</p>
 <p><b>--connect-timeout &lt;seconds&gt;</b>:Maximum time in seconds that the connection to the server may take.</p>
-<p><b>--keepalive-time &lt;seconds&gt;</b>:This option sets the time a connection needs to remain idle before sending keepalive probes and the time between individual keepalive probes.</p> 
+<p><b>--keepalive-time &lt;seconds&gt;</b>:This option sets the time a connection needs to remain idle before sending keepalive probes and the time between individual keepalive probes.</p>
 <p><b>-m, --max-time  &lt;seconds&gt;</b>:Maximum time in seconds that you allow the whole operation to take.</p>
 <p><b>-x, --proxy &lt;[protocol://] [user:password@] proxyhost[:port]&gt; </b>:Use the specified HTTP proxy. If the port number is not specified, it is assumed at port 1080. </p>
 <p><b>-U, --proxy-user  &lt;user:password&gt;</b>:Specify user and password to use for proxy authentication. </p>

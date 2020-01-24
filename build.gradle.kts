@@ -2,18 +2,17 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The ASF licenses this file to you under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 import com.github.spotbugs.SpotBugsPlugin
@@ -23,6 +22,8 @@ import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.crlf.filter
 import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
+import com.github.vlsi.gradle.properties.dsl.lastEditYear
+import com.github.vlsi.gradle.properties.dsl.props
 import com.github.vlsi.gradle.release.RepositoryType
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -34,13 +35,12 @@ plugins {
     checkstyle
     id("org.jetbrains.gradle.plugin.idea-ext") apply false
     id("org.nosphere.apache.rat")
-    id("com.diffplug.gradle.spotless")
+    id("com.github.autostyle")
     id("com.github.spotbugs")
     id("org.sonarqube")
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.ide")
     id("com.github.vlsi.stage-vote-release")
-    signing
     publishing
 }
 
@@ -77,16 +77,7 @@ println("Building JMeter $version")
 
 fun reportsForHumans() = !(System.getenv()["CI"]?.toBoolean() ?: boolProp("CI") ?: false)
 
-val lastEditYear by extra {
-    file("$rootDir/NOTICE")
-        .readLines()
-        .first { it.contains("Copyright") }
-        .let {
-            """Copyright \d{4}-(\d{4})""".toRegex()
-                .find(it)?.groupValues?.get(1)
-                ?: throw IllegalStateException("Unable to identify copyright year from $rootDir/NOTICE")
-        }
-}
+val lastEditYear by extra(lastEditYear().toString())
 
 // This task scans the project for gitignore / gitattributes, and that is reused for building
 // source/binary artifacts with the appropriate eol/executable file flags
@@ -143,15 +134,7 @@ releaseParams {
             stagingProfileId.set("4d29c092016673")
         }
     }
-    validateBeforeBuildingReleaseArtifacts += Runnable {
-        if (useGpgCmd && findProperty("signing.gnupg.keyName") == null) {
-            throw GradleException("Please specify signing key id via signing.gnupg.keyName " +
-                    "(see https://github.com/gradle/gradle/issues/8657)")
-        }
-    }
 }
-
-val isReleaseVersion = rootProject.releaseParams.release.get()
 
 val jacocoReport by tasks.registering(JacocoReport::class) {
     group = "Coverage reports"
@@ -163,37 +146,15 @@ val jacocoEnabled by extra {
 }
 
 // Do not enable spotbugs by default. Execute it only when -Pspotbugs is present
-val enableSpotBugs by extra {
-    boolProp("spotbugs") ?: false
-}
-
-val ignoreSpotBugsFailures by extra {
-    boolProp("ignoreSpotBugsFailures") ?: false
-}
-
-val skipCheckstyle by extra {
-    boolProp("skipCheckstyle") ?: false
-}
-
-val skipSpotless by extra {
-    boolProp("skipSpotless") ?: false
-}
-
+val enableSpotBugs = props.bool("spotbugs", default = false)
+val ignoreSpotBugsFailures by props()
+val skipCheckstyle by props()
+val skipAutostyle by props()
 // Allow to skip building source/binary distributions
 val skipDist by extra {
     boolProp("skipDist") ?: false
 }
-
-// By default use Java implementation to sign artifacts
-// When useGpgCmd=true, then gpg command line tool is used for signing
-val useGpgCmd by extra {
-    boolProp("useGpgCmd") ?: false
-}
-
-// Signing is required for RELEASE version
-val skipSigning by extra {
-    boolProp("skipSigning") ?: boolProp("skipSign") ?: false
-}
+// Inherited from stage-vote-release-plugin: skipSign, useGpgCmd
 
 allprojects {
     if (project.path != ":src") {
@@ -282,33 +243,57 @@ if (enableSpotBugs) {
     }
 }
 
-val licenseHeaderFile = file("config/license.header.java")
+fun com.github.autostyle.gradle.BaseFormatExtension.license() {
+    licenseHeader(rootProject.ide.licenseHeader) {
+        copyrightStyle("bat", com.github.autostyle.generic.DefaultCopyrightStyle.REM)
+        copyrightStyle("cmd", com.github.autostyle.generic.DefaultCopyrightStyle.REM)
+        addBlankLineAfter.set(true)
+    }
+    trimTrailingWhitespace()
+    endWithNewline()
+}
+
 allprojects {
     group = "org.apache.jmeter"
     version = rootProject.version
+
+    repositories {
+        // RAT and Autostyle dependencies
+        mavenCentral()
+    }
+
     // JMeter ClassFinder parses "class.path" and tries to find jar names there,
     // so we should produce jars without versions names for now
     // version = rootProject.version
-    if (!skipSpotless) {
-        apply(plugin = "com.diffplug.gradle.spotless")
-        spotless {
+    if (!skipAutostyle) {
+        apply(plugin = "com.github.autostyle")
+        autostyle {
             kotlinGradle {
+                license()
                 ktlint()
-                trimTrailingWhitespace()
-                endWithNewline()
             }
-            if (project == rootProject) {
-                // Spotless does not exclude subprojects when using target(...)
-                // So **/*.md is enough to scan all the md files in JMeter codebase
-                // See https://github.com/diffplug/spotless/issues/468
-                format("markdown") {
-                    target("**/*.md")
-                    // Flot is known to have trailing whitespace, so the files
-                    // are kept in their original format (e.g. to simplify diff on library upgrade)
-                    targetExclude("bin/report-template/**/flot*/*.md")
-                    trimTrailingWhitespace()
-                    endWithNewline()
+            format("configs") {
+                filter {
+                    include("**/*.sh", "**/*.bsh", "**/*.cmd", "**/*.bat")
+                    include("**/*.properties", "**/*.yml")
+                    include("**/*.xsd", "**/*.xsl", "**/*.xml")
+                    // Autostyle does not support gitignore yet https://github.com/autostyle/autostyle/issues/13
+                    exclude("out/**")
+                    if (project == rootProject) {
+                        exclude(rootDir.resolve(".ratignore").readLines())
+                        exclude("gradlew*")
+                        // Generated by batch tests. It ignores log4j2.xml, however it is not that important
+                        // The configuration will be removed when Autostyle will use .gitignore
+                        exclude("bin/*.xml")
+                    } else {
+                        exclude("bin/**")
+                    }
                 }
+                license()
+            }
+            format("markdown") {
+                filter.include("**/*.md")
+                endWithNewline()
             }
         }
     }
@@ -334,20 +319,20 @@ allprojects {
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {
                 tasks.register("checkstyleAll") {
-                    dependsOn(sourceSets.names.map { "checkstyle" + it.capitalize() })
+                    dependsOn(tasks.withType<Checkstyle>())
                 }
                 tasks.register("checkstyle") {
                     group = LifecycleBasePlugin.VERIFICATION_GROUP
                     description = "Executes Checkstyle verifications"
                     dependsOn("checkstyleAll")
-                    dependsOn("spotlessCheck")
+                    dependsOn("autostyleCheck")
                 }
-                // Spotless produces more meaningful error messages, so we ensure it is executed before Checkstyle
-                if (!skipSpotless) {
+                // Autostyle produces more meaningful error messages, so we ensure it is executed before Checkstyle
+                if (!skipAutostyle) {
                     for (s in sourceSets.names) {
                         tasks.named("checkstyle" + s.capitalize()) {
-                            mustRunAfter("spotlessApply")
-                            mustRunAfter("spotlessCheck")
+                            mustRunAfter("autostyleApply")
+                            mustRunAfter("autostyleCheck")
                         }
                     }
                 }
@@ -360,23 +345,21 @@ allprojects {
             isIgnoreFailures = ignoreSpotBugsFailures
         }
 
-        if (!skipSpotless) {
-            spotless {
+        if (!skipAutostyle) {
+            autostyle {
                 java {
-                    licenseHeaderFile(licenseHeaderFile)
+                    license()
                     importOrder("static ", "java.", "javax", "org", "net", "com", "")
                     removeUnusedImports()
-                    trimTrailingWhitespace()
                     indentWithSpaces(4)
-                    endWithNewline()
                 }
             }
         }
         tasks.register("style") {
             group = LifecycleBasePlugin.VERIFICATION_GROUP
             description = "Formats code (license header, import order, whitespace at end of line, ...) and executes Checkstyle verifications"
-            if (!skipSpotless) {
-                dependsOn("spotlessApply")
+            if (!skipAutostyle) {
+                dependsOn("autostyleApply")
             }
             if (!skipCheckstyle) {
                 dependsOn("checkstyleAll")
@@ -384,14 +367,12 @@ allprojects {
         }
     }
     plugins.withId("groovy") {
-        if (!skipSpotless) {
-            spotless {
+        if (!skipAutostyle) {
+            autostyle {
                 groovy {
-                    licenseHeaderFile(licenseHeaderFile)
+                    license()
                     importOrder("static ", "java.", "javax", "org", "net", "com", "")
-                    trimTrailingWhitespace()
                     indentWithSpaces(4)
-                    endWithNewline()
                 }
             }
         }
@@ -455,32 +436,6 @@ allprojects {
         isReproducibleFileOrder = true
         dirMode = "775".toInt(8)
         fileMode = "664".toInt(8)
-    }
-
-    // Not all the modules use publishing plugin
-    if (isReleaseVersion && !skipSigning) {
-        plugins.withType<PublishingPlugin> {
-            apply<SigningPlugin>()
-            // Sign all the published artifacts
-            signing {
-                sign(publishing.publications)
-            }
-        }
-    }
-
-    plugins.withType<SigningPlugin> {
-        if (useGpgCmd) {
-            signing {
-                useGpgCmd()
-            }
-        }
-        afterEvaluate {
-            signing {
-                // Note it would still try to sign the artifacts,
-                // however it would fail only when signing a RELEASE version fails
-                isRequired = isReleaseVersion && !skipSigning
-            }
-        }
     }
 
     plugins.withType<JavaPlugin> {

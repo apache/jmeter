@@ -1,4 +1,21 @@
 <?xml version="1.0"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
 <!--
@@ -8,9 +25,9 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,8 +35,8 @@
    limitations under the License.
 -->
 
-<!-- 
-	Stylesheet for processing 2.1 output format test result files 
+<!--
+	Stylesheet for processing 2.1 output format test result files
 	To uses this directly in a browser, add the following to the JTL file as line 2:
 	<?xml-stylesheet type="text/xsl" href="../extras/jmeter-results-detail-report_21.xsl"?>
 	and you can then view the JTL in a browser
@@ -67,13 +84,13 @@
 				.Failure {
 					font-weight:bold; color:red;
 				}
-				
-	
+
+
 				img
 				{
 				  border-width: 0px;
 				}
-				
+
 				.expand_link
 				{
 				   position=absolute;
@@ -82,12 +99,12 @@
 				   top: 1px;
 				   height: 27px;
 				}
-				
+
 				.page_details
 				{
 				   display: none;
 				}
-                                
+
                                 .page_details_expanded
                                 {
                                     display: block;
@@ -99,16 +116,16 @@
 			<script language="JavaScript"><![CDATA[
                            function expand(details_id)
 			   {
-			      
+
 			      document.getElementById(details_id).className = "page_details_expanded";
 			   }
-			   
+
 			   function collapse(details_id)
 			   {
-			      
+
 			      document.getElementById(details_id).className = "page_details";
 			   }
-			   
+
 			   function change(details_id)
 			   {
 			      if(document.getElementById(details_id+"_image").src.match("expand"))
@@ -120,20 +137,20 @@
 			      {
 			         document.getElementById(details_id+"_image").src = "expand.png";
 			         collapse(details_id);
-			      } 
+			      }
                            }
 			]]></script>
 		</head>
 		<body>
-		
+
 			<xsl:call-template name="pageHeader" />
-			
+
 			<xsl:call-template name="summary" />
 			<hr size="1" width="95%" align="center" />
-			
+
 			<xsl:call-template name="pagelist" />
 			<hr size="1" width="95%" align="center" />
-			
+
 			<xsl:call-template name="detail" />
 
 		</body>
@@ -290,11 +307,11 @@
 				<td align="center">
 				   <a href="">
 				      <xsl:attribute name="href"><xsl:text/>javascript:change('page_details_<xsl:value-of select="position()" />')</xsl:attribute>
-				      <img src="expand.png" alt="expand/collapse"><xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" />_image</xsl:attribute></img>				      
+				      <img src="expand.png" alt="expand/collapse"><xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" />_image</xsl:attribute></img>
 				   </a>
 				</td>
 			</tr>
-			
+
                         <tr class="page_details">
                            <xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" /></xsl:attribute>
                            <td colspan="8" bgcolor="#FF0000">
@@ -308,8 +325,8 @@
 			            <th>Bytes</th>
 			            <th>Success</th>
 			         </tr>
-			         		         
-			         <xsl:for-each select="../*[@lb = $label and @tn != $label]">			         			            
+
+			         <xsl:for-each select="../*[@lb = $label and @tn != $label]">
 			            <tr>
 			               <td><xsl:value-of select="@tn" /></td>
 			               <td align="center"><xsl:value-of select="position()" /></td>
@@ -319,12 +336,12 @@
 			               <td align="center"><xsl:value-of select="@s" /></td>
 			            </tr>
 			         </xsl:for-each>
-			         
+
 			         </table>
 			      </div>
                            </td>
                         </tr>
-			
+
 		</xsl:for-each>
 	</table>
 </xsl:template>
@@ -350,7 +367,7 @@
 					   <th>Response Data</th>
 					</xsl:if>
 				</tr>
-			
+
 				<xsl:for-each select="/testResults/*[@lb = current()/@lb][attribute::s='false']">
 					<tr>
 						<td><xsl:value-of select="@rc | @rs" /> - <xsl:value-of select="@rm" /></td>
@@ -360,7 +377,7 @@
 						</xsl:if>
 					</tr>
 				</xsl:for-each>
-				
+
 				</table>
 			</xsl:if>
 
@@ -407,5 +424,5 @@
 	<xsl:param name="value" />
 	<xsl:value-of select="format-number($value,'0 ms')" />
 </xsl:template>
-	
+
 </xsl:stylesheet>

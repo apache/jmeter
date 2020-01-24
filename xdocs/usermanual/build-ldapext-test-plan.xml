@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <!DOCTYPE document[
 <!ENTITY sect-num '8b'>
@@ -79,7 +79,7 @@ requests, and the how many requests  they should send.
 </p>
 <p>
 Go ahead and add the <code>Thread Group</code> element by first selecting the <code>Test Plan</code>, clicking your
-right mouse button to get the <code>Add</code> menu, and then select <code>Add</code>&rarr;<code>Threads (Users)</code>&rarr;<code>Thread Group</code>. 
+right mouse button to get the <code>Add</code> menu, and then select <code>Add</code>&rarr;<code>Threads (Users)</code>&rarr;<code>Thread Group</code>.
 You should now see the <code>Thread Group</code> element under <code>Test Plan</code>. If you do not see the element, then "expand" the Test Plan tree by
 clicking on the Test Plan element.
 </p>
@@ -157,7 +157,7 @@ and edit the following properties.</p>
 <p>
    <ol>
 <li>
-Rename the element: "<code>1. Thread bind</code>" 
+Rename the element: "<code>1. Thread bind</code>"
 </li>
 <li>
 Select the "<code>Thread bind</code>" button.
@@ -200,7 +200,7 @@ Figure &sect-num;.3.1. Thread Bind example</figure>
 <p>
    <ol>
 <li>
-Rename the element: "<code>2. Search Test</code>" 
+Rename the element: "<code>2. Search Test</code>"
 </li>
 <li>
 Select the "<code>Search Test</code>" button.
@@ -257,7 +257,7 @@ Figure &sect-num;.3.2. search request example</figure>
 <p>
    <ol>
 <li>
-Rename the element: "<code>3. Compare Test</code>" 
+Rename the element: "<code>3. Compare Test</code>"
 </li>
 <li>
 Select the "<code>Compare</code>" button.
@@ -280,7 +280,7 @@ Figure &sect-num;.3.3. Compare example</figure>
 <p>
    <ol>
 <li>
-Rename the element: "<code>4. Single bind/unbind Test</code>" 
+Rename the element: "<code>4. Single bind/unbind Test</code>"
 </li>
 <li>
 Select the "<code>Single bind/unbind</code>" button.
@@ -305,7 +305,7 @@ Figure &sect-num;.3.4. Single bind/unbind example</figure>
 <p>
    <ol>
 <li>
-Rename the element: "<code>5. Add Test</code>" 
+Rename the element: "<code>5. Add Test</code>"
 </li>
 <li>
 Select the "<code>Add</code>" button.
@@ -331,7 +331,7 @@ Figure &sect-num;.3.5. Add request example</figure>
 <p>
    <ol>
 <li>
-Rename the element: "<code>6. Modify Test</code>" 
+Rename the element: "<code>6. Modify Test</code>"
 </li>
 <li>
 Select the "<code>Modify test</code>" button.
@@ -362,7 +362,7 @@ When a value is given, only that value will be removed<br/>
 </li>
 <li>
 <i>(Optional)</i> Add more modifications in the "<code>modify test</code>" table.<br/>
-All modifications which are specified must succeed, to let the modification test pass. When one modification fails, 
+All modifications which are specified must succeed, to let the modification test pass. When one modification fails,
 NO modifications at all will be made and the entry will remain unchanged.
 </li>
 </ol>
@@ -377,7 +377,7 @@ Figure &sect-num;.3.6. Modify example</figure>
 <p>
    <ol>
 <li>
-Rename the element: "<code>7. Rename entry (moddn)</code>" 
+Rename the element: "<code>7. Rename entry (moddn)</code>"
 </li>
 <li>
 Select the "<code>Rename Entry</code>" button.
@@ -406,7 +406,7 @@ Figure &sect-num;.3.7. Rename example</figure>
 <p>
    <ol>
 <li>
-Rename the element: "<code>8. Delete Test</code>" 
+Rename the element: "<code>8. Delete Test</code>"
 </li>
 <li>
 Select the "<code>Delete</code>" button.
@@ -428,7 +428,7 @@ Figure &sect-num;.3.8. Delete example</figure>
 <p>
    <ol>
 <li>
-Rename the element: "<code>9. Thread unbind</code>" 
+Rename the element: "<code>9. Thread unbind</code>"
 </li>
 <li>
 Select the "<code>Thread unbind</code>" button.

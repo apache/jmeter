@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
-
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!DOCTYPE document
 [
 <!ENTITY sect-num '16'>
@@ -45,7 +45,7 @@ You should absolutely avoid using versions that are older than 3 versions before
 run with JMeter.  The number will also depend on how fast your server is (a faster server
  makes JMeter work harder since it returns a response quicker).  As with any Load Testing tool, if you don't correctly size
  the number of threads, you will face the "Coordinated Omission" problem which can give you wrong or inaccurate results.
- If you need large-scale load testing, consider running multiple CLI JMeter instances on multiple machines 
+ If you need large-scale load testing, consider running multiple CLI JMeter instances on multiple machines
  using distributed mode (or not). When using distributed mode the result file is combined on the Controller node, if
  using multiple autonomous instances, the sample result files can be combined for subsequent analysis.
 For testing how JMeter performs on a given platform, the JavaTest sampler can be used.
@@ -123,7 +123,7 @@ with this new features.-->
 
 <section name="&sect-num;.6 User variables" anchor="user_variables">
 <p>
-Some test plans need to use different values for different users/threads. 
+Some test plans need to use different values for different users/threads.
 For example, you might want to test a sequence that requires a unique login for each user.
 This is easy to achieve with the facilities provided by JMeter.
 </p>
@@ -258,7 +258,7 @@ java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 </section>
 
 <section name="&sect-num;.9 BeanShell scripting" anchor="bsh_scripting">
-<note>Since JMeter 3.1, we advise switching from BeanShell to JSR223 Test Elements (see JSR223 section below for more details), and switching from <code><a href="functions.html#__BeanShell">__Beanshell</a></code> function 
+<note>Since JMeter 3.1, we advise switching from BeanShell to JSR223 Test Elements (see JSR223 section below for more details), and switching from <code><a href="functions.html#__BeanShell">__Beanshell</a></code> function
 to <a href="functions.html#__groovy" >__groovy</a> function.</note>
 <subsection name="&sect-num;.9.1 Overview" anchor="bsh_overview">
 <p>
@@ -324,7 +324,7 @@ defined by the JMeter property "<code>beanshell.init.file</code>". This is only 
 <section name="&sect-num;.10 Developing script functions in Groovy or Jexl3 etc." anchor="developing_scripts">
 <p>
 It's quite hard to write and test scripts as functions.
-However, JMeter has the JSR223 samplers which can be used instead with any language supporting it. 
+However, JMeter has the JSR223 samplers which can be used instead with any language supporting it.
 We advise using <a href="http://www.groovy-lang.org/">Apache Groovy</a> or any language that supports the <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface of JSR223.
 </p>
 <p>
@@ -388,8 +388,8 @@ You can also pass them as Parameters to the script and use them this way.
 <section name="&sect-num;.13 Sharing variables between threads and thread groups" anchor="sharing_variables">
 <p>
 Variables are local to a thread; a variable set in one thread cannot be read in another.
-This is by design. For variables that can be determined before a test starts, see 
-<a href="#parameterising_tests">Parameterising Tests</a> (above). 
+This is by design. For variables that can be determined before a test starts, see
+<a href="#parameterising_tests">Parameterising Tests</a> (above).
 If the value is not known until the test starts, there are various options:
 <ul>
 <li>Store the variable as a property - properties are global to the JMeter instance</li>
@@ -410,9 +410,9 @@ Note that in the documentation <code>jmeter.properties</code> is frequently ment
 </section>
 
 <section name="&sect-num;.15 Deprecated elements" anchor="deprecation">
-<p>It is advised not to use deprecated elements (marked as such in <a href="../changes.html">changes list</a> and in <a href="./component_reference.html">component reference</a>) 
+<p>It is advised not to use deprecated elements (marked as such in <a href="../changes.html">changes list</a> and in <a href="./component_reference.html">component reference</a>)
 and to migrate to new advised elements if available or new way of doing the same thing. <br/>
-Deprecated elements are removed from the menu in version N but can be enabled for migration by modifying <code>not_in_menu</code> property in <code>user.properties</code> file and removing the full class name 
+Deprecated elements are removed from the menu in version N but can be enabled for migration by modifying <code>not_in_menu</code> property in <code>user.properties</code> file and removing the full class name
 of the element from there.<br/></p>
 <note>Please note that deprecated elements in version N will be removed definitely in version N+1, so ensure you stop using them as soon as possible.</note>
 </section>

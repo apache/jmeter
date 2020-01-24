@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <!DOCTYPE document[
 <!ENTITY sect-num '10'>
@@ -33,7 +33,7 @@
 
         <note>
             Make sure the required jar files are in JMeter's <code>lib</code> directory. If they are not, shutdown JMeter,
-            copy the jar files over and restart JMeter. 
+            copy the jar files over and restart JMeter.
             See <a href="get-started.html#libraries_activemq">Getting Started</a> for details.
         </note>
 
@@ -114,7 +114,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
         <section name="&sect-num;.2 Adding JMS Point-to-Point Sampler" anchor="adding_point_to_point_sampler">
 
             <p>Start by adding the sampler <complink name="JMS Point-to-Point"/>
-to the Point-to-Point element 
+to the Point-to-Point element
 (<menuchoice>
   <guimenuitem>Add</guimenuitem>
   <guimenuitem>Sampler</guimenuitem>
@@ -156,7 +156,7 @@ Then, select the JMS Point-to-Point sampler element in the tree.
                     <tr>
                         <td colspan="1">Communication Style</td>
                         <td><code>Request Response</code></td>
-                        <td>This means that you need at least a service running outside of JMeter and that will respond to the requests. 
+                        <td>This means that you need at least a service running outside of JMeter and that will respond to the requests.
                         This service must listen to the Request Queue and send messages to the queue referenced by the <code>message.getJMSReplyTo()</code></td>
                     </tr>
                     <tr>
@@ -211,7 +211,7 @@ a visual model of the data.
             </p>
 
             <p>Select the Thread Group element and add a
-                <complink name="Graph Results"/> listener 
+                <complink name="Graph Results"/> listener
 (<menuchoice>
   <guimenuitem>Add</guimenuitem>
   <guimenuitem>Listener</guimenuitem>

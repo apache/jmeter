@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!DOCTYPE document
 [
 <!ENTITY sect-num '11'>
@@ -31,11 +32,11 @@
 <note>
 JMS requires some optional jars to be downloaded. Please refer to <a href="get-started.html">Getting Started</a> for full details.
 </note>
-<p>In this section, you will learn how to create a 
+<p>In this section, you will learn how to create a
 <a href="build-test-plan.html">Test Plan</a> to test JMS Providers. You will
 create five subscribers and one publisher. You will create 2 thread groups and set
-each one to 10 iterations. The total messages is (6 threads) x (1 message) x 
-(repeat 10 times) = 60 messages. To construct the Test Plan, you will use the 
+each one to 10 iterations. The total messages is (6 threads) x (1 message) x
+(repeat 10 times) = 60 messages. To construct the Test Plan, you will use the
 following elements:
 <a href="test_plan.html#thread_group">Thread Group</a>,
 <complink name="JMS Publisher"/>,
@@ -48,8 +49,8 @@ Topic messaging is generally used in cases where a message is published by a pro
 consumed by multiple subscribers.  Queue messaging is generally used for transactions
 where the sender expects a response.  Messaging systems are quite different from
 normal HTTP requests. In HTTP, a single user sends a request and gets a response.
-Messaging system can work in synchronous and asynchronous mode.  A JMS sampler needs 
-the JMS implementation jar files; for example, from Apache ActiveMQ.  
+Messaging system can work in synchronous and asynchronous mode.  A JMS sampler needs
+the JMS implementation jar files; for example, from Apache ActiveMQ.
 See <a href="get-started.html#libraries_activemq">here</a> for the list of jars provided by ActiveMQ.</p>
 
 </section>
@@ -57,7 +58,7 @@ See <a href="get-started.html#libraries_activemq">here</a> for the list of jars 
 <section name="&sect-num;.1 Adding Users" anchor="adding_users">
 <p>The first step is add a <a href="test_plan.html#thread_group">Thread Group</a>
  element.  The Thread Group tells JMeter the number of users you want to simulate,
- how often the users should send requests, and how many requests they should 
+ how often the users should send requests, and how many requests they should
 send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
@@ -131,18 +132,18 @@ Then, select the JMS Subscriber element in the tree and edit the following prope
 <li>Enter the name of the connection factory. Please refer to the documentation
 of the JMS provider for the information. For ActiveMQ, the default is "<code>ConnectionFactory</code>"</li>
 <li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "<code>dynamicTopics/MyStaticTopic1</code>"
-<note>Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility. 
-Setup on Each sample mean that JMeter (re)starting to listen before run each JMS Subscriber sample, 
+<note>Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility.
+Setup on Each sample mean that JMeter (re)starting to listen before run each JMS Subscriber sample,
 this last option permit to have Destination name with some JMeter variables
 </note></li>
-<li>If the JMS provider requires authentication, check "<code>required</code>" and enter the 
+<li>If the JMS provider requires authentication, check "<code>required</code>" and enter the
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
 <li>Enter <code>10</code> in "<code>Number of samples to aggregate</code>". For performance reasons, the sampler
 will aggregate messages, since small messages will arrive very quickly. If the sampler
 didn't aggregate the messages, JMeter wouldn't be able to keep up.</li>
 <li>If you want to read the response, check the box</li>
-<li>There are two client implementations for subscribers. If the JMS provider 
+<li>There are two client implementations for subscribers. If the JMS provider
 exhibits zombie threads with one client, try the other.</li>
 </ol>
 </p>
@@ -151,7 +152,7 @@ exhibits zombie threads with one client, try the other.</li>
 Figure &sect-num;.2. JMS Subscriber</figure>
 
 <p>Next add the sampler <complink name="JMS Publisher"/>
-to the Publisher element 
+to the Publisher element
 (<menuchoice>
   <guimenuitem>Add</guimenuitem>
   <guimenuitem>Sampler</guimenuitem>
@@ -167,12 +168,12 @@ Then, select the JMS Publisher element in the tree and edit the following proper
 <li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "<code>tcp://localhost:61616</code>"</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
 of the JMS provider for the information. For ActiveMQ, the default is "<code>ConnectionFactory</code>"</li>
-<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "<code>dynamicTopics/MyStaticTopic1</code>". 
-<note>Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility. 
-Setup on Each sample mean that JMeter (re)starting the connection before run each JMS Publisher sample, 
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "<code>dynamicTopics/MyStaticTopic1</code>".
+<note>Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility.
+Setup on Each sample mean that JMeter (re)starting the connection before run each JMS Publisher sample,
 this last option permit to have Destination name with some JMeter variables
 </note></li>
-<li>If the JMS provider requires authentication, check "<code>required</code>" and enter the 
+<li>If the JMS provider requires authentication, check "<code>required</code>" and enter the
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
 <li>Enter <code>10</code> in "<code>Number of samples to aggregate</code>". For performance reasons, the sampler

@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!DOCTYPE document
 [
 <!ENTITY sect-num '22'>
@@ -39,7 +40,7 @@ JMeter variables have thread scope. This is deliberate, so that threads can act 
 However sometimes there is a need to pass variables between different threads, in the same or different Thread Groups.
 </p>
 <p>
-One way to do this is to use a property instead. 
+One way to do this is to use a property instead.
 Properties are shared between all JMeter threads, so if one thread <a href="functions.html#__setProperty">sets a property</a>,
 another thread can <a href="functions.html#__P">read</a> the updated value.
 </p>
@@ -57,7 +58,7 @@ read it using CSV Dataset.
 
 <subsection name="&sect-num;.2 Enabling Debug logging" anchor="debug_logging">
 <p>
-Most test elements include debug logging. If running a test plan from the GUI, 
+Most test elements include debug logging. If running a test plan from the GUI,
 select the test element and use the Help Menu to enable or disable logging.
 The Help Menu also has an option to display the GUI and test element class names.
 You can use these to determine the correct property setting to change the logging level.

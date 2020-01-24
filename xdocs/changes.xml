@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
 <!DOCTYPE document
 [
 <!ENTITY hellip   "&#x02026;" >
@@ -102,6 +103,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>Functions</h3>
 <ul>
+  <li><bug>64070</bug><code>_timeshift</code> function does not work with offset formatters</li>
 </ul>
 
 <h3>I18N</h3>
@@ -114,6 +116,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>General</h3>
 <ul>
+  <li><bug>63458</bug><pr>551</pr>Add new template "Functional Testing Test Plan [01]". Contributed by Sebastian Boga (sebastian.boga at endava.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -159,11 +162,15 @@ to view the last release notes of version 5.2.1.
 
 <h3>Documentation</h3>
 <ul>
+  <li><pr>547</pr>Correct Log level documentation. Contributed by jmetertea</li>
+  <li><pr>548</pr>Correct typos in documentation. Contributed by jmetertea</li>
+  <li><bug>64022</bug>Correct Chinese translation for "Ignore Sub-Controller blocks". Provided by yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
 <ul>
   <li><bug>63945</bug>NPE when opening a file after file system change</li>
+  <li><bug>64034</bug>Shell scripts fail if space in JAVA_HOME path. Contributed by ray7219 (ray7219 at hotmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -173,10 +180,15 @@ to view the last release notes of version 5.2.1.
 </p>
 <ul>
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
+  <li>jmetertea</li>
+  <li>ray7219</li>
+  <li>Sebastian Boga (sebastian.boga at endava.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
   <li>Michael McDermott (mcdermott.michaelj at gmail.com)</li>
+  <li>yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
+  <li>Markus Wolf (wolfm at t-systems.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

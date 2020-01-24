@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!DOCTYPE document
 [
 <!ENTITY hellip   "&#x02026;" >
@@ -37,7 +38,7 @@ There are five basic objects in JMeter which provide extensibility:
 <ul>
 <li><a href="#visualizers">Visualizers</a> represent the sampling data which is recorded.</li>
 <li><a href="#timers">Timers</a> specify the delay between samples.</li>
-<li><a href="#samplercontrollers">SamplerControllers</a> hold information about all the test cases to be sampled, 
+<li><a href="#samplercontrollers">SamplerControllers</a> hold information about all the test cases to be sampled,
 and overall information about how the test is conducted.</li>
 <li><a href="#samplers">Samplers</a> are the classes that actually do the sampling of a particular protocol.</li>
 <li><a href="#testsamples">TestSamples</a> hold information about a particular test case to be sampled.</li>

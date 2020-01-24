@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <!DOCTYPE document[
 <!ENTITY sect-num '3'>
@@ -39,7 +39,7 @@ A minimal test will consist of the Test Plan, a Thread Group and one or more Sam
 
 <subsection name="&sect-num;.0 Test Plan" anchor="test_plan">
 <p>The Test Plan object has a checkbox called "<code>Functional Testing</code>".  If selected, it
-will cause JMeter to record the data returned from the server for each sample.  If you have 
+will cause JMeter to record the data returned from the server for each sample.  If you have
 selected a file in your test listeners, this data will be written to file.  This can be useful if
 you are doing a small run to ensure that JMeter is configured correctly, and that your server
 is returning the expected results.  The consequence is that the file will grow huge quickly, and
@@ -53,7 +53,7 @@ is off by default).  </p>
 <p>Thread group elements are the beginning points of any test plan.
 All controllers and samplers must be under a thread group.
 Other elements, e.g. Listeners, may be placed directly under the test plan,
-in which case they will apply to all the thread groups.  
+in which case they will apply to all the thread groups.
 As the name implies, the thread group
 element controls the number of threads JMeter will use to execute your test.  The
 controls for a thread group allow you to:
@@ -82,15 +82,15 @@ Start with Ramp-up = number of threads and adjust up or down as needed.
 
 <p>By default, the thread group is configured to loop once through its elements.</p>
 
-<p>Thread Group also provides a <b>scheduler</b>. 
+<p>Thread Group also provides a <b>scheduler</b>.
     Click the checkbox at the bottom of the Thread Group panel to enable/disable extra fields
-     in which you can enter the duration of test, the startup delay, the start and end times of the run. 
+     in which you can enter the duration of test, the startup delay, the start and end times of the run.
      You can configure <code>Duration (seconds)</code> and <code>Startup Delay (seconds)</code> to control
      the duration of each thread group and the after how much seconds it starts.
-     When the test is started, JMeter will wait <code>Startup Delay (seconds)</code> before starting the Threads 
+     When the test is started, JMeter will wait <code>Startup Delay (seconds)</code> before starting the Threads
      of the Thread Group and run for the configured <code>Duration (seconds)</code> time.
      Note those 2 options override the <code>Start time</code> and <code>End time</code>.
-     
+
      <p>Alternatively (although not recommended as not very flexible) you can use the two other fields <code>Start time</code> and <code>End time</code>.
      When the test is started, JMeter will wait if necessary until the start-time has been reached.
      At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
@@ -247,7 +247,7 @@ Logic Controllers</a>.</p>
 <subsection name="&sect-num;.2.3 Test Fragments" anchor="test_fragments">
 <p>The Test Fragment element is a special type of <a href="#controllers">controller</a> that
 exists on the Test Plan tree at the same level as the Thread Group element.  It is distinguished
-from a Thread Group in that it is not executed unless it is 
+from a Thread Group in that it is not executed unless it is
 referenced by either a <complink name="Module Controller"/> or an <complink name="Include_Controller"/>.
 </p>
 <p>This element is purely for code re-use within Test Plans</p>
@@ -256,13 +256,13 @@ referenced by either a <complink name="Module Controller"/> or an <complink name
 <subsection name="&sect-num;.3 Listeners" anchor="listeners">
 <p>Listeners provide access to the information JMeter gathers about the test cases while
 JMeter runs.  The  <complink name="Graph
-Results"/> listener plots the response times on a graph.  
+Results"/> listener plots the response times on a graph.
 The "View Results Tree" Listener shows details of sampler requests and responses, and can display basic HTML and XML representations of the response.
 Other listeners provide summary or aggregation information.
 </p>
 
 <p>
-Additionally, listeners can direct the data to a file for later use.  
+Additionally, listeners can direct the data to a file for later use.
 Every listener in JMeter provides a field to indicate the file to store data to.
 There is also a Configuration button which can be used to choose which fields to save, and whether to use CSV or XML format.
 <note>Note that all Listeners save the same data; the only difference is in the way the data is presented on the screen.</note>
@@ -319,7 +319,7 @@ To restrict an assertion to a single sampler, add the assertion as a child of th
 </note>
 
 <p>To view assertion results, add an Assertion Listener to the Thread Group.
-Failed Assertions will also show up in the Tree View and Table Listeners, 
+Failed Assertions will also show up in the Tree View and Table Listeners,
 and will count towards the error %age for example in the Aggregate and Summary reports.
 </p>
 </subsection>
@@ -341,23 +341,23 @@ requests will use "Web Defaults 2", since we placed it in the Thread Group (the 
     Test Plan Showing Accessibility of Configuration Elements</figure>
 
 <note>
-The <complink name="User Defined Variables"/> Configuration element is different. 
+The <complink name="User Defined Variables"/> Configuration element is different.
 It is processed at the start of a test, no matter where it is placed.
 For simplicity, it is suggested that the element is placed only at the start of a Thread Group.
 </note>
 </subsection>
 
 <subsection name="&sect-num;.7 Pre-Processor Elements" anchor="preprocessors">
-<p>A Pre-Processor executes some action prior to a Sampler Request being made. 
-If a Pre-Processor is attached to a Sampler element, then it will execute just prior to that sampler element running. 
-A Pre-Processor is most often used to modify the settings of a Sample Request just before it runs, or to update variables that aren't extracted from response text.  
+<p>A Pre-Processor executes some action prior to a Sampler Request being made.
+If a Pre-Processor is attached to a Sampler element, then it will execute just prior to that sampler element running.
+A Pre-Processor is most often used to modify the settings of a Sample Request just before it runs, or to update variables that aren't extracted from response text.
 See the <a href="test_plan.html#scoping_rules"><b>scoping rules</b></a> for more details on when Pre-Processors are executed.</p>
 </subsection>
 
 <subsection name="&sect-num;.8 Post-Processor Elements" anchor="postprocessors">
 <p>A Post-Processor executes some action after a Sampler Request has been made.
 If a Post-Processor is attached to a Sampler element, then it will execute just after that sampler element runs.
-A Post-Processor is most often used to process the response data, often to extract values from it.  
+A Post-Processor is most often used to process the response data, often to extract values from it.
 See the <a href="test_plan.html#scoping_rules"><b>scoping rules</b></a> for more details on when Post-Processors are executed.</p>
 </subsection>
 
@@ -374,7 +374,7 @@ See the <a href="test_plan.html#scoping_rules"><b>scoping rules</b></a> for more
 
 <note>
 Please note that Timers, Assertions, Pre- and Post-Processors are only processed if there is a sampler to which they apply.
-Logic Controllers and Samplers are processed in the order in which they appear in the tree. 
+Logic Controllers and Samplers are processed in the order in which they appear in the tree.
 Other test elements are processed according to the scope in which they are found, and the type of test element.
 [Within a type, elements are processed in the order in which they appear in the tree].
 </note>
@@ -420,7 +420,7 @@ The JMeter test tree contains elements that are both hierarchical and ordered.  
 <figure image="scoping1.png">Example test tree</figure>
 <p>The order of requests will be, One, Two, Three, Four.</p>
 <p>Some controllers affect the order of their subelements, and you can read about these specific controllers in <a href="component_reference.html">the component reference</a>.</p>
-<p>Other elements are hierarchical.  An Assertion, for instance, is hierarchical in the test tree.  
+<p>Other elements are hierarchical.  An Assertion, for instance, is hierarchical in the test tree.
 If its parent is a request, then it is applied to that request. If its
 parent is a Controller, then it affects all requests that are descendants of
 that Controller.  In the following test tree:</p>
@@ -435,7 +435,7 @@ The Configuration elements Header Manager, Cookie Manager and Authorization mana
 treated differently from the Configuration Default elements.
 The settings from the Configuration Default elements are merged into a set of values that the Sampler has access to.
 However, the settings from the Managers are not merged.
-If more than one Manager is in the scope of a Sampler, 
+If more than one Manager is in the scope of a Sampler,
 only one Manager is used, but there is currently no way to specify <em>which</em> is used.
 </note>
 </subsection>
@@ -448,7 +448,7 @@ JMeter <em>properties</em> are defined in <code>jmeter.properties</code> (see <a
 <br></br>
 Properties are global to jmeter, and are mostly used to define some of the defaults JMeter uses.
 For example the property <code>remote_hosts</code> defines the servers that JMeter will try to run remotely.
-Properties can be referenced in test plans 
+Properties can be referenced in test plans
 - see <a href="functions.html#__property">Functions - read a property</a> -
 but cannot be used for thread-specific values.
 </p>
@@ -456,17 +456,17 @@ but cannot be used for thread-specific values.
 JMeter <em>variables</em> are local to each thread. The values may be the same for each thread, or they may be different.
 <br></br>
 If a variable is updated by a thread, only the thread copy of the variable is changed.
-For example the <complink name="Regular Expression Extractor"/> Post-Processor 
+For example the <complink name="Regular Expression Extractor"/> Post-Processor
 will set its variables according to the sample that its thread has read, and these can be used later
 by the same thread.
 For details of how to reference variables and functions, see <a href="functions.html">Functions and Variables</a>
 </p>
 <p>
 Note that the values defined by the <complink name="Test Plan"/>  and the <complink name="User Defined Variables"/> configuration element
-are made available to the whole test plan at startup. 
+are made available to the whole test plan at startup.
 If the same variable is defined by multiple UDV elements, then the last one takes effect.
 Once a thread has started, the initial set of variables is copied to each thread.
-Other elements such as the 
+Other elements such as the
 <complink name="User Parameters"/> Pre-Processor or <complink name="Regular Expression Extractor"/> Post-Processor
 may be used to redefine the same variables (or create new ones). These redefinitions only apply to the current thread.
 </p>
@@ -485,12 +485,12 @@ Or for items which are constant during a run, but which may vary between runs.
 For example, the name of a host, or the number of threads in a thread group.
 </p>
 <p>
-When deciding how to structure a Test Plan, 
+When deciding how to structure a Test Plan,
 make a note of which items are constant for the run, but which may change between runs.
-Decide on some variable names for these - 
+Decide on some variable names for these -
 perhaps use a naming convention such as prefixing them with <code>C_</code> or <code>K_</code> or using uppercase only
 to distinguish them from variables that need to change during the test.
-Also consider which items need to be local to a thread - 
+Also consider which items need to be local to a thread -
 for example counters or values extracted with the Regular Expression Post-Processor.
 You may wish to use a different naming convention for these.
 </p>

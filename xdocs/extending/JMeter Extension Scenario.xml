@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
- 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <document>
 
   <properties>
@@ -168,11 +169,11 @@ extension.
 <H2><A name="tips">Tips</A></H2>
 <OL>
   <LI>You might consider using slf4j as your logging utility since that's what
-  JMeter uses. It's helpful for figuring out what's going on. 
+  JMeter uses. It's helpful for figuring out what's going on.
   <P>If you do decide to use slf4j and you set the priority (or level, as it
   will soon be called) to debug, you will probably see way more than you need to
   know. You can filter the JMeter stuff by adding  to
-  <TT>log4j2.xml</TT> in the JMeter's <TT>bin</TT> directory.   
+  <TT>log4j2.xml</TT> in the JMeter's <TT>bin</TT> directory.
   <source>
     <Logger name="com.myfirm.jmeter" level="debug" />
   </source>

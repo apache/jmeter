@@ -1,21 +1,22 @@
 <?xml version="1.0"?>
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
-<!-- 
+<!--
     See the DTD for allowable elements and attributes.
  -->
 <!DOCTYPE templates SYSTEM "templates.dtd">
@@ -40,7 +41,7 @@
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/jmeter_proxy_step_by_step.pdf" >http://jmeter.apache.org/usermanual/jmeter_proxy_step_by_step.pdf</a></li>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
-            </ul>       
+            </ul>
         ]]></description>
         <parameters>
             <parameter defaultValue="recording.xml" key="recordingOutputFile"/>
@@ -68,7 +69,7 @@
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/jmeter_proxy_step_by_step.pdf" >http://jmeter.apache.org/usermanual/jmeter_proxy_step_by_step.pdf</a></li>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
-            </ul>       
+            </ul>
         ]]></description>
     </template>
     <template isTestPlan="true">
@@ -150,7 +151,23 @@
         <h2>Useful link</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-web-test-plan.html" >http://jmeter.apache.org/usermanual/build-web-test-plan.html</a></li>
-            </ul>       
+            </ul>
+        ]]></description>
+    </template>
+	<template isTestPlan="true">
+        <name>Functional Testing Test Plan [01]</name>
+        <fileName>/bin/templates/functional-testing-01-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Building a Functional Testing Test Plan [01]</h1>
+		<p>You can use JMeter to automate API Testing</p>
+		<p>This template of Test Plan contains first step when starting creating JMeter script</p>
+        <h2>Useful links</h2>
+            <ul>
+                <li><a href="https://jmeter.apache.org/usermanual/test_plan.html" >https://jmeter.apache.org/usermanual/test_plan.html</a></li>
+				<li><a href="https://jmeter.apache.org/usermanual/listeners.html" >https://jmeter.apache.org/usermanual/listeners.html</a></li>
+				<li><a href="https://jmeter.apache.org/usermanual/component_reference.html#View_Results_Tree" >https://jmeter.apache.org/usermanual/component_reference.html#View_Results_Tree</a></li>
+
+            </ul>
         ]]></description>
     </template>
     <template isTestPlan="true">
@@ -167,7 +184,7 @@
         <h2>Useful link</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-adv-web-test-plan.html" >http://jmeter.apache.org/usermanual/build-adv-web-test-plan.html</a></li>
-            </ul>       
+            </ul>
         ]]></description>
     </template>
     <template isTestPlan="true">
@@ -182,7 +199,7 @@
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Request" >HTTP Request</a></li>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#Response_Assertion">Response Assertion</a></li>
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Header_Manager">HTTP Header Manager</a></li>
-            </ul>       
+            </ul>
         ]]></description>
     </template>
     <template isTestPlan="true">
@@ -193,7 +210,7 @@
         <h2>Useful link</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-ftp-test-plan.html" >http://jmeter.apache.org/usermanual/build-ftp-test-plan.html</a></li>
-            </ul>       
+            </ul>
         ]]></description>
     </template>
     <template isTestPlan="true">
@@ -204,7 +221,7 @@
         <h2>Useful link</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-ldap-test-plan.html" >http://jmeter.apache.org/usermanual/build-ldap-test-plan.html</a></li>
-            </ul>       
+            </ul>
         ]]></description>
     </template>
     <template isTestPlan="true">
@@ -215,7 +232,7 @@
         <h2>Useful link</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html" >http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html</a></li>
-            </ul>       
+            </ul>
         ]]></description>
     </template>
     <template isTestPlan="false">
@@ -224,7 +241,7 @@
         <description><![CDATA[
         <h1>Think Time between 2 samplers</h1>
         <h2>Overview</h2>
-        This shows how to introduce a Think Time of 1s+/- 100 ms between 2 samplers 
+        This shows how to introduce a Think Time of 1s+/- 100 ms between 2 samplers
         <br/>
         Please select a suitable location in the tree - e.g. Thread Group or Controller - before merging.
         <h2>Useful links</h2>
