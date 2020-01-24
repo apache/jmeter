@@ -19,7 +19,9 @@
 package org.apache.jmeter.protocol.http.correlation.extractordata;
 
 public class HtmlExtractorData extends ExtractorData {
+    // attribute for the CSS extractor (e.g. value)
     String attribute;
+    // CSS selector expression
     String expr;
 
     public HtmlExtractorData(String refName, String cssSelectorExpression, String attribute, String matchNr,

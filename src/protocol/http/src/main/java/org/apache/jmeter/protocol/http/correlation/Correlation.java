@@ -117,7 +117,7 @@ public class Correlation {
             throw new IllegalUserActionException("Could not load the JMX file. Please check the file and try again.",
                     e);
         }
-        // Create a list of HTTP sample requests and HeaderManagers
+        // Create a list of HTTP sample requests and HeaderManagers for imported JMX test plan
         List<HTTPSamplerBase> importedJmxSampleRequestList = new ArrayList<>();
         getHttpSampleRequests(tree, importedJmxSampleRequestList);
         if (importedJmxSampleRequestList.isEmpty()) {
@@ -139,7 +139,7 @@ public class Correlation {
             throw new IllegalUserActionException(
                     "No Response data found. Make sure you have recorded the script and not opened it.");
         }
-        // Create List of HTTPSamplerBase and HeaderManager
+        // Create List of HTTPSamplerBase and HeaderManager for currently open JMX test plan
         List<HTTPSamplerBase> currentGuiSampleRequestList = sampleList.stream()
                 .map(node -> (HTTPSamplerBase) node.getTestElement()).collect(Collectors.toList());
         List<HeaderManager> currentGuiheaderList = guiPackage.getTreeModel().getNodesOfType(HeaderManager.class)

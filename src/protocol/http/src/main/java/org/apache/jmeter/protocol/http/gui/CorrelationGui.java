@@ -83,6 +83,10 @@ public class CorrelationGui {
                     parameterMap.put(jTable.getValueAt(i, 1).toString(), jTable.getValueAt(i, 3).toString());
                 }
             }
+            if (parameterMap.isEmpty()) {
+                JMeterUtils.reportErrorToUser("No parameters selected. Please select the parameters and try again.");
+                return;
+            }
             // Read API response data and find parameters in them to create extractors
             CorrelationExtractor.readResponse(parametersList, parameterMap);
             frame.dispose();

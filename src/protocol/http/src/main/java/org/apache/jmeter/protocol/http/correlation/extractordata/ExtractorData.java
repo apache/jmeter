@@ -19,9 +19,14 @@
 package org.apache.jmeter.protocol.http.correlation.extractordata;
 
 public class ExtractorData {
+    // Content type of the extractor
     String contentType;
+    // Match number for the extractor
     String matchNumber;
+    // Correlation variable name
     String refname;
+    // name of the test element in which the extractor
+    // will be added
     String testName;
 
     public ExtractorData(String contentType, String matchNr, String refName, String testName) {

@@ -61,16 +61,12 @@ public class CreateJsonPathExtractor {
             // return null
             return jsonPathExtractor;
         }
-        if (jsonPathExpression == null) {
-            // return null
-            return jsonPathExtractor;
-        } else {
+        if (jsonPathExpression != null) {
             // Match No. = 1, as we are getting first occurrence of the element
             jsonPathExtractor = new JsonPathExtractorData(correlationVariableName, jsonPathExpression, ONE, contentType,
                     requestUrl);
-            return jsonPathExtractor;
         }
-
+        return jsonPathExtractor;
     }
 
     /**

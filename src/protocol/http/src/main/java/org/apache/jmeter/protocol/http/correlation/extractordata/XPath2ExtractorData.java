@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.correlation.extractordata;
 
 public class XPath2ExtractorData extends ExtractorData {
+    // XPath2 Query
     String xPathQuery;
 
     public XPath2ExtractorData(String refName, String xPathQuery, String matchNr, String contentType, String testName) {

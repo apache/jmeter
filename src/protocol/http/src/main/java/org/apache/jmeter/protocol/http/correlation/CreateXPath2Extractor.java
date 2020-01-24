@@ -68,14 +68,11 @@ public class CreateXPath2Extractor {
             throw new IllegalArgumentException("Cannot find XSL Transform");
         }
         String xPathQuery = getXPath(value, xmlResponse, xslt);
-        if (xPathQuery == null) {
-            // return empty map
-            return xPath2Extractor;
-        } else {
+        if (xPathQuery != null) {
             // Match No. = 1, as we are getting first occurrence of the element
             xPath2Extractor = new XPath2ExtractorData(correlationVariableName, xPathQuery, ONE, contentType, requestUrl);
-            return xPath2Extractor;
         }
+        return xPath2Extractor;
     }
 
     /**

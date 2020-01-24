@@ -82,6 +82,10 @@ public class CorrelationRuleFileGui {
                     parameterMap.put(jTable.getValueAt(i, 1).toString(), jTable.getValueAt(i, 2).toString());
                 }
             }
+            if (parameterMap.isEmpty()) {
+                JMeterUtils.reportErrorToUser("No parameters selected. Please select the parameters and try again.");
+                return;
+            }
             List<ExtractorData> extractorsToAdd = new ArrayList<>();
             ruleExtractorDataMap.forEach((rule, extractors) -> extractors.forEach(extractor -> {
                 if (parameterMap.containsKey(extractor.getRefname())) {

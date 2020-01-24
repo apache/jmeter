@@ -19,7 +19,9 @@
 package org.apache.jmeter.protocol.http.correlation.extractordata;
 
 public class BoundaryExtractorData extends ExtractorData {
+    // left boundary parameter
     String lBoundary;
+    // right boundary parameter
     String rBoundary;
 
     public BoundaryExtractorData(String refName, String lBoundary, String rBoundary, String matchNr, String testname) {

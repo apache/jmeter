@@ -67,6 +67,10 @@ public class CorrelationExportRule extends AbstractActionWithNoRunningTest {
         extractorRuleSet.addAll(prepareJsonPathExtractorRuleSet(guiPackage));
         extractorRuleSet.addAll(prepareRegexExtractorRuleSet(guiPackage));
         extractorRuleSet.addAll(prepareBoundaryExtractorRuleSet(guiPackage));
+        if (extractorRuleSet.isEmpty()) {
+            throw new IllegalUserActionException(
+                    "No extractors found to export. Please check if the script is correlated and try again.");
+        }
         // prepare table data for extractors to export and show on GUI
         Object[][] tableData = extractorRuleSet.stream()
                 .map(rule -> new Object[] { Boolean.FALSE, rule.getName(), rule.getType() })

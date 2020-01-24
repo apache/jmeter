@@ -19,7 +19,9 @@
 package org.apache.jmeter.protocol.http.correlation.extractordata;
 
 public class RegexExtractorData extends ExtractorData {
+    // Regular expression
     String expr;
+    // group number
     String template;
 
     Boolean useHeaders;

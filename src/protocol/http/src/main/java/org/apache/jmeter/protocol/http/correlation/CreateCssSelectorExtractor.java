@@ -83,10 +83,8 @@ public class CreateCssSelectorExtractor {
             // Match No. = 1, as we are getting first occurrence of the element
             cssSelectorExtractor = new HtmlExtractorData(correlationVariableName, cssSelectorExpression, attribute, ONE,
                     contentType, requestUrl);
-            return cssSelectorExtractor;
-        } else {
-            return cssSelectorExtractor;
         }
+        return cssSelectorExtractor;
     }
 
     /**

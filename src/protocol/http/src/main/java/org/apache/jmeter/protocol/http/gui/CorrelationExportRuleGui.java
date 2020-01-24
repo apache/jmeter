@@ -94,6 +94,10 @@ public class CorrelationExportRuleGui {
                     parameterMap.put(jTable.getValueAt(i, 1).toString(), jTable.getValueAt(i, 2).toString());
                 }
             }
+            if (parameterMap.isEmpty()) {
+                JMeterUtils.reportErrorToUser("No extractors selected. Please select the extractors and try again.");
+                return;
+            }
             // filter the rules which are selected by the user to be exported
             List<CorrelationRule> rulesToPrepareJson = ruleSet.stream()
                     .filter(rule -> parameterMap.containsKey(rule.getName())).collect(Collectors.toList());

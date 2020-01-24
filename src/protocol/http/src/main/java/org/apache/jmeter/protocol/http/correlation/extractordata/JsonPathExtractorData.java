@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.correlation.extractordata;
 
 public class JsonPathExtractorData extends ExtractorData {
+    // JSONPath expression
     String expr;
 
     public JsonPathExtractorData(String refName, String jsonPathExpression, String matchNr, String contentType,
