@@ -229,7 +229,8 @@ public class Correlation {
         // check if the map contains a parameter with the same key
         if (jmxParameterMap.get(key) == null) {
             jmxParameterMap.put(key, value);
-        } else if (!jmxParameterMap.get(key).equals(value)) {
+        } else if (!jmxParameterMap.get(key).equals(value) && (jmxParameterMap.entrySet().stream()
+                .filter(x -> x.getValue().equals(value)).collect(Collectors.toList())).isEmpty()) {
             // Change the parameter name if it exists in the map and doesn't have
             // the same value as existing parameter
             String modifiedName = changeCorrelatableParameterName(jmxParameterMap, key);
