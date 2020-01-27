@@ -108,6 +108,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>I18N</h3>
 <ul>
+  <li><bug>64102</bug>Add Chinese translation for Tools menu. Contributed by Liu XP (liu_xp2003 at sina.com)</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -183,6 +184,7 @@ to view the last release notes of version 5.2.1.
   <li>jmetertea</li>
   <li>ray7219</li>
   <li>Sebastian Boga (sebastian.boga at endava.com)</li>
+  <li>Liu XP (liu_xp2003 at sina.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
