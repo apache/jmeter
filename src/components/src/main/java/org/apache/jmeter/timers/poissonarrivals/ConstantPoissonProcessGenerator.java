@@ -18,6 +18,7 @@
 package org.apache.jmeter.timers.poissonarrivals;
 
 import java.nio.DoubleBuffer;
+import java.util.Arrays;
 import java.util.Random;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -33,37 +34,34 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
 
     private static final double PRECISION = 0.00001;
 
-    private Random rnd = new Random();
-    private ThroughputProvider throughputProvider;
-    private int batchSize;
-    private int batchThreadDelay;
-    private DurationProvider durationProvider;
-    private double lastThroughput;
-    private int exactLimit;
-    private double allowedThroughputSurplus;
-    private DoubleBuffer events;
-    private double lastEvent;
+    private final Random rnd = new Random();
+    private final ThroughputProvider throughputProvider;
+    private final int batchSize;
+    private final int batchThreadDelay;
+    private final DurationProvider durationProvider;
     private final boolean logFirstSamples;
+
+    private int batchItemIndex;
+    private double lastThroughput;
+    private double lastThroughputDurationFinish;
+    private DoubleBuffer events;
 
     public ConstantPoissonProcessGenerator(
             ThroughputProvider throughput, int batchSize, int batchThreadDelay,
-            DurationProvider duration, int exactLimit, double allowedThroughputSurplus,
+            DurationProvider duration,
             Long seed, boolean logFirstSamples) {
         this.throughputProvider = throughput;
         this.batchSize = batchSize;
         this.batchThreadDelay = batchThreadDelay;
         this.durationProvider = duration;
-        this.exactLimit = exactLimit;
-        this.allowedThroughputSurplus = allowedThroughputSurplus;
         this.logFirstSamples = logFirstSamples;
         if (seed != null && seed.intValue() != 0) {
             rnd.setSeed(seed);
         }
-        ensureCapacity();
+        ensureCapacity(0);
     }
 
-    private void ensureCapacity() {
-        int size = (int) Math.round((throughputProvider.getThroughput() * durationProvider.getDuration() + 1) * 3);
+    private void ensureCapacity(int size) {
         if (events != null && events.capacity() >= size) {
             return;
         }
@@ -76,47 +74,26 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
         if (batchSize > 1) {
             throughput /= batchSize;
         }
+        batchItemIndex = 0;
         long duration = this.durationProvider.getDuration();
-        ensureCapacity();
         int samples = (int) Math.ceil(throughput * duration);
-        double time;
-        int i = 0;
+        ensureCapacity(samples);
         long t = System.currentTimeMillis();
-        int loops = 0;
-        double currentAllowedThroughputSurplus = samples < exactLimit ? 0.0d : this.allowedThroughputSurplus / 100;
-        do {
-            time = 0;
-            events.clear();
-            if (throughput < 1e-5) {
-                log.info("Throughput should exceed zero");
-                break;
-            }
-            if (duration < 5) {
-                log.info("Duration should exceed 5 seconds");
-                break;
-            }
-            i = 0;
-            while (time < duration) {
-                double u = rnd.nextDouble();
-                // https://en.wikipedia.org/wiki/Exponential_distribution#Generating_exponential_variates
-                double delay = -Math.log(1 - u) / throughput;
-                time += delay;
-                events.put(time + lastEvent);
-                i++;
-            }
-            loops++;
-        } while (System.currentTimeMillis() - t < 5000 &&
-                (i < samples + 1 // not enough samples
-                        || (i - 1 - samples) * 1.0f / samples > currentAllowedThroughputSurplus));
+        events.clear();
+        for (int i = 0; i < samples; i++) {
+            events.put(lastThroughputDurationFinish + rnd.nextDouble() * duration);
+        }
+        Arrays.sort(events.array(), events.arrayOffset(), events.position());
         t = System.currentTimeMillis() - t;
         if (t > 1000) {
             log.warn("Spent {} ms while generating sequence of delays for {} samples, {} throughput, {} duration",
                     t, samples, throughput, duration);
         }
+        lastThroughputDurationFinish += duration;
         if (logFirstSamples) {
             if (log.isDebugEnabled()) {
-                log.debug("Generated {} events ({} required, rate {}) in {} ms, restart was issued {} times",
-                        events.position(), samples, throughput, t, loops);
+                log.debug("Generated {} events ({} required, rate {}) in {} ms",
+                        events.position(), samples, throughput, t);
             }
             if (log.isInfoEnabled()) {
                 StringBuilder sb = new StringBuilder();
@@ -126,13 +103,10 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
                 }
                 sb.append(" ").append(samples).append(" required, rate ").append(throughput)
                         .append(", duration ").append(duration)
-                        .append(", exact lim ").append(exactLimit)
-                        .append(", i").append(i)
-                        .append(") in ").append(t)
-                        .append(" ms, restart was issued ").append(loops).append(" times. ");
-                sb.append("First 15 events will be fired at: ");
+                        .append(") in ").append(t).append(" ms");
+                sb.append(". First 15 events will be fired at: ");
                 double prev = 0;
-                for (i = 0; i < events.position() && i < 15; i++) {
+                for (int i = 0; i < events.position() && i < 15; i++) {
                     if (i > 0) {
                         sb.append(", ");
                     }
@@ -145,29 +119,28 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
             }
         }
         events.flip();
-        if (batchSize > 1) {
-            // If required to generate "pairs" of events, then just duplicate events in the buffer
-            // TODO: for large batchSizes it makes sense to use counting instead
-            DoubleBuffer tmpBuffer = DoubleBuffer.allocate(batchSize * events.remaining());
-            while (events.hasRemaining()) {
-                double curTime = events.get();
-                for (int j = 0; j < batchSize; j++) {
-                    tmpBuffer.put(curTime + j * batchThreadDelay);
-                }
-            }
-            tmpBuffer.flip();
-            events = tmpBuffer;
-        }
     }
 
     @Override
     public double next() {
-        if (!events.hasRemaining()
+        if ((batchItemIndex == 0 && !events.hasRemaining())
                 || !valuesAreEqualWithPrecision(throughputProvider.getThroughput(),lastThroughput)) {
             generateNext();
         }
-        lastEvent = events.get();
-        return lastEvent;
+        if (batchSize == 1) {
+            return events.get();
+        }
+        batchItemIndex++;
+        if (batchItemIndex == 1) {
+            // The first item advances the position
+            return events.get();
+        }
+        if (batchItemIndex == batchSize) {
+            batchItemIndex = 0;
+        }
+        // All the other items in the batch refer to the previous position
+        // since #position() points to the next item to be returned
+        return events.get(events.position() - 1);
     }
 
     private boolean valuesAreEqualWithPrecision(double throughput, double lastThroughput) {

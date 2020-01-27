@@ -28,6 +28,7 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.util.JMeterStopThreadException;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,7 +135,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
         return
                 groupEvents.computeIfAbsent(tg, x -> new ConstantPoissonProcessGenerator(
                         () -> PreciseThroughputTimer.this.getThroughput() / throughputPeriod,
-                        batchSize, batchThreadDelay, this, exactLimit, allowedThroughputSurplus, seed, true));
+                        batchSize, batchThreadDelay, this, seed, true));
     }
 
     /**
@@ -174,18 +175,26 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
         this.duration = duration;
     }
 
+    @Deprecated
+    @API(status = API.Status.DEPRECATED, since = "5.3.0")
     public int getExactLimit() {
         return exactLimit;
     }
 
+    @Deprecated
+    @API(status = API.Status.DEPRECATED, since = "5.3.0")
     public void setExactLimit(int exactLimit) {
         this.exactLimit = exactLimit;
     }
 
+    @Deprecated
+    @API(status = API.Status.DEPRECATED, since = "5.3.0")
     public double getAllowedThroughputSurplus() {
         return allowedThroughputSurplus;
     }
 
+    @Deprecated
+    @API(status = API.Status.DEPRECATED, since = "5.3.0")
     public void setAllowedThroughputSurplus(double allowedThroughputSurplus) {
         this.allowedThroughputSurplus = allowedThroughputSurplus;
     }
