@@ -25,6 +25,7 @@ import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.properties.dsl.lastEditYear
 import com.github.vlsi.gradle.properties.dsl.props
 import com.github.vlsi.gradle.release.RepositoryType
+import com.github.vlsi.gradle.test.dsl.printTestResults
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.sonarqube.gradle.SonarQubeProperties
@@ -39,6 +40,7 @@ plugins {
     id("com.github.spotbugs")
     id("org.sonarqube")
     id("com.github.vlsi.crlf")
+    id("com.github.vlsi.gradle-extensions")
     id("com.github.vlsi.ide")
     id("com.github.vlsi.stage-vote-release")
     publishing
@@ -523,18 +525,7 @@ allprojects {
                 passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
                 passProperty("junit.jupiter.execution.parallel.enabled", "true")
                 passProperty("junit.jupiter.execution.timeout.default", "2 m")
-                // https://github.com/junit-team/junit5/issues/2041
-                // Gradle does not print parameterized test names yet :(
-                afterTest(KotlinClosure2<TestDescriptor, TestResult, Any>({ descriptor, result ->
-                    if (result.resultType != TestResult.ResultType.SUCCESS) {
-                        val test = descriptor as org.gradle.api.internal.tasks.testing.TestDescriptorInternal
-                        val classDisplayName = test.className?.let {
-                            if (it.endsWith(test.classDisplayName)) it else "${test.className} [${test.classDisplayName}]"
-                        } ?: test.classDisplayName
-                        val testDisplayName = if (test.name == test.displayName) test.displayName else "${test.name} [${test.displayName}]"
-                        println("\n$classDisplayName > $testDisplayName: ${result.resultType}")
-                    }
-                }))
+                printTestResults()
             }
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP
