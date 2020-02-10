@@ -124,6 +124,7 @@ to view the last release notes of version 5.2.1.
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li><bug>63963</bug><pr>546</pr>Updated jackson to 2.10.1 (from 2.9.10)</li>
+    <li><bug>64120</bug>Updated jsoup to 1.12.2 (from 1.22.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
