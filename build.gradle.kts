@@ -25,7 +25,6 @@ import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.properties.dsl.lastEditYear
 import com.github.vlsi.gradle.properties.dsl.props
 import com.github.vlsi.gradle.release.RepositoryType
-import com.github.vlsi.gradle.test.dsl.printTestResults
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.sonarqube.gradle.SonarQubeProperties
@@ -159,6 +158,8 @@ val skipDist by extra {
 // Inherited from stage-vote-release-plugin: skipSign, useGpgCmd
 
 allprojects {
+    apply(plugin = "com.github.vlsi.gradle-extensions")
+
     if (project.path != ":src") {
         tasks.register<DependencyInsightReportTask>("allDependencyInsight") {
             group = HelpTasksPlugin.HELP_GROUP
@@ -525,7 +526,6 @@ allprojects {
                 passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
                 passProperty("junit.jupiter.execution.parallel.enabled", "true")
                 passProperty("junit.jupiter.execution.timeout.default", "2 m")
-                printTestResults()
             }
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP
