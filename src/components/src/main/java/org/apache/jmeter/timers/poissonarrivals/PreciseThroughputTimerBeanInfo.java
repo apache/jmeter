@@ -66,21 +66,15 @@ public class PreciseThroughputTimerBeanInfo extends BeanInfoSupport {
         p.setValue(DEFAULT, 0);
 
 
-        createPropertyGroup(
-                "accuracy", //$NON-NLS-1$
-                new String[]{
-                        "exactLimit", //$NON-NLS-1$
-                        "allowedThroughputSurplus"    //$NON-NLS-1$
-                }
-        );
-
         p = property("exactLimit"); //$NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, 10000);
+        p.setHidden(true);
 
         p = property("allowedThroughputSurplus"); //$NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, 1.0d);
+        p.setHidden(true);
 
         createPropertyGroup(
                 "repeatability", //$NON-NLS-1$

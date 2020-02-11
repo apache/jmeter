@@ -99,6 +99,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>64091</bug>Precise Throughput Timer schedule generation is improved significantly (e.g. 2 seconds for 10M samples)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -108,6 +109,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>I18N</h3>
 <ul>
+  <li><bug>64102</bug>Add Chinese translation for Tools menu. Contributed by Liu XP (liu_xp2003 at sina.com)</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -122,6 +124,7 @@ to view the last release notes of version 5.2.1.
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li><bug>63963</bug><pr>546</pr>Updated jackson to 2.10.1 (from 2.9.10)</li>
+    <li><bug>64120</bug>Updated jsoup to 1.12.2 (from 1.22.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -146,6 +149,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>64091</bug>Precise Throughput Timer might produce less samples when low test duration is used</li>
 </ul>
 
 <h3>Functions</h3>
@@ -170,7 +174,7 @@ to view the last release notes of version 5.2.1.
 <h3>General</h3>
 <ul>
   <li><bug>63945</bug>NPE when opening a file after file system change</li>
-  <li><bug>64034</bug>Shell scripts fail if space in JAVA_HOME path. Contributed by ray7219 (ray7219 at hotmail.com)</li>
+  <li><bug>64034</bug>Shell scripts fail if space in <code>JAVA_HOME</code> path. Contributed by ray7219 (ray7219 at hotmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -183,6 +187,7 @@ to view the last release notes of version 5.2.1.
   <li>jmetertea</li>
   <li>ray7219</li>
   <li>Sebastian Boga (sebastian.boga at endava.com)</li>
+  <li>Liu XP (liu_xp2003 at sina.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
