@@ -449,15 +449,18 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         } catch (IOException e1) {
             // ignored
         }
-        String textRenderer = JMeterUtils.getResString("view_results_render_text"); // $NON-NLS-1$
-        Object textObject = null;
+        String defaultRenderer = expandToClassname(".RenderAsText"); // $NON-NLS-1$
+        if (VIEWERS_ORDER.length() > 0) {
+            defaultRenderer = expandToClassname(VIEWERS_ORDER.split(",", 2)[0]);
+        }
+        Object defaultObject = null;
         Map<String, ResultRenderer> map = new HashMap<>(classesToAdd.size());
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate render classes
                 final ResultRenderer renderer = (ResultRenderer) Class.forName(clazz).getDeclaredConstructor().newInstance();
-                if (textRenderer.equals(renderer.toString())){
-                    textObject=renderer;
+                if (defaultRenderer.equals(clazz)) {
+                    defaultObject=renderer;
                 }
                 renderer.setBackgroundColor(getBackground());
                 map.put(renderer.getClass().getName(), renderer);
@@ -473,9 +476,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         if (VIEWERS_ORDER.length() > 0) {
             Arrays.stream(VIEWERS_ORDER.split(","))
-                    .map(key -> key.startsWith(".")
-                            ? "org.apache.jmeter.visualizers" + key //$NON-NLS-1$
-                            : key)
+                    .map(this::expandToClassname)
                     .forEach(key -> {
                         ResultRenderer renderer = map.remove(key);
                         if (renderer != null) {
@@ -490,8 +491,15 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         // Add remaining (plugins or missed in property)
         map.values().forEach(renderer -> selectRenderPanel.addItem(renderer));
-        nodesModel.setSelectedItem(textObject); // preset to "Text" option
+        nodesModel.setSelectedItem(defaultObject); // preset to "Text" option or the first option from the view.results.tree.renderers_order property
         return selectRenderPanel;
+    }
+
+    private String expandToClassname(String name) {
+        if (name.startsWith(".")) {
+            return "org.apache.jmeter.visualizers" + name; // $NON-NLS-1$
+        }
+        return name;
     }
 
     /** {@inheritDoc} */
