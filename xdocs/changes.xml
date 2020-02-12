@@ -119,7 +119,7 @@ to view the last release notes of version 5.2.1.
 <h3>General</h3>
 <ul>
   <li><bug>63458</bug><pr>551</pr>Add new template "Functional Testing Test Plan [01]". Contributed by Sebastian Boga (sebastian.boga at endava.com)</li>
-  <li><big>64119</bug>Use first renderer from <code>view.results.tree.renderers_order</code> property as default in View Results Tree</li>
+  <li><bug>64119</bug>Use first renderer from <code>view.results.tree.renderers_order</code> property as default in View Results Tree</li>
 </li>
 </ul>
 
