@@ -151,6 +151,7 @@ to view the last release notes of version 5.2.1.
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
     <li><bug>64091</bug>Precise Throughput Timer might produce less samples when low test duration is used</li>
+    <li><bug>64142</bug>Presence of DebugPostProcessor in Test plan breaks ActiveThread Over time in report due to missing information</li>
 </ul>
 
 <h3>Functions</h3>
