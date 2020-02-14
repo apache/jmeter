@@ -30,6 +30,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -82,7 +83,9 @@ public class DebugPostProcessor extends AbstractTestElement implements PostProce
             formatSet(sb, System.getProperties().entrySet());
             sb.append("\n");
         }
-
+        sr.setThreadName(threadContext.getThread().getThreadName());
+        sr.setGroupThreads(threadContext.getThreadGroup().getNumberOfThreads());
+        sr.setAllThreads(JMeterContextService.getNumberOfThreads());
         sr.setResponseData(sb.toString(), null);
         sr.setDataType(SampleResult.TEXT);
         sr.setSamplerData(rd.toString());
