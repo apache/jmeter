@@ -48,7 +48,7 @@ dependencies {
         // dependency on it during compilation
         runtimev("org.apache.tika:tika-parsers", "tika")
         runtimev("org.ow2.asm:asm")
-        runtimev("com.github.bulenkov.darcula:darcula")
+        apiv("com.github.weisj:darklaf-core")
 
         // activemq-all should not be used as it provides secondary slf4j binding
         runtimev("org.apache.activemq:activemq-broker", "activemq")

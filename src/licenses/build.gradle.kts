@@ -88,11 +88,18 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     // That enables to have "version-independent" MIT license in licenses/slf4j-api, and
     // it would be copied provided the detected license for slf4j-api is MIT.
 
-    // Library is not present in Maven Central
-    overrideLicense("com.github.bulenkov.darcula:darcula:e208efb96f70e4be9dc362fbb46f6e181ef501dd", SpdxLicense.Apache_2_0)
-
     overrideLicense("dnsjava:dnsjava:2.1.9") {
         expectedLicense = SpdxLicense.BSD_2_Clause
+    }
+
+    overrideLicense("com.formdev:svgSalamander") {
+        // See https://github.com/blackears/svgSalamander/blob/d6b6fe9a8ece7d0e0e7aeb3de82f027a38a6fe25/www/license/license-bsd.txt
+        effectiveLicense = SpdxLicense.BSD_3_Clause
+    }
+
+    overrideLicense("org.swinglabs:jxlayer") {
+        // See https://repo1.maven.org/maven2/org/swinglabs/jxlayer/3.0.4/jxlayer-3.0.4-sources.jar
+        effectiveLicense = SpdxLicense.BSD_3_Clause
     }
 
     for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {

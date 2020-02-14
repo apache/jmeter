@@ -8,6 +8,7 @@
     <trusted-key id='c9fbaa83a8753994' group='com.fasterxml.jackson.core' />
     <trusted-key id='4c00043bec5cb7cb' group='com.fifesoft' />
     <trusted-key id='af10873874630863' group='com.flipkart.zjsonpatch' />
+    <trusted-key id='379ce192d401ab61' group='com.formdev' />
     <trusted-key id='105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='3c0a8f4744f37328' group='com.github.ben-manes.caffeine' />
     <trusted-key id='8ea48d105232855d' group='com.github.jknack' />
@@ -15,6 +16,7 @@
     <trusted-key id='1756b920eecf0e90' group='com.github.spotbugs' />
     <trusted-key id='78fcd238c26ea995' group='com.github.tomakehurst' />
     <trusted-key id='105cb91cac2aee0e' group='com.github.vlsi.gradle' />
+    <trusted-key id='254e9c64c264c176' group='com.github.weisj' />
     <trusted-key id='59a252fb1199d873' group='com.google.code.findbugs' />
     <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
     <trusted-key id='912d2c0eccda55c0' group='com.google.errorprone' />
@@ -29,6 +31,7 @@
     <trusted-key id='e57428da9e879e7d' group='com.helger' />
     <trusted-key id='3684155e9365c30e' group='com.jayway.jsonpath' />
     <trusted-key id='a50569c7ca7fa1f0' group='com.jcraft' />
+    <trusted-key id='0a36eef644cff773' group='com.metsci.ext.com.kitfox.svg' />
     <trusted-key id='db45d3a62a183ce2' group='com.miglayout' />
     <trusted-key id='aa49c633b4734832' group='com.pinterest' />
     <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
@@ -59,6 +62,8 @@
     <trusted-key id='528dc75aa68f0923' group='jcharts' />
     <trusted-key id='85911f425ec61b51' group='junit' />
     <trusted-key id='efe8086f9e93774e' group='junit' />
+    <trusted-key id='15c71c0a4e0b8edd' group='net.java.dev.jna' />
+    <trusted-key id='75bf031b7c94e183' group='net.java.dev.jna' />
     <trusted-key id='f6bc09712c8df6ec' group='net.minidev' />
     <trusted-key id='0da8a5ec02d11ead' group='net.sf.jopt-simple' />
     <trusted-key id='d4012dda1f1f0f82' group='net.sf.jtidy' />
@@ -135,6 +140,7 @@
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.gradle' />
     <trusted-key id='72fefd1572eb75e1' group='org.spockframework' />
     <trusted-key id='9a2c7a98e457c53d' group='org.springframework' />
+    <trusted-key id='e4b53844e02b191b' group='org.swinglabs' />
     <trusted-key id='a2115ae15f6b8b72' group='org.xmlunit' />
     <trusted-key id='9ff25980f5ba7e4f' group='xalan' />
     <trusted-key id='858fc4c4f43856a3' group='xerces' />

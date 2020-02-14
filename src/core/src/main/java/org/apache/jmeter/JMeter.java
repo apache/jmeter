@@ -53,7 +53,6 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.JTree;
-import javax.swing.UIManager;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.cli.avalon.CLArgsParser;
@@ -372,16 +371,16 @@ public class JMeter implements JMeterPlugin {
         System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
 
-        SplashScreen splash = new SplashScreen();
-        splash.showScreen();
-        String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
+        String jMeterLaf = LookAndFeelCommand.getPreferredLafCommand();
         try {
             log.info("Setting LAF to: {}", jMeterLaf);
-            UIManager.setLookAndFeel(jMeterLaf);
-            UIManager.put("Button.defaultButtonFollowsFocus", false);
-        } catch (Exception ex) {
+            LookAndFeelCommand.activateLookAndFeel(jMeterLaf);
+        } catch (IllegalArgumentException ex) {
             log.warn("Could not set LAF to: {}", jMeterLaf, ex);
         }
+        // SplashWindow is created after LaF activation. Otherwise it would cause splash flicker
+        SplashScreen splash = new SplashScreen();
+        splash.showScreen();
         splash.setProgress(10);
         JMeterUtils.applyHiDPIOnFonts();
         PluginManager.install(this, true);

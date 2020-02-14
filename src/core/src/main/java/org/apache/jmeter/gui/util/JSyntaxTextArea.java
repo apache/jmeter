@@ -112,8 +112,8 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * @param jSyntaxTextArea
      */
     private static void applyTheme(JSyntaxTextArea jSyntaxTextArea) {
-        String laf = LookAndFeelCommand.getJMeterLaf();
-        if(JMeterMenuBar.DARCULA_LAF_CLASS.equals(laf)) {
+        String laf = LookAndFeelCommand.getPreferredLafCommand();
+        if (LookAndFeelCommand.isDark(laf)) {
             DARCULA_THEME.apply(jSyntaxTextArea);
         }
     }

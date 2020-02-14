@@ -24,6 +24,7 @@ dependencies {
     api(project(":src:jorphan"))
     testCompile(project(":src:jorphan", "testClasses"))
 
+    implementation("com.github.weisj:darklaf-core")
     api("bsf:bsf") {
         because("protected BSFManager BSFTestElement#getManager()")
     }

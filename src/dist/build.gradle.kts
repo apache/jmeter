@@ -71,11 +71,6 @@ dependencies {
         api(project(p))
         testCompile(project(p, "testClasses"))
     }
-    runtimeOnly("com.github.bulenkov.darcula:darcula") {
-        because("""
-            It just looks good, however Darcula is not used explicitly,
-             so the dependency is added for distribution only""".trimIndent())
-    }
 
     binLicense(project(":src:licenses", "binLicense"))
     srcLicense(project(":src:licenses", "srcLicense"))
@@ -128,19 +123,20 @@ val populateLibs by tasks.registering {
         }
         for (dep in deps) {
             val compId = dep.id.componentIdentifier
-            // The path is "relative" to rootDir/lib
-            when (compId) {
-                is ProjectComponentIdentifier ->
-                    (when (compId.projectPath) {
-                        launcherProject -> binLibs
-                        jorphanProject, bshclientProject -> libs
-                        else -> libsExt
-                    }).from(dep.file) {
-                        // Remove version from the file name
-                        rename { dep.name + "." + dep.extension }
-                    }
-
-                else -> libs.from(dep.file)
+            if (compId !is ProjectComponentIdentifier || !compId.build.isCurrentBuild) {
+                // Move all non-JMeter jars to lib folder
+                libs.from(dep.file)
+                continue
+            }
+            // JMeter jars are spread across $root/bin, $root/libs, and $root/libs/ext
+            // for historical reasons
+            when (compId.projectPath) {
+                launcherProject -> binLibs
+                jorphanProject, bshclientProject -> libs
+                else -> libsExt
+            }.from(dep.file) {
+                // Remove version from the file name
+                rename { dep.name + "." + dep.extension }
             }
         }
     }

@@ -449,18 +449,6 @@ allprojects {
 
         repositories {
             jcenter()
-            ivy {
-                url = uri("https://github.com/bulenkov/Darcula/raw/")
-                content {
-                    includeModule("com.github.bulenkov.darcula", "darcula")
-                }
-                patternLayout {
-                    artifact("[revision]/build/[module].[ext]")
-                }
-                metadataSources {
-                    artifact() // == don't try downloading .pom file from the repository
-                }
-            }
         }
 
         tasks {
