@@ -40,6 +40,12 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ResponseTimePercentilesOverTimeGraphConsumer
         extends AbstractOverTimeGraphConsumer {
+    private static final int PERCENTILE_INDEX1 = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct1", 90);
+    private static final int PERCENTILE_INDEX2 = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct2", 95);
+    private static final int PERCENTILE_INDEX3 = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct3", 99);
 
     private static final String PERCENTILE_FORMAT = "%dth percentile";
 
@@ -57,11 +63,11 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
         groupInfos.put("aggregate_report_min", createMinGroupInfo());
         groupInfos.put("aggregate_report_max", createMaxGroupInfo());
         groupInfos.put("aggregate_rpt_pct1",
-                createPercentileGroupInfo("aggregate_rpt_pct1", 90));
+                createPercentileGroupInfo("aggregate_rpt_pct1", PERCENTILE_INDEX1));
         groupInfos.put("aggregate_rpt_pct2",
-                createPercentileGroupInfo("aggregate_rpt_pct2", 95));
+                createPercentileGroupInfo("aggregate_rpt_pct2", PERCENTILE_INDEX2));
         groupInfos.put("aggregate_rpt_pct3",
-                createPercentileGroupInfo("aggregate_rpt_pct3", 99));
+                createPercentileGroupInfo("aggregate_rpt_pct3", PERCENTILE_INDEX3));
 
         return groupInfos;
     }
