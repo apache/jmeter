@@ -526,6 +526,14 @@ public class JMeterThread implements Runnable, Interruptible {
         return transactionResult;
     }
 
+    private void fillThreadInformation(SampleResult result, 
+            int nbActiveThreadsInThreadGroup, 
+            int nbTotalActiveThreads) {
+        result.setGroupThreads(nbActiveThreadsInThreadGroup);
+        result.setAllThreads(nbTotalActiveThreads);
+        result.setThreadName(threadName);
+    }
+
     /**
      * Execute the sampler with its pre/post processors, timers, assertions
      * Broadcast the result to the sample listeners
@@ -545,6 +553,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
         delay(pack.getTimers());
         SampleResult result = null;
+
         if (running) {
             Sampler sampler = pack.getSampler();
             result = doSampling(threadContext, sampler);
@@ -553,15 +562,11 @@ public class JMeterThread implements Runnable, Interruptible {
         if (result != null && !result.isIgnore()) {
             int nbActiveThreadsInThreadGroup = threadGroup.getNumberOfThreads();
             int nbTotalActiveThreads = JMeterContextService.getNumberOfThreads();
-            result.setGroupThreads(nbActiveThreadsInThreadGroup);
-            result.setAllThreads(nbTotalActiveThreads);
-            result.setThreadName(threadName);
+            fillThreadInformation(result, nbActiveThreadsInThreadGroup, nbTotalActiveThreads);
             SampleResult[] subResults = result.getSubResults();
             if (subResults != null) {
                 for (SampleResult subResult : subResults) {
-                    subResult.setGroupThreads(nbActiveThreadsInThreadGroup);
-                    subResult.setAllThreads(nbTotalActiveThreads);
-                    subResult.setThreadName(threadName);
+                    fillThreadInformation(subResult, nbActiveThreadsInThreadGroup, nbTotalActiveThreads);
                 }
             }
             threadContext.setPreviousResult(result);
@@ -639,9 +644,7 @@ public class JMeterThread implements Runnable, Interruptible {
             SamplePackage transactionPack, JMeterContext threadContext) {
         // Get the transaction sample result
         SampleResult transactionResult = transactionSampler.getTransactionResult();
-        transactionResult.setThreadName(threadName);
-        transactionResult.setGroupThreads(threadGroup.getNumberOfThreads());
-        transactionResult.setAllThreads(JMeterContextService.getNumberOfThreads());
+        fillThreadInformation(transactionResult, threadGroup.getNumberOfThreads(), JMeterContextService.getNumberOfThreads());
 
         // Check assertions for the transaction sample
         checkAssertions(transactionPack.getAssertions(), transactionResult, threadContext);
