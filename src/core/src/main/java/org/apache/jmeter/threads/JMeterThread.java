@@ -553,7 +553,6 @@ public class JMeterThread implements Runnable, Interruptible {
 
         delay(pack.getTimers());
         SampleResult result = null;
-
         if (running) {
             Sampler sampler = pack.getSampler();
             result = doSampling(threadContext, sampler);
