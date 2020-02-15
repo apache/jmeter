@@ -526,8 +526,8 @@ public class JMeterThread implements Runnable, Interruptible {
         return transactionResult;
     }
 
-    private void fillThreadInformation(SampleResult result, 
-            int nbActiveThreadsInThreadGroup, 
+    private void fillThreadInformation(SampleResult result,
+            int nbActiveThreadsInThreadGroup,
             int nbTotalActiveThreads) {
         result.setGroupThreads(nbActiveThreadsInThreadGroup);
         result.setAllThreads(nbTotalActiveThreads);
