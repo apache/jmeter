@@ -166,7 +166,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         effectiveLicense = SpdxLicense.Apache_2_0
     }
     for (lib in listOf("hamcrest-core", "hamcrest")) {
-        overrideLicense("org.hamcrest:$lib:2.1") {
+        overrideLicense("org.hamcrest:$lib:2.2") {
             // https://github.com/hamcrest/JavaHamcrest/issues/264
             // pom.xml lists "New BSD License", however it is BSD_3
             expectedLicense = SpdxLicense.BSD_3_Clause
