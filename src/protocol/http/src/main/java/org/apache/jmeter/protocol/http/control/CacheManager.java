@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CacheManager extends ConfigTestElement implements TestStateListener, TestIterationListener, Serializable {
 
-    private static final long serialVersionUID = 235L;
+    private static final long serialVersionUID = 236L;
 
     private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
 
@@ -596,8 +596,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             @Override
             protected Map<String, CacheEntry> initialValue(){
                 // Bug 51942 - this map may be used from multiple threads
-                @SuppressWarnings("unchecked") // LRUMap is not generic currently
-                Map<String, CacheEntry> map = new LRUMap(getMaxSize());
+                Map<String, CacheEntry> map = new LRUMap<>(getMaxSize());
                 return Collections.synchronizedMap(map);
             }
         };

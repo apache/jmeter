@@ -19,6 +19,8 @@ package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,9 +28,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 
-import org.apache.commons.collections.Buffer;
-import org.apache.commons.collections.buffer.CircularFifoBuffer;
-import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.jmeter.gui.logging.GuiLogEventListener;
 import org.apache.jmeter.gui.logging.LogEventObject;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -41,7 +41,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  */
 public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
-    private static final long serialVersionUID = 6911128494402594429L;
+    private static final long serialVersionUID = 4935188629475943229L;
 
     private final JTextArea textArea;
 
@@ -57,7 +57,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
     private static final int LOGGER_PANEL_REFRESH_PERIOD =
             JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500); // $NON-NLS-1$
 
-    private final Buffer events;
+    private final Queue<String> events;
 
     private volatile boolean logChanged = false;
 
@@ -66,9 +66,9 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
      */
     public LoggerPanel() {
         if (LOGGER_PANEL_MAX_LINES > 0) {
-            events = new CircularFifoBuffer(LOGGER_PANEL_MAX_LINES);
+            events = new CircularFifoQueue<>(LOGGER_PANEL_MAX_LINES);
         } else {
-            events = new UnboundedFifoBuffer();
+            events = new ArrayDeque<>();
         }
         textArea = init();
     }
@@ -108,7 +108,6 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.logging.GuiLogEventListener#processLogEvent(org.apache.jmeter.gui.logging.LogEventObject)
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void processLogEvent(final LogEventObject logEventObject) {
         if(!LOGGER_PANEL_RECEIVE_WHEN_CLOSED && !GuiPackage.getInstance().getMenuItemLoggerPanel().getModel().isSelected()) {
@@ -137,8 +136,8 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
         logChanged = false;
         StringBuilder builder = new StringBuilder();
         synchronized (events) {
-            for (Object line: events) {
-                builder.append((String) line);
+            for (String line: events) {
+                builder.append(line);
             }
         }
         String logText = builder.toString();

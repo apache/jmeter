@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,10 +61,8 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.apache.commons.collections.Buffer;
-import org.apache.commons.collections.EnumerationUtils;
-import org.apache.commons.collections.buffer.CircularFifoBuffer;
-import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
+import org.apache.commons.collections4.EnumerationUtils;
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -85,7 +85,7 @@ import org.slf4j.LoggerFactory;
 public class ViewResultsFullVisualizer extends AbstractVisualizer
 implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private static final Logger log = LoggerFactory.getLogger(ViewResultsFullVisualizer.class);
 
@@ -129,7 +129,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private Object resultsObject = null;
     private TreeSelectionEvent lastSelectionEvent;
     private JCheckBox autoScrollCB;
-    private Buffer buffer;
+    private Queue<SampleResult> buffer;
     private boolean dataChanged;
 
     /**
@@ -139,16 +139,15 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         super();
         final int maxResults = JMeterUtils.getPropDefault("view.results.tree.max_results", 500);
         if (maxResults > 0) {
-            buffer = new CircularFifoBuffer(maxResults);
+            buffer = new CircularFifoQueue<>(maxResults);
         } else {
-            buffer = new UnboundedFifoBuffer();
+            buffer = new ArrayDeque<>();
         }
         init();
         new Timer(REFRESH_PERIOD, e -> updateGui()).start();
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     @Override
     public void add(final SampleResult sample) {
         synchronized (buffer) {
@@ -174,8 +173,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             oldExpandedElements = extractExpandedObjects(expandedElements);
             oldSelectedElement = getSelectedObject();
             root.removeAllChildren();
-            for (Object sampler: buffer) {
-                SampleResult res = (SampleResult) sampler;
+            for (SampleResult sampler: buffer) {
+                SampleResult res = sampler;
                 // Add sample
                 DefaultMutableTreeNode currNode = new SearchableTreeNode(res, treeModel);
                 treeModel.insertNodeInto(currNode, root, root.getChildCount());
@@ -255,7 +254,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private Set<Object> extractExpandedObjects(final Enumeration<TreePath> expandedElements) {
         if (expandedElements != null) {
-            @SuppressWarnings("unchecked")
             final List<TreePath> list = EnumerationUtils.toList(expandedElements);
             log.debug("Expanded: {}", list);
             Set<Object> result = list.stream()
