@@ -333,8 +333,10 @@ JMETER-SERVER</source>
 </property>
 <property name="client.rmi.localport">
     Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controller)<br/>
-    Default value is <code>0</code>, which means port is randomly assigned.
-    <note>You may need to open a port in the firewall on the Controller machine.</note>
+    Default value is <code>0</code>, which means port is randomly assigned. 
+    If this is non-zero, it will be used as the base for local port numbers for the client engine. 
+    At the moment JMeter will open up to three ports beginning with the port defined in this property. 
+    <note>You may need to open corresponding ports in the firewall on the Controller machine.</note>
     Defaults to: <code>0</code>
 </property>
 <property name="client.tries">

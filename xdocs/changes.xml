@@ -173,6 +173,7 @@ to view the last release notes of version 5.2.1.
   <li><pr>547</pr>Correct Log level documentation. Contributed by jmetertea</li>
   <li><pr>548</pr>Correct typos in documentation. Contributed by jmetertea</li>
   <li><bug>64022</bug>Correct Chinese translation for "Ignore Sub-Controller blocks". Provided by yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
+  <li><pr>552</pr>Fix <code>client.rmi.localport</code> port allocation description</li>
 </ul>
 
 <h3>General</h3>
@@ -192,6 +193,7 @@ to view the last release notes of version 5.2.1.
   <li>ray7219</li>
   <li>Sebastian Boga (sebastian.boga at endava.com)</li>
   <li>Liu XP (liu_xp2003 at sina.com)</li>
+  <li>anant-93 (https://github.com/anant-93)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
