@@ -76,7 +76,7 @@ dependencies {
         apiv("com.sun.activation:javax.activation", "javax.activation")
         apiv("com.thoughtworks.xstream:xstream")
         apiv("commons-codec:commons-codec")
-        apiv("commons-collections:commons-collections")
+        apiv("org.apache.commons:commons-collections4")
         apiv("commons-io:commons-io")
         apiv("commons-lang:commons-lang")
         apiv("commons-net:commons-net")

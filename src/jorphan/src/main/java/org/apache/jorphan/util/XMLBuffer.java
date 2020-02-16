@@ -17,7 +17,7 @@
 
 package org.apache.jorphan.util;
 
-import org.apache.commons.collections.ArrayStack;
+import java.util.ArrayDeque;
 
 // @see org.apache.jorphan.util.TestXMLBuffer for unit tests
 
@@ -29,7 +29,7 @@ import org.apache.commons.collections.ArrayStack;
 public class XMLBuffer{
     private final StringBuilder sb = new StringBuilder(); // the string so far
 
-    private final ArrayStack tags = new ArrayStack(); // opened tags
+    private final ArrayDeque<String> tags = new ArrayDeque<>(); // opened tags
 
     public XMLBuffer() {
 
@@ -77,7 +77,7 @@ public class XMLBuffer{
      * @throws IllegalArgumentException if the tag names do not match
      */
     public XMLBuffer closeTag(String tagName) {
-        String tag = (String) tags.pop();
+        String tag = tags.pop();
         if (!tag.equals(tagName)) {
             throw new IllegalArgumentException(
                     "Trying to close tag: " + tagName + " ; should be " + tag);
@@ -110,7 +110,7 @@ public class XMLBuffer{
     @Override
     public String toString() {
         while (!tags.isEmpty()) {
-            endTag((String) tags.pop());
+            endTag(tags.pop());
         }
         return sb.toString();
     }

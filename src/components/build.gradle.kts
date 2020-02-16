@@ -53,7 +53,7 @@ dependencies {
     implementation("org.jsoup:jsoup")
     implementation("org.apache.commons:commons-lang3")
     implementation("net.sf.jtidy:jtidy")
-    implementation("commons-collections:commons-collections")
+    implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3")
     implementation("commons-io:commons-io") {
         because("IOUtils")
