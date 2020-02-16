@@ -136,6 +136,8 @@ to view the last release notes of version 5.2.1.
     <li>Updated Apache Groovy to 2.4.18 (from 2.4.16)</li>
     <li>Updated hsqldb to 2.5.0 (from 2.4.1)</li>
     <li>Updated hamcrest to 2.2 (from 2.1)</li>
+    <li>Updated Apache httpclient and httpmime to 4.5.11 (from 4.5.10)</li>
+    <li>Updated Apache httpcore and httpcore-nio to 4.4.13 (from 4.4.12)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
