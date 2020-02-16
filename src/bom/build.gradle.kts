@@ -103,6 +103,7 @@ dependencies {
         apiv("net.sf.saxon:Saxon-HE")
         apiv("nl.jqno.equalsverifier:equalsverifier")
         apiv("org.apache-extras.beanshell:bsh")
+        apiv("org.apache.commons:commons-collections4")
         apiv("org.apache.commons:commons-dbcp2")
         apiv("org.apache.commons:commons-jexl3")
         apiv("org.apache.commons:commons-jexl")

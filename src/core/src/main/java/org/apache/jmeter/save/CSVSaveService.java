@@ -38,7 +38,7 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.commons.collections.map.LinkedMap;
+import org.apache.commons.collections4.map.LinkedMap;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.reporters.ResultCollector;
@@ -452,7 +452,7 @@ public final class CSVSaveService {
     }
 
     // Map header names to set() methods
-    private static final LinkedMap headerLabelMethods = new LinkedMap();
+    private static final LinkedMap<String, Functor> headerLabelMethods = new LinkedMap<>();
 
     // These entries must be in the same order as columns are saved/restored.
 
@@ -536,7 +536,7 @@ public final class CSVSaveService {
             if (isVariableName(label)) {
                 varCount++;
             } else {
-                Functor set = (Functor) headerLabelMethods.get(label);
+                Functor set = headerLabelMethods.get(label);
                 set.invoke(saveConfig, new Boolean[]{Boolean.TRUE});
             }
         }
