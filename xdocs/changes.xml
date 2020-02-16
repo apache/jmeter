@@ -129,6 +129,7 @@ to view the last release notes of version 5.2.1.
     <li><bug>63809</bug>Updated commons-dbcp2 to 2.7.0 (from 2.5.0)</li>
     <li>Updated Apache ActiveMQ to 5.15.11 (from 5.15.8)</li>
     <li>Updated bouncycastle to 1.64 (from 1.60)</li>
+    <li>Updated asm to 7.3.1 (from 7.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
