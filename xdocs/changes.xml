@@ -133,6 +133,7 @@ to view the last release notes of version 5.2.1.
     <li>Updated Apache commons-codec to 1.14 (from 1.13)</li>
     <li>Updated Apache commons-pool to 2.8.0 (from 2.7.0)</li>
     <li>Updated equalsverifier to 3.1.9 (from 3.1.12)</li>
+    <li>Updated Apache Groovy to 2.4.18 (from 2.4.16)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
