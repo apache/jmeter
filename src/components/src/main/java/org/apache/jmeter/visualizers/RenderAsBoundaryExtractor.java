@@ -34,6 +34,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.extractor.BoundaryExtractor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -59,8 +60,6 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
 
     private JTabbedPane rightSide;
 
-    private SampleResult sampleResult = null;
-
     /**
      * Display the response as text or as rendered HTML. Change the text on the
      * button appropriate to the current display.
@@ -70,9 +69,9 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if ((sampleResult != null) && (BOUNDARY_EXTRACTOR_TESTER_COMMAND.equals(command))) {
-            String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
-            executeAndShowBoundaryExtractorTester(response);
+        String boundaryExtractorDataFieldText = boundaryExtractorDataField.getText();
+        if (StringUtils.isNotEmpty(boundaryExtractorDataFieldText) && BOUNDARY_EXTRACTOR_TESTER_COMMAND.equals(command)) {
+            executeAndShowBoundaryExtractorTester(boundaryExtractorDataFieldText);
         }
     }
 
@@ -132,7 +131,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
      */
     private JPanel createBoundaryExtractorPanel() {
         boundaryExtractorDataField = new JTextArea();
-        boundaryExtractorDataField.setEditable(false);
+        boundaryExtractorDataField.setEditable(true);
         boundaryExtractorDataField.setLineWrap(true);
         boundaryExtractorDataField.setWrapStyleWord(true);
 
@@ -204,10 +203,8 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setSamplerResult(Object userObject) {
-        if (userObject instanceof SampleResult) {
-            sampleResult = (SampleResult) userObject;
-        }
+    public void setSamplerResult(Object userObject) {
+        // NOOP
     }
 
     /** {@inheritDoc} */

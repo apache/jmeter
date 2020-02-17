@@ -140,7 +140,7 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
     private JPanel createExtractorPanel() {
         jsonDataField = JSyntaxTextArea.getInstance(50, 80, true);
         jsonDataField.setCodeFoldingEnabled(true);
-        jsonDataField.setEditable(false);
+        jsonDataField.setEditable(true);
         jsonDataField.setBracketMatchingEnabled(false);
         jsonDataField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JSON);
         jsonDataField.setLanguage(SyntaxConstants.SYNTAX_STYLE_JSON);

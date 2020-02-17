@@ -35,6 +35,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
@@ -64,8 +65,6 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
 
     private JTabbedPane rightSide;
 
-    private SampleResult sampleResult = null;
-
     /** {@inheritDoc} */
     @Override
     public void clearData() {
@@ -90,9 +89,9 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if ((sampleResult != null) && (REGEXP_TESTER_COMMAND.equals(command))) {
-            String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
-            executeAndShowRegexpTester(response);
+        String xmlDataFieldText = regexpDataField.getText();
+        if (StringUtils.isNotEmpty(xmlDataFieldText) && REGEXP_TESTER_COMMAND.equals(command)) {
+            executeAndShowRegexpTester(xmlDataFieldText);
         }
     }
 
@@ -163,7 +162,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
      */
     private JPanel createRegexpPanel() {
         regexpDataField = new JTextArea();
-        regexpDataField.setEditable(false);
+        regexpDataField.setEditable(true);
         regexpDataField.setLineWrap(true);
         regexpDataField.setWrapStyleWord(true);
 
@@ -218,10 +217,8 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setSamplerResult(Object userObject) {
-        if (userObject instanceof SampleResult) {
-            sampleResult = (SampleResult) userObject;
-        }
+    public void setSamplerResult(Object userObject) {
+        // NOOP
     }
 
     /** {@inheritDoc} */
