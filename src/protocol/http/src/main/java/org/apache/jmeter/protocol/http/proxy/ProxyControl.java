@@ -45,6 +45,7 @@ import java.util.prefs.Preferences;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.conn.ssl.AbstractVerifier;
 import org.apache.jmeter.assertions.Assertion;
@@ -1133,14 +1134,16 @@ public class ProxyControl extends GenericController implements NonTestElement {
             long deltaT = now - lastTime;
             int cachedGroupingMode = groupingMode;
             if (deltaT > sampleGap) {
+                String controllerName = StringUtils.isNotEmpty(getPrefixHTTPSampleName()) ?
+                        getPrefixHTTPSampleName() : sampler.getName();
                 if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
                     addDivider(treeModel, myTarget);
                 }
                 if (cachedGroupingMode == GROUPING_IN_SIMPLE_CONTROLLERS) {
-                    addSimpleController(treeModel, myTarget, sampler.getName());
+                    addSimpleController(treeModel, myTarget, controllerName);
                 }
                 if (cachedGroupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
-                    addTransactionController(treeModel, myTarget, sampler.getName());
+                    addTransactionController(treeModel, myTarget, controllerName);
                 }
                 firstInBatch = true;// Remember this was first in its batch
             }
