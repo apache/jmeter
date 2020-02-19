@@ -1,6 +1,16 @@
 RewriteEngine On
 
-RewriteCond %{HTTP_HOST} ^jmeter\.apache\.org [NC]
-RewriteCond %{HTTPS} !on
+# Redirect http to https
+# From Cordova PMC Member raphinesse
+# https://s.apache.org/An8s
 
-RewriteRule ^(.*)$ https://jmeter.apache.org/$1 [L]
+# If we receive a forwarded http request from a proxy...
+RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
+
+# ...or just a plain old http request directly from the client
+RewriteCond %{HTTP:X-Forwarded-Proto} =""
+RewriteCond %{HTTPS} !=on
+
+# Redirect to https version
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L]
+
