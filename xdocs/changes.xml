@@ -83,6 +83,7 @@ to view the last release notes of version 5.2.1.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>64160</bug>Test HTTP/S Test Script Recorder: Name transaction controller/ simple controller using prefix without "-XXXX" suffix</li>
 </ul>
 
 <h3>Other samplers</h3>
