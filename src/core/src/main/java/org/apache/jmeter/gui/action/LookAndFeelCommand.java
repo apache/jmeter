@@ -125,6 +125,7 @@ public class LookAndFeelCommand extends AbstractAction {
         try {
             String className = ev.getActionCommand().substring(ActionNames.LAF_PREFIX.length()).replace('/', '.');
             UIManager.setLookAndFeel(className);
+            UIManager.put("Button.defaultButtonFollowsFocus", false);
             JMeterUtils.refreshUI();
             PREFS.put(USER_PREFS_KEY, className);
             int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils

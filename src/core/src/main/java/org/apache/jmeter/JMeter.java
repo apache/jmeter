@@ -378,6 +378,7 @@ public class JMeter implements JMeterPlugin {
         try {
             log.info("Setting LAF to: {}", jMeterLaf);
             UIManager.setLookAndFeel(jMeterLaf);
+            UIManager.put("Button.defaultButtonFollowsFocus", false);
         } catch (Exception ex) {
             log.warn("Could not set LAF to: {}", jMeterLaf, ex);
         }
