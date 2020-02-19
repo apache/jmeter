@@ -144,6 +144,8 @@ Error: Could not load the JMX file. Please check the file and try again.
 Example: Record a test plan and try to correlate it using a JMX test plan with no HTTP Requests.<br/>
 Error: Imported JMX file doesn't have any HTTP(S) Requests. Please check the file and try again.
 </li>
+<li>Rule file should not be created manually, and if you are creating manually then user should follow <a href="#rule_file_format">rule file format</a></li>
+<li>User should not try to perform correlation multiple times on extracted parameters.</li>
 <li>Correlate while recording is still running.<br/>
 This must be avoided in order to avoid any crashes.
 </li>
@@ -172,11 +174,109 @@ Example: <code>authenticity_token, authenticity_token(1)</code>
 </ul>
 </subsection>
 <subsection name="&sect-num;.4 Rule file format" anchor="rule_file_format">
-<p>
-The export rules will create a JSON rule file in the following format.
-</p>
-<figure width="715" height="396" image="correlation/correlation_rule_file_format.png">
-Figure 10 - Rule file example</figure>
+<p>List of rule file Extractors and their attributes </p>
+<table border="1">
+    <tr>
+        <th>Type of Extractors</th>
+        <th>Details about extractor's attribute </th>
+        <th>Example of Rule File</th>
+    </tr>
+    <tr>
+        <td>CSS Selector Extractor Rule</td>
+        <td>
+           <li>attribute</li>
+           <li>expr</li>
+           <li>name </li>
+           <li>type</li>
+
+        </td>
+        <td>{
+	    "rule": [{
+		"name": "$name",
+		"expr": "$expr",
+		"attribute": "$attribute",
+		"type": "css_extractor"
+	   }]
+}</td>
+ </tr>
+ <tr><td><br> </br></td></tr>
+
+		<tr>
+        <td>JsonPathExtractor Rule</td>
+        <td>
+           <li>expr</li>
+           <li>name </li>
+           <li>type</li>
+
+        </td>
+        <td>
+		{
+	    "rule": [{
+		"name": "$name",
+		"expr": "$expr",
+		"type": "jsonpath_extractor"
+	      }]
+        }
+        </td>
+    </tr>
+<tr><td><br> </br></td></tr>
+	<tr>
+        <td>XPath Extractor Rule</td>
+        <td>
+
+           <li>expr</li>
+           <li>name </li>
+           <li>type</li>
+
+        </td>
+        <td>{{
+	    "rule": [{
+		"name": "$name",
+		"expr": "$expr",
+		"type": "xpath2_extractor"
+	       }]
+}</td>
+    </tr>
+<tr><td><br> </br></td></tr>
+	<tr>
+        <td>RegexExtractor Rule</td>
+        <td>
+
+           <li>expr</li>
+           <li>name </li>
+           <li>type</li>
+
+        </td>
+        <td>{
+	   "rule": [{
+		"name": "$name",
+		"expr": "$expr",
+		"type": "regex_extractor"
+	            }]
+        }
+        <ul><li>type attribute value can be "regex_extractor" or "regex_header" based on the applied extractor type</li></ul>
+		</td>
+    </tr>
+	<tr>
+        <td>BoundaryExtractor Rule</td>
+        <td>
+
+           <li>name </li>
+           <li>type</li>
+		   <li>lBoundary</li>
+           <li>rBoundary</li>
+
+        </td>
+        <td>{
+	    "rule": [{
+		"name": "$name",
+		"lBoundary": "$lBoundary",
+	    "rBoundary": "$rBoundary",
+		"type": "boundary_extractor"
+	            }]
+         }</td>
+    </tr>
+</table>
 </subsection>
 <subsection name="&sect-num;.5 Limitations" anchor="limitations">
 <ul>
