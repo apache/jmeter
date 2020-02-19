@@ -1,0 +1,6 @@
+RewriteEngine On
+
+RewriteCond %{HTTP_HOST} ^jmeter\.apache\.org [NC]
+RewriteCond %{HTTPS} !on
+
+RewriteRule ^(.*)$ https://jmeter.apache.org/$1 [L]

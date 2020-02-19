@@ -275,6 +275,7 @@ val xdocs = "$rootDir/xdocs"
 
 fun CopySpec.docCssAndImages() {
     from(xdocs) {
+        include(".htaccess")
         include("css/**")
         include("images/**")
     }
