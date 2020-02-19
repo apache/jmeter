@@ -54,6 +54,9 @@ public class CorrelationJMXFile extends AbstractActionWithNoRunningTest {
             return;
         }
         int retVal = chooser.showDialog(null, JMeterUtils.getResString("correlation_title")); //$NON-NLS-1$
+        if (!(chooser.getSelectedFile().getAbsolutePath().endsWith(".jmx") || chooser.getSelectedFile().getAbsolutePath().endsWith(".xml")) ) {
+            throw new IllegalUserActionException("Please select valid jmx/xml file.");
+        }
         if (retVal == JFileChooser.APPROVE_OPTION) {
             // extract the candidates variables for
             // correlation by comparing the JMX request objects.

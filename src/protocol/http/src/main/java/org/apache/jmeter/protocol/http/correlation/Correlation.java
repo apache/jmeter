@@ -75,6 +75,8 @@ import org.apache.jorphan.collections.HashTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.thoughtworks.xstream.io.StreamException;
+
 public class Correlation {
 
     private static final Logger log = LoggerFactory.getLogger(Correlation.class);
@@ -115,6 +117,9 @@ public class Correlation {
         } catch (IOException e) {
             throw new IllegalUserActionException("Could not load the JMX file. Please check the file and try again.",
                     e);
+        } catch (StreamException e) {
+             throw new IllegalUserActionException("input contained no data.",
+                     e);
         }
         // Create a list of HTTP sample requests and HeaderManagers for imported JMX test plan
         List<HTTPSamplerBase> importedJmxSampleRequestList = new ArrayList<>();

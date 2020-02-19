@@ -119,15 +119,20 @@ public class CorrelationRuleFile extends AbstractActionWithNoRunningTest {
             return;
         }
         int retVal = chooser.showDialog(null, JMeterUtils.getResString("correlation_import_rule")); //$NON-NLS-1$
+        if (!chooser.getSelectedFile().getAbsolutePath().endsWith(".json") ) {
+            throw new IllegalUserActionException( "Please select valid json rule file.");
+        }
         if (retVal == JFileChooser.APPROVE_OPTION) {
             // parse JSON rule file and prepare rules list
             JSONParser jsonParser = new JSONParser(JSONParser.MODE_JSON_SIMPLE);
             JSONObject jsonData = null;
             try {
                 jsonData = (JSONObject) jsonParser.parse(FileUtils.openInputStream(chooser.getSelectedFile()));
-            } catch (ParseException | IOException | ClassCastException e1) {
+            } catch (ParseException | ClassCastException e1) {
                 throw new IllegalUserActionException("Unable to parse rule file. Please check the file and try again.",
                         e1);
+            } catch (IOException e2) {
+                throw new IllegalUserActionException("Unable to import rule file at "+ e2.getMessage());
             }
             JSONArray rules = (JSONArray) jsonData.get("rule");
             if (rules == null) {
@@ -162,6 +167,9 @@ public class CorrelationRuleFile extends AbstractActionWithNoRunningTest {
             Object[][] tableData = valuesToShowOnGui.entrySet().stream()
                     .map(entry -> new Object[] { Boolean.FALSE, entry.getKey(), entry.getValue() })
                     .toArray(size -> new Object[size][1]);
+            if (tableData.length < 1) {
+                throw new IllegalUserActionException("Invalid rule file.");
+            }
             CorrelationTableModel.setRowData(tableData);
             CorrelationRuleFileGui.createCorrelationRuleFileGui(ruleExtractorDataMap);
         }

@@ -311,7 +311,7 @@ public class CorrelationExtractor {
         } else {
             // show error to user if no extractors could be created for the selected
             // parameters
-            JMeterUtils.reportErrorToUser("Unable to correlate script. Please check the logs for more information.",
+            JMeterUtils.reportErrorToUser("No Response data found. Make sure you have recorded the script and not opened it.",
                     "Failure");
         }
     }

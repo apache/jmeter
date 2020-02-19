@@ -133,11 +133,11 @@ public class CorrelationExportRuleGui {
             try (FileWriter file = new FileWriter(updateFile)) {
                 file.write(jsonObject.toJSONString());
             } catch (IOException e) {
-                JMeterUtils.reportErrorToUser("Some error occured while exporting file. " + e.getMessage(),
+                JMeterUtils.reportErrorToUser("Unable to export Rule file at " + e.getMessage(),
                         "Export Failed");
                 return;
             }
-            JMeterUtils.reportInfoToUser("Export successful.", "Export Successful");
+            JMeterUtils.reportInfoToUser("Successfully exported Rule file.", "Successfully exported Rule file.");
         });
         // Cancel event of JFrame
         cancel.addActionListener(actionListener -> frame.dispose());
