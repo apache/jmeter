@@ -137,13 +137,13 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("org.slf4j:jcl-over-slf4j:1.7.28") {
+    overrideLicense("org.slf4j:jcl-over-slf4j:1.7.30") {
         expectedLicense = SpdxLicense.MIT
-        // See https://github.com/qos-ch/slf4j/blob/v_1.7.28/jcl-over-slf4j/LICENSE.txt
+        // See https://github.com/qos-ch/slf4j/blob/v_1.7.30/jcl-over-slf4j/LICENSE.txt
         effectiveLicense = SpdxLicense.Apache_2_0
     }
 
-    overrideLicense("org.slf4j:slf4j-api:1.7.28") {
+    overrideLicense("org.slf4j:slf4j-api:1.7.30") {
         expectedLicense = SpdxLicense.MIT
     }
 
