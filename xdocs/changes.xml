@@ -143,6 +143,8 @@ to view the last release notes of version 5.2.1.
     <li>Updated Apache httpcore and httpcore-nio to 4.4.13 (from 4.4.12)</li>
     <li>Updated jmespath to 0.5.0 (from 0.3.0)</li>
     <li>Updated Apache log4j to 2.13.0 (from 2.12.1)</li>
+    <li>Updated junit4 to 4.13 (from 4.12)</li>
+    <li>Updated junit5 to 5.6.0 (from 5.5.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

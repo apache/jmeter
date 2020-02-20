@@ -56,6 +56,7 @@
     <trusted-key id='6425559c47cc79c4' group='javax.servlet' />
     <trusted-key id='4044edf1bb73efea' group='jaxen' />
     <trusted-key id='528dc75aa68f0923' group='jcharts' />
+    <trusted-key id='85911f425ec61b51' group='junit' />
     <trusted-key id='efe8086f9e93774e' group='junit' />
     <trusted-key id='f6bc09712c8df6ec' group='net.minidev' />
     <trusted-key id='0da8a5ec02d11ead' group='net.sf.jopt-simple' />
