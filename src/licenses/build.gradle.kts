@@ -110,12 +110,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }
 
-    overrideLicense("org.ow2.asm:asm:7.1") {
-        // pom.xml lists license as BSD
-        expectedLicense = SimpleLicense("BSD", uri("http://asm.ow2.org/license.html"))
-        effectiveLicense = SpdxLicense.BSD_3_Clause
-    }
-
     for (jodd in listOf("jodd-core", "jodd-lagarto", "jodd-log", "jodd-props")) {
         overrideLicense("org.jodd:$jodd:5.0.13") {
             expectedLicense = SpdxLicense.BSD_2_Clause // SimpleLicense("The BSD 2-Clause License", uri("http://jodd.org/license.html"))
@@ -135,12 +129,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
 
     overrideLicense("org.brotli:dec:0.1.2") {
         expectedLicense = SpdxLicense.MIT
-    }
-
-    overrideLicense("org.slf4j:jcl-over-slf4j:1.7.30") {
-        expectedLicense = SpdxLicense.MIT
-        // See https://github.com/qos-ch/slf4j/blob/v_1.7.30/jcl-over-slf4j/LICENSE.txt
-        effectiveLicense = SpdxLicense.Apache_2_0
     }
 
     overrideLicense("org.slf4j:slf4j-api:1.7.30") {
