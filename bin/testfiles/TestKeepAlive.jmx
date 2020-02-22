@@ -28,7 +28,7 @@
         </elementProp>
         <stringProp name="HTTPSampler.domain">jmeter.apache.org</stringProp>
         <stringProp name="HTTPSampler.port"></stringProp>
-        <stringProp name="HTTPSampler.protocol"></stringProp>
+        <stringProp name="HTTPSampler.protocol">https</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"></stringProp>
         <stringProp name="HTTPSampler.path"></stringProp>
         <stringProp name="TestPlan.comments">jmeter.apache.org</stringProp>
