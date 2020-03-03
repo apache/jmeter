@@ -46,7 +46,7 @@ Create a Test Plan From a cURL Command
     <figure width="767" height="316" image="curl/enter_command.png">Figure 2.1 - Enter curl command in text panel</figure>
     <figure width="767" height="316" image="curl/enter_command_from_file.png">Figure 2.2 - Enter curl command from file</figure>
   </li>
-  <li>Then, click <code>Create HTTP Request</code> button and a new HTTP Sample will be added to the Test Plan.
+  <li>Then, click <code>Create Test Plan</code> button and a new HTTP Sample will be added to the Test Plan.
     <figure width="767" height="316" image="curl/result.png">Figure 3 - result of Test Plan</figure>
   </li>
 </ol>
