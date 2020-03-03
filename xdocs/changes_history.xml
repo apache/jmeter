@@ -2472,7 +2472,7 @@ jmeter.reportgenerator.apdex_per_transaction=sample(\\d+):1000|2000;\
 <h3>Removed elements or functions</h3>
 <ul>
     <li>SOAP/XML-RPC Request has been removed as part of <bugzilla>60727</bugzilla>. Use HTTP Request element as a replacement.
-    See <a href="./build-ws-test-plan.html" >Building a WebService Test Plan</a></li>
+    See <a href="./usermanual/build-ws-test-plan.html">Building a WebService Test Plan</a></li>
     <li><bug>60423</bug>Drop Monitor Results listener </li>
     <li>Drop deprecated class <code>org.apache.jmeter.protocol.system.NativeCommand</code></li>
     <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui</code></li>
