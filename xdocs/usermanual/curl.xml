@@ -114,12 +114,12 @@ When the command you entered is ignored or contains warning content, we will dis
 
 </subsection>
 <subsection name="&sect-num;.4 Examples" anchor="example">
-<p><b>Use cookie</b><source>curl -X POST  "https://xxx.com" -b 'username=Tom;password=123456'</source></p>
-<p><b>Use data</b><source>curl -X POST  "https://xxx.com" --data 'fname=a&amp;lname=b'</source></p>
-<p><b>Use form</b><source>curl -X POST  "https://xxx.com" -F 'lname=a'  -F 'fname=b' -F 'c=@C:\Test\test.txt'</source></p>
-<p><b>Use proxy</b><source>curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042'</source></p>
-<p><b>Use authorization</b><source>curl "https://xxx.com" -u 'user:passwd' --basic</source></p>
-<p><b>Use DNS</b><source>curl "https://xxx.com" --dns-servers '0.0.0.0,1.1.1.1'</source></p>
+<p><b>Use cookie</b><source>curl -X POST  "https://example.invalid" -b 'username=Tom;password=123456'</source></p>
+<p><b>Use data</b><source>curl -X POST  "https://example.invalid" --data 'fname=a&amp;lname=b'</source></p>
+<p><b>Use form</b><source>curl -X POST  "https://example.invalid" -F 'lname=a'  -F 'fname=b' -F 'c=@C:\Test\test.txt'</source></p>
+<p><b>Use proxy</b><source>curl 'https://example.invalid/' -x 'https://aa:bb@proxy.invalid:8042'</source></p>
+<p><b>Use authorization</b><source>curl "https://example.invalid" -u 'user:passwd' --basic</source></p>
+<p><b>Use DNS</b><source>curl "https://example.invalid" --dns-servers '0.0.0.0,1.1.1.1'</source></p>
 </subsection>
 </section>
 
