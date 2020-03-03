@@ -114,12 +114,12 @@ When the command you entered is ignored or contains warning content, we will dis
 
 </subsection>
 <subsection name="&sect-num;.4 Examples" anchor="example">
-<p><b>Use cookie :</b>curl -X POST  "https://xxx.com" -b 'username=Tom;password=123456'</p>
-<p><b>Use data :</b>curl -X POST  "https://xxx.com" --data 'fname=a&amp;lname=b'</p>
-<p><b>Use form :</b>curl -X POST  "https://xxx.com" -F 'lname=a'  -F 'fname=b' -F 'c=@C:\Test\test.txt'  </p>
-<p><b>Use proxy :</b>curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042'</p>
-<p><b>Use authorization :</b>curl "https://xxx.com" -u 'user:passwd' --basic</p>
-<p><b>Use DNS :</b>curl "https://xxx.com" --dns-servers '0.0.0.0,1.1.1.1'</p>
+<p><b>Use cookie</b><source>curl -X POST  "https://xxx.com" -b 'username=Tom;password=123456'</source></p>
+<p><b>Use data</b><source>curl -X POST  "https://xxx.com" --data 'fname=a&amp;lname=b'</source></p>
+<p><b>Use form</b><source>curl -X POST  "https://xxx.com" -F 'lname=a'  -F 'fname=b' -F 'c=@C:\Test\test.txt'</source></p>
+<p><b>Use proxy</b><source>curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042'</source></p>
+<p><b>Use authorization</b><source>curl "https://xxx.com" -u 'user:passwd' --basic</source></p>
+<p><b>Use DNS</b><source>curl "https://xxx.com" --dns-servers '0.0.0.0,1.1.1.1'</source></p>
 </subsection>
 </section>
 
