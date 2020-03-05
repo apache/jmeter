@@ -123,6 +123,7 @@ to view the last release notes of version 5.2.1.
   <li><bug>63458</bug><pr>551</pr>Add new template "Functional Testing Test Plan [01]". Contributed by Sebastian Boga (sebastian.boga at endava.com)</li>
   <li><bug>64119</bug>Use first renderer from <code>view.results.tree.renderers_order</code> property as default in View Results Tree</li>
   <li><bug>64148</bug>Use gray icons for disabled elements in the tree, display subtree as gray</li>
+  <li><bug>64198</bug>Allow spaces in <code>${...}</code> expressions around functions.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
