@@ -18,6 +18,7 @@
 package org.apache.jmeter.testelement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -157,8 +158,24 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
             sampleList.add(result);
         }
         if (isScopeChildren(scope) || isScopeAll(scope)) {
-            Collections.addAll(sampleList, result.getSubResults());
+            recurseResults(sampleList, result);
         }
         return sampleList;
     }
+
+    private void recurseResults(List<SampleResult> resultList, SampleResult sampleResult) {
+        Collections.addAll(resultList, sampleResult.getSubResults());
+        recurseResults(resultList, sampleResult.getSubResults(), 3);
+    }
+
+    private void recurseResults(List<SampleResult> resultList, SampleResult[] sampleResult, int level) {
+        if (level < 0) {
+            return;
+        }
+        for (SampleResult child: sampleResult) {
+            Collections.addAll(resultList, child.getSubResults());
+            recurseResults(resultList, child.getSubResults(), level - 1);
+        }
+    }
+
 }
