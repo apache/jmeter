@@ -879,27 +879,35 @@ public class JMeterThread implements Runnable, Interruptible {
                 }
                 if (scopedAssertion.isScopeChildren(scope)
                         || scopedAssertion.isScopeAll(scope)) {
-                    SampleResult[] children = parent.getSubResults();
-                    boolean childError = false;
-                    for (SampleResult childSampleResult : children) {
-                        processAssertion(childSampleResult, assertion);
-                        if (!childSampleResult.isSuccessful()) {
-                            childError = true;
-                        }
-                    }
-                    // If parent is OK, but child failed, add a message and flag the parent as failed
-                    if (childError && parent.isSuccessful()) {
-                        AssertionResult assertionResult = new AssertionResult(((AbstractTestElement) assertion).getName());
-                        assertionResult.setResultForFailure("One or more sub-samples failed");
-                        parent.addAssertionResult(assertionResult);
-                        parent.setSuccessful(false);
-                    }
+                    recurseAssertionChecks(parent, assertion, 3);
                 }
             } else {
                 processAssertion(parent, assertion);
             }
         }
         threadContext.getVariables().put(LAST_SAMPLE_OK, Boolean.toString(parent.isSuccessful()));
+    }
+
+    private void recurseAssertionChecks(SampleResult parent, Assertion assertion, int level) {
+        if (level < 0) {
+            return;
+        }
+        SampleResult[] children = parent.getSubResults();
+        boolean childError = false;
+        for (SampleResult childSampleResult : children) {
+            processAssertion(childSampleResult, assertion);
+            recurseAssertionChecks(childSampleResult, assertion, level - 1);
+            if (!childSampleResult.isSuccessful()) {
+                childError = true;
+            }
+        }
+        // If parent is OK, but child failed, add a message and flag the parent as failed
+        if (childError && parent.isSuccessful()) {
+            AssertionResult assertionResult = new AssertionResult(((AbstractTestElement) assertion).getName());
+            assertionResult.setResultForFailure("One or more sub-samples failed");
+            parent.addAssertionResult(assertionResult);
+            parent.setSuccessful(false);
+        }
     }
 
     private void processAssertion(SampleResult result, Assertion assertion) {
