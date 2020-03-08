@@ -24,12 +24,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.zone.ZoneRules;
 import java.util.Collection;
 import java.util.Random;
 import java.util.TimeZone;
@@ -106,13 +109,31 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         assertThat(tomorrowFromFunction, sameDay(tomorrow));
     }
 
+    /**
+     * Calculate the difference between the DST settings that are in use on the dates
+     * given by {@code from} and {@code to}.
+     *
+     * @param from first date used for the first DST setting probe
+     * @param to second date used for the second DST setting probe
+     * return difference between the DST settings as a Duration
+     */
+    private Duration dstDifference(LocalDateTime from, LocalDateTime to) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZoneRules rules = zoneId.getRules();
+        Duration fromDST = rules.getDaylightSavings(from.atZone(zoneId).toInstant());
+        Duration toDST = rules.getDaylightSavings(to.atZone(zoneId).toInstant());
+        return fromDST.minus(toDST);
+    }
+
     @Test
     public void testNowWithComplexPeriod() throws Exception {
         Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "", "P10DT-1H-5M5S", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        LocalDateTime futureDate = LocalDateTime.now().plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime futureDate = now.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
+        futureDateFromFunction = futureDateFromFunction.plus(dstDifference(now, futureDateFromFunction));
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
     }
 
