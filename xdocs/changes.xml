@@ -150,7 +150,7 @@ to view the last release notes of version 5.2.1.
     <li>Updated slf4j to 1.7.30 (from 1.7.28)</li>
     <li>Updated ph-commons to 9.3.9 (from 9.3.7)</li>
     <li>Updated ph-css to 6.2.1 (from 6.2.0)</li>
-    <li>Updated rsyntaxtextarea to 3.0.8 (from 3.0.4)</li>
+    <li>Updated rsyntaxtextarea to 3.1.0 (from 3.0.4)</li>
     <li>Updated rhino to 1.7.12 (from 1.7.11)</li>
     <li>Updated SaxonHE to 9.9.1-7 (from 9.9.1-5)</li>
     <li><pr>559</pr>Add a note to the source of TrustAllSSLSocketFactory, that it is not secure to trust everyone. Based on a PR from YYTVicky (yytvicky at github)</li>
