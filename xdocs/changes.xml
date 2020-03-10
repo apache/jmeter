@@ -97,6 +97,7 @@ to view the last release notes of version 5.2.1.
 <h3>Listeners</h3>
 <ul>
     <li><bug>64150</bug>View Results Tree: Allow editing of response data in testers</li>
+    <li><bug>63822</bug>View Results Tree: Keep position of split pane while switching renderer mode</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

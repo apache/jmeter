@@ -514,12 +514,14 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 if (rightSide != null) {
                     // to restore last selected tab (better user-friendly)
                     selectedTab = rightSide.getSelectedIndex();
-                    // Remove old right side
+                    // Remove old right side and keep the position of the divider
+                    int dividerLocation = mainSplit.getDividerLocation();
                     mainSplit.remove(rightSide);
 
-                    // create and add a new right side
+                    // create and add a new right side at the old position
                     rightSide = new JTabbedPane();
                     mainSplit.add(rightSide);
+                    mainSplit.setDividerLocation(dividerLocation);
                     resultsRender.setRightSide(rightSide);
                     resultsRender.setLastSelectedTab(selectedTab);
                     log.debug("selectedTab={}", selectedTab);
