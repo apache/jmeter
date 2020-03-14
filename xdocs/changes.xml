@@ -65,10 +65,21 @@ to view the last release notes of version 5.2.1.
 </p>
 <!--
 <ch_title>Core improvements</ch_title>
-<ch_title>UX improvements</ch_title>
 <ch_title>Test Plan</ch_title>
 <ch_title>Scripting / Debugging enhancements</ch_title>
 -->
+<ch_title>UX improvements</ch_title>
+Added <a href="https://github.com/weisJ/darklaf">Darklaf</a> look and feel that improves several components.
+
+<p>Tree indentation level is easier to follow:</p>
+<figure width="224" height="247" image="changes/5.3/tree_theme_darcula.png">JMeter tree with Darklaf Darcula theme</figure>
+<figure width="223" height="246" image="changes/5.3/tree_theme_intellij.png">JMeter tree with Darklaf IntelliJ theme</figure>
+
+<p>When an element in tree is disabled, all its descendants are shown in gray.
+For instance, <code>While Contoller</code> is disabled in the following tree, so its children
+are gray. It is purely a UI change, and the behavior is not altered.
+</p>
+<figure width="223" height="256" image="changes/5.3/disabled_subtree.png">While controller is disabled, so its children are gray</figure>
 <!--
 <ch_title>Functions</ch_title>
 -->
