@@ -633,10 +633,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         if (popup != null) {
             log.debug("Showing pop up for {} at x,y = {},{}", invoker, e.getX(), e.getY());
 
-            popup.pack();
+            // Enforce heavyweight popup to show shadows on macOS
+            popup.setLightWeightPopupEnabled(false);
             popup.show(invoker, e.getX(), e.getY());
-            popup.setVisible(true);
-            popup.requestFocusInWindow();
         }
     }
 

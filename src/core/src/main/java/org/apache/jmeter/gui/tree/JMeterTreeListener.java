@@ -27,6 +27,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -154,7 +155,6 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        GuiPackage.getInstance().getMainFrame().repaint();
     }
 
     @Override
@@ -234,6 +234,10 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 
     private void displayPopUp(MouseEvent e) {
         JPopupMenu pop = getCurrentNode().createPopupMenu();
-        GuiPackage.getInstance().displayPopUp(e, pop);
+        // invokeLater ensures popup does not disappear when user right-clicks an inactive node
+        // In other words: right-click different nodes and verify if menu is shown every time.
+        // invokeLater seems to be required as long as tree.requestFocusInWindow(); is used
+        // in valueChanged
+        SwingUtilities.invokeLater(() -> GuiPackage.getInstance().displayPopUp(e, pop));
     }
 }
