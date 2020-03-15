@@ -89,6 +89,7 @@ are gray. It is purely a UI change, and the behavior is not altered.
 <p>Use <keycombo><keysym>CTRL</keysym><keysym>ALT</keysym><keysym>wheel</keysym></keycombo> for zooming
     fonts. Previous shortcut was <keycombo><keysym>CTRL</keysym><keysym>SHIFT</keysym><keysym>wheel</keysym></keycombo>,
     however, it conflicted with horizontal scrolling.</p>
+<p>Tree context menu is shown for the full row, not for the label only</p>
 <!--
 <ch_title>Functions</ch_title>
 -->

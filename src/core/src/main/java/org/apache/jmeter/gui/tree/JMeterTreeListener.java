@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.gui.tree;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -167,12 +168,19 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         MainFrame mainFrame = GuiPackage.getInstance().getMainFrame();
         // Close any Main Menu that is open
         mainFrame.closeMenu();
-        int selRow = tree.getRowForLocation(e.getX(), e.getY());
-        if (tree.getPathForLocation(e.getX(), e.getY()) != null) {
-            log.debug("mouse pressed, updating currentPath");
-            currentPath = tree.getPathForLocation(e.getX(), e.getY());
+        TreePath closestPath = tree.getClosestPathForLocation(e.getX(), e.getY());
+        if (closestPath == null) {
+            log.debug("ClosestPathForLocation is not found for x={}, y={}", e.getX(), e.getY());
+            return;
         }
-        if (selRow != -1 && isRightClick(e)) {
+        Rectangle bounds = tree.getPathBounds(closestPath);
+        if (bounds == null || bounds.y > e.getY() || e.getY() > bounds.y + bounds.height) {
+            log.debug("Mouse click was outside of node {}. bounds={}, event.x={}, event.y={}",
+                    closestPath, bounds, e.getX(), e.getY());
+            return;
+        }
+        currentPath = closestPath;
+        if (isRightClick(e)) {
             if (tree.getSelectionCount() < 2) {
                 tree.setSelectionPath(currentPath);
             }
