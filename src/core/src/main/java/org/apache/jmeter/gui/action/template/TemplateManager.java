@@ -172,7 +172,7 @@ public class TemplateManager {
         bd.setEntityResolver(new DefaultEntityResolver());
         LoggingErrorHandler errorHandler = new LoggingErrorHandler(log, file);
         bd.setErrorHandler(errorHandler);
-        Document document = bd.parse(file.getAbsolutePath());
+        Document document = bd.parse(file.toURI().toString());
         document.getDocumentElement().normalize();
         Map<String, Template> templates = new TreeMap<>();
         NodeList templateNodes = document.getElementsByTagName("template");

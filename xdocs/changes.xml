@@ -211,6 +211,7 @@ to view the last release notes of version 5.2.1.
   <li><bug>63945</bug>NPE when opening a file after file system change</li>
   <li><bug>64034</bug>Shell scripts fail if space in <code>JAVA_HOME</code> path. Contributed by ray7219 (ray7219 at hotmail.com)</li>
   <li><bug>63856</bug>Set <code>connectTime</code> on parent samples when using a transaction controller</li>
+  <li><bug>64227</bug>Error when loading Templates on Windows</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
