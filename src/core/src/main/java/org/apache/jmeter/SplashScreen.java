@@ -18,6 +18,7 @@
 package org.apache.jmeter;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -43,6 +44,11 @@ public class SplashScreen extends JWindow {
      */
     public SplashScreen() {
         imageLabel.setIcon(JMeterUtils.getImage("jmeter.png"));
+        // The image is not optimized for every background
+        // so we do not rely on look and feel, and use bright splashscreen always
+        imageLabel.setBackground(new Color(242, 242, 242));
+        // setOpaque is required for the label to paint its background
+        imageLabel.setOpaque(true);
         imageLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         setLayout(borderLayout);
         add(imageLabel, BorderLayout.CENTER);
