@@ -232,8 +232,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         initTopLevelDndHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        int ctrlShiftMask = (IS_MAC ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK) |
-                InputEvent.SHIFT_DOWN_MASK;
+        int ctrlAltMask = (IS_MAC ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK) |
+                InputEvent.ALT_DOWN_MASK;
 
         addMouseWheelListener(e -> {
             if (e.getWheelRotation() == 0) {
@@ -243,7 +243,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 // See https://github.com/JetBrains/intellij-community/blob/21c99af7c78fc82aefc4d05646389f4991b08b38/bin/idea.properties#L133-L156
                 return;
             }
-            if ((e.getModifiersEx() & ctrlShiftMask) == ctrlShiftMask) {
+            // Shift down means "horizontal scrolling" on macOS, and we need only vertical one
+            if ((e.getModifiersEx() & (ctrlAltMask | InputEvent.SHIFT_DOWN_MASK)) == ctrlAltMask) {
                 final float scale = 1.1f;
                 int rotation = e.getWheelRotation();
                 if (rotation > 0) { // DOWN

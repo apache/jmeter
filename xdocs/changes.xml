@@ -85,6 +85,10 @@ are gray. It is purely a UI change, and the behavior is not altered.
     the popup did disappear and it was required to select a node first and only then launch popup.</p>
 
 <p>Update look and feel without restart</p>
+
+<p>Use <keycombo><keysym>CTRL</keysym><keysym>ALT</keysym><keysym>wheel</keysym></keycombo> for zooming
+    fonts. Previous shortcut was <keycombo><keysym>CTRL</keysym><keysym>SHIFT</keysym><keysym>wheel</keysym></keycombo>,
+    however, it conflicted with horizontal scrolling.</p>
 <!--
 <ch_title>Functions</ch_title>
 -->
