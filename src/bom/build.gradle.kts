@@ -48,7 +48,6 @@ dependencies {
         // dependency on it during compilation
         runtimev("org.apache.tika:tika-parsers", "tika")
         runtimev("org.ow2.asm:asm")
-        apiv("com.github.weisj:darklaf-core")
 
         // activemq-all should not be used as it provides secondary slf4j binding
         runtimev("org.apache.activemq:activemq-broker", "activemq")
@@ -63,8 +62,11 @@ dependencies {
         apiv("com.fasterxml.jackson.core:jackson-core", "jackson")
         apiv("com.fasterxml.jackson.core:jackson-databind", "jackson-databind")
         apiv("com.fifesoft:rsyntaxtextarea")
+        apiv("com.formdev:svgSalamander")
         apiv("com.github.ben-manes.caffeine:caffeine")
         apiv("com.github.tomakehurst:wiremock-jre8")
+        apiv("com.github.weisj:darklaf-core", "darklaf")
+        apiv("com.github.weisj:darklaf-property-loader", "darklaf")
         apiv("com.helger:ph-commons")
         apiv("com.helger:ph-css")
         apiv("com.jayway.jsonpath:json-path")
