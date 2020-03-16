@@ -18,6 +18,7 @@
 package org.apache.jmeter.gui;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.beans.Introspector;
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ import javax.swing.SwingUtilities;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.UndoHistory.HistoryListener;
+import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.TreeNodeNamingPolicy;
 import org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy;
 import org.apache.jmeter.gui.logging.GuiLogEventBus;
@@ -648,27 +651,24 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         // will flush it away):
         updateCurrentNode();
 
-        // Forget about all GUIs we've created so far: we'll need to re-created
-        // them all!
-        guis = new HashMap<>();
-        nodesToGui = new HashMap<>();
-        testBeanGUIs = new HashMap<>();
-
-        // BeanInfo objects also contain locale-sensitive data -- flush them
-        // away:
         Introspector.flushCaches();
 
-        // Now put the current GUI in place. [This code was copied from the
-        // EditCommand action -- we can't just trigger the action because that
-        // would populate the current node with the contents of the new GUI --
-        // which is empty.]
-        MainFrame mf = getMainFrame(); // Fetch once
-        if (mf == null) { // Probably caused by unit testing on headless system
-            log.warn("Mainframe is null");
-        } else {
-            mf.setMainPanel((javax.swing.JComponent) getCurrentGui());
-            mf.setEditMenu(getTreeListener().getCurrentNode().createPopupMenu());
-        }
+        invalidateCachedUi();
+    }
+
+    public void invalidateCachedUi() {
+        // Save current edits from the GUI to tree model just in case
+        updateCurrentNode();
+
+        // Invalidate UIs
+        guis.clear();
+        nodesToGui.clear();
+        testBeanGUIs.clear();
+
+        // Call "start edit for the current tree node" action to show the UI
+        ActionRouter.getInstance().actionPerformed(
+                new ActionEvent(this, 3334, ActionNames.EDIT)
+        );
     }
 
     private String testPlanFile;

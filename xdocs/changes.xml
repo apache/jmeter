@@ -83,6 +83,8 @@ are gray. It is purely a UI change, and the behavior is not altered.
 
 <p>Tree context menu is shown even in case the node selection is changed. Previously
     the popup did disappear and it was required to select a node first and only then launch popup.</p>
+
+<p>Update look and feel without restart</p>
 <!--
 <ch_title>Functions</ch_title>
 -->

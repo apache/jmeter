@@ -18,11 +18,8 @@
 package org.apache.jmeter.util;
 
 import java.awt.Component;
-import java.awt.Dialog;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.HeadlessException;
-import java.awt.Window;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,6 +70,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.weisj.darklaf.LafManager;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import com.thoughtworks.xstream.security.NoTypePermission;
@@ -1267,15 +1265,7 @@ public class JMeterUtils implements UnitTestManager {
      * Refresh UI after LAF change or resizing
      */
     public static final void refreshUI() {
-        for (Window w : Window.getWindows()) {
-            SwingUtilities.updateComponentTreeUI(w);
-            if (w.isDisplayable() &&
-                (w instanceof Frame ? !((Frame)w).isResizable() :
-                w instanceof Dialog ? !((Dialog)w).isResizable() :
-                true)) {
-                w.pack();
-            }
-        }
+        LafManager.updateLaf();
     }
 
     /**

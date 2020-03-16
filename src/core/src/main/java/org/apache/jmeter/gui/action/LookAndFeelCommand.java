@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -212,6 +211,7 @@ public class LookAndFeelCommand extends AbstractAction {
             } else {
                 UIManager.setLookAndFeel(className);
                 UIManager.put("Button.defaultButtonFollowsFocus", false);
+                LafManager.updateLaf();
             }
             PREFS.put(USER_PREFS_KEY, item.command);
         } catch (UnsupportedLookAndFeelException
@@ -230,14 +230,7 @@ public class LookAndFeelCommand extends AbstractAction {
     public void doAction(ActionEvent ev) {
         try {
             activateLookAndFeel(ev.getActionCommand());
-            JMeterUtils.refreshUI();
-            int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-                    .getResString("laf_quit_after_change"), // $NON-NLS-1$
-                    JMeterUtils.getResString("exit"), // $NON-NLS-1$
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (chosenOption == JOptionPane.YES_OPTION) {
-                ActionRouter.getInstance().doActionNow(new ActionEvent(ev.getSource(), ev.getID(), ActionNames.RESTART));
-            }
+            GuiPackage.getInstance().invalidateCachedUi();
         } catch (IllegalArgumentException e) {
             JMeterUtils.reportErrorToUser(e.getMessage(), e);
         }
