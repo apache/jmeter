@@ -41,6 +41,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.gui.JTextAreaWithBorder;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +82,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @SuppressWarnings("DeprecatedIsStillUsed")
     protected NamePanel namePanel;
 
-    private final JTextArea commentField = new JTextArea();
+    private final JTextArea commentField = new JTextAreaWithBorder();
 
     /**
      * When constructing a new component, this takes care of basic tasks like
@@ -229,10 +230,6 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
     private void init() {
         initGui();
-        // JTextArea does not have border by default (see https://bugs.openjdk.java.net/browse/JDK-4139076)
-        // However we want it to look like a text field. So we borrow a border from there
-        Border border = new JTextField().getBorder();
-        commentField.setBorder(border);
     }
 
     /**
