@@ -184,10 +184,15 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * @return a JLabel which subclasses can add to their GUI
      */
     protected Component createTitleLabel() {
-        JLabel titleLabel = new JLabel(getStaticLabel());
-        Font curFont = titleLabel.getFont();
-        titleLabel.setFont(curFont.deriveFont((float) curFont.getSize() + 4));
-        return titleLabel;
+        return new JLabel(getStaticLabel()) {
+            @Override
+            public void updateUI() {
+                super.updateUI();
+                // Setting the font in updateUI reduces UI jumps when look and feel changes
+                Font curFont = getFont();
+                setFont(curFont.deriveFont((float) curFont.getSize() + 4));
+            }
+        };
     }
 
     /**

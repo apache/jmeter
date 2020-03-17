@@ -39,6 +39,8 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.weisj.darklaf.ui.button.DarkButtonUI;
+
 /**
  * The JMeter main toolbar class
  *
@@ -126,7 +128,18 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         if (imageURL == null) {
             throw new Exception("No icon for: " + iconBean.getActionName());
         }
-        JButton button = new JButton(new ImageIcon(imageURL));
+        JButton button = new JButton(new ImageIcon(imageURL)) {
+            @Override
+            public void updateUI() {
+                super.updateUI();
+                // Certain LaFs might alter button configuration, so we revert it to the way we want
+                // For instance, https://github.com/weisJ/darklaf/issues/84
+                setFocusable(false);
+                setRolloverEnabled(true);
+                putClientProperty(DarkButtonUI.KEY_VARIANT, DarkButtonUI.VARIANT_SHADOW);
+                putClientProperty(DarkButtonUI.KEY_THIN, true);
+            }
+        };
         button.setToolTipText(JMeterUtils.getResString(iconBean.getI18nKey()));
         final URL imageURLPressed = JMeterUtils.class.getClassLoader().getResource(iconBean.getIconPathPressed());
         button.setPressedIcon(new ImageIcon(imageURLPressed));
