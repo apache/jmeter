@@ -21,11 +21,16 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public final class IconToolbarBean {
 
     private static final Logger log = LoggerFactory.getLogger(IconToolbarBean.class);
 
     private static final String ICON_FIELD_SEP = ",";  //$NON-NLS-1$
+
+    private static final Pattern DIMENSIONS = Pattern.compile("(\\d+)x(\\d+)");
 
     private final String i18nKey;
 
@@ -34,6 +39,10 @@ public final class IconToolbarBean {
     private final String iconPath;
 
     private final String iconPathPressed;
+
+    private final int width;
+
+    private final int height;
 
     /**
      * Constructor to transform a line value (from icon set file) to a icon bean for toolbar.
@@ -52,6 +61,16 @@ public final class IconToolbarBean {
             this.iconPathPressed = (tmp.length > 3) ? tmp[3].replace("<SIZE>", iconSize) : this.iconPath; //$NON-NLS-1$
         } else {
             throw new IllegalArgumentException("Incorrect argument format - expected at least 2 fields separated by " + ICON_FIELD_SEP);
+        }
+        Matcher m = DIMENSIONS.matcher(iconSize);
+        if (m.matches()) {
+            this.width = Integer.parseInt(m.group(1));
+            this.height = Integer.parseInt(m.group(2));
+        } else {
+            log.info("Unable to parse {} as width x height for icon {}. Will default to 22x22", iconSize, actionName);
+            // See JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE
+            this.width = 22;
+            this.height = 22;
         }
     }
 
@@ -98,4 +117,17 @@ public final class IconToolbarBean {
         return iconPathPressed;
     }
 
+    /**
+     * @return desired icon width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * @return desired icon height
+     */
+    public int getHeight() {
+        return height;
+    }
 }
