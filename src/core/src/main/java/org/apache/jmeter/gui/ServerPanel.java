@@ -102,7 +102,7 @@ public class ServerPanel extends JPanel {
         setLayout(new BorderLayout(5, 0));
         // Target server panel
         JPanel webServerPanel = new HorizontalPanel();
-        webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        webServerPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("target_server"))); // $NON-NLS-1$
         final JPanel domainPanel = getDomainPanel();
         final JPanel portPanel = getPortPanel();
@@ -110,7 +110,7 @@ public class ServerPanel extends JPanel {
         webServerPanel.add(portPanel, BorderLayout.EAST);
 
         JPanel timeOut = new HorizontalPanel();
-        timeOut.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        timeOut.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_server_timeout_title"))); // $NON-NLS-1$
         final JPanel connPanel = getConnectTimeOutPanel();
         final JPanel reqPanel = getResponseTimeOutPanel();

@@ -191,7 +191,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
         mqsLabel.setLabelFor(maxQueueSizeField);
 
         HorizontalPanel panel = new HorizontalPanel();
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("httpmirror_settings"))); // $NON-NLS-1$
 
         panel.add(label);

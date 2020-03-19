@@ -147,7 +147,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         gbc.weightx = 1;
         gbc.weighty = 1;
         JPanel panel = new JPanel(gridBagLayout);
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
         panel.add(httpSampleNamingMode, gbc.clone());
         gbc.gridx++;

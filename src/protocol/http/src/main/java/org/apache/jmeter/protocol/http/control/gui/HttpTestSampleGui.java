@@ -200,7 +200,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     private JPanel getTimeOutPanel() {
         JPanel timeOut = new HorizontalPanel();
-        timeOut.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        timeOut.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_server_timeout_title"))); // $NON-NLS-1$
         final JPanel connPanel = getConnectTimeOutPanel();
         final JPanel reqPanel = getResponseTimeOutPanel();
@@ -254,8 +254,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         concurrentPool.setMaximumSize(new Dimension(30, (int) concurrentPool.getPreferredSize().getHeight()));
 
         final JPanel embeddedRsrcPanel = new HorizontalPanel();
-        embeddedRsrcPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-                .getResString("web_testing_retrieve_title"))); // $NON-NLS-1$
+        embeddedRsrcPanel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("web_testing_retrieve_title"))); // $NON-NLS-1$
         embeddedRsrcPanel.add(retrieveEmbeddedResources);
         embeddedRsrcPanel.add(concurrentDwn);
         embeddedRsrcPanel.add(concurrentPool);
@@ -274,7 +274,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
      */
     protected final JPanel getImplementationPanel(){
         JPanel implPanel = new HorizontalPanel();
-        implPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        implPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_server_client"))); // $NON-NLS-1$
         implPanel.add(new JLabel(JMeterUtils.getResString("http_implementation"))); // $NON-NLS-1$
         httpImplementation.addItem("");// $NON-NLS-1$
@@ -285,8 +285,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     protected JPanel createOptionalTasksPanel() {
         // OPTIONAL TASKS
         final JPanel checkBoxPanel = new VerticalPanel();
-        checkBoxPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-                .getResString("optional_tasks"))); // $NON-NLS-1$
+        checkBoxPanel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("optional_tasks"))); // $NON-NLS-1$
 
         // Use MD5
         useMD5 = new JCheckBox(JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
@@ -297,8 +297,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     protected JPanel createSourceAddrPanel() {
         final JPanel sourceAddrPanel = new HorizontalPanel();
-        sourceAddrPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-                .getResString("web_testing_source_ip"))); // $NON-NLS-1$
+        sourceAddrPanel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("web_testing_source_ip"))); // $NON-NLS-1$
 
         // Add a new field source ip address (for HC implementations only)
         sourceIpType.setSelectedIndex(HTTPSamplerBase.SourceType.HOSTNAME.ordinal()); //default: IP/Hostname
@@ -375,7 +375,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         proxyLogin.add(getProxyPassPanel());
 
         JPanel proxyServerPanel = new HorizontalPanel();
-        proxyServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        proxyServerPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_proxy_server_title"))); // $NON-NLS-1$
         proxyServerPanel.add(proxyServer);
         proxyServerPanel.add(proxyLogin);

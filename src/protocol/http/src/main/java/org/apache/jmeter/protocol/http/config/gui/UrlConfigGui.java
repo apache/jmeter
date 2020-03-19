@@ -318,7 +318,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         // WEB REQUEST PANEL
         JPanel webRequestPanel = new JPanel();
         webRequestPanel.setLayout(new BorderLayout());
-        webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        webRequestPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_request"))); // $NON-NLS-1$
 
         webRequestPanel.add(getPathPanel(), BorderLayout.NORTH);
@@ -340,7 +340,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"), 40); // $NON-NLS-1$
 
         JPanel webServerPanel = new HorizontalPanel();
-        webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        webServerPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_server"))); // $NON-NLS-1$
         webServerPanel.add(protocol);
         webServerPanel.add(domain);

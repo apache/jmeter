@@ -222,7 +222,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
 
         // USER_INPUT
         JPanel sizePanel = new JPanel();
-        sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        sizePanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("size_assertion_size_test"))); //$NON-NLS-1$
 
         sizePanel.add(new JLabel(JMeterUtils.getResString("size_assertion_label"))); //$NON-NLS-1$

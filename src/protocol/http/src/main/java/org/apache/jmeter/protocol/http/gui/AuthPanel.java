@@ -168,7 +168,6 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 
         JPanel optionsPane = new JPanel();
         optionsPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("auth_manager_options"))); // $NON-NLS-1$
         optionsPane.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
         clearEachIteration =
@@ -294,7 +293,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         mechanismColumn.setCellEditor(new MechanismCellEditor());
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("auths_stored"))); //$NON-NLS-1$
         panel.add(new JScrollPane(authTable));
         panel.add(createButtonPanel(), BorderLayout.SOUTH);

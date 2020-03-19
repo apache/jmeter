@@ -104,8 +104,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
 
         // USER_INPUT
         VerticalPanel durationPanel = new VerticalPanel();
-        durationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                getDurationAttributesTitle()));
+        durationPanel.setBorder(BorderFactory.createTitledBorder(getDurationAttributesTitle()));
 
         JPanel labelPanel = new JPanel(new BorderLayout(5, 0));
         JLabel durationLabel =

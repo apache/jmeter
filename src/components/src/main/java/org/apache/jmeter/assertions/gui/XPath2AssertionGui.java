@@ -86,8 +86,7 @@ public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
         // USER_INPUT
         JPanel sizePanel = new JPanel(new BorderLayout());
         sizePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                getXPathAttributesTitle()));
+        sizePanel.setBorder(BorderFactory.createTitledBorder(getXPathAttributesTitle()));
         xpath = new XPath2Panel();
         sizePanel.add(xpath);
         add(sizePanel, BorderLayout.CENTER);

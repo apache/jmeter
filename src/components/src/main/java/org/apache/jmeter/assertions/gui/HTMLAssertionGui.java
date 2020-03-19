@@ -207,7 +207,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
         // USER_INPUT
         VerticalPanel assertionPanel = new VerticalPanel();
-        assertionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Tidy Settings"));
+        assertionPanel.setBorder(BorderFactory.createTitledBorder("Tidy Settings"));
 
         // doctype
         HorizontalPanel docTypePanel = new HorizontalPanel();
@@ -218,7 +218,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
         // format (HTML, XHTML, XML)
         VerticalPanel formatPanel = new VerticalPanel();
-        formatPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Format"));
+        formatPanel.setBorder(BorderFactory.createTitledBorder("Format"));
         htmlRadioButton = new JRadioButton("HTML", true); //$NON-NLS-1$
         xhtmlRadioButton = new JRadioButton("XHTML", false); //$NON-NLS-1$
         xmlRadioButton = new JRadioButton("XML", false); //$NON-NLS-1$

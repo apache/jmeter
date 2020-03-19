@@ -181,7 +181,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         // THREAD PROPERTIES
         JPanel threadPropsPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
-        threadPropsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        threadPropsPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("thread_properties"))); // $NON-NLS-1$
 
         // NUMBER OF THREADS

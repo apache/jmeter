@@ -219,7 +219,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         reqLabel.setLabelFor(requestData);
 
         JPanel reqDataPanel = new JPanel(new BorderLayout(5, 0));
-        reqDataPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
+        reqDataPanel.setBorder(BorderFactory.createTitledBorder(""));
 
         reqDataPanel.add(reqLabel, BorderLayout.WEST);
         reqDataPanel.add(JTextScrollPane.getInstance(requestData), BorderLayout.CENTER);
@@ -242,7 +242,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         mainPanel.add(serverPanel);
 
         HorizontalPanel optionsPanel = new HorizontalPanel();
-        optionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
+        optionsPanel.setBorder(BorderFactory.createTitledBorder(""));
         optionsPanel.add(createClosePortPanel());
         optionsPanel.add(createCloseConnectionPanel());
         optionsPanel.add(createNoDelayPanel());

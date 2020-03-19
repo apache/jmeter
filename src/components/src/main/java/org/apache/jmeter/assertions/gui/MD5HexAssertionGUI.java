@@ -53,7 +53,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
         // USER_INPUT
         HorizontalPanel md5HexPanel = new HorizontalPanel();
-        md5HexPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        md5HexPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("md5hex_assertion_md5hex_test"))); // $NON-NLS-1$
 
         md5HexPanel.add(new JLabel(JMeterUtils.getResString("md5hex_assertion_label"))); //$NON-NLS-1$
