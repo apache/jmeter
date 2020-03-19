@@ -164,7 +164,6 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("return_code_config_box_title"))); // $NON-NLS-1$
         checkReturnCode = new JCheckBox(JMeterUtils.getResString("check_return_code_title")); // $NON-NLS-1$
         checkReturnCode.addItemListener(this);
@@ -184,7 +183,6 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("timeout_config_box_title"))); // $NON-NLS-1$
         timeout = new JLabeledTextField(JMeterUtils.getResString("timeout_title")); // $NON-NLS-1$
         timeout.setSize(timeout.getSize().height, 30);
@@ -206,7 +204,6 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
 
         JPanel panel = new VerticalPanel();
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("command_config_box_title"))); // $NON-NLS-1$
         panel.add(cmdPanel, BorderLayout.NORTH);
         panel.add(makeArgumentsPanel(), BorderLayout.CENTER);
@@ -244,7 +241,6 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     private JPanel makeStreamsPanel() {
         JPanel stdPane = new JPanel(new BorderLayout());
         stdPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("command_config_std_streams_title"))); // $NON-NLS-1$
         stdPane.add(stdin, BorderLayout.NORTH);
         stdPane.add(stdout, BorderLayout.CENTER);

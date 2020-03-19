@@ -218,7 +218,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         JPanel jmsQueueingPanel = new JPanel(new BorderLayout());
-        jmsQueueingPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        jmsQueueingPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("jms_queueing"))); //$NON-NLS-1$
 
         JPanel qcfPanel = new JPanel(new BorderLayout(5, 0));
@@ -236,11 +236,11 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
 
         JPanel messagePanel = new JPanel(new BorderLayout());
-        messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        messagePanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("jms_message_title"))); //$NON-NLS-1$
 
         JPanel correlationPanel = new HorizontalPanel();
-        correlationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        correlationPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("jms_correlation_title"))); //$NON-NLS-1$
 
         useReqMsgIdAsCorrelId = new JCheckBox(JMeterUtils.getResString("jms_use_req_msgid_as_correlid"), false); //$NON-NLS-1$
@@ -291,7 +291,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
      */
     private JPanel createJNDIPanel() {
         JPanel jndiPanel = new JPanel(new BorderLayout());
-        jndiPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        jndiPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("jms_jndi_props"))); //$NON-NLS-1$
 
         JPanel contextPanel = new JPanel(new BorderLayout(10, 0));

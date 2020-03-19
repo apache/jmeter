@@ -748,7 +748,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private JPanel createGraphSettingsPane() {
         JPanel settingsPane = new JPanel(new BorderLayout());
         settingsPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("graph_resp_time_settings_pane"))); // $NON-NLS-1$
 
         JPanel intervalPane = new JPanel();
@@ -816,7 +815,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         titleFontStyleList.setSelectedIndex(DEFAULT_TITLE_FONT_STYLE);
 
         JPanel titlePane = new JPanel(new BorderLayout());
-        titlePane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        titlePane.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("aggregate_graph_title_group"))); // $NON-NLS-1$
         titlePane.add(titleNamePane, BorderLayout.NORTH);
         titlePane.add(titleStylePane, BorderLayout.SOUTH);
@@ -827,7 +826,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         JPanel lineStylePane = new JPanel();
         lineStylePane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         lineStylePane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("graph_resp_time_settings_line"))); // $NON-NLS-1$
         lineStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("graph_resp_time_stroke_width"), //$NON-NLS-1$
                 strokeWidthList));
@@ -842,7 +840,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         JPanel dimensionPane = new JPanel();
         dimensionPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         dimensionPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_dimension"))); // $NON-NLS-1$
 
         dimensionPane.add(dynamicGraphSize);
@@ -865,7 +862,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         JPanel xAxisPane = new JPanel();
         xAxisPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         xAxisPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_xaxis_group"))); // $NON-NLS-1$
         xAxisTimeFormat.setText(DEFAULT_XAXIS_TIME_FORMAT); // $NON-NLS-1$
         xAxisPane.add(xAxisTimeFormat);
@@ -880,7 +876,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         JPanel yAxisPane = new JPanel();
         yAxisPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         yAxisPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_yaxis_group"))); // $NON-NLS-1$
         yAxisPane.add(maxValueYAxisLabel);
         yAxisPane.add(incrScaleYAxis);
@@ -896,7 +891,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         JPanel legendPanel = new JPanel();
         legendPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         legendPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_legend"))); // $NON-NLS-1$
 
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_legend_placement"), //$NON-NLS-1$

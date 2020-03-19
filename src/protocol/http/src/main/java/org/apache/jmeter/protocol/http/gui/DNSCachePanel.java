@@ -222,7 +222,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         northPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
         northPanel.add(makeTitlePanel());
         JPanel optionsPane = new JPanel();
-        optionsPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), OPTIONS)); // $NON-NLS-1$
+        optionsPane.setBorder(BorderFactory.createTitledBorder(OPTIONS)); // $NON-NLS-1$
         optionsPane.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
         optionsPane.add(clearEachIteration, BorderLayout.WEST);
         optionsPane.add(createChooseResPanel(), BorderLayout.SOUTH);
@@ -248,7 +248,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         dnsServersTable.setPreferredScrollableViewportSize(new Dimension(400, 100));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("dns_servers"))); // $NON-NLS-1$
         JScrollPane dnsServScrollPane = GuiUtils.emptyBorder(new JScrollPane(dnsServersTable));
         panel.add(dnsServScrollPane, BorderLayout.CENTER);
@@ -265,7 +265,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         dnsHostsTable.setPreferredScrollableViewportSize(new Dimension(400, 100));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("dns_hosts"))); // $NON-NLS-1$
         JScrollPane dnsHostsScrollPane = GuiUtils.emptyBorder(new JScrollPane(dnsHostsTable));
         panel.add(dnsHostsScrollPane, BorderLayout.CENTER);

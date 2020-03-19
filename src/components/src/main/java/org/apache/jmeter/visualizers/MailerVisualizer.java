@@ -149,7 +149,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
         mainPanel.add(makeTitlePanel());
 
         JPanel attributePane = new VerticalPanel();
-        attributePane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        attributePane.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("mailer_title_settings"))); // $NON-NLS-1$
 
         // Settings panes
@@ -179,7 +179,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 
     private JPanel createMailingSettings() {
         JPanel settingsPane = new JPanel(new BorderLayout());
-        settingsPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        settingsPane.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("mailer_title_message"))); // $NON-NLS-1$
 
         JPanel headerPane = new JPanel(new BorderLayout());
@@ -239,7 +239,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 
     private JPanel createSmtpSettings() {
         JPanel settingsPane = new JPanel(new BorderLayout());
-        settingsPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        settingsPane.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("mailer_title_smtpserver"))); // $NON-NLS-1$
 
         JPanel hostPane = new JPanel(new BorderLayout());

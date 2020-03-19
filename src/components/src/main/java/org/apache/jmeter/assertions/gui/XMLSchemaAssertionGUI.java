@@ -120,7 +120,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 
         // USER_INPUT
         VerticalPanel assertionPanel = new VerticalPanel();
-        assertionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "XML Schema"));
+        assertionPanel.setBorder(BorderFactory.createTitledBorder("XML Schema"));
 
         // doctype
         HorizontalPanel xmlSchemaPanel = new HorizontalPanel();

@@ -584,7 +584,7 @@ public class SmtpPanel extends JPanel {
          * Server Settings
          */
         JPanel panelServerSettings = new VerticalPanel();
-        panelServerSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panelServerSettings.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("smtp_server_settings"))); // $NON-NLS-1$
 
         JPanel panelMailServer = new JPanel(new BorderLayout(5, 0));
@@ -599,7 +599,7 @@ public class SmtpPanel extends JPanel {
         panelServerSettings.add(panelMailServerPort, BorderLayout.SOUTH);
 
         JPanel panelServerTimeoutsSettings = new VerticalPanel();
-        panelServerTimeoutsSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panelServerTimeoutsSettings.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("smtp_server_timeouts_settings"))); // $NON-NLS-1$
 
         JPanel panelMailServerConnectionTimeout = new JPanel(new BorderLayout(5, 0));
@@ -625,7 +625,6 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelMailSettings = new JPanel(new GridBagLayout());
         panelMailSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_mail_settings"))); // $NON-NLS-1$
 
         gridBagConstraints.gridx = 0;
@@ -677,7 +676,6 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelAuthSettings = new JPanel(new GridBagLayout());
         panelAuthSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_auth_settings"))); // $NON-NLS-1$
 
         cbUseAuth.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -730,7 +728,6 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelMessageSettings = new JPanel(new GridBagLayout());
         panelMessageSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_message_settings"))); // $NON-NLS-1$
 
         gridBagConstraints.gridx = 0;
@@ -852,7 +849,6 @@ public class SmtpPanel extends JPanel {
          */
         JPanel panelAdditionalSettings = new JPanel(new GridBagLayout());
         panelAdditionalSettings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("smtp_additional_settings"))); // $NON-NLS-1$
 
         cbMessageSizeStats.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));

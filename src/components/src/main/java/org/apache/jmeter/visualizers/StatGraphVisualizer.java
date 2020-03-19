@@ -877,7 +877,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         barPane.add(optionsPanel, BorderLayout.SOUTH);
 
         JPanel columnPane = new JPanel(new BorderLayout());
-        columnPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        columnPane.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("aggregate_graph_column_settings"))); // $NON-NLS-1$
         columnPane.add(barPane, BorderLayout.NORTH);
         columnPane.add(Box.createRigidArea(new Dimension(0,3)), BorderLayout.CENTER);
@@ -945,7 +945,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         titleFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.bold"));  // $NON-NLS-1$ // default: bold
 
         JPanel titlePane = new JPanel(new BorderLayout());
-        titlePane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        titlePane.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("aggregate_graph_title_group"))); // $NON-NLS-1$
         titlePane.add(titleNamePane, BorderLayout.NORTH);
         titlePane.add(titleStylePane, BorderLayout.SOUTH);
@@ -972,7 +972,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JPanel dimensionPane = new JPanel();
         dimensionPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         dimensionPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_dimension"))); // $NON-NLS-1$
 
         dimensionPane.add(dynamicGraphSize);
@@ -995,7 +994,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JPanel xAxisPane = new JPanel();
         xAxisPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         xAxisPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_xaxis_group"))); // $NON-NLS-1$
         xAxisPane.add(maxLengthXAxisLabel);
         return xAxisPane;
@@ -1009,7 +1007,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JPanel yAxisPane = new JPanel();
         yAxisPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         yAxisPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_yaxis_group"))); // $NON-NLS-1$
         yAxisPane.add(maxValueYAxisLabel);
         return yAxisPane;
@@ -1023,7 +1020,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JPanel legendPanel = new JPanel();
         legendPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         legendPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_legend"))); // $NON-NLS-1$
 
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_legend_placement"), //$NON-NLS-1$

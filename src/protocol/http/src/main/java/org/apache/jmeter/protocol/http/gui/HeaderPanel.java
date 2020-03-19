@@ -274,7 +274,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
         headerTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("headers_stored"))); // $NON-NLS-1$
         panel.add(GuiUtils.emptyBorder(new JScrollPane(headerTable)), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);

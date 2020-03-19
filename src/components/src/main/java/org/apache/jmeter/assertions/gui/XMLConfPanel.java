@@ -62,14 +62,14 @@ public class XMLConfPanel extends JPanel {
         tolerant.addActionListener(e -> tolerant());
         downloadDTDs = new JCheckBox(JMeterUtils.getResString("xml_download_dtds")); //$NON-NLS-1$
         Box tidyOptions = Box.createHorizontalBox();
-        tidyOptions.setBorder(BorderFactory.createEtchedBorder());
+        tidyOptions.setBorder(BorderFactory.createTitledBorder(""));
         tidyOptions.add(tolerant);
         tidyOptions.add(quiet);
         tidyOptions.add(reportErrors);
         tidyOptions.add(showWarnings);
 
         Box untidyOptions = Box.createHorizontalBox();
-        untidyOptions.setBorder(BorderFactory.createEtchedBorder());
+        untidyOptions.setBorder(BorderFactory.createTitledBorder(""));
         untidyOptions.add(namespace);
         untidyOptions.add(validate);
         untidyOptions.add(whitespace);
