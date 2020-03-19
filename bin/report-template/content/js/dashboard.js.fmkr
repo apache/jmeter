@@ -40,7 +40,7 @@ function summaryTableHeader(header) {
 
     cell = document.createElement('th');
     cell.setAttribute("data-sorter", false);
-    cell.colSpan = 6;
+    cell.colSpan = 7;
     cell.innerHTML = "Response Times (ms)";
     newRow.appendChild(cell);
 
@@ -197,16 +197,18 @@ $(document).ready(function() {
             case 4:
             // Mean
             case 7:
-            // Percentile 1
+            // Median
             case 8:
-            // Percentile 2
+            // Percentile 1
             case 9:
-            // Percentile 3
+            // Percentile 2
             case 10:
-            // Throughput
+            // Percentile 3
             case 11:
-            // Kbytes/s
+            // Throughput
             case 12:
+            // Kbytes/s
+            case 13:
             // Sent Kbytes/s
                 item = item.toFixed(2);
                 break;

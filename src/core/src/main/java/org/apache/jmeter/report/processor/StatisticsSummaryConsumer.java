@@ -20,6 +20,8 @@ package org.apache.jmeter.report.processor;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
+import java.math.BigDecimal;
+
 /**
  * The class StatisticsSummaryConsumer provides a consumer that calculates:
  * <ul>
@@ -27,6 +29,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *      <li>errors</li>
  *      <li>error %</li>
  *      <li>mean response time</li>
+ *      <li>median response time</li>
  *      <li>percentile 1 (90% by default)</li>
  *      <li>percentile 2 (95% by default)</li>
  *      <li>percentile 3 (99% by default)</li>
@@ -41,13 +44,16 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class StatisticsSummaryConsumer extends
         AbstractSummaryConsumer<StatisticsSummaryData> {
+    private static final String PCT1_LABEL = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct1", "90");
+    private static final String PCT2_LABEL = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct2", "95");
+    private static final String PCT3_LABEL = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct3", "99");
 
-    private static final int PERCENTILE_INDEX1 = JMeterUtils.getPropDefault(
-        "aggregate_rpt_pct1", 90);
-    private static final int PERCENTILE_INDEX2 = JMeterUtils.getPropDefault(
-        "aggregate_rpt_pct2", 95);
-    private static final int PERCENTILE_INDEX3 = JMeterUtils.getPropDefault(
-        "aggregate_rpt_pct3", 99);
+    private static final double PERCENTILE_INDEX1 = new BigDecimal(PCT1_LABEL).doubleValue();
+    private static final double PERCENTILE_INDEX2 = new BigDecimal(PCT2_LABEL).doubleValue();
+    private static final double PERCENTILE_INDEX3 = new BigDecimal(PCT3_LABEL).doubleValue();
 
     /**
      * Instantiates a new statistics summary consumer.
@@ -79,6 +85,7 @@ public class StatisticsSummaryConsumer extends
         data.getPercentile2().addValue(elapsedTime);
         data.getPercentile3().addValue(elapsedTime);
         data.getMean().addValue(elapsedTime);
+        data.getMedian().addValue(elapsedTime);
         data.setMin(elapsedTime);
         data.setMax(elapsedTime);
 
@@ -139,6 +146,7 @@ public class StatisticsSummaryConsumer extends
         result.addResult(new ValueResultData(data.getMean().getResult()));
         result.addResult(new ValueResultData(data.getMin()));
         result.addResult(new ValueResultData(data.getMax()));
+        result.addResult(new ValueResultData(data.getMedian().getResult()));
         result.addResult(new ValueResultData(data.getPercentile1().getResult()));
         result.addResult(new ValueResultData(data.getPercentile2().getResult()));
         result.addResult(new ValueResultData(data.getPercentile3().getResult()));
@@ -182,18 +190,10 @@ public class StatisticsSummaryConsumer extends
                 JMeterUtils.getResString("reportgenerator_summary_statistics_mean")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_min")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_max")));
-        titles.addResult(new ValueResultData(
-            String.format(
-                JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
-                    PERCENTILE_INDEX1)));
-        titles.addResult(new ValueResultData(
-            String.format(
-                JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
-                    PERCENTILE_INDEX2)));
-        titles.addResult(new ValueResultData(
-            String.format(
-                JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
-                    PERCENTILE_INDEX3)));
+        titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_median")));
+        titles.addResult(new ValueResultData(formatPercentile(PCT1_LABEL)));
+        titles.addResult(new ValueResultData(formatPercentile(PCT2_LABEL)));
+        titles.addResult(new ValueResultData(formatPercentile(PCT3_LABEL)));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_throughput")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_kbytes")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_sent_kbytes")));
@@ -201,4 +201,8 @@ public class StatisticsSummaryConsumer extends
         return titles;
     }
 
+    private String formatPercentile(String percentileLabel) {
+        return String.format(JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
+                percentileLabel);
+    }
 }
