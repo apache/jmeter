@@ -24,9 +24,9 @@ import java.util.Map;
 
 import org.apache.jmeter.report.processor.AggregatorFactory;
 import org.apache.jmeter.report.processor.MaxAggregatorFactory;
+import org.apache.jmeter.report.processor.MedianAggregatorFactory;
 import org.apache.jmeter.report.processor.MinAggregatorFactory;
 import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
-import org.apache.jmeter.report.processor.MedianAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;

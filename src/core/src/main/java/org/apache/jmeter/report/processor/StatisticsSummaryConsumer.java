@@ -17,10 +17,10 @@
 
 package org.apache.jmeter.report.processor;
 
+import java.math.BigDecimal;
+
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
-
-import java.math.BigDecimal;
 
 /**
  * The class StatisticsSummaryConsumer provides a consumer that calculates:
