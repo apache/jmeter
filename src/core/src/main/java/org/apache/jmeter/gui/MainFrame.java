@@ -56,7 +56,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
@@ -585,12 +584,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @return a panel containing the running indicator
      */
     private Component createToolBar() {
-        Box toolPanel = new Box(BoxLayout.X_AXIS);
+        JMeterToolBar toolPanel = JMeterToolBar.createToolbar(true);
         // add the toolbar
-        this.toolbar = JMeterToolBar.createToolbar(true);
+        this.toolbar = toolPanel;
         GuiPackage guiInstance = GuiPackage.getInstance();
         guiInstance.setMainToolbar(toolbar);
-        toolPanel.add(toolbar);
 
         toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
         toolPanel.add(Box.createGlue());
