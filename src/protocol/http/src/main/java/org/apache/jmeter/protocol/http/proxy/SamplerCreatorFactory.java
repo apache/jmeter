@@ -99,4 +99,12 @@ public class SamplerCreatorFactory {
         }
         return creator;
     }
+    
+    /**
+     * get the default Sampler Creator
+     * @return the singleton Sampler Creator
+     */
+    public SamplerCreator getDefaultSamplerCreator() {
+        return DEFAULT_SAMPLER_CREATOR;
+    }
 }

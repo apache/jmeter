@@ -55,8 +55,18 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     /*
      * Optionally number the requests
      */
-    private static final boolean NUMBER_REQUESTS =
+    private final boolean NUMBER_REQUESTS =
         JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
+
+    /*
+     *  numbering mode : prefix or suffix
+     */
+    private final String NUMBER_MODE = JMeterUtils.getPropDefault("proxy.number.mode", "prefix"); // $NON-NLS-1$
+
+    /*
+     *  format numbering  (String.format) like %03d
+     */
+    private final String  NUMBER_VALUE_FORMAT = JMeterUtils.getPropDefault("proxy.number.value_format", "%03d"); // $NON-NLS-1$
 
     private static AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
 
@@ -86,14 +96,22 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     /**
      * @return int request number
      */
-    protected static int getRequestNumber() {
+    public int getRequestNumber() {
         return REQUEST_NUMBER.get();
+    }
+
+    /**
+     * set the RequestNumber to a specify value
+     * @param iValue
+     */
+    public void setRequestNumber(int iValue) {
+        REQUEST_NUMBER.set(iValue);
     }
 
     /**
      * Increment request number
      */
-    protected static void incrementRequestNumber() {
+    protected void incrementRequestNumber() {
         incrementRequestNumberAndGet();
     }
 
@@ -101,15 +119,26 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
      * Increment request number
      * @return int number for created sampler
      */
-    protected static int incrementRequestNumberAndGet() {
+    protected int incrementRequestNumberAndGet() {
         return REQUEST_NUMBER.incrementAndGet();
     }
 
     /**
      * @return boolean is numbering requests is required
      */
-    protected static boolean isNumberRequests() {
-        return NUMBER_REQUESTS;
+    protected boolean isNumberRequests() {
+        boolean bNumberRequest = JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$;
+        return bNumberRequest;
+    }
+
+    protected String getNumberValueFormat() {
+        String sNumberValueFormat = JMeterUtils.getPropDefault("proxy.number.value_format", "%03d");
+       return sNumberValueFormat;
+    }
+
+    protected String getNumberMode() {
+        String sMumberMode = JMeterUtils.getPropDefault("proxy.number.mode", "prefix");
+        return sMumberMode;
     }
 
     /**

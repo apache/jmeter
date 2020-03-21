@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -118,8 +118,13 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final String AUTH_MANAGER = AuthManager.class.getName();
 
     public static final int DEFAULT_PORT = 8888;
+
     // and as a string
     public static final String DEFAULT_PORT_S = Integer.toString(DEFAULT_PORT);
+
+    private static final int HTTP_SAMPLER_NUMBERING_START_VALUE_DEFAULT = 1;
+    private static final String HTTP_SAMPLER_NUMBERING_MODE_DEFAULT = "prefix"; // $NON-NLS-1$
+    private static final String HTTP_SAMPLER_NUMBERING_INTEGER_FORMAT_DEFAULT = "%03d";
 
     //+ JMX file attributes
     private static final String PORT = "ProxyControlGui.port"; // $NON-NLS-1$
@@ -136,6 +141,11 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
     private static final String HTTP_SAMPLER_NAMING_MODE = "ProxyControlGui.proxy_http_sampler_naming_mode"; // $NON-NLS-1$
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
+
+    private static final String HTTP_SAMPLER_NUMBERING_MODE = "ProxyControlGui.proxy_http_sampler_numbering_mode"; // $NON-NLS-1$
+    // private static final String HTTP_SAMPLER_NUMBERING_START_VALUE = "ProxyControlGui.proxy_http_sampler_numbering_start_value"; // $NON-NLS-1$
+    private static final String HTTP_SAMPLER_NUMBERING_INTEGER_FORMAT = "ProxyControlGui.proxy_http_sampler_numbering_integer_format"; // $NON-NLS-1$
+
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
     private static final String DEFAULT_ENCODING_PROPERTY = "ProxyControlGui.default_encoding"; // $NON-NLS-1$
     private static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
@@ -161,6 +171,28 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC4 = "2";
 
+    // prefix, suffix or no_number for numbering sampler when recording
+    public enum HttpSamplerNumberingMode {
+    	PREFIX(0,"prefix"),
+	  	SUFFIX(1,"suffix"),
+	  	NO_NUMBER(2,"no_number");	
+	  	
+	  	private final int value;
+	  	private final String sMode;
+	  	
+	  	private HttpSamplerNumberingMode(int value, String sMode) {
+	  		this.value = value;
+	  		this.sMode = sMode;
+	  	}
+	  	
+	  	public int getIntValue() {
+	  		return this.value;
+	  	}
+	  	public String getStringMode() {
+	  		return sMode;
+	  	}
+	}
+    
     private long sampleGap;
 
     // for ssl connection
@@ -241,6 +273,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private transient Daemon server;
 
+    private final transient SamplerCreatorFactory samplerCreatorFactory = new SamplerCreatorFactory();
+
     private long lastTime = 0;// When was the last sample seen?
 
     private transient KeyStore keyStore;
@@ -276,6 +310,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private String keyPassword;
 
+    private int iNumberingStartValue;
+    private String sNumberingMode;
+    private String sNumberingFormat;
+
     private JMeterTreeModel nonGuiTreeModel;
 
     public ProxyControl() {
@@ -283,6 +321,25 @@ public class ProxyControl extends GenericController implements NonTestElement {
         setExcludeList(new HashSet<>());
         setIncludeList(new HashSet<>());
         setCaptureHttpHeaders(true); // maintain original behaviour
+        
+        iNumberingStartValue = HTTP_SAMPLER_NUMBERING_START_VALUE_DEFAULT;
+        sNumberingFormat = JMeterUtils.getPropDefault("proxy.number.value_format", HTTP_SAMPLER_NUMBERING_INTEGER_FORMAT_DEFAULT);
+        setHttpSamplerNumberingIntegerFormat(sNumberingFormat);
+
+        sNumberingMode = JMeterUtils.getPropDefault("proxy.number.mode", HTTP_SAMPLER_NUMBERING_MODE_DEFAULT);
+
+        if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(sNumberingMode)) {
+            setHttpSampleNumberingMode(HttpSamplerNumberingMode.PREFIX.getIntValue());
+        }
+        if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(sNumberingMode)) {
+            setHttpSampleNumberingMode(HttpSamplerNumberingMode.SUFFIX.getIntValue());
+        }
+
+        boolean bWihtNumber = JMeterUtils.getPropDefault("proxy.number.requests", true);
+        if (!bWihtNumber) {
+            // no numbering request because proxy.number.requests = false
+            setHttpSampleNumberingMode(HttpSamplerNumberingMode.NO_NUMBER.getIntValue());
+        }
     }
 
     /**
@@ -353,6 +410,47 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     public void setHTTPSampleNamingMode(int httpNamingMode) {
         setProperty(new IntegerProperty(HTTP_SAMPLER_NAMING_MODE, httpNamingMode));
+    }
+
+    public void setHttpSampleNumberingMode(int httpSampleNumberingMode) {
+        
+        if (httpSampleNumberingMode == HttpSamplerNumberingMode.PREFIX.getIntValue()) {
+        	sNumberingMode = HttpSamplerNumberingMode.PREFIX.getStringMode(); 
+        }
+        
+        if (httpSampleNumberingMode ==  HttpSamplerNumberingMode.SUFFIX.getIntValue()) {
+            // choose suffix numbering
+        	sNumberingMode =  HttpSamplerNumberingMode.SUFFIX.getStringMode();
+        }
+        
+        if (httpSampleNumberingMode == HttpSamplerNumberingMode.NO_NUMBER.getIntValue()) {
+            // choose no numbering
+        	sNumberingMode = HttpSamplerNumberingMode.NO_NUMBER.getStringMode();
+        }
+    }
+
+    public void setHttpSamplerNumberingStartValue(int httpSamplerNumberingStartValue) {
+        iNumberingStartValue=  httpSamplerNumberingStartValue;
+    }
+
+    public void setHttpSamplerNumberingStartForSamplerCreator(int httpSamplerNumberingStartValue) {
+        iNumberingStartValue =  httpSamplerNumberingStartValue;
+
+        SamplerCreator samplerCreator = samplerCreatorFactory.getDefaultSamplerCreator();
+        samplerCreator.setRequestNumber(httpSamplerNumberingStartValue);
+    }
+
+    public int getRequestNumberFromSamplerCreator() {
+        int iRequestNumber = 1;
+        SamplerCreator samplerCreator = samplerCreatorFactory.getDefaultSamplerCreator();
+ 
+        iRequestNumber = samplerCreator.getRequestNumber();
+        iNumberingStartValue = iRequestNumber;
+        return iRequestNumber;
+    }
+
+    public void setHttpSamplerNumberingIntegerFormat(String httpSamplerNumberingIntegerFormat) {
+    	sNumberingFormat = httpSamplerNumberingIntegerFormat;
     }
 
     public String getDefaultEncoding() {
@@ -456,6 +554,27 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     public String getPrefixHTTPSampleName() {
         return getPropertyAsString(PREFIX_HTTP_SAMPLER_NAME);
+    }
+
+    public int getHttpSampleNumberingMode() {
+    	if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(sNumberingMode)) {
+    		return HttpSamplerNumberingMode.PREFIX.getIntValue();
+    	}
+    	
+    	if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(sNumberingMode)) {
+    		return HttpSamplerNumberingMode.SUFFIX.getIntValue();
+    	}
+    	else {
+    		return HttpSamplerNumberingMode.NO_NUMBER.getIntValue();
+    	}
+    }
+
+    public int getHttpSamplerNumberingStartValue() {
+        return iNumberingStartValue;
+    }
+
+    public String getHttpSamplerNumberingIntegerFormat() { 
+    	return sNumberingFormat;
     }
 
     public String getProxyPauseHTTPSample() {
