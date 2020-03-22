@@ -32,8 +32,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
-import com.github.weisj.darklaf.icons.ThemedSVGIcon;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.UndoHistory;
 import org.apache.jmeter.gui.action.ActionNames;
@@ -44,6 +42,7 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.weisj.darklaf.icons.ThemedSVGIcon;
 import com.github.weisj.darklaf.ui.button.DarkButtonUI;
 
 /**

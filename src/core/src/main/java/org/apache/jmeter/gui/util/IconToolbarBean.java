@@ -17,12 +17,12 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.jmeter.gui.action.ActionNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public final class IconToolbarBean {
 
