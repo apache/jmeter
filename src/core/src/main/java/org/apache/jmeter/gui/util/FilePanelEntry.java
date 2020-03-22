@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.gui.util;
 
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -27,18 +26,14 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JFactory;
 
 public class FilePanelEntry extends HorizontalPanel implements ActionListener {
     private static final long serialVersionUID = 280L;
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     private final JTextField filename = new JTextField(10);
 
@@ -100,7 +95,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
         add(label);
         add(filename);
         filename.addActionListener(this);
-        browse.setFont(FONT_SMALL);
+        JFactory.small(browse);
         add(browse);
         browse.setActionCommand(ACTION_BROWSE);
         browse.addActionListener(this);

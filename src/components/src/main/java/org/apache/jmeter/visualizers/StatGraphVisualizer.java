@@ -60,7 +60,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
@@ -79,6 +78,7 @@ import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
@@ -136,10 +136,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private static final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
@@ -860,7 +856,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             colPanel.add(createColorBarButton(bar, eltList.indexOf(bar)));
         }
         colPanel.add(Box.createRigidArea(new Dimension(5,0)));
-        chooseForeColor.setFont(FONT_SMALL);
+        JFactory.small(chooseForeColor);
         colPanel.add(chooseForeColor);
         chooseForeColor.addActionListener(this);
 
@@ -890,7 +886,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         // Button
         JButton colorBtn = new JButton();
         colorBtn.setName(String.valueOf(index));
-        colorBtn.setFont(FONT_SMALL);
+        JFactory.small(colorBtn);
         colorBtn.addActionListener(this);
         colorBtn.setBackground(barGraph.getBackColor());
         return colorBtn;
@@ -913,14 +909,14 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         searchPanel.add(Box.createRigidArea(new Dimension(5,0)));
 
         // Button
-        applyFilterBtn.setFont(FONT_SMALL);
+        JFactory.small(applyFilterBtn);
         applyFilterBtn.addActionListener(this);
         searchPanel.add(applyFilterBtn);
 
         // checkboxes
-        caseChkBox.setFont(FONT_SMALL);
+        JFactory.small(caseChkBox);
         searchPanel.add(caseChkBox);
-        regexpChkBox.setFont(FONT_SMALL);
+        JFactory.small(regexpChkBox);
         searchPanel.add(regexpChkBox);
 
         return searchPanel;

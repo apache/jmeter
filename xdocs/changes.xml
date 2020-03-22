@@ -84,11 +84,15 @@ are gray. It is purely a UI change, and the behavior is not altered.
 <p>Tree context menu is shown even in case the node selection is changed. Previously
     the popup did disappear and it was required to select a node first and only then launch popup.</p>
 
-<p>Update look and feel without restart</p>
+<p>Look and feel can now be updated without a restart</p>
 
 <p>Use <keycombo><keysym>CTRL</keysym><keysym>ALT</keysym><keysym>wheel</keysym></keycombo> for zooming
     fonts. Previous shortcut was <keycombo><keysym>CTRL</keysym><keysym>SHIFT</keysym><keysym>wheel</keysym></keycombo>,
     however, it conflicted with horizontal scrolling.</p>
+
+<p>In-app zoom is more consistent (e.g. sometimes not all the labels or even panels were scaled).
+For instance: log viewer, JSR223 code editor were not previously scaled with zoom-in/out feature</p>
+
 <p>Tree context menu is shown for the full row, not for the label only</p>
 <!--
 <ch_title>Functions</ch_title>

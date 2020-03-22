@@ -21,9 +21,10 @@ import java.awt.BorderLayout;
 import java.util.Collection;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextArea;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -187,9 +188,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         southPanel.add(serializedMode);
         southPanel.add(tearDownOnShutdown);
         southPanel.add(functionalMode);
-        JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation")); // $NON-NLS-1$
-        explain.setEditable(false);
-        explain.setBackground(this.getBackground());
+        JComponent explain = new JLabel(JMeterUtils.getResString("functional_mode_explanation")); // $NON-NLS-1$
         southPanel.add(explain);
         southPanel.add(browseJar);
 

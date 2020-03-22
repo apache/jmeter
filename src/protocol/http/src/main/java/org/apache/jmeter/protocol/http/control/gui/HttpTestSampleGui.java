@@ -19,7 +19,6 @@ package org.apache.jmeter.protocol.http.control.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 
 import javax.swing.BorderFactory;
@@ -31,7 +30,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -43,6 +41,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
@@ -52,9 +51,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
 public class HttpTestSampleGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 241L;
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private UrlConfigGui urlConfigGui;
     private JCheckBox retrieveEmbeddedResources;
@@ -388,7 +384,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_proxy_scheme")); // $NON-NLS-1$
         label.setLabelFor(proxyScheme);
-        label.setFont(FONT_SMALL);
+        JFactory.small(label);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
@@ -401,7 +397,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
         label.setLabelFor(proxyHost);
-        label.setFont(FONT_SMALL);
+        JFactory.small(label);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
@@ -414,7 +410,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         JLabel label = new JLabel(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
         label.setLabelFor(proxyPort);
-        label.setFont(FONT_SMALL);
+        JFactory.small(label);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
@@ -428,7 +424,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         JLabel label = new JLabel(JMeterUtils.getResString("username")); // $NON-NLS-1$
         label.setLabelFor(proxyUser);
-        label.setFont(FONT_SMALL);
+        JFactory.small(label);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);
@@ -441,7 +437,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         JLabel label = new JLabel(JMeterUtils.getResString("password")); // $NON-NLS-1$
         label.setLabelFor(proxyPass);
-        label.setFont(FONT_SMALL);
+        JFactory.small(label);
 
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.add(label, BorderLayout.WEST);

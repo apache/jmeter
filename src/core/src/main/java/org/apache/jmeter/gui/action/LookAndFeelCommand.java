@@ -31,11 +31,11 @@ import java.util.Set;
 import java.util.prefs.Preferences;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -194,12 +194,17 @@ public class LookAndFeelCommand extends AbstractAction {
         // NOOP
     }
 
-    public static boolean isDark(String command) {
-        MenuItem item = items.get(command);
-        if (item == null) {
-            return false;
+    public static boolean isDark() {
+        String lookAndFeelID = UIManager.getLookAndFeel().getID();
+        if (lookAndFeelID.equals("Darklaf")) { // $NON-NLS-1$
+            Theme lafTheme = LafManager.getTheme();
+            if (lafTheme == null) {
+                return false;
+            }
+            String name = lafTheme.getName();
+            return name.equals("darcula") || name.equals("solarized_dark"); // $NON-NLS-1$
         }
-        return item.lafTheme == DarculaTheme.class || item.lafTheme == SolarizedDarkTheme.class;
+        return false;
     }
 
     public static void activateLookAndFeel(String command) {
@@ -207,16 +212,15 @@ public class LookAndFeelCommand extends AbstractAction {
         String className = item.lafClassName;
         try {
             if (item.lafTheme != null) {
-                LafManager.installTheme(item.lafTheme.getConstructor().newInstance());
-            } else {
-                UIManager.setLookAndFeel(className);
-                UIManager.put("Button.defaultButtonFollowsFocus", false);
-                LafManager.updateLaf();
+                LafManager.setTheme(item.lafTheme.getConstructor().newInstance());
             }
+            GuiPackage instance = GuiPackage.getInstance();
+            if (instance != null) {
+                instance.updateUIForHiddenComponents();
+            }
+            JFactory.refreshUI(className);
             PREFS.put(USER_PREFS_KEY, item.command);
-        } catch (UnsupportedLookAndFeelException
-                | InstantiationException
-                | ClassNotFoundException
+        } catch ( InstantiationException
                 | NoSuchMethodException
                 | IllegalAccessException e) {
             throw new IllegalArgumentException("Look and Feel unavailable:" + e.toString(), e);
@@ -230,7 +234,6 @@ public class LookAndFeelCommand extends AbstractAction {
     public void doAction(ActionEvent ev) {
         try {
             activateLookAndFeel(ev.getActionCommand());
-            GuiPackage.getInstance().invalidateCachedUi();
         } catch (IllegalArgumentException e) {
             JMeterUtils.reportErrorToUser(e.getMessage(), e);
         }

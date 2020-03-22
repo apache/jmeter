@@ -24,7 +24,6 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Font;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
@@ -41,7 +40,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
-import org.apache.jorphan.gui.JTextAreaWithBorder;
+import org.apache.jorphan.gui.JFactory;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +81,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @SuppressWarnings("DeprecatedIsStillUsed")
     protected NamePanel namePanel;
 
-    private final JTextArea commentField = new JTextAreaWithBorder();
+    private final JTextArea commentField = JFactory.tabMovesFocus(JFactory.textAreaWithBorder());
 
     /**
      * When constructing a new component, this takes care of basic tasks like
@@ -184,15 +183,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * @return a JLabel which subclasses can add to their GUI
      */
     protected Component createTitleLabel() {
-        return new JLabel(getStaticLabel()) {
-            @Override
-            public void updateUI() {
-                super.updateUI();
-                // Setting the font in updateUI reduces UI jumps when look and feel changes
-                Font curFont = getFont();
-                setFont(curFont.deriveFont((float) curFont.getSize() + 4));
-            }
-        };
+        return JFactory.big(new JLabel(getStaticLabel()));
     }
 
     /**

@@ -18,7 +18,6 @@
 package org.apache.jmeter.visualizers;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
@@ -35,7 +34,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -46,16 +44,13 @@ import javax.swing.text.Highlighter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.utils.Colors;
+import org.apache.jorphan.gui.JFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private static final Logger log = LoggerFactory.getLogger(SearchTextExtension.class);
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private static final String SEARCH_TEXT_COMMAND = "search_text"; // $NON-NLS-1$
 
@@ -133,7 +128,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         textToFindField = new JTextField(30); // $NON-NLS-1$
         this.toolBar = new JToolBar();
         toolBar.setFloatable(false);
-        toolBar.setFont(FONT_SMALL);
+        JFactory.small(textToFindField);
         toolBar.add(textToFindField);
 
         // add listener to intercept texttofind changes and reset search
@@ -142,7 +137,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         // Buttons
         findButton = new JButton(JMeterUtils
                 .getResString("search_text_button_find")); // $NON-NLS-1$
-        findButton.setFont(FONT_SMALL);
+        JFactory.small(findButton);
         findButton.setActionCommand(SEARCH_TEXT_COMMAND);
         findButton.addActionListener(this);
         toolBar.add(findButton);
@@ -150,11 +145,11 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         // checkboxes
         caseChkBox = new JCheckBox(JMeterUtils
                 .getResString("search_text_chkbox_case"), false); // $NON-NLS-1$
-        caseChkBox.setFont(FONT_SMALL);
+        JFactory.small(caseChkBox);
         toolBar.add(caseChkBox);
         regexpChkBox = new JCheckBox(JMeterUtils
                 .getResString("search_text_chkbox_regexp"), false); // $NON-NLS-1$
-        regexpChkBox.setFont(FONT_SMALL);
+        JFactory.small(regexpChkBox);
         toolBar.add(regexpChkBox);
 
         // when Enter is pressed, search start

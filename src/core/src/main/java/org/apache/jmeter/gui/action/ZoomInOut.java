@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 
 /**
  * Zoom IN/OUT
@@ -43,11 +44,14 @@ public class ZoomInOut extends AbstractAction {
     @Override
     public void doAction(ActionEvent e) {
         final String actionCommand = e.getActionCommand();
+        float scale = JMeterUIDefaults.INSTANCE.getScale();
         if (actionCommand.equals(ActionNames.ZOOM_IN)) {
-            JMeterUtils.applyScaleOnFonts(ZOOM_SCALE);
+            scale *= ZOOM_SCALE;
         } else if (actionCommand.equals(ActionNames.ZOOM_OUT)) {
-            JMeterUtils.applyScaleOnFonts(1/ZOOM_SCALE);
+            scale /= ZOOM_SCALE;
         }
+        JMeterUIDefaults.INSTANCE.setScale(scale);
+        JMeterUtils.refreshUI();
     }
 
     /**

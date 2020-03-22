@@ -18,14 +18,13 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -35,6 +34,8 @@ import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JFactory;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 
 /**
  * The user interface for a controller which specifies that its subcomponents
@@ -187,9 +188,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
         conditionPanel.add(conditionLabel, BorderLayout.WEST);
         ImageIcon image = JMeterUtils.getImage("warning.png");
         warningLabel = new JLabel(JMeterUtils.getResString("if_controller_warning"), image, SwingConstants.CENTER); // $NON-NLS-1$
-        warningLabel.setForeground(Color.RED);
-        Font font = warningLabel.getFont();
-        warningLabel.setFont(new Font(font.getFontName(), Font.BOLD, (int)(font.getSize()*1.1)));
+        JFactory.warning(warningLabel);
 
         // Condition
         theCondition = JSyntaxTextArea.getInstance(5, 50); // $NON-NLS-1$
@@ -217,13 +216,15 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
     @Override
     public void stateChanged(ChangeEvent e) {
         if(e.getSource() == useExpression) {
+            String colorId;
             if(useExpression.isSelected()) {
-                warningLabel.setForeground(Color.BLACK);
+                colorId = JMeterUIDefaults.LABEL_WARNING_FOREGROUND;
                 conditionLabel.setText(JMeterUtils.getResString("if_controller_expression_label"));
             } else {
-                warningLabel.setForeground(Color.RED);
+                colorId = JMeterUIDefaults.LABEL_ERROR_FOREGROUND;
                 conditionLabel.setText(JMeterUtils.getResString("if_controller_label"));
             }
+            warningLabel.setForeground(UIManager.getColor(colorId));
         }
     }
 }

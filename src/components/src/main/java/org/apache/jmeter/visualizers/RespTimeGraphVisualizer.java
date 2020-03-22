@@ -46,7 +46,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
@@ -64,6 +63,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jmeter.visualizers.utils.Colors;
 import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.math.StatCalculatorLong;
 import org.slf4j.Logger;
@@ -74,10 +74,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private static final long serialVersionUID = 281L;
 
     private static final Logger log = LoggerFactory.getLogger(RespTimeGraphVisualizer.class);
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     //+ JMX property names; do not change
 
@@ -756,7 +752,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         intervalPane.add(intervalField);
 
         // Button
-        intervalButton.setFont(FONT_SMALL);
+        JFactory.small(intervalButton);
         intervalButton.addActionListener(this);
         intervalPane.add(intervalButton);
 
@@ -783,14 +779,14 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         searchPanel.add(Box.createRigidArea(new Dimension(5,0)));
 
         // Button
-        applyFilterBtn.setFont(FONT_SMALL);
+        JFactory.small(applyFilterBtn);
         applyFilterBtn.addActionListener(this);
         searchPanel.add(applyFilterBtn);
 
         // checkboxes
-        caseChkBox.setFont(FONT_SMALL);
+        JFactory.small(caseChkBox);
         searchPanel.add(caseChkBox);
-        regexpChkBox.setFont(FONT_SMALL);
+        JFactory.small(regexpChkBox);
         searchPanel.add(regexpChkBox);
 
         return searchPanel;
@@ -798,7 +794,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private JPanel createGraphTitlePane() {
         JPanel titleNamePane = new JPanel(new BorderLayout());
-        syncWithName.setFont(FONT_SMALL);
+        JFactory.small(syncWithName);
         titleNamePane.add(graphTitle, BorderLayout.CENTER);
         titleNamePane.add(syncWithName, BorderLayout.EAST);
 

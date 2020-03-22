@@ -18,7 +18,6 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,9 +25,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.UIManager;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JFactory;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 
@@ -38,10 +37,6 @@ import org.fife.ui.rtextarea.SearchEngine;
  */
 public final class JSyntaxSearchToolBar implements ActionListener {
     public static final Color LIGHT_RED = new Color(0xFF, 0x80, 0x80);
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     public static final String FIND_ACTION = "Find";
 
@@ -68,20 +63,20 @@ public final class JSyntaxSearchToolBar implements ActionListener {
 
     private void init() {
         this.searchField = new JTextField(30);
-        searchField.setFont(FONT_SMALL);
+        JFactory.small(searchField);
         final JButton findButton = new JButton(JMeterUtils.getResString("search_text_button_find"));
-        findButton.setFont(FONT_SMALL);
+        JFactory.small(findButton);
         findButton.setActionCommand(FIND_ACTION);
         findButton.addActionListener(this);
         regexCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"));
-        regexCB.setFont(FONT_SMALL);
+        JFactory.small(regexCB);
 
         matchCaseCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"));
-        matchCaseCB.setFont(FONT_SMALL);
+        JFactory.small(matchCaseCB);
 
         this.toolBar = new JToolBar();
         toolBar.setFloatable(false);
-        toolBar.setFont(FONT_SMALL);
+        JFactory.small(toolBar);
         toolBar.add(searchField);
         toolBar.add(findButton);
         toolBar.add(matchCaseCB);

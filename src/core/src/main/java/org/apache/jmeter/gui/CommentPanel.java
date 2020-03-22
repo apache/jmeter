@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JTextAreaWithBorder;
+import org.apache.jorphan.gui.JFactory;
 import org.apiguardian.api.API;
 
 /**
@@ -54,7 +54,7 @@ public class CommentPanel extends JPanel {
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(5, 0));
 
-        commentField = new JTextAreaWithBorder();
+        commentField = JFactory.textAreaWithBorder();
         JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments")); //$NON-NLS-1$
         commentLabel.setLabelFor(commentField);
         commentLabel.setVerticalAlignment(JLabel.TOP);

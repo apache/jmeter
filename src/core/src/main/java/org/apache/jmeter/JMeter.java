@@ -102,6 +102,7 @@ import org.apache.jmeter.util.ShutdownClient;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
@@ -370,6 +371,8 @@ public class JMeter implements JMeterPlugin {
         System.out.println("   Modify current env variable HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
         System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
+
+        JMeterUIDefaults.INSTANCE.install();
 
         String jMeterLaf = LookAndFeelCommand.getPreferredLafCommand();
         try {

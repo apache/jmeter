@@ -18,8 +18,6 @@
 package org.apache.jmeter.protocol.java.config.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -46,6 +44,7 @@ import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.slf4j.Logger;
@@ -157,9 +156,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
                 false);
         classNameLabeledChoice.addChangeListener(this);
 
-        warningLabel.setForeground(Color.RED);
-        Font font = warningLabel.getFont();
-        warningLabel.setFont(new Font(font.getFontName(), Font.BOLD, (int)(font.getSize()*1.1)));
+        JFactory.error(warningLabel);
         warningLabel.setVisible(false);
 
         VerticalPanel panel = new VerticalPanel();

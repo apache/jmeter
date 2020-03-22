@@ -18,7 +18,6 @@
 package org.apache.jmeter.util;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,7 +30,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -52,12 +50,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-import javax.swing.plaf.FontUIResource;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jorphan.gui.JFactory;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.test.UnitTestManager;
 import org.apache.jorphan.util.JMeterError;
@@ -67,10 +64,10 @@ import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.weisj.darklaf.LafManager;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import com.thoughtworks.xstream.security.NoTypePermission;
@@ -1184,6 +1181,7 @@ public class JMeterUtils implements UnitTestManager {
      * Provide info, whether we run in HiDPI mode
      * @return {@code true} if we run in HiDPI mode, {@code false} otherwise
      */
+    @API(since = "5.3", status = API.Status.DEPRECATED)
     public static boolean getHiDPIMode() {
         return JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
     }
@@ -1192,6 +1190,7 @@ public class JMeterUtils implements UnitTestManager {
      * Provide info about the HiDPI scale factor
      * @return the factor by which we should scale elements for HiDPI mode
      */
+    @API(since = "5.3", status = API.Status.DEPRECATED)
     public static double getHiDPIScaleFactor() {
         return Double.parseDouble(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
     }
@@ -1200,10 +1199,9 @@ public class JMeterUtils implements UnitTestManager {
      * Apply HiDPI mode management to {@link JTable}
      * @param table the {@link JTable} which should be adapted for HiDPI mode
      */
+    @API(since = "5.3", status = API.Status.DEPRECATED)
     public static void applyHiDPI(JTable table) {
-        if (JMeterUtils.getHiDPIMode()) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JFactory.singleLineRowHeight(table);
     }
 
     /**
@@ -1226,6 +1224,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Apply HiDPI scale factor on font if HiDPI mode is enabled
      */
+    @API(since = "5.3", status = API.Status.DEPRECATED)
     public static void applyHiDPIOnFonts() {
         if (!getHiDPIMode()) {
             return;
@@ -1237,35 +1236,18 @@ public class JMeterUtils implements UnitTestManager {
      * Apply HiDPI scale factor on fonts
      * @param scale float scale to apply
      */
+    @API(since = "5.3", status = API.Status.DEPRECATED)
     public static void applyScaleOnFonts(final float scale) {
-        log.info("Applying HiDPI scale: {}", scale);
-        SwingUtilities.invokeLater(() -> {
-            UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-            // If I iterate over the entrySet under ubuntu with jre 1.8.0_121
-            // the font objects are missing, so iterate over the keys, only
-            for (Object key : new ArrayList<>(defaults.keySet())) {
-                Object value = defaults.get(key);
-                log.debug("Try key {} with value {}", key, value);
-                if (value instanceof Font) {
-                    Font font = (Font) value;
-                    final float newSize = font.getSize() * scale;
-                    if (font instanceof FontUIResource) {
-                        defaults.put(key, new FontUIResource(font.getName(),
-                                font.getStyle(), Math.round(newSize)));
-                    } else {
-                        defaults.put(key, font.deriveFont(newSize));
-                    }
-                }
-            }
-            JMeterUtils.refreshUI();
-        });
+        JMeterUIDefaults defaults = JMeterUIDefaults.INSTANCE;
+        defaults.setScale(defaults.getScale() * scale);
     }
 
     /**
      * Refresh UI after LAF change or resizing
      */
-    public static final void refreshUI() {
-        LafManager.updateLaf();
+    public static void refreshUI() {
+        GuiPackage.getInstance().updateUIForHiddenComponents();
+        JFactory.refreshUI();
     }
 
     /**

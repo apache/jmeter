@@ -17,13 +17,18 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.swing.UIManager;
+
 import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JFactory;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -41,7 +46,8 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final long serialVersionUID = 211L;
     private static final Logger log              = LoggerFactory.getLogger(JSyntaxTextArea.class);
 
-    private static final Theme DARCULA_THEME = initTheme();
+    private static final Theme DEFAULT_THEME = loadTheme(Theme.class, "themes/default.xml");
+    private static final Theme DARCULA_THEME = loadTheme(JSyntaxTextArea.class, "theme/darcula_theme.xml");
 
     private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$
 
@@ -74,7 +80,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     public static JSyntaxTextArea getInstance(int rows, int cols, boolean disableUndo) {
         try {
             JSyntaxTextArea jSyntaxTextArea = new JSyntaxTextArea(rows, cols, disableUndo);
-            applyTheme(jSyntaxTextArea);
+            JFactory.withDynamic(jSyntaxTextArea, JSyntaxTextArea::applyTheme);
             return jSyntaxTextArea;
         } catch (HeadlessException e) {
             // Allow override for unit testing only
@@ -112,9 +118,25 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * @param jSyntaxTextArea
      */
     private static void applyTheme(JSyntaxTextArea jSyntaxTextArea) {
-        String laf = LookAndFeelCommand.getPreferredLafCommand();
-        if (LookAndFeelCommand.isDark(laf)) {
-            DARCULA_THEME.apply(jSyntaxTextArea);
+        Theme theme;
+        if (LookAndFeelCommand.isDark()) {
+            theme = DARCULA_THEME;
+        } else {
+            theme = DEFAULT_THEME;
+        }
+        if (theme != null) {
+            theme.apply(jSyntaxTextArea);
+            Font font = jSyntaxTextArea.getFont();
+            float scale = JMeterUIDefaults.INSTANCE.getScale();
+            if (Math.abs(scale - 1.0f) > 0.01) {
+                font = font.deriveFont(font.getSize2D() * scale);
+                jSyntaxTextArea.setFont(font);
+            }
+        }
+        Color color = UIManager.getColor("TextArea.background");
+        if (color != null) {
+            // Pretend syntax textarea theme was designed for the current LaF
+            jSyntaxTextArea.setBackground(color);
         }
     }
 
@@ -259,13 +281,11 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         discardAllEdits();
     }
 
-
-    private static final Theme initTheme() {
+    private static Theme loadTheme(Class<?> klass, String name) {
         try {
-            return Theme.load(JSyntaxTextArea.class.getClassLoader().getResourceAsStream(
-                    "org/apache/jmeter/gui/util/theme/darcula_theme.xml"));
+            return Theme.load(klass.getResourceAsStream(name));
         } catch (IOException e) {
-            log.error("Error reading darcula_theme for JSyntaxTextArea", e);
+            log.error("Error reading " + name + " for JSyntaxTextArea", e);
             return null;
         }
     }
