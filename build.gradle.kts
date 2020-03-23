@@ -386,6 +386,7 @@ allprojects {
 
         val testTasks = tasks.withType<Test>()
         val javaExecTasks = tasks.withType<JavaExec>()
+            .matching { it.name != "runGui" }
         // This configuration must be postponed since JacocoTaskExtension might be added inside
         // configure block of a task (== before this code is run). See :src:dist-check:createBatchTask
         afterEvaluate {
