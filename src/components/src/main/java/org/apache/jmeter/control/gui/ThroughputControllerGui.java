@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.control.ThroughputController;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.gui.util.MenuInfo;
 import org.apache.jmeter.testelement.TestElement;
@@ -35,6 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 @GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+1)
+@TestElementMetadata(labelResource = "throughput_control_title")
 public class ThroughputControllerGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 

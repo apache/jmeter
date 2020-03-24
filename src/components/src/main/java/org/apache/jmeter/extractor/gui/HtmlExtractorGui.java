@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.extractor.HtmlExtractor;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -46,6 +47,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * @since 2.9
  */
 @GUIMenuSortOrder(1)
+@TestElementMetadata(labelResource = "html_extractor_title")
 public class HtmlExtractorGui extends AbstractPostProcessorGui {
     private static final long serialVersionUID = 240L;
 

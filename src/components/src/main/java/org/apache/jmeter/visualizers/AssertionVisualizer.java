@@ -29,11 +29,13 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
+@TestElementMetadata(labelResource = "assertion_visualizer_title")
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable {
 
     private static final long serialVersionUID = 240L;

@@ -65,6 +65,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.SaveGraphics;
@@ -96,6 +97,7 @@ import org.slf4j.LoggerFactory;
  * you!
  *
  */
+@TestElementMetadata(labelResource = "aggregate_graph_title")
 public class StatGraphVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
     private static final long serialVersionUID = 242L;
 

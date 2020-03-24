@@ -42,6 +42,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.samplers.Clearable;
@@ -58,6 +59,7 @@ import org.apache.jorphan.gui.RendererUtils;
  * Aggregate Table-Based Reporting Visualizer for JMeter.
  */
 @GUIMenuSortOrder(3)
+@TestElementMetadata(labelResource = "aggregate_report")
 public class StatVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
 
     private static final long serialVersionUID = 242L;

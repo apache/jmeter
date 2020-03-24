@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.extractor.XPath2Extractor;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
@@ -40,6 +41,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * GUI for XPath2Extractor class.
  * @since 5.0
  */
+@TestElementMetadata(labelResource = "xpath2_extractor_title")
 public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ignore parents warning
 
     private static final long serialVersionUID = 1L;

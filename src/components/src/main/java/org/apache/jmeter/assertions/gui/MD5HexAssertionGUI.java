@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.MD5HexAssertion;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -32,6 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * GUI class supporting the MD5Hex assertion functionality.
  */
+@TestElementMetadata(labelResource = "md5hex_assertion_title")
 public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
     private static final long serialVersionUID = 240L;

@@ -19,6 +19,7 @@ package org.apache.jmeter.reporters.gui;
 
 import java.awt.BorderLayout;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
@@ -27,6 +28,7 @@ import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
  * Create a summariser test element GUI.
  *
  */
+@TestElementMetadata(labelResource = "summariser_title")
 public class SummariserGui extends AbstractListenerGui {
 
     private static final long serialVersionUID = 240L;

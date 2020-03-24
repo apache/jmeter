@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.modifiers.SampleTimeout;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -32,6 +33,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * The GUI for SampleTimeout.
  */
+@TestElementMetadata(labelResource = "sample_timeout_title")
 public class SampleTimeoutGui extends AbstractPreProcessorGui {
 
     private static final long serialVersionUID = 240L;

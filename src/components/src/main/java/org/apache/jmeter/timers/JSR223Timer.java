@@ -22,11 +22,13 @@ import java.io.IOException;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.JSR223TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@TestElementMetadata(labelResource = "displayName")
 public class JSR223Timer extends JSR223TestElement implements Cloneable, Timer, TestBean {
     private static final Logger log = LoggerFactory.getLogger(JSR223Timer.class);
 

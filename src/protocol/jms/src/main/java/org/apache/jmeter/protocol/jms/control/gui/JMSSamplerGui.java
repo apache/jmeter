@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -44,6 +45,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * Configuration screen for Java Messaging Point-to-Point requests.
  */
+@TestElementMetadata(labelResource = "jms_point_to_point")
 public class JMSSamplerGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 240L;

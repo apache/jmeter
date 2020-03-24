@@ -21,6 +21,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.ldap.config.gui.LdapExtConfigGui;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -35,6 +36,7 @@ import org.apache.jmeter.testelement.TestElement;
  * created Apr 29 2003 11:00 AM company Sip Technologies and Exports Ltd.
  *
  ******************************************************************************/
+@TestElementMetadata(labelResource = "ldapext_testing_title")
 public class LdapExtTestSamplerGui extends AbstractSamplerGui {
     private static final long serialVersionUID = 240L;
 

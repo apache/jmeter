@@ -68,6 +68,7 @@ import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -94,6 +95,10 @@ import org.slf4j.LoggerFactory;
  * GUI of HTTP(s) Test Script Recorder
  *
  */
+@TestElementMetadata(
+        labelResource = "proxy_title",
+        actionGroups = MenuFactory.NON_TEST_ELEMENTS
+)
 public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComponent, ActionListener, ItemListener,
         KeyListener, UnsharedComponent {
     private static final Logger log = LoggerFactory.getLogger(ProxyControlGui.class);

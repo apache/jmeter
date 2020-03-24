@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.ForeachController;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -34,6 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * sub-components should be executed some number of times in a loop. This
  * component can be used standalone or embedded into some other component.
  */
+@TestElementMetadata(labelResource = "foreach_controller_title")
 public class ForeachControlPanel extends AbstractControllerGui {
 
     private static final long serialVersionUID = 240L;

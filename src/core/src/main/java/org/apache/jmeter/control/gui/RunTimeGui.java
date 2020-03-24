@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.RunTime;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -36,7 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * used standalone or embedded into some other component.
  *
  */
-
+@TestElementMetadata(labelResource = "runtime_controller_title")
 public class RunTimeGui extends AbstractControllerGui implements ActionListener {
     private static final long serialVersionUID = 240L;
 

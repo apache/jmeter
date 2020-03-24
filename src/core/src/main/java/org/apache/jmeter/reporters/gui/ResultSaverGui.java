@@ -29,6 +29,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.reporters.ResultSaver;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.testelement.TestElement;
@@ -41,6 +42,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * of files
  *
  */
+@TestElementMetadata(labelResource = "resultsaver_title")
 public class ResultSaverGui extends AbstractListenerGui implements Clearable { // NOSONAR Ignore inheritance rule
 
     private static final long serialVersionUID = 241L;

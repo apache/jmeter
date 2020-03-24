@@ -41,6 +41,7 @@ import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -49,6 +50,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
+@TestElementMetadata(labelResource = "property_visualiser_title", actionGroups = MenuFactory.NON_TEST_ELEMENTS)
 public class PropertyControlGui extends AbstractConfigGui implements
         ActionListener, UnsharedComponent {
 

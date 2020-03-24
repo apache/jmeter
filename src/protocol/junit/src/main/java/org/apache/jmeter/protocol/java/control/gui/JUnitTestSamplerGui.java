@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.java.sampler.JUnitSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -57,6 +58,7 @@ import junit.framework.TestCase;
  * for the {@link JUnitSampler}.
  *
  */
+@TestElementMetadata(labelResource = "junit_request")
 public class JUnitTestSamplerGui extends AbstractSamplerGui
 implements ChangeListener, ActionListener, ItemListener
 {

@@ -19,6 +19,7 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
@@ -26,6 +27,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * This listener can record results to a file but not to the UI. It is meant to
  * provide an efficient means of recording data by eliminating GUI overhead.
  */
+@TestElementMetadata(labelResource = "simple_data_writer_title")
 public class SimpleDataWriter extends AbstractVisualizer {
     private static final long serialVersionUID = 240L;
 

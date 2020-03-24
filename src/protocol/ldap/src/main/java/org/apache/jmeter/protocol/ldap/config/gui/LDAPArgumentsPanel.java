@@ -34,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -48,6 +49,7 @@ import org.apache.jorphan.reflect.Functor;
  * for some other component.
  *
  */
+@TestElementMetadata(labelResource = "ldapext_sample_title", actionGroups = "")
 public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListener {
 
     private static final long serialVersionUID = 240L;

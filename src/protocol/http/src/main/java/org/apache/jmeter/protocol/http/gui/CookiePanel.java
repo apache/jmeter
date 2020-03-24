@@ -35,6 +35,7 @@ import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -57,6 +58,7 @@ import org.slf4j.LoggerFactory;
  * for this service.
  */
 @GUIMenuSortOrder(3)
+@TestElementMetadata(labelResource = "cookie_manager_title")
 public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private static final long serialVersionUID = 241L;

@@ -29,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.testelement.TestElement;
@@ -42,6 +43,7 @@ import org.apache.jorphan.gui.GuiUtils;
 /**
  * Default config gui for Configuration Element.
  */
+@TestElementMetadata(labelResource = "simple_config_element")
 public class SimpleConfigGui extends AbstractConfigGui implements ActionListener {
     /* This class created for enhancement Bug ID 9101. */
 

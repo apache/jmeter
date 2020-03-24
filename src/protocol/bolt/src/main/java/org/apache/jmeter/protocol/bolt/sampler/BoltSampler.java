@@ -28,6 +28,7 @@ import java.util.Set;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.bolt.config.BoltConnectionElement;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -45,12 +46,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
+@TestElementMetadata(labelResource = "displayName")
 public class BoltSampler extends AbstractBoltTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
 
     private static final Set<String> APPLICABLE_CONFIG_CLASSES = new HashSet<>(
             Collections.singletonList("org.apache.jmeter.config.gui.SimpleConfigGui")); // $NON-NLS-1$
 
-    private static final ObjectReader objectMapper = new ObjectMapper().readerFor(new TypeReference<HashMap<String, Object>>() {});
+    // Enables to initialize object mapper on demand
+    private static class Holder {
+        private static final ObjectReader OBJECT_READER = new ObjectMapper().readerFor(new TypeReference<HashMap<String, Object>>() {});
+    }
 
     @Override
     public SampleResult sample(Entry e) {
@@ -116,7 +121,7 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
 
     private Map<String, Object> getParamsAsMap() throws IOException {
         if (getParams() != null && getParams().length() > 0) {
-            return objectMapper.readValue(getParams());
+            return Holder.OBJECT_READER.readValue(getParams());
         } else {
             return Collections.emptyMap();
         }

@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -46,6 +47,7 @@ import org.slf4j.LoggerFactory;
  * GUI of Mirror Server Test element
  *
  */
+@TestElementMetadata(labelResource = "httpmirror_title", actionGroups = MenuFactory.NON_TEST_ELEMENTS)
 public class HttpMirrorControlGui extends LogicControllerGui
     implements JMeterGUIComponent, ActionListener, UnsharedComponent {
 

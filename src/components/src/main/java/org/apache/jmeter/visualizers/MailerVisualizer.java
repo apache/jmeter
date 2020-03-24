@@ -39,6 +39,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.reporters.MailerModel;
 import org.apache.jmeter.reporters.MailerResultCollector;
@@ -61,6 +62,7 @@ import org.slf4j.LoggerFactory;
  * This class implements a visualizer that mails a message when an error occurs.
  *
  */
+@TestElementMetadata(labelResource = "mailer_visualizer_title")
 public class MailerVisualizer extends AbstractVisualizer implements ActionListener, Clearable, ChangeListener {
     private static final long serialVersionUID = 241L;
 

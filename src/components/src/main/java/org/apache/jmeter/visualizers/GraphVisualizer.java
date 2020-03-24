@@ -42,6 +42,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.JMeterColor;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -54,6 +55,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * autoscaling plots.
  *
  */
+@TestElementMetadata(labelResource = "graph_results_title")
 public class GraphVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener, Clearable {
 
     private static final long serialVersionUID = 240L;

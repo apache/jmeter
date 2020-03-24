@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.XMLSchemaAssertion;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * XMLSchemaAssertionGUI.java
  *
  */
+@TestElementMetadata(labelResource = "xmlschema_assertion_title")
 public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
     // class attributes
      private static final Logger log = LoggerFactory.getLogger(XMLSchemaAssertionGUI.class);

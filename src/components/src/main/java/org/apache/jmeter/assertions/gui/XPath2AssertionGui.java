@@ -25,10 +25,12 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.assertions.XPath2Assertion;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 @GUIMenuSortOrder(50)
+@TestElementMetadata(labelResource = "xpath2_assertion_title")
 public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
 
     private static final long serialVersionUID = 240L;// $NON-NLS-1$

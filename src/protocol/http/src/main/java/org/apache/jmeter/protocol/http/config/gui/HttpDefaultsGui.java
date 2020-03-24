@@ -34,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -51,6 +52,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * GUI for Http Request defaults
  */
 @GUIMenuSortOrder(5)
+@TestElementMetadata(labelResource = "url_config_title")
 public class HttpDefaultsGui extends AbstractConfigGui {
 
     private static final long serialVersionUID = 241L;

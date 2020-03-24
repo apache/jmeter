@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.modifiers.CounterConfig;
 import org.apache.jmeter.testelement.TestElement;
@@ -30,6 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+@TestElementMetadata(labelResource = "counter_config_title")
 public class CounterConfigGui extends AbstractConfigGui implements ActionListener {
     private static final long serialVersionUID = 240L;
 

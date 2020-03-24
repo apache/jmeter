@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -31,6 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.StringSubstitution;
 import org.apache.oro.text.regex.Util;
 
+@TestElementMetadata(labelResource = "displayName")
 public class CompareAssertion extends AbstractTestElement implements Assertion, TestBean, Serializable,
         LoopIterationListener {
 

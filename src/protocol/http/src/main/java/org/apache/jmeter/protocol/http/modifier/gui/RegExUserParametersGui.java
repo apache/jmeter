@@ -26,6 +26,7 @@ import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.RegExUserParameters;
 import org.apache.jmeter.testelement.TestElement;
@@ -35,6 +36,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * GUI for {@link RegExUserParameters}
  */
+@TestElementMetadata(labelResource = "regex_params_title")
 public class RegExUserParametersGui extends AbstractPreProcessorGui {
 
     /**

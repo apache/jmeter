@@ -18,9 +18,11 @@
 package org.apache.jmeter.assertions.gui;
 
 import org.apache.jmeter.assertions.XMLAssertion;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+@TestElementMetadata(labelResource = "xml_assertion_title")
 public class XMLAssertionGui extends AbstractAssertionGui {
     private static final long serialVersionUID = 240L;
 

@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FilePanelEntry;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.system.SystemSampler;
@@ -46,6 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * GUI for {@link SystemSampler}
  */
+@TestElementMetadata(labelResource = "system_sampler_title")
 public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener {
     private static final Logger log = LoggerFactory.getLogger(SystemSamplerGui.class);
 

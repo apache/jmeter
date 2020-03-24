@@ -34,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.control.DNSCacheManager;
 import org.apache.jmeter.protocol.http.control.StaticHost;
@@ -56,6 +57,7 @@ import org.slf4j.LoggerFactory;
  *
  * @since 2.12
  */
+@TestElementMetadata(labelResource = "dns_cache_manager_title")
 public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DNSCachePanel.class);

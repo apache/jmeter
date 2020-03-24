@@ -24,9 +24,11 @@ import javax.swing.Box;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.assertions.XPathAssertion;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+@TestElementMetadata(labelResource = "xpath_assertion_title")
 public class XPathAssertionGui extends AbstractAssertionGui {
 
     private static final long serialVersionUID = 240L;

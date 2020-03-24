@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.extractor.json.jmespath.JMESPathExtractor;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -39,6 +40,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * @since 5.2
  */
 @GUIMenuSortOrder(2)
+@TestElementMetadata(labelResource = "jmes_extractor_title")
 public class JMESPathExtractorGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = -4825532539405119033L;

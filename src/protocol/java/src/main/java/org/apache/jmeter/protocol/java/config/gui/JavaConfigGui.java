@@ -37,6 +37,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
@@ -55,6 +56,7 @@ import org.slf4j.LoggerFactory;
  * {@link JavaConfig} object.
  *
  */
+@TestElementMetadata(labelResource = "java_request_defaults")
 public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
     private static final long serialVersionUID = 241L;
 

@@ -42,6 +42,7 @@ import javax.swing.ListSelectionModel;
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -58,6 +59,7 @@ import org.apache.jorphan.gui.GuiUtils;
  * GUI interface for a {@link ResponseAssertion}.
  */
 @GUIMenuSortOrder(1)
+@TestElementMetadata(labelResource = "assertion_title")
 public class AssertionGui extends AbstractAssertionGui {
     private static final long serialVersionUID = 240L;
 

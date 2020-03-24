@@ -20,12 +20,14 @@ package org.apache.jmeter.control.gui;
 import java.awt.BorderLayout;
 
 import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
  * A generic controller component.
  *
  */
+@TestElementMetadata(labelResource = "logic_controller_title")
 public class LogicControllerGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 

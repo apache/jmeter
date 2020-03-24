@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
@@ -36,6 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Debugging Post-Processor: creates a subSample containing the variables defined in the previous sampler.
  */
+@TestElementMetadata(labelResource = "displayName")
 public class DebugPostProcessor extends AbstractTestElement implements PostProcessor, TestBean {
 
     private static final long serialVersionUID = 260L;

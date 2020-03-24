@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.assertions.gui.XMLConfPanel;
 import org.apache.jmeter.extractor.XPathExtractor;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -37,6 +38,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * GUI for XPathExtractor class.
  */
+@TestElementMetadata(labelResource = "xpath_extractor_title")
 public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = 240L;

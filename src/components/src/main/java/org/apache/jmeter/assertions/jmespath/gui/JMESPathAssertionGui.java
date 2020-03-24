@@ -21,6 +21,7 @@ import javax.swing.JCheckBox;
 
 import org.apache.jmeter.assertions.gui.JSONPathAssertionGui;
 import org.apache.jmeter.assertions.jmespath.JMESPathAssertion;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextArea;
@@ -35,6 +36,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  *
  * @since 5.2
  */
+@TestElementMetadata(labelResource = "jmespath_assertion_title")
 public class JMESPathAssertionGui extends JSONPathAssertionGui {
     private static final long serialVersionUID = 3719848809836264945L;
 

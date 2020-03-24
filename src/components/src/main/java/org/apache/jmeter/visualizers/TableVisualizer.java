@@ -40,6 +40,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.JMeter;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.samplers.Clearable;
@@ -60,6 +61,7 @@ import org.apache.jorphan.reflect.Functor;
  * in a JTable, and the statistics are displayed at the bottom of the table.
  *
  */
+@TestElementMetadata(labelResource = "view_results_in_table")
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private static final long serialVersionUID = 241L;

@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -38,6 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * The Debug Sampler can be used to "sample" JMeter variables, JMeter properties and System Properties.
  */
 @GUIMenuSortOrder(2)
+@TestElementMetadata(labelResource = "displayName")
 public class DebugSampler extends AbstractSampler implements TestBean {
 
     private static final long serialVersionUID = 232L;

@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.sampler.TestAction;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -36,6 +37,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 @GUIMenuSortOrder(1)
+@TestElementMetadata(labelResource = "test_action_title")
 public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierarchy error
     private static final long serialVersionUID = 240L;
 

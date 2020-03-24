@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.DurationAssertion;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -32,6 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * GUI for {@link DurationAssertion}
  */
+@TestElementMetadata(labelResource = "duration_assertion_title")
 public class DurationAssertionGui extends AbstractAssertionGui {
 
     private static final long serialVersionUID = 240L;

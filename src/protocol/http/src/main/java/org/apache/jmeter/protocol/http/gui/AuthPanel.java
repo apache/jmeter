@@ -42,6 +42,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -59,6 +60,7 @@ import org.slf4j.LoggerFactory;
  * Sampler. It also understands how to get AuthManagers for the files that the
  * user selects.
  */
+@TestElementMetadata(labelResource = "auth_manager_title")
 public class AuthPanel extends AbstractConfigGui implements ActionListener {
     private static final long serialVersionUID = -378312656300713635L;
 

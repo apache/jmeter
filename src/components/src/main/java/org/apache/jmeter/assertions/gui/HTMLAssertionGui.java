@@ -34,6 +34,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.HTMLAssertion;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -45,6 +46,7 @@ import org.slf4j.LoggerFactory;
 /**
  * GUI for HTMLAssertion
  */
+@TestElementMetadata(labelResource = "html_assertion_title")
 public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListener, ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(HTMLAssertionGui.class);

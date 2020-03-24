@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.java.control.gui;
 
 import java.awt.BorderLayout;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.protocol.java.config.gui.JavaConfigGui;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
@@ -30,6 +31,7 @@ import org.apache.jmeter.testelement.TestElement;
  * the {@link JavaSampler}.
  *
  */
+@TestElementMetadata(labelResource = "java_request")
 public class JavaTestSamplerGui extends AbstractSamplerGui {
     private static final long serialVersionUID = 240L;
 

@@ -51,6 +51,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.SaveGraphics;
@@ -69,6 +70,7 @@ import org.apache.jorphan.math.StatCalculatorLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@TestElementMetadata(labelResource = "graph_resp_time_title")
 public class RespTimeGraphVisualizer extends AbstractVisualizer implements ActionListener, Clearable {
 
     private static final long serialVersionUID = 281L;
@@ -512,14 +514,14 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             try {
                 ActionRouter.getInstance().getAction(
                         ActionNames.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
-                                new ActionEvent(this,event.getID(),ActionNames.SAVE_GRAPHICS));
+                        new ActionEvent(this,event.getID(),ActionNames.SAVE_GRAPHICS));
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
         } else if (eventSource == syncWithName) {
             graphTitle.setText(getName());
         } else if (eventSource == dynamicGraphSize) {
-                enableDynamicGraph(dynamicGraphSize.isSelected());
+            enableDynamicGraph(dynamicGraphSize.isSelected());
         } else if (eventSource == samplerSelection) {
             enableSamplerSelection(samplerSelection.isSelected());
             if (!samplerSelection.isSelected()) {

@@ -29,6 +29,7 @@ import javax.swing.JPopupMenu;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.FileListPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -42,6 +43,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * JMeter GUI component representing the test plan which will be executed when
  * the test is run.
  */
+@TestElementMetadata(labelResource = "test_plan", actionGroups = "")
 public class TestPlanGui extends AbstractJMeterGuiComponent {
 
     private static final long serialVersionUID = 240L;

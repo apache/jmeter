@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.ConstantTimer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -33,6 +34,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * The GUI for ConstantTimer.
  */
 @GUIMenuSortOrder(1)
+@TestElementMetadata(labelResource = "constant_timer_title")
 public class ConstantTimerGui extends AbstractTimerGui {
     private static final long serialVersionUID = 240L;
 

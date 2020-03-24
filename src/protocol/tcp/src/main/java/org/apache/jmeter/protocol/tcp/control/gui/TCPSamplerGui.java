@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 
 import org.apache.jmeter.config.gui.LoginConfigGui;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.tcp.config.gui.TCPConfigGui;
 import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
@@ -29,6 +30,7 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+@TestElementMetadata(labelResource = "tcp_sample_title")
 public class TCPSamplerGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 240L;

@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.timers.gui;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.timers.GaussianRandomTimer;
 import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -24,6 +25,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Implementation of a gaussian random timer.
  */
+@TestElementMetadata(labelResource = "gaussian_timer_title")
 public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
 
     private static final long serialVersionUID = 240L;

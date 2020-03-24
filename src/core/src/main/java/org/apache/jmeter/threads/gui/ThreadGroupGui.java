@@ -31,6 +31,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
@@ -39,6 +40,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+@TestElementMetadata(labelResource = "threadgroup")
 public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListener {
     private static final long serialVersionUID = 240L;
 

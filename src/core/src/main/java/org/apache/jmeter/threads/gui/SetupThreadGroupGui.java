@@ -19,9 +19,11 @@ package org.apache.jmeter.threads.gui;
 
 import java.awt.event.ItemListener;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.SetupThreadGroup;
 
+@TestElementMetadata(labelResource = "setup_thread_group_title")
 public class SetupThreadGroupGui extends ThreadGroupGui implements ItemListener {
     private static final long serialVersionUID = 240L;
 

@@ -47,6 +47,7 @@ import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.control.TestFragmentController;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.MenuInfo;
@@ -69,6 +70,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  *
  */
 @GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+2)
+@TestElementMetadata(labelResource = "module_controller_title")
 public class ModuleControllerGui extends AbstractControllerGui implements ActionListener { // NOSONAR Ignore parent warning
     private static final long serialVersionUID = -4195441608252523573L;
 

@@ -18,6 +18,7 @@
 package org.apache.jmeter.visualizers;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @GUIMenuSortOrder(Integer.MAX_VALUE)
+@TestElementMetadata(labelResource = "displayName")
 public class BeanShellListener extends BeanShellTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer, UnsharedComponent  {
 

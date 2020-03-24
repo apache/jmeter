@@ -23,6 +23,7 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * thus create large instant loads at various points of the test plan.
  *
  */
+@TestElementMetadata(labelResource = "displayName")
 public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean, TestStateListener, ThreadListener {
     private static final Logger log = LoggerFactory.getLogger(SyncTimer.class);
 
