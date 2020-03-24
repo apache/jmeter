@@ -239,6 +239,7 @@ val flakyTests = listOf(
     "batchHttp4ImplPreemptiveBasicAuthJava",
     "batchSlowCharsFeatureHttpClient4",
     "batchSlowCharsFeatureJava",
+    "batchTCP_TESTS",
     "batchTestKeepAlive",
     "batchTestRedirectionPolicies"
 )
