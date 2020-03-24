@@ -234,6 +234,7 @@ are gray. It is purely a UI change, and the behavior is not altered.
   <li><bug>64034</bug>Shell scripts fail if space in <code>JAVA_HOME</code> path. Contributed by ray7219 (ray7219 at hotmail.com)</li>
   <li><bug>63856</bug>Set <code>connectTime</code> on parent samples when using a transaction controller</li>
   <li><bug>64227</bug>Error when loading Templates on Windows</li>
+  <li>TestPlan UI: skip adding the entry to the classpath if the user clicks cance</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

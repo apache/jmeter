@@ -205,7 +205,10 @@ public class FileListPanel extends JPanel implements ActionListener {
             chooser.setFileFilter(new JMeterFileFilter(new String[] { filetype }));
             chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             chooser.setMultiSelectionEnabled(true);
-            chooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
+            if (chooser.showOpenDialog(GuiPackage.getInstance().getMainFrame()) !=
+                    JFileChooser.APPROVE_OPTION) {
+                return;
+            }
             File[] cfiles = chooser.getSelectedFiles();
             if (cfiles != null) {
                 for (File cfile : cfiles) {
