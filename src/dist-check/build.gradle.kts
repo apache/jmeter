@@ -40,6 +40,8 @@ dependencies {
     testImplementation("com.fasterxml.jackson.core:jackson-databind") {
         because("It is used in ReportGeneratorSpec and HtmlReportGeneratorSpec")
     }
+    testImplementation("com.github.weisj:darklaf-core")
+    testImplementation("org.apache.xmlgraphics:xmlgraphics-commons")
 
     extraTestDependencies(platform(project(":src:bom")))
     extraTestDependencies("org.hsqldb:hsqldb")
@@ -253,5 +255,20 @@ if (props.bool("enableFlaky", default = false)) {
         tasks.named(test) {
             enabled = false
         }
+    }
+}
+
+tasks.test {
+    exclude("**/GenerateScreenshotsTest.class")
+}
+
+if (props.bool("generateScreenshots")) {
+    val generateScreenshots by tasks.registering(Test::class) {
+        include("**/GenerateScreenshotsTest.class")
+        // Test examine JAR contents in /lib/..., so we need to copy jars to the projectRoot/lib/
+        dependsOn(createDist)
+    }
+    tasks.build {
+        dependsOn(generateScreenshots)
     }
 }
