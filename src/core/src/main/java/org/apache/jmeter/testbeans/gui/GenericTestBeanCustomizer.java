@@ -26,6 +26,7 @@ import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -246,8 +247,23 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     try {
                         propertyEditor = (PropertyEditor) editorClass.getDeclaredConstructor().newInstance();
                     } catch (ReflectiveOperationException e) {
-                        log.error("Can't create property editor.", e);
-                        throw new Error(e.toString());
+                        Throwable ex = e;
+                        if (ex instanceof InvocationTargetException) {
+                            ex = ex.getCause();
+                        }
+                        IllegalArgumentException context = ex == null ? null :
+                                new IllegalArgumentException("Unable to instantiate property " + name +
+                                        " editor " + editorClass + ": " + ex.getMessage());
+                        if (ex instanceof RuntimeException) {
+                            ex.addSuppressed(context);
+                            throw (RuntimeException) ex;
+                        } else if (ex instanceof Error) {
+                            ex.addSuppressed(context);
+                            throw (Error) ex;
+                        } else {
+                            context.initCause(ex);
+                            throw context;
+                        }
                     }
                 } else {
                     Class<?> c = descriptor.getPropertyType();
