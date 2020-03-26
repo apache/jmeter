@@ -54,7 +54,7 @@ public class CommentPanel extends JPanel {
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(5, 0));
 
-        commentField = JFactory.textAreaWithBorder();
+        commentField = JFactory.tabMovesFocus(new JTextArea());
         JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments")); //$NON-NLS-1$
         commentLabel.setLabelFor(commentField);
         commentLabel.setVerticalAlignment(JLabel.TOP);

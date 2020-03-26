@@ -69,16 +69,6 @@ public class JFactory {
     }
 
     /**
-     * Returns a {@link JTextArea} that looks like {@link JTextField}.
-     * <p>By default {@link JTextArea} has no border, this method is helpful if the border is need</p>
-     * @return textArea with border
-     */
-    @API(since = "5.3", status = API.Status.EXPERIMENTAL)
-    public static JTextArea textAreaWithBorder() {
-        return STYLE.withBorder(new JTextArea(), JMeterUIDefaults.TEXTAREA_BORDER);
-    }
-
-    /**
      * By default {@link JTextArea} uses {@code tab} to add tab character,
      * however, sometimes it is desired to use {@code tab} to move focus.
      * @param textArea input textarea to configure moving focus on tab

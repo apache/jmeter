@@ -30,6 +30,8 @@ import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.UIResource;
 
+import org.apache.jorphan.gui.ui.TextAreaUIWithUndo;
+import org.apache.jorphan.gui.ui.TextFieldUIWithUndo;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,6 +136,9 @@ public class JMeterUIDefaults {
             defaults.put(LABEL_ERROR_FOREGROUND, Color.red);
 
             defaults.put(BUTTON_ERROR_FOREGROUND, Color.red);
+
+            TextFieldUIWithUndo.install(defaults);
+            TextAreaUIWithUndo.install(defaults);
         });
     }
 

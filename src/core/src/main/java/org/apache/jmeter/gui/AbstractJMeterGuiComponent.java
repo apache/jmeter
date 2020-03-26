@@ -81,7 +81,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @SuppressWarnings("DeprecatedIsStillUsed")
     protected NamePanel namePanel;
 
-    private final JTextArea commentField = JFactory.tabMovesFocus(JFactory.textAreaWithBorder());
+    private final JTextArea commentField = JFactory.tabMovesFocus(new JTextArea());
 
     /**
      * When constructing a new component, this takes care of basic tasks like

@@ -94,6 +94,14 @@ are gray. It is purely a UI change, and the behavior is not altered.
 For instance: log viewer, JSR223 code editor were not previously scaled with zoom-in/out feature</p>
 
 <p>Tree context menu is shown for the full row, not for the label only</p>
+
+<p>Undo and redo support for editable fields. Keystrokes are <keycombo><keysym>CTRL</keysym><keysym>Z</keysym></keycombo> /
+    <keycombo><keysym>CTRL</keysym><keysym>SHIFT</keysym><keysym>Z</keysym></keycombo>, or
+    <keycombo><keysym>CMD</keysym><keysym>Z</keysym></keycombo>/
+    <keycombo><keysym>CMD</keysym><keysym>SHIFT</keysym><keysym>Z</keysym></keycombo> depending on the operating system.
+Undo is implemented on a field level basis (each fields has its own history), and the history is
+invalidated when tree selection changes.</p>
+
 <!--
 <ch_title>Functions</ch_title>
 -->
