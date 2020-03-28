@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
+import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -209,6 +210,13 @@ public class DynamicStyle {
         if (children != null) {
             for (Component child : children) {
                 collectComponents(child, components);
+            }
+        }
+        if (root instanceof JTabbedPane) {
+            JTabbedPane tabbedPane = (JTabbedPane) root;
+            int size = tabbedPane.getTabCount();
+            for (int i = 0; i < size; i++) {
+                collectComponents(tabbedPane.getTabComponentAt(i), components);
             }
         }
     }
