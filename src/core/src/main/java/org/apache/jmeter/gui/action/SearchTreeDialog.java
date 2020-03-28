@@ -45,6 +45,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
@@ -61,9 +62,10 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.documentation.VisibleForTesting;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JFactory;
-import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Dialog to search in tree of element
@@ -90,9 +92,9 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
 
     private JButton cancelButton;
 
-    private JLabeledTextField searchTF;
+    private JTextField searchTF;
 
-    private JLabeledTextField replaceTF;
+    private JTextField replaceTF;
 
     private JLabel statusLabel;
 
@@ -152,7 +154,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
-        searchTF = new JLabeledTextField(JMeterUtils.getResString("search_text_field"), 20); //$NON-NLS-1$
+        searchTF = new JTextField(20);
         searchTF.setAlignmentY(TOP_ALIGNMENT);
         if (lastSearchConditions != null) {
             searchTF.setText(lastSearchConditions.getLeft());
@@ -160,7 +162,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
             isRegexpCB.setSelected(lastSearchConditions.getRight());
         }
 
-        replaceTF = new JLabeledTextField(JMeterUtils.getResString("search_text_replace"), 20); //$NON-NLS-1$
+        replaceTF = new JTextField(20);
         replaceTF.setAlignmentX(TOP_ALIGNMENT);
         statusLabel = new JLabel(" ");
         statusLabel.setPreferredSize(new Dimension(100, 20));
@@ -177,12 +179,14 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
         searchCriterionPanel.add(isRegexpCB);
 
         JPanel searchPanel = new JPanel();
-        searchPanel.setLayout(new GridLayout(4, 1));
+        searchPanel.setLayout(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
         searchPanel.setBorder(BorderFactory.createEmptyBorder(7, 3, 3, 3));
+        searchPanel.add(JMeterUtils.labelFor(searchTF, "search_text_field"));
         searchPanel.add(searchTF);
+        searchPanel.add(JMeterUtils.labelFor(replaceTF, "search_text_replace"));
         searchPanel.add(replaceTF);
-        searchPanel.add(statusLabel);
-        searchPanel.add(searchCriterionPanel);
+        searchPanel.add(statusLabel, "span 2");
+        searchPanel.add(searchCriterionPanel, "span 2");
 
         JPanel buttonsPanel = new JPanel(new GridLayout(9, 1));
         searchButton = createButton("search_search_all"); //$NON-NLS-1$
