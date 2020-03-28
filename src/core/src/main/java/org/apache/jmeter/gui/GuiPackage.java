@@ -98,6 +98,13 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     private boolean dirty = false;
 
     /**
+     * Map from TestElement to JMeterGUIComponent, mapping the nodes in the tree
+     * to their corresponding GUI components.
+     * <p>This enables to associate {@link UnsharedComponent} UIs with their {@link TestElement}.</p>
+     */
+    private Map<TestElement, JMeterGUIComponent> nodesToGui = new HashMap<>();
+
+    /**
      * Map from Class to JMeterGUIComponent, mapping the Class of a GUI
      * component to an instance of that component.
      */
@@ -254,7 +261,13 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public JMeterGUIComponent getGui(TestElement node, Class<?> guiClass, Class<?> testClass) {
         try {
-            JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
+            JMeterGUIComponent comp = nodesToGui.get(node);
+            if (comp == null) {
+                comp = getGuiFromCache(guiClass, testClass);
+                nodesToGui.put(node, comp);
+            } else {
+                updateUi(comp);
+            }
             log.debug("Gui retrieved = {}", comp);
             return comp;
         } catch (Exception e) {
@@ -270,8 +283,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @param node
      *            the test element being removed
      */
-    @API(since = "5.3", status = API.Status.DEPRECATED)
+    @API(since = "5.3", status = API.Status.MAINTAINED)
     public void removeNode(TestElement node) {
+        nodesToGui.remove(node);
     }
 
     /**
@@ -325,7 +339,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         try {
             JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
             comp.clearGui();
-            return comp.createTestElement();
+            TestElement node = comp.createTestElement();
+            nodesToGui.put(node, comp);
+            return node;
         } catch (Exception e) {
             log.error("Problem retrieving gui", e);
             return null;
@@ -354,7 +370,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 comp = getGuiFromCache(c, null);
             }
             comp.clearGui();
-            return comp.createTestElement();
+            TestElement node = comp.createTestElement();
+            nodesToGui.put(node, comp);
+            return node;
         } catch (NoClassDefFoundError e) {
             log.error("Problem retrieving gui for " + objClass, e);
             String msg="Cannot find class: "+e.getMessage();
@@ -408,16 +426,21 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 }
             }
         }
-        if (comp instanceof JComponent) {
-            JComponent jc = (JComponent) comp;
-            Object epoch = jc.getClientProperty(LAF_EPOCH);
-            int currentLafEpoch = lafEpoch.get();
-            if (epoch instanceof Integer && ((Integer) epoch) < currentLafEpoch) {
-                JFactory.updateUi(jc);
-            }
-            jc.putClientProperty(LAF_EPOCH, currentLafEpoch);
-        }
+        updateUi(comp);
         return comp;
+    }
+
+    private void updateUi(JMeterGUIComponent comp) {
+        if (!(comp instanceof JComponent)) {
+            return;
+        }
+        JComponent jc = (JComponent) comp;
+        Object epoch = jc.getClientProperty(LAF_EPOCH);
+        int currentLafEpoch = lafEpoch.get();
+        if (epoch instanceof Integer && ((Integer) epoch) < currentLafEpoch) {
+            JFactory.updateUi(jc);
+        }
+        jc.putClientProperty(LAF_EPOCH, currentLafEpoch);
     }
 
     /**
@@ -669,6 +692,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
         // Invalidate UIs
         guis.clear();
+        nodesToGui.clear();
         testBeanGUIs.clear();
 
         // Call "start edit for the current tree node" action to show the UI
@@ -726,6 +750,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     public void clearTestPlan() {
         testPlanListeners.stream().forEach(TestPlanListener::beforeTestPlanCleared);
         getTreeModel().clearTestPlan();
+        nodesToGui.clear();
         setTestPlanFile(null);
         testPlanListeners.stream().forEach(TestPlanListener::afterTestPlanCleared);
         undoHistory.clear();
