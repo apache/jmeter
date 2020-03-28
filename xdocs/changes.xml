@@ -154,6 +154,7 @@ For instance: log viewer, JSR223 code editor were not previously scaled with zoo
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Build system upgraded from Gradle to 6.3 (from 6.1), Java 14 can be used now for the build</li>
     <li><bug>63963</bug><pr>546</pr>Updated jackson to 2.10.2 (from 2.9.10)</li>
     <li><bug>64120</bug>Updated jsoup to 1.13.1 (from 1.12.1)</li>
     <li><bug>63809</bug>Updated commons-dbcp2 to 2.7.0 (from 2.5.0)</li>
