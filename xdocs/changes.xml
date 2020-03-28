@@ -152,6 +152,7 @@ For instance: log viewer, JSR223 code editor were not previously scaled with zoo
   <li><bug>64148</bug>Use gray icons for disabled elements in the tree, display subtree as gray</li>
   <li><bug>64198</bug>Allow spaces in <code>${...}</code> expressions around functions.</li>
   <li><bug>64276</bug>Search popup: Improve UX</li>
+  <li><bug>64277</bug>ForEach Controller: Improve UX</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
