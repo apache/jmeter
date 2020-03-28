@@ -236,6 +236,7 @@ tasks.named(JavaPlugin.TEST_TASK_NAME).configure {
 }
 
 val flakyTests = listOf(
+    "batchHttp4ImplDigestAuth",
     "batchHttp4ImplPreemptiveBasicAuthJava",
     "batchSlowCharsFeatureHttpClient4",
     "batchSlowCharsFeatureJava",
