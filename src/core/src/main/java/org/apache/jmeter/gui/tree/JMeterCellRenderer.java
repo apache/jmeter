@@ -28,6 +28,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.control.TestFragmentController;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -57,7 +58,13 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
         // one of its parents is in fact disabled.
         for (TreeNode parent = node.getParent(); parent != null && enabled; parent = parent.getParent()) {
             if (parent instanceof JMeterTreeNode) {
-                enabled = ((JMeterTreeNode) parent).isEnabled();
+                JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) parent;
+                if (jMeterTreeNode.getTestElement() instanceof TestFragmentController) {
+                    // TestFragment is always disabled, so we don't want to mark everything below
+                    // with pale
+                    break;
+                }
+                enabled = jMeterTreeNode.isEnabled();
             }
         }
         ImageIcon ic = node.getIcon(enabled);
