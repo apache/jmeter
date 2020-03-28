@@ -924,6 +924,20 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
+     * Creates {@link JLabel} that is associated with a given {@link Component} instance.
+     * @param component component for the label
+     * @param labelValue label text
+     * @param name JLabel name
+     * @return JLabel instance
+     */
+    public static JLabel labelFor(Component component, String labelValue, String name) {
+        JLabel label = new JLabel(labelValue);
+        label.setName(name);
+        label.setLabelFor(component);
+        return label;
+    }
+
+    /**
      * Takes an array of strings and a tokenizer character, and returns a string
      * of all the strings concatenated with the tokenizer string in between each
      * one.

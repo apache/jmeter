@@ -17,12 +17,8 @@
 
 package org.apache.jmeter.timers.gui;
 
-import java.awt.Dimension;
-
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -32,6 +28,8 @@ import org.apache.jmeter.timers.ConstantTimer;
 import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Abstract Random timer GUI.
@@ -117,36 +115,22 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
 
         add(makeTitlePanel());
 
-        JPanel threadDelayPropsPanel = new JPanel();
-        threadDelayPropsPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+        JPanel threadDelayPropsPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
         threadDelayPropsPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("thread_delay_properties")));//$NON-NLS-1$
 
         // DELAY DEVIATION
-        Box delayDevPanel = Box.createHorizontalBox();
-        delayDevPanel.add(new JLabel(getTimerRangeLabelKey()));//$NON-NLS-1$
-        delayDevPanel.add(Box.createHorizontalStrut(5));
-
         rangeField = new JTextField(20);
         rangeField.setText(getDefaultRange());
-        rangeField.setName(RANGE_FIELD);
-        delayDevPanel.add(rangeField);
-
-        threadDelayPropsPanel.add(delayDevPanel);
+        threadDelayPropsPanel.add(JMeterUtils.labelFor(rangeField, getTimerRangeLabelKey(), RANGE_FIELD));
+        threadDelayPropsPanel.add(rangeField);
 
         // AVG DELAY
-        Box avgDelayPanel = Box.createHorizontalBox();
-        avgDelayPanel.add(new JLabel(getTimerDelayLabelKey()));//$NON-NLS-1$
-        avgDelayPanel.add(Box.createHorizontalStrut(5));
-
         delayField = new JTextField(20);
         delayField.setText(getDefaultDelay());
-        delayField.setName(DELAY_FIELD);
-        avgDelayPanel.add(delayField);
+        threadDelayPropsPanel.add(JMeterUtils.labelFor(delayField, getTimerDelayLabelKey(), DELAY_FIELD));
+        threadDelayPropsPanel.add(delayField);
 
-        threadDelayPropsPanel.add(avgDelayPanel);
-        threadDelayPropsPanel.setMaximumSize(new Dimension(threadDelayPropsPanel.getMaximumSize().width,
-                threadDelayPropsPanel.getPreferredSize().height));
         add(threadDelayPropsPanel);
     }
 
