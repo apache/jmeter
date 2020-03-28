@@ -211,7 +211,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
         loopPanel.add(JMeterUtils.labelFor(endIndex, "foreach_end_index"));
         endIndex.setName(END_INDEX_NAME);
         loopPanel.add(endIndex);
-        
+
         // TEXT FIELD
         returnVal = new JTextField("", 5); // $NON-NLS-1$
         loopPanel.add(JMeterUtils.labelFor(returnVal, "foreach_output"));
