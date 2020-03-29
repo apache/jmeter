@@ -190,23 +190,23 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
     private JPanel createConditionPanel() {
         JPanel conditionPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
 
-        ImageIcon image = JMeterUtils.getImage("warning.png");
+        ImageIcon image = JMeterUtils.getImage("warning.png"); // $NON-NLS-1$
         warningLabel = new JLabel(JMeterUtils.getResString("if_controller_warning"), image, SwingConstants.LEFT); // $NON-NLS-1$
         JFactory.warning(warningLabel);
-        conditionPanel.add(warningLabel, "span 2");
+        conditionPanel.add(warningLabel, "span 2"); // $NON-NLS-1$
 
         // Condition LABEL
         conditionLabel = new JLabel(JMeterUtils.getResString("if_controller_label")); // $NON-NLS-1$
         conditionPanel.add(conditionLabel);
-        conditionLabel.setName("if_controller_label");
+        conditionLabel.setName("if_controller_label"); // $NON-NLS-1$
 
         // Condition
-        theCondition = JSyntaxTextArea.getInstance(5, 50); // $NON-NLS-1$
+        theCondition = JSyntaxTextArea.getInstance(5, 50);
         conditionLabel.setLabelFor(theCondition);
         conditionPanel.add(JTextScrollPane.getInstance(theCondition));
 
-        JLabel ifControllerTipLabel = new JLabel(JMeterUtils.getResString("if_controller_tip"));
-        useLastSampleStatusButton = new JButton(JMeterUtils.getResString("if_controller_use_last_sample_ok"));
+        JLabel ifControllerTipLabel = new JLabel(JMeterUtils.getResString("if_controller_tip")); // $NON-NLS-1$
+        useLastSampleStatusButton = new JButton(JMeterUtils.getResString("if_controller_use_last_sample_ok")); // $NON-NLS-1$
         useLastSampleStatusButton.setActionCommand(USE_LAST_SAMPLE_OK);
         useLastSampleStatusButton.addActionListener(this);
         conditionPanel.add(useLastSampleStatusButton);
@@ -215,11 +215,11 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
         // Use expression instead of Javascript
         useExpression = new JCheckBox(JMeterUtils.getResString("if_controller_expression")); // $NON-NLS-1$
         useExpression.addChangeListener(this);
-        conditionPanel.add(useExpression, "span 2");
+        conditionPanel.add(useExpression, "span 2"); // $NON-NLS-1$
 
         // Evaluate All checkbox
         evaluateAll = new JCheckBox(JMeterUtils.getResString("if_controller_evaluate_all")); // $NON-NLS-1$
-        conditionPanel.add(evaluateAll, "span 2");
+        conditionPanel.add(evaluateAll, "span 2"); // $NON-NLS-1$
 
         return conditionPanel;
     }
@@ -230,11 +230,11 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
             String colorId;
             if(useExpression.isSelected()) {
                 colorId = JMeterUIDefaults.LABEL_WARNING_FOREGROUND;
-                conditionLabel.setText(JMeterUtils.getResString("if_controller_expression_label"));
+                conditionLabel.setText(JMeterUtils.getResString("if_controller_expression_label")); // $NON-NLS-1$
                 useLastSampleStatusButton.setEnabled(true);
             } else {
                 colorId = JMeterUIDefaults.LABEL_ERROR_FOREGROUND;
-                conditionLabel.setText(JMeterUtils.getResString("if_controller_label"));
+                conditionLabel.setText(JMeterUtils.getResString("if_controller_label")); // $NON-NLS-1$
                 useLastSampleStatusButton.setEnabled(false);
             }
             warningLabel.setForeground(UIManager.getColor(colorId));
@@ -249,7 +249,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals(USE_LAST_SAMPLE_OK)) {
-            theCondition.setText(theCondition.getText()+"${JMeterThread.last_sample_ok}");
+            theCondition.setText(theCondition.getText()+"${JMeterThread.last_sample_ok}"); // $NON-NLS-1$
         }
     }
 }
