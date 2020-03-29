@@ -125,7 +125,7 @@ public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ign
     private JPanel makeParameterPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(createScopePanel(true, true, true), BorderLayout.NORTH);
-        
+
         JPanel panel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
         panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("xpath2_extractor_properties")));
