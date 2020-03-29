@@ -19,7 +19,6 @@ package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -192,7 +191,6 @@ public class ForeachControlPanel extends AbstractControllerGui {
      */
     private JPanel createLoopCountPanel() {
         JPanel loopPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
-        loopPanel.setBorder(BorderFactory.createEtchedBorder()); // $NON-NLS-1$
 
         // TEXT FIELD
         inputVal = new JTextField("", 5); // $NON-NLS-1$
