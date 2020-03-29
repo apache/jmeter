@@ -50,8 +50,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import junit.framework.TestCase;
 import net.miginfocom.swing.MigLayout;
+
+import junit.framework.TestCase;
 
 /**
  * The <code>JUnitTestSamplerGui</code> class provides the user interface
