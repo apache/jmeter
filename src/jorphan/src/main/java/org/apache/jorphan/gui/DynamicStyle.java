@@ -184,6 +184,11 @@ public class DynamicStyle {
     }
 
     private static void collectComponents(Component root, List<Component> components) {
+        if (root == null) {
+            // E.g. getTabComponentAt might return null
+            // https://stackoverflow.com/questions/988734/jtabbedpane-gettabcomponentatint-returning-null
+            return;
+        }
         components.add(root);
         if (root instanceof JComponent) {
             JComponent jc = (JComponent) root;
@@ -216,6 +221,9 @@ public class DynamicStyle {
             JTabbedPane tabbedPane = (JTabbedPane) root;
             int size = tabbedPane.getTabCount();
             for (int i = 0; i < size; i++) {
+                // This is the contents of the tab
+                collectComponents(tabbedPane.getComponentAt(i), components);
+                // This is the tab itself (might be null)
                 collectComponents(tabbedPane.getTabComponentAt(i), components);
             }
         }
