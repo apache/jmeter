@@ -17,23 +17,26 @@
 
 package org.apache.jmeter.protocol.http.control
 
-import org.apache.jmeter.junit.spock.JMeterSpec
 import org.xbill.DNS.ExtendedResolver
 import org.xbill.DNS.ResolverConfig
 
 import spock.lang.IgnoreIf
+import spock.lang.Requires
+import spock.lang.Specification
 
-class DNSCacheManagerSpec extends JMeterSpec {
+class DNSCacheManagerSpec extends Specification {
 
-    private static final String[] VALID_DNS_SERVERS  = ResolverConfig.getCurrentConfig().servers()
+    private static final String[] VALID_DNS_SERVERS = ResolverConfig.getCurrentConfig().servers()
     private static final String INVALID_DNS_SERVER = "512.1.1.1"
+    private static final String VALID_HOSTNAME = "jmeter.apache.org"
 
-    static def localDNSResolverFailed() {
+    private static final boolean localDNSResolverOK = {
         try {
+            println "localDNSResolverOK"
             new DNSCacheManager().resolve("apache.org")
-            return false
-        } catch (UnknownHostException uhe) {
             return true
+        } catch (UnknownHostException uhe) {
+            return false
         }
     }
 
@@ -66,16 +69,16 @@ class DNSCacheManagerSpec extends JMeterSpec {
                      InetAddress.getByName("1.2.3.4")].toArray()
     }
 
-    @IgnoreIf({ DNSCacheManagerSpec.localDNSResolverFailed() })
+    @Requires({ localDNSResolverOK })
     def "Clear removes custom resolver status and any added hosts"() {
         given:
             sut.setCustomResolver(true)
-            sut.addHost("apache.jmeter.org", "127.0.0.1")
+            sut.addHost(VALID_HOSTNAME, "127.0.0.1")
             sut.clear()
         expect:
             // uses real DNS server
-            sut.resolve("jmeter.apache.org").contains(InetAddress.getByName("jmeter.apache.org"))
-            !sut.resolve("jmeter.apache.org").contains(InetAddress.getByName("127.0.0.1"))
+            sut.resolve(VALID_HOSTNAME).contains(InetAddress.getByName(VALID_HOSTNAME))
+            !sut.resolve(VALID_HOSTNAME).contains(InetAddress.getByName("127.0.0.1"))
     }
 
     def "If using an invalid server resolve throws UnknownHostException"() {
@@ -83,17 +86,15 @@ class DNSCacheManagerSpec extends JMeterSpec {
             sut.addServer(INVALID_DNS_SERVER)
             sut.setCustomResolver(true)
         when:
-            sut.resolve("jmeter.apache.org")
+            sut.resolve(VALID_HOSTNAME)
         then:
             thrown(UnknownHostException)
             sut.resolver == null
             sut.initFailed
     }
 
-    @IgnoreIf({
-        (Boolean.getBoolean("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
-                || DNSCacheManagerSpec.localDNSResolverFailed())
-    })
+    @IgnoreIf({ Boolean.getBoolean("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server") })
+    @Requires({ localDNSResolverOK })
     def "Valid DNS resolves and caches with custom resolve true"() {
         given:
             for (dns in VALID_DNS_SERVERS) {
@@ -102,7 +103,7 @@ class DNSCacheManagerSpec extends JMeterSpec {
             sut.setCustomResolver(true)
             sut.setTimeoutMs(5000)
         when:
-            sut.resolve("jmeter.apache.org")
+            sut.resolve(VALID_HOSTNAME)
         then:
             sut.resolver != null
             ((ExtendedResolver) sut.resolver).getResolvers().length == VALID_DNS_SERVERS.length
@@ -117,24 +118,23 @@ class DNSCacheManagerSpec extends JMeterSpec {
             sut.setCustomResolver(true)
             sut.setTimeoutMs(5000)
         when:
-            sut.cache.put("jmeter.apache.org", new InetAddress[0])
+            sut.cache.put(VALID_HOSTNAME, new InetAddress[0])
         then:
-            sut.resolve("jmeter.apache.org") == new InetAddress[0]
+            sut.resolve(VALID_HOSTNAME) == new InetAddress[0]
 
         when:
-            sut.cache.put("jmeter.apache.org", null)
+            sut.cache.put(VALID_HOSTNAME, null)
         then:
-            sut.resolve("jmeter.apache.org") == null
+            sut.resolve(VALID_HOSTNAME) == null
     }
 
-    @IgnoreIf({ DNSCacheManagerSpec.localDNSResolverFailed() })
+    @Requires({ localDNSResolverOK })
     def "set custom resolver but without an address should use system resolver"() {
         given:
             sut.setCustomResolver(true)
             sut.setTimeoutMs(5000)
         when:
-            // This will use Default System DNS resolver
-            sut.resolve("jmeter.apache.org")
+            sut.resolve(VALID_HOSTNAME)
         then:
             sut.resolver != null
             ((ExtendedResolver) sut.resolver).getResolvers().length == 0
@@ -147,14 +147,14 @@ class DNSCacheManagerSpec extends JMeterSpec {
             DNSCacheManager clone = (DNSCacheManager) sut.clone()
             clone.setTimeoutMs(5000)
         when:
-            clone.resolve("jmeter.apache.org")
+            clone.resolve(VALID_HOSTNAME)
         then:
             thrown(UnknownHostException)
             clone.resolver == sut.resolver
     }
 
-    @IgnoreIf({ DNSCacheManagerSpec.localDNSResolverFailed() })
-    def "Resolve Existing Host With System Default Dns Server"() {
+    @Requires({ localDNSResolverOK })
+    def "Resolve Existing Host With System Default DNS Server"() {
         given:
             sut.setCustomResolver(false)
         when:
@@ -165,7 +165,7 @@ class DNSCacheManagerSpec extends JMeterSpec {
             result.length > 0 // IPv4 and/or IPv6
     }
 
-    def "Resolve Non-existing Host With System Default Dns Server"() {
+    def "Resolve Non-existing Host With System Default DNS Server"() {
         given:
             sut.setCustomResolver(false)
         when:
