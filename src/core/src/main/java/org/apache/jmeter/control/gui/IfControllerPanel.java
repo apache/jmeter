@@ -244,7 +244,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
     }
 
     /**
-     * Fill theCondition 
+     * Fill theCondition
      * @param e {@link ActionEvent}
      */
     @Override
