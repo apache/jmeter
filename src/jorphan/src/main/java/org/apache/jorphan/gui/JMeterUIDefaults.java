@@ -72,6 +72,9 @@ public class JMeterUIDefaults {
 
     public static final String BUTTON_ERROR_FOREGROUND = "[jmeter]Button.errorForeground"; // $NON-NLS-1$
 
+    public static final String TABLE_ROW_HEIGHT = "Table.rowHeight"; // $NON-NLS-1$
+    public static final String TREE_ROW_HEIGHT = "Tree.rowHeight"; // $NON-NLS-1$
+
     private static final float SMALL_FONT_SCALE = 10f / 12;
     private static final float BIG_FONT_SCALE = 4f / 3;
     private static final float WARNING_FONT_SCALE = 11f / 10;
@@ -108,6 +111,9 @@ public class JMeterUIDefaults {
                 // We don't want to make controls extra big, so we damp the scaling factors
                 scaleControlsProperties(defaults, (float) Math.sqrt(scale));
             }
+            configureRowHeight(defaults, scale, TABLE_ROW_HEIGHT, "Table.font"); // $NON-NLS-1$
+            configureRowHeight(defaults, scale, TREE_ROW_HEIGHT, "Tree.font"); // $NON-NLS-1$
+
             defaults.put("Button.defaultButtonFollowsFocus", false); // $NON-NLS-1$
             defaults.put(TEXTAREA_BORDER, (UIDefaults.LazyValue) d -> new JTextField().getBorder());
 
@@ -156,8 +162,6 @@ public class JMeterUIDefaults {
         scaleIntProperty(defaults, "FileChooser.rowHeight", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "Spinner:\"Spinner.codeviousButton\".size", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "Spinner:\"Spinner.nextButton\".size", scale); // $NON-NLS-1$
-        configureRowHeight(defaults, scale, "Table.rowHeight", "Table.font"); // $NON-NLS-1$
-        configureRowHeight(defaults, scale, "Tree.rowHeight", "Tree.font"); // $NON-NLS-1$
     }
 
     private void configureRowHeight(UIDefaults defaults, float scale, String rowHeight, String font) {
@@ -166,10 +170,13 @@ public class JMeterUIDefaults {
         }
         defaults.put(rowHeight, (UIDefaults.LazyValue) d -> {
             Font f = d.getFont(font);
-            if (f == null) {
-                return Math.round(16 * scale);
-            }
-            return FontDesignMetrics.getMetrics(f).getHeight();
+            float height = f == null ? 16 * scale : FontDesignMetrics.getMetrics(f).getHeight();
+            // Set line height to be 1.3 of the font size. The number of completely made up,
+            // 1.2 seems to be the minimal usable scale. 1.3 looks good.
+            int round = (int) Math.floor(height * 1.3f);
+            // Round to the next even, so the text does not move when editing the cell contents
+            round += round & 1;
+            return round;
         });
     }
 

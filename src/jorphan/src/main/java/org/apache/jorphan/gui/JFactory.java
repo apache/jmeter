@@ -137,14 +137,8 @@ public class JFactory {
      */
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
     public static JTable singleLineRowHeight(JTable component) {
-        return STYLE.withDynamic(component, c -> {
-            Font font = c.getFont();
-            if (font != null) {
-                // Swing has no default property for Table.rowHeight
-                // So we set it for tables that opt-in
-                c.setRowHeight(c.getFontMetrics(font).getHeight());
-            }
-        });
+        return STYLE.withDynamic(component,
+                c -> c.setRowHeight(UIManager.getInt(JMeterUIDefaults.TABLE_ROW_HEIGHT)));
     }
 
     /**
