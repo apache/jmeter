@@ -132,6 +132,7 @@ For instance: log viewer, JSR223 code editor were not previously scaled with zoo
 <ul>
     <li><bug>64091</bug>Precise Throughput Timer schedule generation is improved significantly (e.g. 2 seconds for 10M samples)</li>
     <li><bug>64281</bug>Counter Config: Improve UX</li>
+    <li><bug>64283</bug>XPath2 Extractor: Improve UX</li>
 </ul>
 
 <h3>Functions</h3>

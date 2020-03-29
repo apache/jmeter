@@ -18,15 +18,11 @@
 package org.apache.jmeter.extractor.gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.List;
 
-import javax.swing.Box;
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.apache.jmeter.extractor.XPath2Extractor;
 import org.apache.jmeter.gui.TestElementMetadata;
@@ -35,7 +31,8 @@ import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JLabeledTextField;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * GUI for XPath2Extractor class.
@@ -46,16 +43,13 @@ public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ign
 
     private static final long serialVersionUID = 1L;
 
-    private final JLabeledTextField defaultField = new JLabeledTextField(
-            JMeterUtils.getResString("default_value_field"));//$NON-NLS-1$
+    private final JTextField defaultField = new JTextField(25);
 
-    private final JLabeledTextField xpathQueryField = new JLabeledTextField(
-            JMeterUtils.getResString("xpath_extractor_query"));//$NON-NLS-1$
+    private final JTextField xpathQueryField = new JTextField(30);
 
-    private final JLabeledTextField matchNumberField = new JLabeledTextField(
-            JMeterUtils.getResString("match_num_field"));//$NON-NLS-1$
+    private final JTextField matchNumberField = new JTextField();
 
-    private final JLabeledTextField refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));//$NON-NLS-1$
+    private final JTextField refNameField = new JTextField(25);
 
     // Should we return fragment as text, rather than text of fragment?
     private JCheckBox getFragment;
@@ -123,64 +117,39 @@ public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ign
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
-        Box box = Box.createVerticalBox();
-        box.add(makeTitlePanel());
-        box.add(createScopePanel(true, true, true));
-        box.add(makeParameterPanel());
-        add(box, BorderLayout.NORTH);
+
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeParameterPanel(), BorderLayout.CENTER);
     }
 
     private JPanel makeParameterPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        initConstraints(gbc);
-        addField(panel, refNameField, gbc);
-        resetContraints(gbc);
-        addField(panel, xpathQueryField, gbc);
-        resetContraints(gbc);
-        addField(panel, matchNumberField, gbc);
-        resetContraints(gbc);
-        addField(panel, defaultField, gbc);
-        resetContraints(gbc);
-        panel.add(new JLabel(JMeterUtils.getResString("xpath_extractor_user_namespaces")), gbc.clone());
-        gbc.gridx++;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(createScopePanel(true, true, true), BorderLayout.NORTH);
+        
+        JPanel panel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
+        panel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("xpath2_extractor_properties")));
+
+        panel.add(JMeterUtils.labelFor(refNameField, "ref_name_field"));
+        panel.add(refNameField);
+
+        panel.add(JMeterUtils.labelFor(xpathQueryField, "xpath_extractor_query"));
+        panel.add(xpathQueryField);
+
+        panel.add(JMeterUtils.labelFor(matchNumberField, "match_num_field"));
+        panel.add(matchNumberField);
+
+        panel.add(JMeterUtils.labelFor(defaultField, "default_value_field"));
+        panel.add(defaultField);
+
         namespacesTA = JSyntaxTextArea.getInstance(5, 80);
-        panel.add(JTextScrollPane.getInstance(namespacesTA, true), gbc.clone());
+        JTextScrollPane namespaceJSP = JTextScrollPane.getInstance(namespacesTA, true);
+        panel.add(JMeterUtils.labelFor(namespaceJSP, "xpath_extractor_user_namespaces"));
+        panel.add(namespaceJSP);
 
-        resetContraints(gbc);
-        gbc.gridwidth = 2;
         getFragment = new JCheckBox(JMeterUtils.getResString("xpath_extractor_fragment"));//$NON-NLS-1$
-        panel.add(getFragment, gbc.clone());
-        return panel;
-    }
-
-    private void addField(JPanel panel, JLabeledTextField field, GridBagConstraints gbc) {
-        List<JComponent> item = field.getComponentList();
-        panel.add(item.get(0), gbc.clone());
-        gbc.gridx++;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(item.get(1), gbc.clone());
-    }
-
-    private void resetContraints(GridBagConstraints gbc) {
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weightx = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-    }
-
-    private void initConstraints(GridBagConstraints gbc) {
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridheight = 1;
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0;
-        gbc.weighty = 0;
+        panel.add(getFragment, "span 2");
+        mainPanel.add(panel, BorderLayout.CENTER);
+        return mainPanel;
     }
 }
