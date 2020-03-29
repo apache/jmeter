@@ -20,7 +20,6 @@ package org.apache.jmeter.control.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
