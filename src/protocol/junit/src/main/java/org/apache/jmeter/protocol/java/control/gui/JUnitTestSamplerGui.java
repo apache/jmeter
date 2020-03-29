@@ -31,13 +31,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.TestElementMetadata;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.java.sampler.JUnitSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -52,6 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import junit.framework.TestCase;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * The <code>JUnitTestSamplerGui</code> class provides the user interface
@@ -92,41 +92,30 @@ implements ChangeListener, ActionListener, ItemListener
         SPATHS = paths;
     }
 
-    private JLabeledTextField constructorLabel =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_constructor_string")); //$NON-NLS-1$
+    private JTextField constructorLabel =
+        new JTextField();
 
-    private JLabel methodLabel =
-        new JLabel(
-            JMeterUtils.getResString("junit_test_method")); //$NON-NLS-1$
+    private JTextField successMsg =
+        new JTextField();
 
-    private JLabeledTextField successMsg =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_success_msg")); //$NON-NLS-1$
+    private JTextField failureMsg =
+        new JTextField();
 
-    private JLabeledTextField failureMsg =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_failure_msg")); //$NON-NLS-1$
+    private JTextField errorMsg =
+        new JTextField();
 
-    private JLabeledTextField errorMsg =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_error_msg")); //$NON-NLS-1$
+    private JTextField successCode =
+        new JTextField();
 
-    private JLabeledTextField successCode =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_success_code")); //$NON-NLS-1$
+    private JTextField failureCode =
+        new JTextField();
 
-    private JLabeledTextField failureCode =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_failure_code")); //$NON-NLS-1$
-
-    private JLabeledTextField errorCode =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_error_code")); //$NON-NLS-1$
+    private JTextField errorCode =
+        new JTextField();
 
     private JLabeledTextField filterpkg =
         new JLabeledTextField(
-            JMeterUtils.getResString("junit_pkg_filter")); //$NON-NLS-1$
+            JMeterUtils.getResString("junit_pkg_filter"), 50); //$NON-NLS-1$
 
     private JCheckBox doSetup = new JCheckBox(JMeterUtils.getResString("junit_do_setup_teardown")); //$NON-NLS-1$
     private JCheckBox appendError = new JCheckBox(JMeterUtils.getResString("junit_append_error")); //$NON-NLS-1$
@@ -168,8 +157,6 @@ implements ChangeListener, ActionListener, ItemListener
         setBorder(makeBorder());
 
         add(makeTitlePanel(), BorderLayout.NORTH);
-
-
         add(createClassPanel(), BorderLayout.CENTER);
     }
 
@@ -212,44 +199,53 @@ implements ChangeListener, ActionListener, ItemListener
 
     private JPanel createClassPanel()
     {
-        JLabel label =
-            new JLabel(JMeterUtils.getResString("protocol_java_classname")); //$NON-NLS-1$
-
         classnameCombo = new JComboBox<>();
         classnameCombo.addActionListener(this);
         classnameCombo.setEditable(false);
-        label.setLabelFor(classnameCombo);
 
         methodName = new JComboBox<>();
         methodName.addActionListener(this);
-        methodLabel.setLabelFor(methodName);
-
         setupClasslist(false);
 
-        VerticalPanel panel = new VerticalPanel();
-        panel.add(junit4);
+        JPanel panel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
+        panel.add(junit4, "span 2");
         junit4.addItemListener(this);
-        panel.add(filterpkg);
+
+        panel.add(filterpkg, "span 2");
         filterpkg.addChangeListener(this);
 
-        panel.add(label);
+        panel.add(JMeterUtils.labelFor(classnameCombo, "protocol_java_classname"));
         panel.add(classnameCombo);
 
         constructorLabel.setText("");
+        panel.add(JMeterUtils.labelFor(constructorLabel, "junit_constructor_string"));
         panel.add(constructorLabel);
-        panel.add(methodLabel);
+
+        panel.add(JMeterUtils.labelFor(methodName, "junit_test_method"));
         panel.add(methodName);
 
+        panel.add(JMeterUtils.labelFor(successMsg, "junit_success_msg"));
         panel.add(successMsg);
+
+        panel.add(JMeterUtils.labelFor(successCode, "junit_success_code"));
         panel.add(successCode);
+
+        panel.add(JMeterUtils.labelFor(failureMsg, "junit_failure_msg"));
         panel.add(failureMsg);
+
+        panel.add(JMeterUtils.labelFor(failureCode, "junit_failure_code"));
         panel.add(failureCode);
+
+        panel.add(JMeterUtils.labelFor(errorMsg, "junit_error_msg"));
         panel.add(errorMsg);
+
+        panel.add(JMeterUtils.labelFor(errorCode, "junit_error_code"));
         panel.add(errorCode);
-        panel.add(doSetup);
-        panel.add(appendError);
-        panel.add(appendExc);
-        panel.add(createInstancePerSample);
+
+        panel.add(doSetup, "span 2");
+        panel.add(appendError, "span 2");
+        panel.add(appendExc, "span 2");
+        panel.add(createInstancePerSample, "span 2");
         return panel;
     }
 

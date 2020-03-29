@@ -113,6 +113,7 @@ For instance: log viewer, JSR223 code editor were not previously scaled with zoo
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>64288</bug>JUnit Request: Improve UX</li>
 </ul>
 
 <h3>Controllers</h3>
