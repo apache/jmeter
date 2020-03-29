@@ -119,6 +119,7 @@ For instance: log viewer, JSR223 code editor were not previously scaled with zoo
 <ul>
     <li><bug>64277</bug>ForEach Controller: Improve UX</li>
     <li><bug>64280</bug>If Controller: Improve UX</li>
+    <li><bug>64282</bug>Throughput Controller: Improve UX</li>
 </ul>
 
 <h3>Listeners</h3>
