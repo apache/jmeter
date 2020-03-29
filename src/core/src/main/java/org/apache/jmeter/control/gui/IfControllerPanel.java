@@ -18,8 +18,12 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,6 +42,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 
+import net.miginfocom.swing.MigLayout;
+
 /**
  * The user interface for a controller which specifies that its subcomponents
  * should be executed while a condition holds. This component can be used
@@ -46,9 +52,11 @@ import org.apache.jorphan.gui.JMeterUIDefaults;
  */
 @GUIMenuSortOrder(1)
 @TestElementMetadata(labelResource = "if_controller_title")
-public class IfControllerPanel extends AbstractControllerGui implements ChangeListener {
+public class IfControllerPanel extends AbstractControllerGui implements ChangeListener, ActionListener {
 
     private static final long serialVersionUID = 240L;
+
+    private static final String USE_LAST_SAMPLE_OK = "use_last_sample_ok";
 
     /**
      * Used to warn about performance penalty
@@ -72,6 +80,8 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
      * intended to be used as a subpanel for another component.
      */
     private boolean displayName = true;
+
+    private JButton useLastSampleStatusButton;
 
     /**
      * Create a new LoopControlPanel as a standalone component.
@@ -165,11 +175,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
             setLayout(new BorderLayout(0, 5));
             setBorder(makeBorder());
             add(makeTitlePanel(), BorderLayout.NORTH);
-
-            JPanel mainPanel = new JPanel(new BorderLayout());
-            mainPanel.add(createConditionPanel(), BorderLayout.NORTH);
-            add(mainPanel, BorderLayout.CENTER);
-
+            add(createConditionPanel(), BorderLayout.CENTER);
         } else {
             // Embedded
             setLayout(new BorderLayout());
@@ -183,35 +189,40 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
      * @return a GUI panel containing the condition components
      */
     private JPanel createConditionPanel() {
-        JPanel conditionPanel = new JPanel(new BorderLayout(5, 0));
+        JPanel conditionPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
+        conditionPanel.setBorder(BorderFactory.createEtchedBorder()); // $NON-NLS-1$
+
+        ImageIcon image = JMeterUtils.getImage("warning.png");
+        warningLabel = new JLabel(JMeterUtils.getResString("if_controller_warning"), image, SwingConstants.LEFT); // $NON-NLS-1$
+        JFactory.warning(warningLabel);
+        conditionPanel.add(warningLabel, "span 2");
 
         // Condition LABEL
         conditionLabel = new JLabel(JMeterUtils.getResString("if_controller_label")); // $NON-NLS-1$
-        conditionPanel.add(conditionLabel, BorderLayout.WEST);
-        ImageIcon image = JMeterUtils.getImage("warning.png");
-        warningLabel = new JLabel(JMeterUtils.getResString("if_controller_warning"), image, SwingConstants.CENTER); // $NON-NLS-1$
-        JFactory.warning(warningLabel);
+        conditionPanel.add(conditionLabel);
+        conditionLabel.setName("if_controller_label");
 
         // Condition
         theCondition = JSyntaxTextArea.getInstance(5, 50); // $NON-NLS-1$
         conditionLabel.setLabelFor(theCondition);
-        conditionPanel.add(JTextScrollPane.getInstance(theCondition), BorderLayout.CENTER);
+        conditionPanel.add(JTextScrollPane.getInstance(theCondition));
 
-        conditionPanel.add(warningLabel, BorderLayout.NORTH);
-
-
-        JPanel optionPanel = new JPanel();
+        JLabel ifControllerTipLabel = new JLabel(JMeterUtils.getResString("if_controller_tip"));
+        useLastSampleStatusButton = new JButton(JMeterUtils.getResString("if_controller_use_last_sample_ok"));
+        useLastSampleStatusButton.setActionCommand(USE_LAST_SAMPLE_OK);
+        useLastSampleStatusButton.addActionListener(this);
+        conditionPanel.add(useLastSampleStatusButton);
+        conditionPanel.add(ifControllerTipLabel);
 
         // Use expression instead of Javascript
         useExpression = new JCheckBox(JMeterUtils.getResString("if_controller_expression")); // $NON-NLS-1$
         useExpression.addChangeListener(this);
-        optionPanel.add(useExpression);
+        conditionPanel.add(useExpression, "span 2");
 
         // Evaluate All checkbox
         evaluateAll = new JCheckBox(JMeterUtils.getResString("if_controller_evaluate_all")); // $NON-NLS-1$
-        optionPanel.add(evaluateAll);
+        conditionPanel.add(evaluateAll, "span 2");
 
-        conditionPanel.add(optionPanel,BorderLayout.SOUTH);
         return conditionPanel;
     }
 
@@ -222,11 +233,25 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
             if(useExpression.isSelected()) {
                 colorId = JMeterUIDefaults.LABEL_WARNING_FOREGROUND;
                 conditionLabel.setText(JMeterUtils.getResString("if_controller_expression_label"));
+                useLastSampleStatusButton.setEnabled(true);
             } else {
                 colorId = JMeterUIDefaults.LABEL_ERROR_FOREGROUND;
                 conditionLabel.setText(JMeterUtils.getResString("if_controller_label"));
+                useLastSampleStatusButton.setEnabled(false);
             }
             warningLabel.setForeground(UIManager.getColor(colorId));
+        }
+    }
+
+    /**
+     * Fill theCondition 
+     * @param e {@link ActionEvent}
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String action = e.getActionCommand();
+        if (action.equals(USE_LAST_SAMPLE_OK)) {
+            theCondition.setText(theCondition.getText()+"${JMeterThread.last_sample_ok}");
         }
     }
 }
