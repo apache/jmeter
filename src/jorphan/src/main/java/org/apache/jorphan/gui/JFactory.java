@@ -17,7 +17,6 @@
 
 package org.apache.jorphan.gui;
 
-import java.awt.Font;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.function.Consumer;
@@ -138,7 +137,13 @@ public class JFactory {
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
     public static JTable singleLineRowHeight(JTable component) {
         return STYLE.withDynamic(component,
-                c -> c.setRowHeight(UIManager.getInt(JMeterUIDefaults.TABLE_ROW_HEIGHT)));
+                c -> {
+                    int rowHeight = UIManager.getInt(JMeterUIDefaults.TABLE_ROW_HEIGHT);
+                    // rowHeight is 0 when JMeterUIDefaults was not installed
+                    if (rowHeight != 0) {
+                        c.setRowHeight(rowHeight);
+                    }
+                });
     }
 
     /**
