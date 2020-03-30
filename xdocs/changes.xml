@@ -109,6 +109,7 @@ For instance: log viewer, JSR223 code editor were not previously scaled with zoo
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>64160</bug>Test HTTP/S Test Script Recorder: Name transaction controller/ simple controller using prefix without "-XXXX" suffix</li>
+    <li><bug>64289</bug>Make <code>httpclient4.time_to_live</code> to 60000 to be closer to typical browser behavior</li>
 </ul>
 
 <h3>Other samplers</h3>
