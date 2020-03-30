@@ -29,12 +29,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.UIManager;
@@ -45,6 +47,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.LoadRecentProject;
+import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.plugin.MenuCreator.MENU_LOCATION;
 import org.apache.jmeter.util.JMeterUtils;
@@ -94,7 +97,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public static final String SYSTEM_LAF = "System"; // $NON-NLS-1$
     public static final String CROSS_PLATFORM_LAF = "CrossPlatform"; // $NON-NLS-1$
     public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
+    public static final String DARKLAF_LAF = "Darklaf"; // $NON-NLS-1$
     public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
+    public static final String DARKLAF_LAF_CLASS = "com.github.weisj.darklaf.DarkLaf"; // $NON-NLS-1$
 
     public JMeterMenuBar() {
         // List for recent files menu items
@@ -337,11 +342,16 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenu createLaFMenu() {
         JMenu lafMenu = makeMenuRes("appearance", 'L');
-        for (LookAndFeelInfo laf : getAllLAFs()) {
-            JMenuItem menuItem = new JMenuItem(laf.getName());
+        ButtonGroup lafGroup = new ButtonGroup();
+        String currentLafCommand = LookAndFeelCommand.getPreferredLafCommand();
+        for (LookAndFeelCommand.MenuItem item : LookAndFeelCommand.getMenuItems()) {
+            JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(item.getTitle());
             menuItem.addActionListener(ActionRouter.getInstance());
-            menuItem.setActionCommand(ActionNames.LAF_PREFIX + laf.getClassName());
-            menuItem.setToolTipText(laf.getClassName()); // show the classname to the user
+            menuItem.setActionCommand(item.getCommand());
+            if (item.getCommand().equals(currentLafCommand)) {
+                menuItem.setSelected(true);
+            }
+            lafGroup.add(menuItem);
             lafMenu.add(menuItem);
         }
         return lafMenu;

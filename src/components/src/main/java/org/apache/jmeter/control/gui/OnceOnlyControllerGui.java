@@ -18,9 +18,11 @@
 package org.apache.jmeter.control.gui;
 
 import org.apache.jmeter.control.OnceOnlyController;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+@TestElementMetadata(labelResource = "once_only_controller_title")
 public class OnceOnlyControllerGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 

@@ -21,13 +21,15 @@ import java.awt.BorderLayout;
 import java.util.Collection;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextArea;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.FileListPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -41,6 +43,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * JMeter GUI component representing the test plan which will be executed when
  * the test is run.
  */
+@TestElementMetadata(labelResource = "test_plan", actionGroups = "")
 public class TestPlanGui extends AbstractJMeterGuiComponent {
 
     private static final long serialVersionUID = 240L;
@@ -187,9 +190,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         southPanel.add(serializedMode);
         southPanel.add(tearDownOnShutdown);
         southPanel.add(functionalMode);
-        JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation")); // $NON-NLS-1$
-        explain.setEditable(false);
-        explain.setBackground(this.getBackground());
+        JComponent explain = new JLabel(JMeterUtils.getResString("functional_mode_explanation")); // $NON-NLS-1$
         southPanel.add(explain);
         southPanel.add(browseJar);
 

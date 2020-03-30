@@ -40,6 +40,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.assertions.gui.XMLConfPanel;
 import org.apache.jmeter.extractor.XPathExtractor;
@@ -78,8 +79,6 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
 
     private JTabbedPane rightSide;
 
-    private SampleResult sampleResult = null;
-
     // Should we return fragment as text, rather than text of fragment?
     private final JCheckBox getFragment =
         new JCheckBox(JMeterUtils.getResString("xpath_tester_fragment"));//$NON-NLS-1$
@@ -110,12 +109,12 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if ((sampleResult != null) && (XPATH_TESTER_COMMAND.equals(command))) {
-            String response = xmlDataField.getText();
+        String xmlDataFieldText = xmlDataField.getText();
+        if (StringUtils.isNotEmpty(xmlDataFieldText) && XPATH_TESTER_COMMAND.equals(command)) {
             XPathExtractor extractor = new XPathExtractor();
             xmlConfPanel.modifyTestElement(extractor);
             extractor.setFragment(getFragment.isSelected());
-            executeAndShowXPathTester(response, extractor);
+            executeAndShowXPathTester(xmlDataFieldText, extractor);
         }
     }
 
@@ -214,7 +213,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     private JPanel createXpathExtractorPanel() {
         xmlDataField = JSyntaxTextArea.getInstance(50, 80, true);
         xmlDataField.setCodeFoldingEnabled(true);
-        xmlDataField.setEditable(false);
+        xmlDataField.setEditable(true);
         xmlDataField.setBracketMatchingEnabled(false);
         xmlDataField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
         xmlDataField.setLanguage(SyntaxConstants.SYNTAX_STYLE_XML);
@@ -279,10 +278,8 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setSamplerResult(Object userObject) {
-        if (userObject instanceof SampleResult) {
-            sampleResult = (SampleResult) userObject;
-        }
+    public void setSamplerResult(Object userObject) {
+        // NOOP
     }
 
     /** {@inheritDoc} */

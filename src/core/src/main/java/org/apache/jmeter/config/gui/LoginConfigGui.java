@@ -25,6 +25,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -35,6 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * login.
  *
  */
+@TestElementMetadata(labelResource = "login_config_element")
 public class LoginConfigGui extends AbstractConfigGui {
     private static final long serialVersionUID = 240L;
 

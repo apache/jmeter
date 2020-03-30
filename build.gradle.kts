@@ -386,6 +386,7 @@ allprojects {
 
         val testTasks = tasks.withType<Test>()
         val javaExecTasks = tasks.withType<JavaExec>()
+            .matching { it.name != "runGui" }
         // This configuration must be postponed since JacocoTaskExtension might be added inside
         // configure block of a task (== before this code is run). See :src:dist-check:createBatchTask
         afterEvaluate {
@@ -449,18 +450,6 @@ allprojects {
 
         repositories {
             jcenter()
-            ivy {
-                url = uri("https://github.com/bulenkov/Darcula/raw/")
-                content {
-                    includeModule("com.github.bulenkov.darcula", "darcula")
-                }
-                patternLayout {
-                    artifact("[revision]/build/[module].[ext]")
-                }
-                metadataSources {
-                    artifact() // == don't try downloading .pom file from the repository
-                }
-            }
         }
 
         tasks {

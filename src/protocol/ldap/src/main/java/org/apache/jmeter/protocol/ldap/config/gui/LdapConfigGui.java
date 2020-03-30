@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPSampler;
 import org.apache.jmeter.testelement.TestElement;
@@ -48,6 +49,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Created Apr 29 2003 11:45 AM
  *
  */
+@TestElementMetadata(labelResource = "ldap_sample_title")
 public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 
     private static final long serialVersionUID = 241L;

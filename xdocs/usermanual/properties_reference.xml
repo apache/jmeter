@@ -334,7 +334,9 @@ JMETER-SERVER</source>
 <property name="client.rmi.localport">
     Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controller)<br/>
     Default value is <code>0</code>, which means port is randomly assigned.
-    <note>You may need to open a port in the firewall on the Controller machine.</note>
+    If this is non-zero, it will be used as the base for local port numbers for the client engine.
+    At the moment JMeter will open up to three ports beginning with the port defined in this property.
+    <note>You may need to open corresponding ports in the firewall on the Controller machine.</note>
     Defaults to: <code>0</code>
 </property>
 <property name="client.tries">
@@ -523,12 +525,12 @@ JMETER-SERVER</source>
 <property name="httpclient4.validate_after_inactivity">
     Check connection if the elapsed time (in milliseconds) since the last use of the connection
     exceeds this value. Ensure this value is always lower by at least 150 ms than <code>httpclient4.time_to_live</code><br/>
-    Defaults to: <code>1700</code>
+    Defaults to: <code>4900</code>
 </property>
 <property name="httpclient4.time_to_live">
     <abbr title="time to live">TTL</abbr> (in milliseconds) represents an absolute value.
     No matter what, the connection will not be re-used beyond its TTL.<br/>
-    Defaults to: <code>2000</code>
+    Defaults to: <code>60000</code>
 </property>
 <property name="httpclient4.max_body_retain_size">
     Max size in bytes of <code>PUT</code> body to retain in result sampler.

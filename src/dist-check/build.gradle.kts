@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
+import com.github.vlsi.gradle.properties.dsl.props
 import java.time.Duration
 import org.apache.jmeter.buildtools.batchtest.BatchTest
 import org.apache.jmeter.buildtools.batchtest.BatchTestServer
 
 plugins {
     jmeterbuild.batchtest
+    id("com.github.vlsi.gradle-extensions")
 }
 
 val extraTestDependencies by configurations.creating
@@ -163,9 +165,8 @@ arrayOf(
     "Http4ImplDigestAuth",
     "BUG_62847",
     "HTMLParserTestFile_2",
-    "TestResultStatusAction"
-    // TestRedirectionPolicies fails too often, so it is disabled
-    // "TestRedirectionPolicies"
+    "TestResultStatusAction",
+    "TestRedirectionPolicies"
 ).map { createBatchTestTask(it) }
 
 // Certain errors are expected in those tests as they examine failure cases as well
@@ -232,4 +233,25 @@ tasks.named(JavaPlugin.TEST_TASK_NAME).configure {
     dependsOn(createDist)
     // This is a convenience, so batch tests are executed as a part of default "test" task
     dependsOn(batchTests)
+}
+
+val flakyTests = listOf(
+    "batchHttp4ImplDigestAuth",
+    "batchHttp4ImplPreemptiveBasicAuthJava",
+    "batchSlowCharsFeatureHttpClient4",
+    "batchSlowCharsFeatureJava",
+    "batchTCP_TESTS",
+    "batchTestKeepAlive",
+    "batchTestRedirectionPolicies"
+)
+
+if (props.bool("enableFlaky", default = false)) {
+    println("The following tests are known to be flaky as they depend on the external services: $flakyTests")
+} else {
+    println("Certain tests will be skipped as they depend on external services and fail too often. Please add -PenableFlaky to enable them: $flakyTests")
+    for (test in flakyTests) {
+        tasks.named(test) {
+            enabled = false
+        }
+    }
 }

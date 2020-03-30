@@ -20,20 +20,22 @@ package org.apache.jmeter.control.gui;
 import java.awt.BorderLayout;
 
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.ForeachController;
-import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * The user interface for a foreach controller which specifies that its
  * sub-components should be executed some number of times in a loop. This
  * component can be used standalone or embedded into some other component.
  */
+@TestElementMetadata(labelResource = "foreach_controller_title")
 public class ForeachControlPanel extends AbstractControllerGui {
 
     private static final long serialVersionUID = 240L;
@@ -188,53 +190,35 @@ public class ForeachControlPanel extends AbstractControllerGui {
      * @return a GUI panel containing the loop count components
      */
     private JPanel createLoopCountPanel() {
-        VerticalPanel loopPanel = new VerticalPanel();
-
-        // LOOP LABEL
-        JLabel inputValLabel = new JLabel(JMeterUtils.getResString("foreach_input")); // $NON-NLS-1$
-        JLabel startIndexLabel = new JLabel(JMeterUtils.getResString("foreach_start_index")); // $NON-NLS-1$
-        JLabel endIndexLabel = new JLabel(JMeterUtils.getResString("foreach_end_index")); // $NON-NLS-1$
-        JLabel returnValLabel = new JLabel(JMeterUtils.getResString("foreach_output")); // $NON-NLS-1$
+        JPanel loopPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
 
         // TEXT FIELD
-        JPanel inputValSubPanel = new JPanel(new BorderLayout(5, 0));
         inputVal = new JTextField("", 5); // $NON-NLS-1$
+        loopPanel.add(JMeterUtils.labelFor(inputVal, "foreach_input"));
         inputVal.setName(INPUT_VAL_NAME);
-        inputValLabel.setLabelFor(inputVal);
-        inputValSubPanel.add(inputValLabel, BorderLayout.WEST);
-        inputValSubPanel.add(inputVal, BorderLayout.CENTER);
+        loopPanel.add(inputVal);
 
         // TEXT FIELD
-        JPanel startIndexSubPanel = new JPanel(new BorderLayout(5, 0));
         startIndex = new JTextField("", 5); // $NON-NLS-1$
+        loopPanel.add(JMeterUtils.labelFor(startIndex, "foreach_start_index"));
         startIndex.setName(START_INDEX_NAME);
-        startIndexLabel.setLabelFor(startIndex);
-        startIndexSubPanel.add(startIndexLabel, BorderLayout.WEST);
-        startIndexSubPanel.add(startIndex, BorderLayout.CENTER);
+        loopPanel.add(startIndex);
 
         // TEXT FIELD
-        JPanel endIndexSubPanel = new JPanel(new BorderLayout(5, 0));
         endIndex = new JTextField("", 5); // $NON-NLS-1$
+        loopPanel.add(JMeterUtils.labelFor(endIndex, "foreach_end_index"));
         endIndex.setName(END_INDEX_NAME);
-        endIndexLabel.setLabelFor(endIndex);
-        endIndexSubPanel.add(endIndexLabel, BorderLayout.WEST);
-        endIndexSubPanel.add(endIndex, BorderLayout.CENTER);
+        loopPanel.add(endIndex);
 
         // TEXT FIELD
-        JPanel returnValSubPanel = new JPanel(new BorderLayout(5, 0));
         returnVal = new JTextField("", 5); // $NON-NLS-1$
+        loopPanel.add(JMeterUtils.labelFor(returnVal, "foreach_output"));
         returnVal.setName(RETURN_VAL_NAME);
-        returnValLabel.setLabelFor(returnVal);
-        returnValSubPanel.add(returnValLabel, BorderLayout.WEST);
-        returnValSubPanel.add(returnVal, BorderLayout.CENTER);
+        loopPanel.add(returnVal);
 
         // Checkbox
         useSeparator = new JCheckBox(JMeterUtils.getResString("foreach_use_separator"), true); // $NON-NLS-1$
-        loopPanel.add(inputValSubPanel);
-        loopPanel.add(startIndexSubPanel);
-        loopPanel.add(endIndexSubPanel);
-        loopPanel.add(returnValSubPanel);
-        loopPanel.add(useSeparator);
+        loopPanel.add(useSeparator, "span 2");
 
         return loopPanel;
     }

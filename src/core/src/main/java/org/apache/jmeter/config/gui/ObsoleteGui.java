@@ -25,12 +25,14 @@ import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Default config gui for Configuration Element.
  */
+@TestElementMetadata(labelResource = "obsolete_test_element", actionGroups = "")
 public class ObsoleteGui extends AbstractJMeterGuiComponent {
 
     private static final long serialVersionUID = 240L;

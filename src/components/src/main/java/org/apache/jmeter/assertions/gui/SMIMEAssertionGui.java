@@ -29,10 +29,12 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.SMIMEAssertionTestElement;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+@TestElementMetadata(labelResource = "smime_assertion_title")
  public class SMIMEAssertionGui extends AbstractAssertionGui {
 
     private static final long serialVersionUID = 1L;

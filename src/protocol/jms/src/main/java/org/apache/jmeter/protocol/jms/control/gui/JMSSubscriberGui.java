@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JLabeledRadioI18N;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -40,6 +41,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * This is the GUI for JMS Subscriber <br>
  *
  */
+@TestElementMetadata(labelResource = "jms_subscriber_title")
 public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListener {
 
     private static final long serialVersionUID = 240L;

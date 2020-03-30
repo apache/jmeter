@@ -18,6 +18,7 @@
 package org.apache.jmeter.extractor;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @GUIMenuSortOrder(Integer.MAX_VALUE)
+@TestElementMetadata(labelResource = "displayName")
 public class BeanShellPostProcessor extends BeanShellTestElement
     implements Cloneable, PostProcessor, TestBean
 {

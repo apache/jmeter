@@ -19,7 +19,6 @@ package org.apache.jmeter.gui;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -56,7 +55,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
@@ -74,6 +72,7 @@ import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -102,6 +101,7 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,8 +232,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         initTopLevelDndHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        int ctrlShiftMask = (IS_MAC ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK) |
-                InputEvent.SHIFT_DOWN_MASK;
+        int ctrlAltMask = (IS_MAC ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK) |
+                InputEvent.ALT_DOWN_MASK;
 
         addMouseWheelListener(e -> {
             if (e.getWheelRotation() == 0) {
@@ -243,7 +243,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 // See https://github.com/JetBrains/intellij-community/blob/21c99af7c78fc82aefc4d05646389f4991b08b38/bin/idea.properties#L133-L156
                 return;
             }
-            if ((e.getModifiersEx() & ctrlShiftMask) == ctrlShiftMask) {
+            // Shift down means "horizontal scrolling" on macOS, and we need only vertical one
+            if ((e.getModifiersEx() & (ctrlAltMask | InputEvent.SHIFT_DOWN_MASK)) == ctrlAltMask) {
+                e.consume();
                 final float scale = 1.1f;
                 int rotation = e.getWheelRotation();
                 if (rotation > 0) { // DOWN
@@ -251,7 +253,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 } else if (rotation < 0) { // UP
                     JMeterUtils.applyScaleOnFonts(scale);
                 }
-                e.consume();
+                JMeterUtils.refreshUI();
             }
         });
     }
@@ -262,7 +264,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     private void refreshErrors(ActionEvent evt) {
         if (errorOrFatal.get() > 0) {
-            warnIndicator.setForeground(Color.RED);
+            warnIndicator.setForeground(UIManager.getColor(JMeterUIDefaults.BUTTON_ERROR_FOREGROUND));
             warnIndicator.setText(Integer.toString(errorOrFatal.get()));
         }
     }
@@ -585,12 +587,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @return a panel containing the running indicator
      */
     private Component createToolBar() {
-        Box toolPanel = new Box(BoxLayout.X_AXIS);
+        JMeterToolBar toolPanel = JMeterToolBar.createToolbar(true);
         // add the toolbar
-        this.toolbar = JMeterToolBar.createToolbar(true);
+        this.toolbar = toolPanel;
         GuiPackage guiInstance = GuiPackage.getInstance();
         guiInstance.setMainToolbar(toolbar);
-        toolPanel.add(toolbar);
 
         toolPanel.add(Box.createRigidArea(new Dimension(5, 15)));
         toolPanel.add(Box.createGlue());
@@ -871,7 +872,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         public void clearData() {
             errorOrFatal.set(0);
             SwingUtilities.invokeLater(() -> {
-                warnIndicator.setForeground(null);
+                warnIndicator.setForeground(UIManager.getColor("Button.foreground"));
                 warnIndicator.setText(Integer.toString(errorOrFatal.get()));
             });
         }

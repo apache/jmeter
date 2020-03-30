@@ -17,6 +17,7 @@
 
 package org.apache.jorphan.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -136,6 +137,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      * Initialises all of the components on this panel.
      */
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+        setLayout(new BorderLayout(5, 0));
         // Register the handler for focus listening. This handler will
         // only notify the registered when the text changes from when
         // the focus is gained to when it is lost.

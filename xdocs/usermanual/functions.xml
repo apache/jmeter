@@ -1730,7 +1730,7 @@ returns:
     </property>
     <property name="Append to file?" required="No">
     The way to write the string, <code>true</code> means append, <code>false</code>
-    means overwrite.
+    means overwrite. If not specified, the default append is <code>true</code>.
     </property>
     <property name="File encoding if not UTF-8" required="No">
     The encoding to be used to write to the file. If not specified, the default encoding is <code>UTF-8</code>.

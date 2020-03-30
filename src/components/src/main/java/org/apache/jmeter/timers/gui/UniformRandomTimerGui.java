@@ -18,6 +18,7 @@
 package org.apache.jmeter.timers.gui;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.timers.UniformRandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -26,6 +27,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Implementation of a uniform random timer.
  */
 @GUIMenuSortOrder(2)
+@TestElementMetadata(labelResource = "uniform_timer_title")
 public class UniformRandomTimerGui extends AbstractRandomTimerGui {
 
     private static final long serialVersionUID = 240L;

@@ -31,6 +31,7 @@ import javax.swing.JTextField;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.ServerPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -41,6 +42,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
+@TestElementMetadata(labelResource = "tcp_config_title")
 public class TCPConfigGui extends AbstractConfigGui {
 
     private static final long serialVersionUID = 240L;
@@ -219,7 +221,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         reqLabel.setLabelFor(requestData);
 
         JPanel reqDataPanel = new JPanel(new BorderLayout(5, 0));
-        reqDataPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
+        reqDataPanel.setBorder(BorderFactory.createTitledBorder(""));
 
         reqDataPanel.add(reqLabel, BorderLayout.WEST);
         reqDataPanel.add(JTextScrollPane.getInstance(requestData), BorderLayout.CENTER);
@@ -242,7 +244,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         mainPanel.add(serverPanel);
 
         HorizontalPanel optionsPanel = new HorizontalPanel();
-        optionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
+        optionsPanel.setBorder(BorderFactory.createTitledBorder(""));
         optionsPanel.add(createClosePortPanel());
         optionsPanel.add(createCloseConnectionPanel());
         optionsPanel.add(createNoDelayPanel());

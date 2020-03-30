@@ -53,6 +53,8 @@ public class TransactionSampler extends AbstractSampler {
 
     private long totalTime = 0;
 
+    private long totalConnectTime = 0;
+
     /**
      * @deprecated only for use by test code
      */
@@ -114,6 +116,7 @@ public class TransactionSampler extends AbstractSampler {
         transactionSampleResult.addSubResult(res, false);
         // Add current time to total for later use (exclude pause time)
         totalTime += res.getTime();
+        totalConnectTime += res.getConnectTime();
     }
 
     protected void setTransactionDone() {
@@ -133,6 +136,7 @@ public class TransactionSampler extends AbstractSampler {
                     - transactionSampleResult.getStartTime() - totalTime);
             transactionSampleResult.setEndTime(end);
         }
+        transactionSampleResult.setConnectTime(totalConnectTime);
     }
 
     protected void setSubSampler(Sampler subSampler) {

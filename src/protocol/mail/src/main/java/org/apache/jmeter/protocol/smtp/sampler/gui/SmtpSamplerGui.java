@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.smtp.sampler.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.smtp.sampler.SmtpSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -30,6 +31,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
  * Class to build superstructure-gui for SMTP-panel, sets/gets value for a JMeter's testElement-object (i.e. also for save/load-purposes).
  * This class extends AbstractSamplerGui, therefor most implemented methods are defined by JMeter's structure.
  */
+@TestElementMetadata(labelResource = "smtp_sampler_title")
 public class SmtpSamplerGui extends AbstractSamplerGui {
 
     /**

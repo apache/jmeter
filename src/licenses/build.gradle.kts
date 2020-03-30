@@ -88,11 +88,18 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     // That enables to have "version-independent" MIT license in licenses/slf4j-api, and
     // it would be copied provided the detected license for slf4j-api is MIT.
 
-    // Library is not present in Maven Central
-    overrideLicense("com.github.bulenkov.darcula:darcula:e208efb96f70e4be9dc362fbb46f6e181ef501dd", SpdxLicense.Apache_2_0)
-
     overrideLicense("dnsjava:dnsjava:2.1.9") {
         expectedLicense = SpdxLicense.BSD_2_Clause
+    }
+
+    overrideLicense("com.formdev:svgSalamander") {
+        // See https://github.com/blackears/svgSalamander/blob/d6b6fe9a8ece7d0e0e7aeb3de82f027a38a6fe25/www/license/license-bsd.txt
+        effectiveLicense = SpdxLicense.BSD_3_Clause
+    }
+
+    overrideLicense("org.swinglabs:jxlayer") {
+        // See https://repo1.maven.org/maven2/org/swinglabs/jxlayer/3.0.4/jxlayer-3.0.4-sources.jar
+        effectiveLicense = SpdxLicense.BSD_3_Clause
     }
 
     for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {
@@ -107,12 +114,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SimpleLicense("BSD style", uri("http://x-stream.github.io/license.html"))
         // https://github.com/x-stream/xstream/issues/151
         // https://github.com/x-stream/xstream/issues/153
-        effectiveLicense = SpdxLicense.BSD_3_Clause
-    }
-
-    overrideLicense("org.ow2.asm:asm:7.1") {
-        // pom.xml lists license as BSD
-        expectedLicense = SimpleLicense("BSD", uri("http://asm.ow2.org/license.html"))
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }
 
@@ -137,13 +138,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("org.slf4j:jcl-over-slf4j:1.7.28") {
-        expectedLicense = SpdxLicense.MIT
-        // See https://github.com/qos-ch/slf4j/blob/v_1.7.28/jcl-over-slf4j/LICENSE.txt
-        effectiveLicense = SpdxLicense.Apache_2_0
-    }
-
-    overrideLicense("org.slf4j:slf4j-api:1.7.28") {
+    overrideLicense("org.slf4j:slf4j-api:1.7.30") {
         expectedLicense = SpdxLicense.MIT
     }
 
@@ -166,7 +161,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         effectiveLicense = SpdxLicense.Apache_2_0
     }
     for (lib in listOf("hamcrest-core", "hamcrest")) {
-        overrideLicense("org.hamcrest:$lib:2.1") {
+        overrideLicense("org.hamcrest:$lib:2.2") {
             // https://github.com/hamcrest/JavaHamcrest/issues/264
             // pom.xml lists "New BSD License", however it is BSD_3
             expectedLicense = SpdxLicense.BSD_3_Clause

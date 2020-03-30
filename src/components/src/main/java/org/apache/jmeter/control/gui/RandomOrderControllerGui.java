@@ -18,12 +18,14 @@
 package org.apache.jmeter.control.gui;
 
 import org.apache.jmeter.control.RandomOrderController;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
  * GUI for RandomOrderController.
  *
  */
+@TestElementMetadata(labelResource = "random_order_control_title")
 public class RandomOrderControllerGui extends LogicControllerGui {
 
     private static final long serialVersionUID = 240L;

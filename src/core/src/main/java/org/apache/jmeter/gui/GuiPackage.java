@@ -18,6 +18,7 @@
 package org.apache.jmeter.gui;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.beans.Introspector;
 import java.util.ArrayList;
@@ -25,9 +26,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.prefs.Preferences;
 
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
@@ -36,6 +39,8 @@ import javax.swing.SwingUtilities;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.UndoHistory.HistoryListener;
+import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.TreeNodeNamingPolicy;
 import org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy;
 import org.apache.jmeter.gui.logging.GuiLogEventBus;
@@ -55,6 +60,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.gui.JFactory;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +78,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     private static final Logger log = LoggerFactory.getLogger(GuiPackage.class);
 
-    private static final String SBR_PREFS_KEY = "save_before_run";
+    private static final String LAF_EPOCH = "JMeter.laf_epoch"; // $NON-NLS-1$
+
+    private static final String SBR_PREFS_KEY = "save_before_run"; // $NON-NLS-1$
 
     private static final String SAVE_BEFORE_RUN_PROPERTY = "save_automatically_before_run"; // $NON-NLS-1$
 
@@ -91,6 +100,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /**
      * Map from TestElement to JMeterGUIComponent, mapping the nodes in the tree
      * to their corresponding GUI components.
+     * <p>This enables to associate {@link UnsharedComponent} UIs with their {@link TestElement}.</p>
      */
     private Map<TestElement, JMeterGUIComponent> nodesToGui = new HashMap<>();
 
@@ -105,6 +115,12 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * instance of TestBeanGUI to be used to edit such components.
      */
     private Map<Class<?>, JMeterGUIComponent> testBeanGUIs = new HashMap<>();
+
+    /**
+     * Tracks the number of times Look and Feel was changed.
+     * It enables partial invalidation of the cached UIs.
+     */
+    private final AtomicInteger lafEpoch = new AtomicInteger();
 
     /** The currently selected node in the tree. */
     private JMeterTreeNode currentNode = null;
@@ -249,6 +265,8 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             if (comp == null) {
                 comp = getGuiFromCache(guiClass, testClass);
                 nodesToGui.put(node, comp);
+            } else {
+                updateUi(comp);
             }
             log.debug("Gui retrieved = {}", comp);
             return comp;
@@ -265,6 +283,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @param node
      *            the test element being removed
      */
+    @API(since = "5.3", status = API.Status.MAINTAINED)
     public void removeNode(TestElement node) {
         nodesToGui.remove(node);
     }
@@ -407,7 +426,21 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 }
             }
         }
+        updateUi(comp);
         return comp;
+    }
+
+    private void updateUi(JMeterGUIComponent comp) {
+        if (!(comp instanceof JComponent)) {
+            return;
+        }
+        JComponent jc = (JComponent) comp;
+        Object epoch = jc.getClientProperty(LAF_EPOCH);
+        int currentLafEpoch = lafEpoch.get();
+        if (epoch instanceof Integer && ((Integer) epoch) < currentLafEpoch) {
+            JFactory.updateUi(jc);
+        }
+        jc.putClientProperty(LAF_EPOCH, currentLafEpoch);
     }
 
     /**
@@ -633,10 +666,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         if (popup != null) {
             log.debug("Showing pop up for {} at x,y = {},{}", invoker, e.getX(), e.getY());
 
-            popup.pack();
+            // Enforce heavyweight popup to show shadows on macOS
+            popup.setLightWeightPopupEnabled(false);
             popup.show(invoker, e.getX(), e.getY());
-            popup.setVisible(true);
-            popup.requestFocusInWindow();
         }
     }
 
@@ -649,27 +681,34 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         // will flush it away):
         updateCurrentNode();
 
-        // Forget about all GUIs we've created so far: we'll need to re-created
-        // them all!
-        guis = new HashMap<>();
-        nodesToGui = new HashMap<>();
-        testBeanGUIs = new HashMap<>();
-
-        // BeanInfo objects also contain locale-sensitive data -- flush them
-        // away:
         Introspector.flushCaches();
 
-        // Now put the current GUI in place. [This code was copied from the
-        // EditCommand action -- we can't just trigger the action because that
-        // would populate the current node with the contents of the new GUI --
-        // which is empty.]
-        MainFrame mf = getMainFrame(); // Fetch once
-        if (mf == null) { // Probably caused by unit testing on headless system
-            log.warn("Mainframe is null");
-        } else {
-            mf.setMainPanel((javax.swing.JComponent) getCurrentGui());
-            mf.setEditMenu(getTreeListener().getCurrentNode().createPopupMenu());
-        }
+        invalidateCachedUi();
+    }
+
+    public void invalidateCachedUi() {
+        // Save current edits from the GUI to tree model just in case
+        updateCurrentNode();
+
+        // Invalidate UIs
+        guis.clear();
+        nodesToGui.clear();
+        testBeanGUIs.clear();
+
+        // Call "start edit for the current tree node" action to show the UI
+        ActionRouter.getInstance().actionPerformed(
+                new ActionEvent(this, 3334, ActionNames.EDIT)
+        );
+    }
+
+    /**
+     * Tells hidden GUI components to update UIs when they are shown.
+     * <p>When Look and Feel (or zoom scaling) changes, only visible components are updated.
+     * The hidden ones are updated as they are shown.</p>
+     */
+    @API(since = "5.3", status = API.Status.EXPERIMENTAL)
+    public void updateUIForHiddenComponents() {
+        lafEpoch.getAndIncrement();
     }
 
     private String testPlanFile;

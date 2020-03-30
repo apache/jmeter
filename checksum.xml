@@ -8,14 +8,18 @@
     <trusted-key id='c9fbaa83a8753994' group='com.fasterxml.jackson.core' />
     <trusted-key id='4c00043bec5cb7cb' group='com.fifesoft' />
     <trusted-key id='af10873874630863' group='com.flipkart.zjsonpatch' />
+    <trusted-key id='379ce192d401ab61' group='com.formdev' />
     <trusted-key id='105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='3c0a8f4744f37328' group='com.github.ben-manes.caffeine' />
     <trusted-key id='8ea48d105232855d' group='com.github.jknack' />
     <trusted-key id='461a804f2609fd89' group='com.github.shyiko.klob' />
     <trusted-key id='1756b920eecf0e90' group='com.github.spotbugs' />
     <trusted-key id='78fcd238c26ea995' group='com.github.tomakehurst' />
+    <trusted-key id='105cb91cac2aee0e' group='com.github.vlsi.gradle' />
+    <trusted-key id='254e9c64c264c176' group='com.github.weisj' />
     <trusted-key id='59a252fb1199d873' group='com.google.code.findbugs' />
     <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
+    <trusted-key id='912d2c0eccda55c0' group='com.google.errorprone' />
     <trusted-key id='9a259c7ee636c5ed' group='com.google.errorprone' />
     <trusted-key id='bf935c771a8474f8' group='com.google.errorprone' />
     <trusted-key id='9a259c7ee636c5ed' group='com.google.googlejavaformat' />
@@ -27,6 +31,7 @@
     <trusted-key id='e57428da9e879e7d' group='com.helger' />
     <trusted-key id='3684155e9365c30e' group='com.jayway.jsonpath' />
     <trusted-key id='a50569c7ca7fa1f0' group='com.jcraft' />
+    <trusted-key id='0a36eef644cff773' group='com.metsci.ext.com.kitfox.svg' />
     <trusted-key id='db45d3a62a183ce2' group='com.miglayout' />
     <trusted-key id='aa49c633b4734832' group='com.pinterest' />
     <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
@@ -55,7 +60,10 @@
     <trusted-key id='6425559c47cc79c4' group='javax.servlet' />
     <trusted-key id='4044edf1bb73efea' group='jaxen' />
     <trusted-key id='528dc75aa68f0923' group='jcharts' />
+    <trusted-key id='85911f425ec61b51' group='junit' />
     <trusted-key id='efe8086f9e93774e' group='junit' />
+    <trusted-key id='15c71c0a4e0b8edd' group='net.java.dev.jna' />
+    <trusted-key id='75bf031b7c94e183' group='net.java.dev.jna' />
     <trusted-key id='f6bc09712c8df6ec' group='net.minidev' />
     <trusted-key id='0da8a5ec02d11ead' group='net.sf.jopt-simple' />
     <trusted-key id='d4012dda1f1f0f82' group='net.sf.jtidy' />
@@ -66,6 +74,7 @@
     <trusted-key id='6b1b008864323b92' group='org.antlr' />
     <trusted-key id='411063a3a0ffd119' group='org.apache-extras.beanshell' />
     <trusted-key id='87a7f75a6a8ba5fc' group='org.apache.activemq' />
+    <trusted-key id='bff2ee42c8282e76' group='org.apache.activemq' />
     <trusted-key id='86fdc7e2a11262cb' group='org.apache.bcel' />
     <trusted-key id='3faad2cd5ecbb314' group='org.apache.commons' />
     <trusted-key id='64a16faaec16a4be' group='org.apache.commons' />
@@ -84,6 +93,7 @@
     <trusted-key id='9c8c892f91f8e6d1' group='org.apache.rat' />
     <trusted-key id='4a51a45b944ffd51' group='org.apache.tika' />
     <trusted-key id='d0eb627d4885ced1' group='org.apache.velocity' />
+    <trusted-key id='73129f58de61ecbd' group='org.apache.xbean' />
     <trusted-key id='a2e92e06ddb37997' group='org.apache.xbean' />
     <trusted-key id='5b93f1df7cdb6dea' group='org.apache.xmlgraphics' />
     <trusted-key id='85911f425ec61b51' group='org.apiguardian' />
@@ -130,6 +140,7 @@
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.gradle' />
     <trusted-key id='72fefd1572eb75e1' group='org.spockframework' />
     <trusted-key id='9a2c7a98e457c53d' group='org.springframework' />
+    <trusted-key id='e4b53844e02b191b' group='org.swinglabs' />
     <trusted-key id='a2115ae15f6b8b72' group='org.xmlunit' />
     <trusted-key id='9ff25980f5ba7e4f' group='xalan' />
     <trusted-key id='858fc4c4f43856a3' group='xerces' />
@@ -145,26 +156,11 @@
     <dependency group='com.github.bulenkov.darcula' module='darcula' version='e208efb96f70e4be9dc362fbb46f6e181ef501dd'>
       <sha512>80F3335D8EA3FB3FF07A12A79C958C4E3F8BB542511C52825A8B3694AC96F027E24396CE9EDCEFA44EE93B5CBED4E4AED4575E6AAED56F363BAE92C52EE85D22</sha512>
     </dependency>
-    <dependency group='com.github.vlsi.gradle' module='crlf-plugin' version='1.61'>
-      <sha512>613DEC993998651505A523DBA80C262D0C570083EA9FB2ED17C8A82032AC989EE3F506198D9C45657133785D29C2678880E4F32CAA086E83D58121051C0DE9C2</sha512>
-    </dependency>
-    <dependency group='com.github.vlsi.gradle' module='gradle-extensions-plugin' version='1.61'>
-      <sha512>21061CE66CFE4A699DEE7483FEB9681DF2319530F2A9ABAA86E3EA6FA336F64040E8E405F7F2A5EB8CBE7DF9E5EBA1B597B7039CA279A00E0BECBC2BB5D69348</sha512>
-    </dependency>
-    <dependency group='com.github.vlsi.gradle' module='ide-plugin' version='1.61'>
-      <sha512>73D737F6E73171B75B47893339695604E7FF1A7B730625B33D65A14998B890A74B84499D2F5248170BEEA0F94754F4C58DDCA27D84254610DDC23F031E489A53</sha512>
-    </dependency>
-    <dependency group='com.github.vlsi.gradle' module='license-gather-plugin' version='1.61'>
-      <sha512>47F5142EB067DFFCD8B16DAEC000063747C5409A494FAB328DF429DE0D3AAF584A2AB68D335E53EA8A2C11FC5ABD32C77A9D996F7FFFCB3B748A12931A1A028F</sha512>
-    </dependency>
-    <dependency group='com.github.vlsi.gradle' module='stage-vote-release-plugin' version='1.61'>
-      <sha512>4ABAEFA329E49CA8F80E5616DD4A3F32AAD6D88E602CB8DB22C3DDE55CC055C32F4DCF3DE60178D1F74B1DB0F1CD8B39CC172430F9DAAFC46A54C7DC70DD96DF</sha512>
-    </dependency>
     <dependency group='commons-logging' module='commons-logging' version='1.0.4'>
       <sha512>C8D2D39A60ADCC49091D393DAF30473D1776E4B6B09BB86639171F660833A17AFBDC9F3E85843093535DA16FA664CD7CD4CA38F54E141018DD1B78DE681AD668</sha512>
     </dependency>
-    <dependency group='de.marcphilipp.gradle' module='nexus-publish-plugin' version='0.2.0'>
-      <sha512>36DFDADA6745D7AF5CF2807E197AFD111073C30536CB29C531522F73D4086C2A7AB70756975FEC290657012B8C9090414F76811731A920D8BC4EEC1DEC0AB2DF</sha512>
+    <dependency group='de.marcphilipp.gradle' module='nexus-publish-plugin' version='0.4.0'>
+      <sha512>37EC6DFBDDD0458A2A341E371D038B3B0A25AB2F9006B295EBCF3BDE873A8D02C8CDAA6C69D875500F67593C618E8EF62C0269FB2F7F527A1367A7D6B8EA3CBE</sha512>
     </dependency>
     <dependency group='gradle.plugin.com.github.spotbugs' module='spotbugs-gradle-plugin' version='1.6.10'>
       <sha512>E7486B32EF6C9C14FE879814DA5F06CA6ECABF47195063A93E6FC8CD10119244C5A7BC3C71A4760CCE3AFFA9E9736336D345D8ED84EB65153C15683FA6529D92</sha512>

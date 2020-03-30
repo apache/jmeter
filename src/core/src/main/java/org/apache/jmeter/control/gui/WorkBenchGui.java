@@ -25,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -38,6 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @deprecated since 4.0 Non Test Elements are now children of Test Plan
  */
 @Deprecated
+@TestElementMetadata(labelResource = "workbench_title", actionGroups = MenuFactory.NON_TEST_ELEMENTS)
 public class WorkBenchGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
     // This check-box defines whether to save  WorkBench content or not

@@ -29,6 +29,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -41,6 +42,7 @@ import org.apiguardian.api.API;
  *
  */
 @GUIMenuSortOrder(3)
+@TestElementMetadata(labelResource = "loop_controller_title")
 public class LoopControlPanel extends AbstractControllerGui implements ActionListener {
     private static final long serialVersionUID = 241L;
 

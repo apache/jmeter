@@ -18,6 +18,7 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,11 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.UndoHistory;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -38,6 +41,9 @@ import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.weisj.darklaf.icons.ThemedSVGIcon;
+import com.github.weisj.darklaf.ui.button.DarkButtonUI;
 
 /**
  * The JMeter main toolbar class
@@ -122,17 +128,36 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      * @return a button for toolbar
      */
     private static JButton makeButtonItemRes(IconToolbarBean iconBean) throws Exception {
-        final URL imageURL = JMeterUtils.class.getClassLoader().getResource(iconBean.getIconPath());
-        if (imageURL == null) {
-            throw new Exception("No icon for: " + iconBean.getActionName());
-        }
-        JButton button = new JButton(new ImageIcon(imageURL));
+        JButton button = new JButton(loadIcon(iconBean, iconBean.getIconPath())) {
+            @Override
+            public void updateUI() {
+                super.updateUI();
+                // Certain LaFs might alter button configuration, so we revert it to the way we want
+                // For instance, https://github.com/weisJ/darklaf/issues/84
+                setFocusable(false);
+                setRolloverEnabled(true);
+                putClientProperty(DarkButtonUI.KEY_VARIANT, DarkButtonUI.VARIANT_SHADOW);
+                putClientProperty(DarkButtonUI.KEY_THIN, true);
+            }
+        };
         button.setToolTipText(JMeterUtils.getResString(iconBean.getI18nKey()));
-        final URL imageURLPressed = JMeterUtils.class.getClassLoader().getResource(iconBean.getIconPathPressed());
-        button.setPressedIcon(new ImageIcon(imageURLPressed));
+        if (!iconBean.getIconPathPressed().equals(iconBean.getIconPath())) {
+            button.setPressedIcon(loadIcon(iconBean, iconBean.getIconPathPressed()));
+        }
         button.addActionListener(ActionRouter.getInstance());
         button.setActionCommand(iconBean.getActionNameResolve());
         return button;
+    }
+
+    private static Icon loadIcon(IconToolbarBean iconBean, String iconPath) throws URISyntaxException {
+        final URL imageURL = JMeterUtils.class.getClassLoader().getResource(iconPath);
+        if (imageURL == null) {
+            throw new IllegalArgumentException("No icon for: " + iconBean.getActionName());
+        }
+        if (StringUtils.endsWithIgnoreCase(iconBean.getIconPath(), ".svg")) {
+            return new ThemedSVGIcon(imageURL.toURI(), iconBean.getWidth(), iconBean.getHeight());
+        }
+        return new ImageIcon(imageURL);
     }
 
     /**

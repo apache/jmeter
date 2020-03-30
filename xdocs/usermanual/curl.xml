@@ -37,89 +37,142 @@ Curl document</a>.
 <p>
 Create a Test Plan From a cURL Command
 </p>
-1. To create an import from a cURL, open the ‘Tools’ menu and click ‘Import from cURL’.
-<figure width="768" height="339" image="curl/choose_curl.png">Figure 1 - The menu where curl is located</figure>
-2.There are two ways to enter the curl command line. Firstly, we can enter it manually. Secondly, we can import a file containing the curl command line.
-This tool supports input of multiple curl command lines at the same time.
-<figure width="767" height="316" image="curl/enter_command.png">Figure 2.1 - Enter curl command in text panel</figure>
-<figure width="767" height="316" image="curl/enter_command_from_file.png">Figure 2.2 - Enter curl command from file</figure>
-3.Then, click ‘Create HTTP Request’ button and a new HTTP Sample will be added to the Test Plan.
-<figure width="767" height="316" image="curl/result.png">Figure 3 - result of Test Plan</figure>
+<ol>
+  <li>To create an import from a cURL, open the <code>Tools</code> menu and click <code>Import from cURL</code>.
+    <figure width="768" height="339" image="curl/choose_curl.png">Figure 1 - The menu where curl is located</figure>
+  </li>
+    <li>There are two ways to enter the curl command line. Firstly, we can enter it manually. Secondly, we can import a file containing the curl command line.
+    This tool supports input of multiple curl command lines at the same time.
+    <figure width="767" height="316" image="curl/enter_command.png">Figure 2.1 - Enter curl command in text panel</figure>
+    <figure width="767" height="316" image="curl/enter_command_from_file.png">Figure 2.2 - Enter curl command from file</figure>
+  </li>
+  <li>Then, click <code>Create Test Plan</code> button and a new HTTP Sample will be added to the Test Plan.
+    <figure width="767" height="316" image="curl/result.png">Figure 3 - result of Test Plan</figure>
+  </li>
+</ol>
 </subsection>
 
 <subsection name="&sect-num;.2 Curl options supported" anchor="curl_options">
 
-<p><b>-H, --header&lt;header&gt;</b>:Extra header to use when getting a web page.</p>
-<p><b>-X, --request &lt;command&gt;</b>:Specifies a custom request method to use when communicating with the HTTP server.</p>
-<p><b>--compressed</b>:Request a compressed response using one of the algorithms curl supports, and return the uncompressed document.</p>
-<p><b>-A, --user-agent &lt;agent string &gt;</b>:Specify the User-Agent string to send to the HTTP server.</p>
-<p><b>-b, --cookie &lt;name=data&gt;</b>:Pass the data to the HTTP server as a cookie.</p>
+<dl>
+  <dt><code>-H</code>, <code>--header &lt;header&gt;</code></dt>
+  <dd>Extra header to use when getting a web page.</dd>
+  <dt><code>-X</code>, <code>--request &lt;command&gt;</code></dt>
+  <dd>Specifies a custom request method to use when communicating with the HTTP server.</dd>
+  <dt><code>--compressed</code></dt>
+  <dd>Request a compressed response using one of the algorithms curl supports, and return the uncompressed document.</dd>
+  <dt><code>-A</code>, <code>--user-agent &lt;agent string&gt;</code></dt>
+  <dd>Specify the User-Agent string to send to the HTTP server.</dd>
+  <dt><code>-b</code>, <code>--cookie &lt;name=data&gt;</code></dt>
+  <dd>Pass the data to the HTTP server as a cookie.</dd>
+  <dt><code>-d</code> and friends</dt>
+  <dd><p>Sending data via POST request</p>
+    <p>Sends the specified data in a POST request to the HTTP server. If this option is used more than
+    once on the same command line, the data pieces specified will be merged together with a
+    separating '<code>&amp;</code>' character. Thus, using '<code>-d name=daniel -d skill=lousy</code>' would generate a POST
+    chunk that looks like '<code>name=daniel&amp;skill=lousy</code>'.</p>
+    <dl>
+      <dt><code>-d</code>, <code>--data &lt;data&gt;</code>, <code>--data-ascii &lt;data&gt;</code></dt>
+      <dd>use <code>@</code> to upload a file</dd>
+      <dt><code>--data-raw &lt;data&gt;</code>gt;</dt>
+      <dd></dd>
+      <dt><code>--data-raw &lt;data&gt;</code></dt>
+      <dd>This posts data exactly as specified with no extra processing whatsoever.
+        If you start the data with the character <code>@,</code> the rest should be a filename.</dd>
+      <dt><code>--data-raw &lt;data&gt;</code>ta&gt;</dt>
+      <dd>This posts data, similar to the other <code>--data</code> options with the exception that this performs
+        URL-encoding.</dd>
+      <dt><code>--data-raw &lt;data&gt;</code></dt>
+      <dd>This posts data similarly to <code>--data</code> but without the special interpretation
+        of the <code>@</code> character.</dd>
+    </dl>
+  </dd>
+  <dt><code>-F</code> and friends</dt>
+  <dd>
+    <p>This lets curl emulate a filled-in form in which a user has pressed the submit button.</p>
+    <dl>
+      <dt><code>-F</code>, <code>--form &lt;name=content&gt;</code></dt>
+      <dd>use <code>@</code> to upload a file</dd>
+      <dt><code>--form-string &lt;name=content&gt;</code></dt>
+      <dd></dd>
+    </dl>
+  </dd>
+  <dt><code>-u</code>, --user &lt;user:password &gt;</dt>
+  <dd>Specify user and password to use for server authentication.</dd>
+  <dt><code>--basic</code>, <code>--digest</code></dt>
+  <dd>Tells curl to use HTTP authentication.</dd>
+  <dt><code>--cacert</code> and friends</dt>
+  <dd>
+    <p>Tells curl to use the specified client certificate file when getting a file with HTTPS</p>
+    <dl>
+      <dt><code>--cacert &lt;CA certificate&gt;</code></dt>
+      <dt><code>--capath  &lt;CA certificate directory&gt;</code></dt>
+      <dt><code>--ciphers &lt;list of ciphers&gt;</code></dt>
+      <dt><code>--cert-status</code></dt>
+      <dt><code>--cert-type &lt;type&gt;</code></dt>
+    </dl>
+  </dd>
+  <dt><code>-G</code>, <code>--get</code></dt>
+  <dd>put the post data in the URL and use get to replace post.</dd>
+  <dt><code>--no-keepalive</code></dt>
+  <dd>Disables the use of keepalive messages on the TCP connection.</dd>
+  <dt><code>-e</code>, <code>--referer &lt;URL&gt;</code></dt>
+  <dd>Sends the <em>Referer Page</em> information to the HTTP server.</dd>
+  <dt><code>-L</code>, <code>--location</code></dt>
+  <dd>If the server reports that the requested page has moved to a different location
+    this option will make curl redo the request on the new place.</dd>
+  <dt><code>-i</code>, <code>--include</code></dt>
+  <dd>Include the HTTP-header in the output.</dd>
+  <dt><code>--connect-timeout &lt;seconds&gt;</code></dt>
+  <dd>Maximum time in seconds that the connection to the server may take.</dd>
+  <dt><code>--keepalive-time &lt;seconds&gt;</code></dt>
+  <dd>This option sets the time a connection needs to remain idle before sending keepalive probes
+    and the time between individual keepalive probes.</dd>
+  <dt><code>-m</code>, <code>--max-time  &lt;seconds&gt;</code></dt>
+  <dd>Maximum time in seconds that you allow the whole operation to take.</dd>
+  <dt><code>-x</code>, <code>--proxy &lt;[protocol://][user:password@]proxyhost[:port]&gt;</code></dt>
+  <dd>Use the specified HTTP proxy. If the port number is not specified,
+    it is assumed at port <code>1080</code>.</dd>
+  <dt><code>-U</code>, <code>--proxy-user  &lt;user:password&gt;</code></dt>
+  <dd>Specify user and password to use for proxy authentication.</dd>
+  <dt><code>-k</code>, <code>--insecure</code></dt>
+  <dd>This option explicitly allows curl to perform <em>insecure</em> SSL connections and transfers.</dd>
+  <dt><code>--raw</code></dt>
+  <dd>When used, it disables all internal HTTP decoding of content or transfer encodings and instead makes them passed on unaltered,raw.</dd>
+  <dt><code>-I</code>, <code>--head</code></dt>
+  <dd>Fetch the HTTP-header only. HTTP-servers feature the method <code>HEAD</code> which this uses to get nothing but the header of a document.</dd>
+  <dt><code>--interface &lt;name&gt;</code></dt>
+  <dd>Perform an operation using a specified interface. You can enter interface name, IP address or host name.</dd>
+  <dt><code>--proxy-ntlm</code>/<code>--proxy-negotiate</code></dt>
+  <dd>Tells curl to use HTTP BASIC/NTLM/Digest authentication when communicating with the given proxy.</dd>
+  <dt><code>--dns-servers &lt;addresses&gt;</code></dt>
+  <dd>Resolve host name over DOH.</dd>
+  <dt><code>--resolve &lt;host:port:address&gt;</code></dt>
+  <dd>Provide a custom address for a specific host and port pair.</dd>
+  <dt><code>--limit-rate &lt;speed&gt;</code></dt>
+  <dd>Specify the maximum transfer rate you want curl to use.</dd>
+  <dt><code>--max-redirs &lt;num&gt;</code></dt>
+  <dd>Set maximum number of redirections which may be followed.</dd>
+  <dt><code>--noproxy &lt;no-proxy-list&gt;</code></dt>
+  <dd>Comma-separated list of hosts which do not use a proxy, if one is specified.</dd>
+</dl>
 
-<b>Sends the specified data in a POST request to the HTTP server. If this option is used more than
- once on the same command line, the data pieces specified will be merged together with a
-separating "&amp;" character. Thus, using '-d name=daniel -d skill=lousy' would generate a POST
- chunk that looks like 'name=daniel&amp;skill=lousy'.</b>
-<ul><li>-d,--data &lt;data&gt;  --data-ascii &lt;data&gt;  :use @ to upload the file</li>
-<li> --data-binary &lt;data&gt;  </li><li>--data-raw &lt;data&gt; : This posts data exactly as specified with no extra processing whatsoever.
-If you start the data with the character @, the rest should be a filename. </li>
-<li> --data-urlencode &lt;data&gt; :This posts data, similar to the other --data options with the exception that this performs
- URL-encoding.</li>
- <li> --data-raw &lt;data&gt; :This  posts data similarly to --data but without the special interpretation
-of the @ character. </li>
-</ul>
-
-<b>This lets curl emulate a filled-in form in which a user has pressed the submit button.</b>
-<ul><li>-F, --form &lt;name=content&gt; :use @ to upload the file</li>
-<li>--form-string  &lt;name=content&gt;</li>
-</ul>
-<p><b>-u, --user &lt;user:password &gt;</b>:Specify user and password to use for server authentication.</p>
-<p><b>--basic,--digest</b>:Tells curl to use HTTP authentication.</p>
-
-<b>Tells curl to use the specified client certificate file when getting a file with HTTPS</b>
-<ul>
-<li>--cacert &lt;CA certificate&gt;</li>
-<li>--capath  &lt;CA certificate directory&gt;</li>
-<li>--ciphers &lt;list of ciphers&gt; </li>
-<li>--cert-status</li>
-<li>--cert-type &lt;type&gt;</li>
-</ul>
-<p><b>-G, --get</b>:put the post data in the url and use get to replace post.</p>
-<p><b>--no-keepalive</b>:Disables the use of keepalive messages on the TCP connection.</p>
-<p><b>-e, --referer &lt;URL&gt;</b>:Sends the "Referer Page" information to the HTTP server.</p>
-<p><b>-L, --location</b>:If the server reports that the requested page has moved to a different location
-this option will make curl redo the request on the new place.</p>
-<p><b>-i, --include</b>:Include the HTTP-header in the output.</p>
-<p><b>--connect-timeout &lt;seconds&gt;</b>:Maximum time in seconds that the connection to the server may take.</p>
-<p><b>--keepalive-time &lt;seconds&gt;</b>:This option sets the time a connection needs to remain idle before sending keepalive probes and the time between individual keepalive probes.</p>
-<p><b>-m, --max-time  &lt;seconds&gt;</b>:Maximum time in seconds that you allow the whole operation to take.</p>
-<p><b>-x, --proxy &lt;[protocol://] [user:password@] proxyhost[:port]&gt; </b>:Use the specified HTTP proxy. If the port number is not specified, it is assumed at port 1080. </p>
-<p><b>-U, --proxy-user  &lt;user:password&gt;</b>:Specify user and password to use for proxy authentication. </p>
-<p><b>-k, --insecure</b>:This option explicitly allows curl to perform "insecure" SSL connections and transfers.</p>
-<p><b>--raw</b>:When used, it disables all internal HTTP decoding of content or transfer encodings and instead makes them passed on unaltered,raw.</p>
-<p><b>-I, --head</b>:Fetch the HTTP-header only. HTTP-servers feature the command HEAD which this uses to get nothing but the header of a document.</p>
-<p><b>--interface &lt;name&gt;</b>:Perform an operation using a specified interface. You can enter interface name, IP address or host name.</p>
-<p><b>--proxy-ntlm/--proxy-negotiate</b>:Tells curl to use HTTP basic/ntlm/Digest authentication when communicating with the given proxy.</p>
-<p><b>--dns-servers &lt;addresses&gt;</b>:Resolve host name over DOH.</p>
-<p><b>--resolve &lt;host:port:address&gt;</b>:Provide a custom address for a specific host and port pair.</p>
-<p><b>--limit-rate &lt;speed&gt;</b>:Specify the maximum transfer rate you want curl to use.</p>
-<p><b>--max-redirs &lt;num&gt;</b>:Set maximum number of redirections which may be followed.</p>
-<p><b>--noproxy &lt;no-proxy-list&gt;</b>:Comma-separated list of hosts which do not use a proxy, if one is specified.</p>
 </subsection>
 
 <subsection name="&sect-num;.3 Warning" anchor="warning">
 <p>
-When the command you entered is ignored or contains warning content, we will display warning in the comment section of Http Request.
+When the command you entered is ignored or contains warning content, we will display warning in the comment section of HTTP Request.
 </p>
 <figure width="768" height="339" image="curl/http_request_warning.png">Figure 1 -Warning</figure>
 
 </subsection>
 <subsection name="&sect-num;.4 Examples" anchor="example">
-<p><b>Use cookie :</b>curl -X POST  "https://xxx.com" -b 'username=Tom;password=123456'</p>
-<p><b>Use data :</b>curl -X POST  "https://xxx.com" --data 'fname=a&amp;lname=b'</p>
-<p><b>Use form :</b>curl -X POST  "https://xxx.com" -F 'lname=a'  -F 'fname=b' -F 'c=@C:\Test\test.txt'  </p>
-<p><b>Use proxy :</b>curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042'</p>
-<p><b>Use autorization :</b>curl "https://xxx.com" -u 'user:passwd' --basic</p>
-<p><b>Use DNS :</b>curl "https://xxx.com" --dns-servers '0.0.0.0,1.1.1.1'</p>
+<p><b>Use cookie</b><source>curl -X POST  "https://example.invalid" -b 'username=Tom;password=123456'</source></p>
+<p><b>Use data</b><source>curl -X POST  "https://example.invalid" --data 'fname=a&amp;lname=b'</source></p>
+<p><b>Use form</b><source>curl -X POST  "https://example.invalid" -F 'lname=a'  -F 'fname=b' -F 'c=@C:\Test\test.txt'</source></p>
+<p><b>Use proxy</b><source>curl 'https://example.invalid/' -x 'https://aa:bb@proxy.invalid:8042'</source></p>
+<p><b>Use authorization</b><source>curl "https://example.invalid" -u 'user:passwd' --basic</source></p>
+<p><b>Use DNS</b><source>curl "https://example.invalid" --dns-servers '0.0.0.0,1.1.1.1'</source></p>
 </subsection>
 </section>
 

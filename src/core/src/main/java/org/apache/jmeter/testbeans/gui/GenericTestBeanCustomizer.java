@@ -571,8 +571,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 }
                 currentGroup = g;
                 currentPanel = new JPanel(new GridBagLayout());
-                currentPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                        groupDisplayName(g)));
+                currentPanel.setBorder(BorderFactory.createTitledBorder(groupDisplayName(g)));
                 cp.weighty = 0.0;
                 y = 0;
             }

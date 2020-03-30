@@ -61,6 +61,7 @@ dependencies {
     implementation("org.apache.commons:commons-text") {
         because("StringEscapeUtils")
     }
+    implementation("com.miglayout:miglayout-swing")
     // we use bcmail for compilation only, and bcmail is not shipped in the release
     compileOnly("org.bouncycastle:bcmail-jdk15on")
     compileOnly("org.bouncycastle:bcpkix-jdk15on")

@@ -35,6 +35,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.mail.sampler.MailReaderSampler;
@@ -43,6 +44,7 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+@TestElementMetadata(labelResource = "mail_reader_title")
 public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionListener, FocusListener {
 
     private static final long serialVersionUID = 240L;

@@ -18,6 +18,7 @@
 package org.apache.jmeter.config;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.JMeterUtils;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Configure Keystore
  */
+@TestElementMetadata(labelResource = "displayName")
 public class KeystoreConfig extends ConfigTestElement implements TestBean, TestStateListener {
 
     private static final long serialVersionUID = 1L;

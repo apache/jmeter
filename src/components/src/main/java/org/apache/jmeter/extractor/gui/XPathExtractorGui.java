@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.assertions.gui.XMLConfPanel;
 import org.apache.jmeter.extractor.XPathExtractor;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -37,6 +38,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * GUI for XPathExtractor class.
  */
+@TestElementMetadata(labelResource = "xpath_extractor_title")
 public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = 240L;
@@ -126,8 +128,8 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         Box box = Box.createVerticalBox();
         box.add(makeTitlePanel());
         box.add(createScopePanel(true, true, true));
-        xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-                .getResString("xpath_assertion_option"))); //$NON-NLS-1$
+        xml.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("xpath_assertion_option"))); //$NON-NLS-1$
         box.add(xml);
         box.add(getFragment);
         box.add(makeParameterPanel());

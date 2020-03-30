@@ -122,6 +122,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     /** Whether the GUI components have been created. */
     private boolean initialized = false;
 
+    /** The list of categories this UI participates in */
+    private List<String> menuCategories;
+
     static {
         List<String> paths = new LinkedList<>();
         paths.add("org.apache.jmeter.testbeans.gui");// $NON-NLS-1$
@@ -298,6 +301,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     public void configure(TestElement element) {
         if (!initialized){
             init();
+            // It populates GUI_CLASS bean property which is used for icon display
+            setupGuiClassesList();
         }
         clearGui();
         super.configure(element);
@@ -368,7 +373,11 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * @return matches
      */
     private List<String> setupGuiClassesList() {
-        List<String> menuCategories = new ArrayList<>();
+        List<String> menuCategories = this.menuCategories;
+        if (menuCategories != null) {
+            return menuCategories;
+        }
+        menuCategories = new ArrayList<>(1);
         // TODO: there must be a nicer way...
         BeanDescriptor bd = beanInfo.getBeanDescriptor();
         if (Assertion.class.isAssignableFrom(testBeanClass)) {
@@ -403,6 +412,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             menuCategories.add(MenuFactory.TIMERS);
             bd.setValue(TestElement.GUI_CLASS, AbstractTimerGui.class.getName());
         }
+        this.menuCategories = menuCategories;
         return menuCategories;
     }
 

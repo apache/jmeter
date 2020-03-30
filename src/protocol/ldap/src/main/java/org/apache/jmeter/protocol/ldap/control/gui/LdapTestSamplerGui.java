@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 
 import org.apache.jmeter.config.gui.LoginConfigGui;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ldap.config.gui.LdapConfigGui;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPSampler;
@@ -29,6 +30,7 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+@TestElementMetadata(labelResource = "ldap_testing_title")
 public class LdapTestSamplerGui extends AbstractSamplerGui {
     private static final long serialVersionUID = 240L;
 

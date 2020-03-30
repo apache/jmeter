@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.testelement.TestElement;
@@ -52,6 +53,7 @@ import org.apache.jorphan.gui.JLabeledChoice;
  * Based on the work of: author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
  * created Apr 29 2003 11:00 AM company Sip Technologies and Exports Ltd.
  ******************************************************************************/
+@TestElementMetadata(labelResource = "ldapext_sample_title")
 public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener {
 
     private static final long serialVersionUID = 240L;

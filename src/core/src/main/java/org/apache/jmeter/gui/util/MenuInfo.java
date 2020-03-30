@@ -49,7 +49,7 @@ public class MenuInfo {
 
     private int getSortOrderFromName(String classFullName) {
         try {
-            GUIMenuSortOrder menuSortOrder = Class.forName(classFullName)
+            GUIMenuSortOrder menuSortOrder = Class.forName(classFullName, false, MenuInfo.class.getClassLoader())
                     .getDeclaredAnnotation(GUIMenuSortOrder.class);
             if (menuSortOrder != null) {
                 return menuSortOrder.value();

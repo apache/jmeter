@@ -147,6 +147,7 @@ project("junit") {
         implementation("org.exparity:hamcrest-date") {
             because("hamcrest-date.jar was historically shipped with JMeter")
         }
+        implementation("com.miglayout:miglayout-swing")
     }
 }
 

@@ -19,10 +19,12 @@ package org.apache.jmeter.protocol.http.modifier.gui;
 
 import java.awt.BorderLayout;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
 
+@TestElementMetadata(labelResource = "anchor_modifier_title")
 public class AnchorModifierGui extends AbstractPreProcessorGui {
     private static final long serialVersionUID = 240L;
 

@@ -32,7 +32,8 @@ import javax.net.ssl.X509ExtendedTrustManager;
 
 /**
  * This class can be used as a SocketFactory with SSL-connections.<p>
- * Its purpose is to ensure that all certificates - no matter from which CA - are accepted to secure the SSL-connection.
+ * Its purpose is to ensure that all certificates - no matter from which CA - are accepted to enable the SSL-connection.<p>
+ * <b>This is of course not secure</b>
  */
 public class TrustAllSSLSocketFactory extends SSLSocketFactory  { // NOSONAR JMeter is a pentest and perf testing tool
 

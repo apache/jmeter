@@ -4,6 +4,7 @@ language: java
 # skip default "install" command
 install: true
 
+# We can clean the caches via web at https://travis-ci.org/apache/jmeter/caches
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -45,26 +46,26 @@ matrix:
         - LC_ALL=fr_FR.UTF-8
       script:
         # This job verifies headless mode to ensure Apache JMeter is workable in headless as well
-        # Spotless and Checksyle are skipped here to save some time. They are verified anyway in Java 8 and Java 13 builds, so skipping them for Java 11 does not harm
+        # Spotless and Checkstyle are skipped here to save some time. They are verified anyway in Java 8 and Java 13 builds, so skipping them for Java 11 does not harm
         - ./gradlew build -Djava.awt.headless=true -Duser.language=fr -Duser.country=FR -PskipCheckstyle -PskipSpotless $SKIP_TAR
-    - name: Tests with OpenJDK 11 on s390x 
-      os: linux  
-      arch: s390x  
-      dist: bionic 
-      jdk: openjdk11 
-      addons: 
-        apt: 
-          packages: 
-            - language-pack-fr 
-      script: 
-        - sudo apt-get install -y openjdk-11-jdk  
-        - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-s390x/  
-        - export PATH=$JAVA_HOME/bin:$PATH   
+    - name: Tests with OpenJDK 11 on s390x
+      os: linux
+      arch: s390x
+      dist: bionic
+      jdk: openjdk11
+      addons:
+        apt:
+          packages:
+            - language-pack-fr
+      script:
+        - sudo apt-get install -y openjdk-11-jdk
+        - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-s390x/
+        - export PATH=$JAVA_HOME/bin:$PATH
         - ./gradlew build -Djava.awt.headless=true -PskipCheckstyle -PskipSpotless $SKIP_TAR
     # Java 12 is not here because it has been superceeded by Java 13
     # Tests with Java 12 do not surface much new, so Java 11 (LTS) and Java 13 (non-LTS) are enough for "post Java 9" testing
-    - name: Tests with OpenJDK 13
-      jdk: openjdk13
+    - name: Tests with OpenJDK 14
+      jdk: openjdk14
       addons:
         apt:
           packages:
@@ -74,7 +75,7 @@ matrix:
         - LANG=fr_FR.UTF-8
         - LC_ALL=fr_FR.UTF-8
       script:
-        # Spotless, Checksyle, and JaCoCo are verified here to ensure they all work with the latest supported Java
+        # Spotless, Checkstyle, and JaCoCo are verified here to ensure they all work with the latest supported Java
         - xvfb-run ./gradlew build jacocoReport -Duser.language=fr -Duser.country=FR $SKIP_TAR
     - name: jmeter-maven-plugin tests
       jdk: openjdk8
@@ -85,15 +86,15 @@ matrix:
         - cd jmeter-maven-plugin
         - mvn verify -Djmeter.version=42.0-SNAPSHOT
     - name: jmeter-maven-plugin tests on s390x
-      os: linux  
-      arch: s390x  
-      jdk: openjdk11 
-      script: 
-        - wget http://www.eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz  
-        - tar -xvzf apache-maven-3.6.3-bin.tar.gz  
-        - export PATH=`pwd`/apache-maven-3.6.3/bin/:$PATH  
-        - ./gradlew -PskipJavadoc publishToMavenLocal -Pjmeter.version=42.0 -PchecksumIgnore 
-        - cd .. 
-        - git clone --depth 100 https://github.com/jmeter-maven-plugin/jmeter-maven-plugin.git 
-        - cd jmeter-maven-plugin 
+      os: linux
+      arch: s390x
+      jdk: openjdk11
+      script:
+        - wget http://www.eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        - tar -xvzf apache-maven-3.6.3-bin.tar.gz
+        - export PATH=`pwd`/apache-maven-3.6.3/bin/:$PATH
+        - ./gradlew -PskipJavadoc publishToMavenLocal -Pjmeter.version=42.0 -PchecksumIgnore
+        - cd ..
+        - git clone --depth 100 https://github.com/jmeter-maven-plugin/jmeter-maven-plugin.git
+        - cd jmeter-maven-plugin
         - mvn verify -Djmeter.version=42.0-SNAPSHOT

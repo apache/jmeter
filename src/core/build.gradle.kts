@@ -61,23 +61,22 @@ dependencies {
         because("Groovy is a default JSR232 engine")
     }
 
-    implementation("org.slf4j:jcl-over-slf4j")
+    implementation("com.fasterxml.jackson.core:jackson-annotations")
+    implementation("com.fasterxml.jackson.core:jackson-core")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.formdev:svgSalamander")
+    implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("com.github.weisj:darklaf-core")
+    implementation("com.github.weisj:darklaf-property-loader")
+    implementation("com.miglayout:miglayout-swing")
     implementation("commons-codec:commons-codec") {
         because("DigestUtils")
     }
     implementation("commons-collections:commons-collections")
-    implementation("com.github.ben-manes.caffeine:caffeine")
-    implementation("com.fasterxml.jackson.core:jackson-annotations")
-    implementation("com.fasterxml.jackson.core:jackson-core")
-    implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.miglayout:miglayout-swing")
-    implementation("org.freemarker:freemarker")
-    implementation("org.mozilla:rhino")
-    implementation("org.apache.xmlgraphics:xmlgraphics-commons")
-    implementation("org.apache.commons:commons-text")
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
     }
+    implementation("org.apache.commons:commons-text")
     // For some reason JMeter bundles just tika-core and tika-parsers without transitive
     // dependencies. So we exclude those
     implementation("org.apache.tika:tika-core") {
@@ -86,8 +85,12 @@ dependencies {
     runtimeOnly("org.apache.tika:tika-parsers") {
         isTransitive = false
     }
+    implementation("org.apache.xmlgraphics:xmlgraphics-commons")
+    implementation("org.freemarker:freemarker")
     implementation("org.jodd:jodd-core")
     implementation("org.jodd:jodd-props")
+    implementation("org.mozilla:rhino")
+    implementation("org.slf4j:jcl-over-slf4j")
     // TODO: JMeter bundles Xerces, however the reason is unknown
     runtimeOnly("xerces:xercesImpl")
     runtimeOnly("xml-apis:xml-apis")
@@ -117,4 +120,10 @@ val versionClass by tasks.registering(Sync::class) {
 
 ide {
     generatedJavaSources(versionClass.get(), generatedVersionDir)
+}
+
+tasks.jar {
+    into("org/apache/jmeter/images") {
+        from("$rootDir/xdocs/images/logo.svg")
+    }
 }

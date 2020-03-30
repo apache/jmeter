@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.CriticalSectionController;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -35,6 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  * @since 2.12
  */
+@TestElementMetadata(labelResource = "critical_section_controller_title")
 public class CriticalSectionControllerGui extends AbstractControllerGui {
 
     /**

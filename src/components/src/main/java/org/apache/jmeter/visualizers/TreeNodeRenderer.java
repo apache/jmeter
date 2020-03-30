@@ -17,17 +17,18 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 
 /**
  * Tree cell renderer used by ComparisonVisualizer.
@@ -59,7 +60,7 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
         if(obj instanceof SampleResult)
         {
             if (!((SampleResult) obj).isSuccessful()) {
-                this.setForeground(Color.red);
+                this.setForeground(UIManager.getColor(JMeterUIDefaults.LABEL_ERROR_FOREGROUND));
                 this.setIcon(imageFailure);
             } else {
                 this.setIcon(imageSuccess);

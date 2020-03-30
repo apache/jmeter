@@ -23,6 +23,7 @@ import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
  * Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
  *
  */
+@TestElementMetadata(labelResource = "displayName")
 public class JSR223Listener extends JSR223TestElement
     implements Cloneable, SampleListener, TestBean, Visualizer {
 

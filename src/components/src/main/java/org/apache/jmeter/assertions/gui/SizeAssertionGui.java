@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.assertions.SizeAssertion;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -38,6 +39,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * GUI for {@link SizeAssertion}
  */
 @GUIMenuSortOrder(3)
+@TestElementMetadata(labelResource = "size_assertion_title")
 public class SizeAssertionGui extends AbstractAssertionGui implements ActionListener {
 
     private static final long serialVersionUID = 241L;
@@ -222,7 +224,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
 
         // USER_INPUT
         JPanel sizePanel = new JPanel();
-        sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        sizePanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("size_assertion_size_test"))); //$NON-NLS-1$
 
         sizePanel.add(new JLabel(JMeterUtils.getResString("size_assertion_label"))); //$NON-NLS-1$

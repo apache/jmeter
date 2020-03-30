@@ -19,6 +19,7 @@ package org.apache.jmeter.save;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,10 +31,9 @@ import javax.swing.JComponent;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.xmlgraphics.image.codec.png.PNGEncodeParam;
-import org.apache.xmlgraphics.image.codec.png.PNGImageEncoder;
 import org.apache.xmlgraphics.image.codec.tiff.TIFFEncodeParam;
 import org.apache.xmlgraphics.image.codec.tiff.TIFFImageEncoder;
+import org.apache.xmlgraphics.image.writer.ImageWriterUtil;
 
 /**
  * Class is responsible for taking a component and saving it as a JPEG, PNG or
@@ -73,9 +73,17 @@ public class SaveGraphicsService {
      */
     public void saveJComponent(String filename, int type, JComponent component) {
         Dimension size = component.getSize();
-        BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_BYTE_INDEXED);
+        int scale = 2;
+        BufferedImage image = new BufferedImage(size.width * scale, size.height * scale, BufferedImage.TYPE_INT_RGB);
         Graphics2D grp = image.createGraphics();
-        component.paint(grp);
+        try {
+            AffineTransform transform = new AffineTransform();
+            transform.setToScale(scale, scale);
+            grp.setTransform(transform);
+            component.paint(grp);
+        } finally {
+            grp.dispose();
+        }
 
         if (type == PNG) {
             filename += PNG_EXTENSION;
@@ -96,18 +104,10 @@ public class SaveGraphicsService {
      */
     public void savePNGWithBatik(String filename, BufferedImage image) {
         File outfile = new File(filename);
-        OutputStream fos = createFile(outfile);
-        if (fos == null) {
-            return;
-        }
-        PNGEncodeParam param = PNGEncodeParam.getDefaultEncodeParam(image);
-        PNGImageEncoder encoder = new PNGImageEncoder(fos, param);
         try {
-            encoder.encode(image);
+            ImageWriterUtil.saveAsPNG(image, 144, outfile);
         } catch (IOException e) {
             JMeterUtils.reportErrorToUser("PNGImageEncoder reported: "+e.getMessage(), "Problem creating image file");
-        } finally {
-            JOrphanUtils.closeQuietly(fos);
         }
     }
 

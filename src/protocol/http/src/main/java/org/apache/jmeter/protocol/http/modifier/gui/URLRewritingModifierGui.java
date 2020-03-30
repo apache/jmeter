@@ -21,6 +21,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JCheckBox;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.URLRewritingModifier;
@@ -28,6 +29,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
+@TestElementMetadata(labelResource = "http_url_rewriting_modifier_title")
 public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     private static final long serialVersionUID = 240L;
 

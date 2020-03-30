@@ -17,24 +17,26 @@
 
 package org.apache.jmeter.control.gui;
 
+import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.ThroughputController;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
-import org.apache.jmeter.gui.util.CheckBoxPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.MenuInfo;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
+
+import net.miginfocom.swing.MigLayout;
 
 @GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+1)
+@TestElementMetadata(labelResource = "throughput_control_title")
 public class ThroughputControllerGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 
@@ -52,8 +54,6 @@ public class ThroughputControllerGui extends AbstractControllerGui {
     private final String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label"); // $NON-NLS-1$
 
     private final String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label"); // $NON-NLS-1$
-
-    private final String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel"); // $NON-NLS-1$
 
     private final String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label"); // $NON-NLS-1$
 
@@ -124,9 +124,10 @@ public class ThroughputControllerGui extends AbstractControllerGui {
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
+        setLayout(new BorderLayout());
         setBorder(makeBorder());
-        add(makeTitlePanel());
+
+        JPanel panel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
 
         DefaultComboBoxModel<String> styleModel = new DefaultComboBoxModel<>();
         styleModel.addElement(BYNUMBER_LABEL);
@@ -139,19 +140,15 @@ public class ThroughputControllerGui extends AbstractControllerGui {
                 style = ThroughputController.BYPERCENT;
             }
         });
-        add(styleBox);
 
-        // TYPE FIELD
-        JPanel tpPanel = new JPanel();
-        JLabel tpLabel = new JLabel(THROUGHPUT_LABEL);
-        tpPanel.add(tpLabel);
+        panel.add(JMeterUtils.labelFor(styleBox, "throughput_control_mode"));
+        panel.add(styleBox);
 
         // TEXT FIELD
         throughput = new JTextField(15);
-        tpPanel.add(throughput);
+        panel.add(JMeterUtils.labelFor(throughput, "throughput_control_tplabel"));
+        panel.add(throughput);
         throughput.setText("1"); // $NON-NLS-1$
-        tpPanel.add(throughput);
-        add(tpPanel);
 
         // PERTHREAD FIELD
         perthread = new JCheckBox(PERTHREAD_LABEL, isPerThread);
@@ -162,6 +159,9 @@ public class ThroughputControllerGui extends AbstractControllerGui {
                 isPerThread = false;
             }
         });
-        add(CheckBoxPanel.wrap(perthread));
+        panel.add(perthread, "span 2");
+
+        add(makeTitlePanel(), BorderLayout.NORTH);
+        add(panel, BorderLayout.CENTER);
     }
 }

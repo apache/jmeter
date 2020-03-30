@@ -145,5 +145,10 @@ apply(plugin = "com.github.vlsi.checksum-dependency")
 // This enables to try local Autostyle
 property("localAutostyle")?.ifBlank { "../autostyle" }?.let {
     println("Importing project '$it'")
-    includeBuild("../autostyle")
+    includeBuild(it)
+}
+
+property("localDarklaf")?.ifBlank { "../darklaf" }?.let {
+    println("Importing project '$it'")
+    includeBuild(it)
 }

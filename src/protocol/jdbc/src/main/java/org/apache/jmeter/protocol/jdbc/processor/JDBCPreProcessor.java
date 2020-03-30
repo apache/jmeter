@@ -17,12 +17,14 @@
 
 package org.apache.jmeter.protocol.jdbc.processor;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.testbeans.TestBean;
 
 /**
  * Preprocessor handling JDBC Requests
  */
+@TestElementMetadata(labelResource = "displayName")
 public class JDBCPreProcessor extends AbstractJDBCProcessor implements TestBean, PreProcessor {
 
     private static final long serialVersionUID = 1L;

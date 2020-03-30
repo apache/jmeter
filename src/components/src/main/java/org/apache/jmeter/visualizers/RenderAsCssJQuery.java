@@ -37,6 +37,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.extractor.Extractor;
 import org.apache.jmeter.extractor.HtmlExtractor;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -70,8 +71,6 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
 
     private JLabeledChoice cssJqueryLabeledChoice;
 
-    private SampleResult sampleResult = null;
-
     /** {@inheritDoc} */
     @Override
     public void clearData() {
@@ -98,9 +97,9 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if ((sampleResult != null) && (CSSJQUEY_TESTER_COMMAND.equals(command))) {
-            String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
-            executeAndShowCssJqueryTester(response);
+        String cssJqueryDataFieldText = cssJqueryDataField.getText();
+        if (StringUtils.isNotEmpty(cssJqueryDataFieldText) && CSSJQUEY_TESTER_COMMAND.equals(command)) {
+            executeAndShowCssJqueryTester(cssJqueryDataFieldText);
         }
     }
 
@@ -166,7 +165,7 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
     private JPanel createCssJqueryPanel() {
         cssJqueryDataField = JSyntaxTextArea.getInstance(50, 80, true);
         cssJqueryDataField.setCodeFoldingEnabled(true);
-        cssJqueryDataField.setEditable(false);
+        cssJqueryDataField.setEditable(true);
         cssJqueryDataField.setBracketMatchingEnabled(false);
         cssJqueryDataField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
         cssJqueryDataField.setLanguage(SyntaxConstants.SYNTAX_STYLE_HTML);
@@ -234,7 +233,6 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
         c.gridy=1;
         cssJqueryActionPanel.add(cssJqueryTester, c);
 
-
         cssJqueryResultField = new JTextArea();
         cssJqueryResultField.setEditable(false);
         cssJqueryResultField.setLineWrap(true);
@@ -255,10 +253,8 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setSamplerResult(Object userObject) {
-        if (userObject instanceof SampleResult) {
-            sampleResult = (SampleResult) userObject;
-        }
+    public void setSamplerResult(Object userObject) {
+        // NOOP
     }
 
     /** {@inheritDoc} */

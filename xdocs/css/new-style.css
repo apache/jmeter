@@ -96,7 +96,6 @@ a:hover {
 
 img {
   border: 0;
-  width: auto;
   max-width: 95%;
   height: auto;
 }
@@ -237,7 +236,6 @@ figcaption {
 
 figure>a>img, .screenshot>a>img {
   overflow: auto;
-  width: auto;
   max-width: 100%;
   height: auto;
 }

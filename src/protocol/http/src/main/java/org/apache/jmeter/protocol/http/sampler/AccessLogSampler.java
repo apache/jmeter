@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
@@ -63,6 +64,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  *
  */
+@TestElementMetadata(labelResource = "displayName")
 public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
     private static final Logger log = LoggerFactory.getLogger(AccessLogSampler.class);
 

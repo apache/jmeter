@@ -36,6 +36,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.extractor.XPath2Extractor;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -68,8 +69,6 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
 
     private JTabbedPane rightSide;
 
-    private SampleResult sampleResult = null;
-
     // Should we return fragment as text, rather than text of fragment?
     private final JCheckBox getFragment =
         new JCheckBox(JMeterUtils.getResString("xpath_tester_fragment"));//$NON-NLS-1$
@@ -100,15 +99,17 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if ((sampleResult != null) && (XPATH_TESTER_COMMAND.equals(command))) {
-            String response = xmlDataField.getText();
+        String xmlDataFieldText = xmlDataField.getText();
+        if (StringUtils.isEmpty(xmlDataFieldText)) {
+            return;
+        }
+        if (XPATH_TESTER_COMMAND.equals(command)) {
             XPath2Extractor extractor = new XPath2Extractor();
             extractor.setFragment(getFragment.isSelected());
-            executeAndShowXPathTester(response, extractor);
+            executeAndShowXPathTester(xmlDataFieldText, extractor);
         }
-        else if ((sampleResult != null) && (XPATH_NAMESPACES_COMMAND.equals(command))) {
-            String response = xmlDataField.getText();
-            this.xpathResultField.setText(getDocumentNamespaces(response));
+        else if (XPATH_NAMESPACES_COMMAND.equals(command)) {
+            this.xpathResultField.setText(getDocumentNamespaces(xmlDataFieldText));
         }
     }
 
@@ -196,7 +197,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     private JPanel createXpathExtractorPanel() {
         xmlDataField = JSyntaxTextArea.getInstance(50, 80, true);
         xmlDataField.setCodeFoldingEnabled(true);
-        xmlDataField.setEditable(false);
+        xmlDataField.setEditable(true);
         xmlDataField.setBracketMatchingEnabled(false);
         xmlDataField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
         xmlDataField.setLanguage(SyntaxConstants.SYNTAX_STYLE_XML);
@@ -296,10 +297,8 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setSamplerResult(Object userObject) {
-        if (userObject instanceof SampleResult) {
-            sampleResult = (SampleResult) userObject;
-        }
+    public void setSamplerResult(Object userObject) {
+        // NOOP
     }
 
     /** {@inheritDoc} */

@@ -32,6 +32,7 @@ import javax.swing.JRadioButton;
 
 import org.apache.jmeter.extractor.RegexExtractor;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -42,6 +43,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * Regular Expression Extractor Post-Processor GUI
  */
 @GUIMenuSortOrder(4)
+@TestElementMetadata(labelResource = "regex_extractor_title")
 public class RegexExtractorGui extends AbstractPostProcessorGui {
     private static final long serialVersionUID = 240L;
 

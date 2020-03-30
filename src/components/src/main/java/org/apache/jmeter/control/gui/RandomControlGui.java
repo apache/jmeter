@@ -21,11 +21,13 @@ import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.InterleaveControl;
 import org.apache.jmeter.control.RandomController;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
+@TestElementMetadata(labelResource = "random_control_title")
 public class RandomControlGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
@@ -30,11 +31,13 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Debugging Post-Processor: creates a subSample containing the variables defined in the previous sampler.
  */
+@TestElementMetadata(labelResource = "displayName")
 public class DebugPostProcessor extends AbstractTestElement implements PostProcessor, TestBean {
 
     private static final long serialVersionUID = 260L;
@@ -82,7 +85,9 @@ public class DebugPostProcessor extends AbstractTestElement implements PostProce
             formatSet(sb, System.getProperties().entrySet());
             sb.append("\n");
         }
-
+        sr.setThreadName(threadContext.getThread().getThreadName());
+        sr.setGroupThreads(threadContext.getThreadGroup().getNumberOfThreads());
+        sr.setAllThreads(JMeterContextService.getNumberOfThreads());
         sr.setResponseData(sb.toString(), null);
         sr.setDataType(SampleResult.TEXT);
         sr.setSamplerData(rd.toString());

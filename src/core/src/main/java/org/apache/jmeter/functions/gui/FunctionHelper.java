@@ -34,7 +34,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.event.ChangeEvent;
@@ -52,7 +51,6 @@ import org.apache.jmeter.gui.action.Help;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -69,6 +67,8 @@ import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.miginfocom.swing.MigLayout;
 
 public class FunctionHelper extends JDialog implements ActionListener, ChangeListener, LocaleChangeListener {
     private static final long serialVersionUID = 240L;
@@ -134,11 +134,10 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         comboPanel.add(helpButton);
         this.getContentPane().add(comboPanel, BorderLayout.NORTH);
         this.getContentPane().add(parameterPanel, BorderLayout.CENTER);
-        JPanel resultsPanel = new VerticalPanel();
+        JPanel resultsPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
         JPanel generatePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel displayPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel variablesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35, null, false); //$NON-NLS-1$
+        cutPasteFunction.setEnabled(false);
         generatePanel.add(cutPasteFunction);
         JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
         generateButton.setActionCommand(GENERATE);
@@ -151,17 +150,19 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         generatePanel.add(resetVarsButton);
 
         resultTextArea = JSyntaxTextArea.getInstance(5,60);
+        resultTextArea.setEditable(false);
         resultTextArea.setToolTipText(JMeterUtils.getResString("function_helper_dialog_result_warn"));
-        displayPanel.add(new JLabel(JMeterUtils.getResString("result_function")));
-        displayPanel.add(JTextScrollPane.getInstance(resultTextArea));
 
         variablesTextArea = JSyntaxTextArea.getInstance(10,60);
-        variablesPanel.add(new JLabel(JMeterUtils.getResString("function_helper_dialog_variables")));
-        variablesPanel.add(JTextScrollPane.getInstance(variablesTextArea));
+        variablesTextArea.setEditable(false);
 
-        resultsPanel.add(generatePanel);
-        resultsPanel.add(displayPanel);
-        resultsPanel.add(variablesPanel);
+        resultsPanel.add(generatePanel, "span 2");
+        JTextScrollPane resultTextAreaJSP = JTextScrollPane.getInstance(resultTextArea);
+        resultsPanel.add(JMeterUtils.labelFor(resultTextAreaJSP, "result_function"));
+        resultsPanel.add(resultTextAreaJSP);
+        JTextScrollPane variablesTextAreaJSP = JTextScrollPane.getInstance(variablesTextArea);
+        resultsPanel.add(JMeterUtils.labelFor(variablesTextAreaJSP, "function_helper_dialog_variables"));
+        resultsPanel.add(variablesTextAreaJSP);
 
         this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
         this.pack();

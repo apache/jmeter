@@ -37,6 +37,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.control.Header;
@@ -52,6 +53,7 @@ import org.slf4j.LoggerFactory;
  * parameters for this service.
  */
 @GUIMenuSortOrder(2)
+@TestElementMetadata(labelResource = "header_manager_title")
 public class HeaderPanel extends AbstractConfigGui implements ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(HeaderPanel.class);
@@ -274,7 +276,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
         headerTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("headers_stored"))); // $NON-NLS-1$
         panel.add(GuiUtils.emptyBorder(new JScrollPane(headerTable)), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);

@@ -19,6 +19,7 @@ package org.apache.jmeter.plugin;
 
 import java.net.URL;
 
+import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 
 import org.apache.jmeter.gui.GUIFactory;
@@ -57,14 +58,24 @@ public final class PluginManager {
             if (resource == null) {
                 log.warn("Can't find icon for {} - {}", icon[0], icon[1]);
             } else {
-                GUIFactory.registerIcon(icon[0], new ImageIcon(resource));
+                final ImageIcon regularIcon = new ImageIcon(resource);
+                GUIFactory.registerIcon(icon[0], regularIcon);
+                ImageIcon disabledIcon = null;
                 if (icon.length > 2 && icon[2] != null) {
                     URL resource2 = classloader.getResource(icon[2].trim());
                     if (resource2 == null) {
                         log.info("Can't find disabled icon for {} - {}", icon[0], icon[2]);
                     } else {
-                        GUIFactory.registerDisabledIcon(icon[0], new ImageIcon(resource2));
+                        disabledIcon = new ImageIcon(resource2);
                     }
+                } else {
+                    // Second icon is not specified, create disabled one automatically
+                    disabledIcon = new ImageIcon(
+                            GrayFilter.createDisabledImage(regularIcon.getImage())
+                    );
+                }
+                if (disabledIcon != null) {
+                    GUIFactory.registerDisabledIcon(icon[0], disabledIcon);
                 }
             }
         }

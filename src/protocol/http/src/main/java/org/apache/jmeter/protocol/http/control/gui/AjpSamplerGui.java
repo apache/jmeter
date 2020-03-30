@@ -17,10 +17,12 @@
 
 package org.apache.jmeter.protocol.http.control.gui;
 
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.sampler.AjpSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+@TestElementMetadata(labelResource = "ajp_sampler_title")
 public class AjpSamplerGui extends HttpTestSampleGui {
 
     private static final long serialVersionUID = 240L;

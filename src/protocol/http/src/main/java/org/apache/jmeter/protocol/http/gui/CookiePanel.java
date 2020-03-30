@@ -35,6 +35,7 @@ import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -57,6 +58,7 @@ import org.slf4j.LoggerFactory;
  * for this service.
  */
 @GUIMenuSortOrder(3)
+@TestElementMetadata(labelResource = "cookie_manager_title")
 public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
     private static final long serialVersionUID = 241L;
@@ -296,7 +298,6 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         northPanel.add(makeTitlePanel());
         JPanel optionsPane = new JPanel();
         optionsPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("cookie_options"))); // $NON-NLS-1$
         optionsPane.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
         optionsPane.add(clearEachIteration);
@@ -321,8 +322,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         JPanel buttonPanel = createButtonPanel();
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-                .getResString("cookies_stored"))); //$NON-NLS-1$
+        panel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("cookies_stored"))); //$NON-NLS-1$
 
         panel.add(GuiUtils.emptyBorder(new JScrollPane(cookieTable)), BorderLayout.CENTER);
         panel.add(buttonPanel, BorderLayout.SOUTH);

@@ -526,6 +526,14 @@ public class JMeterThread implements Runnable, Interruptible {
         return transactionResult;
     }
 
+    private void fillThreadInformation(SampleResult result,
+            int nbActiveThreadsInThreadGroup,
+            int nbTotalActiveThreads) {
+        result.setGroupThreads(nbActiveThreadsInThreadGroup);
+        result.setAllThreads(nbTotalActiveThreads);
+        result.setThreadName(threadName);
+    }
+
     /**
      * Execute the sampler with its pre/post processors, timers, assertions
      * Broadcast the result to the sample listeners
@@ -553,15 +561,11 @@ public class JMeterThread implements Runnable, Interruptible {
         if (result != null && !result.isIgnore()) {
             int nbActiveThreadsInThreadGroup = threadGroup.getNumberOfThreads();
             int nbTotalActiveThreads = JMeterContextService.getNumberOfThreads();
-            result.setGroupThreads(nbActiveThreadsInThreadGroup);
-            result.setAllThreads(nbTotalActiveThreads);
-            result.setThreadName(threadName);
+            fillThreadInformation(result, nbActiveThreadsInThreadGroup, nbTotalActiveThreads);
             SampleResult[] subResults = result.getSubResults();
             if (subResults != null) {
                 for (SampleResult subResult : subResults) {
-                    subResult.setGroupThreads(nbActiveThreadsInThreadGroup);
-                    subResult.setAllThreads(nbTotalActiveThreads);
-                    subResult.setThreadName(threadName);
+                    fillThreadInformation(subResult, nbActiveThreadsInThreadGroup, nbTotalActiveThreads);
                 }
             }
             threadContext.setPreviousResult(result);
@@ -639,9 +643,7 @@ public class JMeterThread implements Runnable, Interruptible {
             SamplePackage transactionPack, JMeterContext threadContext) {
         // Get the transaction sample result
         SampleResult transactionResult = transactionSampler.getTransactionResult();
-        transactionResult.setThreadName(threadName);
-        transactionResult.setGroupThreads(threadGroup.getNumberOfThreads());
-        transactionResult.setAllThreads(JMeterContextService.getNumberOfThreads());
+        fillThreadInformation(transactionResult, threadGroup.getNumberOfThreads(), JMeterContextService.getNumberOfThreads());
 
         // Check assertions for the transaction sample
         checkAssertions(transactionPack.getAssertions(), transactionResult, threadContext);
@@ -877,27 +879,35 @@ public class JMeterThread implements Runnable, Interruptible {
                 }
                 if (scopedAssertion.isScopeChildren(scope)
                         || scopedAssertion.isScopeAll(scope)) {
-                    SampleResult[] children = parent.getSubResults();
-                    boolean childError = false;
-                    for (SampleResult childSampleResult : children) {
-                        processAssertion(childSampleResult, assertion);
-                        if (!childSampleResult.isSuccessful()) {
-                            childError = true;
-                        }
-                    }
-                    // If parent is OK, but child failed, add a message and flag the parent as failed
-                    if (childError && parent.isSuccessful()) {
-                        AssertionResult assertionResult = new AssertionResult(((AbstractTestElement) assertion).getName());
-                        assertionResult.setResultForFailure("One or more sub-samples failed");
-                        parent.addAssertionResult(assertionResult);
-                        parent.setSuccessful(false);
-                    }
+                    recurseAssertionChecks(parent, assertion, 3);
                 }
             } else {
                 processAssertion(parent, assertion);
             }
         }
         threadContext.getVariables().put(LAST_SAMPLE_OK, Boolean.toString(parent.isSuccessful()));
+    }
+
+    private void recurseAssertionChecks(SampleResult parent, Assertion assertion, int level) {
+        if (level < 0) {
+            return;
+        }
+        SampleResult[] children = parent.getSubResults();
+        boolean childError = false;
+        for (SampleResult childSampleResult : children) {
+            processAssertion(childSampleResult, assertion);
+            recurseAssertionChecks(childSampleResult, assertion, level - 1);
+            if (!childSampleResult.isSuccessful()) {
+                childError = true;
+            }
+        }
+        // If parent is OK, but child failed, add a message and flag the parent as failed
+        if (childError && parent.isSuccessful()) {
+            AssertionResult assertionResult = new AssertionResult(((AbstractTestElement) assertion).getName());
+            assertionResult.setResultForFailure("One or more sub-samples failed");
+            parent.addAssertionResult(assertionResult);
+            parent.setSuccessful(false);
+        }
     }
 
     private void processAssertion(SampleResult result, Assertion assertion) {

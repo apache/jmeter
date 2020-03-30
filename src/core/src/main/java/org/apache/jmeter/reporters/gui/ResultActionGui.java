@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import javax.swing.Box;
 
 import org.apache.jmeter.gui.OnErrorPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.reporters.ResultAction;
 import org.apache.jmeter.testelement.OnErrorTestElement;
@@ -30,6 +31,7 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * Create a Result Action Test Element
  */
+@TestElementMetadata(labelResource = "resultaction_title")
 public class ResultActionGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = 240L;

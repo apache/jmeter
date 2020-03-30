@@ -26,6 +26,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
 
@@ -52,11 +54,19 @@ public class TestTemplateManager extends JMeterTestCase {
     }
 
     private Map<String, Template> readTemplateFromFile() {
-        File xmlTemplate = new File(this.getClass().getResource("validTemplates.xml").getFile());
+        File xmlTemplate = getFileFromResource("validTemplates.xml");
         try {
             return TemplateManager.getInstance().parseTemplateFile(xmlTemplate);
         } catch (IOException | SAXException | ParserConfigurationException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private File getFileFromResource(String resourceName) {
+        try {
+            return Paths.get(this.getClass().getResource(resourceName).toURI()).toFile();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Can't read resource " + resourceName, e);
         }
     }
 
@@ -98,8 +108,7 @@ public class TestTemplateManager extends JMeterTestCase {
     @Test
     public void testInvalidTemplateXml() throws IOException, SAXException, ParserConfigurationException {
         try {
-            String xmlTemplatePath = this.getClass().getResource("invalidTemplates.xml").getFile();
-            File templateFile = new File(xmlTemplatePath);
+            File templateFile = getFileFromResource("invalidTemplates.xml");
             TemplateManager.getInstance().parseTemplateFile(templateFile);
         } catch (SAXParseException ex) {
             assertTrue("Exception did not contains expected message, got:" + ex.getMessage(),

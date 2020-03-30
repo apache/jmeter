@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FilePanelEntry;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.system.SystemSampler;
@@ -46,6 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * GUI for {@link SystemSampler}
  */
+@TestElementMetadata(labelResource = "system_sampler_title")
 public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener {
     private static final Logger log = LoggerFactory.getLogger(SystemSamplerGui.class);
 
@@ -164,7 +166,6 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("return_code_config_box_title"))); // $NON-NLS-1$
         checkReturnCode = new JCheckBox(JMeterUtils.getResString("check_return_code_title")); // $NON-NLS-1$
         checkReturnCode.addItemListener(this);
@@ -184,7 +185,6 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("timeout_config_box_title"))); // $NON-NLS-1$
         timeout = new JLabeledTextField(JMeterUtils.getResString("timeout_title")); // $NON-NLS-1$
         timeout.setSize(timeout.getSize().height, 30);
@@ -206,7 +206,6 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
 
         JPanel panel = new VerticalPanel();
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("command_config_box_title"))); // $NON-NLS-1$
         panel.add(cmdPanel, BorderLayout.NORTH);
         panel.add(makeArgumentsPanel(), BorderLayout.CENTER);
@@ -244,7 +243,6 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     private JPanel makeStreamsPanel() {
         JPanel stdPane = new JPanel(new BorderLayout());
         stdPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("command_config_std_streams_title"))); // $NON-NLS-1$
         stdPane.add(stdin, BorderLayout.NORTH);
         stdPane.add(stdout, BorderLayout.CENTER);

@@ -48,6 +48,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -66,11 +67,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +81,7 @@ import org.slf4j.LoggerFactory;
  * Base for ViewResults
  */
 @GUIMenuSortOrder(1)
+@TestElementMetadata(labelResource = "view_results_tree_title")
 public class ViewResultsFullVisualizer extends AbstractVisualizer
 implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
@@ -450,15 +454,18 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         } catch (IOException e1) {
             // ignored
         }
-        String textRenderer = JMeterUtils.getResString("view_results_render_text"); // $NON-NLS-1$
-        Object textObject = null;
+        String defaultRenderer = expandToClassname(".RenderAsText"); // $NON-NLS-1$
+        if (VIEWERS_ORDER.length() > 0) {
+            defaultRenderer = expandToClassname(VIEWERS_ORDER.split(",", 2)[0]);
+        }
+        Object defaultObject = null;
         Map<String, ResultRenderer> map = new HashMap<>(classesToAdd.size());
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate render classes
                 final ResultRenderer renderer = (ResultRenderer) Class.forName(clazz).getDeclaredConstructor().newInstance();
-                if (textRenderer.equals(renderer.toString())){
-                    textObject=renderer;
+                if (defaultRenderer.equals(clazz)) {
+                    defaultObject=renderer;
                 }
                 renderer.setBackgroundColor(getBackground());
                 map.put(renderer.getClass().getName(), renderer);
@@ -474,9 +481,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         if (VIEWERS_ORDER.length() > 0) {
             Arrays.stream(VIEWERS_ORDER.split(","))
-                    .map(key -> key.startsWith(".")
-                            ? "org.apache.jmeter.visualizers" + key //$NON-NLS-1$
-                            : key)
+                    .map(this::expandToClassname)
                     .forEach(key -> {
                         ResultRenderer renderer = map.remove(key);
                         if (renderer != null) {
@@ -491,8 +496,15 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         // Add remaining (plugins or missed in property)
         map.values().forEach(renderer -> selectRenderPanel.addItem(renderer));
-        nodesModel.setSelectedItem(textObject); // preset to "Text" option
+        nodesModel.setSelectedItem(defaultObject); // preset to "Text" option or the first option from the view.results.tree.renderers_order property
         return selectRenderPanel;
+    }
+
+    private String expandToClassname(String name) {
+        if (name.startsWith(".")) {
+            return "org.apache.jmeter.visualizers" + name; // $NON-NLS-1$
+        }
+        return name;
     }
 
     /** {@inheritDoc} */
@@ -507,12 +519,14 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 if (rightSide != null) {
                     // to restore last selected tab (better user-friendly)
                     selectedTab = rightSide.getSelectedIndex();
-                    // Remove old right side
+                    // Remove old right side and keep the position of the divider
+                    int dividerLocation = mainSplit.getDividerLocation();
                     mainSplit.remove(rightSide);
 
-                    // create and add a new right side
+                    // create and add a new right side at the old position
                     rightSide = new JTabbedPane();
                     mainSplit.add(rightSide);
+                    mainSplit.setDividerLocation(dividerLocation);
                     resultsRender.setRightSide(rightSide);
                     resultsRender.setLastSelectedTab(selectedTab);
                     log.debug("selectedTab={}", selectedTab);
@@ -568,7 +582,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
             // Set the status for the node
             if (failure) {
-                this.setForeground(Color.red);
+                this.setForeground(UIManager.getColor(JMeterUIDefaults.LABEL_ERROR_FOREGROUND));
                 this.setIcon(imageFailure);
             } else {
                 this.setIcon(imageSuccess);

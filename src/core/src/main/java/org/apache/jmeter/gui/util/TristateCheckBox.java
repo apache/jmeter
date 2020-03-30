@@ -303,9 +303,12 @@ public final class TristateCheckBox extends JCheckBox {
         public TristateCheckBoxIcon() {
             // Assume that the UI has not changed since the checkbox was created
             UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-            final Icon icon = (Icon) defaults.get("CheckBox.icon");
-            iconHeight = icon.getIconHeight();
-            iconWidth = icon.getIconWidth();
+            Icon icon = defaults.getIcon("CheckBox.icon");
+            if (icon == null) {
+                icon = defaults.getIcon("CheckBox.selected.icon");
+            }
+            iconHeight = icon == null ? 19 : icon.getIconHeight();
+            iconWidth = icon == null ? 19 : icon.getIconWidth();
         }
 
         @Override

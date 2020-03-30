@@ -60,12 +60,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.SaveGraphics;
@@ -79,6 +79,7 @@ import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
@@ -96,6 +97,7 @@ import org.slf4j.LoggerFactory;
  * you!
  *
  */
+@TestElementMetadata(labelResource = "aggregate_graph_title")
 public class StatGraphVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
     private static final long serialVersionUID = 242L;
 
@@ -136,10 +138,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private static final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
-
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
@@ -860,7 +858,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             colPanel.add(createColorBarButton(bar, eltList.indexOf(bar)));
         }
         colPanel.add(Box.createRigidArea(new Dimension(5,0)));
-        chooseForeColor.setFont(FONT_SMALL);
+        JFactory.small(chooseForeColor);
         colPanel.add(chooseForeColor);
         chooseForeColor.addActionListener(this);
 
@@ -877,7 +875,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         barPane.add(optionsPanel, BorderLayout.SOUTH);
 
         JPanel columnPane = new JPanel(new BorderLayout());
-        columnPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        columnPane.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("aggregate_graph_column_settings"))); // $NON-NLS-1$
         columnPane.add(barPane, BorderLayout.NORTH);
         columnPane.add(Box.createRigidArea(new Dimension(0,3)), BorderLayout.CENTER);
@@ -890,7 +888,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         // Button
         JButton colorBtn = new JButton();
         colorBtn.setName(String.valueOf(index));
-        colorBtn.setFont(FONT_SMALL);
+        JFactory.small(colorBtn);
         colorBtn.addActionListener(this);
         colorBtn.setBackground(barGraph.getBackColor());
         return colorBtn;
@@ -913,14 +911,14 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         searchPanel.add(Box.createRigidArea(new Dimension(5,0)));
 
         // Button
-        applyFilterBtn.setFont(FONT_SMALL);
+        JFactory.small(applyFilterBtn);
         applyFilterBtn.addActionListener(this);
         searchPanel.add(applyFilterBtn);
 
         // checkboxes
-        caseChkBox.setFont(FONT_SMALL);
+        JFactory.small(caseChkBox);
         searchPanel.add(caseChkBox);
-        regexpChkBox.setFont(FONT_SMALL);
+        JFactory.small(regexpChkBox);
         searchPanel.add(regexpChkBox);
 
         return searchPanel;
@@ -945,7 +943,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         titleFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.bold"));  // $NON-NLS-1$ // default: bold
 
         JPanel titlePane = new JPanel(new BorderLayout());
-        titlePane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        titlePane.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("aggregate_graph_title_group"))); // $NON-NLS-1$
         titlePane.add(titleNamePane, BorderLayout.NORTH);
         titlePane.add(titleStylePane, BorderLayout.SOUTH);
@@ -972,7 +970,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JPanel dimensionPane = new JPanel();
         dimensionPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         dimensionPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_dimension"))); // $NON-NLS-1$
 
         dimensionPane.add(dynamicGraphSize);
@@ -995,7 +992,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JPanel xAxisPane = new JPanel();
         xAxisPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         xAxisPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_xaxis_group"))); // $NON-NLS-1$
         xAxisPane.add(maxLengthXAxisLabel);
         return xAxisPane;
@@ -1009,7 +1005,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JPanel yAxisPane = new JPanel();
         yAxisPane.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         yAxisPane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_yaxis_group"))); // $NON-NLS-1$
         yAxisPane.add(maxValueYAxisLabel);
         return yAxisPane;
@@ -1023,7 +1018,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         JPanel legendPanel = new JPanel();
         legendPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         legendPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("aggregate_graph_legend"))); // $NON-NLS-1$
 
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_legend_placement"), //$NON-NLS-1$

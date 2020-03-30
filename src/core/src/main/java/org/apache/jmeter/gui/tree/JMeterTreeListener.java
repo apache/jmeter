@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.gui.tree;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -27,6 +28,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -154,7 +156,6 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        GuiPackage.getInstance().getMainFrame().repaint();
     }
 
     @Override
@@ -167,12 +168,19 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         MainFrame mainFrame = GuiPackage.getInstance().getMainFrame();
         // Close any Main Menu that is open
         mainFrame.closeMenu();
-        int selRow = tree.getRowForLocation(e.getX(), e.getY());
-        if (tree.getPathForLocation(e.getX(), e.getY()) != null) {
-            log.debug("mouse pressed, updating currentPath");
-            currentPath = tree.getPathForLocation(e.getX(), e.getY());
+        TreePath closestPath = tree.getClosestPathForLocation(e.getX(), e.getY());
+        if (closestPath == null) {
+            log.debug("ClosestPathForLocation is not found for x={}, y={}", e.getX(), e.getY());
+            return;
         }
-        if (selRow != -1 && isRightClick(e)) {
+        Rectangle bounds = tree.getPathBounds(closestPath);
+        if (bounds == null || bounds.y > e.getY() || e.getY() > bounds.y + bounds.height) {
+            log.debug("Mouse click was outside of node {}. bounds={}, event.x={}, event.y={}",
+                    closestPath, bounds, e.getX(), e.getY());
+            return;
+        }
+        currentPath = closestPath;
+        if (isRightClick(e)) {
             if (tree.getSelectionCount() < 2) {
                 tree.setSelectionPath(currentPath);
             }
@@ -234,6 +242,10 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 
     private void displayPopUp(MouseEvent e) {
         JPopupMenu pop = getCurrentNode().createPopupMenu();
-        GuiPackage.getInstance().displayPopUp(e, pop);
+        // invokeLater ensures popup does not disappear when user right-clicks an inactive node
+        // In other words: right-click different nodes and verify if menu is shown every time.
+        // invokeLater seems to be required as long as tree.requestFocusInWindow(); is used
+        // in valueChanged
+        SwingUtilities.invokeLater(() -> GuiPackage.getInstance().displayPopUp(e, pop));
     }
 }

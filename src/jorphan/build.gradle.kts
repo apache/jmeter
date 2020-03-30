@@ -18,6 +18,7 @@
 dependencies {
     api(platform(project(":src:bom")))
 
+    api("org.apiguardian:apiguardian-api")
     api("org.slf4j:slf4j-api")
 
     implementation("commons-io:commons-io")

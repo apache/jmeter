@@ -25,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.control.TestFragmentController;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -35,7 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * to allow for a non-execution part of the Test Plan that can be saved and referenced
  * by a Module or Include Controller.
  */
-
+@TestElementMetadata(labelResource = "test_fragment_title", actionGroups = MenuFactory.FRAGMENTS)
 public class TestFragmentControllerGui extends AbstractControllerGui {
 
     private static final long serialVersionUID = 240L;

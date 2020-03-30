@@ -24,7 +24,6 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Font;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
@@ -41,6 +40,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.gui.JFactory;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +81,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @SuppressWarnings("DeprecatedIsStillUsed")
     protected NamePanel namePanel;
 
-    private final JTextArea commentField = new JTextArea();
+    private final JTextArea commentField = JFactory.tabMovesFocus(JFactory.textAreaWithBorder());
 
     /**
      * When constructing a new component, this takes care of basic tasks like
@@ -183,10 +183,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * @return a JLabel which subclasses can add to their GUI
      */
     protected Component createTitleLabel() {
-        JLabel titleLabel = new JLabel(getStaticLabel());
-        Font curFont = titleLabel.getFont();
-        titleLabel.setFont(curFont.deriveFont((float) curFont.getSize() + 4));
-        return titleLabel;
+        return JFactory.big(new JLabel(getStaticLabel()));
     }
 
     /**
@@ -229,10 +226,6 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
     private void init() {
         initGui();
-        // JTextArea does not have border by default (see https://bugs.openjdk.java.net/browse/JDK-4139076)
-        // However we want it to look like a text field. So we borrow a border from there
-        Border border = new JTextField().getBorder();
-        commentField.setBorder(border);
     }
 
     /**

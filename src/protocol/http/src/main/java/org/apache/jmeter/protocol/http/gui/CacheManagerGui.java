@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -37,6 +38,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * The GUI for the HTTP Cache Manager {@link CacheManager}
  */
 @GUIMenuSortOrder(4)
+@TestElementMetadata(labelResource = "cache_manager_title")
 public class CacheManagerGui extends AbstractConfigGui implements ActionListener {
 
     private static final long serialVersionUID = 240L;

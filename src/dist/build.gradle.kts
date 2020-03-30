@@ -71,11 +71,6 @@ dependencies {
         api(project(p))
         testCompile(project(p, "testClasses"))
     }
-    runtimeOnly("com.github.bulenkov.darcula:darcula") {
-        because("""
-            It just looks good, however Darcula is not used explicitly,
-             so the dependency is added for distribution only""".trimIndent())
-    }
 
     binLicense(project(":src:licenses", "binLicense"))
     srcLicense(project(":src:licenses", "srcLicense"))
@@ -128,19 +123,20 @@ val populateLibs by tasks.registering {
         }
         for (dep in deps) {
             val compId = dep.id.componentIdentifier
-            // The path is "relative" to rootDir/lib
-            when (compId) {
-                is ProjectComponentIdentifier ->
-                    (when (compId.projectPath) {
-                        launcherProject -> binLibs
-                        jorphanProject, bshclientProject -> libs
-                        else -> libsExt
-                    }).from(dep.file) {
-                        // Remove version from the file name
-                        rename { dep.name + "." + dep.extension }
-                    }
-
-                else -> libs.from(dep.file)
+            if (compId !is ProjectComponentIdentifier || !compId.build.isCurrentBuild) {
+                // Move all non-JMeter jars to lib folder
+                libs.from(dep.file)
+                continue
+            }
+            // JMeter jars are spread across $root/bin, $root/libs, and $root/libs/ext
+            // for historical reasons
+            when (compId.projectPath) {
+                launcherProject -> binLibs
+                jorphanProject, bshclientProject -> libs
+                else -> libsExt
+            }.from(dep.file) {
+                // Remove version from the file name
+                rename { dep.name + "." + dep.extension }
             }
         }
     }
@@ -275,6 +271,7 @@ val xdocs = "$rootDir/xdocs"
 
 fun CopySpec.docCssAndImages() {
     from(xdocs) {
+        include(".htaccess")
         include("css/**")
         include("images/**")
     }
@@ -500,26 +497,22 @@ releaseArtifacts {
     }
 }
 
-val runGui by tasks.registering() {
+val runGui by tasks.registering(JavaExec::class) {
     group = "Development"
     description = "Builds and starts JMeter GUI"
     dependsOn(createDist)
 
-    doLast {
-        javaexec {
-            workingDir = File(project.rootDir, "bin")
-            main = "org.apache.jmeter.NewDriver"
-            classpath("$rootDir/bin/ApacheJMeter.jar")
-            jvmArgs("-Xss256k")
-            jvmArgs("-XX:MaxMetaspaceSize=256m")
+    workingDir = File(project.rootDir, "bin")
+    main = "org.apache.jmeter.NewDriver"
+    classpath("$rootDir/bin/ApacheJMeter.jar")
+    jvmArgs("-Xss256k")
+    jvmArgs("-XX:MaxMetaspaceSize=256m")
 
-            val osName = System.getProperty("os.name")
-            if (osName.contains(Regex("mac os x|darwin|osx", RegexOption.IGNORE_CASE))) {
-                jvmArgs("-Xdock:name=JMeter")
-                jvmArgs("-Xdock:icon=$rootDir/xdocs/images/jmeter_square.png")
-                jvmArgs("-Dapple.laf.useScreenMenuBar=true")
-                jvmArgs("-Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS")
-            }
-        }
+    val osName = System.getProperty("os.name")
+    if (osName.contains(Regex("mac os x|darwin|osx", RegexOption.IGNORE_CASE))) {
+        jvmArgs("-Xdock:name=JMeter")
+        jvmArgs("-Xdock:icon=$rootDir/xdocs/images/jmeter_square.png")
+        jvmArgs("-Dapple.laf.useScreenMenuBar=true")
+        jvmArgs("-Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS")
     }
 }
