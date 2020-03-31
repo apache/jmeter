@@ -101,7 +101,7 @@ For instance: log viewer, JSR223 code editor were not previously scaled with zoo
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-    <li>Default value of <code>httpclient4.time_to_live</code> has been modified from 2000 to 60000, this means HTTP connections will live longer than before. This 
+    <li>Default value of <code>httpclient4.time_to_live</code> has been modified from 2000 to 60000, this means HTTP connections will live longer than before. This
     has impact on connection creation and SSL handshake, see <bugzilla>64289</bugzilla></li>
 </ul>
 <!-- =================== Improvements =================== -->
