@@ -131,7 +131,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private JCheckBox autoScrollCB;
     private Buffer buffer;
     private boolean dataChanged;
-
     /**
      * Constructor
      */
@@ -154,7 +153,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         synchronized (buffer) {
             buffer.add(sample);
             dataChanged = true;
-            CorrelationRecorder.setBuffer(buffer);
         }
     }
 

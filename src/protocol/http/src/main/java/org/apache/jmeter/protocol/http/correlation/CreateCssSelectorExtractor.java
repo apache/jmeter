@@ -18,33 +18,62 @@
 package org.apache.jmeter.protocol.http.correlation;
 
 import org.apache.jmeter.extractor.HtmlExtractor;
+import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.HtmlExtractorData;
 import org.apache.jmeter.testelement.TestElement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class CreateCssSelectorExtractor {
+public class CreateCssSelectorExtractor implements CreateExtractorInterface {
+
+    private static final Logger log = LoggerFactory.getLogger(CreateCssSelectorExtractor.class);
 
     private static final String ATTRIBUTE_KEY_VALUE = "value"; //$NON-NLS-1$
     private static final String ATTRIBUTE_KEY_CONTENT = "content"; //$NON-NLS-1$
     private static final String ONE = "1"; //$NON-NLS-1$
 
-    private CreateCssSelectorExtractor() {}
+    CreateCssSelectorExtractor() {
+    }
+
+    /**
+     * Get Jsoup document by parsing HTML string
+     *
+     * @param html HTML response data
+     * @return Jsoup Document object
+     */
+    public static Document getDocument(String html) {
+        return Jsoup.parse(html);
+    }
+
+    /**
+     * Converts ID selector to attribute selector
+     *
+     * @param idSelector ID Selector e.g. #prodId
+     * @return Attribute selector e.g [id=prodId]
+     */
+    public static String toAttributeSelector(String idSelector) {
+        idSelector = idSelector.replace("#", "[id="); //$NON-NLS-1$ //$NON-NLS-2$
+        idSelector = idSelector.concat("]"); //$NON-NLS-1$
+        return idSelector;
+    }
 
     /**
      * Create CSS Selector Extractor
      *
-     * @param html                    HTML response
-     * @param attributeValue          Value of the parameter required to correlate
-     * @param correlationVariableName alias of the correlated variable
-     * @param requestUrl              URL of the request whose response yields the
-     *                                parameter required to correlate
-     * @param contentType             responseData content type
-     * @return HtmlExtractrData object or null
+     * @param extractorCreatorData ExtractorCreatorData object.
+     * @return ExtractorData object.
      */
-    public static HtmlExtractorData createCssSelectorExtractor(String html, String attributeValue,
-            String correlationVariableName, String requestUrl, String contentType) {
+    @Override
+    public ExtractorData createExtractor(ExtractorCreatorData extractorCreatorData) {
+        log.debug("Create ExtractorData data from ExtractorCreatorData "+ extractorCreatorData);
+        String html = extractorCreatorData.getSampleResult().getResponseDataAsString();
+        String attributeValue = extractorCreatorData.getParameterValue();
+        String correlationVariableName = extractorCreatorData.getParameter();
+        String requestUrl = extractorCreatorData.getSampleResult().getSampleLabel();
+        String contentType = extractorCreatorData.getSampleResult().getContentType();
         // parse the HTML string
         Document doc = getDocument(html);
         HtmlExtractorData cssSelectorExtractor = null;
@@ -87,36 +116,16 @@ public class CreateCssSelectorExtractor {
     }
 
     /**
-     * Get Jsoup document by parsing HTML string
-     *
-     * @param html HTML response data
-     * @return Jsoup Document object
-     */
-    public static Document getDocument(String html) {
-        return Jsoup.parse(html);
-    }
-
-    /**
-     * Converts ID selector to attribute selector
-     *
-     * @param idSelector ID Selector e.g. #prodId
-     * @return Attribute selector e.g [id=prodId]
-     */
-    public static String toAttributeSelector(String idSelector) {
-        idSelector = idSelector.replace("#", "[id="); //$NON-NLS-1$ //$NON-NLS-2$
-        idSelector = idSelector.concat("]"); //$NON-NLS-1$
-        return idSelector;
-    }
-
-    /**
      * Create CSS Selector extractor TestElement
      *
-     * @param extractor HtmlExtractorData object
-     * @param testElement empty testElement object
-     * @return CSS selector extractor TestElement
+     * @param extractordata   ExtractorData object
+     * @param testElement  TestElement object
+     * @return TestElement object.
      */
-    public static TestElement createHtmlExtractorTestElement(HtmlExtractorData extractor, TestElement testElement) {
+    @Override
+    public TestElement createExtractorTestElement(ExtractorData extractordata, TestElement testElement) {
         HtmlExtractor htmlExtractor = (HtmlExtractor) testElement;
+        HtmlExtractorData extractor = (HtmlExtractorData) extractordata;
         htmlExtractor.setName(extractor.getRefname());
         htmlExtractor.setRefName(extractor.getRefname());
         htmlExtractor.setExpression(extractor.getExpr());

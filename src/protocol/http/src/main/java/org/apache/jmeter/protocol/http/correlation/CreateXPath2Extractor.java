@@ -29,33 +29,40 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 
 import org.apache.jmeter.extractor.XPath2Extractor;
+import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.XPath2ExtractorData;
 import org.apache.jmeter.testelement.TestElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sf.saxon.TransformerFactoryImpl;
 
-public class CreateXPath2Extractor {
+public class CreateXPath2Extractor implements CreateExtractorInterface {
+
+    private static final Logger log = LoggerFactory.getLogger(CreateXPath2Extractor.class);
 
     private static final String ONE = "1"; //$NON-NLS-1$
 
-    private CreateXPath2Extractor() {}
+    CreateXPath2Extractor() {
+    }
 
     /**
      * Create XPath2 Extractor
      *
-     * @param xml                     response as string
-     * @param value                   of Attribute/Text content in XML to create
-     *                                XPath
-     * @param correlationVariableName alias of the correlated variable
-     * @param requestUrl              URL of the request whose response yields the
-     *                                parameter required to correlate
-     * @param contentType             responseData content type
-     * @return XPath2Extractor values in a map
-     * @throws TransformerException when XSL transform failed
+     * @param extractorCreatorData ExtractorCreatorData object.
+     * @return ExtractorData object
      */
-    public static XPath2ExtractorData createXPath2Extractor(String xml, String value, String correlationVariableName,
-            String requestUrl, String contentType) throws TransformerException {
+    @Override
+    public ExtractorData createExtractor(ExtractorCreatorData extractorCreatorData) {
+        log.debug("Create ExtractorData data from ExtractorCreatorData "+ extractorCreatorData);
         XPath2ExtractorData xPath2Extractor = null;
+        String xml = extractorCreatorData.getSampleResult().getResponseDataAsString();
+        String value = extractorCreatorData.getParameterValue();
+        String correlationVariableName = extractorCreatorData.getParameter();
+
+        String requestUrl = extractorCreatorData.getSampleResult().getSampleLabel();
+        String contentType = extractorCreatorData.getSampleResult().getContentType();
+
         if (xml == null || value == null) {
             throw new IllegalArgumentException("Response Data or value to be searched is null"); //$NON-NLS-1$
         }
@@ -66,11 +73,18 @@ public class CreateXPath2Extractor {
         if (xslt == null) {
             throw new IllegalArgumentException("Cannot find XSL Transform");
         }
-        String xPathQuery = getXPath(value, xmlResponse, xslt);
+        String xPathQuery = null;
+        try {
+            xPathQuery = getXPath(value, xmlResponse, xslt);
+        } catch (TransformerException e) {
+             log.error("XSL transform failed {}", e.getCause());
+        }
         if (xPathQuery != null) {
             // Match No. = 1, as we are getting first occurrence of the element
-            xPath2Extractor = new XPath2ExtractorData(correlationVariableName, xPathQuery, ONE, contentType, requestUrl);
+            xPath2Extractor = new XPath2ExtractorData(correlationVariableName, xPathQuery, ONE, contentType,
+                    requestUrl);
         }
+        log.debug("XPath2ExtractorData data created from ExtractorCreatorData "+ xPath2Extractor);
         return xPath2Extractor;
     }
 
@@ -118,11 +132,13 @@ public class CreateXPath2Extractor {
     /**
      * Create XPath2 extractor TestElement
      *
-     * @param extractor Map containing extractor data
-     * @param testElement empty testElement object
-     * @return XPath2 extractor TestElement
+     * @param extractordata   ExtractorData object.
+     * @param testElement  TestElement object
+     * @return xPath2extractor TestElement
      */
-    public static TestElement createXPath2ExtractorTestElement(XPath2ExtractorData extractor, TestElement testElement) {
+    @Override
+    public TestElement createExtractorTestElement(ExtractorData extractordata, TestElement testElement) {
+        XPath2ExtractorData extractor = (XPath2ExtractorData) extractordata;
         XPath2Extractor xPath2Extractor = (XPath2Extractor) testElement;
         xPath2Extractor.setName(extractor.getRefname());
         xPath2Extractor.setRefName(extractor.getRefname());

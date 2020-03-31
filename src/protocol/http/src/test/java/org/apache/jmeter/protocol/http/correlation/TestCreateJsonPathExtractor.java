@@ -17,17 +17,41 @@
 
 package org.apache.jmeter.protocol.http.correlation;
 
+import java.nio.charset.StandardCharsets;
+
 import javax.xml.transform.TransformerException;
 
+import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TestCreateJsonPathExtractor {
 
+    CreateExtractorInterface createExtractorInterface = null;
+    ExtractorCreatorData extractorCreatorData = null;
+     SampleResult sampleResult;
+    @BeforeEach
+    public void setup() {
+        sampleResult = new SampleResult();
+        sampleResult.setSampleLabel("2 /login");
+        sampleResult.setResponseHeaders("HTTP/1.1 200 OK");
+        sampleResult.setResponseData("{ \"_csrf\": \"7d1de48134af4342a9b4b8288c451f7c\" }",
+                StandardCharsets.UTF_8.name());
+        sampleResult.setContentType("text/html;charset=UTF8");
+        createExtractorInterface = new CreateXPath2Extractor();
+        extractorCreatorData = new ExtractorCreatorData();
+        extractorCreatorData.setContentType("application/json");
+        extractorCreatorData.setParameter("_csrf");
+        extractorCreatorData.setParameterValue(null);
+        SampleResult sampleResult = new SampleResult();
+        extractorCreatorData.setSampleResult(sampleResult);
+    }
+
     @Test
     public void testCreateJsonPathExtractorThrowsException() throws TransformerException {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            CreateJsonPathExtractor.createJsonPathExtractor(null, null, "_csrf", "2 /login", "application/xml");
+            createExtractorInterface.createExtractor(extractorCreatorData);
         });
     }
 

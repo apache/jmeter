@@ -21,35 +21,41 @@ import java.util.List;
 
 import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
 import org.apache.jmeter.functions.CorrelationFunction;
+import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.JsonPathExtractorData;
 import org.apache.jmeter.testelement.TestElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.PathNotFoundException;
 
-public class CreateJsonPathExtractor {
+public class CreateJsonPathExtractor implements CreateExtractorInterface {
+
+    private static final Logger log = LoggerFactory.getLogger(CreateJsonPathExtractor.class);
 
     private static final String ONE = "1"; //$NON-NLS-1$
 
-    private CreateJsonPathExtractor() {}
+    CreateJsonPathExtractor() {
+    }
 
     /**
      * Create JSONPath extractor
      *
-     * @param json                    response string
-     * @param value                   of Attribute/Text content in XML to create
-     *                                XPath
-     * @param correlationVariableName alias of the correlated variable
-     * @param requestUrl              URL of the request whose response yields the
-     *                                parameter required to correlate
-     * @param contentType             responseData content type
-     * @return JSONPath extractor in a map
+     * @param extractorCreatorData ExtractorCreatorData object.
+     * @return ExtractorData object.
      */
-    public static JsonPathExtractorData createJsonPathExtractor(String json, String value,
-            String correlationVariableName, String requestUrl, String contentType) {
+    @Override
+    public ExtractorData createExtractor(ExtractorCreatorData extractorCreatorData) {
+        log.debug("Create ExtractorData data from ExtractorCreatorData "+ extractorCreatorData);
         JsonPathExtractorData jsonPathExtractor = null;
+        String json = extractorCreatorData.getSampleResult().getResponseDataAsString();
+        String value = extractorCreatorData.getParameterValue();
+        String correlationVariableName = extractorCreatorData.getParameter();
+        String requestUrl = extractorCreatorData.getSampleResult().getSampleLabel();
+        String contentType = extractorCreatorData.getSampleResult().getContentType();
         if (json == null || value == null) {
             throw new IllegalArgumentException("Response Data or value to be searched is null"); //$NON-NLS-1$
         }
@@ -67,6 +73,7 @@ public class CreateJsonPathExtractor {
         }
         return jsonPathExtractor;
     }
+
 
     /**
      * Get JSONPath expression to get the key, value from json
@@ -99,12 +106,14 @@ public class CreateJsonPathExtractor {
     /**
      * Create the JSONExtractor TestElement
      *
-     * @param extractor   Map containing extractor data
-     * @param testElement empty testElement object
-     * @return JSONExtractor TestElement
+     * @param extractordata  ExtractorData object.
+     * @param  testElement TestElement object.
+     * @return JSONExtractor TestElement object.
      */
-    public static TestElement createJsonExtractorTestElement(JsonPathExtractorData extractor, TestElement testElement) {
+    @Override
+    public TestElement createExtractorTestElement(ExtractorData extractordata, TestElement testElement) {
         JSONPostProcessor jsonExtractor = (JSONPostProcessor) testElement;
+        JsonPathExtractorData extractor = (JsonPathExtractorData) extractordata;
         jsonExtractor.setName(extractor.getRefname());
         jsonExtractor.setRefNames(extractor.getRefname());
         jsonExtractor.setJsonPathExpressions(extractor.getExpr());

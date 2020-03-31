@@ -77,6 +77,10 @@ import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.io.StreamException;
 
+/**
+ * Class is being used to find and extract parameters as per the extractor type and perform correlation on parameters.
+ *
+ */
 public class Correlation {
 
     private static final Logger log = LoggerFactory.getLogger(Correlation.class);

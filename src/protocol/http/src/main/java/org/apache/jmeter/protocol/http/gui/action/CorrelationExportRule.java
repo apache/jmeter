@@ -35,7 +35,12 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.AbstractActionWithNoRunningTest;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.protocol.http.correlation.CorrelationRule;
+import org.apache.jmeter.protocol.http.correlation.rule.BoundryExtractorCorrelationRule;
+import org.apache.jmeter.protocol.http.correlation.rule.CorrelationRule;
+import org.apache.jmeter.protocol.http.correlation.rule.HtmlExtractorCorrelationRule;
+import org.apache.jmeter.protocol.http.correlation.rule.JsonExtractorCorrelationRule;
+import org.apache.jmeter.protocol.http.correlation.rule.RegexExtractorCorrelationRule;
+import org.apache.jmeter.protocol.http.correlation.rule.XPath2ExtractorCorrelationRule;
 import org.apache.jmeter.protocol.http.gui.CorrelationExportRuleGui;
 
 public class CorrelationExportRule extends AbstractActionWithNoRunningTest {
@@ -78,7 +83,7 @@ public class CorrelationExportRule extends AbstractActionWithNoRunningTest {
         CorrelationExportRuleGui.createCorrelationRuleFileGui(extractorRuleSet);
     }
 
-    private Set<CorrelationRule> prepareBoundaryExtractorRuleSet(GuiPackage guiPackage) {
+    private Set<BoundryExtractorCorrelationRule> prepareBoundaryExtractorRuleSet(GuiPackage guiPackage) {
         // extract Boundary Extractor JMeterTreeNode
         List<JMeterTreeNode> boundaryExtractorNodes = guiPackage.getTreeModel().getNodesOfType(BoundaryExtractor.class);
         // Extract testElement from nodes and cast them to BoundaryExtractor
@@ -92,47 +97,49 @@ public class CorrelationExportRule extends AbstractActionWithNoRunningTest {
         // Prepare the set of Correlation Rule object
         return boundaryExtractors.stream().map(boundaryExtractor -> {
             boundaryExtractor.setRefName(CorrelationFunction.extractVariable(boundaryExtractor.getRefName()));
-            return new CorrelationRule(boundaryExtractor);
+            return new BoundryExtractorCorrelationRule(boundaryExtractor);
         }).collect(Collectors.toSet());
     }
 
-    private Set<CorrelationRule> prepareRegexExtractorRuleSet(GuiPackage guiPackage) {
+    private Set<RegexExtractorCorrelationRule> prepareRegexExtractorRuleSet(GuiPackage guiPackage) {
         // see prepareBoundaryExtractorRuleSet for description
         return guiPackage.getTreeModel().getNodesOfType(RegexExtractor.class).stream()
                 .map(node -> (RegexExtractor) node.getTestElement()).collect(Collectors.toList()).stream()
                 .map(regexExtractor -> {
                     regexExtractor.setRefName(CorrelationFunction.extractVariable(regexExtractor.getRefName()));
-                    return new CorrelationRule(regexExtractor);
+                    return new RegexExtractorCorrelationRule(regexExtractor);
                 }).collect(Collectors.toSet());
     }
 
-    private Set<CorrelationRule> prepareJsonPathExtractorRuleSet(GuiPackage guiPackage) {
+    private Set<JsonExtractorCorrelationRule> prepareJsonPathExtractorRuleSet(GuiPackage guiPackage) {
         // see prepareBoundaryExtractorRuleSet for description
         return guiPackage.getTreeModel().getNodesOfType(JSONPostProcessor.class).stream()
                 .map(node -> (JSONPostProcessor) node.getTestElement()).collect(Collectors.toList()).stream()
                 .map(jsonPathExtractor -> {
                     jsonPathExtractor.setRefNames(CorrelationFunction.extractVariable(jsonPathExtractor.getRefNames()));
-                    return new CorrelationRule(jsonPathExtractor);
+                    return new JsonExtractorCorrelationRule(jsonPathExtractor);
                 }).collect(Collectors.toSet());
     }
 
-    private Set<CorrelationRule> prepareXPath2ExtractorRuleSet(GuiPackage guiPackage) {
+    private Set<XPath2ExtractorCorrelationRule> prepareXPath2ExtractorRuleSet(GuiPackage guiPackage) {
         // see prepareBoundaryExtractorRuleSet for description
-        return guiPackage.getTreeModel().getNodesOfType(XPath2Extractor.class).stream()
-                .map(node -> (XPath2Extractor) node.getTestElement()).collect(Collectors.toList()).stream()
-                .map(xPath2Extractor -> {
-                    xPath2Extractor.setRefName(CorrelationFunction.extractVariable(xPath2Extractor.getRefName()));
-                    return new CorrelationRule(xPath2Extractor);
-                }).collect(Collectors.toSet());
+        List<JMeterTreeNode> xpathExtractorNodes = guiPackage.getTreeModel().getNodesOfType(XPath2Extractor.class);
+        List<XPath2Extractor> xpathExtractors = xpathExtractorNodes.stream()
+                .map(node -> (XPath2Extractor) node.getTestElement()).collect(Collectors.toList());
+        return xpathExtractors.stream().map(xpathExtractor -> {
+            xpathExtractor.setRefName(CorrelationFunction.extractVariable(xpathExtractor.getRefName()));
+            return new XPath2ExtractorCorrelationRule(xpathExtractor);
+        }).collect(Collectors.toSet());
     }
 
-    private Set<CorrelationRule> prepareHtmlExtractorRuleSet(GuiPackage guiPackage) {
+    private Set<HtmlExtractorCorrelationRule> prepareHtmlExtractorRuleSet(GuiPackage guiPackage) {
         // see prepareBoundaryExtractorRuleSet for description
-        return guiPackage.getTreeModel().getNodesOfType(HtmlExtractor.class).stream()
-                .map(node -> (HtmlExtractor) node.getTestElement()).collect(Collectors.toList()).stream()
-                .map(htmlExtractor -> {
-                    htmlExtractor.setRefName(CorrelationFunction.extractVariable(htmlExtractor.getRefName()));
-                    return new CorrelationRule(htmlExtractor);
-                }).collect(Collectors.toSet());
-    }
+        List<JMeterTreeNode> htmlExtractorNodes = guiPackage.getTreeModel().getNodesOfType(HtmlExtractor.class);
+        List<HtmlExtractor> htmlExtractors = htmlExtractorNodes.stream()
+                .map(node -> (HtmlExtractor) node.getTestElement()).collect(Collectors.toList());
+        return htmlExtractors.stream().map(htmlExtractor -> {
+            htmlExtractor.setRefName(CorrelationFunction.extractVariable(htmlExtractor.getRefName()));
+            return new HtmlExtractorCorrelationRule(htmlExtractor);
+        }).collect(Collectors.toSet());
+     }
 }

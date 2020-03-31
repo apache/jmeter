@@ -48,13 +48,13 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.correlation.Correlation;
-import org.apache.jmeter.protocol.http.correlation.CorrelationRule;
 import org.apache.jmeter.protocol.http.correlation.extractordata.BoundaryExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.HtmlExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.JsonPathExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.RegexExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.XPath2ExtractorData;
+import org.apache.jmeter.protocol.http.correlation.rule.CorrelationRule;
 import org.apache.jmeter.protocol.http.gui.CorrelationRuleFileGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
@@ -72,11 +72,12 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import net.sf.saxon.s9api.SaxonApiException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class CorrelationRuleFile extends AbstractActionWithNoRunningTest {
 
@@ -119,27 +120,37 @@ public class CorrelationRuleFile extends AbstractActionWithNoRunningTest {
             return;
         }
         int retVal = chooser.showDialog(null, JMeterUtils.getResString("correlation_import_rule")); //$NON-NLS-1$
-        if (!chooser.getSelectedFile().getAbsolutePath().endsWith(".json") ) {
-            throw new IllegalUserActionException( "Please select valid json rule file.");
+        if (!chooser.getSelectedFile().getAbsolutePath().endsWith(".json")) {
+            throw new IllegalUserActionException("Please select valid json rule file.");
         }
         if (retVal == JFileChooser.APPROVE_OPTION) {
-            // parse JSON rule file and prepare rules list
-            JSONParser jsonParser = new JSONParser(JSONParser.MODE_JSON_SIMPLE);
-            JSONObject jsonData = null;
+            Map<String, List<HashMap<String, String>>> jsonData = null;
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
             try {
-                jsonData = (JSONObject) jsonParser.parse(FileUtils.openInputStream(chooser.getSelectedFile()));
-            } catch (ParseException | ClassCastException e1) {
-                throw new IllegalUserActionException("Unable to parse rule file. Please check the file and try again.",
-                        e1);
-            } catch (IOException e2) {
-                throw new IllegalUserActionException("Unable to import rule file at "+ e2.getMessage());
+                jsonData = mapper.readValue(FileUtils.openInputStream(chooser.getSelectedFile()),
+                        new TypeReference<HashMap<String, List<HashMap<String, String>>>>() {
+                        });
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
-            JSONArray rules = (JSONArray) jsonData.get("rule");
+            // Array Data
+            List<HashMap<String, String>> rules = (List<HashMap<String, String>>) jsonData.get("rule");
             if (rules == null) {
                 throw new IllegalUserActionException("Invalid rule file.");
             }
-            List<CorrelationRule> ruleObjectList = rules.stream().map(CorrelationRule::new)
-                    .collect(Collectors.toList());
+            List<CorrelationRule> ruleObjectList = new ArrayList<CorrelationRule>();
+            CorrelationRule rule = null;
+            String ruleString = null;
+            for (HashMap<String, String> hashMap : rules) {
+                try {
+                 ruleString = mapper.writeValueAsString(hashMap);
+                 rule = new CorrelationRule(ruleString);
+                 ruleObjectList.add(rule);
+                } catch (JsonProcessingException e1) {
+                    throw new IllegalUserActionException("Unable to parse rule file.");
+                }
+            }
             if (ruleObjectList.isEmpty()) {
                 throw new IllegalUserActionException("No rule present in rule file.");
             }
@@ -152,8 +163,10 @@ public class CorrelationRuleFile extends AbstractActionWithNoRunningTest {
             if (CorrelationRecorder.getBuffer().isEmpty()) {
                 throw new IllegalUserActionException("Testplan isn't recorded, please record the plan and try again.");
             }
-            // Process the rule on response data and prepare a map with all the valid extractors possible
-            // Also, simultaneously filter the matched values which aren't used as a parameter, i.e., do
+            // Process the rule on response data and prepare a map with all the valid
+            // extractors possible
+            // Also, simultaneously filter the matched values which aren't used as a
+            // parameter, i.e., do
             // not exist in currentGuiHttpParameters
             Map<CorrelationRule, List<ExtractorData>> ruleExtractorDataMap = processRules(ruleObjectList,
                     currentGuiHttpParameters);
@@ -292,7 +305,8 @@ public class CorrelationRuleFile extends AbstractActionWithNoRunningTest {
             SampleResult sampleResult = (SampleResult) sample;
             List<String> matches = extractor.extractAll(rule.getlBoundary(), rule.getrBoundary(),
                     sampleResult.getResponseDataAsString());
-            if (!matches.isEmpty() && StringUtils.isNotBlank(matches.get(0)) && currentGuiHttpParameters.containsValue(matches.get(0))) {
+            if (!matches.isEmpty() && StringUtils.isNotBlank(matches.get(0))
+                    && currentGuiHttpParameters.containsValue(matches.get(0))) {
                 Optional<String> optional = currentGuiHttpParameters.entrySet().stream()
                         .filter(entry -> entry.getValue().contains(matches.get(0))).map(Map.Entry::getKey).findFirst();
                 String correlationVariableName = "";

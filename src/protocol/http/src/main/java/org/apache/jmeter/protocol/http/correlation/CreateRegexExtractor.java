@@ -22,11 +22,16 @@ import java.util.regex.Pattern;
 
 import org.apache.jmeter.extractor.RegexExtractor;
 import org.apache.jmeter.functions.CorrelationFunction;
+import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.RegexExtractorData;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class CreateRegexExtractor {
+public class CreateRegexExtractor implements CreateExtractorInterface {
+
+    private static final Logger log = LoggerFactory.getLogger(CreateRegexExtractor.class);
 
     private static final String END_OF_LINE = "$"; //$NON-NLS-1$
     private static final String ONE = "1"; //$NON-NLS-1$
@@ -35,39 +40,7 @@ public class CreateRegexExtractor {
     private static final String PARANTHESES_OPEN = "("; //$NON-NLS-1$
     private static final String START_OF_LINE = "^"; //$NON-NLS-1$
 
-    private CreateRegexExtractor() {
-    }
-
-    /**
-     * Create Regular Expression Extractor for body parameter
-     *
-     * @param sampleResult   object to get Response data
-     * @param parameter      parameter to be correlated
-     * @param parameterValue Map containing correlation candidates and their values
-     * @return Map for Regex Extractor
-     */
-    public static RegexExtractorData createRegularExtractor(SampleResult sampleResult, String parameter,
-            String parameterValue) {
-        StringBuilder regexBuffer = new StringBuilder();
-        // Create a regex to find the parameter with name and value
-        // e.g (name, value) = (_csrf, tokenvalue)
-        // regex = ^(.*?)_csrf(.*?)tokenvalue(.*?)$
-        if (parameter.contains(PARANTHESES_OPEN)) {
-            // get parameter's real name if its alias is provided
-            String parameterName = CorrelationFunction.extractVariable(parameter);
-            String regex = START_OF_LINE + REGEX_EXPRESSION + Pattern.quote(parameterName) + REGEX_EXPRESSION
-                    + Pattern.quote(parameterValue) + REGEX_EXPRESSION + END_OF_LINE;
-            regexBuffer.append(regex);
-        } else {
-            String regex = START_OF_LINE + REGEX_EXPRESSION + Pattern.quote(parameter) + REGEX_EXPRESSION
-                    + Pattern.quote(parameterValue) + REGEX_EXPRESSION + END_OF_LINE;
-            regexBuffer.append(regex);
-        }
-        // create pattern matcher to match the regex created above in MULTILINE mode
-        Pattern pattern = Pattern.compile(regexBuffer.toString(), Pattern.UNICODE_CASE | Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(sampleResult.getResponseDataAsString());
-        // Create Regular expression extractor if pattern is matched
-        return matchExpressionInResponseBody(matcher, parameter, parameterValue, sampleResult);
+    CreateRegexExtractor() {
     }
 
     /**
@@ -172,14 +145,50 @@ public class CreateRegexExtractor {
     }
 
     /**
+     * Create Regular Expression Extractor for body parameter
+     *
+     * @param extractorCreatorData ExtractorCreatorData object.
+     * @return ExtractorData object.
+     */
+    @Override
+    public ExtractorData createExtractor(ExtractorCreatorData extractorCreatorData) {
+        log.debug("Create ExtractorData data from ExtractorCreatorData "+ extractorCreatorData);
+        StringBuilder regexBuffer = new StringBuilder();
+        SampleResult sampleResult = extractorCreatorData.getSampleResult();
+        String parameter = extractorCreatorData.getParameter();
+        String parameterValue = extractorCreatorData.getParameterValue();
+        // Create a regex to find the parameter with name and value
+        // e.g (name, value) = (_csrf, tokenvalue)
+        // regex = ^(.*?)_csrf(.*?)tokenvalue(.*?)$
+        if (parameter.contains(PARANTHESES_OPEN)) {
+            // get parameter's real name if its alias is provided
+            String parameterName = CorrelationFunction.extractVariable(parameter);
+            String regex = START_OF_LINE + REGEX_EXPRESSION + Pattern.quote(parameterName) + REGEX_EXPRESSION
+                    + Pattern.quote(parameterValue) + REGEX_EXPRESSION + END_OF_LINE;
+            regexBuffer.append(regex);
+        } else {
+            String regex = START_OF_LINE + REGEX_EXPRESSION + Pattern.quote(parameter) + REGEX_EXPRESSION
+                    + Pattern.quote(parameterValue) + REGEX_EXPRESSION + END_OF_LINE;
+            regexBuffer.append(regex);
+        }
+        // create pattern matcher to match the regex created above in MULTILINE mode
+        Pattern pattern = Pattern.compile(regexBuffer.toString(), Pattern.UNICODE_CASE | Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(sampleResult.getResponseDataAsString());
+        // Create Regular expression extractor if pattern is matched
+        return matchExpressionInResponseBody(matcher, parameter, parameterValue, sampleResult);
+    }
+
+    /**
      * Create the Regex Extractor TestElement
      *
-     * @param extractor   Map containing extractor data
-     * @param testElement empty testElement object
-     * @return Regex Extractor TestElement
+     * @param extractordata   ExtractorData object.
+     * @param testElement TestElement object.
+     * @return Regex Extractor TestElement object.
      */
-    public static TestElement createRegexExtractorTestElement(RegexExtractorData extractor, TestElement testElement) {
+    @Override
+    public TestElement createExtractorTestElement(ExtractorData extractordata, TestElement testElement) {
         RegexExtractor regexExtractor = (RegexExtractor) testElement;
+        RegexExtractorData extractor = (RegexExtractorData) extractordata;
         regexExtractor.setName(extractor.getRefname());
         regexExtractor.setRefName(extractor.getRefname());
         regexExtractor.setRegex(extractor.getExpr());

@@ -15,79 +15,25 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.protocol.http.correlation;
+package org.apache.jmeter.protocol.http.correlation.rule;
 
 import org.apache.jmeter.extractor.BoundaryExtractor;
-import org.apache.jmeter.extractor.HtmlExtractor;
-import org.apache.jmeter.extractor.RegexExtractor;
-import org.apache.jmeter.extractor.XPath2Extractor;
-import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
 import org.apache.jmeter.protocol.http.gui.action.CorrelationRuleFile;
 
-import net.minidev.json.JSONObject;
+public class BoundryExtractorCorrelationRule extends CorrelationRule {
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-@JsonInclude(Include.NON_NULL)
-public final class CorrelationRule {
-
-    private String attribute;
-    private String expr;
     private String lBoundary;
     private String name;
     private String rBoundary;
     private String type;
 
-    public CorrelationRule(Object jsonData) {
-        JSONObject object = (JSONObject) jsonData;
-        setName(object.getAsString("name"));
-        setType(object.getAsString("type"));
-        setExpr(object.getAsString("expr"));
-        setAttribute(object.getAsString("attribute"));
-        setlBoundary(object.getAsString("lBoundary"));
-        setrBoundary(object.getAsString("rBoundary"));
-    }
-
-    public CorrelationRule(HtmlExtractor htmlExtractor) {
-        setName(htmlExtractor.getRefName());
-        setType(CorrelationRuleFile.HTML_EXTRACTOR_TYPE);
-        setExpr(htmlExtractor.getExpression());
-        setAttribute(htmlExtractor.getAttribute());
-    }
-
-    public CorrelationRule(XPath2Extractor xPath2Extractor) {
-        setName(xPath2Extractor.getRefName());
-        setType(CorrelationRuleFile.XPATH2_EXTRACTOR_TYPE);
-        setExpr(xPath2Extractor.getXPathQuery());
-    }
-
-    public CorrelationRule(JSONPostProcessor jsonPathExtractor) {
-        setName(jsonPathExtractor.getRefNames());
-        setType(CorrelationRuleFile.JSON_EXTRACTOR_TYPE);
-        setExpr(jsonPathExtractor.getJsonPathExpressions());
-    }
-
-    public CorrelationRule(RegexExtractor regexExtractor) {
-        setName(regexExtractor.getRefName());
-        setType(regexExtractor.useHeaders() ? CorrelationRuleFile.REGEX_HEADER_TYPE
-                : CorrelationRuleFile.REGEX_EXTRACTOR_TYPE);
-        setExpr(regexExtractor.getRegex());
-    }
-
-    public CorrelationRule(BoundaryExtractor boundaryExtractor) {
+    public BoundryExtractorCorrelationRule(BoundaryExtractor boundaryExtractor) {
+        super(boundaryExtractor);
         setName(boundaryExtractor.getRefName());
         setType(CorrelationRuleFile.BOUNDARY_EXTRACTOR_TYPE);
         setlBoundary(boundaryExtractor.getLeftBoundary());
         setrBoundary(boundaryExtractor.getRightBoundary());
-    }
 
-    public String getAttribute() {
-        return attribute;
-    }
-
-    public String getExpr() {
-        return expr;
     }
 
     public String getlBoundary() {
@@ -104,14 +50,6 @@ public final class CorrelationRule {
 
     public String getType() {
         return type;
-    }
-
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
-    }
-
-    public void setExpr(String expr) {
-        this.expr = expr;
     }
 
     public void setlBoundary(String lBoundary) {
@@ -138,19 +76,13 @@ public final class CorrelationRule {
         if (!(rule instanceof CorrelationRule)) {
             return false;
         }
-        CorrelationRule correlationRule = (CorrelationRule) rule;
+        BoundryExtractorCorrelationRule correlationRule = (BoundryExtractorCorrelationRule) rule;
         Boolean isEqual = true;
-        if (attribute != null) {
-            isEqual = isEqual && correlationRule.getAttribute().equals(attribute);
-        }
         if (rBoundary != null) {
             isEqual = isEqual && correlationRule.getrBoundary().equals(rBoundary);
         }
         if (lBoundary != null) {
             isEqual = isEqual && correlationRule.getlBoundary().equals(lBoundary);
-        }
-        if (expr != null) {
-            isEqual = isEqual && correlationRule.getExpr().equals(expr);
         }
         return isEqual && correlationRule.getName().equals(name) && correlationRule.getType().equals(type);
     }
@@ -158,20 +90,15 @@ public final class CorrelationRule {
     @Override
     public int hashCode() {
         int result = 17;
-        if (attribute != null) {
-            result = 31 * result + attribute.hashCode();
-        }
         if (rBoundary != null) {
             result = 31 * result + rBoundary.hashCode();
         }
         if (lBoundary != null) {
             result = 31 * result + lBoundary.hashCode();
         }
-        if (expr != null) {
-            result = 31 * result + expr.hashCode();
-        }
         result = 31 * result + name.hashCode();
         result = 31 * result + type.hashCode();
         return result;
     }
+
 }

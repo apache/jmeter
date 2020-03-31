@@ -33,19 +33,24 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CorrelationJMXFile extends AbstractActionWithNoRunningTest {
+/**
+ * Choose the JMX file to correlate with previous JMX file.
+ *
+ */
+public class CorrelateJMXFile extends AbstractActionWithNoRunningTest {
 
     private static final String[] exts = new String[] { ".jmx" }; //$NON-NLS-1$
     private static final Set<String> commands = new HashSet<>();
-    private static final Logger log = LoggerFactory.getLogger(CorrelationJMXFile.class);
+    private static final Logger log = LoggerFactory.getLogger(CorrelateJMXFile.class);
 
     static {
         commands.add(ActionNames.CORRELATION_JMX_FILE);
     }
 
-    public CorrelationJMXFile() {
+    public CorrelateJMXFile() {
         super();
     }
+
 
     @Override
     protected void doActionAfterCheck(ActionEvent e) throws IllegalUserActionException {

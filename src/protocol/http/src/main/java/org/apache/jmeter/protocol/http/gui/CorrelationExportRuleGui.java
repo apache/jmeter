@@ -21,6 +21,8 @@ import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +43,10 @@ import javax.swing.table.TableModel;
 import org.apache.jmeter.gui.CorrelationTableModel;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.protocol.http.correlation.CorrelationRule;
+import org.apache.jmeter.protocol.http.correlation.rule.CorrelationRule;
 import org.apache.jmeter.util.JMeterUtils;
 
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
-
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -102,17 +102,19 @@ public class CorrelationExportRuleGui {
                     .filter(rule -> parameterMap.containsKey(rule.getName())).collect(Collectors.toList());
             // prepare internal JSON data objects
             ObjectMapper obj = new ObjectMapper();
-            JSONArray jsonArray = new JSONArray();
+            obj.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+
             // Prepare JSONObject list from rule which will be written to JSON file
-            List<JSONObject> jsonObjectList = rulesToPrepareJson.stream()
-                    .map(rule -> new JSONObject(obj.convertValue(rule, new TypeReference<Map<String, String>>() {
-                    }))).collect(Collectors.toList());
-            jsonArray.addAll(jsonObjectList);
-            // prepare JSON root
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("rule", jsonArray);
+            List<Map<String, String>> jsonList = new ArrayList<Map<String, String>>();
+            for (CorrelationRule rule : rulesToPrepareJson) {
+                Map<String, String> map =obj.convertValue(rule, new TypeReference<Map<String, String>>() {});
+                jsonList.add(map);
+            }
+            Map<String, List<Map<String, String>>> listMap = new HashMap<String,  List<Map<String, String>>>();
+            listMap.put("rule", jsonList);
             // dispose the JTable frame
             frame.dispose();
+
             // Get user input for saving file
             JFileChooser chooser = FileDialoger.promptToSaveFile("rule.json", exts);
             if (chooser == null) {
@@ -131,7 +133,8 @@ public class CorrelationExportRuleGui {
             }
             // Write the file
             try (FileWriter file = new FileWriter(updateFile)) {
-                file.write(jsonObject.toJSONString());
+                String jsonStr = obj.writeValueAsString(listMap);
+                file.write(jsonStr);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser("Unable to export Rule file at " + e.getMessage(),
                         "Export Failed");

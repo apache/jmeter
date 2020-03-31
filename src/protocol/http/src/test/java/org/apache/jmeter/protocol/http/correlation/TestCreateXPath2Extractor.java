@@ -18,18 +18,45 @@
 package org.apache.jmeter.protocol.http.correlation;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.transform.TransformerException;
 
+import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TestCreateXPath2Extractor {
 
+    CreateExtractorInterface createExtractorInterface = null;
+    ExtractorCreatorData extractorCreatorData = null;
+    SampleResult sampleResult;
+
+    @BeforeEach
+    public void setup() {
+        sampleResult = new SampleResult();
+        sampleResult.setSampleLabel("2 /login");
+        sampleResult.setResponseHeaders("HTTP/1.1 200 OK");
+        sampleResult.setResponseData(
+                "<?xml version=\"1.0\" encoding=\"UTF8\"?>"
+                        + "<token><_csrf>7d1de48134af4342a9b4b8288c451f7c</_csrf></token>",
+                StandardCharsets.UTF_8.name());
+        sampleResult.setContentType("text/html;charset=UTF8");
+        createExtractorInterface = new CreateXPath2Extractor();
+        extractorCreatorData = new ExtractorCreatorData();
+        extractorCreatorData.setContentType("application/xml");
+        extractorCreatorData.setParameter("_csrf");
+        extractorCreatorData.setParameterValue(null);
+        SampleResult sampleResult = new SampleResult();
+        extractorCreatorData.setSampleResult(sampleResult);
+
+    }
+
     @Test
     public void testCreateXPath2ExtractorThrowsException() throws TransformerException {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            CreateXPath2Extractor.createXPath2Extractor(null, null, "_csrf", "2 /login", "application/xml");
+            createExtractorInterface.createExtractor(extractorCreatorData);
         });
     }
 

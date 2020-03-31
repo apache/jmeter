@@ -19,26 +19,30 @@ package org.apache.jmeter.protocol.http.correlation;
 
 import org.apache.jmeter.extractor.BoundaryExtractor;
 import org.apache.jmeter.protocol.http.correlation.extractordata.BoundaryExtractorData;
+import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.testelement.TestElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class CreateBoundaryExtractor {
+public class CreateBoundaryExtractor implements CreateExtractorInterface{
 
-    private CreateBoundaryExtractor() {}
+    private static final Logger log = LoggerFactory.getLogger(CreateBoundaryExtractor.class);
+
+    CreateBoundaryExtractor() {}
 
     private static final String ONE = "1"; //$NON-NLS-1$
 
+
     /**
      * Create Boundary Extractor
-     *
-     * @param responseData as string
-     * @param value        Value of the parameter required to correlate
-     * @param parameter    parameter alias for correlation
-     * @param testname     TestName of the request whose response yields the
-     *                     parameter required to correlate
-     * @return Boundary Extractor values in a map
+     * @param extractorCreatorData ExtractorCreatorData object
+     * @return ExtractorData object.
      */
-    public static BoundaryExtractorData createBoundaryExtractor(String responseData, String value, String parameter,
-            String testname) {
+    @Override
+    public ExtractorData createExtractor(ExtractorCreatorData extractorCreatorData) {
+        log.debug("Create ExtractorData data from ExtractorCreatorData "+ extractorCreatorData);
+        String value = extractorCreatorData.getParameterValue();
+        String responseData = extractorCreatorData.getSampleResult().getResponseDataAsString();
         int startIndex = responseData.indexOf(value);
         int endIndex = responseData.indexOf(value) + value.length();
         BoundaryExtractorData boundaryExtractor = null;
@@ -49,20 +53,23 @@ public class CreateBoundaryExtractor {
         String lBoundary = responseData.substring(startIndex < 4 ? 0 : startIndex - 4, startIndex);
         String rBoundary = responseData.substring(endIndex,
                 responseData.length() - endIndex < 4 ? responseData.length() : endIndex + 4);
-        boundaryExtractor = new BoundaryExtractorData(parameter, lBoundary, rBoundary, ONE, testname);
+        boundaryExtractor = new BoundaryExtractorData(extractorCreatorData.getParameter(), lBoundary, rBoundary, ONE,
+                extractorCreatorData.getSampleResult().getSampleLabel());
         return boundaryExtractor;
     }
+
 
     /**
      * Create Boundary extractor TestElement
      *
-     * @param extractor   Map containing extractor data
+     * @param extractorData   ExtractorData object.
      * @param testElement empty testElement object
      * @return Boundary extractor TestElement
      */
-    public static TestElement createBoundaryExtractorTestElement(BoundaryExtractorData extractor,
-            TestElement testElement) {
+    @Override
+    public  TestElement createExtractorTestElement(ExtractorData extractorData, TestElement testElement) {
         BoundaryExtractor boundaryExtractor = (BoundaryExtractor) testElement;
+        BoundaryExtractorData extractor = (BoundaryExtractorData) extractorData;
         boundaryExtractor.setName(extractor.getRefname());
         boundaryExtractor.setRefName(extractor.getRefname());
         boundaryExtractor.setLeftBoundary(extractor.getlBoundary());

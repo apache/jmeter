@@ -34,8 +34,8 @@ import javax.swing.table.TableModel;
 
 import org.apache.jmeter.gui.CorrelationTableModel;
 import org.apache.jmeter.protocol.http.correlation.Correlation;
-import org.apache.jmeter.protocol.http.correlation.CorrelationRule;
 import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
+import org.apache.jmeter.protocol.http.correlation.rule.CorrelationRule;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class CorrelationRuleFileGui {

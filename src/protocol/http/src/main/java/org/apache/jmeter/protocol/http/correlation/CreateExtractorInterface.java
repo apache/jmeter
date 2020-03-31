@@ -15,26 +15,29 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.functions;
+package org.apache.jmeter.protocol.http.correlation;
+
+import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
+import org.apache.jmeter.testelement.TestElement;
+
 
 /**
- * Utility class which contains utility methods to extract variables.
+ * interface is used to create extractor based on the extractorCreatorData.
  *
  */
-public class CorrelationFunction {
-
-    private static final String PARANTHESES_OPEN = "\\("; //$NON-NLS-1$
-
-    private CorrelationFunction() {}
+public interface CreateExtractorInterface {
 
     /**
-     * Extract argument from alias e.g token(1) to token
-     *
-     * @param argument alias
-     * @return argument name
+     * @param extractorCreatorData ExtractorCreatorData object.
+     * @return ExtractorData
      */
-    public static String extractVariable(String argument) {
-        return argument.split(PARANTHESES_OPEN)[0];
-    }
+    ExtractorData createExtractor(ExtractorCreatorData extractorCreatorData);
+
+    /**
+     * @param extractordata ExtractorData object.
+     * @param testElement   TestElement object
+     * @return testElement
+     */
+    TestElement createExtractorTestElement(ExtractorData extractordata, TestElement testElement);
 
 }

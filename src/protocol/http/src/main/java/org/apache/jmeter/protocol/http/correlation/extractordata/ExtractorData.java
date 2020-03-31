@@ -17,7 +17,8 @@
 
 package org.apache.jmeter.protocol.http.correlation.extractordata;
 
-public class ExtractorData {
+public class ExtractorData{
+
     // Content type of the extractor
     String contentType;
     // Match number for the extractor

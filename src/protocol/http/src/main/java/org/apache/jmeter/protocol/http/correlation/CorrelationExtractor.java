@@ -78,7 +78,7 @@ public class CorrelationExtractor {
             }
         }
         // update the JMX file with extractor tags
-        log.debug("Processing of sample results ended.");
+        log.debug("Processing of finding parameters in response data and creation of extractors ended.");
         updateJmxFile(parameterMap);
     }
 
@@ -107,7 +107,12 @@ public class CorrelationExtractor {
             // Check if the parameter is found in response header
             // If found in response header then create regex extractor
             if (StringUtils.isNotBlank(responseHeader) && responseHeader.contains(decodedParameterValue)) {
-                ExtractorData extractor = createExtractor(sampleResult, parameter, parameterValue, HEADER);
+                ExtractorCreatorData creatorData = new ExtractorCreatorData();
+                creatorData.setContentType(HEADER);
+                creatorData.setParameter(parameter);
+                creatorData.setParameterValue(parameterValue);
+                creatorData.setSampleResult(sampleResult);
+                ExtractorData extractor = createExtractor(creatorData);
                 if (extractor != null) {
                     return extractor;
                 }
@@ -131,31 +136,59 @@ public class CorrelationExtractor {
     private static ExtractorData createExtractorParamInResponseBody(SampleResult sampleResult, String parameter,
             String parameterValue, String contentType) {
         ExtractorData createdExtractor = null;
+        ExtractorCreatorData creatorData = null;
         // create extractor
         if (contentType.contains(TEXT_HTML)) {
             log.debug("Try to create HTML extractor for parameters in response of {}", sampleResult.getSampleLabel());
+            creatorData = new ExtractorCreatorData();
+            creatorData.setContentType(TEXT_HTML);
+            creatorData.setParameter(parameter);
+            creatorData.setParameterValue(parameterValue);
+            creatorData.setSampleResult(sampleResult);
             // Note: It checks for only URL decoded parameter value
             // If html contains URL encoded parameter value then it will be
             // correlated by regex or boundary extractor
-            createdExtractor = createExtractor(sampleResult, parameter, parameterValue, TEXT_HTML);
+            createdExtractor = createExtractor(creatorData);
         } else if (contentType.contains(APPLICATION_XML) || contentType.contains(TEXT_XML)) {
             log.debug("Try to create XPath2 extractor for parameters in response of {}", sampleResult.getSampleLabel());
-            createdExtractor = createExtractor(sampleResult, parameter, parameterValue, APPLICATION_XML);
+            creatorData = new ExtractorCreatorData();
+            creatorData.setContentType(APPLICATION_XML);
+            creatorData.setParameter(parameter);
+            creatorData.setParameterValue(parameterValue);
+            creatorData.setSampleResult(sampleResult);
+            createdExtractor = createExtractor(creatorData);
         } else if (contentType.contains(APPLICATION_JSON)) {
             log.debug("Try to create JSONPath extractor for parameters in response of {}",
                     sampleResult.getSampleLabel());
-            createdExtractor = createExtractor(sampleResult, parameter, parameterValue, APPLICATION_JSON);
+            creatorData = new ExtractorCreatorData();
+            creatorData.setContentType(APPLICATION_JSON);
+            creatorData.setParameter(parameter);
+            creatorData.setParameterValue(parameterValue);
+            creatorData.setSampleResult(sampleResult);
+            createdExtractor = createExtractor(creatorData);
         } else {
             // create Regex extractor which matches by name and value both
             // More accurate than Boundary extractor which matches by value only
             log.debug("Try to create Regex extractor for parameters in response of {}", sampleResult.getSampleLabel());
-            createdExtractor = createExtractor(sampleResult, parameter, parameterValue, OTHER);
+            creatorData = new ExtractorCreatorData();
+            creatorData.setContentType(OTHER);
+            creatorData.setParameter(parameter);
+            creatorData.setParameterValue(parameterValue);
+            creatorData.setSampleResult(sampleResult);
+            createdExtractor = createExtractor(creatorData);
+            // createdExtractor = createExtractor(sampleResult, parameter, parameterValue, OTHER);
         }
         // check no extractor was created, if no then add default Boundary extractor
         if (createdExtractor == null) {
             log.debug("Try to create Boundary extractor for parameters in response of {}",
                     sampleResult.getSampleLabel());
-            createdExtractor = createExtractor(sampleResult, parameter, parameterValue, BOUNDARY);
+            creatorData = new ExtractorCreatorData();
+            creatorData.setContentType(BOUNDARY);
+            creatorData.setParameter(parameter);
+            creatorData.setParameterValue(parameterValue);
+            creatorData.setSampleResult(sampleResult);
+            createdExtractor = createExtractor(creatorData);
+            //createdExtractor = createExtractor(sampleResult, parameter, parameterValue, BOUNDARY);
         }
         return createdExtractor;
     }
@@ -163,109 +196,101 @@ public class CorrelationExtractor {
     /**
      * Create the extractor based on the content type. eg. if
      * contentType:text/html then create the HTML extractor.
-     *
-     * @param sampleResult   sampleResult object containing response data
-     * @param parameter      Parameter name
-     * @param parameterValue Parameter value
-     * @param contentType    Response content type
+     * @param extractorCreatorData     ExtractorCreatorData object.
      * @return ExtractorData object or null
      */
-    public static ExtractorData createExtractor(SampleResult sampleResult, String parameter, String parameterValue,
-            String contentType) {
-        switch (contentType) {
+    public static ExtractorData createExtractor(ExtractorCreatorData extractorCreatorData) {
+        switch (extractorCreatorData.getContentType()) {
         case TEXT_HTML:
             // Create CSS Selector Extractor, also called HTML Extractor
-            return createHtmlExtractor(sampleResult, parameter, parameterValue);
+            return createHtmlExtractor(extractorCreatorData);
         case APPLICATION_XML:
             try {
                 // Create XPath2 Extractor
-                return createXPath2Extractor(sampleResult, parameter, parameterValue);
+                return createXPath2Extractor(extractorCreatorData);
             } catch (TransformerException | IllegalArgumentException e) {
-                log.error("Unable to create XPath2 Extractor for parameter {}, {}", parameter, e.getMessage());
+                log.error("Unable to create XPath2 Extractor for parameter {}, {}", extractorCreatorData.getParameter(), e.getMessage());
                 return null;
             }
         case APPLICATION_JSON:
             try {
                 // Create JSONPath Extractor
-                return createJsonPathExtractor(sampleResult, parameter, parameterValue);
+                return createJsonPathExtractor(extractorCreatorData);
             } catch (IllegalArgumentException e) {
-                log.error("Unable to create JSONPath Extractor for parameter {}, {}", parameter, e.getMessage());
+                log.error("Unable to create JSONPath Extractor for parameter {}, {}", extractorCreatorData.getParameter(), e.getMessage());
                 return null;
             }
         case OTHER:
             // Create Regex Extractor for parameter in response body
-            return createRegexExtractor(sampleResult, parameter, parameterValue);
+            return createRegexExtractor(extractorCreatorData);
         case HEADER:
             // Create Regex Extractor for parameter in response header
-            return createRegexExtractorForHeaderParameter(sampleResult, parameter, parameterValue);
+            return createRegexExtractorForHeaderParameter(extractorCreatorData);
         case BOUNDARY:
             // Create Boundary Extractor for parameter in response body
-            return createBoundaryExtractor(sampleResult, parameter, parameterValue);
+            return createBoundaryExtractor(extractorCreatorData);
         default:
             return null;
         }
     }
 
-    private static HtmlExtractorData createHtmlExtractor(SampleResult sampleResult, String parameter,
-            String parameterValue) {
-        HtmlExtractorData htmlExtractorData = CreateCssSelectorExtractor.createCssSelectorExtractor(
-                sampleResult.getResponseDataAsString(), parameterValue, parameter, sampleResult.getSampleLabel(),
-                sampleResult.getContentType());
+
+    private static HtmlExtractorData createHtmlExtractor(ExtractorCreatorData extractorCreatorData) {
+        CreateExtractorInterface createExtractorInterface = new CreateCssSelectorExtractor();
+        HtmlExtractorData htmlExtractorData = (HtmlExtractorData) createExtractorInterface.createExtractor(extractorCreatorData);
         if (htmlExtractorData != null) {
-            log.debug("HTML Extractor created for {} in {}", parameter, sampleResult.getSampleLabel());
+            log.debug("HTML Extractor created for {} in {}", extractorCreatorData.getParameter(), extractorCreatorData.getSampleResult().getSampleLabel());
         }
         return htmlExtractorData;
     }
 
-    private static XPath2ExtractorData createXPath2Extractor(SampleResult sampleResult, String parameter,
-            String parameterValue) throws TransformerException {
-        XPath2ExtractorData xPath2Extractor = CreateXPath2Extractor.createXPath2Extractor(
-                sampleResult.getResponseDataAsString(), parameterValue, parameter, sampleResult.getSampleLabel(),
-                sampleResult.getContentType());
+
+    private static XPath2ExtractorData createXPath2Extractor(ExtractorCreatorData extractorCreatorData) throws TransformerException {
+        CreateExtractorInterface createExtractorInterface =new CreateXPath2Extractor();
+        XPath2ExtractorData xPath2Extractor = (XPath2ExtractorData) createExtractorInterface.createExtractor(extractorCreatorData);
         if (xPath2Extractor != null) {
-            log.debug("XPath2 Extractor created for {} in {}", parameter, sampleResult.getSampleLabel());
+            log.debug("XPath2 Extractor created for {} in {}", extractorCreatorData.getParameter(), extractorCreatorData.getSampleResult().getSampleLabel());
         }
         return xPath2Extractor;
     }
 
-    private static JsonPathExtractorData createJsonPathExtractor(SampleResult sampleResult, String parameter,
-            String parameterValue) {
-        JsonPathExtractorData jsonPathExtractor = CreateJsonPathExtractor.createJsonPathExtractor(
-                sampleResult.getResponseDataAsString(), parameterValue, parameter, sampleResult.getSampleLabel(),
-                sampleResult.getContentType());
+
+    private static JsonPathExtractorData createJsonPathExtractor(ExtractorCreatorData extractorCreatorData) {
+        CreateExtractorInterface createExtractorInterface = new CreateJsonPathExtractor();
+        JsonPathExtractorData jsonPathExtractor = (JsonPathExtractorData) createExtractorInterface.createExtractor(extractorCreatorData);
         if (jsonPathExtractor != null) {
-            log.debug("JSONPath Extractor created for {} in {}", parameter, sampleResult.getSampleLabel());
+            log.debug("JSONPath Extractor created for {} in {}", extractorCreatorData.getParameter(), extractorCreatorData.getSampleResult().getSampleLabel());
         }
         return jsonPathExtractor;
     }
 
-    private static RegexExtractorData createRegexExtractor(SampleResult sampleResult, String parameter,
-            String parameterValue) {
-        RegexExtractorData regexExtractor = CreateRegexExtractor.createRegularExtractor(sampleResult, parameter,
-                parameterValue);
+
+    private static RegexExtractorData createRegexExtractor(ExtractorCreatorData extractorCreatorData) {
+        CreateExtractorInterface createExtractorInterface = new CreateRegexExtractor();
+        RegexExtractorData regexExtractor = (RegexExtractorData) createExtractorInterface.createExtractor(extractorCreatorData);
         if (regexExtractor != null) {
-            log.debug("Regex Extractor created for {} in {}", parameter, sampleResult.getSampleLabel());
+            log.debug("Regex Extractor created for {} in {}", extractorCreatorData.getParameter(), extractorCreatorData.getSampleResult().getSampleLabel());
         }
         return regexExtractor;
     }
 
-    private static RegexExtractorData createRegexExtractorForHeaderParameter(SampleResult sampleResult,
-            String parameter, String parameterValue) {
-        RegexExtractorData regexExtractorForHeader = CreateRegexExtractor
-                .createRegularExtractorForHeaderParameter(sampleResult, parameter, parameterValue);
+
+    private static RegexExtractorData createRegexExtractorForHeaderParameter(ExtractorCreatorData extractorCreatorData) {
+        RegexExtractorData regexExtractorForHeader = CreateRegexExtractor.createRegularExtractorForHeaderParameter(
+                extractorCreatorData.getSampleResult(), extractorCreatorData.getParameter(),
+                extractorCreatorData.getParameterValue());
         if (regexExtractorForHeader != null) {
-            log.debug("Regex Extractor created for parameter in header {} in {}", parameter,
-                    sampleResult.getSampleLabel());
+            log.debug("Regex Extractor created for parameter in header {} in {}", extractorCreatorData.getParameter(),
+                    extractorCreatorData.getSampleResult().getSampleLabel());
         }
         return regexExtractorForHeader;
     }
 
-    private static BoundaryExtractorData createBoundaryExtractor(SampleResult sampleResult, String parameter,
-            String parameterValue) {
-        BoundaryExtractorData boundaryExtractor = CreateBoundaryExtractor.createBoundaryExtractor(
-                sampleResult.getResponseDataAsString(), parameterValue, parameter, sampleResult.getSampleLabel());
+    private static BoundaryExtractorData createBoundaryExtractor(ExtractorCreatorData extractorCreatorData) {
+        CreateExtractorInterface createExtractorInterface = new CreateBoundaryExtractor();
+        BoundaryExtractorData boundaryExtractor =(BoundaryExtractorData) createExtractorInterface.createExtractor(extractorCreatorData);
         if (boundaryExtractor != null) {
-            log.debug("Boundary Extractor created for {} in {}", parameter, sampleResult.getSampleLabel());
+            log.debug("Boundary Extractor created for {} in {}", extractorCreatorData.getParameter(), extractorCreatorData.getSampleResult().getSampleLabel());
         }
         return boundaryExtractor;
     }
@@ -281,19 +306,25 @@ public class CorrelationExtractor {
     public static TestElement createExtractorTestElement(GuiPackage guiPackage, String extractorTypeClassName,
             ExtractorData extractor) {
         TestElement testElement = guiPackage.createTestElement(extractorTypeClassName);
+        CreateExtractorInterface createExtractorInterface = null;
         // create the extractors TestElement objects based on their type
         if (testElement instanceof HtmlExtractor) {
-            return CreateCssSelectorExtractor.createHtmlExtractorTestElement((HtmlExtractorData) extractor,
+            createExtractorInterface = new CreateCssSelectorExtractor();
+            return createExtractorInterface.createExtractorTestElement((HtmlExtractorData) extractor,
                     testElement);
         } else if (testElement instanceof XPath2Extractor) {
-            return CreateXPath2Extractor.createXPath2ExtractorTestElement((XPath2ExtractorData) extractor, testElement);
+            createExtractorInterface = new CreateXPath2Extractor();
+            return createExtractorInterface.createExtractorTestElement((XPath2ExtractorData) extractor, testElement);
         } else if (testElement instanceof JSONPostProcessor) {
-            return CreateJsonPathExtractor.createJsonExtractorTestElement((JsonPathExtractorData) extractor,
+            createExtractorInterface = new CreateJsonPathExtractor();
+            return createExtractorInterface.createExtractorTestElement((JsonPathExtractorData) extractor,
                     testElement);
         } else if (testElement instanceof RegexExtractor) {
-            return CreateRegexExtractor.createRegexExtractorTestElement((RegexExtractorData) extractor, testElement);
+            createExtractorInterface = new CreateRegexExtractor();
+            return createExtractorInterface.createExtractorTestElement((RegexExtractorData) extractor, testElement);
         } else if (testElement instanceof BoundaryExtractor) {
-            return CreateBoundaryExtractor.createBoundaryExtractorTestElement((BoundaryExtractorData) extractor,
+            createExtractorInterface= new CreateBoundaryExtractor();
+            return createExtractorInterface.createExtractorTestElement(extractor,
                     testElement);
         }
         return null;
