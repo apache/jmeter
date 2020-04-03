@@ -51,6 +51,7 @@
     <trusted-key id='33cd6733af5ec452' group='commons-logging' />
     <trusted-key id='a41f13c999945293' group='commons-logging' />
     <trusted-key id='7a8860944fad5f62' group='commons-net' />
+    <trusted-key id='6449005f96bc97a3' group='de.undercouch' />
     <trusted-key id='3449ec3ac2efe8aa' group='dnsjava' />
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
@@ -87,6 +88,8 @@
     <trusted-key id='cbaebe39a46c4ca1' group='org.apache.geronimo.specs' />
     <trusted-key id='ecdfea3cb4493b94' group='org.apache.geronimo.specs' />
     <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
+    <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents.client5' />
+    <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents.core5' />
     <trusted-key id='3595395eb3d8e1ba' group='org.apache.logging.log4j' />
     <trusted-key id='c7bf26d0bb617866' group='org.apache.maven' />
     <trusted-key id='31474e5e7c6b7034' group='org.apache.mina' />
@@ -109,6 +112,7 @@
     <trusted-key id='0e91c2de43b72bb1' group='org.ec4j.core' />
     <trusted-key id='c7bf26d0bb617866' group='org.eclipse.aether' />
     <trusted-key id='2d0e1fb8fe4b68b4' group='org.eclipse.jetty' />
+    <trusted-key id='873a8e86b4372146' group='org.eclipse.jetty' />
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
     <trusted-key id='694db6f419c8d1fd' group='org.exparity' />
     <trusted-key id='8759d8f56d022006' group='org.exparity' />

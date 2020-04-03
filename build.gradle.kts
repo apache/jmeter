@@ -380,6 +380,19 @@ allprojects {
             }
         }
     }
+    plugins.withId("org.jetbrains.kotlin.jvm") {
+        if (!skipAutostyle) {
+            autostyle {
+                kotlin {
+                    license()
+                    ktlint()
+                    trimTrailingWhitespace()
+                    indentWithSpaces(4)
+                    endWithNewline()
+                }
+            }
+        }
+    }
 
     plugins.withType<JacocoPlugin> {
         the<JacocoPluginExtension>().toolVersion = "jacoco".v

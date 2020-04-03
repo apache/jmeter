@@ -57,6 +57,8 @@ project("http") {
             because("ParseCurlCommandAction uses new MimetypesFileTypeMap()")
         }
 
+        implementation("org.eclipse.jetty:jetty-client:9.4.21.v20190926")
+
         implementation("com.github.ben-manes.caffeine:caffeine")
         implementation("commons-io:commons-io") {
             because("IOUtils")
@@ -67,6 +69,7 @@ project("http") {
         implementation("org.apache.commons:commons-text") {
             because("StringEscapeUtils")
         }
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
         implementation("org.jodd:jodd-lagarto")
         implementation("org.jsoup:jsoup")
         implementation("oro:oro")
@@ -83,6 +86,7 @@ project("http") {
         implementation("dnsjava:dnsjava")
         implementation("org.apache.httpcomponents:httpmime")
         implementation("org.apache.httpcomponents:httpcore")
+        implementation("org.apache.httpcomponents.client5:httpclient5")
         implementation("org.brotli:dec")
         testImplementation(testFixtures(project(":src:testkit-wiremock")))
         testImplementation("com.github.tomakehurst:wiremock-jre8")

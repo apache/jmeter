@@ -57,6 +57,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private final boolean showDelayedStart;
 
     private JCheckBox delayedStart;
+    private JCheckBox multitask = new JCheckBox("Enable thread multi-tasking");
 
     private final JCheckBox scheduler = new JCheckBox(JMeterUtils.getResString("scheduler"));
 
@@ -108,6 +109,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         tg.setProperty(ThreadGroup.DURATION, duration.getText());
         tg.setProperty(ThreadGroup.DELAY, delay.getText());
         tg.setProperty(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION,sameUserBox.isSelected());
+        tg.setProperty(ThreadGroup.MULTITASK, multitask.isSelected());
     }
 
     @Override
@@ -119,6 +121,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         if (showDelayedStart) {
             delayedStart.setSelected(tg.getPropertyAsBoolean(ThreadGroup.DELAYED_START));
         }
+        multitask.setSelected(tg.getPropertyAsBoolean(ThreadGroup.MULTITASK));
         scheduler.setSelected(tg.getPropertyAsBoolean(ThreadGroup.SCHEDULER));
 
         toggleSchedulerFields(scheduler.isSelected());
@@ -205,6 +208,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         if (showDelayedStart) {
             delayedStart = new JCheckBox(JMeterUtils.getResString("delayed_start")); // $NON-NLS-1$
             threadPropsPanel.add(delayedStart, "span 2");
+            threadPropsPanel.add(multitask, "span 2");
         }
         scheduler.addItemListener(this);
 

@@ -170,7 +170,7 @@ The output artifacts (jars, reports) are placed to `build` folders.
 For instance, binary artifacts can be found under `src/dist/build/distributions`.
 
 The following command would compile the application and enable you to run `jmeter` from the `bin`
-directory. Note: it completely refreshes `lib/` contents, so it would remove clustom plugins
+directory. Note: it completely refreshes `lib/` contents, so it would remove custom plugins
 should you have them installed.
 
 ```sh

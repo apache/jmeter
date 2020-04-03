@@ -87,6 +87,7 @@ dependencies {
     }
     implementation("org.apache.xmlgraphics:xmlgraphics-commons")
     implementation("org.freemarker:freemarker")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jodd:jodd-core")
     implementation("org.jodd:jodd-props")
     implementation("org.mozilla:rhino")
