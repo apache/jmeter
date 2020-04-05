@@ -102,6 +102,7 @@ For instance: log viewer, JSR223 code editor were not previously scaled with zoo
 Undo is implemented on a field level basis (each fields has its own history), and the history is
 invalidated when tree selection changes.</p>
 
+<p>Mark the currently selected language in the options menu</p>
 <!--
 <ch_title>Functions</ch_title>
 -->
