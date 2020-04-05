@@ -358,13 +358,19 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
          * Create a language entry from the locale name.
          *
          * @param locale - must also be a valid resource name
+         * @param languageGroup - group for radio items
+         * @param selected - if the menu item is selected
          */
-        void addLang(String locale){
+        void addLang(String locale, ButtonGroup languageGroup, boolean selected) {
             String localeString = JMeterUtils.getLocaleString(locale);
-            JMenuItem language = new JMenuItem(localeString);
+            JMenuItem language = new JRadioButtonMenuItem(localeString);
             language.addActionListener(actionRouter);
             language.setActionCommand(ActionNames.CHANGE_LANGUAGE);
             language.setName(locale); // This is used by the ChangeLanguage class to define the Locale
+            if (selected) {
+                language.setSelected(true);
+            }
+            languageGroup.add(language);
             languageMenu.add(language);
         }
    }
@@ -409,8 +415,16 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
          * Also, need to ensure that the names are valid resource entries too.
          */
 
+        Locale currentLocale = JMeterUtils.getLocale();
+        String selectedLocale = currentLocale == null ? "" : currentLocale.toString();
+        if (selectedLocale.equals(JMeterUtils.getLocaleString(selectedLocale))) {
+            // E.g. if the current locale has no localized name, then it is unknown to JMeter,
+            // so it can't appear in the menu. In that case, we assume English locale is used.
+            selectedLocale = Locale.ENGLISH.toString();
+        }
+        ButtonGroup languageGroup = new ButtonGroup();
         for (String lang : getLanguages()) {
-            langMenu.addLang(lang);
+            langMenu.addLang(lang, languageGroup, selectedLocale.equals(lang));
         }
         return languageMenu;
     }
