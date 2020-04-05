@@ -17,6 +17,7 @@
 
 package org.apache.jorphan.gui;
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Collections;
@@ -35,8 +36,6 @@ import org.apache.jorphan.gui.ui.TextFieldUIWithUndo;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import sun.font.FontDesignMetrics;
 
 /**
  * Configures JMeter-specific properties as {@link UIDefaults} properties for on-the-fly LaF updates.
@@ -175,7 +174,13 @@ public class JMeterUIDefaults {
         }
         defaults.put(rowHeight, (UIDefaults.LazyValue) d -> {
             Font f = d.getFont(font);
-            float height = f == null ? 16 * scale : FontDesignMetrics.getMetrics(f).getHeight();
+            float height;
+            if (f == null) {
+                height = 16 * scale;
+            } else {
+                Canvas c = new Canvas();
+                height = c.getFontMetrics(f).getHeight();
+            }
             // Set line height to be 1.3 of the font size. The number of completely made up,
             // 1.2 seems to be the minimal usable scale. 1.3 looks good.
             int round = (int) Math.floor(height * 1.3f);
