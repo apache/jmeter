@@ -47,6 +47,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.LoadRecentProject;
+import org.apache.jmeter.gui.action.LogLevelCommand;
 import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.plugin.MenuCreator.MENU_LOCATION;
@@ -56,9 +57,9 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.logging.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private static final long serialVersionUID = 241L;
@@ -300,12 +301,21 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenu menuLoggerLevel = makeMenuRes("menu_logger_level"); //$NON-NLS-1$
         JMenuItem menuItem;
         String levelString;
-        for (Level level : Level.values()) {
+        // Note: slf4j does not provide a way to set log level, so we use log4j levels here
+        Level currentLevel = LogLevelCommand.getRootLevel();
+        ButtonGroup loggerLevels = new ButtonGroup();
+        Level[] logLevels = Level.values();
+        Arrays.sort(logLevels);
+        for (Level level : logLevels) {
             levelString = level.toString();
-            menuItem = new JMenuItem(levelString);
+            menuItem = new JRadioButtonMenuItem(levelString);
             menuItem.addActionListener(ActionRouter.getInstance());
             menuItem.setActionCommand(ActionNames.LOG_LEVEL_PREFIX + levelString);
             menuItem.setToolTipText(levelString); // show the classname to the user
+            if (level.equals(currentLevel)) {
+                menuItem.setSelected(true);
+            }
+            loggerLevels.add(menuItem);
             menuLoggerLevel.add(menuItem);
         }
         optionsMenu.add(menuLoggerLevel);
