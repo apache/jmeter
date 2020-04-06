@@ -32,7 +32,6 @@ class DNSCacheManagerSpec extends Specification {
 
     private static final boolean localDNSResolverOK = {
         try {
-            println "localDNSResolverOK"
             new DNSCacheManager().resolve("apache.org")
             return true
         } catch (UnknownHostException uhe) {
