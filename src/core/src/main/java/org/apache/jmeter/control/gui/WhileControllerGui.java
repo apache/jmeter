@@ -125,7 +125,7 @@ public class WhileControllerGui extends AbstractControllerGui {
      * @return a GUI panel containing the condition components
      */
     private JPanel createConditionPanel() {
-        JPanel conditionPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
+        JPanel conditionPanel = new JPanel(new MigLayout("fillx, wrap 2, insets 0", "[][fill,grow]"));
 
         // Condition
         // This means exit if last sample failed
