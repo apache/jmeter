@@ -190,7 +190,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
      * @return a GUI panel containing the loop count components
      */
     private JPanel createLoopCountPanel() {
-        JPanel loopPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
+        JPanel loopPanel = new JPanel(new MigLayout("fillx, wrap 2, insets 0", "[][fill,grow]"));
 
         // TEXT FIELD
         inputVal = new JTextField("", 5); // $NON-NLS-1$

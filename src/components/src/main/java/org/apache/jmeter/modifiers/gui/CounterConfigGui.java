@@ -124,7 +124,7 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
         setBorder(makeBorder());
         setLayout(new BorderLayout());
 
-        JPanel counterPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
+        JPanel counterPanel = new JPanel(new MigLayout("fillx, wrap 2, insets 0", "[][fill,grow]"));
 
         startField = new JTextField(20);
         counterPanel.add(JMeterUtils.labelFor(startField, "start_value"));
