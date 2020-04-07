@@ -65,6 +65,13 @@ public class TextAreaUIWithUndo {
             component.addPropertyChangeListener("UI",
                     evt -> component.setBorder(UIManager.getBorder(JMeterUIDefaults.TEXTAREA_BORDER)));
         }
-        return UIFactory.create(BACKUP_UI_CLASS);
+        // Temporary restore the proper UI class
+        UIManager.put(UI_CLASS, UIManager.get(BACKUP_UI_CLASS));
+        try {
+            return UIManager.getUI(component);
+        } finally {
+            // Add our class back so we handle the next created editor
+            UIManager.put(UI_CLASS, TextAreaUIWithUndo.class.getName());
+        }
     }
 }
