@@ -19,6 +19,7 @@ package org.apache.jorphan.gui.ui;
 
 import javax.swing.JComponent;
 import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.JTextComponent;
 
@@ -57,6 +58,13 @@ public class TextFieldUIWithUndo {
     @SuppressWarnings("unused")
     public static ComponentUI createUI(JComponent c) {
         TextComponentUI.INSTANCE.installUndo((JTextComponent) c);
-        return UIFactory.create(BACKUP_UI_CLASS);
+        // Temporary restore the proper UI class
+        UIManager.put(UI_CLASS, UIManager.get(BACKUP_UI_CLASS));
+        try {
+            return UIManager.getUI(c);
+        } finally {
+            // Add our class back so we handle the next created editor
+            UIManager.put(UI_CLASS, TextFieldUIWithUndo.class.getName());
+        }
     }
 }
