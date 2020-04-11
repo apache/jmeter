@@ -39,6 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @deprecated since 4.0 Non Test Elements are now children of Test Plan
  */
 @Deprecated
+@TestElementMetadata(labelResource = "workbench_title", actionGroups = MenuFactory.NON_TEST_ELEMENTS)
 public class WorkBenchGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
     // This check-box defines whether to save  WorkBench content or not
