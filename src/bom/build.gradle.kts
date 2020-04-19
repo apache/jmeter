@@ -66,6 +66,7 @@ dependencies {
         apiv("com.github.ben-manes.caffeine:caffeine")
         apiv("com.github.tomakehurst:wiremock-jre8")
         apiv("com.github.weisj:darklaf-core", "darklaf")
+        apiv("com.github.weisj:darklaf-theme", "darklaf")
         apiv("com.github.weisj:darklaf-property-loader", "darklaf")
         apiv("com.helger:ph-commons")
         apiv("com.helger:ph-css")

@@ -67,6 +67,7 @@ dependencies {
     implementation("com.formdev:svgSalamander")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("com.github.weisj:darklaf-core")
+    implementation("com.github.weisj:darklaf-theme")
     implementation("com.github.weisj:darklaf-property-loader")
     implementation("com.miglayout:miglayout-swing")
     implementation("commons-codec:commons-codec") {
