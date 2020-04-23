@@ -170,6 +170,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
                 if (isUseSSL() || isUseStartTLS()) {
                     props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.class"), TRUST_ALL_SOCKET_FACTORY);  // $NON-NLS-1$
                     props.setProperty(mailProp(serverProtocol, "ssl.socketFactory.fallback"), FALSE);  // $NON-NLS-1$
+                    props.setProperty(mailProp(serverProtocol, "ssl.enable"), "true");
                 }
             } else if (isUseLocalTrustStore()){
                 File truststore = new File(getTrustStoreToUse());
