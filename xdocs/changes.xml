@@ -178,6 +178,7 @@ invalidated when tree selection changes.</p>
   <li><bug>64148</bug>Use gray icons for disabled elements in the tree, display subtree as gray</li>
   <li><bug>64198</bug>Allow spaces in <code>${...}</code> expressions around functions.</li>
   <li><bug>64276</bug>Search popup: Improve UX</li>
+  <li><pr>573</pr>Improve the startup time: skip test plan UI initialization</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
