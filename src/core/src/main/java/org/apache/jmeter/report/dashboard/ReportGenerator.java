@@ -355,6 +355,9 @@ public class ReportGenerator {
                     .excludesControllers() ? excludeControllerFilter
                     : nameFilter;
             entryPoint.addSampleConsumer(graph);
+        } catch (ClassNotFoundException ex) {
+            log.warn("Unable to add class:{} as consumer for HTML report generation, "
+                    + "check class name or that the plugin that contains it is on classpath", className, ex);
         } catch (ClassCastException | IllegalArgumentException |  ReflectiveOperationException | SecurityException ex) {
             String error = String.format(INVALID_CLASS_FMT, className);
             throw new GenerationException(error, ex);
