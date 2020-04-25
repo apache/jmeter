@@ -75,6 +75,10 @@ Added <a href="https://github.com/weisJ/darklaf">Darklaf</a> look and feel that 
 <figure width="224" height="247" image="changes/5.3/tree_theme_darcula.png">JMeter tree with Darklaf Darcula theme</figure>
 <figure width="223" height="246" image="changes/5.3/tree_theme_intellij.png">JMeter tree with Darklaf IntelliJ theme</figure>
 
+<p>New look and feel themes. Light: IntellJ, Solarized Light, HighContrast Light.
+    Dark: OneDark, Solarized Dark, HighContrast Light.
+</p>
+
 <p>When an element in tree is disabled, all its descendants are shown in gray.
 For instance, <code>While Contoller</code> is disabled in the following tree, so its children
 are gray. It is purely a UI change, and the behavior is not altered.

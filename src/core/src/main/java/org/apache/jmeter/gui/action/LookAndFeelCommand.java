@@ -41,7 +41,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.weisj.darklaf.LafManager;
 import com.github.weisj.darklaf.theme.DarculaTheme;
+import com.github.weisj.darklaf.theme.HighContrastDarkTheme;
+import com.github.weisj.darklaf.theme.HighContrastLightTheme;
 import com.github.weisj.darklaf.theme.IntelliJTheme;
+import com.github.weisj.darklaf.theme.OneDarkTheme;
 import com.github.weisj.darklaf.theme.SolarizedDarkTheme;
 import com.github.weisj.darklaf.theme.SolarizedLightTheme;
 import com.github.weisj.darklaf.theme.Theme;
@@ -97,7 +100,12 @@ public class LookAndFeelCommand extends AbstractAction {
     }
 
     static {
-        System.setProperty("darklaf.decorations", "false");
+        if (System.getProperty("darklaf.decorations") == null) {
+            System.setProperty("darklaf.decorations", "false");
+        }
+        if (System.getProperty("darklaf.allowNativeCode") == null) {
+            System.setProperty("darklaf.allowNativeCode", "false");
+        }
         UIManager.installLookAndFeel(JMeterMenuBar.DARKLAF_LAF, JMeterMenuBar.DARKLAF_LAF_CLASS);
 
         List<MenuItem> items = new ArrayList<>();
@@ -108,8 +116,11 @@ public class LookAndFeelCommand extends AbstractAction {
             }
             items.add(MenuItem.ofDarklafTheme(DarculaTheme.class));
             items.add(MenuItem.ofDarklafTheme(IntelliJTheme.class));
+            items.add(MenuItem.ofDarklafTheme(OneDarkTheme.class));
             items.add(MenuItem.ofDarklafTheme(SolarizedDarkTheme.class));
             items.add(MenuItem.ofDarklafTheme(SolarizedLightTheme.class));
+            items.add(MenuItem.ofDarklafTheme(HighContrastDarkTheme.class));
+            items.add(MenuItem.ofDarklafTheme(HighContrastLightTheme.class));
         }
         items.sort(Comparator.comparing(MenuItem::getTitle));
         for (MenuItem item : items) {
