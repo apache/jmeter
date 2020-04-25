@@ -76,7 +76,7 @@ Added <a href="https://github.com/weisJ/darklaf">Darklaf</a> look and feel that 
 <figure width="223" height="246" image="changes/5.3/tree_theme_intellij.png">JMeter tree with Darklaf IntelliJ theme</figure>
 
 <p>New look and feel themes. Light: IntellJ, Solarized Light, HighContrast Light.
-    Dark: OneDark, Solarized Dark, HighContrast Light.
+    Dark: OneDark, Solarized Dark, HighContrast Dark.
 </p>
 
 <p>When an element in tree is disabled, all its descendants are shown in gray.
