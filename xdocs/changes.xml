@@ -168,6 +168,7 @@ invalidated when tree selection changes.</p>
 
 <h3>Report / Dashboard</h3>
 <ul>
+  <li><bug>64378</bug>HTML report generation should not fail if a plugin has registered a graph and is not more present in classpath, issue a warning instead</li>
 </ul>
 
 <h3>General</h3>
