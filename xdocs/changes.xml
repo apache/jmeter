@@ -168,6 +168,7 @@ invalidated when tree selection changes.</p>
 
 <h3>Report / Dashboard</h3>
 <ul>
+  <li><bug>64380</bug>Add a 'Median' field to the dashboard and make the response time percentile fields support floating-point numbers. Contributed by Keith Mo(https://github.com/keithmork)</li>
   <li><bug>64378</bug>HTML report generation should not fail if a plugin has registered a graph and is not more present in classpath, issue a warning instead</li>
 </ul>
 
@@ -290,6 +291,7 @@ invalidated when tree selection changes.</p>
   <li>Liu XP (liu_xp2003 at sina.com)</li>
   <li>anant-93 (https://github.com/anant-93)</li>
   <li>Ori Marko (orimarko at gmail.com)</li>
+  <li>Keith Mo(https://github.com/keithmork)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
