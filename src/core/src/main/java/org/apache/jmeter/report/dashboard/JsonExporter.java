@@ -125,12 +125,13 @@ public class JsonExporter extends AbstractDataExporter {
         statistic.setMeanResTime((Double) ((ValueResultData)listResultData.get(4)).getValue());
         statistic.setMinResTime((Long) ((ValueResultData)listResultData.get(5)).getValue());
         statistic.setMaxResTime((Long) ((ValueResultData)listResultData.get(6)).getValue());
-        statistic.setPct1ResTime((Double) ((ValueResultData)listResultData.get(7)).getValue());
-        statistic.setPct2ResTime((Double) ((ValueResultData)listResultData.get(8)).getValue());
-        statistic.setPct3ResTime((Double) ((ValueResultData)listResultData.get(9)).getValue());
-        statistic.setThroughput((Double) ((ValueResultData)listResultData.get(10)).getValue());
-        statistic.setReceivedKBytesPerSec((Double) ((ValueResultData)listResultData.get(11)).getValue());
-        statistic.setSentKBytesPerSec((Double) ((ValueResultData)listResultData.get(12)).getValue());
+        statistic.setMedianResTime((Double) ((ValueResultData)listResultData.get(7)).getValue());
+        statistic.setPct1ResTime((Double) ((ValueResultData)listResultData.get(8)).getValue());
+        statistic.setPct2ResTime((Double) ((ValueResultData)listResultData.get(9)).getValue());
+        statistic.setPct3ResTime((Double) ((ValueResultData)listResultData.get(10)).getValue());
+        statistic.setThroughput((Double) ((ValueResultData)listResultData.get(11)).getValue());
+        statistic.setReceivedKBytesPerSec((Double) ((ValueResultData)listResultData.get(12)).getValue());
+        statistic.setSentKBytesPerSec((Double) ((ValueResultData)listResultData.get(13)).getValue());
         statistics.put(statistic.getTransaction(), statistic);
     }
 }

@@ -28,6 +28,7 @@ public class SamplingStatistic {
     private long errorCount;
     private float errorPct;
     private double meanResTime;
+    private double medianResTime;
     private double minResTime;
     private double maxResTime;
     private double pct1ResTime;
@@ -109,6 +110,20 @@ public class SamplingStatistic {
      */
     public void setMeanResTime(double meanResTime) {
         this.meanResTime = meanResTime;
+    }
+
+    /**
+     * @return medianResTime
+     */
+    public double getMedianResTime() {
+        return medianResTime;
+    }
+
+    /**
+     * @param medianResTime the meanResTime to set
+     */
+    public void setMedianResTime(double medianResTime) {
+        this.medianResTime = medianResTime;
     }
 
     /**
