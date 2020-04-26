@@ -552,7 +552,7 @@ ul.tree li:last-child {
 <xsl:template match="PreciseThroughputTimer">
 <li>
     <xsl:call-template name="header"/>
-    (throughput:<xsl:value-of select='stringProp[@name="throughput"]'/> samples per 
+    (throughput:<xsl:value-of select='stringProp[@name="throughput"]'/> samples per
     <xsl:value-of select='intProp[@name="throughputPeriod"]'/>sec for test duration:<xsl:value-of select='longProp[@name="duration"]'/>)
     <xsl:call-template name="comment"/>
 </li>
