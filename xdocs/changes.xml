@@ -245,6 +245,7 @@ invalidated when tree selection changes.</p>
     <li><bug>64142</bug>Presence of DebugPostProcessor in Test plan breaks ActiveThread Over time in report due to missing information</li>
     <li><bug>64196</bug>Recurse into sub samplers more deeply when checking assertions</li>
     <li><bug>64196</bug>Recurse into sampleResults for <code>AbstractScopedTestElement#getSampleList</code></li>
+    <li><bug>64381</bug>PreciseThroughputTimer: On termination, log message contains negative value</li>
 </ul>
 
 <h3>Functions</h3>
