@@ -17,11 +17,14 @@
 
 package org.apache.jmeter.report.processor.graph.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jmeter.report.processor.AggregatorFactory;
 import org.apache.jmeter.report.processor.MaxAggregatorFactory;
+import org.apache.jmeter.report.processor.MedianAggregatorFactory;
 import org.apache.jmeter.report.processor.MinAggregatorFactory;
 import org.apache.jmeter.report.processor.PercentileAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
@@ -40,14 +43,14 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ResponseTimePercentilesOverTimeGraphConsumer
         extends AbstractOverTimeGraphConsumer {
-    private static final int PERCENTILE_INDEX1 = JMeterUtils.getPropDefault(
-            "aggregate_rpt_pct1", 90);
-    private static final int PERCENTILE_INDEX2 = JMeterUtils.getPropDefault(
-            "aggregate_rpt_pct2", 95);
-    private static final int PERCENTILE_INDEX3 = JMeterUtils.getPropDefault(
-            "aggregate_rpt_pct3", 99);
+    private static final String PCT1_LABEL = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct1", "90");
+    private static final String PCT2_LABEL = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct2", "95");
+    private static final String PCT3_LABEL = JMeterUtils.getPropDefault(
+            "aggregate_rpt_pct3", "99");
 
-    private static final String PERCENTILE_FORMAT = "%dth percentile";
+    private static final String PERCENTILE_FORMAT = "%sth percentile";
 
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
@@ -62,18 +65,19 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
 
         groupInfos.put("aggregate_report_min", createMinGroupInfo());
         groupInfos.put("aggregate_report_max", createMaxGroupInfo());
+        groupInfos.put("aggregate_report_median", createMedianGroupInfo());
         groupInfos.put("aggregate_rpt_pct1",
-                createPercentileGroupInfo("aggregate_rpt_pct1", PERCENTILE_INDEX1));
+                createPercentileGroupInfo("aggregate_rpt_pct1", PCT1_LABEL));
         groupInfos.put("aggregate_rpt_pct2",
-                createPercentileGroupInfo("aggregate_rpt_pct2", PERCENTILE_INDEX2));
+                createPercentileGroupInfo("aggregate_rpt_pct2", PCT2_LABEL));
         groupInfos.put("aggregate_rpt_pct3",
-                createPercentileGroupInfo("aggregate_rpt_pct3", PERCENTILE_INDEX3));
+                createPercentileGroupInfo("aggregate_rpt_pct3", PCT3_LABEL));
 
         return groupInfos;
     }
 
-    private String formatPercentile(int percentile) {
-        return String.format(PERCENTILE_FORMAT, percentile);
+    private String formatPercentile(String percentileLabel) {
+        return String.format(PERCENTILE_FORMAT, percentileLabel);
     }
 
     private GroupInfo createMinGroupInfo() {
@@ -88,10 +92,19 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
         return createGroupInfo(new MaxAggregatorFactory(), seriesSelector);
     }
 
-    private GroupInfo createPercentileGroupInfo(String propKey, int defaultValue) {
-        String seriesName = formatPercentile(defaultValue);
+    private GroupInfo createMedianGroupInfo() {
+        StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
+        seriesSelector.setSeriesName("Median");
+        return createGroupInfo(new MedianAggregatorFactory(), seriesSelector);
+    }
 
-        int property = JMeterUtils.getPropDefault(propKey, defaultValue);
+    private GroupInfo createPercentileGroupInfo(String propKey, String label) {
+        String seriesName = formatPercentile(label);
+        double defaultValue = new BigDecimal(label)
+                .divide(new BigDecimal("100"), 6, RoundingMode.CEILING)
+                .doubleValue();
+
+        double property = JMeterUtils.getPropDefault(propKey, defaultValue);
         PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
         factory.setPercentileIndex(property);
         StaticSeriesSelector seriesSelector = new StaticSeriesSelector();

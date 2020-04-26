@@ -33,6 +33,7 @@ public class StatisticsSummaryData {
     private long errors = 0L;
     private long total = 0L;
     private final MeanAggregator mean;
+    private final PercentileAggregator median;
     private final PercentileAggregator percentile1;
     private final PercentileAggregator percentile2;
     private final PercentileAggregator percentile3;
@@ -191,12 +192,13 @@ public class StatisticsSummaryData {
      * @param percentileIndex2 value of second percentile
      * @param percentileIndex3 value of third percentile
      */
-    public StatisticsSummaryData(long percentileIndex1, long percentileIndex2,
-            long percentileIndex3) {
+    public StatisticsSummaryData(double percentileIndex1, double percentileIndex2,
+            double percentileIndex3) {
         percentile1 = new PercentileAggregator(percentileIndex1);
         percentile2 = new PercentileAggregator(percentileIndex2);
         percentile3 = new PercentileAggregator(percentileIndex3);
         mean = new MeanAggregator();
+        median = new PercentileAggregator(50);
     }
 
     /**
@@ -257,6 +259,13 @@ public class StatisticsSummaryData {
      */
     public MeanAggregator getMean() {
         return mean;
+    }
+
+    /**
+     * @return the median response times
+     */
+    public PercentileAggregator getMedian() {
+        return median;
     }
 
     /**
