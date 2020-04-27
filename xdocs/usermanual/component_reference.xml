@@ -1128,7 +1128,7 @@ To benefit from this feature:
 <ul>
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
     <li>Or Use Script Text and check <code>Cache compiled script if available</code> property.
-    <note>When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
+    <note>When using this feature, ensure your script code does not use JMeter variables or JMeter function calls directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
     <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     <note>When using Groovy as scripting language and not checking <code>Cache compiled script if available</code> (while caching is recommended), you should set this JVM Property <code>-Dgroovy.use.classvalue=true</code>
         due to a Groovy Memory leak as of version 2.4.6, see:
