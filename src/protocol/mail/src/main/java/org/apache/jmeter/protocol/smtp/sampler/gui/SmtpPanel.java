@@ -787,7 +787,6 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.gridy = 3;
         panelMessageSettings.add(jlMessage, gridBagConstraints);
 
-        taMessage.setBorder(BorderFactory.createBevelBorder(1));
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
