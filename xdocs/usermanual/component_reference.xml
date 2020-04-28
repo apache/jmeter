@@ -633,7 +633,7 @@ The fields allow variables to be used, so the values of these can readily be see
 </p>
 </description>
 
-<note>If the method <code>teardownTest</code> is not overridden by a subclass of <code><a href="../api/org/apache/jmeter/protocol/java/sampler/AbstractJavaSamplerClient.html">AbstractJavaSamplerClient</a></code>, its <code>teardownTest</code> method will not be called.
+<note>If the method <code>teardownTest</code> is not overridden by a subclass of <code><apilink href="org/apache/jmeter/protocol/java/sampler/AbstractJavaSamplerClient.html">AbstractJavaSamplerClient</apilink></code>, its <code>teardownTest</code> method will not be called.
 This reduces JMeter memory requirements.
 This will not have any impact on existing Test plans.
 </note>
@@ -1057,12 +1057,12 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
         <li><code>FileName</code> - the file name, if any</li>
         <li><code>Parameters</code> - text from the Parameters field</li>
         <li><code>bsh.args</code> - the parameters, split as described above</li>
-        <li><code>SampleResult</code> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></a></li>
+        <li><code>SampleResult</code> - pointer to the current <apilink href="org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></apilink></li>
             <li><code>ResponseCode</code> defaults to <code>200</code></li>
             <li><code>ResponseMessage</code> defaults to "<code>OK</code>"</li>
             <li><code>IsSuccess</code> defaults to <code>true</code></li>
-            <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
-            <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g.
+            <li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink></li>
+            <li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>  - e.g.
                <source>vars.get("VAR1");
 vars.put("VAR2","value");
 vars.remove("VAR3");
@@ -1072,7 +1072,7 @@ vars.putObject("OBJ1",new Object());</source></li>
 props.put("PROP1","1234");</source></li>
         </ul>
         <p>When the script completes, control is returned to the Sampler, and it copies the contents
-            of the following script variables into the corresponding variables in the <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></a>:</p>
+            of the following script variables into the corresponding variables in the <apilink href="org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></apilink>:</p>
             <ul>
             <li><code>ResponseCode</code> - for example <code>200</code></li>
             <li><code>ResponseMessage</code> - for example "<code>OK</code>"</li>
@@ -1107,7 +1107,7 @@ The following script will show the values of all the variables in the <code>Resp
 return getVariables();
 </source>
 <p>
-For details on the methods available for the various classes (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html"><code>JMeterVariables</code></a>, <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></a> etc.) please check the Javadoc or the source code.
+For details on the methods available for the various classes (<apilink href="org/apache/jmeter/threads/JMeterVariables.html"><code>JMeterVariables</code></apilink>, <apilink href="org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></apilink> etc.) please check the Javadoc or the source code.
 Beware however that misuse of any methods can cause subtle faults that may be difficult to find.
 </p>
 </component>
@@ -1117,7 +1117,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 <p>
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample or some computation required to create/update variables.
 <note>
-If you don't want to generate a <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> when this sampler is run, call the following method:
+If you don't want to generate a <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> when this sampler is run, call the following method:
 <source>SampleResult.setIgnore();</source>
 </note>
 </p>
@@ -1183,10 +1183,10 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 <li><code>FileName</code> - the file name, if any</li>
 <li><code>Parameters</code> - text from the Parameters field</li>
 <li><code>args</code> - the parameters, split as described above</li>
-<li><code>SampleResult</code> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - pointer to current Sampler</li>
-<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
-<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g.
+<li><code>SampleResult</code> - pointer to the current <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink></li>
+<li><code>sampler</code> - (<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>) - pointer to current Sampler</li>
+<li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink></li>
+<li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>  - e.g.
   <source>vars.get("VAR1");
 vars.put("VAR2","value");
 vars.remove("VAR3");
@@ -1197,7 +1197,7 @@ props.put("PROP1","1234");</source></li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
 <p>
-The <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> ResponseData is set from the return value of the script.
+The <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> ResponseData is set from the return value of the script.
 If the script returns <code>null</code>, it can set the response directly, by using the method
 <code>SampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
 The data type defaults to "<code>text</code>", but can be set to binary by using the method
@@ -1210,7 +1210,7 @@ methods in the SampleResult. For example, the script has access to the methods
 </p>
 <p>
 Unlike the BeanShell Sampler, the JSR223 Sampler does not set the <code>ResponseCode</code>, <code>ResponseMessage</code> and sample status via script variables.
-Currently the only way to changes these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
+Currently the only way to changes these is via the <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> methods:
 </p>
 <ul>
 <li><code>SampleResult.setSuccessful(true/false)</code></li>
@@ -1892,7 +1892,7 @@ If the timeout expires before the command finishes, JMeter will attempt to kill 
 <complink name="MongoDB Source Config"/> Configuration element
 </p>
 <note>This Element currently uses <code>com.mongodb.DB#eval</code> which takes a global write lock causing a performance impact on the database, see <a href="http://docs.mongodb.org/manual/reference/method/db.eval/"><code>db.eval()</code></a>.
-So it is better to avoid using this element for load testing and use JSR223+Groovy scripting using <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a> instead.
+So it is better to avoid using this element for load testing and use JSR223+Groovy scripting using <apilink href="org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</apilink> instead.
 MongoDB Script is more suitable for functional testing or test setup (setup/teardown threads)</note>
 </description>
 
@@ -3151,14 +3151,14 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+<li><code>ctx</code> - (<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</li>
+<li><code>vars</code> - (<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 </source></li>
 <li><code>props</code> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>sampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
-<li><code>sampleEvent</code> (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) gives access to the current sample event</li>
+<li><code>sampleResult</code>, <code>prev</code> - (<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the previous <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink></li>
+<li><code>sampleEvent</code> (<apilink href="org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</apilink>) gives access to the current sample event</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <code>beanshell.listener.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
@@ -3287,15 +3287,15 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 <dt><code>FileName</code></dt><dd>the script file name (if any)</dd>
 <dt><code>Parameters</code></dt><dd>the parameters (as a String)</dd>
 <dt><code>args</code></dt><dd>the parameters as a String array (split on whitespace)</dd>
-<dt><code>ctx</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</dd>
-<dt><code>vars</code></dt><dd>(<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+<dt><code>ctx</code></dt><dd>(<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</dd>
+<dt><code>vars</code></dt><dd>(<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</source></dd>
 <dt><code>props</code></dt><dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
-<dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
-<dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
-<dt><code>sampler</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
+<dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the SampleResult</dd>
+<dt><code>sampleEvent</code></dt><dd>(<apilink href="org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</apilink>) - gives access to the SampleEvent</dd>
+<dt><code>sampler</code></dt><dd>(<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>)- gives access to the last sampler</dd>
 <dt><code>OUT</code></dt><dd><code>System.out</code> - e.g. <code>OUT.println("message")</code></dd>
 </dl>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -3392,7 +3392,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
 
 <component name="Backend Listener" index="&sect-num;.3.21"  width="705" height="350" screenshot="backend_listener.png">
 <description>
-The backend listener is an Asynchronous listener that enables you to plug custom implementations of <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a>.
+The backend listener is an Asynchronous listener that enables you to plug custom implementations of <apilink href="org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</apilink>.
 By default, a Graphite implementation is provided.
 </description>
  <properties>
@@ -3403,7 +3403,7 @@ By default, a Graphite implementation is provided.
  </properties>
 
 
-     <p>The following parameters apply to the <a href="../api/org/apache/jmeter/visualizers/backend/graphite/GraphiteBackendListenerClient.html">GraphiteBackendListenerClient</a> implementation:</p>
+     <p>The following parameters apply to the <apilink href="org/apache/jmeter/visualizers/backend/graphite/GraphiteBackendListenerClient.html">GraphiteBackendListenerClient</apilink> implementation:</p>
 
     <properties>
         <property name="graphiteMetricsSender" required="Yes"><code>org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender</code> or <code>org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</code></property>
@@ -3426,7 +3426,7 @@ By default, a Graphite implementation is provided.
 
 
     <p>Since JMeter 3.2, a new implementation has been added that allows writing directly in InfluxDB with a custom schema, it is called <code>InfluxdbBackendListenerClient</code>
-      The following parameters apply to the <a href="../api/org/apache/jmeter/visualizers/backend/influxdb/InfluxdbBackendListenerClient.html">InfluxdbBackendListenerClient</a> implementation:</p>
+      The following parameters apply to the <apilink href="org/apache/jmeter/visualizers/backend/influxdb/InfluxdbBackendListenerClient.html">InfluxdbBackendListenerClient</apilink> implementation:</p>
 
     <properties>
         <property name="influxdbMetricsSender" required="Yes"><code>org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender</code></property>
@@ -4353,7 +4353,7 @@ GUI that they can use while developing new JMeter components.</p>
      The connection configuration name is used by the JDBC Sampler to select the appropriate
      connection.
      <p>
-     You can then access <code>com.mongodb.DB</code> object in Beanshell or JSR223 Test Elements through the element <a href="../api/org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</a>
+     You can then access <code>com.mongodb.DB</code> object in Beanshell or JSR223 Test Elements through the element <apilink href="org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</apilink>
      using this code</p>
 
     <source>
@@ -4699,7 +4699,7 @@ These are strings unless otherwise noted:
 </p>
 <ul>
   <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> Object. (e.g.) <code>log.warn("Message"[,Throwable])</code></li>
-  <li><code>SampleResult</code>, <code>prev</code> - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
+  <li><code>SampleResult</code>, <code>prev</code> - the <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> Object; read-write</li>
   <li><code>Response</code> - the response Object; read-write</li>
   <li><code>Failure</code> - boolean; read-write; used to set the Assertion status</li>
   <li><code>FailureMessage</code> - String; read-write; used to set the Assertion message</li>
@@ -4710,8 +4710,8 @@ These are strings unless otherwise noted:
   <li><code>RequestHeaders</code> - contains the HTTP headers sent to the server</li>
   <li><code>SampleLabel</code></li>
   <li><code>SamplerData</code> - data that was sent to the server</li>
-  <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a></li>
-  <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>  - e.g.
+  <li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink></li>
+  <li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>  - e.g.
     <source>vars.get("VAR1");
 vars.put("VAR2","value");
 vars.putObject("OBJ1",new Object());</source></li>
@@ -4861,8 +4861,8 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
 <li><code>Filename</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>
 <li><code>args</code> - the parameters as a String array (split on whitespace)</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables:
+<li><code>ctx</code> - (<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</li>
+<li><code>vars</code> - (<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables:
 <source>
 vars.get(key);
 vars.put(key,val);
@@ -4874,13 +4874,13 @@ vars.getObject("OBJ2");
 props.get("START.HMS");
 props.put("PROP1","1234");
 </source></li>
-<li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
+<li><code>SampleResult</code>, <code>prev</code> - (<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the previous SampleResult (if any)</li>
+<li><code>sampler</code> - (<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>) - gives access to the current sampler</li>
 <li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
-<li><code>AssertionResult</code> - (<a href="../api/org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</a>) - the assertion result</li>
+<li><code>AssertionResult</code> - (<apilink href="org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</apilink>) - the assertion result</li>
 </ul>
 <p>
-The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
+The script can check various aspects of the <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>.
 If an error is detected, the script should use <code>AssertionResult.setFailureMessage("message")</code> and <code>AssertionResult.setFailure(true)</code>.
 </p>
 <p>For further details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -5279,14 +5279,14 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>
+<li><code>ctx</code> - (<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</li>
+<li><code>vars</code> - (<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables: <source>
 vars.get(key);
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 </source></li>
 <li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <code>SampleResult</code> (if any)</li>
+<li><code>prev</code> - (<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the previous <code>SampleResult</code> (if any)</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <code>beanshell.timer.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
@@ -5324,12 +5324,12 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
 <p>Before invoking the script, some variables are set up in the script interpreter:</p>
 <ul>
 <li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+<li><code>ctx</code> - (<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</li>
+<li><code>vars</code> - (<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());</source></li>
 <li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - the current Sampler</li>
+<li><code>sampler</code> - (<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>) - the current Sampler</li>
 <li><code>Label</code> - the name of the Timer</li>
 <li><code>FileName</code> - the file name (if any)</li>
 <li><code>OUT</code> - System.out</li>
@@ -5518,13 +5518,13 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
 <li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+<li><code>ctx</code> - (<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</li>
+<li><code>vars</code> - (<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());</source></li>
 <li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
+<li><code>prev</code> - (<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the previous SampleResult (if any)</li>
+<li><code>sampler</code> - (<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>)- gives access to the current sampler</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <code>beanshell.preprocessor.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
@@ -5558,13 +5558,13 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
 <li><code>FileName</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>
 <li><code>args</code> - the parameters as a String array (split on whitespace)</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+<li><code>ctx</code> - (<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</li>
+<li><code>vars</code> - (<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</source></li>
 <li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
+<li><code>sampler</code> - (<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>)- gives access to the current sampler</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -6156,12 +6156,12 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 <p>The following BeanShell variables are set up for use by the script:</p>
 <ul>
 <li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+<li><code>ctx</code> - (<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</li>
+<li><code>vars</code> - (<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());</source></li>
 <li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult</li>
+<li><code>prev</code> - (<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the previous SampleResult</li>
 <li><code>data</code> - (byte [])- gives access to the current sample data</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
@@ -6199,14 +6199,14 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 <li><code>FileName</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>
 <li><code>args</code> - the parameters as a String array (split on whitespace)</li>
-<li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
-<li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
+<li><code>ctx</code> - (<apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink>) - gives access to the context</li>
+<li><code>vars</code> - (<apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</source></li>
 <li><code>props</code> - (JMeterProperties - class java.util.Properties) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
-<li><code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
-<li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the current sampler</li>
+<li><code>prev</code> - (<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the previous SampleResult (if any)</li>
+<li><code>sampler</code> - (<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>)- gives access to the current sampler</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>

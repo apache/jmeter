@@ -36,6 +36,7 @@
   <xsl:param name="imgdir" select="concat($relative-path, '/images')" />
   <xsl:param name="sshotdir" select="concat($imgdir, '/screenshots')" />
   <xsl:param name="cssdir" select="concat($relative-path, '/css')" />
+  <xsl:param name="apidir" select="concat($relative-path, '/api')" />
   <xsl:param name="jakarta-site" select="'https://jakarta.apache.org'" />
   <xsl:param name="year" select="'2019'" />
   <xsl:param name="max-img-width" select="'600'" />
@@ -477,6 +478,21 @@
       <xsl:apply-templates />
     </div>
     <div class="clear"></div>
+  </xsl:template>
+
+  <xsl:template name="apilink">
+    <xsl:param name="href" />
+    <a
+      href="{concat($apidir, '/', @href)}"
+    >
+      <xsl:value-of select="." />
+    </a>
+  </xsl:template>
+
+  <xsl:template match="apilink">
+    <xsl:call-template name="apilink">
+      <xsl:with-param name="name" select="@href" />
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="complink">
