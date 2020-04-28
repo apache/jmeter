@@ -237,7 +237,7 @@ will match any component that contains test in searchable elements of the compon
             <li>Follow this <a href="https://openjfx.io/openjfx-docs/" >documentation</a> to install Java FX for your OS and Java version. <br/>
             If you don't want to read it, here are the necessary steps:
                 <ul>
-                    <li>Go to <a href="Gluon website">https://gluonhq.com/products/javafx/</a> and download the runtime for your Java version and OS</li>
+                    <li>Go to <a href="https://gluonhq.com/products/javafx/">Gluon website</a> and download the runtime for your Java version and OS</li>
                     <li>Unzip it</li>
                     <li>Then configure a variable pointing to lib folder:<br/>
                         Linux/MacOSX:<br/>
