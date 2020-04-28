@@ -1011,7 +1011,7 @@ The <code>interrupt()</code> method can be defined in the script or the init fil
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts.
-    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    For further information, see <a href="best-practices.html#bsh_scripting">Best Practices - BeanShell scripting</a>.
     </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     This is intended for use with script files; for scripts defined in the GUI, you can use whatever
@@ -3136,7 +3136,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts.
-    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    For further information, see <a href="best-practices.html#bsh_scripting">Best Practices - BeanShell scripting</a>.
     </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:
@@ -4680,7 +4680,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts.
-    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    For further information, see <a href="best-practices.html#bsh_scripting">Best Practices - BeanShell scripting</a>.
     </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:
@@ -5258,7 +5258,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts.
-    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    For further information, see <a href="best-practices.html#bsh_scripting">Best Practices - BeanShell scripting</a>.
     </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:
@@ -5503,7 +5503,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts.
-    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    For further information, see <a href="best-practices.html#bsh_scripting">Best Practices - BeanShell scripting</a>.
     </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:
@@ -6141,7 +6141,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
     <property name="Reset bsh.Interpreter before each call" required="Yes">
     If this option is selected, then the interpreter will be recreated for each sample.
     This may be necessary for some long running scripts.
-    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    For further information, see <a href="best-practices.html#bsh_scripting">Best Practices - BeanShell scripting</a>.
     </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
     The parameters are stored in the following variables:

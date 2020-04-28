@@ -268,6 +268,7 @@ invalidated when tree selection changes.</p>
   <li><bug>64022</bug>Correct Chinese translation for "Ignore Sub-Controller blocks". Provided by yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
   <li><pr>552</pr>Fix <code>client.rmi.localport</code> port allocation description. Contributed by anant-93</li>
   <li><pr>543</pr>Clarify documentation of <code>__StringToFile</code> function regarding default value of <code>Append to file?</code> parameter. Contributed by Ori Marko</li>
+  <li><bug>64302</bug>Correct links to BeanShell best practices and to JavaFX implementation website. Reported by 2477441814 (2477441814 at qq.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -301,6 +302,7 @@ invalidated when tree selection changes.</p>
   <li>Markus Wolf (wolfm at t-systems.com)</li>
   <li>Pierre Astruc (pierre.astruc at evertest.com)</li>
   <li>YYTVicky (yytvicky at github)</li>
+  <li>2477441814 at qq.com</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
