@@ -332,7 +332,7 @@ Writing Visualizers is somewhat of a special case, however.
 a look at more up to date components like:
 <ul>
 <li><a href="generating-dashboard.html">Web report</a></li>
-<li><a href="realtime-results.html">Real-Time results</a> with <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <apilink href="org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</apilink></li>
 </ul>
 </note>
 <p>
@@ -542,7 +542,7 @@ added so that users can save a screen capture of any given visualizer.
 a look at more up to date components like:
 <ul>
 <li><a href="generating-dashboard.html">Web report</a></li>
-<li><a href="realtime-results.html">Real-Time results</a> with <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <apilink href="org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</apilink></li>
 </ul>
 </note>
 <p>
@@ -576,7 +576,7 @@ implement the interface, please look at <code>GraphVisualizer</code>.
 a look at more up to date components like:
 <ul>
 <li><a href="generating-dashboard.html">Web report</a></li>
-<li><a href="realtime-results.html">Real-Time results</a> with <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a></li>
+<li><a href="realtime-results.html">Real-Time results</a> with <apilink href="org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</apilink></li>
 </ul>
 </note>
 <p>

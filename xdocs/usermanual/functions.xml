@@ -380,7 +380,7 @@ If you want to have a count that increments for each sample, use the function in
 being executed.  These numbers are only locally unique with respect to their ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
 <note>The function returns a number between one and the max number of running threads. Note that if you're using
-JSR223 code with <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object (<code>ctx</code> variable),
+JSR223 code with <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink> object (<code>ctx</code> variable),
 the below code returns a number between zero and (max number of running threads minus one)
 <source>ctx.getThreadNum()</source>
 </note>
@@ -601,11 +601,11 @@ The following variables are made available to the script:
 </p>
 <ul>
 <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
-<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
-<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink> object</li>
+<li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink> object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
-<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
+<li><code>sampler</code> - current <apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink> object (if any)</li>
+<li><code>sampleResult</code> - previous <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> object (if any)</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 </ul>
 <p>
@@ -937,12 +937,12 @@ sample init file in the bin directory: <code>BeanShellFunction.bshrc</code>.
 The following variables are set before the script is executed:
 <ul>
 <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the BeanShell function (*)</li>
-<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
-<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink> object</li>
+<li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - the threadName (String)</li>
-<li><code>Sampler</code> - the current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>, if any</li>
-<li><code>SampleResult</code> - the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
+<li><code>Sampler</code> - the current <apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>, if any</li>
+<li><code>SampleResult</code> - the current <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>, if any</li>
 </ul>
 (*) means that this is set before the init file, if any, is processed.
 Other variables vary from invocation to invocation.
@@ -982,12 +982,12 @@ The following variables are set before the script is executed:
 </p>
 <ul>
 <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the groovy function (*)</li>
-<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
-<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink> object</li>
+<li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - the threadName (String)</li>
-<li><code>sampler</code> - the current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>, if any</li>
-<li><code>prev</code> - the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
+<li><code>sampler</code> - the current <apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>, if any</li>
+<li><code>prev</code> - the previous <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>, if any</li>
 <li><code>OUT</code> - System.out</li>
 </ul>
 <p>
@@ -1173,12 +1173,12 @@ The following variables are made available to the script:
 </p>
 <ul>
 <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
-<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
-<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink> object</li>
+<li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
-<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
+<li><code>sampler</code> - current <apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink> object (if any)</li>
+<li><code>sampleResult</code> - previous <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> object (if any)</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
     <p>
@@ -1224,12 +1224,12 @@ The following variables are made available to the script:
 </p>
 <ul>
 <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
-<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
-<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink> object</li>
+<li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
-<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
+<li><code>sampler</code> - current <apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink> object (if any)</li>
+<li><code>sampleResult</code> - previous <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> object (if any)</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
     <p>
