@@ -251,4 +251,27 @@
             </ul>
         ]]></description>
     </template>
+	<template isTestPlan="true">
+        <name>Auto-Correlation Recording Template</name>
+        <fileName>/bin/templates/autocorrelation.jmx</fileName>
+        <description><![CDATA[
+        <h1>Recording Template to use Auto-Correlation</h1>
+        <h2>JMeter Configuration</h2>
+            <ul>
+                <li>JMeter Server Proxy port is set to 8888, you may want to change this</li>
+            </ul>
+        <h2>Browser Configuration</h2>
+        <p>Configure your browser so that it uses the JMeter proxy, set:
+            <ul>
+                <li>the host of the machine that runs JMeter</li>
+                <li>the port you setup in JMeter Server Proxy</li>
+            </ul>
+        </p>
+        ]]></description>
+        <parameters>
+            <parameter defaultValue="recording.xml" key="recordingOutputFile"/>
+            <parameter defaultValue="www.example.com" key="hostToRecord"/>
+            <parameter defaultValue="https" key="schemeToRecord"/>
+        </parameters>
+    </template>
 </templates>

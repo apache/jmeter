@@ -41,42 +41,62 @@ There are two ways to perform Auto-Correlation.<br/>
 <li><a href="#jmx_file">JMX File</a></li>
 <li><a href="#import_rule">Import Rule</a></li>
 </ul>
-<p id="important_note"><note> Test Plan must be recorded using the documentation shared
-<a href="jmeter_proxy_step_by_step.html">here</a>.
-</note>
+<p>
+<note>Auto-Correlation requires recording Test Plan with <code>Auto-Correlation Recording Template</code>.</note>
+<p><code>Auto-Correlation Recording Template</code> is a modified version of <code>Recording Template</code> which
+uses <code><a href="component_reference.html#Correlation_Response_Recorder">Correlation Response Recorder</a></code> instead of <code>View Results Tree</code> to record response data.</p>
+<p><b>Steps to record a Test Plan</b></p>
+<ol>
+  <li>Go to <code>JMETER_HOME/bin</code> and start JMeter with <code>jmeter.bat</code> on Windows
+      and <code>jmeter.sh
+      </code> on Linux/Unix.</li>
+  <li>Select <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Templates...</guimenuitem></menuchoice> on the menu bar.</li>
+  <figure image="correlation/correlation_how_to_1.png"></figure>
+  <li>Select <code>Auto-Correlation Recording Template</code> on the list and click <code>Create</code> button.</li>
+  <figure image="correlation/correlation_how_to_2.png"></figure>
+  Fill the parameters and click <code>Create</code> button.
+  <figure image="correlation/correlation_how_to_2b.png"></figure>
+  <li>A complete <code>Test Plan</code> is generated</li>
+  <figure image="correlation/correlation_how_to_3.png"></figure>
+</ol>
+<p>
+Please follow the Recording documentation <a href="jmeter_proxy_step_by_step.html#basic-instructions">here</a> from Step 5 onwards.
+</p>
 </p>
 </p>
 <subsection name="&sect-num;.1.1 JMX File" anchor="jmx_file">
 <p>
-Using a JMX Test Plan.
+Auto-Correlation using a JMX Test Plan.
 </p>
 <p><b>Steps</b></p>
 
-1.Record a Test Plan for a testing scenario. Save it (say TestPlan_recording_one.jmx).<br/>
-2.Record another Test Plan with the same scenario.
-<b><a href="#important_note">(Important)</a></b><br/>
-3.Click on <menuchoice><guimenuitem>Tools</guimenuitem><guimenuitem>Correlation</guimenuitem><guimenuitem>JMX File</guimenuitem></menuchoice>.<br/>
+1. Record a Test Plan for a testing scenario using the steps mentioned <a href="#how_to_correlation">here</a>
+and save it (say TestPlan_recording_one.jmx).<br/>
+2. Record another Test Plan with the same scenario. It is not required to save this test plan.<br/>
+3. Click on <menuchoice><guimenuitem>Tools</guimenuitem><guimenuitem>Correlation</guimenuitem><guimenuitem>JMX File</guimenuitem></menuchoice>.<br/>
 <figure width="751" height="292" image="correlation/correlation_jmx_file.png">
 Figure 1 - The menu where correlation via JMX file is located</figure><br/>
-A browse file menu will open.
+A file browse menu will open.
 <figure width="945" height="442" image="correlation/correlation_jmx_file_browse.png">
 Figure 2 - The browse menu for JMX file</figure>
-4.Browse for the Test Plan saved in Step 1 (TestPlan_recording_one.jmx)<br/>
-5.Click on <code>Correlation.</code><br/>
-A list of dynamic (correlatable) parameters will be displayed in the table.<br/>
+4. Browse for the Test Plan saved in Step 1 (TestPlan_recording_one.jmx)<br/>
+5. Click on <code>Correlation</code> button.<br/><br/>
+A list of dynamic parameters for correlation will be displayed in the table.<br/>
 For more details on the parameter naming convention refer <a href="#naming_convention">here</a>.
 <br/>
 <figure width="968" height="362" image="correlation/correlation_jmx_file_parameters.png">
 Figure 3 - The list of parameters which can be correlated</figure>
-6.Select the parameters you want to correlate and Click <code>OK</code>.<br/>
+6. Select (click check-box) the parameters you want to correlate and Click <code>OK</code> button.<br/>
 If successful, the following dialog box will be displayed and extractors
 will be added in the script.
 <figure width="812" height="366" image="correlation/correlation_jmx_file_success.png">
 Figure 4 - Successful Correlation</figure>
-<p id="dialog">
+If unsuccessful or partially successful, one of the following errors will be displayed.
+<p>
 <figure width="979" height="280" image="correlation/correlation_jmx_file_success_failure.png">
 Figure 5 - Failure and Partial failure dialog boxes</figure>
 </p>
+If successful, you may try out the test plan.
 </subsection>
 
 <subsection name="&sect-num;.1.2 Import/Export Rule" anchor="import_rule">
@@ -84,7 +104,7 @@ Figure 5 - Failure and Partial failure dialog boxes</figure>
 you need to export the rule from an existing correlated Test Plan.</p>
 <ch_section>Export Rule</ch_section>
 <p>
-It allows you to export the response extractors in your Test Plan in a rule file.
+It allows you to export the response extractors in your Test Plan into a rule file.
 </p>
 <p><b>Steps</b></p>
 <ol>
@@ -92,11 +112,11 @@ It allows you to export the response extractors in your Test Plan in a rule file
 <li>Click on <menuchoice><guimenuitem>Tools</guimenuitem><guimenuitem>Correlation</guimenuitem><guimenuitem>Export Rule</guimenuitem></menuchoice>.<br/>
 A list of extractors for which the rules can be created will be displayed.
 </li>
-<li>Select the extractors for which you want to create rule and Click <code>Export</code>.
+<li>Select the extractors for which you want to create rule and Click <code>Export</code> button.
 </li>
 <figure width="612" height="349" image="correlation/correlation_export_rule_1.png">
 Figure 6 - Export rule extractor list</figure>
-<li>Browse for the directory where you want to save the rule file and Click <code>Save</code>.<br/>
+<li>Browse for the directory where you want to save the rule file and Click <code>Save</code> button.<br/>
 <figure width="594" height="406" image="correlation/correlation_export_rule_2.png">
 Figure 7 - Save Rule File</figure>
 A popup will be displayed for successful/failed rule export.
@@ -111,14 +131,15 @@ Details about the rule file format can be referred <a href="#rule_file_format">h
 </p>
 <p><b>Steps</b></p>
 <ol>
-<li>Record a Test Plan.<b><a href="#important_note">(Important)</a></b></li>
+<li>Record a Test Plan using the steps mentioned <a href="#how_to_correlation">here</a>.</li>
 <li>Click on <menuchoice><guimenuitem>Tools</guimenuitem><guimenuitem>Correlation</guimenuitem><guimenuitem>Import Rule</guimenuitem></menuchoice>.<br/>
 A list of parameters which can be correlated based on the rule will be displayed.
 </li>
 <figure width="605" height="430" image="correlation/correlation_import_rule_1.png">
 Figure 9 - Import Rule parameter list</figure>
-<li>Select the parameters you want to correlate and Click <code>OK</code>.<br/>
-A <a href="#dialog">popup</a> will be displayed for successful/failed correlation.
+<li>Select the parameters you want to correlate and Click <code>OK</code> button.<br/><br/>
+Popups will be displayed for successful/failed correlation similar to the ones in correlation via JMX file.<br/>
+If successful, you may try out the test plan.
 </li>
 </ol>
 </subsection>

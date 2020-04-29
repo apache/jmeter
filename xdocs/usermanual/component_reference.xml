@@ -3024,7 +3024,9 @@ See the <code>jmeter.properties</code> file for details.
 </component>
 
 <component name="Correlation Response Recorder" index="&sect-num;.3.10"  width="741" height="141" screenshot="correlation_response_recorder.png">
-<description>This listner is used to record response data to correlate test cases.
+<description>This listener is used to record results in memory
+which can be used for <a href="correlation.html">Auto-Correlation</a>.
+It also allows to write the results to a file.
 </description>
 </component>
 
