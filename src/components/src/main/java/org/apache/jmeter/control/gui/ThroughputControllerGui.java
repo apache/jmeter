@@ -127,6 +127,8 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         setLayout(new BorderLayout());
         setBorder(makeBorder());
 
+        // TODO: add "insets 0", however, for now JComboBox consumes more space than its cell
+        // for some reason.
         JPanel panel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
 
         DefaultComboBoxModel<String> styleModel = new DefaultComboBoxModel<>();

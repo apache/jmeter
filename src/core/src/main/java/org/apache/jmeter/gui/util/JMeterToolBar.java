@@ -136,7 +136,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
                 // For instance, https://github.com/weisJ/darklaf/issues/84
                 setFocusable(false);
                 setRolloverEnabled(true);
-                putClientProperty(DarkButtonUI.KEY_VARIANT, DarkButtonUI.VARIANT_SHADOW);
+                putClientProperty(DarkButtonUI.KEY_VARIANT, DarkButtonUI.VARIANT_BORDERLESS);
                 putClientProperty(DarkButtonUI.KEY_THIN, true);
             }
         };

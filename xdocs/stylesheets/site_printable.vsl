@@ -38,6 +38,7 @@
 ## Printable document settings
 #set ($imgdir = "$relativePath/../docs/images")
 #set ($cssdir = "$relativePath/../docs/css")
+#set ($apidir = "$relativePath/../docs/api")
 #set ($sshotdir = "$imgdir/screenshots")
 
 <!-- start the processing -->
@@ -284,6 +285,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #note($node)
 #elseif($node.getName() == "br")
 <br>
+#elseif($node.getName() == "apilink")
+#apilink($node)
 #elseif($node.getName() == "complink")
 #complink($node)
 #elseif($node.getName() == "funclink")
@@ -341,6 +344,10 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #runloop($node)
 #outputEndTag($node)
 #end
+#end
+
+#macro (apilink $node)
+<a href="$apidir/$node.getAttributeValue("href")">#runloop($node)</a>##
 #end
 
 #macro (complink $complink)

@@ -966,7 +966,7 @@ JMETER-SERVER</source>
         and <code>sample_sender_strip_also_on_error</code></dd>
         <dt><code>StrippedDiskStore</code></dt>
         <dd>Same as <code>DiskStore</code> but strips response data from SampleResult</dd>
-        <dt>Class extending <a href="../api/org/apache/jmeter/samplers/AbstractSampleSender.html"><code>AbstractSampleSender</code></a> (<code>org.example.load.MySampleSender</code> for example)</dt>
+        <dt>Class extending <apilink href="org/apache/jmeter/samplers/AbstractSampleSender.html"><code>AbstractSampleSender</code></apilink> (<code>org.example.load.MySampleSender</code> for example)</dt>
         <dd>A custom implementation of your choice</dd>
     </dl>
 <properties>
@@ -1838,12 +1838,12 @@ JMETER-SERVER</source>
 </property>
 <property name="think_time_creator.impl">
     Default implementation that create the Timer structure to add to Test Plan.
-    Implementation of interface <a href="../api/org/apache/jmeter/gui/action/thinktime/ThinkTimeCreator.html"><code>org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator</code></a>
-    Defaults to: <a href="../api/org/apache/jmeter/thinktime/DefaultThinkTimeCreator.html"><code>org.apache.jmeter.thinktime.DefaultThinkTimeCreator</code></a>
+    Implementation of interface <apilink href="org/apache/jmeter/gui/action/thinktime/ThinkTimeCreator.html"><code>org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator</code></apilink>
+    Defaults to: <apilink href="org/apache/jmeter/thinktime/DefaultThinkTimeCreator.html"><code>org.apache.jmeter.thinktime.DefaultThinkTimeCreator</code></apilink>
 </property>
 <property name="think_time_creator.default_timer_implementation">
     Default Timer GUI class added to Test Plan by DefaultThinkTimeCreator
-    Defaults to: <a href="../api/org/apache/jmeter/timers/gui/UniformRandomTimerGui.html"><code>org.apache.jmeter.timers.gui.UniformRandomTimerGui</code></a>
+    Defaults to: <apilink href="org/apache/jmeter/timers/gui/UniformRandomTimerGui.html"><code>org.apache.jmeter.timers.gui.UniformRandomTimerGui</code></apilink>
 </property>
 <property name="think_time_creator.default_constant_pause">
     Default constant pause of Timer
@@ -1869,10 +1869,10 @@ JMETER-SERVER</source>
     Defaults to empty suffix
 </property>
 <property name="naming_policy.impl">
-    Implementation of interface <a href="../api/org/apache/jmeter/gui/action/TreeNodeNamingPolicy.html"><code>org.apache.jmeter.gui.action.TreeNodeNamingPolicy</code></a>
+    Implementation of interface <apilink href="org/apache/jmeter/gui/action/TreeNodeNamingPolicy.html"><code>org.apache.jmeter.gui.action.TreeNodeNamingPolicy</code></apilink>
     Default implementation that create the Timer structure to add to Test Plan.
     Implementation of interface org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator
-    Defaults to: <a href="../api/org/apache/jmeter/gui/action/impl/DefaultTreeNodeNamingPolicy.html"><code>org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy</code></a>
+    Defaults to: <apilink href="org/apache/jmeter/gui/action/impl/DefaultTreeNodeNamingPolicy.html"><code>org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy</code></apilink>
 </property>
 </properties>
 <a href="#">^</a>

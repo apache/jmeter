@@ -515,4 +515,24 @@ val runGui by tasks.registering(JavaExec::class) {
         jvmArgs("-Dapple.laf.useScreenMenuBar=true")
         jvmArgs("-Dapple.eawt.quitStrategy=CLOSE_ALL_WINDOWS")
     }
+
+    fun passProperty(name: String, default: String? = null) {
+        val value = System.getProperty(name) ?: default
+        value?.let { systemProperty(name, it) }
+    }
+
+    passProperty("java.awt.headless")
+
+    val props = System.getProperties()
+    @Suppress("UNCHECKED_CAST")
+    for (e in props.propertyNames() as `java.util`.Enumeration<String>) {
+        // Pass -Djmeter.* and -Ddarklaf.* properties to the JMeter process
+        if (e.startsWith("jmeter.") || e.startsWith("darklaf.")) {
+            passProperty(e)
+        }
+        if (e == "darklaf.native") {
+            systemProperty("darklaf.decorations", "true")
+            systemProperty("darklaf.allowNativeCode", "true")
+        }
+    }
 }

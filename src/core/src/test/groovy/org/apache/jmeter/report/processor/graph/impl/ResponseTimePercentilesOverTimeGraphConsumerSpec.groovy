@@ -28,7 +28,8 @@ class ResponseTimePercentilesOverTimeGraphConsumerSpec extends JMeterSpec {
              'aggregate_report_max',
              'aggregate_rpt_pct1',
              'aggregate_rpt_pct2',
-             'aggregate_rpt_pct3'] as Set
+             'aggregate_rpt_pct3',
+            'aggregate_report_median'] as Set
 
     def sut = new ResponseTimePercentilesOverTimeGraphConsumer()
 

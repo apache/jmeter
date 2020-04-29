@@ -33,7 +33,7 @@
 <section name="&sect-num;. Real-time results" anchor="realtime-results">
 <p>Since JMeter 2.13 you can get real-time results sent to a backend through the
 <a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice, &hellip;)
-by providing a class which implements <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
+by providing a class which implements <apilink href="org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html">AbstractBackendListenerClient</apilink>.<br/>
 JMeter ships with:
 <ul>
 <li>a GraphiteBackendListenerClient which allows you to send metrics to a Graphite Backend.<br/>

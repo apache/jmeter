@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class PreciseThroughputTimer extends AbstractTestElement implements Cloneable, Timer, TestStateListener, TestBean, ThroughputProvider, DurationProvider {
     private static final Logger log = LoggerFactory.getLogger(PreciseThroughputTimer.class);
 
-    private static final long serialVersionUID = 3;
+    private static final long serialVersionUID = 4;
     private static final ConcurrentMap<AbstractThreadGroup, EventProducer> groupEvents = new ConcurrentHashMap<>();
 
     /**
@@ -115,17 +115,18 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
         synchronized (events) {
             nextEvent = events.next();
         }
-        long delay = (long) (nextEvent * TimeUnit.SECONDS.toMillis(1) + testStarted - System.currentTimeMillis());
+        long now = System.currentTimeMillis();
+        long delay = (long) (nextEvent * TimeUnit.SECONDS.toMillis(1) + testStarted - now);
         if (log.isDebugEnabled()) {
             log.debug("Calculated delay is {}", delay);
         }
         delay = Math.max(0, delay);
         long endTime = getThreadContext().getThread().getEndTime();
-        if (endTime > 0 && System.currentTimeMillis() + delay > endTime) {
+        if (endTime > 0 && now + delay > endTime) {
             throw new JMeterStopThreadException("The thread is scheduled to stop in " +
-                    (System.currentTimeMillis() - endTime) + " ms" +
+                    (endTime - now) + " ms" +
                     " and the throughput timer generates a delay of " + delay + "." +
-                    " JMeter (as of 4.0) does not support interrupting of sleeping threads, thus terminating the thread manually."
+                    " Terminating the thread manually."
             );
         }
         return delay;

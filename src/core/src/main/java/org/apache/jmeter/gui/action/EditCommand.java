@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jorphan.gui.ui.TextComponentUI;
 
 /**
  * Implements the Edit menu item.
@@ -43,6 +44,7 @@ public class EditCommand extends AbstractAction {
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         guiPackage.getMainFrame().setMainPanel((javax.swing.JComponent) currentGui);
         guiPackage.getMainFrame().setEditMenu(guiPackage.getTreeListener().getCurrentNode().createPopupMenu());
+        TextComponentUI.INSTANCE.resetUndoHistory();
         guiPackage.getMainFrame().setFileLoadEnabled(true);
         guiPackage.getMainFrame().setFileSaveEnabled(true);
     }

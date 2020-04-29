@@ -765,6 +765,24 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
+     * Get a double value with default if not present.
+     *
+     * @param propName
+     *            the name of the property.
+     * @param defaultVal
+     *            the default value.
+     * @return The PropDefault value
+     */
+    public static double getPropDefault(String propName, double defaultVal) {
+        try {
+            return Float.parseFloat(appProperties.getProperty(propName, Double.toString(defaultVal)).trim());
+        } catch (Exception e) {
+            log.warn("Exception '{}' occurred when fetching double property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
+        }
+        return defaultVal;
+    }
+
+    /**
      * Get a String value with default if not present.
      *
      * @param propName

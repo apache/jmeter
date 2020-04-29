@@ -208,7 +208,7 @@ implements ChangeListener, ActionListener, ItemListener
         methodName.addActionListener(this);
         setupClasslist(false);
 
-        JPanel panel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
+        JPanel panel = new JPanel(new MigLayout("fillx, wrap 2, insets 0", "[][fill,grow]"));
         panel.add(junit4, "span 2");
         junit4.addItemListener(this);
 

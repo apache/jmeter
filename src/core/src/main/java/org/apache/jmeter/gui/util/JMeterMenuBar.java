@@ -47,6 +47,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.LoadRecentProject;
+import org.apache.jmeter.gui.action.LogLevelCommand;
 import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.plugin.MenuCreator.MENU_LOCATION;
@@ -56,9 +57,9 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.logging.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private static final long serialVersionUID = 241L;
@@ -311,12 +312,21 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenu menuLoggerLevel = makeMenuRes("menu_logger_level"); //$NON-NLS-1$
         JMenuItem menuItem;
         String levelString;
-        for (Level level : Level.values()) {
+        // Note: slf4j does not provide a way to set log level, so we use log4j levels here
+        Level currentLevel = LogLevelCommand.getRootLevel();
+        ButtonGroup loggerLevels = new ButtonGroup();
+        Level[] logLevels = Level.values();
+        Arrays.sort(logLevels);
+        for (Level level : logLevels) {
             levelString = level.toString();
-            menuItem = new JMenuItem(levelString);
+            menuItem = new JRadioButtonMenuItem(levelString);
             menuItem.addActionListener(ActionRouter.getInstance());
             menuItem.setActionCommand(ActionNames.LOG_LEVEL_PREFIX + levelString);
             menuItem.setToolTipText(levelString); // show the classname to the user
+            if (level.equals(currentLevel)) {
+                menuItem.setSelected(true);
+            }
+            loggerLevels.add(menuItem);
             menuLoggerLevel.add(menuItem);
         }
         optionsMenu.add(menuLoggerLevel);
@@ -369,13 +379,19 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
          * Create a language entry from the locale name.
          *
          * @param locale - must also be a valid resource name
+         * @param languageGroup - group for radio items
+         * @param selected - if the menu item is selected
          */
-        void addLang(String locale){
+        void addLang(String locale, ButtonGroup languageGroup, boolean selected) {
             String localeString = JMeterUtils.getLocaleString(locale);
-            JMenuItem language = new JMenuItem(localeString);
+            JMenuItem language = new JRadioButtonMenuItem(localeString);
             language.addActionListener(actionRouter);
             language.setActionCommand(ActionNames.CHANGE_LANGUAGE);
             language.setName(locale); // This is used by the ChangeLanguage class to define the Locale
+            if (selected) {
+                language.setSelected(true);
+            }
+            languageGroup.add(language);
             languageMenu.add(language);
         }
    }
@@ -420,8 +436,16 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
          * Also, need to ensure that the names are valid resource entries too.
          */
 
+        Locale currentLocale = JMeterUtils.getLocale();
+        String selectedLocale = currentLocale == null ? "" : currentLocale.toString();
+        if (selectedLocale.equals(JMeterUtils.getLocaleString(selectedLocale))) {
+            // E.g. if the current locale has no localized name, then it is unknown to JMeter,
+            // so it can't appear in the menu. In that case, we assume English locale is used.
+            selectedLocale = Locale.ENGLISH.toString();
+        }
+        ButtonGroup languageGroup = new ButtonGroup();
         for (String lang : getLanguages()) {
-            langMenu.addLang(lang);
+            langMenu.addLang(lang, languageGroup, selectedLocale.equals(lang));
         }
         return languageMenu;
     }

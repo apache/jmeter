@@ -188,7 +188,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
      * @return a GUI panel containing the condition components
      */
     private JPanel createConditionPanel() {
-        JPanel conditionPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
+        JPanel conditionPanel = new JPanel(new MigLayout("fillx, wrap 2, insets 0", "[][fill,grow]"));
 
         ImageIcon image = JMeterUtils.getImage("warning.png"); // $NON-NLS-1$
         warningLabel = new JLabel(JMeterUtils.getResString("if_controller_warning"), image, SwingConstants.LEFT); // $NON-NLS-1$

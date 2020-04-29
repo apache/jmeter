@@ -21,10 +21,13 @@ import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 /**
  * Implements log level setting menu item.
@@ -49,12 +52,19 @@ public class LogLevelCommand extends AbstractAction {
     @Override
     public void doAction(ActionEvent ev) {
         String levelString = ev.getActionCommand().substring(ActionNames.LOG_LEVEL_PREFIX.length());
-        log.warn("Setting root log level: {}", levelString);
-        Configurator.setRootLevel(org.apache.logging.log4j.Level.toLevel(levelString));
+        log.info("Setting root log level: {}", levelString);
+        Configurator.setRootLevel(Level.toLevel(levelString));
     }
 
     @Override
     public Set<String> getActionNames() {
         return commands;
+    }
+
+    @API(since = "5.3", status = API.Status.INTERNAL)
+    public static Level getRootLevel() {
+        final LoggerContext loggerContext = LoggerContext.getContext(false);
+        final LoggerConfig loggerConfig = loggerContext.getConfiguration().getRootLogger();
+        return loggerConfig.getLevel();
     }
 }

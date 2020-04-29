@@ -110,6 +110,7 @@
     <trusted-key id='c7bf26d0bb617866' group='org.eclipse.aether' />
     <trusted-key id='2d0e1fb8fe4b68b4' group='org.eclipse.jetty' />
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
+    <trusted-key id='694db6f419c8d1fd' group='org.exparity' />
     <trusted-key id='8759d8f56d022006' group='org.exparity' />
     <trusted-key id='1939a2520bab1d90' group='org.freemarker' />
     <trusted-key id='9ff25980f5ba7e4f' group='org.fusesource.hawtbuf' />
