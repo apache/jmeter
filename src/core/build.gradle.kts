@@ -73,6 +73,9 @@ dependencies {
     implementation("commons-codec:commons-codec") {
         because("DigestUtils")
     }
+    implementation("commons-collections:commons-collections") {
+        because("Compatibility for old plugins")
+    }
     implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
