@@ -26,13 +26,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -141,14 +141,13 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         if (maxResults > 0) {
             buffer = new CircularFifoQueue<>(maxResults);
         } else {
-            buffer = new LinkedList<>();
+            buffer = new ArrayDeque<>();
         }
         init();
         new Timer(REFRESH_PERIOD, e -> updateGui()).start();
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     @Override
     public void add(final SampleResult sample) {
         synchronized (buffer) {
@@ -255,7 +254,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private Set<Object> extractExpandedObjects(final Enumeration<TreePath> expandedElements) {
         if (expandedElements != null) {
-            @SuppressWarnings("unchecked")
             final List<TreePath> list = EnumerationUtils.toList(expandedElements);
             log.debug("Expanded: {}", list);
             Set<Object> result = list.stream()

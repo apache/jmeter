@@ -19,7 +19,7 @@ package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 import javax.swing.JPanel;
@@ -68,7 +68,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
         if (LOGGER_PANEL_MAX_LINES > 0) {
             events = new CircularFifoQueue<>(LOGGER_PANEL_MAX_LINES);
         } else {
-            events = new LinkedList<>();
+            events = new ArrayDeque<>();
         }
         textArea = init();
     }
