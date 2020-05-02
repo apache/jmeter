@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,6 +41,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.prefs.Preferences;
 
 import org.apache.commons.codec.binary.Base64;
@@ -330,8 +331,12 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
         if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(sNumberingMode)) {
             setHttpSampleNumberingMode(HttpSamplerNumberingMode.PREFIX.getIntValue());
+<<<<<<< HEAD
+        } else if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(sNumberingMode)) {
+=======
         }
         if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(sNumberingMode)) {
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
             setHttpSampleNumberingMode(HttpSamplerNumberingMode.SUFFIX.getIntValue());
         }
 
@@ -415,6 +420,21 @@ public class ProxyControl extends GenericController implements NonTestElement {
     public void setHttpSampleNumberingMode(int httpSampleNumberingMode) {
         
         if (httpSampleNumberingMode == HttpSamplerNumberingMode.PREFIX.getIntValue()) {
+<<<<<<< HEAD
+        	sNumberingMode = HttpSamplerNumberingMode.PREFIX.getStringMode();
+        	JMeterUtils.setProperty("proxy.number.mode", "prefix");
+        	JMeterUtils.setProperty("proxy.number.requests", "true");
+        } else if (httpSampleNumberingMode ==  HttpSamplerNumberingMode.SUFFIX.getIntValue()) {
+            // choose suffix numbering
+        	sNumberingMode =  HttpSamplerNumberingMode.SUFFIX.getStringMode();
+        	JMeterUtils.setProperty("proxy.number.mode", "suffix");
+        	JMeterUtils.setProperty("proxy.number.requests", "true");
+        	
+        } else if (httpSampleNumberingMode == HttpSamplerNumberingMode.NO_NUMBER.getIntValue()) {
+            // choose no numbering
+        	sNumberingMode = HttpSamplerNumberingMode.NO_NUMBER.getStringMode();
+        	JMeterUtils.setProperty("proxy.number.requests", "false");
+=======
         	sNumberingMode = HttpSamplerNumberingMode.PREFIX.getStringMode(); 
         }
         
@@ -426,6 +446,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         if (httpSampleNumberingMode == HttpSamplerNumberingMode.NO_NUMBER.getIntValue()) {
             // choose no numbering
         	sNumberingMode = HttpSamplerNumberingMode.NO_NUMBER.getStringMode();
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
         }
     }
 
@@ -435,7 +456,12 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     public void setHttpSamplerNumberingStartForSamplerCreator(int httpSamplerNumberingStartValue) {
         iNumberingStartValue =  httpSamplerNumberingStartValue;
+<<<<<<< HEAD
+        
+        // change the numbering start value directly to the AtomicInteger REQUEST_NUMBER in the AbstractSamplerCreator
+=======
 
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
         SamplerCreator samplerCreator = samplerCreatorFactory.getDefaultSamplerCreator();
         samplerCreator.setRequestNumber(httpSamplerNumberingStartValue);
     }
@@ -444,6 +470,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
         int iRequestNumber = 1;
         SamplerCreator samplerCreator = samplerCreatorFactory.getDefaultSamplerCreator();
  
+<<<<<<< HEAD
+        // get the current value directly to the AtomicInteger REQUEST_NUMBER in the AbstractSamplerCreator
+=======
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
         iRequestNumber = samplerCreator.getRequestNumber();
         iNumberingStartValue = iRequestNumber;
         return iRequestNumber;
@@ -559,9 +589,13 @@ public class ProxyControl extends GenericController implements NonTestElement {
     public int getHttpSampleNumberingMode() {
     	if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(sNumberingMode)) {
     		return HttpSamplerNumberingMode.PREFIX.getIntValue();
+<<<<<<< HEAD
+    	} else if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(sNumberingMode)) {
+=======
     	}
     	
     	if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(sNumberingMode)) {
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
     		return HttpSamplerNumberingMode.SUFFIX.getIntValue();
     	}
     	else {

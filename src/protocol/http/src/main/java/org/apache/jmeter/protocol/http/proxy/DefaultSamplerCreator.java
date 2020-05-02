@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
+import org.apache.jmeter.protocol.http.proxy.ProxyControl.HttpSamplerNumberingMode;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.PostWriter;
@@ -291,21 +292,38 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         int httpSampleNameMode = request.getHttpSampleNameMode();
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
             if(StringUtils.isNotEmpty(prefix)) {
+            	// with a prefix name
                 if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
+<<<<<<< HEAD
+                    if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(getNumberMode())) {
+                        // ppp/img.png-001
+                        sampler.setName(prefix + sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
+                    }
+                    if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(getNumberMode())) {
+=======
                     if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
                         // ppp/img.png-001
                         sampler.setName(prefix + sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
                     }
                     if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
                         // ppp-001 /img.png
                         sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()) + " " + sampler.getPath());
                     }
                 } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+<<<<<<< HEAD
+                    if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(getNumberMode())) {
+                        // ppp-001
+                        sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
+                    }
+                    if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(getNumberMode())) {
+=======
                     if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
                         // ppp-001
                         sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
                     }
                     if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
                         // 001-ppp
                         sampler.setName(formatNumberingInteger(incrementRequestNumberAndGet()) + "-" + prefix);
                     }
@@ -314,17 +332,26 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 }
             } else {
                 // no prefix name
+<<<<<<< HEAD
+                if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(getNumberMode())) {
+                    // /img.png-001
+                    sampler.setName(sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
+                }
+                if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(getNumberMode())) {
+=======
                 if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
                     // /img.png-001
                     sampler.setName(sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
                 }
                 if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
                     // 001 /img.png
                     sampler.setName(formatNumberingInteger(incrementRequestNumberAndGet()) + " " + sampler.getPath());
                 }
             }
         } else { // no numbering
             if(StringUtils.isNotEmpty(prefix)) {
+            	// with a prefix name
                 if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
                     // ppp/img.png
                     sampler.setName(prefix + sampler.getPath());
@@ -478,7 +505,16 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
     protected String formatNumberingInteger(int iValue) {
         // format like %03d
+<<<<<<< HEAD
+    	String sFormat = getNumberValueFormat();
+    	if (sFormat.length() == 0) {
+    		// the simplest format for an integer
+    		sFormat = "%d";
+    	}
+        String sReturn = String.format(sFormat, iValue);
+=======
         String sReturn = String.format(getNumberValueFormat(), iValue);
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
         return sReturn;
     }
 }

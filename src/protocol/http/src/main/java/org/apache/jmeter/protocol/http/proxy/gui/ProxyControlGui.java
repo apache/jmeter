@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -337,7 +337,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
 
             model.setHttpSampleNumberingMode(httpSampleNumberingMode.getSelectedIndex());
+<<<<<<< HEAD
+            
+            int iStartValue = 1;
+            String sStartValue = httpSamplerNumberingStartValue.getText();
+            if (sStartValue.length() > 0) {
+            	iStartValue = Integer.parseInt(httpSamplerNumberingStartValue.getText());
+            }
+=======
             int iStartValue = Integer.parseInt(httpSamplerNumberingStartValue.getText());
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
             model.setHttpSamplerNumberingStartValue(iStartValue);
             model.setHttpSamplerNumberingIntegerFormat(httpSamplerNumberingIntegerFormat.getText());
 
@@ -447,6 +456,13 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             JComboBox combo = (JComboBox) e.getSource();
             if(HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())) {
                 model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
+<<<<<<< HEAD
+            }
+
+            if(HTTP_SAMPLER_NUMBERING_MODE.equals(combo.getName())) {
+                model.setHttpSampleNumberingMode(httpSampleNumberingMode.getSelectedIndex());
+            }
+=======
             }
 
             if(HTTP_SAMPLER_NUMBERING_MODE.equals(combo.getName())) {
@@ -463,6 +479,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 	JMeterUtils.setProperty("proxy.number.requests", "false");
                 }
             }
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
         }
         else {
             enableRestart();
@@ -785,10 +802,24 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                             JMeterUtils.getResString("sample_numbering_start_value_error_invalid_data"), // $NON-NLS-1$
                             JOptionPane.WARNING_MESSAGE);
                     // Drop the last character:
+<<<<<<< HEAD
+                    String sNextNumber = httpSamplerNumberingStartValue.getText().substring(0, length - 1);
+                    if (sNextNumber.length() == 0) {
+                    	// if no more character set to "1"
+                    	sNextNumber = "1";
+                    }
+                    httpSamplerNumberingStartValue.setText(sNextNumber);
+                }
+            }
+            if (httpSamplerNumberingStartValue.getText().length() > 0) {
+            	model.setHttpSamplerNumberingStartValue(Integer.parseInt(httpSamplerNumberingStartValue.getText()));
+            }
+=======
                     httpSamplerNumberingStartValue.setText(httpSamplerNumberingStartValue.getText().substring(0, length - 1));
                 }
             }
             model.setHttpSamplerNumberingStartValue(Integer.parseInt(httpSamplerNumberingStartValue.getText()));
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
             enableRestart();
         } else if(fieldName.equals(PROXY_PAUSE_HTTP_SAMPLER)) {
             try {

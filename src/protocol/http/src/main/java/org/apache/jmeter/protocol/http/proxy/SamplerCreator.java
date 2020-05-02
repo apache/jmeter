@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -95,9 +95,16 @@ public interface SamplerCreator {
     List<TestElement> createChildren(HTTPSamplerBase sampler, SampleResult result);
     
     /**
+<<<<<<< HEAD
+     * Set the current numbering value
+     * @param startValue the current numbering value
+     */
+    void setRequestNumber(int startValue);
+=======
      * Set the current record request number
      */
     void setRequestNumber(int starValue);
+>>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
     
     /**
      * Get the current record request number
