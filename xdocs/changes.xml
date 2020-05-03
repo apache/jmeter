@@ -132,6 +132,7 @@ invalidated when tree selection changes.</p>
 <h3>Other samplers</h3>
 <ul>
     <li><bug>64288</bug>JUnit Request: Improve UX</li>
+    <li><bug>64407</bug>Improve JMS Publisher UX. Contributed by Ubik Load Pack (www.ubikloadpack.com)</li>
 </ul>
 
 <h3>Controllers</h3>
