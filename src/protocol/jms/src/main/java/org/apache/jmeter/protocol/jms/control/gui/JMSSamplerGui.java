@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.protocol.jms.control.gui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
