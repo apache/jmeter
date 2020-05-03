@@ -122,7 +122,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
      */
     private void init() {// called from ctor, so must not be overridable
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
         add(createPropertiesPanel(), BorderLayout.CENTER);
     }
 

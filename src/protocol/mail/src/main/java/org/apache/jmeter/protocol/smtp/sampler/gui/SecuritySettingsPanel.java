@@ -123,8 +123,6 @@ public class SecuritySettingsPanel extends JPanel{
         rbUseSSL.addItemListener(this::rbSecuritySettingsItemStateChanged);
         rbUseStartTLS.addItemListener(this::rbSecuritySettingsItemStateChanged);
 
-        cbTrustAllCerts.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        cbTrustAllCerts.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbTrustAllCerts.setEnabled(false);
         cbTrustAllCerts.setToolTipText(JMeterUtils.getResString("smtp_trustall_tooltip")); // $NON-NLS-1$
         cbTrustAllCerts.addActionListener(this::cbTrustAllCertsActionPerformed);
@@ -133,8 +131,6 @@ public class SecuritySettingsPanel extends JPanel{
         gridBagConstraints.gridy = 1;
         this.add(cbTrustAllCerts, gridBagConstraints);
 
-        cbEnforceStartTLS.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        cbEnforceStartTLS.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbEnforceStartTLS.setEnabled(false);
         cbEnforceStartTLS.addActionListener(this::cbEnforceStartTLSActionPerformed);
         cbEnforceStartTLS.setToolTipText(JMeterUtils.getResString("smtp_enforcestarttls_tooltip")); // $NON-NLS-1$
@@ -143,8 +139,6 @@ public class SecuritySettingsPanel extends JPanel{
         gridBagConstraints.gridy = 1;
         this.add(cbEnforceStartTLS, gridBagConstraints);
 
-        cbUseLocalTrustStore.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        cbUseLocalTrustStore.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbUseLocalTrustStore.setEnabled(false);
         cbUseLocalTrustStore.addActionListener(this::cbUseLocalTrustStoreActionPerformed);
 
