@@ -110,8 +110,8 @@ invalidated when tree selection changes.</p>
 
 <p>Mark the currently selected log level in the options menu.</p>
 
-<p>Rework of many Test Element UI (JUnit Request, ForEach Controller, If Controller, Throughput Controller, WhileController, Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, 
-JMS Elements)</p>
+<p>Rework of many Test Element UI (JUnit Request, ForEach Controller, If Controller, Throughput Controller, WhileController,
+Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elements)</p>
 <!--
 <ch_title>Functions</ch_title>
 -->
