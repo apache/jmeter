@@ -127,6 +127,7 @@ project("jms") {
         implementation("commons-io:commons-io") {
             because("IOUtils")
         }
+        implementation("com.miglayout:miglayout-swing")
     }
 }
 
