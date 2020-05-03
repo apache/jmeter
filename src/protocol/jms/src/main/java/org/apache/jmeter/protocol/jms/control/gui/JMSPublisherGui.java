@@ -19,29 +19,27 @@ package org.apache.jmeter.protocol.jms.control.gui;
 
 import java.awt.BorderLayout;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FilePanel;
-import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JLabeledRadioI18N;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledPasswordField;
 import org.apache.jorphan.gui.JLabeledTextField;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * This is the GUI for JMS Publisher
@@ -73,7 +71,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private static final String[] CONFIG_ITEMS_BYTES_MSG = { USE_FILE_RSC, USE_RANDOM_RSC};
 
     // Button group resources
-    private static final String[] CONFIG_ITEMS = { USE_FILE_RSC, USE_RANDOM_RSC, USE_TEXT_RSC };
+    private static final String[] CONFIG_ITEMS = { USE_TEXT_RSC, USE_FILE_RSC, USE_RANDOM_RSC };
 
     private static final String[] MSGTYPES_ITEMS = { TEXT_MSG_RSC, MAP_MSG_RSC, OBJECT_MSG_RSC, BYTES_MSG_RSC };
 
@@ -81,18 +79,17 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledRadioI18N configChoice = new JLabeledRadioI18N("jms_config", CONFIG_ITEMS, USE_TEXT_RSC); //$NON-NLS-1$
 
-    private final JLabeledTextField jndiICF = new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
+    private final JTextField jndiICF = new JTextField();
 
-    private final JLabeledTextField urlField = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
+    private final JTextField urlField = new JTextField();
 
-    private final JLabeledTextField jndiConnFac = new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory")); //$NON-NLS-1$
+    private final JTextField jndiConnFac = new JTextField();
 
-    private final JLabeledTextField jmsDestination = new JLabeledTextField(JMeterUtils.getResString("jms_topic")); //$NON-NLS-1$
+    private final JTextField jmsDestination = new JTextField();
 
     private final JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"),10); //$NON-NLS-1$
 
-    private final JLabeledTextField jmsErrorReconnectOnCodes =
-            new JLabeledTextField(JMeterUtils.getResString("jms_error_reconnect_on_codes")); // $NON-NLS-1$
+    private final JTextField jmsErrorReconnectOnCodes = new JTextField();
 
     private final JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"),1); //$NON-NLS-1$
 
@@ -102,17 +99,17 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledTextField jmsPwd = new JLabeledPasswordField(JMeterUtils.getResString("jms_pwd")); //$NON-NLS-1$
 
-    private final JLabeledTextField iterations = new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); //$NON-NLS-1$
+    private final JTextField iterations = new JTextField();
 
     private final FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file")); //$NON-NLS-1$
 
     private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), true); //$NON-NLS-1$
 
-    private final JSyntaxTextArea textMessage = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
+    private final JSyntaxTextArea textMessage = JSyntaxTextArea.getInstance(10, 50);
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
 
-    private JLabeledChoice fileEncoding;
+    private JComboBox<String> fileEncoding;
 
     private final JCheckBox useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
 
@@ -183,7 +180,12 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
       sampler.setInputFile(messageFile.getFilename());
       sampler.setRandomPath(randomFile.getFilename());
       sampler.setConfigChoice(configChoice.getText());
-      sampler.setFileEncoding(fileEncoding.getText());
+      Object item = fileEncoding.getSelectedItem();
+      if (item == null) {
+          sampler.setFileEncoding("");
+      } else {
+          sampler.setFileEncoding((String) item);
+      }
       sampler.setMessageChoice(msgChoice.getText());
       sampler.setIterations(iterations.getText());
       sampler.setUseAuth(useAuth.isSelected());
@@ -202,42 +204,54 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        JPanel mainPanel = new VerticalPanel();
+        JPanel mainPanel = new JPanel(new MigLayout("fillx, wrap 3, insets 0", "[][fill,grow]"));
         add(mainPanel, BorderLayout.CENTER);
 
-        mainPanel.add(useProperties);
-        mainPanel.add(jndiICF);
-        mainPanel.add(urlField);
-        mainPanel.add(jndiConnFac);
-        mainPanel.add(createDestinationPane());
-        mainPanel.add(createAuthPane());
-        mainPanel.add(createPriorityAndExpiration());
-        mainPanel.add(jmsErrorReconnectOnCodes);
-        mainPanel.add(iterations);
+        mainPanel.add(useProperties, "span");
 
-        jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$
-        mainPanel.add(jmsPropertiesPanel);
+        mainPanel.add(JMeterUtils.labelFor(jndiICF, "jms_initial_context_factory"));
+        mainPanel.add(jndiICF, "span, growx");
 
-        configChoice.setLayout(new BoxLayout(configChoice, BoxLayout.X_AXIS));
-        mainPanel.add(configChoice);
-        msgChoice.setLayout(new BoxLayout(msgChoice, BoxLayout.X_AXIS));
-        mainPanel.add(msgChoice);
+        mainPanel.add(JMeterUtils.labelFor(urlField, "jms_provider_url"));
+        mainPanel.add(urlField, "span, growx");
 
-        String nonBreakingSpace = "\u00A0"; // CHECKSTYLE IGNORE AvoidEscapedUnicodeCharacters
-        fileEncoding = new JLabeledChoice(JMeterUtils.getResString("content_encoding") + nonBreakingSpace + nonBreakingSpace, // $NON-NLS-1$
-                PublisherSampler.getSupportedEncodings(), true, false);
-        fileEncoding.setLayout(new BoxLayout(fileEncoding, BoxLayout.X_AXIS));
-        fileEncoding.add(Box.createHorizontalGlue());
-        mainPanel.add(fileEncoding);
+        mainPanel.add(useAuth);
+        mainPanel.add(jmsUser);
+        mainPanel.add(jmsPwd);
 
-        mainPanel.add(messageFile);
-        mainPanel.add(randomFile);
+        mainPanel.add(JMeterUtils.labelFor(jndiConnFac, "jms_connection_factory"));
+        mainPanel.add(jndiConnFac, "span, growx");
 
-        JPanel messageContentPanel = new JPanel(new BorderLayout());
-        messageContentPanel.add(new JLabel(JMeterUtils.getResString("jms_text_area")), BorderLayout.NORTH);
-        messageContentPanel.add(JTextScrollPane.getInstance(textMessage), BorderLayout.CENTER);
+        mainPanel.add(JMeterUtils.labelFor(jmsDestination, "jms_topic"));
+        mainPanel.add(jmsDestination);
+        mainPanel.add(destSetup);
 
-        mainPanel.add(messageContentPanel);
+        mainPanel.add(useNonPersistentDelivery);
+        mainPanel.add(expiration);
+        mainPanel.add(priority);
+
+
+        jmsPropertiesPanel = new JMSPropertiesPanel();
+        mainPanel.add(jmsPropertiesPanel, "span, growx");
+
+        mainPanel.add(msgChoice, "span");
+        fileEncoding = new JComboBox<String>(PublisherSampler.getSupportedEncodings());
+        fileEncoding.setEditable(true);
+        mainPanel.add(JMeterUtils.labelFor(fileEncoding, "content_encoding"));
+        mainPanel.add(fileEncoding, "span, growx");
+
+        mainPanel.add(configChoice, "span");
+        mainPanel.add(JMeterUtils.labelFor(textMessage, "jms_text_area"), "span");
+        mainPanel.add(JTextScrollPane.getInstance(textMessage), "span, growx");
+        mainPanel.add(messageFile, "span, growx");
+        mainPanel.add(randomFile, "span, growx");
+
+        mainPanel.add(JMeterUtils.labelFor(jmsErrorReconnectOnCodes, "jms_error_reconnect_on_codes"));
+        mainPanel.add(jmsErrorReconnectOnCodes, "span, growx");
+
+        mainPanel.add(JMeterUtils.labelFor(iterations, "jms_itertions"));
+        mainPanel.add(iterations, "span, growx");
+
         useProperties.addChangeListener(this);
         useAuth.addChangeListener(this);
         configChoice.addChangeListener(this);
@@ -294,7 +308,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         randomFile.setFilename(sampler.getRandomPath());
         configChoice.setText(sampler.getConfigChoice());
         msgChoice.setText(sampler.getMessageChoice());
-        fileEncoding.setText(sampler.getFileEncoding());
+        fileEncoding.setSelectedItem(sampler.getFileEncoding());
         iterations.setText(sampler.getIterations());
         expiration.setText(sampler.getExpiration());
         jmsErrorReconnectOnCodes.setText(sampler.getReconnectionErrorCodes());
@@ -333,7 +347,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     private void updateFileEncoding() {
         boolean isTextMode = USE_TEXT_RSC.equals(configChoice.getText());
         boolean isObjectType = OBJECT_MSG_RSC.equals(msgChoice.getText());
-        fileEncoding.setChoiceListEnabled(!isTextMode && !isObjectType);
+        fileEncoding.setEnabled(!isTextMode && !isObjectType);
     }
     /**
      * Update choice contains the actual logic for hiding or showing Textarea if Bytes message
@@ -377,41 +391,5 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
             randomFile.enableFile(false);
         }
         updateFileEncoding();
-    }
-
-    /**
-     * @return JPanel that contains destination infos
-     */
-    private JPanel createDestinationPane() {
-        JPanel pane = new JPanel(new BorderLayout(3, 0));
-        pane.add(jmsDestination, BorderLayout.WEST);
-        destSetup.setLayout(new BoxLayout(destSetup, BoxLayout.X_AXIS));
-        pane.add(destSetup, BorderLayout.CENTER);
-        pane.add(useNonPersistentDelivery, BorderLayout.EAST);
-        return pane;
-    }
-
-    /**
-     * @return JPanel Panel with checkbox to choose auth , user and password
-     */
-    private JPanel createAuthPane() {
-        JPanel pane = new JPanel();
-        pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-        pane.add(useAuth);
-        pane.add(Box.createHorizontalStrut(10));
-        pane.add(jmsUser);
-        pane.add(Box.createHorizontalStrut(10));
-        pane.add(jmsPwd);
-        return pane;
-    }
-
-    /**
-     * @return JPanel Panel for priority and expiration
-     */
-    private JPanel createPriorityAndExpiration() {
-        JPanel panel = new HorizontalPanel();
-        panel.add(expiration);
-        panel.add(priority);
-        return panel;
     }
 }
