@@ -180,6 +180,7 @@ invalidated when tree selection changes.</p>
   <li><bug>64198</bug>Allow spaces in <code>${...}</code> expressions around functions.</li>
   <li><bug>64276</bug>Search popup: Improve UX</li>
   <li><pr>573</pr>Improve the startup time: skip test plan UI initialization</li>
+  <li><pr>585</pr>Added JEXL3 as a syntax alias for JSyntaxTextArea. Contributed by drivera-armedia (https://github.com/drivera-armedia)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -287,6 +288,7 @@ invalidated when tree selection changes.</p>
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+  <li>Jannis Weis (https://github.com/weisJ/darklaf)</li>
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
   <li>jmetertea</li>
   <li>ray7219</li>
@@ -295,6 +297,7 @@ invalidated when tree selection changes.</p>
   <li>anant-93 (https://github.com/anant-93)</li>
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>Keith Mo(https://github.com/keithmork)</li>
+  <li>drivera-armedia (https://github.com/drivera-armedia)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
