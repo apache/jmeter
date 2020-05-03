@@ -209,27 +209,27 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
         mainPanel.add(useProperties, "span");
 
-        mainPanel.add(JMeterUtils.labelFor(jndiICF, "jms_initial_context_factory"), "span 1");
+        mainPanel.add(JMeterUtils.labelFor(jndiICF, "jms_initial_context_factory"));
         mainPanel.add(jndiICF, "span, growx");
 
-        mainPanel.add(JMeterUtils.labelFor(urlField, "jms_provider_url"), "span 1");
+        mainPanel.add(JMeterUtils.labelFor(urlField, "jms_provider_url"));
         mainPanel.add(urlField, "span, growx");
 
         mainPanel.add(useAuth);
         mainPanel.add(jmsUser);
         mainPanel.add(jmsPwd);
 
-        mainPanel.add(JMeterUtils.labelFor(jndiConnFac, "jms_connection_factory"), "span 1");
+        mainPanel.add(JMeterUtils.labelFor(jndiConnFac, "jms_connection_factory"));
         mainPanel.add(jndiConnFac, "span, growx");
 
         mainPanel.add(JMeterUtils.labelFor(jmsDestination, "jms_topic"));
-        mainPanel.add(jmsDestination, "span, growx");
+        mainPanel.add(jmsDestination);
+        mainPanel.add(destSetup);
 
         mainPanel.add(useNonPersistentDelivery);
         mainPanel.add(expiration);
         mainPanel.add(priority);
 
-        mainPanel.add(destSetup, "span 3");
 
         jmsPropertiesPanel = new JMSPropertiesPanel();
         mainPanel.add(jmsPropertiesPanel, "span, growx");
@@ -249,7 +249,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(JMeterUtils.labelFor(jmsErrorReconnectOnCodes, "jms_error_reconnect_on_codes"));
         mainPanel.add(jmsErrorReconnectOnCodes, "span, growx");
 
-        mainPanel.add(JMeterUtils.labelFor(iterations, "jms_itertions"), "span 1");
+        mainPanel.add(JMeterUtils.labelFor(iterations, "jms_itertions"));
         mainPanel.add(iterations, "span, growx");
 
         useProperties.addChangeListener(this);
