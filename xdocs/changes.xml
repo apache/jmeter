@@ -109,6 +109,9 @@ invalidated when tree selection changes.</p>
 <p>Mark the currently selected language in the options menu.</p>
 
 <p>Mark the currently selected log level in the options menu.</p>
+
+<p>Rework of many Test Element UI (JUnit Request, ForEach Controller, If Controller, Throughput Controller, WhileController, Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, 
+JMS Elements)</p>
 <!--
 <ch_title>Functions</ch_title>
 -->
@@ -132,8 +135,8 @@ invalidated when tree selection changes.</p>
 <h3>Other samplers</h3>
 <ul>
     <li><bug>64288</bug>JUnit Request: Improve UX</li>
-    <li><bug>64407</bug>Improve JMS Publisher UX. Contributed by Ubik Load Pack (www.ubikloadpack.com)</li>
-    <li><bug>64408</bug>Improve JMS Subscriber UX. Contributed by Ubik Load Pack (www.ubikloadpack.com)</li>
+    <li><bug>64407</bug>Improve JMS Publisher UX. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
+    <li><bug>64408</bug>Improve JMS Subscriber UX. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -290,7 +293,7 @@ invalidated when tree selection changes.</p>
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-  <li>Jannis Weis (https://github.com/weisJ/darklaf)</li>
+  <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
   <li>jmetertea</li>
   <li>ray7219</li>
@@ -300,6 +303,7 @@ invalidated when tree selection changes.</p>
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>Keith Mo(https://github.com/keithmork)</li>
   <li>drivera-armedia (https://github.com/drivera-armedia)</li>
+  <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
