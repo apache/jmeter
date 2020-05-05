@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link AbstractBackendListenerClient} to write in an InfluxDB using
- * custom schema
+ * custom schema; since JMeter 5.2, this also support the InfluxDB v2.
  *
  * @since 3.2
  */

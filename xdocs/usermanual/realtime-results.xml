@@ -158,6 +158,20 @@ Installation and configuration is very easy, read this for more details <a href=
 InfluxDB data can be easily viewed in a browser through <a href="http://grafana.org/"  target="_blank">Grafana</a>.
 </p>
 </subsection>
+<subsection name="&sect-num;.3.2 InfluxDB 2 setup for InfluxDBBackendListenerClient" anchor="influxdb_v2">
+    <p>
+        The configuration should specify the <code>influxdbToken</code> parameter and also specify <code>bucket</code> and <code>org</code> as query parameters in the <code>influxdbUrl</code>. See the <a href="https://v2.docs.influxdata.com/v2.0/api/#operation/PostWrite" target="_blank">InfluxDB v2 API</a> for more details.
+    </p>
+    <p>
+     How to retrieve the required information in the InfluxDB UI:
+     <ul>
+         <li><a target="_blank" href="https://v2.docs.influxdata.com/v2.0/security/tokens/view-tokens/">influxdbToken</a></li>
+         <li><a target="_blank" href="https://v2.docs.influxdata.com/v2.0/organizations/buckets/view-buckets/">bucket</a></li>
+         <li><a target="_blank" href="https://v2.docs.influxdata.com/v2.0/organizations/view-orgs/">org</a></li>
+    </ul>
+    </p>
+    <figure width="882" height="428" image="backend_listener_influxdb_v2.png">InfluxDB 2 configuration</figure>
+</subsection>
 </subsection>
 
 <subsection name="&sect-num;.4 Grafana configuration" anchor="grafana_configuration">
