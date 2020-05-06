@@ -17,11 +17,13 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import java.awt.event.ActionEvent;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -30,6 +32,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -278,11 +281,17 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private JMeterTreeModel nonGuiTreeModel;
 
+    private ArrayDeque<SamplerInfo> sampleQueue = new ArrayDeque<>();
+
+    // accessed from Swing-Thread, only
+    private String oldPrefix = null;
+
     public ProxyControl() {
         setPort(DEFAULT_PORT);
         setExcludeList(new HashSet<>());
         setIncludeList(new HashSet<>());
         setCaptureHttpHeaders(true); // maintain original behaviour
+        new javax.swing.Timer(200, this::putSamplesIntoModel).start();
     }
 
     /**
@@ -608,7 +617,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 if (authorization != null) {
                     setAuthorization(authorization, myTarget);
                 }
-                placeSampler(sampler, testElements, myTarget);
+                sampleQueue.add(new SamplerInfo(sampler, testElements, myTarget, getPrefixHTTPSampleName(), groupingMode));
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug(
@@ -1124,86 +1133,103 @@ public class ProxyControl extends GenericController implements NonTestElement {
         return elements;
     }
 
-    private void placeSampler(
-            HTTPSamplerBase sampler, TestElement[] testElements, JMeterTreeNode myTarget) {
-        try {
-            final JMeterTreeModel treeModel = getJmeterTreeModel();
-
-            boolean firstInBatch = false;
-            long now = System.currentTimeMillis();
-            long deltaT = now - lastTime;
-            int cachedGroupingMode = groupingMode;
-            if (deltaT > sampleGap) {
-                String controllerName = StringUtils.isNotEmpty(getPrefixHTTPSampleName()) ?
-                        getPrefixHTTPSampleName() : sampler.getName();
-                if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
-                    addDivider(treeModel, myTarget);
-                }
-                if (cachedGroupingMode == GROUPING_IN_SIMPLE_CONTROLLERS) {
-                    addSimpleController(treeModel, myTarget, controllerName);
-                }
-                if (cachedGroupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
-                    addTransactionController(treeModel, myTarget, controllerName);
-                }
-                firstInBatch = true;// Remember this was first in its batch
-            }
-            if (lastTime == 0) {
-                deltaT = 0; // Decent value for timers
-            }
-            lastTime = now;
-
-            if (cachedGroupingMode == GROUPING_STORE_FIRST_ONLY) {
-                if (!firstInBatch) {
-                    return; // Huh! don't store this one!
-                }
-
-                // If we're not storing subsequent samplers, we'll need the
-                // first sampler to do all the work...:
-                sampler.setFollowRedirects(true);
-                sampler.setImageParser(true);
-            }
-
-            if (cachedGroupingMode == GROUPING_IN_SIMPLE_CONTROLLERS ||
-                    cachedGroupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
-                // Find the last controller in the target to store the
-                // sampler there:
-                for (int i = myTarget.getChildCount() - 1; i >= 0; i--) {
-                    JMeterTreeNode c = (JMeterTreeNode) myTarget.getChildAt(i);
-                    if (c.getTestElement() instanceof GenericController) {
-                        myTarget = c;
-                        break;
-                    }
-                }
-            }
-            final long deltaTFinal = deltaT;
-            final boolean firstInBatchFinal = firstInBatch;
-            final JMeterTreeNode myTargetFinal = myTarget;
-            JMeterUtils.runSafe(true, () -> {
+    private void putSamplesIntoModel(ActionEvent e) {
+        final JMeterTreeModel treeModel = getJmeterTreeModel();
+        while (!sampleQueue.isEmpty()) {
+            SamplerInfo info = sampleQueue.poll();
+            try {
+                log.info("Add sample {} into controller {}", info.sampler.getName(), info.prefix);
                 try {
-                    final JMeterTreeNode newNode = treeModel.addComponent(sampler, myTargetFinal);
-                    if (firstInBatchFinal) {
+                    long now = info.recordedAt;
+                    long deltaT = now - lastTime;
+                    boolean firstInBatch = prepareTree( treeModel, deltaT, info);
+                    if (lastTime == 0) {
+                        deltaT = 0; // Decent value for timers
+                    }
+                    lastTime = now;
+
+                    if (info.groupingMode == GROUPING_STORE_FIRST_ONLY) {
+                        if (!firstInBatch) {
+                            return; // Huh! don't store this one!
+                        }
+
+                        // If we're not storing subsequent samplers, we'll need the
+                        // first sampler to do all the work...:
+                        info.sampler.setFollowRedirects(true);
+                        info.sampler.setImageParser(true);
+                    }
+
+                    final JMeterTreeNode targetNode = getTargetNode(info.target, info.groupingMode);
+                    final JMeterTreeNode newNode = treeModel.addComponent(info.sampler, targetNode);
+                    if (firstInBatch) {
                         if (addAssertions) {
                             addAssertion(treeModel, newNode);
                         }
-                        addTimers(treeModel, newNode, deltaTFinal);
+                        addTimers(treeModel, newNode, deltaT);
                     }
-
-                    if (testElements != null) {
-                        for (TestElement testElement : testElements) {
-                            if (isAddableTestElement(testElement)) {
-                                treeModel.addComponent(testElement, newNode);
-                            }
-                        }
-                    }
-                } catch (IllegalUserActionException e) {
-                    log.error("Error placing sampler", e);
-                    JMeterUtils.reportErrorToUser(e.getMessage());
+                    addTestElements(treeModel, info.testElements, newNode);
+                } catch (IllegalUserActionException ex) {
+                    log.error("Error placing sampler", ex);
+                    JMeterUtils.reportErrorToUser(ex.getMessage());
                 }
-            });
-        } catch (Exception e) {
-            log.error("Error placing sampler", e);
-            JMeterUtils.reportErrorToUser(e.getMessage());
+            } catch (Exception ex) {
+                log.error("Error placing sampler", ex);
+                JMeterUtils.reportErrorToUser(ex.getMessage());
+            }
         }
+    }
+
+    private void addTestElements(final JMeterTreeModel treeModel, TestElement[] testElements,
+            final JMeterTreeNode newNode) throws IllegalUserActionException {
+        if (testElements == null) {
+            return;
+        }
+        for (TestElement testElement : testElements) {
+            if (isAddableTestElement(testElement)) {
+                treeModel.addComponent(testElement, newNode);
+            }
+        }
+    }
+
+    private boolean prepareTree(final JMeterTreeModel treeModel,
+            long deltaT, SamplerInfo info) {
+        HTTPSamplerBase sampler = info.sampler;
+        JMeterTreeNode myTarget = info.target;
+        int cachedGroupingMode = info.groupingMode;
+        boolean prefixChanged = false;
+        if (oldPrefix == null || !oldPrefix.equals(info.prefix)) {
+            oldPrefix = info.prefix;
+            prefixChanged = true;
+        }
+        if (deltaT > sampleGap || prefixChanged) {
+            String controllerName = StringUtils.defaultString(getPrefixHTTPSampleName(), sampler.getName());
+            if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
+                addDivider(treeModel, myTarget);
+            }
+            if (cachedGroupingMode == GROUPING_IN_SIMPLE_CONTROLLERS) {
+                addSimpleController(treeModel, myTarget, controllerName);
+            }
+            if (cachedGroupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
+                addTransactionController(treeModel, myTarget, controllerName);
+            }
+            return true;// Remember this was first in its batch
+        }
+        return false;
+    }
+
+    private JMeterTreeNode getTargetNode(JMeterTreeNode origTarget, int cachedGroupingMode) {
+        if (cachedGroupingMode == GROUPING_IN_SIMPLE_CONTROLLERS ||
+                cachedGroupingMode == GROUPING_IN_TRANSACTION_CONTROLLERS) {
+            // Find the last controller in the target to store the
+            // sampler there:
+            for (int i = origTarget.getChildCount() - 1; i >= 0; i--) {
+                JMeterTreeNode currentNode = (JMeterTreeNode) origTarget.getChildAt(i);
+                if (currentNode.getTestElement() instanceof GenericController) {
+                    return currentNode;
+                }
+            }
+        }
+        return origTarget;
     }
 
     /**
@@ -1609,4 +1635,26 @@ public class ProxyControl extends GenericController implements NonTestElement {
         return KEYSTORE_MODE == KeystoreMode.DYNAMIC_KEYSTORE;
     }
 
+    /**
+     * Holds information about a sampler at the time of recording by the HTTP proxy
+     */
+    private static class SamplerInfo implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private HTTPSamplerBase sampler;
+        private transient TestElement[] testElements;
+        private JMeterTreeNode target;
+        private String prefix;
+        private int groupingMode;
+        private long recordedAt;
+
+        public SamplerInfo(HTTPSamplerBase sampler, TestElement[] testElements, JMeterTreeNode target, String prefix,
+                int groupingMode) {
+            this.sampler = sampler;
+            this.testElements = testElements;
+            this.target = target;
+            this.prefix = prefix;
+            this.groupingMode = groupingMode;
+            this.recordedAt = System.currentTimeMillis();
+        }
+    }
 }

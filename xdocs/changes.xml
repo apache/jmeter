@@ -223,6 +223,7 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
     <li>Updated equalsverifier to 3.1.13 (from 3.1.12)</li>
     <li>Updated xstream to 1.4.11.1 (from 1.4.11)</li>
     <li><pr>559</pr>Add a note to the source of TrustAllSSLSocketFactory, that it is not secure to trust everyone. Based on a PR from YYTVicky (yytvicky at github)</li>
+    <li><pr>588</pr>Add documentation on usage of InfluxDB v2 for real-time results. Based on PR from Jakub Bednář (jakub.bednar at gmail.com)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -231,6 +232,7 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>64400</bug>Make sorting recorded samples into transaction controllers more predictable</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -304,6 +306,7 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
   <li>Keith Mo(https://github.com/keithmork)</li>
   <li>drivera-armedia (https://github.com/drivera-armedia)</li>
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
+  <li>Jakub Bednář (jakub.bednar at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
