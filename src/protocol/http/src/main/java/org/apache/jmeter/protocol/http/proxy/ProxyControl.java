@@ -1134,6 +1134,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
     }
 
     private void putSamplesIntoModel(ActionEvent e) {
+        // return early, as JMeterTreeModel might not been initialized yet
+        if (sampleQueue.isEmpty()) {
+            return;
+        }
         final JMeterTreeModel treeModel = getJmeterTreeModel();
         while (!sampleQueue.isEmpty()) {
             SamplerInfo info = sampleQueue.poll();
