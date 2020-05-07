@@ -19,8 +19,8 @@ package org.apache.jmeter.protocol.http.parser;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.Assert.assertThat;
 
 import java.net.MalformedURLException;
 import java.net.URL;

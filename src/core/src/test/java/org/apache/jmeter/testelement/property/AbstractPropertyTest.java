@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.testelement.property;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Collection;

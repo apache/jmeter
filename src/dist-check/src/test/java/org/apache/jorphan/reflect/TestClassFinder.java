@@ -26,6 +26,7 @@ import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.logging.log4j.LoggingException;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ public class TestClassFinder {
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Exception.class });
-        Assert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
+        MatcherAssert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
     }
 
     @Test
@@ -71,7 +72,7 @@ public class TestClassFinder {
                 false);
         Assert.assertTrue(
                 findClassesThatExtend.stream().filter(s -> s.contains("$")).collect(Collectors.toList()).isEmpty());
-        Assert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
+        MatcherAssert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
     }
 
     @Test
