@@ -75,6 +75,7 @@
     <trusted-key id='411063a3a0ffd119' group='org.apache-extras.beanshell' />
     <trusted-key id='87a7f75a6a8ba5fc' group='org.apache.activemq' />
     <trusted-key id='bff2ee42c8282e76' group='org.apache.activemq' />
+    <trusted-key id='ddbcc1270a29d081' group='org.apache.ant' />
     <trusted-key id='86fdc7e2a11262cb' group='org.apache.bcel' />
     <trusted-key id='3faad2cd5ecbb314' group='org.apache.commons' />
     <trusted-key id='64a16faaec16a4be' group='org.apache.commons' />
@@ -140,6 +141,7 @@
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.api' />
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.gradle' />
     <trusted-key id='72fefd1572eb75e1' group='org.spockframework' />
+    <trusted-key id='af0a94402ea0a67f' group='org.spockframework' />
     <trusted-key id='9a2c7a98e457c53d' group='org.springframework' />
     <trusted-key id='e4b53844e02b191b' group='org.swinglabs' />
     <trusted-key id='a2115ae15f6b8b72' group='org.xmlunit' />
