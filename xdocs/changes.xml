@@ -205,7 +205,7 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
     <li>Updated hamcrest to 2.2 (from 2.1)</li>
     <li>Updated Apache httpclient and httpmime to 4.5.12 (from 4.5.10)</li>
     <li>Updated Apache httpcore and httpcore-nio to 4.4.13 (from 4.4.12)</li>
-    <li>Updated Apache Tika to 1.23 (from 1.22)</li>
+    <li>Updated Apache Tika to 1.24.1 (from 1.22)</li>
     <li>Updated jmespath to 0.5.0 (from 0.3.0)</li>
     <li>Updated Apache log4j to 2.13.1 (from 2.12.1)</li>
     <li>Updated junit4 to 4.13 (from 4.12)</li>
