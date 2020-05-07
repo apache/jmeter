@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.net.URL;
 import java.nio.charset.StandardCharsets;

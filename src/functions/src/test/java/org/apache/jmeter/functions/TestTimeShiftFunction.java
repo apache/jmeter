@@ -22,7 +22,7 @@ import static org.exparity.hamcrest.date.LocalDateMatchers.sameDay;
 import static org.exparity.hamcrest.date.LocalDateTimeMatchers.within;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.time.Instant;
 import java.time.LocalDate;

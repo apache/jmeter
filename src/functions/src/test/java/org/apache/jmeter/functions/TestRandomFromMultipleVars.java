@@ -29,6 +29,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,7 +74,7 @@ public class TestRandomFromMultipleVars extends JMeterTestCase {
         params.add(new CompoundVariable("var1|var2"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assert.assertThat(returnValue,
+        MatcherAssert.assertThat(returnValue,
                 CoreMatchers.anyOf(CoreMatchers.is("var1_value"),
                         CoreMatchers.is("var2_value1"),
                         CoreMatchers.is("var2_value2")));
