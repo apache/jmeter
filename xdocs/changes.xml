@@ -186,6 +186,7 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
   <li><bug>64276</bug>Search popup: Improve UX</li>
   <li><pr>573</pr>Improve the startup time: skip test plan UI initialization</li>
   <li><pr>585</pr>Added JEXL3 as a syntax alias for JSyntaxTextArea. Contributed by drivera-armedia (https://github.com/drivera-armedia)</li>
+  <li><pr>590</pr>Update Groovy to 3.0.3.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

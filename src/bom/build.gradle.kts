@@ -39,7 +39,13 @@ fun DependencyConstraintHandlerScope.runtimev(
 ) =
     "runtime"(notation + ":" + versionProp.v)
 
+javaPlatform {
+    allowDependencies()
+}
+
 dependencies {
+    api(platform("org.codehaus.groovy:groovy-bom:${"groovy".v}"))
+
     // Parenthesis are needed here: https://github.com/gradle/gradle/issues/9248
     (constraints) {
         // api means "the dependency is for both compilation and runtime"
@@ -87,7 +93,6 @@ dependencies {
         apiv("javax.mail:mail")
         apiv("jcharts:jcharts")
         apiv("junit:junit", "junit4")
-        apiv("org.codehaus.groovy:groovy-all")
         apiv("org.junit.jupiter:junit-jupiter-api", "junit5")
         apiv("org.junit.jupiter:junit-jupiter-params", "junit5")
         runtimev("org.junit.jupiter:junit-jupiter-engine", "junit5")
