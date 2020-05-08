@@ -63,8 +63,6 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private static final int SAMPLER_NAME_NAMING_MODE_PREFIX = 0;  // $NON-NLS-1$
     private static final int SAMPLER_NAME_NAMING_MODE_COMPLETE = 1;  // $NON-NLS-1$
 
-    private static final String  SAMPLER_NUMBERING_MODE_NAME_PREFIX = "prefix";  // $NON-NLS-1$
-    private static final String  SAMPLER_NUMBERING_MODE_NAME_SUFFIX = "suffix";  // $NON-NLS-1$
     /**
      *
      */
@@ -294,36 +292,20 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             if(StringUtils.isNotEmpty(prefix)) {
             	// with a prefix name
                 if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
-<<<<<<< HEAD
                     if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(getNumberMode())) {
                         // ppp/img.png-001
                         sampler.setName(prefix + sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
                     }
                     if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(getNumberMode())) {
-=======
-                    if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
-                        // ppp/img.png-001
-                        sampler.setName(prefix + sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
-                    }
-                    if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
->>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
                         // ppp-001 /img.png
                         sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()) + " " + sampler.getPath());
                     }
                 } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
-<<<<<<< HEAD
                     if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(getNumberMode())) {
                         // ppp-001
                         sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
                     }
                     if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(getNumberMode())) {
-=======
-                    if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
-                        // ppp-001
-                        sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
-                    }
-                    if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
->>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
                         // 001-ppp
                         sampler.setName(formatNumberingInteger(incrementRequestNumberAndGet()) + "-" + prefix);
                     }
@@ -332,19 +314,11 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 }
             } else {
                 // no prefix name
-<<<<<<< HEAD
                 if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(getNumberMode())) {
                     // /img.png-001
                     sampler.setName(sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
                 }
                 if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(getNumberMode())) {
-=======
-                if (SAMPLER_NUMBERING_MODE_NAME_SUFFIX.equals(getNumberMode())) {
-                    // /img.png-001
-                    sampler.setName(sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
-                }
-                if (SAMPLER_NUMBERING_MODE_NAME_PREFIX.equals(getNumberMode())) {
->>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
                     // 001 /img.png
                     sampler.setName(formatNumberingInteger(incrementRequestNumberAndGet()) + " " + sampler.getPath());
                 }
@@ -505,16 +479,12 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
     protected String formatNumberingInteger(int iValue) {
         // format like %03d
-<<<<<<< HEAD
     	String sFormat = getNumberValueFormat();
     	if (sFormat.length() == 0) {
     		// the simplest format for an integer
     		sFormat = "%d";
     	}
         String sReturn = String.format(sFormat, iValue);
-=======
-        String sReturn = String.format(getNumberValueFormat(), iValue);
->>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
         return sReturn;
     }
 }

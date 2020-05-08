@@ -52,25 +52,6 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
         JMeterUtils.getPropDefault("proxy.binary.directory",// $NON-NLS-1$
                 System.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.fileType=binary
 
-<<<<<<< HEAD
-=======
-    /*
-     * Optionally number the requests
-     */
-    private final boolean NUMBER_REQUESTS =
-        JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
->>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
-
-    /*
-     *  numbering mode : prefix or suffix
-     */
-    private final String NUMBER_MODE = JMeterUtils.getPropDefault("proxy.number.mode", "prefix"); // $NON-NLS-1$
-
-    /*
-     *  format numbering  (String.format) like %03d
-     */
-    private final String  NUMBER_VALUE_FORMAT = JMeterUtils.getPropDefault("proxy.number.value_format", "%03d"); // $NON-NLS-1$
-
     private static AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
 
     static {
@@ -100,12 +81,8 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
 
     /**
      * set the RequestNumber to a specify value
-<<<<<<< HEAD
      * @param iValue the current number
-=======
-     * @param iValue
->>>>>>> 478ab74d404d48199a5d690bffbd35f061f061e7
-     */
+    */
     public void setRequestNumber(int iValue) {
         REQUEST_NUMBER.set(iValue);
     }
