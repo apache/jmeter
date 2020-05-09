@@ -438,9 +438,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
-    private static final ThreadLocal<Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>
-        HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY =
-            InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
+    private static final ThreadLocal<Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = new InheritableThreadLocal<Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>() {
+        @Override
+        protected Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> initialValue() {
+            return new HashMap<>(5);
+        }
+    };
 
     /**
      * CONNECTION_SOCKET_FACTORY changes if we want to simulate Slow connection
