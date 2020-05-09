@@ -119,7 +119,8 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-    <li>Default value of <code>httpclient4.time_to_live</code> has been modified from 2000 to 60000, this means HTTP connections will live longer than before. This
+    <li>Default value of <code>httpclient4.time_to_live</code> has been modified from <code>2000</code> to <code>60000</code>,
+    this means HTTP connections will live longer than before. This
     has impact on connection creation and SSL handshake, see <bugzilla>64289</bugzilla></li>
     <li>The update to Groovy 3 (<pr>590</pr>) might break some old Groovy code of your tests. Have a look
     at <a href="https://groovy-lang.org/releasenotes/groovy-3.0.html">the update notes for Groovy 3</a></li>
@@ -130,8 +131,8 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>64160</bug>Test HTTP/S Test Script Recorder: Name transaction controller/ simple controller using prefix without "-XXXX" suffix</li>
-    <li><bug>64289</bug>Make <code>httpclient4.time_to_live</code> to 60000 to be closer to typical browser behavior</li>
+    <li><bug>64160</bug>Test HTTP/S Test Script Recorder: Name transaction controller/ simple controller using prefix without "<code>-XXXX</code>" suffix</li>
+    <li><bug>64289</bug>Make <code>httpclient4.time_to_live</code> to <code>60000</code> to be closer to typical browser behavior</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -175,7 +176,7 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 
 <h3>Report / Dashboard</h3>
 <ul>
-  <li><bug>64380</bug>Add a 'Median' field to the dashboard and make the response time percentile fields support floating-point numbers. Contributed by Keith Mo(https://github.com/keithmork)</li>
+  <li><bug>64380</bug>Add a '<code>Median</code>' field to the dashboard and make the response time percentile fields support floating-point numbers. Contributed by Keith Mo(https://github.com/keithmork)</li>
   <li><bug>64378</bug>HTML report generation should not fail if a plugin has registered a graph and is not more present in classpath, issue a warning instead</li>
 </ul>
 
