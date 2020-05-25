@@ -137,6 +137,7 @@
     <trusted-key id='7c7d8456294423ba' group='org.objenesis' />
     <trusted-key id='85911f425ec61b51' group='org.opentest4j' />
     <trusted-key id='5f69ad087600b22c' group='org.ow2.asm' />
+    <trusted-key id='1364c5e2df3e99c5' group='org.reactivestreams' />
     <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.api' />
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.gradle' />

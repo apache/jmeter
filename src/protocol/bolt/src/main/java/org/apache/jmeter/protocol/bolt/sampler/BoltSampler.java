@@ -35,12 +35,12 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
-import org.neo4j.driver.v1.Driver;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Session;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.exceptions.Neo4jException;
-import org.neo4j.driver.v1.summary.ResultSummary;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.Record;
+import org.neo4j.driver.Result;
+import org.neo4j.driver.Session;
+import org.neo4j.driver.exceptions.Neo4jException;
+import org.neo4j.driver.summary.ResultSummary;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -102,7 +102,7 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
 
     private String execute(Driver driver, String cypher, Map<String, Object> params) {
         try (Session session = driver.session()) {
-            StatementResult statementResult = session.run(cypher, params);
+            Result statementResult = session.run(cypher, params);
             return response(statementResult);
         }
     }
@@ -137,10 +137,10 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
         return request.toString();
     }
 
-    private String response(StatementResult result) {
+    private String response(Result result) {
         StringBuilder response = new StringBuilder();
         response.append("\nSummary:");
-        ResultSummary summary = result.summary();
+        ResultSummary summary = result.consume();
         response.append("\nConstraints Added: ")
                 .append(summary.counters().constraintsAdded())
                 .append("\nConstraints Removed: ")
