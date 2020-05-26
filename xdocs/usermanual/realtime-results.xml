@@ -143,12 +143,12 @@ In this document we will present the configuration setup to graph and historize 
     <figure width="902" height="341" image="backend_listener.png">InfluxDB configuration</figure>
 </subsection>
 
-<subsection name="&sect-num;.3 InfluxDB database configuration" anchor="influxdb_db_configuration">
-    <p>Connect to InfluxDB using <a href="https://docs.influxdata.com/influxdb/latest/introduction/getting_started/" >InfluxDB’s Command Line Interface (CLI).</a> and <a href="https://docs.influxdata.com/influxdb/latest/query_language/database_management/" >create JMeter database</a>:
+<subsection name="&sect-num;.3 InfluxDB configuration" anchor="influxdb_db_configuration">
+    <p>Do one of the following to store data sent by the Backend Listener:
     <ul>
-        <li>jmeter : Used by InfluxDB to store the data sent by the Backend Listener</li>
+        <li>For InfluxDB 2 setup, create a <code>jmeter</code> <a href="https://v2.docs.influxdata.com/v2.0/organizations/buckets/create-bucket/" target="_blank">bucket</a></li>
+        <li>For InfluxDB 1.x setup, create a <code>jmeter</code> database using the <a href="https://docs.influxdata.com/influxdb/v1.8/introduction/get-started/" target="_blank">Influx CLI</a></li>
     </ul>
-    You can do it too by using the HTTP API.
     </p>
 
 <subsection name="&sect-num;.3.1 InfluxDB setup for InfluxDBBackendListenerClient" anchor="influxdb">
