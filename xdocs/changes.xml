@@ -222,6 +222,7 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
     <li>Updated hamcrest-date to 2.0.7 (from 2.0.4)</li>
     <li>Updated equalsverifier to 3.1.13 (from 3.1.12)</li>
     <li>Updated xstream to 1.4.11.1 (from 1.4.11)</li>
+    <li>Updated neo4j-java-driver to 4.0.1 (from 1.7.5)</li>
     <li><pr>559</pr>Add a note to the source of TrustAllSSLSocketFactory, that it is not secure to trust everyone. Based on a PR from YYTVicky (yytvicky at github)</li>
     <li><pr>588</pr>Add documentation on usage of InfluxDB v2 for real-time results. Based on PR from Jakub Bednář (jakub.bednar at gmail.com)</li>
 </ul>
