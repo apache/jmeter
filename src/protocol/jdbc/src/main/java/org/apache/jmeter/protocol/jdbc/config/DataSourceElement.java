@@ -114,8 +114,8 @@ public class DataSourceElement extends AbstractTestElement
         TestBeanHelper.prepare(this);
         JMeterVariables variables = getThreadContext().getVariables();
         String poolName = getDataSource();
-        if(JOrphanUtils.isBlank(poolName)) {
-            throw new IllegalArgumentException("Variable Name must not be empty for element:"+getName());
+        if (JOrphanUtils.isBlank(poolName)) {
+            throw new IllegalArgumentException("Name for DataSoure must not be empty in " + getName());
         } else if (variables.getObject(poolName) != null) {
             log.error("JDBC data source already defined for: {}", poolName);
         } else {

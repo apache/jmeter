@@ -114,6 +114,7 @@ Summary
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li><pr>594</pr>Updated neo4j-java-driver to 4.0.1 (from 1.7.5)</li>
+    <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
