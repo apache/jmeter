@@ -182,9 +182,7 @@ public class ParseCurlCommandActionTest {
         httpSampler.setProperty(TestElement.NAME, "HTTP Request");
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -x 'https://aa:bb@example.com:8042'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("createProxyServer", Request.class, HTTPSamplerProxy.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createProxyServer", Request.class, HTTPSamplerProxy.class);
         method.invoke(p, request, httpSampler);
         assertEquals("example.com", httpSampler.getProxyHost(), "proxy host should be set in httpsampler");
         assertEquals("aa", httpSampler.getProxyUser(), "proxy user should be set in httpsampler");
@@ -200,9 +198,7 @@ public class ParseCurlCommandActionTest {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org:8443/' -x 'https://aa:bb@example.com:8042'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("createSampler", Request.class, String.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createSampler", Request.class, String.class);
         HTTPSamplerProxy httpSampler = (HTTPSamplerProxy) method.invoke(p, request, "");
         assertEquals("https", httpSampler.getProxyScheme(), "proxy scheme should be set in httpsampler");
         assertEquals("example.com", httpSampler.getProxyHost(), "proxy host should be set in httpsampler");
@@ -268,9 +264,7 @@ public class ParseCurlCommandActionTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser
                 .parse("curl 'http://jmeter.apache.org/' -F 'test=name' --data 'fname=a&lname=b'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("setFormData", Request.class, HTTPSamplerProxy.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("setFormData", Request.class, HTTPSamplerProxy.class);
         try {
             method.invoke(p, request, httpSampler);
             throw new IllegalStateException("Should have thrown InvocationTargetException");
@@ -289,9 +283,7 @@ public class ParseCurlCommandActionTest {
         HashTree testPlanHT = tree.add(testPlan);
         HashTree threadGroupHT = testPlanHT.add(threadGroup);
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/'  -E '<CA certificate>'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("createHttpRequest", Request.class, HashTree.class, String.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createHttpRequest", Request.class, HashTree.class, String.class);
         HTTPSamplerProxy httpSampler = (HTTPSamplerProxy) method.invoke(p, request, threadGroupHT, "comment");
         assertEquals("/", httpSampler.getPath(), "path should be set in httpsampler");
         assertEquals("jmeter.apache.org", httpSampler.getDomain(), "domain should be set in httpsampler");
@@ -308,9 +300,7 @@ public class ParseCurlCommandActionTest {
                 .newInstance(HTTPSamplerFactory.DEFAULT_CLASSNAME);
         httpSampler.setProperty(TestElement.GUI_CLASS, HttpTestSampleGui.class.getName());
         httpSampler.setProperty(TestElement.NAME, "HTTP Request");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("configureTimeout", Request.class, HTTPSamplerProxy.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("configureTimeout", Request.class, HTTPSamplerProxy.class);
         method.invoke(p, request, httpSampler);
         assertEquals(1000, httpSampler.getConnectTimeout());
         assertEquals(19000, httpSampler.getResponseTimeout());
@@ -322,9 +312,7 @@ public class ParseCurlCommandActionTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse(
                 "curl 'http://jmeter.apache.org/' -H 'Content-Type: application/x-www-form-urlencoded' --compressed");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("createHeaderManager", Request.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createHeaderManager", Request.class);
         HeaderManager headerManager = (HeaderManager) method.invoke(p, request);
         // The following headers should be set in the HeaderManager
         assertEquals("Content-Type", headerManager.get(0).getName());
@@ -339,9 +327,7 @@ public class ParseCurlCommandActionTest {
         AuthManager authManager = new AuthManager();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -u 'user:passwd'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("createAuthManager", Request.class, AuthManager.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createAuthManager", Request.class, AuthManager.class);
         method.invoke(p, request, authManager);
         assertEquals("user", authManager.get(0).getUser());
         assertEquals("passwd", authManager.get(0).getPass());
@@ -359,9 +345,7 @@ public class ParseCurlCommandActionTest {
         authManager.addAuth(authorization);
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -u 'user:passwd'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("canAddAuthManagerInHttpRequest", Request.class, AuthManager.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("canAddAuthManagerInHttpRequest", Request.class, AuthManager.class);
         assertFalse((boolean) method.invoke(p, request, authManager),
                 "When AuthManager contains this authorization, shouldn't add a AuthManager in Http Request");
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -u 'user1:passwd1'");
@@ -382,9 +366,7 @@ public class ParseCurlCommandActionTest {
         authManager.addAuth(authorization);
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -u 'user:passwd'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("canUpdateAuthManagerInThreadGroup", Request.class, AuthManager.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("canUpdateAuthManagerInThreadGroup", Request.class, AuthManager.class);
         assertFalse((boolean) method.invoke(p, request, authManager),
                 "When AuthManager contains this url, shouldn't add a AuthManager in ThreadGroup");
         request = basicCurlParser.parse("curl 'http://jmeter.apache.fr/' -u 'user:passwd'");
@@ -398,9 +380,7 @@ public class ParseCurlCommandActionTest {
         CookieManager cookieManager = new CookieManager();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -b 'name=Tom'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("createCookieManager", CookieManager.class, Request.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createCookieManager", CookieManager.class, Request.class);
         method.invoke(p, cookieManager, request);
         assertEquals("jmeter.apache.org", cookieManager.get(0).getDomain(),
                 "the domain of cookie should be set in cookieManager");
@@ -431,14 +411,12 @@ public class ParseCurlCommandActionTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser
                 .parse("curl 'http://jmeter.apache.org/' -H 'cookie: PHPSESSID=testphpsessid;a=b' --compressed");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
         Field f = ParseCurlCommandAction.class.getDeclaredField("uploadCookiesCheckBox");
         f.setAccessible(true);
         JCheckBox uploadCookiesCheckBox = new JCheckBox(
                 JMeterUtils.getResString("curl_add_cookie_header_to_cookiemanager"), true);
         f.set(p, uploadCookiesCheckBox);
-        Method method = parseCurlCommandAction.getDeclaredMethod("createCookieManager", CookieManager.class, Request.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createCookieManager", CookieManager.class, Request.class);
         method.invoke(p, cookieManager, request);
         assertEquals("jmeter.apache.org", cookieManager.get(0).getDomain(), "the domain of cookie should be set in cookieManager");
         assertEquals("/", cookieManager.get(0).getPath(), "the path of cookie should be set in cookieManager");
@@ -460,9 +438,7 @@ public class ParseCurlCommandActionTest {
         DNSCacheManager dnsCacheManager = new DNSCacheManager();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' --dns-servers '0.0.0.0'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("createDnsServer", Request.class, DNSCacheManager.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createDnsServer", Request.class, DNSCacheManager.class);
         method.invoke(p, request, dnsCacheManager);
         assertEquals("0.0.0.0", dnsCacheManager.getServers().get(0).getStringValue(),
                 "the dns server should be set in DNSCacheManager");
@@ -475,9 +451,7 @@ public class ParseCurlCommandActionTest {
         dnsCacheManager.addServer("0.0.0.0");
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' --dns-servers '0.0.0.0'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("canAddDnsServerInHttpRequest", Request.class, DNSCacheManager.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("canAddDnsServerInHttpRequest", Request.class, DNSCacheManager.class);
         assertFalse((boolean) method.invoke(p, request, dnsCacheManager),
                 "When the Dns servers are  the same, shouldn't add the DnsCacheManager in Http Request");
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' --dns-servers '1.1.1.1'");
@@ -492,9 +466,7 @@ public class ParseCurlCommandActionTest {
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser
                 .parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:443:127.0.0.2'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("createDnsResolver", Request.class, DNSCacheManager.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("createDnsResolver", Request.class, DNSCacheManager.class);
         method.invoke(p, request, dnsCacheManager);
         assertEquals("StaticHost(moonagic.com, 127.0.0.2)", dnsCacheManager.getHosts().get(0).getStringValue());
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:9090:127.0.0.2'");
@@ -514,9 +486,7 @@ public class ParseCurlCommandActionTest {
 
         Request request = basicCurlParser
                 .parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:443:127.0.0.2'");
-        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
-        Method method = parseCurlCommandAction.getDeclaredMethod("canAddDnsResolverInHttpRequest", Request.class, DNSCacheManager.class);
-        method.setAccessible(true);
+        Method method = getMethodFor("canAddDnsResolverInHttpRequest", Request.class, DNSCacheManager.class);
         dnsCacheManager = new DNSCacheManager();
         dnsCacheManager.addHost("moonagic.com", "127.0.0.2");
         method.invoke(p, request, dnsCacheManager);
@@ -539,4 +509,12 @@ public class ParseCurlCommandActionTest {
         assertTrue((boolean) method.invoke(p, request, dnsCacheManager),
                 "When the Dns servers aren't the same, should add the DnsCacheManager in Http Request");
     }
+
+    private Method getMethodFor(String name, Class<?>...paramsClasses) throws NoSuchMethodException, SecurityException {
+        Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
+        Method method = parseCurlCommandAction.getDeclaredMethod(name, paramsClasses);
+        method.setAccessible(true);
+        return method;
+    }
 }
+
