@@ -40,8 +40,8 @@ public abstract class AbstractJDBCProcessor extends AbstractJDBCTestElement {
      * Calls the JDBC code to be executed.
      */
     protected void process() {
-        if(JOrphanUtils.isBlank(getDataSource())) {
-            throw new IllegalArgumentException("Variable Name must not be null in "+getName());
+        if (JOrphanUtils.isBlank(getDataSource())) {
+            throw new IllegalArgumentException("Name for DataSoure must not be empty in " + getName());
         }
         try (Connection conn = DataSourceElement.getConnection(getDataSource())){
             execute(conn);

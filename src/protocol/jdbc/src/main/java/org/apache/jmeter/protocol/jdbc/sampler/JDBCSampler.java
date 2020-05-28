@@ -72,8 +72,8 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
         Connection conn = null;
 
         try {
-            if(JOrphanUtils.isBlank(getDataSource())) {
-                throw new IllegalArgumentException("Variable Name must not be null in "+getName());
+            if (JOrphanUtils.isBlank(getDataSource())) {
+                throw new IllegalArgumentException("Name for DataSoure must not be empty in " + getName());
             }
 
             try {
