@@ -41,9 +41,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 5.3 =================== -->
+<!--  =================== 5.3.1 =================== -->
 
-<h1>Version 5.3</h1>
+<h1>Version 5.3.1</h1>
 <p>
 Summary
 </p>
@@ -63,63 +63,13 @@ Summary
 <ch_title>Core improvements</ch_title>
 <ch_title>Test Plan</ch_title>
 <ch_title>Scripting / Debugging enhancements</ch_title>
--->
 <ch_title>UX improvements</ch_title>
-Added <a href="https://github.com/weisJ/darklaf">Darklaf</a> look and feel that improves several components.
-
-<p>Tree indentation level is easier to follow:</p>
-<figure width="224" height="247" image="changes/5.3/tree_theme_darcula.png">JMeter tree with Darklaf Darcula theme</figure>
-<figure width="223" height="246" image="changes/5.3/tree_theme_intellij.png">JMeter tree with Darklaf IntelliJ theme</figure>
-
-<p>New look and feel themes. Light: IntellJ, Solarized Light, HighContrast Light.
-    Dark: OneDark, Solarized Dark, HighContrast Dark.
-</p>
-
-<p>When an element in tree is disabled, all its descendants are shown in gray.
-For instance, <code>While Contoller</code> is disabled in the following tree, so its children
-are gray. It is purely a UI change, and the behavior is not altered.
-</p>
-<figure width="223" height="256" image="changes/5.3/disabled_subtree.png">While controller is disabled, so its children are gray</figure>
-
-<p>Tree context menu is shown even in case the node selection is changed. Previously
-    the popup did disappear and it was required to select a node first and only then launch popup.</p>
-
-<p>Look and feel can now be updated without a restart</p>
-
-<p>Use <keycombo><keysym>CTRL</keysym><keysym>ALT</keysym><keysym>wheel</keysym></keycombo> for zooming
-    fonts. Previous shortcut was <keycombo><keysym>CTRL</keysym><keysym>SHIFT</keysym><keysym>wheel</keysym></keycombo>,
-    however, it conflicted with horizontal scrolling.</p>
-
-<p>In-app zoom is more consistent (e.g. sometimes not all the labels or even panels were scaled).
-For instance: log viewer, JSR223 code editor were not previously scaled with zoom-in/out feature</p>
-
-<p>Tree context menu is shown for the full row, not for the label only</p>
-
-<p>Undo and redo support for editable fields. Keystrokes are <keycombo><keysym>CTRL</keysym><keysym>Z</keysym></keycombo> /
-    <keycombo><keysym>CTRL</keysym><keysym>SHIFT</keysym><keysym>Z</keysym></keycombo>, or
-    <keycombo><keysym>CMD</keysym><keysym>Z</keysym></keycombo>/
-    <keycombo><keysym>CMD</keysym><keysym>SHIFT</keysym><keysym>Z</keysym></keycombo> depending on the operating system.
-Undo is implemented on a field level basis (each fields has its own history), and the history is
-invalidated when tree selection changes.</p>
-
-<p>Mark the currently selected language in the options menu.</p>
-
-<p>Mark the currently selected log level in the options menu.</p>
-
-<p>Rework of many Test Element UI (JUnit Request, ForEach Controller, If Controller, Throughput Controller, WhileController,
-Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elements)</p>
-<!--
 <ch_title>Functions</ch_title>
 -->
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-    <li>Default value of <code>httpclient4.time_to_live</code> has been modified from <code>2000</code> to <code>60000</code>,
-    this means HTTP connections will live longer than before. This
-    has impact on connection creation and SSL handshake, see <bugzilla>64289</bugzilla></li>
-    <li>The update to Groovy 3 (<pr>590</pr>) might break some old Groovy code of your tests. Have a look
-    at <a href="https://groovy-lang.org/releasenotes/groovy-3.0.html">the update notes for Groovy 3</a></li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -127,104 +77,43 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>64160</bug>Test HTTP/S Test Script Recorder: Name transaction controller/ simple controller using prefix without "<code>-XXXX</code>" suffix</li>
-    <li><bug>64289</bug>Make <code>httpclient4.time_to_live</code> to <code>60000</code> to be closer to typical browser behavior</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>64288</bug>JUnit Request: Improve UX</li>
-    <li><bug>64407</bug>Improve JMS Publisher UX. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
-    <li><bug>64408</bug>Improve JMS Subscriber UX. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>64277</bug>ForEach Controller: Improve UX</li>
-    <li><bug>64280</bug>If Controller: Improve UX</li>
-    <li><bug>64282</bug>Throughput Controller: Improve UX</li>
-    <li><bug>64287</bug>WhileController: Improve UX</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>64150</bug>View Results Tree: Allow editing of response data in testers</li>
-    <li><bug>63822</bug>View Results Tree: Keep position of split pane while switching renderer mode</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>64091</bug>Precise Throughput Timer schedule generation is improved significantly (e.g. 2 seconds for 10M samples)</li>
-    <li><bug>64281</bug>Counter Config: Improve UX</li>
-    <li><bug>64283</bug>XPath2 Extractor: Improve UX</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
-  <li><bug>64070</bug><code>_timeshift</code> function does not work with offset formatters</li>
-  <li><bug>64275</bug>Function Helper Dialog: Improve UX</li>
 </ul>
 
 <h3>I18N</h3>
 <ul>
-  <li><bug>64102</bug>Add Chinese translation for Tools menu. Contributed by Liu XP (liu_xp2003 at sina.com)</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
 <ul>
-  <li><bug>64380</bug>Add a '<code>Median</code>' field to the dashboard and make the response time percentile fields support floating-point numbers. Contributed by Keith Mo(https://github.com/keithmork)</li>
-  <li><bug>64378</bug>HTML report generation should not fail if a plugin has registered a graph and is not more present in classpath, issue a warning instead</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-  <li><bug>63458</bug><pr>551</pr>Add new template "Functional Testing Test Plan [01]". Contributed by Sebastian Boga (sebastian.boga at endava.com)</li>
-  <li><bug>64119</bug>Use first renderer from <code>view.results.tree.renderers_order</code> property as default in View Results Tree</li>
-  <li><bug>64148</bug>Use gray icons for disabled elements in the tree, display subtree as gray</li>
-  <li><bug>64198</bug>Allow spaces in <code>${...}</code> expressions around functions.</li>
-  <li><bug>64276</bug>Search popup: Improve UX</li>
-  <li><pr>573</pr>Improve the startup time: skip test plan UI initialization</li>
-  <li><pr>585</pr>Added JEXL3 as a syntax alias for JSyntaxTextArea. Contributed by drivera-armedia (https://github.com/drivera-armedia)</li>
-  <li><pr>590</pr>Update Groovy to 3.0.3.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Build system upgraded from Gradle to 6.3 (from 6.1), Java 14 can be used now for the build</li>
-    <li><bug>63963</bug><pr>546</pr>Updated jackson to 2.10.3 (from 2.9.10)</li>
-    <li><bug>64120</bug>Updated jsoup to 1.13.1 (from 1.12.1)</li>
-    <li><bug>63809</bug>Updated commons-dbcp2 to 2.7.0 (from 2.5.0)</li>
-    <li>Updated Apache ActiveMQ to 5.15.11 (from 5.15.8)</li>
-    <li>Updated bouncycastle to 1.64 (from 1.60)</li>
-    <li>Updated asm to 7.3.1 (from 7.1)</li>
-    <li>Updated Apache commons-codec to 1.14 (from 1.13)</li>
-    <li>Updated Apache commons-pool to 2.8.0 (from 2.7.0)</li>
-    <li>Updated equalsverifier to 3.1.9 (from 3.1.12)</li>
-    <li>Updated Apache Groovy to 2.4.18 (from 2.4.16)</li>
-    <li>Updated hsqldb to 2.5.0 (from 2.4.1)</li>
-    <li>Updated hamcrest to 2.2 (from 2.1)</li>
-    <li>Updated Apache httpclient and httpmime to 4.5.12 (from 4.5.10)</li>
-    <li>Updated Apache httpcore and httpcore-nio to 4.4.13 (from 4.4.12)</li>
-    <li>Updated Apache Tika to 1.24.1 (from 1.22)</li>
-    <li>Updated jmespath to 0.5.0 (from 0.3.0)</li>
-    <li>Updated Apache log4j to 2.13.1 (from 2.12.1)</li>
-    <li>Updated junit4 to 4.13 (from 4.12)</li>
-    <li>Updated junit5 to 5.6.0 (from 5.5.1)</li>
-    <li>Updated slf4j to 1.7.30 (from 1.7.28)</li>
-    <li>Updated ph-commons to 9.4.1 (from 9.3.7)</li>
-    <li>Updated ph-css to 6.2.2 (from 6.2.0)</li>
-    <li>Updated rsyntaxtextarea to 3.1.0 (from 3.0.4)</li>
-    <li>Updated rhino to 1.7.12 (from 1.7.11)</li>
-    <li>Updated SaxonHE to 9.9.1-7 (from 9.9.1-5)</li>
-    <li>Updated cglib to 3.2.12 (from 3.2.9)</li>
-    <li>Updated commons-lang3 to 3.10 (from 3.9)</li>
-    <li>Updated freemarker to 2.3.30 (from 2.3.29)</li>
-    <li>Updated hamcrest-date to 2.0.7 (from 2.0.4)</li>
-    <li>Updated equalsverifier to 3.1.13 (from 3.1.12)</li>
-    <li>Updated xstream to 1.4.11.1 (from 1.4.11)</li>
-    <li>Updated neo4j-java-driver to 4.0.1 (from 1.7.5)</li>
-    <li><pr>559</pr>Add a note to the source of TrustAllSSLSocketFactory, that it is not secure to trust everyone. Based on a PR from YYTVicky (yytvicky at github)</li>
-    <li><pr>588</pr>Add documentation on usage of InfluxDB v2 for real-time results. Based on PR from Jakub Bednář (jakub.bednar at gmail.com)</li>
+    <li><pr>594</pr>Updated neo4j-java-driver to 4.0.1 (from 1.7.5)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -233,8 +122,6 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>64400</bug>Make sorting recorded samples into transaction controllers more predictable</li>
-    <li><bug>64267</bug>When preemptive auth is disabled HTTP Sampler does not automatically respond to Basic Auth challenge</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -251,11 +138,6 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>64091</bug>Precise Throughput Timer might produce less samples when low test duration is used</li>
-    <li><bug>64142</bug>Presence of DebugPostProcessor in Test plan breaks ActiveThread Over time in report due to missing information</li>
-    <li><bug>64196</bug>Recurse into sub samplers more deeply when checking assertions</li>
-    <li><bug>64196</bug>Recurse into sampleResults for <code>AbstractScopedTestElement#getSampleList</code></li>
-    <li><bug>64381</bug>PreciseThroughputTimer: On termination, log message contains negative value</li>
 </ul>
 
 <h3>Functions</h3>
@@ -268,27 +150,14 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>64059</bug>Response Time Percentiles Over Time, unable to change the percentiles</li>
 </ul>
 
 <h3>Documentation</h3>
 <ul>
-  <li><pr>547</pr>Correct Log level documentation. Contributed by jmetertea</li>
-  <li><pr>548</pr>Correct typos in documentation. Contributed by jmetertea</li>
-  <li><bug>64022</bug>Correct Chinese translation for "Ignore Sub-Controller blocks". Provided by yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
-  <li><pr>552</pr>Fix <code>client.rmi.localport</code> port allocation description. Contributed by anant-93</li>
-  <li><pr>543</pr>Clarify documentation of <code>__StringToFile</code> function regarding default value of <code>Append to file?</code> parameter. Contributed by Ori Marko</li>
-  <li><bug>64302</bug>Correct links to JMeter API in printable docs and BeanShell best practices and to JavaFX implementation website in all docs.
-     Reported by 2477441814 (2477441814 at qq.com)</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-  <li><bug>63945</bug>NPE when opening a file after file system change</li>
-  <li><bug>64034</bug>Shell scripts fail if space in <code>JAVA_HOME</code> path. Contributed by ray7219 (ray7219 at hotmail.com)</li>
-  <li><bug>63856</bug>Set <code>connectTime</code> on parent samples when using a transaction controller</li>
-  <li><bug>64227</bug>Error when loading Templates on Windows</li>
-  <li>TestPlan UI: skip adding the entry to the classpath if the user clicks cancel</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -297,27 +166,10 @@ Counter Config, XPath2 Extractor, Function Helper Dialog, Search popup, JMS Elem
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-  <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
-  <li>Stefan Seide (stefan at trilobyte-se.de)</li>
-  <li>jmetertea</li>
-  <li>ray7219</li>
-  <li>Sebastian Boga (sebastian.boga at endava.com)</li>
-  <li>Liu XP (liu_xp2003 at sina.com)</li>
-  <li>anant-93 (https://github.com/anant-93)</li>
-  <li>Ori Marko (orimarko at gmail.com)</li>
-  <li>Keith Mo(https://github.com/keithmork)</li>
-  <li>drivera-armedia (https://github.com/drivera-armedia)</li>
-  <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
-  <li>Jakub Bednář (jakub.bednar at gmail.com)</li>
+  <li>Michael Weidmann (https://github.com/michaelweidmann)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
-  <li>Michael McDermott (mcdermott.michaelj at gmail.com)</li>
-  <li>yangxiaofei77 (yangxiaofei77 at gmail.com)</li>
-  <li>Markus Wolf (wolfm at t-systems.com)</li>
-  <li>Pierre Astruc (pierre.astruc at evertest.com)</li>
-  <li>YYTVicky (yytvicky at github)</li>
-  <li>2477441814 at qq.com</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
