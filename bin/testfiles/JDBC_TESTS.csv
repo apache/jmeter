@@ -23,7 +23,7 @@ JDBC_SELECT_LIMIT_RESULTSET_1,200,OK,TG-OK 1-1,text,true,1,1,1,0
 JDBC_SELECT_LIMIT_RESULTSET_2,200,OK,TG-OK 1-1,text,true,1,1,1,0
 JDBC_SELECT_LIMIT_RESULTSET_3,200,OK,TG-OK 1-1,text,true,1,1,1,0
 JDBC_SELECT_LIMIT_RESULTSET_4,200,OK,TG-OK 1-1,text,true,1,1,1,0
-JDBC_NoConfig,000,java.lang.IllegalArgumentException: Variable Name must not be null in JDBC_NoConfig,TG-Errors 2-1,text,true,1,1,1,0
+JDBC_NoConfig,000,java.lang.IllegalArgumentException: Name for DataSoure must not be empty in JDBC_NoConfig,TG-Errors 2-1,text,true,1,1,1,0
 JDBC_Wrong_Sql,42581 -5581,java.sql.SQLSyntaxErrorException: unexpected token: WHERE,TG-Errors 2-1,text,true,1,1,1,0
 JDBC_With_Failing_PreProcessor,200,OK,TG-Errors 2-1,text,true,1,1,1,0
 JDBC_With_Failing_PostProcessor,200,OK,TG-Errors 2-1,text,true,1,1,1,0
