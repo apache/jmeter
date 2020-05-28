@@ -412,12 +412,8 @@ public class ParseCurlCommandActionTest {
         String filepath = tempDir.resolve("test.txt").toAbsolutePath().toString();
         assertTrue(tempDir.resolve("test.txt").toFile().createNewFile());
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -b '" + filepath + "'");
-        method = parseCurlCommandAction.getDeclaredMethod("createCookieManager", CookieManager.class, Request.class);
-        method.setAccessible(true);
         method.invoke(p, cookieManager, request);
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -b 'test1.txt'");
-        method = parseCurlCommandAction.getDeclaredMethod("createCookieManager", CookieManager.class, Request.class);
-        method.setAccessible(true);
         try {
             method.invoke(p, cookieManager, request);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -451,8 +447,6 @@ public class ParseCurlCommandActionTest {
         uploadCookiesCheckBox = new JCheckBox(JMeterUtils.getResString("curl_add_cookie_header_to_cookiemanager"), false);
 
         f.set(p, uploadCookiesCheckBox);
-        method = parseCurlCommandAction.getDeclaredMethod("createCookieManager", CookieManager.class, Request.class);
-        method.setAccessible(true);
         cookieManager = new CookieManager();
         method.invoke(p, cookieManager, request);
         assertEquals(0, cookieManager.getCookies().size(),
@@ -504,7 +498,6 @@ public class ParseCurlCommandActionTest {
         method.invoke(p, request, dnsCacheManager);
         assertEquals("StaticHost(moonagic.com, 127.0.0.2)", dnsCacheManager.getHosts().get(0).getStringValue());
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:9090:127.0.0.2'");
-        method.setAccessible(true);
         method.invoke(p, request, dnsCacheManager);
         assertEquals("StaticHost(moonagic.com, 127.0.0.2)", dnsCacheManager.getHosts().get(0).getStringValue(),
                 "the dns resolver should be set in DNSCacheManager");
@@ -531,7 +524,6 @@ public class ParseCurlCommandActionTest {
                 "When the Dns servers are the same, shouldn't add the DnsCacheManager in Http Request");
 
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:9090:127.0.0.1'");
-        method.setAccessible(true);
         method.invoke(p, request, dnsCacheManager);
         assertTrue((boolean) method.invoke(p, request, dnsCacheManager),
                 "When the Dns servers aren't the same, should add the DnsCacheManager in Http Request");
@@ -543,7 +535,6 @@ public class ParseCurlCommandActionTest {
                 "When the Dns servers aren't the same, should add the DnsCacheManager in Http Request");
 
         request = basicCurlParser.parse("curl 'http://jmeter.apache.org/'  --resolve 'moonagic.com:9090:127.0.0.1'");
-        method.setAccessible(true);
         method.invoke(p, request, dnsCacheManager);
         assertTrue((boolean) method.invoke(p, request, dnsCacheManager),
                 "When the Dns servers aren't the same, should add the DnsCacheManager in Http Request");
