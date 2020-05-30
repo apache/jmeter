@@ -517,4 +517,3 @@ public class ParseCurlCommandActionTest {
         return method;
     }
 }
-
