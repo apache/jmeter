@@ -288,6 +288,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private transient javax.swing.Timer sampleWorkerTimer;
 
+    private String httpSampleNameFormat;
+
     public ProxyControl() {
         setPort(DEFAULT_PORT);
         setExcludeList(new HashSet<>());
@@ -1658,8 +1660,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         private int groupingMode;
         private long recordedAt;
 
-        public SamplerInfo(HTTPSamplerBase sampler, TestElement[] testElements, JMeterTreeNode target, String prefix,
-                int groupingMode) {
+        public SamplerInfo(HTTPSamplerBase sampler, TestElement[] testElements, JMeterTreeNode target, String prefix, int groupingMode) {
             this.sampler = sampler;
             this.testElements = testElements;
             this.target = target;
@@ -1667,5 +1668,13 @@ public class ProxyControl extends GenericController implements NonTestElement {
             this.groupingMode = groupingMode;
             this.recordedAt = System.currentTimeMillis();
         }
+    }
+
+    public void setHttpSampleNameFormat(String text) {
+        this.httpSampleNameFormat = text;
+    }
+
+    public String getHttpSampleNameFormat() {
+        return httpSampleNameFormat;
     }
 }

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
@@ -60,6 +61,8 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     */
     private static final int SAMPLER_NAME_NAMING_MODE_PREFIX = 0;  // $NON-NLS-1$
     private static final int SAMPLER_NAME_NAMING_MODE_COMPLETE = 1;  // $NON-NLS-1$
+    private static final int SAMPLER_NAME_NAMING_MODE_SUFFIX = 2; // $NON-NLS-1$
+    private static final int SAMPLER_NAME_NAMING_MODE_FORMATTER = 3; // $NON_NLS-1$
 
     /**
      *
@@ -285,33 +288,48 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      */
     protected void computeSamplerName(HTTPSamplerBase sampler,
             HttpRequestHdr request) {
-        String prefix = request.getPrefix();
+        String prefix = StringUtils.defaultString(request.getPrefix(), "");
         int httpSampleNameMode = request.getHttpSampleNameMode();
+        String format = getFormat(httpSampleNameMode, request.getHttpSampleNameFormat());
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
-            if(StringUtils.isNotEmpty(prefix)) {
-                if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
-                    sampler.setName(prefix + sampler.getPath()+ "-" + incrementRequestNumberAndGet());
-                } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
-                    sampler.setName(prefix + "-" + incrementRequestNumberAndGet());
-                } else {
-                    log.debug("Sampler name naming mode not recognized");
-                }
-            } else {
-                sampler.setName(sampler.getPath()+"-"+incrementRequestNumberAndGet());
-            }
+            sampler.setName(MessageFormat.format(format, prefix, sampler.getPath(), incrementRequestNumberAndGet()));
         } else {
-            if(StringUtils.isNotEmpty(prefix)) {
-                if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
-                    sampler.setName(prefix + sampler.getPath());
-                } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
-                    sampler.setName(prefix);
-                } else {
-                    log.debug("Sampler name naming mode not recognized");
-                }
-            } else {
-                sampler.setName(sampler.getPath());
-            }
+            sampler.setName(MessageFormat.format(format, prefix, sampler.getPath()));
         }
+    }
+
+    private String getFormat(int httpSampleNameMode, String format) {
+        if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_FORMATTER) {
+            return format.replaceAll("#\\{name([,}])", "{0$1")
+                    .replaceAll("#\\{path([,}])", "{1$1")
+                    .replaceAll("#\\{counter([,}])", "{2$1");
+        }
+        if (isNumberRequests()) {
+            return getNumberedFormat(httpSampleNameMode, format);
+        }
+        if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
+            return "{0}{1}";
+        }
+        if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+            return "{0}";
+        }
+        if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_SUFFIX) {
+            return "{0} {1}";
+        }
+        return "{1}";
+    }
+
+    private String getNumberedFormat(int httpSampleNameMode, String format) {
+        if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
+            return "{0}{1}-{2}";
+        }
+        if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
+            return "{0}-{2}";
+        }
+        if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_SUFFIX) {
+            return "{0}-{2} {1}";
+        }
+        return "{1}";
     }
 
     /**

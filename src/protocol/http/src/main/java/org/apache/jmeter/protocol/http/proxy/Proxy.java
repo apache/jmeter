@@ -161,7 +161,8 @@ public class Proxy extends Thread {
         // Check which HTTPSampler class we should use
         String httpSamplerName = target.getSamplerTypeName();
 
-        HttpRequestHdr request = new HttpRequestHdr(target.getPrefixHTTPSampleName(), httpSamplerName,target.getHTTPSampleNamingMode());
+        HttpRequestHdr request = new HttpRequestHdr(target.getPrefixHTTPSampleName(), httpSamplerName,
+                target.getHTTPSampleNamingMode(), target.getHttpSampleNameFormat());
         SampleResult result = null;
         HeaderManager headers = null;
         HTTPSamplerBase sampler = null;
@@ -302,6 +303,15 @@ public class Proxy extends Thread {
             }
             JMeterContextService.getContext().setRecording(false);
         }
+    }
+
+    /**
+     * Set the counter for all registered {@link SamplerCreatorFactory}s
+     *
+     * @param value to be initialized
+     */
+    public static void setCounter(int value) {
+        SAMPLERFACTORY.setCounter(value);
     }
 
     /**
