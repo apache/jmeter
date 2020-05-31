@@ -84,6 +84,8 @@ public class HttpRequestHdr {
 
     private int httpSampleNameMode;
 
+    private String httpSampleNameFormat;
+
     public HttpRequestHdr() {
         this("", "");
     }
@@ -100,19 +102,21 @@ public class HttpRequestHdr {
      * @param httpSamplerName the http sampler name
      */
     public HttpRequestHdr(String prefix, String httpSamplerName) {
-        this(prefix, httpSamplerName,0);
+        this(prefix, httpSamplerName, 0, "{0}{1}");
     }
 
     /**
      * @param prefix Sampler prefix
      * @param httpSamplerName the http sampler name
      * @param httpSampleNameMode the naming mode of sampler name
+     * @param format format to use when mode is 3
      */
-    public HttpRequestHdr(String prefix, String httpSamplerName, int httpSampleNameMode) {
+    public HttpRequestHdr(String prefix, String httpSamplerName, int httpSampleNameMode, String format) {
         this.prefix = prefix;
         this.httpSamplerName = httpSamplerName;
         this.firstLine = "" ; // $NON-NLS-1$
         this.httpSampleNameMode = httpSampleNameMode;
+        this.httpSampleNameFormat = format;
     }
 
     /**
@@ -462,5 +466,9 @@ public class HttpRequestHdr {
      */
     public int getHttpSampleNameMode() {
         return httpSampleNameMode;
+    }
+
+    public String getHttpSampleNameFormat() {
+        return httpSampleNameFormat;
     }
 }
