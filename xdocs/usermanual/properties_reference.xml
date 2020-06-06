@@ -727,7 +727,7 @@ JMETER-SERVER</source>
 <property name="sampleresult.timestamp.start">
     Save the start time stamp instead of the end.<br/>
     This also affects the timestamp stored in result files.<br/>
-    Defaults to: <code>true</code>
+    Defaults to: <code>false</code>
 </property>
 <property name="sampleresult.useNanoTime">
     Whether to use <code>System.nanoTime()</code> - otherwise only use <code>System.currentTimeMillis()</code>.<br/>
