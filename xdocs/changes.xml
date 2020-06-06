@@ -161,6 +161,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>64448</bug>User Defined Variable Duplication in Right Click Context Menu</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

@@ -28,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
-import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -42,7 +41,6 @@ import org.apache.jorphan.reflect.Functor;
  * These have names and values, as well as check-boxes to determine whether or not to
  * include the "=" sign in the output and whether or not to encode the output.
  */
-@TestElementMetadata(labelResource = "user_defined_variables")
 public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     private static final long serialVersionUID = 240L;
