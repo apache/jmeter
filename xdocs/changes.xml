@@ -162,6 +162,7 @@ Summary
 <h3>General</h3>
 <ul>
     <li><bug>64448</bug>User Defined Variable Duplication in Right Click Context Menu</li>
+    <li><bug>64499</bug>Exiting JMeter when <code>jmeterengine.stopfail.system.exit=true</code> takes too much time if threads are not stopped</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

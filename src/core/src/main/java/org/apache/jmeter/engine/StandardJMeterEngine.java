@@ -289,12 +289,13 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
          * @return boolean true if all threads of all Thread Groups stopped
          */
         private boolean verifyThreadsStopped() {
-            boolean stoppedAll = true;
             // ConcurrentHashMap does not need synch. here
             for (AbstractThreadGroup threadGroup : groups) {
-                stoppedAll = stoppedAll && threadGroup.verifyThreadsStopped();
+                if(!threadGroup.verifyThreadsStopped()) {
+                    return false;
+                }
             }
-            return stoppedAll;
+            return true;
         }
 
         /**
