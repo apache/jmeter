@@ -452,10 +452,16 @@ public class ThreadGroup extends AbstractThreadGroup {
         if (delayedStartup) {
             stoppedAll = verifyThreadStopped(threadStarter);
         }
-        for (Thread t : allThreads.values()) {
-            stoppedAll = stoppedAll && verifyThreadStopped(t);
+        if(stoppedAll) {
+            for (Thread t : allThreads.values()) {
+                if(!verifyThreadStopped(t)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
         }
-        return stoppedAll;
     }
 
     /**
