@@ -119,6 +119,7 @@ Summary
     <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
     <li><pr>591</pr>Remove deprecated sudo flag from travis file. .Deng Liming (liming.d.pro at gmail.com)</li>
     <li>Updated Darklaf to 2.2.1 (from 2.1.1)</li>
+    <li><pr>596</pr>Use neutral words in documentation</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
