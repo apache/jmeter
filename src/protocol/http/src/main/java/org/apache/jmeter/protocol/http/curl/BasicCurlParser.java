@@ -700,7 +700,9 @@ public class BasicCurlParser {
                     String value = option.getArgument(0);
                     String dataOptionName = option.getDescriptor().getName();
                     value = getPostDataByDifferentOption(value.trim(), dataOptionName);
-                    request.setMethod("POST");
+                    if ("GET".equals(request.getMethod())) {
+                        request.setMethod("POST");
+                    }
                     request.setPostData(value);
                 } else if (FORMS_OPT.contains(option.getDescriptor().getId())) {
                     String nameAndValue = option.getArgument(0);
@@ -850,7 +852,7 @@ public class BasicCurlParser {
                         current.setLength(0);
                     }
                 } else {
-                    current.append(nextTok);
+                    current.append(nextTok.replaceAll("^\\\\[\\r\\n]", ""));
                 }
                 lastTokenHasBeenQuoted = false;
                 break;

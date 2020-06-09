@@ -89,6 +89,25 @@ public class BasicCurlParserTest {
     }
 
     @Test
+    public void testBackslashAtLineEnding() {
+        String cmdLine = "curl \\\n-d 'hey' http://jmeter.apache.org/";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        assertEquals("http://jmeter.apache.org/", request.getUrl());
+        assertEquals("hey", request.getPostData());
+    }
+
+    @Test
+    public void testSetRequestMethodOnData() {
+        String cmdLine = "curl -X PUT -d 'hey' http://jmeter.apache.org/";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        assertEquals("http://jmeter.apache.org/", request.getUrl());
+        assertEquals("hey", request.getPostData());
+        assertEquals("PUT", request.getMethod());
+    }
+
+    @Test
     public void testChromeParsingNotCompressed() {
         String cmdLine = "curl 'https://jmeter.apache.org/' -H 'Proxy-Connection: keep-alive' "
                 + "-H 'Proxy-Authorization: Basic XXXXXXXXX/' -H 'Upgrade-Insecure-Requests: 1' "
