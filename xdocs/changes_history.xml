@@ -464,7 +464,7 @@ to view the last release notes of version 5.1.1.
     <li><bug>63490</bug>At end of scheduler duration lots of Samplers gets executed at the same time</li>
     <li><pr>480</pr><pr>482</pr>Fix a few typos in comments and log messages. Based on patch by Anass Benomar (anassbenomar at gmail.com)</li>
     <li><bug>63751</bug>Correct a typo in Chinese translations. Reported by Jinliang Wang (wjl31802 at 126.com)</li>
-    <li><bug>63723</bug>Distributed testing: JMeter master ends distributed test though some threads still are active</li>
+    <li><bug>63723</bug>Distributed testing: JMeter controller node ends distributed test though some threads still are active</li>
     <li><bug>63614</bug>Distributed testing: Unable to generate Dashboard report at end of load test</li>
     <li><bug>63862</bug> Search Dialog / Search in View Results Tree: Uncaught exception if regex is checked and regex is invalid</li>
     <li><bug>63793</bug>Fix unsecure XML Parsing</li>
@@ -1055,7 +1055,7 @@ containing a fix to this issue, we decided to remove it. If you still needed, yo
     <li><bug>62743</bug>Client auth must be enabled on distributed testing</li>
     <li><bug>62767</bug>NPE when searching under certain conditions. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>62790</bug><code>ArrayIndexOutOfBoundsException</code> when calling replace without selecting the first match</li>
-    <li><bug>62795</bug>JMeter master sometimes ends distributed test even though some of the slaves have not finished</li>
+    <li><bug>62795</bug>JMeter controller node sometimes ends distributed test even though some of the worker nodes have not finished</li>
     <li><bug>62336</bug><pr>396</pr>Some shortcuts are not working correctly on windows. Contributed by Michael Pavlov (michael.paulau at gmail.com)</li>
     <li><bug>62889</bug>Format JSON Arrays when displayed with JSON Path Tester.</li>
     <li><bug>62900</bug>ObjectProperty#getStringValue() can throw NullPointerException</li>
@@ -2215,7 +2215,7 @@ ensure you update your implementation to be able to compute latency, see <bugzil
     <li><bug>57958</bug>Fix transaction sample not generated if thread stops/restarts. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61050</bug>Handle uninitialized RessourceBundle more gracefully, when calling <code>JMeterUtils#getResString</code>.</li>
     <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
-    <li><bug>57962</bug>Allow to use variables ( from User Defined Variables only ) in all listeners in slave mode</li>
+    <li><bug>57962</bug>Allow to use variables (from User Defined Variables only) in all listeners in worker node mode</li>
     <li><bug>61270</bug>Fixed width fonts too small in text areas to read under HiDPI (user manual bug)</li>
     <li><bug>61292</bug>Make processing of samples in reporter more robust.</li>
     <li><bug>61359</bug>When cutting an element from Tree, Test plan is not marked as dirty</li>
