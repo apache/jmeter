@@ -109,6 +109,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+  <li><bug>64446</bug>Better parse curl commands with backslash at line endings and support <code>PUT</code> method with data arguments</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
