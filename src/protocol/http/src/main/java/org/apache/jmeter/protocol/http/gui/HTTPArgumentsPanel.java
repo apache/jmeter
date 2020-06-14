@@ -100,7 +100,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     public HTTPArgumentsPanel() {
         super(JMeterUtils.getResString("paramtable")); //$NON-NLS-1$
         init();
-        clearBorderForMainPanel();
+        //clearBorderForMainPanel();
     }
 
     @Override
