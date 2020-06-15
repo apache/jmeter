@@ -121,6 +121,7 @@ Check that patch does not break JUnit tests by running:
     <li>Add JMeter repository as upstream : <source>git remote add upstream http://www.github.com/apache/jmeter</source></li>
     <li>push it : <source>git push origin BUGID</source></li>
     <li>Create a PR and link it in the bugzilla issue</li>
+    <li>Or create a diff and add as attachment to bugzilla issue <source>git diff &gt; BUGID.patch</source></li>
 </ul>
 
 <note>Different operation systems have different defaults for end-of-line markers.
