@@ -121,6 +121,7 @@ Summary
     <li>Updated Darklaf to 2.2.1 (from 2.1.1)</li>
     <li><pr>596</pr>Use neutral words in documentation</li>
     <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
+    <li><pr>598</pr>Add another option for creating diffs to the building page. Contributed by jmetertea (github.com/jmetertea)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -177,6 +178,7 @@ Summary
 <ul>
   <li>Michael Weidmann (https://github.com/michaelweidmann)</li>
   <li>Deng Liming (liming.d.pro at gmail.com>)</li>
+  <li>jmetertea (https://github.com/jmetertea)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
