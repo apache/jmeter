@@ -301,8 +301,8 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
         <ul>
             <li>ASCII Control Chars</li>
             <li>Non-ASCII characters</li>
-            <li>Reserved characters:URLs use some characters for special use in defining their syntax. When these characters are not used in their special role inside a URL, they need to be encoded, example : '<code>$</code>', '<code>&amp;</code>', '<code>+</code>', '<code>,</code>' , '<code>/</code>', '<code>:</code>', '<code>;</code>', '<code>=</code>', '<code>?</code>', '<code>@</code>'</li>
-            <li>Unsafe characters: Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should also always be encoded, example : '<code> </code>', '<code>&lt;</code>', '<code>&gt;</code>', '<code>#</code>', '<code>%</code>', &hellip;</li>
+            <li>Reserved characters:URLs use some characters for special use in defining their syntax. When these characters are not used in their special role inside a URL, they need to be encoded, example: '<code>$</code>', '<code>&amp;</code>', '<code>+</code>', '<code>,</code>' , '<code>/</code>', '<code>:</code>', '<code>;</code>', '<code>=</code>', '<code>?</code>', '<code>@</code>'</li>
+            <li>Unsafe characters: Some characters present the possibility of being misunderstood within URLs for various reasons. These characters should also always be encoded, example: '<code> </code>', '<code>&lt;</code>', '<code>&gt;</code>', '<code>#</code>', '<code>%</code>', &hellip;</li>
         </ul>
         </property>
         <property name="File Path:" required="No">Name of the file to send.  If left blank, JMeter
@@ -2218,12 +2218,12 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         <p>
         The best option (default one) is to check <code>Interpret Condition as Variable Expression?</code>, then in the condition field you have 2 options:
         <ul>
-            <li>Option 1 : Use a variable that contains <code>true</code> or <code>false</code>
+            <li>Option 1: Use a variable that contains <code>true</code> or <code>false</code>
             <note>If you want to test if last sample was successful, you can use <code>${JMeterThread.last_sample_ok}</code>
             <figure width="815" height="260" image="if_controller_variable.png">If Controller using Variable</figure>
             </note>
             </li>
-            <li>Option 2 : Use a function (<code>${__jexl3()}</code> is advised) to evaluate an expression that must return <code>true</code> or <code>false</code>
+            <li>Option 2: Use a function (<code>${__jexl3()}</code> is advised) to evaluate an expression that must return <code>true</code> or <code>false</code>
             <figure width="815" height="260" image="if_controller_expression.png">If Controller using expression</figure>
             </li>
         </ul>
@@ -3048,7 +3048,7 @@ the graph as a PNG file.</description>
         <br></br>Before display the graph, click on <code>Apply filter</code> button to refresh internal data.</li>
         </ul>
         </property>
-        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "<code>Aggregate Graph</code>".
+        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value: "<code>Aggregate Graph</code>".
         The button <code>Synchronize with name</code> define the title with the label of the listener. And define font settings for graph title</property>
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
         Use <code>Width</code> and <code>Height</code> fields to define a custom size. The unit is pixel. </property>
@@ -3075,7 +3075,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
         Before display the graph, click on <code>Apply interval</code> button to refresh internal data.</property>
         <property name="Sampler label selection" required="No">Filter by result label. A regular expression can be used, ex. <code>.*Transaction.*</code>.
         Before display the graph, click on <code>Apply filter</code> button to refresh internal data.</property>
-        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value : "<code>Response Time Graph</code>".
+        <property name="Title" required="No">Define the graph's title on the head of chart. Empty value is the default value: "<code>Response Time Graph</code>".
         The button <code>Synchronize with name</code> define the title with the label of the listener. And define font settings for graph title</property>
         <property name="Line settings" required="Yes">Define the width of the line. Define the type of each value point. Choose <code>none</code> to have a line without mark</property>
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
@@ -4409,26 +4409,26 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         For example if <code>connectionsPerHost</code> is <code>10</code> and <code>threadsAllowedToBlockForConnectionMultiplier</code> is <code>5</code>, then up to 50 threads can wait for a connection.<br/>
         Default is <code>5</code>.
         </property>
-        <property name="Write Concern : Safe" required="No">
+        <property name="Write Concern: Safe" required="No">
             If <code>true</code> the driver will use a <code>WriteConcern</code> of <code>WriteConcern.SAFE</code> for all operations.<br/>
             If <code>w</code>, <code>wtimeout</code>, <code>fsync</code> or <code>j</code> are specified, this setting is ignored.<br/>
             Default is <code>false</code>.
         </property>
-        <property name="Write Concern : Fsync" required="No">
+        <property name="Write Concern: Fsync" required="No">
             The <code>fsync</code> value of the global <code>WriteConcern</code>.<br/>
             Default is <code>false</code>.
         </property>
-        <property name="Write Concern : Wait for Journal" required="No">
+        <property name="Write Concern: Wait for Journal" required="No">
             The <code>j</code> value of the global <code>WriteConcern</code>.<br/>
             Default is <code>false</code>.
         </property>
-        <property name="Write Concern : Wait for servers" required="No">
+        <property name="Write Concern: Wait for servers" required="No">
             The <code>w</code> value of the global <code>WriteConcern</code>.<br/>Default is <code>0</code>.
         </property>
-        <property name="Write Concern : Wait timeout" required="No">
+        <property name="Write Concern: Wait timeout" required="No">
             The <code>wtimeout</code> value of the global <code>WriteConcern</code>.<br/>Default is <code>0</code>.
         </property>
-        <property name="Write Concern : Continue on error" required="No">
+        <property name="Write Concern: Continue on error" required="No">
             If batch inserts should continue after the first error
         </property>
     </properties>
@@ -4817,7 +4817,7 @@ Some sample expressions:
 
 <properties>
 <property name="Namespaces aliases list" required="No">List of namespaces aliases you want to use to parse the document, one line per declaration.
-    You must specify them as follow : <code>prefix=namespace</code>. This implementation makes it easier to
+    You must specify them as follow: <code>prefix=namespace</code>. This implementation makes it easier to
     use namespaces than with the old XPathExtractor version.</property>
 <property name="XPath2 Assertion"    required="Yes">XPath to match in the document.</property>
 <property name="Invert assertion"    required="No">Will fail if xpath expression returns true or matches, succeed otherwise</property>
@@ -5930,20 +5930,20 @@ extracting the node as text or attribute value and store the result into the giv
     <property name="XPath Query" required="Yes">Element query in XPath 2.0 language. Can return more than one match.</property>
     <property name="Match No. (0 for Random)" required="No">If the XPath Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
-        <li><code>0</code> : means random (default value)</li>
+        <li><code>0</code>: means random (default value)</li>
         <li><code>-1</code> means extract all results, they will be named as <code><em>&lt;variable name&gt;</em>_N</code> (where <code>N</code> goes from 1 to Number of results)</li>
-        <li><code>X</code> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
+        <li><code>X</code>: means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
     </ul>
     </property>
     <property name="Default Value" required="yes">Default value returned when no match found.
     It is also returned if the node has no value and the fragment option is not selected.</property>
     <property name="Namespaces aliases list" required="No">List of namespaces aliases you want to use to parse the document, one line per declaration.
-    You must specify them as follow : <code>prefix=namespace</code>. This implementation makes it easier to
+    You must specify them as follow: <code>prefix=namespace</code>. This implementation makes it easier to
     use namespaces than with the old XPathExtractor version.</property>
    </properties>
    <p>To allow for use in a <complink name="ForEach Controller"/>, it works exactly the same as the above XPath Extractor</p>
    <p>XPath2 Extractor provides some interestings tools such as an improved syntax and much more functions than in it's first version.</p>
-   <p>Here are some exemples : </p>
+   <p>Here are some exemples: </p>
    <dl>
    <dt><code>abs(/book/page[2])</code></dt>
      <dd>extracts 2<sup>nd</sup> absolute value of the page from a book</dd>
@@ -6001,9 +6001,9 @@ extracting the node as text or attribute value and store the result into the giv
     <property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match.</property>
     <property name="Match No. (0 for Random)" required="No">If the XPath Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
-        <li><code>0</code> : means random</li>
+        <li><code>0</code>: means random</li>
         <li><code>-1</code> means extract all results (default value), they will be named as <code><em>&lt;variable name&gt;</em>_N</code> (where <code>N</code> goes from 1 to Number of results)</li>
-        <li><code>X</code> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
+        <li><code>X</code>: means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
     </ul>
     </property>
     <property name="Default Value" required="">Default value returned when no match found.
@@ -6089,9 +6089,9 @@ where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</co
     <property name="JMESPath expressions" required="Yes">Element query in JMESPath query language. Can return the matched result.</property>
     <property name="Match No. (0 for Random)" required="No">If the JMESPath query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
-        <li><code>0</code> : means random</li>
+        <li><code>0</code>: means random</li>
         <li><code>-1</code> means extract all results (default value), they will be named as <code><em>&lt;variable name&gt;</em>_N</code> (where <code>N</code> goes from 1 to Number of results)</li>
-        <li><code>X</code> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
+        <li><code>X</code>: means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
     </ul>
     </property>
     <property name="Default Value" required="">Default value returned when no match found.
@@ -6245,9 +6245,9 @@ It will allow you to extract in a very easy way text content, see <a href="https
     <property name="Default Values" required="No">Semi-colon separated default values if JSON-PATH expressions do not return any result(must match number of variables)</property>
     <property name="Match No. (0 for Random)" required="No">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
-        <li><code>0</code> : means random (Default Value)</li>
+        <li><code>0</code>: means random (Default Value)</li>
         <li><code>-1</code> means extract all results, they will be named as <code><em>&lt;variable name&gt;</em>_N</code> (where <code>N</code> goes from 1 to Number of results)</li>
-        <li><code>X</code> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
+        <li><code>X</code>: means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
     </ul>
     </property>
     <property name="Compute concatenation var" required="No">If many results are found, plugin will concatenate them using ‘<code>,</code>’ separator and store it in a var named <code><em>&lt;variable name&gt;</em>_ALL</code></property>
@@ -6420,19 +6420,19 @@ Since JMeter 3.0, you can run a selection of Thread Group by selecting them and 
 
 <br/>Notice you have 3 options to run the selection of Thread Groups:
 <ul>
-<li>Start : Start the selected thread groups only</li>
-<li>Start no pauses : Start the selected thread groups only but without running the timers</li>
-<li>Validate : Start the selected thread groups only using validation mode. Per default this runs the Thread Group in validation mode (see below)</li>
+<li>Start: Start the selected thread groups only</li>
+<li>Start no pauses: Start the selected thread groups only but without running the timers</li>
+<li>Validate: Start the selected thread groups only using validation mode. Per default this runs the Thread Group in validation mode (see below)</li>
 </ul>
 
 <b>Validation Mode:</b><br></br>
 This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <code>Startup delay</code> set to 0.
 Behaviour can be modified with some properties by setting in user.properties:
 <ul>
-<li><code>testplan_validation.nb_threads_per_thread_group</code> : Number of threads to use to validate a Thread Group, by default 1</li>
-<li><code>testplan_validation.ignore_timers</code> : Ignore timers when validating the thread group of plan, by default 1</li>
-<li><code>testplan_validation.number_iterations</code> : Number of iterations to use to validate a Thread Group</li>
-<li><code>testplan_validation.tpc_force_100_pct</code> : Whether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to false</li>
+<li><code>testplan_validation.nb_threads_per_thread_group</code>: Number of threads to use to validate a Thread Group, by default 1</li>
+<li><code>testplan_validation.ignore_timers</code>: Ignore timers when validating the thread group of plan, by default 1</li>
+<li><code>testplan_validation.number_iterations</code>: Number of iterations to use to validate a Thread Group</li>
+<li><code>testplan_validation.tpc_force_100_pct</code>: Whether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to false</li>
 </ul>
 </p>
 
