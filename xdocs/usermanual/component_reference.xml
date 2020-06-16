@@ -4376,10 +4376,10 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         <property name="Keep Trying" required="No">
             If <code>true</code>, the driver will keep trying to connect to the same server in case that the socket cannot be established.<br/>
             There is maximum amount of time to keep retrying, which is 15s by default.<br/>This can be useful to avoid some exceptions being thrown when a server is down temporarily by blocking the operations.
-            <br/>It can also be useful to smooth the transition to a new master (so that a new master is elected within the retry time).<br/>
+            <br/>It can also be useful to smooth the transition to a new primary node (so that a new primary node is elected within the retry time).<br/>
             <note>Note that when using this flag
               <ul>
-                <li>for a replica set, the driver will try to connect to the old master for that time, instead of failing over to the new one right away </li>
+                <li>for a replica set, the driver will try to connect to the old primary node for that time, instead of failing over to the new one right away </li>
                 <li>this does not prevent exception from being thrown in read/write operations on the socket, which must be handled by application.</li>
               </ul>
               Even if this flag is false, the driver already has mechanisms to automatically recreate broken connections and retry the read operations.
