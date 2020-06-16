@@ -6719,34 +6719,34 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         By default it also removes <code>If-Modified-Since</code> and <code>If-None-Match</code> headers.
         These are used to determine if the browser cache items are up to date;
         when recording one normally wants to download all the content.
-        To change which additional headers are removed, define the JMeter property <code>proxy.heade'rs.remove</code>
+        To change which additional headers are removed, define the JMeter property <code>proxy.headers.remove</code>
         as a comma-separated list of headers.
         </property>
         <property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
         <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, i.e. it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to <code>\b</code>. More information below in the paragraph about "<code>User Defined Variable replacement</code>".</property>
         <property name="Prefix/Transaction name" required="No">Add a prefix to sampler name during recording (Prefix mode). Or replace sampler name by user chosen name (Transaction name)</property>
-		<property name="Numbering Sampler Choice" required="Yes">Select the numbering mode for sampler name<br/>
-		<ul>
-             <li><code>Without numbering</code> no numbering, ex : '/a.png'</li>
-			 <li><code>Prefix number (start)</code> add the number at the start of sampler name, ex : '001 /a.png'</li>
-			 <li><code>Suffix number (at the end)</code> add number at the end of the sampler name, ex : '/a.png-001'</li>
-		</ul>	 
-		property <code>proxy.number.requests</code> add numeric to Sampler Names (default <code>proxy.number.requests=true</code>) if false then Numbering Sampler Choice = 'Without numbering'<br/>
-		property <code>proxy.number.mode</code> suffix or prefix (default <code>proxy.number.mode=prefix</code>), if set to prefix then Numbering Sampler Choice = 'Prefix number (start), if set to suffix then the Numbering Sampler Choice = 'Suffix number (at the end)'<br/>
-		This field is also related to 'Prefix/Transaction name'
-		</property>
-		<property name="Next number" required="Yes">Set the next number for the sampler name, you can reset the value to 1 (or another value &gt; 0) if you have already record samplers or if you have delete not wanted samplers.<br/>
-		This field is related to 'Numbering Sampler Choice'
-		</property>
-		<property name="Number format (String.format)" required="Yes">Set the number format for the number sampler name, the format use the Java String.format method for an integer number.<br/>
-		property <code>proxy.number.value_format</code> Set the number format (default <code>proxy.number.value_format=%03d</code>) wihth %03d examples 001, 002, 202.<br/>
-		The main advantage to use %03d is to keep the order in numeric and alphanumeric sort for sampler name for number from 001 to 999.<br/>
-		This field is related to 'Numbering Sampler Choice' and 'Next number'
-		</property>
+        <property name="Numbering Sampler Choice" required="Yes">Select the numbering mode for sampler name<br/>
+        <ul>
+            <li><code>Without numbering</code> no numbering, e.g.: '/a.png'</li>
+            <li><code>Prefix number (start)</code> add the number at the start of sampler name, e.g.: '001 /a.png'</li>
+            <li><code>Suffix number (at the end)</code> add number at the end of the sampler name, e.g.: '/a.png-001'</li>
+        </ul>
+        property <code>proxy.number.requests</code> add numeric to Sampler Names (default <code>proxy.number.requests=true</code>) if false then Numbering Sampler Choice = 'Without numbering'<br/>
+        property <code>proxy.number.mode</code> suffix or prefix (default <code>proxy.number.mode=prefix</code>), if set to prefix then Numbering Sampler Choice = 'Prefix number (start), if set to suffix then the Numbering Sampler Choice = 'Suffix number (at the end)'<br/>
+        This field is also related to 'Prefix/Transaction name'
+        </property>
+        <property name="Next number" required="Yes">Set the next number for the sampler name, you can reset the value to 1 (or another value &gt; 0) if you have already record samplers or if you have delete not wanted samplers.<br/>
+        This field is related to 'Numbering Sampler Choice'
+        </property>
+        <property name="Number format (String.format)" required="Yes">Set the number format for the number sampler name, the format use the Java String.format method for an integer number.<br/>
+        property <code>proxy.number.value_format</code> Set the number format (default <code>proxy.number.value_format=%03d</code>) wihth %03d examples 001, 002, 202.<br/>
+        The main advantage to use %03d is to keep the order in numeric and alphanumeric sort for sampler name for number from 001 to 999.<br/>
+        This field is related to 'Numbering Sampler Choice' and 'Next number'
+        </property>
         <property name="Create new transaction after request (ms)">Inactivity time between two requests needed to consider them in two separate groups.
-		The property <code>proxy.pause</code> determines the minimum gap that JMeter needs between requests to treat them as separate "clicks" (default <code>proxy.pause=5000</code>).<br/>
-		This field is related to 'Grouping'		
-		</property>
+        The property <code>proxy.pause</code> determines the minimum gap that JMeter needs between requests to treat them as separate "clicks" (default <code>proxy.pause=5000</code>).<br/>
+        This field is related to 'Grouping'		
+        </property>
         <property name="Type" required="Yes">Which type of sampler to generate (the HTTPClient default or Java)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
         <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?<br/>

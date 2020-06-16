@@ -484,10 +484,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         } else if (command.equals(ACTION_RESTART)) {
             model.stopProxy();
             // what is the last number for numbering samplers, ex : 96
-            int iRequestNumber = model.getRequestNumberFromSamplerCreator();
-            model.setHttpSamplerNumberingStartValue(iRequestNumber);
+            int requestNumber = model.getRequestNumberFromSamplerCreator();
+            model.setHttpSamplerNumberingStartValue(requestNumber);
             // the next value is the current value add 1
-            httpSamplerNumberingStartValue.setText("" + (iRequestNumber + 1));
+            httpSamplerNumberingStartValue.setText("" + (requestNumber + 1));
 
             if(startProxy()) {
                 recorderDialog.setVisible(true);
