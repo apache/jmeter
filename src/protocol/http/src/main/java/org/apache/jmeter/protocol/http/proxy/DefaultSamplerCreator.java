@@ -286,27 +286,27 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * @param request {@link HttpRequestHdr}
      */
     protected void computeSamplerName(HTTPSamplerBase sampler, HttpRequestHdr request) {
-        String prefix = request.getPrefix(); // ppp
+        String prefix = request.getPrefix(); // pn for prefix name
         int httpSampleNameMode = request.getHttpSampleNameMode();
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
             if(StringUtils.isNotEmpty(prefix)) {
             	// with a prefix name
                 if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
                     if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(getNumberMode())) {
-                        // ppp/img.png-001
+                        // pn/img.png-001
                         sampler.setName(prefix + sampler.getPath() + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
                     }
                     if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(getNumberMode())) {
-                        // ppp-001 /img.png
+                        // pn-001 /img.png
                         sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()) + " " + sampler.getPath());
                     }
                 } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
                     if (HttpSamplerNumberingMode.SUFFIX.getStringMode().equals(getNumberMode())) {
-                        // ppp-001
+                        // pn-001
                         sampler.setName(prefix + "-" + formatNumberingInteger(incrementRequestNumberAndGet()));
                     }
                     if (HttpSamplerNumberingMode.PREFIX.getStringMode().equals(getNumberMode())) {
-                        // 001-ppp
+                        // 001-pn
                         sampler.setName(formatNumberingInteger(incrementRequestNumberAndGet()) + "-" + prefix);
                     }
                 } else {
@@ -327,10 +327,10 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             if(StringUtils.isNotEmpty(prefix)) {
             	// with a prefix name
                 if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
-                    // ppp/img.png
+                    // pn/img.png
                     sampler.setName(prefix + sampler.getPath());
                 } else if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_COMPLETE) {
-                    // ppp
+                    // pn
                     sampler.setName(prefix);
                 } else {
                     log.debug("Sampler name naming mode not recognized");
