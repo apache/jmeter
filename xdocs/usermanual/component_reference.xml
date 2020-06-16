@@ -1737,7 +1737,7 @@ Relative paths are resolved against the current directory.
 <br />Failing that, against the directory containing the test script (JMX file).
 </property>
 </properties>
-<note>You can pass mail related environment properties by adding to user.properties any of the properties described <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html">here</a>.</note>
+<note>You can pass mail related environment properties by adding to <code>user.properties</code> any of the properties described <a href="https://javaee.github.io/javamail/docs/api/com/sun/mail/pop3/package-summary.html">here</a>.</note>
 <p>
 Messages are stored as subsamples of the main sampler.
 Multipart message parts are stored as subsamples of the message.
@@ -4790,7 +4790,7 @@ The non-tolerant parser can be quite slow, as it may need to download the DTD et
 <b>NAMESPACES</b><br/>
 As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
 <ul>
-<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes:
+<li>provide a Properties file (if for example your file is named <code>namespaces.properties</code>) which contains mappings for the namespace prefixes:
 <source>
 prefix1=http\://foo.apache.org
 prefix2=http\://toto.apache.org
@@ -6046,7 +6046,7 @@ extracting the node as text or attribute value and store the result into the giv
 <b>NAMESPACES</b><br/>
 As a work-round for namespace limitations of the Xalan XPath parser (implementation on which JMeter is based) you need to:
 <ul>
-<li>provide a Properties file (if for example your file is named namespaces.properties) which contains mappings for the namespace prefixes:
+<li>provide a Properties file (if for example your file is named <code>namespaces.properties</code>) which contains mappings for the namespace prefixes:
 <source>
 prefix1=http\://foo.apache.org
 prefix2=http\://toto.apache.org
@@ -6426,13 +6426,13 @@ Since JMeter 3.0, you can run a selection of Thread Group by selecting them and 
 </ul>
 
 <b>Validation Mode:</b><br></br>
-This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <code>Startup delay</code> set to 0.
-Behaviour can be modified with some properties by setting in user.properties:
+This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <code>Startup delay</code> set to <code>0</code>.
+Behaviour can be modified with some properties by setting in <code>user.properties</code>:
 <ul>
-<li><code>testplan_validation.nb_threads_per_thread_group</code>: Number of threads to use to validate a Thread Group, by default 1</li>
-<li><code>testplan_validation.ignore_timers</code>: Ignore timers when validating the thread group of plan, by default 1</li>
+<li><code>testplan_validation.nb_threads_per_thread_group</code>: Number of threads to use to validate a Thread Group, by default <code>1</code></li>
+<li><code>testplan_validation.ignore_timers</code>: Ignore timers when validating the thread group of plan, by default <code>1</code></li>
 <li><code>testplan_validation.number_iterations</code>: Number of iterations to use to validate a Thread Group</li>
-<li><code>testplan_validation.tpc_force_100_pct</code>: Whether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to false</li>
+<li><code>testplan_validation.tpc_force_100_pct</code>: Whether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to <code>false</code></li>
 </ul>
 </p>
 
