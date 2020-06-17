@@ -286,12 +286,13 @@ public class ProxyControl extends GenericController implements NonTestElement {
     // accessed from Swing-Thread, only
     private String oldPrefix = null;
 
+    private transient javax.swing.Timer sampleWorkerTimer;
+
     public ProxyControl() {
         setPort(DEFAULT_PORT);
         setExcludeList(new HashSet<>());
         setIncludeList(new HashSet<>());
         setCaptureHttpHeaders(true); // maintain original behaviour
-        new javax.swing.Timer(200, this::putSamplesIntoModel).start();
     }
 
     /**
@@ -508,6 +509,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
             log.error("Could not initialise key store", e);
             throw e;
         }
+        sampleWorkerTimer = new javax.swing.Timer(200, this::putSamplesIntoModel);
+        sampleWorkerTimer.start();
         notifyTestListenersOfStart();
         try {
             server = new Daemon(getPort(), this);
@@ -737,6 +740,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
             }
             notifyTestListenersOfEnd();
             server = null;
+        }
+        if (sampleWorkerTimer != null) {
+            sampleWorkerTimer.stop();
+            sampleWorkerTimer = null;
         }
     }
 
