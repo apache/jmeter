@@ -129,6 +129,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+  <li><bug>64479</bug>Regression: HTTP(s) Script Recorder prevents proper shutdown in non-GUI mode</li>
 </ul>
 
 <h3>Other Samplers</h3>
