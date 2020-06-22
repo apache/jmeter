@@ -235,7 +235,7 @@ public final class Utils {
                 msg.setJMSCorrelationID((String)value);
             } else if ("JMSType".equalsIgnoreCase(name)) { // $NON-NLS-1$
                 msg.setJMSType((String)value);
-        } else {
+            } else {
                 msg.setObjectProperty(name, value);
             }
         }
