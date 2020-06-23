@@ -17,8 +17,6 @@
 
 package org.apache.jmeter.report.processor.graph;
 
-import java.util.Arrays;
-
 import org.apache.jmeter.report.core.Sample;
 
 /**
@@ -44,7 +42,7 @@ public class NameSeriesSelector extends AbstractSeriesSelector {
      */
     @Override
     public Iterable<String> select(Sample sample) {
-        return Arrays.asList(sample.getName());
+        return withDefaultIfEmpty(sample.getName(), "EMPTY_SERIE_NAME"); //$NON-NLS-1$
     }
 
 }
