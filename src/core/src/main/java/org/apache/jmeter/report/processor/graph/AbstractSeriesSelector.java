@@ -63,12 +63,9 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
     /**
      * @param value String value
      * @param defaultValue Default value to use if value is empty or null
-     * @return Iterable 
+     * @return input or default value wrapped in a list
      */
     protected Iterable<String> withDefaultIfEmpty(String value, String defaultValue) {
-        if (StringUtils.isEmpty(value)) {
-            value = defaultValue;
-        }
-        return Arrays.asList(value);
+        return Arrays.asList(StringUtils.defaultIfBlank(value, defaultValue));
     }
 }
