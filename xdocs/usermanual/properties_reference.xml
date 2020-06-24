@@ -596,6 +596,17 @@ JMETER-SERVER</source>
     Only <code>xml</code> and <code>csv</code> are currently supported.<br/>
     Defaults to: <code>csv</code>
 </property>
+<property name="jmeter.save.disruptor.ringbuffer.size">
+	Size of the Ring Buffer of <a href="https://lmax-exchange.github.io/disruptor/">LMAX Disruptor</a> used to store SampleResults that are delivered to ResultCollector (Default listener in CLI mode, View Results Tree...).<br/>
+    <note>Integer value that should be a power of 2 (but JMeter will adjust). Ensure it is large enough based on the type of test you run.</note><br/>
+    Defaults to: <code>0</code> meaning it is disabled.
+</property>
+<property name="jmeter.save.disruptor.wait-strategy">
+	RingBuffer wait strategy for storing SampleResults when Ring Buffer is enable (jmeter.save.disruptor.ringbuffer.size>0)<br/>
+    Defaults to: <code>BlockingWaitStrategy</code><br/>
+    Legitimate values: <code>BlockingWaitStrategy</code>, <code>SleepingWaitStrategy</code>, <code>, YieldingWaitStrategy</code>, <code>BusySpinWaitStrategy</code>.<br/>
+    See <a href="https://lmax-exchange.github.io/disruptor/docs/com/lmax/disruptor/WaitStrategy.html">WaitStrategy javadocs</a> 
+</property>
 <property name="jmeter.save.saveservice.assertion_results_failure_message">
     <code>true</code> when field should be saved; <code>false</code> otherwise.<br/>
     <code>assertion_results_failure_message</code> only affects CSV output.<br/>

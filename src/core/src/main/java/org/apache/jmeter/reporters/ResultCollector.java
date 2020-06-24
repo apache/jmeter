@@ -54,6 +54,16 @@ import org.apache.jorphan.util.JMeterError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lmax.disruptor.BlockingWaitStrategy;
+import com.lmax.disruptor.BusySpinWaitStrategy;
+import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.SleepingWaitStrategy;
+import com.lmax.disruptor.WaitStrategy;
+import com.lmax.disruptor.YieldingWaitStrategy;
+import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.dsl.ProducerType;
+import com.lmax.disruptor.util.DaemonThreadFactory;
+
 /**
  * This class handles all saving of samples.
  * The class must be thread-safe because it is shared between threads (NoThreadClone).
@@ -117,7 +127,23 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     /** AutoFlush on each line */
     private static final boolean SAVING_AUTOFLUSH = JMeterUtils.getPropDefault("jmeter.save.saveservice.autoflush", false); //$NON-NLS-1$
 
-    // Static variables
+	private static final int DEFAULT_RING_BUFFER_SIZE = 0;
+	private static final int RING_BUFFER_SIZE = JMeterUtils.getPropDefault("jmeter.save.disruptor.ringbuffer.size",
+			DEFAULT_RING_BUFFER_SIZE);
+
+	private enum WaitingStrategy {
+		BlockingWaitStrategy, SleepingWaitStrategy, YieldingWaitStrategy, BusySpinWaitStrategy;
+		// LiteBlockingWaitStrategy experimental
+		// LiteTimeoutBlockingWaitStrategy undocumented
+		// PhasedBackoffWaitStrategy undocumented
+		// TimeoutBlockingWaitStrategy undocumented
+	}
+
+	private static final WaitingStrategy DEFAULT_WAIT_STRATEGY = WaitingStrategy.BlockingWaitStrategy;
+	private static final String WAIT_STRATEGY_STR = JMeterUtils.getPropDefault("jmeter.save.disruptor.wait-strategy",
+			DEFAULT_WAIT_STRATEGY.name());
+	
+	// Static variables
 
     // Lock used to guard static mutable variables
     private static final Object LOCK = new Object();
@@ -140,6 +166,20 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     // Instance variables (guarded by volatile)
     private transient volatile PrintWriter out;
 
+	private transient volatile Disruptor<ResultCollectorEvent> disruptor;
+
+	private static class ResultCollectorEvent {
+		private SampleEvent sampleEvent;
+
+		public SampleEvent getSampleEvent() {
+			return sampleEvent;
+		}
+
+		public void setSampleEvent(SampleEvent sampleEvent) {
+			this.sampleEvent = sampleEvent;
+		}
+	}
+	
     /**
      * Is a test running ?
      */
@@ -289,6 +329,13 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     @Override
     public void testEnded(String host) {
         synchronized(LOCK){
+        	
+			if (disruptor != null) {
+				log.info("Shutdown disruptor of ResultCollector '{}'", getName());
+				disruptor.shutdown();
+				log.info("Disruptor of ResultCollector '{}' stopped", getName());
+			}
+
             instanceCount--;
             if (instanceCount <= 0) {
                 // No need for the hook now
@@ -308,6 +355,37 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             summariser.testEnded(host);
         }
     }
+
+	private void saveSampleEvent(SampleEvent event, SampleSaveConfiguration saveConfig) {
+		try {
+			if (saveConfig.saveAsXml()) {
+				SaveService.saveSampleResult(event, out);
+			} else { // !saveAsXml
+				CSVSaveService.saveSampleResult(event, out);
+			}
+		} catch (Exception err) {
+			log.error("Error trying to record a sample", err); // should throw exception back to caller
+		}
+	}
+
+	private WaitStrategy buildWaitStrategy(WaitingStrategy strategy) {
+		WaitStrategy result;
+		switch (strategy) {
+		case BusySpinWaitStrategy:
+			result = new BusySpinWaitStrategy();
+			break;
+		case SleepingWaitStrategy:
+			result = new SleepingWaitStrategy();
+			break;
+		case YieldingWaitStrategy:
+			result = new YieldingWaitStrategy();
+			break;
+		default:
+			result = new BlockingWaitStrategy();
+			break;
+		}
+		return result;
+	}
 
     @Override
     public void testStarted(String host) {
@@ -332,6 +410,24 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             } catch (Exception e) {
                 log.error("Exception occurred while initializing file output.", e);
             }
+
+			if (RING_BUFFER_SIZE > 0) {
+				int ringBufferSize = JMeterUtils.ceilingNextPowerOfTwo(RING_BUFFER_SIZE);
+				log.info("Computed for result collector {} a ringBufferSize:{} from property:{} with value:{}", getName(),
+						ringBufferSize, "jmeter.save.disruptor.ringbuffer.size", RING_BUFFER_SIZE);
+				WaitingStrategy waitingStrategy = WaitingStrategy.valueOf(WAIT_STRATEGY_STR);
+				log.info("Initializing disruptor for result collector '{}' with ring buffer size: {} and wait strategy: {} ", getName(),
+						ringBufferSize, waitingStrategy);
+				disruptor = new Disruptor<>(ResultCollectorEvent::new, ringBufferSize, DaemonThreadFactory.INSTANCE,
+						ProducerType.MULTI, buildWaitStrategy(waitingStrategy));
+				disruptor.handleEventsWith((event, sequence, endOfBatch) -> {
+					saveSampleEvent(event.getSampleEvent(), getSaveConfig());
+				});
+				disruptor.start();
+			} else {
+				log.info("Ring buffer is not enabled, will use legacy synchronized saving of SampleResuls");
+			}
+
         }
         inTest = true;
 
@@ -548,15 +644,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             if (out != null && !isResultMarked(result) && !this.isStats) {
                 SampleSaveConfiguration config = getSaveConfig();
                 result.setSaveConfig(config);
-                try {
-                    if (config.saveAsXml()) {
-                        SaveService.saveSampleResult(event, out);
-                    } else { // !saveAsXml
-                        CSVSaveService.saveSampleResult(event, out);
-                    }
-                } catch (Exception err) {
-                    log.error("Error trying to record a sample", err); // should throw exception back to caller
-                }
+
+				if (disruptor != null) {
+					RingBuffer<ResultCollectorEvent> ringBuffer = disruptor.getRingBuffer();
+					ringBuffer.publishEvent((rbEvent, seq, sampleEvent) -> {
+						rbEvent.setSampleEvent(sampleEvent);
+					}, event);
+				} else {
+					saveSampleEvent(event, config);
+				}
             }
         }
 

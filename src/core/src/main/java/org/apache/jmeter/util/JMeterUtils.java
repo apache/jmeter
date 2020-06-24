@@ -79,6 +79,7 @@ import com.thoughtworks.xstream.security.NoTypePermission;
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggerFactory.getLogger(JMeterUtils.class);
 
+    private static final int BITS_PER_INT = 32;
     private static final String JMETER_VARS_PREFIX = "__jm__";
     public static final String THREAD_GROUP_DISTRIBUTED_PREFIX_PROPERTY_NAME = "__jm.D_TG";
 
@@ -1310,5 +1311,17 @@ public class JMeterUtils implements UnitTestManager {
         XStream xstream = new XStream();
         JMeterUtils.setupXStreamSecurityPolicy(xstream);
         return xstream;
+    }
+    
+    /**
+     * Calculate the next power of 2, greater than or equal to x.
+     * <p>
+     * From Hacker's Delight, Chapter 3, Harry S. Warren Jr.
+     *
+     * @param x Value to round up
+     * @return The next power of 2 from x inclusive
+     */
+    public static int ceilingNextPowerOfTwo(final int x) {
+        return 1 << (BITS_PER_INT - Integer.numberOfLeadingZeros(x - 1));
     }
 }

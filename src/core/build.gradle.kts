@@ -100,6 +100,7 @@ dependencies {
     implementation("org.jodd:jodd-props")
     implementation("org.mozilla:rhino")
     implementation("org.slf4j:jcl-over-slf4j")
+    implementation("com.lmax:disruptor:3.4.2")
     // TODO: JMeter bundles Xerces, however the reason is unknown
     runtimeOnly("xerces:xercesImpl")
     runtimeOnly("xml-apis:xml-apis")
