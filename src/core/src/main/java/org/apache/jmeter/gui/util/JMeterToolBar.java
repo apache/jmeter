@@ -91,6 +91,22 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         return toolBar;
     }
 
+    @Override
+    protected void addImpl(Component comp, Object constraints, int index) {
+        super.addImpl(comp, constraints, index);
+        if (comp instanceof JButton) {
+            // Ensure buttons added to the toolbar have the same style.
+            JButton b = (JButton) comp;
+            b.setFocusable(false);
+            if (b.isBorderPainted() && (b.getText() == null || b.getText().isEmpty())) {
+                b.setRolloverEnabled(true);
+                b.putClientProperty(DarkButtonUI.KEY_VARIANT, DarkButtonUI.VARIANT_BORDERLESS);
+                b.putClientProperty(DarkButtonUI.KEY_THIN, true);
+                b.putClientProperty(DarkButtonUI.KEY_SQUARE, true);
+            }
+        }
+    }
+
     /**
      * Setup toolbar content
      * @param toolBar {@link JMeterToolBar}
@@ -128,18 +144,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      * @return a button for toolbar
      */
     private static JButton makeButtonItemRes(IconToolbarBean iconBean) throws Exception {
-        JButton button = new JButton(loadIcon(iconBean, iconBean.getIconPath())) {
-            @Override
-            public void updateUI() {
-                super.updateUI();
-                // Certain LaFs might alter button configuration, so we revert it to the way we want
-                // For instance, https://github.com/weisJ/darklaf/issues/84
-                setFocusable(false);
-                setRolloverEnabled(true);
-                putClientProperty(DarkButtonUI.KEY_VARIANT, DarkButtonUI.VARIANT_BORDERLESS);
-                putClientProperty(DarkButtonUI.KEY_THIN, true);
-            }
-        };
+        JButton button = new JButton(loadIcon(iconBean, iconBean.getIconPath()));
         button.setToolTipText(JMeterUtils.getResString(iconBean.getI18nKey()));
         if (!iconBean.getIconPathPressed().equals(iconBean.getIconPath())) {
             button.setPressedIcon(loadIcon(iconBean, iconBean.getIconPathPressed()));
