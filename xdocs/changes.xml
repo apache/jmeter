@@ -110,6 +110,7 @@ Summary
 <h3>General</h3>
 <ul>
   <li><bug>64446</bug>Better parse curl commands with backslash at line endings and support <code>PUT</code> method with data arguments</li>
+  <li><pr>599</pr>Ensure all buttons added to the toolbar behave/look consistently. Contributed by Jannis Weis</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -170,6 +171,8 @@ Summary
 <ul>
     <li><bug>64448</bug>User Defined Variable Duplication in Right Click Context Menu</li>
     <li><bug>64499</bug>Exiting JMeter when <code>jmeterengine.stopfail.system.exit=true</code> takes too much time if threads are not stopped</li>
+    <li><bug>64510</bug>Darklaf- IntelliJ Theme throws NPE in DarkTreeUI on MacOS</li>
+    <li><bug>64543</bug>On MacOSX, Darklaf- IntelliJ Theme throws NPE in javax.swing.ToolTipManager.initiateToolTip</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -182,6 +185,7 @@ Summary
   <li>Deng Liming (liming.d.pro at gmail.com>)</li>
   <li>jmetertea (https://github.com/jmetertea)</li>
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
+  <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
