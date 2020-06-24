@@ -81,6 +81,7 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>64555</bug>Set JMSType header field through JMSProperties. Contributed by topicus-pw-dvdouden</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -186,6 +187,7 @@ Summary
   <li>jmetertea (https://github.com/jmetertea)</li>
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
   <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
+  <li><a href="https://github.com/topicus-pw-dvdouden">topicus-pw-dvdouden</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
