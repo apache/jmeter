@@ -229,9 +229,12 @@ public final class Utils {
                 log.debug("Adding property [" + name + "=" + value + "]");
             }
 
-            // WebsphereMQ does not allow corr. id. to be set using setStringProperty()
+            // Some JMS implemenations do not allow certain header fields to be set using properties
+            // e.g.: WebsphereMQ does not allow corr. id. to be set using setStringProperty()
             if ("JMSCorrelationID".equalsIgnoreCase(name)) { // $NON-NLS-1$
                 msg.setJMSCorrelationID((String)value);
+            } else if ("JMSType".equalsIgnoreCase(name)) { // $NON-NLS-1$
+                msg.setJMSType((String)value);
             } else {
                 msg.setObjectProperty(name, value);
             }
