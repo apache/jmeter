@@ -1312,7 +1312,7 @@ public class JMeterUtils implements UnitTestManager {
         JMeterUtils.setupXStreamSecurityPolicy(xstream);
         return xstream;
     }
-    
+
     /**
      * Calculate the next power of 2, greater than or equal to x.
      * <p>

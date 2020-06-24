@@ -605,7 +605,7 @@ JMETER-SERVER</source>
 	RingBuffer wait strategy for storing SampleResults when Ring Buffer is enable (jmeter.save.disruptor.ringbuffer.size>0)<br/>
     Defaults to: <code>BlockingWaitStrategy</code><br/>
     Legitimate values: <code>BlockingWaitStrategy</code>, <code>SleepingWaitStrategy</code>, <code>, YieldingWaitStrategy</code>, <code>BusySpinWaitStrategy</code>.<br/>
-    See <a href="https://lmax-exchange.github.io/disruptor/docs/com/lmax/disruptor/WaitStrategy.html">WaitStrategy javadocs</a> 
+    See <a href="https://lmax-exchange.github.io/disruptor/docs/com/lmax/disruptor/WaitStrategy.html">WaitStrategy javadocs</a>
 </property>
 <property name="jmeter.save.saveservice.assertion_results_failure_message">
     <code>true</code> when field should be saved; <code>false</code> otherwise.<br/>
