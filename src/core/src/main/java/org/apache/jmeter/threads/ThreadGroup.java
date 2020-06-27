@@ -95,7 +95,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     /**
      * We cache thread group name for performance otherwise it's a contention point
      */
-	private transient String cachedName;
+    private transient String cachedName;
 
     /**
      * No-arg constructor.
@@ -638,11 +638,11 @@ public class ThreadGroup extends AbstractThreadGroup {
         }
     }
 
-	@Override
-	public String getName() {
-		if (cachedName == null) {
-			cachedName = super.getName();
-		}
-		return cachedName;
-	}
+    @Override
+    public String getName() {
+        if (cachedName == null) {
+            cachedName = super.getName();
+        }
+        return cachedName;
+    }
 }

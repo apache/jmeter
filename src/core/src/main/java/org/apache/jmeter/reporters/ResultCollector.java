@@ -163,17 +163,17 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     /**
      * We cache the property value to avoid contention point at high throughput
      */
-	private transient boolean errorOnlyCached;
+    private transient boolean errorOnlyCached;
 
     /**
      * We cache the property value to avoid contention point at high throughput
      */
-	private transient boolean successOnlyCached;
-	
+    private transient boolean successOnlyCached;
+
     /**
      * We cache the property value to avoid contention point at high throughput
      */
-	private transient String fileNameCached;
+    private transient String fileNameCached;
 
     /**
      * No-arg constructor.
@@ -323,14 +323,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 }
                 if (QUEUE_SIZE > 0) {
                     log.info("Interrupting queueConsumer of {}", getName());
-	                queueConsumer.interrupt();
-	                SampleEvent event = null;
-	                log.info("Emptying the queue of {} which has {} elements", getName(), queue.size());
-	                SampleSaveConfiguration config = getSaveConfig();
-	                while((event = queue.poll()) != null) {
-	                	event.getResult().setSaveConfig(config);
-	                	saveSampleEvent(event, getSaveConfig());
-	                }
+                    queueConsumer.interrupt();
+                    SampleEvent event = null;
+                    log.info("Emptying the queue of {} which has {} elements", getName(), queue.size());
+                    SampleSaveConfiguration config = getSaveConfig();
+                    while((event = queue.poll()) != null) {
+                        event.getResult().setSaveConfig(config);
+                        saveSampleEvent(event, getSaveConfig());
+                    }
                 }
                 finalizeFileOutput();
                 out = null;
@@ -368,11 +368,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
 
             if (QUEUE_SIZE > 0) {
-            	log.info("Configuring queue for {} of size:{}", getName(), QUEUE_SIZE);
-            	queue = new ArrayBlockingQueue<SampleEvent>(QUEUE_SIZE);
-            	queueConsumer = new Thread(new SampleEventConsumer(), getName() + "-QueueConsumer");
-            	queueConsumer.setDaemon(true);
-            	queueConsumer.start();
+                log.info("Configuring queue for {} of size:{}", getName(), QUEUE_SIZE);
+                queue = new ArrayBlockingQueue<SampleEvent>(QUEUE_SIZE);
+                queueConsumer = new Thread(new SampleEventConsumer(), getName() + "-QueueConsumer");
+                queueConsumer.setDaemon(true);
+                queueConsumer.start();
             }
         }
         inTest = true;
@@ -386,19 +386,19 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     }
 
     private class SampleEventConsumer implements Runnable {
-		@Override
-		public void run() {
-			SampleEvent event;
-			try {
-				SampleSaveConfiguration config = getSaveConfig();
-				while ((event = queue.take()) != null) {
-					event.getResult().setSaveConfig(config);
-					saveSampleEvent(event, getSaveConfig());
-				}
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-		}
+        @Override
+        public void run() {
+            SampleEvent event;
+            try {
+                SampleSaveConfiguration config = getSaveConfig();
+                while ((event = queue.take()) != null) {
+                    event.getResult().setSaveConfig(config);
+                    saveSampleEvent(event, getSaveConfig());
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     private void saveSampleEvent(SampleEvent event, SampleSaveConfiguration saveConfig) {
@@ -620,13 +620,13 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             sendToVisualizer(result);
             if (out != null && !isResultMarked(result) && !this.isStats) {
                 try {
-                	if (QUEUE_SIZE > 0) {
-	                	queue.put(event);
-                	} else {
+                    if (QUEUE_SIZE > 0) {
+                        queue.put(event);
+                    } else {
                         SampleSaveConfiguration config = getSaveConfig();
                         result.setSaveConfig(config);
-                		saveSampleEvent(event, config);
-                	}
+                        saveSampleEvent(event, config);
+                    }
                 } catch (Exception err) {
                     log.error("Error trying to record a sample", err); // should throw exception back to caller
                 }
