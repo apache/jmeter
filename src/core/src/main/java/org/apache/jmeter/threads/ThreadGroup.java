@@ -93,6 +93,11 @@ public class ThreadGroup extends AbstractThreadGroup {
     private ListedHashTree threadGroupTree;
 
     /**
+     * We cache thread group name for performance otherwise it's a contention point
+     */
+	private transient String cachedName;
+
+    /**
      * No-arg constructor.
      */
     public ThreadGroup() {
@@ -212,6 +217,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         this.groupNumber = groupNum;
         this.notifier = notifier;
         this.threadGroupTree = threadGroupTree;
+        this.cachedName = super.getName();
         int numThreads = getNumThreads();
         int rampUpPeriodInSeconds = getRampUp();
         boolean isSameUserOnNextIteration = isSameUserOnNextIteration();
@@ -631,4 +637,12 @@ public class ThreadGroup extends AbstractThreadGroup {
             }
         }
     }
+
+	@Override
+	public String getName() {
+		if (cachedName == null) {
+			cachedName = super.getName();
+		}
+		return cachedName;
+	}
 }
