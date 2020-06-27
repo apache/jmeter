@@ -33,6 +33,8 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.GuiPackage;
@@ -117,6 +119,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     /** AutoFlush on each line */
     private static final boolean SAVING_AUTOFLUSH = JMeterUtils.getPropDefault("jmeter.save.saveservice.autoflush", false); //$NON-NLS-1$
 
+    private static final int FLUSH_BUFFER = JMeterUtils.getPropDefault("jmeter.save.saveservice.buffer", 256 * 1024); //$NON-NLS-1$
+
+    private static final int QUEUE_SIZE = JMeterUtils.getPropDefault("jmeter.save.queue.size", 0);
+
     // Static variables
 
     // Lock used to guard static mutable variables
@@ -149,6 +155,25 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     /** the summarizer to which this result collector will forward the samples */
     private volatile Summariser summariser;
+
+    private BlockingQueue<SampleEvent> queue;
+
+    private Thread queueConsumer;
+
+    /**
+     * We cache the property value to avoid contention point at high throughput
+     */
+	private transient boolean errorOnlyCached;
+
+    /**
+     * We cache the property value to avoid contention point at high throughput
+     */
+	private transient boolean successOnlyCached;
+	
+    /**
+     * We cache the property value to avoid contention point at high throughput
+     */
+	private transient String fileNameCached;
 
     /**
      * No-arg constructor.
@@ -247,9 +272,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * @return whether to log/display the sample
      */
     public boolean isSampleWanted(boolean success){
-        boolean errorOnly = isErrorLogging();
-        boolean successOnly = isSuccessOnlyLogging();
-        return isSampleWanted(success, errorOnly, successOnly);
+        return isSampleWanted(success, errorOnlyCached, successOnlyCached);
     }
 
     /**
@@ -298,6 +321,17 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 } else {
                     log.warn("Should not happen: shutdownHook==null, instanceCount={}", instanceCount);
                 }
+                if (QUEUE_SIZE > 0) {
+                    log.info("Interrupting queueConsumer of {}", getName());
+	                queueConsumer.interrupt();
+	                SampleEvent event = null;
+	                log.info("Emptying the queue of {} which has {} elements", getName(), queue.size());
+	                SampleSaveConfiguration config = getSaveConfig();
+	                while((event = queue.poll()) != null) {
+	                	event.getResult().setSaveConfig(config);
+	                	saveSampleEvent(event, getSaveConfig());
+	                }
+                }
                 finalizeFileOutput();
                 out = null;
                 inTest = false;
@@ -332,11 +366,50 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             } catch (Exception e) {
                 log.error("Exception occurred while initializing file output.", e);
             }
+
+            if (QUEUE_SIZE > 0) {
+            	log.info("Configuring queue for {} of size:{}", getName(), QUEUE_SIZE);
+            	queue = new ArrayBlockingQueue<SampleEvent>(QUEUE_SIZE);
+            	queueConsumer = new Thread(new SampleEventConsumer(), getName() + "-QueueConsumer");
+            	queueConsumer.setDaemon(true);
+            	queueConsumer.start();
+            }
         }
         inTest = true;
 
         if(summariser != null) {
             summariser.testStarted(host);
+        }
+        errorOnlyCached = isErrorLogging();
+        successOnlyCached = isSuccessOnlyLogging();
+        fileNameCached = getFilename();
+    }
+
+    private class SampleEventConsumer implements Runnable {
+		@Override
+		public void run() {
+			SampleEvent event;
+			try {
+				SampleSaveConfiguration config = getSaveConfig();
+				while ((event = queue.take()) != null) {
+					event.getResult().setSaveConfig(config);
+					saveSampleEvent(event, getSaveConfig());
+				}
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+    }
+
+    private void saveSampleEvent(SampleEvent event, SampleSaveConfiguration saveConfig) {
+        try {
+            if (saveConfig.saveAsXml()) {
+                SaveService.saveSampleResult(event, out);
+            } else { // !saveAsXml
+                CSVSaveService.saveSampleResult(event, out);
+            }
+        } catch (Exception err) {
+            log.error("Error trying to record a sample", err); // should throw exception back to caller
         }
     }
 
@@ -472,7 +545,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 }
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
-                    trimmed)), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())), SAVING_AUTOFLUSH);
+                    trimmed), FLUSH_BUFFER), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())), SAVING_AUTOFLUSH);
             if(log.isDebugEnabled()) {
                 log.debug("Opened file: {} in thread {}", filename, Thread.currentThread().getName());
             }
@@ -546,14 +619,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         if (isSampleWanted(result.isSuccessful())) {
             sendToVisualizer(result);
             if (out != null && !isResultMarked(result) && !this.isStats) {
-                SampleSaveConfiguration config = getSaveConfig();
-                result.setSaveConfig(config);
                 try {
-                    if (config.saveAsXml()) {
-                        SaveService.saveSampleResult(event, out);
-                    } else { // !saveAsXml
-                        CSVSaveService.saveSampleResult(event, out);
-                    }
+                	if (QUEUE_SIZE > 0) {
+	                	queue.put(event);
+                	} else {
+                        SampleSaveConfiguration config = getSaveConfig();
+                        result.setSaveConfig(config);
+                		saveSampleEvent(event, config);
+                	}
                 } catch (Exception err) {
                     log.error("Error trying to record a sample", err); // should throw exception back to caller
                 }
@@ -577,8 +650,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * @return <code>true</code> if the result was marked
      */
     private boolean isResultMarked(SampleResult res) {
-        String filename = getFilename();
-        return res.markFile(filename);
+        return res.markFile(fileNameCached);
     }
 
     /**
