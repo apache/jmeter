@@ -1034,6 +1034,7 @@ public class JMeter implements JMeterPlugin {
             ResultCollector resultCollector = null;
             if (logFile != null) {
                 resultCollector = new ResultCollector(summariser);
+                resultCollector.setName("DefaultResultCollector");
                 resultCollector.setFilename(logFile);
                 clonedTree.add(clonedTree.getArray()[0], resultCollector);
             }
