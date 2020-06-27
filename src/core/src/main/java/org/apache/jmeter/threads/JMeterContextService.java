@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.threads;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -30,16 +32,16 @@ public final class JMeterContextService {
     private static long testStart = 0;
 
     //@GuardedBy(JMeterContextService.class)
-    private static int numberOfActiveThreads = 0;
+    private static AtomicInteger numberOfActiveThreads = new AtomicInteger(0);
 
     //@GuardedBy(JMeterContextService.class)
-    private static int numberOfThreadsStarted = 0;
+    private static AtomicInteger numberOfThreadsStarted = new AtomicInteger(0);
 
     //@GuardedBy(JMeterContextService.class)
-    private static int numberOfThreadsFinished = 0;
+    private static AtomicInteger numberOfThreadsFinished = new AtomicInteger(0);
 
     //@GuardedBy(JMeterContextService.class)
-    private static int totalThreads = 0;
+    private static AtomicInteger totalThreads = new AtomicInteger(0);
 
     private static UnmodifiableJMeterVariables variables;
 
@@ -83,9 +85,9 @@ public final class JMeterContextService {
      * Zeroes numberOfActiveThreads.
      * Saves current time in a field and in the JMeter property "TESTSTART.MS"
      */
-    public static synchronized void startTest() {
+    public static void startTest() {
         if (testStart == 0) {
-            numberOfActiveThreads = 0;
+            numberOfActiveThreads = new AtomicInteger(0);
             testStart = System.currentTimeMillis();
             JMeterUtils.setProperty("TESTSTART.MS",Long.toString(testStart));// $NON-NLS-1$
         }
@@ -94,30 +96,30 @@ public final class JMeterContextService {
     /**
      * Increment number of active threads.
      */
-    static synchronized void incrNumberOfThreads() {
-        numberOfActiveThreads++;
-        numberOfThreadsStarted++;
+    static void incrNumberOfThreads() {
+        numberOfActiveThreads.incrementAndGet();
+        numberOfThreadsStarted.incrementAndGet();
     }
 
     /**
      * Decrement number of active threads.
      */
     static synchronized void decrNumberOfThreads() {
-        numberOfActiveThreads--;
-        numberOfThreadsFinished++;
+        numberOfActiveThreads.decrementAndGet();
+        numberOfThreadsFinished.incrementAndGet();
     }
 
     /**
      * Get the number of currently active threads
      * @return active thread count
      */
-    public static synchronized int getNumberOfThreads() {
-        return numberOfActiveThreads;
+    public static int getNumberOfThreads() {
+        return numberOfActiveThreads.get();
     }
 
     // return all the associated counts together
     public static synchronized ThreadCounts getThreadCounts() {
-        return new ThreadCounts(numberOfActiveThreads, numberOfThreadsStarted, numberOfThreadsFinished);
+        return new ThreadCounts(numberOfActiveThreads.get(), numberOfThreadsStarted.get(), numberOfThreadsFinished.get());
     }
 
     /**
@@ -137,25 +139,25 @@ public final class JMeterContextService {
      * Get the total number of threads (&gt;= active)
      * @return total thread count
      */
-    public static synchronized int getTotalThreads() {
-        return totalThreads;
+    public static int getTotalThreads() {
+        return totalThreads.get();
     }
 
     /**
      * Update the total number of threads
      * @param thisGroup number of threads in this thread group
      */
-    public static synchronized void addTotalThreads(int thisGroup) {
-        totalThreads += thisGroup;
+    public static void addTotalThreads(int thisGroup) {
+        totalThreads.addAndGet(thisGroup);
     }
 
     /**
      * Set total threads to zero; also clears started and finished counts
      */
-    public static synchronized void clearTotalThreads() {
-        totalThreads = 0;
-        numberOfThreadsStarted = 0;
-        numberOfThreadsFinished = 0;
+    public static void clearTotalThreads() {
+        totalThreads.set(0);
+        numberOfThreadsStarted.set(0);
+        numberOfThreadsFinished.set(0);
     }
 
     /**
