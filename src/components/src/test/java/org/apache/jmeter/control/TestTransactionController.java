@@ -74,13 +74,13 @@ public class TestTransactionController extends JMeterTestCase {
         ThreadGroup threadGroup = new ThreadGroup();
         threadGroup.setNumThreads(1);
 
-        ListenerNotifier notifier = new ListenerNotifier();
-
+        ListenerNotifier notifier = ListenerNotifier.getInstance();
+        notifier.testStarted();
         JMeterThread thread = new JMeterThread(hashTree, threadGroup, notifier);
         thread.setThreadGroup(threadGroup);
         thread.setOnErrorStopThread(true);
         thread.run();
-
+        notifier.testEnded();
         assertEquals("Must one transaction samples with parent debug sample", 1, listener.events.size());
         assertEquals("Number of samples in transaction : 1, number of failing samples : 1", listener.events.get(0).getResult().getResponseMessage());
     }

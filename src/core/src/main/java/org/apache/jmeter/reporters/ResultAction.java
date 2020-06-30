@@ -19,8 +19,8 @@ package org.apache.jmeter.reporters;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.samplers.JMeterThreadBoudSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.OnErrorTestElement;
 import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * ResultAction - take action based on the status of the last Result
  *
  */
-public class ResultAction extends OnErrorTestElement implements Serializable, SampleListener {
+public class ResultAction extends OnErrorTestElement implements Serializable, JMeterThreadBoudSampleListener {
 
     private static final long serialVersionUID = 242L;
 

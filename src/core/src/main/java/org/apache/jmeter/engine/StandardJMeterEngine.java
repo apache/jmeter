@@ -399,10 +399,10 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         Iterator<AbstractThreadGroup> iter = searcher.getSearchResults().iterator();
         Iterator<PostThreadGroup> postIter = postSearcher.getSearchResults().iterator();
 
-        ListenerNotifier notifier = new ListenerNotifier();
-
+        ListenerNotifier notifier = ListenerNotifier.getInstance();
         int groupCount = 0;
         JMeterContextService.clearTotalThreads();
+        notifier.testStarted();
 
         if (setupIter.hasNext()) {
             log.info("Starting setUp thread groups");
@@ -489,6 +489,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             waitThreadsStopped(); // wait for Post threads to stop
         }
 
+        notifier.testEnded();
         notifyTestListenersOfEnd(testListeners);
         JMeterContextService.endTest();
         if (JMeter.isNonGUI() && SYSTEM_EXIT_FORCED) {

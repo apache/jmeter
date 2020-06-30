@@ -33,10 +33,7 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.samplers.Clearable;
@@ -122,8 +119,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     private static final int FLUSH_BUFFER = JMeterUtils.getPropDefault("jmeter.save.saveservice.buffer", 256 * 1024); //$NON-NLS-1$
 
-    private static final int QUEUE_SIZE = JMeterUtils.getPropDefault("jmeter.save.queue.size", 5000);
-
     // Static variables
 
     // Lock used to guard static mutable variables
@@ -156,10 +151,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     /** the summarizer to which this result collector will forward the samples */
     private volatile Summariser summariser;
-
-    private BlockingQueue<Pair<SampleEvent, SampleSaveConfiguration>> queue;
-
-    private Thread queueConsumer;
 
     /**
      * We cache the property value to avoid contention point at high throughput
@@ -322,15 +313,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 } else {
                     log.warn("Should not happen: shutdownHook==null, instanceCount={}", instanceCount);
                 }
-                if (QUEUE_SIZE > 0) {
-                    log.info("Interrupting queueConsumer of {}", getName());
-                    queueConsumer.interrupt();
-                    Pair<SampleEvent, SampleSaveConfiguration> event = null;
-                    log.info("Emptying the queue of {} which has {} elements", getName(), queue.size());
-                    while((event = queue.poll()) != null) {
-                        saveSampleEvent(event.getLeft(), event.getRight());
-                    }
-                }
                 finalizeFileOutput();
                 out = null;
                 inTest = false;
@@ -365,14 +347,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             } catch (Exception e) {
                 log.error("Exception occurred while initializing file output.", e);
             }
-
-            if (QUEUE_SIZE > 0) {
-                log.info("Configuring queue for {} of size:{}", getName(), QUEUE_SIZE);
-                queue = new ArrayBlockingQueue<>(QUEUE_SIZE);
-                queueConsumer = new Thread(new SampleEventConsumer(), getName() + "-QueueConsumer");
-                queueConsumer.setDaemon(true);
-                queueConsumer.start();
-            }
         }
         inTest = true;
 
@@ -384,23 +358,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         fileNameCached = getFilename();
     }
 
-    private class SampleEventConsumer implements Runnable {
-        @Override
-        public void run() {
-            Pair<SampleEvent, SampleSaveConfiguration> event;
-            try {
-                while ((event = queue.take()) != null) {
-                    saveSampleEvent(event.getLeft(), event.getRight());
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
     private void saveSampleEvent(SampleEvent event, SampleSaveConfiguration saveConfig) {
         try {
-        	event.getResult().setSaveConfig(saveConfig);
+            event.getResult().setSaveConfig(saveConfig);
             if (saveConfig.saveAsXml()) {
                 SaveService.saveSampleResult(event, out);
             } else { // !saveAsXml
@@ -618,15 +578,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             sendToVisualizer(result);
             if (out != null && !isResultMarked(result) && !this.isStats) {
                 SampleSaveConfiguration config = getSaveConfig();
-                try {
-                    if (QUEUE_SIZE > 0) {
-                        queue.put(Pair.of(event, config));
-                    } else {
-                        saveSampleEvent(event, config);
-                    }
-                } catch (Exception err) {
-                    log.error("Error trying to record a sample", err); // should throw exception back to caller
-                }
+                saveSampleEvent(event, config);
             }
         }
 

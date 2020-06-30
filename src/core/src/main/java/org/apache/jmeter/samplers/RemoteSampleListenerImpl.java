@@ -18,10 +18,12 @@
 package org.apache.jmeter.samplers;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -34,7 +36,7 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
 
     private final TestStateListener testListener;
 
-    private final SampleListener sampleListener;
+    private final List<SampleListener> sampleListeners;
 
     private static final int DEFAULT_LOCAL_PORT = addOffset(
         JMeterUtils.getPropDefault("client.rmi.localport", 0), 2); // $NON-NLS-1$
@@ -47,9 +49,9 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
             testListener = null;
         }
         if (listener instanceof SampleListener) {
-            sampleListener = (SampleListener) listener;
+            sampleListeners = Arrays.asList((SampleListener) listener);
         } else {
-            sampleListener = null;
+            sampleListeners = null;
         }
     }
 
@@ -98,17 +100,17 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
      */
     @Override
     public void processBatch(List<SampleEvent> samples) {
-        if (samples != null && sampleListener != null) {
+        if (samples != null && sampleListeners != null) {
             for (SampleEvent e : samples) {
-                sampleListener.sampleOccurred(e);
+                ListenerNotifier.getInstance().notifyListeners(e, sampleListeners);
             }
         }
     }
 
     @Override
     public void sampleOccurred(SampleEvent e) {
-        if (sampleListener != null) {
-            sampleListener.sampleOccurred(e);
+        if (sampleListeners != null) {
+            ListenerNotifier.getInstance().notifyListeners(e, sampleListeners);
         }
     }
 
@@ -117,8 +119,10 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
      */
     @Override
     public void sampleStarted(SampleEvent e) {
-        if (sampleListener != null) {
-            sampleListener.sampleStarted(e);
+        if (sampleListeners != null) {
+            for (SampleListener sampleListener : sampleListeners) {
+                sampleListener.sampleStarted(e);
+            }
         }
     }
 
@@ -127,8 +131,10 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
      */
     @Override
     public void sampleStopped(SampleEvent e) {
-        if (sampleListener != null) {
-            sampleListener.sampleStopped(e);
+        if (sampleListeners != null) {
+            for (SampleListener sampleListener : sampleListeners) {
+                sampleListener.sampleStopped(e);
+            }
         }
     }
 }

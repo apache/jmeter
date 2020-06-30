@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.slf4j.Logger;
@@ -127,6 +128,7 @@ public class DistributedRunner {
         println("Starting distributed test with remote engines: " + addresses + " @ " + new Date(now) + " (" + now + ")");
         List<String> startedEngines = new ArrayList<>(addresses.size());
         List<String> failedEngines = new ArrayList<>(addresses.size());
+        ListenerNotifier.getInstance().testStarted();
         for (String address : addresses) {
             JMeterEngine engine = engines.get(address);
             try {
@@ -170,6 +172,7 @@ public class DistributedRunner {
                 errln("Failed to stop test on " + address, e);
             }
         }
+        ListenerNotifier.getInstance().testEnded();
         println("Remote engines have been stopped");
     }
 

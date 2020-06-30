@@ -18,12 +18,18 @@
 package org.apache.jmeter.threads;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jmeter.samplers.JMeterThreadBoudSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,13 +39,39 @@ import org.slf4j.LoggerFactory;
  * using {@link #notifyListeners(SampleEvent, List)} <br>
  * Thread safe class
  */
-public class ListenerNotifier implements Serializable {
+public final class ListenerNotifier implements Serializable {
     /**
      *
      */
-    private static final long serialVersionUID = -4861457279068497917L;
+    private static final long serialVersionUID = -4861457279068497918L;
     private static final Logger log = LoggerFactory.getLogger(ListenerNotifier.class);
+    private static final int QUEUE_SIZE = JMeterUtils.getPropDefault("jmeter.save.queue.size", 5000);
+    // Create unique object as marker for end of queue
+    private static transient final Pair<SampleEvent, List<SampleListener>> FINAL_EVENT = Pair.of(new SampleEvent(), null);
+    /**
+     * Initialization On Demand Holder pattern
+     */
+    private static class ListenerNotifierHolder {
+        public static final ListenerNotifier INSTANCE = new ListenerNotifier();
+    }
 
+    /**
+     * @return ListenerNotifier singleton
+     */
+    public static ListenerNotifier getInstance() {
+        return ListenerNotifierHolder.INSTANCE;
+    }
+
+    private Thread queueConsumer;
+
+    private BlockingQueue<Pair<SampleEvent, List<SampleListener>>> queue;
+
+    /**
+     * Private constructor
+     */
+    private ListenerNotifier() {
+        super();
+    }
 
     /**
      * Notify a list of listeners that a sample has occurred.
@@ -52,6 +84,44 @@ public class ListenerNotifier implements Serializable {
      *            elements.
      */
     public void notifyListeners(SampleEvent res, List<SampleListener> listeners) {
+        if (QUEUE_SIZE > 0) {
+            try {
+                List<SampleListener> threadBounldSampleListeners = new ArrayList<>(listeners.size());
+                List<SampleListener> threadUnbounldSampleListeners = new ArrayList<>(listeners.size());
+                for (SampleListener sampleListener : listeners) {
+                    if (sampleListener instanceof JMeterThreadBoudSampleListener) {
+                        if (threadBounldSampleListeners == null) {
+                            threadBounldSampleListeners = new ArrayList<>(listeners.size());
+                        }
+                        threadBounldSampleListeners.add(sampleListener);
+                    }
+                }
+                if (threadBounldSampleListeners != null) {
+                    pNotifyListeners(res, threadBounldSampleListeners);
+                    threadUnbounldSampleListeners = new ArrayList<>(listeners);
+                    threadUnbounldSampleListeners.removeAll(threadBounldSampleListeners);
+                    listeners = threadUnbounldSampleListeners;
+                }
+                queue.put(Pair.of(res, listeners));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        } else {
+            pNotifyListeners(res, listeners);
+        }
+    }
+
+    /**
+     * Notify a list of listeners that a sample has occurred.
+     *
+     * @param res
+     *            the sample event that has occurred. Must be non-null.
+     * @param listeners
+     *            a list of the listeners which should be notified. This list
+     *            must not be null and must contain only SampleListener
+     *            elements.
+     */
+    private void pNotifyListeners(SampleEvent res, List<SampleListener> listeners) {
         for (SampleListener sampleListener : listeners) {
             try {
                 TestBeanHelper.prepare((TestElement) sampleListener);
@@ -63,4 +133,51 @@ public class ListenerNotifier implements Serializable {
         }
     }
 
+    private class SampleEventConsumer implements Runnable {
+        @Override
+        public void run() {
+            Pair<SampleEvent, List<SampleListener>> event;
+            log.info("Thread {} starting", Thread.currentThread().getName());
+            try {
+                while ((event = queue.take()) != FINAL_EVENT) {
+                    pNotifyListeners(event.getLeft(), event.getRight());
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            log.info("Thread {} exiting", Thread.currentThread().getName());
+        }
+    }
+
+    /**
+     * Setup on test start
+     */
+    public void testStarted() {
+        if (QUEUE_SIZE > 0) {
+            log.info("Configuring queue of size:{}", QUEUE_SIZE);
+            queue = new ArrayBlockingQueue<>(QUEUE_SIZE);
+            queueConsumer = new Thread(new SampleEventConsumer(), "ListenerNotifier-QueueConsumer");
+            queueConsumer.setDaemon(true);
+            queueConsumer.start();
+        } else {
+            log.info("No queue configured for SampleResult notification");
+        }
+    }
+
+    /**
+     * Teardown on test end
+     */
+    public void testEnded() {
+        if (QUEUE_SIZE > 0) {
+            log.info("Test ended, Interrupting queueConsumer of ListenerNotifier");
+            try {
+                queue.put(FINAL_EVENT);
+                queueConsumer.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        } else {
+            log.info("Test ended called");
+        }
+    }
 }
