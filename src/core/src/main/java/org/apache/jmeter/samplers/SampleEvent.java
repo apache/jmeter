@@ -224,4 +224,9 @@ public class SampleEvent implements Serializable {
         return isTransactionSampleEvent;
     }
 
+	@Override
+	public String toString() {
+		return "SampleEvent [values=" + Arrays.toString(values) + ", result=" + result + ", threadGroup=" + threadGroup
+				+ ", hostname=" + hostname + ", isTransactionSampleEvent=" + isTransactionSampleEvent + "]";
+	}
 }
