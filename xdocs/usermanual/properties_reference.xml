@@ -589,6 +589,10 @@ JMETER-SERVER</source>
 </section>
 <section name="&sect-num;.15 Results file configuration" anchor="results_file_config">
 <properties>
+<property name="jmeter.save.saveservice.buffer">
+	Size of buffer used to save CSV/XML file in ResultCollector.
+	Defaults to 262144 bytes(256kB)
+</property>
 <property name="jmeter.save.saveservice.output_format">
     This section helps determine how result data will be saved.<br/>
     The commented out values are the defaults.<br/>
@@ -610,6 +614,12 @@ JMETER-SERVER</source>
 </property>
 <property name="jmeter.save.saveservice.label">
     Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.queue.size" >
+	If value is higher than 0, this will be the size of the Asynchronous queue that will be used to deliver SampleEvents 
+	to SampleListeners that implement <apilink href="org/apache/jmeter/samplers/JMeterThreadUnboundSampleListener.html"><code>JMeterThreadUnboundSampleListener</code></apilink>.
+	This mechanism delivers much higher throughput than synchronous notifications when size of queue is 0.
+	Defaults to: <code>5000</code>
 </property>
 <property name="jmeter.save.saveservice.response_code">
     Defaults to: <code>true</code>
