@@ -616,7 +616,7 @@ JMETER-SERVER</source>
     Defaults to: <code>true</code>
 </property>
 <property name="jmeter.save.queue.size" >
-	If value is higher than 0, this will be the size of the Asynchronous queue that will be used to deliver SampleEvents 
+	If value is higher than 0, this will be the size of the Asynchronous queue that will be used to deliver SampleEvents
 	to SampleListeners that implement <apilink href="org/apache/jmeter/samplers/JMeterThreadUnboundSampleListener.html"><code>JMeterThreadUnboundSampleListener</code></apilink>.
 	This mechanism delivers much higher throughput than synchronous notifications when size of queue is 0.
 	Defaults to: <code>5000</code>
