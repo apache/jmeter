@@ -93,7 +93,7 @@ public final class ListenerNotifier implements Serializable {
                     }
                 }
                 if (!threadBoundSampleListeners.isEmpty()) {
-                	// Notify JMeterThreadBoundSampleListener listeners within JMeterThread
+                    // Notify JMeterThreadBoundSampleListener listeners within JMeterThread
                     pNotifyListeners(res, threadBoundSampleListeners);
                     // We must copy the listener to avoid changing underlying SamplePackage listeners
                     List<SampleListener> threadUnboundSampleListeners = new ArrayList<>(listeners);
