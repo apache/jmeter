@@ -19,7 +19,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.samplers.JMeterThreadBoudSampleListener;
+import org.apache.jmeter.samplers.JMeterThreadBoundSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * - generate parent sampler containing the nested samples
  *
  */
-public class TransactionController extends GenericController implements JMeterThreadBoudSampleListener, Controller, Serializable {
+public class TransactionController extends GenericController implements JMeterThreadBoundSampleListener, Controller, Serializable {
     /**
      * Used to identify Transaction Controller Parent Sampler
      */

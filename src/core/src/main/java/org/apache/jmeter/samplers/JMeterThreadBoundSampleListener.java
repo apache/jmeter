@@ -17,5 +17,11 @@
 
 package org.apache.jmeter.samplers;
 
-public interface JMeterThreadBoudSampleListener extends SampleListener {
+import org.apache.jmeter.threads.JMeterThread;
+
+/**
+ * Marker interface that informs {@link SampleListener} must be executed within {@link JMeterThread}
+ * @since 5.4
+ */
+public interface JMeterThreadBoundSampleListener extends SampleListener {
 }

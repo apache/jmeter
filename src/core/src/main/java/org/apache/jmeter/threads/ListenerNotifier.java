@@ -24,7 +24,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jmeter.samplers.JMeterThreadBoudSampleListener;
+import org.apache.jmeter.samplers.JMeterThreadUnboundSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testbeans.TestBeanHelper;
@@ -86,22 +86,21 @@ public final class ListenerNotifier implements Serializable {
     public void notifyListeners(SampleEvent res, List<SampleListener> listeners) {
         if (QUEUE_SIZE > 0) {
             try {
-                List<SampleListener> threadBounldSampleListeners = new ArrayList<>(listeners.size());
-                List<SampleListener> threadUnbounldSampleListeners = new ArrayList<>(listeners.size());
+                List<SampleListener> threadBoundSampleListeners = new ArrayList<>(listeners.size());
                 for (SampleListener sampleListener : listeners) {
-                    if (sampleListener instanceof JMeterThreadBoudSampleListener) {
-                        if (threadBounldSampleListeners == null) {
-                            threadBounldSampleListeners = new ArrayList<>(listeners.size());
-                        }
-                        threadBounldSampleListeners.add(sampleListener);
+                    if (!(sampleListener instanceof JMeterThreadUnboundSampleListener)) {
+                        threadBoundSampleListeners.add(sampleListener);
                     }
                 }
-                if (threadBounldSampleListeners != null) {
-                    pNotifyListeners(res, threadBounldSampleListeners);
-                    threadUnbounldSampleListeners = new ArrayList<>(listeners);
-                    threadUnbounldSampleListeners.removeAll(threadBounldSampleListeners);
-                    listeners = threadUnbounldSampleListeners;
+                if (!threadBoundSampleListeners.isEmpty()) {
+                	// Notify JMeterThreadBoundSampleListener listeners within JMeterThread
+                    pNotifyListeners(res, threadBoundSampleListeners);
+                    // We must copy the listener to avoid changing underlying SamplePackage listeners
+                    List<SampleListener> threadUnboundSampleListeners = new ArrayList<>(listeners);
+                    threadUnboundSampleListeners.removeAll(threadBoundSampleListeners);
+                    listeners = threadUnboundSampleListeners;
                 }
+                // Notify JMeterThreadUnboundSampleListener listeners asynchronously
                 queue.put(Pair.of(res, listeners));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

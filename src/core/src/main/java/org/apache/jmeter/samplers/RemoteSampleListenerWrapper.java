@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class RemoteSampleListenerWrapper extends AbstractTestElement implements SampleListener, Serializable,
+public class RemoteSampleListenerWrapper extends AbstractTestElement implements JMeterThreadUnboundSampleListener, Serializable,
         NoThreadClone {
     private static final Logger log = LoggerFactory.getLogger(RemoteSampleListenerWrapper.class);
 

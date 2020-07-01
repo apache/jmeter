@@ -37,9 +37,9 @@ import java.util.Map;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.samplers.JMeterThreadUnboundSampleListener;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
  * This class handles all saving of samples.
  * The class must be thread-safe because it is shared between threads (NoThreadClone).
  */
-public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
+public class ResultCollector extends AbstractListenerElement implements JMeterThreadUnboundSampleListener, Clearable, Serializable,
         TestStateListener, Remoteable, NoThreadClone {
     /**
      * Keep track of the file writer and the configuration,

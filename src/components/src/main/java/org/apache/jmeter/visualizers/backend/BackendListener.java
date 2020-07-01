@@ -30,9 +30,9 @@ import java.util.concurrent.locks.LockSupport;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.util.NoThreadClone;
+import org.apache.jmeter.samplers.JMeterThreadUnboundSampleListener;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public class BackendListener
         extends AbstractTestElement
-        implements Backend, Serializable, SampleListener, TestStateListener, NoThreadClone, Remoteable {
+        implements Backend, Serializable, JMeterThreadUnboundSampleListener, TestStateListener, NoThreadClone, Remoteable {
 
     private static final class ListenerClientData {
         private BackendListenerClient client;

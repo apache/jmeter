@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * Lars-Erik Helander provided the idea (and original implementation) for the
  * caching functionality (sampleStore).
  */
-public class RemoteListenerWrapper extends AbstractTestElement implements SampleListener, TestStateListener, Serializable,
+public class RemoteListenerWrapper extends AbstractTestElement implements JMeterThreadUnboundSampleListener, TestStateListener, Serializable,
         NoThreadClone {
     private static final Logger log = LoggerFactory.getLogger(RemoteListenerWrapper.class);
 

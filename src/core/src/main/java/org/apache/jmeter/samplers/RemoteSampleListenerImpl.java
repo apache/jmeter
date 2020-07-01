@@ -30,7 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Implementation of remote sampler listener, also supports TestStateListener
  */
 public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject
-    implements RemoteSampleListener, SampleListener, TestStateListener {
+    implements RemoteSampleListener, JMeterThreadUnboundSampleListener, TestStateListener {
 
     private static final long serialVersionUID = 240L;
 
