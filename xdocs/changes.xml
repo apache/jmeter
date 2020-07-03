@@ -70,18 +70,28 @@ Summary
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-	<li>This version introduces a major change in the way SampleEvent (containing SampleResult) are delivered to Sample listeners like View Results Tree, Summarizer etc.
+	<li>This version introduces a major change in the way SampleEvent 
+	(containing SampleResult) are delivered to Sample listeners.
+	View Results Tree, Summarizer... performance is increased by 68% 
+	for high throughput test (high number of VUs or high request rate).<br/>
 	A new property <code>jmeter.save.queue.size</code> has been introduced. <br/>
-	If set to a value higher than 0, an asynchronous queue will be used to deliver events to Listeners that implement <apilink href="org/apache/jmeter/samplers/JMeterThreadUnboundSampleListener.html"><code>JMeterThreadUnboundSampleListener</code></apilink>.
+	If set to a value higher than 0, an asynchronous queue will be used to deliver events
+	 to Listeners that implement <apilink href="org/apache/jmeter/samplers/JMeterThreadUnboundSampleListener.html"><code>JMeterThreadUnboundSampleListener</code></apilink>.
 	Also listeners will be notified in the following order:
 	<ul>
-		<li>implementations of JMeterThreadBoundSampleListener and SampleListener that are not JMeterThreadUnboundSampleListener within the JMeter Thread: BeanShellListener, JSR223Listener, ResultAction, TransactionController</li>
-		<li>implementations of JMeterThreadUnboundSampleListener asynchronously within a dedicated thread: All other listeners</li>
+		<li>implementations of JMeterThreadBoundSampleListener and SampleListener that 
+		are not JMeterThreadUnboundSampleListener within the JMeter Thread: BeanShellListener, 
+		JSR223Listener, ResultAction, TransactionController</li>
+		<li>implementations of JMeterThreadUnboundSampleListener asynchronously within
+		 a dedicated thread: All other listeners</li>
 	</ul>
-	This Asynchronous queue comes with major performance improvements (68% higher throughput in benchmarks done).
+	This Asynchronous queue comes with major performance improvements 
+	<b>(68% higher throughput in benchmarks done).</b>
 	If set to 0, the previous behaviour will be retained.
 	For full details, see <bugzilla>64558</bugzilla></li>
-	<li>A new property <code>jmeter.save.saveservice.buffer</code> has been introduced to control the size of the buffer used to write CSV/XML files in ResultCollector. The default value has been set to 256kB while it was 8kB before.</li>
+	<li>A new property <code>jmeter.save.saveservice.buffer</code> has been 
+	introduced to control the size of the buffer used to write CSV/XML files in 
+	ResultCollector. The default value has been set to 256kB while it was 8kB before.</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
