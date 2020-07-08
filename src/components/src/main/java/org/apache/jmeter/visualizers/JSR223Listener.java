@@ -26,6 +26,7 @@ import javax.script.ScriptException;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.samplers.JMeterThreadBoundSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
+import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.JSR223TestElement;
@@ -37,8 +38,9 @@ import org.slf4j.LoggerFactory;
  *
  */
 @TestElementMetadata(labelResource = "displayName")
+@JMeterThreadBoundSampleListener
 public class JSR223Listener extends JSR223TestElement
-    implements Cloneable, JMeterThreadBoundSampleListener, TestBean, Visualizer {
+    implements Cloneable, SampleListener, TestBean, Visualizer {
 
     private static final Logger log = LoggerFactory.getLogger(JSR223Listener.class);
 

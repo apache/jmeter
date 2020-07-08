@@ -88,7 +88,7 @@ public final class ListenerNotifier implements Serializable {
             try {
                 List<SampleListener> threadBoundSampleListeners = new ArrayList<>(listeners.size());
                 for (SampleListener sampleListener : listeners) {
-                    if (!(sampleListener instanceof JMeterThreadUnboundSampleListener)) {
+                	if (sampleListener.getClass().getAnnotation(JMeterThreadUnboundSampleListener.class) == null) {
                         threadBoundSampleListeners.add(sampleListener);
                     }
                 }

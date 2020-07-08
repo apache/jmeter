@@ -31,6 +31,7 @@ import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.samplers.JMeterThreadUnboundSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
+import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -48,7 +49,8 @@ import org.slf4j.LoggerFactory;
  * This is mainly intended for validation tests
  *
  */
-public class ResultSaver extends AbstractTestElement implements NoThreadClone, Serializable, JMeterThreadUnboundSampleListener, TestStateListener {
+@JMeterThreadUnboundSampleListener
+public class ResultSaver extends AbstractTestElement implements NoThreadClone, Serializable, SampleListener, TestStateListener {
     private static final Logger log = LoggerFactory.getLogger(ResultSaver.class);
 
     private static final long serialVersionUID = 242L;

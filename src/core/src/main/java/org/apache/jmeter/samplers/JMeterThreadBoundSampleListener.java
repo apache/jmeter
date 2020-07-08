@@ -17,11 +17,18 @@
 
 package org.apache.jmeter.samplers;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import org.apache.jmeter.threads.JMeterThread;
 
 /**
- * Marker interface that informs {@link SampleListener} must be executed within {@link JMeterThread}
+ * Informs that annotated {@link SampleListener} must be executed within {@link JMeterThread}
  * @since 5.4
  */
-public interface JMeterThreadBoundSampleListener extends SampleListener {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface JMeterThreadBoundSampleListener {
 }

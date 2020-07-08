@@ -28,6 +28,7 @@ import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.sampler.DebugSampler;
 import org.apache.jmeter.samplers.JMeterThreadUnboundSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
+import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -85,7 +86,8 @@ public class TestTransactionController extends JMeterTestCase {
         assertEquals("Number of samples in transaction : 1, number of failing samples : 1", listener.events.get(0).getResult().getResponseMessage());
     }
 
-    public class TestSampleListener extends ResultCollector implements JMeterThreadUnboundSampleListener {
+    @JMeterThreadUnboundSampleListener
+    public class TestSampleListener extends ResultCollector implements SampleListener {
         public List<SampleEvent> events = new ArrayList<>();
 
         @Override

@@ -22,6 +22,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.samplers.JMeterThreadBoundSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
+import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BeanShellInterpreter;
@@ -36,8 +37,9 @@ import org.slf4j.LoggerFactory;
  */
 @GUIMenuSortOrder(Integer.MAX_VALUE)
 @TestElementMetadata(labelResource = "displayName")
+@JMeterThreadBoundSampleListener
 public class BeanShellListener extends BeanShellTestElement
-    implements Cloneable, JMeterThreadBoundSampleListener, TestBean, Visualizer, UnsharedComponent  {
+    implements Cloneable, SampleListener, TestBean, Visualizer, UnsharedComponent  {
 
     private static final Logger log = LoggerFactory.getLogger(BeanShellListener.class);
 
