@@ -26,10 +26,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.engine.util.NoThreadClone;
-import org.apache.jmeter.samplers.JMeterThreadUnboundSampleListener;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.samplers.SampleListenerExecutionMode;
+import org.apache.jmeter.samplers.SampleListenerExecutionMode.Mode;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -59,7 +60,7 @@ import org.slf4j.LoggerFactory;
  * Data is accumulated according to the test element name.
  *
  */
-@JMeterThreadUnboundSampleListener
+@SampleListenerExecutionMode(mode = Mode.ThreadUnbound)
 public class Summariser extends AbstractTestElement
     implements Serializable, SampleListener, TestStateListener, NoThreadClone, Remoteable {
 

@@ -19,9 +19,10 @@ package org.apache.jmeter.visualizers;
 
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
-import org.apache.jmeter.samplers.JMeterThreadBoundSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.samplers.SampleListenerExecutionMode;
+import org.apache.jmeter.samplers.SampleListenerExecutionMode.Mode;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BSFTestElement;
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
  */
-@JMeterThreadBoundSampleListener
+@SampleListenerExecutionMode(mode = Mode.ThreadBound)
 public class BSFListener extends BSFTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer {
 

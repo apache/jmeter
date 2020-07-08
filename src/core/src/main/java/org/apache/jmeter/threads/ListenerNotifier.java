@@ -24,9 +24,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jmeter.samplers.JMeterThreadUnboundSampleListener;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.samplers.SampleListenerExecutionMode;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -88,7 +88,9 @@ public final class ListenerNotifier implements Serializable {
             try {
                 List<SampleListener> threadBoundSampleListeners = new ArrayList<>(listeners.size());
                 for (SampleListener sampleListener : listeners) {
-                    if (sampleListener.getClass().getAnnotation(JMeterThreadUnboundSampleListener.class) == null) {
+                    SampleListenerExecutionMode executionMode = sampleListener.getClass().getAnnotation(SampleListenerExecutionMode.class);
+                    if (executionMode == null // Legacy mode
+                    		|| executionMode.mode() == SampleListenerExecutionMode.Mode.ThreadBound) {
                         threadBoundSampleListeners.add(sampleListener);
                     }
                 }

@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.jmeter.rmi.RmiUtils;
+import org.apache.jmeter.samplers.SampleListenerExecutionMode.Mode;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.util.JMeterUtils;
@@ -29,7 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Implementation of remote sampler listener, also supports TestStateListener
  */
-@JMeterThreadUnboundSampleListener
+@SampleListenerExecutionMode(mode = Mode.ThreadUnbound)
 public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObject
     implements RemoteSampleListener, SampleListener, TestStateListener {
 

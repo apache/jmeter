@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 
 import org.apache.jmeter.engine.util.NoThreadClone;
+import org.apache.jmeter.samplers.SampleListenerExecutionMode.Mode;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * Lars-Erik Helander provided the idea (and original implementation) for the
  * caching functionality (sampleStore).
  */
-@JMeterThreadUnboundSampleListener
+@SampleListenerExecutionMode(mode = Mode.ThreadUnbound)
 public class RemoteListenerWrapper extends AbstractTestElement implements SampleListener, TestStateListener, Serializable,
         NoThreadClone {
     private static final Logger log = LoggerFactory.getLogger(RemoteListenerWrapper.class);

@@ -30,5 +30,10 @@ import org.apache.jmeter.threads.JMeterThread;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface JMeterThreadUnboundSampleListener {
+public @interface SampleListenerExecutionMode {
+    Mode mode();
+    enum Mode {
+        ThreadBound,
+        ThreadUnbound
+    }
 }
