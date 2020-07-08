@@ -90,7 +90,7 @@ public final class ListenerNotifier implements Serializable {
                 for (SampleListener sampleListener : listeners) {
                     SampleListenerExecutionMode executionMode = sampleListener.getClass().getAnnotation(SampleListenerExecutionMode.class);
                     if (executionMode == null // Legacy mode
-                    		|| executionMode.mode() == SampleListenerExecutionMode.Mode.ThreadBound) {
+                            || executionMode.mode() == SampleListenerExecutionMode.Mode.ThreadBound) {
                         threadBoundSampleListeners.add(sampleListener);
                     }
                 }
