@@ -112,6 +112,7 @@ Summary
 <ul>
   <li><bug>64446</bug>Better parse curl commands with backslash at line endings and support <code>PUT</code> method with data arguments</li>
   <li><pr>599</pr>Ensure all buttons added to the toolbar behave/look consistently. Contributed by Jannis Weis</li>
+  <li><bug>64581</bug>Allow SampleResult#setIgnore to influence behaviour on Sampler Error</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

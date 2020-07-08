@@ -1119,6 +1119,13 @@ The JSR223 Sampler allows JSR223 script code to be used to perform a sample or s
 <note>
 If you don't want to generate a <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> when this sampler is run, call the following method:
 <source>SampleResult.setIgnore();</source>
+This call will have the following impact:
+<ul>
+    <li>SampleResult will not be delivered to SampleListeners like View Results Tree, Summariser ...</li>
+    <li>SampleResult will not be evaluated in Assertions nor PostProcessors</li>
+    <li>SampleResult will be evaluated to computing last sample status (${JMeterThread.last_sample_ok}),
+    and ThreadGroup "Action to be taken after a Sampler error" (since JMeter 5.4)</li>
+</ul>
 </note>
 </p>
 <p>
