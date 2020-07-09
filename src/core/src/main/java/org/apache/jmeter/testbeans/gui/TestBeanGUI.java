@@ -38,7 +38,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPopupMenu;
 
-import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.collections4.map.LRUMap;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.gui.AbstractAssertionGui;
 import org.apache.jmeter.config.ConfigElement;
@@ -90,7 +90,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUIComponent, LocaleChangeListener{
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private static final Logger log = LoggerFactory.getLogger(TestBeanGUI.class);
 
@@ -110,8 +110,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * needs to be limited, though, to avoid memory issues when editing very
      * large test plans.
      */
-    @SuppressWarnings("unchecked")
-    private final Map<TestElement, Customizer> customizers = new LRUMap(20);
+    private final Map<TestElement, Customizer> customizers = new LRUMap<>(20);
 
     /** Index of the customizer in the JPanel's child component list: */
     private int customizerIndexInPanel;
@@ -327,12 +326,11 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             if (initialized){
                 remove(customizerIndexInPanel);
             }
-            Customizer c = customizers.get(element);
-            if (c == null) {
-                c = createCustomizer();
-                c.setObject(propertyMap);
-                customizers.put(element, c);
-            }
+            Customizer c = customizers.computeIfAbsent(element, e -> {
+                Customizer result = createCustomizer();
+                result.setObject(propertyMap);
+                return result;
+            });
             add((Component) c, BorderLayout.CENTER);
         }
     }

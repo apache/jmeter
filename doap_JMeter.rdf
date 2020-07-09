@@ -279,6 +279,13 @@
         <revision>5.2.1 final</revision>
       </Version>
     </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2020-05-15</created>
+        <revision>5.3 final</revision>
+      </Version>
+    </release>
     <repository>
       <GitRepository>
         <location rdf:resource="https://gitbox.apache.org/repos/asf/jmeter.git"/>

@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.report.processor.graph;
 
+import java.util.Arrays;
+
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * The class AbstractSeriesSelector provide an abstract base class for
  * GraphSeriesSelector.
@@ -56,4 +60,12 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
         return allowsControllerDiscrimination;
     }
 
+    /**
+     * @param value String value
+     * @param defaultValue Default value to use if value is empty or null
+     * @return input or default value wrapped in a list
+     */
+    protected Iterable<String> withDefaultIfEmpty(String value, String defaultValue) {
+        return Arrays.asList(StringUtils.defaultIfBlank(value, defaultValue));
+    }
 }

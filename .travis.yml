@@ -1,4 +1,3 @@
-sudo: false
 language: java
 
 # skip default "install" command
@@ -27,6 +26,7 @@ matrix:
     # j-m-p does not seem to download all the dependencies: https://github.com/jmeter-maven-plugin/jmeter-maven-plugin/issues/187
     - name: jmeter-maven-plugin tests
     - name: jmeter-maven-plugin tests on s390x
+    - name: Tests with OpenJDK 11 on s390x
   include:
     - name: Tests with OpenJDK 8 + code coverage
       jdk: openjdk8

@@ -57,8 +57,13 @@ dependencies {
         because("XPathUtil: throws SaxonApiException")
     }
 
-    runtimeOnly("org.codehaus.groovy:groovy-all") {
+    runtimeOnly("org.codehaus.groovy:groovy") {
         because("Groovy is a default JSR232 engine")
+    }
+    arrayOf("datetime", "jmx", "json", "jsr223", "sql", "templates").forEach {
+        runtimeOnly("org.codehaus.groovy:groovy-$it") {
+            because("Groovy is a default JSR232 engine")
+        }
     }
 
     implementation("com.fasterxml.jackson.core:jackson-annotations")
@@ -73,7 +78,10 @@ dependencies {
     implementation("commons-codec:commons-codec") {
         because("DigestUtils")
     }
-    implementation("commons-collections:commons-collections")
+    implementation("commons-collections:commons-collections") {
+        because("Compatibility for old plugins")
+    }
+    implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
     }

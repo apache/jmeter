@@ -360,12 +360,13 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     }
 
     /**
-     * Create Cookie Manager
+     * Configures a given Cookie Manager
      *
-     * @param request {@link Request}
-     * @return {@link CookieManager} element
+     * @param cookieManager the manager to configure
+     * @param request to copy information about cookies from
+     * @returns the configured cookie manager
      */
-    private void createCookieManager(CookieManager cookieManager,Request request) {
+    private void createCookieManager(CookieManager cookieManager, Request request) {
         cookieManager.setProperty(TestElement.GUI_CLASS, CookiePanel.class.getName());
         cookieManager.setProperty(TestElement.NAME, "HTTP CookieManager");
         cookieManager.setProperty(TestElement.COMMENTS,
@@ -375,7 +376,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                 cookieManager.getCookies().addItem(c);
             }
         }
-        if (!request.getCookieInHeaders(request.getUrl()).isEmpty()&&uploadCookiesCheckBox.isSelected()) {
+        if (!request.getCookieInHeaders(request.getUrl()).isEmpty() && uploadCookiesCheckBox.isSelected()) {
             for (Cookie c : request.getCookieInHeaders(request.getUrl())) {
                 cookieManager.getCookies().addItem(c);
             }

@@ -42,6 +42,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 
+
 /**
  * Configuration screen for Java Messaging Point-to-Point requests.
  */
@@ -252,9 +253,12 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         correlationPanel.add(useReqMsgIdAsCorrelId);
         correlationPanel.add(useResMsgIdAsCorrelId);
 
+        JPanel communicationStylePanel = new JPanel();
+        communicationStylePanel.add(jmsCommunicationStyle);
+
         JPanel messageNorthPanel = new JPanel(new BorderLayout());
         JPanel onewayPanel = new HorizontalPanel();
-        onewayPanel.add(jmsCommunicationStyle);
+        onewayPanel.add(communicationStylePanel);
         onewayPanel.add(correlationPanel);
         messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
 

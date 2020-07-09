@@ -80,7 +80,7 @@ dependencies {
     buildDocs(platform(project(":src:bom")))
     buildDocs("org.apache.velocity:velocity")
     buildDocs("commons-lang:commons-lang")
-    buildDocs("commons-collections:commons-collections")
+    buildDocs("org.apache.commons:commons-collections4")
     buildDocs("org.jdom:jdom")
 }
 

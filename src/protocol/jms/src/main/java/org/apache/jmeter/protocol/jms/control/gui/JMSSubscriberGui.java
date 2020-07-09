@@ -20,22 +20,22 @@ package org.apache.jmeter.protocol.jms.control.gui;
 import java.awt.BorderLayout;
 
 import javax.naming.Context;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.TestElementMetadata;
-import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JLabeledRadioI18N;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledPasswordField;
 import org.apache.jorphan.gui.JLabeledTextField;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * This is the GUI for JMS Subscriber <br>
@@ -49,26 +49,22 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JCheckBox useProperties =
         new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false); // $NON-NLS-1$
 
-    private final JLabeledTextField jndiICF =
-        new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory")); // $NON-NLS-1$
+    private final JTextField jndiICF = new JTextField();
 
-    private final JLabeledTextField urlField =
-        new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); // $NON-NLS-1$
+    private final JTextField urlField = new JTextField();
 
-    private final JLabeledTextField jndiConnFac =
-        new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory")); // $NON-NLS-1$
+    private final JTextField jndiConnFac = new JTextField();
 
-    private final JLabeledTextField jmsDestination =
-        new JLabeledTextField(JMeterUtils.getResString("jms_topic")); // $NON-NLS-1$
+    private final JTextField jmsDestination = new JTextField();
 
-    private final JLabeledTextField jmsDurableSubscriptionId =
-        new JLabeledTextField(JMeterUtils.getResString("jms_durable_subscription_id")); // $NON-NLS-1$
+    private final JTextField jmsDurableSubscriptionId = new JTextField();
 
-    private final JLabeledTextField jmsClientId =
-        new JLabeledTextField(JMeterUtils.getResString("jms_client_id")); // $NON-NLS-1$
+    private final JTextField jmsClientId = new JTextField();
 
-    private final JLabeledTextField jmsSelector =
-        new JLabeledTextField(JMeterUtils.getResString("jms_selector")); // $NON-NLS-1$
+    private final JTextField jmsSelector = new JTextField();
+
+    private final JCheckBox useAuth =
+            new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
 
     private final JLabeledTextField jmsUser =
         new JLabeledTextField(JMeterUtils.getResString("jms_user")); // $NON-NLS-1$
@@ -76,26 +72,18 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JLabeledTextField jmsPwd =
         new JLabeledPasswordField(JMeterUtils.getResString("jms_pwd")); // $NON-NLS-1$
 
-    private final JLabeledTextField samplesToAggregate =
-        new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); // $NON-NLS-1$
-
-    private final JCheckBox useAuth =
-        new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
+    private final JTextField samplesToAggregate = new JTextField();
 
     private final JCheckBox storeResponse =
         new JCheckBox(JMeterUtils.getResString("jms_store_response"), true); // $NON-NLS-1$
 
-    private final JLabeledTextField timeout =
-        new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
+    private final JTextField timeout = new JTextField();
 
-    private final JLabeledTextField jmsErrorPauseBetween =
-        new JLabeledTextField(JMeterUtils.getResString("jms_error_pause_between")); // $NON-NLS-1$
+    private final JTextField jmsErrorPauseBetween = new JTextField();
 
-    private final JLabeledTextField jmsErrorReconnectOnCodes =
-        new JLabeledTextField(JMeterUtils.getResString("jms_error_reconnect_on_codes")); // $NON-NLS-1$
+    private final JTextField jmsErrorReconnectOnCodes = new JTextField();
 
-    private final JLabeledTextField separator =
-        new JLabeledTextField(JMeterUtils.getResString("jms_separator")); //$NON-NLS-1$
+    private final JTextField separator = new JTextField();
 
     //++ Do not change these strings; they are used in JMX files to record the button settings
     public static final String RECEIVE_RSC = "jms_subscriber_receive"; // $NON-NLS-1$
@@ -181,37 +169,61 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        JPanel mainPanel = new VerticalPanel();
+        JPanel mainPanel = new JPanel(new MigLayout("fillx, wrap 3, insets 0", "[][fill,grow]"));
         add(mainPanel, BorderLayout.CENTER);
 
         jndiICF.setToolTipText(Context.INITIAL_CONTEXT_FACTORY);
         urlField.setToolTipText(Context.PROVIDER_URL);
         jmsUser.setToolTipText(Context.SECURITY_PRINCIPAL);
         jmsPwd.setToolTipText(Context.SECURITY_CREDENTIALS);
-        mainPanel.add(useProperties);
-        mainPanel.add(jndiICF);
-        mainPanel.add(urlField);
-        mainPanel.add(jndiConnFac);
-        mainPanel.add(createDestinationPane());
-        mainPanel.add(jmsDurableSubscriptionId);
-        mainPanel.add(jmsClientId);
-        mainPanel.add(jmsSelector);
+
+        mainPanel.add(useProperties, "span");
+
+        mainPanel.add(JMeterUtils.labelFor(jndiICF, "jms_initial_context_factory"));
+        mainPanel.add(jndiICF, "span, growx");
+
+        mainPanel.add(JMeterUtils.labelFor(urlField, "jms_provider_url"));
+        mainPanel.add(urlField, "span, growx");
+
         mainPanel.add(useAuth);
         mainPanel.add(jmsUser);
         mainPanel.add(jmsPwd);
-        mainPanel.add(samplesToAggregate);
 
-        mainPanel.add(storeResponse);
-        mainPanel.add(timeout);
+        mainPanel.add(JMeterUtils.labelFor(jndiConnFac, "jms_connection_factory"));
+        mainPanel.add(jndiConnFac, "span, growx");
 
-        JPanel choice = new HorizontalPanel();
-        choice.add(clientChoice);
-        choice.add(stopBetweenSamples);
-        mainPanel.add(choice);
-        mainPanel.add(separator);
+        mainPanel.add(JMeterUtils.labelFor(jmsDestination, "jms_topic"));
+        mainPanel.add(jmsDestination);
+        mainPanel.add(destSetup);
 
-        mainPanel.add(jmsErrorReconnectOnCodes);
-        mainPanel.add(jmsErrorPauseBetween);
+        mainPanel.add(JMeterUtils.labelFor(jmsDurableSubscriptionId, "jms_durable_subscription_id"));
+        mainPanel.add(jmsDurableSubscriptionId, "span, growx");
+
+        mainPanel.add(JMeterUtils.labelFor(jmsClientId, "jms_client_id"));
+        mainPanel.add(jmsClientId, "span, growx");
+
+        mainPanel.add(JMeterUtils.labelFor(jmsSelector, "jms_selector"));
+        mainPanel.add(jmsSelector);
+
+        mainPanel.add(storeResponse, "span");
+
+        mainPanel.add(JMeterUtils.labelFor(timeout, "jms_timeout"));
+        mainPanel.add(timeout, "span");
+
+        mainPanel.add(clientChoice, "span 2");
+        mainPanel.add(stopBetweenSamples);
+
+        mainPanel.add(JMeterUtils.labelFor(jmsErrorReconnectOnCodes, "jms_error_reconnect_on_codes"));
+        mainPanel.add(jmsErrorReconnectOnCodes, "span, growx");
+
+        mainPanel.add(JMeterUtils.labelFor(jmsErrorPauseBetween, "jms_error_pause_between"));
+        mainPanel.add(jmsErrorPauseBetween, "span, growx");
+
+        mainPanel.add(JMeterUtils.labelFor(samplesToAggregate, "jms_itertions"));
+        mainPanel.add(samplesToAggregate, "span, growx");
+
+        mainPanel.add(JMeterUtils.labelFor(separator, "jms_separator"));
+        mainPanel.add(separator, "span, growx");
 
         useProperties.addChangeListener(this);
         useAuth.addChangeListener(this);
@@ -290,13 +302,5 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
             jmsUser.setEnabled(useAuth.isSelected() && useAuth.isEnabled());
             jmsPwd.setEnabled(useAuth.isSelected()  && useAuth.isEnabled());
         }
-    }
-
-    private JPanel createDestinationPane() {
-        JPanel pane = new JPanel(new BorderLayout(3, 0));
-        pane.add(jmsDestination, BorderLayout.CENTER);
-        destSetup.setLayout(new BoxLayout(destSetup, BoxLayout.X_AXIS));
-        pane.add(destSetup, BorderLayout.EAST);
-        return pane;
     }
 }

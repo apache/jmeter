@@ -875,13 +875,13 @@ public class JMeterUtils implements UnitTestManager {
             errorMsg = "Unknown error - see log file";
             log.warn("Unknown error", new Throwable("errorMsg == null"));
         }
+        if (exception != null) {
+            log.error(errorMsg, exception);
+        } else {
+            log.error(errorMsg);
+        }
         GuiPackage instance = GuiPackage.getInstance();
         if (instance == null) {
-            if(exception != null) {
-                log.error(errorMsg, exception);
-            } else {
-                log.error(errorMsg);
-            }
             System.out.println(errorMsg); // NOSONAR intentional
             return; // Done
         }

@@ -17,8 +17,6 @@
 
 package org.apache.jmeter.report.processor.graph;
 
-import java.util.Arrays;
-
 import org.apache.jmeter.report.core.Sample;
 
 /**
@@ -38,7 +36,6 @@ public class CodeSeriesSelector extends AbstractSeriesSelector {
      */
     @Override
     public Iterable<String> select(Sample sample) {
-        return Arrays.asList(sample.getResponseCode());
+        return withDefaultIfEmpty(sample.getResponseCode(), "EMPTY_RES_CODE"); //$NON-NLS-1$
     }
-
 }

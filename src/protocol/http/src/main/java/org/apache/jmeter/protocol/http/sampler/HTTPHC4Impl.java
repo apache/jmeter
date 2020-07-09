@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -62,6 +63,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.AuthState;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.AuthenticationStrategy;
 import org.apache.http.client.CredentialsProvider;
@@ -204,6 +206,80 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             instream -> new LaxDeflateInputStream(instream, DEFLATE_RELAX_MODE);
 
     private static final InputStreamFactory BROTLI = BrotliInputStream::new;
+
+    private static final class ManagedCredentialsProvider implements CredentialsProvider {
+        private AuthManager authManager;
+        private Credentials proxyCredentials;
+        private AuthScope proxyAuthScope;
+
+        public ManagedCredentialsProvider(AuthManager authManager, AuthScope proxyAuthScope, Credentials proxyCredentials) {
+            this.authManager = authManager;
+            this.proxyAuthScope = proxyAuthScope;
+            this.proxyCredentials = proxyCredentials;
+        }
+
+        @Override
+        public void setCredentials(AuthScope authscope, Credentials credentials) {
+            log.debug("Store creds {} for {}", credentials, authscope);
+        }
+
+        @Override
+        public Credentials getCredentials(AuthScope authScope) {
+            log.info("Get creds for {}", authScope);
+            if (this.proxyAuthScope != null && authScope.equals(proxyAuthScope)) {
+                return proxyCredentials;
+            }
+            final Authorization authorization = getAuthorizationForAuthScope(authScope);
+            if (authorization == null) {
+                return null;
+            }
+            return new UsernamePasswordCredentials(authorization.getUser(), authorization.getPass());
+        }
+
+        /**
+         * Find the Authorization for the given AuthScope. We can't ask the AuthManager
+         * by the URL, as we didn't get the scheme or path of the URL. Therefore we do a
+         * best guess on the information we have
+         *
+         * @param authScope information which destination we want to get credentials for
+         * @return matching authorization information entry from the AuthManager
+         */
+        private Authorization getAuthorizationForAuthScope(AuthScope authScope) {
+            if (authScope == null) {
+                return null;
+            }
+            for (JMeterProperty authProp : authManager.getAuthObjects()) {
+                Object authObject = authProp.getObjectValue();
+                if (authObject instanceof Authorization) {
+                    Authorization auth = (Authorization) authObject;
+                    if (!authScope.getRealm().equals(auth.getRealm())) {
+                        continue;
+                    }
+                    try {
+                        URL authUrl = new URL(auth.getURL());
+                        if (authUrl.getHost().equals(authScope.getHost()) && getPort(authUrl) == authScope.getPort()) {
+                            return auth;
+                        }
+                    } catch (MalformedURLException e) {
+                        log.debug("Invalid URL {} in authManager", auth.getURL());
+                    }
+                }
+            }
+            return null;
+        }
+
+        private int getPort(URL url) {
+            if (url.getPort() == -1) {
+                return url.getProtocol().equals("https") ? 443 : 80;
+            }
+            return url.getPort();
+        }
+
+        @Override
+        public void clear() {
+            log.debug("clear creds");
+        }
+    }
 
     private static final class PreemptiveAuthRequestInterceptor implements HttpRequestInterceptor {
         @Override
@@ -439,8 +515,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
     private static final ThreadLocal<Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>
-        HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY =
-            InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
+            HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = new InheritableThreadLocal<Map<HttpClientKey,
+                    MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>() {
+        @Override
+        protected Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> initialValue() {
+            return new HashMap<>(5);
+        }
+    };
 
     /**
      * CONNECTION_SOCKET_FACTORY changes if we want to simulate Slow connection
@@ -1050,21 +1131,27 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
 
             // Set up proxy details
+            AuthScope proxyAuthScope = null;
+            NTCredentials proxyCredentials = null;
             if (key.hasProxy) {
                 HttpHost proxy = new HttpHost(key.proxyHost, key.proxyPort, key.proxyScheme);
                 builder.setProxy(proxy);
 
                 CredentialsProvider credsProvider = new BasicCredentialsProvider();
                 if (!key.proxyUser.isEmpty()) {
+                    proxyAuthScope = new AuthScope(key.proxyHost, key.proxyPort);
+                    proxyCredentials = new NTCredentials(key.proxyUser, key.proxyPass, LOCALHOST, PROXY_DOMAIN);
                     credsProvider.setCredentials(
-                            new AuthScope(key.proxyHost, key.proxyPort),
-                            new NTCredentials(key.proxyUser, key.proxyPass, LOCALHOST, PROXY_DOMAIN));
+                            proxyAuthScope,
+                            proxyCredentials);
                 }
                 builder.setDefaultCredentialsProvider(credsProvider);
             }
             builder.disableContentCompression().addInterceptorLast(RESPONSE_CONTENT_ENCODING);
             if(BASIC_AUTH_PREEMPTIVE) {
                 builder.addInterceptorFirst(PREEMPTIVE_AUTH_INTERCEPTOR);
+            } else {
+                builder.setDefaultCredentialsProvider(new ManagedCredentialsProvider(getAuthManager(), proxyAuthScope, proxyCredentials));
             }
             httpClient = builder.build();
             if (log.isDebugEnabled()) {

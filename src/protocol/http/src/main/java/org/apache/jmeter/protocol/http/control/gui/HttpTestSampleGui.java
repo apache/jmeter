@@ -162,17 +162,20 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     private void init() {// called from ctor, so must not be overridable
         setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
+        setBorder(BorderFactory.createEmptyBorder());
 
         // URL CONFIG
         urlConfigGui = new UrlConfigGui(true, true, true);
+        urlConfigGui.setBorder(makeBorder());
 
         // HTTP request options
         JPanel httpOptions = new HorizontalPanel();
         httpOptions.add(getImplementationPanel());
         httpOptions.add(getTimeOutPanel());
+
         // AdvancedPanel (embedded resources, source address and optional tasks)
         JPanel advancedPanel = new VerticalPanel();
+        advancedPanel.setBorder(makeBorder());
         if (!isAJP) {
             advancedPanel.add(httpOptions);
         }
@@ -190,7 +193,11 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         tabbedPane.add(JMeterUtils
                 .getResString("web_testing_advanced"), advancedPanel);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, makeTitlePanel(), tabbedPane);
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBorder(makeBorder());
+        wrapper.add(makeTitlePanel(), BorderLayout.CENTER);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, wrapper, tabbedPane);
         splitPane.setBorder(BorderFactory.createEmptyBorder());
         splitPane.setOneTouchExpandable(true);
         add(splitPane);

@@ -17,9 +17,9 @@
 
 package org.apache.jorphan.util;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.charset.StandardCharsets;
@@ -370,16 +370,16 @@ public class TestJorphanUtils {
 
     @Test
     public void testReplaceValueWithNullValue() {
-        Assert.assertThat(JOrphanUtils.replaceValue(null, null, false, null, null),
+        assertThat(JOrphanUtils.replaceValue(null, null, false, null, null),
                 CoreMatchers.is(0));
     }
 
     @Test
     public void testReplaceValueWithValidValueAndValidSetter() {
         Holder h = new Holder();
-        Assert.assertThat(JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", s -> h.value = s),
+        assertThat(JOrphanUtils.replaceValue("\\d+", "${port}", true, "80", s -> h.value = s),
                 CoreMatchers.is(1));
-        Assert.assertThat(h.value, CoreMatchers.is("${port}"));
+        assertThat(h.value, CoreMatchers.is("${port}"));
     }
 
     private static class Holder {

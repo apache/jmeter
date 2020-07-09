@@ -137,7 +137,7 @@ val violations =
         .joinToString("\n  ") { (file, sha512) -> "SHA-512(${file.name}) = $sha512 ($file)" }
 
 if (violations.isNotBlank()) {
-    throw GradleException("Buildscript classpath has non-whitelisted files:\n  $violations")
+    throw GradleException("Buildscript classpath has permitted files that were not explicitly permitted:\n  $violations")
 }
 
 apply(plugin = "com.github.vlsi.checksum-dependency")

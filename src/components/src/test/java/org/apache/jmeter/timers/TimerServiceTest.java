@@ -20,7 +20,7 @@ package org.apache.jmeter.timers;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
-import org.junit.Assert;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
 public class TimerServiceTest {
@@ -31,7 +31,7 @@ public class TimerServiceTest {
     public void testBigInitialDelayAndDontWait() {
         long now = System.currentTimeMillis();
         long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L, false);
-        Assert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
+        MatcherAssert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
                 adjustedDelay, CoreMatchers.is((long) -1));
     }
 
@@ -39,7 +39,7 @@ public class TimerServiceTest {
     public void testBigInitialDelayAndWait() {
         long now = System.currentTimeMillis();
         long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L);
-        Assert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
+        MatcherAssert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
                 adjustedDelay, isAlmost(1000L, 200L));
     }
 
@@ -65,13 +65,13 @@ public class TimerServiceTest {
     @Test
     public void testSmallInitialDelay() {
         long now = System.currentTimeMillis();
-        Assert.assertThat("TimerService should not change the delay as the end time is far away",
+        MatcherAssert.assertThat("TimerService should not change the delay as the end time is far away",
                 sut.adjustDelay(1000L, now + 20000L), CoreMatchers.is(1000L));
     }
 
     @Test
     public void testNegativeEndTime() {
-        Assert.assertThat("TimerService should not change the delay as the indicated end time is far away",
+        MatcherAssert.assertThat("TimerService should not change the delay as the indicated end time is far away",
                 sut.adjustDelay(1000L, -1), CoreMatchers.is(1000L));
     }
 

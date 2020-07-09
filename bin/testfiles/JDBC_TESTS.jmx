@@ -1284,7 +1284,7 @@ if (list.size()==3) {
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1643270117">Variable Name must not be null in JDBC_NoConfig</stringProp>
+              <stringProp name="-1643270117">Name for DataSoure must not be empty in JDBC_NoConfig</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>

@@ -29,11 +29,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.commons.collections.ArrayStack;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.save.CSVSaveService;
@@ -189,15 +189,15 @@ public class FileServer {
         // Must first convert to absolute path names to ensure parents are available
         File parent = new File(DEFAULT_BASE).getAbsoluteFile();
         File f = base.getAbsoluteFile();
-        ArrayStack l = new ArrayStack();
+        ArrayDeque<String> l = new ArrayDeque<>();
         while (f != null) {
             if (f.equals(parent)){
                 if (l.isEmpty()){
                     break;
                 }
-                File rel = new File((String) l.pop());
+                File rel = new File(l.pop());
                 while(!l.isEmpty()) {
-                    rel = new File(rel, (String) l.pop());
+                    rel = new File(rel, l.pop());
                 }
                 return rel;
             }

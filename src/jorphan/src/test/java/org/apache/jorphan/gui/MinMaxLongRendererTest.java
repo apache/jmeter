@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -59,7 +59,7 @@ public class MinMaxLongRendererTest {
             @Override
             public void setText(String text) {
                 if (afterInit.get()) {
-                    Assert.assertThat(text, CoreMatchers.is(expected));
+                    MatcherAssert.assertThat(text, CoreMatchers.is(expected));
                 }
             }
         };

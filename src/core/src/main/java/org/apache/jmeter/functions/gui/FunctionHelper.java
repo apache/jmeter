@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -78,6 +79,8 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private static final String GENERATE = "GENERATE";
 
     private static final String RESET_VARS = "RESET_VARS";
+
+    private static final String FUNCTION_PREFIX = "__";
 
     private JLabeledChoice functionList;
 
@@ -172,7 +175,9 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private void initializeFunctionList() {
         String[] functionNames = CompoundVariable.getFunctionNames();
         Arrays.sort(functionNames, String::compareToIgnoreCase);
-        functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
+        functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), //$NON-NLS-1$
+                Arrays.stream(functionNames).map(
+                        e -> e.substring(FUNCTION_PREFIX.length())).collect(Collectors.toList()).toArray(new String[0]));
         functionList.addChangeListener(this);
     }
 
@@ -198,7 +203,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
      */
     protected void initParameterPanel() throws InstantiationException, IllegalAccessException {
         Arguments args = new Arguments();
-        Function function = CompoundVariable.getFunctionClass(functionList.getText()).newInstance();
+        Function function = CompoundVariable.getFunctionClass(getFunctionName(functionList.getText())).newInstance();
         List<String> argumentDesc = function.getArgumentDesc();
         for (String help : argumentDesc) {
             args.addArgument(help, ""); //$NON-NLS-1$
@@ -207,11 +212,19 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         parameterPanel.revalidate();
     }
 
+    /**
+     * @param text Function name without __ prefix
+     * @return String function name with __ prefix
+     */
+    private static final String getFunctionName(String text) {
+        return FUNCTION_PREFIX+text;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();
         if(GENERATE.equals(actionCommand)) {
-            String functionName = functionList.getText();
+            String functionName = getFunctionName(functionList.getText());
             Arguments args = (Arguments) parameterPanel.createTestElement();
             String functionCall = buildFunctionCallString(functionName, args);
             cutPasteFunction.setText(functionCall);
@@ -310,7 +323,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private class HelpListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String[] source = new String[] { Help.HELP_FUNCTIONS, functionList.getText() };
+            String[] source = new String[] { Help.HELP_FUNCTIONS, getFunctionName(functionList.getText()) };
             ActionRouter.getInstance().doActionNow(
                     new ActionEvent(source, e.getID(), ActionNames.HELP));
 

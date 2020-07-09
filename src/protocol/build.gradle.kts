@@ -73,7 +73,7 @@ project("http") {
         implementation("org.jodd:jodd-lagarto")
         implementation("org.jsoup:jsoup")
         implementation("oro:oro")
-        implementation("commons-collections:commons-collections")
+        implementation("org.apache.commons:commons-collections4")
         implementation("commons-net:commons-net")
         implementation("com.helger:ph-commons") {
             // We don't really need to use/distribute jsr305
@@ -135,6 +135,7 @@ project("jms") {
         implementation("commons-io:commons-io") {
             because("IOUtils")
         }
+        implementation("com.miglayout:miglayout-swing")
     }
 }
 
