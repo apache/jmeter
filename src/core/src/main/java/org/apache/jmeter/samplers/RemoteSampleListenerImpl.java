@@ -103,8 +103,9 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
     @Override
     public void processBatch(List<SampleEvent> samples) {
         if (samples != null && sampleListeners != null) {
+        	ListenerNotifier listenerNotifier = ListenerNotifier.getInstance();
             for (SampleEvent e : samples) {
-                ListenerNotifier.getInstance().notifyListeners(e, sampleListeners);
+            	listenerNotifier.notifyListeners(e, sampleListeners);
             }
         }
     }
