@@ -18,10 +18,10 @@
 package org.apache.jmeter.protocol.http.correlation;
 
 import java.awt.BorderLayout;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
-import org.apache.commons.collections.Buffer;
-import org.apache.commons.collections.buffer.CircularFifoBuffer;
-import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.CorrelationRecorder;
@@ -35,7 +35,7 @@ public class CorrelationResponseRecorder extends AbstractVisualizer {
 
     private static final long serialVersionUID = 240L;
 
-    private Buffer buffer;
+    private Queue<SampleResult> buffer;
 
     private CorrelationRecorder correlationRecorder;
 
@@ -45,9 +45,9 @@ public class CorrelationResponseRecorder extends AbstractVisualizer {
     public CorrelationResponseRecorder() {
         final int maxResults = JMeterUtils.getPropDefault("view.results.tree.max_results", 500);
         if (maxResults > 0) {
-            buffer = new CircularFifoBuffer(maxResults);
+            buffer = new CircularFifoQueue<>(maxResults);
         } else {
-            buffer = new UnboundedFifoBuffer();
+            buffer = new ArrayDeque<>();
         }
         init();
         setName(getStaticLabel());

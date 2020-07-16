@@ -17,7 +17,9 @@
 
 package org.apache.jmeter.visualizers;
 
-import org.apache.commons.collections.Buffer;
+import java.util.Queue;
+
+import org.apache.jmeter.samplers.SampleResult;
 
 public class CorrelationRecorder {
 
@@ -26,13 +28,13 @@ public class CorrelationRecorder {
     // followed by a Correlation template(?)
     // Also, based on the recorded data in correlation template,
     // enable/disable or show/hide(?) the correlation option
-    private static Buffer buffer;
+    private static Queue<SampleResult> buffer;
 
-    public static Buffer getBuffer() {
+    public static Queue<SampleResult> getBuffer() {
         return buffer;
     }
 
-    public void setBuffer(Buffer buffer) {
+    public void setBuffer(Queue<SampleResult> buffer) {
         CorrelationRecorder.buffer = buffer;
     }
 
