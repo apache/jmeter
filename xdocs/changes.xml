@@ -121,7 +121,7 @@ Summary
     <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
     <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
     <li><pr>591</pr>Remove deprecated sudo flag from travis file. Deng Liming (liming.d.pro at gmail.com)</li>
-    <li>Updated Darklaf to 2.4.0 (from 2.1.1)</li>
+    <li>Updated Darklaf to 2.4.1 (from 2.1.1)</li>
     <li><pr>596</pr>Use neutral words in documentation</li>
     <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
     <li><pr>598</pr>Add another option for creating diffs to the building page. Contributed by jmetertea (github.com/jmetertea)</li>
@@ -175,6 +175,7 @@ Summary
     <li><bug>64499</bug>Exiting JMeter when <code>jmeterengine.stopfail.system.exit=true</code> takes too much time if threads are not stopped</li>
     <li><bug>64510</bug>Darklaf- IntelliJ Theme throws NPE in DarkTreeUI on MacOS</li>
     <li><bug>64543</bug>On MacOSX, Darklaf- IntelliJ Theme throws NPE in javax.swing.ToolTipManager.initiateToolTip</li>
+    <li><bug>64594</bug>Unable to enter variable values instead of numeric values in components using PowerTableModel (Impacts 3rd party plugins like Throughput Shaping Timer)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
