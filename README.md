@@ -1,25 +1,36 @@
 <h1 align="center"><img src="https://jmeter.apache.org/images/logo.svg" alt="Apache JMeter logo" /></h1>
-<h4 align="center">Open Source application designed to load test applications and measure performance. By The Apache Software Foundation</h4>
-<br>
+
+An Open Source Java application designed to measure performance and load test applications.
+
+By The Apache Software Foundation
 
 [![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=master)](https://travis-ci.org/apache/jmeter/)
 [![codecov](https://codecov.io/gh/apache/jmeter/branch/master/graph/badge.svg)](https://codecov.io/gh/apache/jmeter)
-[![License](https://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![License](https://img.shields.io/:license-apache-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Stack Overflow](https://img.shields.io/:stack%20overflow-jmeter-brightgreen.svg)](https://stackoverflow.com/questions/tagged/jmeter)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
 [![Javadocs](https://www.javadoc.io/badge/org.apache.jmeter/ApacheJMeter_core.svg)](https://www.javadoc.io/doc/org.apache.jmeter/ApacheJMeter_core)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/apache/jmeter.svg?style=social)](https://twitter.com/intent/tweet?text=Powerful%20load%20testing%20with%20Apache%20JMeter:&url=https://jmeter.apache.org)
 
-## What is it
+## What Is It?
 
-Apache JMeter may be used to test performance both on static and dynamic resources, Web dynamic applications.
-It can be used to simulate a heavy load on a server, group of servers, network or object to test its strength or to analyze overall performance under different load types.
+Apache JMeter can measure performance and load test static and dynamic web applications.
 
-<img alt="JMeter screen" src="https://raw.githubusercontent.com/apache/jmeter/master/xdocs/images/screenshots/jmeter_screen.png">
+It can be used to simulate a heavy load on a server, group of servers,
+network or object to test its strength or to analyze overall performance under different load types.
 
-Apache JMeter features include:
+![JMeter screen](https://raw.githubusercontent.com/apache/jmeter/master/xdocs/images/screenshots/jmeter_screen.png)
 
-Ability to load and performance test many different applications/server/protocol types:
+## Features
+
+Complete portability and 100% Java.
+
+Multi-threading allows concurrent sampling by many threads and
+simultaneous sampling of different functions by separate thread groups.
+
+### Protocols
+
+Ability to load and performance test many applications/server/protocol types:
 
 - Web - HTTP, HTTPS (Java, NodeJS, PHP, ASP.NET,...)
 - SOAP / REST Webservices
@@ -32,40 +43,48 @@ Ability to load and performance test many different applications/server/protocol
 - TCP
 - Java Objects
 
-Full featured Test IDE that allows fast Test Plan **recording (from Browsers or native applications), building and debugging.**
+### IDE
 
-[**Command-line mode (Non GUI / headless mode)**](http://jmeter.apache.org/usermanual/get-started.html#non_gui) to load test from any Java compatible OS (Linux, Windows, Mac OSX, ...)
+Fully featured Test IDE that allows fast Test Plan **recording**
+ (from Browsers or native applications), **building** and **debugging**.
 
-A complete and [**ready to present dynamic HTML report**](http://jmeter.apache.org/usermanual/generating-dashboard.html)
+### Command Line
+
+[Command-line mode (Non GUI / headless mode)](https://jmeter.apache.org/usermanual/get-started.html#non_gui)
+to load test from any Java compatible OS (Linux, Windows, Mac OSX, ...)
+
+### Reporting
+
+A complete and ready to present [dynamic HTML report](https://jmeter.apache.org/usermanual/generating-dashboard.html)
 
 ![Dashboard screenshot](https://raw.githubusercontent.com/apache/jmeter/master/xdocs/images/screenshots/dashboard/response_time_percentiles_over_time.png)
 
-[**Live reporting**](http://jmeter.apache.org/usermanual/realtime-results.html) into 3rd party databases like InfluxDB or Graphite
+[Live reporting](https://jmeter.apache.org/usermanual/realtime-results.html)
+into 3rd party databases like InfluxDB or Graphite
 
 ![Live report](https://raw.githubusercontent.com/apache/jmeter/master/xdocs/images/screenshots/grafana_dashboard.png)
 
-Easy correlation through ability to extract data from most popular response formats, [**HTML**](http://jmeter.apache.org/usermanual/component_reference.html#CSS/JQuery_Extractor), [**JSON**](http://jmeter.apache.org/usermanual/component_reference.html#JSON_Extractor), [**XML**](http://jmeter.apache.org/usermanual/component_reference.html#XPath_Extractor) or [**any textual format**](http://jmeter.apache.org/usermanual/component_reference.html#Regular_Expression_Extractor)
+### Correlation
 
-Complete portability and 100% Java purity
+Easy correlation through ability to extract data from most popular response formats,
+[HTML](https://jmeter.apache.org/usermanual/component_reference.html#CSS/JQuery_Extractor),
+[JSON](https://jmeter.apache.org/usermanual/component_reference.html#JSON_Extractor),
+[XML](https://jmeter.apache.org/usermanual/component_reference.html#XPath_Extractor) or
+[any textual format](https://jmeter.apache.org/usermanual/component_reference.html#Regular_Expression_Extractor)
 
-Full multi-threading framework allows concurrent sampling by many threads
-and simultaneous sampling of different functions by separate thread groups.
-
-Caching and offline analysis/replaying of test results.
-
-Highly Extensible core:
+### Highly Extensible Core
 
 - Pluggable Samplers allow unlimited testing capabilities.
-- **Scriptable Samplers** (JSR223-compatible languages like Groovy)
-- Several load statistics may be chosen with **pluggable tiers**.
-- Data analysis and **visualization plugins** allow great exensibility and personalization.
-- Functions can be used to provide dynamic input to a test orprovide data manipulation.
-- Easy Continuous Integration through 3rd party Open Source libraries for Maven, Gradle and Jenkins
+- **Scriptable Samplers** (JSR223-compatible languages like Groovy).
+- Several load statistics can be chosen with **pluggable tiers**.
+- Data analysis and **visualization plugins** allow great extensibility and personalization.
+- Functions can be used to provide dynamic input to a test or provide data manipulation.
+- Easy Continuous Integration via 3rd party Open Source libraries for Maven, Gradle and Jenkins.
 
 ## The Latest Version
 
-Details of the latest version can be found on the [JMeter Apache
-Project web site](https://jmeter.apache.org/)
+Details of the latest version can be found on the
+[JMeter Apache Project web site](https://jmeter.apache.org/)
 
 ## Requirements
 
@@ -83,7 +102,7 @@ The following requirements exist for running Apache JMeter:
   If required, these should be downloaded and placed in the lib directory
   - JDBC - available from the database supplier
   - JMS - available from the JMS provider
-  - [Bouncy Castle](http://www.bouncycastle.org/test_releases.html) -
+  - [Bouncy Castle](https://www.bouncycastle.org/) -
   only needed for SMIME Assertion
 
 - Java Compiler (*OPTIONAL*):
@@ -122,7 +141,7 @@ and it may be browsed starting from the file called [index.html](printable_docs/
 
 ## Reporting a bug/enhancement
 
-See [Issue Tracking](https://jmeter.apache.org/issues.html)
+See [Issue Tracking](https://jmeter.apache.org/issues.html).
 
 ## Build instructions
 
@@ -140,7 +159,8 @@ but won't be used at run-time.
 _This is useful for testing what happens if the optional jars are not
 downloaded by other JMeter users._
 
-If you are behind a proxy, you can set a few build properties in `~/.gradle/gradle.properties` for gradle to use the proxy:
+If you are behind a proxy, you can set a few build properties in
+`~/.gradle/gradle.properties` for gradle to use the proxy:
 
 ```properties
 systemProp.http.proxyHost=proxy.example.invalid
@@ -157,49 +177,52 @@ systemProp.https.proxyPassword=your_password
 
 JMeter is built using Gradle.
 
-The following command would build and test JMeter:
+The following command builds and tests JMeter:
 
 ```sh
-./gradlew build [-Djava.awt.headless=true]
+./gradlew build
 ```
 
-The optional property definition is required if the system
-does not have a suitable GUI display.
+If the system does not have a GUI display then:
 
-The output artifacts (jars, reports) are placed to `build` folders.
+```sh
+./gradlew build -Djava.awt.headless=true
+```
+
+The output artifacts (jars, reports) are placed in the `build` folder.
 For instance, binary artifacts can be found under `src/dist/build/distributions`.
 
-The following command would compile the application and enable you to run `jmeter` from the `bin`
-directory. Note: it completely refreshes `lib/` contents, so it would remove clustom plugins
-should you have them installed.
+The following command would compile the application and enable you to run `jmeter`
+from the `bin` directory. Note: it completely refreshes `lib/` contents,
+so it would remove clustom plugins should you have them installed.
 
 ```sh
 ./gradlew createDist
 ```
 
-Alternatively you could start GUI via
+Alternatively you could get Gradle to start the GUI:
 
 ```sh
 ./gradlew runGui
 ```
 
-## Developer information
+## Developer Information
 
-Building and contributing is explained in details at [building JMeter](https://jmeter.apache.org/building.html)
+Building and contributing is explained in details at
+[building JMeter](https://jmeter.apache.org/building.html)
 and [CONTRIBUTING.md](CONTRIBUTING.md). More information on the tasks available for
 building JMeter with Gradle is available in [gradle.md](gradle.md).
 
-The code is maintained at GitHub:
+The code can be obtained from:
 
-- <https://github.com/apache/jmeter>
-- <https://gitbox.apache.org/repos/asf/jmeter.git>
+- https://github.com/apache/jmeter`
+- https://gitbox.apache.org/repos/asf/jmeter.git
 
-## Licensing and legal information
+## Licensing and Legal Information
 
 For legal and licensing information, please see the following files:
 
 - [LICENSE](LICENSE)
-
 - [NOTICE](NOTICE)
 
 ## Cryptographic Software Notice
@@ -210,7 +233,7 @@ may have restrictions on the import, possession, use, and/or re-export
 to another country, of encryption software. BEFORE using any encryption
 software, please check your country's laws, regulations and policies
 concerning the import, possession, or use, and re-export of encryption
-software, to see if this is permitted. See <http://www.wassenaar.org/>
+software, to see if this is permitted. See <https://www.wassenaar.org/>
 for more information.
 
 The U.S. Government Department of Commerce, Bureau of Industry and
@@ -238,5 +261,6 @@ Java Cryptography Extension (JCE) API to provide
 
 Apache JMeter does not include any implementation of JSSE or JCE.
 
+## Thanks
 
 **Thank you for using Apache JMeter.**
