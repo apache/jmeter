@@ -29,8 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.JsonPathException;
 import com.jayway.jsonpath.Option;
-import com.jayway.jsonpath.PathNotFoundException;
 
 public class CreateJsonPathExtractor implements CreateExtractorInterface {
 
@@ -62,7 +62,7 @@ public class CreateJsonPathExtractor implements CreateExtractorInterface {
         String jsonPathExpression = null;
         try {
             jsonPathExpression = getJsonPath(CorrelationFunction.extractVariable(correlationVariableName), value, json);
-        } catch (PathNotFoundException e) {
+        } catch (JsonPathException e) {
             // return null
             return jsonPathExtractor;
         }
