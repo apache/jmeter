@@ -163,6 +163,7 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>64547</bug>Report/Dashboard: Ensure graphs Response codes per second is not broken by empty response code in SampleResult. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
+    <li><bug>64617</bug>HTML report: In graph Response Time Percentiles Over Time 90,95,99th percentile correspond in reality to 0.90, 0.95 and 0.99 percentiles</li>
 </ul>
 
 <h3>Documentation</h3>
@@ -195,6 +196,7 @@ Summary
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
+  <li>Hiroyoshi Mitsumori (mitsumori at mis.dev)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
