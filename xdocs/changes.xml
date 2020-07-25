@@ -176,6 +176,7 @@ Summary
     <li><bug>64510</bug>Darklaf- IntelliJ Theme throws NPE in DarkTreeUI on MacOS</li>
     <li><bug>64543</bug>On MacOSX, Darklaf- IntelliJ Theme throws NPE in javax.swing.ToolTipManager.initiateToolTip</li>
     <li><bug>64594</bug>Unable to enter variable values instead of numeric values in components using PowerTableModel (Impacts 3rd party plugins like Throughput Shaping Timer)</li>
+    <li><bug>64475</bug>Menu Generate HTML Report: When report generation fails due to timeout, error message is not explicit. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -190,6 +191,7 @@ Summary
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
   <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
   <li><a href="https://github.com/topicus-pw-dvdouden">Daniel van den Ouden</a></li>
+  <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
