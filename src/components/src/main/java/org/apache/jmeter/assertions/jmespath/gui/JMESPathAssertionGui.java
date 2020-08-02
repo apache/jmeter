@@ -82,7 +82,7 @@ public class JMESPathAssertionGui extends JSONPathAssertionGui {
         expectNull = new JCheckBox();
         panel.add(JMeterUtils.labelFor(expectNull, JMES_ASSERTION_NULL));
         panel.add(expectNull, "span");
-        
+
         invert = new JCheckBox();
         panel.add(JMeterUtils.labelFor(invert, JMES_ASSERTION_INVERT));
         panel.add(invert, "span");

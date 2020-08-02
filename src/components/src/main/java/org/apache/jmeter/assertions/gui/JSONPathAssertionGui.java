@@ -97,7 +97,7 @@ public class JSONPathAssertionGui extends AbstractAssertionGui implements Change
         expectNull = new JCheckBox();
         panel.add(JMeterUtils.labelFor(expectNull, JSON_ASSERTION_NULL));
         panel.add(expectNull, "span");
-        
+
         invert = new JCheckBox();
         panel.add(JMeterUtils.labelFor(invert, JSON_ASSERTION_INVERT));
         panel.add(invert, "span");
