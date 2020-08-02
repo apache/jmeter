@@ -43,7 +43,8 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
-import org.apache.jorphan.gui.JLabeledTextField;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * HTTP Sampler GUI
@@ -52,14 +53,15 @@ import org.apache.jorphan.gui.JLabeledTextField;
 @TestElementMetadata(labelResource = "web_testing_title")
 public class HttpTestSampleGui extends AbstractSamplerGui {
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private UrlConfigGui urlConfigGui;
     private JCheckBox retrieveEmbeddedResources;
     private JCheckBox concurrentDwn;
     private JTextField concurrentPool;
     private JCheckBox useMD5;
-    private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
+    private JTextField embeddedAllowRE; // regular expression used to match against embedded resource URLs to allow
+    private JTextField embeddedExcludeRE; // regular expression used to match against embedded resource URLs to exclude
     private JTextField sourceIpAddr; // does not apply to Java implementation
     private JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
     private JTextField proxyScheme;
@@ -96,7 +98,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         concurrentDwn.setSelected(samplerBase.isConcurrentDwn());
         concurrentPool.setText(samplerBase.getConcurrentPool());
         useMD5.setSelected(samplerBase.useMD5());
-        embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
+        embeddedAllowRE.setText(samplerBase.getEmbeddedUrlRE());
+        embeddedExcludeRE.setText(samplerBase.getEmbededUrlExcludeRE());
         if (!isAJP) {
             sourceIpAddr.setText(samplerBase.getIpSource());
             sourceIpType.setSelectedIndex(samplerBase.getIpSourceType());
@@ -136,7 +139,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         samplerBase.setConcurrentDwn(concurrentDwn.isSelected());
         samplerBase.setConcurrentPool(concurrentPool.getText());
         samplerBase.setMD5(useMD5.isSelected());
-        samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
+        samplerBase.setEmbeddedUrlRE(embeddedAllowRE.getText());
+        samplerBase.setEmbeddedUrlExcludeRE(embeddedExcludeRE.getText());
         if (!isAJP) {
             samplerBase.setIpSource(sourceIpAddr.getText());
             samplerBase.setIpSourceType(sourceIpType.getSelectedIndex());
@@ -256,20 +260,31 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         });
         concurrentPool = new JTextField(2); // 2 column size
         concurrentPool.setMinimumSize(new Dimension(10, (int) concurrentPool.getPreferredSize().getHeight()));
-        concurrentPool.setMaximumSize(new Dimension(30, (int) concurrentPool.getPreferredSize().getHeight()));
+        concurrentPool.setMaximumSize(new Dimension(60, (int) concurrentPool.getPreferredSize().getHeight()));
 
-        final JPanel embeddedRsrcPanel = new HorizontalPanel();
+        final JPanel embeddedRsrcPanel = new JPanel(new MigLayout());
         embeddedRsrcPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_testing_retrieve_title"))); // $NON-NLS-1$
         embeddedRsrcPanel.add(retrieveEmbeddedResources);
         embeddedRsrcPanel.add(concurrentDwn);
-        embeddedRsrcPanel.add(concurrentPool);
+        embeddedRsrcPanel.add(concurrentPool, "wrap");
 
         // Embedded URL match regex
-        embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),20); // $NON-NLS-1$
-        embeddedRsrcPanel.add(embeddedRE);
+        embeddedAllowRE = addTextFieldWithLabel(embeddedRsrcPanel, JMeterUtils.getResString("web_testing_embedded_url_pattern")); // $NON-NLS-1$
+
+        // Embedded URL to not match regex
+        embeddedExcludeRE = addTextFieldWithLabel(embeddedRsrcPanel, JMeterUtils.getResString("web_testing_embedded_url_exclude_pattern")); // $NON-NLS-1$
 
         return embeddedRsrcPanel;
+    }
+
+    private JTextField addTextFieldWithLabel(JPanel panel, String labelText) {
+        JLabel label = new JLabel(labelText); // $NON-NLS-1$
+        JTextField field = new JTextField(100);
+        label.setLabelFor(field);
+        panel.add(label);
+        panel.add(field, "span");
+        return field;
     }
 
     /**
@@ -334,7 +349,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         enableConcurrentDwn(false);
         useMD5.setSelected(false);
         urlConfigGui.clear();
-        embeddedRE.setText(""); // $NON-NLS-1$
+        embeddedAllowRE.setText(""); // $NON-NLS-1$
         if (!isAJP) {
             sourceIpAddr.setText(""); // $NON-NLS-1$
             sourceIpType.setSelectedIndex(HTTPSamplerBase.SourceType.HOSTNAME.ordinal()); //default: IP/Hostname
@@ -350,17 +365,10 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     }
 
     private void enableConcurrentDwn(boolean enable) {
-        if (enable) {
-            concurrentDwn.setEnabled(true);
-            embeddedRE.setEnabled(true);
-            if (concurrentDwn.isSelected()) {
-                concurrentPool.setEnabled(true);
-            }
-        } else {
-            concurrentDwn.setEnabled(false);
-            concurrentPool.setEnabled(false);
-            embeddedRE.setEnabled(false);
-        }
+        concurrentDwn.setEnabled(enable);
+        embeddedAllowRE.setEnabled(enable);
+        embeddedExcludeRE.setEnabled(enable);
+        concurrentPool.setEnabled(concurrentDwn.isSelected() && enable);
     }
 
 
