@@ -331,10 +331,15 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
        Instead, the 32 character MD5 hash of the data is calculated and stored instead.
        This is intended for testing large amounts of data.
        </property>
-        <property name="Embedded URLs must match:" required="No">
+        <property name="URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
-        So if you only want to download embedded resources from <code>http://example.com/</code>, use the expression:
-        <code>http://example\.com/.*</code>
+        So if you only want to download embedded resources from <code>http://example.invalid/</code>, use the expression:
+        <code>http://example\.invalid/.*</code>
+        </property>
+        <property name="URLs must not match:" required="No">
+        If present, this must be a regular expression that is used to filter out any embedded URLs found.
+        So if you don't want to download PNG or SVG files from any source, use the expression:
+        <code>.*\.(?i:svg|png)</code>
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
         <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
@@ -3898,10 +3903,15 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
         <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
-        <property name="Embedded URLs must match:" required="No">
+        <property name="URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
-        So if you only want to download embedded resources from <code>http://example.com/</code>, use the expression:
-        <code>http://example\.com/.*</code>
+        So if you only want to download embedded resources from <code>http://example.invalid/</code>, use the expression:
+        <code>http://example\.invalid/.*</code>
+        </property>
+        <property name="URLs must not match:" required="No">
+        If present, this must be a regular expression that is used to filter out any embedded URLs found.
+        So if you don't want to download PNG or SVG files from any source, use the expression:
+        <code>.*\.(?i:svg|png)</code>
         </property>
 </properties>
 <note>
