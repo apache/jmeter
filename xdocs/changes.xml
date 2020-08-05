@@ -180,6 +180,7 @@ Summary
     <li><bug>64594</bug>Unable to enter variable values instead of numeric values in components using PowerTableModel (Impacts 3rd party plugins like Throughput Shaping Timer)</li>
     <li><bug>64475</bug>Menu Generate HTML Report: When report generation fails due to timeout, error message is not explicit. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
     <li><bug>64627</bug>Programmatic manipulation of the control flow via API methods of JMeterContext is not working as it used to before 5.0. Contributed by Till Neunast</li>
+    <li><bug>64647</bug>groovy-dateutil is missing in distribution</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
