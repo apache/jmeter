@@ -38,7 +38,7 @@ public class SamplerMetricTimedModeTest {
 
         SamplerMetric metric = new SamplerMetric();
 
-        metric.add(createSampleResult(true));
+        metric.add(createSampleResult(true), false);
         assertEquals("Before reset  ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.001);
         assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.001);
         assertEquals("Before reset failure", 1, metric.getHits(), 0.0);
@@ -58,7 +58,7 @@ public class SamplerMetricTimedModeTest {
     public void checkResetKoAndAllStats() throws Exception {
 
         SamplerMetric metric = new SamplerMetric();
-        metric.add(createSampleResult(false));
+        metric.add(createSampleResult(false), false);
         assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 0.001);
         assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.001);
         assertEquals("Before reset failure", 1, metric.getFailures(), 0.0);
