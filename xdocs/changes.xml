@@ -121,7 +121,7 @@ Summary
     <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
     <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
     <li><pr>591</pr>Remove deprecated sudo flag from travis file. Deng Liming (liming.d.pro at gmail.com)</li>
-    <li>Updated Darklaf to 2.4.1 (from 2.1.1)</li>
+    <li>Updated Darklaf to 2.4.2 (from 2.1.1)</li>
     <li>Updated Groovy to 3.0.5 (from 3.0.3)</li>
     <li><pr>596</pr>Use neutral words in documentation</li>
     <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
@@ -182,6 +182,10 @@ Summary
     <li><bug>64475</bug>Menu Generate HTML Report: When report generation fails due to timeout, error message is not explicit. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
     <li><bug>64627</bug>Programmatic manipulation of the control flow via API methods of JMeterContext is not working as it used to before 5.0. Contributed by Till Neunast</li>
     <li><bug>64647</bug>groovy-dateutil is missing in distribution</li>
+    <li><bug>64640</bug>Darklaf: NPE at com.github.weisj.darklaf.ui.DarkPopupFactory.getPopupType(DarkPopupFactory.java:96)</li>
+    <li><bug>64641</bug>Darklaf: NPE at com.github.weisj.darklaf.ui.tree.DarkTreeUI.isChildOfSelectionPath(DarkTreeUI.java:603) ~[darklaf-core-2.4.2-SNAPSHOT.jar:2.4.2-SNAPSHOT]</li>
+    <li><bug>64453</bug>Darklaf: Save Test Plan as New Folder failure</li>
+    <li><bug>64625</bug>Darklaf: trying to select a folder in Browse leads to an error popup and stacktrace</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
