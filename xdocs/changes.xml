@@ -121,7 +121,8 @@ Summary
     <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
     <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
     <li><pr>591</pr>Remove deprecated sudo flag from travis file. Deng Liming (liming.d.pro at gmail.com)</li>
-    <li>Updated Darklaf to 2.4.0 (from 2.1.1)</li>
+    <li>Updated Darklaf to 2.4.2 (from 2.1.1)</li>
+    <li>Updated Groovy to 3.0.5 (from 3.0.3)</li>
     <li><pr>596</pr>Use neutral words in documentation</li>
     <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
     <li><pr>598</pr>Add another option for creating diffs to the building page. Contributed by jmetertea (github.com/jmetertea)</li>
@@ -150,6 +151,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>64638</bug>JSON JMESPath Assertion / JSON Assertion: Opening GUI shows a horizontal scrollbar that keeps sliding</li>
 </ul>
 
 <h3>Functions</h3>
@@ -163,6 +165,7 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>64547</bug>Report/Dashboard: Ensure graphs Response codes per second is not broken by empty response code in SampleResult. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
+    <li><bug>64617</bug>HTML report: In graph Response Time Percentiles Over Time 90,95,99th percentile correspond in reality to 0.90, 0.95 and 0.99 percentiles</li>
 </ul>
 
 <h3>Documentation</h3>
@@ -175,6 +178,14 @@ Summary
     <li><bug>64499</bug>Exiting JMeter when <code>jmeterengine.stopfail.system.exit=true</code> takes too much time if threads are not stopped</li>
     <li><bug>64510</bug>Darklaf- IntelliJ Theme throws NPE in DarkTreeUI on MacOS</li>
     <li><bug>64543</bug>On MacOSX, Darklaf- IntelliJ Theme throws NPE in javax.swing.ToolTipManager.initiateToolTip</li>
+    <li><bug>64594</bug>Unable to enter variable values instead of numeric values in components using PowerTableModel (Impacts 3rd party plugins like Throughput Shaping Timer)</li>
+    <li><bug>64475</bug>Menu Generate HTML Report: When report generation fails due to timeout, error message is not explicit. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
+    <li><bug>64627</bug>Programmatic manipulation of the control flow via API methods of JMeterContext is not working as it used to before 5.0. Contributed by Till Neunast</li>
+    <li><bug>64647</bug>groovy-dateutil is missing in distribution</li>
+    <li><bug>64640</bug>Darklaf: NPE at com.github.weisj.darklaf.ui.DarkPopupFactory.getPopupType(DarkPopupFactory.java:96)</li>
+    <li><bug>64641</bug>Darklaf: NPE at com.github.weisj.darklaf.ui.tree.DarkTreeUI.isChildOfSelectionPath(DarkTreeUI.java:603) ~[darklaf-core-2.4.2-SNAPSHOT.jar:2.4.2-SNAPSHOT]</li>
+    <li><bug>64453</bug>Darklaf: Save Test Plan as New Folder failure</li>
+    <li><bug>64625</bug>Darklaf: trying to select a folder in Browse leads to an error popup and stacktrace</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -189,9 +200,12 @@ Summary
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
   <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
   <li><a href="https://github.com/topicus-pw-dvdouden">Daniel van den Ouden</a></li>
+  <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
+  <li>Till Neunast (https://github.com/tilln)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
+  <li>Hiroyoshi Mitsumori (mitsumori at mis.dev)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

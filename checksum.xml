@@ -78,6 +78,7 @@
     <trusted-key id='87a7f75a6a8ba5fc' group='org.apache.activemq' />
     <trusted-key id='bff2ee42c8282e76' group='org.apache.activemq' />
     <trusted-key id='ddbcc1270a29d081' group='org.apache.ant' />
+    <trusted-key id='a2115ae15f6b8b72' group='org.apache.ant' />
     <trusted-key id='86fdc7e2a11262cb' group='org.apache.bcel' />
     <trusted-key id='3faad2cd5ecbb314' group='org.apache.commons' />
     <trusted-key id='64a16faaec16a4be' group='org.apache.commons' />

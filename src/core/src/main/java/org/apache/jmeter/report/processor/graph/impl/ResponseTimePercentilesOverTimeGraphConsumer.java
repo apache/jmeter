@@ -100,10 +100,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
 
     private GroupInfo createPercentileGroupInfo(String propKey, String label) {
         String seriesName = formatPercentile(label);
-        double defaultValue = new BigDecimal(label)
-                .divide(new BigDecimal("100"), 6, RoundingMode.CEILING)
-                .doubleValue();
-
+        double defaultValue = new BigDecimal(label).setScale(2, RoundingMode.CEILING).doubleValue();
         double property = JMeterUtils.getPropDefault(propKey, defaultValue);
         PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
         factory.setPercentileIndex(property);

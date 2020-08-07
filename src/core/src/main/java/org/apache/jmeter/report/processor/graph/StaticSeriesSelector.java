@@ -56,7 +56,7 @@ public class StaticSeriesSelector extends AbstractSeriesSelector {
      */
     @Override
     public Iterable<String> select(Sample sample) {
-        return withDefaultIfEmpty(sample.getName(), "EMPTY_SERIE_NAME"); //$NON-NLS-1$
+        return withDefaultIfEmpty(seriesName, "EMPTY_SERIE_NAME"); //$NON-NLS-1$
     }
 
 }

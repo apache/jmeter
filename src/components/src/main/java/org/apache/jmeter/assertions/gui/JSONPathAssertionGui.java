@@ -19,19 +19,21 @@ package org.apache.jmeter.assertions.gui;
 
 import java.awt.BorderLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.assertions.JSONPathAssertion;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.TestElementMetadata;
-import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JLabeledTextArea;
-import org.apache.jorphan.gui.JLabeledTextField;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Java class representing GUI for the {@link JSONPathAssertion} component in JMeter
@@ -50,8 +52,8 @@ public class JSONPathAssertionGui extends AbstractAssertionGui implements Change
     private static final String JSON_ASSERTION_INVERT = "json_assertion_invert";
     private static final String JSON_ASSERTION_TITLE = "json_assertion_title";
 
-    protected JLabeledTextField jsonPath = null;
-    protected JLabeledTextArea jsonValue = null;
+    protected JTextField jsonPath = null;
+    protected JSyntaxTextArea jsonValue = null;
     protected JCheckBox jsonValidation = null;
     protected JCheckBox expectNull = null;
     protected JCheckBox invert = null;
@@ -66,31 +68,40 @@ public class JSONPathAssertionGui extends AbstractAssertionGui implements Change
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);
 
-        VerticalPanel panel = new VerticalPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-
-        initFields();
+        JPanel panel = buildPanel();
+        add(panel, BorderLayout.CENTER);
 
         jsonValidation.addChangeListener(this);
         expectNull.addChangeListener(this);
-
-        panel.add(jsonPath);
-        panel.add(jsonValidation);
-        panel.add(isRegex);
-        panel.add(jsonValue);
-        panel.add(expectNull);
-        panel.add(invert);
-
-        add(panel, BorderLayout.CENTER);
     }
 
-    protected void initFields() {
-        jsonPath =  new JLabeledTextField(JMeterUtils.getResString(JSON_ASSERTION_PATH));
-        jsonValue = new JLabeledTextArea(JMeterUtils.getResString(JSON_ASSERTION_EXPECTED_VALUE));
-        jsonValidation = new JCheckBox(JMeterUtils.getResString(JSON_ASSERTION_VALIDATION));
-        expectNull = new JCheckBox(JMeterUtils.getResString(JSON_ASSERTION_NULL));
-        invert = new JCheckBox(JMeterUtils.getResString(JSON_ASSERTION_INVERT));
-        isRegex = new JCheckBox(JMeterUtils.getResString(JSON_ASSERTION_REGEX));
+    protected JPanel buildPanel() {
+        JPanel panel = new JPanel(new MigLayout("fillx, wrap 2, insets 0", "[][fill,grow]"));
+
+        jsonPath =  new JTextField();
+        panel.add(JMeterUtils.labelFor(jsonPath, JSON_ASSERTION_PATH));
+        panel.add(jsonPath, "span, growx");
+
+        jsonValidation = new JCheckBox();
+        panel.add(JMeterUtils.labelFor(jsonValidation, JSON_ASSERTION_VALIDATION));
+        panel.add(jsonValidation, "span");
+
+        isRegex = new JCheckBox();
+        panel.add(JMeterUtils.labelFor(isRegex, JSON_ASSERTION_REGEX));
+        panel.add(isRegex, "span");
+
+        jsonValue =  JSyntaxTextArea.getInstance(5, 60);
+        panel.add(JMeterUtils.labelFor(jsonValue, JSON_ASSERTION_EXPECTED_VALUE));
+        panel.add(JTextScrollPane.getInstance(jsonValue));
+
+        expectNull = new JCheckBox();
+        panel.add(JMeterUtils.labelFor(expectNull, JSON_ASSERTION_NULL));
+        panel.add(expectNull, "span");
+
+        invert = new JCheckBox();
+        panel.add(JMeterUtils.labelFor(invert, JSON_ASSERTION_INVERT));
+        panel.add(invert, "span");
+        return panel;
     }
 
     @Override
