@@ -77,7 +77,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>63527</li>Implement a new setting to allow the exclusion of embedded URLs</li>
+    <li><bug>63527</bug>Implement a new setting to allow the exclusion of embedded URLs</li>
 </ul>
 
 <h3>Other samplers</h3>
