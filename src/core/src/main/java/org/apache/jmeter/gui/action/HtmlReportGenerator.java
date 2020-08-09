@@ -89,13 +89,13 @@ public class HtmlReportGenerator {
             }
         } catch (TimeoutException e) {
             errorMessageList.add(MessageFormat.format(JMeterUtils.getResString("generate_report_ui.html_report_timeout_error"),
-                    COMMAND_TIMEOUT, e.getMessage(), commandExecutionOutput.toString()));
-            LOGGER.error("Report generation took more time than configured timeout(Property {}={})",
-                    "generate_report_ui.generation_timeout", COMMAND_TIMEOUT, commandExecutionOutput.toString(), e);
+                    COMMAND_TIMEOUT, e.getMessage(), commandExecutionOutput));
+            LOGGER.error("Report generation took more time than configured timeout (Property {}={}, command output=[{}])",
+                    "generate_report_ui.generation_timeout", COMMAND_TIMEOUT, commandExecutionOutput, e);
         } catch (InterruptedException | IOException e) {
             errorMessageList.add(MessageFormat.format(JMeterUtils.getResString("generate_report_ui.html_report_unknown_error"),
                     e.getMessage(), commandExecutionOutput.toString()));
-            LOGGER.error("Error during HTML report generation, executing {}", commandExecutionOutput.toString(), e);
+            LOGGER.error("Error during HTML report generation, executing {}", commandExecutionOutput, e);
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
