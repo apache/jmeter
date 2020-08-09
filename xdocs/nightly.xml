@@ -36,7 +36,7 @@
     <note><b>These builds should not be used in production.</b></note>
 
     <h2>Last Build status on Jenkins</h2>
-    <a href='https://builds.apache.org/job/JMeter-trunk/'><img src='https://builds.apache.org/buildStatus/icon?job=JMeter-trunk' /></a>
+    <a href='https://ci-builds.apache.org/job/JMeter/job/JMeter-trunk/'><img src='https://ci-builds.apache.org/buildStatus/icon?job=JMeter%2FJMeter-trunk'/></a>
 
     <h2>Last Quality Report on Sonar</h2>
     <a href="https://sonarcloud.io/dashboard?id=JMeter">Apache JMeter quality report</a>
