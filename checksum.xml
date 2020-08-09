@@ -14,6 +14,7 @@
     <trusted-key id='8ea48d105232855d' group='com.github.jknack' />
     <trusted-key id='461a804f2609fd89' group='com.github.shyiko.klob' />
     <trusted-key id='1756b920eecf0e90' group='com.github.spotbugs' />
+    <trusted-key id='a5def5a76f94a471' group='com.github.spotbugs' />
     <trusted-key id='78fcd238c26ea995' group='com.github.tomakehurst' />
     <trusted-key id='105cb91cac2aee0e' group='com.github.vlsi.gradle' />
     <trusted-key id='254e9c64c264c176' group='com.github.weisj' />
