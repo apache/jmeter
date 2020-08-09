@@ -185,7 +185,7 @@ sonarqube {
         property("sonar.links.ci", "https://builds.apache.org/job/JMeter-trunk/")
         property("sonar.links.scm", "https://jmeter.apache.org/svnindex.html")
         property("sonar.links.issue", "https://jmeter.apache.org/issues.html")
-        property("sonar.java.libraries", "./libs/**/*.jar")
+        property("sonar.java.libraries", "./lib/**/*.jar")
     }
 }
 
