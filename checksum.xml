@@ -133,7 +133,7 @@
     <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
     <trusted-key id='91ae1504568ec4dd' group='org.jodd' />
-    <trusted-ley id='145d819475314d97' group='org.json' />
+    <trusted-key id='145d819475314d97' group='org.json' />
     <trusted-key id='f42e87f9665015c9' group='org.jsoup' />
     <trusted-key id='85911f425ec61b51' group='org.junit.jupiter' />
     <trusted-key id='85911f425ec61b51' group='org.junit.platform' />
