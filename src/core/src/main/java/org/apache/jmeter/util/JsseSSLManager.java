@@ -188,7 +188,7 @@ public class JsseSSLManager extends SSLManager {
     public void resetContext() {
         if (!SHARED_SESSION_CONTEXT) {
             log.debug("Clearing session context for current thread");
-            this.threadlocal.set(null);
+            this.threadlocal.remove();
         }
     }
 
