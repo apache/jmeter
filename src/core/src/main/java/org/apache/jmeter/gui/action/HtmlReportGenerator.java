@@ -94,7 +94,7 @@ public class HtmlReportGenerator {
                     "generate_report_ui.generation_timeout", COMMAND_TIMEOUT, commandExecutionOutput, e);
         } catch (InterruptedException | IOException e) {
             errorMessageList.add(MessageFormat.format(JMeterUtils.getResString("generate_report_ui.html_report_unknown_error"),
-                    e.getMessage(), commandExecutionOutput.toString()));
+                    e.getMessage(), commandExecutionOutput));
             LOGGER.error("Error during HTML report generation, executing {}", commandExecutionOutput, e);
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
