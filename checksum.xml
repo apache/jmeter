@@ -19,6 +19,7 @@
     <trusted-key id='254e9c64c264c176' group='com.github.weisj' />
     <trusted-key id='59a252fb1199d873' group='com.google.code.findbugs' />
     <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
+    <trusted-key id='1669c4bb543e0445' group='com.google.errorprone' />
     <trusted-key id='912d2c0eccda55c0' group='com.google.errorprone' />
     <trusted-key id='9a259c7ee636c5ed' group='com.google.errorprone' />
     <trusted-key id='bf935c771a8474f8' group='com.google.errorprone' />
@@ -39,6 +40,7 @@
     <trusted-key id='6425559c47cc79c4' group='com.sun.activation' />
     <trusted-key id='602ec18d20c4661c' group='com.thoughtworks.xstream' />
     <trusted-key id='1861c322c56014b2' group='commons-beanutils' />
+    <trusted-key id='3faad2cd5ecbb314' group='commons-beanutils' />
     <trusted-key id='411063a3a0ffd119' group='commons-beanutils' />
     <trusted-key id='9daadc1c9fcc82d0' group='commons-cli' />
     <trusted-key id='86fdc7e2a11262cb' group='commons-codec' />
@@ -77,8 +79,8 @@
     <trusted-key id='411063a3a0ffd119' group='org.apache-extras.beanshell' />
     <trusted-key id='87a7f75a6a8ba5fc' group='org.apache.activemq' />
     <trusted-key id='bff2ee42c8282e76' group='org.apache.activemq' />
-    <trusted-key id='ddbcc1270a29d081' group='org.apache.ant' />
     <trusted-key id='a2115ae15f6b8b72' group='org.apache.ant' />
+    <trusted-key id='ddbcc1270a29d081' group='org.apache.ant' />
     <trusted-key id='86fdc7e2a11262cb' group='org.apache.bcel' />
     <trusted-key id='3faad2cd5ecbb314' group='org.apache.commons' />
     <trusted-key id='64a16faaec16a4be' group='org.apache.commons' />
