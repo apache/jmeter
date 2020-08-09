@@ -631,7 +631,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 s.close();
             }
         } catch (SQLException e) {
-            log.warn("Error closing Statement {}", s.toString(), e);
+            log.warn("Error closing Statement {}", s, e);
         }
     }
 
