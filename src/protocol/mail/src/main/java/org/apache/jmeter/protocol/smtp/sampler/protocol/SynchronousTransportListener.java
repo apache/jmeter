@@ -74,7 +74,7 @@ public class SynchronousTransportListener extends TransportAdapter {
      * Synchronized-method
      * <p>
      * Waits until {@link #finish()} was called and thus the end of the mail
-     * sending was signalled.
+     * sending was signaled.
      *
      * @throws InterruptedException
      *             when interrupted while waiting with the lock
@@ -93,7 +93,7 @@ public class SynchronousTransportListener extends TransportAdapter {
     public void finish() {
         finished = true;
         synchronized(LOCK) {
-            LOCK.notify();
+            LOCK.notifyAll();
         }
     }
 
