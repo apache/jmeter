@@ -18,7 +18,6 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,12 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.weisj.darklaf.LafManager;
 import com.github.weisj.darklaf.theme.DarculaTheme;
-import com.github.weisj.darklaf.theme.HighContrastDarkTheme;
-import com.github.weisj.darklaf.theme.HighContrastLightTheme;
-import com.github.weisj.darklaf.theme.IntelliJTheme;
-import com.github.weisj.darklaf.theme.OneDarkTheme;
-import com.github.weisj.darklaf.theme.SolarizedDarkTheme;
-import com.github.weisj.darklaf.theme.SolarizedLightTheme;
 import com.github.weisj.darklaf.theme.Theme;
 
 /**
@@ -70,9 +63,9 @@ public class LookAndFeelCommand extends AbstractAction {
         final String title;
         final String command;
         final String lafClassName;
-        final Class<? extends Theme> lafTheme;
+        final Theme lafTheme;
 
-        private MenuItem(String title, String command, String lafClassName, Class<? extends Theme> lafTheme) {
+        private MenuItem(String title, String command, String lafClassName, Theme lafTheme) {
             this.title = title;
             this.command = command;
             this.lafClassName = lafClassName;
@@ -88,14 +81,14 @@ public class LookAndFeelCommand extends AbstractAction {
         }
 
         private static MenuItem of(String title, String lafClass) {
-            return new MenuItem(title,ActionNames.LAF_PREFIX + lafClass, lafClass, null);
+            return new MenuItem(title, ActionNames.LAF_PREFIX + lafClass, lafClass, null);
         }
 
-        private static MenuItem ofDarklafTheme(Class<? extends Theme> lafTheme) {
-            return new MenuItem("Darklaf - " + lafTheme.getSimpleName().replace("Theme", ""),
-                    JMeterMenuBar.DARKLAF_LAF_CLASS + ":" + lafTheme.getName(),
+        private static MenuItem ofDarklafTheme(Theme theme) {
+            return new MenuItem("Darklaf - " + theme.getName(),
+                    JMeterMenuBar.DARKLAF_LAF_CLASS + ":" + theme.getThemeClass().getName(),
                     JMeterMenuBar.DARKLAF_LAF_CLASS,
-                    lafTheme);
+                    theme);
         }
     }
 
@@ -106,21 +99,17 @@ public class LookAndFeelCommand extends AbstractAction {
         if (System.getProperty("darklaf.allowNativeCode") == null) {
             System.setProperty("darklaf.allowNativeCode", "false");
         }
-        UIManager.installLookAndFeel(JMeterMenuBar.DARKLAF_LAF, JMeterMenuBar.DARKLAF_LAF_CLASS);
+        UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
 
         List<MenuItem> items = new ArrayList<>();
         for (UIManager.LookAndFeelInfo laf : JMeterMenuBar.getAllLAFs()) {
-            if (!laf.getClassName().equals(JMeterMenuBar.DARKLAF_LAF_CLASS)) {
+            if (!laf.getClassName().equals(JMeterMenuBar.DARCULA_LAF_CLASS)) {
                 items.add(MenuItem.of(laf.getName(), laf.getClassName()));
-                continue;
+            } else {
+                for (Theme theme : LafManager.getRegisteredThemes()) {
+                    items.add(MenuItem.ofDarklafTheme(theme));
+                }
             }
-            items.add(MenuItem.ofDarklafTheme(DarculaTheme.class));
-            items.add(MenuItem.ofDarklafTheme(IntelliJTheme.class));
-            items.add(MenuItem.ofDarklafTheme(OneDarkTheme.class));
-            items.add(MenuItem.ofDarklafTheme(SolarizedDarkTheme.class));
-            items.add(MenuItem.ofDarklafTheme(SolarizedLightTheme.class));
-            items.add(MenuItem.ofDarklafTheme(HighContrastDarkTheme.class));
-            items.add(MenuItem.ofDarklafTheme(HighContrastLightTheme.class));
         }
         items.sort(Comparator.comparing(MenuItem::getTitle));
         for (MenuItem item : items) {
@@ -184,7 +173,7 @@ public class LookAndFeelCommand extends AbstractAction {
         String jMeterLaf = getJMeterLaf();
         if (jMeterLaf.equals(JMeterMenuBar.DARCULA_LAF_CLASS)) {
             // Convert old Darcula to new Darklaf-Darcula LaF
-            return MenuItem.ofDarklafTheme(DarculaTheme.class).command;
+            return MenuItem.ofDarklafTheme(new DarculaTheme()).command;
         }
 
         return MenuItem.of("default", jMeterLaf).command; // $NON-NLS-1$
@@ -208,12 +197,7 @@ public class LookAndFeelCommand extends AbstractAction {
     public static boolean isDark() {
         String lookAndFeelID = UIManager.getLookAndFeel().getID();
         if (lookAndFeelID.equals("Darklaf")) { // $NON-NLS-1$
-            Theme lafTheme = LafManager.getTheme();
-            if (lafTheme == null) {
-                return false;
-            }
-            String name = lafTheme.getName();
-            return name.equals("darcula") || name.equals("solarized_dark"); // $NON-NLS-1$
+            return Theme.isDark(LafManager.getTheme());
         }
         return false;
     }
@@ -221,24 +205,15 @@ public class LookAndFeelCommand extends AbstractAction {
     public static void activateLookAndFeel(String command) {
         MenuItem item = items.get(command);
         String className = item.lafClassName;
-        try {
-            if (item.lafTheme != null) {
-                LafManager.setTheme(item.lafTheme.getConstructor().newInstance());
-            }
-            GuiPackage instance = GuiPackage.getInstance();
-            if (instance != null) {
-                instance.updateUIForHiddenComponents();
-            }
-            JFactory.refreshUI(className);
-            PREFS.put(USER_PREFS_KEY, item.command);
-        } catch ( InstantiationException
-                | NoSuchMethodException
-                | IllegalAccessException e) {
-            throw new IllegalArgumentException("Look and Feel unavailable:" + e.toString(), e);
-        } catch (InvocationTargetException e) {
-            Throwable c = e.getCause();
-            throw new IllegalArgumentException("Look and Feel unavailable:" + c.toString(), c);
+        if (item.lafTheme != null) {
+            LafManager.setTheme(item.lafTheme);
         }
+        GuiPackage instance = GuiPackage.getInstance();
+        if (instance != null) {
+            instance.updateUIForHiddenComponents();
+        }
+        JFactory.refreshUI(className);
+        PREFS.put(USER_PREFS_KEY, item.command);
     }
 
     @Override
