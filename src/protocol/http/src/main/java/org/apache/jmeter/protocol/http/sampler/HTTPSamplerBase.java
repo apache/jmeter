@@ -1379,7 +1379,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             if (excludeRegex.length() > 0) {
                 try {
                     excludePattern = JMeterUtils.getPattern(excludeRegex);
-                    if (localMatcher != null) {
+                    if (localMatcher == null) {
                         localMatcher = JMeterUtils.getMatcher();// don't fetch unless pattern compiles
                     }
                 } catch (MalformedCachePatternException e) { // NOSONAR
@@ -1422,6 +1422,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             setParentSampleSuccess(res, false);
                             continue;
                         }
+                        log.debug("allowPattern: {}, excludePattern: {}, localMatcher: {}, url: {}", allowPattern, excludePattern, localMatcher, url);
                         // I don't think localMatcher can be null here, but check just in case
                         if (allowPattern != null && localMatcher != null && !localMatcher.matches(url.toString(), allowPattern)) {
                             continue; // we have a pattern and the URL does not match, so skip it
