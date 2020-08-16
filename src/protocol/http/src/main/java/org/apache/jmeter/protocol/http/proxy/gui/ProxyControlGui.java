@@ -232,8 +232,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private transient RecorderDialog recorderDialog;
 
-    private Component labelDefaultEncoding;
-
     private JTextField httpSampleNameFormat;
 
     //+ action names
