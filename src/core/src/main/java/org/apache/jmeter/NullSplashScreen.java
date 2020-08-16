@@ -17,21 +17,21 @@
 
 package org.apache.jmeter;
 
-public interface SplashScreen {
+public class NullSplashScreen implements SplashScreen {
 
-    /**
-     * Show screen
-     */
-    void showScreen();
+    @Override
+    public void showScreen() {
+        // Do nothing
+    }
 
-    /**
-     * Close splash
-     */
-    void close();
+    @Override
+    public void close() {
+        // Do nothing
+    }
 
-    /**
-     * @param progress Loading progress
-     */
-    void setProgress(int progress);
+    @Override
+    public void setProgress(int progress) {
+        // Do nothing
+    }
 
 }

@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.jmeter.SplashScreen;
+import org.apache.jmeter.DefaultSplashScreen;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.util.JMeterUtils;
@@ -134,7 +134,7 @@ public class AboutCommand extends AbstractAction {
         infos.add(releaseNotes);
         Container panel = about.getContentPane();
         panel.setLayout(new BorderLayout());
-        panel.add(SplashScreen.loadLogo(), BorderLayout.NORTH);
+        panel.add(DefaultSplashScreen.loadLogo(), BorderLayout.NORTH);
         panel.add(infos, BorderLayout.SOUTH);
         about.pack();
         return about;

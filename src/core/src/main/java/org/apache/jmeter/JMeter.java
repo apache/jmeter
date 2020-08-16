@@ -17,6 +17,7 @@
 
 package org.apache.jmeter;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -180,6 +181,7 @@ public class JMeter implements JMeterPlugin {
     private static final int REMOTE_OPT_PARAM   = 'R';// $NON-NLS-1$
     private static final int SYSTEM_PROPFILE    = 'S';// $NON-NLS-1$
     private static final int REMOTE_STOP        = 'X';// $NON-NLS-1$
+    private static final int NO_SPLASH_SCREEN   = 'Y';// $NON-NLS-1$
 
     private static final String JMX_SUFFIX = ".JMX"; // $NON-NLS-1$
 
@@ -297,6 +299,8 @@ public class JMeter implements JMeterPlugin {
             new CLOptionDescriptor("forceDeleteResultFile",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED, FORCE_DELETE_RESULT_FILE,
                     "force delete existing results files and web report folder if present before starting the test");
+     private static final CLOptionDescriptor D_NO_SPLASH_SCREEN =
+             new CLOptionDescriptor("nosplashscreen", CLOptionDescriptor.ARGUMENT_DISALLOWED, NO_SPLASH_SCREEN, "do not show splash screen on startup");
 
     private static final String[][] DEFAULT_ICONS = {
             { "org.apache.jmeter.control.gui.TestPlanGui",               "org/apache/jmeter/images/beaker.gif" },     //$NON-NLS-1$ $NON-NLS-2$
@@ -343,6 +347,7 @@ public class JMeter implements JMeterPlugin {
             D_REPORT_GENERATING_OPT,
             D_REPORT_AT_END_OPT,
             D_REPORT_OUTPUT_FOLDER_OPT,
+            D_NO_SPLASH_SCREEN,
     };
 
     /** Properties to be sent to remote servers */
@@ -353,6 +358,8 @@ public class JMeter implements JMeterPlugin {
 
     /** should delete result file / report folder before start ? */
     private boolean deleteResultFile = false;
+
+    private boolean showSplashScreen = true;
 
     public JMeter() {
         super();
@@ -382,7 +389,7 @@ public class JMeter implements JMeterPlugin {
             log.warn("Could not set LAF to: {}", jMeterLaf, ex);
         }
         // SplashWindow is created after LaF activation. Otherwise it would cause splash flicker
-        SplashScreen splash = new SplashScreen();
+        SplashScreen splash = createSplashScreen();
         splash.showScreen();
         splash.setProgress(10);
         log.debug("Apply HiDPI on fonts");
@@ -408,7 +415,9 @@ public class JMeter implements JMeterPlugin {
         MainFrame main = new MainFrame(treeModel, treeLis);
         splash.setProgress(100);
         ComponentUtil.centerComponentInWindow(main, 80);
-        main.setLocationRelativeTo(splash);
+        if (splash instanceof Component) {
+            main.setLocationRelativeTo((Component) splash);
+        }
         main.setVisible(true);
         main.toFront();
         instance.actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
@@ -440,6 +449,14 @@ public class JMeter implements JMeterPlugin {
         splash.close();
     }
 
+
+    private SplashScreen createSplashScreen() {
+        if (this.showSplashScreen) {
+            return new DefaultSplashScreen();
+        }
+        return new NullSplashScreen();
+    }
+
     /**
      * Takes the command line arguments and uses them to determine how to
      * startup JMeter.
@@ -466,6 +483,9 @@ public class JMeter implements JMeterPlugin {
             // repeat the error so no need to scroll back past the usage to see it
             System.out.println("Error: " + error);//NOSONAR
             return;
+        }
+        if (parser.getArgumentById(NO_SPLASH_SCREEN) != null) {
+            disableSplashScreen();
         }
         try {
             initializeProperties(parser); // Also initialises JMeter logging
@@ -585,6 +605,11 @@ public class JMeter implements JMeterPlugin {
             System.exit(1);
         }
     }
+
+    private void disableSplashScreen() {
+        this.showSplashScreen  = false;
+    }
+
 
     /**
      * Extract option JMeter#REPORT_OUTPUT_FOLDER_OPT and if defined sets property
