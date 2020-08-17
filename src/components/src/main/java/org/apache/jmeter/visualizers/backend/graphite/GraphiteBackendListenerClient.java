@@ -285,10 +285,10 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                     }
                     if (samplersToFilterMatch) {
                         SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
-                        samplerMetric.add(sampleResult, false);
+                        samplerMetric.add(sampleResult);
                     }
                 }
-                getSamplerMetric(CUMULATED_METRICS).add(sampleResult, true);
+                getSamplerMetric(CUMULATED_METRICS).addCumulated(sampleResult);
             }
         }
     }

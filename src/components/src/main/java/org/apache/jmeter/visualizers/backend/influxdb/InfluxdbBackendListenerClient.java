@@ -300,10 +300,10 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                 Matcher matcher = samplersToFilter.matcher(sampleResult.getSampleLabel());
                 if (!summaryOnly && (matcher.find())) {
                     SamplerMetric samplerMetric = getSamplerMetricInfluxdb(sampleResult.getSampleLabel());
-                    samplerMetric.add(sampleResult, false);
+                    samplerMetric.add(sampleResult);
                 }
                 SamplerMetric cumulatedMetrics = getSamplerMetricInfluxdb(CUMULATED_METRICS);
-                cumulatedMetrics.add(sampleResult, true);
+                cumulatedMetrics.addCumulated(sampleResult);
             }
         }
     }

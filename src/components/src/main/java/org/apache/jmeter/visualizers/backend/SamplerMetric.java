@@ -99,9 +99,25 @@ public class SamplerMetric {
     /**
      * Add a {@link SampleResult} to be used in the statistics
      * @param result {@link SampleResult} to be used
+     */
+    public synchronized void add(SampleResult result) {
+        add(result, false);
+    }
+
+    /**
+     * Add a {@link SampleResult} and its sub-results to be used in the statistics
+     * @param result {@link SampleResult} to be used
+     */
+    public synchronized void addCumulated(SampleResult result) {
+        add(result, true);
+    }
+
+    /**
+     * Add a {@link SampleResult} to be used in the statistics
+     * @param result {@link SampleResult} to be used
      * @param isCumulated is the overall Sampler Metric
      */
-    public synchronized void add(SampleResult result, boolean isCumulated) {
+    private synchronized void add(SampleResult result, boolean isCumulated) {
         if(result.isSuccessful()) {
             successes+=result.getSampleCount()-result.getErrorCount();
         } else {
