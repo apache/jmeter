@@ -208,7 +208,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     private void addMetric(String transaction, int count,
                            Long sentBytes, Long receivedBytes,
-                           String statut, double mean, double minTime, double maxTime,
+                           String status, double mean, double minTime, double maxTime,
                            int hits,
                            Collection<Float> pcts, PercentileProvider percentileProvider) {
         if (count <= 0) {
@@ -217,7 +217,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         StringBuilder tag = new StringBuilder(95);
         tag.append(TAG_APPLICATION).append(applicationName);
         tag.append(TAG_TRANSACTION).append(transaction);
-        tag.append(TAG_STATUS).append(statut);
+        tag.append(TAG_STATUS).append(status);
         tag.append(userTag);
 
         StringBuilder field = new StringBuilder(80);
