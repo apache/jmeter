@@ -159,11 +159,11 @@ public class SamplerMetric {
      * @param isCumulated related to the overall sampler metric
      */
     private void addHits(SampleResult result, boolean isCumulated) {
+        SampleResult[] subResults = result.getSubResults();
         if (isCumulated && TransactionController.isFromTransactionController(result)
-                && result.getSubResults().length == 0) { // Transaction controller without generate parent sampler
+                && subResults.length == 0) { // Transaction controller without generate parent sampler
             return;
         }
-        SampleResult[] subResults = result.getSubResults();
         if (!(TransactionController.isFromTransactionController(result) && subResults.length > 0)) {
             hits += result.getSampleCount();
         }
