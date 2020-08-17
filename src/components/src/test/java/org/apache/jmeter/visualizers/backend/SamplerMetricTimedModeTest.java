@@ -19,6 +19,9 @@ package org.apache.jmeter.visualizers.backend;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+
+import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +32,7 @@ public class SamplerMetricTimedModeTest {
 
     @BeforeEach
     public void initMode() throws Exception {
-        //noinspection deprecation
+        // noinspection deprecation
         SamplerMetric.setDefaultWindowMode(WindowMode.TIMED);
     }
 
@@ -41,7 +44,7 @@ public class SamplerMetricTimedModeTest {
         metric.add(createSampleResult(true));
         assertEquals("Before reset  ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.001);
         assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.001);
-        assertEquals("Before reset failure", 1, metric.getHits(), 0.0);
+        assertEquals("Before reset hits", 1, metric.getHits(), 0.0);
         assertEquals("Before reset sent bytes", 1000, metric.getSentBytes(), 0.0);
         assertEquals("Before reset received bytes", 2000, metric.getReceivedBytes(), 0.0);
 
@@ -49,7 +52,7 @@ public class SamplerMetricTimedModeTest {
 
         assertEquals("After reset in TIMED mode ok.max", Double.NaN, metric.getOkMaxTime(), 0.0);
         assertEquals("After reset in TIMED mode all.max", Double.NaN, metric.getAllMaxTime(), 0.0);
-        assertEquals("After reset failure", 0, metric.getHits(), 0.0);
+        assertEquals("After reset hits", 0, metric.getHits(), 0.0);
         assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
         assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
     }
@@ -84,6 +87,65 @@ public class SamplerMetricTimedModeTest {
         result.setBytes(2000L);
         result.setEndTime(result.getStartTime() + DEFAULT_ELAPSED_TIME);
         return result;
+    }
+
+    private SampleResult createSampleResultWithSubresults(boolean success) {
+        SampleResult result = new SampleResult();
+        result.sampleStart();
+        result.setSampleCount(1);
+        result.setErrorCount(success ? 0 : 1);
+        result.setSuccessful(success);
+        result.addSubResult(createSampleResult(success));
+        result.addSubResult(createSampleResult(success));
+        result.setEndTime(Arrays.stream(result.getSubResults()).mapToLong(SampleResult::getEndTime).max().orElse(0));
+        result.setBytes(Arrays.stream(result.getSubResults()).mapToLong(SampleResult::getBytesAsLong).sum());
+        result.setSentBytes(Arrays.stream(result.getSubResults()).mapToLong(SampleResult::getSentBytes).sum());
+        result.setResponseMessage("Number of samples in transaction : "); // This is a constant in TransactionController
+        return result;
+    }
+
+    @Test
+    public void checkAddCumulatedOk() throws Exception {
+        SamplerMetric metric = new SamplerMetric();
+        SampleResult sample = createSampleResultWithSubresults(true);
+        assertEquals("We are recognized as a TransactionController made sample", Boolean.TRUE,
+                Boolean.valueOf(TransactionController.isFromTransactionController(sample)));
+        metric.addCumulated(sample);
+        assertEquals("Before reset  ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 2.001);
+        assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 2.001);
+        assertEquals("Before reset hits", 2, metric.getHits(), 0.0);
+        assertEquals("Before reset sent bytes", 2000, metric.getSentBytes(), 0.0);
+        assertEquals("Before reset received bytes", 4000, metric.getReceivedBytes(), 0.0);
+
+        metric.resetForTimeInterval();
+
+        assertEquals("After reset in TIMED mode ok.max", Double.NaN, metric.getOkMaxTime(), 0.0);
+        assertEquals("After reset in TIMED mode all.max", Double.NaN, metric.getAllMaxTime(), 0.0);
+        assertEquals("After reset hits", 0, metric.getHits(), 0.0);
+        assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
+        assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
+    }
+
+    @Test
+    public void checkAddCumulatedKo() throws Exception {
+        SamplerMetric metric = new SamplerMetric();
+        SampleResult sample = createSampleResultWithSubresults(false);
+        assertEquals("We are recognized as a TransactionController made sample", Boolean.TRUE,
+                Boolean.valueOf(TransactionController.isFromTransactionController(sample)));
+        metric.addCumulated(sample);
+        assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 2.001);
+        assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 2.001);
+        assertEquals("Before reset failures", 1, metric.getFailures(), 0.0);
+        assertEquals("Before reset sent bytes", 2000, metric.getSentBytes(), 0.0);
+        assertEquals("Before reset received bytes", 4000, metric.getReceivedBytes(), 0.0);
+
+        metric.resetForTimeInterval();
+
+        assertEquals("After reset in TIMED mode ko.max", Double.NaN, metric.getKoMaxTime(), 0.0);
+        assertEquals("After reset in TIMED mode all.max", Double.NaN, metric.getAllMaxTime(), 0.0);
+        assertEquals("After reset failures", 0, metric.getFailures(), 0.0);
+        assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
+        assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
     }
 
 }
