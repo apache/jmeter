@@ -77,6 +77,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>63527</bug>Implement a new setting to allow the exclusion of embedded URLs</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -121,11 +122,12 @@ Summary
     <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
     <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
     <li><pr>591</pr>Remove deprecated sudo flag from travis file. Deng Liming (liming.d.pro at gmail.com)</li>
-    <li>Updated Darklaf to 2.4.2 (from 2.1.1)</li>
+    <li>Updated Darklaf to 2.4.4 (from 2.1.1)</li>
     <li>Updated Groovy to 3.0.5 (from 3.0.3)</li>
     <li><pr>596</pr>Use neutral words in documentation</li>
     <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
     <li><pr>598</pr>Add another option for creating diffs to the building page. Contributed by jmetertea (github.com/jmetertea)</li>
+    <li><pr>609</pr>Make use of newer API for darklaf installation. Jannis Weis</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -135,6 +137,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><bug>64479</bug>Regression: HTTP(s) Script Recorder prevents proper shutdown in non-GUI mode</li>
+  <li><bug>64653</bug>Exclude Javascript and JSON from parsing for charsets from forms by proxy</li>
 </ul>
 
 <h3>Other Samplers</h3>

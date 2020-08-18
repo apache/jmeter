@@ -46,7 +46,8 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
-import org.apache.jorphan.gui.JLabeledTextField;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * GUI for Http Request defaults
@@ -55,14 +56,15 @@ import org.apache.jorphan.gui.JLabeledTextField;
 @TestElementMetadata(labelResource = "url_config_title")
 public class HttpDefaultsGui extends AbstractConfigGui {
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private UrlConfigGui urlConfigGui;
     private JCheckBox retrieveEmbeddedResources;
     private JCheckBox concurrentDwn;
     private JTextField concurrentPool;
     private JCheckBox useMD5;
-    private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
+    private JTextField embeddedAllowRE; // regular expression used to match against embedded resource URLs to allow
+    private JTextField embeddedExcludeRE; // regular expression used to match against embedded resource URLs to discard
     private JTextField sourceIpAddr; // does not apply to Java implementation
     private JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
     private JTextField proxyScheme;
@@ -131,11 +133,17 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         } else {
             config.removeProperty(HTTPSamplerBase.MD5);
         }
-        if (!StringUtils.isEmpty(embeddedRE.getText())) {
+        if (!StringUtils.isEmpty(embeddedAllowRE.getText())) {
             config.setProperty(new StringProperty(HTTPSamplerBase.EMBEDDED_URL_RE,
-                    embeddedRE.getText()));
+                    embeddedAllowRE.getText()));
         } else {
             config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_RE);
+        }
+        if (!StringUtils.isEmpty(embeddedExcludeRE.getText())) {
+            config.setProperty(new StringProperty(HTTPSamplerBase.EMBEDDED_URL_EXCLUDE_RE,
+                    embeddedExcludeRE.getText()));
+        } else {
+            config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_EXCLUDE_RE);
         }
 
         if(!StringUtils.isEmpty(sourceIpAddr.getText())) {
@@ -170,7 +178,8 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         enableConcurrentDwn(false);
         useMD5.setSelected(false);
         urlConfigGui.clear();
-        embeddedRE.setText(""); // $NON-NLS-1$
+        embeddedAllowRE.setText(""); // $NON-NLS-1$
+        embeddedExcludeRE.setText(""); // $NON-NLS-1$
         sourceIpAddr.setText(""); // $NON-NLS-1$
         sourceIpType.setSelectedIndex(HTTPSamplerBase.SourceType.HOSTNAME.ordinal()); //default: IP/Hostname
         proxyScheme.setText(""); // $NON-NLS-1$
@@ -192,7 +201,8 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         concurrentDwn.setSelected(samplerBase.getPropertyAsBoolean(HTTPSamplerBase.CONCURRENT_DWN));
         concurrentPool.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.CONCURRENT_POOL));
         useMD5.setSelected(samplerBase.getPropertyAsBoolean(HTTPSamplerBase.MD5, false));
-        embeddedRE.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.EMBEDDED_URL_RE, ""));//$NON-NLS-1$
+        embeddedAllowRE.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.EMBEDDED_URL_RE, ""));//$NON-NLS-1$
+        embeddedExcludeRE.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.EMBEDDED_URL_EXCLUDE_RE, ""));//$NON-NLS-1$
         sourceIpAddr.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.IP_SOURCE)); //$NON-NLS-1$
         sourceIpType.setSelectedIndex(
                 samplerBase.getPropertyAsInt(HTTPSamplerBase.IP_SOURCE_TYPE,
@@ -294,20 +304,31 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         });
         concurrentPool = new JTextField(2); // 2 columns size
         concurrentPool.setMinimumSize(new Dimension(10, (int) concurrentPool.getPreferredSize().getHeight()));
-        concurrentPool.setMaximumSize(new Dimension(30, (int) concurrentPool.getPreferredSize().getHeight()));
+        concurrentPool.setMaximumSize(new Dimension(60, (int) concurrentPool.getPreferredSize().getHeight()));
 
-        final JPanel embeddedRsrcPanel = new HorizontalPanel();
+        final JPanel embeddedRsrcPanel = new JPanel(new MigLayout());
         embeddedRsrcPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_testing_retrieve_title"))); // $NON-NLS-1$
         embeddedRsrcPanel.add(retrieveEmbeddedResources);
         embeddedRsrcPanel.add(concurrentDwn);
-        embeddedRsrcPanel.add(concurrentPool);
+        embeddedRsrcPanel.add(concurrentPool, "wrap");
 
-        // Embedded URL match regex
-        embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),20); // $NON-NLS-1$
-        embeddedRsrcPanel.add(embeddedRE);
+        // Embedded URL match regex to allow
+        embeddedAllowRE = addTextFieldWithLabel(embeddedRsrcPanel, JMeterUtils.getResString("web_testing_embedded_url_pattern")); // $NON-NLS-1$
+
+        // Embedded URL match regex to exclude
+        embeddedExcludeRE = addTextFieldWithLabel(embeddedRsrcPanel, JMeterUtils.getResString("web_testing_embedded_url_exclude_pattern")); // $NON-NLS-1$
 
         return embeddedRsrcPanel;
+    }
+
+    private JTextField addTextFieldWithLabel(JPanel panel, String labelText) {
+        JLabel label = new JLabel(labelText); // $NON-NLS-1$
+        JTextField field = new JTextField(100);
+        label.setLabelFor(field);
+        panel.add(label);
+        panel.add(field, "span");
+        return field;
     }
 
     protected JPanel createSourceAddrPanel() {
@@ -343,17 +364,10 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     }
 
     private void enableConcurrentDwn(final boolean enable) {
-        if (enable) {
-            concurrentDwn.setEnabled(true);
-            embeddedRE.setEnabled(true);
-            if (concurrentDwn.isSelected()) {
-                concurrentPool.setEnabled(true);
-            }
-        } else {
-            concurrentDwn.setEnabled(false);
-            concurrentPool.setEnabled(false);
-            embeddedRE.setEnabled(false);
-        }
+        concurrentDwn.setEnabled(enable);
+        embeddedAllowRE.setEnabled(enable);
+        embeddedExcludeRE.setEnabled(enable);
+        concurrentPool.setEnabled(concurrentDwn.isSelected() && enable);
     }
 
     /**

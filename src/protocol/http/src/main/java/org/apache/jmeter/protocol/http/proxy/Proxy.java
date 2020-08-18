@@ -32,6 +32,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,9 @@ import org.slf4j.LoggerFactory;
  * JMeter test plan.
  */
 public class Proxy extends Thread {
+    // Mime-types of resources, that are not HTML and not binary that should be skipped on form parsing in JSoup
+    private static final List<String> NOT_HTML_TEXT_TYPES = Arrays.asList("application/javascript", "application/json", "text/javascript");
+
     private static final Logger log = LoggerFactory.getLogger(Proxy.class);
 
     private static final byte[] CRLF_BYTES = { 0x0d, 0x0a };
@@ -595,9 +599,15 @@ public class Proxy extends Thread {
         FormCharSetFinder finder = new FormCharSetFinder();
         if (SampleResult.isBinaryType(result.getContentType())) {
             if (log.isDebugEnabled()) {
-                log.debug("Will not guess encoding of url:{} as it's binary", result.getUrlAsString());
+                log.debug("Will not guess encoding of URL: {} as it's binary", result.getUrlAsString());
             }
             return; // no point parsing anything else, e.g. GIF ...
+        }
+        if (isNotHtmlType(result.getContentType())) {
+            if (log.isDebugEnabled()) {
+                log.debug("Will not guess encoding of URL: {} as it's not HTML", result.getUrlAsString());
+            }
+            return; // None HTML types have been crashing JSoup parser, so return here early
         }
         try {
             finder.addFormActionsAndCharSet(result.getResponseDataAsString(), formEncodings, pageEncoding);
@@ -607,6 +617,15 @@ public class Proxy extends Thread {
                 log.debug("{} Unable to parse response, could not find any form character set encodings for url:{}", port, result.getUrlAsString());
             }
         }
+    }
+
+    private boolean isNotHtmlType(String contentType) {
+        for (String mimeType: NOT_HTML_TEXT_TYPES) {
+            if (contentType.startsWith(mimeType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getUrlWithoutQuery(URL url) {

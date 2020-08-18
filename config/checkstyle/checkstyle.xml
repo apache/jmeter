@@ -68,6 +68,12 @@
     <property name="fileExtensions" value="java, kt, kts, groovy"/>
   </module>
 
+  <module name="LineLength">
+    <!-- TODO: reduce this to 120 -->
+    <property name="max" value="160"/>
+    <property name="fileExtensions" value="java, kt, kts, groovy"/>
+  </module>
+
   <module name="TreeWalker">
 
     <!-- Annotations -->
@@ -177,10 +183,6 @@
     <!-- size -->
     <module name="AnonInnerLength">
       <property name="max" value="45"/>
-    </module>
-    <module name="LineLength">
-      <!-- TODO: reduce this to 120 -->
-      <property name="max" value="160"/>
     </module>
 
     <!-- whitespace -->
