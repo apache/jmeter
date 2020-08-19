@@ -63,9 +63,13 @@ Summary
 <ch_title>Core improvements</ch_title>
 <ch_title>Test Plan</ch_title>
 <ch_title>Scripting / Debugging enhancements</ch_title>
-<ch_title>UX improvements</ch_title>
 <ch_title>Functions</ch_title>
 -->
+<ch_title>UX improvements</ch_title>
+
+<p>The splash screen is now application-modal rather than system-modal, so it does not block other
+applications when JMeter is starting up.</p>
+
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
