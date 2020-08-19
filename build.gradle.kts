@@ -506,6 +506,11 @@ allprojects {
                     exceptionFormat = TestExceptionFormat.FULL
                     showStandardStreams = true
                 }
+
+                outputs.cacheIf("test outcomes sometimes depends on third-party systems, so we should not cache it for now") {
+                    false
+                }
+
                 // Pass the property to tests
                 fun passProperty(name: String, default: String? = null) {
                     val value = System.getProperty(name) ?: default
