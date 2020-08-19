@@ -79,7 +79,7 @@ Easy correlation through ability to extract data from most popular response form
 - Several load statistics can be chosen with **pluggable tiers**.
 - Data analysis and **visualization plugins** allow great extensibility and personalization.
 - Functions can be used to provide dynamic input to a test or provide data manipulation.
-- Easy Continuous Integration via 3rd party Open Source libraries for Maven, Gradle and Jenkins.
+- Easy Continuous Integration via 3rd party Open Source libraries for Maven, Gradle, and Jenkins.
 
 ## The Latest Version
 
@@ -107,7 +107,7 @@ The following requirements exist for running Apache JMeter:
 
 - Java Compiler (*OPTIONAL*):
 
-  A Java compiler is not needed since the distribution cludes a
+  A Java compiler is not needed since the distribution includes a
   precompiled Java binary archive.
   > **Note** that a compiler is required to build plugins for Apache JMeter.
 
@@ -126,7 +126,7 @@ The following requirements exist for running Apache JMeter:
 
 ### Windows
 
-For Windows there are also some other scripts which you can drag-and-drop
+For Windows, there are also some other scripts which you can drag-and-drop
 a JMX file onto:
 
 - `jmeter-n.cmd` - runs the file as a non-GUI test
@@ -200,7 +200,7 @@ so it would remove clustom plugins should you have them installed.
 ./gradlew createDist
 ```
 
-Alternatively you could get Gradle to start the GUI:
+Alternatively, you could get Gradle to start the GUI:
 
 ```sh
 ./gradlew runGui
@@ -247,7 +247,7 @@ Export Administration Regulations, Section 740.13) for both object
 code and source code.
 
 The following provides more details on the included software that
-may be subject to export controls on cryptographic software:
+maybe subject to export controls on cryptographic software:
 
 Apache JMeter interfaces with the
 Java Secure Socket Extension (JSSE) API to provide
