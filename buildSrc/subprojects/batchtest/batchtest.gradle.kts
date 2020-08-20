@@ -17,7 +17,7 @@
  */
 
 dependencies {
-    compile("org.ajoberstar.grgit:grgit-gradle:3.1.1")
+    implementation("org.ajoberstar.grgit:grgit-gradle:3.1.1")
 }
 
 gradlePlugin {
