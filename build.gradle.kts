@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-import com.github.spotbugs.SpotBugsPlugin
-import com.github.spotbugs.SpotBugsTask
+import com.github.spotbugs.snom.SpotBugsTask
 import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.crlf.filter
@@ -147,7 +146,7 @@ val jacocoEnabled by extra {
 }
 
 // Do not enable spotbugs by default. Execute it only when -Pspotbugs is present
-val enableSpotBugs = props.bool("spotbugs", default = false)
+val enableSpotBugs = props.bool("spotbugs", default = true)
 val ignoreSpotBugsFailures by props()
 val skipCheckstyle by props()
 val skipAutostyle by props()
@@ -239,7 +238,7 @@ if (enableSpotBugs) {
         sonarqube {
             properties {
                 spotBugTasks.configureEach {
-                    add("sonar.java.spotbugs.reportPaths", reports.xml.destination.toString())
+                    add("sonar.java.spotbugs.reportPaths", reports.named("xml").get().destination.toString())
                 }
             }
         }
@@ -341,11 +340,11 @@ allprojects {
                 }
             }
         }
-        apply<SpotBugsPlugin>()
+        apply(plugin = "com.github.spotbugs")
 
         spotbugs {
-            toolVersion = "spotbugs".v
-            isIgnoreFailures = ignoreSpotBugsFailures
+            toolVersion.set("spotbugs".v)
+            ignoreFailures.set(ignoreSpotBugsFailures)
         }
 
         if (!skipAutostyle) {
@@ -527,10 +526,7 @@ allprojects {
                     description = "$description (skipped by default, to enable it add -Dspotbugs)"
                 }
                 reports {
-                    html.isEnabled = reportsForHumans()
-                    xml.isEnabled = !reportsForHumans()
-                    // This is for Sonar
-                    xml.isWithMessages = true
+                    create(if (reportsForHumans()) "html" else "xml")
                 }
                 enabled = enableSpotBugs
             }
