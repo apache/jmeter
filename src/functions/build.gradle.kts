@@ -17,7 +17,7 @@
 
 dependencies {
     api(project(":src:components"))
-    testCompile(project(":src:components", "testClasses"))
+    testImplementation(project(":src:core", "testClasses"))
 
     implementation("org.mozilla:rhino")
     implementation("commons-codec:commons-codec")
