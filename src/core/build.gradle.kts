@@ -22,7 +22,7 @@ plugins {
 dependencies {
     api(project(":src:launcher"))
     api(project(":src:jorphan"))
-    testCompile(project(":src:jorphan", "testClasses"))
+    testImplementation(project(":src:jorphan", "testClasses"))
 
     api("bsf:bsf") {
         because("protected BSFManager BSFTestElement#getManager()")
