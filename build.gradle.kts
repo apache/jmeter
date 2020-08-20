@@ -320,8 +320,14 @@ allprojects {
             }
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {
+                val checkstyleTasks = tasks.withType<Checkstyle>()
+                checkstyleTasks.configureEach {
+                    // Checkstyle 8.26 does not need classpath, see https://github.com/gradle/gradle/issues/14227
+                    classpath = files()
+                }
+
                 tasks.register("checkstyleAll") {
-                    dependsOn(tasks.withType<Checkstyle>())
+                    dependsOn(checkstyleTasks)
                 }
                 tasks.register("checkstyle") {
                     group = LifecycleBasePlugin.VERIFICATION_GROUP
