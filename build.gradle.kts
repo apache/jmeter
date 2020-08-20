@@ -146,7 +146,7 @@ val jacocoEnabled by extra {
 }
 
 // Do not enable spotbugs by default. Execute it only when -Pspotbugs is present
-val enableSpotBugs = props.bool("spotbugs", default = true)
+val enableSpotBugs = props.bool("spotbugs", default = false)
 val ignoreSpotBugsFailures by props()
 val skipCheckstyle by props()
 val skipAutostyle by props()
