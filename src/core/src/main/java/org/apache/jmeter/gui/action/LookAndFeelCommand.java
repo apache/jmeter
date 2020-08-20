@@ -95,7 +95,7 @@ public class LookAndFeelCommand extends AbstractAction {
     static {
         if (System.getProperty("darklaf.decorations") == null) {
             System.setProperty("darklaf.decorations", "false");
-        } else if ("true".equals(System.getProperty("darklaf.allowNativeCode"))) {
+        } else if (Boolean.getBoolean("darklaf.allowNativeCode")) {
             // darklaf.allowNativeCode=true is required for darklaf.decorations=true to work.
             System.setProperty("darklaf.decorations", "true");
         }
