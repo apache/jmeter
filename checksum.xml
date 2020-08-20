@@ -173,6 +173,9 @@
     <dependency group='de.marcphilipp.gradle' module='nexus-publish-plugin' version='0.4.0'>
       <sha512>37EC6DFBDDD0458A2A341E371D038B3B0A25AB2F9006B295EBCF3BDE873A8D02C8CDAA6C69D875500F67593C618E8EF62C0269FB2F7F527A1367A7D6B8EA3CBE</sha512>
     </dependency>
+    <dependency group='gradle.plugin.com.github.spotbugs.snom' module='spotbugs-gradle-plugin' version='4.5.0'>
+      <sha512>36557C04B8FC7DC446B5FBDD6383A1B7281708B424C3039E7EC11807F3BB9A5E2764BE4BEC1D717C38595B12D8B291CB2A002D85B5E79DC9A9A4CBD27C58C7BB</sha512>
+    </dependency>
     <dependency group='gradle.plugin.com.github.spotbugs' module='spotbugs-gradle-plugin' version='1.6.10'>
       <sha512>E7486B32EF6C9C14FE879814DA5F06CA6ECABF47195063A93E6FC8CD10119244C5A7BC3C71A4760CCE3AFFA9E9736336D345D8ED84EB65153C15683FA6529D92</sha512>
     </dependency>

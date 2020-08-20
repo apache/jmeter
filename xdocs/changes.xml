@@ -134,6 +134,7 @@ applications when JMeter is starting up.</p>
     <li><pr>609</pr>Make use of newer API for darklaf installation. Jannis Weis</li>
     <li><pr>612</pr>Correct typos in <code>README.me</code>. Based on patches by Pooja Chandak (poojachandak002 at gmail.com)</li>
     <li><pr>613</pr>Add documentation for Darklaf properties. Jannis Weis</li>
+    <li>Update SpotBugs to 4.1.2 (from 4.1.1), upgrade spotbugs-gradle-plugin to 4.5.0 (from 2.0.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
