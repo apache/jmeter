@@ -462,21 +462,17 @@ allprojects {
                 options.encoding = "UTF-8"
             }
             withType<ProcessResources>().configureEach {
-                from(source) {
-                    include("**/*.properties")
-                    filteringCharset = "UTF-8"
-                    // apply native2ascii conversion since Java 8 expects properties to have ascii symbols only
-                    filter(org.apache.tools.ant.filters.EscapeUnicode::class)
-                    filter(LineEndings.LF)
-                }
-                // Text-like resources are normalized to LF (just for consistency purposes)
-                // This makes to produce exactly the same jar files no matter which OS is used for the build
-                from(source) {
-                    include("**/*.dtd")
-                    include("**/*.svg")
-                    include("**/*.txt")
-                    filteringCharset = "UTF-8"
-                    filter(LineEndings.LF)
+                filteringCharset = "UTF-8"
+                eachFile {
+                    if (name.endsWith(".properties")) {
+                        filteringCharset = "UTF-8"
+                        // apply native2ascii conversion since Java 8 expects properties to have ascii symbols only
+                        filter(org.apache.tools.ant.filters.EscapeUnicode::class)
+                        filter(LineEndings.LF)
+                    } else if (name.endsWith(".dtd") || name.endsWith(".svg") ||
+                        name.endsWith(".txt")) {
+                        filter(LineEndings.LF)
+                    }
                 }
             }
             afterEvaluate {
