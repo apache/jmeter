@@ -187,11 +187,15 @@ sonarqube {
     }
 }
 
-fun SonarQubeProperties.add(name: String, value: String) {
-    properties.getOrPut(name) { mutableSetOf<String>() }
+fun SonarQubeProperties.add(name: String, valueProvider: () -> String) {
+    properties.getOrPut(name) { mutableSetOf<Any>() }
         .also {
             @Suppress("UNCHECKED_CAST")
-            (it as MutableCollection<String>).add(value)
+            (it as MutableCollection<Any>).add(object {
+                // SonarQube calls toString when converting properties to values
+                // (see SonarQubeProperties), so we use that to emulate "lazy properties"
+                override fun toString() = valueProvider()
+            })
         }
 }
 
@@ -238,7 +242,11 @@ if (enableSpotBugs) {
         sonarqube {
             properties {
                 spotBugTasks.configureEach {
-                    add("sonar.java.spotbugs.reportPaths", reports.named("xml").get().destination.toString())
+                    add("sonar.java.spotbugs.reportPaths") {
+                        // Note: report is created with lower-case xml, and then
+                        // the created entry MUST be retrieved as upper-case XML
+                        reports.named("XML").get().destination.toString()
+                    }
                 }
             }
         }
@@ -528,7 +536,11 @@ allprojects {
                     description = "$description (skipped by default, to enable it add -Dspotbugs)"
                 }
                 reports {
-                    create(if (reportsForHumans()) "html" else "xml")
+                    // xml goes for SonarQube, so we always create it just in case
+                    create("xml")
+                    if (reportsForHumans()) {
+                        create("html")
+                    }
                 }
                 enabled = enableSpotBugs
             }
