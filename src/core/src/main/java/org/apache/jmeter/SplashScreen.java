@@ -92,9 +92,7 @@ public class SplashScreen extends JDialog {
      * Show screen
      */
     public void showScreen() {
-        SwingUtilities.invokeLater(() -> {
-            setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> setVisible(true));
     }
 
     /**
