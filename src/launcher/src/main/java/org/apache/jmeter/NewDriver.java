@@ -85,6 +85,9 @@ public final class NewDriver {
                 tmpDir = userDir.getAbsoluteFile().getParent();
             }
         }
+        if (tmpDir == null) {
+            tmpDir = System.getenv("JMETER_HOME");
+        }
         JMETER_INSTALLATION_DIRECTORY=tmpDir;
 
         /*
