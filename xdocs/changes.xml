@@ -182,6 +182,7 @@ applications when JMeter is starting up.</p>
 
 <h3>Documentation</h3>
 <ul>
+    <li><pr>571</pr>Correct documented name of generated CA when using proxy script recorder. Part of a bigger PR. Vincent Daburon (vdaburon at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -215,6 +216,7 @@ applications when JMeter is starting up.</p>
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
   <li>Till Neunast (https://github.com/tilln)</li>
   <li>Pooja Chandak (poojachandak002 at gmail.com)</li>
+  <li>Vincent Daburon (vdaburon at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
