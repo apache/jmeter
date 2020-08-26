@@ -166,7 +166,9 @@ public class CorrelationExtractor {
             creatorData.setParameterValue(parameterValue);
             creatorData.setSampleResult(sampleResult);
             createdExtractor = createExtractor(creatorData);
-        } else {
+        }
+        // check no extractor was created, if no then try to create Regex Extractor
+        if (createdExtractor == null) {
             // create Regex extractor which matches by name and value both
             // More accurate than Boundary extractor which matches by value only
             log.debug("Try to create Regex extractor for parameters in response of {}", sampleResult.getSampleLabel());
@@ -342,7 +344,7 @@ public class CorrelationExtractor {
         } else {
             // show error to user if no extractors could be created for the selected
             // parameters
-            JMeterUtils.reportErrorToUser("No Response data found. Make sure you have recorded the script and not opened it.",
+            JMeterUtils.reportErrorToUser("No extractor could be created for the selected parameters. Could not correlate the script.",
                     "Failure");
         }
     }

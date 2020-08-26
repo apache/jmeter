@@ -19,6 +19,8 @@ package org.apache.jmeter.protocol.http.correlation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.jmeter.extractor.RegexExtractor;
 import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
@@ -97,6 +99,9 @@ public class CreateRegexExtractor implements CreateExtractorInterface {
             for (int i = parametersArray.length - 1; i >= 0; i--) {
                 if (parametersArray[i].contains(REGEX_EXPRESSION)) {
                     String resultString = parameterName + parametersArray[i];
+                    // escape the regex special characters
+                    resultString = Stream.of(resultString.split(Pattern.quote(REGEX_EXPRESSION)))
+                            .map(elem -> escapeSpecialRegexChars(elem)).collect(Collectors.joining(REGEX_EXPRESSION));
                     regularExtractor = new RegexExtractorData(resultString.trim(), parameter,
                             sampleResult.getSampleLabel(), ONE, GROUP_NUMBER, false);
                     return regularExtractor;
@@ -104,6 +109,11 @@ public class CreateRegexExtractor implements CreateExtractorInterface {
             }
         }
         return regularExtractor;
+    }
+
+    private static String escapeSpecialRegexChars(String str) {
+        Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
+        return SPECIAL_REGEX_CHARS.matcher(str).replaceAll("\\\\$0");
     }
 
     /**
@@ -152,23 +162,21 @@ public class CreateRegexExtractor implements CreateExtractorInterface {
      */
     @Override
     public ExtractorData createExtractor(ExtractorCreatorData extractorCreatorData) {
-        log.debug("Create ExtractorData data from ExtractorCreatorData "+ extractorCreatorData);
+        log.debug("Create ExtractorData data from ExtractorCreatorData " + extractorCreatorData);
         StringBuilder regexBuffer = new StringBuilder();
         SampleResult sampleResult = extractorCreatorData.getSampleResult();
         String parameter = extractorCreatorData.getParameter();
         String parameterValue = extractorCreatorData.getParameterValue();
         // Create a regex to find the parameter with name and value
         // e.g (name, value) = (_csrf, tokenvalue)
-        // regex = ^(.*?)_csrf(.*?)tokenvalue(.*?)$
+        // regex = (.{0,5}\Q_csrf\E.*?\Qtokenvalue\E(.{0,5}
         if (parameter.contains(PARANTHESES_OPEN)) {
             // get parameter's real name if its alias is provided
             String parameterName = CorrelationFunction.extractVariable(parameter);
-            String regex = START_OF_LINE + REGEX_EXPRESSION + Pattern.quote(parameterName) + REGEX_EXPRESSION
-                    + Pattern.quote(parameterValue) + REGEX_EXPRESSION + END_OF_LINE;
+            String regex = "(.{0,5}" + Pattern.quote(parameterName) + ".*?" + Pattern.quote(parameterValue) + ".{0,5})";
             regexBuffer.append(regex);
         } else {
-            String regex = START_OF_LINE + REGEX_EXPRESSION + Pattern.quote(parameter) + REGEX_EXPRESSION
-                    + Pattern.quote(parameterValue) + REGEX_EXPRESSION + END_OF_LINE;
+            String regex = "(.{0,5}" + Pattern.quote(parameter) + ".*?" + Pattern.quote(parameterValue) + ".{0,5})";
             regexBuffer.append(regex);
         }
         // create pattern matcher to match the regex created above in MULTILINE mode
@@ -181,8 +189,8 @@ public class CreateRegexExtractor implements CreateExtractorInterface {
     /**
      * Create the Regex Extractor TestElement
      *
-     * @param extractordata   ExtractorData object.
-     * @param testElement TestElement object.
+     * @param extractordata ExtractorData object.
+     * @param testElement   TestElement object.
      * @return Regex Extractor TestElement object.
      */
     @Override
