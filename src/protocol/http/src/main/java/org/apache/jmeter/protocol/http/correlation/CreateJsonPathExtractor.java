@@ -20,10 +20,10 @@ package org.apache.jmeter.protocol.http.correlation;
 import java.util.List;
 
 import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
-import org.apache.jmeter.functions.CorrelationFunction;
 import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.JsonPathExtractorData;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.CorrelationFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

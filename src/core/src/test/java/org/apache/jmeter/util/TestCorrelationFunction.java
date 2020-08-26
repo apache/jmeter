@@ -15,26 +15,20 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.functions;
+package org.apache.jmeter.util;
 
-/**
- * Utility class which contains utility methods to extract variables.
- *
- */
-public class CorrelationFunction {
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-    private static final String PARANTHESES_OPEN = "\\("; //$NON-NLS-1$
+public class TestCorrelationFunction {
 
-    private CorrelationFunction() {}
-
-    /**
-     * Extract argument from alias e.g token(1) to token
-     *
-     * @param argument alias
-     * @return argument name
-     */
-    public static String extractVariable(String argument) {
-        return argument.split(PARANTHESES_OPEN)[0];
+    @Test
+    public void testExtractVariable() {
+        String argument = "token(otp)(12)";
+        String result = "token(otp)";
+        Assertions.assertEquals(result, CorrelationFunction.extractVariable(argument));
+        argument = "token";
+        result = "token";
+        Assertions.assertEquals(result, CorrelationFunction.extractVariable(argument));
     }
-
 }

@@ -21,11 +21,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.jmeter.extractor.RegexExtractor;
-import org.apache.jmeter.functions.CorrelationFunction;
 import org.apache.jmeter.protocol.http.correlation.extractordata.ExtractorData;
 import org.apache.jmeter.protocol.http.correlation.extractordata.RegexExtractorData;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.CorrelationFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

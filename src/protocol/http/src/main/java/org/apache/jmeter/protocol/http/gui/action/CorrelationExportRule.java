@@ -29,7 +29,6 @@ import org.apache.jmeter.extractor.HtmlExtractor;
 import org.apache.jmeter.extractor.RegexExtractor;
 import org.apache.jmeter.extractor.XPath2Extractor;
 import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
-import org.apache.jmeter.functions.CorrelationFunction;
 import org.apache.jmeter.gui.CorrelationTableModel;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.AbstractActionWithNoRunningTest;
@@ -42,6 +41,7 @@ import org.apache.jmeter.protocol.http.correlation.rule.JsonExtractorCorrelation
 import org.apache.jmeter.protocol.http.correlation.rule.RegexExtractorCorrelationRule;
 import org.apache.jmeter.protocol.http.correlation.rule.XPath2ExtractorCorrelationRule;
 import org.apache.jmeter.protocol.http.gui.CorrelationExportRuleGui;
+import org.apache.jmeter.util.CorrelationFunction;
 
 public class CorrelationExportRule extends AbstractActionWithNoRunningTest {
 
