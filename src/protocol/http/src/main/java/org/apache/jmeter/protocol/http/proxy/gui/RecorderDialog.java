@@ -203,7 +203,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() instanceof JComboBox) {
-            JComboBox combo = (JComboBox) e.getSource();
+            JComboBox<?> combo = (JComboBox<?>) e.getSource();
             if(ProxyControlGui.HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
                 recorderGui.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
                 sampleNameFormat.setEnabled(httpSampleNamingMode.getSelectedIndex() == 3);
