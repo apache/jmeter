@@ -230,11 +230,11 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
     @Override
     public void keyReleased(KeyEvent e) {
         String fieldName = e.getComponent().getName();
-        if(fieldName.equals(ProxyControlGui.PREFIX_HTTP_SAMPLER_NAME)) {
+        if (fieldName.equals(ProxyControlGui.PREFIX_HTTP_SAMPLER_NAME)) {
             recorderGui.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
         } else if (fieldName.equals(ProxyControlGui.HTTP_SAMPLER_NAME_FORMAT)) {
             recorderGui.setSampleNameFormat(sampleNameFormat.getText());
-        } else if(fieldName.equals(ProxyControlGui.PROXY_PAUSE_HTTP_SAMPLER)) {
+        } else if (fieldName.equals(ProxyControlGui.PROXY_PAUSE_HTTP_SAMPLER)) {
             try {
                 Long.parseLong(proxyPauseHTTPSample.getText());
             } catch (NumberFormatException nfe) {
