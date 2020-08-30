@@ -73,12 +73,6 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     }
 
 
-    /**
-     *
-     */
-    /**
-     *
-     */
     public AbstractSamplerCreator() {
         super();
     }
@@ -95,6 +89,11 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
      */
     protected static void incrementRequestNumber() {
         incrementRequestNumberAndGet();
+    }
+
+    @Override
+    public void setCounter(int value) {
+        REQUEST_NUMBER.set(value);
     }
 
     /**

@@ -196,6 +196,17 @@ Defaults to: <code>true</code>
     Defaults to: <code>500</code></property>
 </properties>
 </section>
+<section name="&sect-num;.4.1 Darklaf configuration" anchor="darklaf_config">
+<properties>
+    <property name="darklaf.decorations">
+        Enables custom window chrome when using a Darklaf Look And Feel.
+        Defaults to: <code>false</code></property>
+    <property name="darklaf.unifiedMenuBar">
+        Enables the unified menubar on Windows when using a Darklaf Look and Feel.<br/>
+        This property only has an effect if <code>darklaf.native</code> is <code>true</code>.
+        Defaults to: <code>true</code></property>
+</properties>
+</section>
 <section name="&sect-num;.5 Toolbar display" anchor="toolbar_display">
 <properties>
 <property name="jmeter.toolbar.icons">

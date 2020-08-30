@@ -32,6 +32,10 @@ pluginManagement {
     }
 }
 
+plugins {
+    `gradle-enterprise`
+}
+
 // This is the name of a current project
 // Note: it cannot be inferred from the directory name as developer might clone JMeter to jmeter_tmp folder
 rootProject.name = "jmeter"
@@ -92,6 +96,18 @@ if (property("localReleasePlugins").toBool(nullAs = false, blankAs = true, defau
         includeBuild("../vlsi-release-plugins")
 }
 
+val isCiServer = System.getenv().containsKey("CI")
+
+if (isCiServer) {
+    gradleEnterprise {
+        buildScan {
+            termsOfServiceUrl = "https://gradle.com/terms-of-service"
+            termsOfServiceAgree = "yes"
+            tag("CI")
+        }
+    }
+}
+
 // Checksum plugin sources can be validated at https://github.com/vlsi/vlsi-release-plugins
 buildscript {
     dependencies {
@@ -107,6 +123,8 @@ buildscript {
 
 // Note: we need to verify the checksum for checksum-dependency-plugin itself
 val expectedSha512 = mapOf(
+    "F7040C571C2A2727F2EED4EA772F5A7C5D9CB393828B7A2331F7167E467429486F5F3E9423883FE9A6D652FFB0484EAE722CDFB46D97180209BCBEEBF9C25DE3"
+            to "gradle-enterprise-gradle-plugin-3.4.jar",
     "43BC9061DFDECA0C421EDF4A76E380413920E788EF01751C81BDC004BD28761FBD4A3F23EA9146ECEDF10C0F85B7BE9A857E9D489A95476525565152E0314B5B"
             to "bcpg-jdk15on-1.62.jar",
     "2BA6A5DEC9C8DAC2EB427A65815EB3A9ADAF4D42D476B136F37CD57E6D013BF4E9140394ABEEA81E42FBDB8FC59228C7B85C549ED294123BF898A7D048B3BD95"
@@ -137,7 +155,7 @@ val violations =
         .joinToString("\n  ") { (file, sha512) -> "SHA-512(${file.name}) = $sha512 ($file)" }
 
 if (violations.isNotBlank()) {
-    throw GradleException("Buildscript classpath has permitted files that were not explicitly permitted:\n  $violations")
+    throw GradleException("Buildscript classpath has files that were not explicitly permitted:\n  $violations")
 }
 
 apply(plugin = "com.github.vlsi.checksum-dependency")

@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-import com.github.spotbugs.SpotBugsPlugin
-import com.github.spotbugs.SpotBugsTask
+import com.github.spotbugs.snom.SpotBugsTask
 import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.crlf.filter
@@ -188,11 +187,15 @@ sonarqube {
     }
 }
 
-fun SonarQubeProperties.add(name: String, value: String) {
-    properties.getOrPut(name) { mutableSetOf<String>() }
+fun SonarQubeProperties.add(name: String, valueProvider: () -> String) {
+    properties.getOrPut(name) { mutableSetOf<Any>() }
         .also {
             @Suppress("UNCHECKED_CAST")
-            (it as MutableCollection<String>).add(value)
+            (it as MutableCollection<Any>).add(object {
+                // SonarQube calls toString when converting properties to values
+                // (see SonarQubeProperties), so we use that to emulate "lazy properties"
+                override fun toString() = valueProvider()
+            })
         }
 }
 
@@ -239,7 +242,11 @@ if (enableSpotBugs) {
         sonarqube {
             properties {
                 spotBugTasks.configureEach {
-                    add("sonar.java.spotbugs.reportPaths", reports.xml.destination.toString())
+                    add("sonar.java.spotbugs.reportPaths") {
+                        // Note: report is created with lower-case xml, and then
+                        // the created entry MUST be retrieved as upper-case XML
+                        reports.named("XML").get().destination.toString()
+                    }
                 }
             }
         }
@@ -321,8 +328,14 @@ allprojects {
             }
             val sourceSets: SourceSetContainer by project
             if (sourceSets.isNotEmpty()) {
+                val checkstyleTasks = tasks.withType<Checkstyle>()
+                checkstyleTasks.configureEach {
+                    // Checkstyle 8.26 does not need classpath, see https://github.com/gradle/gradle/issues/14227
+                    classpath = files()
+                }
+
                 tasks.register("checkstyleAll") {
-                    dependsOn(tasks.withType<Checkstyle>())
+                    dependsOn(checkstyleTasks)
                 }
                 tasks.register("checkstyle") {
                     group = LifecycleBasePlugin.VERIFICATION_GROUP
@@ -341,11 +354,11 @@ allprojects {
                 }
             }
         }
-        apply<SpotBugsPlugin>()
+        apply(plugin = "com.github.spotbugs")
 
         spotbugs {
-            toolVersion = "spotbugs".v
-            isIgnoreFailures = ignoreSpotBugsFailures
+            toolVersion.set("spotbugs".v)
+            ignoreFailures.set(ignoreSpotBugsFailures)
         }
 
         if (!skipAutostyle) {
@@ -457,21 +470,17 @@ allprojects {
                 options.encoding = "UTF-8"
             }
             withType<ProcessResources>().configureEach {
-                from(source) {
-                    include("**/*.properties")
-                    filteringCharset = "UTF-8"
-                    // apply native2ascii conversion since Java 8 expects properties to have ascii symbols only
-                    filter(org.apache.tools.ant.filters.EscapeUnicode::class)
-                    filter(LineEndings.LF)
-                }
-                // Text-like resources are normalized to LF (just for consistency purposes)
-                // This makes to produce exactly the same jar files no matter which OS is used for the build
-                from(source) {
-                    include("**/*.dtd")
-                    include("**/*.svg")
-                    include("**/*.txt")
-                    filteringCharset = "UTF-8"
-                    filter(LineEndings.LF)
+                filteringCharset = "UTF-8"
+                eachFile {
+                    if (name.endsWith(".properties")) {
+                        filteringCharset = "UTF-8"
+                        // apply native2ascii conversion since Java 8 expects properties to have ascii symbols only
+                        filter(org.apache.tools.ant.filters.EscapeUnicode::class)
+                        filter(LineEndings.LF)
+                    } else if (name.endsWith(".dtd") || name.endsWith(".svg") ||
+                        name.endsWith(".txt")) {
+                        filter(LineEndings.LF)
+                    }
                 }
             }
             afterEvaluate {
@@ -506,6 +515,11 @@ allprojects {
                     exceptionFormat = TestExceptionFormat.FULL
                     showStandardStreams = true
                 }
+
+                outputs.cacheIf("test outcomes sometimes depends on third-party systems, so we should not cache it for now") {
+                    false
+                }
+
                 // Pass the property to tests
                 fun passProperty(name: String, default: String? = null) {
                     val value = System.getProperty(name) ?: default
@@ -522,10 +536,11 @@ allprojects {
                     description = "$description (skipped by default, to enable it add -Dspotbugs)"
                 }
                 reports {
-                    html.isEnabled = reportsForHumans()
-                    xml.isEnabled = !reportsForHumans()
-                    // This is for Sonar
-                    xml.isWithMessages = true
+                    // xml goes for SonarQube, so we always create it just in case
+                    create("xml")
+                    if (reportsForHumans()) {
+                        create("html")
+                    }
                 }
                 enabled = enableSpotBugs
             }

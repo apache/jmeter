@@ -385,18 +385,26 @@ public class JMeter implements JMeterPlugin {
         SplashScreen splash = new SplashScreen();
         splash.showScreen();
         splash.setProgress(10);
+        log.debug("Apply HiDPI on fonts");
         JMeterUtils.applyHiDPIOnFonts();
+        splash.setProgress(20);
+        log.debug("Configure PluginManager");
         PluginManager.install(this, true);
-
-        JMeterTreeModel treeModel = new JMeterTreeModel();
         splash.setProgress(30);
+        log.debug("Setup tree");
+        JMeterTreeModel treeModel = new JMeterTreeModel();
         JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
         final ActionRouter instance = ActionRouter.getInstance();
+        splash.setProgress(40);
+        log.debug("populate command map");
         instance.populateCommandMap();
         splash.setProgress(60);
         treeLis.setActionHandler(instance);
+        log.debug("init instance");
+        splash.setProgress(70);
         GuiPackage.initInstance(treeLis, treeModel);
         splash.setProgress(80);
+        log.debug("constructing main frame");
         MainFrame main = new MainFrame(treeModel, treeLis);
         splash.setProgress(100);
         ComponentUtil.centerComponentInWindow(main, 80);

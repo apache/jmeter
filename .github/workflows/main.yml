@@ -22,10 +22,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 14
-    - name: 'Test'
-      shell: bash
-      run: |
-        ./gradlew --no-parallel build -x distTar -x distTarSource
+    - uses: burrunan/gradle-cache-action@v1
+      name: Test
+      with:
+        job-id: jdk14
+        multi-cache-enabled: false
+        arguments: --scan --no-parallel build -x distTar -x distTarSource
 
   mac:
     name: 'macOS (JDK 14)'
@@ -38,6 +40,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 14
-    - name: 'Test'
-      run: |
-        ./gradlew --no-parallel build -x distTar -x distTarSource -Dskip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
+    - uses: burrunan/gradle-cache-action@v1
+      name: Test
+      with:
+        job-id: jdk14
+        multi-cache-enabled: false
+        arguments: --scan --no-parallel build -x distTar -x distTarSource -Dskip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true

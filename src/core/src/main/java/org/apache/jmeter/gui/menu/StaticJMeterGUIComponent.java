@@ -41,6 +41,7 @@ import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.threads.gui.AbstractThreadGroupGui;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
@@ -100,7 +101,7 @@ public class StaticJMeterGUIComponent implements JMeterGUIComponent {
             group = MenuFactory.SAMPLERS;
         } else if (Timer.class.isAssignableFrom(c) || AbstractTimerGui.class.isAssignableFrom(c)) {
             group = MenuFactory.TIMERS;
-        } else if (AbstractThreadGroupGui.class.isAssignableFrom(c) || AbstractThreadGroupGui.class.isAssignableFrom(c)) {
+        } else if (ThreadGroup.class.isAssignableFrom(c) || AbstractThreadGroupGui.class.isAssignableFrom(c)) {
             group = MenuFactory.THREADS;
         } else {
             throw new IllegalArgumentException("Unknown group for class " + c);

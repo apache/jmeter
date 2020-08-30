@@ -36,7 +36,7 @@
     <note><b>These builds should not be used in production.</b></note>
 
     <h2>Last Build status on Jenkins</h2>
-    <a href='https://builds.apache.org/job/JMeter-trunk/'><img src='https://builds.apache.org/buildStatus/icon?job=JMeter-trunk' /></a>
+    <a href='https://ci-builds.apache.org/job/JMeter/job/JMeter-trunk/'><img src='https://ci-builds.apache.org/buildStatus/icon?job=JMeter%2FJMeter-trunk'/></a>
 
     <h2>Last Quality Report on Sonar</h2>
     <a href="https://sonarcloud.io/dashboard?id=JMeter">Apache JMeter quality report</a>
@@ -45,7 +45,7 @@
     <p>JMeter CI builds are currently run by Jenkins and Buildbot</p>
     <p>These are located at:
     <ul>
-    <li><a href="https://builds.apache.org/job/JMeter-trunk/lastSuccessfulBuild/artifact/src/dist/build/distributions/">Last Successful Jenkins build for JMeter-trunk</a></li>
+    <li><a href="https://ci-builds.apache.org/job/JMeter/job/JMeter-trunk/lastSuccessfulBuild/artifact/src/dist/build/distributions/">Last Successful Jenkins build for JMeter-trunk</a></li>
     <li><a href="http://ci.apache.org/projects/jmeter/nightlies/">Buildbot nightly builds for JMeter-trunk</a></li>
     <li><a href="https://repository.apache.org/content/repositories/snapshots/org/apache/jmeter/">Maven Snapshots (Buildbot nightly builds)</a></li>
     </ul>
@@ -55,10 +55,10 @@
 JMeter is distributed as a set of zip (or tar-gz) archive files as are the released versions.
 You can find the bundles:
 <ul>
-<li>apache-jmeter-{SVN revision}.zip - Bundle in ZIP format</li>
-<li>apache-jmeter-{SVN revision}.tgz - Bundle in TAR GZIP format</li>
-<li>apache-jmeter-{SVN revision}_src.zip - Sources in ZIP format</li>
-<li>apache-jmeter-{SVN revision}_src.tgz - Sources in TAR GZIP format</li>
+<li>{git revision}/apache-jmeter-{version}.zip - Bundle in ZIP format</li>
+<li>{git revision}/apache-jmeter-{version}.tgz - Bundle in TAR GZIP format</li>
+<li>{git revision}/apache-jmeter-{version}_src.zip - Sources in ZIP format</li>
+<li>{git revision}/apache-jmeter-{version}_src.tgz - Sources in TAR GZIP format</li>
 </ul>
 For each file you will also find a hash (MD5, SHA) that allows you to test its integrity.
 </p>
