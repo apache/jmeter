@@ -143,6 +143,7 @@ applications when JMeter is starting up.</p>
     <li>Update Apache commons-io to 2.7 (from 2.6)</li>
     <li>Update Apache commons-lang3 to 3.11 (from 3.10)</li>
     <li>Update Apache commons-net to 3.7 (from 3.6)</li>
+    <li>Update Apache commons-pool2 to 2.8.1 (from 2.8.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
