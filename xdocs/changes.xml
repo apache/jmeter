@@ -139,6 +139,7 @@ applications when JMeter is starting up.</p>
     <li>Update SpotBugs to 4.1.2 (from 4.1.1), upgrade spotbugs-gradle-plugin to 4.5.0 (from 2.0.0)</li>
     <li>Update org.sonarqube Gradle plugin to 3.0 (from 2.7.1)</li>
     <li>Update Apache ActiveMQ to 5.16.0 (from 5.15.11)</li>
+    <li>Update Bouncycastle to 1.66 (from 1.64)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
