@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.protocol.http.control.CacheManager.CacheEntry;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.junit.jupiter.api.Test;
@@ -281,8 +282,9 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
         assertTrue(this.cacheManager.inCache(url), "Should find valid entry");
         sleepTill(start + age / 10 + 10);
-        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
-        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry");
+        CacheEntry cachedEntry = getThreadCacheEntry(LOCAL_HOST);
+        assertNotNull(cachedEntry, "Should find entry");
+        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry. Found " + cachedEntry);
     }
 
     @Test
