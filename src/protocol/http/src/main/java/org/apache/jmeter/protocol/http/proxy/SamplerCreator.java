@@ -100,5 +100,5 @@ public interface SamplerCreator {
      *
      * @param value to be used
      */
-    default void setCounter(int value) {};
+    default void setCounter(int value) {}
 }
