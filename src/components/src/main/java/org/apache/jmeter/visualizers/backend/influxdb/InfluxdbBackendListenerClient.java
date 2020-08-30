@@ -177,15 +177,15 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         // ALL
         addMetric(transaction, metric.getTotal(), metric.getSentBytes(), metric.getReceivedBytes(),
                 TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
-                metric.getAllMaxTime(), allPercentiles.values(), metric::getAllPercentile);
+                metric.getAllMaxTime(), metric.getHits(), allPercentiles.values(), metric::getAllPercentile);
         // OK
-        addMetric(transaction, metric.getSuccesses(), null, null,
+        addMetric(transaction, metric.getSuccesses(), metric.getSentBytes(), metric.getReceivedBytes(),
                 TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
-                metric.getOkMaxTime(), okPercentiles.values(), metric::getOkPercentile);
+                metric.getOkMaxTime(), metric.getHits(), okPercentiles.values(), metric::getOkPercentile);
         // KO
-        addMetric(transaction, metric.getFailures(), null, null,
+        addMetric(transaction, metric.getFailures(), metric.getSentBytes(), metric.getReceivedBytes(),
                 TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
-                metric.getKoMaxTime(), koPercentiles.values(), metric::getKoPercentile);
+                metric.getKoMaxTime(), metric.getHits(), koPercentiles.values(), metric::getKoPercentile);
 
         metric.getErrors().forEach((err, count) -> addErrorMetric(transaction, err, count));
     }
@@ -208,15 +208,16 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     private void addMetric(String transaction, int count,
                            Long sentBytes, Long receivedBytes,
-                           String statut, double mean, double minTime, double maxTime,
+                           String status, double mean, double minTime, double maxTime,
+                           int hits,
                            Collection<Float> pcts, PercentileProvider percentileProvider) {
         if (count <= 0) {
             return;
         }
         StringBuilder tag = new StringBuilder(95);
         tag.append(TAG_APPLICATION).append(applicationName);
-        tag.append(TAG_STATUS).append(statut);
         tag.append(TAG_TRANSACTION).append(transaction);
+        tag.append(TAG_STATUS).append(status);
         tag.append(userTag);
 
         StringBuilder field = new StringBuilder(80);
@@ -230,6 +231,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         if (!Double.isNaN(maxTime)) {
             field.append(',').append(METRIC_MAX).append(maxTime);
         }
+        field.append(',').append(METRIC_HIT).append(hits);
         if (sentBytes != null) {
             field.append(',').append(METRIC_SENT_BYTES).append(sentBytes);
         }
@@ -301,7 +303,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                     samplerMetric.add(sampleResult);
                 }
                 SamplerMetric cumulatedMetrics = getSamplerMetricInfluxdb(CUMULATED_METRICS);
-                cumulatedMetrics.add(sampleResult);
+                cumulatedMetrics.addCumulated(sampleResult);
             }
         }
     }
