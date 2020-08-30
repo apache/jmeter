@@ -305,7 +305,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                     .replaceAll("#\\{counter([,}])", "{2$1");
         }
         if (isNumberRequests()) {
-            return getNumberedFormat(httpSampleNameMode, format);
+            return getNumberedFormat(httpSampleNameMode);
         }
         if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
             return "{0}{1}";
@@ -319,7 +319,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         return "{1}";
     }
 
-    private String getNumberedFormat(int httpSampleNameMode, String format) {
+    private String getNumberedFormat(int httpSampleNameMode) {
         if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
             return "{0}{1}-{2}";
         }
