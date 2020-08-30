@@ -164,7 +164,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         JTextField counterValue = new JTextField(10);
         labelSetCounter.setLabelFor(counterValue);
         JButton buttonSetCounter = new JButton(JMeterUtils.getResString("sample_creator_set_counter"));
-        buttonSetCounter.addActionListener(e -> Proxy.setCounter(Integer.valueOf(counterValue.getText())));
+        buttonSetCounter.addActionListener(e -> Proxy.setCounter(Integer.parseInt(counterValue.getText())));
         panel.add(labelSetCounter);
         panel.add(counterValue);
         panel.add(buttonSetCounter);
