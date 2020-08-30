@@ -145,6 +145,7 @@ applications when JMeter is starting up.</p>
     <li>Update Apache commons-net to 3.7 (from 3.6)</li>
     <li>Update Apache commons-pool2 to 2.8.1 (from 2.8.0)</li>
     <li>Update Apache commons-text to 1.9 (from 1.8)</li>
+    <li>Update equalsverifier to 3.4.2 (from 3.1.13)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
