@@ -185,8 +185,9 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                         .append("000000")
                         .append("\n"); //$NON-NLS-1$
             }
-
-            httpRequest.setEntity(new StringEntity(sb.toString(), StandardCharsets.UTF_8));
+            String data = sb.toString();
+            log.debug("Sending to influxdb:{}", data);
+            httpRequest.setEntity(new StringEntity(data, StandardCharsets.UTF_8));
             lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
                 @Override
                 public void completed(final HttpResponse response) {
