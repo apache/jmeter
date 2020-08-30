@@ -167,6 +167,7 @@ Summary
     <li><bug>64547</bug>Report/Dashboard: Ensure graphs Response codes per second is not broken by empty response code in SampleResult. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
     <li><bug>64617</bug>HTML report: In graph Response Time Percentiles Over Time 90,95,99th percentile correspond in reality to 0.90, 0.95 and 0.99 percentiles</li>
     <li>64553<bug>When using Transaction Controller, send Bytes and Received Bytes are displayed as 0 in the influxdb(BackendListener)</bug></li>
+    <li><bug>64624</bug>Use less aggressive escaping for JSON Strings in reports error messages</li>
 </ul>
 
 <h3>Documentation</h3>
