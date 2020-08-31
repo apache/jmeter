@@ -777,6 +777,11 @@ JMETER-SERVER</source>
     Add numeric suffix to Sampler names.<br/>
     defaults to: <code>true</code>
 </property>
+<property name="proxy.sampler_format">
+    Default format string for new samplers when <code>Use format string</code> is selected
+    as <code>naming scheme</code>.<br/>
+    Defaults to: <code>#{counter,number,000} - #{path} (#{name})</code>
+</property>
 <property name="proxy.excludes.suggested">
     List of URL patterns that will be added to URL Patterns to exclude.<br/>
     Separate multiple lines with <code>;</code><br/>

@@ -332,6 +332,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setRegexMatch(regexMatch.isSelected());
             model.setContentTypeInclude(contentTypeInclude.getText());
             model.setContentTypeExclude(contentTypeExclude.getText());
+            model.setHttpSampleNameFormat(httpSampleNameFormat.getText());
             TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
             if (nw == null) {
                 model.setTarget(null);
@@ -396,6 +397,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         regexMatch.setSelected(model.getRegexMatch());
         contentTypeInclude.setText(model.getContentTypeInclude());
         contentTypeExclude.setText(model.getContentTypeExclude());
+        httpSampleNameFormat.setText(model.getHttpSampleNameFormat());
 
         reinitializeTargetCombo();// Set up list of potential targets and
                                     // enable listener
