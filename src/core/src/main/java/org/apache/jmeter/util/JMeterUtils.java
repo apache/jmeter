@@ -189,15 +189,11 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static void loadJMeterProperties(String file) {
         Properties p = new Properties(System.getProperties());
-        InputStream is = null;
-        try {
-            File f = new File(file);
-            is = new FileInputStream(f);
+        try (InputStream is = new FileInputStream(new File(file))) {
             p.load(is);
         } catch (IOException e) {
-            try {
-                is = ClassLoader.getSystemResourceAsStream(
-                        "org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
+            try (InputStream is = ClassLoader.getSystemResourceAsStream(
+                        "org/apache/jmeter/jmeter.properties")) { // $NON-NLS-1$
                 if (is == null) {
                     throw new RuntimeException("Could not read JMeter properties file:" + file);
                 }
@@ -205,8 +201,6 @@ public class JMeterUtils implements UnitTestManager {
             } catch (IOException ex) {
                 throw new RuntimeException("Could not read JMeter properties file:" + file);
             }
-        } finally {
-            JOrphanUtils.closeQuietly(is);
         }
         appProperties = p;
     }
@@ -234,19 +228,15 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static Properties loadProperties(String file, Properties defaultProps) {
         Properties p = new Properties(defaultProps);
-        InputStream is = null;
-        try {
-            File f = new File(file);
-            is = new FileInputStream(f);
+        try (InputStream is = new FileInputStream(new File(file))) {
             p.load(is);
         } catch (IOException e) {
-            try {
-                final URL resource = JMeterUtils.class.getClassLoader().getResource(file);
-                if (resource == null) {
-                    log.warn("Cannot find {}", file);
-                    return defaultProps;
-                }
-                is = resource.openStream();
+            final URL resource = JMeterUtils.class.getClassLoader().getResource(file);
+            if (resource == null) {
+                log.warn("Cannot find {}", file);
+                return defaultProps;
+            }
+            try (InputStream is = resource.openStream()) {
                 if (is == null) {
                     log.warn("Cannot open {}", file);
                     return defaultProps;
@@ -256,8 +246,6 @@ public class JMeterUtils implements UnitTestManager {
                 log.warn("Error reading {} {}", file, ex.toString());
                 return defaultProps;
             }
-        } finally {
-            JOrphanUtils.closeQuietly(is);
         }
         return p;
     }
