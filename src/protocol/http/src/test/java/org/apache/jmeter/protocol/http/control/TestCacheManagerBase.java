@@ -335,8 +335,9 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     }
 
     private void assertInvalidEntry() throws Exception {
+        CacheEntry cachedEntry = getThreadCacheEntry(LOCAL_HOST);
         assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
-        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry");
+        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry. Found: " + cachedEntry + " at " + System.currentTimeMillis());
     }
 
     private void assertValidEntry() throws Exception {
@@ -345,9 +346,8 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     }
 
     private void assertNoSuchEntry() throws Exception {
-        CacheEntry cachedEntry = getThreadCacheEntry(LOCAL_HOST);
-        assertNull(cachedEntry, "Should not find entry");
-        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry. Found: " + cachedEntry + " at " + System.currentTimeMillis());
+        assertNull(getThreadCacheEntry(LOCAL_HOST), "Should not find entry");
+        assertFalse(this.cacheManager.inCache(url), "Should not find valid entry");
     }
 
     @Test
