@@ -86,7 +86,8 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     protected abstract void setRequestHeaders();
 
     protected void sleepTill(long deadline) {
-        while (System.currentTimeMillis() < deadline) {
+        long roundedToUpperSecond = Math.round(Math.ceil(deadline / 1000.0)) * 1000;
+        while (System.currentTimeMillis() < roundedToUpperSecond) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
