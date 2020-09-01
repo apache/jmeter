@@ -149,7 +149,7 @@ class SMIMEAssertion {
         AssertionResult res = new AssertionResult(name);
 
         try {
-            Store certs = s.getCertificates();
+            Store<?> certs = s.getCertificates();
             SignerInformationStore signers = s.getSignerInfos();
             Iterator<?> signerIt = signers.getSigners().iterator();
 
