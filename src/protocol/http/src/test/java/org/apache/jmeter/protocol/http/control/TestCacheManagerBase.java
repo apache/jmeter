@@ -283,7 +283,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         cacheResult(sampleResultOK);
         assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
         assertTrue(this.cacheManager.inCache(url), "Should find valid entry");
-        sleepTill(start + age / 10 + 10);
+        sleepTill(start + age / 10 + 1010);
         CacheEntry cachedEntry = getThreadCacheEntry(LOCAL_HOST);
         assertNotNull(cachedEntry, "Should find entry");
         assertFalse(this.cacheManager.inCache(url),
@@ -307,7 +307,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         cacheResult(sampleResultOK);
         assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
         assertTrue(this.cacheManager.inCache(url), "Should find valid entry");
-        sleepTill(start + age / 10 + 10);
+        sleepTill(start + age / 10 + 1010);
         assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
         assertFalse(this.cacheManager.inCache(url), "Should not find valid entry");
     }
