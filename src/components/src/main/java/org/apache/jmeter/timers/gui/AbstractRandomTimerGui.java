@@ -148,7 +148,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
      * {@inheritDoc}
      */
     @Override
-    abstract public String getLabelResource();
+    public abstract String getLabelResource();
 
     /**
      * Create implementation of RandomTimer
@@ -159,20 +159,20 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
     /**
      * @return String timer delay label key
      */
-    abstract protected String getTimerDelayLabelKey();
+    protected abstract String getTimerDelayLabelKey();
 
     /**
      * @return String timer range label key
      */
-    abstract protected String getTimerRangeLabelKey();
+    protected abstract String getTimerRangeLabelKey();
 
     /**
      * @return String default delay value
      */
-    abstract protected String getDefaultDelay();
+    protected abstract String getDefaultDelay();
 
     /**
      * @return String default range value
      */
-    abstract protected String getDefaultRange();
+    protected abstract String getDefaultRange();
 }
