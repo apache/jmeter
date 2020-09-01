@@ -4,8 +4,10 @@
   <ignored-keys />
   <trusted-keys>
     <trusted-key id='1c8d5ef0df2b70d4' group='cglib' />
+    <trusted-key id='ac107b386692dadd' group='com.amazonaws' />
     <trusted-key id='379ce192d401ab61' group='com.diffplug.durian' />
     <trusted-key id='c9fbaa83a8753994' group='com.fasterxml.jackson.core' />
+    <trusted-key id='9cd8549acf9bd0ce' group='com.fasterxml.jackson.dataformat' />
     <trusted-key id='4c00043bec5cb7cb' group='com.fifesoft' />
     <trusted-key id='af10873874630863' group='com.flipkart.zjsonpatch' />
     <trusted-key id='379ce192d401ab61' group='com.formdev' />
@@ -65,6 +67,7 @@
     <trusted-key id='6425559c47cc79c4' group='javax.servlet' />
     <trusted-key id='4044edf1bb73efea' group='jaxen' />
     <trusted-key id='528dc75aa68f0923' group='jcharts' />
+    <trusted-key id='72385ff0af338d52' group='joda-time' />
     <trusted-key id='85911f425ec61b51' group='junit' />
     <trusted-key id='efe8086f9e93774e' group='junit' />
     <trusted-key id='15c71c0a4e0b8edd' group='net.java.dev.jna' />
@@ -117,6 +120,7 @@
     <trusted-key id='c7bf26d0bb617866' group='org.eclipse.aether' />
     <trusted-key id='2d0e1fb8fe4b68b4' group='org.eclipse.jetty' />
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
+    <trusted-key id='d27d666cd88e42b4' group='org.elasticsearch.client' />
     <trusted-key id='694db6f419c8d1fd' group='org.exparity' />
     <trusted-key id='8759d8f56d022006' group='org.exparity' />
     <trusted-key id='1939a2520bab1d90' group='org.freemarker' />
@@ -134,6 +138,7 @@
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
     <trusted-key id='91ae1504568ec4dd' group='org.jodd' />
     <trusted-key id='145d819475314d97' group='org.json' />
+    <trusted-key id='99ce9d9f22dc5c99' group='org.json' />
     <trusted-key id='f42e87f9665015c9' group='org.jsoup' />
     <trusted-key id='85911f425ec61b51' group='org.junit.jupiter' />
     <trusted-key id='85911f425ec61b51' group='org.junit.platform' />
@@ -153,6 +158,8 @@
     <trusted-key id='9a2c7a98e457c53d' group='org.springframework' />
     <trusted-key id='e4b53844e02b191b' group='org.swinglabs' />
     <trusted-key id='a2115ae15f6b8b72' group='org.xmlunit' />
+    <trusted-key id='e4fbf7179d65e94d' group='software.amazon.ion' />
+    <trusted-key id='cee0f782423c1b1b' group='vc.inreach.aws' />
     <trusted-key id='9ff25980f5ba7e4f' group='xalan' />
     <trusted-key id='858fc4c4f43856a3' group='xerces' />
     <trusted-key id='86fdc7e2a11262cb' group='xml-apis' />

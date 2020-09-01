@@ -61,7 +61,15 @@ dependencies {
     implementation("org.apache.commons:commons-text") {
         because("StringEscapeUtils")
     }
+    implementation("org.elasticsearch.client:elasticsearch-rest-client:7.9.0")
     implementation("com.miglayout:miglayout-swing")
+
+    // Needed to send sampler results to an AWS ElasticSearch instance
+    implementation("com.amazonaws:aws-java-sdk-core:1.11.851")
+    implementation("com.amazonaws:aws-java-sdk-secretsmanager:1.11.851")
+    implementation("vc.inreach.aws:aws-signing-request-interceptor:0.0.22")
+    implementation("com.google:google:5") // Used for the "Supplier" class
+
     // we use bcmail for compilation only, and bcmail is not shipped in the release
     compileOnly("org.bouncycastle:bcmail-jdk15on")
     compileOnly("org.bouncycastle:bcpkix-jdk15on")

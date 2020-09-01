@@ -64,6 +64,7 @@ In this document we will present the configuration setup to graph and historize 
 <li>InfluxDB setup for GraphiteBackendListenerClient</li>
 <li>Grafana</li>
 <li>Graphite</li>
+<li>Elasticsearch</li>
 </ul>
 </p>
 <subsection name="&sect-num;.1 Metrics exposed" anchor="metrics">
@@ -188,7 +189,158 @@ InfluxDB data can be easily viewed in a browser through <a href="http://grafana.
 <p>HELP WELCOME for this section, see <a href="../building.html" >Contributing documentation</a></p>
 </subsection>
 
-
+<subsection name="&sect-num;.6 Elasticsearch" anchor="elasticsearch">
+    <p>
+        Elasticsearch is a distributed, open source search and analytics engine for all types of data, including textual, numerical, geospatial, structured, and unstructured. <br/>
+        Elasticsearch is built on Apache Lucene and was first released in 2010 by Elasticsearch N.V. (now known as Elastic). For more info, please refer to their <a href="https://www.elastic.co/what-is/elasticsearch">website</a>
+    </p>
+    <subsection name="&sect-num;.6.1 Setup" anchor="elasticsearch_setup">
+        <p>
+            To get started with the ElasticSearch Backend Listener, you need to add a <code>Backend Listener</code> to your test
+            plan and choose the <code>org.apache.jmeter.visualizers.backend.elasticsearch</code> implementation.<br/>
+            You will then need to specify the <code>es.host</code>, the <code>es.port</code>, and the <code>es.index</code>.<br/>
+            <ul>
+                <li>ES Host: the hostname of the machine where the engine is hosted</li>
+                <li>ES Port: the port on which the engine is exposed </li>
+                <li>ES Index: an index in ElasticSearch is a collection of documents (data). If you are familiar with SQL, think of it as a table.</li>
+            </ul>
+            Also, if your host uses <code>https</code>, don't forget to change the <code>es.scheme</code> parameter.
+        </p>
+    </subsection>
+    <subsection name="&sect-num;.6.2 Features" anchor="elasticsearch_features">
+        <p>
+            Here's a list of the different parameters and their functionnalities:
+            <table>
+                <tr>
+                    <td>es.bulk.size</td>
+                    <td>
+                        To reduce overhead and possible impact over performance of the test. Results are sent to the ES engine
+                        in bulk. This parameter lets you control the speed at which the results will be sent. The lower
+                        the number, the faster the updates, but the higher the chances of impact on performance. Defaults
+                        to 100.
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.timeout.ms</td>
+                    <td>
+                        The timeout in millisecond, if a query to the ES engine takes more than the specified amount, it
+                        will result in a connection timeout. Defaults to 200.
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.sample.filter</td>
+                    <td>
+                        Filters allows for filtering of which samples are sent to the ElasticSearch engine. All filters
+                        are seperated by a semi-colon (;). Therefore, if one wanted to include the samples "foo" and "bar"
+                        <code>foo;bar</code> would be the value to be entered. It is important to note that filters can
+                        also be used to exclude certain samples. If one wanted every sample but "toto" the value would be
+                        <code>!!toto</code>.
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.fields</td>
+                    <td>
+                        This feature allows you to send only specific result fields (i.e. ResponseTime) to the ES engine.
+                        Here's a list of the available fields:
+                        <ul>
+                            <li>AllThreads</li>
+                            <li>BodySize</li>
+                            <li>Bytes</li>
+                            <li>SentBytes</li>
+                            <li>ConnectTime</li>
+                            <li>ContentType</li>
+                            <li>DataType</li>
+                            <li>ErrorCount</li>
+                            <li>GrpThreads</li>
+                            <li>IdleTime</li>
+                            <li>Latency</li>
+                            <li>ResponseTime</li>
+                            <li>SampleCount</li>
+                            <li>SampleLabel</li>
+                            <li>ThreadName</li>
+                            <li>URL</li>
+                            <li>ResponseCode</li>
+                            <li>TestStartTime</li>
+                            <li>SampleStartTime</li>
+                            <li>SampleEndTime</li>
+                            <li>Timestamp</li>
+                            <li>InjectorHostname</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.test.mode</td>
+                    <td>
+                        Test modes are presets that control what samples are being sent to the engine.<br/>
+                        There are 4 available modes:
+                        <ul>
+                            <li>info: Sends all samplers to the ElasticSearch engine, but only sends the headers, body info for the failed samplers.</li>
+                            <li>error: Only sends the failing samplers to the ElasticSearch engine (Along with their headers and body information)</li>
+                            <li>debug: Send request/response information of all samplers (headers, body, etc.)</li>
+                            <li>quiet: Only sends the response time, bytes, and other metrics</li>
+                        </ul>
+                        Defaults to <code>info</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.xpack.user</td>
+                    <td>If your Elasticsearch instance uses XPack, you will need to specify a username</td>
+                </tr>
+                <tr>
+                    <td>es.xpack.password</td>
+                    <td>If your Elasticsearch instance uses XPac, you will need to specify a password</td>
+                </tr>
+                <tr>
+                    <td>es.parse.all.req.headers</td>
+                    <td>
+                        The Elasticsearch backend listener allows users to send variables through the headers of a request.
+                        By adding a <code>HTTP Header Manager</code> to your sampler, and then specifying a header that goes
+                        like this: <code>X-es-backend-my_variable: ${some_variable}</code>. The result of this will be an
+                        extra field in the ElasticSearch document sent to the index.
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.parse.all.res.headers</td>
+                    <td>
+                        See previous parameter, but for the response headers instead.
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.aws.endpoint</td>
+                    <td>
+                        Elasticsearch is integrated with AWS and with this parameter you specify your AWS elastic endpoint.
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.aws.region</td>
+                    <td>You have to specify the AWS region where your ElasticSearch engine is hosted.</td>
+                </tr>
+                <tr>
+                    <td>es.ssl.truststore.path</td>
+                    <td>
+                        Some SSL encrypted endpoints require a TrustStore to authenticate the incoming requests.
+                        Here, simply specify the location of said TrustStore.
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.ssl.truststore.pw</td>
+                    <td>Type in your TrustStore's password.</td>
+                </tr>
+                <tr>
+                    <td>es.ssl.keystore.path</td>
+                    <td>
+                        Same as for the TrustStore (which holds external systems certificates), the KeyStore will
+                        hold your AUT's (Application Under Test) certificates. Specify the location of the KeyStore.
+                    </td>
+                </tr>
+                <tr>
+                    <td>es.ssl.keystore.pw</td>
+                    <td>Type in the KeyStore's password</td>
+                </tr>
+            </table>
+        </p>
+    </subsection>
+</subsection>
 </section>
 
 </body>
