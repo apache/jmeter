@@ -133,8 +133,8 @@ public class SamplerMetricTimedModeTest {
         assertEquals("We are recognized as a TransactionController made sample", Boolean.TRUE,
                 Boolean.valueOf(TransactionController.isFromTransactionController(sample)));
         metric.addCumulated(sample);
-        assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 2.001);
-        assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 2.001);
+        assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 8.001);
+        assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 8.001);
         assertEquals("Before reset failures", 1, metric.getFailures(), 0.0);
         assertEquals("Before reset sent bytes", 2000, metric.getSentBytes(), 0.0);
         assertEquals("Before reset received bytes", 4000, metric.getReceivedBytes(), 0.0);
