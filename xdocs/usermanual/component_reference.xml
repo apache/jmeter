@@ -6548,7 +6548,7 @@ Behaviour can be modified with some properties by setting in <code>user.properti
 </p>
 </component>
 
-<component name="HTTP(S) Test Script Recorder" was="HTTP Proxy Server" index="&sect-num;.9.5"  width="1052" height="694" screenshot="proxy_control.png">
+<component name="HTTP(S) Test Script Recorder" was="HTTP Proxy Server" index="&sect-num;.9.5"  width="983" height="702" screenshot="proxy_control.png">
 <description><p>The HTTP(S) Test Script Recorder allows JMeter to intercept and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).<br/>
@@ -6624,9 +6624,9 @@ As a consequence:
 <li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:
 <source>
 1) The server's name "<code>www.example.com</code>" does not match the certificate's name
-   "<code>JMeter Proxy (DO NOT TRUST)</code>". Somebody may be trying to eavesdrop on you.
-2) The certificate for "<code>JMeter Proxy (DO NOT TRUST)</code>" is signed by the unknown Certificate Authority
-   "<code>JMeter Proxy (DO NOT TRUST)</code>". It is not possible to verify that this is a valid certificate.
+   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>". Somebody may be trying to eavesdrop on you.
+2) The certificate for "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>" is signed by the unknown Certificate Authority
+   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>". It is not possible to verify that this is a valid certificate.
 </source>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it.
@@ -6752,6 +6752,9 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         <property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
         <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, i.e. it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to <code>\b</code>. More information below in the paragraph about "<code>User Defined Variable replacement</code>".</property>
         <property name="Prefix/Transaction name" required="No">Add a prefix to sampler name during recording (Prefix mode). Or replace sampler name by user chosen name (Transaction name)</property>
+        <property name="Naming scheme" required="No">Select the naming scheme for sampler names during recording. Default is <code>Transaction name</code></property>
+        <property name="Naming format" required="No">If <code>Use format string</code> is selected as naming scheme, a freestyle format can be given. Placeholders for the transaction name, path and counter can be given by <code>#{name}</code>, <code>#{path}</code> and <code>#{counter}</code>. A simple format could be "<code>#{name}-#{counter}</code>", which would be equivalent to the numbered default naming scheme. For more complex formatting Java formatting for MessageFormat can be used, as in "<code>#{counter,number,000}: #{name}-#{path}</code>", which would print the counter filled with up to three zeroes. Default is an empty string.</property>
+        <property name="Counter start value" required="No">Can be used to reset the counter to a given value. Note, that the next sample will first increment and then use the value. If the first sampler should start with <code>1</code>, reset the counter to <code>0</code>.</property>
         <property name="Create new transaction after request (ms)">Inactivity time between two requests needed to consider them in two separate groups.</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the HTTPClient default or Java)</property>
         <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>

@@ -93,4 +93,12 @@ public interface SamplerCreator {
      * @return List
      */
     List<TestElement> createChildren(HTTPSamplerBase sampler, SampleResult result);
+
+    /**
+     * Set the counter for this implementation. The counter should be incremented
+     * before creating a new sampler by the implementation.
+     *
+     * @param value to be used
+     */
+    default void setCounter(int value) {}
 }

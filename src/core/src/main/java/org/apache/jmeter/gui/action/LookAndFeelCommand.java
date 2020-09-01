@@ -95,9 +95,15 @@ public class LookAndFeelCommand extends AbstractAction {
     static {
         if (System.getProperty("darklaf.decorations") == null) {
             System.setProperty("darklaf.decorations", "false");
+        } else if (Boolean.getBoolean("darklaf.allowNativeCode")) {
+            // darklaf.allowNativeCode=true is required for darklaf.decorations=true to work.
+            System.setProperty("darklaf.decorations", "true");
         }
         if (System.getProperty("darklaf.allowNativeCode") == null) {
             System.setProperty("darklaf.allowNativeCode", "false");
+        }
+        if (System.getProperty("darklaf.unifiedMenuBar") == null) {
+            System.setProperty("darklaf.unifiedMenuBar", "true");
         }
         UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
 

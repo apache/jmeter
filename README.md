@@ -107,7 +107,7 @@ The following requirements exist for running Apache JMeter:
 
 - Java Compiler (*OPTIONAL*):
 
-  A Java compiler is not needed since the distribution cludes a
+  A Java compiler is not needed since the distribution includes a
   precompiled Java binary archive.
   > **Note** that a compiler is required to build plugins for Apache JMeter.
 
@@ -126,7 +126,7 @@ The following requirements exist for running Apache JMeter:
 
 ### Windows
 
-For Windows there are also some other scripts which you can drag-and-drop
+For Windows, there are also some other scripts which you can drag-and-drop
 a JMX file onto:
 
 - `jmeter-n.cmd` - runs the file as a non-GUI test
@@ -160,7 +160,7 @@ _This is useful for testing what happens if the optional jars are not
 downloaded by other JMeter users._
 
 If you are behind a proxy, you can set a few build properties in
-`~/.gradle/gradle.properties` for gradle to use the proxy:
+`~/.gradle/gradle.properties` for Gradle to use the proxy:
 
 ```properties
 systemProp.http.proxyHost=proxy.example.invalid
@@ -193,14 +193,16 @@ The output artifacts (jars, reports) are placed in the `build` folder.
 For instance, binary artifacts can be found under `src/dist/build/distributions`.
 
 The following command would compile the application and enable you to run `jmeter`
-from the `bin` directory. Note: it completely refreshes `lib/` contents,
-so it would remove clustom plugins should you have them installed.
+from the `bin` directory.
+
+> **Note** that it completely refreshes `lib/` contents,
+so it would remove custom plugins should you have them installed.
 
 ```sh
 ./gradlew createDist
 ```
 
-Alternatively you could get Gradle to start the GUI:
+Alternatively, you could get Gradle to start the GUI:
 
 ```sh
 ./gradlew runGui

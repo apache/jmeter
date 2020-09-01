@@ -17,7 +17,7 @@
 
 dependencies {
     api(project(":src:core"))
-    testCompile(project(":src:core", "testClasses"))
+    testImplementation(project(":src:core", "testClasses"))
 
     api("org.apache-extras.beanshell:bsh") {
         because("""

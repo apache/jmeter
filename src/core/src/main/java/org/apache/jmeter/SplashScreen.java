@@ -24,9 +24,9 @@ import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
@@ -40,7 +40,7 @@ import com.github.weisj.darklaf.icons.ThemedSVGIcon;
  * Splash Screen
  * @since 3.2
  */
-public class SplashScreen extends JWindow {
+public class SplashScreen extends JDialog {
     private static final Logger log = LoggerFactory.getLogger(SplashScreen.class);
 
     private static final long serialVersionUID = 1L;
@@ -53,6 +53,9 @@ public class SplashScreen extends JWindow {
         setLayout(new BorderLayout());
         add(loadLogo(), BorderLayout.CENTER);
         add(progressBar, BorderLayout.SOUTH);
+        setModalityType(ModalityType.APPLICATION_MODAL);
+        setAutoRequestFocus(true);
+        setUndecorated(true);
         pack();
         setLocationRelativeTo(null);
     }
@@ -89,10 +92,7 @@ public class SplashScreen extends JWindow {
      * Show screen
      */
     public void showScreen() {
-        SwingUtilities.invokeLater(() -> {
-            setVisible(true);
-            setAlwaysOnTop(true);
-        });
+        SwingUtilities.invokeLater(() -> setVisible(true));
     }
 
     /**

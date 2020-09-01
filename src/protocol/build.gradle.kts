@@ -18,7 +18,7 @@
 subprojects {
     dependencies {
         api(project(":src:core"))
-        testCompile(project(":src:core", "testClasses"))
+        testImplementation(project(":src:core", "testClasses"))
     }
 }
 
@@ -47,7 +47,7 @@ project("http") {
     dependencies {
         // for SearchTextExtension
         api(project(":src:components"))
-        testCompile(project(":src:components", "testClasses"))
+        testImplementation(project(":src:components", "testClasses"))
 
         api("com.thoughtworks.xstream:xstream") {
             because("HTTPResultConverter uses XStream in public API")
@@ -123,7 +123,7 @@ project("jdbc") {
 
 project("jms") {
     dependencies {
-        testCompile(project(":src:core", "testClasses"))
+        testImplementation(project(":src:core", "testClasses"))
         api("com.github.ben-manes.caffeine:caffeine") {
             because("MessageRenderer#getValueFromFile(..., caffeine.cache.Cache)")
         }

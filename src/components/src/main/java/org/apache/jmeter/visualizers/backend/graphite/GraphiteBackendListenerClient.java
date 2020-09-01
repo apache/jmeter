@@ -288,7 +288,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                         samplerMetric.add(sampleResult);
                     }
                 }
-                getSamplerMetric(CUMULATED_METRICS).add(sampleResult);
+                getSamplerMetric(CUMULATED_METRICS).addCumulated(sampleResult);
             }
         }
     }

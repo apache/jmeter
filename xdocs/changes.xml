@@ -63,9 +63,13 @@ Summary
 <ch_title>Core improvements</ch_title>
 <ch_title>Test Plan</ch_title>
 <ch_title>Scripting / Debugging enhancements</ch_title>
-<ch_title>UX improvements</ch_title>
 <ch_title>Functions</ch_title>
 -->
+<ch_title>UX improvements</ch_title>
+
+<p>The splash screen is now application-modal rather than system-modal, so it does not block other
+applications when JMeter is starting up.</p>
+
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
@@ -78,6 +82,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>63527</bug>Implement a new setting to allow the exclusion of embedded URLs</li>
+    <li><bug>64696</bug><pr>571</pr><pr>595</pr>Freestyle format for names in (Default)SamplerCreater. Based on a patch by Vincent Daburon (vdaburon at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -114,6 +119,7 @@ Summary
   <li><bug>64446</bug>Better parse curl commands with backslash at line endings and support <code>PUT</code> method with data arguments</li>
   <li><pr>599</pr>Ensure all buttons added to the toolbar behave/look consistently. Contributed by Jannis Weis</li>
   <li><bug>64581</bug>Allow SampleResult#setIgnore to influence behaviour on Sampler Error</li>
+  <li><bug>64680</bug>Fall back to <code>JMETER_HOME</code> on startup to detect JMeter's installation directory</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -122,12 +128,27 @@ Summary
     <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
     <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
     <li><pr>591</pr>Remove deprecated sudo flag from travis file. Deng Liming (liming.d.pro at gmail.com)</li>
-    <li>Updated Darklaf to 2.4.4 (from 2.1.1)</li>
+    <li>Updated Darklaf to 2.4.5 (from 2.1.1)</li>
     <li>Updated Groovy to 3.0.5 (from 3.0.3)</li>
     <li><pr>596</pr>Use neutral words in documentation</li>
     <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
     <li><pr>598</pr>Add another option for creating diffs to the building page. Contributed by jmetertea (github.com/jmetertea)</li>
     <li><pr>609</pr>Make use of newer API for darklaf installation. Jannis Weis</li>
+    <li><pr>612</pr>Correct typos in <code>README.me</code>. Based on patches by Pooja Chandak (poojachandak002 at gmail.com)</li>
+    <li><pr>613</pr>Add documentation for Darklaf properties. Jannis Weis</li>
+    <li>Update SpotBugs to 4.1.2 (from 4.1.1), upgrade spotbugs-gradle-plugin to 4.5.0 (from 2.0.0)</li>
+    <li>Update org.sonarqube Gradle plugin to 3.0 (from 2.7.1)</li>
+    <li>Update Apache ActiveMQ to 5.16.0 (from 5.15.11)</li>
+    <li>Update Bouncycastle to 1.66 (from 1.64)</li>
+    <li>Update Apache commons-io to 2.7 (from 2.6)</li>
+    <li>Update Apache commons-lang3 to 3.11 (from 3.10)</li>
+    <li>Update Apache commons-net to 3.7 (from 3.6)</li>
+    <li>Update Apache commons-pool2 to 2.8.1 (from 2.8.0)</li>
+    <li>Update Apache commons-text to 1.9 (from 1.8)</li>
+    <li>Update equalsverifier to 3.4.2 (from 3.1.13)</li>
+    <li>Update junit5 to 5.6.2 (from 5.6.0)</li>
+    <li>Update Apache log4j2 to 2.13.3 (from 2.13.1)</li>
+    <li>Update rsyntaxtextarea to 3.1.1 (from 3.1.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -169,10 +190,13 @@ Summary
 <ul>
     <li><bug>64547</bug>Report/Dashboard: Ensure graphs Response codes per second is not broken by empty response code in SampleResult. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
     <li><bug>64617</bug>HTML report: In graph Response Time Percentiles Over Time 90,95,99th percentile correspond in reality to 0.90, 0.95 and 0.99 percentiles</li>
+    <li>64553<bug>When using Transaction Controller, send Bytes and Received Bytes are displayed as 0 in the influxdb(BackendListener)</bug></li>
+    <li><bug>64624</bug>Use less aggressive escaping for JSON Strings in reports error messages</li>
 </ul>
 
 <h3>Documentation</h3>
 <ul>
+    <li><pr>571</pr>Correct documented name of generated CA when using proxy script recorder. Part of a bigger PR. Vincent Daburon (vdaburon at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -205,6 +229,8 @@ Summary
   <li><a href="https://github.com/topicus-pw-dvdouden">Daniel van den Ouden</a></li>
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
   <li>Till Neunast (https://github.com/tilln)</li>
+  <li>Pooja Chandak (poojachandak002 at gmail.com)</li>
+  <li>Vincent Daburon (vdaburon at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

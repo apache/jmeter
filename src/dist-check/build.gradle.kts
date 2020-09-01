@@ -30,7 +30,7 @@ val loggingClasspath by configurations.creating
 
 dependencies {
     api(project(":src:dist"))
-    testCompile(project(":src:dist", "testClasses"))
+    testImplementation(project(":src:dist", "allTestClasses"))
     testImplementation("org.apache.commons:commons-lang3") {
         because("StringUtils")
     }

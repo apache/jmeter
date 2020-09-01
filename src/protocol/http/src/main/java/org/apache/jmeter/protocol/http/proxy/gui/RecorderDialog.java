@@ -18,8 +18,6 @@
 package org.apache.jmeter.protocol.http.proxy.gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,7 +45,10 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.util.JMeterToolBar;
+import org.apache.jmeter.protocol.http.proxy.Proxy;
 import org.apache.jmeter.util.JMeterUtils;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Dialog for Recorder
@@ -65,6 +66,8 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
      * Add a prefix/transaction name to HTTP sample name recorded
      */
     private JTextField prefixHTTPSampleName;
+
+    private JTextField sampleNameFormat;
 
     private JTextField proxyPauseHTTPSample;
 
@@ -120,6 +123,8 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         DefaultComboBoxModel<String> choice = new DefaultComboBoxModel<>();
         choice.addElement(JMeterUtils.getResString("sample_name_prefix")); // $NON-NLS-1$
         choice.addElement(JMeterUtils.getResString("sample_name_transaction")); // $NON-NLS-1$
+        choice.addElement(JMeterUtils.getResString("sample_name_suffix")); // $NON-NLS-1$
+        choice.addElement(JMeterUtils.getResString("sample_name_formatter")); // $NON-NLS-1$
         httpSampleNamingMode = new JComboBox<>(choice);
         httpSampleNamingMode.setName(ProxyControlGui.HTTP_SAMPLER_NAMING_MODE);
         httpSampleNamingMode.addItemListener(this);
@@ -136,31 +141,35 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         JLabel labelProxyPause = new JLabel(JMeterUtils.getResString("proxy_pause_http_sampler")); // $NON-NLS-1$
         labelProxyPause.setLabelFor(proxyPauseHTTPSample);
 
-        GridBagLayout gridBagLayout = new GridBagLayout();
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridheight = 1;
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        JPanel panel = new JPanel(gridBagLayout);
+        JPanel panel = new JPanel(new MigLayout("fillx, wrap 3"));
         panel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
-        panel.add(httpSampleNamingMode, gbc.clone());
-        gbc.gridx++;
-        gbc.weightx = 3;
-        gbc.fill=GridBagConstraints.HORIZONTAL;
-        panel.add(prefixHTTPSampleName, gbc.clone());
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panel.add(labelProxyPause, gbc.clone());
-        gbc.gridx++;
-        gbc.weightx = 3;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(proxyPauseHTTPSample, gbc.clone());
+        JLabel labelTransactionName = new JLabel(JMeterUtils.getResString("sample_name_transaction"));
+        labelTransactionName.setLabelFor(prefixHTTPSampleName);
+        panel.add(labelTransactionName);
+        panel.add(prefixHTTPSampleName, "span");
+
+        JLabel labelNamingScheme = new JLabel(JMeterUtils.getResString("sample_naming_scheme"));
+        labelNamingScheme.setLabelFor(httpSampleNamingMode);
+        panel.add(labelNamingScheme, "split 2");
+        panel.add(httpSampleNamingMode);
+        sampleNameFormat = new JTextField(20);
+        sampleNameFormat.addKeyListener(this);
+        sampleNameFormat.setName(ProxyControlGui.HTTP_SAMPLER_NAME_FORMAT);
+        sampleNameFormat.setEnabled(httpSampleNamingMode.getSelectedIndex() == 3);
+        sampleNameFormat.setToolTipText(JMeterUtils.getResString("sample_naming_format_help"));
+        panel.add(sampleNameFormat, "span");
+
+        JLabel labelSetCounter = new JLabel(JMeterUtils.getResString("sample_creator_counter_value"));
+        JTextField counterValue = new JTextField(10);
+        labelSetCounter.setLabelFor(counterValue);
+        JButton buttonSetCounter = new JButton(JMeterUtils.getResString("sample_creator_set_counter"));
+        buttonSetCounter.addActionListener(e -> Proxy.setCounter(Integer.parseInt(counterValue.getText())));
+        panel.add(labelSetCounter);
+        panel.add(counterValue);
+        panel.add(buttonSetCounter);
+        panel.add(labelProxyPause);
+        panel.add(proxyPauseHTTPSample, "span");
 
         this.getContentPane().add(panel, BorderLayout.CENTER);
 
@@ -194,9 +203,10 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() instanceof JComboBox) {
-            JComboBox combo = (JComboBox) e.getSource();
+            JComboBox<?> combo = (JComboBox<?>) e.getSource();
             if(ProxyControlGui.HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
                 recorderGui.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
+                sampleNameFormat.setEnabled(httpSampleNamingMode.getSelectedIndex() == 3);
             }
         }
         else {
@@ -220,9 +230,11 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
     @Override
     public void keyReleased(KeyEvent e) {
         String fieldName = e.getComponent().getName();
-        if(fieldName.equals(ProxyControlGui.PREFIX_HTTP_SAMPLER_NAME)) {
+        if (fieldName.equals(ProxyControlGui.PREFIX_HTTP_SAMPLER_NAME)) {
             recorderGui.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
-        } else if(fieldName.equals(ProxyControlGui.PROXY_PAUSE_HTTP_SAMPLER)) {
+        } else if (fieldName.equals(ProxyControlGui.HTTP_SAMPLER_NAME_FORMAT)) {
+            recorderGui.setSampleNameFormat(sampleNameFormat.getText());
+        } else if (fieldName.equals(ProxyControlGui.PROXY_PAUSE_HTTP_SAMPLER)) {
             try {
                 Long.parseLong(proxyPauseHTTPSample.getText());
             } catch (NumberFormatException nfe) {
