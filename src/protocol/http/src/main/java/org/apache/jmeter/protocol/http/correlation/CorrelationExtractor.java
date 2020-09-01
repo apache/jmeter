@@ -178,7 +178,6 @@ public class CorrelationExtractor {
             creatorData.setParameterValue(parameterValue);
             creatorData.setSampleResult(sampleResult);
             createdExtractor = createExtractor(creatorData);
-            // createdExtractor = createExtractor(sampleResult, parameter, parameterValue, OTHER);
         }
         // check no extractor was created, if no then add default Boundary extractor
         if (createdExtractor == null) {
@@ -190,7 +189,6 @@ public class CorrelationExtractor {
             creatorData.setParameterValue(parameterValue);
             creatorData.setSampleResult(sampleResult);
             createdExtractor = createExtractor(creatorData);
-            //createdExtractor = createExtractor(sampleResult, parameter, parameterValue, BOUNDARY);
         }
         return createdExtractor;
     }
