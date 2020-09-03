@@ -62,9 +62,9 @@ class FunctionParser {
                     if (reader.read(current) == 0) {
                         break;
                     }
-                    // Keep '\' unless it is one of the escapable chars '$' ',' or '\'
+                    // Keep '\' unless it is one of the escapable chars '$' or ','
                     // N.B. This method is used to parse function parameters, so must treat ',' as special
-                    if (current[0] != '$' && current[0] != ',' && current[0] != '\\') {
+                    if (current[0] != '$' && current[0] != ',') {
                         buffer.append(previous); // i.e. '\\'
                     }
                     previous = ' ';
