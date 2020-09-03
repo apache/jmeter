@@ -176,7 +176,7 @@ public class TestValueReplacer extends JMeterTestCase {
         element.setProperty(new StringProperty("domain", input));
         replacer.replaceValues(element);
         element.setRunningVersion(true);
-        assertEquals("jakarta.apache.org \\ \\ \\\\ , ", element.getPropertyAsString("domain"));
+        assertEquals("jakarta.apache.org \\ \\\\ \\\\\\ , ", element.getPropertyAsString("domain"));
     }
 
     @AfterEach
