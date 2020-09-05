@@ -547,6 +547,8 @@ the additional variables for rows four, five and six will be removed.
             <li>Autocommit(true)</li>
             <li>Edit - this should be a variable reference that evaluates to one of the above</li>
             </ul>
+            <note>The types <code>Commit</code>, <code>Rollback</code>, <code>Autocommit(false)</code> and <code>Autocommit(true)</code>
+              are special, as they are ignoring the given SQL statements and are changing the state of the connection, only.</note>
         </property>
         <property name="SQL Query" required="Yes">
         SQL query.
