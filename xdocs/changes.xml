@@ -67,7 +67,7 @@ Summary
 -->
 <ch_title>UX improvements</ch_title>
 
-<p>The splash screen is now application-modal rather than system-modal, so it does not block other
+<p><bug>62179</bug><bug>64658</bug>The splash screen is now application-modal rather than system-modal, so it does not block other
 applications when JMeter is starting up.</p>
 
 <!-- =================== Incompatible changes =================== -->
