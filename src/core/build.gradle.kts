@@ -74,6 +74,7 @@ dependencies {
     implementation("com.github.weisj:darklaf-core")
     implementation("com.github.weisj:darklaf-theme")
     implementation("com.github.weisj:darklaf-property-loader")
+    implementation("com.github.weisj:darklaf-extensions-rsyntaxarea")
     implementation("com.miglayout:miglayout-swing")
     implementation("commons-codec:commons-codec") {
         because("DigestUtils")
