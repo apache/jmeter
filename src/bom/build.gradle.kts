@@ -74,6 +74,7 @@ dependencies {
         apiv("com.github.weisj:darklaf-core", "darklaf")
         apiv("com.github.weisj:darklaf-theme", "darklaf")
         apiv("com.github.weisj:darklaf-property-loader", "darklaf")
+        apiv("com.github.weisj:darklaf-extensions-rsyntaxarea", "darklaf.extensions")
         apiv("com.helger:ph-commons")
         apiv("com.helger:ph-css")
         apiv("com.jayway.jsonpath:json-path")
