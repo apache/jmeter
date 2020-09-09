@@ -21,7 +21,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -66,6 +65,7 @@ import org.apache.jmeter.visualizers.utils.Colors;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.math.StatCalculatorLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -373,10 +373,12 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         graphPanel.setPointShape(StatGraphProperties.getPointShapeMap().get(pointShapeLine.getSelectedItem()));
         graphPanel.setStrokeWidth(Float.parseFloat((String) strokeWidthList.getSelectedItem()));
 
-        graphPanel.setTitleFont(new Font(StatGraphProperties.getFontNameMap().get(titleFontNameList.getSelectedItem()),
+        graphPanel.setTitleFont(JMeterUIDefaults.createFont(
+                StatGraphProperties.getFontNameMap().get(titleFontNameList.getSelectedItem()),
                 StatGraphProperties.getFontStyleMap().get(titleFontStyleList.getSelectedItem()),
                 Integer.parseInt((String) titleFontSizeList.getSelectedItem())));
-        graphPanel.setLegendFont(new Font(StatGraphProperties.getFontNameMap().get(fontNameList.getSelectedItem()),
+        graphPanel.setLegendFont(JMeterUIDefaults.createFont(
+                StatGraphProperties.getFontNameMap().get(fontNameList.getSelectedItem()),
                 StatGraphProperties.getFontStyleMap().get(fontStyleList.getSelectedItem()),
                 Integer.parseInt((String) fontSizeList.getSelectedItem())));
 

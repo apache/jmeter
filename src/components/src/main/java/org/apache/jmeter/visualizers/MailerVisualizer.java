@@ -49,6 +49,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -283,7 +284,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
                 MailerModel.MailAuthType.NONE.toString(),
                 MailerModel.MailAuthType.SSL.toString(),
                 MailerModel.MailAuthType.TLS.toString()});
-        authTypeCombo.setFont(new Font("SansSerif", Font.PLAIN, 10)); // $NON-NLS-1$
+        authTypeCombo.setFont(JMeterUIDefaults.createFont("SansSerif", Font.PLAIN, 10)); // $NON-NLS-1$
         authTypePane.add(authTypeCombo, BorderLayout.CENTER);
 
         JPanel credPane = new JPanel(new BorderLayout());

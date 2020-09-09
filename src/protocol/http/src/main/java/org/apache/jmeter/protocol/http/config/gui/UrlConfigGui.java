@@ -20,14 +20,12 @@ package org.apache.jmeter.protocol.http.config.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -68,10 +66,6 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private int tabRawBodyIndex = 1;
 
     private int tabFileUploadIndex = 2;
-
-    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
-
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private HTTPArgumentsPanel argsPanel;
 

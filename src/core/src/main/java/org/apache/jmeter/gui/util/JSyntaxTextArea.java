@@ -233,7 +233,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         this.disableUndo = disableUndo;
         if (USER_FONT_FAMILY != null) {
             int fontSize = USER_FONT_SIZE > 0 ? USER_FONT_SIZE : getFont().getSize();
-            setFont(new Font(USER_FONT_FAMILY, Font.PLAIN, fontSize));
+            setFont(JMeterUIDefaults.createFont(USER_FONT_FAMILY, Font.PLAIN, fontSize));
             if (log.isDebugEnabled()) {
                 log.debug("Font is set to: {}", getFont());
             }
