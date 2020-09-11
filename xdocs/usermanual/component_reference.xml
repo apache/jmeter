@@ -7011,11 +7011,11 @@ Note that you can get more control over the responses by adding an HTTP Header M
 You can also use the following query parameters:
 </p>
 <properties>
-    <property name="redirect" required="No">Generates a 302 (Temporary Redirect) with the provided location.
+    <property name="redirect" required="No">Generates a 302 (Temporary Redirect) with the provided location,
     e.g. <code>?redirect=/path</code>
     </property>
-    <property name="status" required="No">Overrides the default status return. e.g. <code>?status=404 Not Found</code></property>
-    <property name="v" required="No">Verbose flag, writes some details to standard output. e.g. first line and redirect location if specified</property>
+    <property name="status" required="No">Overrides the default status return, e.g. <code>?status=404 Not Found</code></property>
+    <property name="v" required="No">Verbose flag, writes some details to standard output, e.g. first line and redirect location if specified</property>
 </properties>
 </component>
 
