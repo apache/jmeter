@@ -7004,7 +7004,7 @@ Note that you can get more control over the responses by adding an HTTP Header M
         <property name="X-ResponseStatus" required="No">Response status, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Status responses</a>, example 200 OK, 500 Internal Server Error, &hellip;.</property>
         <property name="X-ResponseLength" required="No">Size of response, this trims the response to the requested size if that is less than the total size</property>
         <property name="X-SetHeaders" required="No">Pipe separated list of headers, example:<br/>
-        <code>headerA=valueA|headerB=valueB</code> would set <code>headerA</code> to <code>valueA</code> and <code>headerB</code> to <code>valueB</code>.
+        <code>headerA: valueA|headerB: valueB</code> would set <code>headerA</code> to <code>valueA</code> and <code>headerB</code> to <code>valueB</code>.
         </property>
 </properties>
 <p>

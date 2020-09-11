@@ -197,6 +197,7 @@ applications when JMeter is starting up.</p>
 <h3>Documentation</h3>
 <ul>
     <li><pr>571</pr>Correct documented name of generated CA when using proxy script recorder. Part of a bigger PR. Vincent Daburon (vdaburon at gmail.com)</li>
+    <li>Change documentation of the special header functionality of the mirror server to reflect the implementation.</li>
 </ul>
 
 <h3>General</h3>
