@@ -222,7 +222,7 @@ class SMIMEAssertion {
     }
 
     private static void checkSignerByFile(SMIMEAssertionTestElement testElement, AssertionResult res,
-            X509CertificateHolder cert) throws CertificateException, CertificateEncodingException {
+            X509CertificateHolder cert) throws CertificateException {
         CertificateFactory cf = CertificateFactory
                 .getInstance("X.509");
         try (InputStream fis = new FileInputStream(testElement.getSignerCertFile());
