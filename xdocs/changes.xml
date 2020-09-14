@@ -149,6 +149,7 @@ applications when JMeter is starting up.</p>
     <li>Update junit5 to 5.6.2 (from 5.6.0)</li>
     <li>Update Apache log4j2 to 2.13.3 (from 2.13.1)</li>
     <li>Update rsyntaxtextarea to 3.1.1 (from 3.1.0)</li>
+    <li>Update JUnit5 to 5.7.0 (from 5.6.2)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
