@@ -19,6 +19,8 @@ import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
+import com.github.vlsi.gradle.properties.dsl.props
+import kotlin.math.absoluteValue
 import org.gradle.api.internal.TaskOutputsInternal
 
 plugins {
@@ -145,6 +147,91 @@ val populateLibs by tasks.registering {
             }
         }
     }
+}
+
+val updateExpectedJars by props()
+
+val verifyReleaseDependencies by tasks.registering {
+    description = "Verifies if binary release archive contains the expected set of external jars"
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+
+    dependsOn(configurations.runtimeClasspath)
+    val expectedLibs = file("src/dist/expected_release_jars.csv")
+    inputs.file(expectedLibs)
+    val actualLibs = File(buildDir, "dist/expected_release_jars.csv")
+    outputs.file(actualLibs)
+    doLast {
+        val caseInsensitive: Comparator<String> = compareBy(String.CASE_INSENSITIVE_ORDER, { it })
+
+        val deps = configurations.runtimeClasspath.get().resolvedConfiguration.resolvedArtifacts
+        val libs = deps.asSequence()
+            .filter {
+                val compId = it.id.componentIdentifier
+                compId !is ProjectComponentIdentifier || !compId.build.isCurrentBuild
+            }
+            .map { it.file.name to it.file.length() }
+            .sortedWith(compareBy(caseInsensitive) { it.first })
+            .associate { it }
+
+        val expected = expectedLibs.readLines().asSequence()
+            .filter { "," in it }
+            .map {
+                val (length, name) = it.split(",", limit = 2)
+                name to length.toLong()
+            }
+            .associate { it }
+
+        if (libs == expected) {
+            return@doLast
+        }
+
+        val sb = StringBuilder()
+        sb.append("External dependencies differ (you could update ${expectedLibs.relativeTo(rootDir)} if you add -PupdateExpectedJars):")
+
+        val sizeBefore = expected.values.sum()
+        val sizeAfter = libs.values.sum()
+        if (sizeBefore != sizeAfter) {
+            sb.append("\n  $sizeBefore => $sizeAfter bytes")
+            sb.append(" (${if (sizeAfter > sizeBefore) "+" else "-"}${(sizeAfter - sizeBefore).absoluteValue} byte")
+            if ((sizeAfter - sizeBefore).absoluteValue > 1) {
+                sb.append("s")
+            }
+            sb.append(")")
+        }
+        if (libs.size != expected.size) {
+            sb.append("\n  ${expected.size} => ${libs.size} files")
+            sb.append(" (${if (libs.size > expected.size) "+" else "-"}${(libs.size - expected.size).absoluteValue})")
+        }
+        sb.appendln()
+        for (dep in (libs.keys + expected.keys).sortedWith(caseInsensitive)) {
+            val old = expected[dep]
+            val new = libs[dep]
+            if (old == new) {
+                continue
+            }
+            sb.append("\n")
+            if (old != null) {
+                sb.append("-").append(old.toString().padStart(8))
+            } else {
+                sb.append("+").append(new.toString().padStart(8))
+            }
+            sb.append(" ").append(dep)
+        }
+        val newline = System.getProperty("line.separator")
+        actualLibs.writeText(
+            libs.map { "${it.value},${it.key}" }.joinToString(newline, postfix = newline)
+        )
+        if (updateExpectedJars) {
+            println("Updating ${expectedLibs.relativeTo(rootDir)}")
+            actualLibs.copyTo(expectedLibs, overwrite = true)
+        } else {
+            throw GradleException(sb.toString())
+        }
+    }
+}
+
+tasks.check {
+    dependsOn(verifyReleaseDependencies)
 }
 
 // This adds dependency on "populateLibs" task
