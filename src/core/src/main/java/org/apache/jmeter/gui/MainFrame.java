@@ -674,7 +674,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                         }
                     }
                 }
-                return null;
+                return "";
             }
         };
         treevar.setToolTipText("");
