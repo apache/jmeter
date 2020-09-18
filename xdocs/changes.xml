@@ -67,7 +67,7 @@ Summary
 -->
 <ch_title>UX improvements</ch_title>
 
-<p>The splash screen is now application-modal rather than system-modal, so it does not block other
+<p><bug>62179</bug><bug>64658</bug>The splash screen is now application-modal rather than system-modal, so it does not block other
 applications when JMeter is starting up.</p>
 
 <!-- =================== Incompatible changes =================== -->
@@ -81,7 +81,7 @@ applications when JMeter is starting up.</p>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>63527</bug>Implement a new setting to allow the exclusion of embedded URLs</li>
+    <li><bug>53848</bug><bug>63527</bug>Implement a new setting to allow the exclusion of embedded URLs</li>
     <li><bug>64696</bug><pr>571</pr><pr>595</pr>Freestyle format for names in (Default)SamplerCreater. Based on a patch by Vincent Daburon (vdaburon at gmail.com)</li>
 </ul>
 
@@ -149,6 +149,7 @@ applications when JMeter is starting up.</p>
     <li>Update junit5 to 5.6.2 (from 5.6.0)</li>
     <li>Update Apache log4j2 to 2.13.3 (from 2.13.1)</li>
     <li>Update rsyntaxtextarea to 3.1.1 (from 3.1.0)</li>
+    <li>Update JUnit5 to 5.7.0 (from 5.6.2)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -197,6 +198,7 @@ applications when JMeter is starting up.</p>
 <h3>Documentation</h3>
 <ul>
     <li><pr>571</pr>Correct documented name of generated CA when using proxy script recorder. Part of a bigger PR. Vincent Daburon (vdaburon at gmail.com)</li>
+    <li>Change documentation of the special header functionality of the mirror server to reflect the implementation.</li>
 </ul>
 
 <h3>General</h3>

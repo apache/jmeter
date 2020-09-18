@@ -61,6 +61,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.control.gui.TreeNodeWrapper;
@@ -332,7 +333,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setRegexMatch(regexMatch.isSelected());
             model.setContentTypeInclude(contentTypeInclude.getText());
             model.setContentTypeExclude(contentTypeExclude.getText());
-            model.setHttpSampleNameFormat(httpSampleNameFormat.getText());
+            httpSampleNameFormat.setEnabled(httpSampleNamingMode.getSelectedIndex() == 3);
+            if (StringUtils.isNotBlank(httpSampleNameFormat.getText())) {
+                model.setHttpSampleNameFormat(httpSampleNameFormat.getText());
+            }
             TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
             if (nw == null) {
                 model.setTarget(null);

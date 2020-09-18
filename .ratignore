@@ -29,6 +29,7 @@ src/licenses/licenses/*/CC0-1.0.txt
 #reports/**
 src/launcher/src/main/resources/org/apache/jmeter/jmeter_as_ascii_art.txt
 src/core/src/main/resources/org/apache/jmeter/help.txt
+src/dist/src/dist/expected_release_jars.csv
 test/resources/**
 **/test/resources/**
 #**/*.log

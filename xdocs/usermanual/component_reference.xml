@@ -547,6 +547,8 @@ the additional variables for rows four, five and six will be removed.
             <li>Autocommit(true)</li>
             <li>Edit - this should be a variable reference that evaluates to one of the above</li>
             </ul>
+            <note>The types <code>Commit</code>, <code>Rollback</code>, <code>Autocommit(false)</code> and <code>Autocommit(true)</code>
+              are special, as they are ignoring the given SQL statements and are changing the state of the connection, only.</note>
         </property>
         <property name="SQL Query" required="Yes">
         SQL query.
@@ -7009,18 +7011,18 @@ Note that you can get more control over the responses by adding an HTTP Header M
         <property name="X-ResponseStatus" required="No">Response status, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Status responses</a>, example 200 OK, 500 Internal Server Error, &hellip;.</property>
         <property name="X-ResponseLength" required="No">Size of response, this trims the response to the requested size if that is less than the total size</property>
         <property name="X-SetHeaders" required="No">Pipe separated list of headers, example:<br/>
-        <code>headerA=valueA|headerB=valueB</code> would set <code>headerA</code> to <code>valueA</code> and <code>headerB</code> to <code>valueB</code>.
+        <code>headerA: valueA|headerB: valueB</code> would set <code>headerA</code> to <code>valueA</code> and <code>headerB</code> to <code>valueB</code>.
         </property>
 </properties>
 <p>
 You can also use the following query parameters:
 </p>
 <properties>
-    <property name="redirect" required="No">Generates a 302 (Temporary Redirect) with the provided location.
+    <property name="redirect" required="No">Generates a 302 (Temporary Redirect) with the provided location,
     e.g. <code>?redirect=/path</code>
     </property>
-    <property name="status" required="No">Overrides the default status return. e.g. <code>?status=404 Not Found</code></property>
-    <property name="v" required="No">Verbose flag, writes some details to standard output. e.g. first line and redirect location if specified</property>
+    <property name="status" required="No">Overrides the default status return, e.g. <code>?status=404 Not Found</code></property>
+    <property name="v" required="No">Verbose flag, writes some details to standard output, e.g. first line and redirect location if specified</property>
 </properties>
 </component>
 

@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 public class SamplerMetricFixedModeTest {
 
     private static final int DEFAULT_ELAPSED_TIME = 1_000;
+    private static final double ALLOWED_DELTA = 25.0;
 
     @BeforeEach
     public void initMode() throws Exception {
@@ -129,16 +130,16 @@ public class SamplerMetricFixedModeTest {
         assertEquals("We are recognized as a TransactionController made sample", Boolean.TRUE,
                 Boolean.valueOf(TransactionController.isFromTransactionController(sample)));
         metric.addCumulated(sample);
-        assertEquals("Before reset  ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 4.001);
-        assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 4.001);
+        assertEquals("Before reset  ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), ALLOWED_DELTA);
+        assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), ALLOWED_DELTA);
         assertEquals("Before reset hits", 2, metric.getHits(), 0.0);
         assertEquals("Before reset sent bytes", 2000, metric.getSentBytes(), 0.0);
         assertEquals("Before reset received bytes", 4000, metric.getReceivedBytes(), 0.0);
 
         metric.resetForTimeInterval();
 
-        assertEquals("After reset in TIMED mode ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), 0.0);
-        assertEquals("After reset in TIMED mode all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 0.0);
+        assertEquals("After reset in TIMED mode ok.max", DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), ALLOWED_DELTA);
+        assertEquals("After reset in TIMED mode all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), ALLOWED_DELTA);
         assertEquals("After reset hits", 0, metric.getHits(), 0.0);
         assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
         assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
@@ -151,16 +152,16 @@ public class SamplerMetricFixedModeTest {
         assertEquals("We are recognized as a TransactionController made sample", Boolean.TRUE,
                 Boolean.valueOf(TransactionController.isFromTransactionController(sample)));
         metric.addCumulated(sample);
-        assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 4.001);
-        assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 4.001);
+        assertEquals("Before reset  ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), ALLOWED_DELTA);
+        assertEquals("Before reset all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), ALLOWED_DELTA);
         assertEquals("Before reset failures", 1, metric.getFailures(), 0.0);
         assertEquals("Before reset sent bytes", 2000, metric.getSentBytes(), 0.0);
         assertEquals("Before reset received bytes", 4000, metric.getReceivedBytes(), 0.0);
 
         metric.resetForTimeInterval();
 
-        assertEquals("After reset in TIMED mode ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), 4.0);
-        assertEquals("After reset in TIMED mode all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), 4.0);
+        assertEquals("After reset in TIMED mode ko.max", DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), ALLOWED_DELTA);
+        assertEquals("After reset in TIMED mode all.max", DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), ALLOWED_DELTA);
         assertEquals("After reset failures", 0, metric.getFailures(), 0.0);
         assertEquals("After reset sent bytes", 0, metric.getSentBytes(), 0.0);
         assertEquals("After reset received bytes", 0, metric.getReceivedBytes(), 0.0);
