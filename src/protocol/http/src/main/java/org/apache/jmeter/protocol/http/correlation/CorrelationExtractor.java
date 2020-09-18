@@ -342,7 +342,7 @@ public class CorrelationExtractor {
         } else {
             // show error to user if no extractors could be created for the selected
             // parameters
-            JMeterUtils.reportErrorToUser("No extractor could be created for the selected parameters. Could not correlate the script.",
+            JMeterUtils.reportErrorToUser("No extractors could be created for the selected parameters. Could not correlate the script.",
                     "Failure");
         }
     }
