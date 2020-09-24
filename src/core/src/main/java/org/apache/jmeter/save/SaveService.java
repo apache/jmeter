@@ -155,7 +155,7 @@ public class SaveService {
     private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
     // Must match the sha1 checksum of the file saveservice.properties (without newline character),
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "56ae8319b2b02d33eb1028c4460db770cf246b5c"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "353414389088ae0d10d40baa96b673f29fad73eb"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
