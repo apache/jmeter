@@ -25,12 +25,13 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Basic URL / HTTP Request configuration:
+ * GraphQL over HTTP Request configuration:
  * <ul>
  * <li>host and port</li>
  * <li>connect and response timeouts</li>
  * <li>path, method, encoding, parameters</li>
  * <li>redirects and keepalive</li>
+ * <li>GraphQL query and query variables</li>
  * </ul>
  */
 public class GraphQLUrlConfigGui extends UrlConfigGui {
@@ -53,8 +54,7 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
     }
 
     /**
-     * Constructor which is setup to show HTTP implementation, raw body pane and
-     * sampler fields.
+     * Constructor which is setup to show the sampler fields for GraphQL over HTTP request.
      */
     public GraphQLUrlConfigGui() {
         super(true, false, false);
