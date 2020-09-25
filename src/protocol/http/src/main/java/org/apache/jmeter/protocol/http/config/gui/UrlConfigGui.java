@@ -108,7 +108,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private JSyntaxTextArea postBodyContent;
 
     // Tabbed pane that contains parameters and raw body
-    private ValidationTabbedPane postContentTabbedPane;
+    private AbstractValidationTabbedPane postContentTabbedPane;
 
     private boolean showRawBodyPane;
     private boolean showFileUploadPane;
@@ -453,60 +453,40 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         return postContentTabbedPane;
     }
 
-    /**
-     *
-     */
-    class ValidationTabbedPane extends JTabbedPane {
+    class ValidationTabbedPane extends AbstractValidationTabbedPane {
 
-        /**
-         *
-         */
-        private static final long serialVersionUID = 7014311238367882880L;
-
+        private static final long serialVersionUID = 7014311238367882881L;
 
         @Override
-        public void setSelectedIndex(int index) {
-            setSelectedIndex(index, true);
-        }
-
-        /**
-         * Apply some check rules if check is true
-         *
-         * @param index
-         *            index to select
-         * @param check
-         *            flag whether to perform checks before setting the selected
-         *            index
-         */
-        public void setSelectedIndex(int index, boolean check) {
-            int oldSelectedIndex = this.getSelectedIndex();
-            if(!check || oldSelectedIndex == -1) {
-                super.setSelectedIndex(index);
-            } else if(index == tabFileUploadIndex) { // We're going to File, no problem
-                super.setSelectedIndex(index);
+        protected int getValidatedTabIndex(int currentTabIndex, int newTabIndex) {
+            if (newTabIndex == tabFileUploadIndex) { // We're going to File, no problem
+                return newTabIndex;
             }
+
             // We're moving to Raw or Parameters
-            else if(index != oldSelectedIndex) {
+            if (newTabIndex != currentTabIndex) {
                 // If the Parameter data can be converted (i.e. no names)
                 // we switch
-                if(index == tabRawBodyIndex) {
-                    if(canSwitchToRawBodyPane()) {
+                if (newTabIndex == tabRawBodyIndex) {
+                    if (canSwitchToRawBodyPane()) {
                         convertParametersToRaw();
-                        super.setSelectedIndex(index);
+                        return newTabIndex;
                     } else {
-                        super.setSelectedIndex(TAB_PARAMETERS);
+                        return TAB_PARAMETERS;
                     }
                 }
                 else {
                     // If the Parameter data cannot be converted to Raw, then the user should be
                     // prevented from doing so raise an error dialog
-                    if(canSwitchToParametersTab()) {
-                        super.setSelectedIndex(index);
+                    if (canSwitchToParametersTab()) {
+                        return newTabIndex;
                     } else {
-                        super.setSelectedIndex(tabRawBodyIndex);
+                        return tabRawBodyIndex;
                     }
                 }
             }
+
+            return newTabIndex;
         }
 
         /**

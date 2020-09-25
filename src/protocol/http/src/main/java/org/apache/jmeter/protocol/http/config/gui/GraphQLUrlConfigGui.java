@@ -67,8 +67,9 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
 
     @Override
     protected JTabbedPane getParameterPanel() {
-        final JTabbedPane paramPanel = super.getParameterPanel();
+        final AbstractValidationTabbedPane paramPanel = (AbstractValidationTabbedPane) super.getParameterPanel();
         paramPanel.removeAll();
+        paramPanel.setValidationEnabled(false);
 
         queryContent = JSyntaxTextArea.getInstance(30, 50);
         queryContent.setInitialText("");
