@@ -22,6 +22,7 @@ import javax.swing.JTabbedPane;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -58,6 +59,22 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
      */
     public GraphQLUrlConfigGui() {
         super(true, false, false);
+    }
+
+    @Override
+    public void configure(TestElement element) {
+        super.configure(element);
+        final String query = element.getPropertyAsString("GraphQLHTTPSampler.query", "");
+        queryContent.setText(query);
+        final String variables = element.getPropertyAsString("GraphQLHTTPSampler.variables", "");
+        variablesContent.setText(variables);
+    }
+
+    @Override
+    public void modifyTestElement(TestElement element) {
+        super.modifyTestElement(element);
+        element.setProperty("GraphQLHTTPSampler.query", queryContent.getText());
+        element.setProperty("GraphQLHTTPSampler.variables", variablesContent.getText());
     }
 
     @Override
