@@ -17,10 +17,15 @@
 
 package org.apache.jmeter.protocol.http.config.gui;
 
+import java.awt.Component;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -29,6 +34,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +65,10 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
 
     public static final String VARIABLES = "GraphQLHTTPSampler.variables";
 
+    private JLabeledTextField operationNameText;
+
     private JSyntaxTextArea queryContent;
+
     private JSyntaxTextArea variablesContent;
 
     private static final UrlConfigDefaults URL_CONFIG_DEFAULTS = new UrlConfigDefaults();
@@ -95,9 +104,9 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         super.modifyTestElement(element);
 
         final String method = element.getPropertyAsString(HTTPSamplerBase.METHOD);
-        final String operationName = StringUtils.trim(null);
-        final String query = StringUtils.trim(queryContent.getText());
-        final String variables = StringUtils.trim(variablesContent.getText());
+        final String operationName = operationNameText.getText();
+        final String query = queryContent.getText();
+        final String variables = variablesContent.getText();
 
         element.setProperty(OPERATION_NAME, operationName);
         element.setProperty(QUERY, query);
@@ -119,16 +128,27 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
     }
 
     @Override
+    protected Component getPathPanel() {
+        final JPanel panel = (JPanel) super.getPathPanel();
+        JPanel graphQLReqInfoPane = new HorizontalPanel();
+        graphQLReqInfoPane.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("graphql_request_info")));
+        operationNameText = new JLabeledTextField(JMeterUtils.getResString("graphql_operation_name"), 40);
+        graphQLReqInfoPane.add(operationNameText);
+        panel.add(graphQLReqInfoPane);
+        return panel;
+    }
+
+    @Override
     protected JTabbedPane getParameterPanel() {
         final AbstractValidationTabbedPane paramPanel = (AbstractValidationTabbedPane) super.getParameterPanel();
         paramPanel.removeAll();
         paramPanel.setValidationEnabled(false);
 
-        queryContent = JSyntaxTextArea.getInstance(30, 50);
+        queryContent = JSyntaxTextArea.getInstance(26, 50);
         queryContent.setInitialText("");
         paramPanel.add(JMeterUtils.getResString("graphql_query"), JTextScrollPane.getInstance(queryContent));
 
-        variablesContent = JSyntaxTextArea.getInstance(30, 50);
+        variablesContent = JSyntaxTextArea.getInstance(26, 50);
         variablesContent.setLanguage("json");
         variablesContent.setInitialText("");
         paramPanel.add(JMeterUtils.getResString("graphql_variables"), JTextScrollPane.getInstance(variablesContent));
@@ -139,9 +159,9 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
     private Arguments createGraphQLPostArguments(final String operationName, final String query, final String variables) {
         final Gson gson = new GsonBuilder().serializeNulls().create();
         final JsonObject postBodyJson = new JsonObject();
-        postBodyJson.addProperty("operationName", operationName);
+        postBodyJson.addProperty("operationName", StringUtils.trimToNull(operationName));
 
-        if (variables != null && !variables.isEmpty()) {
+        if (StringUtils.isNotBlank(variables)) {
             try {
                 final JsonObject variablesJson = gson.fromJson(variables, JsonObject.class);
                 postBodyJson.add("variables", variablesJson);
@@ -150,7 +170,7 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
             }
         }
 
-        postBodyJson.addProperty("query", query);
+        postBodyJson.addProperty("query", StringUtils.trim(query));
 
         final HTTPArgument arg = new HTTPArgument("", gson.toJson(postBodyJson));
         arg.setUseEquals(true);
