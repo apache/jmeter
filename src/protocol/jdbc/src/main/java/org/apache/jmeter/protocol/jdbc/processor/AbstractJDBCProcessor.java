@@ -48,7 +48,7 @@ public abstract class AbstractJDBCProcessor extends AbstractJDBCTestElement {
         } catch (SQLException ex) {
             log.warn("SQL Problem in {}: {}", getName(), ex.toString());
         } catch (IOException ex) {
-            log.warn("IO Problem in {}: {}"+ getName(), ex.toString());
+            log.warn("IO Problem in {}: {}", getName(), ex.toString());
         } catch (UnsupportedOperationException ex) {
             log.warn("Execution Problem in {}: {}", getName(), ex.toString());
         }
