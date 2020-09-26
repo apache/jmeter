@@ -18,11 +18,13 @@
 package org.apache.jmeter.protocol.http.config.gui;
 
 import java.awt.Component;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -64,6 +66,8 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
     public static final String QUERY = "GraphQLHTTPSampler.query";
 
     public static final String VARIABLES = "GraphQLHTTPSampler.variables";
+
+    private static Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
 
     private JLabeledTextField operationNameText;
 
@@ -111,15 +115,12 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         element.setProperty(OPERATION_NAME, operationName);
         element.setProperty(QUERY, query);
         element.setProperty(VARIABLES, variables);
+        element.setProperty(HTTPSamplerBase.POST_BODY_RAW, !HTTPConstants.GET.equals(method));
 
-        if (HTTPConstants.GET.equals(method)) {
-            element.setProperty(HTTPSamplerBase.POST_BODY_RAW, false);
-            // TODO
-        } else {
-            element.setProperty(HTTPSamplerBase.POST_BODY_RAW, true);
-            final Arguments postArgs = createGraphQLPostArguments(operationName, query, variables);
-            element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, postArgs));
-        }
+        final Arguments args = (HTTPConstants.GET.equals(method))
+                ? createGraphQLGetArguments(operationName, query, variables)
+                : createGraphQLPostArguments(operationName, query, variables);
+        element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
     }
 
     @Override
@@ -172,12 +173,42 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
 
         postBodyJson.addProperty("query", StringUtils.trim(query));
 
-        final HTTPArgument arg = new HTTPArgument("", gson.toJson(postBodyJson));
-        arg.setUseEquals(true);
-        arg.setAlwaysEncoded(false);
         final Arguments args = new Arguments();
-        args.addArgument(arg);
+        args.addArgument(createHTTPArgument("", gson.toJson(postBodyJson), true, false, true));
+        return args;
+    }
+
+    private Arguments createGraphQLGetArguments(final String operationName, final String query, final String variables) {
+        final Arguments args = createHTTPArgumentsTestElement();
+
+        final String operationNameParam = StringUtils.trim(operationName);
+        if (StringUtils.isNotEmpty(operationNameParam)) {
+            args.addArgument(createHTTPArgument("operationName", operationNameParam, true, true, true));
+        }
+
+        args.addArgument(createHTTPArgument("query",
+                RegExUtils.replaceAll(StringUtils.trim(query), WHITESPACES_PATTERN, " "), true, true, true));
+
+        if (StringUtils.isNotBlank(variables)) {
+            final Gson gson = new GsonBuilder().serializeNulls().create();
+
+            try {
+                final JsonObject variablesJson = gson.fromJson(variables, JsonObject.class);
+                args.addArgument(createHTTPArgument("variables", gson.toJson(variablesJson), true, true, true));
+            } catch (JsonSyntaxException e) {
+                log.error("Ignoring the GraphQL query variables content due to the syntax error: {}", e.getLocalizedMessage());
+            }
+        }
 
         return args;
+    }
+
+    private HTTPArgument createHTTPArgument(final String name, final String value, final boolean useEquals,
+            final boolean alwaysEncoded, final boolean enabled) {
+        final HTTPArgument arg = new HTTPArgument(name, value);
+        arg.setUseEquals(useEquals);
+        arg.setAlwaysEncoded(alwaysEncoded);
+        arg.setEnabled(enabled);
+        return arg;
     }
 }

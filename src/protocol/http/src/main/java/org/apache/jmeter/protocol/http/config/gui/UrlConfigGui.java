@@ -453,6 +453,14 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         return postContentTabbedPane;
     }
 
+    /**
+     * Create a new {@link Arguments} instance associated with the specific GUI used in this component.
+     * @return a new {@link Arguments} instance associated with the specific GUI used in this component
+     */
+    protected Arguments createHTTPArgumentsTestElement() {
+        return (Arguments) argsPanel.createTestElement();
+    }
+
     class ValidationTabbedPane extends AbstractValidationTabbedPane {
 
         private static final long serialVersionUID = 7014311238367882881L;
