@@ -63,6 +63,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
     private static final long serialVersionUID = 240L;
 
+    /**
+     * Default value settings for URL Configuration GUI elements.
+     */
     private static final UrlConfigDefaults URL_CONFIG_DEFAULTS = new UrlConfigDefaults();
 
     private static final int TAB_PARAMETERS = 0;

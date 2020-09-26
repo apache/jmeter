@@ -17,21 +17,21 @@
 
 package org.apache.jmeter.protocol.http.control.gui;
 
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.config.gui.GraphQLUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.util.JMeterUtils;
 
+/**
+ * GraphQL HTTP Sampler GUI which extends {@link HttpTestSampleGui} in order to provide more convenient UI elements for
+ * GraphQL query, variables and operationName.
+ */
 @TestElementMetadata(labelResource = "graphql_http_sampler_title")
 public class GraphQLHTTPSamplerGui extends HttpTestSampleGui {
 
     private static final long serialVersionUID = 1L;
-
-    public GraphQLHTTPSamplerGui() {
-        super(true);
-    }
 
     // Use this instead of getLabelResource() otherwise getDocAnchor() below does not work
     @Override
@@ -44,17 +44,24 @@ public class GraphQLHTTPSamplerGui extends HttpTestSampleGui {
         return super.getStaticLabel().replace(' ', '_'); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
+    /**
+     * {@inheritDoc}
+     * <P>
+     * Overridden to hide the HTML embedded resource handling section as GraphQL responses are always in JSON.
+     */
     @Override
-    protected JTabbedPane createTabbedConfigPane() {
-        final JTabbedPane tabbedPane = super.createTabbedConfigPane();
-        // Remove other tabs than the first 'Basic' tab as they are unnecessary in GraphQL requests.
-        final int tabCount = tabbedPane.getTabCount();
-        for (int i = tabCount - 1; i > 0; i--) {
-            tabbedPane.remove(i);
-        }
-        return tabbedPane;
+    protected JPanel createEmbeddedRsrcPanel() {
+        final JPanel panel = super.createEmbeddedRsrcPanel();
+        // No need to consider embedded resources in HTML as the GraphQL responses are always in JSON.
+        panel.setVisible(false);
+        return panel;
     }
 
+    /**
+     * {@inheritDoc}
+     * <P>
+     * Overridden to create a {@link GraphQLUrlConfigGui} which extends {@link UrlConfigGui} for GraphQL specific UI elements.
+     */
     @Override
     protected UrlConfigGui createUrlConfigGui() {
         final GraphQLUrlConfigGui configGui = new GraphQLUrlConfigGui();

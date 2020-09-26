@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3.1-SNAPSHOT f27ca4f">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3.1-SNAPSHOT e9cd05f">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Simple GraphQL HTTP Request Test Plan" enabled="true">
-      <stringProp name="TestPlan.comments">Simple GraphQL HTTP Request Test Plan for demonstration purpose, querying data from starwars demo server (https://github.com/apollographql/starwars-server)</stringProp>
+      <stringProp name="TestPlan.comments">Simple GraphQL HTTP Request Test Plan for demonstration purpose, querying data from a demo GraphQL server</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
@@ -88,6 +88,8 @@
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           <stringProp name="HTTPSampler.embedded_url_exclude_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
       </hashTree>

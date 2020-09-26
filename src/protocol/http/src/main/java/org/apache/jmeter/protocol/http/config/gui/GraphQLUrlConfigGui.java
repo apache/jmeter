@@ -46,14 +46,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * GraphQL over HTTP Request configuration:
- * <ul>
- * <li>host and port</li>
- * <li>connect and response timeouts</li>
- * <li>path, method, encoding, parameters</li>
- * <li>redirects and keepalive</li>
- * <li>GraphQL query and query variables</li>
- * </ul>
+ * Extending {@link UrlConfigGui}, GraphQL over HTTP Request configuration GUI, providing more convenient UI elements
+ * for GraphQL query, variables and operationName.
  */
 public class GraphQLUrlConfigGui extends UrlConfigGui {
 
@@ -67,14 +61,9 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
 
     public static final String VARIABLES = "GraphQLHTTPSampler.variables";
 
-    private static Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
-
-    private JLabeledTextField operationNameText;
-
-    private JSyntaxTextArea queryContent;
-
-    private JSyntaxTextArea variablesContent;
-
+    /**
+     * Default value settings for GraphQL URL Configuration GUI elements.
+     */
     private static final UrlConfigDefaults URL_CONFIG_DEFAULTS = new UrlConfigDefaults();
     static {
         URL_CONFIG_DEFAULTS.setValidMethods(new String[] { HTTPConstants.POST, HTTPConstants.GET });
@@ -86,6 +75,14 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         URL_CONFIG_DEFAULTS.setUseMultipart(false);
         URL_CONFIG_DEFAULTS.setUseMultipartVisible(false);
     }
+
+    private static Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
+
+    private JLabeledTextField operationNameText;
+
+    private JSyntaxTextArea queryContent;
+
+    private JSyntaxTextArea variablesContent;
 
     /**
      * Constructor which is setup to show the sampler fields for GraphQL over HTTP request.
@@ -130,6 +127,11 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         return URL_CONFIG_DEFAULTS;
     }
 
+    /**
+     * {@inheritDoc}
+     * <P>
+     * Overridden to add the extra GraphQL Request Information section including 'operationName' text field.
+     */
     @Override
     protected Component getPathPanel() {
         final JPanel panel = (JPanel) super.getPathPanel();
@@ -141,6 +143,11 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         return panel;
     }
 
+    /**
+     * {@inheritDoc}
+     * <P>
+     * Overridden to remove the existing tab for parameter arguments and GraphQL variables content pane.
+     */
     @Override
     protected JTabbedPane getParameterPanel() {
         final AbstractValidationTabbedPane paramPanel = (AbstractValidationTabbedPane) super.getParameterPanel();
