@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
-import org.apache.jmeter.protocol.http.sampler.GraphQLHTTPSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -54,6 +53,12 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
 
     private static Logger log = LoggerFactory.getLogger(GraphQLUrlConfigGui.class);
 
+    public static final String OPERATION_NAME = "GraphQLHTTPSampler.operationName";
+
+    public static final String QUERY = "GraphQLHTTPSampler.query";
+
+    public static final String VARIABLES = "GraphQLHTTPSampler.variables";
+
     private JSyntaxTextArea queryContent;
     private JSyntaxTextArea variablesContent;
 
@@ -79,9 +84,9 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        final String query = element.getPropertyAsString(GraphQLHTTPSampler.QUERY, "");
+        final String query = element.getPropertyAsString(QUERY, "");
         queryContent.setText(query);
-        final String variables = element.getPropertyAsString(GraphQLHTTPSampler.VARIABLES, "");
+        final String variables = element.getPropertyAsString(VARIABLES, "");
         variablesContent.setText(variables);
     }
 
@@ -94,9 +99,9 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         final String query = StringUtils.trim(queryContent.getText());
         final String variables = StringUtils.trim(variablesContent.getText());
 
-        element.setProperty(GraphQLHTTPSampler.OPERATION_NAME, operationName);
-        element.setProperty(GraphQLHTTPSampler.QUERY, query);
-        element.setProperty(GraphQLHTTPSampler.VARIABLES, variables);
+        element.setProperty(OPERATION_NAME, operationName);
+        element.setProperty(QUERY, query);
+        element.setProperty(VARIABLES, variables);
 
         if (HTTPConstants.GET.equals(method)) {
             element.setProperty(HTTPSamplerBase.POST_BODY_RAW, false);
