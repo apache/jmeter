@@ -583,7 +583,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public String getSampleLabel(boolean includeGroup) {
         if (includeGroup) {
-            return threadName.substring(0, threadName.lastIndexOf(' ')) + ":" + label;
+            // while JMeters own samplers always set the threadName, that might not be the case for plugins
+            int lastSpacePos = Math.max(0, threadName.lastIndexOf(' '));
+            return threadName.substring(0, lastSpacePos) + ":" + label;
         }
         return label;
     }
