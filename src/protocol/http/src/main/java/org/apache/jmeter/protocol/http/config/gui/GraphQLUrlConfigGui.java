@@ -97,6 +97,8 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
+        final String operationName = element.getPropertyAsString(OPERATION_NAME, "");
+        operationNameText.setText(operationName);
         final String query = element.getPropertyAsString(QUERY, "");
         queryContent.setText(query);
         final String variables = element.getPropertyAsString(VARIABLES, "");
@@ -174,7 +176,7 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         postBodyJson.addProperty("query", StringUtils.trim(query));
 
         final Arguments args = new Arguments();
-        args.addArgument(createHTTPArgument("", gson.toJson(postBodyJson), true, false, true));
+        args.addArgument(createHTTPArgument("", gson.toJson(postBodyJson), false));
         return args;
     }
 
@@ -183,18 +185,18 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
 
         final String operationNameParam = StringUtils.trim(operationName);
         if (StringUtils.isNotEmpty(operationNameParam)) {
-            args.addArgument(createHTTPArgument("operationName", operationNameParam, true, true, true));
+            args.addArgument(createHTTPArgument("operationName", operationNameParam, true));
         }
 
         args.addArgument(createHTTPArgument("query",
-                RegExUtils.replaceAll(StringUtils.trim(query), WHITESPACES_PATTERN, " "), true, true, true));
+                RegExUtils.replaceAll(StringUtils.trim(query), WHITESPACES_PATTERN, " "), true));
 
         if (StringUtils.isNotBlank(variables)) {
             final Gson gson = new GsonBuilder().serializeNulls().create();
 
             try {
                 final JsonObject variablesJson = gson.fromJson(variables, JsonObject.class);
-                args.addArgument(createHTTPArgument("variables", gson.toJson(variablesJson), true, true, true));
+                args.addArgument(createHTTPArgument("variables", gson.toJson(variablesJson), true));
             } catch (JsonSyntaxException e) {
                 log.error("Ignoring the GraphQL query variables content due to the syntax error: {}", e.getLocalizedMessage());
             }
@@ -203,12 +205,11 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         return args;
     }
 
-    private HTTPArgument createHTTPArgument(final String name, final String value, final boolean useEquals,
-            final boolean alwaysEncoded, final boolean enabled) {
+    private HTTPArgument createHTTPArgument(final String name, final String value, final boolean encodeValue) {
         final HTTPArgument arg = new HTTPArgument(name, value);
-        arg.setUseEquals(useEquals);
-        arg.setAlwaysEncoded(alwaysEncoded);
-        arg.setEnabled(enabled);
+        arg.setUseEquals(true);
+        arg.setEnabled(true);
+        arg.setAlwaysEncoded(encodeValue);
         return arg;
     }
 }
