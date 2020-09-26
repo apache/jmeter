@@ -17,18 +17,17 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GraphQLHTTPSampler extends HTTPSampler {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger log = LoggerFactory.getLogger(GraphQLHTTPSampler.class);
+    public static final String OPERATION_NAME = "GraphQLHTTPSampler.operationName";
+
+    public static final String QUERY = "GraphQLHTTPSampler.query";
+
+    public static final String VARIABLES = "GraphQLHTTPSampler.variables";
 
     private String operationName;
     private String query;
@@ -39,32 +38,12 @@ public class GraphQLHTTPSampler extends HTTPSampler {
         setMethod(HTTPConstants.POST);
     }
 
-    @Override
-    public String getMethod() {
-        return super.getMethod();
-    }
-
-    @Override
-    public void setMethod(String value) {
-        if (StringUtils.equals(value, getMethod())) {
-            return;
-        }
-
-        super.setMethod(value);
-        updateHttpSamplerProperties();
-    }
-
     public String getOperationName() {
         return operationName;
     }
 
     public void setOperationName(String value) {
-        if (StringUtils.equals(value, getOperationName())) {
-            return;
-        }
-
         this.operationName = value;
-        updateHttpSamplerProperties();
     }
 
     public String getQuery() {
@@ -72,12 +51,7 @@ public class GraphQLHTTPSampler extends HTTPSampler {
     }
 
     public void setQuery(String value) {
-        if (StringUtils.equals(value, getQuery())) {
-            return;
-        }
-
         this.query = value;
-        updateHttpSamplerProperties();
     }
 
     public String getVariables() {
@@ -85,37 +59,6 @@ public class GraphQLHTTPSampler extends HTTPSampler {
     }
 
     public void setVariables(String value) {
-        if (StringUtils.equals(value, getVariables())) {
-            return;
-        }
-
         this.variables = value;
-        updateHttpSamplerProperties();
-    }
-
-    private void updateHttpSamplerProperties() {
-        if (HTTPConstants.GET.equals(getMethod())) {
-            updateHttpSamplerPropertiesWithGetMethod();
-        } else {
-            updateHttpSamplerPropertiesWithPostMethod();
-        }
-    }
-
-    private void updateHttpSamplerPropertiesWithPostMethod() {
-        setPostBodyRaw(true);
-        setDoMultipart(false);
-
-        final Arguments args = new Arguments();
-        final String postBody = "{\"operationName\":null,\"variables\":{},"
-                + "\"query\":\"{\\n  findItemsByKeyword(text: \\\"\\\", offset: 0, limit: 200) {\\n    total\\n }\\n  }\\n\"}";
-        final HTTPArgument arg = new HTTPArgument("", postBody);
-        arg.setUseEquals(true);
-        arg.setAlwaysEncoded(false);
-        args.addArgument(arg);
-        setArguments(args);
-    }
-
-    private void updateHttpSamplerPropertiesWithGetMethod() {
-        setPostBodyRaw(false);
     }
 }

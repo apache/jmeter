@@ -85,6 +85,7 @@ project("http") {
         implementation("org.apache.httpcomponents:httpcore")
         implementation("org.brotli:dec")
         implementation("com.miglayout:miglayout-swing")
+        implementation("com.google.code.gson:gson")
         testImplementation(testFixtures(project(":src:testkit-wiremock")))
         testImplementation("com.github.tomakehurst:wiremock-jre8")
     }

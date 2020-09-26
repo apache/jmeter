@@ -22,8 +22,6 @@ import javax.swing.JTabbedPane;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.config.gui.GraphQLUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
-import org.apache.jmeter.protocol.http.sampler.GraphQLHTTPSampler;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 @TestElementMetadata(labelResource = "graphql_http_sampler_title")
@@ -44,13 +42,6 @@ public class GraphQLHTTPSamplerGui extends HttpTestSampleGui {
     @Override
     public String getDocAnchor() {// reuse documentation
         return super.getStaticLabel().replace(' ', '_'); //$NON-NLS-1$ //$NON-NLS-2$
-    }
-
-    @Override
-    public TestElement createTestElement() {
-        GraphQLHTTPSampler sampler = new GraphQLHTTPSampler();
-        modifyTestElement(sampler);
-        return sampler;
     }
 
     @Override
