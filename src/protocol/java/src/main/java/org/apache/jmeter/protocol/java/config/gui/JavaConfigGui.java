@@ -201,7 +201,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             } catch (AbstractMethodError e) {
                 log.warn("JavaSamplerClient doesn't implement "
                         + "getDefaultParameters.  Default parameters won't "
-                        + "be shown.  Please update your client class: " + className);
+                        + "be shown.  Please update your client class: {}", className);
             }
 
             if (testParams != null) {
@@ -227,7 +227,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             argsPanel.configure(newArgs);
             warningLabel.setVisible(false);
         } catch (Exception e) {
-            log.error("Error getting argument list for " + className, e);
+            log.error("Error getting argument list for {}", className, e);
             warningLabel.setVisible(true);
         }
     }
@@ -272,9 +272,9 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             // Just to use client
             return client != null;
         } catch (Exception ex) {
-            log.error("Error creating class:'"+className+"' in JavaSampler "+getName()
-                +", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
-                ex);
+            log.error("Error creating class:'{}' in JavaSampler {}"
+                    + ", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
+                    className, getName(), ex);
             return false;
         }
     }

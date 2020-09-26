@@ -100,7 +100,7 @@ public class IfController extends GenericController implements Serializable, Thr
                 , "<cmd>", 1, null);
                 result = computeResultFromString(condition, Context.toString(cxResultObject));
             } catch (Exception e) {
-                log.error("{}: error while processing "+ "[{}]", testElementName, condition, e);
+                log.error("{}: error while processing [{}]", testElementName, condition, e);
             } finally {
                 Context.exit();
             }
