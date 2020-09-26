@@ -214,7 +214,7 @@ class JTidyHTMLParser extends HTMLParser {
         tidy.setQuiet(true);
         tidy.setShowWarnings(false);
         if (log.isDebugEnabled()) {
-            log.debug("getParser : tidy parser created - " + tidy);
+            log.debug("getParser : tidy parser created - {}", tidy);
         }
         log.debug("End   : getParser");
         return tidy;
@@ -234,7 +234,7 @@ class JTidyHTMLParser extends HTMLParser {
         log.debug("Start : getDOM");
         Node node = getTidyParser(encoding).parseDOM(new ByteArrayInputStream(text), null);
         if (log.isDebugEnabled()) {
-            log.debug("node : " + node);
+            log.debug("node : {}", node);
         }
         log.debug("End   : getDOM");
         return node;

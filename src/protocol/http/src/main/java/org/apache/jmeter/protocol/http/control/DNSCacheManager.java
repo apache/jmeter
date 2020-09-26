@@ -170,7 +170,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     }
 
     private void logCache(String hitOrMiss, String host, InetAddress[] addresses) {
-        log.debug("Cache " + hitOrMiss + " thread#{}: {} => {}",
+        log.debug("Cache {} thread#{}: {} => {}", hitOrMiss,
                 JMeterContextService.getContext().getThreadNum(),
                 host,
                 Arrays.toString(addresses));
