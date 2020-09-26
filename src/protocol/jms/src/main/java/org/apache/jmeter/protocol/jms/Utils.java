@@ -226,7 +226,7 @@ public final class Utils {
             String name = me.getKey();
             Object value = me.getValue();
             if (log.isDebugEnabled()) {
-                log.debug("Adding property [" + name + "=" + value + "]");
+                log.debug("Adding property [{}={}]", name, value);
             }
 
             // Some JMS implemenations do not allow certain header fields to be set using properties

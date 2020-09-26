@@ -133,7 +133,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
                 try {
                     return Integer.parseInt(tag);
                 } catch (NumberFormatException e) {
-                    log.warn("Illegal transaction isolation configuration '" + tag + "'");
+                    log.warn("Illegal transaction isolation configuration '{}'", tag);
                 }
             } else {
                 return isolationMode;

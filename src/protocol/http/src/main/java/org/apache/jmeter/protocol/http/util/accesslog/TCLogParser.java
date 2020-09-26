@@ -277,7 +277,7 @@ public class TCLogParser implements LogParser {
         // we clean the line to get
         // rid of extra stuff
         String cleanedLine = this.cleanURL(line);
-        log.debug("parsing line: " + line);
+        log.debug("parsing line: {}", line);
         // now we set request method
         el.setProperty(HTTPSamplerBase.METHOD, RMETHOD);
         if (FILTER != null) {

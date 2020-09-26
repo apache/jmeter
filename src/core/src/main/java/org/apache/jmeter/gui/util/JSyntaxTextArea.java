@@ -297,7 +297,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         try {
             return Theme.load(klass.getResourceAsStream(name));
         } catch (IOException e) {
-            log.error("Error reading " + name + " for JSyntaxTextArea", e);
+            log.error("Error reading {} for JSyntaxTextArea", name, e);
             return null;
         }
     }

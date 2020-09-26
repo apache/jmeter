@@ -69,12 +69,12 @@ public class KerberosManager implements Serializable {
                 loginCtx.login();
                 return loginCtx.getSubject();
             } catch (LoginException e) {
-                log.warn("Could not log in user " + username, e);
+                log.warn("Could not log in user {}", username, e);
             }
             return null;
         });
         if(log.isDebugEnabled()) {
-            log.debug("Subject cached:"+subjects.keySet() +" before:"+username);
+            log.debug("Subject cached:{} before:{}", subjects.keySet(), username);
         }
         Future<Subject> subjectFuture = subjects.putIfAbsent(username, task);
         if (subjectFuture == null) {
@@ -84,10 +84,10 @@ public class KerberosManager implements Serializable {
         try {
             return subjectFuture.get();
         } catch (InterruptedException e1) {
-            log.warn("Interrupted while getting subject for " + username, e1);
+            log.warn("Interrupted while getting subject for {}", username, e1);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e1) {
-            log.warn("Execution of getting subject for " + username + " failed", e1);
+            log.warn("Execution of getting subject for {} failed", username, e1);
         }
         return null;
     }
