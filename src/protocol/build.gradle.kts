@@ -86,6 +86,8 @@ project("http") {
         implementation("org.brotli:dec")
         implementation("com.miglayout:miglayout-swing")
         implementation("com.google.code.gson:gson")
+        implementation("com.fasterxml.jackson.core:jackson-core")
+        implementation("com.fasterxml.jackson.core:jackson-databind")
         testImplementation(testFixtures(project(":src:testkit-wiremock")))
         testImplementation("com.github.tomakehurst:wiremock-jre8")
     }

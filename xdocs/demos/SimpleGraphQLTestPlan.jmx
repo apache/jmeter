@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3.1-SNAPSHOT c739498">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3.1-SNAPSHOT fcf3ed2">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Simple GraphQL HTTP Request Test Plan" enabled="true">
       <stringProp name="TestPlan.comments">Simple GraphQL HTTP Request Test Plan for demonstration purpose, querying data from a demo GraphQL server</stringProp>
