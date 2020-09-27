@@ -195,6 +195,10 @@ Defaults to: <code>true</code>
     Interval period in <code>ms</code> to process the events of the listeners.<br/>
     Defaults to: <code>500</code></property>
 </properties>
+<property name="jmeter.gui.propagate_parent_state_to_children">
+    Propagate the state (enabled or disable) of the current element to the children of the tree<br/>
+    Defaults to: <code>true</code></property>
+</properties>
 </section>
 <section name="&sect-num;.4.1 Darklaf configuration" anchor="darklaf_config">
 <properties>

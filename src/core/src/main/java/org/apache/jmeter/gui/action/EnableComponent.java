@@ -40,8 +40,8 @@ public class EnableComponent extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 
     // propagate the state of the current element to the children of the tree
-    private static final boolean PROPAGATES_PARENT_STATE_TO_CHILDREN_RENDER_TREE =
-            JMeterUtils.getPropDefault("jmeter.gui.propagates_parent_state_to_children", true);
+    private static final boolean PROPAGATE_PARENT_STATE_TO_CHILDREN_RENDER_TREE =
+            JMeterUtils.getPropDefault("jmeter.gui.propagate_parent_state_to_children", true);
 
     static {
         commands.add(ActionNames.ENABLE);
@@ -67,7 +67,7 @@ public class EnableComponent extends AbstractAction {
             toggleComponents(nodes);
          }
 
-        if (PROPAGATES_PARENT_STATE_TO_CHILDREN_RENDER_TREE) {
+        if (PROPAGATE_PARENT_STATE_TO_CHILDREN_RENDER_TREE) {
             log.debug("propagate the state of the current element to the children of the tree");
             triggerChildrenRender(nodes);
         }

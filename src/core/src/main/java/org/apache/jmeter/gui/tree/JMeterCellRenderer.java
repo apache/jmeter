@@ -29,6 +29,7 @@ import javax.swing.tree.TreeNode;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.TestFragmentController;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -43,6 +44,11 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
 
     private static final Border RED_BORDER = BorderFactory.createLineBorder(Color.red);
     private static final Border BLUE_BORDER = BorderFactory.createLineBorder(Color.blue);
+
+    // propagate the state of the current element to the children of the tree
+    private static final boolean PROPAGATE_PARENT_STATE_TO_CHILDREN_RENDER_TREE =
+            JMeterUtils.getPropDefault("jmeter.gui.propagate_parent_state_to_children", true);
+
     public JMeterCellRenderer() {
     }
 
@@ -55,8 +61,9 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
                         sel, expanded, leaf, row, p_hasFocus);
         boolean enabled = node.isEnabled();
         // Even in case the node itself is not disabled, we render it as disabled if
-        // one of its parents is in fact disabled.
-        for (TreeNode parent = node.getParent(); parent != null && enabled; parent = parent.getParent()) {
+        // one of its parents is in fact disabled and
+        // PROPAGATE_PARENT_STATE_TO_CHILDREN_RENDER_TREE == true
+        for (TreeNode parent = node.getParent(); parent != null && enabled && PROPAGATE_PARENT_STATE_TO_CHILDREN_RENDER_TREE; parent = parent.getParent()) {
             if (parent instanceof JMeterTreeNode) {
                 JMeterTreeNode jMeterTreeNode = (JMeterTreeNode) parent;
                 if (jMeterTreeNode.getTestElement() instanceof TestFragmentController) {

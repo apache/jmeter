@@ -120,6 +120,7 @@ applications when JMeter is starting up.</p>
   <li><pr>599</pr>Ensure all buttons added to the toolbar behave/look consistently. Contributed by Jannis Weis</li>
   <li><bug>64581</bug>Allow SampleResult#setIgnore to influence behaviour on Sampler Error</li>
   <li><bug>64680</bug>Fall back to <code>JMETER_HOME</code> on startup to detect JMeter's installation directory</li>
+  <li><pr>628</pr>Add jmeter property <code>jmeter.gui.propagate_parent_state_to_children</code> to choose if you want to propagate the state (enable or disable) of the current element to the children of the tree OR NOT (gray for disable for all chidren in the tree).Contributed by Vincent Daburon</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
