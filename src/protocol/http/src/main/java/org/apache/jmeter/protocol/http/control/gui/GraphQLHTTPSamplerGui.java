@@ -33,6 +33,10 @@ public class GraphQLHTTPSamplerGui extends HttpTestSampleGui {
 
     private static final long serialVersionUID = 1L;
 
+    public GraphQLHTTPSamplerGui() {
+        super();
+    }
+
     // Use this instead of getLabelResource() otherwise getDocAnchor() below does not work
     @Override
     public String getStaticLabel() {
