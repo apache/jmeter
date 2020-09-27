@@ -25,10 +25,9 @@ import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Utilities to (de)serialize GraphQL request parameters.
@@ -46,24 +45,30 @@ public final class GraphQLRequestParamUtils {
      * Convert the GraphQL request parameters input data to an HTTP POST body string.
      * @param params GraphQL request parameter input data
      * @return an HTTP POST body string converted from the GraphQL request parameters input data
+     * @throws RuntimeException if JSON serialization fails for some reason due to any runtime environment issues
      */
     public static String toPostBodyString(final GraphQLRequestParams params) {
-        final Gson gson = new GsonBuilder().serializeNulls().create();
-        final JsonObject postBodyJson = new JsonObject();
-        postBodyJson.addProperty("operationName", StringUtils.trimToNull(params.getOperationName()));
+        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectNode postBodyJson = mapper.createObjectNode();
+        postBodyJson.put("operationName", StringUtils.trimToNull(params.getOperationName()));
 
         if (StringUtils.isNotBlank(params.getVariables())) {
             try {
-                final JsonObject variablesJson = gson.fromJson(params.getVariables(), JsonObject.class);
-                postBodyJson.add("variables", variablesJson);
-            } catch (JsonSyntaxException e) {
+                final ObjectNode variablesJson = mapper.readValue(params.getVariables(), ObjectNode.class);
+                postBodyJson.set("variables", variablesJson);
+            } catch (JsonProcessingException e) {
                 log.error("Ignoring the GraphQL query variables content due to the syntax error: {}",
                         e.getLocalizedMessage());
             }
         }
 
-        postBodyJson.addProperty("query", StringUtils.trim(params.getQuery()));
-        return gson.toJson(postBodyJson);
+        postBodyJson.put("query", StringUtils.trim(params.getQuery()));
+
+        try {
+            return mapper.writeValueAsString(postBodyJson);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Cannot serialize JSON for POST body string", e);
+        }
     }
 
     /**
@@ -81,12 +86,12 @@ public final class GraphQLRequestParamUtils {
      * @return an HTTP GET request parameter value converted from the GraphQL Variables JSON input string
      */
     public static String variablesToGetParamValue(final String variables) {
-        final Gson gson = new GsonBuilder().serializeNulls().create();
+        final ObjectMapper mapper = new ObjectMapper();
 
         try {
-            final JsonObject variablesJson = gson.fromJson(variables, JsonObject.class);
-            return gson.toJson(variablesJson);
-        } catch (JsonSyntaxException e) {
+            final ObjectNode variablesJson = mapper.readValue(variables, ObjectNode.class);
+            return mapper.writeValueAsString(variablesJson);
+        } catch (JsonProcessingException e) {
             log.error("Ignoring the GraphQL query variables content due to the syntax error: {}",
                     e.getLocalizedMessage());
         }

@@ -170,9 +170,6 @@
     <dependency group='commons-logging' module='commons-logging' version='1.0.4'>
       <sha512>C8D2D39A60ADCC49091D393DAF30473D1776E4B6B09BB86639171F660833A17AFBDC9F3E85843093535DA16FA664CD7CD4CA38F54E141018DD1B78DE681AD668</sha512>
     </dependency>
-    <dependency group='com.google.code.gson' module='gson' version='2.8.6'>
-      <sha1>9180733b7df8542621dc12e21e87557e8c99b8cb</sha1>
-    </dependency>
     <dependency group='de.marcphilipp.gradle' module='nexus-publish-plugin' version='0.4.0'>
       <sha512>37EC6DFBDDD0458A2A341E371D038B3B0A25AB2F9006B295EBCF3BDE873A8D02C8CDAA6C69D875500F67593C618E8EF62C0269FB2F7F527A1367A7D6B8EA3CBE</sha512>
     </dependency>

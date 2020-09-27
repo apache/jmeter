@@ -124,8 +124,10 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
                     GraphQLRequestParamUtils.queryToGetParamValue(params.getQuery()), true));
 
             if (StringUtils.isNotBlank(params.getVariables())) {
-                args.addArgument(createHTTPArgument("variables",
-                        GraphQLRequestParamUtils.variablesToGetParamValue(params.getVariables()), true));
+                final String variablesParamValue = GraphQLRequestParamUtils.variablesToGetParamValue(params.getVariables());
+                if (variablesParamValue != null) {
+                    args.addArgument(createHTTPArgument("variables", variablesParamValue, true));
+                }
             }
         } else {
             args = new Arguments();
