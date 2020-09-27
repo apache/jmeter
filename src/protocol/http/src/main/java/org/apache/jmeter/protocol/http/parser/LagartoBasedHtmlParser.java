@@ -225,7 +225,8 @@ public class LagartoBasedHtmlParser extends HTMLParser {
         } catch (LagartoException e) {
             // TODO is it the best way ? https://bz.apache.org/bugzilla/show_bug.cgi?id=55634
             if(log.isDebugEnabled()) {
-                log.debug("Error extracting embedded resource URLs from:'"+baseUrl+"', probably not text content, message:"+e.getMessage());
+                log.debug("Error extracting embedded resource URLs from:'{}', probably not text content, message:{}",
+                        baseUrl, e.getMessage());
             }
             return Collections.<URL>emptyList().iterator();
         } catch (Exception e) {

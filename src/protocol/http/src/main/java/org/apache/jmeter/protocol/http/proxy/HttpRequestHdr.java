@@ -216,7 +216,7 @@ public class HttpRequestHdr {
                 log.debug("Successfully built URI from url:{} => {}", url, testCleanUri.toString());
             }
         } catch (URISyntaxException e) {
-            log.warn("Url '" + url + "' contains unsafe characters, will escape it, message:"+e.getMessage());
+            log.warn("Url '{}' contains unsafe characters, will escape it, message:{}", url, e.getMessage());
             try {
                 String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
                 if(log.isDebugEnabled()) {
@@ -224,7 +224,7 @@ public class HttpRequestHdr {
                 }
                 url = escapedUrl;
             } catch (Exception e1) {
-                log.error("Error escaping URL:'"+url+"', message:"+e1.getMessage());
+                log.error("Error escaping URL:'{}', message:{}", url, e1.getMessage());
             }
         }
         log.debug("First Line url: {}", url);

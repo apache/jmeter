@@ -57,7 +57,7 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
     @Override
     public void process() {
         if (log.isDebugEnabled()) {
-            log.debug(Thread.currentThread().getName() + " Running up named: " + getName());//$NON-NLS-1$
+            log.debug("{} Running up named: {}", Thread.currentThread().getName(), getName());//$NON-NLS-1$
         }
         Sampler entry = getThreadContext().getCurrentSampler();
         if (!(entry instanceof HTTPSamplerBase)) {

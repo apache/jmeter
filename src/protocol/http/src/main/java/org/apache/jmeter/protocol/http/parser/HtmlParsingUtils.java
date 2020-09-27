@@ -208,7 +208,7 @@ public final class HtmlParsingUtils {
         tidy.setShowWarnings(false);
 
         if (log.isDebugEnabled()) {
-            log.debug("getParser1 : tidy parser created - " + tidy);
+            log.debug("getParser1 : tidy parser created - {}", tidy);
         }
 
         log.debug("End : getParser1");
@@ -232,7 +232,7 @@ public final class HtmlParsingUtils {
                                 text.getBytes(StandardCharsets.UTF_8)), null);
 
         if (log.isDebugEnabled()) {
-            log.debug("node : " + node);
+            log.debug("node : {}", node);
         }
 
         log.debug("End : getDOM1");
@@ -263,7 +263,7 @@ public final class HtmlParsingUtils {
      */
     public static HTTPSamplerBase createUrlFromAnchor(String parsedUrlString, URL context) throws MalformedURLException {
         if (log.isDebugEnabled()) {
-            log.debug("Creating URL from Anchor: " + parsedUrlString + ", base: " + context);
+            log.debug("Creating URL from Anchor: {}, base: {}", parsedUrlString, context);
         }
         URL url = ConversionUtils.makeRelativeURL(context, parsedUrlString);
         HTTPSamplerBase sampler =HTTPSamplerFactory.newInstance();
@@ -329,7 +329,7 @@ public final class HtmlParsingUtils {
                 }
             }
         } catch (Exception ex) {
-            log.warn("Some bad HTML " + printNode(tempNode), ex);
+            log.warn("Some bad HTML {}", printNode(tempNode), ex);
         }
         NodeList childNodes = tempNode.getChildNodes();
         for (int x = 0; x < childNodes.getLength(); x++) {
