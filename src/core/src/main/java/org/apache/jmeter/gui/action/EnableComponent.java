@@ -27,6 +27,7 @@ import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,10 @@ public class EnableComponent extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(EnableComponent.class);
 
     private static final Set<String> commands = new HashSet<>();
+
+    // propagate the state of the current element to the children of the tree
+    private static final boolean PROPAGATES_PARENT_STATE_TO_CHILDREN_RENDER_TREE =
+            JMeterUtils.getPropDefault("jmeter.gui.propagates_parent_state_to_children", true);
 
     static {
         commands.add(ActionNames.ENABLE);
@@ -54,15 +59,20 @@ public class EnableComponent extends AbstractAction {
         if (e.getActionCommand().equals(ActionNames.ENABLE)) {
             log.debug("enabling currently selected gui objects");
             enableComponents(nodes, true);
-            triggerChildrenRender(nodes);
-        } else if (e.getActionCommand().equals(ActionNames.DISABLE)) {
+         } else if (e.getActionCommand().equals(ActionNames.DISABLE)) {
             log.debug("disabling currently selected gui objects");
             enableComponents(nodes, false);
-            triggerChildrenRender(nodes);
         } else if (e.getActionCommand().equals(ActionNames.TOGGLE)) {
             log.debug("toggling currently selected gui objects");
             toggleComponents(nodes);
+         }
+
+        if (PROPAGATES_PARENT_STATE_TO_CHILDREN_RENDER_TREE) {
+            log.debug("propagate the state of the current element to the children of the tree");
             triggerChildrenRender(nodes);
+        }
+        else {
+            log.debug("Do NOT propagate the state of the current element to the children of the tree");
         }
     }
 
