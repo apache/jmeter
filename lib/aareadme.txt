@@ -106,6 +106,11 @@ groovy-3.0.3
 ----------------------
 Advised scripting language for JSR223 Test Elements
 
+gson-2.8.6
+----------------------
+https://github.com/google/gson
+- Parsing and serializing JSON
+
 hamcrest-core-1.3
 ----------------------
 - unit tests, JUnit sampler
