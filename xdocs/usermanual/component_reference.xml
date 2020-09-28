@@ -3493,16 +3493,21 @@ By default, a Graphite implementation is provided.
     </p>
 
     <p>
-      Since JMeter 5.4, an implementation that writes all sample results directly to InfluxDB.
-      It is called <code>InfluxDBRawBackendListenerClient</code>. It is worth noting that this will use more resources
-      than the <code>InfluxdbBackendListenerClient</code> both in JMeter while running a load test and also InfluxDB
-      due to the increase writes and data. The following parameters apply to the
-      <a href="../api/org/apache/jmeter/visualizers/backend/influxdb/InfluxDBRawBackendListenerClient.html">InfluxDBRawBackendListenerClient</a> implementation:
+      Since JMeter 5.4, an implementation that writes all sample results to InfluxDB.
+      It is called <code>InfluxDBRawBackendListenerClient</code>.
+      It is worth noting that this will use more resources than the
+      <code>InfluxdbBackendListenerClient</code>, both by JMeter and InfluxDB
+      due to the increase in data and individual writes.
+      The following parameters apply to the
+      <a href="../api/org/apache/jmeter/visualizers/backend/influxdb/InfluxDBRawBackendListenerClient.html">InfluxDBRawBackendListenerClient</a>
+      implementation:
     </p>
 
     <properties>
       <property name="influxdbMetricsSender" required="Yes"><code>org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender</code></property>
-      <property name="influxdbUrl" required="Yes">Influx URL (e.g. http://influxHost:8086/write?db=jmeter)</property>
+      <property name="influxdbUrl" required="Yes">
+        Influx URL (e.g. http://influxHost:8086/write?db=jmeter or, for the cloud, https://eu-central-1-1.aws.cloud2.influxdata.com/api/v2/write?org=org-id&amp;bucket=jmeter)
+      </property>
       <property name="influxdbToken" required="No">
         InfluxDB 2 <a href="https://v2.docs.influxdata.com/v2.0/security/">authentication token</a> (e.g. HE9yIdAPzWJDspH_tCc2UvdKZpX==)
       </property>
