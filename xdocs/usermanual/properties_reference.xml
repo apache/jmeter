@@ -543,11 +543,6 @@ JMETER-SERVER</source>
     No matter what, the connection will not be re-used beyond its TTL.<br/>
     Defaults to: <code>60000</code>
 </property>
-<property name="httpclient4.max_body_retain_size">
-    Max size in bytes of <code>PUT</code> body to retain in result sampler.
-    Bigger results will be clipped.<br/>
-    Defaults to: <code>327678</code> (bytes)
-</property>
 <property name="httpclient4.deflate_relax_mode">
     Ignore EOFException that some edgy application may emit to signal end of Deflated stream.<br/>
     Defaults to: <code>false</code>
