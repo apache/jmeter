@@ -17,16 +17,26 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
@@ -97,5 +107,134 @@ public final class GraphQLRequestParamUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Parse {@code postData} and convert it to a {@link GraphQLRequestParams} object if it is a valid GraphQL post data.
+     * @param postData post data
+     * @param contentEncoding content encoding
+     * @return a converted {@link GraphQLRequestParams} object form the {@code postData}
+     * @throws IllegalArgumentException if {@code postData} is not a GraphQL post JSON data or not a valid JSON
+     * @throws JsonProcessingException if it fails to serialize a parsed JSON object to string
+     * @throws UnsupportedEncodingException if it fails to decode parameter value
+     */
+    public static GraphQLRequestParams toGraphQLRequestParams(byte[] postData, final String contentEncoding)
+            throws IllegalArgumentException, JsonProcessingException, UnsupportedEncodingException {
+        final String encoding = StringUtils.isNotEmpty(contentEncoding) ? contentEncoding
+                : EncoderCache.URL_ARGUMENT_ENCODING;
+
+        final ObjectMapper mapper = new ObjectMapper();
+        ObjectNode data;
+
+        try (InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(postData), encoding)) {
+            data = mapper.readValue(reader, ObjectNode.class);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Invalid json data: " + e.getLocalizedMessage());
+        }
+
+        String operationName = null;
+        String query = null;
+        String variables = null;
+
+        final JsonNode operationNameNode = data.has("operationName") ? data.get("operationName") : null;
+        if (operationNameNode != null) {
+            operationName = getJsonNodeTextContent(operationNameNode, true);
+        }
+
+        if (!data.has("query")) {
+            throw new IllegalArgumentException("Not a valid GraphQL query.");
+        }
+        final JsonNode queryNode = data.get("query");
+        query = getJsonNodeTextContent(queryNode, false);
+        final String trimmedQuery = StringUtils.trim(query);
+        if (!StringUtils.startsWith(trimmedQuery, "query") && !StringUtils.startsWith(trimmedQuery, "mutation")) {
+            throw new IllegalArgumentException("Not a valid GraphQL query.");
+        }
+
+        final JsonNode variablesNode = data.has("variables") ? data.get("variables") : null;
+        if (variablesNode != null) {
+            final JsonNodeType nodeType = variablesNode.getNodeType();
+            if (nodeType != JsonNodeType.NULL) {
+                if (nodeType == JsonNodeType.OBJECT) {
+                    variables = mapper.writeValueAsString(variablesNode);
+                } else {
+                    throw new IllegalArgumentException("Not a valid object node for GraphQL variables.");
+                }
+            }
+        }
+
+        return new GraphQLRequestParams(operationName, query, variables);
+    }
+
+    /**
+     * Parse {@code arguments} and convert it to a {@link GraphQLRequestParams} object if it has valid GraphQL HTTP arguments.
+     * @param arguments arguments
+     * @param contentEncoding content encoding
+     * @return a converted {@link GraphQLRequestParams} object form the {@code arguments}
+     * @throws IllegalArgumentException if {@code arguments} does not contain valid GraphQL request arguments
+     * @throws UnsupportedEncodingException if it fails to decode parameter value
+     */
+    public static GraphQLRequestParams toGraphQLRequestParams(final Arguments arguments, final String contentEncoding)
+            throws IllegalArgumentException, UnsupportedEncodingException {
+        final String encoding = StringUtils.isNotEmpty(contentEncoding) ? contentEncoding
+                : EncoderCache.URL_ARGUMENT_ENCODING;
+
+        String operationName = null;
+        String query = null;
+        String variables = null;
+
+        for (JMeterProperty prop : arguments) {
+            final Argument arg = (Argument) prop.getObjectValue();
+            if (!(arg instanceof HTTPArgument)) {
+                continue;
+            }
+
+            final String name = arg.getName();
+            final String metadata = arg.getMetaData();
+            final String value = StringUtils.trimToNull(arg.getValue());
+
+            if ("=".equals(metadata) && value != null) {
+                final boolean alwaysEncoded = ((HTTPArgument) arg).isAlwaysEncoded();
+
+                if ("operationName".equals(name)) {
+                    operationName = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
+                } else if ("query".equals(name)) {
+                    query = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
+                } else if ("variables".equals(name)) {
+                    variables = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
+                }
+            }
+        }
+
+        if (StringUtils.isEmpty(query)
+                || (!StringUtils.startsWith(query, "query") && !StringUtils.startsWith(query, "mutation"))) {
+            throw new IllegalArgumentException("Not a valid GraphQL query.");
+        }
+
+        if (StringUtils.isNotEmpty(variables)) {
+            if (!StringUtils.startsWith(variables, "{") || !StringUtils.endsWith(variables, "}")) {
+                throw new IllegalArgumentException("Not a valid object node for GraphQL variables.");
+            }
+        }
+
+        return new GraphQLRequestParams(operationName, query, variables);
+    }
+
+    private static String getJsonNodeTextContent(final JsonNode jsonNode, final boolean nullable) throws IllegalArgumentException {
+        final JsonNodeType nodeType = jsonNode.getNodeType();
+
+        if (nodeType == JsonNodeType.NULL) {
+            if (nullable) {
+                return null;
+            }
+
+            throw new IllegalArgumentException("Not a non-null value node.");
+        }
+
+        if (nodeType == JsonNodeType.STRING) {
+            return jsonNode.asText();
+        }
+
+        throw new IllegalArgumentException("Not a string value node.");
     }
 }

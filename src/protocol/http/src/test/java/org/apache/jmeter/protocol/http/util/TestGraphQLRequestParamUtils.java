@@ -18,7 +18,12 @@
 package org.apache.jmeter.protocol.http.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.nio.charset.StandardCharsets;
+
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,5 +85,114 @@ public class TestGraphQLRequestParamUtils {
     public void testVariablesToGetParamValue() throws Exception {
         assertEquals(EXPECTED_VARIABLES_GET_PARAM_VALUE,
                 GraphQLRequestParamUtils.variablesToGetParamValue(params.getVariables()));
+    }
+
+    @Test
+    public void testToGraphQLRequestParamsWithPostData() throws Exception {
+        GraphQLRequestParams params = GraphQLRequestParamUtils
+                .toGraphQLRequestParams(EXPECTED_POST_BODY.getBytes(StandardCharsets.UTF_8), null);
+        assertNull(params.getOperationName());
+        assertEquals(QUERY.trim(), params.getQuery());
+        assertEquals(EXPECTED_VARIABLES_GET_PARAM_VALUE, params.getVariables());
+
+        params = GraphQLRequestParamUtils.toGraphQLRequestParams(
+                "{\"operationName\":\"op1\",\"variables\":{\"id\":123},\"query\":\"query { droid { id }}\"}"
+                        .getBytes(StandardCharsets.UTF_8),
+                null);
+        assertEquals("op1", params.getOperationName());
+        assertEquals("query { droid { id }}", params.getQuery());
+        assertEquals("{\"id\":123}", params.getVariables());
+
+        try {
+            params = GraphQLRequestParamUtils.toGraphQLRequestParams("".getBytes(StandardCharsets.UTF_8), null);
+            fail("Should have failed due to invalid json data.");
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        try {
+            params = GraphQLRequestParamUtils.toGraphQLRequestParams("{}".getBytes(StandardCharsets.UTF_8), null);
+            fail("Should have failed due to invalid json data.");
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        try {
+            params = GraphQLRequestParamUtils
+                    .toGraphQLRequestParams("{\"query\":\"select * from emp\"}".getBytes(StandardCharsets.UTF_8), null);
+            fail("Should have failed due to invalid graph query param.");
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        try {
+            params = GraphQLRequestParamUtils
+                    .toGraphQLRequestParams("{\"operationName\":{\"id\":123},\"query\":\"query { droid { id }}\"}"
+                            .getBytes(StandardCharsets.UTF_8), null);
+            fail("Should have failed due to invalid graph operationName type.");
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        try {
+            params = GraphQLRequestParamUtils.toGraphQLRequestParams(
+                    "{\"variables\":\"r2d2\",\"query\":\"query { droid { id }}\"}".getBytes(StandardCharsets.UTF_8),
+                    null);
+            fail("Should have failed due to invalid graph variables type.");
+        } catch (IllegalArgumentException ignore) {
+        }
+    }
+
+    @Test
+    public void testToGraphQLRequestParamsWithHttpArguments() throws Exception {
+        Arguments args = new Arguments();
+        args.addArgument(new HTTPArgument("query", "query { droid { id }}", "=", false));
+        GraphQLRequestParams params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
+        assertNull(params.getOperationName());
+        assertEquals("query { droid { id }}", params.getQuery());
+        assertNull(params.getVariables());
+
+        args = new Arguments();
+        args.addArgument(new HTTPArgument("operationName", "op1", "=", false));
+        args.addArgument(new HTTPArgument("query", "query { droid { id }}", "=", false));
+        args.addArgument(new HTTPArgument("variables", "{\"id\":123}", "=", false));
+        params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
+        assertEquals("op1", params.getOperationName());
+        assertEquals("query { droid { id }}", params.getQuery());
+        assertEquals("{\"id\":123}", params.getVariables());
+
+        args = new Arguments();
+        args.addArgument(new HTTPArgument("query", "query+%7B+droid+%7B+id+%7D%7D", "=", true));
+        params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
+        assertNull(params.getOperationName());
+        assertEquals("query { droid { id }}", params.getQuery());
+        assertNull(params.getVariables());
+
+        args = new Arguments();
+        args.addArgument(new HTTPArgument("query", "query%20%7B%20droid%20%7B%20id%20%7D%7D", "=", true));
+        params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
+        assertNull(params.getOperationName());
+        assertEquals("query { droid { id }}", params.getQuery());
+        assertNull(params.getVariables());
+
+        try {
+            args = new Arguments();
+            params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
+            fail("Should have failed due to missing GraphQL parameters.");
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        try {
+            args = new Arguments();
+            args.addArgument(new HTTPArgument("query", "select * from emp", "=", false));
+            params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
+            fail("Should have failed due to invalid graph query param.");
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        try {
+            args = new Arguments();
+            args.addArgument(new HTTPArgument("query", "query { droid { id }}", "=", false));
+            args.addArgument(new HTTPArgument("variables", "r2d2", "=", false));
+            params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
+            fail("Should have failed due to invalid graph query param.");
+        } catch (IllegalArgumentException ignore) {
+        }
     }
 }

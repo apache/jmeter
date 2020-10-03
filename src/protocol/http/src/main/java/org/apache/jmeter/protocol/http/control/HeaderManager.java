@@ -200,6 +200,26 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
     }
 
     /**
+     * Get the first header from Headers by the header name, or {@code null} if not found.
+     * @param name header name
+     * @return the first header from Headers by the header name, or {@code null} if not found
+     */
+    public Header getFirstHeaderNamed(final String name) {
+        final CollectionProperty headers = getHeaders();
+        final int size = headers.size();
+        for (int i = 0; i < size; i++) {
+            Header header = (Header) headers.get(i).getObjectValue();
+            if (header == null) {
+                continue;
+            }
+            if (header.getName().equalsIgnoreCase(name)) {
+                return header;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Remove from Headers the header named name
      * @param name header name
      */
