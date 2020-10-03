@@ -135,11 +135,12 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private void detectAndModifySamplerOnGraphQLRequest(final HTTPSamplerBase sampler, final HttpRequestHdr request) {
         final String method = request.getMethod();
         final Header header = request.getHeaderManager().getFirstHeaderNamed("Content-Type");
-        final boolean jsonContent = header != null && "application/json".equals(header.getValue());
+        final boolean graphQLContentType = header != null
+                && GraphQLRequestParamUtils.isGraphQLContentType(header.getValue());
 
         GraphQLRequestParams params = null;
 
-        if (HTTPConstants.POST.equals(method) && jsonContent) {
+        if (HTTPConstants.POST.equals(method) && graphQLContentType) {
             try {
                 byte[] postData = request.getRawPostData();
                 if (postData != null && postData.length > 0) {

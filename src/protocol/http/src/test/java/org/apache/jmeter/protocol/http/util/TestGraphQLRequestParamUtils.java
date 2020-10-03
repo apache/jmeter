@@ -18,7 +18,9 @@
 package org.apache.jmeter.protocol.http.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.charset.StandardCharsets;
@@ -69,6 +71,18 @@ public class TestGraphQLRequestParamUtils {
     @BeforeEach
     public void setUp() {
         params = new GraphQLRequestParams(OPERATION_NAME, QUERY, VARIABLES);
+    }
+
+    @Test
+    public void testIsGraphQLContentType() throws Exception {
+        assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json"));
+        assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json;charset=utf-8"));
+        assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json; charset=utf-8"));
+
+        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType("application/vnd.api+json"));
+        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType("application/json-patch+json"));
+        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType(""));
+        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType(null));
     }
 
     @Test

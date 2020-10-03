@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.entity.ContentType;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
@@ -49,6 +50,19 @@ public final class GraphQLRequestParamUtils {
     private static Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
 
     private GraphQLRequestParamUtils() {
+    }
+
+    /**
+     * Return true if the content type is GraphQL content type (i.e. 'application/json').
+     * @param contentType Content-Type value
+     * @return true if the content type is GraphQL content type
+     */
+    public static boolean isGraphQLContentType(final String contentType) {
+        if (StringUtils.isEmpty(contentType)) {
+            return false;
+        }
+        final ContentType type = ContentType.parse(contentType);
+        return ContentType.APPLICATION_JSON.getMimeType().equals(type.getMimeType());
     }
 
     /**

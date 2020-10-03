@@ -114,22 +114,22 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
             args = createHTTPArgumentsTestElement();
 
             if (StringUtils.isNotBlank(params.getOperationName())) {
-                args.addArgument(createHTTPArgument("operationName", params.getOperationName().trim()));
+                args.addArgument(createHTTPArgument("operationName", params.getOperationName().trim(), true));
             }
 
-            args.addArgument(
-                    createHTTPArgument("query", GraphQLRequestParamUtils.queryToGetParamValue(params.getQuery())));
+            args.addArgument(createHTTPArgument("query",
+                    GraphQLRequestParamUtils.queryToGetParamValue(params.getQuery()), true));
 
             if (StringUtils.isNotBlank(params.getVariables())) {
                 final String variablesParamValue = GraphQLRequestParamUtils
                         .variablesToGetParamValue(params.getVariables());
                 if (variablesParamValue != null) {
-                    args.addArgument(createHTTPArgument("variables", variablesParamValue));
+                    args.addArgument(createHTTPArgument("variables", variablesParamValue, true));
                 }
             }
         } else {
             args = new Arguments();
-            args.addArgument(createHTTPArgument("", GraphQLRequestParamUtils.toPostBodyString(params)));
+            args.addArgument(createHTTPArgument("", GraphQLRequestParamUtils.toPostBodyString(params), false));
         }
 
         element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
@@ -180,11 +180,11 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         return paramPanel;
     }
 
-    private HTTPArgument createHTTPArgument(final String name, final String value) {
+    private HTTPArgument createHTTPArgument(final String name, final String value, final boolean alwaysEncoded) {
         final HTTPArgument arg = new HTTPArgument(name, value);
         arg.setUseEquals(true);
         arg.setEnabled(true);
-        arg.setAlwaysEncoded(false);
+        arg.setAlwaysEncoded(alwaysEncoded);
         return arg;
     }
 }
