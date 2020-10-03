@@ -136,6 +136,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     private static final String SAMPLER_REDIRECT_AUTOMATICALLY = "ProxyControlGui.sampler_redirect_automatically"; // $NON-NLS-1$
     private static final String SAMPLER_FOLLOW_REDIRECTS = "ProxyControlGui.sampler_follow_redirects"; // $NON-NLS-1$
     private static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
+    private static final String DETECT_GRAPHQL_REQUEST = "ProxyControlGui.detect_graphql_request"; // $NON-NLS-1$
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
     private static final String HTTP_SAMPLER_NAMING_MODE = "ProxyControlGui.proxy_http_sampler_naming_mode"; // $NON-NLS-1$
     private static final String HTTP_SAMPLER_FORMAT = "ProxyControlGui.proxy_http_sampler_format"; // $NON-NLS-1$
@@ -268,6 +269,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private volatile boolean regexMatch = false;
 
+    private volatile boolean detectGraphQLRequest = false;
+
     private Set<Class<?>> addableInterfaces = new HashSet<>(
             Arrays.asList(Visualizer.class, ConfigElement.class,
                     Assertion.class, Timer.class, PreProcessor.class,
@@ -358,6 +361,11 @@ public class ProxyControl extends GenericController implements NonTestElement {
     public void setUseKeepAlive(boolean b) {
         useKeepAlive = b;
         setProperty(new BooleanProperty(USE_KEEPALIVE, b));
+    }
+
+    public void setDetectGraphQLRequest(boolean b) {
+        detectGraphQLRequest = b;
+        setProperty(new BooleanProperty(DETECT_GRAPHQL_REQUEST, b));
     }
 
     public void setSamplerDownloadImages(boolean b) {
@@ -458,6 +466,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     public boolean getUseKeepalive() {
         return getPropertyAsBoolean(USE_KEEPALIVE, true);
+    }
+
+    public boolean getDetectGraphQLRequest() {
+        return getPropertyAsBoolean(DETECT_GRAPHQL_REQUEST, true);
     }
 
     public boolean getSamplerDownloadImages() {
