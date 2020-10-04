@@ -86,6 +86,8 @@ public class HttpRequestHdr {
 
     private String httpSampleNameFormat;
 
+    private boolean detectGraphQLRequest;
+
     public HttpRequestHdr() {
         this("", "");
     }
@@ -117,6 +119,22 @@ public class HttpRequestHdr {
         this.firstLine = "" ; // $NON-NLS-1$
         this.httpSampleNameMode = httpSampleNameMode;
         this.httpSampleNameFormat = format;
+    }
+
+    /**
+     * Return true if automatic GraphQL Request detection is enabled.
+     * @return true if automatic GraphQL Request detection is enabled
+     */
+    public boolean isDetectGraphQLRequest() {
+        return detectGraphQLRequest;
+    }
+
+    /**
+     * Sets whether automatic GraphQL Request detection is enabled.
+     * @param detectGraphQLRequest whether automatic GraphQL Request detection is enabled
+     */
+    public void setDetectGraphQLRequest(boolean detectGraphQLRequest) {
+        this.detectGraphQLRequest = detectGraphQLRequest;
     }
 
     /**
