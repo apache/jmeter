@@ -163,6 +163,8 @@ public class Proxy extends Thread {
 
         HttpRequestHdr request = new HttpRequestHdr(target.getPrefixHTTPSampleName(), httpSamplerName,
                 target.getHTTPSampleNamingMode(), target.getHttpSampleNameFormat());
+        request.setDetectGraphQLRequest(target.getDetectGraphQLRequest());
+
         SampleResult result = null;
         HeaderManager headers = null;
         HTTPSamplerBase sampler = null;

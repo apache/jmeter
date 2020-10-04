@@ -168,10 +168,52 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         setLayout(new BorderLayout(0, 5));
         setBorder(BorderFactory.createEmptyBorder());
 
-        // URL CONFIG
-        urlConfigGui = new UrlConfigGui(true, true, true);
-        urlConfigGui.setBorder(makeBorder());
+        JTabbedPane tabbedPane = createTabbedConfigPane();
 
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBorder(makeBorder());
+        wrapper.add(makeTitlePanel(), BorderLayout.CENTER);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, wrapper, tabbedPane);
+        splitPane.setBorder(BorderFactory.createEmptyBorder());
+        splitPane.setOneTouchExpandable(true);
+        add(splitPane);
+    }
+
+    /**
+     * Create the parameters configuration tabstrip which includes the Basic tab ({@link UrlConfigGui})
+     * and the Advanced tab by default.
+     * @return the parameters configuration tabstrip which includes the Basic tab ({@link UrlConfigGui})
+     *         and the Advanced tab by default
+     */
+    protected JTabbedPane createTabbedConfigPane() {
+        final JTabbedPane tabbedPane = new JTabbedPane();
+
+        // URL CONFIG
+        urlConfigGui = createUrlConfigGui();
+
+        tabbedPane.add(JMeterUtils
+                .getResString("web_testing_basic"), urlConfigGui);
+
+        // AdvancedPanel (embedded resources, source address and optional tasks)
+        final JPanel advancedPanel = createAdvancedConfigPanel();
+        tabbedPane.add(JMeterUtils
+                .getResString("web_testing_advanced"), advancedPanel);
+
+        return tabbedPane;
+    }
+
+    /**
+     * Create a {@link UrlConfigGui} which is used as the Basic tab in the parameters configuration tabstrip.
+     * @return a {@link UrlConfigGui} which is used as the Basic tab
+     */
+    protected UrlConfigGui createUrlConfigGui() {
+        final UrlConfigGui configGui = new UrlConfigGui(true, true, true);
+        configGui.setBorder(makeBorder());
+        return configGui;
+    }
+
+    private JPanel createAdvancedConfigPanel() {
         // HTTP request options
         JPanel httpOptions = new HorizontalPanel();
         httpOptions.add(getImplementationPanel());
@@ -190,21 +232,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         }
 
         advancedPanel.add(createOptionalTasksPanel());
-
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.add(JMeterUtils
-                .getResString("web_testing_basic"), urlConfigGui);
-        tabbedPane.add(JMeterUtils
-                .getResString("web_testing_advanced"), advancedPanel);
-
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBorder(makeBorder());
-        wrapper.add(makeTitlePanel(), BorderLayout.CENTER);
-
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, wrapper, tabbedPane);
-        splitPane.setBorder(BorderFactory.createEmptyBorder());
-        splitPane.setOneTouchExpandable(true);
-        add(splitPane);
+        return advancedPanel;
     }
 
     private JPanel getTimeOutPanel() {
