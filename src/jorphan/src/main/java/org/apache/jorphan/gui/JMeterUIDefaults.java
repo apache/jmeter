@@ -30,6 +30,7 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.UIResource;
+import javax.swing.text.StyleContext;
 
 import org.apache.jorphan.gui.ui.TextAreaUIWithUndo;
 import org.apache.jorphan.gui.ui.TextFieldUIWithUndo;
@@ -141,6 +142,10 @@ public class JMeterUIDefaults {
         });
     }
 
+    public static Font createFont(String family, int style, int size) {
+        return stripUiResource(StyleContext.getDefaultStyleContext().getFont(family, style, size));
+    }
+
     private static void addScaledFont(UIDefaults defaults, String output, String input, float scale) {
         addDerivedFont(defaults, output, input, f -> f.deriveFont(f.getSize2D() * scale));
     }
@@ -154,7 +159,7 @@ public class JMeterUIDefaults {
         // Note: we drop UIResource here so LaF treats the font as user-provided rather than
         // LaF-provided.
         if (input instanceof UIResource) {
-            output = new Font(output.getAttributes());
+            output = stripUiResource(output);
         }
         return output;
     }
@@ -238,8 +243,22 @@ public class JMeterUIDefaults {
     }
 
     /**
+     * Ensures the font isn't of type {@link UIResource}.
+     *
+     * @param font the font.
+     * @return font which does not implement {@link UIResource}.
+     */
+    private static Font stripUiResource(Font font) {
+        if (font instanceof UIResource) {
+            return new NonUIResourceFont(font);
+        }
+        return font;
+    }
+
+    /**
      * Ensures {@code oldFont} and {@code newFont} either both implement {@link UIResource},
      * or none of them implement.
+     *
      * @param oldFont old font
      * @param newFont new font
      * @return Font (when oldFont does not implement UIResource) or FontUIResource (when oldFont implements UIResource)
@@ -249,8 +268,19 @@ public class JMeterUIDefaults {
         boolean O = newFont instanceof FontUIResource;
         // This is a beautiful smile, isn't it?
         if (o ^ O) {
-            return o ? new FontUIResource(newFont) : new Font(newFont.getAttributes());
+            return o ? new FontUIResource(newFont) : stripUiResource(newFont);
         }
         return newFont;
+    }
+
+    /**
+     * Non UIResource wrapper for fonts which preserves the underlying {@link sun.font.Font2D}.
+     * This way the font behaves the same way with respect to fallback fonts
+     * (i.e. if the {@link sun.font.Font2D} base is of type {@link sun.font.CompositeFont}).
+     */
+    private static class NonUIResourceFont extends Font {
+        private NonUIResourceFont(Font font) {
+            super(font);
+        }
     }
 }
