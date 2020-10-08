@@ -269,8 +269,6 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private volatile boolean regexMatch = false;
 
-    private volatile boolean detectGraphQLRequest = false;
-
     private Set<Class<?>> addableInterfaces = new HashSet<>(
             Arrays.asList(Visualizer.class, ConfigElement.class,
                     Assertion.class, Timer.class, PreProcessor.class,
@@ -364,7 +362,6 @@ public class ProxyControl extends GenericController implements NonTestElement {
     }
 
     public void setDetectGraphQLRequest(boolean b) {
-        detectGraphQLRequest = b;
         setProperty(new BooleanProperty(DETECT_GRAPHQL_REQUEST, b));
     }
 
