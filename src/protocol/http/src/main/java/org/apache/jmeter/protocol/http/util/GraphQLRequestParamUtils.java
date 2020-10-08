@@ -47,7 +47,7 @@ public final class GraphQLRequestParamUtils {
 
     private static Logger log = LoggerFactory.getLogger(GraphQLRequestParamUtils.class);
 
-    private static Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
+    private static final Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
 
     private GraphQLRequestParamUtils() {
     }
