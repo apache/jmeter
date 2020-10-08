@@ -46,6 +46,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  */
 public final class GraphQLRequestParamUtils {
 
+    private static final String VARIABLES_FIELD = "variables";
+
+    private static final String OPERATION_NAME_FIELD = "operationName";
+
+    private static final String QUERY_FIELD = "query";
+
     private static Logger log = LoggerFactory.getLogger(GraphQLRequestParamUtils.class);
 
     private static final Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
@@ -75,20 +81,20 @@ public final class GraphQLRequestParamUtils {
     public static String toPostBodyString(final GraphQLRequestParams params) {
         final ObjectMapper mapper = new ObjectMapper();
         final ObjectNode postBodyJson = mapper.createObjectNode();
-        postBodyJson.set("operationName",
+        postBodyJson.set(OPERATION_NAME_FIELD,
                 JsonNodeFactory.instance.textNode(StringUtils.trimToNull(params.getOperationName())));
 
         if (StringUtils.isNotBlank(params.getVariables())) {
             try {
                 final ObjectNode variablesJson = mapper.readValue(params.getVariables(), ObjectNode.class);
-                postBodyJson.set("variables", variablesJson);
+                postBodyJson.set(VARIABLES_FIELD, variablesJson);
             } catch (JsonProcessingException e) {
                 log.error("Ignoring the GraphQL query variables content due to the syntax error: {}",
                         e.getLocalizedMessage());
             }
         }
 
-        postBodyJson.set("query", JsonNodeFactory.instance.textNode(StringUtils.trim(params.getQuery())));
+        postBodyJson.set(QUERY_FIELD, JsonNodeFactory.instance.textNode(StringUtils.trim(params.getQuery())));
 
         try {
             return mapper.writeValueAsString(postBodyJson);
@@ -152,22 +158,22 @@ public final class GraphQLRequestParamUtils {
         String query = null;
         String variables = null;
 
-        final JsonNode operationNameNode = data.has("operationName") ? data.get("operationName") : null;
+        final JsonNode operationNameNode = data.has(OPERATION_NAME_FIELD) ? data.get(OPERATION_NAME_FIELD) : null;
         if (operationNameNode != null) {
             operationName = getJsonNodeTextContent(operationNameNode, true);
         }
 
-        if (!data.has("query")) {
+        if (!data.has(QUERY_FIELD)) {
             throw new IllegalArgumentException("Not a valid GraphQL query.");
         }
-        final JsonNode queryNode = data.get("query");
+        final JsonNode queryNode = data.get(QUERY_FIELD);
         query = getJsonNodeTextContent(queryNode, false);
         final String trimmedQuery = StringUtils.trim(query);
-        if (!StringUtils.startsWith(trimmedQuery, "query") && !StringUtils.startsWith(trimmedQuery, "mutation")) {
+        if (!StringUtils.startsWith(trimmedQuery, QUERY_FIELD) && !StringUtils.startsWith(trimmedQuery, "mutation")) {
             throw new IllegalArgumentException("Not a valid GraphQL query.");
         }
 
-        final JsonNode variablesNode = data.has("variables") ? data.get("variables") : null;
+        final JsonNode variablesNode = data.has(VARIABLES_FIELD) ? data.get(VARIABLES_FIELD) : null;
         if (variablesNode != null) {
             final JsonNodeType nodeType = variablesNode.getNodeType();
             if (nodeType != JsonNodeType.NULL) {
@@ -212,18 +218,18 @@ public final class GraphQLRequestParamUtils {
             if ("=".equals(metadata) && value != null) {
                 final boolean alwaysEncoded = ((HTTPArgument) arg).isAlwaysEncoded();
 
-                if ("operationName".equals(name)) {
+                if (OPERATION_NAME_FIELD.equals(name)) {
                     operationName = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
-                } else if ("query".equals(name)) {
+                } else if (QUERY_FIELD.equals(name)) {
                     query = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
-                } else if ("variables".equals(name)) {
+                } else if (VARIABLES_FIELD.equals(name)) {
                     variables = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
                 }
             }
         }
 
         if (StringUtils.isEmpty(query)
-                || (!StringUtils.startsWith(query, "query") && !StringUtils.startsWith(query, "mutation"))) {
+                || (!StringUtils.startsWith(query, QUERY_FIELD) && !StringUtils.startsWith(query, "mutation"))) {
             throw new IllegalArgumentException("Not a valid GraphQL query.");
         }
 
