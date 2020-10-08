@@ -141,7 +141,7 @@ public final class GraphQLRequestParamUtils {
      * @throws UnsupportedEncodingException if it fails to decode parameter value
      */
     public static GraphQLRequestParams toGraphQLRequestParams(byte[] postData, final String contentEncoding)
-            throws IllegalArgumentException, JsonProcessingException, UnsupportedEncodingException {
+            throws JsonProcessingException, UnsupportedEncodingException {
         final String encoding = StringUtils.isNotEmpty(contentEncoding) ? contentEncoding
                 : EncoderCache.URL_ARGUMENT_ENCODING;
 
@@ -197,7 +197,7 @@ public final class GraphQLRequestParamUtils {
      * @throws UnsupportedEncodingException if it fails to decode parameter value
      */
     public static GraphQLRequestParams toGraphQLRequestParams(final Arguments arguments, final String contentEncoding)
-            throws IllegalArgumentException, UnsupportedEncodingException {
+            throws UnsupportedEncodingException {
         final String encoding = StringUtils.isNotEmpty(contentEncoding) ? contentEncoding
                 : EncoderCache.URL_ARGUMENT_ENCODING;
 
@@ -242,7 +242,7 @@ public final class GraphQLRequestParamUtils {
         return new GraphQLRequestParams(operationName, query, variables);
     }
 
-    private static String getJsonNodeTextContent(final JsonNode jsonNode, final boolean nullable) throws IllegalArgumentException {
+    private static String getJsonNodeTextContent(final JsonNode jsonNode, final boolean nullable) {
         final JsonNodeType nodeType = jsonNode.getNodeType();
 
         if (nodeType == JsonNodeType.NULL) {
