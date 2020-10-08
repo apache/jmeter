@@ -66,7 +66,7 @@ abstract class AbstractValidationTabbedPane extends JTabbedPane {
      * @param newTabIndex new requested tab index to validate
      * @return the validated tab index
      */
-    abstract protected int getValidatedTabIndex(final int currentTabIndex, final int newTabIndex);
+    protected abstract int getValidatedTabIndex(final int currentTabIndex, final int newTabIndex);
 
     /**
      * Return true if the validation feature should be enabled, {@code true} by default.
