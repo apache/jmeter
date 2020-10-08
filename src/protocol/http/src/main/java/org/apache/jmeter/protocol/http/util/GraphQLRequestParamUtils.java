@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -74,7 +75,8 @@ public final class GraphQLRequestParamUtils {
     public static String toPostBodyString(final GraphQLRequestParams params) {
         final ObjectMapper mapper = new ObjectMapper();
         final ObjectNode postBodyJson = mapper.createObjectNode();
-        postBodyJson.put("operationName", StringUtils.trimToNull(params.getOperationName()));
+        postBodyJson.set("operationName",
+                JsonNodeFactory.instance.textNode(StringUtils.trimToNull(params.getOperationName())));
 
         if (StringUtils.isNotBlank(params.getVariables())) {
             try {
@@ -86,7 +88,7 @@ public final class GraphQLRequestParamUtils {
             }
         }
 
-        postBodyJson.put("query", StringUtils.trim(params.getQuery()));
+        postBodyJson.set("query", JsonNodeFactory.instance.textNode(StringUtils.trim(params.getQuery())));
 
         try {
             return mapper.writeValueAsString(postBodyJson);
