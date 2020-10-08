@@ -1942,6 +1942,28 @@ JMETER-SERVER</source>
     No default value</property>
 </properties>
 </section>
+<section name="&sect-num;.46 Security Provider" anchor="securityprovider">
+<description>Advanced properties for documentation generation</description>
+<properties>
+    <property name="security.provider">
+        The value must be in this format: &lt;ClassName&gt;[:&lt;Postion&gt;[:&lt;ConfigString&gt;]]</property>.
+        Examples:<br/>
+        <dl>
+            <dt>org.bouncycastle.jce.provider.BouncyCastleProvider</dt>
+            <dd>Adds the <code>BouncyCastleProvider</code> to the next position available.</dd>
+            <dt>org.bouncycastle.jce.provider.BouncyCastleProvider:1</dt>
+            <dd>Adds the <code>BouncyCastleProvider</code>, at the first position.</dd>
+            <dt>org.bouncycastle.jsse.provider.BouncyCastleJsseProvider:2:BC</dt>
+            <dd>Adds the <code>BouncyCastleJsseProvider</code>, at the second position. And configure it to use the
+                BC provider.</dd>
+        </dl>
+    <property name="security.provider.&lt;n&gt;">
+        Replace the <code>&lt;n&gt;</code> with any number. The SecurityProviders will be added in the alphabetical
+        order of the property names. (First: <code>security.provider</code> and then <code>security.provider.2</code>, <code>security.provider.3</code>,...)
+        See property <code>security.provider</code>
+        </property>
+</properties>
+</section>
 <!--
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>

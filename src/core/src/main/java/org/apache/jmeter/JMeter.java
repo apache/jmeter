@@ -98,6 +98,7 @@ import org.apache.jmeter.threads.RemoteThreadsListenerTestElement;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellServer;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.SecurityProviderLoader;
 import org.apache.jmeter.util.ShutdownClient;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
@@ -469,6 +470,8 @@ public class JMeter implements JMeterPlugin {
         }
         try {
             initializeProperties(parser); // Also initialises JMeter logging
+
+            SecurityProviderLoader.addSecurityProvider(JMeterUtils.getJMeterProperties());
 
             Thread.setDefaultUncaughtExceptionHandler(
                     (Thread t, Throwable e) -> {
