@@ -148,14 +148,14 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                             sampler.getContentEncoding());
                 }
             } catch (Exception e) {
-                log.debug("Ignoring request, '{}' as it's not a valid GraphQL post data.");
+                log.debug("Ignoring request, '{}' as it's not a valid GraphQL post data.", request);
             }
         } else if (HTTPConstants.GET.equals(method)) {
             try {
                 params = GraphQLRequestParamUtils.toGraphQLRequestParams(sampler.getArguments(),
                         sampler.getContentEncoding());
             } catch (Exception e) {
-                log.debug("Ignoring request, '{}' as it does not valid GraphQL arguments.");
+                log.debug("Ignoring request, '{}' as it does not valid GraphQL arguments.", request);
             }
         }
 
