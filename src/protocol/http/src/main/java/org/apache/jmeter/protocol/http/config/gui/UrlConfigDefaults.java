@@ -131,7 +131,7 @@ public class UrlConfigDefaults implements Serializable {
     }
 
     /**
-     * Return the default value to be set for the followRedirect checkbox in the {@link UrlConfigGui}.
+     * @return the default value to be set for the followRedirect checkbox in the {@link UrlConfigGui}.
      */
     public boolean isFollowRedirects() {
         return followRedirects;
@@ -139,13 +139,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the default value to be set for the followRedirect checkbox in the {@link UrlConfigGui}.
+     * @param followRedirects flag whether redirects should be followed
      */
     public void setFollowRedirects(boolean followRedirects) {
         this.followRedirects = followRedirects;
     }
 
     /**
-     * Return the default value to be set for the autoRedirects checkbox in the {@link UrlConfigGui}.
+     * @return the default value to be set for the autoRedirects checkbox in the {@link UrlConfigGui}.
      */
     public boolean isAutoRedirects() {
         return autoRedirects;
@@ -153,13 +154,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the default value to be set for the autoRedirects checkbox in the {@link UrlConfigGui}.
+     * @param autoRedirects flag whether redirects should be followed automatically
      */
     public void setAutoRedirects(boolean autoRedirects) {
         this.autoRedirects = autoRedirects;
     }
 
     /**
-     * Return the default value to be set for the useKeepAlive checkbox in the {@link UrlConfigGui}.
+     * @return the default value to be set for the useKeepAlive checkbox in the {@link UrlConfigGui}.
      */
     public boolean isUseKeepAlive() {
         return useKeepAlive;
@@ -167,13 +169,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the default value to be set for the useKeepAlive checkbox in the {@link UrlConfigGui}.
+     * @param useKeepAlive flag whether to use keep-alive on HTTP requests
      */
     public void setUseKeepAlive(boolean useKeepAlive) {
         this.useKeepAlive = useKeepAlive;
     }
 
     /**
-     * Return the default value to be set for the useMultipart checkbox in the {@link UrlConfigGui}.
+     * @return the default value to be set for the useMultipart checkbox in the {@link UrlConfigGui}.
      */
     public boolean isUseMultipart() {
         return useMultipart;
@@ -181,13 +184,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the default value to be set for the useMultipart checkbox in the {@link UrlConfigGui}.
+     * @param useMultipart flag whether request data should use multi-part feature
      */
     public void setUseMultipart(boolean useMultipart) {
         this.useMultipart = useMultipart;
     }
 
     /**
-     * Return the default value to be set for the useBrowserCompatibleMultipartMode checkbox in the {@link UrlConfigGui}.
+     * @return the default value to be set for the useBrowserCompatibleMultipartMode checkbox in the {@link UrlConfigGui}.
      */
     public boolean isUseBrowserCompatibleMultipartMode() {
         return useBrowserCompatibleMultipartMode;
@@ -195,13 +199,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the default value to be set for the useBrowserCompatibleMultipartMode checkbox in the {@link UrlConfigGui}.
+     * @param useBrowserCompatibleMultipartMode flag whether to use browser compatible multi-part mode
      */
     public void setUseBrowserCompatibleMultipartMode(boolean useBrowserCompatibleMultipartMode) {
         this.useBrowserCompatibleMultipartMode = useBrowserCompatibleMultipartMode;
     }
 
     /**
-     * Return true if the followRedirect checkbox should be visible in the {@link UrlConfigGui}.
+     * @return {@code true} if the followRedirect checkbox should be visible in the {@link UrlConfigGui}.
      */
     public boolean isFollowRedirectsVisible() {
         return followRedirectsVisible;
@@ -209,13 +214,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the visibility of the followRedirect checkbox in the {@link UrlConfigGui}.
+     * @param followRedirectsVisible flag to toggle visibility in GUI
      */
     public void setFollowRedirectsVisible(boolean followRedirectsVisible) {
         this.followRedirectsVisible = followRedirectsVisible;
     }
 
     /**
-     * Return true if the autoRedirectsVisible checkbox should be visible in the {@link UrlConfigGui}.
+     * @return true if the autoRedirectsVisible checkbox should be visible in the {@link UrlConfigGui}.
      */
     public boolean isAutoRedirectsVisible() {
         return autoRedirectsVisible;
@@ -223,13 +229,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the visibility of the autoRedirectsVisible checkbox in the {@link UrlConfigGui}.
+     * @param autoRedirectsVisible flag to toggle visibility in GUI
      */
     public void setAutoRedirectsVisible(boolean autoRedirectsVisible) {
         this.autoRedirectsVisible = autoRedirectsVisible;
     }
 
     /**
-     * Return true if the useKeepAliveVisible checkbox should be visible in the {@link UrlConfigGui}.
+     * @return {@code true} if the useKeepAliveVisible checkbox should be visible in the {@link UrlConfigGui}.
      */
     public boolean isUseKeepAliveVisible() {
         return useKeepAliveVisible;
@@ -237,13 +244,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the visibility of the useKeepAliveVisible checkbox in the {@link UrlConfigGui}.
+     * @param useKeepAliveVisible flag to toggle visibility in GUI
      */
     public void setUseKeepAliveVisible(boolean useKeepAliveVisible) {
         this.useKeepAliveVisible = useKeepAliveVisible;
     }
 
     /**
-     * Return true if the useMultipartVisible checkbox should by default in the {@link UrlConfigGui}.
+     * @return {@code true} if the useMultipartVisible checkbox should by default in the {@link UrlConfigGui}.
      */
     public boolean isUseMultipartVisible() {
         return useMultipartVisible;
@@ -251,13 +259,14 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the visibility of the useMultipartVisible checkbox in the {@link UrlConfigGui}.
+     * @param useMultipartVisible flag to toggle visibility in GUI
      */
     public void setUseMultipartVisible(boolean useMultipartVisible) {
         this.useMultipartVisible = useMultipartVisible;
     }
 
     /**
-     * Return true if the useBrowserCompatibleMultipartModeVisible checkbox should be visible in the {@link UrlConfigGui}.
+     * @return {@code true} if the useBrowserCompatibleMultipartModeVisible checkbox should be visible in the {@link UrlConfigGui}.
      */
     public boolean isUseBrowserCompatibleMultipartModeVisible() {
         return useBrowserCompatibleMultipartModeVisible;
@@ -265,6 +274,7 @@ public class UrlConfigDefaults implements Serializable {
 
     /**
      * Set the visibility of the useBrowserCompatibleMultipartModeVisible checkbox in the {@link UrlConfigGui}.
+     * @param useBrowserCompatibleMultipartModeVisible flag to toggle visibility in GUI
      */
     public void setUseBrowserCompatibleMultipartModeVisible(boolean useBrowserCompatibleMultipartModeVisible) {
         this.useBrowserCompatibleMultipartModeVisible = useBrowserCompatibleMultipartModeVisible;
