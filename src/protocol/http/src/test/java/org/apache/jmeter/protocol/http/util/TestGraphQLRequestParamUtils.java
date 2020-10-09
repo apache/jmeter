@@ -69,12 +69,12 @@ public class TestGraphQLRequestParamUtils {
     private GraphQLRequestParams params;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         params = new GraphQLRequestParams(OPERATION_NAME, QUERY, VARIABLES);
     }
 
     @Test
-    public void testIsGraphQLContentType() throws Exception {
+    void testIsGraphQLContentType() throws Exception {
         assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json"));
         assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json;charset=utf-8"));
         assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json; charset=utf-8"));
@@ -86,23 +86,23 @@ public class TestGraphQLRequestParamUtils {
     }
 
     @Test
-    public void testToPostBodyString() throws Exception {
+    void testToPostBodyString() throws Exception {
         assertEquals(EXPECTED_POST_BODY, GraphQLRequestParamUtils.toPostBodyString(params));
     }
 
     @Test
-    public void testQueryToGetParamValue() throws Exception {
+    void testQueryToGetParamValue() throws Exception {
         assertEquals(EXPECTED_QUERY_GET_PARAM_VALUE, GraphQLRequestParamUtils.queryToGetParamValue(params.getQuery()));
     }
 
     @Test
-    public void testVariablesToGetParamValue() throws Exception {
+    void testVariablesToGetParamValue() throws Exception {
         assertEquals(EXPECTED_VARIABLES_GET_PARAM_VALUE,
                 GraphQLRequestParamUtils.variablesToGetParamValue(params.getVariables()));
     }
 
     @Test
-    public void testToGraphQLRequestParamsWithPostData() throws Exception {
+    void testToGraphQLRequestParamsWithPostData() throws Exception {
         GraphQLRequestParams params = GraphQLRequestParamUtils
                 .toGraphQLRequestParams(EXPECTED_POST_BODY.getBytes(StandardCharsets.UTF_8), null);
         assertNull(params.getOperationName());
@@ -154,7 +154,7 @@ public class TestGraphQLRequestParamUtils {
     }
 
     @Test
-    public void testToGraphQLRequestParamsWithHttpArguments() throws Exception {
+    void testToGraphQLRequestParamsWithHttpArguments() throws Exception {
         Arguments args = new Arguments();
         args.addArgument(new HTTPArgument("query", "query { droid { id }}", "=", false));
         GraphQLRequestParams params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
