@@ -20,9 +20,10 @@ package org.apache.jmeter.protocol.http.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.jmeter.config.Arguments;
@@ -30,6 +31,7 @@ import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jknack.handlebars.internal.lang3.StringUtils;
 
 public class TestGraphQLRequestParamUtils {
@@ -116,41 +118,36 @@ public class TestGraphQLRequestParamUtils {
         assertEquals("op1", params.getOperationName());
         assertEquals("query { droid { id }}", params.getQuery());
         assertEquals("{\"id\":123}", params.getVariables());
+    }
 
-        try {
-            params = GraphQLRequestParamUtils.toGraphQLRequestParams("".getBytes(StandardCharsets.UTF_8), null);
-            fail("Should have failed due to invalid json data.");
-        } catch (IllegalArgumentException ignore) {
-        }
+    @Test
+    void testInvalidJsonData() throws JsonProcessingException, UnsupportedEncodingException {
+        assertThrows(IllegalArgumentException.class,
+                () -> GraphQLRequestParamUtils.toGraphQLRequestParams("".getBytes(StandardCharsets.UTF_8), null));
 
-        try {
-            params = GraphQLRequestParamUtils.toGraphQLRequestParams("{}".getBytes(StandardCharsets.UTF_8), null);
-            fail("Should have failed due to invalid json data.");
-        } catch (IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> GraphQLRequestParamUtils.toGraphQLRequestParams("{}".getBytes(StandardCharsets.UTF_8), null));
+    }
 
-        try {
-            params = GraphQLRequestParamUtils
-                    .toGraphQLRequestParams("{\"query\":\"select * from emp\"}".getBytes(StandardCharsets.UTF_8), null);
-            fail("Should have failed due to invalid graph query param.");
-        } catch (IllegalArgumentException ignore) {
-        }
+    @Test
+    void testInvalidGraphQueryParam() throws JsonProcessingException, UnsupportedEncodingException {
+        assertThrows(IllegalArgumentException.class, () -> GraphQLRequestParamUtils
+                .toGraphQLRequestParams("{\"query\":\"select * from emp\"}".getBytes(StandardCharsets.UTF_8), null));
+    }
 
-        try {
-            params = GraphQLRequestParamUtils
-                    .toGraphQLRequestParams("{\"operationName\":{\"id\":123},\"query\":\"query { droid { id }}\"}"
-                            .getBytes(StandardCharsets.UTF_8), null);
-            fail("Should have failed due to invalid graph operationName type.");
-        } catch (IllegalArgumentException ignore) {
-        }
+    @Test
+    void testIvalidGraphOperationName() throws JsonProcessingException, UnsupportedEncodingException {
+        assertThrows(IllegalArgumentException.class, () -> GraphQLRequestParamUtils.toGraphQLRequestParams(
+                "{\"operationName\":{\"id\":123},\"query\":\"query { droid { id }}\"}".getBytes(StandardCharsets.UTF_8),
+                null));
+    }
 
-        try {
-            params = GraphQLRequestParamUtils.toGraphQLRequestParams(
-                    "{\"variables\":\"r2d2\",\"query\":\"query { droid { id }}\"}".getBytes(StandardCharsets.UTF_8),
-                    null);
-            fail("Should have failed due to invalid graph variables type.");
-        } catch (IllegalArgumentException ignore) {
-        }
+    @Test
+    void testInvalidGraphVariableType() {
+        assertThrows(IllegalArgumentException.class,
+                () -> GraphQLRequestParamUtils.toGraphQLRequestParams(
+                        "{\"variables\":\"r2d2\",\"query\":\"query { droid { id }}\"}".getBytes(StandardCharsets.UTF_8),
+                        null));
     }
 
     @Test
@@ -184,29 +181,29 @@ public class TestGraphQLRequestParamUtils {
         assertNull(params.getOperationName());
         assertEquals("query { droid { id }}", params.getQuery());
         assertNull(params.getVariables());
+    }
 
-        try {
-            args = new Arguments();
-            params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
-            fail("Should have failed due to missing GraphQL parameters.");
-        } catch (IllegalArgumentException ignore) {
-        }
+    @Test
+    void testMissingParams() throws UnsupportedEncodingException {
+        Arguments args = new Arguments();
+        assertThrows(IllegalArgumentException.class,
+                () -> GraphQLRequestParamUtils.toGraphQLRequestParams(args, null));
+    }
 
-        try {
-            args = new Arguments();
-            args.addArgument(new HTTPArgument("query", "select * from emp", "=", false));
-            params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
-            fail("Should have failed due to invalid graph query param.");
-        } catch (IllegalArgumentException ignore) {
-        }
+    @Test
+    void testInvalidQueryParam() throws UnsupportedEncodingException {
+        Arguments args = new Arguments();
+        args.addArgument(new HTTPArgument("query", "select * from emp", "=", false));
+        assertThrows(IllegalArgumentException.class,
+                () -> GraphQLRequestParamUtils.toGraphQLRequestParams(args, null));
+    }
 
-        try {
-            args = new Arguments();
-            args.addArgument(new HTTPArgument("query", "query { droid { id }}", "=", false));
-            args.addArgument(new HTTPArgument("variables", "r2d2", "=", false));
-            params = GraphQLRequestParamUtils.toGraphQLRequestParams(args, null);
-            fail("Should have failed due to invalid graph query param.");
-        } catch (IllegalArgumentException ignore) {
-        }
+    @Test
+    void testInvalidQueryParamVariables() throws UnsupportedEncodingException {
+        Arguments args = new Arguments();
+        args.addArgument(new HTTPArgument("query", "query { droid { id }}", "=", false));
+        args.addArgument(new HTTPArgument("variables", "r2d2", "=", false));
+        assertThrows(IllegalArgumentException.class,
+                () -> GraphQLRequestParamUtils.toGraphQLRequestParams(args, null));
     }
 }
