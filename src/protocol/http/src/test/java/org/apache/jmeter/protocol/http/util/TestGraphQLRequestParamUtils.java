@@ -86,8 +86,10 @@ public class TestGraphQLRequestParamUtils {
     }
 
     // null can't be used in a ValueSource directly, so we need to use a MethodSource
-    static Stream<String> invalidContentTypes = Stream.of("application/vnd.api+json", "application/json-patch+json", "",
+    static Stream<String> invalidContentTypes() {
+        return Stream.of("application/vnd.api+json", "application/json-patch+json", "",
             null);
+    }
 
     @ParameterizedTest
     @MethodSource("invalidContentTypes")
