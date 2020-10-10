@@ -132,30 +132,39 @@ class TestGraphQLRequestParamUtils {
 
     @ParameterizedTest
     @ValueSource(strings = { "", "{}"})
-    void testInvalidJsonData(String postData) throws JsonProcessingException, UnsupportedEncodingException {
+    void testInvalidJsonData(String postDataAsString) throws JsonProcessingException, UnsupportedEncodingException {
+        byte[] postData = postDataAsString.getBytes(StandardCharsets.UTF_8);
         assertThrows(IllegalArgumentException.class,
-                () -> GraphQLRequestParamUtils.toGraphQLRequestParams(postData.getBytes(StandardCharsets.UTF_8), null));
+                () -> {
+                    GraphQLRequestParamUtils.toGraphQLRequestParams(postData, null);
+                });
     }
 
     @Test
     void testInvalidGraphQueryParam() throws JsonProcessingException, UnsupportedEncodingException {
-        assertThrows(IllegalArgumentException.class, () -> GraphQLRequestParamUtils
-                .toGraphQLRequestParams("{\"query\":\"select * from emp\"}".getBytes(StandardCharsets.UTF_8), null));
+        byte[] postData = "{\"query\":\"select * from emp\"}".getBytes(StandardCharsets.UTF_8);
+        assertThrows(IllegalArgumentException.class, () -> {
+            GraphQLRequestParamUtils
+                    .toGraphQLRequestParams(postData, null);
+        });
     }
 
     @Test
     void testIvalidGraphOperationName() throws JsonProcessingException, UnsupportedEncodingException {
-        assertThrows(IllegalArgumentException.class, () -> GraphQLRequestParamUtils.toGraphQLRequestParams(
-                "{\"operationName\":{\"id\":123},\"query\":\"query { droid { id }}\"}".getBytes(StandardCharsets.UTF_8),
-                null));
+        byte[] postData = "{\"operationName\":{\"id\":123},\"query\":\"query { droid { id }}\"}"
+                .getBytes(StandardCharsets.UTF_8);
+        assertThrows(IllegalArgumentException.class, () -> {
+            GraphQLRequestParamUtils.toGraphQLRequestParams(postData, null);
+        });
     }
 
     @Test
     void testInvalidGraphVariableType() {
-        assertThrows(IllegalArgumentException.class,
-                () -> GraphQLRequestParamUtils.toGraphQLRequestParams(
-                        "{\"variables\":\"r2d2\",\"query\":\"query { droid { id }}\"}".getBytes(StandardCharsets.UTF_8),
-                        null));
+        byte[] postData = "{\"variables\":\"r2d2\",\"query\":\"query { droid { id }}\"}"
+                .getBytes(StandardCharsets.UTF_8);
+        assertThrows(IllegalArgumentException.class, () -> {
+            GraphQLRequestParamUtils.toGraphQLRequestParams(postData, null);
+        });
     }
 
     @Test
