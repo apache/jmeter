@@ -25,12 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -75,16 +79,20 @@ public class TestGraphQLRequestParamUtils {
         params = new GraphQLRequestParams(OPERATION_NAME, QUERY, VARIABLES);
     }
 
-    @Test
-    void testIsGraphQLContentType() throws Exception {
-        assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json"));
-        assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json;charset=utf-8"));
-        assertTrue(GraphQLRequestParamUtils.isGraphQLContentType("application/json; charset=utf-8"));
+    @ParameterizedTest
+    @ValueSource(strings = { "application/json", "application/json;charset=utf-8", "application/json; charset=utf-8" })
+    void testIsGraphQLContentType(String contentType) throws Exception {
+        assertTrue(GraphQLRequestParamUtils.isGraphQLContentType(contentType));
+    }
 
-        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType("application/vnd.api+json"));
-        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType("application/json-patch+json"));
-        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType(""));
-        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType(null));
+    // null can't be used in a ValueSource directly, so we need to use a MethodSource
+    static Stream<String> invalidContentTypes = Stream.of("application/vnd.api+json", "application/json-patch+json", "",
+            null);
+
+    @ParameterizedTest
+    @MethodSource("invalidContentTypes")
+    void testInvalidGraphQLContentType(String contentType) {
+        assertFalse(GraphQLRequestParamUtils.isGraphQLContentType(contentType));
     }
 
     @Test
@@ -120,13 +128,11 @@ public class TestGraphQLRequestParamUtils {
         assertEquals("{\"id\":123}", params.getVariables());
     }
 
-    @Test
-    void testInvalidJsonData() throws JsonProcessingException, UnsupportedEncodingException {
+    @ParameterizedTest
+    @ValueSource(strings = { "", "{}"})
+    void testInvalidJsonData(String postData) throws JsonProcessingException, UnsupportedEncodingException {
         assertThrows(IllegalArgumentException.class,
-                () -> GraphQLRequestParamUtils.toGraphQLRequestParams("".getBytes(StandardCharsets.UTF_8), null));
-
-        assertThrows(IllegalArgumentException.class,
-                () -> GraphQLRequestParamUtils.toGraphQLRequestParams("{}".getBytes(StandardCharsets.UTF_8), null));
+                () -> GraphQLRequestParamUtils.toGraphQLRequestParams(postData.getBytes(StandardCharsets.UTF_8), null));
     }
 
     @Test
