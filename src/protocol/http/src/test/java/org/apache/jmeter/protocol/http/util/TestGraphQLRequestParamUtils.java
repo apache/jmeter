@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public class TestGraphQLRequestParamUtils {
+class TestGraphQLRequestParamUtils {
 
     private static final String OPERATION_NAME = "";
 
