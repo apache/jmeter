@@ -198,8 +198,7 @@ public final class GraphQLRequestParamUtils {
      */
     public static GraphQLRequestParams toGraphQLRequestParams(final Arguments arguments, final String contentEncoding)
             throws UnsupportedEncodingException {
-        final String encoding = StringUtils.isNotEmpty(contentEncoding) ? contentEncoding
-                : EncoderCache.URL_ARGUMENT_ENCODING;
+        final String encoding = StringUtils.defaultIfEmpty(contentEncoding, EncoderCache.URL_ARGUMENT_ENCODING);
 
         String operationName = null;
         String query = null;
@@ -219,27 +218,42 @@ public final class GraphQLRequestParamUtils {
                 final boolean alwaysEncoded = ((HTTPArgument) arg).isAlwaysEncoded();
 
                 if (OPERATION_NAME_FIELD.equals(name)) {
-                    operationName = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
+                    operationName = encodedField(value, encoding, alwaysEncoded);
                 } else if (QUERY_FIELD.equals(name)) {
-                    query = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
+                    query = encodedField(value, encoding, alwaysEncoded);
                 } else if (VARIABLES_FIELD.equals(name)) {
-                    variables = alwaysEncoded ? value : URLDecoder.decode(value, encoding);
+                    variables = encodedField(value, encoding, alwaysEncoded);
                 }
             }
         }
 
-        if (StringUtils.isEmpty(query)
-                || (!StringUtils.startsWith(query, QUERY_FIELD) && !StringUtils.startsWith(query, "mutation"))) {
+        if (isNoQueryOrMutation(query)) {
             throw new IllegalArgumentException("Not a valid GraphQL query.");
         }
 
-        if (StringUtils.isNotEmpty(variables)) {
-            if (!StringUtils.startsWith(variables, "{") || !StringUtils.endsWith(variables, "}")) {
-                throw new IllegalArgumentException("Not a valid object node for GraphQL variables.");
-            }
+        if (isNoJsonObject(variables)) {
+            throw new IllegalArgumentException("Not a valid object node for GraphQL variables.");
         }
 
         return new GraphQLRequestParams(operationName, query, variables);
+    }
+
+    private static String encodedField(final String value, final String encoding, final boolean isEncoded)
+            throws UnsupportedEncodingException {
+        if (isEncoded) {
+            return value;
+        }
+        return URLDecoder.decode(value, encoding);
+    }
+
+    private static boolean isNoJsonObject(String variables) {
+        return StringUtils.isNotEmpty(variables)
+                && (!StringUtils.startsWith(variables, "{") || !StringUtils.endsWith(variables, "}"));
+    }
+
+    private static boolean isNoQueryOrMutation(String query) {
+        return StringUtils.isEmpty(query)
+                || (!StringUtils.startsWith(query, QUERY_FIELD) && !StringUtils.startsWith(query, "mutation"));
     }
 
     private static String getJsonNodeTextContent(final JsonNode jsonNode, final boolean nullable) {
