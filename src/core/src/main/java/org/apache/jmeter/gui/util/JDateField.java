@@ -93,6 +93,7 @@ public class JDateField extends JTextField {
     }
 
     // Dummy constructor to allow JUnit tests to work
+    @SuppressWarnings("JdkObsolete")
     public JDateField() {
         this(new Date());
     }
@@ -112,6 +113,7 @@ public class JDateField extends JTextField {
      *
      * @return The currently set date
      */
+    @SuppressWarnings("JdkObsolete")
     public Date getDate() {
         try {
             return dateFormat.parse(getText());

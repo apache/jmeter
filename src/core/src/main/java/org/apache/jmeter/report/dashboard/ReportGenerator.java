@@ -268,6 +268,7 @@ public class ReportGenerator {
     /**
      * @return {@link FilterConsumer} that filter data based on date range
      */
+    @SuppressWarnings("JdkObsolete")
     private FilterConsumer createFilterByDateRange() {
         FilterConsumer dateRangeFilter = new FilterConsumer();
         dateRangeFilter.setName(DATE_RANGE_FILTER_CONSUMER_NAME);

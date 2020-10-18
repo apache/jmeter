@@ -171,6 +171,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     }
 
     @Override
+    @SuppressWarnings("JdkObsolete")
     public void runTest() throws JMeterEngineException {
         if (host != null){
             long now=System.currentTimeMillis();
@@ -208,6 +209,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
+    @SuppressWarnings("JdkObsolete")
     private void notifyTestListenersOfEnd(SearchByClass<TestStateListener> testListeners) {
         log.info("Notifying test listeners of end of test");
         for (TestStateListener tl : testListeners.getSearchResults()) {
