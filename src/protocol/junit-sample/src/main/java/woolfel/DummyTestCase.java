@@ -88,6 +88,7 @@ public class DummyTestCase extends TestCase {
     }
 
     // Generate test error
+    @SuppressWarnings("ConstantOverflow")
     public void testException() {
         @SuppressWarnings("unused")
         int i = 27 / 0; // will generate Divide by zero error

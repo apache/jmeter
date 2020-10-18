@@ -60,6 +60,7 @@ public class DummyAnnotatedTest
 
     @Test
     // Succeeds only if Before method - verifyTwo() - is run.
+    @SuppressWarnings("UseCorrectAssertInTests")
     public void add() {
         int four = two + 2;
         if (4 != four) {
@@ -94,6 +95,7 @@ public class DummyAnnotatedTest
 
     @Test
     // Generate a test error
+    @SuppressWarnings("ConstantOverflow")
     public void divideByZero() {
         @SuppressWarnings("unused")
         int i = 27 / 0; // will generate Divide by zero error
