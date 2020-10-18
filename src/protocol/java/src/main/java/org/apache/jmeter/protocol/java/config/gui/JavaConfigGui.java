@@ -187,8 +187,10 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
     private void configureClassName() {
         String className = classNameLabeledChoice.getText().trim();
         try {
-            JavaSamplerClient client = (JavaSamplerClient) Class.forName(className, true,
-                    Thread.currentThread().getContextClassLoader()).getDeclaredConstructor().newInstance();
+            JavaSamplerClient client = Class.forName(className, true,
+                    Thread.currentThread().getContextClassLoader())
+                    .asSubclass(JavaSamplerClient.class)
+                    .getDeclaredConstructor().newInstance();
 
             Arguments currArgs = new Arguments();
             argsPanel.modifyTestElement(currArgs);
@@ -267,8 +269,10 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
      */
     private boolean classOk(String className) {
         try {
-            JavaSamplerClient client = (JavaSamplerClient) Class.forName(className, true,
-                    Thread.currentThread().getContextClassLoader()).getDeclaredConstructor().newInstance();
+            JavaSamplerClient client = Class.forName(className, true,
+                    Thread.currentThread().getContextClassLoader())
+                    .asSubclass(JavaSamplerClient.class)
+                    .getDeclaredConstructor().newInstance();
             // Just to use client
             return client != null;
         } catch (Exception ex) {
