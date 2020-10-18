@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
@@ -175,7 +176,11 @@ public class ResourcesDownloader {
             // wait for a previous download to finish before submitting a new one
             for (; i < list.size(); i++) {
                 Callable<AsynSamplerResultHolder> task = list.get(i);
-                completionService.take();
+                try {
+                    completionService.take().get();
+                } catch (ExecutionException e) {
+                    throw new RuntimeException("Task execution failed", e.getCause());
+                }
                 remainingTasksToTake--;
                 submittedTasks.add(completionService.submit(task));
             }
@@ -183,7 +188,11 @@ public class ResourcesDownloader {
             // all the resources downloads are in the thread pool queue
             // wait for the completion of all downloads
             while (remainingTasksToTake > 0) {
-                completionService.take();
+                try {
+                    completionService.take().get();
+                } catch (ExecutionException e) {
+                    throw new RuntimeException("Task execution failed", e.getCause());
+                }
                 remainingTasksToTake--;
             }
         } finally {

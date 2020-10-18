@@ -67,6 +67,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
     }
 
     @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
     public void testEnded(String host) {
         log.info("Test Ended on {}", host);
         singleExecutor.submit(() -> {
@@ -121,6 +122,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
     }
 
     @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
     public void sampleOccurred(final SampleEvent e) {
         // sampleOccurred is called from multiple threads; not safe to write from multiple threads.
         // also decouples the file IO from sample generation
@@ -141,6 +143,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
      *             never
      */
     // TODO should errors be thrown back through RMI?
+    @SuppressWarnings("FutureReturnValueIgnored")
     private Object readResolve() throws ObjectStreamException{
         log.info("Using DiskStoreSampleSender for this test run"); // server log file
         singleExecutor = Executors.newSingleThreadExecutor();
