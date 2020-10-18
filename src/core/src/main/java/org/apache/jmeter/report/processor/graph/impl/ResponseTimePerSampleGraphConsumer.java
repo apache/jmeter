@@ -41,8 +41,6 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
-    private static final String RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT = "%dth percentile";
-
     /**
      * Instantiates a new response time per sample graph consumer.
      */
@@ -80,7 +78,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
         factory.setPercentileIndex(property);
         StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
         seriesSelector.setSeriesName(String.format(
-                RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT, property));
+                "%dth percentile", property));
 
         return new GroupInfo(factory, seriesSelector,
                 // We include Transaction Controller results

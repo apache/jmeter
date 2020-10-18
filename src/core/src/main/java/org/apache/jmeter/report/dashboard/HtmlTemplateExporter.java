@@ -80,7 +80,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     public static final String DATA_CTX_FILTERS_ONLY_SAMPLE_SERIES = "filtersOnlySampleSeries";
 
     public static final String TIMESTAMP_FORMAT_MS = "ms";
-    private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
 
     // Template directory
     private static final String TEMPLATE_DIR = "template_dir";
@@ -311,7 +310,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                 File.class);
         if (!templateDirectory.isDirectory()) {
             String message = String.format(
-                    INVALID_TEMPLATE_DIRECTORY_FMT,
+                    "\"%s\" is not a valid template directory",
                     templateDirectory.getAbsolutePath());
             log.error(message);
             throw new ExportException(message);

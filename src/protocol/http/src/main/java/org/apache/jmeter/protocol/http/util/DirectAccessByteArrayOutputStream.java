@@ -32,8 +32,8 @@ public class DirectAccessByteArrayOutputStream extends ByteArrayOutputStream {
         super(initialSize);
     }
 
-    @SuppressWarnings("sync-override")
     @Override
+    @SuppressWarnings({"sync-override", "UnsynchronizedOverridesSynchronized"})
     public byte[] toByteArray() {
         // no need to copy the buffer if it has the right size
         // avoid an unneeded memory allocation

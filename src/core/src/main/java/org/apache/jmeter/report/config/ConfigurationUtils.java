@@ -28,8 +28,6 @@ import org.apache.jmeter.report.core.Converters;
  */
 public class ConfigurationUtils {
 
-    private static final String NOT_SUPPORTED_CONVERSION_FMT = "Convert \"%s\" to \"%s\" is not supported";
-
     /**
      * Instantiates a new configuration utils.
      */
@@ -55,7 +53,7 @@ public class ConfigurationUtils {
             return Converters.convert(clazz, value);
         } catch (ConvertException ex) {
             throw new ConfigurationException(String.format(
-                NOT_SUPPORTED_CONVERSION_FMT, value, clazz.getName()));
+                    "Convert \"%s\" to \"%s\" is not supported", value, clazz.getName()));
         }
     }
 }
