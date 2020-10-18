@@ -360,11 +360,10 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     }
 
     /**
-     * Configures a given Cookie Manager
+     * Configures a given Cookie Manager.
      *
      * @param cookieManager the manager to configure
      * @param request to copy information about cookies from
-     * @returns the configured cookie manager
      */
     private void createCookieManager(CookieManager cookieManager, Request request) {
         cookieManager.setProperty(TestElement.GUI_CLASS, CookiePanel.class.getName());

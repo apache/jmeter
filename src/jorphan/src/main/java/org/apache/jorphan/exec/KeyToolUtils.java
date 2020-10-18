@@ -181,8 +181,8 @@ public class KeyToolUtils {
     }
 
     /**
-     * Formats arguments
-     * @param arguments
+     * Formats arguments.
+     * @param arguments command arguments
      * @return String command line
      */
     private static String formatCommand(List<String> arguments) {
@@ -440,6 +440,7 @@ public class KeyToolUtils {
     }
 
     /**
+     * Returns true if {@code KeyToolUtils#KEYTOOL_PATH} is configured
      * @return flag whether KeyToolUtils#KEYTOOL_PATH is
      *         configured (is not <code>null</code>)
      */

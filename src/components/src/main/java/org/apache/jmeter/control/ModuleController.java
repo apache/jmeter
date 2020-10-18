@@ -75,7 +75,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
     }
 
     /**
-     * Sets the (@link JMeterTreeNode) which represents the controller which
+     * Sets the {@link JMeterTreeNode} which represents the controller which
      * this object is pointing to. Used for building the test case upon
      * execution.
      *
@@ -89,7 +89,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
     }
 
     /**
-     * Gets the (@link JMeterTreeNode) for the Controller
+     * Gets the {@link JMeterTreeNode} for the Controller
      *
      * @return JMeterTreeNode
      */

@@ -50,7 +50,7 @@ public class SearchTreeCommand extends AbstractAction {
      * parent.
      * </p>
      *
-     * @param source The source object that originated the display of the dialog
+     * @param event The source event that originated the display of the dialog
      * @return A freshly created search dialog with the parent frame that could be
      *         found, or no parent otherwise.
      */

@@ -97,6 +97,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
     }
 
     /**
+     * Returns Comparator used prior to sorted columns.
      * @return Comparator used prior to sorted columns.
      */
     public Comparator<Row> getPrimaryComparator() {
@@ -104,6 +105,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
     }
 
     /**
+     * Returns Comparator used on column.
      * @param column to be compared
      * @return Comparator used on column.
      */
@@ -112,6 +114,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
     }
 
     /**
+     * Returns Comparator if all sorted columns matches. Defaults to model index comparison.
      * @return Comparator if all sorted columns matches. Defaults to model index comparison.
      */
     public Comparator<Row> getFallbackComparator() {

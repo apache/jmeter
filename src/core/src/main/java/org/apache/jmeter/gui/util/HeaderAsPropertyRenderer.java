@@ -43,12 +43,12 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
 
     /**
      * @param columnsMsgParameters ignored
-     * @deprecated don't use {@code columnsMgsParameters} as they are
+     * @deprecated don't use {@code columnsMsgParameters} as they are
      * not moved around when rows of the corresponding table object model
      * are moved.
      */
     @Deprecated
-    public HeaderAsPropertyRenderer(Object[][] columnsMsgParameters) {
+    public HeaderAsPropertyRenderer(@Deprecated Object[][] columnsMsgParameters) {
         super();
     }
 

@@ -517,7 +517,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /**
      * The dirty property is a flag that indicates whether there are parts of
      * JMeter's test tree that the user has not saved since last modification.
-     * Various (@link Command actions) set this property when components are
+     * Various {@link org.apache.jmeter.gui.action.Command} actions set this property when components are
      * modified/created/saved.
      *
      * @param dirty

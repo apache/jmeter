@@ -121,6 +121,7 @@ public class SystemCommand {
     }
 
     /**
+     * Runs the command with given arguments and returns its return code.
      * @param arguments List of strings, not null
      * @return return code
      * @throws InterruptedException when execution was interrupted
@@ -233,6 +234,7 @@ public class SystemCommand {
     }
 
     /**
+     * Returns Out/Err stream contents
      * @return Out/Err stream contents
      */
     public String getOutResult() {
@@ -244,6 +246,7 @@ public class SystemCommand {
     }
 
     /**
+     * Returns the executionEnvironment.
      * @return the executionEnvironment
      */
     public Map<String, String> getExecutionEnvironment() {

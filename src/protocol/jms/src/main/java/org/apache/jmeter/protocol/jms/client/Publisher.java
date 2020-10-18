@@ -174,7 +174,7 @@ public class Publisher implements Closeable {
 
     /**
      * @param destinationName
-     * @param properties Map<String, String>
+     * @param properties {@code Map<String, String>}
      * @param msg Message
      * @param deliveryMode
      * @param priority
