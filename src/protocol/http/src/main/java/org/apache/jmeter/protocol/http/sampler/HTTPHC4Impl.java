@@ -30,6 +30,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -1505,7 +1506,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public void writeTo(final OutputStream out) throws IOException {
             if (hideFileData) {
-                out.write("<actual file content, not shown here>".getBytes());// encoding does not really matter here
+                out.write("<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8));
             } else {
                 super.writeTo(out);
             }

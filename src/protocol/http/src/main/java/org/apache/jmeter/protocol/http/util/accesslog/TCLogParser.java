@@ -195,8 +195,9 @@ public class TCLogParser implements LogParser {
         return -1;// indicate that an error occurred
     }
 
+    @SuppressWarnings("DefaultCharset")
     private static BufferedReader getReader(File file) throws IOException {
-        if (! isGZIP(file)) {
+        if (!isGZIP(file)) {
             return new BufferedReader(new FileReader(file));
         }
         GZIPInputStream in = new GZIPInputStream(new FileInputStream(file));

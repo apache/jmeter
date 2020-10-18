@@ -207,6 +207,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                     if (isUpload()) {
                         String contents=getLocalFileContents();
                         if (contents.length() > 0){
+                            @SuppressWarnings("DefaultCharset")
                             byte[] bytes = contents.getBytes(); // TODO - charset?
                             input = new ByteArrayInputStream(bytes);
                             res.setSentBytes((long)bytes.length);

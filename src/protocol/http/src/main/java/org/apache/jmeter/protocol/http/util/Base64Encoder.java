@@ -37,6 +37,7 @@ public final class Base64Encoder {
     private Base64Encoder() {
     }
 
+    @SuppressWarnings("DefaultCharset")
     public static String encode(String s) {
         return encode(s.getBytes()); // TODO - charset?
     }

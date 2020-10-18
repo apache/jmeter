@@ -19,12 +19,14 @@ package org.apache.jmeter.assertions;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 
 import org.apache.commons.lang3.StringUtils;
@@ -191,7 +193,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
         // check if filename defined
         if (StringUtils.isNotBlank(filename)) {
-            try (FileWriter writer = new FileWriter(filename, false)){
+            try (Writer writer = Files.newBufferedWriter(Paths.get(filename))) {
                 // write to file
                 writer.write(inOutput);
                 log.debug("writeOutput() -> output successfully written to file: {}", filename);

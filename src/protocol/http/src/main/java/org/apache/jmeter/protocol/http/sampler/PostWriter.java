@@ -33,7 +33,6 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Class for setting the necessary headers for a POST request, and sending the
@@ -114,10 +113,11 @@ public class PostWriter {
             for (int i=0; i < files.length; i++) {
                 HTTPFileArg file = files[i];
                 // First write the start multipart file
-                byte[] header = file.getHeader().getBytes();  // TODO - charset?
+                final String headerValue = file.getHeader();
+                byte[] header = headerValue.getBytes(ENCODING);
                 out.write(header);
                 // Retrieve the formatted data using the same encoding used to create it
-                postedBody.append(new String(header)); // TODO - charset?
+                postedBody.append(headerValue);
                 // Write the actual file content
                 writeFileToStream(file.getPath(), out);
                 // We just add placeholder text for file content
@@ -411,21 +411,10 @@ public class PostWriter {
         // elsewhere in the chain) and it caused OOM when many concurrent
         // uploads were being done. Could be fixed by increasing the evacuation
         // ratio in bin/jmeter[.bat], but this is better.
-        InputStream in = new BufferedInputStream(new FileInputStream(filename));
         int read;
-        boolean noException = false;
-        try {
+        try (InputStream in = new BufferedInputStream(new FileInputStream(filename))) {
             while ((read = in.read(buf)) > 0) {
                 out.write(buf, 0, read);
-            }
-            noException = true;
-        }
-        finally {
-            if(!noException) {
-                // Exception in progress
-                JOrphanUtils.closeQuietly(in);
-            } else {
-                in.close();
             }
         }
     }

@@ -288,6 +288,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                     sb.append(arg.getStringValue());
                 }
                 stringBody = sb.toString();
+                @SuppressWarnings("DefaultCharset")
                 byte [] sbody = stringBody.getBytes(); // TODO - charset?
                 cl = sbody.length;
                 body = new ByteArrayInputStream(sbody);

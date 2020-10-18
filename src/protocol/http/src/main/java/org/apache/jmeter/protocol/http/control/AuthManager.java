@@ -18,8 +18,8 @@
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -357,8 +357,8 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         if (!file.isAbsolute()) {
             file = new File(System.getProperty("user.dir"),authFile);
         }
-        try (FileWriter fw = new FileWriter(file);
-                PrintWriter writer = new PrintWriter(fw)){
+        try (BufferedWriter fw = Files.newBufferedWriter(file.toPath());
+             PrintWriter writer = new PrintWriter(fw)){
             writer.println("# JMeter generated Authorization file");
             for (int i = 0; i < getAuthObjects().size(); i++) {
                 Authorization auth = (Authorization) getAuthObjects().get(i).getObjectValue();

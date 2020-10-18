@@ -19,8 +19,9 @@ package org.apache.jmeter.report.dashboard;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class JsonExporter extends AbstractDataExporter {
     public static final String OUTPUT_FILENAME = "statistics.json";
     private static final FileFilter JSON_FILE_FILTER =
             file -> file.isFile() && file.getName().equals(OUTPUT_FILENAME);
+    private final static ObjectWriter OBJECT_WRITER = new ObjectMapper().writerWithDefaultPrettyPrinter();
 
 
     public JsonExporter() {
@@ -78,9 +80,8 @@ public class JsonExporter extends AbstractDataExporter {
 
             File outputFile = new File(outputDir, OUTPUT_FILENAME);
             LOGGER.info("Writing statistics JSON to {}", outputFile);
-            ObjectWriter objectWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
-            try (FileWriter fileWriter = new FileWriter(outputFile)) {
-                objectWriter.writeValue(fileWriter, statistics);
+            try (Writer fileWriter = Files.newBufferedWriter(outputFile.toPath())) {
+                OBJECT_WRITER.writeValue(fileWriter, statistics);
             } catch (IOException e) {
                 throw new ExportException("Error generating JSON statistics file to " + outputFile +" for "+statistics, e);
             }

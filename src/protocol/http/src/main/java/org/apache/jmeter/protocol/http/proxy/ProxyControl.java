@@ -718,7 +718,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                             }
                             authorization.setMechanism(mechanism);
                             if(BASIC_AUTH.equals(authType)) {
-                                String authCred= new String(Base64.decodeBase64(authCredentialsBase64));
+                                String authCred = new String(Base64.decodeBase64(authCredentialsBase64), StandardCharsets.UTF_8);
                                 String[] loginPassword = authCred.split(":"); //$NON-NLS-1$
                                 if(loginPassword.length == 2) {
                                     authorization.setUser(loginPassword[0]);

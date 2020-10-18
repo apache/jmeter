@@ -184,7 +184,9 @@ public class SystemSampler extends AbstractSampler {
         }
 
         if (nativeCommand != null) {
-            results.setResponseData(nativeCommand.getOutResult().getBytes()); // default charset is deliberate here
+            @SuppressWarnings("DefaultCharset")
+            final byte[] responseData = nativeCommand.getOutResult().getBytes();
+            results.setResponseData(responseData); // default charset is deliberate here
         }
 
         return results;

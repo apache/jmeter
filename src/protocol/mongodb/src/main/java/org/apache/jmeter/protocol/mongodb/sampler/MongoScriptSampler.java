@@ -76,12 +76,12 @@ public class MongoScriptSampler
             Object result = runner.evaluate(db, data);
             EvalResultHandler handler = new EvalResultHandler();
             String resultAsString = handler.handle(result);
-            res.setResponseData(resultAsString.getBytes());
+            res.setResponseData(resultAsString, res.getDataEncodingWithDefault());
         } catch (Exception ex) {
             res.setResponseCode("500"); // $NON-NLS-1$
             res.setSuccessful(false);
             res.setResponseMessage(ex.toString());
-            res.setResponseData(ex.getMessage().getBytes());
+            res.setResponseData(ex.getMessage(), res.getDataEncodingWithDefault());
         } finally {
             res.sampleEnd();
         }
