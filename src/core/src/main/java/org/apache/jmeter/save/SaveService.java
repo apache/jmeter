@@ -280,10 +280,11 @@ public class SaveService {
             throws InstantiationException, IllegalAccessException,
             InvocationTargetException, NoSuchMethodException,
             ClassNotFoundException {
+        final Class<? extends Converter> clazz = Class.forName(key).asSubclass(Converter.class);
         if (useMapper){
-            jmxsaver.registerConverter((Converter) Class.forName(key).getConstructor(Mapper.class).newInstance(jmxsaver.getMapper()));
+            jmxsaver.registerConverter(clazz.getConstructor(Mapper.class).newInstance(jmxsaver.getMapper()));
         } else {
-            jmxsaver.registerConverter((Converter) Class.forName(key).getDeclaredConstructor().newInstance());
+            jmxsaver.registerConverter(clazz.getDeclaredConstructor().newInstance());
         }
     }
 

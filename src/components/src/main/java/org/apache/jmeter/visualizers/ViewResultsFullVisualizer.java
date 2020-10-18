@@ -460,7 +460,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         for (String clazz : classesToAdd) {
             try {
                 // Instantiate render classes
-                final ResultRenderer renderer = (ResultRenderer) Class.forName(clazz).getDeclaredConstructor().newInstance();
+                final ResultRenderer renderer = Class.forName(clazz)
+                        .asSubclass(ResultRenderer.class)
+                        .getDeclaredConstructor().newInstance();
                 if (defaultRenderer.equals(clazz)) {
                     defaultObject=renderer;
                 }

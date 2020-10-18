@@ -72,7 +72,9 @@ public class CompoundVariable implements Function {
             List<String> classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
                     new Class[] { Function.class }, true, contain, notContain);
             for (String clazzName : classes) {
-                Function tempFunc = (Function) Class.forName(clazzName).getDeclaredConstructor().newInstance();
+                Function tempFunc = Class.forName(clazzName)
+                        .asSubclass(Function.class)
+                        .getDeclaredConstructor().newInstance();
                 String referenceKey = tempFunc.getReferenceKey();
                 if (referenceKey.length() > 0) { // ignore self
                     functions.put(referenceKey, tempFunc.getClass());

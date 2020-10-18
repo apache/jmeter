@@ -236,8 +236,10 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
     private BackendListenerClient createBackendListenerClient(String newClassName)
             throws ReflectiveOperationException {
-        return (BackendListenerClient) Class.forName(newClassName, true,
-                Thread.currentThread().getContextClassLoader()).getDeclaredConstructor().newInstance();
+        return Class.forName(newClassName, true,
+                Thread.currentThread().getContextClassLoader())
+                .asSubclass(BackendListenerClient.class)
+                .getDeclaredConstructor().newInstance();
     }
 
     /**
