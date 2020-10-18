@@ -180,7 +180,9 @@ public class Proxy extends Thread {
                 throw new JMeterException(); // hack to skip processing
             }
             if (isDebug) {
-                log.debug("{} Initial request: {}", port, new String(ba)); // NOSONAR False positive
+                @SuppressWarnings("DefaultCharset")
+                final String reparsed = new String(ba); // NOSONAR False positive
+                log.debug("{} Initial request: {}", port, reparsed);
             }
             // Use with SSL connection
             OutputStream outStreamClient = clientSocket.getOutputStream();
@@ -214,7 +216,9 @@ public class Proxy extends Thread {
                     throw new JMeterException(); // hack to skip processing
                 }
                 if (isDebug) {
-                    log.debug("{} Reparse: {}", port, new String(ba)); // NOSONAR False positive
+                    @SuppressWarnings("DefaultCharset")
+                    final String reparsed = new String(ba); // NOSONAR False positive
+                    log.debug("{} Reparse: {}", port, reparsed);
                 }
                 if (ba.length == 0) {
                     log.warn("{} Empty response to http over SSL. Probably waiting for user to authorize the certificate for {}",

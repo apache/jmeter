@@ -22,6 +22,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +100,7 @@ class UdpMetricsSender extends AbstractInfluxdbMetricsSender {
             }
 
             try (DatagramSocket ds = new DatagramSocket()) {
-                byte[] buf = sb.toString().getBytes();
+                byte[] buf = sb.toString().getBytes(StandardCharsets.UTF_8);
                 DatagramPacket dp = new DatagramPacket(buf, buf.length, this.hostAddress, this.udpPort);
                 ds.send(dp);
             } catch (SocketException e) {

@@ -18,8 +18,8 @@
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -104,8 +104,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
             file = new File(System.getProperty("user.dir")// $NON-NLS-1$
                     + File.separator + headFile);
         }
-        try ( FileWriter fw = new FileWriter(file);
-                PrintWriter writer = new PrintWriter(fw);) { // TODO Charset ?
+        try (BufferedWriter fw = Files.newBufferedWriter(file.toPath());
+             PrintWriter writer = new PrintWriter(fw);) { // TODO Charset ?
             writer.println("# JMeter generated Header file");// $NON-NLS-1$
             final CollectionProperty hdrs = getHeaders();
             for (int i = 0; i < hdrs.size(); i++) {

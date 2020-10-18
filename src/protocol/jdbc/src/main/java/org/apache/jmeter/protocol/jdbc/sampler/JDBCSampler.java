@@ -87,12 +87,14 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
             final String errCode = Integer.toString(ex.getErrorCode());
             res.setResponseMessage(ex.toString());
             res.setResponseCode(ex.getSQLState()+ " " +errCode);
-            res.setResponseData(ex.getMessage().getBytes());
+            res.setResponseData(ex.getMessage(), res.getDataEncodingWithDefault());
             res.setSuccessful(false);
         } catch (Exception ex) {
             res.setResponseMessage(ex.toString());
             res.setResponseCode("000");
-            res.setResponseData(ObjectUtils.defaultIfNull(ex.getMessage(), "NO MESSAGE").getBytes());
+            res.setResponseData(
+                    ObjectUtils.defaultIfNull(ex.getMessage(), "NO MESSAGE"),
+                    res.getDataEncodingWithDefault());
             res.setSuccessful(false);
         } finally {
             close(conn);

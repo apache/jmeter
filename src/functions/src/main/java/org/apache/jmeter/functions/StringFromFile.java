@@ -18,8 +18,9 @@
 package org.apache.jmeter.functions;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -102,9 +103,6 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
     private Object[] values;
 
     // @GuardedBy("this")
-    private FileReader myFileReader = null; // File reader
-
-    // @GuardedBy("this")
     private BufferedReader myBread = null; // Buffered reader
 
     // @GuardedBy("this")
@@ -140,12 +138,6 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         }
         try {
             myBread.close();
-        } catch (IOException e) {
-            log.error("closeFile() error: {}", e.toString(), e);//$NON-NLS-1$
-        }
-
-        try {
-            myFileReader.close();
         } catch (IOException e) {
             log.error("closeFile() error: {}", e.toString(), e);//$NON-NLS-1$
         }
@@ -218,14 +210,11 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
 
         log.info("{} opening file {}", tn, fileName);//$NON-NLS-1$
         try {
-            myFileReader = new FileReader(fileName);
-            myBread = new BufferedReader(myFileReader);
+            myBread = Files.newBufferedReader(Paths.get(fileName));
         } catch (Exception e) {
             log.error("openFile() error: {}", e.toString());//$NON-NLS-1$
-            IOUtils.closeQuietly(myFileReader, null);
             IOUtils.closeQuietly(myBread, null);
             myBread = null;
-            myFileReader = null;
         }
     }
 

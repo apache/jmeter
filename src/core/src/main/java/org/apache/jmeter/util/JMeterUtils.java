@@ -30,6 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -655,9 +656,9 @@ public class JMeterUtils implements UnitTestManager {
         try {
             String lineEnd = System.getProperty("line.separator"); // $NON-NLS-1$
             InputStream is = JMeterUtils.class.getClassLoader().getResourceAsStream(name);
-            if(is != null) {
-                try (Reader in = new InputStreamReader(is);
-                        BufferedReader fileReader = new BufferedReader(in)) {
+            if (is != null) {
+                try (Reader in = new InputStreamReader(is, StandardCharsets.UTF_8);
+                     BufferedReader fileReader = new BufferedReader(in)) {
                     return fileReader.lines()
                             .collect(Collectors.joining(lineEnd, "", lineEnd));
                 }

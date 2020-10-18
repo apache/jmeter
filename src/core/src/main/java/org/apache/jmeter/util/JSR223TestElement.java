@@ -19,9 +19,9 @@ package org.apache.jmeter.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
@@ -182,9 +182,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                             synchronized (compiledScriptsCache) {
                                 compiledScript = compiledScriptsCache.get(newCacheKey);
                                 if (compiledScript == null) {
-                                    // TODO Charset ?
-                                    try (BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile),
-                                            (int) scriptFile.length())) {
+                                    try (BufferedReader fileReader = Files.newBufferedReader(scriptFile.toPath())) {
                                         compiledScript = ((Compilable) scriptEngine).compile(fileReader);
                                         compiledScriptsCache.put(newCacheKey, compiledScript);
                                     }
@@ -193,9 +191,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                         }
                         return compiledScript.eval(bindings);
                     } else {
-                        // TODO Charset ?
-                        try (BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile),
-                                (int) scriptFile.length())) {
+                        try (BufferedReader fileReader = Files.newBufferedReader(scriptFile.toPath())) {
                             return scriptEngine.eval(fileReader, bindings);
                         }
                     }
@@ -259,8 +255,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             }
         } else {
             File scriptFile = new File(getFilename());
-            try (BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile),
-                    (int) scriptFile.length())) {
+            try (BufferedReader fileReader = Files.newBufferedReader(scriptFile.toPath())) {
                 try {
                     ((Compilable) scriptEngine).compile(fileReader);
                     return true;

@@ -21,9 +21,9 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.net.Authenticator;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -31,6 +31,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -711,7 +712,7 @@ public class JMeter implements JMeterPlugin {
             File file = new File(jsr223Init);
             if(file.exists() && file.canRead()) {
                 String extension = StringUtils.defaultIfBlank(FilenameUtils.getExtension(jsr223Init), "Groovy");
-                try (FileReader reader = new FileReader(file)) {
+                try (Reader reader = Files.newBufferedReader(file.toPath())) {
                     ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
                     ScriptEngine engine = scriptEngineManager.getEngineByExtension(extension);
                     if (engine == null) {

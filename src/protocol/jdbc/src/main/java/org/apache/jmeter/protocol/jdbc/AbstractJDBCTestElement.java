@@ -464,7 +464,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         case Types.BINARY:
         case Types.VARBINARY:
         case Types.LONGVARBINARY:
-            pstmt.setBytes(index, argument.getBytes());
+            pstmt.setBytes(index, argument.getBytes(StandardCharsets.UTF_8));
             break;
         case Types.NULL:
             pstmt.setNull(index, targetSqlType);

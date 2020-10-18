@@ -223,7 +223,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         sb.append("Browse message on Send Queue ").append(sendQueue.getQueueName())
             .append(": ")
             .append(browseQueueDetails(sendQueue, res));
-        res.setResponseData(sb.toString().getBytes());
+        res.setResponseData(sb.toString(), res.getDataEncodingWithDefault());
         res.setResponseCodeOK();
     }
 
@@ -234,7 +234,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         sb.append("Clear messages on Send Queue ").append(sendQueue.getQueueName())
                 .append(": ")
                 .append(clearQueue(sendQueue, res));
-        res.setResponseData(sb.toString().getBytes());
+        res.setResponseData(sb.toString(), res.getDataEncodingWithDefault());
         res.setResponseCodeOK();
     }
 
