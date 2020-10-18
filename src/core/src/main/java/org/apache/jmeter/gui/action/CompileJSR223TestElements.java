@@ -130,9 +130,9 @@ public class CompileJSR223TestElements extends AbstractAction implements MenuCre
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
         if(location == MENU_LOCATION.TOOLS) {
-
+            // Use the action name as resource key because the action name is used by JMeterMenuBar too when changing languages.
             JMenuItem menuItemIC = new JMenuItem(
-                    JMeterUtils.getResString("compile_menu"), KeyEvent.VK_UNDEFINED);
+                    JMeterUtils.getResString(ActionNames.COMPILE_JSR223), KeyEvent.VK_UNDEFINED);
             menuItemIC.setName(ActionNames.COMPILE_JSR223);
             menuItemIC.setActionCommand(ActionNames.COMPILE_JSR223);
             menuItemIC.setAccelerator(null);
