@@ -233,7 +233,9 @@ public class ThreadGroup extends AbstractThreadGroup {
                 long nowInMillis = System.currentTimeMillis();
                 if(threadNum > 0) {
                     long timeElapsedToStartLastThread = nowInMillis - lastThreadStartInMillis;
-                    delayForNextThreadInMillis += perThreadDelayInMillis - timeElapsedToStartLastThread;
+                    // Note: `int += long` assignment hides lossy cast to int
+                    delayForNextThreadInMillis = (int) (delayForNextThreadInMillis +
+                            (perThreadDelayInMillis - timeElapsedToStartLastThread));
                 }
                 if (log.isDebugEnabled()) {
                     log.debug("Computed delayForNextThreadInMillis:{} for thread:{}", delayForNextThreadInMillis, Thread.currentThread().getId());
