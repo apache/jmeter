@@ -152,6 +152,7 @@ public class TemplateManager {
             super();
         }
 
+        @Override
         public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
             if(systemId.endsWith("templates.dtd")) {
                 return new InputSource(TemplateManager.class.getResourceAsStream("/org/apache/jmeter/gui/action/template/templates.dtd"));

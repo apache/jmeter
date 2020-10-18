@@ -128,6 +128,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
         return variables.entrySet();
     }
 
+    @Override
     public String toString() {
         return variables.toString();
     }
