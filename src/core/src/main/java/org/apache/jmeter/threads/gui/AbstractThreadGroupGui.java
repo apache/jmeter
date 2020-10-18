@@ -52,7 +52,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
     private JRadioButton stopTestBox;
     private JRadioButton stopTestNowBox;
 
-    public AbstractThreadGroupGui(){
+    protected AbstractThreadGroupGui(){
         super();
         init();
         initGui();

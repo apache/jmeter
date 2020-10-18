@@ -88,7 +88,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * setting up the Name Panel and assigning the class's static label as the
      * name to start.
      */
-    public AbstractJMeterGuiComponent() {
+    protected AbstractJMeterGuiComponent() {
         namePanel = new NamePanel();
         init();
     }

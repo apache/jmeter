@@ -28,7 +28,7 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
     /**
      * @param beanClass class to create bean info for
      */
-    public JDBCTestElementBeanInfoSupport(Class<? extends TestBean> beanClass) {
+    protected JDBCTestElementBeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass);
 
         createPropertyGroup("varName", // $NON-NLS-1$

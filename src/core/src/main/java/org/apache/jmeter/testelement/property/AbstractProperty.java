@@ -34,14 +34,14 @@ public abstract class AbstractProperty implements JMeterProperty {
 
     private transient boolean runningVersion = false;
 
-    public AbstractProperty(String name) {
+    protected AbstractProperty(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
         }
         this.name = name;
     }
 
-    public AbstractProperty() {
+    protected AbstractProperty() {
         this("");
     }
 

@@ -344,7 +344,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     ////////////////////// Code ///////////////////////////
 
-    public HTTPSamplerBase() {
+    protected HTTPSamplerBase() {
         setArguments(new Arguments());
     }
 

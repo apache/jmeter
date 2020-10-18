@@ -38,7 +38,7 @@ public abstract class RandomTimer extends ConstantTimer implements ModifiableTim
     /**
      * No-arg constructor.
      */
-    public RandomTimer() {
+    protected RandomTimer() {
     }
 
     /**

@@ -45,13 +45,13 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
 
     protected final transient List<Functor> writeFunctors;
 
-    public AbstractTreeTableModel(TreeNode root) {
+    protected AbstractTreeTableModel(TreeNode root) {
         this.rootNode = root;
         readFunctors = new ArrayList<>();
         writeFunctors = new ArrayList<>();
     }
 
-    public AbstractTreeTableModel(String[] headers,
+    protected AbstractTreeTableModel(String[] headers,
             Functor[] readFunctors,
             Functor[] writeFunctors,
             Class<?>[] editorClasses) {

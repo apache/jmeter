@@ -37,7 +37,7 @@ abstract class AbstractHostIPName extends AbstractFunction {
 
     private Object[] values;
 
-    public AbstractHostIPName() {
+    protected AbstractHostIPName() {
     }
 
     /** {@inheritDoc} */

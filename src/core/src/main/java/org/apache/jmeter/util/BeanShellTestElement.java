@@ -52,7 +52,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 
     private transient boolean hasInitFile = false;
 
-    public BeanShellTestElement() {
+    protected BeanShellTestElement() {
         super();
         init();
     }

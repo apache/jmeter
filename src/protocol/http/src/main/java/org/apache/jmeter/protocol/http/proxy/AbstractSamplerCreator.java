@@ -73,7 +73,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     }
 
 
-    public AbstractSamplerCreator() {
+    protected AbstractSamplerCreator() {
         super();
     }
 

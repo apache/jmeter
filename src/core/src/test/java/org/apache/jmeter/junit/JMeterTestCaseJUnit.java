@@ -38,11 +38,11 @@ public abstract class JMeterTestCaseJUnit extends TestCase {
     // Used by findTestFile
     private static final String filePrefix;
 
-    public JMeterTestCaseJUnit() {
+    protected JMeterTestCaseJUnit() {
         super();
     }
 
-    public JMeterTestCaseJUnit(String name) {
+    protected JMeterTestCaseJUnit(String name) {
         super(name);
     }
 

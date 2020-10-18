@@ -41,7 +41,7 @@ public abstract class AbstractSampleSender implements SampleSender {
     /**
      *
      */
-    public AbstractSampleSender() {
+    protected AbstractSampleSender() {
         super();
     }
 

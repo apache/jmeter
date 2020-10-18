@@ -85,7 +85,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             return LazyHolder.INSTANCE;
     }
 
-    public JSR223TestElement() {
+    protected JSR223TestElement() {
         super();
     }
 

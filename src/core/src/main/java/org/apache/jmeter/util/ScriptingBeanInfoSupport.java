@@ -40,7 +40,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
     static final String FALSE_AS_STRING = Boolean.FALSE.toString();
     static final String TRUE_AS_STRING = Boolean.TRUE.toString();
 
-    public ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] languageTags) {
+    protected ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] languageTags) {
         this(beanClass, languageTags, null);
     }
 

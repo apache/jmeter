@@ -43,7 +43,7 @@ public abstract class ScriptingTestElement extends AbstractTestElement {
 
     //-- For TestBean implementations only
 
-    public ScriptingTestElement() {
+    protected ScriptingTestElement() {
         super();
     }
 

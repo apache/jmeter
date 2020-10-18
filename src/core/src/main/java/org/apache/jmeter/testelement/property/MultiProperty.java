@@ -27,11 +27,11 @@ import org.apache.jmeter.testelement.TestElement;
 public abstract class MultiProperty extends AbstractProperty implements Iterable<JMeterProperty> {
     private static final long serialVersionUID = 240L;
 
-    public MultiProperty() {
+    protected MultiProperty() {
         super();
     }
 
-    public MultiProperty(String name) {
+    protected MultiProperty(String name) {
         super(name);
     }
 
