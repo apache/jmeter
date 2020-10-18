@@ -32,8 +32,8 @@ public class SamplerMetricTimedModeTest {
     private static final double ALLOWED_DELTA = 25.0;
 
     @BeforeEach
+    @SuppressWarnings("deprecation")
     public void initMode() throws Exception {
-        // noinspection deprecation
         SamplerMetric.setDefaultWindowMode(WindowMode.TIMED);
     }
 
