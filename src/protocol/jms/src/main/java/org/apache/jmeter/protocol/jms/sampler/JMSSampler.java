@@ -350,6 +350,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         return retVal;
     }
 
+    @SuppressWarnings("JdkObsolete")
     private void extractContent(StringBuilder buffer, StringBuilder propBuffer, Message msg) {
         if (msg != null) {
             try {
@@ -388,6 +389,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
+    @SuppressWarnings("JdkObsolete")
     private String browseQueueDetails(Queue queue, SampleResult res) {
         String queueName = null;
         try {

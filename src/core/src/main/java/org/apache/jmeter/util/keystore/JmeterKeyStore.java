@@ -102,6 +102,7 @@ public final class JmeterKeyStore {
      * @throws UnrecoverableKeyException if the key can not be recovered from the store (should not
      *                                   happen here, either)
      */
+    @SuppressWarnings("JdkObsolete")
     public void load(InputStream is, String pword)
             throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
         char[] pw = toCharArrayOrNull(pword);

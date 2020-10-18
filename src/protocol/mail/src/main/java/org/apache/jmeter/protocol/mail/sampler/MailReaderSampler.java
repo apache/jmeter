@@ -139,6 +139,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("JdkObsolete")
     public SampleResult sample(Entry e) {
         SampleResult parent = new SampleResult();
         boolean isOK = false; // Did sample succeed?
@@ -305,6 +306,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         return parent;
     }
 
+    @SuppressWarnings("JdkObsolete")
     protected void addCustomProperties(Properties props) {
         Properties jMeterProperties = JMeterUtils.getJMeterProperties();
         @SuppressWarnings("unchecked")

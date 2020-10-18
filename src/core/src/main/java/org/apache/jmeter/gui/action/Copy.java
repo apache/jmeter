@@ -134,6 +134,7 @@ public class Copy extends AbstractAction {
         return treeNodes;
     }
 
+    @SuppressWarnings("JdkObsolete")
     private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from) {
         Enumeration<?> enumFrom = from.children();
         while (enumFrom.hasMoreElements()) {

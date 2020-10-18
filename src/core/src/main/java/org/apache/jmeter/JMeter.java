@@ -1391,6 +1391,7 @@ public class JMeter implements JMeterPlugin {
     }
 
     @Override
+    @SuppressWarnings("JdkObsolete")
     public String[][] getIconMappings() {
         final String defaultIconProp = "org/apache/jmeter/images/icon.properties"; //$NON-NLS-1$
         final String iconSize = JMeterUtils.getPropDefault(TREE_ICON_SIZE, DEFAULT_TREE_ICON_SIZE);

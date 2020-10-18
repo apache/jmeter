@@ -316,6 +316,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @param pd the descriptor
      * @param pe the propertyEditor
      */
+    @SuppressWarnings("JdkObsolete")
     private static void validateAttributes(PropertyDescriptor pd, PropertyEditor pe) {
         final Object deflt = pd.getValue(DEFAULT);
         if (deflt == null) {
