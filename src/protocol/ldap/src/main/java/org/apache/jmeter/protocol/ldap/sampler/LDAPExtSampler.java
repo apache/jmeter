@@ -536,7 +536,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         while (iter.hasNext()) {
             BasicAttribute attr;
             LDAPArgument item = (LDAPArgument) iter.next().getObjectValue();
-            if ((item.getValue()).length()==0) {
+            if (item.getValue().length() == 0) {
                 attr = new BasicAttribute(item.getName());
             } else {
                 attr = getBasicAttribute(item.getName(), item.getValue());

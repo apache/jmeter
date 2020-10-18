@@ -282,7 +282,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                     String body = contentDoc.getText(lastPosition, contentDoc.getLength() - lastPosition);
                     matcher = pattern.matcher(body);
 
-                    if ((matcher != null) && (matcher.find())) {
+                    if (matcher.find()) {
                         selection.removeAllHighlights();
                         selection.addHighlight(lastPosition + matcher.start(),
                                 lastPosition + matcher.end(), painter);

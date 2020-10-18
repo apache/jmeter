@@ -205,7 +205,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         // If it was a HTTP GET request, then all parameters in the URL
         // has been handled by the sampler.setPath above, so we just need
         // to do parse the rest of the request if it is not a GET request
-        if((!HTTPConstants.CONNECT.equals(request.getMethod())) && (!HTTPConstants.GET.equals(request.getMethod()))) {
+        if(!HTTPConstants.CONNECT.equals(request.getMethod()) && !HTTPConstants.GET.equals(request.getMethod())) {
             // Check if it was a multipart http post request
             final String contentType = request.getContentType();
             MultipartUrlConfig urlConfig = request.getMultipartConfig(contentType);

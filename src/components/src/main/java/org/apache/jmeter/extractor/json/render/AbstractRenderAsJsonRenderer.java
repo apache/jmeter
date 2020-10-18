@@ -92,7 +92,7 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if ((sampleResult != null) && (TESTER_COMMAND.equals(command))) {
+        if ((sampleResult != null) && TESTER_COMMAND.equals(command)) {
             String response = jsonDataField.getText();
             executeTester(response);
         }

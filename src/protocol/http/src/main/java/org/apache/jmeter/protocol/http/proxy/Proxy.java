@@ -185,7 +185,7 @@ public class Proxy extends Thread {
             // Use with SSL connection
             OutputStream outStreamClient = clientSocket.getOutputStream();
 
-            if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
+            if (request.getMethod().startsWith(HTTPConstants.CONNECT) && (outStreamClient != null)) {
                 log.debug("{} Method CONNECT => SSL", port);
                 // write a OK response to browser, to engage SSL exchange
                 outStreamClient.write(

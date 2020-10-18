@@ -75,7 +75,7 @@ public class RandomString extends AbstractFunction {
 
         String charsToUse = null;//means no restriction
         if (values.length >= CHARS) {
-            charsToUse = (values[CHARS - 1]).execute().trim();
+            charsToUse = values[CHARS - 1].execute().trim();
             if (charsToUse.length() <= 0) { // empty chars, return to null
                 charsToUse = null;
             }
@@ -83,7 +83,7 @@ public class RandomString extends AbstractFunction {
 
         String myName = "";//$NON-NLS-1$
         if (values.length >= PARAM_NAME) {
-            myName = (values[PARAM_NAME - 1]).execute().trim();
+            myName = values[PARAM_NAME - 1].execute().trim();
         }
 
         String myValue = null;

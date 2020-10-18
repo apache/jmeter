@@ -127,7 +127,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         servername.setText(element.getPropertyAsString(LDAPSampler.SERVERNAME));
         port.setText(element.getPropertyAsString(LDAPSampler.PORT));
         rootdn.setText(element.getPropertyAsString(LDAPSampler.ROOTDN));
-        CardLayout cl = (CardLayout) (cards.getLayout());
+        CardLayout cl = (CardLayout) cards.getLayout();
         final String testType = element.getPropertyAsString(LDAPSampler.TEST);
         if (testType.equals(LDAPSampler.ADD)) {
             addTest.setSelected(true);
@@ -232,7 +232,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
      */
     @Override
     public void itemStateChanged(ItemEvent ie) {
-        CardLayout cl = (CardLayout) (cards.getLayout());
+        CardLayout cl = (CardLayout) cards.getLayout();
         if (userDefined.isSelected()) {
             if (addTest.isSelected()) {
                 cl.show(cards, "Add");

@@ -298,7 +298,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             for (SampleResult sampleResult : sampleResults) {
                 userMetrics.add(sampleResult);
                 Matcher matcher = samplersToFilter.matcher(sampleResult.getSampleLabel());
-                if (!summaryOnly && (matcher.find())) {
+                if (!summaryOnly && matcher.find()) {
                     SamplerMetric samplerMetric = getSamplerMetricInfluxdb(sampleResult.getSampleLabel());
                     samplerMetric.add(sampleResult);
                 }

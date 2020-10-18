@@ -157,7 +157,7 @@ public class LogFunction extends AbstractFunction {
             }
 
             final String threadName = Thread.currentThread().getName();
-            final String separator = (comment.isEmpty()) ? DEFAULT_SEPARATOR : comment;
+            final String separator = comment.isEmpty() ? DEFAULT_SEPARATOR : comment;
 
             switch (prioLevel) {
                 case ERROR:

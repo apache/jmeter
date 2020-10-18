@@ -198,7 +198,7 @@ public class ThreadGroup extends AbstractThreadGroup {
 
         // set the endtime for the Thread
         if (getDuration() > 0) {// Duration is in seconds
-            thread.setEndTime(getDuration() * 1000 + (thread.getStartTime()));
+            thread.setEndTime(getDuration() * 1000 + thread.getStartTime());
         } else {
             throw new JMeterStopTestException("Invalid duration " + getDuration() + " set in Thread Group:" + getName());
         }

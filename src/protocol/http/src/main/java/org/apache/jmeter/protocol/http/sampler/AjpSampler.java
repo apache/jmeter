@@ -326,7 +326,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         if(cookies != null) {
             cookieHeader = cookies.getCookieHeaderForURL(url);
             for (JMeterProperty jMeterProperty : cookies.getCookies()) {
-                Cookie cookie = (Cookie)(jMeterProperty.getObjectValue());
+                Cookie cookie = (Cookie) jMeterProperty.getObjectValue();
                 setInt(0xA009); // Cookie
                 setString(cookie.getName()+"="+cookie.getValue());//$NON-NLS-1$
             }
