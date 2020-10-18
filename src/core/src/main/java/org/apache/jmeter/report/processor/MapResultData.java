@@ -19,7 +19,6 @@ package org.apache.jmeter.report.processor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -49,7 +48,7 @@ public class MapResultData implements ResultData {
      *
      * @return the sets of entries of the map
      */
-    public Set<Entry<String, ResultData>> entrySet() {
+    public Set<Map.Entry<String, ResultData>> entrySet() {
         return map.entrySet();
     }
 

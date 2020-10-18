@@ -22,7 +22,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleMetadata;
@@ -83,7 +82,7 @@ public class CustomGraphConsumerTest {
         customGraphConsumer.initializeExtraResults(resultData);
 
         JsonizerVisitor jsonizer = new JsonizerVisitor();
-        for (Entry<String, ResultData> entrySet : resultData.entrySet()) {
+        for (Map.Entry<String, ResultData> entrySet : resultData.entrySet()) {
             Object testedValue = entrySet.getValue().accept(jsonizer);
             String key = entrySet.getKey();
 

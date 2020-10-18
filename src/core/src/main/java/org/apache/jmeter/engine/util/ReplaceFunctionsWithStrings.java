@@ -18,7 +18,6 @@
 package org.apache.jmeter.engine.util;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -73,7 +72,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
         if(input == null) {
             return prop;
         }
-        for(Entry<String, String> entry : getVariables().entrySet()){
+        for(Map.Entry<String, String> entry : getVariables().entrySet()){
             String key = entry.getKey();
             String value = entry.getValue();
             if (regexMatch) {

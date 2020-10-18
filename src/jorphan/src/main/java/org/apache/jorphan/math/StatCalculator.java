@@ -20,7 +20,6 @@ package org.apache.jorphan.math;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.mutable.MutableLong;
@@ -109,7 +108,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public void addAll(StatCalculator<T> calc) {
-        for(Entry<T, MutableLong> ent : calc.valuesMap.entrySet()) {
+        for(Map.Entry<T, MutableLong> ent : calc.valuesMap.entrySet()) {
             addEachValue(ent.getKey(), ent.getValue().longValue());
         }
     }
@@ -184,7 +183,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     public Map<Number, Number[]> getDistribution() {
         Map<Number, Number[]> items = new HashMap<>();
 
-        for (Entry<T, MutableLong> entry : valuesMap.entrySet()) {
+        for (Map.Entry<T, MutableLong> entry : valuesMap.entrySet()) {
             Number[] dis = new Number[2];
             dis[0] = entry.getKey();
             dis[1] = entry.getValue();

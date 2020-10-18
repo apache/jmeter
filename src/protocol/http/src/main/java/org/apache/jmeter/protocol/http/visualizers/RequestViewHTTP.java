@@ -26,7 +26,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -181,7 +180,7 @@ public class RequestViewHTTP implements RequestView {
 
             // Parsed request headers
             LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getRequestHeaders());
-            for (Entry<String, String> entry : lhm.entrySet()) {
+            for (Map.Entry<String, String> entry : lhm.entrySet()) {
                 headersModel.addRow(new RowResult(entry.getKey(), entry.getValue()));
             }
 
@@ -214,8 +213,8 @@ public class RequestViewHTTP implements RequestView {
                 }
 
                 if (StringUtils.isNotBlank(queryGet)) {
-                    Set<Entry<String, String[]>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
-                    for (Entry<String, String[]> entry : keys) {
+                    Set<Map.Entry<String, String[]>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
+                    for (Map.Entry<String, String[]> entry : keys) {
                         for (String value : entry.getValue()) {
                             paramsModel.addRow(new RowResult(entry.getKey(), value));
                         }

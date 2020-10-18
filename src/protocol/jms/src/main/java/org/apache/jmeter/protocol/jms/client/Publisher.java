@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.jms.client;
 import java.io.Closeable;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
@@ -166,7 +165,7 @@ public class Publisher implements Closeable {
             int deliveryMode, int priority, long expiration)
             throws JMSException, NamingException {
         MapMessage msg = session.createMapMessage();
-        for (Entry<String, Object> me : map.entrySet()) {
+        for (Map.Entry<String, Object> me : map.entrySet()) {
             msg.setObject(me.getKey(), me.getValue());
         }
         return (MapMessage)setPropertiesAndSend(destinationName, properties, msg, deliveryMode, priority, expiration);
