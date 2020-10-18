@@ -191,6 +191,7 @@ public final class CSVSaveService {
      *
      * @throws JMeterError
      */
+    @SuppressWarnings("JdkObsolete")
     private static SampleEvent makeResultFromDelimitedString(
             final String[] parts,
             final SampleSaveConfiguration saveConfig, // may be updated
@@ -809,6 +810,7 @@ public final class CSVSaveService {
      *            the separation string
      * @return the separated value representation of the result
      */
+    @SuppressWarnings("JdkObsolete")
     public static String resultToDelimitedString(SampleEvent event,
             SampleResult sample,
             SampleSaveConfiguration saveConfig,

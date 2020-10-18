@@ -123,6 +123,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     }
 
     @Override
+    @SuppressWarnings("JdkObsolete")
     public void testStarted(String host) {
         synchronized(LOCK){
             sequenceNumber = 0;
