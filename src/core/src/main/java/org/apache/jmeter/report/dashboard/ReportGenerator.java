@@ -173,6 +173,7 @@ public class ReportGenerator {
      * @param propertyKey the property key
      * @return the name of the property setter
      */
+    @SuppressWarnings("JdkObsolete")
     private static String getSetterName(String propertyKey) {
         Matcher matcher = POTENTIAL_CAMEL_CASE_PATTERN.matcher(propertyKey);
         StringBuffer buffer = new StringBuffer(); // NOSONAR Unfortunately Matcher does not support StringBuilder
