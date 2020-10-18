@@ -18,8 +18,10 @@
 package org.apache.commons.cli.avalon;
 
 import java.text.ParseException;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Parser for command line arguments.
@@ -62,10 +64,10 @@ public final class CLArgsParser {
 
     private final CLOptionDescriptor[] optionDescriptors;
 
-    private final Vector<CLOption> options;
+    private final List<CLOption> options = new ArrayList<>();
 
     // Key is String or Integer
-    private Hashtable<Object, CLOption> optionIndex;
+    private Map<Object, CLOption> optionIndex;
 
     private final ParserControl control;
 
@@ -109,7 +111,7 @@ public final class CLArgsParser {
      *
      * @return the list of options
      */
-    public final Vector<CLOption> getArguments() {
+    public final List<CLOption> getArguments() {
         return this.options;
     }
 
@@ -218,7 +220,6 @@ public final class CLArgsParser {
     public CLArgsParser(final String[] args, final CLOptionDescriptor[] optionDescriptors, final ParserControl control) {
         this.optionDescriptors = optionDescriptors;
         this.control = control;
-        this.options = new Vector<>();
         this.args = args;
 
         try {
@@ -237,11 +238,11 @@ public final class CLArgsParser {
      * @param arguments
      *            the arguments
      */
-    private void checkIncompatibilities(final Vector<CLOption> arguments) throws ParseException {
+    private void checkIncompatibilities(final List<CLOption> arguments) throws ParseException {
         final int size = arguments.size();
 
         for (int i = 0; i < size; i++) {
-            final CLOption option = arguments.elementAt(i);
+            final CLOption option = arguments.get(i);
             final int id = option.getDescriptor().getId();
             final CLOptionDescriptor descriptor = getDescriptorFor(id);
 
@@ -257,7 +258,7 @@ public final class CLArgsParser {
         }
     }
 
-    private void checkIncompatible(final Vector<CLOption> arguments, final int[] incompatible, final int original)
+    private void checkIncompatible(final List<CLOption> arguments, final int[] incompatible, final int original)
             throws ParseException {
         final int size = arguments.size();
 
@@ -266,12 +267,12 @@ public final class CLArgsParser {
                 continue;
             }
 
-            final CLOption option = arguments.elementAt(i);
+            final CLOption option = arguments.get(i);
             final int id = option.getDescriptor().getId();
 
             for (int anIncompatible : incompatible) {
                 if (id == anIncompatible) {
-                    final CLOption originalOption = arguments.elementAt(original);
+                    final CLOption originalOption = arguments.get(original);
                     final int originalId = originalOption.getDescriptor().getId();
 
                     String message = null;
@@ -398,7 +399,7 @@ public final class CLArgsParser {
         // Reached end of input arguments - perform final processing
         if (this.option != null) {
             if (STATE_OPTIONAL_ARG == this.state) {
-                this.options.addElement(this.option);
+                this.options.add(this.option);
             } else if (STATE_REQUIRE_ARG == this.state) {
                 final CLOptionDescriptor descriptor = getDescriptorFor(this.option.getDescriptor().getId());
                 final String message = "Missing argument to option " + getOptionDescription(descriptor);
@@ -406,7 +407,7 @@ public final class CLArgsParser {
             } else if (STATE_REQUIRE_2ARGS == this.state) {
                 if (1 == this.option.getArgumentCount()) {
                     this.option.addArgument("");
-                    this.options.addElement(this.option);
+                    this.options.add(this.option);
                 } else {
                     final CLOptionDescriptor descriptor = getDescriptorFor(this.option.getDescriptor().getId());
                     final String message = "Missing argument to option " + getOptionDescription(descriptor);
@@ -497,7 +498,7 @@ public final class CLArgsParser {
     }
 
     private void addOption(final CLOption option) {
-        this.options.addElement(option);
+        this.options.add(option);
         this.lastOptionId = option.getDescriptor().getId();
         this.option = null;
     }
@@ -588,7 +589,7 @@ public final class CLArgsParser {
                 if (0 == this.ch && '-' == peekAtChar()) {
                     // Yes, so the second argument is missing
                     this.option.addArgument("");
-                    this.options.addElement(this.option);
+                    this.options.add(this.option);
                     this.state = STATE_NORMAL;
                 }
             } else // 2nd argument
@@ -656,7 +657,7 @@ public final class CLArgsParser {
      */
     private void buildOptionIndex() {
         final int size = this.options.size();
-        this.optionIndex = new Hashtable<>(size * 2);
+        this.optionIndex = new HashMap<>(size * 2);
 
         for (final CLOption option : this.options) {
             final CLOptionDescriptor optionDescriptor = getDescriptorFor(option.getDescriptor().getId());
