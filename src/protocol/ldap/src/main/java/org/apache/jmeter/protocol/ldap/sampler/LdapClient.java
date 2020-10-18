@@ -64,6 +64,7 @@ public class LdapClient {
      *             if {@link InitialDirContext} can not be build using the above
      *             parameters
      */
+    @SuppressWarnings("JdkObsolete")
     public void connect(String host, String port, String rootdn, String username, String password)
             throws NamingException {
         Hashtable<String, String> env = new Hashtable<>();
