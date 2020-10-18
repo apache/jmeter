@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
@@ -103,7 +102,7 @@ public class TestUnmodifiableJMeterVariables {
 
     @Test
     public void testGetIteratorIsUnmodifable() {
-        Iterator<Entry<String, Object>> iterator = unmodifiables.getIterator();
+        Iterator<Map.Entry<String, Object>> iterator = unmodifiables.getIterator();
         assertThat(iterator.hasNext(), CoreMatchers.is(true));
         iterator.next();
         assertThrowsUnsupportedOperation(iterator::remove);
@@ -121,10 +120,10 @@ public class TestUnmodifiableJMeterVariables {
         assertThat(iteratorToMap(unmodifiables.getIterator()), CoreMatchers.is(iteratorToMap(vars.getIterator())));
     }
 
-    private <K, V> Map<K, V> iteratorToMap(Iterator<Entry<K, V>> it) {
+    private <K, V> Map<K, V> iteratorToMap(Iterator<Map.Entry<K, V>> it) {
         Map<K, V> result = new HashMap<>();
         while (it.hasNext()) {
-            Entry<K, V> entry = it.next();
+            Map.Entry<K, V> entry = it.next();
             result.put(entry.getKey(), entry.getValue());
         }
         return result;

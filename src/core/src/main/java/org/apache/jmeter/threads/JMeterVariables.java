@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.jmeter.util.JMeterUtils;
@@ -161,7 +160,7 @@ public class JMeterVariables {
      *
      * @return the iterator
      */
-    public Iterator<Entry<String, Object>> getIterator(){
+    public Iterator<Map.Entry<String, Object>> getIterator(){
         return Collections.unmodifiableMap(variables).entrySet().iterator() ;
     }
 
@@ -169,7 +168,7 @@ public class JMeterVariables {
     /**
      * @return an unmodifiable view of the entries contained in {@link JMeterVariables}
      */
-    public Set<Entry<String, Object>> entrySet(){
+    public Set<Map.Entry<String, Object>> entrySet(){
         return Collections.unmodifiableMap(variables).entrySet();
     }
 

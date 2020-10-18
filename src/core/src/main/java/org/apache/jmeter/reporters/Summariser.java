@@ -20,7 +20,6 @@ package org.apache.jmeter.reporters;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -295,7 +294,7 @@ public class Summariser extends AbstractTestElement
      */
     @Override
     public void testEnded(String host) {
-        Set<Entry<String, Totals>> totals = null;
+        Set<Map.Entry<String, Totals>> totals = null;
         synchronized (LOCK) {
             instanceCount--;
             if (instanceCount <= 0){

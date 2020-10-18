@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.ListResourceBundle;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
 import javax.script.ScriptEngineFactory;
@@ -61,7 +60,7 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
         Arrays.sort(LANGUAGE_TAGS);
         CONSTANT_LANGUAGE_NAMES = new String[nameMap.size()][2];
         int i = 0;
-        for(Entry<String, ScriptEngineFactory> me : nameMap.entrySet()) {
+        for(Map.Entry<String, ScriptEngineFactory> me : nameMap.entrySet()) {
             final String key = me.getKey();
             CONSTANT_LANGUAGE_NAMES[i][0] = key;
             final ScriptEngineFactory fact = me.getValue();

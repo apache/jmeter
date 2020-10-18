@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -229,7 +228,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     private Map<String, String> getUserParameters(){
         Map<String, String> userParameters = new LinkedHashMap<>();
-        for (Entry<String, JLabeledTextField> entry : parametersTextFields.entrySet()) {
+        for (Map.Entry<String, JLabeledTextField> entry : parametersTextFields.entrySet()) {
             userParameters.put(entry.getKey(), entry.getValue().getText());
         }
         return userParameters;
@@ -371,7 +370,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         int parameterCount = 0;
 
         JPanel gridbagpanel = new JPanel(new GridBagLayout());
-        for (Entry<String, String> entry : parameters.entrySet()) {
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             JLabeledTextField paramLabel = new JLabeledTextField(key + " : ");

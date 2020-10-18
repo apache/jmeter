@@ -19,7 +19,6 @@ package org.apache.jmeter.threads;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -120,12 +119,12 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
     }
 
     @Override
-    public Iterator<Entry<String, Object>> getIterator() {
+    public Iterator<Map.Entry<String, Object>> getIterator() {
         return variables.getIterator();
     }
 
     @Override
-    public Set<Entry<String, Object>> entrySet() {
+    public Set<Map.Entry<String, Object>> entrySet() {
         return variables.entrySet();
     }
 

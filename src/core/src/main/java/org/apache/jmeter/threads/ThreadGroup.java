@@ -19,7 +19,7 @@ package org.apache.jmeter.threads;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -349,7 +349,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public boolean stopThread(String threadName, boolean now) {
-        for (Entry<JMeterThread, Thread> threadEntry : allThreads.entrySet()) {
+        for (Map.Entry<JMeterThread, Thread> threadEntry : allThreads.entrySet()) {
             JMeterThread jMeterThread = threadEntry.getKey();
             if (jMeterThread.getThreadName().equals(threadName)) {
                 stopThread(jMeterThread, threadEntry.getValue(), now);
