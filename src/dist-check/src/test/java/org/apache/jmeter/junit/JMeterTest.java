@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -508,8 +509,9 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
             Class<?> c = Class.forName(className);
             try {
                 // Try with a parameter-less constructor first
-                objects.add(c.newInstance());
-            } catch (InstantiationException e) {
+                objects.add(c.getDeclaredConstructor().newInstance());
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
+                    InvocationTargetException e) {
                 caught = e;
                 try {
                     // Events often have this constructor

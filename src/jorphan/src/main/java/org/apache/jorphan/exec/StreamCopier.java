@@ -52,19 +52,11 @@ class StreamCopier extends Thread {
     @Override
     public void run() {
         final boolean isSystemOutput = os.equals(System.out) || os.equals(System.err);
-        try {
+        try (OutputStream ignored = isSystemOutput ? null : os;
+             InputStream ignored1 = is) {
             IOUtils.copyLarge(is, os);
-            if (!isSystemOutput){
-                os.close();
-            }
-            is.close();
         } catch (IOException e) {
             log.warn("Error writing stream", e);
-        } finally {
-            IOUtils.closeQuietly(is);
-            if (!isSystemOutput){
-                IOUtils.closeQuietly(os);
-            }
         }
     }
 

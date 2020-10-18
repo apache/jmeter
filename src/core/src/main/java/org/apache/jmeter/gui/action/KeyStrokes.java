@@ -38,7 +38,7 @@ public final class KeyStrokes {
     static {
         int mask = KeyEvent.CTRL_DOWN_MASK; // This is better than nothing...
         try {
-            mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+            mask = getMenuShortcutKeyMask();
         } catch (java.awt.HeadlessException e) {
             // suppress the error if we are deliberately running headless
             if (!"true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
@@ -47,6 +47,13 @@ public final class KeyStrokes {
         }
         CONTROL_MASK = mask;
     }
+
+    @SuppressWarnings("deprecation")
+    private static int getMenuShortcutKeyMask() {
+        // getMenuShortcutKeyMask is deprecated since Java 10
+        return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+    }
+
 
     public static final KeyStroke COPY              = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK);
     public static final KeyStroke DUPLICATE         = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
@@ -113,6 +120,7 @@ public final class KeyStrokes {
      * @return true if event matches the keystroke definition
      */
     public static boolean matches(KeyEvent e, KeyStroke k){
+        @SuppressWarnings("deprecation")
         final int modifiersEx = e.getModifiersEx()  | e.getModifiers();// Hack to get full modifier value
         return e.getKeyCode() == k.getKeyCode() && modifiersEx == k.getModifiers();
     }

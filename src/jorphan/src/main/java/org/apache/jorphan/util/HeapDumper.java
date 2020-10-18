@@ -159,6 +159,7 @@ public class HeapDumper {
      * @return the name of the dump file that was created
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
+    @SuppressWarnings("JdkObsolete")
     public static String dumpHeap(File basedir, boolean live) throws Exception {
         SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
         String stamp = timestampFormat.format(new Date());

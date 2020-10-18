@@ -258,6 +258,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testBug61321() throws Exception {
         this.cacheManager.setUseExpires(false);
         this.cacheManager.testIterationStart(null);

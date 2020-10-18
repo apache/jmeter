@@ -34,7 +34,6 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
@@ -122,7 +121,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
                 userObject.setFunctionalMode(tp.isFunctionalMode());
                 userObject.setSerialized(tp.isSerialized());
                 addSubTree(subTree.getTree(item), current);
-            } else if (item instanceof WorkBench) {
+            } else if (isWorkbench(item)) {
                 //Move item from WorkBench to TestPlan
                 HashTree workbenchTree = subTree.getTree(item);
                 if (!workbenchTree.isEmpty()) {
@@ -133,6 +132,11 @@ public class JMeterTreeModel extends DefaultTreeModel {
             }
         }
         return getCurrentSubTree(current);
+    }
+
+    @SuppressWarnings("deprecation")
+    private boolean isWorkbench(TestElement item) {
+        return item instanceof org.apache.jmeter.testelement.WorkBench;
     }
 
     /**

@@ -239,6 +239,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void destroy() {
         // Give some time to send last metrics before shutting down
         log.info("Destroying ");
@@ -250,7 +251,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         if (httpRequest != null) {
             httpRequest.abort();
         }
-        IOUtils.closeQuietly(httpClient);
+        IOUtils.closeQuietly(httpClient, null);
     }
 
 }

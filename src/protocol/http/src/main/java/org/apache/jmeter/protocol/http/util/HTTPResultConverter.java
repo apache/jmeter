@@ -80,7 +80,7 @@ public class HTTPResultConverter extends SampleResultConverter {
             writeString(writer, TAG_REDIRECT_LOCATION, res.getRedirectLocation());
         }
         if (save.saveUrl()) {
-            writeItem(res.getURL(), context, writer);
+            writeCompleteItem(res.getURL(), context, writer);
         }
     }
 
@@ -91,7 +91,7 @@ public class HTTPResultConverter extends SampleResultConverter {
         retrieveAttributes(reader, context, res);
         while (reader.hasMoreChildren()) {
             reader.moveDown();
-            Object subItem = readItem(reader, context, res);
+            Object subItem = readBareItem(reader, context, res);
             if (!retrieveItem(reader, context, res, subItem)) {
                 retrieveHTTPItem(reader, res, subItem);
             }

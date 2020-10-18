@@ -30,7 +30,6 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -69,16 +68,18 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
     /* Implements JMeterGUIComponent.createTestElement() */
     @Override
     public TestElement createTestElement() {
-        WorkBench wb = new WorkBench();
+        @SuppressWarnings("deprecation")
+        org.apache.jmeter.testelement.WorkBench wb = new org.apache.jmeter.testelement.WorkBench();
         modifyTestElement(wb);
         return wb;
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     @Override
+    @SuppressWarnings("deprecation")
     public void modifyTestElement(TestElement wb) {
         super.configureTestElement(wb);
-        ((WorkBench)wb).setSaveWorkBench(saveWorkBench.isSelected());
+        ((org.apache.jmeter.testelement.WorkBench) wb).setSaveWorkBench(saveWorkBench.isSelected());
     }
 
     /**
@@ -91,10 +92,11 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
      *            the TestElement to configure
      */
     @Override
+    @SuppressWarnings("deprecation")
     public void configure(TestElement el) {
         super.configure(el);
-        if (el instanceof WorkBench) {
-            WorkBench tp = (WorkBench) el;
+        if (el instanceof org.apache.jmeter.testelement.WorkBench) {
+            org.apache.jmeter.testelement.WorkBench tp = (org.apache.jmeter.testelement.WorkBench) el;
             saveWorkBench.setSelected(tp.getSaveWorkBench());
         }
     }

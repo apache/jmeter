@@ -166,6 +166,7 @@ public final class TristateCheckBox extends JCheckBox {
     }
 
     // Mostly delegates to model
+    @SuppressWarnings("deprecation")
     private void iterateState() {
         //Maybe do nothing at all?
         if (!getModel().isEnabled()) {

@@ -137,7 +137,9 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setReceiveQueue(receiveQueue.getText());
 
         element.setProperty(JMSSampler.JMS_COMMUNICATION_STYLE, jmsCommunicationStyle.getSelectedIndex());
-        element.removeProperty(JMSSampler.IS_ONE_WAY);
+        @SuppressWarnings("deprecation")
+        String isOneWay = JMSSampler.IS_ONE_WAY;
+        element.removeProperty(isOneWay);
         element.setNonPersistent(useNonPersistentDelivery.isSelected());
         element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
         element.setUseResMsgIdAsCorrelId(useResMsgIdAsCorrelId.isSelected());
@@ -183,7 +185,9 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         queueConnectionFactory.setText(sampler.getQueueConnectionFactory());
         sendQueue.setText(sampler.getSendQueue());
         receiveQueue.setText(sampler.getReceiveQueue());
-        JMeterProperty oneWay = el.getProperty(JMSSampler.IS_ONE_WAY); // NOSONAR
+        @SuppressWarnings("deprecation")
+        String isOneWay = JMSSampler.IS_ONE_WAY;
+        JMeterProperty oneWay = el.getProperty(isOneWay); // NOSONAR
         if(oneWay instanceof NullProperty) {
             jmsCommunicationStyle.setSelectedIndex(el.getPropertyAsInt(JMSSampler.JMS_COMMUNICATION_STYLE));
         } else {

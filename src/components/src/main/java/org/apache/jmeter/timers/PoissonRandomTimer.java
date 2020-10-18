@@ -36,6 +36,7 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
     /**
      *
      */
+    @SuppressWarnings("FloatingPointLiteralPrecision")
     private static final double[] LOG_FACTORIAL =
         {
             0.000000000000000,

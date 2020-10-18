@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
@@ -29,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Checks if the result is a well-formed XML content using {@link XMLReader}
@@ -45,10 +47,12 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         @Override
         protected XMLReader initialValue() {
             try {
-                XMLReader reader = XMLReaderFactory.createXMLReader();
+                XMLReader reader = SAXParserFactory.newInstance()
+                        .newSAXParser()
+                        .getXMLReader();
                 reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
                 return reader;
-            } catch (SAXException e) {
+            } catch (SAXException | ParserConfigurationException e) {
                 log.error("Error initializing XMLReader in XMLAssertion", e);
                 return null;
             }

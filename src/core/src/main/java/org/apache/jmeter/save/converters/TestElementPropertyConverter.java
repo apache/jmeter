@@ -71,7 +71,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
                 if (!(TestElement.COMMENTS.equals(jmp.getName())
                         && jmp.getStringValue().isEmpty()))
                 {
-                    writeItem(jmp, context, writer);
+                    writeCompleteItem(jmp, context, writer);
                 }
             }
         }
@@ -106,7 +106,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
             ConversionHelp.restoreSpecialProperties(te, reader);
             while (reader.hasMoreChildren()) {
                 reader.moveDown();
-                JMeterProperty subProp = (JMeterProperty) readItem(reader, context, prop);
+                JMeterProperty subProp = (JMeterProperty) readBareItem(reader, context, prop);
                 if (subProp != null) { // could be null if it has been deleted via NameUpdater
                     if (isHeader) {
                         String name = subProp.getName();

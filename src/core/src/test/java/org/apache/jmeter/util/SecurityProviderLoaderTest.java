@@ -175,6 +175,7 @@ public class SecurityProviderLoaderTest {
         private static final long serialVersionUID = 1L;
         public static final String PROVIDER_NAME = "DUMMY";
 
+        @SuppressWarnings("deprecation")
         public DummyProvider() {
             super(PROVIDER_NAME, 1.0, PROVIDER_NAME);
         }
@@ -187,6 +188,7 @@ public class SecurityProviderLoaderTest {
 
         private String config = null;
 
+        @SuppressWarnings("deprecation")
         public DummyProviderWithConfig() {
             super(PROVIDER_NAME, 1.0, PROVIDER_NAME);
         }

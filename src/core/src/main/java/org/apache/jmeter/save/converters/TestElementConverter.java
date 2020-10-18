@@ -70,7 +70,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
                            && !el.getClass().equals(TestPlan.class)
                        ))
                    {
-                    writeItem(jmp, context, writer);
+                       writeCompleteItem(jmp, context, writer);
                    }
             }
         }
@@ -102,7 +102,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
             el.setProperty(TestElement.TEST_CLASS, targetName);
             while (reader.hasMoreChildren()) {
                 reader.moveDown();
-                JMeterProperty prop = (JMeterProperty) readItem(reader, context, el);
+                JMeterProperty prop = (JMeterProperty) readBareItem(reader, context, el);
                 if (prop != null) { // could be null if it has been deleted via NameUpdater
                     el.setProperty(prop);
                 }

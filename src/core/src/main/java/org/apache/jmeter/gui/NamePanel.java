@@ -28,7 +28,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apiguardian.api.API;
@@ -140,7 +139,8 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     /** {@inheritDoc} */
     @Override
     public TestElement createTestElement() {
-        WorkBench wb = new WorkBench();
+        @SuppressWarnings("deprecation")
+        org.apache.jmeter.testelement.WorkBench wb = new org.apache.jmeter.testelement.WorkBench();
         modifyTestElement(wb);
         return wb;
     }
@@ -150,7 +150,9 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     public void modifyTestElement(TestElement wb) {
         wb.setName(getName());
         wb.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
-        wb.setProperty(new StringProperty(TestElement.TEST_CLASS, WorkBench.class.getName()));
+        @SuppressWarnings("deprecation")
+        String className = org.apache.jmeter.testelement.WorkBench.class.getName();
+        wb.setProperty(new StringProperty(TestElement.TEST_CLASS, className));
     }
 
     /**

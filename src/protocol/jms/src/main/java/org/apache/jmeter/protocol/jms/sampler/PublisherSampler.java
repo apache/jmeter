@@ -284,7 +284,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
             String errorCode = Optional.ofNullable(jms.getErrorCode()).orElse("");
             if (checkForReconnect && publisher != null && getIsReconnectErrorCode().test(errorCode)) {
                 ClientPool.removeClient(publisher);
-                IOUtils.closeQuietly(publisher);
+                IOUtils.closeQuietly(publisher, null);
                 publisher = null;
             }
 

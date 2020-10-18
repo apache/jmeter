@@ -205,6 +205,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         return result.toString();
     }
 
+    @SuppressWarnings("deprecation")
     private void testCacheVary(String vary, Header[] origHeaders, Header[] differentHeaders) throws Exception {
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
@@ -335,17 +336,20 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         assertInvalidEntry();
     }
 
+    @SuppressWarnings("deprecation")
     private void assertInvalidEntry() throws Exception {
         CacheEntry cachedEntry = getThreadCacheEntry(LOCAL_HOST);
         assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
         assertFalse(this.cacheManager.inCache(url), "Should not find valid entry. Found: " + cachedEntry + " at " + System.currentTimeMillis());
     }
 
+    @SuppressWarnings("deprecation")
     private void assertValidEntry() throws Exception {
         assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Should find entry");
         assertTrue(this.cacheManager.inCache(url), "Should find valid entry");
     }
 
+    @SuppressWarnings("deprecation")
     private void assertNoSuchEntry() throws Exception {
         assertNull(getThreadCacheEntry(LOCAL_HOST), "Should not find entry");
         assertFalse(this.cacheManager.inCache(url), "Should not find valid entry");

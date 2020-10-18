@@ -256,7 +256,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      *
      */
     private void cleanup() {
-        IOUtils.closeQuietly(SUBSCRIBER);
+        IOUtils.closeQuietly(SUBSCRIBER, null);
     }
 
     /**

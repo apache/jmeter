@@ -91,7 +91,7 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
         final ResultCollectorHelper resultCollectorHelper = (ResultCollectorHelper) context.get(SaveService.RESULTCOLLECTOR_HELPER_OBJECT);
         while (reader.hasMoreChildren()) {
             reader.moveDown();
-            SampleResult sample = (SampleResult) readItem(reader, context, results);
+            SampleResult sample = (SampleResult) readBareItem(reader, context, results);
             if (resultCollectorHelper != null) {
                 resultCollectorHelper.add(sample);
             } else {

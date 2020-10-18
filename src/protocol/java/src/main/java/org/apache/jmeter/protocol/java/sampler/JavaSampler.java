@@ -322,6 +322,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
          * @see JavaSamplerClient#runTest(JavaSamplerContext)
          */
         @Override
+        @SuppressWarnings("ThreadPriorityCheck")
         public SampleResult runTest(JavaSamplerContext p_context) {
             if (log.isDebugEnabled()) {
                 log.debug("{}\trunTest", whoAmI());

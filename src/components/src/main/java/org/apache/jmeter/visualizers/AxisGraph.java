@@ -25,6 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.Paint;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -398,7 +399,7 @@ public class AxisGraph extends JPanel {
             // Y Axis
             try {
                 BigDecimal round = BigDecimal.valueOf(max / 1000d);
-                round = round.setScale(0, BigDecimal.ROUND_UP);
+                round = round.setScale(0, RoundingMode.HALF_EVEN);
                 double topValue = round.doubleValue() * 1000;
                 yaxis.setUserDefinedScale(0, 500);
                 yaxis.setNumItems((int) (topValue / 500)+1);

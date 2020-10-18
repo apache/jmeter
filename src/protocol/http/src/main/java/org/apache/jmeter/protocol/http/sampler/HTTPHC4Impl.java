@@ -353,7 +353,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
          */
         private void fillAuthCache(HttpHost targetHost, Authorization authorization, AuthCache authCache,
                 AuthScope authScope) {
-            if(authorization.getMechanism() == Mechanism.BASIC_DIGEST || // NOSONAR
+            @SuppressWarnings("deprecation")
+            Mechanism basicDigest = Mechanism.BASIC_DIGEST;
+            if(authorization.getMechanism() == basicDigest ||
                     authorization.getMechanism() == Mechanism.BASIC) {
                 BasicScheme basicAuth = new BasicScheme();
                 authCache.put(targetHost, basicAuth);
