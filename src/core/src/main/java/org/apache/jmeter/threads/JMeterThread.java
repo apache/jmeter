@@ -321,8 +321,8 @@ public class JMeterThread implements Runnable, Interruptible {
             throw e; // Must not ignore this one
         } finally {
             currentSamplerForInterruption = null; // prevent any further interrupts
+            interruptLock.lock();  // make sure current interrupt is finished, prevent another starting yet
             try {
-                interruptLock.lock();  // make sure current interrupt is finished, prevent another starting yet
                 threadContext.clear();
                 log.info("Thread finished: {}", threadName);
                 threadFinished(iterationListener);
@@ -819,8 +819,8 @@ public class JMeterThread implements Runnable, Interruptible {
     /** {@inheritDoc} */
     @Override
     public boolean interrupt(){
+        interruptLock.lock();
         try {
-            interruptLock.lock();
             Sampler samp = currentSamplerForInterruption; // fetch once; must be done under lock
             if (samp instanceof Interruptible){ // (also protects against null)
                 if (log.isWarnEnabled()) {
