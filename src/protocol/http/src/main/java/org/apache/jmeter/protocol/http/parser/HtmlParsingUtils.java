@@ -381,7 +381,7 @@ public final class HtmlParsingUtils {
         Pattern pattern = JMeterUtils.getPatternCache().getPattern(
                 "URL\\(\\s*('|\")(.*)('|\")\\s*\\)", // $NON-NLS-1$
                 Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.SINGLELINE_MASK | Perl5Compiler.READ_ONLY_MASK);
-        PatternMatcherInput input = null;
+        PatternMatcherInput input;
         input = new PatternMatcherInput(styleTagStr);
         while (matcher.contains(input, pattern)) {
             MatchResult match = matcher.getMatch();

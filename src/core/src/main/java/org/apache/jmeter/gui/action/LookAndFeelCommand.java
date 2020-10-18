@@ -35,8 +35,6 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.weisj.darklaf.LafManager;
 import com.github.weisj.darklaf.theme.DarculaTheme;
@@ -46,9 +44,6 @@ import com.github.weisj.darklaf.theme.Theme;
  * Implements the Look and Feel menu item.
  */
 public class LookAndFeelCommand extends AbstractAction {
-
-    private static final Logger log = LoggerFactory.getLogger(LookAndFeelCommand.class);
-
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
     private static final Map<String, MenuItem> items = new LinkedHashMap<>();

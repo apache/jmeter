@@ -37,8 +37,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Extending {@link UrlConfigGui}, GraphQL over HTTP Request configuration GUI, providing more convenient UI elements
@@ -47,8 +45,6 @@ import org.slf4j.LoggerFactory;
 public class GraphQLUrlConfigGui extends UrlConfigGui {
 
     private static final long serialVersionUID = 1L;
-
-    private static Logger log = LoggerFactory.getLogger(GraphQLUrlConfigGui.class);
 
     public static final String OPERATION_NAME = "GraphQLHTTPSampler.operationName";
 

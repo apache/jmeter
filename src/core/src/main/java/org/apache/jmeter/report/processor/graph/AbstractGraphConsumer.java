@@ -237,7 +237,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @param seriesData
      * @param aggregated
      */
-    private void addKeyData(MapResultData result, String group, String series,
+    private void addKeyData(MapResultData result, @SuppressWarnings("unused") String group,
+                            String series,
                             SeriesData seriesData, boolean aggregated) {
 
         // Override series name when aggregated
