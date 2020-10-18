@@ -33,7 +33,6 @@ bsh.system.shutdownOnExit = false;
 print("Startup script running");
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 
 getprop(p){// get a JMeter property
 return JMeterUtils.getPropDefault(p,"");
@@ -49,7 +48,8 @@ print(p + " = " + getprop(p));
 }
 
 loglevel(String priority, String category){
-LoggingManager.setPriority(priority, category);
+// Previous implementation delegated the call to LoggingManager which
+// was deprecated since JMeter 3.2
 }
 
 logdebug(String text){

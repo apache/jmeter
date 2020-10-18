@@ -54,9 +54,6 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
 
     private static final Logger log = LoggerFactory.getLogger(AbstractBackendListenerClient.class);
 
-    @SuppressWarnings("deprecation") // will be removed in 3.3
-    private static final org.apache.log.Logger oldLogger = org.apache.jorphan.logging.LoggingManager.getLoggerForClass();
-
     private UserMetric userMetrics = new UserMetric();
 
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
@@ -85,18 +82,6 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     @Override
     public Arguments getDefaultParameters() {
         return null;
-    }
-
-    /**
-     * Get a Logger instance which can be used by subclasses to log information.
-     * As this class is designed to be subclassed this is useful.
-     *
-     * @return a Logger instance which can be used for logging
-     * @deprecated Will be removed in 3.3, use {@link AbstractBackendListenerClient#getNewLogger()}
-     */
-    @Deprecated
-    protected org.apache.log.Logger getLogger() {
-        return oldLogger;
     }
 
     /**
