@@ -28,7 +28,6 @@ import org.apache.jmeter.report.processor.ValueResultData;
  * The Class AbstractDataExporter provides a base class for DataExporter.
  */
 public abstract class AbstractDataExporter implements DataExporter {
-    private static final String INVALID_PROPERTY_CONFIG_FMT = "Wrong property \"%s\" in \"%s\" export configuration";
 
     private String name;
 
@@ -124,7 +123,7 @@ public abstract class AbstractDataExporter implements DataExporter {
         try {
             return cfg.getProperty(property, defaultValue, clazz);
         } catch (ConfigurationException ex) {
-            throw new ExportException(String.format(INVALID_PROPERTY_CONFIG_FMT,
+            throw new ExportException(String.format("Wrong property \"%s\" in \"%s\" export configuration",
                     property, getName()), ex);
         }
     }

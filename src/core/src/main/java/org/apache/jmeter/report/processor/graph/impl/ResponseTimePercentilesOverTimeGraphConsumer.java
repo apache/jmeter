@@ -50,8 +50,6 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
     private static final String PCT3_LABEL = JMeterUtils.getPropDefault(
             "aggregate_rpt_pct3", "99");
 
-    private static final String PERCENTILE_FORMAT = "%sth percentile";
-
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
@@ -77,7 +75,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
     }
 
     private String formatPercentile(String percentileLabel) {
-        return String.format(PERCENTILE_FORMAT, percentileLabel);
+        return String.format("%sth percentile", percentileLabel);
     }
 
     private GroupInfo createMinGroupInfo() {

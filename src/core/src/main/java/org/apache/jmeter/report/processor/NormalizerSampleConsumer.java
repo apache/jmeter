@@ -44,9 +44,6 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
                     "jmeter.save.saveservice.timestamp_format", // $NON-NLS-1$
                     SampleSaveConfiguration.MILLISECONDS);
 
-    private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE =
-            "Could not parse timeStamp <%s> using format defined by property jmeter.save.saveservice.timestamp_format=%s on sample %s ";
-
     /**
      * index of the timeStamp column
      */
@@ -104,7 +101,9 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
             }
         } catch (Exception e) {
             throw new SampleException(String.format(
-                    PARSE_TIMESTAMP_EXCEPTION_MESSAGE, s.getData(timestamp),
+                    "Could not parse timeStamp <%s> using format defined by property" +
+                            " jmeter.save.saveservice.timestamp_format=%s on sample %s ",
+                    s.getData(timestamp),
                     TIMESTAMP_FORMAT, s.toString()), e);
         }
         long time = date.getTime();
