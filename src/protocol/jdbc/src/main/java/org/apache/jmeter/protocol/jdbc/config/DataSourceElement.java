@@ -230,7 +230,7 @@ public class DataSourceElement extends AbstractTestElement
         int poolSize = Integer.parseInt(maxPool);
         dataSource.setMinIdle(0);
         dataSource.setInitialSize(poolSize);
-        dataSource.setEnableAutoCommitOnReturn(false);
+        dataSource.setAutoCommitOnReturn(false);
         if(StringUtils.isNotEmpty(initQuery)) {
             String[] sqls = initQuery.split("\n");
             dataSource.setConnectionInitSqls(Arrays.asList(sqls));

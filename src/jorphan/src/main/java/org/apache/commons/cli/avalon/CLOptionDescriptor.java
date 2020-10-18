@@ -125,7 +125,7 @@ public final class CLOptionDescriptor {
      *
      * @return the array of incompatible option ids
      */
-    protected final int[] getIncompatible() {
+    final int[] getIncompatible() {
         return this.incompatible;
     }
 

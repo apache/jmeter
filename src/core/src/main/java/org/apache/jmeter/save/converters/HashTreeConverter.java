@@ -49,8 +49,8 @@ public class HashTreeConverter extends AbstractCollectionConverter {
     public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
         HashTree tree = (HashTree) arg0;
         for (Object item : tree.list()) {
-            writeItem(item, context, writer);
-            writeItem(tree.getTree(item), context, writer);
+            writeCompleteItem(item, context, writer);
+            writeCompleteItem(tree.getTree(item), context, writer);
         }
 
     }
@@ -63,7 +63,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
         HashTree tree = (HashTree) createCollection(context.getRequiredType());
         while (reader.hasMoreChildren()) {
             reader.moveDown();
-            Object item = readItem(reader, context, tree);
+            Object item = readBareItem(reader, context, tree);
             if (isKey) {
                 tree.add(item);
                 current = item;

@@ -84,6 +84,7 @@ public abstract class AbstractTCPClient implements TCPClient {
      * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream, org.apache.jmeter.samplers.SampleResult)
      */
     @Override
+    @SuppressWarnings("deprecation")
     public String read(InputStream is, SampleResult sampleResult) throws ReadException {
         return read(is);
     }

@@ -222,8 +222,8 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
             myBread = new BufferedReader(myFileReader);
         } catch (Exception e) {
             log.error("openFile() error: {}", e.toString());//$NON-NLS-1$
-            IOUtils.closeQuietly(myFileReader);
-            IOUtils.closeQuietly(myBread);
+            IOUtils.closeQuietly(myFileReader, null);
+            IOUtils.closeQuietly(myBread, null);
             myBread = null;
             myFileReader = null;
         }

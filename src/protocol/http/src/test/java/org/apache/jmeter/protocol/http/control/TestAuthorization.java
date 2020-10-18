@@ -28,7 +28,7 @@ public class TestAuthorization {
     @Test
     public void testToBasicHeader() {
         Authorization basicAuthorization = new Authorization("http://example.com", "foo", "bar", null, "Test Realm",
-                Mechanism.BASIC_DIGEST);
+                Mechanism.BASIC);
         assertThat(basicAuthorization.toBasicHeader(), CoreMatchers.is("Basic Zm9vOmJhcg=="));
     }
 

@@ -166,7 +166,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         JTable myJTable = new JTable(model);
         myJTable.setRowSorter(new ObjectTableSorter(model).fixLastRow());
         JMeterUtils.applyHiDPI(myJTable);
-        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable, StatGraphVisualizer.getColumnsMsgParameters());
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable);
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, StatGraphVisualizer.getRenderers());
         JScrollPane myScrollPane = new JScrollPane(myJTable);

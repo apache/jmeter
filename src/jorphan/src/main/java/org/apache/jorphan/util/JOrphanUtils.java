@@ -682,6 +682,7 @@ public final class JOrphanUtils {
      * @param caseSensitive is case taken into account
      * @return array of Object where first row is the replaced text, second row is the number of replacement that occurred
      */
+    @SuppressWarnings("JdkObsolete")
     public static Object[] replaceAllWithRegex(
             String source, String regex, String replacement, boolean caseSensitive) {
         java.util.regex.Pattern pattern = caseSensitive ?
@@ -690,6 +691,7 @@ public final class JOrphanUtils {
         final String replacementQuoted = Matcher.quoteReplacement(replacement);
         Matcher matcher = pattern.matcher(source);
         int totalReplaced = 0;
+        // Can be replaced with StringBuilder for Java 9+
         StringBuffer result = new StringBuffer(); // NOSONAR Matcher#appendReplacement needs a StringBuffer
         while (matcher.find()) {
             matcher.appendReplacement(result, replacementQuoted);

@@ -96,7 +96,7 @@ public class HTTPFileImpl extends HTTPAbstractImpl {
         } catch (IOException e) {
             return errorResult(e, res);
         } finally {
-            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(is, null);
         }
 
     }

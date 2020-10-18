@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -135,7 +134,6 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
                 }
             }
 
-            IOUtils.closeQuietly(w); // For completeness
             final String hexString = JOrphanUtils.baToHexString(w.toByteArray());
             if(log.isDebugEnabled()) {
                 log.debug("Read: " + w.size() + "\n" + hexString);

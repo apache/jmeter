@@ -50,7 +50,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.http.conn.ssl.AbstractVerifier;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.assertions.gui.AssertionGui;
@@ -1594,11 +1593,12 @@ public class ProxyControl extends GenericController implements NonTestElement {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private boolean isValid(String subject) {
         String[] parts = subject.split("\\.");
         return !parts[0].endsWith("*") // not a wildcard
                 || parts.length >= 3
-                && AbstractVerifier.acceptableCountryWildcard(subject);
+                && org.apache.http.conn.ssl.AbstractVerifier.acceptableCountryWildcard(subject);
     }
 
     // This should only be called for a specific host

@@ -276,14 +276,17 @@ public final class HtmlParsingUtils {
         return sampler;
     }
 
+    @SuppressWarnings("JdkObsolete")
     public static List<HTTPSamplerBase> createURLFromForm(Node doc, URL context) {
         String selectName = null;
+        // TODO: migrate to ArrayDequeue
         LinkedList<HTTPSamplerBase> urlConfigs = new LinkedList<>();
         recurseForm(doc, urlConfigs, context, selectName, false);
         return urlConfigs;
     }
 
     // N.B. Since the tags are extracted from an HTML Form, any values must already have been encoded
+    @SuppressWarnings("JdkObsolete")
     private static boolean recurseForm(Node tempNode, LinkedList<HTTPSamplerBase> urlConfigs, URL context, String selectName,
             boolean inForm) {
         NamedNodeMap nodeAtts = tempNode.getAttributes();

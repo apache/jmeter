@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -567,7 +568,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
-     * @deprecated use {@link HTTPSamplerBase#getDoMultipartPost()}
+     * @deprecated use {@link HTTPSamplerBase#getDoMultipart()}
      * @return flag whether multiparts should be used
      */
     @Deprecated
@@ -1907,7 +1908,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public byte[] readResponse(SampleResult sampleResult, InputStream in, long length) throws IOException {
 
         OutputStream w = null;
-        try { // NOSONAR No try with resource as performance is critical here
+        try (Closeable ignore = in) { // NOSONAR No try with resource as performance is critical here
             byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
             int bufferSize = 32;// Enough for MD5
 
@@ -1978,8 +1979,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
 
         } finally {
-            IOUtils.closeQuietly(in);
-            IOUtils.closeQuietly(w);
+            IOUtils.closeQuietly(w, null);
         }
     }
 

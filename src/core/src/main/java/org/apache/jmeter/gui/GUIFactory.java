@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.gui;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -158,14 +159,14 @@ public final class GUIFactory {
      *             to be created
      */
     public static void registerGUI(String key, Class<?> guiClass, Class<?> testClass) throws InstantiationException,
-            IllegalAccessException {
+            IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         // TODO: This method doesn't appear to be used.
         JMeterGUIComponent gui;
 
         if (guiClass == TestBeanGUI.class) {
             gui = new TestBeanGUI(testClass);
         } else {
-            gui = (JMeterGUIComponent) guiClass.newInstance();
+            gui = (JMeterGUIComponent) guiClass.getDeclaredConstructor().newInstance();
         }
         GUI_MAP.put(key, gui);
     }

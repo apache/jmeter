@@ -236,7 +236,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                                 }
                             }
                             if (target == null){
-                                target=new NullOutputStream();
+                                target = NullOutputStream.NULL_OUTPUT_STREAM;
                             }
                             input = ftp.retrieveFileStream(remote);
                             if (input == null){// Could not access file or other error
@@ -252,8 +252,8 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                                 }
                             }
                         } finally {
-                            IOUtils.closeQuietly(target);
-                            IOUtils.closeQuietly(output);
+                            IOUtils.closeQuietly(target, null);
+                            IOUtils.closeQuietly(output, null);
                         }
                     }
 
@@ -296,8 +296,8 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                     // NOOP
                 }
             }
-            IOUtils.closeQuietly(input);
-            IOUtils.closeQuietly(fileIS);
+            IOUtils.closeQuietly(input, null);
+            IOUtils.closeQuietly(fileIS, null);
         }
 
         res.sampleEnd();

@@ -90,6 +90,7 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
      * @param columnsMsgParameters ignored
      * @return the text
      */
+    @SuppressWarnings("deprecation")
     static String getText(Object value, int row, int column, Object[][] columnsMsgParameters) {
         if (value == null){
             return "";

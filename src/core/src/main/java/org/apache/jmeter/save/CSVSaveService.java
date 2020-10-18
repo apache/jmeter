@@ -249,7 +249,9 @@ public final class CSVSaveService {
             }
 
             if (saveConfig.saveSampleCount()) {
-                result = new StatisticalSampleResult(timeStamp, elapsed);
+                @SuppressWarnings("deprecation")
+                StatisticalSampleResult sampleResult = new StatisticalSampleResult(timeStamp, elapsed);
+                result = sampleResult;
             } else {
                 result = new SampleResult(timeStamp, elapsed);
             }

@@ -521,6 +521,7 @@ public class MenuScroller {
      * @see MenuScroller#dispose()
      */
     @Override
+    @SuppressWarnings("deprecation")
     public void finalize() throws Throwable {
         dispose();
         super.finalize();

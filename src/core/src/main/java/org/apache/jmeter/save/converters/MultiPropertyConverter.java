@@ -54,7 +54,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
 
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
         for (JMeterProperty jMeterProperty : prop) {
-            writeItem(jMeterProperty, context, writer);
+            writeCompleteItem(jMeterProperty, context, writer);
         }
     }
 
@@ -65,7 +65,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
         prop.setName(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)));
         while (reader.hasMoreChildren()) {
             reader.moveDown();
-            JMeterProperty subProp = (JMeterProperty) readItem(reader, context, prop);
+            JMeterProperty subProp = (JMeterProperty) readBareItem(reader, context, prop);
             if (subProp != null) { // could be null if it has been deleted via NameUpdater
                 prop.addProperty(subProp);
             }
