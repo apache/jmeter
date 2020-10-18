@@ -66,14 +66,12 @@ public class XPath extends AbstractFunction {
     @Override
     public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
-        String myValue = ""; //$NON-NLS-1$
-
         String fileName = ((CompoundVariable) values[0]).execute();
         String xpathString = ((CompoundVariable) values[1]).execute();
 
         log.debug("execute ({} {})", fileName, xpathString);
 
-        myValue = XPathWrapper.getXPathString(fileName, xpathString);
+        String myValue = XPathWrapper.getXPathString(fileName, xpathString);
 
         log.debug("execute value: {}", myValue);
 

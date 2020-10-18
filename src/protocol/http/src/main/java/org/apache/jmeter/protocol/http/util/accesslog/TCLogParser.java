@@ -314,7 +314,7 @@ public class TCLogParser implements LogParser {
      * @param el {@link TestElement} into which the url will be added
      */
     private void createUrl(String line, TestElement el) {
-        String paramString = null;
+        String paramString;
         // check the URL for "?" symbol
         paramString = this.stripFile(line, el);
         if (paramString != null) {

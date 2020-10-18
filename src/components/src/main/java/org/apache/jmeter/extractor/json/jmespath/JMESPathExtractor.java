@@ -72,9 +72,8 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         }
 
         try {
-            JsonNode result = null;
             JsonNode actualObj = OBJECT_MAPPER.readValue(jsonResponse, JsonNode.class);
-            result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
+            JsonNode result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
             if (result.isNull()) {
                 handleNullResult(vars, refName, defaultValue, matchNumber);
                 return;

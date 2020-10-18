@@ -37,6 +37,8 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
     private final Random rnd = new Random();
     private final ThroughputProvider throughputProvider;
     private final int batchSize;
+    // TODO: implement
+    @SuppressWarnings("unused")
     private final int batchThreadDelay;
     private final DurationProvider durationProvider;
     private final boolean logFirstSamples;

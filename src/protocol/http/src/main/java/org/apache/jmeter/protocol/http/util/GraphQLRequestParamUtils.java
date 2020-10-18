@@ -155,7 +155,7 @@ public final class GraphQLRequestParamUtils {
         }
 
         String operationName = null;
-        String query = null;
+        String query;
         String variables = null;
 
         final JsonNode operationNameNode = data.has(OPERATION_NAME_FIELD) ? data.get(OPERATION_NAME_FIELD) : null;
