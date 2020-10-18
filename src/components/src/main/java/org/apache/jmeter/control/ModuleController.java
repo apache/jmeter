@@ -192,6 +192,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
         return tree;
     }
 
+    @SuppressWarnings("JdkObsolete")
     private void createSubTree(HashTree tree, JMeterTreeNode node) {
         Enumeration<?> e = node.children();
         while (e.hasMoreElements()) {
@@ -208,6 +209,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
         return treeNode;
     }
 
+    @SuppressWarnings("JdkObsolete")
     private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from) {
         Enumeration<?> enumr = from.children();
         while (enumr.hasMoreElements()) {

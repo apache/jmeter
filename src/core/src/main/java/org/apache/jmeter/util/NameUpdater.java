@@ -30,6 +30,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("JdkObsolete")
 public final class NameUpdater {
     private static final Properties nameMap;
     // Read-only access after class has been initialised

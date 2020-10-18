@@ -184,6 +184,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
         }
     }
 
+    @SuppressWarnings("JdkObsolete")
     private void traverseAndFind(Class<?> type, JMeterTreeNode node, List<JMeterTreeNode> nodeList) {
         if (type.isInstance(node.getUserObject())) {
             nodeList.add(node);
@@ -195,6 +196,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
         }
     }
 
+    @SuppressWarnings("JdkObsolete")
     private JMeterTreeNode traverseAndFind(TestElement userObject, JMeterTreeNode node) {
         if (userObject == node.getUserObject()) {
             return node;
@@ -215,6 +217,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
      * @param node The {@link JMeterTreeNode} from which the sub tree is to be taken
      * @return newly copied sub tree
      */
+    @SuppressWarnings("JdkObsolete")
     public HashTree getCurrentSubTree(JMeterTreeNode node) {
         ListedHashTree hashTree = new ListedHashTree(node);
         Enumeration<?> enumNode = node.children();

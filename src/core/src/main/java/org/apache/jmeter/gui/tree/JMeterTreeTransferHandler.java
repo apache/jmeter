@@ -190,6 +190,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
     }
 
     @Override
+    @SuppressWarnings("JdkObsolete")
     public boolean importData(TransferHandler.TransferSupport support) {
         if (!canImport(support)) {
             return false;

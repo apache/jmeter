@@ -274,6 +274,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         return wait > DEFAULT_WAIT ? DEFAULT_WAIT : wait;
     }
 
+    @SuppressWarnings("JdkObsolete")
     private void extractContent(StringBuilder buffer, StringBuilder propBuffer,
             Message msg, boolean isLast) {
         if (msg != null) {

@@ -329,6 +329,7 @@ public class SmtpSampler extends AbstractSampler {
         return sb.toString();
     }
 
+    @SuppressWarnings("JdkObsolete")
     private void writeHeaders(Enumeration<Header> headers, StringBuilder sb) {
         while (headers.hasMoreElements()) {
             Header header = headers.nextElement();

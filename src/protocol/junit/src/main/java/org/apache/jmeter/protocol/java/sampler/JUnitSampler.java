@@ -366,6 +366,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("JdkObsolete")
     public SampleResult sample(Entry entry) {
         if(getCreateOneInstancePerSample()) {
             initializeTestObject();
