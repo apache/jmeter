@@ -280,8 +280,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (!commentText.isEmpty()) {
             httpSampler.setProperty(TestElement.COMMENTS,commentText); // NOSONAR
         } else {
-            httpSampler.setProperty(TestElement.COMMENTS,
-                    "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+            httpSampler.setProperty(TestElement.COMMENTS, getDefaultComment());
         } // NOSONAR
         URL url = new URL(request.getUrl());
         httpSampler.setProtocol(url.getProtocol());
@@ -344,8 +343,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         HeaderManager headerManager = new HeaderManager();
         headerManager.setProperty(TestElement.GUI_CLASS, HeaderPanel.class.getName());
         headerManager.setProperty(TestElement.NAME, "HTTP HeaderManager");
-        headerManager.setProperty(TestElement.COMMENTS,
-                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        headerManager.setProperty(TestElement.COMMENTS, getDefaultComment());
         Map<String, String> map = request.getHeaders();
         boolean hasAcceptEncoding = false;
         for (Map.Entry<String, String> header : map.entrySet()) {
@@ -368,8 +366,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private void createCookieManager(CookieManager cookieManager, Request request) {
         cookieManager.setProperty(TestElement.GUI_CLASS, CookiePanel.class.getName());
         cookieManager.setProperty(TestElement.NAME, "HTTP CookieManager");
-        cookieManager.setProperty(TestElement.COMMENTS,
-                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        cookieManager.setProperty(TestElement.COMMENTS, getDefaultComment());
         if (!request.getCookies(request.getUrl()).isEmpty()) {
             for (Cookie c : request.getCookies(request.getUrl())) {
                 cookieManager.getCookies().addItem(c);
@@ -401,8 +398,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         KeystoreConfig keystoreConfig = new KeystoreConfig();
         keystoreConfig.setProperty(TestElement.GUI_CLASS, TestBeanGUI.class.getName());
         keystoreConfig.setProperty(TestElement.NAME, "Keystore Configuration");
-        keystoreConfig.setProperty(TestElement.COMMENTS,
-                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        keystoreConfig.setProperty(TestElement.COMMENTS, getDefaultComment());
         return keystoreConfig;
     }
 
@@ -415,8 +411,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         Authorization auth = request.getAuthorization();
         authManager.setProperty(TestElement.GUI_CLASS, AuthPanel.class.getName());
         authManager.setProperty(TestElement.NAME, "HTTP AuthorizationManager");
-        authManager.setProperty(TestElement.COMMENTS,
-                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        authManager.setProperty(TestElement.COMMENTS, getDefaultComment());
         authManager.getAuthObjects().addItem(auth);
     }
 
@@ -460,8 +455,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         Set<String> dnsServers = request.getDnsServers();
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
-        dnsCacheManager.setProperty(TestElement.COMMENTS,
-                "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        dnsCacheManager.setProperty(TestElement.COMMENTS, getDefaultComment());
         dnsCacheManager.getServers().clear();
         for (String dnsServer : dnsServers) {
             dnsCacheManager.addServer(dnsServer);
@@ -491,10 +485,14 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                     "Custom DNS resolver doesn't support port "+port);
         }
         else {
-            dnsCacheManager.setProperty(TestElement.COMMENTS,
-                    "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+            dnsCacheManager.setProperty(TestElement.COMMENTS, getDefaultComment());
         }
         dnsCacheManager.addHost(resolveParameters[0], resolveParameters[2]);
+    }
+
+    @SuppressWarnings("JavaTimeDefaultTimeZone")
+    private static String getDefaultComment() {
+        return "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     private boolean canAddDnsResolverInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {

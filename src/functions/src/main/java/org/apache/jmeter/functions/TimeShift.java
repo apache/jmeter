@@ -197,6 +197,7 @@ public class TimeShift extends AbstractFunction {
         return dateString;
     }
 
+    @SuppressWarnings("JavaTimeDefaultTimeZone")
     private DateTimeFormatter createFormatter(LocaleFormatObject format) {
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
         return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
@@ -207,7 +208,9 @@ public class TimeShift extends AbstractFunction {
                 .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
                 .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
                 .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+                // TODO: what if year changes? (e.g. the year changes as the test executes)
                 .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
+                // TODO: offset seconds might vary over time, so it is likely we should not provide a default for OFFSET_SECONDS
                 .parseDefaulting(ChronoField.OFFSET_SECONDS, ZonedDateTime.now().getOffset().getTotalSeconds())
                 .toFormatter(format.getLocale());
 

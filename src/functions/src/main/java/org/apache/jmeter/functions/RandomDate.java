@@ -202,9 +202,11 @@ public class RandomDate extends AbstractFunction {
         return dateString;
     }
 
+    @SuppressWarnings("JavaTimeDefaultTimeZone")
     private DateTimeFormatter createFormatter(LocaleFormatObject format) {
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
         return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
+                // TODO: what if year changes? (e.g. the year changes as the test executes)
                 .parseDefaulting(ChronoField.DAY_OF_MONTH, 1).parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
                 .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue()).toFormatter(format.getLocale());
 
