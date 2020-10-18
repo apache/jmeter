@@ -399,7 +399,6 @@ public class BackendListener
         @Override
         public void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context) {
             log.warn("ErrorBackendListenerClient#handleSampleResult called, noop");
-            Thread.yield();
         }
     }
 

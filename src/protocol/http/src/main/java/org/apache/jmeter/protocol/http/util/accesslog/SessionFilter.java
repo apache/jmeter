@@ -160,6 +160,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return false;
     }
 
+    @SuppressWarnings("ThreadPriorityCheck")
     protected CookieManager getCookieManager(String ipAddr)
     {
         CookieManager cm;
