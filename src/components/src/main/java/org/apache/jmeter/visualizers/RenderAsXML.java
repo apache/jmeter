@@ -98,7 +98,8 @@ public class RenderAsXML extends SamplerResultTab
         resultsScrollPane.setViewportView(domTreePanel);
     }
 
-    /* (non-Javadoc)
+    /**
+     * {@inheritDoc}
      * @see org.apache.jmeter.visualizers.SamplerResultTab#clearData()
      */
     @Override

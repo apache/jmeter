@@ -42,6 +42,7 @@ public class ThreadDumper {
     }
 
     /**
+     * Returns name of file containing thread dump.
      * @return Name of file containing thread dump
      * @throws Exception if file cannot be written
      */
@@ -50,10 +51,12 @@ public class ThreadDumper {
     }
 
     /**
+     * Returns name of file containing thread dump.
      * @param basedir {@link File} Base directory
      * @return Name of file containing thread dump
      * @throws Exception  if file cannot we written
      */
+    @SuppressWarnings("JdkObsolete")
     public static String threadDump(File basedir) throws Exception {
         SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
         String stamp = timestampFormat.format(new Date());

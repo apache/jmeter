@@ -119,6 +119,7 @@ public class TextFile extends File {
     }
 
     /**
+     * Returns encoding being used to read and write this file.
      * @return Encoding being used to read and write this file.
      */
     public String getEncoding() {
@@ -126,6 +127,7 @@ public class TextFile extends File {
     }
 
     /**
+     * Configures encoding to be used to read and write this file.
      * @param string Encoding to be used to read and write this file.
      */
     public void setEncoding(String string) {

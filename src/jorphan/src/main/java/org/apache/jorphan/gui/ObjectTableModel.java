@@ -285,6 +285,7 @@ public class ObjectTableModel extends DefaultTableModel {
     }
 
     /**
+     * Returns Object (List of Object).
      * @return Object (List of Object)
      */
     public Object getObjectList() { // used by TableEditor
@@ -292,6 +293,7 @@ public class ObjectTableModel extends DefaultTableModel {
     }
 
     /**
+     * Returns List of Object.
      * @return List of Object
      */
     public List<Object> getObjectListAsList() {

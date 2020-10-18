@@ -560,6 +560,7 @@ public final class JOrphanUtils {
     }
 
     /**
+     * Returns duration formatted with format HH:mm:ss.
      * @param elapsedSec long elapsed time in seconds
      * @return String formatted with format HH:mm:ss
      */
@@ -753,6 +754,7 @@ public final class JOrphanUtils {
     }
 
     /**
+     * Random alphanumeric password of a given length.
      * @param length Max length of password
      * @return String random password
      */

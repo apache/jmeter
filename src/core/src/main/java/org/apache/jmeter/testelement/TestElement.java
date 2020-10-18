@@ -288,13 +288,14 @@ public interface TestElement extends Cloneable {
     void setThreadContext(JMeterContext threadContext);
 
     /**
-     * @return Returns the threadName.
+     * Returns the threadName.
+     * @return the threadName.
      */
     String getThreadName();
 
     /**
-     * @param threadName
-     *            The threadName to set.
+     * Configures thread name.
+     * @param threadName the threadName to set.
      */
     void setThreadName(String threadName);
 
@@ -314,12 +315,14 @@ public interface TestElement extends Cloneable {
     String getName();
 
     /**
+     * Returns name of this element.
      * @param name
      *            of this element
      */
     void setName(String name);
 
     /**
+     * Returns comment associated with this element.
      * @return comment associated with this element
      */
     String getComment();
