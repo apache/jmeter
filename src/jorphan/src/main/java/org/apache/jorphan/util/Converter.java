@@ -70,6 +70,7 @@ public class Converter {
             try {
                 convertedValue = Class.forName(value.toString());
             } catch (Exception ignored) {
+                // Intentionally left blank
             }
         }
         return convertedValue;

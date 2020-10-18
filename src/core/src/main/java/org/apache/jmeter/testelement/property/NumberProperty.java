@@ -54,6 +54,7 @@ public abstract class NumberProperty extends AbstractProperty {
             try {
                 setNumberValue(v.toString());
             } catch (RuntimeException ignored) {
+                // Intentionally left blank
             }
         }
     }
