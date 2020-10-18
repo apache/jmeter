@@ -113,6 +113,7 @@ applications when JMeter is starting up.</p>
 
 <h3>Report / Dashboard</h3>
 <ul>
+  <li><bug>64824</bug>Dashboard/HTML Report: Rename KO to FAIL</li>
 </ul>
 
 <h3>General</h3>
