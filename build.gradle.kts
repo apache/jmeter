@@ -24,6 +24,7 @@ import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.properties.dsl.lastEditYear
 import com.github.vlsi.gradle.properties.dsl.props
 import com.github.vlsi.gradle.release.RepositoryType
+import net.ltgt.gradle.errorprone.errorprone
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.sonarqube.gradle.SonarQubeProperties
@@ -36,6 +37,7 @@ plugins {
     id("org.nosphere.apache.rat")
     id("com.github.autostyle")
     id("com.github.spotbugs")
+    id("net.ltgt.errorprone") apply false
     id("org.sonarqube")
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.gradle-extensions")
@@ -147,9 +149,11 @@ val jacocoEnabled by extra {
 
 // Do not enable spotbugs by default. Execute it only when -Pspotbugs is present
 val enableSpotBugs = props.bool("spotbugs", default = false)
+val enableErrorprone by props()
 val ignoreSpotBugsFailures by props()
 val skipCheckstyle by props()
 val skipAutostyle by props()
+val werror by props(true) // treat javac warnings as errors
 // Allow to skip building source/binary distributions
 val skipDist by extra {
     boolProp("skipDist") ?: false
@@ -381,6 +385,34 @@ allprojects {
                 dependsOn("checkstyleAll")
             }
         }
+
+        if (enableErrorprone) {
+            apply(plugin = "net.ltgt.errorprone")
+            dependencies {
+                "errorprone"("com.google.errorprone:error_prone_core:${"errorprone".v}")
+                "annotationProcessor"("com.google.guava:guava-beta-checker:1.0")
+            }
+            tasks.withType<JavaCompile>().configureEach {
+                options.errorprone {
+                    disableWarningsInGeneratedCode.set(true)
+                    errorproneArgs.add("-XepExcludedPaths:.*/javacc/.*")
+                    disable(
+                        "ComplexBooleanConstant",
+                        "EqualsGetClass",
+                        "OperatorPrecedence",
+                        "MutableConstantField",
+                        // "ReferenceEquality",
+                        "SameNameButDifferent",
+                        "TypeParameterUnusedInFormals"
+                    )
+                    // Analyze issues, and enable the check
+                    disable(
+                        "BigDecimalEquals",
+                        "StringSplitter"
+                    )
+                }
+            }
+        }
     }
     plugins.withId("groovy") {
         if (!skipAutostyle) {
@@ -468,6 +500,10 @@ allprojects {
         tasks {
             withType<JavaCompile>().configureEach {
                 options.encoding = "UTF-8"
+                options.compilerArgs.add("-Xlint:deprecation")
+                if (werror) {
+                    options.compilerArgs.add("-Werror")
+                }
             }
             withType<ProcessResources>().configureEach {
                 filteringCharset = "UTF-8"

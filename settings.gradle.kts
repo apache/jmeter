@@ -26,6 +26,7 @@ pluginManagement {
         idv("com.github.vlsi.gradle-extensions", "com.github.vlsi.vlsi-release-plugins")
         idv("com.github.vlsi.ide", "com.github.vlsi.vlsi-release-plugins")
         idv("com.github.vlsi.stage-vote-release", "com.github.vlsi.vlsi-release-plugins")
+        idv("net.ltgt.errorprone")
         idv("org.jetbrains.gradle.plugin.idea-ext")
         idv("org.nosphere.apache.rat")
         idv("org.sonarqube")
