@@ -121,8 +121,9 @@ public class Summariser extends AbstractTestElement
      * Called several times during test startup.
      * The name will not necessarily have been set at this point.
      */
+    @SuppressWarnings("StaticAssignmentInConstructor")
     public Summariser() {
-        super();
+        // TODO: is it needed to reset static field instanceCount in the instance constructor?
         synchronized (LOCK) {
             ACCUMULATORS.clear();
             instanceCount=0;
