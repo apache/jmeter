@@ -321,6 +321,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     @Override
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     public JMeterThread addNewThread(int delay, StandardJMeterEngine engine) {
         long now = System.currentTimeMillis();
         JMeterContext context = JMeterContextService.getContext();
