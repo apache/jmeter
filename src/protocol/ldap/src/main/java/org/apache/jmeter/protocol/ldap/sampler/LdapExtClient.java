@@ -75,6 +75,7 @@ public class LdapExtClient {
      * @exception NamingException
      *                when creating the {@link DirContext} fails
      */
+    @SuppressWarnings("JdkObsolete")
     public static DirContext connect(String host,
             String port,
             String rootdn,

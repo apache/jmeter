@@ -697,6 +697,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
+    @SuppressWarnings("JdkObsolete")
     private Context getInitialContext() throws NamingException {
         Hashtable<String, String> table = new Hashtable<>();
 
@@ -727,6 +728,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         return initialContext;
     }
 
+    @SuppressWarnings("JdkObsolete")
     private void printEnvironment(Context context) throws NamingException {
         try {
             Hashtable<?, ?> env = context.getEnvironment();
