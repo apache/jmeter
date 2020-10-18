@@ -19,8 +19,9 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.Deque;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -41,7 +42,7 @@ public class RequestPanel {
 
     private static final Logger log = LoggerFactory.getLogger(RequestPanel.class);
 
-    private final LinkedList<RequestView> listRequestView;
+    private final Deque<RequestView> listRequestView;
 
     private final JPanel panel;
 
@@ -50,7 +51,7 @@ public class RequestPanel {
      * and Create Request Panel
      */
     public RequestPanel() {
-        listRequestView = new LinkedList<>();
+        listRequestView = new ArrayDeque<>();
         List<String> classesToAdd = Collections.<String> emptyList();
         try {
             classesToAdd = JMeterUtils.findClassesThatExtend(RequestView.class);

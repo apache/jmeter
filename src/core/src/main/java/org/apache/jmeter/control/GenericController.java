@@ -18,9 +18,10 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -54,7 +55,7 @@ public class GenericController extends AbstractTestElement implements Controller
 
     static final String INDEX_VAR_NAME_SUFFIX = "__idx";
 
-    private transient LinkedList<LoopIterationListener> iterationListeners = new LinkedList<>();
+    private transient Deque<LoopIterationListener> iterationListeners = new ArrayDeque<>();
 
     // Only create the map if it is required
     private transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
@@ -412,7 +413,7 @@ public class GenericController extends AbstractTestElement implements Controller
     }
 
     protected Object readResolve(){
-        iterationListeners = new LinkedList<>();
+        iterationListeners = new ArrayDeque<>();
         children = new ConcurrentHashMap<>();
         subControllersAndSamplers = new ArrayList<>();
 

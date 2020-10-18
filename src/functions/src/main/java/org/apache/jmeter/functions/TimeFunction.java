@@ -18,10 +18,10 @@
 package org.apache.jmeter.functions;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -44,7 +44,7 @@ public class TimeFunction extends AbstractFunction {
 
     private static final Pattern DIVISOR_PATTERN = Pattern.compile("/\\d+");
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     // Only modified in class init
     private static final Map<String, String> aliases = new HashMap<>();

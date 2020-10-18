@@ -19,7 +19,7 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -43,7 +43,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
 
     private static final String ACTION_BROWSE = "browse"; //$NON-NLS-1$
 
-    private final List<ChangeListener> listeners = new LinkedList<>();
+    private final List<ChangeListener> listeners = new ArrayList<>();
 
     private final String[] filetypes;
 

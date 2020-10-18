@@ -20,12 +20,12 @@ package org.apache.jmeter.gui.util;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -90,17 +90,17 @@ public final class MenuFactory {
 
     static {
         menuMap = new HashMap<>();
-        menuMap.put(THREADS, new LinkedList<>());
-        menuMap.put(TIMERS, new LinkedList<>());
-        menuMap.put(ASSERTIONS, new LinkedList<>());
-        menuMap.put(CONFIG_ELEMENTS, new LinkedList<>());
-        menuMap.put(CONTROLLERS, new LinkedList<>());
-        menuMap.put(LISTENERS, new LinkedList<>());
-        menuMap.put(NON_TEST_ELEMENTS, new LinkedList<>());
-        menuMap.put(SAMPLERS, new LinkedList<>());
-        menuMap.put(POST_PROCESSORS, new LinkedList<>());
-        menuMap.put(PRE_PROCESSORS, new LinkedList<>());
-        menuMap.put(FRAGMENTS, new LinkedList<>());
+        menuMap.put(THREADS, new ArrayList<>());
+        menuMap.put(TIMERS, new ArrayList<>());
+        menuMap.put(ASSERTIONS, new ArrayList<>());
+        menuMap.put(CONFIG_ELEMENTS, new ArrayList<>());
+        menuMap.put(CONTROLLERS, new ArrayList<>());
+        menuMap.put(LISTENERS, new ArrayList<>());
+        menuMap.put(NON_TEST_ELEMENTS, new ArrayList<>());
+        menuMap.put(SAMPLERS, new ArrayList<>());
+        menuMap.put(POST_PROCESSORS, new ArrayList<>());
+        menuMap.put(PRE_PROCESSORS, new ArrayList<>());
+        menuMap.put(FRAGMENTS, new ArrayList<>());
         menuMap.put(SEPARATOR, Collections.singletonList(new MenuSeparatorInfo()));
 
         try {

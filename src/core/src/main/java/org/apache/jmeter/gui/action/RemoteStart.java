@@ -19,9 +19,9 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -100,7 +100,7 @@ public class RemoteStart extends AbstractAction {
     private List<String> getRemoteHosts() {
         String remoteHostsString = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
         StringTokenizer st = new StringTokenizer(remoteHostsString, REMOTE_HOSTS_SEPARATOR);
-        List<String> list = new LinkedList<>();
+        List<String> list = new ArrayList<>();
         while (st.hasMoreElements()) {
             list.add((String) st.nextElement());
         }

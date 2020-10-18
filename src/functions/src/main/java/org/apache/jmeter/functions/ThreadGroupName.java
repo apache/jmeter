@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.functions;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -34,7 +34,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 public class ThreadGroupName extends AbstractFunctionByKey {
     private static final String KEY = "__threadGroupName"; //$NON-NLS-1$
 
-    private static final List<String> DESC = new LinkedList<>();
+    private static final List<String> DESC = new ArrayList<>();
 
     public ThreadGroupName() {
         super(KEY, 0); //$NON-NLS-1$

@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jorphan.util.JMeterError;
@@ -43,7 +43,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     public ListedHashTree() {
         super();
-        order = new LinkedList<>();
+        order = new ArrayList<>();
     }
 
     public ListedHashTree(Object key) {

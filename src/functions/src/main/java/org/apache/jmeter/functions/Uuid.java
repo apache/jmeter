@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +38,7 @@ import org.apache.jmeter.samplers.Sampler;
  */
 public class Uuid extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__UUID"; //$NON-NLS-1$
 

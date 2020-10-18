@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -48,7 +48,7 @@ import org.slf4j.event.Level;
 public class LogFunction extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(LogFunction.class);
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__log"; //$NON-NLS-1$
 

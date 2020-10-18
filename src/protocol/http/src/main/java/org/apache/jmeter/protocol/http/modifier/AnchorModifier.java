@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.modifier;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -140,7 +139,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
     private void addFormUrls(Document html, HTTPSampleResult result, HTTPSamplerBase config,
             List<HTTPSamplerBase> potentialLinks) {
         NodeList rootList = html.getChildNodes();
-        List<HTTPSamplerBase> urls = new LinkedList<>();
+        List<HTTPSamplerBase> urls = new ArrayList<>();
         for (int x = 0; x < rootList.getLength(); x++) {
             urls.addAll(HtmlParsingUtils.createURLFromForm(rootList.item(x), result.getURL()));
         }

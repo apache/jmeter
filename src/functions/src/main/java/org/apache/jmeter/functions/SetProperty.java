@@ -18,8 +18,8 @@
 package org.apache.jmeter.functions;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -42,7 +42,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class SetProperty extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__setProperty"; //$NON-NLS-1$
 

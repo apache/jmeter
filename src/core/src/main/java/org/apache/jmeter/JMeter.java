@@ -32,11 +32,11 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -1078,7 +1078,7 @@ public class JMeter implements JMeterPlugin {
             // when NON GUI mode is used
             clonedTree.add(clonedTree.getArray()[0], new RemoteThreadsListenerTestElement());
 
-            List<JMeterEngine> engines = new LinkedList<>();
+            List<JMeterEngine> engines = new ArrayList<>();
             println("Created the tree successfully using "+testFile);
             if (!remoteStart) {
                 JMeterEngine engine = new StandardJMeterEngine();
@@ -1091,7 +1091,7 @@ public class JMeter implements JMeterPlugin {
                 engine.runTest();
             } else {
                 java.util.StringTokenizer st = new java.util.StringTokenizer(remoteHostsString.trim(), ",");//$NON-NLS-1$
-                List<String> hosts = new LinkedList<>();
+                List<String> hosts = new ArrayList<>();
                 while (st.hasMoreElements()) {
                     hosts.add(((String) st.nextElement()).trim());
                 }
@@ -1164,8 +1164,7 @@ public class JMeter implements JMeterPlugin {
      * @param tree The {@link HashTree} to convert
      */
     private static void pConvertSubTree(HashTree tree) {
-        LinkedList<Object> copyList = new LinkedList<>(tree.list());
-        for (Object o  : copyList) {
+        for (Object o : new ArrayList<>(tree.list())) {
             if (o instanceof TestElement) {
                 TestElement item = (TestElement) o;
                 if (item.isEnabled()) {

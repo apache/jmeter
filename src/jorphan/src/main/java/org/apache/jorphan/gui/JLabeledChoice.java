@@ -23,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -112,7 +111,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      */
     @Override
     public List<JComponent> getComponentList() {
-        List<JComponent> comps = new LinkedList<>();
+        List<JComponent> comps = new ArrayList<>();
         comps.add(mLabel);
         comps.add(choiceList);
         return comps;

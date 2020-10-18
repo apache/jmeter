@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.samplers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public class Entry {
 
     public Entry() {
         configSet = new HashMap<>();
-        assertions = new LinkedList<>();
+        assertions = new ArrayList<>();
     }
 
     public void addAssertion(Assertion assertion) {

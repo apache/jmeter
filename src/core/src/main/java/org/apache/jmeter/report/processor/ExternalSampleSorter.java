@@ -20,7 +20,6 @@ package org.apache.jmeter.report.processor;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.BlockingQueue;
@@ -102,9 +101,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private final AtomicLong inputSampleCount = new AtomicLong();
 
-    private LinkedList<File> chunks;
+    private List<File> chunks;
 
-    private LinkedList<Sample> samples;
+    private List<Sample> samples;
 
     private SampleMetadata sampleMetadata;
 
@@ -281,8 +280,8 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         this.pool.prestartAllCoreThreads();
         inputSampleCount.set(0);
         chunkedSampleCount.set(0);
-        chunks = new LinkedList<>();
-        samples = new LinkedList<>();
+        chunks = new ArrayList<>();
+        samples = new ArrayList<>();
         sampleMetadata = getConsumedMetadata(0);
         sampleComparator.initialize(sampleMetadata);
     }

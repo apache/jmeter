@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.report.processor.graph;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.report.core.Sample;
@@ -31,7 +31,7 @@ import org.apache.jmeter.report.core.Sample;
 public class IndexedNameSelector implements GraphKeysSelector {
 
     /** The names. */
-    private LinkedList<String> names = new LinkedList<>();
+    private final List<String> names = new ArrayList<>();
 
     /**
      * Gets the names.
@@ -54,7 +54,7 @@ public class IndexedNameSelector implements GraphKeysSelector {
         String name = sample.getName();
         int index = names.indexOf(name);
         if (index < 0) {
-            names.addLast(name);
+            names.add(name);
             index = names.size() - 1;
         }
         return (double) index;

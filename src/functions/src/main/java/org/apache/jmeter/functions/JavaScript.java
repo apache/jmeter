@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.script.Bindings;
@@ -66,7 +66,7 @@ public class JavaScript extends AbstractFunction {
     private static ScriptEngineManager getInstance() {
             return LazyHolder.INSTANCE;
     }
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__javaScript"; //$NON-NLS-1$
 

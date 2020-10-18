@@ -18,9 +18,9 @@
 package org.apache.jmeter.functions;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class DateTimeConvertFunction extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(DateTimeConvertFunction.class);
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
     private static final String KEY = "__dateTimeConvert";
 
     // Number of parameters expected - used to reject invalid calls

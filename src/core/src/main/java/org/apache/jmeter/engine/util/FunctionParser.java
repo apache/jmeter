@@ -19,7 +19,7 @@ package org.apache.jmeter.engine.util;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.functions.Function;
@@ -49,9 +49,9 @@ class FunctionParser {
      * @return list of Strings or Objects representing functions
      * @throws InvalidVariableException when evaluation of variables fail
      */
-    LinkedList<Object> compileString(String value) throws InvalidVariableException {
+    ArrayList<Object> compileString(String value) throws InvalidVariableException {
         StringReader reader = new StringReader(value);
-        LinkedList<Object> result = new LinkedList<>();
+        ArrayList<Object> result = new ArrayList<>();
         StringBuilder buffer = new StringBuilder();
         char previous = ' '; // TODO - why use space?
         char[] current = new char[1];
@@ -145,7 +145,7 @@ class FunctionParser {
                 } else if (current[0] == '}') {// variable, or function with no parameter list
                     function = CompoundVariable.getNamedFunction(buffer.toString());
                     if (function instanceof Function){// ensure that setParameters() is called.
-                        ((Function) function).setParameters(new LinkedList<CompoundVariable>());
+                        ((Function) function).setParameters(new ArrayList<>());
                     }
                     buffer.setLength(0);
                     return function;
@@ -186,8 +186,8 @@ class FunctionParser {
      * @return a list of CompoundVariable elements
      * @throws InvalidVariableException when evaluation of variables fail
      */
-    LinkedList<CompoundVariable> parseParams(StringReader reader) throws InvalidVariableException {
-        LinkedList<CompoundVariable> result = new LinkedList<>();
+    ArrayList<CompoundVariable> parseParams(StringReader reader) throws InvalidVariableException {
+        ArrayList<CompoundVariable> result = new ArrayList<>();
         StringBuilder buffer = new StringBuilder();
         char[] current = new char[1];
         char previous = ' ';

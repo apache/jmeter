@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.jexl3.JexlBuilder;
@@ -48,7 +48,7 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
 
     private static final String KEY = "__jexl3"; //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final ThreadLocal<JexlEngine> threadLocalJexl = ThreadLocal
             .withInitial(Jexl3Function::createJexlEngine);

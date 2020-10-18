@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -454,7 +453,7 @@ public class Save extends AbstractAction {
 
     // package protected to allow access from test code
     void convertSubTree(HashTree tree) {
-        for (Object o : new LinkedList<>(tree.list())) {
+        for (Object o : new ArrayList<>(tree.list())) {
             JMeterTreeNode item = (JMeterTreeNode) o;
             convertSubTree(tree.getTree(item));
             TestElement testElement = item.getTestElement(); // requires JMeterTreeNode

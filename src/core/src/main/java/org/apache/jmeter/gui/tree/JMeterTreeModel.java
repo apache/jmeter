@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.gui.tree;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.tree.DefaultTreeModel;
@@ -80,7 +80,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
      * @return a list of tree nodes of the given <code>type</code>, or an empty list
      */
     public List<JMeterTreeNode> getNodesOfType(Class<?> type) {
-        List<JMeterTreeNode> nodeList = new LinkedList<>();
+        List<JMeterTreeNode> nodeList = new ArrayList<>();
         traverseAndFind(type, (JMeterTreeNode) this.getRoot(), nodeList);
         return nodeList;
     }

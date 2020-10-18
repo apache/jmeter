@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -231,8 +230,7 @@ public class Start extends AbstractAction {
      * @param threadGroupsToKeep Array of {@link AbstractThreadGroup} to keep
      */
     private void keepOnlySelectedThreadGroupsInHashTree(HashTree testTree, AbstractThreadGroup[] threadGroupsToKeep) {
-        LinkedList<Object> copyList = new LinkedList<>(testTree.list());
-        for (Object o  : copyList) {
+        for (Object o : new ArrayList<>(testTree.list())) {
             TestElement item = (TestElement) o;
             if (o instanceof AbstractThreadGroup) {
                 if (!isInThreadGroups(item, threadGroupsToKeep)) {

@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ChangeCase extends AbstractFunction {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeCase.class);
-    private static final List<String> DESC = new LinkedList<>();
+    private static final List<String> DESC = new ArrayList<>();
     private static final String KEY = "__changeCase";
 
     private static final int MIN_PARAMETER_COUNT = 1;

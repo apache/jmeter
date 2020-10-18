@@ -21,8 +21,8 @@ import java.io.File;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -51,7 +51,7 @@ public class Groovy extends AbstractFunction {
 
     private static final String GROOVY_ENGINE_NAME = "groovy";
 
-    private static final List<String> DESCRIPTION = new LinkedList<>();
+    private static final List<String> DESCRIPTION = new ArrayList<>();
 
     private static final String KEY = "__groovy"; //$NON-NLS-1$
 

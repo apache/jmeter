@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -36,7 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class IterationCounter extends AbstractFunction implements ThreadListener {
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__counter"; //$NON-NLS-1$
 

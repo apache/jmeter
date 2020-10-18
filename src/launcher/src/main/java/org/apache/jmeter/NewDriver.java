@@ -31,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -61,7 +60,7 @@ public final class NewDriver {
     private static final List<Exception> EXCEPTIONS_IN_INIT = new ArrayList<>();
 
     static {
-        final List<URL> jars = new LinkedList<>();
+        final List<URL> jars = new ArrayList<>();
         final String initiaClasspath = System.getProperty(JAVA_CLASS_PATH);
 
         // Find JMeter home dir from the initial classpath
@@ -342,10 +341,12 @@ public final class NewDriver {
     /*
      * If the fileName contains at least one set of paired single-quotes, reformat using DateFormat
      */
+    @SuppressWarnings("JdkObsolete")
     private static String replaceDateFormatInFileName(String fileName) {
         try {
             StringBuilder builder = new StringBuilder();
 
+            // TODO: replace with java.time.*
             final Date date = new Date();
             int fromIndex = 0;
             int begin = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$

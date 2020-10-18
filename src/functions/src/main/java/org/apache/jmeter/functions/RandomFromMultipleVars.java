@@ -19,7 +19,6 @@ package org.apache.jmeter.functions;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -45,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public class RandomFromMultipleVars extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(RandomFromMultipleVars.class);
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
     private static final String KEY = "__RandomFromMultipleVars"; //$NON-NLS-1$
     private static final String SEPARATOR = "\\|"; //$NON-NLS-1$
     static {

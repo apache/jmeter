@@ -17,7 +17,8 @@
 
 package org.apache.jmeter.engine;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.TestElement;
@@ -32,7 +33,7 @@ public class TreeCloner implements HashTreeTraverser {
 
     private final ListedHashTree newTree;
 
-    private final LinkedList<Object> objects = new LinkedList<>();
+    private final List<Object> objects = new ArrayList<>();
 
     private final boolean honourNoThreadClone;
 
@@ -86,12 +87,12 @@ public class TreeCloner implements HashTreeTraverser {
      * @param node Object
      */
     private void addLast(Object node) {
-        objects.addLast(node);
+        objects.add(node);
     }
 
     @Override
     public void subtractNode() {
-        objects.removeLast();
+        objects.remove(objects.size() - 1);
     }
 
     public ListedHashTree getClonedTree() {

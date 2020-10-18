@@ -20,8 +20,8 @@ package org.apache.jmeter.functions;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Hex;
@@ -51,7 +51,7 @@ public class DigestEncodeFunction extends AbstractFunction {
      * The algorithm names in this section can be specified when generating an
      * instance of MessageDigest: MD5 SHA-1 SHA-256 SHA-384 SHA-512
      */
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
     private static final String KEY = "__digest";
 
     // Number of parameters expected - used to reject invalid calls

@@ -20,7 +20,6 @@ package org.apache.jmeter.engine;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -380,7 +379,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         test.traverse(new TurnElementsOn());
         notifyTestListenersOfStart(testListeners);
 
-        List<?> testLevelElements = new LinkedList<>(test.list(test.getArray()[0]));
+        List<?> testLevelElements = new ArrayList<>(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
 
         SearchByClass<SetupThreadGroup> setupSearcher = new SearchByClass<>(SetupThreadGroup.class);

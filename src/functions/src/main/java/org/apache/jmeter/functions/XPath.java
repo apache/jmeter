@@ -18,8 +18,8 @@
 package org.apache.jmeter.functions;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -50,7 +50,7 @@ public class XPath extends AbstractFunction {
 
     private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private Object[] values; // Parameter list
 
