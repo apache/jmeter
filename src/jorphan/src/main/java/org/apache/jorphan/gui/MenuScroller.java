@@ -669,7 +669,9 @@ public class MenuScroller {
     private enum MenuIcon implements Icon {
 
         UP(9, 1, 9), DOWN(1, 9, 1);
+        @SuppressWarnings("ImmutableEnumChecker")
         final int[] xPoints = { 1, 5, 9 };
+        @SuppressWarnings("ImmutableEnumChecker")
         final int[] yPoints;
 
         MenuIcon(int... yPoints) {

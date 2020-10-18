@@ -33,13 +33,18 @@ enum RendererFactory {
         return INSTANCE;
     }
 
-    private TextMessageRenderer   text   = new TextMessageRenderer();
-    private BinaryMessageRenderer binary = new BinaryMessageRenderer(text);
-    private ObjectMessageRenderer object = new ObjectMessageRenderer(text);
-    private MapMessageRenderer    map    = new MapMessageRenderer(text);
+    @SuppressWarnings("ImmutableEnumChecker")
+    private final TextMessageRenderer   text   = new TextMessageRenderer();
+    @SuppressWarnings("ImmutableEnumChecker")
+    private final BinaryMessageRenderer binary = new BinaryMessageRenderer(text);
+    @SuppressWarnings("ImmutableEnumChecker")
+    private final ObjectMessageRenderer object = new ObjectMessageRenderer(text);
+    @SuppressWarnings("ImmutableEnumChecker")
+    private final MapMessageRenderer    map    = new MapMessageRenderer(text);
 
     /** Registered renderers **/
-    private Map<Class<?>, MessageRenderer<?>> renderers;
+    @SuppressWarnings("ImmutableEnumChecker")
+    private final Map<Class<?>, MessageRenderer<?>> renderers;
     {
         Map<Class<?>, MessageRenderer<?>> writable = new LinkedHashMap<>();
         writable.put(String.class, text);
