@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
  * This class is intended to be ThreadSafe.
  */
 @GUIMenuSortOrder(1)
+@SuppressWarnings("JavaLangClash")
 public class ThreadGroup extends AbstractThreadGroup {
     private static final long serialVersionUID = 282L;
 
