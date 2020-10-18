@@ -104,7 +104,7 @@ public final class JSyntaxSearchToolBar implements ActionListener {
         }
     }
 
-    protected void toggleSearchField(JTextField textToFindField, boolean matchFound) {
+    void toggleSearchField(JTextField textToFindField, boolean matchFound) {
         if(!matchFound) {
             textToFindField.setBackground(LIGHT_RED);
             textToFindField.setForeground(Color.WHITE);

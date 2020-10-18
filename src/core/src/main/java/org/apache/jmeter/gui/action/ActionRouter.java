@@ -280,7 +280,7 @@ public final class ActionRouter implements ActionListener {
      * @param action {@link Class}
      * @param e {@link ActionEvent}
      */
-    protected void preActionPerformed(Class<? extends Command> action, ActionEvent e) {
+    void preActionPerformed(Class<? extends Command> action, ActionEvent e) {
         actionPerformed(action, e, preActionListeners);
     }
 
@@ -288,7 +288,7 @@ public final class ActionRouter implements ActionListener {
      * @param action {@link Class}
      * @param e {@link ActionEvent}
      */
-    protected void postActionPerformed(Class<? extends Command> action, ActionEvent e) {
+    void postActionPerformed(Class<? extends Command> action, ActionEvent e) {
         actionPerformed(action, e, postActionListeners);
     }
 
