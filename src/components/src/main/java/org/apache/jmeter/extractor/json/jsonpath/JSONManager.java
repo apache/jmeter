@@ -84,7 +84,7 @@ public class JSONManager {
         for (Object obj: extractedObjects) {
             results.add(stringifyJSONObject(obj));
         }
-        return results;
+        return Collections.unmodifiableList(results);
     }
 
     @SuppressWarnings("unchecked")
