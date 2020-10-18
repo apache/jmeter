@@ -149,9 +149,9 @@ public class SchematicView extends AbstractAction implements MenuCreator {
     @Override
     public JMenuItem[] getMenuItemsAtLocation(MENU_LOCATION location) {
         if (location == MENU_LOCATION.TOOLS) {
-
+            // Use the action name as resource key because the action name is used by JMeterMenuBar too when changing languages.
             JMenuItem menuItem = new JMenuItem(
-                    JMeterUtils.getResString("schematic_view_menu"), KeyEvent.VK_UNDEFINED);
+                    JMeterUtils.getResString(ActionNames.SCHEMATIC_VIEW), KeyEvent.VK_UNDEFINED);
             menuItem.setName(ActionNames.SCHEMATIC_VIEW);
             menuItem.setActionCommand(ActionNames.SCHEMATIC_VIEW);
             menuItem.setAccelerator(null);
