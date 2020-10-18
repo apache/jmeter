@@ -71,6 +71,7 @@ import org.slf4j.LoggerFactory;
  * IIS and Netscape.
  */
 
+@SuppressWarnings("InconsistentCapitalization")
 public class TCLogParser implements LogParser {
     protected static final Logger log = LoggerFactory.getLogger(TCLogParser.class);
 

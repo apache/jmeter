@@ -56,15 +56,14 @@ public class HttpSSLProtocolSocketFactory
         }
     }
 
-    private final int CPS; // Characters per second to emulate
+    private final int cps; // Characters per second to emulate
 
     public HttpSSLProtocolSocketFactory() {
         this(0);
     }
 
     public HttpSSLProtocolSocketFactory(int cps) {
-        super();
-        CPS=cps;
+        this.cps = cps;
     }
 
 
@@ -120,8 +119,8 @@ public class HttpSSLProtocolSocketFactory
      * Wraps the socket in a slow SSL socket if necessary
      */
     private Socket wrapSocket(Socket sock){
-        if (CPS>0) {
-            return new SlowSSLSocket((SSLSocket) sock, CPS);
+        if (cps >0) {
+            return new SlowSSLSocket((SSLSocket) sock, cps);
         }
         return sock;
     }

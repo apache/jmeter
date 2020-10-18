@@ -56,7 +56,7 @@ public class DistributedRunner {
     private final int retriesDelay;
     private final int retriesNumber;
     private PrintStream stdout = new PrintStream(new SilentOutputStream());
-    private PrintStream stderr = new PrintStream(new SilentOutputStream());
+    private PrintStream stdErr = new PrintStream(new SilentOutputStream());
     private final Map<String, JMeterEngine> engines = new HashMap<>();
 
 
@@ -249,13 +249,13 @@ public class DistributedRunner {
 
     private void errln(String s) {
         log.error(s);
-        stderr.println(s);
+        stdErr.println(s);
     }
 
     private void errln(String s, Exception e) {
         log.error(s, e);
-        stderr.println(s + ": ");
-        e.printStackTrace(stderr); // NOSONAR
+        stdErr.println(s + ": ");
+        e.printStackTrace(stdErr); // NOSONAR
     }
 
     public void setStdout(PrintStream stdout) {
@@ -263,7 +263,7 @@ public class DistributedRunner {
     }
 
     public void setStdErr(PrintStream stdErr) {
-        this.stderr = stdErr;
+        this.stdErr = stdErr;
     }
 
     private static class SilentOutputStream extends OutputStream {

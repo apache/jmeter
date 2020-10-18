@@ -219,21 +219,21 @@ public class CSVDataSet extends ConfigTestElement
         trimVarNames(vars);
     }
 
-    private void setAlias(final JMeterContext context, String fileName) {
+    private void setAlias(final JMeterContext context, String alias) {
         String mode = getShareMode();
         int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
         switch(modeInt){
             case CSVDataSetBeanInfo.SHARE_ALL:
-                alias = fileName;
+                this.alias = alias;
                 break;
             case CSVDataSetBeanInfo.SHARE_GROUP:
-                alias = fileName+"@"+System.identityHashCode(context.getThreadGroup());
+                this.alias = alias + "@" + System.identityHashCode(context.getThreadGroup());
                 break;
             case CSVDataSetBeanInfo.SHARE_THREAD:
-                alias = fileName+"@"+System.identityHashCode(context.getThread());
+                this.alias = alias + "@" + System.identityHashCode(context.getThread());
                 break;
             default:
-                alias = fileName+"@"+mode; // user-specified key
+                this.alias = alias + "@" + mode; // user-specified key
                 break;
         }
     }

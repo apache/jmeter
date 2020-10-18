@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
  * added and should be left up to the user. One option is to provide parameters,
  * so the user can pass the desired listener to the tool.
  */
+@SuppressWarnings("InconsistentCapitalization")
 public class StandardGenerator implements Generator, Serializable {
 
     private static final long serialVersionUID = 234L;
