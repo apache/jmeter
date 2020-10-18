@@ -39,7 +39,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -101,7 +101,8 @@ public class JMeterUtils implements UnitTestManager {
 
     private static volatile Properties appProperties;
 
-    private static final Vector<LocaleChangeListener> localeChangeListeners = new Vector<>();
+    private static final CopyOnWriteArrayList<LocaleChangeListener> localeChangeListeners =
+            new CopyOnWriteArrayList<>();
 
     private static volatile Locale locale;
 
@@ -414,12 +415,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     private static void notifyLocaleChangeListeners() {
         LocaleChangeEvent event = new LocaleChangeEvent(JMeterUtils.class, locale);
-        @SuppressWarnings("unchecked") // clone will produce correct type
-        // TODO but why do we need to clone the list?
-        // ANS: to avoid possible ConcurrentUpdateException when unsubscribing
-        // Could perhaps avoid need to clone by using a modern concurrent list
-        Vector<LocaleChangeListener> listeners = (Vector<LocaleChangeListener>) localeChangeListeners.clone();
-        for (LocaleChangeListener listener : listeners) {
+        for (LocaleChangeListener listener : localeChangeListeners) {
             listener.localeChanged(event);
         }
     }

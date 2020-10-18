@@ -41,7 +41,7 @@ import java.util.Hashtable;
  * @deprecated Will be dropped in 3.3
  */
 @Deprecated
-@SuppressWarnings({"unchecked","rawtypes"}) // will be dropped in 3.3
+@SuppressWarnings({"unchecked", "rawtypes", "JdkObsolete"}) // will be dropped in 3.3
 public final class ContextMap
     implements Serializable
 {

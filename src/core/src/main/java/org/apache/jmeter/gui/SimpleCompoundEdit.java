@@ -26,6 +26,7 @@ public class SimpleCompoundEdit extends CompoundEdit {
     /**
      * @return boolean true if edits is empty
      */
+    @SuppressWarnings("JdkObsolete")
     public boolean isEmpty() {
         return edits.isEmpty();
     }
@@ -33,6 +34,7 @@ public class SimpleCompoundEdit extends CompoundEdit {
     /**
      * @return size of edits
      */
+    @SuppressWarnings("JdkObsolete")
     public int size() {
         return edits.size();
     }

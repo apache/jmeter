@@ -42,8 +42,10 @@ public class CollectionProperty extends MultiProperty {
     }
 
     @Override
+    @SuppressWarnings("UndefinedEquals")
     public boolean equals(Object o) {
         if (o instanceof CollectionProperty && value != null) {
+            // TODO: Collection does not have well-defined equals behavior
             return value.equals(((JMeterProperty) o).getObjectValue());
         }
         return false;
