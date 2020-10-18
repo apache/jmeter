@@ -53,6 +53,7 @@ public class TestResultAction extends JMeterTestCase {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testOnFailureStopTest() {
         sampleResult.setSuccessful(false);
         resultAction.setErrorAction(ResultAction.ON_ERROR_STOPTEST);
@@ -64,6 +65,7 @@ public class TestResultAction extends JMeterTestCase {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testOnFailureStopTestNow() {
         sampleResult.setSuccessful(false);
         resultAction.setErrorAction(ResultAction.ON_ERROR_STOPTEST_NOW);
@@ -75,6 +77,7 @@ public class TestResultAction extends JMeterTestCase {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testOnFailureStopThread() {
         sampleResult.setSuccessful(false);
         resultAction.setErrorAction(ResultAction.ON_ERROR_STOPTHREAD);
@@ -86,6 +89,7 @@ public class TestResultAction extends JMeterTestCase {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testOnFailureStartNextThreadLoop() {
         sampleResult.setSuccessful(false);
         resultAction.setErrorAction(ResultAction.ON_ERROR_START_NEXT_THREAD_LOOP);
