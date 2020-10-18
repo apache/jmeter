@@ -228,11 +228,13 @@ public class HttpMirrorServer extends Thread implements Stoppable, NonTestElemen
             try {
                 port = Integer.parseInt(value);
             } catch (NumberFormatException ignored) {
+                // Intentionally left blank
             }
         } else if (args.length > 0) {
             try {
                 port = Integer.parseInt(args[0]);
             } catch (NumberFormatException ignored) {
+                // Intentionally left blank
             }
         }
         return port;
