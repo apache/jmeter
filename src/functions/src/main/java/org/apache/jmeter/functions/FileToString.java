@@ -19,8 +19,8 @@ package org.apache.jmeter.functions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 public class FileToString extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(FileToString.class);
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__FileToString";//$NON-NLS-1$
 

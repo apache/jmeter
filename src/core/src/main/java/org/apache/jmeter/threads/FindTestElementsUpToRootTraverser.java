@@ -17,8 +17,9 @@
 
 package org.apache.jmeter.threads;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Deque;
 import java.util.List;
 
 import org.apache.jmeter.control.Controller;
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
     private static final Logger log = LoggerFactory.getLogger(FindTestElementsUpToRootTraverser.class);
 
-    private final LinkedList<TestElement> stack = new LinkedList<>();
+    private final Deque<TestElement> stack = new ArrayDeque<>();
 
     /**
      * Node to find in TestTree
@@ -89,7 +90,7 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
      */
     public List<Controller> getControllersToRoot() {
         List<Controller> result = new ArrayList<>(stack.size());
-        LinkedList<TestElement> stackLocalCopy = new LinkedList<>(stack);
+        Deque<TestElement> stackLocalCopy = new ArrayDeque<>(stack);
         while(!stackLocalCopy.isEmpty()) {
             TestElement te = stackLocalCopy.getLast();
             if(te instanceof Controller) {

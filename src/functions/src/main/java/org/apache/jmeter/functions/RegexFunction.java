@@ -20,7 +20,6 @@ package org.apache.jmeter.functions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -56,7 +55,7 @@ public class RegexFunction extends AbstractFunction {
 
     private Object[] values;// Parameters are stored here
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String TEMPLATE_PATTERN = "\\$(\\d+)\\$";  //$NON-NLS-1$
     /** initialised to the regex \$(\d+)\$ */
@@ -248,7 +247,7 @@ public class RegexFunction extends AbstractFunction {
     private Object[] generateTemplate(String rawTemplate) {
         List<String> pieces = new ArrayList<>();
         // String or Integer
-        List<Object> combined = new LinkedList<>();
+        List<Object> combined = new ArrayList<>();
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Util.split(pieces, matcher, templatePattern, rawTemplate);
         PatternMatcherInput input = new PatternMatcherInput(rawTemplate);

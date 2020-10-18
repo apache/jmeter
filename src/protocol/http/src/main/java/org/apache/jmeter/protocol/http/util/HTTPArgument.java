@@ -20,7 +20,7 @@ package org.apache.jmeter.protocol.http.util;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.config.Argument;
@@ -265,7 +265,7 @@ public class HTTPArgument extends Argument implements Serializable {
      * @param args collection of {@link Argument} and/or {@link HTTPArgument} entries
      */
     public static void convertArgumentsToHTTP(Arguments args) {
-        List<Argument> newArguments = new LinkedList<>();
+        List<Argument> newArguments = new ArrayList<>();
         for (JMeterProperty jMeterProperty : args.getArguments()) {
             Argument arg = (Argument) jMeterProperty.getObjectValue();
             if (!(arg instanceof HTTPArgument)) {

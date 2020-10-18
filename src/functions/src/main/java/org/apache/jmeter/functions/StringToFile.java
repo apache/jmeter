@@ -23,8 +23,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StringToFile extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(StringToFile.class);
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
     private static final String KEY = "__StringToFile";//$NON-NLS-1$
     private static final ConcurrentHashMap<String, Lock> lockMap = new ConcurrentHashMap<>();
     private static final Pattern NEW_LINE_PATTERN = Pattern.compile("\\\\n");

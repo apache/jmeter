@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.engine.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -156,7 +156,7 @@ public class ValueReplacer {
      * @throws InvalidVariableException when <code>transform</code> throws an {@link InvalidVariableException} while transforming a value
      */
     private Collection<JMeterProperty> replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
-        List<JMeterProperty> props = new LinkedList<>();
+        List<JMeterProperty> props = new ArrayList<>();
         while (iter.hasNext()) {
             JMeterProperty val = iter.next();
             if (log.isDebugEnabled()) {

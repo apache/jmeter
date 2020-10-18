@@ -21,8 +21,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -73,7 +73,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
     private static final Logger log = LoggerFactory.getLogger(StringFromFile.class);
 
     // Only modified by static block so no need to synchronize subsequent read-only access
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__StringFromFile";//$NON-NLS-1$
 

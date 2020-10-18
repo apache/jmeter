@@ -36,9 +36,10 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.BindException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -364,10 +365,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private List<String> getDataList(PowerTableModel pModel, String colName) {
         String[] dataArray = pModel.getData().getColumn(colName);
-        List<String> list = new LinkedList<>();
-        for (String data : dataArray) {
-            list.add(data);
-        }
+        List<String> list = new ArrayList<>();
+        Collections.addAll(list, dataArray);
         return list;
     }
 

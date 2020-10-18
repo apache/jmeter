@@ -22,7 +22,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -119,7 +119,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         } catch (MalformedCachePatternException e) {
             return e.toString();
         }
-        List<MatchResult> matches = new LinkedList<>();
+        List<MatchResult> matches = new ArrayList<>();
         while (matcher.contains(input, pattern)) {
             matches.add(matcher.getMatch());
         }

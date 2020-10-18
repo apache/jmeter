@@ -20,7 +20,7 @@ package org.apache.jmeter.control;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
@@ -173,7 +173,7 @@ public class IncludeController extends GenericController implements ReplaceableC
      * @return HashTree Subset within Test Fragment or Empty HashTree
      */
     private HashTree getProperBranch(HashTree tree) {
-        for (Object o : new LinkedList<>(tree.list())) {
+        for (Object o : new ArrayList<>(tree.list())) {
             TestElement item = (TestElement) o;
 
             //if we found a TestPlan, then we are on our way to the TestFragment
@@ -193,7 +193,7 @@ public class IncludeController extends GenericController implements ReplaceableC
 
 
     private void removeDisabledItems(HashTree tree) {
-        for (Object o : new LinkedList<>(tree.list())) {
+        for (Object o : new ArrayList<>(tree.list())) {
             TestElement item = (TestElement) o;
             if (!item.isEnabled()) {
                 tree.remove(item);

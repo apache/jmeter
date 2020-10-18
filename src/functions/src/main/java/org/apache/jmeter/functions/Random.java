@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Random extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
     private static final String KEY = "__Random"; //$NON-NLS-1$
 
     static {

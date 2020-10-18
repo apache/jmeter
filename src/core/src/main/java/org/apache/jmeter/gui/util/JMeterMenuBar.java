@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -104,12 +103,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     public JMeterMenuBar() {
         // List for recent files menu items
-        fileLoadRecentFiles = new LinkedList<>();
+        fileLoadRecentFiles = new ArrayList<>();
         // Lists for remote engines menu items
-        remoteEngineStart = new LinkedList<>();
-        remoteEngineStop = new LinkedList<>();
-        remoteEngineShut = new LinkedList<>();
-        remoteEngineExit = new LinkedList<>();
+        remoteEngineStart = new ArrayList<>();
+        remoteEngineStop = new ArrayList<>();
+        remoteEngineShut = new ArrayList<>();
+        remoteEngineExit = new ArrayList<>();
         remoteHosts = JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ","); //$NON-NLS-1$
         if (remoteHosts.length == 1 && remoteHosts[0].isEmpty()) {
             remoteHosts = new String[0];

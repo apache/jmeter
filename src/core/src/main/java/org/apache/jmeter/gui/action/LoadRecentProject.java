@@ -20,8 +20,10 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.prefs.Preferences;
@@ -81,7 +83,7 @@ public class LoadRecentProject extends Load {
      * @return a List of JMenuItem, representing recent files. JMenuItem may not be visible
      */
     public static List<JComponent> getRecentFileMenuItems() {
-        LinkedList<JComponent> menuItems = new LinkedList<>();
+        List<JComponent> menuItems = new ArrayList<>();
         // Get the preference for the recent files
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
             // Create the menu item
@@ -114,7 +116,7 @@ public class LoadRecentProject extends Load {
     public static void updateRecentFileMenuItems(List<JComponent> menuItems, String loadedFileName) {
         // Get the preference for the recent files
 
-        LinkedList<String> newRecentFiles = new LinkedList<>();
+        Deque<String> newRecentFiles = new ArrayDeque<>();
         // Check if the new file is already in the recent list
         boolean alreadyExists = false;
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
@@ -127,16 +129,21 @@ public class LoadRecentProject extends Load {
             }
         }
         // Add the new file at the start of the list
-        newRecentFiles.add(0, loadedFileName);
+        newRecentFiles.addFirst(loadedFileName);
         // Remove the last item from the list if it was a brand new file
         if(!alreadyExists) {
             newRecentFiles.removeLast();
         }
         // Store the recent files
-        for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
-            String fileName = newRecentFiles.get(i);
-            if(fileName != null) {
-                setRecentFile(i, fileName);
+        int index = 0;
+        for (String fileName : newRecentFiles) {
+            if (fileName == null) {
+                continue;
+            }
+            setRecentFile(index, fileName);
+            index++;
+            if (index >= NUMBER_OF_MENU_ITEMS) {
+                break;
             }
         }
         // Update menu items to reflect recent files

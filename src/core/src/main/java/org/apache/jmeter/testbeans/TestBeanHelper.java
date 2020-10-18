@@ -23,8 +23,8 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testbeans.gui.TableEditor;
@@ -135,7 +135,7 @@ public class TestBeanHelper {
     {
         if(prop instanceof CollectionProperty)
         {
-            Collection<Object> values = new LinkedList<>();
+            Collection<Object> values = new ArrayList<>();
             for (JMeterProperty jMeterProperty : prop) {
                 try {
                     values.add(unwrapProperty(null, jMeterProperty, Class.forName(type)));

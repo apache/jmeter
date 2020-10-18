@@ -22,7 +22,6 @@ import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -115,7 +114,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
      */
     @Override
     public List<JComponent> getComponentList() {
-        List<JComponent> comps = new LinkedList<>();
+        List<JComponent> comps = new ArrayList<>();
         comps.add(mLabel);
         comps.add(mTextField);
         return comps;

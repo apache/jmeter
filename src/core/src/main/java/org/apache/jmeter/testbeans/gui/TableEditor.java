@@ -27,9 +27,9 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -177,7 +177,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     }
 
     private Collection<Object> convertCollection(Collection<?> values) {
-        List<Object> l = new LinkedList<>();
+        List<Object> l = new ArrayList<>();
         for(Object obj : values) {
             if(obj instanceof TestElementProperty) {
                 l.add(((TestElementProperty)obj).getElement());

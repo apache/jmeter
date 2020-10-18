@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -29,7 +29,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 abstract class AbstractHostIPName extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     static {
         desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$

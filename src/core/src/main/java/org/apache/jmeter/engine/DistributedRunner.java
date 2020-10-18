@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -74,7 +73,7 @@ public class DistributedRunner {
 
     public void init(List<String> addresses, HashTree tree) {
         // converting list into mutable version
-        List<String> addrs = new LinkedList<>(addresses);
+        List<String> addrs = new ArrayList<>(addresses);
 
         for (int tryNo = 0; tryNo < retriesNumber; tryNo++) {
             if (tryNo > 0) {
@@ -152,7 +151,7 @@ public class DistributedRunner {
      * Start all engines that were previously initiated
      */
     public void start() {
-        List<String> addresses = new LinkedList<>(engines.keySet());
+        List<String> addresses = new ArrayList<>(engines.keySet());
         start(addresses);
     }
 
@@ -177,7 +176,7 @@ public class DistributedRunner {
      * Stop all engines that were previously initiated
      */
     public void stop() {
-        List<String> addresses = new LinkedList<>(engines.keySet());
+        List<String> addresses = new ArrayList<>(engines.keySet());
         stop(addresses);
     }
 

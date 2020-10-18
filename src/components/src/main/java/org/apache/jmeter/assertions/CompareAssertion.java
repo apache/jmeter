@@ -18,8 +18,8 @@
 package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -170,7 +170,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
     @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
-        responses = new LinkedList<>();
+        responses = new ArrayList<>();
     }
 
     /**

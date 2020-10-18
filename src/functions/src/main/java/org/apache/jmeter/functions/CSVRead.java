@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -58,7 +58,7 @@ public class CSVRead extends AbstractFunction {
 
     private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private Object[] values; // Parameter list
 

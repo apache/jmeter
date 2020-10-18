@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class RandomString extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(RandomString.class);
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__RandomString"; //$NON-NLS-1$
 

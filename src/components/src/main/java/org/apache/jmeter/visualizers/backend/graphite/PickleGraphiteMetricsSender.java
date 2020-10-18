@@ -20,7 +20,7 @@ package org.apache.jmeter.visualizers.backend.graphite;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.ByteBuffer;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
@@ -52,7 +52,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private final Object lock = new Object();
 
     // graphite expects a python-pickled list of nested tuples.
-    private List<MetricTuple> metrics = new LinkedList<>();
+    private List<MetricTuple> metrics = new ArrayList<>();
 
     private SocketConnectionInfos socketConnectionInfos;
     private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
@@ -118,7 +118,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
             }
             // keep the current metrics to send outside sync block
             currentMetrics = metrics;
-            metrics = new LinkedList<>();
+            metrics = new ArrayList<>();
         }
         writeMetrics(currentMetrics);
     }

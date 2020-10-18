@@ -18,8 +18,8 @@
 package org.apache.jmeter.modifiers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
@@ -121,7 +121,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
         if (threadValues.size() > 0) {
             return (CollectionProperty) threadValues.get(getThreadContext().getThreadNum() % threadValues.size());
         }
-        return new CollectionProperty("noname", new LinkedList<>());
+        return new CollectionProperty("noname", new ArrayList<>());
     }
 
     public boolean isPerIteration() {

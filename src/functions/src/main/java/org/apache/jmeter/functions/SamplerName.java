@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -35,7 +35,7 @@ public class SamplerName extends AbstractFunction {
 
     private static final String KEY = "__samplerName"; //$NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     static {
         desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$

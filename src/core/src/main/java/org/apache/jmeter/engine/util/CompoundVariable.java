@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.engine.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +53,8 @@ public class CompoundVariable implements Function {
 
     private String permanentResults;
 
-    private LinkedList<Object> compiledComponents = new LinkedList<>();
+    // Type is ArrayList, so we can use ArrayList#clone
+    private ArrayList<Object> compiledComponents = new ArrayList<>();
 
     static {
         try {
@@ -152,7 +153,7 @@ public class CompoundVariable implements Function {
     @SuppressWarnings("unchecked") // clone will produce correct type
     public CompoundVariable getFunction() {
         CompoundVariable func = new CompoundVariable();
-        func.compiledComponents = (LinkedList<Object>) compiledComponents.clone();
+        func.compiledComponents = (ArrayList<Object>) compiledComponents.clone();
         func.rawParameters = rawParameters;
         func.hasFunction = hasFunction;
         func.isDynamic = isDynamic;
@@ -162,7 +163,7 @@ public class CompoundVariable implements Function {
     /** {@inheritDoc} */
     @Override
     public List<String> getArgumentDesc() {
-        return new LinkedList<>();
+        return new ArrayList<>();
     }
 
     public void clear() {

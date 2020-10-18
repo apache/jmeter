@@ -22,7 +22,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -61,7 +61,7 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     private JButton delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 
-    private List<ChangeListener> listeners = new LinkedList<>();
+    private List<ChangeListener> listeners = new ArrayList<>();
 
     private String title;
 

@@ -18,8 +18,8 @@
 package org.apache.jmeter.functions;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.text.StringEscapeUtils;
@@ -38,7 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class UnEscape extends AbstractFunction {
 
-    private static final List<String> desc = new LinkedList<>();
+    private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__unescape"; //$NON-NLS-1$
 

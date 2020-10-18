@@ -17,9 +17,9 @@
 
 package org.apache.jorphan.collections;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +52,7 @@ import java.util.Map;
  *            Class that should be searched for
  */
 public class SearchByClass<T> implements HashTreeTraverser {
-    private final List<T> objectsOfClass = new LinkedList<>();
+    private final List<T> objectsOfClass = new ArrayList<>();
 
     private final Map<Object, ListedHashTree> subTrees = new HashMap<>();
 

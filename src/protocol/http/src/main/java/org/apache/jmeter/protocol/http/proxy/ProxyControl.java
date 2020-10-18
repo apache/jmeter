@@ -37,10 +37,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -768,6 +768,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         }
     }
 
+    @SuppressWarnings("JdkObsolete")
     public String[] getCertificateDetails() {
         if (isDynamicMode()) {
             try {
@@ -1008,6 +1009,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @param node   Sampler node in where we will add the timers
      * @param deltaT Time interval from the previous request
      */
+    @SuppressWarnings("JdkObsolete")
     private void addTimers(JMeterTreeModel model, JMeterTreeNode node, long deltaT) {
         TestPlan variables = new TestPlan();
         variables.addParameter("T", Long.toString(deltaT)); // $NON-NLS-1$
@@ -1102,9 +1104,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @return a collection of applicable objects of the given class.
      */
     // TODO - could be converted to generic class?
+    @SuppressWarnings("JdkObsolete")
     private Collection<?> findApplicableElements(JMeterTreeNode myTarget, Class<? extends TestElement> myClass, boolean ascending) {
         JMeterTreeModel treeModel = getJmeterTreeModel();
-        LinkedList<TestElement> elements = new LinkedList<>();
+        Deque<TestElement> elements = new ArrayDeque<>();
 
         // Look for elements directly within the HTTP proxy:
         JMeterTreeNode node = treeModel.getNodeOf(this);
@@ -1400,6 +1403,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      *
      * @param event sampling event to be delivered
      */
+    @SuppressWarnings("JdkObsolete")
     private void notifySampleListeners(SampleEvent event) {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
@@ -1421,6 +1425,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * This will notify test listeners directly within the Proxy that the 'test'
      * (here meaning the proxy recording) has started.
      */
+    @SuppressWarnings("JdkObsolete")
     private void notifyTestListenersOfStart() {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
@@ -1443,6 +1448,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * This will notify test listeners directly within the Proxy that the 'test'
      * (here meaning the proxy recording) has ended.
      */
+    @SuppressWarnings("JdkObsolete")
     private void notifyTestListenersOfEnd() {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
@@ -1493,6 +1499,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     /**
      * Initialise the user-provided keystore
      */
+    @SuppressWarnings("JdkObsolete")
     private void initUserKeyStore() {
         try {
             keyStore = getKeyStore(storePassword.toCharArray());
@@ -1514,6 +1521,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     /**
      * Initialise the dynamic domain keystore
      */
+    @SuppressWarnings("JdkObsolete")
     private void initDynamicKeyStore() throws IOException, GeneralSecurityException {
         if (storePassword  != null) { // Assume we have already created the store
             try {
@@ -1608,6 +1616,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     /**
      * Initialise the single key JMeter keystore (original behaviour)
      */
+    @SuppressWarnings("JdkObsolete")
     private void initJMeterKeyStore() throws IOException, GeneralSecurityException {
         if (storePassword != null) { // Assume we have already created the store
             try {
