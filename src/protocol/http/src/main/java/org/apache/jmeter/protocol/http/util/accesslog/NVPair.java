@@ -23,6 +23,7 @@ package org.apache.jmeter.protocol.http.util.accesslog;
  *
  */
 
+@SuppressWarnings("InconsistentCapitalization")
 public class NVPair {
 
     protected String NAME = "";

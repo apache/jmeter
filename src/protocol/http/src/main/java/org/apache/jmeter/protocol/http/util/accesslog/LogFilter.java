@@ -67,6 +67,7 @@ import org.slf4j.LoggerFactory;
  * which will return null if it is filtered and replace any part of the string
  * that should be replaced.
  */
+@SuppressWarnings("InconsistentCapitalization")
 public class LogFilter implements Filter, Serializable {
 
     private static final long serialVersionUID = 241L;
