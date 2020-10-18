@@ -129,7 +129,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private Object resultsObject = null;
     private TreeSelectionEvent lastSelectionEvent;
     private JCheckBox autoScrollCB;
-    private Queue<SampleResult> buffer;
+    private final Queue<SampleResult> buffer;
     private boolean dataChanged;
 
     /**
