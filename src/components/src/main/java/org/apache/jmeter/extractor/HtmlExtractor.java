@@ -188,7 +188,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 }
             }
         }
-        return result;
+        return Collections.unmodifiableList(result);
     }
 
     /**

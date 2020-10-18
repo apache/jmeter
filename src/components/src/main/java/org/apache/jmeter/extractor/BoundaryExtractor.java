@@ -296,7 +296,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
             }
         }
 
-        return matches;
+        return Collections.unmodifiableList(matches);
     }
 
     public List<String> extractAll(

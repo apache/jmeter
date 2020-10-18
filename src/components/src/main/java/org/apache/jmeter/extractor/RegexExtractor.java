@@ -209,7 +209,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 }
             }
         }
-        return matches;
+        return Collections.unmodifiableList(matches);
     }
 
     private int matchStrings(int matchNumber, Perl5Matcher matcher,
