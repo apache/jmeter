@@ -24,6 +24,7 @@ import junit.framework.TestCase;
 /**
  * Test to demonstrate whether a test instance can be re-run
  */
+@SuppressWarnings("JUnitAmbiguousTestClass")
 public class RerunTest extends TestCase {
 
     private int i = 123;

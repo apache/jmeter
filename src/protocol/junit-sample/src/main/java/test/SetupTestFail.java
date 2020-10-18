@@ -25,6 +25,7 @@ import junit.framework.TestCase;
 /**
  * Test to demonstrate how setUp failures are handled
  */
+@SuppressWarnings("JUnitAmbiguousTestClass")
 public class SetupTestFail extends TestCase {
 
     @Override
