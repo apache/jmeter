@@ -123,7 +123,7 @@ public class ChangeCase extends AbstractFunction {
      */
     public enum ChangeCaseMode {
         UPPER("UPPER"), LOWER("LOWER"), CAPITALIZE("CAPITALIZE");
-        private String mode;
+        private final String mode;
 
         private ChangeCaseMode(String mode) {
             this.mode = mode;
