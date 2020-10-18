@@ -5,8 +5,7 @@ install: true
 
 # We can clean the caches via web at https://travis-ci.org/apache/jmeter/caches
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - F=CleanupGradleCache sh -x -c 'curl -O https://raw.githubusercontent.com/vlsi/cleanup-gradle-cache/v1.x/$F.java && javac -J-Xmx128m $F.java && java -Xmx128m $F'
   - rm -rf $HOME/.m2/repository/org/apache/jmeter
 
 cache:
