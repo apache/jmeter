@@ -25,16 +25,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -339,37 +337,6 @@ public final class ClassFinder {
     }
 
     /**
-     * Fix a path:
-     * <ul>
-     * <li>replace "{@code .}" by current directory</li>
-     * <li>upcase the first character if it appears to be a drive letter</li>
-     * <li>trim any trailing spaces</li>
-     * <li>replace {@code \} by {@code /}</li>
-     * <li>replace {@code //} by {@code /}</li>
-     * <li>remove all trailing {@code /}</li>
-     * </ul>
-     */
-    private static String fixPathEntry(String path) {
-        if (path == null) {
-            return null;
-        }
-        if (path.equals(".")) { // $NON-NLS-1$
-            return System.getProperty("user.dir"); // $NON-NLS-1$
-        }
-        String resultPath = path;
-        if (path.length() > 3 && path.matches("[a-z]:\\\\.*")) { // lower-case drive letter?
-            resultPath = path.substring(0, 1).toUpperCase(Locale.ROOT) + path.substring(1);
-        }
-        resultPath = resultPath.trim().replace('\\', '/'); // $NON-NLS-1$ // $NON-NLS-2$
-        resultPath = JOrphanUtils.substitute(resultPath, "//", "/"); // $NON-NLS-1$// $NON-NLS-2$
-
-        while (resultPath.endsWith("/")) { // $NON-NLS-1$
-            resultPath = resultPath.substring(0, resultPath.length() - 1);
-        }
-        return resultPath;
-    }
-
-    /**
      * Converts a class file from the text stored in a Jar file to a version
      * that can be used in Class.forName().
      *
@@ -389,15 +356,14 @@ public final class ClassFinder {
         if (file.isDirectory()) {
             findClassesInPathsDir(file.getAbsolutePath(), file, listClasses, filter);
         } else if (file.exists()) {
-            try (ZipFile zipFile = new ZipFile(file)) {
-                Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                while (entries.hasMoreElements()) {
-                    String strEntry = entries.nextElement().toString();
-                    if (strEntry.endsWith(DOT_CLASS)) {
-                        String fixedClassName = fixClassName(strEntry);
-                        applyFiltering(listClasses, filter, fixedClassName);
-                    }
-                }
+            try (ZipFile zipFile = new ZipFile(file);
+                 Stream<? extends ZipEntry> entries = zipFile.stream()) {
+                entries.filter(entry -> entry.getName().endsWith(DOT_CLASS))
+                        .forEach(entry -> {
+                                    String fixedClassName = fixClassName(entry.getName());
+                                    applyFiltering(listClasses, filter, fixedClassName);
+                                }
+                        );
             } catch (IOException e) {
                 log.warn("Can not open the jar {}, message: {}", file.getAbsolutePath(), e.getLocalizedMessage(), e);
             }
