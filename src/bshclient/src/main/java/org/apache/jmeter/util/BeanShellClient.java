@@ -17,12 +17,14 @@
 
 package org.apache.jmeter.util;
 
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 // N.B. Do not call any JMeter methods; the jar is standalone
 
@@ -65,7 +67,7 @@ public class BeanShellClient {
             sendLine("};", os);
 
             int b;
-            try (InputStreamReader fis = new FileReader(file)) {
+            try (BufferedReader fis = Files.newBufferedReader(Paths.get(file))) {
                 while ((b = fis.read()) != -1) {
                     os.write(b);
                 }
@@ -80,7 +82,7 @@ public class BeanShellClient {
     private static void sendLine( String line, OutputStream outPipe )
     throws IOException
     {
-        outPipe.write( line.getBytes() ); // TODO - charset?
+        outPipe.write(line.getBytes(StandardCharsets.UTF_8));
         outPipe.flush();
     }
 
@@ -93,6 +95,7 @@ public class BeanShellClient {
         }
 
         @Override
+        @SuppressWarnings("CatchAndPrintStackTrace")
         public void run(){
             System.out.println("Reading responses from server ...");
             int x = 0;
