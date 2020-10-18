@@ -477,7 +477,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         if (columnSelection.isSelected() && pattern != null) {
             matcher = pattern.matcher(sampleLabel);
         }
-        if ((matcher == null) || (matcher.find())) {
+        if (matcher == null || matcher.find()) {
             SamplingStatCalculator row = tableRows.computeIfAbsent(sampleLabel, label -> {
                 SamplingStatCalculator newRow = new SamplingStatCalculator(label);
                 newRows.addLast(newRow);

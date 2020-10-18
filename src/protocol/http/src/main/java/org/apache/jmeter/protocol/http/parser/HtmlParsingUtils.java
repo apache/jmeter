@@ -106,7 +106,7 @@ public final class HtmlParsingUtils {
             Argument item = (Argument) argument.getObjectValue();
             final String name = item.getName();
             if (!query.contains(name + "=")) { // $NON-NLS-1$
-                if (!(matcher.contains(query, patternCache.getPattern(name, Perl5Compiler.READ_ONLY_MASK)))) {
+                if (!matcher.contains(query, patternCache.getPattern(name, Perl5Compiler.READ_ONLY_MASK))) {
                     return false;
                 }
             }

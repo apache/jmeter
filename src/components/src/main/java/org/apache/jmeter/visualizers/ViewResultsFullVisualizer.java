@@ -403,7 +403,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      * @return true if sampleResult is text or has empty content type
      */
     protected static boolean isTextDataType(SampleResult sampleResult) {
-        return (SampleResult.TEXT).equals(sampleResult.getDataType())
+        return SampleResult.TEXT.equals(sampleResult.getDataType())
                 || StringUtils.isEmpty(sampleResult.getDataType());
     }
 
@@ -571,7 +571,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             boolean failure = true;
             Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
             if (userObject instanceof SampleResult) {
-                failure = !(((SampleResult) userObject).isSuccessful());
+                failure = !((SampleResult) userObject).isSuccessful();
             } else if (userObject instanceof AssertionResult) {
                 AssertionResult assertion = (AssertionResult) userObject;
                 failure = assertion.isError() || assertion.isFailure();

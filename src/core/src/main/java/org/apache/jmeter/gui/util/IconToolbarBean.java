@@ -81,7 +81,7 @@ public final class IconToolbarBean {
     public String getActionNameResolve() {
         final String aName;
         try {
-            aName = (String) (ActionNames.class.getField(this.actionName).get(null));
+            aName = (String) ActionNames.class.getField(this.actionName).get(null);
         } catch (Exception e) {
             log.warn("Toolbar icon Action names error: {}, use unknown action.", this.actionName); //$NON-NLS-1$
             return this.actionName; // return unknown action names for display error msg

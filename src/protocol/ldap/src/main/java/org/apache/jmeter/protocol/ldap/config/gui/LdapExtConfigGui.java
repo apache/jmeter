@@ -218,7 +218,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
         comparefilt.setText(element.getPropertyAsString(LDAPExtSampler.COMPAREFILT));
         modddn.setText(element.getPropertyAsString(LDAPExtSampler.MODDDN));
         newdn.setText(element.getPropertyAsString(LDAPExtSampler.NEWDN));
-        CardLayout cl = (CardLayout) (cards.getLayout());
+        CardLayout cl = (CardLayout) cards.getLayout();
         final String testType = element.getPropertyAsString(LDAPExtSampler.TEST);
         if (testType.equals(LDAPExtSampler.UNBIND)) {
             unbind.setSelected(true);
@@ -383,7 +383,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
      **************************************************************************/
     @Override
     public void itemStateChanged(ItemEvent ie) {
-        CardLayout cl = (CardLayout) (cards.getLayout());
+        CardLayout cl = (CardLayout) cards.getLayout();
         if (addTest.isSelected()) {
             cl.show(cards, CARDS_ADD);
         } else if (deleteTest.isSelected()) {

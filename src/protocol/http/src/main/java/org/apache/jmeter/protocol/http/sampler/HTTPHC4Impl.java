@@ -1464,7 +1464,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private String getOnlyCookieFromHeaders(HttpRequest method) {
         String cookieHeader= getFromHeadersMatchingPredicate(method, ONLY_COOKIE).trim();
         if(!cookieHeader.isEmpty()) {
-            return cookieHeader.substring((HTTPConstants.HEADER_COOKIE_IN_REQUEST).length(), cookieHeader.length()).trim();
+            return cookieHeader.substring(HTTPConstants.HEADER_COOKIE_IN_REQUEST.length()).trim();
         }
         return "";
     }

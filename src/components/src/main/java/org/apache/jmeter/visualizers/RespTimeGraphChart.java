@@ -403,7 +403,7 @@ public class RespTimeGraphChart extends JPanel {
         double max = 0;
         for (double[] data : datas) {
             for (final double value : data) {
-                if ((!Double.isNaN(value)) && (value > max)) {
+                if (!Double.isNaN(value) && (value > max)) {
                     max = value;
                 }
             }
