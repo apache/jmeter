@@ -393,6 +393,7 @@ allprojects {
                 "annotationProcessor"("com.google.guava:guava-beta-checker:1.0")
             }
             tasks.withType<JavaCompile>().configureEach {
+                options.compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
                 options.errorprone {
                     disableWarningsInGeneratedCode.set(true)
                     errorproneArgs.add("-XepExcludedPaths:.*/javacc/.*")
@@ -407,6 +408,8 @@ allprojects {
                     )
                     // Analyze issues, and enable the check
                     disable(
+                        "MissingSummary",
+                        "EmptyBlockTag",
                         "BigDecimalEquals",
                         "StringSplitter"
                     )
