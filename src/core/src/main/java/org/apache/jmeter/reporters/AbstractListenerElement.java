@@ -32,7 +32,7 @@ public abstract class AbstractListenerElement extends AbstractTestElement {
     // TODO should class implement SampleListener?
     private transient WeakReference<Visualizer> listener;
 
-    public AbstractListenerElement() {
+    protected AbstractListenerElement() {
     }
 
     protected final Visualizer getVisualizer() {

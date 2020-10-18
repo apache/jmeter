@@ -604,7 +604,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         this.threadName = inthreadName;
     }
 
-    public AbstractTestElement() {
+    protected AbstractTestElement() {
         super();
     }
 

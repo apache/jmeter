@@ -25,7 +25,7 @@ public abstract class TCPClientDecorator extends AbstractTCPClient {
 
     protected final TCPClient tcpClient; // the data implementation
 
-    public TCPClientDecorator(TCPClient tcpClient) {
+    protected TCPClientDecorator(TCPClient tcpClient) {
         this.tcpClient = tcpClient;
     }
 

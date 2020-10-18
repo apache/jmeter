@@ -178,7 +178,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
             null, // Value
     };
 
-    public SamplerResultTab() {
+    protected SamplerResultTab() {
         // create tables
         resultModel = new ObjectTableModel(COLUMNS_RESULT, RowResult.class, // The object used for each row
                 new Functor[] {

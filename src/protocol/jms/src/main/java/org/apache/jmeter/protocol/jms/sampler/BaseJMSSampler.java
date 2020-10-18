@@ -87,7 +87,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     // See BUG 45460. We need to keep the resource in order to interpret existing files
     private static final String REQUIRED = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
 
-    public BaseJMSSampler() {
+    protected BaseJMSSampler() {
     }
 
     /**

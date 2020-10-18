@@ -53,7 +53,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
     /**
      * No-arg constructor.
      */
-    public AbstractRandomTimerGui() {
+    protected AbstractRandomTimerGui() {
         init();
     }
 

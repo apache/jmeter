@@ -35,7 +35,7 @@ abstract class AbstractFunctionByKey extends AbstractFunction {
 
     private Object[] values;
 
-    public AbstractFunctionByKey(String key, int parametersCount) {
+    protected AbstractFunctionByKey(String key, int parametersCount) {
         this.key = key;
         this.parametersCount = parametersCount;
     }

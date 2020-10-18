@@ -51,7 +51,7 @@ public abstract class BSFTestElement extends ScriptingTestElement
                 new String[]{"js"}); //$NON-NLS-1$
     }
 
-    public BSFTestElement() {
+    protected BSFTestElement() {
         super();
     }
 

@@ -36,7 +36,7 @@ public abstract class BaseParser implements LinkExtractorParser {
     /**
      * Constructor for BaseParser
      */
-    public BaseParser() {
+    protected BaseParser() {
     }
 
     /**

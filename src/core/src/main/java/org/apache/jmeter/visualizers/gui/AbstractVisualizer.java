@@ -120,7 +120,7 @@ public abstract class AbstractVisualizer
 
     protected boolean isStats = false;
 
-    public AbstractVisualizer() {
+    protected AbstractVisualizer() {
         super();
 
         // errorLogging and successOnlyLogging are mutually exclusive
