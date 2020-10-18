@@ -51,9 +51,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
     private static final Logger log = LoggerFactory.getLogger(AbstractJavaSamplerClient.class);
 
-    @SuppressWarnings("deprecation") // will be removed in 3.3
-    private static final org.apache.log.Logger oldLogger = org.apache.jorphan.logging.LoggingManager.getLoggerForClass();
-
     /* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
     @Override
     public void setupTest(JavaSamplerContext context) {
@@ -70,19 +67,6 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
     @Override
     public Arguments getDefaultParameters() {
         return null;
-    }
-
-    /**
-     * Get a Logger instance which can be used by subclasses to log information.
-     * This is the same Logger which is used by the base JavaSampler classes
-     * (jmeter.protocol.java).
-     *
-     * @return a Logger instance which can be used for logging
-     * @deprecated Will be removed in 3.3, use {@link AbstractJavaSamplerClient#getNewLogger()}
-     */
-    @Deprecated
-    protected org.apache.log.Logger getLogger() {
-        return oldLogger;
     }
 
     /**

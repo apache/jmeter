@@ -74,6 +74,7 @@ applications when JMeter is starting up.</p>
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
+    <li>Remove LoggingManager class (it has been deprecated since JMeter 3.2)</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
