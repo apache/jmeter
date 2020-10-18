@@ -159,6 +159,7 @@ public class CounterConfig extends AbstractTestElement
     }
 
     /**
+     * Configures if the counter must be reset on Thread Group Iteration.
      * @param value boolean indicating if counter must be reset on Thread Group Iteration
      */
     public void setResetOnThreadGroupIteration(boolean value) {
@@ -166,6 +167,7 @@ public class CounterConfig extends AbstractTestElement
     }
 
     /**
+     * Returns true if counter must be reset on Thread Group Iteration.
      * @return true if counter must be reset on Thread Group Iteration
      */
     public boolean isResetOnThreadGroupIteration() {
@@ -173,7 +175,7 @@ public class CounterConfig extends AbstractTestElement
     }
 
     /**
-     *
+     * Returns counter upper limit (default {@code Long.MAX_VALUE}).
      * @return counter upper limit (default Long.MAX_VALUE)
      */
     public long getEnd() {

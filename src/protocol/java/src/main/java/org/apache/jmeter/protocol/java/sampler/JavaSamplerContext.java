@@ -228,21 +228,23 @@ public class JavaSamplerContext {
     }
 
     /**
-     *
-     * @return {@link JMeterContext}
+     * Returns {@link JMeterContext} for the current thread.
+     * @return {@link JMeterContext} for the current thread
      */
     public JMeterContext getJMeterContext() {
         return JMeterContextService.getContext();
     }
+
     /**
-     * @return {@link JMeterVariables}
+     * Returns {@link JMeterVariables} for the current thread.
+     * @return {@link JMeterVariables} for the current thread.
      */
     public final JMeterVariables getJMeterVariables() {
         return JMeterContextService.getContext().getVariables();
     }
 
     /**
-     *
+     * Returns JMeter properties.
      * @return {@link Properties} JMeter properties
      */
     public final Properties getJMeterProperties() {
