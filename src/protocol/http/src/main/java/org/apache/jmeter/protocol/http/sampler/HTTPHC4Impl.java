@@ -431,6 +431,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final Pattern PORT_PATTERN = Pattern.compile("\\d+"); // only used in .matches(), no need for anchors
 
+    @SuppressWarnings("UnnecessaryAnonymousClass")
     private static final ConnectionKeepAliveStrategy IDLE_STRATEGY = new DefaultConnectionKeepAliveStrategy(){
         @Override
         public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
@@ -477,6 +478,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * that HC core {@link ResponseContentEncoding} removes after uncompressing
      * See Bug 59401
      */
+    @SuppressWarnings("UnnecessaryAnonymousClass")
     private static final HttpResponseInterceptor RESPONSE_CONTENT_ENCODING = new ResponseContentEncoding(createLookupRegistry()) {
         @Override
         public void process(HttpResponse response, HttpContext context)
