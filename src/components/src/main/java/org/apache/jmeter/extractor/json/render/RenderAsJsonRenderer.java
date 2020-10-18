@@ -46,6 +46,7 @@ public class RenderAsJsonRenderer extends AbstractRenderAsJsonRenderer {
         return JMeterUtils.getResString("jsonpath_tester_field");
     }
 
+    @Override
     protected String process(String textToParse) {
         String expression = getExpression();
         try {

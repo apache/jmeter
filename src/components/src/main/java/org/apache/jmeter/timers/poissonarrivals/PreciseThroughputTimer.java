@@ -145,6 +145,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
      * Returns number of generated samples per {@link #getThroughputPeriod}
      * @return number of samples per {@link #getThroughputPeriod}
      */
+    @Override
     public double getThroughput() {
         return throughput;
     }
@@ -170,6 +171,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
         this.throughputPeriod = throughputPeriod;
     }
 
+    @Override
     public long getDuration() {
         return duration;
     }
