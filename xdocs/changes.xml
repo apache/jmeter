@@ -83,6 +83,7 @@ applications when JMeter is starting up.</p>
 <ul>
     <li><bug>53848</bug><bug>63527</bug>Implement a new setting to allow the exclusion of embedded URLs</li>
     <li><bug>64696</bug><pr>571</pr><pr>595</pr>Freestyle format for names in (Default)SamplerCreater. Based on a patch by Vincent Daburon (vdaburon at gmail.com)</li>
+    <li><bug>64752</bug>Add GraphQL/HTTP Request Sampler. Contributed by woonsan.</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -112,6 +113,7 @@ applications when JMeter is starting up.</p>
 
 <h3>Report / Dashboard</h3>
 <ul>
+  <li><bug>64824</bug>Dashboard/HTML Report: Rename KO to FAIL</li>
 </ul>
 
 <h3>General</h3>
@@ -120,15 +122,17 @@ applications when JMeter is starting up.</p>
   <li><pr>599</pr>Ensure all buttons added to the toolbar behave/look consistently. Contributed by Jannis Weis</li>
   <li><bug>64581</bug>Allow SampleResult#setIgnore to influence behaviour on Sampler Error</li>
   <li><bug>64680</bug>Fall back to <code>JMETER_HOME</code> on startup to detect JMeter's installation directory</li>
+  <li><bug>64787</bug><pr>630</pr>Add Korean translation. Contributed by Woonsan Ko (woonsan at apache.org)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Build system upgraded from Gradle to 6.7 (from 6.6)</li>
     <li><pr>594</pr>Updated neo4j-java-driver to 4.0.1 (from 1.7.5)</li>
     <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
     <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
     <li><pr>591</pr>Remove deprecated sudo flag from travis file. Deng Liming (liming.d.pro at gmail.com)</li>
-    <li>Updated Darklaf to 2.4.5 (from 2.1.1)</li>
+    <li>Updated Darklaf to 2.4.10 (from 2.1.1)</li>
     <li>Updated Groovy to 3.0.5 (from 3.0.3)</li>
     <li><pr>596</pr>Use neutral words in documentation</li>
     <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
@@ -233,6 +237,7 @@ applications when JMeter is starting up.</p>
   <li>Till Neunast (https://github.com/tilln)</li>
   <li>Pooja Chandak (poojachandak002 at gmail.com)</li>
   <li>Vincent Daburon (vdaburon at gmail.com)</li>
+  <li>Woonsan Ko (woonsan at apache.org)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

@@ -93,6 +93,8 @@ project("http") {
         implementation("com.fasterxml.jackson.core:jackson-databind")
         implementation("com.jayway.jsonpath:json-path")
         implementation("com.miglayout:miglayout-swing")
+        implementation("com.fasterxml.jackson.core:jackson-core")
+        implementation("com.fasterxml.jackson.core:jackson-databind")
         testImplementation(testFixtures(project(":src:testkit-wiremock")))
         testImplementation("com.github.tomakehurst:wiremock-jre8")
     }

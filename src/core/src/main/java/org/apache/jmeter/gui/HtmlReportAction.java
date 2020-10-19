@@ -62,7 +62,8 @@ public class HtmlReportAction extends AbstractAction implements MenuCreator {
             return new JMenuItem[0];
         }
 
-        JMenuItem menuItem = new JMenuItem(JMeterUtils.getResString("generate_report_ui.html_report_menu"), KeyEvent.VK_UNDEFINED);
+        // Use the action name as resource key because the action name is used by JMeterMenuBar too when changing languages.
+        JMenuItem menuItem = new JMenuItem(JMeterUtils.getResString(ActionNames.HTML_REPORT), KeyEvent.VK_UNDEFINED);
         menuItem.setName(ActionNames.HTML_REPORT);
         menuItem.setActionCommand(ActionNames.HTML_REPORT);
         menuItem.setAccelerator(null);

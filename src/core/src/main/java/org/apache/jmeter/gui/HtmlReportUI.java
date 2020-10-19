@@ -103,7 +103,7 @@ public class HtmlReportUI implements ActionListener {
     }
 
     public void setupInputDialog(JFrame parent) {
-        messageDialog = new EscapeDialog(parent, JMeterUtils.getResString("generate_report_ui.html_report_menu"), false);
+        messageDialog = new EscapeDialog(parent, JMeterUtils.getResString("html_report"), false);
         setupContentPane();
     }
 

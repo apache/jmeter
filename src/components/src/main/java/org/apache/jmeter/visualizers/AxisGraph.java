@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.jCharts.axisChart.AxisChart;
 import org.jCharts.axisChart.customRenderers.axisValue.renderers.ValueLabelPosition;
 import org.jCharts.axisChart.customRenderers.axisValue.renderers.ValueLabelRenderer;
@@ -82,7 +83,7 @@ public class AxisGraph extends JPanel {
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
 
-    protected Font valueFont = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.6));
+    protected Font valueFont = JMeterUIDefaults.createFont("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.6));
 
     protected Color[] color = { Color.YELLOW };
 

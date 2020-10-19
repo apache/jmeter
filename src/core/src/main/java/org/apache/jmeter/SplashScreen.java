@@ -71,7 +71,7 @@ public class SplashScreen extends JDialog {
                 svgUri = svgUrl.toURI();
             }
         } catch (URISyntaxException e) {
-            log.warn("Unable to find logo " + svgResourcePath, e);
+            log.warn("Unable to find logo {}", svgResourcePath, e);
         }
 
         if (svgUri != null) {

@@ -168,37 +168,7 @@ public class CSVDataSet extends ConfigTestElement
             delim=",";
         }
         if (vars == null) {
-            String fileName = getFilename().trim();
-            String mode = getShareMode();
-            int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
-            switch(modeInt){
-                case CSVDataSetBeanInfo.SHARE_ALL:
-                    alias = fileName;
-                    break;
-                case CSVDataSetBeanInfo.SHARE_GROUP:
-                    alias = fileName+"@"+System.identityHashCode(context.getThreadGroup());
-                    break;
-                case CSVDataSetBeanInfo.SHARE_THREAD:
-                    alias = fileName+"@"+System.identityHashCode(context.getThread());
-                    break;
-                default:
-                    alias = fileName+"@"+mode; // user-specified key
-                    break;
-            }
-            final String names = getVariableNames();
-            if (StringUtils.isEmpty(names)) {
-                String header = server.reserveFile(fileName, getFileEncoding(), alias, true);
-                try {
-                    vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
-                    firstLineIsNames = true;
-                } catch (IOException e) {
-                    throw new IllegalArgumentException("Could not split CSV header line from file:" + fileName,e);
-                }
-            } else {
-                server.reserveFile(fileName, getFileEncoding(), alias, ignoreFirstLine);
-                vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
-            }
-            trimVarNames(vars);
+            initVars(server, context, delim);
         }
 
         // TODO: fetch this once as per vars above?
@@ -227,6 +197,44 @@ public class CSVDataSet extends ConfigTestElement
             for (String var :vars) {
                 threadVars.put(var, EOFVALUE);
             }
+        }
+    }
+
+    private void initVars(FileServer server, final JMeterContext context, String delim) {
+        String fileName = getFilename().trim();
+        setAlias(context, fileName);
+        final String names = getVariableNames();
+        if (StringUtils.isEmpty(names)) {
+            String header = server.reserveFile(fileName, getFileEncoding(), alias, true);
+            try {
+                vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
+                firstLineIsNames = true;
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Could not split CSV header line from file:" + fileName,e);
+            }
+        } else {
+            server.reserveFile(fileName, getFileEncoding(), alias, ignoreFirstLine);
+            vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
+        }
+        trimVarNames(vars);
+    }
+
+    private void setAlias(final JMeterContext context, String fileName) {
+        String mode = getShareMode();
+        int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
+        switch(modeInt){
+            case CSVDataSetBeanInfo.SHARE_ALL:
+                alias = fileName;
+                break;
+            case CSVDataSetBeanInfo.SHARE_GROUP:
+                alias = fileName+"@"+System.identityHashCode(context.getThreadGroup());
+                break;
+            case CSVDataSetBeanInfo.SHARE_THREAD:
+                alias = fileName+"@"+System.identityHashCode(context.getThread());
+                break;
+            default:
+                alias = fileName+"@"+mode; // user-specified key
+                break;
         }
     }
 

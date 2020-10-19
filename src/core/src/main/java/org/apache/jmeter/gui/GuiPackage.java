@@ -236,7 +236,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             }
             return getGui(node, guiClass, testClass);
         } catch (ClassNotFoundException e) {
-            log.error("Could not get GUI for " + node, e);
+            log.error("Could not get GUI for {}", node, e);
             return null;
         }
     }
@@ -374,7 +374,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             nodesToGui.put(node, comp);
             return node;
         } catch (NoClassDefFoundError e) {
-            log.error("Problem retrieving gui for " + objClass, e);
+            log.error("Problem retrieving gui for {}", objClass, e);
             String msg="Cannot find class: "+e.getMessage();
             JOptionPane.showMessageDialog(null,
                     msg,
@@ -382,7 +382,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                     JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e.toString(), e); // Probably a missing jar
         } catch ( ReflectiveOperationException e) {
-            log.error("Problem retrieving gui for " + objClass, e);
+            log.error("Problem retrieving gui for {}", objClass, e);
             throw new RuntimeException(e.toString(), e); // Programming error: bail out.
         }
     }
@@ -919,8 +919,8 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                     ret ^= stringValue.hashCode();
                 } else {
                     if (log.isDebugEnabled()) {
-                        log.debug("obj.getStringValue() returned null for test element:"
-                                + el.getName() + " at property:" + obj.getName());
+                        log.debug("obj.getStringValue() returned null for test element:{} at property:{}",
+                                el.getName(), obj.getName());
                     }
                 }
             }
@@ -950,7 +950,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.getDeclaredConstructor().newInstance();
 
             } catch (Exception ex) {
-                log.error("Failed to create configured naming policy:" + namingPolicyImplementation + ", will use default one", ex);
+                log.error("Failed to create configured naming policy:{}, will use default one", namingPolicyImplementation, ex);
                 this.namingPolicy = new DefaultTreeNodeNamingPolicy();
             }
         }

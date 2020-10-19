@@ -33,12 +33,17 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
+import org.apache.jmeter.protocol.http.config.gui.GraphQLUrlConfigGui;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.gui.GraphQLHTTPSamplerGui;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.PostWriter;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jmeter.protocol.http.util.GraphQLRequestParamUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
@@ -120,6 +125,45 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         Arguments arguments = sampler.getArguments();
         if(arguments.getArgumentCount() == 1 && arguments.getArgument(0).getName().length()==0) {
             sampler.setPostBodyRaw(true);
+        }
+
+        if (request.isDetectGraphQLRequest()) {
+            detectAndModifySamplerOnGraphQLRequest(sampler, request);
+        }
+    }
+
+    private void detectAndModifySamplerOnGraphQLRequest(final HTTPSamplerBase sampler, final HttpRequestHdr request) {
+        final String method = request.getMethod();
+        final Header header = request.getHeaderManager().getFirstHeaderNamed("Content-Type");
+        final boolean graphQLContentType = header != null
+                && GraphQLRequestParamUtils.isGraphQLContentType(header.getValue());
+
+        GraphQLRequestParams params = null;
+
+        if (HTTPConstants.POST.equals(method) && graphQLContentType) {
+            try {
+                byte[] postData = request.getRawPostData();
+                if (postData != null && postData.length > 0) {
+                    params = GraphQLRequestParamUtils.toGraphQLRequestParams(request.getRawPostData(),
+                            sampler.getContentEncoding());
+                }
+            } catch (Exception e) {
+                log.debug("Ignoring request, '{}' as it's not a valid GraphQL post data.", request);
+            }
+        } else if (HTTPConstants.GET.equals(method)) {
+            try {
+                params = GraphQLRequestParamUtils.toGraphQLRequestParams(sampler.getArguments(),
+                        sampler.getContentEncoding());
+            } catch (Exception e) {
+                log.debug("Ignoring request, '{}' as it does not valid GraphQL arguments.", request);
+            }
+        }
+
+        if (params != null) {
+            sampler.setProperty(TestElement.GUI_CLASS, GraphQLHTTPSamplerGui.class.getName());
+            sampler.setProperty(GraphQLUrlConfigGui.OPERATION_NAME, params.getOperationName());
+            sampler.setProperty(GraphQLUrlConfigGui.QUERY, params.getQuery());
+            sampler.setProperty(GraphQLUrlConfigGui.VARIABLES, params.getVariables());
         }
     }
 

@@ -415,7 +415,7 @@ public class LogFilter implements Filter, Serializable {
             return JMeterUtils.getPatternCache().getPattern(pattern,
                     Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
         } catch (MalformedCachePatternException exception) {
-            log.error("Problem with pattern: "+pattern,exception);
+            log.error("Problem with pattern: {}", pattern, exception);
             return null;
         }
     }
