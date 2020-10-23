@@ -18,12 +18,8 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -54,15 +50,12 @@ public class EnableComponent extends AbstractAction {
         if (e.getActionCommand().equals(ActionNames.ENABLE)) {
             log.debug("enabling currently selected gui objects");
             enableComponents(nodes, true);
-            triggerChildrenRender(nodes);
         } else if (e.getActionCommand().equals(ActionNames.DISABLE)) {
             log.debug("disabling currently selected gui objects");
             enableComponents(nodes, false);
-            triggerChildrenRender(nodes);
         } else if (e.getActionCommand().equals(ActionNames.TOGGLE)) {
             log.debug("toggling currently selected gui objects");
             toggleComponents(nodes);
-            triggerChildrenRender(nodes);
         }
     }
 
@@ -80,24 +73,6 @@ public class EnableComponent extends AbstractAction {
             boolean enable = !node.isEnabled();
             node.setEnabled(enable);
             pack.getGui(node.getTestElement()).setEnabled(enable);
-        }
-    }
-
-    private void triggerChildrenRender(JMeterTreeNode[] nodes) {
-        Set<TreeNode> visited = new HashSet<>();
-        ArrayDeque<TreeNode> queue = new ArrayDeque<>(Arrays.asList(nodes));
-        while (!queue.isEmpty()) {
-            final TreeNode next = queue.poll();
-            if (!visited.add(next)) {
-                continue;
-            }
-            if (next instanceof JMeterTreeNode) {
-                // Trigger render
-                ((JMeterTreeNode) next).nameChanged();
-            }
-            for (int i = 0; i < next.getChildCount(); i++) {
-                queue.add(next.getChildAt(i));
-            }
         }
     }
 
