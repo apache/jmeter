@@ -172,6 +172,7 @@ applications when JMeter is starting up.</p>
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>64795</bug>Generate summary report may not output a summary line in the configured interval (<code>summariser.interval</code>): Clarify documentation</li>
 </ul>
 
 <h3>Listeners</h3>
