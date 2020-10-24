@@ -220,6 +220,7 @@ applications when JMeter is starting up.</p>
     <li><bug>64641</bug>Darklaf: NPE at com.github.weisj.darklaf.ui.tree.DarkTreeUI.isChildOfSelectionPath(DarkTreeUI.java:603) ~[darklaf-core-2.4.2-SNAPSHOT.jar:2.4.2-SNAPSHOT]</li>
     <li><bug>64453</bug>Darklaf: Save Test Plan as New Folder failure</li>
     <li><bug>64625</bug>Darklaf: trying to select a folder in Browse leads to an error popup and stacktrace</li>
+    <li><bug>64711</bug>Textarea Colors are not good in dark modes. Contributed by Jannis Weis</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -234,7 +235,6 @@ applications when JMeter is starting up.</p>
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
   <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
   <li><a href="https://github.com/topicus-pw-dvdouden">Daniel van den Ouden</a></li>
-  <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
   <li>Till Neunast (https://github.com/tilln)</li>
   <li>Pooja Chandak (poojachandak002 at gmail.com)</li>
   <li>Vincent Daburon (vdaburon at gmail.com)</li>
