@@ -3347,7 +3347,7 @@ Generates a summary of the test run so far to the log file and/or
 standard output. Both running and differential totals are shown.
 Output is generated every <code>n</code> seconds (default 30 seconds) on the appropriate
 time boundary, so that multiple test runs on the same time will be synchronised.
-<note>Since a summary/differential line is written only if there are samples emitted, the interval 
+<note>Since a summary/differential line is written only if there are samples emitted, the interval
 for generation may not be respected if your test has no sample generated within the interval</note>
 See <code>jmeter.properties</code> file for the summariser configuration items:
 <source>
