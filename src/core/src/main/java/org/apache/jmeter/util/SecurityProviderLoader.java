@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 public class SecurityProviderLoader {
     private static final Logger log = LoggerFactory.getLogger(SecurityProviderLoader.class);
+    private static final Pattern CONFIGURATION_REGEX = Pattern.compile("^(?<classname>[^:]+)(:(?<position>\\d+)(:(?<config>.+))?)?$");
 
     public static void addSecurityProvider(Properties properties) {
         properties.keySet().stream()
@@ -39,8 +40,7 @@ public class SecurityProviderLoader {
     }
 
     public static void addSecurityProvider(String securityProviderConfig) {
-        Pattern regex = Pattern.compile("^(?<classname>[^:]+)(:(?<position>\\d+)(:(?<config>.+))?)?$");
-        Matcher matcher = regex.matcher(securityProviderConfig);
+        Matcher matcher = CONFIGURATION_REGEX.matcher(securityProviderConfig);
 
         if (matcher.matches()) {
             final String classname = matcher.group("classname");

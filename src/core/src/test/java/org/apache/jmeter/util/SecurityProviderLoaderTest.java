@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class SecurityProviderLoaderTest {
 
     @AfterEach
-    public void removeAllDummProviders() {
+    public void removeAllDummyProviders() {
         Security.removeProvider(DummyProvider.PROVIDER_NAME);
         Security.removeProvider(DummyProviderWithConfig.PROVIDER_NAME);
         Assert.assertNull(Security.getProvider(DummyProvider.PROVIDER_NAME));
@@ -41,10 +41,9 @@ public class SecurityProviderLoaderTest {
 
     @Test
     public void addSecurityProviderTest() {
-        removeAllDummProviders();
+        removeAllDummyProviders();
         Provider[] providers = Security.getProviders();
         int providersCountBefore = providers.length;
-
 
         SecurityProviderLoader.addSecurityProvider(DummyProvider.class.getName());
 
@@ -63,7 +62,7 @@ public class SecurityProviderLoaderTest {
 
     @Test
     public void addSecurityProviderTestWithConfigForUnconfigurableProvider() {
-        removeAllDummProviders();
+        removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
         SecurityProviderLoader.addSecurityProvider(DummyProvider.class.getName()+":0:Configure");
@@ -79,7 +78,7 @@ public class SecurityProviderLoaderTest {
 
     @Test
     public void addUnknownSecurityProviderTest() {
-        removeAllDummProviders();
+        removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
         SecurityProviderLoader.addSecurityProvider("org.apache.jmeter.util.SecurityProviderLoaderTest.UnknownProvider");
@@ -93,7 +92,7 @@ public class SecurityProviderLoaderTest {
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3})
     public void addSecurityProviderWithPositionTest(int position) {
-        removeAllDummProviders();
+        removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
         SecurityProviderLoader.addSecurityProvider(DummyProvider.class.getName() + ":" + position);
@@ -110,7 +109,7 @@ public class SecurityProviderLoaderTest {
     @ParameterizedTest
     @CsvSource({":0:TestConfig,0", ":2:TEST,2", ":3:TEST,3"})
     public void addSecurityProviderWithPositionAndConfigTest(String config, int position) {
-        removeAllDummProviders();
+        removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
         SecurityProviderLoader.addSecurityProvider(DummyProviderWithConfig.class.getName() + config);
@@ -129,7 +128,7 @@ public class SecurityProviderLoaderTest {
 
     @Test
     public void addSecurityProvidersViaProperties() {
-        removeAllDummProviders();
+        removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
         Properties properties = new Properties();
