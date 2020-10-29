@@ -76,18 +76,18 @@ public class SecurityProviderLoaderTest {
         Assert.assertEquals(provider, providers_after[providers_after.length - 1]);
     }
 
-    @Test
-    public void addUnknownSecurityProviderTest() {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "java.lang.Object", "org.apache.jmeter.util.SecurityProviderLoaderTest.UnknownProvider"})
+    public void addInvalidProviderClassTest(String invalidClassname) {
         removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
-        SecurityProviderLoader.addSecurityProvider("org.apache.jmeter.util.SecurityProviderLoaderTest.UnknownProvider");
+        SecurityProviderLoader.addSecurityProvider(invalidClassname);
 
-        Provider[] providers_after = Security.getProviders();
+        int providersCountAfter = Security.getProviders().length;
 
-        Assert.assertEquals(providersCountBefore, providers_after.length);
+        Assert.assertEquals(providersCountBefore, providersCountAfter);
     }
-
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3})
@@ -154,6 +154,7 @@ public class SecurityProviderLoaderTest {
     }
 
     public static class DummyProvider extends Provider {
+        private static final long serialVersionUID = 1L;
         public static final String PROVIDER_NAME = "DUMMY";
 
         public DummyProvider() {
@@ -163,6 +164,7 @@ public class SecurityProviderLoaderTest {
     }
 
     public static class DummyProviderWithConfig extends Provider {
+        private static final long serialVersionUID = 1L;
         public static final String PROVIDER_NAME = "DUMMY_CONFIG";
 
         private String config = null;

@@ -18,6 +18,7 @@
 package org.apache.jmeter.util;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.Provider;
 import java.security.Security;
 import java.util.Comparator;
@@ -33,6 +34,10 @@ public class SecurityProviderLoader {
     private static final Logger log = LoggerFactory.getLogger(SecurityProviderLoader.class);
     private static final Pattern CONFIGURATION_REGEX = Pattern.compile("^(?<classname>[^:]+)(:(?<position>\\d+)(:(?<config>.+))?)?$");
 
+    private SecurityProviderLoader() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void addSecurityProvider(Properties properties) {
         properties.keySet().stream()
                 .filter(key -> key.toString().matches("security\\.provider(\\.\\d+)?"))
@@ -44,29 +49,26 @@ public class SecurityProviderLoader {
 
         if (matcher.matches()) {
             final String classname = matcher.group("classname");
-            final Integer position = Integer.parseInt(StringUtils.defaultString(matcher.group("position"), "0"));
+            final int position = Integer.parseInt(StringUtils.defaultString(matcher.group("position"), "0"));
             final String config = matcher.group("config");
 
             try {
-                Class providerClass = Class.forName(classname);
+                @SuppressWarnings("unchecked")
+                Class<Provider> providerClass = (Class<Provider>) Class.forName(classname);
 
                 Provider provider = null;
 
                 if (config != null) {
-                    try {
-                        Constructor constructor = providerClass.getConstructor(String.class);
-                        provider = (Provider) constructor.newInstance(config);
-                    } catch (NoSuchMethodException e) {
-                        log.warn("Security Provider {} has no constructor with a single String argument - try to use default constructor.", providerClass);
-                    }
+                    provider = tryConstructorWithString(providerClass, config);
                 }
 
                 if (provider == null) {
-                    provider = (Provider) providerClass.newInstance();
+                    provider = providerClass.getDeclaredConstructor().newInstance();
                 }
                 int installedPosition = Security.insertProviderAt(provider, position);
 
-                log.info("Security Provider {} ({}) is installed at position {}", provider.getClass().getSimpleName(), provider.getName(), installedPosition);
+                log.info("Security Provider {} ({}) is installed at position {}", provider.getClass().getSimpleName(),
+                        provider.getName(), Integer.valueOf(installedPosition));
             } catch (Exception exception) {
                 String message = String.format("Security Provider '%s' could not be installed.", classname);
                 log.error(message, exception);
@@ -74,5 +76,18 @@ public class SecurityProviderLoader {
                 System.err.println(" - see the log for more information.");
             }
         }
+    }
+
+    private static Provider tryConstructorWithString(Class<Provider> providerClass, final String config)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+        try {
+            Constructor<Provider> constructor = providerClass.getConstructor(String.class);
+            return constructor.newInstance(config);
+        } catch (NoSuchMethodException e) {
+            log.warn(
+                    "Security Provider {} has no constructor with a single String argument - try to use default constructor.",
+                    providerClass);
+        }
+        return null;
     }
 }
