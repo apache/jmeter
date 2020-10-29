@@ -103,7 +103,14 @@ public class SecurityProviderLoaderTest {
         Assert.assertEquals(providersCountBefore + 1, providersAfter.length);
         Assert.assertNotNull(provider);
         Assert.assertEquals(DummyProvider.class, provider.getClass());
-        Assert.assertEquals(provider, providersAfter[position == 0 ? providersAfter.length - 1 : position - 1]);
+        Assert.assertEquals(provider, providersAfter[expectedInsertPosition(position, providersAfter)]);
+    }
+
+    private int expectedInsertPosition(int position, Provider[] providersAfter) {
+        if (position == 0) {
+            return providersAfter.length - 1;
+        }
+        return position - 1;
     }
 
     @ParameterizedTest
@@ -120,10 +127,8 @@ public class SecurityProviderLoaderTest {
         Assert.assertNotNull("Provider not installed.", provider);
         Assert.assertEquals(providersCountBefore + 1, providersAfter.length);
         Assert.assertEquals(DummyProviderWithConfig.class, provider.getClass());
-        Assert.assertEquals(provider, providersAfter[position == 0 ? providersAfter.length - 1 : position - 1]);
+        Assert.assertEquals(provider, providersAfter[expectedInsertPosition(position, providersAfter)]);
         Assert.assertEquals(config.substring(config.lastIndexOf(":") + 1), ((DummyProviderWithConfig) provider).getConfig());
-
-
     }
 
     @Test
