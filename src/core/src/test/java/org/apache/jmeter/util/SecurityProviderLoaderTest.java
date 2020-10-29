@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.Provider;
 import java.security.Security;
 import java.util.Arrays;
@@ -37,6 +39,17 @@ public class SecurityProviderLoaderTest {
         Security.removeProvider(DummyProviderWithConfig.PROVIDER_NAME);
         Assert.assertNull(Security.getProvider(DummyProvider.PROVIDER_NAME));
         Assert.assertNull(Security.getProvider(DummyProviderWithConfig.PROVIDER_NAME));
+    }
+
+    @Test
+    public void utilityClassTest() throws Exception {
+        Constructor<SecurityProviderLoader> privateConstructor = SecurityProviderLoader.class.getDeclaredConstructor();
+        privateConstructor.setAccessible(true);
+        try {
+            privateConstructor.newInstance();
+        } catch (InvocationTargetException e) {
+            Assert.assertEquals(IllegalStateException.class, e.getCause().getClass());
+        }
     }
 
     @Test
