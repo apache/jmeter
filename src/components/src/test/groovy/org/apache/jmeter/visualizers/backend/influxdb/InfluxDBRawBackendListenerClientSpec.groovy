@@ -28,8 +28,8 @@ class InfluxDBRawBackendListenerClientSpec extends Specification {
     def defaultContext = new BackendListenerContext(sut.getDefaultParameters())
 
     def createOkSample() {
-        def now = System.currentTimeMillis()
-        def okSample = SampleResult.createTestSample(now - 100, now)
+        def t = 1600123456789
+        def okSample = SampleResult.createTestSample(t - 100, t)
         okSample.setLatency(42)
         okSample.setConnectTime(7)
         okSample.setSampleLabel("myLabel")
