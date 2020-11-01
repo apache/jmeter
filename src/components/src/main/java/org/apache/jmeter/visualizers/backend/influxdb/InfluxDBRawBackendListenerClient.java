@@ -80,8 +80,9 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
     }
 
     private void initInfluxDBMetricsManager(BackendListenerContext context) throws Exception {
-        influxDBMetricsManager = (InfluxdbMetricsSender) Class
+        influxDBMetricsManager = Class
                 .forName(context.getParameter("influxdbMetricsSender"))
+                .asSubclass(InfluxdbMetricsSender.class)
                 .getDeclaredConstructor()
                 .newInstance();
 
