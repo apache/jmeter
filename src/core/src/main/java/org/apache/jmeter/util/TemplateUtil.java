@@ -43,7 +43,7 @@ public final class TemplateUtil {
     }
 
     private static Configuration init() {
-        Configuration templateConfiguration = new Configuration(Configuration.getVersion());
+        Configuration templateConfiguration = new Configuration(Configuration.VERSION_2_3_30);
         templateConfiguration.setDefaultEncoding(StandardCharsets.UTF_8.name());
         templateConfiguration.setInterpolationSyntax(Configuration.SQUARE_BRACKET_INTERPOLATION_SYNTAX);
         templateConfiguration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
