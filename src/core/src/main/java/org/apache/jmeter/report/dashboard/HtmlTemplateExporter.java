@@ -442,7 +442,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         addToContext(DATA_CTX_OVERALL_FILTER, configuration.getSampleFilter(), dataContext);
 
         // Walk template directory to copy files and process templated ones
-        Configuration templateCfg = new Configuration(Configuration.getVersion());
+        Configuration templateCfg = new Configuration(Configuration.VERSION_2_3_30);
         try {
             templateCfg.setDirectoryForTemplateLoading(templateDirectory);
             templateCfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
