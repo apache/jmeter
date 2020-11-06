@@ -1038,7 +1038,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setEmbeddedUrlExcludeRE(String regex) {
-        setProperty(new StringProperty(EMBEDDED_URL_EXCLUDE_RE, regex));
+        setProperty(EMBEDDED_URL_EXCLUDE_RE, regex, "");
     }
 
     /**
