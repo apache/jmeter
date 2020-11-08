@@ -101,14 +101,9 @@ public class StringToFile extends AbstractFunction {
             return false;
         }
         log.debug("Writing {} to file {} with charset {} and append {}", content, fileName, charset, append);
-        Lock localLock = new ReentrantLock();
-        Lock lock = lockMap.putIfAbsent(fileName, localLock);
+        Lock lock = lockMap.computeIfAbsent(fileName, key -> new ReentrantLock());
         try {
-            if (lock == null) {
-                localLock.lock();
-            } else {
-                lock.lock();
-            }
+            lock.lock();
             File file = new File(fileName);
             File fileParent = file.getParentFile();
             if (fileParent == null || (fileParent.exists() && fileParent.isDirectory() && fileParent.canWrite())) {
@@ -118,11 +113,7 @@ public class StringToFile extends AbstractFunction {
                 return false;
             }
         } finally {
-            if (lock == null) {
-                localLock.unlock();
-            } else {
-                lock.unlock();
-            }
+            lock.unlock();
         }
         return true;
     }
