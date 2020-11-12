@@ -74,7 +74,7 @@ applications when JMeter is starting up.</p>
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-    <li>Remove LoggingManager class (it has been deprecated since JMeter 3.2)</li>
+    <li>Remove <code>LoggingManager</code> class (it has been deprecated since JMeter 3.2)</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -114,14 +114,14 @@ applications when JMeter is starting up.</p>
 
 <h3>Report / Dashboard</h3>
 <ul>
-  <li><bug>64824</bug>Dashboard/HTML Report: Rename KO to FAIL</li>
+  <li><bug>64824</bug>Dashboard/HTML Report: Rename <code>KO</code> to <code>FAIL</code></li>
 </ul>
 
 <h3>General</h3>
 <ul>
   <li><bug>64446</bug>Better parse curl commands with backslash at line endings and support <code>PUT</code> method with data arguments</li>
   <li><pr>599</pr>Ensure all buttons added to the toolbar behave/look consistently. Contributed by Jannis Weis</li>
-  <li><bug>64581</bug>Allow SampleResult#setIgnore to influence behaviour on Sampler Error</li>
+  <li><bug>64581</bug>Allow <code>SampleResult#setIgnore</code> to influence behaviour on Sampler Error</li>
   <li><bug>64680</bug>Fall back to <code>JMETER_HOME</code> on startup to detect JMeter's installation directory</li>
   <li><bug>64787</bug><pr>630</pr>Add Korean translation. Contributed by Woonsan Ko (woonsan at apache.org)</li>
   <li><bug>64776</bug>Add the ability to install additional SecurityProvider. Contributed by Timo (ASF.Software.Timo at Leefers.eu)</li>
