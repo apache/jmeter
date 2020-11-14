@@ -23,10 +23,11 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
- * This interface defines the interactions between the BackendListener and external
- * Java programs which can be executed by JMeter. Any Java class which wants to
- * be executed using the BackendListener test element must implement this interface (either directly
- * or preferably indirectly through AbstractBackendListenerClient).
+ * This interface defines the interactions between the {@link BackendListener}
+ * and external Java programs which can be executed by JMeter. Any Java class
+ * which wants to be executed using the {@link BackendListener} test element
+ * must implement this interface (either directly or through
+ * {@link AbstractBackendListenerClient}).
  * <p>
  * JMeter will create one instance of a BackendListenerClient implementation for
  * each user/thread in the test. Additional instances may be created for
@@ -34,21 +35,24 @@ import org.apache.jmeter.samplers.SampleResult;
  * supported by the client).
  * <p>
  * When the test is started, setupTest() will be called on each thread's
- * BackendListenerClient instance to initialize the client. Then handleSampleResult() will be
- * called for each SampleResult notification. Finally, teardownTest() will be called
- * to allow the client to do any necessary clean-up.
+ * BackendListenerClient instance to initialize the client.
+ * Then {@link #handleSampleResults(List, BackendListenerContext)} will be
+ * called for each {@link SampleResult} notification. Finally,
+ * {@link #teardownTest(BackendListenerContext)}
+ * will be called to allow the client to do any necessary clean-up.
  * <p>
- * The JMeter BackendListener GUI allows a list of parameters to be defined for the
- * test. These are passed to the various test methods through the
+ * The JMeter BackendListener GUI allows a list of parameters to be defined for
+ * the test. These are passed to the various test methods through the
  * {@link BackendListenerContext}. A list of default parameters can be defined
- * through the getDefaultParameters() method. These parameters and any default
- * values associated with them will be shown in the GUI. Users can add other
- * parameters as well.
+ * through the {@link #getDefaultParameters()} method. These parameters and any
+ * default values associated with them will be shown in the GUI. Users can add
+ * other parameters as well.
  * <p>
- * When possible, Listeners should extend {@link AbstractBackendListenerClient
- * AbstractBackendListenerClient} rather than implementing BackendListenerClient
- * directly. This should protect your tests from future changes to the
- * interface. While it may be necessary to make changes to the BackendListenerClient
+ * Listeners should extend {@link AbstractBackendListenerClient}
+ * rather than implementing {@link BackendListenerClient} directly to protect
+ * your code from future changes to the interface.
+ * <p>
+ * While it may be necessary to make changes to the {@link BackendListenerClient}
  * interface from time to time (therefore requiring changes to any
  * implementations of this interface), we intend to make this abstract class
  * provide reasonable default implementations of any new methods so that
@@ -60,16 +64,14 @@ import org.apache.jmeter.samplers.SampleResult;
  * @since 2.13
  */
 public interface BackendListenerClient {
+
     /**
      * Do any initialization required by this client. It is generally
-     * recommended to do any initialization such as getting parameter values in
-     * the setupTest method rather than the runTest method in order to add as
-     * little overhead as possible to the test.
+     * recommended to do any initialization such as getting parameter values
+     * here rather than {@link #handleSampleResults(List, BackendListenerContext)}
+     * in order to add as little overhead as possible to the test.
      *
-     * @param context
-     *            the context to run with. This provides access to
-     *            initialization parameters.
-     *            Context is readonly
+     * @param context provides access to initialization parameters.
      * @throws Exception when setup fails
      */
     void setupTest(BackendListenerContext context) throws Exception; // NOSONAR
@@ -78,23 +80,19 @@ public interface BackendListenerClient {
      * Handle sampleResults, this can be done in many ways:
      * <ul>
      * <li>Write to a file</li>
-     * <li>Write to a distant server</li>
+     * <li>Write to a remote server</li>
      * <li>...</li>
      * </ul>
-     * @param sampleResults List of {@link SampleResult}
-     * @param context
-     *            the context to run with. This provides access to
-     *            initialization parameters.
      *
+     * @param sampleResults List of {@link SampleResult}
+     * @param context       provides access to initialization parameters.
      */
     void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context);
 
     /**
      * Do any clean-up required at the end of a test run.
      *
-     * @param context
-     *            the context to run with. This provides access to
-     *            initialization parameters.
+     * @param context provides access to initialization parameters.
      * @throws Exception when tear down fails
      */
     void teardownTest(BackendListenerContext context) throws Exception; // NOSONAR
@@ -109,19 +107,24 @@ public interface BackendListenerClient {
      * empty value.
      *
      * @return a specification of the parameters used by this test which should
-     *         be listed in the GUI, or null if no parameters should be listed.
+     * be listed in the GUI, or null if no parameters should be listed.
      */
-    Arguments getDefaultParameters();
+    default Arguments getDefaultParameters() {
+        return null;
+    }
 
     /**
      * Create a copy of SampleResult, this method is here to allow customizing
      * what is kept in the copy, for example copy could remove some useless fields.
      * Note that if it returns null, the sample result is not put in the queue.
      * Defaults to returning result.
+     *
      * @param context {@link BackendListenerContext}
-     * @param result {@link SampleResult}
+     * @param result  {@link SampleResult}
      * @return {@link SampleResult}
      */
-    SampleResult createSampleResult(
-            BackendListenerContext context, SampleResult result);
+    default SampleResult createSampleResult(
+            BackendListenerContext context, SampleResult result) {
+        return result;
+    }
 }

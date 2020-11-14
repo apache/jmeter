@@ -127,8 +127,8 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     /**
-     * @param url   {@link URL} Influxdb Url
-     * @param token Influxdb 2.0 authorization token
+     * @param url   {@link URL} InfluxDB Url
+     * @param token InfluxDB 2.0 authorization token
      * @return {@link HttpPost}
      * @throws URISyntaxException
      */
@@ -149,9 +149,14 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     }
 
     @Override
-    public void addMetric(String mesurement, String tag, String field) {
+    public void addMetric(String measurement, String tag, String field) {
+        addMetric(measurement, tag, field, System.currentTimeMillis());
+    }
+
+    @Override
+    public void addMetric(String measurement, String tag, String field, long timestamp) {
         synchronized (lock) {
-            metrics.add(new MetricTuple(mesurement, tag, field, System.currentTimeMillis()));
+            metrics.add(new MetricTuple(measurement, tag, field, timestamp));
         }
     }
 
