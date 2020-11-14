@@ -124,7 +124,7 @@ In this document we will present the configuration setup to graph and historize 
     i.e. the 3 percentiles 90%, 95% and 99%.
     </p>
     <p>
-    The <a href="http://graphite.readthedocs.io/en/latest/feeding-carbon.html#step-1-plan-a-naming-hierarchy">Graphite naming hierarchy</a>
+    The <a href="https://graphite.readthedocs.io/en/latest/feeding-carbon.html#step-1-plan-a-naming-hierarchy">Graphite naming hierarchy</a>
     uses dot (".") to separate elements. This could be confused with decimal percentile values.
     JMeter converts any such values, replacing dot (".") with underscore ("-").
     For example, "<code>99.9</code>" becomes "<code>99_9</code>"
@@ -149,6 +149,8 @@ In this document we will present the configuration setup to graph and historize 
         <li>For InfluxDB 2 setup, create a <code>jmeter</code> <a href="https://v2.docs.influxdata.com/v2.0/organizations/buckets/create-bucket/" target="_blank">bucket</a></li>
         <li>For InfluxDB 1.x setup, create a <code>jmeter</code> database using the <a href="https://docs.influxdata.com/influxdb/v1.8/introduction/get-started/" target="_blank">Influx CLI</a></li>
     </ul>
+    You can also use the HTTP API i.e.
+        <code>curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE jmeter"</code>
     </p>
 
 <subsection name="&sect-num;.3.1 InfluxDB setup for InfluxDBBackendListenerClient" anchor="influxdb">
@@ -177,8 +179,8 @@ InfluxDB data can be easily viewed in a browser through <a href="http://grafana.
 <subsection name="&sect-num;.4 Grafana configuration" anchor="grafana_configuration">
     <p>
     Installing grafana<br/>
-    Read <a href="http://docs.grafana.org/" target="_blank">documentation</a> for more details.
-    Add the <a href="http://docs.grafana.org/features/datasources/influxdb/" target="_blank">datasource</a><br/>
+    Read <a href="https://docs.grafana.org/" target="_blank">documentation</a> for more details.
+    Add the <a href="https://docs.grafana.org/features/datasources/influxdb/" target="_blank">datasource</a><br/>
     </p>
     Here is the kind of dashboard that you could obtain:
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
@@ -187,7 +189,6 @@ InfluxDB data can be easily viewed in a browser through <a href="http://grafana.
 <subsection name="&sect-num;.5 Graphite" anchor="graphite">
 <p>HELP WELCOME for this section, see <a href="../building.html" >Contributing documentation</a></p>
 </subsection>
-
 
 </section>
 

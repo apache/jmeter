@@ -44,8 +44,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of {@link AbstractBackendListenerClient} to write in an InfluxDB using
- * custom schema; since JMeter 5.2, this also support the InfluxDB v2.
+ * Implementation of {@link AbstractBackendListenerClient} to write to InfluxDB
+ * using a custom schema; since JMeter 5.2, this also support the InfluxDB v2.
  *
  * @since 3.2
  */
@@ -414,7 +414,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         addAnnotation(false);
 
         // Send last set of data before ending
-        log.info("Sending last metrics");
+        log.info("Sending last metrics to InfluxDB");
         sendMetrics();
 
         influxdbMetricsManager.destroy();
@@ -424,10 +424,10 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     /**
      * Add Annotation at start or end of the run ( useful with Grafana )
      * Grafana will let you send HTML in the "Text" such as a link to the release notes
-     * Tags are separated by spaces in grafana
+     * Tags are separated by spaces in Grafana
      * Tags is put as InfluxdbTag for better query performance on it
-     * Never double or single quotes in influxdb except for string field
-     * see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
+     * Never double or single quotes in InfluxDB except for string field
+     * see : https://docs.influxdata.com/influxdb/v1.7/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
      *
      * @param isStartOfTest boolean true for start, false for end
      */

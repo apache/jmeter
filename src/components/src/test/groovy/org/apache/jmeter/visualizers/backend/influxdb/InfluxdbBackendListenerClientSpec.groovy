@@ -24,7 +24,7 @@ import spock.lang.Specification
 class InfluxdbBackendListenerClientSpec extends Specification {
 
     def sut = new InfluxdbBackendListenerClient()
-    def defaultContext = new BackendListenerContext(InfluxdbBackendListenerClient.DEFAULT_ARGS)
+    def defaultContext = new BackendListenerContext(sut.getDefaultParameters())
 
     def "setupTest with default config does not raise an exception"() {
         when:
