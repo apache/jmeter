@@ -274,9 +274,9 @@ public class JMeterUIDefaults {
     }
 
     /**
-     * Non UIResource wrapper for fonts which preserves the underlying {@link sun.font.Font2D}.
+     * Non UIResource wrapper for fonts which preserves the underlying {@code sun.font.Font2D}.
      * This way the font behaves the same way with respect to fallback fonts
-     * (i.e. if the {@link sun.font.Font2D} base is of type {@link sun.font.CompositeFont}).
+     * (i.e. if the {@code sun.font.Font2D} base is of type {@code sun.font.CompositeFont}).
      */
     private static class NonUIResourceFont extends Font {
         private NonUIResourceFont(Font font) {
