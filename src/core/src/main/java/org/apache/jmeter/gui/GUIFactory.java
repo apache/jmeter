@@ -157,6 +157,10 @@ public final class GUIFactory {
      * @throws IllegalAccessException
      *             if access rights do not permit an instance of the GUI class
      *             to be created
+     * @throws NoSuchMethodException
+     *             when no constructor can be found on the given {@code guiClass}
+     * @throws InvocationTargetException
+     *             when the called constructor throws an exception
      */
     public static void registerGUI(String key, Class<?> guiClass, Class<?> testClass) throws InstantiationException,
             IllegalAccessException, NoSuchMethodException, InvocationTargetException {
