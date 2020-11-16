@@ -191,8 +191,19 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String url = conn.getURL().toString();
             String cacheControl = conn.getHeaderField(HTTPConstants.CACHE_CONTROL);
             String date = conn.getHeaderField(HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, url, date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders())));
+            if (anyNotBlank(lastModified, expires, etag, cacheControl)) {
+                setCache(lastModified, cacheControl, expires, etag, url, date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders())));
+            }
         }
+    }
+
+    private boolean anyNotBlank(String... values) {
+        for (String value: values) {
+            if (StringUtils.isNotBlank(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Pair<String, String> getVaryHeader(String headerName, Header[] reqHeaders) {
@@ -230,9 +241,11 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             String date = getHeader(method, HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag,
-                    res.getUrlAsString(), date, getVaryHeader(varyHeader,
-                            asHeaders(res.getRequestHeaders()))); // TODO correct URL?
+            if (anyNotBlank(lastModified, expires, etag, cacheControl)) {
+                setCache(lastModified, cacheControl, expires, etag,
+                        res.getUrlAsString(), date, getVaryHeader(varyHeader,
+                                asHeaders(res.getRequestHeaders()))); // TODO correct URL?
+            }
         }
     }
 

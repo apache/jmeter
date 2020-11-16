@@ -77,6 +77,8 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
 
     protected abstract void cacheResult(HTTPSampleResult result) throws Exception;
 
+    protected abstract void cacheResult(HTTPSampleResult sampleResultOK, boolean hasCachingHeaders) throws Exception;
+
     protected abstract void setLastModified(String lastModified);
 
     protected abstract void checkRequestHeader(String requestHeader, String expectedValue);
@@ -321,6 +323,16 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         cacheResult(sampleResultOK);
         assertNoSuchEntry();
     }
+
+    @Test
+    public void testNoCachingHeadersBug64915() throws Exception {
+        this.cacheManager.setUseExpires(true);
+        this.cacheManager.testIterationStart(null);
+        assertNoSuchEntry();
+        cacheResult(sampleResultOK, false);
+        assertNoSuchEntry();
+    }
+
 
     @Test
     public void testCacheHttpClientBug51932() throws Exception {
