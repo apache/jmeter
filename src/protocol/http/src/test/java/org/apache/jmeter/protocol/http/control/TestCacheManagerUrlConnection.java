@@ -30,6 +30,12 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
 
     @Override
     protected void cacheResult(HTTPSampleResult result) throws Exception {
+        cacheResult(result, true);
+    }
+
+    @Override
+    protected void cacheResult(HTTPSampleResult result, boolean hasCachingHeaders) throws Exception {
+        ((URLConnectionStub) this.urlConnection).setCachingHeaders(hasCachingHeaders);
         this.cacheManager.saveDetails(this.urlConnection, result);
     }
 

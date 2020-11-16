@@ -62,10 +62,19 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
         private List<org.apache.http.Header> headers;
 
         public HttpResponseStub() {
+            this(true);
+        }
+
+        public HttpResponseStub(boolean cachingHeaders) {
             this.headers = new ArrayList<>();
-            this.lastModifiedHeader = new BasicHeader(HTTPConstants.LAST_MODIFIED, currentTimeInGMT);
             this.dateHeader = new BasicHeader(HTTPConstants.DATE, currentTimeInGMT);
-            this.etagHeader = new BasicHeader(HTTPConstants.ETAG, EXPECTED_ETAG);
+            if (cachingHeaders) {
+                this.lastModifiedHeader = new BasicHeader(HTTPConstants.LAST_MODIFIED, currentTimeInGMT);
+                this.etagHeader = new BasicHeader(HTTPConstants.ETAG, EXPECTED_ETAG);
+            } else {
+                this.lastModifiedHeader = null;
+                this.etagHeader = null;
+            }
         }
 
         /* (non-Javadoc)
@@ -236,7 +245,16 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
 
     @Override
     protected void cacheResult(HTTPSampleResult result) {
-        this.cacheManager.saveDetails(httpResponse, result);
+        cacheResult(result, true);
+    }
+
+    @Override
+    protected void cacheResult(HTTPSampleResult result, boolean hasCachingHeaders) {
+        if (hasCachingHeaders) {
+            this.cacheManager.saveDetails(httpResponse, result);
+        } else {
+            this.cacheManager.saveDetails(new HttpResponseStub(false), result);
+        }
     }
 
     @Override

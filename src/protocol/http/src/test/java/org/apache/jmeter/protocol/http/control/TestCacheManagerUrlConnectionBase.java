@@ -29,6 +29,8 @@ import org.junit.jupiter.api.BeforeEach;
 public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManagerBase {
     protected class URLConnectionStub extends HttpURLConnection {
 
+        private boolean cachingHeaders = true;
+
         protected URLConnectionStub(URL url) {
             super(url);
         }
@@ -47,15 +49,18 @@ public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManager
 
         @Override
         public String getHeaderField(String name) {
-            if (HTTPConstants.LAST_MODIFIED.equals(name)) {
-                return lastModifiedHeader;
-            } else if (HTTPConstants.ETAG.equals(name)) {
-                return EXPECTED_ETAG;
-            } else if (HTTPConstants.EXPIRES.equals(name)) {
-                return expires;
-            } else if (HTTPConstants.CACHE_CONTROL.equals(name)) {
-                return cacheControl;
-            } else if (HTTPConstants.DATE.equals(name)) {
+            if (cachingHeaders) {
+                if (HTTPConstants.LAST_MODIFIED.equals(name)) {
+                    return lastModifiedHeader;
+                } else if (HTTPConstants.ETAG.equals(name)) {
+                    return EXPECTED_ETAG;
+                } else if (HTTPConstants.EXPIRES.equals(name)) {
+                    return expires;
+                } else if (HTTPConstants.CACHE_CONTROL.equals(name)) {
+                    return cacheControl;
+                }
+            }
+            if (HTTPConstants.DATE.equals(name)) {
                 return currentTimeInGMT;
             } else if (HTTPConstants.VARY.equals(name)) {
                 return vary;
@@ -76,7 +81,12 @@ public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManager
         public boolean usingProxy() {
             return false;
         }
+
+        protected void setCachingHeaders(boolean useSpecialHeaders) {
+            this.cachingHeaders = useSpecialHeaders;
+        }
     }
+
     protected URLConnection urlConnection;
 
     @Override
