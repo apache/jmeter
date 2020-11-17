@@ -156,6 +156,7 @@ applications when JMeter is starting up.</p>
     <li>Update Apache log4j2 to 2.13.3 (from 2.13.1)</li>
     <li>Update rsyntaxtextarea to 3.1.1 (from 3.1.0)</li>
     <li>Update JUnit5 to 5.7.0 (from 5.6.2)</li>
+    <li>Update Rhino to 1.7.13 (from 1.7.12)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -319,6 +320,11 @@ That can be achieved by setting the enviroment variable <code>JVM_ARGS</code>
 export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
 </source>
 </li>
+
+<li>
+With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jeps/372">Nashorn has been removed</a>. To add back a JSR-223 compatible JavaScript engine, copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_13_Release/rhino-engine-1.7.13.jar">rhino-engine-1.7.13.jar</a> in <code>$JMETER_HOME/lib/ext</code>.
+</li>
+
 </ul>
 
 </section>
