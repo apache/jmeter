@@ -110,13 +110,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         }
     }
 
-    overrideLicense("com.thoughtworks.xstream:xstream:1.4.11") {
-        expectedLicense = SimpleLicense("BSD style", uri("http://x-stream.github.io/license.html"))
-        // https://github.com/x-stream/xstream/issues/151
-        // https://github.com/x-stream/xstream/issues/153
-        effectiveLicense = SpdxLicense.BSD_3_Clause
-    }
-
     for (jodd in listOf("jodd-core", "jodd-lagarto", "jodd-log", "jodd-props")) {
         overrideLicense("org.jodd:$jodd:5.0.13") {
             expectedLicense = SpdxLicense.BSD_2_Clause // SimpleLicense("The BSD 2-Clause License", uri("http://jodd.org/license.html"))
@@ -142,10 +135,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("net.sf.saxon:Saxon-HE:9.9.1-5") {
-        expectedLicense = SpdxLicense.MPL_2_0
-    }
-
     overrideLicense("com.sun.mail:all:1.5.0-b01") {
         // Multiple licenses, specify explicitly
         expectedLicense = SimpleLicense("CDDL", uri("http://www.sun.com/cddl")) and SimpleLicense("GPLv2+CE", uri("https://glassfish.java.net/public/CDDL+GPL_1_1.html"))
@@ -167,12 +156,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
             expectedLicense = SpdxLicense.BSD_3_Clause
             licenseFiles = "hamcrest"
         }
-    }
-    overrideLicense("org.exparity:hamcrest-date:2.0.4") {
-        // https://github.com/eXparity/hamcrest-date/issues/26
-        // pom.xml lists "New BSD License", however it is BSD_3
-        expectedLicense = SimpleLicense("New BSD License", uri("http://www.opensource.org/licenses/bsd-license.php"))
-        effectiveLicense = SpdxLicense.BSD_3_Clause
     }
     overrideLicense("net.sf.jtidy:jtidy:r938") {
         expectedLicense = SimpleLicense("Java HTML Tidy License", uri("http://jtidy.svn.sourceforge.net/viewvc/jtidy/trunk/jtidy/LICENSE.txt?revision=95"))
