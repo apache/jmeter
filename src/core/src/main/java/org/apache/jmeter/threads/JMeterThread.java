@@ -608,7 +608,7 @@ public class JMeterThread implements Runnable, Interruptible {
      * <ul>
      *  <li>setting up ThreadContext</li>
      *  <li>initializing sampler if needed</li>
-     *  <li>positionning currentSamplerForInterruption for potential interruption</li>
+     *  <li>positioning currentSamplerForInterruption for potential interruption</li>
      *  <li>Playing SampleMonitor before and after sampling</li>
      *  <li>resetting currentSamplerForInterruption</li>
      * </ul>
