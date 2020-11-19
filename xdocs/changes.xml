@@ -130,7 +130,7 @@ applications when JMeter is starting up.</p>
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li>Build system upgraded from Gradle to 6.7 (from 6.6)</li>
-    <li><pr>594</pr>Updated neo4j-java-driver to 4.0.1 (from 1.7.5)</li>
+    <li><pr>594</pr>Updated neo4j-java-driver to 4.2.0 (from 1.7.5)</li>
     <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
     <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
     <li><pr>591</pr>Remove deprecated sudo flag from travis file. Deng Liming (liming.d.pro at gmail.com)</li>
