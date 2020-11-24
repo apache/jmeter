@@ -140,7 +140,7 @@ applications when JMeter is starting up.</p>
     <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
     <li><pr>598</pr>Add another option for creating diffs to the building page. Contributed by jmetertea (github.com/jmetertea)</li>
     <li><pr>609</pr>Make use of newer API for darklaf installation. Jannis Weis</li>
-    <li><pr>612</pr>Correct typos in <code>README.me</code>. Based on patches by Pooja Chandak (poojachandak002 at gmail.com)</li>
+    <li><pr>612</pr>Correct typos in <code>README.md</code>. Based on patches by Pooja Chandak (poojachandak002 at gmail.com)</li>
     <li><pr>613</pr>Add documentation for Darklaf properties. Jannis Weis</li>
     <li>Update SpotBugs to 4.1.2 (from 4.1.1), upgrade spotbugs-gradle-plugin to 4.5.0 (from 2.0.0)</li>
     <li>Update org.sonarqube Gradle plugin to 3.0 (from 2.7.1)</li>
@@ -237,7 +237,7 @@ applications when JMeter is starting up.</p>
 </p>
 <ul>
   <li>Michael Weidmann (https://github.com/michaelweidmann)</li>
-  <li>Deng Liming (liming.d.pro at gmail.com>)</li>
+  <li>Deng Liming (liming.d.pro at gmail.com)</li>
   <li>jmetertea (https://github.com/jmetertea)</li>
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
   <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
@@ -325,7 +325,7 @@ export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
 </li>
 
 <li>
-With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jeps/372">Nashorn has been removed</a>. To add back a JSR-223 compatible JavaScript engine, copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_13_Release/rhino-engine-1.7.13.jar">rhino-engine-1.7.13.jar</a> in <code>$JMETER_HOME/lib/ext</code>.
+With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jeps/372">Nashorn has been removed</a>. To add back a JSR-223 compatible JavaScript engine, copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_13_Release/rhino-engine-1.7.13.jar">rhino-engine-1.7.13.jar</a> into <code>$JMETER_HOME/lib/ext</code>.
 </li>
 
 </ul>
