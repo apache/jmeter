@@ -115,6 +115,7 @@ applications when JMeter is starting up.</p>
 <h3>Report / Dashboard</h3>
 <ul>
   <li><bug>64824</bug>Dashboard/HTML Report: Rename <code>KO</code> to <code>FAIL</code></li>
+  <li><bug>64936</bug>Increase generate_report_ui.generation_timeout to 5 minutes to handle large performance test</li>
 </ul>
 
 <h3>General</h3>

@@ -1779,7 +1779,7 @@ JMETER-SERVER</source>
 </property>
 <property name="generate_report_ui.generation_timeout">
     Timeout in milliseconds for Report generation when using Tools &gt; Generate HTML report.<br/>
-    Defaults to: 120000
+    Defaults to: 300000
 </property>
 </properties>
 </section>

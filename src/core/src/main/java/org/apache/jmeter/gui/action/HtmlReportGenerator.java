@@ -40,7 +40,7 @@ public class HtmlReportGenerator {
     public static final String CANNOT_CREATE_DIRECTORY = "generate_report_ui.cannot_create_directory";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
-    private static final long COMMAND_TIMEOUT = JMeterUtils.getPropDefault("generate_report_ui.generation_timeout", 120_000L);
+    private static final long COMMAND_TIMEOUT = JMeterUtils.getPropDefault("generate_report_ui.generation_timeout", 300_000L);
 
     private String csvFilePath;
     private String userPropertiesFilePath;
