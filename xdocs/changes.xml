@@ -227,6 +227,7 @@ applications when JMeter is starting up.</p>
     <li><bug>64453</bug>Darklaf: Save Test Plan as New Folder failure</li>
     <li><bug>64625</bug>Darklaf: trying to select a folder in Browse leads to an error popup and stacktrace</li>
     <li><bug>64711</bug>Textarea Colors are not good in dark modes. Contributed by Jannis Weis</li>
+    <li><bug>64935</bug>A broken plugin class should not prevent JMeter from starting</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
