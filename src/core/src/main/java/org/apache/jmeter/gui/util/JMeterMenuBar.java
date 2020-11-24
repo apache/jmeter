@@ -232,8 +232,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                         MenuCreator creator = (MenuCreator) commandClass.getDeclaredConstructor().newInstance();
                         creators.add(creator);
                     }
+                } catch (NoClassDefFoundError e) {
+                    log.error("Exception registering implementation:{} of interface:{}, a dependency used by the plugin class is missing",
+                            strClassName, MenuCreator.class, e);
                 } catch (Exception e) {
-                    log.error("Exception registering {} with implementation: {}", MenuCreator.class, strClassName, e);
+                    log.error("Exception registering implementation {} of interface:{}, a jar is probably missing",
+                            strClassName, MenuCreator.class, e);
                 }
             }
         } catch (IOException e) {
