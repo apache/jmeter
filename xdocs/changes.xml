@@ -74,7 +74,10 @@ applications when JMeter is starting up.</p>
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-    <li>Remove <code>LoggingManager</code> class (it has been deprecated since JMeter 3.2)</li>
+    <li>Remove LogKit logger functionality from some classes. This was intended to completely remove
+      <code>LoggingManager</code> class (it has been deprecated since JMeter 3.2), but as jmeter-plugins
+      depended on it, <code>LoggingManager</code> and our <code>LogKit</code>-adapter will remain for
+      this version (but is still deprecated).</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
