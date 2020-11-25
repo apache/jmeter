@@ -19,9 +19,6 @@ package org.apache.jorphan.logging;
 
 import java.util.Properties;
 
-import org.apache.log.LogTarget;
-import org.apache.log.Logger;
-import org.apache.log.Priority;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -116,7 +113,7 @@ public final class LoggingManager {
      *
      * @return Logger
      */
-    public static Logger getLoggerForClass() {
+    public static org.apache.log.Logger getLoggerForClass() {
         String className = new Exception().getStackTrace()[1].getClassName();
         return new Slf4jLogkitLogger(LoggerFactory.getLogger(className));
     }
@@ -128,7 +125,7 @@ public final class LoggingManager {
      *
      * @return Logger
      */
-    public static Logger getLoggerFor(String category) {
+    public static org.apache.log.Logger getLoggerFor(String category) {
         return new Slf4jLogkitLogger(LoggerFactory.getLogger(category));
     }
 
@@ -141,7 +138,7 @@ public final class LoggingManager {
      * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
-    public static Logger getLoggerForShortName(String category) {
+    public static org.apache.log.Logger getLoggerForShortName(String category) {
         return getLoggerFor(category);
     }
 
@@ -177,7 +174,7 @@ public final class LoggingManager {
      * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
-    public static void setPriority(Priority priority, String category) {
+    public static void setPriority(org.apache.log.Priority priority, String category) {
         // NOP
     }
 
@@ -199,7 +196,7 @@ public final class LoggingManager {
      * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
-    public static void setPriority(Priority priority) {
+    public static void setPriority(org.apache.log.Priority priority) {
         // NOP
     }
 
@@ -211,7 +208,7 @@ public final class LoggingManager {
      * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
-    public static void setTarget(LogTarget target, String category) {
+    public static void setTarget(org.apache.log.LogTarget target, String category) {
         // NOP
     }
 
@@ -222,7 +219,7 @@ public final class LoggingManager {
      * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
-    public static void addLogTargetToRootLogger(LogTarget[] logTargets) {
+    public static void addLogTargetToRootLogger(org.apache.log.LogTarget[] logTargets) {
         // NOP
     }
 }
