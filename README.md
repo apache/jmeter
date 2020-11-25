@@ -217,7 +217,7 @@ building JMeter with Gradle is available in [gradle.md](gradle.md).
 
 The code can be obtained from:
 
-- https://github.com/apache/jmeter`
+- https://github.com/apache/jmeter
 - https://gitbox.apache.org/repos/asf/jmeter.git
 
 ## Licensing and Legal Information
