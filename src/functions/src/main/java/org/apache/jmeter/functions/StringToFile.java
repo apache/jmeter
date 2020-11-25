@@ -102,8 +102,8 @@ public class StringToFile extends AbstractFunction {
         }
         log.debug("Writing {} to file {} with charset {} and append {}", content, fileName, charset, append);
         Lock lock = lockMap.computeIfAbsent(fileName, key -> new ReentrantLock());
+        lock.lock();
         try {
-            lock.lock();
             File file = new File(fileName);
             File fileParent = file.getParentFile();
             if (fileParent == null || (fileParent.exists() && fileParent.isDirectory() && fileParent.canWrite())) {
