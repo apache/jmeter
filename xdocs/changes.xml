@@ -163,6 +163,8 @@ applications when JMeter is starting up.</p>
     <li>Update Rhino to 1.7.13 (from 1.7.12)</li>
     <li>Update XStream to 1.4.14 (from 1.4.14.1)</li>
     <li>Update Apache commons-dbcp2 to 2.8.0 (from 2.7.0)</li>
+    <li><pr>635</pr>Correct some image ratios in the documentation. Patch provided
+      by Vincent Daburon (vdaburon at gmail.com)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

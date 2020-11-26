@@ -43,11 +43,11 @@ Create a Test Plan From a cURL Command
   </li>
     <li>There are two ways to enter the curl command line. Firstly, we can enter it manually. Secondly, we can import a file containing the curl command line.
     This tool supports input of multiple curl command lines at the same time.
-    <figure width="767" height="316" image="curl/enter_command.png">Figure 2.1 - Enter curl command in text panel</figure>
-    <figure width="767" height="316" image="curl/enter_command_from_file.png">Figure 2.2 - Enter curl command from file</figure>
+    <figure width="767" height="443" image="curl/enter_command.png">Figure 2.1 - Enter curl command in text panel</figure>
+    <figure width="767" height="449" image="curl/enter_command_from_file.png">Figure 2.2 - Enter curl command from file</figure>
   </li>
   <li>Then, click <code>Create Test Plan</code> button and a new HTTP Sample will be added to the Test Plan.
-    <figure width="767" height="316" image="curl/result.png">Figure 3 - result of Test Plan</figure>
+    <figure width="767" height="464" image="curl/result.png">Figure 3 - result of Test Plan</figure>
   </li>
 </ol>
 </subsection>
@@ -163,7 +163,7 @@ Create a Test Plan From a cURL Command
 <p>
 When the command you entered is ignored or contains warning content, we will display warning in the comment section of HTTP Request.
 </p>
-<figure width="768" height="339" image="curl/http_request_warning.png">Figure 1 -Warning</figure>
+<figure width="768" height="464" image="curl/http_request_warning.png">Figure 1 -Warning</figure>
 
 </subsection>
 <subsection name="&sect-num;.4 Examples" anchor="example">
