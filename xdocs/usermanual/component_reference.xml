@@ -211,7 +211,7 @@ https.default.protocol=SSLv3
         <a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
         for additional configuration steps.</p>
 </description>
-<figure width="951" height="284" image="http-request-advanced-tab.png">HTTP Request Advanced config fields</figure>
+<figure width="951" height="548" image="http-request-advanced-tab.png">HTTP Request Advanced config fields</figure>
 <figure width="950" height="618" image="graphql-http-request.png">Screenshot of Control-Panel of GraphQL HTTP Request</figure>
 <figure width="950" height="618" image="graphql-http-request-vars.png">Variables field for GraphQL HTTP Request</figure>
 
@@ -3531,7 +3531,7 @@ By default, a Graphite implementation is provided.
     <br></br>
 </description>
 
-<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="433" height="281" screenshot="csvdatasetconfig.png">
+<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="658" height="281" screenshot="csvdatasetconfig.png">
 <description>
     <p>
     CSV Data Set Config is used to read lines from a file, and split them into variables.
@@ -6476,7 +6476,7 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
 </description>
 </component>
 
-<component name="Thread Group" index="&sect-num;.9.2"  width="911" height="390" screenshot="threadgroup.png">
+<component name="Thread Group" index="&sect-num;.9.2"  width="911" height="662" screenshot="threadgroup.png">
 <description>
 <p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (number of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
