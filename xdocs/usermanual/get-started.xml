@@ -264,7 +264,7 @@ There are a few environment variables, that can be used to customize the JVM set
 rem This is the content of bin\setenv.bat,
 rem it will be called by bin\jmeter.bat
 
-set JVM_ARGS="-Xms1024m -Xmx1024m -Dpropname=value"
+set JVM_ARGS=-Xms1024m -Xmx1024m -Dpropname=value
 </source>
 
 <p>
