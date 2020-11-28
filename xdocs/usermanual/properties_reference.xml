@@ -465,6 +465,12 @@ JMETER-SERVER</source>
     Define the local host address to be used for multi-homed hosts,
     example <source>httpclient.localaddress=1.2.3.4</source>
 </property>
+<property name="http.proxyUser">
+    Set the user name to use with a proxy.
+</property>
+<property name="http.proxyPass">
+    Set the password to use with a proxy.
+</property>
 </properties>
 </section>
 <section name="&sect-num;.11 Kerberos properties" anchor="kerberos">
