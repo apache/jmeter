@@ -425,7 +425,14 @@ If the proxy host and port are provided, then JMeter sets the following System p
 <li><code>https.proxyHost</code></li>
 <li><code>https.proxyPort</code></li>
 </ul>
+<p>
+The user and password used for a proxy can be given by the System properties <code>http.proxyUser</code>
+and <code>http.proxyUser</code>. They will get overridden by the above arguments or values set in the
+HTTP Samplers.
+</p>
+<p>
 If a nonproxy host list is provided, then JMeter sets the following System properties:
+</p>
 <ul>
 <li><code>http.nonProxyHosts</code></li>
 <li><code>https.nonProxyHosts</code></li>
