@@ -236,7 +236,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                     log.error("Exception registering implementation: [{}] of interface: [{}], a dependency used by the plugin class is missing",
                             strClassName, MenuCreator.class, e);
                 } catch (Exception e) {
-                    log.error("Exception registering implementation: [{}] of interface: [{}], a jar is probably missing",
+                    log.error("Exception registering implementation: [{}] of interface: [{}], a jar is probably missing",
                             strClassName, MenuCreator.class, e);
                 }
             }
