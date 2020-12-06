@@ -28,6 +28,7 @@ import java.util.Properties;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
@@ -289,7 +290,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The initial text to be set
      */
     public void setInitialText(String string) {
-        setText(string);
+        setText(StringUtils.defaultString(string, ""));
         discardAllEdits();
     }
 
