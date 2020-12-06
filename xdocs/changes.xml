@@ -158,6 +158,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+  <li><bug>64957</bug>When importing example test plan JMeter displays an NullPointerException</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
