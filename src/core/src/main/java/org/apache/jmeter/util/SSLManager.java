@@ -166,9 +166,9 @@ public abstract class SSLManager {
         return this.keyStore;
     }
 
-    private void retryLoadKeys(File initStore, boolean allowEmptyPassword) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException,
-            UnrecoverableKeyException {
-        for (int i=0; i<3; i++) {
+    private void retryLoadKeys(File initStore, boolean allowEmptyPassword) throws NoSuchAlgorithmException,
+            CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
+        for (int i = 0; i < 3; i++) {
             String password = getPassword();
             if (!allowEmptyPassword) {
                 Validate.notNull(password, "Password for keystore must not be null");
