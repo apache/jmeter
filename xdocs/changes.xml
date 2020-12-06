@@ -135,6 +135,7 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
+  <li><bug>64821</bug>When importing XML formatted jtl files, sub samplers will get renamed</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

@@ -706,11 +706,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      * @param renameSubResults boolean do we rename subResults based on position
      */
-    private void storeSubResult(SampleResult subResult, boolean renameSubResults) {
+    public void storeSubResult(SampleResult subResult, boolean renameSubResults) {
         if (subResults == null) {
             subResults = new ArrayList<>();
         }
-        if(renameSubResults) {
+        if (renameSubResults) {
             subResult.setSampleLabel(getSampleLabel()+"-"+subResultIndex++);
         }
         subResults.add(subResult);
