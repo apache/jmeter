@@ -121,6 +121,9 @@ public class LoadRecentProject extends Load {
         boolean alreadyExists = false;
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
             String recentFilePath = getRecentFile(i);
+            if (recentFilePath == null) {
+                continue;
+            }
             if(!loadedFileName.equals(recentFilePath)) {
                 newRecentFiles.add(recentFilePath);
             }
