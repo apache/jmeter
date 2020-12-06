@@ -41,9 +41,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 5.4 =================== -->
+<!--  =================== 5.4.1 =================== -->
 
-<h1>Version 5.4</h1>
+<h1>Version 5.4.1</h1>
 <p>
 Summary
 </p>
@@ -67,17 +67,10 @@ Summary
 -->
 <ch_title>UX improvements</ch_title>
 
-<p><bug>62179</bug><bug>64658</bug>The splash screen is now application-modal rather than system-modal, so it does not block other
-applications when JMeter is starting up.</p>
-
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
-    <li>Remove LogKit logger functionality from some classes. This was intended to completely remove
-      <code>LoggingManager</code> class (it has been deprecated since JMeter 3.2), but as jmeter-plugins
-      depended on it, <code>LoggingManager</code> and our <code>LogKit</code>-adapter will remain for
-      this version (but is still deprecated).</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -85,14 +78,10 @@ applications when JMeter is starting up.</p>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>53848</bug><bug>63527</bug>Implement a new setting to allow the exclusion of embedded URLs</li>
-    <li><bug>64696</bug><pr>571</pr><pr>595</pr>Freestyle format for names in (Default)SamplerCreater. Based on a patch by Vincent Daburon (vdaburon at gmail.com)</li>
-    <li><bug>64752</bug>Add GraphQL/HTTP Request Sampler. Contributed by woonsan.</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>64555</bug>Set JMSType header field through JMSProperties. Contributed by Daniel van den Ouden</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -101,8 +90,6 @@ applications when JMeter is starting up.</p>
 
 <h3>Listeners</h3>
 <ul>
-    <li><pr>544</pr>Add BackendListener that sends "raw" results to InfluxDB. Contributed by Graham Russell
-      (graham at ham1.co.uk)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -119,54 +106,14 @@ applications when JMeter is starting up.</p>
 
 <h3>Report / Dashboard</h3>
 <ul>
-  <li><bug>64824</bug>Dashboard/HTML Report: Rename <code>KO</code> to <code>FAIL</code></li>
-  <li><bug>64936</bug>Increase generate_report_ui.generation_timeout to 5 minutes to handle large performance test</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-  <li><bug>64446</bug>Better parse curl commands with backslash at line endings and support <code>PUT</code> method with data arguments</li>
-  <li><pr>599</pr>Ensure all buttons added to the toolbar behave/look consistently. Contributed by Jannis Weis</li>
-  <li><bug>64581</bug>Allow <code>SampleResult#setIgnore</code> to influence behaviour on Sampler Error</li>
-  <li><bug>64680</bug>Fall back to <code>JMETER_HOME</code> on startup to detect JMeter's installation directory</li>
-  <li><bug>64787</bug><pr>630</pr>Add Korean translation. Contributed by Woonsan Ko (woonsan at apache.org)</li>
-  <li><bug>64776</bug>Add the ability to install additional SecurityProvider. Contributed by Timo (ASF.Software.Timo at Leefers.eu)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Build system upgraded from Gradle to 6.7 (from 6.6)</li>
-    <li><pr>594</pr>Updated neo4j-java-driver to 4.2.0 (from 1.7.5)</li>
-    <li><bug>64454</bug>More precise error message, when no datasource value can be found in JDBC sampler</li>
-    <li><bug>64440</bug>Log exeptions reported via <code>JMeterUtils#reportToUser</code> even when in GUI mode</li>
-    <li><pr>591</pr>Remove deprecated sudo flag from travis file. Deng Liming (liming.d.pro at gmail.com)</li>
-    <li>Updated Darklaf to 2.4.10 (from 2.1.1)</li>
-    <li>Updated Groovy to 3.0.5 (from 3.0.3)</li>
-    <li><pr>596</pr>Use neutral words in documentation</li>
-    <li><bug>63809</bug><pr>557</pr>Updated commons-collections to 4.4 (from 3.2.2) while keeping the jars for the old commons-collections 3.x for compatibility</li>
-    <li><pr>598</pr>Add another option for creating diffs to the building page. Contributed by jmetertea (github.com/jmetertea)</li>
-    <li><pr>609</pr>Make use of newer API for darklaf installation. Jannis Weis</li>
-    <li><pr>612</pr>Correct typos in <code>README.md</code>. Based on patches by Pooja Chandak (poojachandak002 at gmail.com)</li>
-    <li><pr>613</pr>Add documentation for Darklaf properties. Jannis Weis</li>
-    <li>Update SpotBugs to 4.1.2 (from 4.1.1), upgrade spotbugs-gradle-plugin to 4.5.0 (from 2.0.0)</li>
-    <li>Update org.sonarqube Gradle plugin to 3.0 (from 2.7.1)</li>
-    <li>Update Apache ActiveMQ to 5.16.0 (from 5.15.11)</li>
-    <li>Update Bouncycastle to 1.66 (from 1.64)</li>
-    <li>Update Apache commons-io to 2.7 (from 2.6)</li>
-    <li>Update Apache commons-lang3 to 3.11 (from 3.10)</li>
-    <li>Update Apache commons-net to 3.7 (from 3.6)</li>
-    <li>Update Apache commons-pool2 to 2.9.0 (from 2.8.0)</li>
-    <li>Update Apache commons-text to 1.9 (from 1.8)</li>
-    <li>Update equalsverifier to 3.4.2 (from 3.1.13)</li>
-    <li>Update junit5 to 5.6.2 (from 5.6.0)</li>
-    <li>Update Apache log4j2 to 2.13.3 (from 2.13.1)</li>
-    <li>Update rsyntaxtextarea to 3.1.1 (from 3.1.0)</li>
-    <li>Update JUnit5 to 5.7.0 (from 5.6.2)</li>
-    <li>Update Rhino to 1.7.13 (from 1.7.12)</li>
-    <li>Update XStream to 1.4.14 (from 1.4.14.1)</li>
-    <li>Update Apache commons-dbcp2 to 2.8.0 (from 2.7.0)</li>
-    <li><pr>635</pr>Correct some image ratios in the documentation. Patch provided
-      by Vincent Daburon (vdaburon at gmail.com)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -175,8 +122,6 @@ applications when JMeter is starting up.</p>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-  <li><bug>64479</bug>Regression: HTTP(s) Script Recorder prevents proper shutdown in non-GUI mode</li>
-  <li><bug>64653</bug>Exclude Javascript and JSON from parsing for charsets from forms by proxy</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -185,7 +130,6 @@ applications when JMeter is starting up.</p>
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>64795</bug>Generate summary report may not output a summary line in the configured interval (<code>summariser.interval</code>): Clarify documentation</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -194,8 +138,6 @@ applications when JMeter is starting up.</p>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>64638</bug>JSON JMESPath Assertion / JSON Assertion: Opening GUI shows a horizontal scrollbar that keeps sliding</li>
-    <li><bug>64915</bug>JMeter Cache Manager misbehaving when "Use Cache-Control/Expires header" is checked</li>
 </ul>
 
 <h3>Functions</h3>
@@ -208,34 +150,14 @@ applications when JMeter is starting up.</p>
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>64547</bug>Report/Dashboard: Ensure graphs Response codes per second is not broken by empty response code in SampleResult. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
-    <li><bug>64617</bug>HTML report: In graph Response Time Percentiles Over Time 90,95,99th percentile correspond in reality to 0.90, 0.95 and 0.99 percentiles</li>
-    <li><bug>64553</bug>When using Transaction Controller, send Bytes and Received Bytes are displayed as 0 in the influxdb(BackendListener)</li>
-    <li><bug>64624</bug>Use less aggressive escaping for JSON Strings in reports error messages</li>
 </ul>
 
 <h3>Documentation</h3>
 <ul>
-    <li><pr>571</pr>Correct documented name of generated CA when using proxy script recorder. Part of a bigger PR. Vincent Daburon (vdaburon at gmail.com)</li>
-    <li>Change documentation of the special header functionality of the mirror server to reflect the implementation.</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-    <li><bug>64448</bug>User Defined Variable Duplication in Right Click Context Menu</li>
-    <li><bug>64499</bug>Exiting JMeter when <code>jmeterengine.stopfail.system.exit=true</code> takes too much time if threads are not stopped</li>
-    <li><bug>64510</bug>Darklaf- IntelliJ Theme throws NPE in DarkTreeUI on MacOS</li>
-    <li><bug>64543</bug>On MacOSX, Darklaf- IntelliJ Theme throws NPE in javax.swing.ToolTipManager.initiateToolTip</li>
-    <li><bug>64594</bug>Unable to enter variable values instead of numeric values in components using PowerTableModel (Impacts 3rd party plugins like Throughput Shaping Timer)</li>
-    <li><bug>64475</bug>Menu Generate HTML Report: When report generation fails due to timeout, error message is not explicit. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
-    <li><bug>64627</bug>Programmatic manipulation of the control flow via API methods of JMeterContext is not working as it used to before 5.0. Contributed by Till Neunast</li>
-    <li><bug>64647</bug>groovy-dateutil is missing in distribution</li>
-    <li><bug>64640</bug>Darklaf: NPE at com.github.weisj.darklaf.ui.DarkPopupFactory.getPopupType(DarkPopupFactory.java:96)</li>
-    <li><bug>64641</bug>Darklaf: NPE at com.github.weisj.darklaf.ui.tree.DarkTreeUI.isChildOfSelectionPath(DarkTreeUI.java:603) ~[darklaf-core-2.4.2-SNAPSHOT.jar:2.4.2-SNAPSHOT]</li>
-    <li><bug>64453</bug>Darklaf: Save Test Plan as New Folder failure</li>
-    <li><bug>64625</bug>Darklaf: trying to select a folder in Browse leads to an error popup and stacktrace</li>
-    <li><bug>64711</bug>Textarea Colors are not good in dark modes. Contributed by Jannis Weis</li>
-    <li><bug>64935</bug>A broken plugin class should not prevent JMeter from starting</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -244,22 +166,9 @@ applications when JMeter is starting up.</p>
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-  <li>Michael Weidmann (https://github.com/michaelweidmann)</li>
-  <li>Deng Liming (liming.d.pro at gmail.com)</li>
-  <li>jmetertea (https://github.com/jmetertea)</li>
-  <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
-  <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
-  <li><a href="https://github.com/topicus-pw-dvdouden">Daniel van den Ouden</a></li>
-  <li>Till Neunast (https://github.com/tilln)</li>
-  <li>Pooja Chandak (poojachandak002 at gmail.com)</li>
-  <li>Vincent Daburon (vdaburon at gmail.com)</li>
-  <li>Woonsan Ko (woonsan at apache.org)</li>
-  <li>Timo (ASF.Software.Timo at Leefers.eu)</li>
-  <li>Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
-  <li>Hiroyoshi Mitsumori (mitsumori at mis.dev)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
