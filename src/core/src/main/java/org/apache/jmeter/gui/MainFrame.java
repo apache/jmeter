@@ -668,13 +668,13 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                         Object testElement = ((DefaultMutableTreeNode) treeNode).getUserObject();
                         if (testElement instanceof TestElement) {
                             String comment = ((TestElement) testElement).getComment();
-                            if (comment != null && comment.length() > 0) {
+                            if (StringUtils.isNotBlank(comment)) {
                                 return comment;
                             }
                         }
                     }
                 }
-                return "";
+                return null;
             }
         };
         treevar.setToolTipText("");
