@@ -164,6 +164,7 @@ Summary
   <li><bug>64957</bug>When importing example test plan JMeter displays an NullPointerException</li>
   <li><bug>64961</bug>Darklaf: On Windows 7, NPE in BasicEditorPaneUI.cleanDisplayProperties with Darklaf Intellij</li>
   <li><bug>64963</bug>Blank comment tooltip is visible</li>
+  <li><bug>64969</bug>RemoteJMeterEngineImpl#rexit doesn't unexport RemoteJMeterEngineImpl on exit. Contributed by luo_isaiah at qq.com</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -173,6 +174,7 @@ Summary
 </p>
 <ul>
   <li>Ori Marko (orimarko at gmail.com)</li>
+  <li>罗寅卓 (luo_isaiah at qq.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
