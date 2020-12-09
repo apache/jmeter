@@ -24,6 +24,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -206,6 +207,8 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
             log.warn("{} is not bound", JMETER_ENGINE_RMI_NAME, e);
         }
         log.info("Unbound from registry");
+        // unexported object
+        UnicastRemoteObject.unexportObject(this, false);
         // Help with garbage control
         JMeterUtils.helpGC();
         et.start();
