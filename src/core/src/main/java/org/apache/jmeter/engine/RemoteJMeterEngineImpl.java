@@ -19,11 +19,13 @@ package org.apache.jmeter.engine;
 
 import java.io.File;
 import java.net.InetAddress;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -206,6 +208,12 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
             log.warn("{} is not bound", JMETER_ENGINE_RMI_NAME, e);
         }
         log.info("Unbound from registry");
+        try {
+            UnicastRemoteObject.unexportObject(this, false);
+        } catch (NoSuchObjectException e) {
+            log.warn("{} not longer exists", this, e);
+        }
+        log.info("Unexported RemoteJMeterEngineImpl");
         // Help with garbage control
         JMeterUtils.helpGC();
         et.start();
