@@ -1112,10 +1112,20 @@ public final class CSVSaveService {
 
         if(saveConfiguration.saveSubresults()) {
             SampleResult result = event.getResult();
-            for (SampleResult subResult : result.getSubResults()) {
-                formattedResult = resultToDelimitedString(event, subResult, saveConfiguration, delimiter);
-                out.println(formattedResult);
-            }
+            saveSubResults(event, out, saveConfiguration, delimiter, result, 0);
+        }
+    }
+
+    private static void saveSubResults(SampleEvent event, PrintWriter out, SampleSaveConfiguration saveConfiguration,
+            String delimiter, SampleResult result, int recursionLevel) {
+        if (recursionLevel > 10) {
+            return;
+        }
+        String formattedResult;
+        for (SampleResult subResult : result.getSubResults()) {
+            saveSubResults(event, out, saveConfiguration, delimiter, subResult, recursionLevel + 1);
+            formattedResult = resultToDelimitedString(event, subResult, saveConfiguration, delimiter);
+            out.println(formattedResult);
         }
     }
 }
