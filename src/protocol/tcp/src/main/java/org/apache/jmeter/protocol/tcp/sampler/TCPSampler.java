@@ -64,6 +64,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                     "org.apache.jmeter.config.gui.SimpleConfigGui"
             ));
 
+    public static final String PROXY_SERVER_PORT = "TCPSampler.proxy.port"; //$NON-NLS-1$
+
     public static final String SERVER = "TCPSampler.server"; //$NON-NLS-1$
 
     public static final String PORT = "TCPSampler.port"; //$NON-NLS-1$
@@ -348,8 +350,17 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return tcpClient;
     }
 
+    public SampleResult sample(){
+        return sample(null, true);
+    }
+
     @Override
     public SampleResult sample(Entry e)// Entry tends to be ignored ...
+    {
+        return sample(e, firstSample);
+    }
+
+    public SampleResult sample(Entry e, boolean firstSampleFlag)// Entry tends to be ignored ...
     {
         if (firstSample) { // Do stuff we cannot do as part of threadStarted()
             initSampling();
