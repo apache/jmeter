@@ -24,6 +24,7 @@ import org.apache.jmeter.threads.JMeterVariables
 import org.neo4j.driver.Driver
 import org.neo4j.driver.Result
 import org.neo4j.driver.Session
+import org.neo4j.driver.SessionConfig
 import org.neo4j.driver.exceptions.ClientException
 import org.neo4j.driver.summary.ResultSummary
 import org.neo4j.driver.summary.SummaryCounters
@@ -47,12 +48,13 @@ class BoltSamplerSpec extends Specification {
         JMeterContextService.getContext().setVariables(variables)
         entry.addConfigElement(boltConfig)
         session = Mock(Session)
-        driver.session() >> session
+        driver.session(_) >> session
     }
 
     def "should execute return success on successful query"() {
         given:
             sampler.setCypher("MATCH x")
+            sampler.setDatabase("neo4j")
             session.run("MATCH x", [:]) >> getEmptyQueryResult()
         when:
             def response = sampler.sample(entry)
@@ -70,6 +72,7 @@ class BoltSamplerSpec extends Specification {
     def "should return error on failed query"() {
         given:
             sampler.setCypher("MATCH x")
+            sampler.setDatabase("neo4j")
             session.run("MATCH x", [:]) >> { throw new RuntimeException("a message") }
         when:
             def response = sampler.sample(entry)
@@ -104,6 +107,7 @@ class BoltSamplerSpec extends Specification {
     def "should return db error code"() {
         given:
             sampler.setCypher("MATCH x")
+            sampler.setDatabase("neo4j")
             session.run("MATCH x", [:]) >> { throw new ClientException("a code", "a message") }
         when:
             def response = sampler.sample(entry)

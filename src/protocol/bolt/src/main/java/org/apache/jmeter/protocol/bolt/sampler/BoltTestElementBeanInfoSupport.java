@@ -22,6 +22,7 @@ import java.beans.PropertyDescriptor;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
+import org.neo4j.driver.AccessMode;
 
 public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
     /**
@@ -32,7 +33,7 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
     protected BoltTestElementBeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass);
 
-        createPropertyGroup("query", new String[] { "cypher","params","recordQueryResults"});
+        createPropertyGroup("query", new String[] { "cypher","params","recordQueryResults","accessMode","database"});
 
         PropertyDescriptor propertyDescriptor =  property("cypher", TypeEditor.TextAreaEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -45,5 +46,13 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
         propertyDescriptor =  property("recordQueryResults");
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(DEFAULT, Boolean.FALSE);
+
+        propertyDescriptor =  property("accessMode", TypeEditor.ComboStringEditor);
+        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        propertyDescriptor.setValue(DEFAULT, AccessMode.WRITE);
+
+        propertyDescriptor =  property("database");
+        propertyDescriptor.setValue(DEFAULT, "neo4j");
     }
 }

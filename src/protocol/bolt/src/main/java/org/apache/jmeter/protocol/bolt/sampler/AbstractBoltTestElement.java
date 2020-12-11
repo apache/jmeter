@@ -18,12 +18,35 @@
 package org.apache.jmeter.protocol.bolt.sampler;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.neo4j.driver.AccessMode;
 
 public abstract class AbstractBoltTestElement extends AbstractTestElement {
 
     private String cypher;
     private String params;
+    private String database;
+    private AccessMode accessMode;
     private boolean recordQueryResults;
+
+    public AccessMode getAccessMode() {
+        if (accessMode != null) {
+            return accessMode;
+        } else {
+            return AccessMode.WRITE;
+        }
+    }
+
+    public void setAccessMode(AccessMode accessMode) {
+        this.accessMode = accessMode;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
 
     public String getCypher() {
         return cypher;
