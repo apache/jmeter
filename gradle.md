@@ -48,6 +48,9 @@ However it might be useful to perform a "clean" build:
       # Expected checksums are stored in /checksum.properties file
       # Actual checksums are stored in /build/checksum/computed.checksum.properties
 
+      # Update expected dependencies after updating a dependency version
+      gw -PupdateExpectedJars check
+
 ## Static checks
 
 ### Release Audit Tool
