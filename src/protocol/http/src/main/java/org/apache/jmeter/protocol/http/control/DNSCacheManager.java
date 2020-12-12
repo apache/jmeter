@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.control;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -266,7 +265,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             Lookup lookup = new Lookup(host, Type.A);
             lookup.setCache(lookupCache);
             if (timeoutMs > 0) {
-                resolver.setTimeout(Duration.ofMillis(timeoutMs));
+                resolver.setTimeout(timeoutMs / 1000, timeoutMs % 1000);
             }
             lookup.setResolver(resolver);
             Record[] records = lookup.run();
