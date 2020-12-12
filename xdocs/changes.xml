@@ -126,7 +126,6 @@ Summary
     <li>Updated junit to 4.13.1 (from 4.13)</li>
     <li>Updated ph-commons to 9.5.1 (from 9.4.1)</li>
     <li>Updated ph-css to 6.2.3 (from 6.2.1)</li>
-    <li>Updated dnsjava to 3.3.1 (from 2.1.9)</li>
     <li>Updated groovy to 3.0.7 (from 3.0.5)</li>
 </ul>
 
