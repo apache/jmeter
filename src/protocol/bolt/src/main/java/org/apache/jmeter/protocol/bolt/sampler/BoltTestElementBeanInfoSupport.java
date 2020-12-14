@@ -33,7 +33,8 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
     protected BoltTestElementBeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass);
 
-        createPropertyGroup("query", new String[] { "cypher","params","recordQueryResults","accessMode","database"});
+        createPropertyGroup("query", new String[] { "cypher","params","recordQueryResults"});
+        createPropertyGroup("options", new String[] { "accessMode","database", "txTimeout"});
 
         PropertyDescriptor propertyDescriptor =  property("cypher", TypeEditor.TextAreaEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -50,9 +51,19 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
         propertyDescriptor =  property("accessMode", TypeEditor.ComboStringEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        propertyDescriptor.setValue(DEFAULT, AccessMode.WRITE);
+        propertyDescriptor.setValue(DEFAULT, AccessMode.WRITE.toString());
+        propertyDescriptor.setValue(TAGS, getListAccessModes());
 
-        propertyDescriptor =  property("database");
+        propertyDescriptor =  property("database", TypeEditor.ComboStringEditor);
         propertyDescriptor.setValue(DEFAULT, "neo4j");
+
+        propertyDescriptor = property("txTimeout");
+        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(DEFAULT, "60");
+    }
+
+    private String[] getListAccessModes() {
+        String[] list = {AccessMode.READ.toString(), AccessMode.WRITE.toString()};
+        return list;
     }
 }

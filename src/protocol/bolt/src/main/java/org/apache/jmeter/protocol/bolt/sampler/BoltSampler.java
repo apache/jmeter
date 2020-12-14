@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,12 +36,12 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
-import org.neo4j.driver.AccessMode;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.SessionConfig;
+import org.neo4j.driver.TransactionConfig;
 import org.neo4j.driver.exceptions.Neo4jException;
 import org.neo4j.driver.summary.ResultSummary;
 
@@ -84,7 +85,9 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
 
         try {
             res.setResponseHeaders("Cypher request: " + getCypher());
-            res.setResponseData(execute(BoltConnectionElement.getDriver(), getCypher(), params, getAccessMode(), getDatabase()), StandardCharsets.UTF_8.name());
+            res.setResponseData(
+                        execute(BoltConnectionElement.getDriver(), getCypher(), params,
+                                getSessionConfig(), getTransactionConfig()), StandardCharsets.UTF_8.name());
         } catch (Exception ex) {
             res = handleException(res, ex);
         } finally {
@@ -102,13 +105,9 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
         return APPLICABLE_CONFIG_CLASSES.contains(guiClass);
     }
 
-    private String execute(Driver driver, String cypher, Map<String, Object> params, AccessMode accessMode, String database) {
-        SessionConfig sessionConfig = SessionConfig.builder()
-                .withDatabase(database)
-                .withDefaultAccessMode(accessMode)
-                .build();
+    private String execute(Driver driver, String cypher, Map<String, Object> params, SessionConfig sessionConfig, TransactionConfig txConfig) {
         try (Session session = driver.session(sessionConfig)) {
-            Result statementResult = session.run(cypher, params);
+            Result statementResult = session.run(cypher, params, txConfig);
             return response(statementResult);
         }
     }
@@ -141,12 +140,25 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
                 .append(getCypher())
                 .append("\n")
                 .append("Parameters: \n")
-                .append(getParams());
+                .append(getParams())
+                .append("\n")
+                .append("Database: \n")
+                .append(getDatabase())
+                .append("\n")
+                .append("Access Mode: \n")
+                .append(getAccessMode().toString());
         return request.toString();
     }
 
     private String response(Result result) {
         StringBuilder response = new StringBuilder();
+        List<Record> records;
+        if (isRecordQueryResults()) {
+            //get records already as consume() will exhaust the stream
+            records = result.list();
+        } else {
+            records = null;
+        }
         response.append("\nSummary:");
         ResultSummary summary = result.consume();
         response.append("\nConstraints Added: ")
@@ -172,8 +184,8 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
                 .append("\nRelationships Deleted: ")
                 .append(summary.counters().relationshipsDeleted());
         response.append("\n\nRecords: ");
-        if (isRecordQueryResults()) {
-            for (Record record : result.list()) {
+        if (records != null) {
+            for (Record record : records) {
                 response.append("\n").append(record);
             }
         } else {
