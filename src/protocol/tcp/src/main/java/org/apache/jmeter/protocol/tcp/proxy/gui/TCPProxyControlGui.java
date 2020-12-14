@@ -17,7 +17,9 @@
 
 package org.apache.jmeter.protocol.tcp.proxy.gui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -26,7 +28,16 @@ import java.net.BindException;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.LogicControllerGui;
@@ -44,6 +55,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
+
 
 public class TCPProxyControlGui extends LogicControllerGui
         implements JMeterGUIComponent, ActionListener {

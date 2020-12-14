@@ -33,6 +33,14 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * TCPSamplerManager is a worker for TCPProxyServer.
+ * Create new TCPSampler ,return tcp client response, and save TCP samplers to jmeter tree node.
+ * <p>
+ * If you want use this class,
+ * Please don't use Thread.start(), use the TCPSamplerManager.managerStart().
+ * TCPSamplerManager.managerStart() will load some needs param before it work.
+ */
 public class TCPSamplerManager extends Thread {
     private static final Logger log = LoggerFactory.getLogger(TCPSamplerManager.class);
 
@@ -55,7 +63,7 @@ public class TCPSamplerManager extends Thread {
      * @return target server response payload
      */
     public byte[] newTCPSampler(String data) {
-        log.debug("new sampler , payload " + data);
+        log.debug("new sampler , payload {}", data);
         TCPSampler tcpSampler = new TCPSampler();
         TestElement element = (TestElement) tcpSamplerElement.clone();
         element.removeProperty(TCPSampler.PROXY_SERVER_PORT);
@@ -90,8 +98,11 @@ public class TCPSamplerManager extends Thread {
         return false;
     }
 
+    /**
+     * start TCPSamplerManager working.
+     */
     public synchronized void managerStart() {
-        log.debug("start");
+        log.debug("start, target server {}", this.tcpSamplerElement.getPropertyAsString(TCPSampler.SERVER));
         workStatus = true;
         start();
     }
@@ -109,7 +120,7 @@ public class TCPSamplerManager extends Thread {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.warn("sleep fail,tcp samplers maybe lost,check the jmeter tree node", e);
             }
             while (!tcpSamplerInfoQueue.isEmpty()) {
                 TCPSampler sampler = tcpSamplerInfoQueue.poll();
@@ -118,6 +129,11 @@ public class TCPSamplerManager extends Thread {
         }
     }
 
+    /**
+     * save tcp sampler to target jmeter node
+     *
+     * @param sampler create by TCPSamplerManager
+     */
     private void putSamplesIntoModel(TCPSampler sampler) {
         try {
             GuiPackage.getInstance().getTreeModel().addComponent(sampler, targetNode);

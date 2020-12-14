@@ -26,6 +26,16 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * TCPProxyServer is a tcp server.
+ * TCP client message pass by,
+ * and server will record the message and create TCPSamplers by TCPSamplerManager.
+ * <p>
+ * If you want use this server:
+ * Please don't ues Thread.start(),
+ * Set the proxy port and init a new TCPSamplerManager,use the TCPProxyServer.serverStart().
+ * TCPProxyServer.serverStart() function will load some needs param.
+ */
 public class TCPProxyServer extends Thread {
     private static final Logger log = LoggerFactory.getLogger(TCPProxyServer.class);
 
@@ -79,6 +89,9 @@ public class TCPProxyServer extends Thread {
                             int readFlag = socket.getInputStream().read(buffer);
                             if (readFlag != -1) {
                                 byte[] dataRead = Arrays.copyOf(buffer, readFlag);
+                                // read client message, copy message string, TCPSamplerManager will create a new TCPSampler
+                                // and return the new TCPSampler.sample() result.
+                                // sample result will be response to tcp client as byte array.
                                 byte[] responseData = samplerManager.newTCPSampler(new String(dataRead));
                                 socket.getOutputStream().write(responseData);
                             }
@@ -94,7 +107,7 @@ public class TCPProxyServer extends Thread {
                 }).start();
             }
         } catch (SocketException socketException) {
-            log.debug("proxy closed ");
+            log.debug("proxy closed ", socketException);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

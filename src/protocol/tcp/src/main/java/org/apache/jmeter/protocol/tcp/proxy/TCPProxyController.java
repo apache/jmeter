@@ -27,7 +27,7 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * Don't use Thread.start() to start a TCPProxyController.
- * use proxyServerStart(JMeterTreeNode targetNode)
+ * use proxyServerStart()
  */
 public class TCPProxyController extends GenericController implements NonTestElement {
 
