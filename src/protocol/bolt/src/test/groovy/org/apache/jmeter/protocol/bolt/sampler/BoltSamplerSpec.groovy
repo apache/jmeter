@@ -55,7 +55,8 @@ class BoltSamplerSpec extends Specification {
         given:
             sampler.setCypher("MATCH x")
             sampler.setDatabase("neo4j")
-            session.run("MATCH x", [:]) >> getEmptyQueryResult()
+            sampler.setTxTimeout(60)
+            session.run("MATCH x", [:], _) >> getEmptyQueryResult()
         when:
             def response = sampler.sample(entry)
         then:
@@ -73,7 +74,8 @@ class BoltSamplerSpec extends Specification {
         given:
             sampler.setCypher("MATCH x")
             sampler.setDatabase("neo4j")
-            session.run("MATCH x", [:]) >> { throw new RuntimeException("a message") }
+            sampler.setTxTimeout(60)
+            session.run("MATCH x", [:], _) >> { throw new RuntimeException("a message") }
         when:
             def response = sampler.sample(entry)
         then:
@@ -91,6 +93,8 @@ class BoltSamplerSpec extends Specification {
         given:
             sampler.setCypher("MATCH x")
             sampler.setParams("{invalid}")
+            sampler.setDatabase("neo4j")
+            sampler.setTxTimeout(60)
         when:
             def response = sampler.sample(entry)
         then:
@@ -108,7 +112,8 @@ class BoltSamplerSpec extends Specification {
         given:
             sampler.setCypher("MATCH x")
             sampler.setDatabase("neo4j")
-            session.run("MATCH x", [:]) >> { throw new ClientException("a code", "a message") }
+            sampler.setTxTimeout(60)
+            session.run("MATCH x", [:], _) >> { throw new ClientException("a code", "a message") }
         when:
             def response = sampler.sample(entry)
         then:
