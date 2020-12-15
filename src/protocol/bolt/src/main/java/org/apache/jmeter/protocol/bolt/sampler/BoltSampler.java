@@ -152,7 +152,7 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
                 .append(getDatabase())
                 .append("\n")
                 .append("Access Mode: \n")
-                .append(getAccessMode().toString());
+                .append(getAccessMode());
         return request.toString();
     }
 
