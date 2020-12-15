@@ -22,9 +22,9 @@ import org.apache.jmeter.samplers.Entry
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
 import org.neo4j.driver.Driver
+import org.neo4j.driver.Record
 import org.neo4j.driver.Result
 import org.neo4j.driver.Session
-import org.neo4j.driver.SessionConfig
 import org.neo4j.driver.exceptions.ClientException
 import org.neo4j.driver.summary.ResultSummary
 import org.neo4j.driver.summary.SummaryCounters
@@ -54,8 +54,6 @@ class BoltSamplerSpec extends Specification {
     def "should execute return success on successful query"() {
         given:
             sampler.setCypher("MATCH x")
-            sampler.setDatabase("neo4j")
-            sampler.setTxTimeout(60)
             session.run("MATCH x", [:], _) >> getEmptyQueryResult()
         when:
             def response = sampler.sample(entry)
@@ -70,11 +68,44 @@ class BoltSamplerSpec extends Specification {
             response.getTime() > 0
     }
 
+    def "should not display results by default"() {
+        given:
+            sampler.setCypher("MATCH x")
+            session.run("MATCH x", [:], _) >> getPopulatedQueryResult()
+        when:
+            def response = sampler.sample(entry)
+        then:
+            response.isSuccessful()
+            response.isResponseCodeOK()
+            def str = response.getResponseDataAsString()
+            str.contains("Summary:")
+            str.endsWith("Records: Skipped")
+            response.getSampleCount() == 1
+            response.getErrorCount() == 0
+            response.getTime() > 0
+    }
+
+    def "should display results if asked"() {
+        given:
+            sampler.setCypher("MATCH x")
+            sampler.setRecordQueryResults(true)
+            session.run("MATCH x", [:], _) >> getPopulatedQueryResult()
+        when:
+            def response = sampler.sample(entry)
+        then:
+            response.isSuccessful()
+            response.isResponseCodeOK()
+            def str = response.getResponseDataAsString()
+            str.contains("Summary:")
+            str.endsWith("Mock for type 'Record'")
+            response.getSampleCount() == 1
+            response.getErrorCount() == 0
+            response.getTime() > 0
+    }
+
     def "should return error on failed query"() {
         given:
             sampler.setCypher("MATCH x")
-            sampler.setDatabase("neo4j")
-            sampler.setTxTimeout(60)
             session.run("MATCH x", [:], _) >> { throw new RuntimeException("a message") }
         when:
             def response = sampler.sample(entry)
@@ -93,8 +124,6 @@ class BoltSamplerSpec extends Specification {
         given:
             sampler.setCypher("MATCH x")
             sampler.setParams("{invalid}")
-            sampler.setDatabase("neo4j")
-            sampler.setTxTimeout(60)
         when:
             def response = sampler.sample(entry)
         then:
@@ -111,8 +140,6 @@ class BoltSamplerSpec extends Specification {
     def "should return db error code"() {
         given:
             sampler.setCypher("MATCH x")
-            sampler.setDatabase("neo4j")
-            sampler.setTxTimeout(60)
             session.run("MATCH x", [:], _) >> { throw new ClientException("a code", "a message") }
         when:
             def response = sampler.sample(entry)
@@ -120,10 +147,39 @@ class BoltSamplerSpec extends Specification {
             response.getResponseCode() == "a code"
     }
 
+    def "should ignore invalid timeout values"() {
+        given:
+            sampler.setCypher("MATCH x")
+            sampler.setTxTimeout(-1)
+            session.run("MATCH x", [:], _) >> getEmptyQueryResult()
+        when:
+            def response = sampler.sample(entry)
+        then:
+            response.isSuccessful()
+            response.isResponseCodeOK()
+            def str = response.getResponseDataAsString()
+            str.contains("Summary:")
+            str.endsWith("Records: Skipped")
+            response.getSampleCount() == 1
+            response.getErrorCount() == 0
+            response.getTime() > 0
+    }
+
     def getEmptyQueryResult() {
         def queryResult = Mock(Result)
         def summary = Mock(ResultSummary)
         queryResult.consume() >> summary
+        SummaryCounters counters = Mock(SummaryCounters)
+        summary.counters() >> counters
+        return queryResult
+    }
+
+    def getPopulatedQueryResult() {
+        def queryResult = Mock(Result)
+        def summary = Mock(ResultSummary)
+        def list = [Mock(Record), Mock(Record), Mock(Record)]
+        queryResult.consume() >> summary
+        queryResult.list() >> list
         SummaryCounters counters = Mock(SummaryCounters)
         summary.counters() >> counters
         return queryResult
