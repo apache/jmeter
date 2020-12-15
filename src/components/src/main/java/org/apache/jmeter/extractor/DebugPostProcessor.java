@@ -33,6 +33,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.AlphaNumericKeyComparator;
 
 /**
  * Debugging Post-Processor: creates a subSample containing the variables defined in the previous sampler.
@@ -108,12 +109,7 @@ public class DebugPostProcessor extends AbstractTestElement implements PostProce
     private void formatSet(StringBuilder sb, @SuppressWarnings("rawtypes") Set s) {
         @SuppressWarnings("unchecked")
         List<Map.Entry<Object, Object>> al = new ArrayList<>(s);
-        al.sort(
-                (Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) -> {
-                String m1 = (String)o1.getKey();
-                String m2 =(String)o2.getKey();
-                return m1.compareTo(m2);
-            });
+        al.sort(AlphaNumericKeyComparator.INSTANCE);
         al.forEach(me -> sb.append(me.getKey()).append("=").append(me.getValue()).append("\n"));
     }
 
