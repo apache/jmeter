@@ -86,8 +86,13 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
         try {
             res.setResponseHeaders("Cypher request: " + getCypher());
             res.setResponseData(
-                        execute(BoltConnectionElement.getDriver(), getCypher(), params,
-                                getSessionConfig(), getTransactionConfig()), StandardCharsets.UTF_8.name());
+                    execute(
+                        BoltConnectionElement.getDriver(),
+                        getCypher(),
+                        params,
+                        getSessionConfig(),
+                        getTransactionConfig()),
+                    StandardCharsets.UTF_8.name());
         } catch (Exception ex) {
             res = handleException(res, ex);
         } finally {
@@ -105,7 +110,8 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
         return APPLICABLE_CONFIG_CLASSES.contains(guiClass);
     }
 
-    private String execute(Driver driver, String cypher, Map<String, Object> params, SessionConfig sessionConfig, TransactionConfig txConfig) {
+    private String execute(Driver driver, String cypher, Map<String, Object> params,
+                           SessionConfig sessionConfig, TransactionConfig txConfig) {
         try (Session session = driver.session(sessionConfig)) {
             Result statementResult = session.run(cypher, params, txConfig);
             return response(statementResult);

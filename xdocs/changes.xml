@@ -81,7 +81,12 @@ Summary
 </ul>
 
 <h3>Other samplers</h3>
-<ul>
+<ul>Bolt Sampler : added "transaction timeout" option
+</ul>
+<ul>Bolt Sampler : added "database" option, required for Neo4j 4.x (with multi-database support)
+</ul>
+<ul>Bolt Sampler : added "access mode" option, that allows running against a Neo4j Enterprise causal cluster,
+    with proper query routing using the "neo4://" or "bolt+routing://" URL schemes.
 </ul>
 
 <h3>Controllers</h3>
@@ -126,7 +131,7 @@ Summary
 </ul>
 
 <h3>Other Samplers</h3>
-<ul>
+<ul>Bolt Sampler : fixed error displaying results when "Record Query Results" is enabled.
 </ul>
 
 <h3>Controllers</h3>
