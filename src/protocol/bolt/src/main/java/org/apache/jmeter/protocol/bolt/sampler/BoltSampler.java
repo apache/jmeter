@@ -163,7 +163,7 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
             //get records already as consume() will exhaust the stream
             records = result.list();
         } else {
-            records = null;
+            records = Collections.emptyList();
         }
         response.append("\nSummary:");
         ResultSummary summary = result.consume();
@@ -190,7 +190,7 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
                 .append("\nRelationships Deleted: ")
                 .append(summary.counters().relationshipsDeleted());
         response.append("\n\nRecords: ");
-        if (records != null) {
+        if (isRecordQueryResults()) {
             for (Record record : records) {
                 response.append("\n").append(record);
             }

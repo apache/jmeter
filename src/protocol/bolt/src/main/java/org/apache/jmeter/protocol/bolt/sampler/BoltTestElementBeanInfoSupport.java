@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.bolt.sampler;
 
 import java.beans.PropertyDescriptor;
+import java.util.Arrays;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
@@ -36,34 +37,33 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
         createPropertyGroup("query", new String[] { "cypher","params","recordQueryResults"});
         createPropertyGroup("options", new String[] { "accessMode","database", "txTimeout"});
 
-        PropertyDescriptor propertyDescriptor =  property("cypher", TypeEditor.TextAreaEditor);
+        PropertyDescriptor propertyDescriptor = property("cypher", TypeEditor.TextAreaEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(DEFAULT, "");
 
-        propertyDescriptor =  property("params", TypeEditor.TextAreaEditor);
+        propertyDescriptor = property("params", TypeEditor.TextAreaEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(DEFAULT, "{\"paramName\":\"paramValue\"}");
 
-        propertyDescriptor =  property("recordQueryResults");
+        propertyDescriptor = property("recordQueryResults");
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(DEFAULT, Boolean.FALSE);
 
-        propertyDescriptor =  property("accessMode", TypeEditor.ComboStringEditor);
+        propertyDescriptor = property("accessMode", TypeEditor.ComboStringEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(NOT_EXPRESSION, Boolean.TRUE);
         propertyDescriptor.setValue(DEFAULT, AccessMode.WRITE.toString());
         propertyDescriptor.setValue(TAGS, getListAccessModes());
 
-        propertyDescriptor =  property("database", TypeEditor.ComboStringEditor);
+        propertyDescriptor = property("database", TypeEditor.ComboStringEditor);
         propertyDescriptor.setValue(DEFAULT, "neo4j");
 
         propertyDescriptor = property("txTimeout");
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        propertyDescriptor.setValue(DEFAULT, "60");
+        propertyDescriptor.setValue(DEFAULT, 60);
     }
 
     private String[] getListAccessModes() {
-        String[] list = {AccessMode.READ.toString(), AccessMode.WRITE.toString()};
-        return list;
+        return Arrays.stream(AccessMode.values()).map(Enum::toString).toArray(String[]::new);
     }
 }
