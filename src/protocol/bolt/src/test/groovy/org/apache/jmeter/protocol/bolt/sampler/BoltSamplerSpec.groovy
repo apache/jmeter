@@ -82,7 +82,6 @@ class BoltSamplerSpec extends Specification {
             str.endsWith("Records: Skipped")
             response.getSampleCount() == 1
             response.getErrorCount() == 0
-            response.getTime() > 0
     }
 
     def "should display results if asked"() {
@@ -162,7 +161,6 @@ class BoltSamplerSpec extends Specification {
             str.endsWith("Records: Skipped")
             response.getSampleCount() == 1
             response.getErrorCount() == 0
-            response.getTime() > 0
     }
 
     def getEmptyQueryResult() {
