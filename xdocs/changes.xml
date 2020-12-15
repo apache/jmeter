@@ -86,6 +86,12 @@ Summary
 <h3>Other samplers</h3>
 <ul>
   <li><bug>65149</bug><pr>644</pr>Encode the personal part of email addresses in SMTP Sampler</li>
+<ul>Bolt Sampler : added "transaction timeout" option
+</ul>
+<ul>Bolt Sampler : added "database" option, required for Neo4j 4.x (with multi-database support)
+</ul>
+<ul>Bolt Sampler : added "access mode" option, that allows running against a Neo4j Enterprise causal cluster,
+    with proper query routing using the "neo4://" or "bolt+routing://" URL schemes.
 </ul>
 
 <h3>Controllers</h3>
@@ -135,6 +141,7 @@ Summary
 <h3>Other Samplers</h3>
 <ul>
   <li><bug>65152</bug>OS Process Sampler - Cannot <code>Add from Clipboard</code> Command parameters</li>
+<ul>Bolt Sampler : fixed error displaying results when "Record Query Results" is enabled.
 </ul>
 
 <h3>Controllers</h3>

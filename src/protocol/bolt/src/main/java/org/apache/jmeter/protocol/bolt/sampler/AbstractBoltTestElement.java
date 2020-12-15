@@ -85,6 +85,7 @@ public abstract class AbstractBoltTestElement extends AbstractTestElement {
         this.recordQueryResults = recordQueryResults;
     }
 
+    //returns a SessionConfig object that can be passed to the driver session
     public SessionConfig getSessionConfig() {
         SessionConfig.Builder sessionConfigBuilder = SessionConfig.builder()
                 .withDefaultAccessMode(Enum.valueOf(AccessMode.class, getAccessMode()));
@@ -95,6 +96,8 @@ public abstract class AbstractBoltTestElement extends AbstractTestElement {
 
         return sessionConfigBuilder.build();
     }
+
+    //returns a TransactionConfig object that can be passed to the driver transaction
     public TransactionConfig getTransactionConfig() {
         TransactionConfig.Builder txConfigBuilder = TransactionConfig.builder();
 
