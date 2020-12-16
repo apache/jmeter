@@ -109,7 +109,7 @@ public class TCPProxyServer extends Thread {
         } catch (SocketException socketException) {
             log.debug("proxy closed ", socketException);
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            log.debug("proxy io failed ", ioException);
         }
     }
 
