@@ -635,7 +635,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 sampler.setFollowRedirects(samplerFollowRedirects);
                 sampler.setUseKeepAlive(useKeepAlive);
                 sampler.setImageParser(samplerDownloadImages);
-                Authorization authorization = createAuthorization(testElements, sampler, result);
+                Authorization authorization = createAuthorization(testElements, result);
                 if (authorization != null) {
                     setAuthorization(authorization, myTarget);
                 }
@@ -667,11 +667,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * Removes Authorization if present
      *
      * @param testElements {@link TestElement}[]
-     * @param sampler      {@link HTTPSamplerBase}
      * @param result       {@link HTTPSampleResult}
      * @return {@link Authorization}
      */
-    private Authorization createAuthorization(final TestElement[] testElements, HTTPSamplerBase sampler, SampleResult result) {
+    private Authorization createAuthorization(final TestElement[] testElements, SampleResult result) {
         Header authHeader;
         Authorization authorization = null;
         // Iterate over subconfig elements searching for HeaderManager
