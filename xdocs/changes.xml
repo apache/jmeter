@@ -136,6 +136,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><bug>64955</bug>Keystore password not reset on reload</li>
+  <li><bug>65002</bug>HTTP(S) Test Script recorder creates an invalid Basic authentication URL. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -188,6 +189,7 @@ Summary
 <ul>
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>罗寅卓 (luo_isaiah at qq.com)</li>
+  <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
