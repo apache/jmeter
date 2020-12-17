@@ -288,7 +288,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      */
     public static boolean isPotentialJson(final String postData) throws IOException {
         boolean valid = true;
-        try{ 
+        try{
             OBJECT_MAPPER.readTree(postData);
         } catch(JsonProcessingException e){
             valid = false;
