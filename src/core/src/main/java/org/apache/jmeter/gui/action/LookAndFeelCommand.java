@@ -100,6 +100,9 @@ public class LookAndFeelCommand extends AbstractAction {
         if (System.getProperty("darklaf.unifiedMenuBar") == null) {
             System.setProperty("darklaf.unifiedMenuBar", "true");
         }
+        if (System.getProperty("darklaf.treeRowPopup") == null) {
+            System.setProperty("darklaf.treeRowPopup", "false");
+        }
         UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
 
         List<MenuItem> items = new ArrayList<>();

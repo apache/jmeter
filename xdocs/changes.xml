@@ -180,6 +180,7 @@ Summary
   <li><bug>64961</bug>Darklaf: On Windows 7, NPE in BasicEditorPaneUI.cleanDisplayProperties with Darklaf Intellij</li>
   <li><bug>64963</bug>Blank comment tooltip is visible</li>
   <li><bug>64969</bug>RemoteJMeterEngineImpl#rexit doesn't unexport RemoteJMeterEngineImpl on exit. Contributed by luo_isaiah at qq.com</li>
+  <li><bug>64984</bug>Darklaf LAF: Selecting a Test element does not work under certain screen resolutions on Windows. With the help of Jannis Weis</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -191,6 +192,7 @@ Summary
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>罗寅卓 (luo_isaiah at qq.com)</li>
   <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
+  <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
