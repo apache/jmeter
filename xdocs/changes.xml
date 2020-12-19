@@ -71,6 +71,7 @@ Summary
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
+    <li>Restart after LAF change has been reinstated, it had been removed in JMeter 5.3</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
