@@ -139,6 +139,7 @@ Summary
   <li><bug>64955</bug>Keystore password not reset on reload</li>
   <li><bug>65002</bug>HTTP(S) Test Script recorder creates an invalid Basic authentication URL. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
   <li><bug>65004</bug>HTTP(S) Test Script recorder computes wrong HTTP Request breaking the application. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
+  <li><bug>64543</bug>On MacOSX, Darklaf- IntelliJ Theme throws NPE in javax.swing.ToolTipManager.initiateToolTip</li>
 </ul>
 
 <h3>Other Samplers</h3>
