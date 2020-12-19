@@ -83,6 +83,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.LoadDraggedFile;
+import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.gui.logging.GuiLogEventListener;
 import org.apache.jmeter.gui.logging.LogEventObject;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
@@ -674,7 +675,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                         }
                     }
                 }
-                return null;
+                if (LookAndFeelCommand.isDarklafTheme()) {
+                    // See https://github.com/weisJ/darklaf/issues/226#issuecomment-748478418
+                    return "";
+                } else {
+                    return null;
+                }
             }
         };
         treevar.setToolTipText("");
