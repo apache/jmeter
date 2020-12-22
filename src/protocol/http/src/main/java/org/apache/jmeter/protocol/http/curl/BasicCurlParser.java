@@ -710,9 +710,9 @@ public class BasicCurlParser {
                     String key = nameAndValue.substring(0, indexOfEqual).trim();
                     String value = nameAndValue.substring(indexOfEqual + 1).trim();
                     if ("form-string".equals(option.getDescriptor().getName())) {
-                        request.addFormStringData(key, value);
+                        request.addFormStringData(key, unquote(value));
                     } else {
-                        request.addFormData(key, value);
+                        request.addFormData(key, unquote(value));
                     }
                     request.setMethod("POST");
                 } else if (option.getDescriptor().getId() == USER_AGENT_OPT) {
@@ -955,7 +955,7 @@ public class BasicCurlParser {
            postdata = encodePostdata(postdata);
        } else {
            if (postdata.charAt(0) == '@' && !"data-raw".equals(dataOptionName)) {
-               postdata = postdata.substring(1, postdata.length());
+               postdata = unquote(postdata.substring(1, postdata.length()));
                postdata = readFromFile(postdata);
                if (!"data-binary".equals(dataOptionName)) {
                    postdata = deleteLineBreak(postdata);
@@ -963,6 +963,15 @@ public class BasicCurlParser {
            }
        }
        return postdata;
+   }
+
+   private String unquote(String value) {
+       LoggerFactory.getLogger(this.getClass()).info("Unquote {}", value, new RuntimeException(""));
+       if (value.charAt(0) == '"') {
+           String result = value.substring(1, value.length() - 1);
+           return result.replaceAll("\\\\(.)", "$1");
+       }
+       return value;
    }
 
    /**
@@ -975,7 +984,7 @@ public class BasicCurlParser {
         if (postdata.contains("@")) {
             String contentFile = null;
             String[] arr = postdata.split("@", 2);
-            String dataToEncode = readFromFile(arr[1]);
+            String dataToEncode = readFromFile(unquote(arr[1]));
             try {
                 contentFile = URLEncoder.encode(dataToEncode, StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {

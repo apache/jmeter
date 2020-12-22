@@ -423,6 +423,40 @@ public class BasicCurlParserTest {
     }
 
     @Test
+    public void testFormWithQuotedValue() {
+        String cmdLine = "curl 'https://www.exaple.invalid/' "
+                + "--form 'test=\"something quoted\"'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Map<String, String> res = request.getFormData();
+        assertEquals("something quoted", res.get("test"),
+                "With method 'form', we should post form data");
+    }
+
+    @Test
+    public void testFormWithQuotedValueWithQuotes() {
+        String cmdLine = "curl 'https://www.exaple.invalid/' "
+                + "--form 'test=\"something \\\"quoted\\\"\"'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Map<String, String> res = request.getFormData();
+        assertEquals("something \"quoted\"", res.get("test"),
+                "With method 'form', we should post form data");
+    }
+
+    @Test
+    public void testFormWithQuotedFilename() {
+        // The quotes will be removed later by the consumer, which is ParseCurlCommandAction
+        String cmdLine = "curl 'https://www.exaple.invalid/' "
+                + "--form 'image=@\"/some/file.jpg\"'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        Map<String, String> res = request.getFormData();
+        assertEquals("@\"/some/file.jpg\"", res.get("image"),
+                "With method 'form', we should post form data");
+    }
+
+    @Test
     public void testFormString() {
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
                 + "-H 'cache-control: no-cache' --form-string 'image=@C:\\Test\\test.jpg' ";
