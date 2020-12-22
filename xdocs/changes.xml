@@ -176,6 +176,7 @@ Summary
 <h3>Documentation</h3>
 <ul>
   <li><bug>64960</bug>Change scheduler reference in Thread Group documentation. Contributed by Ori Marko</li>
+  <li><bug>65006</bug>Illustration for completed HTTP Request Defaults element (Figure 4.4) contains misleading info</li>
 </ul>
 
 <h3>General</h3>
