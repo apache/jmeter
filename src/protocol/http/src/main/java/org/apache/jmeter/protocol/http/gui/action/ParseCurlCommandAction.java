@@ -526,7 +526,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             boolean isContainsFile = "@".equals(formValue.substring(0, 1));
             boolean isContainsContentType = formValue.toLowerCase().contains(TYPE_FORM);
             if (isContainsFile) {
-                formValue = formValue.substring(1, formValue.length());
+                formValue = unquote(formValue.substring(1, formValue.length()));
                 String contentType;
                 if (isContainsContentType) {
                     String[] formValueWithType = formValue.split(TYPE_FORM);
@@ -550,6 +550,13 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (!httpFileArgs.isEmpty()) {
             httpSampler.setHTTPFiles(httpFileArgs.toArray(new HTTPFileArg[httpFileArgs.size()]));
         }
+    }
+
+    private String unquote(String substring) {
+        if (substring.charAt(0) == '"') {
+            return substring.substring(1, substring.length() - 1).replaceAll("\\\\(.)", "$1");
+        }
+        return substring;
     }
 
     private void createProxyServer(Request request, HTTPSamplerProxy httpSampler) {

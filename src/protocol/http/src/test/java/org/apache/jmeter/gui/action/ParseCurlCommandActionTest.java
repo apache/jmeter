@@ -49,6 +49,7 @@ import org.apache.jmeter.protocol.http.curl.BasicCurlParser.Request;
 import org.apache.jmeter.protocol.http.gui.action.ParseCurlCommandAction;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.ThreadGroup;
@@ -289,6 +290,28 @@ public class ParseCurlCommandActionTest {
         assertEquals("jmeter.apache.org", httpSampler.getDomain(), "domain should be set in httpsampler");
         assertEquals(80, httpSampler.getPort(), "port should be 80 in httpsampler");
         assertEquals("GET", httpSampler.getMethod(), "method should be set in httpsampler");
+    }
+
+    @Test
+    public void testCreateHttpRequestWithQuotedFilenameAsData() throws Exception {
+        ParseCurlCommandAction p = new ParseCurlCommandAction();
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        ThreadGroup threadGroup = new ThreadGroup();
+        TestPlan testPlan = new TestPlan();
+        HashTree tree = new HashTree();
+        HashTree testPlanHT = tree.add(testPlan);
+        HashTree threadGroupHT = testPlanHT.add(threadGroup);
+        Request request = basicCurlParser.parse("curl 'http://jmeter.apache.org/' -X POST --form 'pic=@\"/some/file.jpg\"'");
+        Method method = getMethodFor("createHttpRequest", Request.class, HashTree.class, String.class);
+        HTTPSamplerProxy httpSampler = (HTTPSamplerProxy) method.invoke(p, request, threadGroupHT, "comment");
+        assertEquals("/", httpSampler.getPath(), "path should be set in httpsampler");
+        assertEquals("jmeter.apache.org", httpSampler.getDomain(), "domain should be set in httpsampler");
+        assertEquals(80, httpSampler.getPort(), "port should be 80 in httpsampler");
+        assertEquals("POST", httpSampler.getMethod(), "method should be set in httpsampler");
+        HTTPFileArg fileArg = httpSampler.getHTTPFiles()[0];
+        assertEquals("pic", fileArg.getParamName());
+        assertEquals("/some/file.jpg", fileArg.getPath());
+        assertEquals("image/jpeg", fileArg.getMimeType());
     }
 
     @Test

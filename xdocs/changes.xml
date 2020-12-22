@@ -186,6 +186,7 @@ Summary
   <li><bug>64984</bug>Darklaf LAF: Selecting a Test element does not work under certain screen resolutions on Windows. With the help of Jannis Weis</li>
   <li><bug>65008</bug>SampleResult.setIgnore() called from PostProcessor is not considered</li>
   <li><bug>64993</bug>Daklaf LAF: Menu navigation not working with keyboard shortcuts. With the help of Jannis Weis</li>
+  <li><bug>65013</bug>POST multipart/form-data cURL code with quoted arguments is not imported correctly</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
