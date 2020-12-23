@@ -445,6 +445,16 @@ public class BasicCurlParserTest {
     }
 
     @Test
+    public void testFormWithEmptyHeader() {
+        String cmdLine = "curl 'https://example.invalid' -H 'X-Something;' ";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        List<Pair<String, String>> res = request.getHeaders();
+        assertTrue(res.contains(Pair.of("X-Something", "")),
+                "With method 'parser', we should post form data: " + request.getFormData());
+    }
+
+    @Test
     public void testFormWithQuotedValue() {
         String cmdLine = "curl 'https://www.exaple.invalid/' "
                 + "--form 'test=\"something quoted\"'";

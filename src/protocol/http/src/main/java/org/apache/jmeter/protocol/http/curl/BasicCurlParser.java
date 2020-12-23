@@ -702,10 +702,16 @@ public class BasicCurlParser {
                     request.setCompressed(true);
                 } else if (option.getDescriptor().getId() == HEADER_OPT) {
                     String nameAndValue = option.getArgument(0);
-                    int indexOfSemicolon = nameAndValue.indexOf(':');
-                    String name = nameAndValue.substring(0, indexOfSemicolon).trim();
-                    String value = nameAndValue.substring(indexOfSemicolon + 1).trim();
-                    request.addHeader(name, value);
+                    int indexOfColon = nameAndValue.indexOf(':');
+                    if (indexOfColon >= 0) {
+                        String name = nameAndValue.substring(0, indexOfColon).trim();
+                        String value = nameAndValue.substring(indexOfColon + 1).trim();
+                        request.addHeader(name, value);
+                    } else if (nameAndValue.endsWith(";")) {
+                            request.addHeader(nameAndValue.substring(0, nameAndValue.length() - 1), "");
+                    } else {
+                        LOGGER.warn("Could not parse header argument [{}] as it didn't contain a colon nor ended with a semicolon", nameAndValue);
+                    }
                 } else if (option.getDescriptor().getId() == METHOD_OPT) {
                     String value = option.getArgument(0);
                     request.setMethod(value);
