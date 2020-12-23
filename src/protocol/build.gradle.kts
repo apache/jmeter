@@ -89,6 +89,14 @@ project("http") {
         implementation("com.fasterxml.jackson.core:jackson-databind")
         testImplementation(testFixtures(project(":src:testkit-wiremock")))
         testImplementation("com.github.tomakehurst:wiremock-jre8")
+        // For some reason JMeter bundles just tika-core and tika-parsers without transitive
+        // dependencies. So we exclude those
+        implementation("org.apache.tika:tika-core") {
+            isTransitive = false
+        }
+        runtimeOnly("org.apache.tika:tika-parsers") {
+            isTransitive = false
+        }
     }
 }
 
