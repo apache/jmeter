@@ -112,6 +112,12 @@ public class TestBug60842HtmlParser {
                     new Object[] { parserToTest,
                             "<link href='favicon.ico' rel='icon' type='image/vnd.microsoft.icon'/>",
                             "http://example.org/favicon.ico" },
+                    new Object[] { parserToTest,
+                            "<applet codebase='/some/path' code='Application.class' />",
+                            "http://example.org/some/path/Application.class" },
+                    new Object[] { parserToTest,
+                            "<applet codebase='/some/path' code='Application.class' archive='app.jar' />",
+                            "http://example.org/some/path/app.jar" },
                     new Object[] { parserToTest, "<embed src=''/>", "" },
                     new Object[] { parserToTest, "<embed src='  '/>", "" })) {
                 result.add(data);

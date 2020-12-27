@@ -93,7 +93,20 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             } else if (tagName.equals(TAG_IMAGE)) {
                 extractAttribute(tag, ATT_SRC);
             } else if (tagName.equals(TAG_APPLET)) {
-                extractAttribute(tag, ATT_CODE);
+                CharSequence codebase = tag.attr(ATT_CODEBASE);
+                CharSequence archive = tag.attr(ATT_ARCHIVE);
+                CharSequence code = tag.attr(ATT_CODE);
+                if (StringUtils.isNotBlank(codebase)) {
+                    String result;
+                    if (StringUtils.isNotBlank(archive)) {
+                        result = codebase.toString() + "/" + archive;
+                    } else {
+                        result = codebase.toString() + "/" + code;
+                    }
+                    urls.addURL(normalizeUrlValue(result), baseUrl.url);
+                } else {
+                    extractAttribute(tag, ATT_CODE);
+                }
             } else if (tagName.equals(TAG_OBJECT)) {
                 extractAttribute(tag, ATT_CODEBASE);
                 extractAttribute(tag, ATT_DATA);
