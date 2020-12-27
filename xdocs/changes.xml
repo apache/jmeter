@@ -142,6 +142,7 @@ Summary
   <li><bug>65004</bug>HTTP(S) Test Script recorder computes wrong HTTP Request breaking the application. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
   <li><bug>64543</bug>On MacOSX, Darklaf- IntelliJ Theme throws NPE in javax.swing.ToolTipManager.initiateToolTip</li>
   <li><bug>65024</bug>Sending mime type with parameter throws IllegalArgumentException</li>
+  <li><bug>65029</bug>Try harder to correctly guess the URL for applets, when download embedded URLs is enabled</li>
 </ul>
 
 <h3>Other Samplers</h3>
