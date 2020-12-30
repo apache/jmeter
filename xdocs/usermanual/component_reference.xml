@@ -2992,7 +2992,7 @@ It is important to choose the sampler names correctly to get the best results fr
 the Aggregate Report.
 </p>
 <p>
-Calculation of the <a href="glossary.html#Median">Median</a> and 90% Line (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>) values requires additional memory.
+Calculation of the <a href="glossary.html#Median">Median</a> and 90&nnbsp;% Line (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>) values requires additional memory.
 JMeter now combines samples with the same elapsed time, so far less memory is used.
 However, for samples that take more than a few seconds, the probability is that fewer samples will have identical times,
 in which case more memory will be needed.
@@ -3015,12 +3015,12 @@ This allows identical labels from different thread groups to be collated separat
 <li><code># Samples</code> - The number of samples with the same label</li>
 <li><code>Average</code> - The average time of a set of results</li>
 <li><code>Median</code> - The <a href="glossary.html#Median">median</a> is the time in the middle of a set of results.
-50% of the samples took no more than this time; the remainder took at least as long.</li>
-<li><code>90% Line</code> - 90% of the samples took no more than this time.
+50&nnbsp;% of the samples took no more than this time; the remainder took at least as long.</li>
+<li><code>90% Line</code> - 90&nnbsp;% of the samples took no more than this time.
 The remaining samples took at least as long as this. (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
-<li><code>95% Line</code> - 95% of the samples took no more than this time.
+<li><code>95% Line</code> - 95&nnbsp;% of the samples took no more than this time.
 The remaining samples took at least as long as this. (95<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
-<li><code>99% Line</code> - 99% of the samples took no more than this time.
+<li><code>99% Line</code> - 99&nnbsp;% of the samples took no more than this time.
 The remaining samples took at least as long as this. (99<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
 <li><code>Min</code> - The shortest time for the samples with the same label</li>
 <li>Max - The longest time for the samples with the same label</li>
