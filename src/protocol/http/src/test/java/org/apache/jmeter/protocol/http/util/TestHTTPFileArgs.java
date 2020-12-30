@@ -114,11 +114,11 @@ public class TestHTTPFileArgs {
     public void testToString() throws Exception {
         HTTPFileArgs files = new HTTPFileArgs();
         files.addHTTPFileArg("file1");
-        files.addHTTPFileArg("file2");
-        files.addHTTPFileArg("file3");
-        assertEquals("path:'file1'|param:''|mimetype:''\n"
-                    +"path:'file2'|param:''|mimetype:''\n"
-                    +"path:'file3'|param:''|mimetype:''",
+        files.addHTTPFileArg("file2.jpg");
+        files.addHTTPFileArg("file3.jar");
+        assertEquals("path:'file1'|param:''|mimetype:'application/octet-stream'\n"
+                    +"path:'file2.jpg'|param:''|mimetype:'image/jpeg'\n"
+                    +"path:'file3.jar'|param:''|mimetype:'application/java-archive'",
                     files.toString());
     }
 }

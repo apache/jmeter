@@ -32,7 +32,7 @@ public class TestHTTPFileArg {
         file = new HTTPFileArg("path");
         assertEquals("single parameter failure", "path", file.getPath());
         assertEquals("single parameter failure", "", file.getParamName());
-        assertEquals("single parameter failure", "", file.getMimeType());
+        assertEquals("single parameter failure", "application/octet-stream", file.getMimeType());
         file = new HTTPFileArg("path", "param", "mimetype");
         assertEquals("three parameter failure", "path", file.getPath());
         assertEquals("three parameter failure", "param", file.getParamName());
