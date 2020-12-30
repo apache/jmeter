@@ -22,6 +22,7 @@
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
+<!ENTITY nnbsp    "&#8239;" >
 ]>
 <document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
   prev="boss.html" next="properties_reference.html" id="$Id$">
@@ -6492,7 +6493,7 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
 Since JMeter 3.0, you can run a selection of Thread Group by selecting them and right clicking. A popup menu will appear:
 <figure width="461" height="818" image="threadgroup-popup-menu.png">Popup menu to start a selection of Thread Groups</figure>
 
-<br/>Notice you have 3 options to run the selection of Thread Groups:
+<br/>Notice you have three options to run the selection of Thread Groups:
 <ul>
 <li>Start: Start the selected thread groups only</li>
 <li>Start no pauses: Start the selected thread groups only but without running the timers</li>
@@ -6500,13 +6501,13 @@ Since JMeter 3.0, you can run a selection of Thread Group by selecting them and 
 </ul>
 
 <b>Validation Mode:</b><br></br>
-This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <code>Startup delay</code> set to <code>0</code>.
+This mode enables rapid validation of a Thread Group by running it with one thread, one iteration, no timers and no <code>Startup delay</code> set to <code>0</code>.
 Behaviour can be modified with some properties by setting in <code>user.properties</code>:
 <ul>
 <li><code>testplan_validation.nb_threads_per_thread_group</code>: Number of threads to use to validate a Thread Group, by default <code>1</code></li>
 <li><code>testplan_validation.ignore_timers</code>: Ignore timers when validating the thread group of plan, by default <code>1</code></li>
 <li><code>testplan_validation.number_iterations</code>: Number of iterations to use to validate a Thread Group</li>
-<li><code>testplan_validation.tpc_force_100_pct</code>: Whether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to <code>false</code></li>
+<li><code>testplan_validation.tpc_force_100_pct</code>: Whether to force Throughput Controller in percentage mode to run as if percentage was 100&nnbsp;%. Defaults to <code>false</code></li>
 </ul>
 </p>
 
@@ -6524,7 +6525,13 @@ Behaviour can be modified with some properties by setting in <code>user.properti
         </ul>
         </property>
         <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
-        <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
+        <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.
+            If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after
+            the previous thread started, for a total time of 100 seconds to get the test fully up to speed.
+            <note>The first thread will always start directly, so if you configured <strong>one</strong> thread,
+                the ramp-up time is effectively <strong>zero</strong>. For the same reason, the tenth thread in
+                the above example will actually be started after 90 seconds and not 100 seconds.</note>
+        </property>
         <property name="Loop Count" required="Yes, unless Infinite is selected">Number of times to perform the test case.  Alternatively, "<code>infinite</code>" can be selected causing the test to run until manually stopped or end of the thread lifetime is reached.</property>
         <property name="Delay Thread creation until needed" required="Yes">
         If selected, threads are created only when the appropriate proportion of the ramp-up time has elapsed.
