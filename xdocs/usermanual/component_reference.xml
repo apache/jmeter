@@ -323,10 +323,12 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         <p>
-        If it is a <code>POST</code> or <code>PUT</code> or <code>PATCH</code> request and there is a single file whose 'Parameter name' attribute (below) is omitted,
-        then the file is sent as the entire body
-        of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for <code>POST</code> requests,
-        and also for <code>PUT</code> requests.
+        When <code>MIME Type</code> is empty, JMeter will try to guess the MIME type of the given file.
+        </p>
+        <p>
+        If it is a <code>POST</code> or <code>PUT</code> or <code>PATCH</code> request and there is a single file whose '<code>Parameter name</code>'
+        attribute (below) is omitted, then the file is sent as the entire body of the request, i.e. no wrappers are added. This allows arbitrary
+        bodies to be sent. This functionality is present for <code>POST</code> requests, and also for <code>PUT</code> requests.
         <b>See below for some further information on parameter handling.</b>
         </p>
         </property>
