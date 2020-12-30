@@ -6494,21 +6494,21 @@ Since JMeter 3.0, you can run a selection of Thread Group by selecting them and 
 <figure width="461" height="818" image="threadgroup-popup-menu.png">Popup menu to start a selection of Thread Groups</figure>
 
 <br/>Notice you have three options to run the selection of Thread Groups:
-<ul>
-<li>Start: Start the selected thread groups only</li>
-<li>Start no pauses: Start the selected thread groups only but without running the timers</li>
-<li>Validate: Start the selected thread groups only using validation mode. Per default this runs the Thread Group in validation mode (see below)</li>
-</ul>
+<dl>
+<dt><code>Start</code></dt><dd>Start the selected thread groups only</dd>
+<dt><code>Start no pauses</code></dt><dd>Start the selected thread groups only but without running the timers</dd>
+<dt><code>Validate</code></dt><dd>Start the selected thread groups only using validation mode. Per default this runs the Thread Group in validation mode (see below)</dd>
+</dl>
 
 <b>Validation Mode:</b><br></br>
 This mode enables rapid validation of a Thread Group by running it with one thread, one iteration, no timers and no <code>Startup delay</code> set to <code>0</code>.
 Behaviour can be modified with some properties by setting in <code>user.properties</code>:
-<ul>
-<li><code>testplan_validation.nb_threads_per_thread_group</code>: Number of threads to use to validate a Thread Group, by default <code>1</code></li>
-<li><code>testplan_validation.ignore_timers</code>: Ignore timers when validating the thread group of plan, by default <code>1</code></li>
-<li><code>testplan_validation.number_iterations</code>: Number of iterations to use to validate a Thread Group</li>
-<li><code>testplan_validation.tpc_force_100_pct</code>: Whether to force Throughput Controller in percentage mode to run as if percentage was 100&nnbsp;%. Defaults to <code>false</code></li>
-</ul>
+<dl>
+<dt><code>testplan_validation.nb_threads_per_thread_group</code></dt><dd>Number of threads to use to validate a Thread Group, by default <code>1</code></dd>
+<dt><code>testplan_validation.ignore_timers</code></dt><dd>Ignore timers when validating the thread group of plan, by default <code>1</code></dd>
+<dt><code>testplan_validation.number_iterations</code></dt><dd>Number of iterations to use to validate a Thread Group</dd>
+<dt><code>testplan_validation.tpc_force_100_pct</code></dt><dd>Whether to force Throughput Controller in percentage mode to run as if percentage was 100&nnbsp;%. Defaults to <code>false</code></dd>
+</dl>
 </p>
 
 <properties>
