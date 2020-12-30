@@ -5191,7 +5191,7 @@ Note that the throughput value should not be changed too often during a test
 
 <h4>Ramp-up and startup spike</h4>
 <p>You might used "ramp-up" or similar approaches to avoid a spike at the test start. For instance, if you configure <complink name="Thread Group" /> to have
-    100 threads, and set <code>Ramp-up Period</code> to 0 (or to a small number), then all the threads would start at the same time, and it would produce an unwanted spike of the load. On top of that, if you set <code>Ramp-up Period</code> too high, it might result in "too few" threads being available at the very beginning to achieve
+    100 threads, and set <code>Ramp-up Period</code> to <code>0</code> (or to a small number), then all the threads would start at the same time, and it would produce an unwanted spike of the load. On top of that, if you set <code>Ramp-up Period</code> too high, it might result in "<em>too few</em>" threads being available at the very beginning to achieve
 the required load.</p>
 <p><code>Precise Throughput Timer</code> schedules executions in a random way, so it can be used to generate constant load, and it is recommended to set both
     <code>Ramp-up Period</code> and <code>Delay</code> to <code>0</code>.</p>
