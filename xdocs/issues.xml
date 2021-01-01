@@ -106,10 +106,12 @@ Use the checklist below to guide you.
 <li>OS version</li>
 <li><code>jmeter.log</code> file (unlikely to contain sensitive information, but check before uploading)</li>
 <li>JMX file if relevant (redact any sensitive information first), providing a simplified Test Plan (using <complink name="Debug Sampler"/>) will ensure BUG is fixed much more rapidly than without it</li>
+<li>Try to reproduce the bug without third-party plug-ins. Minimal JMX files should not contain third-party plug-ins, as it makes it harder to test them on a plain JMeter installation.</li>
 <li>JTL file if relevant (may need to redact sensitive information)</li>
 <li>For a suspected bug, describe what you did, what happened, and how this differs from what you expected to happen.
 Does it happen every time?
 </li>
+<li>If you have error messages, that you wish to report, copy them as text into the issue, as it makes it easier to search for them and re-use the message in our research for the origin of the issue</li>
 <li>Add yourself in <code>CC</code> List to be notified when JMeter Team requires more information (in this case bug will be marked as <code>NEEDINFO</code>)</li>
 <li>When a bug is market as <code>NEEDINFO</code>, please provide as soon as possible the required information so that bug can be understood and fixed. Be aware that if
 no information is provided after team requires more information and bug is not reproducible, then bug will be closed as <code>WORKSFORME</code>. You can always reopen it later once you provide the required information.</li>
