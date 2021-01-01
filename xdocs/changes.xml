@@ -79,6 +79,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><bug>65027</bug>Detect mime-type for files automatically when adding files to HTTP Sampler</li>
+  <li><bug>65020</bug>HTTP Sampler/Files upload tab - add missing buttons</li>
 </ul>
 
 <h3>Other samplers</h3>
