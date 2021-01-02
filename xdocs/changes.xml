@@ -112,6 +112,7 @@ Summary
 <h3>General</h3>
 <ul>
   <li><bug>65028</bug>Add documentation for the property <code>client.rmi.localport</code></li>
+  <li><bug>65012</bug>Better handling of displaying long comments in the GUI</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
