@@ -16,11 +16,8 @@
  */
 package org.apache.jorphan.util;
 
-import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Comparator for {@link Map.Entry} Objects, that compares based on their keys only. The keys
@@ -31,57 +28,16 @@ import java.util.regex.Pattern;
 public class AlphaNumericKeyComparator implements Comparator<Map.Entry<Object, Object>> {
     
     public static final AlphaNumericKeyComparator INSTANCE = new AlphaNumericKeyComparator();
+    private AlphaNumericComparator<Map.Entry<Object, Object>> comparator;
     
     private AlphaNumericKeyComparator() {
         // don't instantiate this class on your own.
+        this.comparator = new AlphaNumericComparator<Map.Entry<Object, Object>>(e -> e.getKey().toString());
     }
-
-    private static final Pattern parts = Pattern.compile("(\\D*)(\\d*)");
-    private static final int ALPHA_PART = 1;
-    private static final int NUM_PART = 2;
 
     @Override
     public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {
-        Matcher m1 = parts.matcher(o1.getKey().toString());
-        Matcher m2 = parts.matcher(o2.getKey().toString());
-
-        while (m1.find() && m2.find()) {
-            int compareCharGroup = m1.group(ALPHA_PART).compareTo(m2.group(ALPHA_PART));
-            if (compareCharGroup != 0) {
-                return compareCharGroup;
-            }
-            String numberPart1 = m1.group(NUM_PART);
-            String numberPart2 = m2.group(NUM_PART);
-            if (numberPart1.isEmpty()) {
-                if (numberPart2.isEmpty()) {
-                    return 0;
-                }
-                return -1;
-            } else if (numberPart2.isEmpty()) {
-                return 1;
-            }
-            int lengthNumber1 = numberPart1.length();
-            int lengthNumber2 = numberPart2.length();
-            if (lengthNumber1 != lengthNumber2) {
-                if (lengthNumber1 < lengthNumber2) {
-                    return -1;
-                }
-                return 1;
-            }
-            BigInteger i1 = new BigInteger(numberPart1);
-            BigInteger i2 = new BigInteger(numberPart2);
-            int compareNumber = i1.compareTo(i2);
-            if (compareNumber != 0) {
-                return compareNumber;
-            }
-        }
-        if (m1.hitEnd() && m2.hitEnd()) {
-            return 0;
-        }
-        if (m1.hitEnd()) {
-            return -1;
-        }
-        return 1;
+        return this.comparator.compare(o1, o2);
     }
 
 }
