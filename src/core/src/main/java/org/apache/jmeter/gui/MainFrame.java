@@ -670,7 +670,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                         if (testElement instanceof TestElement) {
                             String comment = ((TestElement) testElement).getComment();
                             if (StringUtils.isNotBlank(comment)) {
-                                return comment;
+                                return StringUtils.abbreviate(comment, 80);
                             }
                         }
                     }
