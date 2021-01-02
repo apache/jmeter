@@ -30,7 +30,7 @@ public class FileArgumentHolder implements ArgumentHolder {
     private FileArgumentHolder(String name, Map<String, String> metadata) {
         this.name = name;
         this.metadata = metadata;
-    };
+    }
 
     public static FileArgumentHolder of(String name) {
         if (name == null) {
