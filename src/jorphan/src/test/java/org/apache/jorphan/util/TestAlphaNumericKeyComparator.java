@@ -13,16 +13,28 @@ class TestAlphaNumericKeyComparator {
 
     @ParameterizedTest
     @ValueSource(strings = { "abc", "", "var_123", "434", "_" })
-    void testComparatorWithEqualKeys(String candidate) {
+    void testComparatorWithSameKeys(String candidate) {
         Comparator<Map.Entry<Object, Object>> comparator = AlphaNumericKeyComparator.INSTANCE;
         assertEquals(0, comparator.compare(entry(candidate), entry(candidate)));
     }
 
     @ParameterizedTest
+    @CsvSource({ "abc-001, abc-1", "007, 7", "0000, 0", "abc|000, abc|0" })
+    void testComparatorWithEquivalentKeys(String left, String right) {
+        Comparator<Map.Entry<Object, Object>> comparator = AlphaNumericKeyComparator.INSTANCE;
+        assertEquals(0, comparator.compare(entry(left), entry(right)));
+        assertEquals(0, comparator.compare(entry(right), entry(left)));
+    }
+
+    @ParameterizedTest
     @CsvSource({
         "a,                    1",
+        "something-0001,       999999999999999999999999999999999999999999999999999999999999999999999999999999",
+        "abc[23],              abc[2]",
         "a10,                  a1",
         "a2,                   a1",
+        "2,                    01",
+        "0010,                 000005",
         "a20,                  a10",
         "a10,                  a2",
         "z,                    10000",
@@ -32,7 +44,9 @@ class TestAlphaNumericKeyComparator {
         "abc,                  ''",
         "'abc.,${something}1', 'abc.,${something}'",
         "number1,              number",
-        "789b,                 789"
+        "789b,                 789",
+        "0xcafebabe,           0x8664",
+        "abc_0000,             abc_"
         })
     void testComparatorDifferentKeys(String higher, String lower) {
         Comparator<Map.Entry<Object, Object>> comparator = AlphaNumericKeyComparator.INSTANCE;
