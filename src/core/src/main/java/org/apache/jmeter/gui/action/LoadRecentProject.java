@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
@@ -122,8 +123,8 @@ public class LoadRecentProject extends Load {
         }
         // Get the preference for the recent files
         Deque<String> newRecentFiles = IntStream.range(0, NUMBER_OF_MENU_ITEMS)
-                .mapToObj(i -> getRecentFile(i))
-                .filter(s -> s != null)
+                .mapToObj(LoadRecentProject::getRecentFile)
+                .filter(Objects::nonNull)
                 .filter(s -> !(s.equals(loadedFileName)))
                 .collect(Collectors.toCollection(ArrayDeque::new));
         newRecentFiles.addFirst(loadedFileName);
