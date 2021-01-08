@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -636,7 +635,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 sampler.setFollowRedirects(samplerFollowRedirects);
                 sampler.setUseKeepAlive(useKeepAlive);
                 sampler.setImageParser(samplerDownloadImages);
-                Authorization authorization = createAuthorization(testElements, sampler);
+                Authorization authorization = createAuthorization(testElements, result);
                 if (authorization != null) {
                     setAuthorization(authorization, myTarget);
                 }
@@ -668,10 +667,10 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * Removes Authorization if present
      *
      * @param testElements {@link TestElement}[]
-     * @param sampler      {@link HTTPSamplerBase}
+     * @param result       {@link HTTPSampleResult}
      * @return {@link Authorization}
      */
-    private Authorization createAuthorization(final TestElement[] testElements, HTTPSamplerBase sampler) {
+    private Authorization createAuthorization(final TestElement[] testElements, SampleResult result) {
         Header authHeader;
         Authorization authorization = null;
         // Iterate over subconfig elements searching for HeaderManager
@@ -710,12 +709,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                             }
                             authCredentialsBase64 = authHeaderContent[1];
                             authorization=new Authorization();
-                            try {
-                                authorization.setURL(sampler.getUrl().toExternalForm());
-                            } catch (MalformedURLException e) {
-                                log.error("Error filling url on authorization, message: {}", e.getMessage(), e);
-                                authorization.setURL("${AUTH_BASE_URL}");//$NON-NLS-1$
-                            }
+                            authorization.setURL(computeAuthUrl(result.getUrlAsString()));
                             authorization.setMechanism(mechanism);
                             if(BASIC_AUTH.equals(authType)) {
                                 String authCred = new String(Base64.decodeBase64(authCredentialsBase64), StandardCharsets.UTF_8);
@@ -744,6 +738,14 @@ public class ProxyControl extends GenericController implements NonTestElement {
             }
         }
         return authorization;
+    }
+
+    private String computeAuthUrl(String url) {
+        int index = url.lastIndexOf('/');
+        if (index >=0) {
+            return url.substring(0, index+1);
+        }
+        return url;
     }
 
     public void stopProxy() {

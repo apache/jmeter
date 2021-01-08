@@ -22,6 +22,7 @@
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
+<!ENTITY nnbsp    "&#8239;" >
 ]>
 <document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
   prev="boss.html" next="properties_reference.html" id="$Id$">
@@ -2991,7 +2992,7 @@ It is important to choose the sampler names correctly to get the best results fr
 the Aggregate Report.
 </p>
 <p>
-Calculation of the <a href="glossary.html#Median">Median</a> and 90% Line (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>) values requires additional memory.
+Calculation of the <a href="glossary.html#Median">Median</a> and 90&nnbsp;% Line (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>) values requires additional memory.
 JMeter now combines samples with the same elapsed time, so far less memory is used.
 However, for samples that take more than a few seconds, the probability is that fewer samples will have identical times,
 in which case more memory will be needed.
@@ -3014,12 +3015,12 @@ This allows identical labels from different thread groups to be collated separat
 <li><code># Samples</code> - The number of samples with the same label</li>
 <li><code>Average</code> - The average time of a set of results</li>
 <li><code>Median</code> - The <a href="glossary.html#Median">median</a> is the time in the middle of a set of results.
-50% of the samples took no more than this time; the remainder took at least as long.</li>
-<li><code>90% Line</code> - 90% of the samples took no more than this time.
+50&nnbsp;% of the samples took no more than this time; the remainder took at least as long.</li>
+<li><code>90% Line</code> - 90&nnbsp;% of the samples took no more than this time.
 The remaining samples took at least as long as this. (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
-<li><code>95% Line</code> - 95% of the samples took no more than this time.
+<li><code>95% Line</code> - 95&nnbsp;% of the samples took no more than this time.
 The remaining samples took at least as long as this. (95<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
-<li><code>99% Line</code> - 99% of the samples took no more than this time.
+<li><code>99% Line</code> - 99&nnbsp;% of the samples took no more than this time.
 The remaining samples took at least as long as this. (99<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
 <li><code>Min</code> - The shortest time for the samples with the same label</li>
 <li>Max - The longest time for the samples with the same label</li>
@@ -5191,7 +5192,7 @@ Note that the throughput value should not be changed too often during a test
 
 <h4>Ramp-up and startup spike</h4>
 <p>You might used "ramp-up" or similar approaches to avoid a spike at the test start. For instance, if you configure <complink name="Thread Group" /> to have
-    100 threads, and set <code>Ramp-up Period</code> to 0 (or to a small number), then all the threads would start at the same time, and it would produce an unwanted spike of the load. On top of that, if you set <code>Ramp-up Period</code> too high, it might result in "too few" threads being available at the very beginning to achieve
+    100 threads, and set <code>Ramp-up Period</code> to <code>0</code> (or to a small number), then all the threads would start at the same time, and it would produce an unwanted spike of the load. On top of that, if you set <code>Ramp-up Period</code> too high, it might result in "<em>too few</em>" threads being available at the very beginning to achieve
 the required load.</p>
 <p><code>Precise Throughput Timer</code> schedules executions in a random way, so it can be used to generate constant load, and it is recommended to set both
     <code>Ramp-up Period</code> and <code>Delay</code> to <code>0</code>.</p>
@@ -6492,22 +6493,22 @@ JMeter does not interrupt samplers which are waiting for a response, so the end 
 Since JMeter 3.0, you can run a selection of Thread Group by selecting them and right clicking. A popup menu will appear:
 <figure width="461" height="818" image="threadgroup-popup-menu.png">Popup menu to start a selection of Thread Groups</figure>
 
-<br/>Notice you have 3 options to run the selection of Thread Groups:
-<ul>
-<li>Start: Start the selected thread groups only</li>
-<li>Start no pauses: Start the selected thread groups only but without running the timers</li>
-<li>Validate: Start the selected thread groups only using validation mode. Per default this runs the Thread Group in validation mode (see below)</li>
-</ul>
+<br/>Notice you have three options to run the selection of Thread Groups:
+<dl>
+<dt><code>Start</code></dt><dd>Start the selected thread groups only</dd>
+<dt><code>Start no pauses</code></dt><dd>Start the selected thread groups only but without running the timers</dd>
+<dt><code>Validate</code></dt><dd>Start the selected thread groups only using validation mode. Per default this runs the Thread Group in validation mode (see below)</dd>
+</dl>
 
 <b>Validation Mode:</b><br></br>
-This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <code>Startup delay</code> set to <code>0</code>.
+This mode enables rapid validation of a Thread Group by running it with one thread, one iteration, no timers and no <code>Startup delay</code> set to <code>0</code>.
 Behaviour can be modified with some properties by setting in <code>user.properties</code>:
-<ul>
-<li><code>testplan_validation.nb_threads_per_thread_group</code>: Number of threads to use to validate a Thread Group, by default <code>1</code></li>
-<li><code>testplan_validation.ignore_timers</code>: Ignore timers when validating the thread group of plan, by default <code>1</code></li>
-<li><code>testplan_validation.number_iterations</code>: Number of iterations to use to validate a Thread Group</li>
-<li><code>testplan_validation.tpc_force_100_pct</code>: Whether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to <code>false</code></li>
-</ul>
+<dl>
+<dt><code>testplan_validation.nb_threads_per_thread_group</code></dt><dd>Number of threads to use to validate a Thread Group, by default <code>1</code></dd>
+<dt><code>testplan_validation.ignore_timers</code></dt><dd>Ignore timers when validating the thread group of plan, by default <code>1</code></dd>
+<dt><code>testplan_validation.number_iterations</code></dt><dd>Number of iterations to use to validate a Thread Group</dd>
+<dt><code>testplan_validation.tpc_force_100_pct</code></dt><dd>Whether to force Throughput Controller in percentage mode to run as if percentage was 100&nnbsp;%. Defaults to <code>false</code></dd>
+</dl>
 </p>
 
 <properties>
@@ -6524,7 +6525,13 @@ Behaviour can be modified with some properties by setting in <code>user.properti
         </ul>
         </property>
         <property name="Number of Threads" required="Yes">Number of users to simulate.</property>
-        <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.  If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after the previous thread started, for a total time of 100 seconds to get the test fully up to speed.</property>
+        <property name="Ramp-up Period" required="Yes">How long JMeter should take to get all the threads started.
+            If there are 10 threads and a ramp-up time of 100 seconds, then each thread will begin 10 seconds after
+            the previous thread started, for a total time of 100 seconds to get the test fully up to speed.
+            <note>The first thread will always start directly, so if you configured <strong>one</strong> thread,
+                the ramp-up time is effectively <strong>zero</strong>. For the same reason, the tenth thread in
+                the above example will actually be started after 90 seconds and not 100 seconds.</note>
+        </property>
         <property name="Loop Count" required="Yes, unless Infinite is selected">Number of times to perform the test case.  Alternatively, "<code>infinite</code>" can be selected causing the test to run until manually stopped or end of the thread lifetime is reached.</property>
         <property name="Delay Thread creation until needed" required="Yes">
         If selected, threads are created only when the appropriate proportion of the ramp-up time has elapsed.

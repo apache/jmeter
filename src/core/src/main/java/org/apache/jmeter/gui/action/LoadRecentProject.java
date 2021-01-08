@@ -25,8 +25,11 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -114,40 +117,30 @@ public class LoadRecentProject extends Load {
      * been loaded
      */
     public static void updateRecentFileMenuItems(List<JComponent> menuItems, String loadedFileName) {
+        // Do nothing, when no real file was given
+        if (loadedFileName == null) {
+            return;
+        }
         // Get the preference for the recent files
-
-        Deque<String> newRecentFiles = new ArrayDeque<>();
-        // Check if the new file is already in the recent list
-        boolean alreadyExists = false;
-        for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
-            String recentFilePath = getRecentFile(i);
-            if (recentFilePath == null) {
-                continue;
-            }
-            if(!loadedFileName.equals(recentFilePath)) {
-                newRecentFiles.add(recentFilePath);
-            }
-            else {
-                alreadyExists = true;
-            }
-        }
-        // Add the new file at the start of the list
+        Deque<String> newRecentFiles = IntStream.range(0, NUMBER_OF_MENU_ITEMS)
+                .mapToObj(LoadRecentProject::getRecentFile)
+                .filter(Objects::nonNull)
+                .filter(s -> !(s.equals(loadedFileName)))
+                .collect(Collectors.toCollection(ArrayDeque::new));
         newRecentFiles.addFirst(loadedFileName);
-        // Remove the last item from the list if it was a brand new file
-        if(!alreadyExists) {
-            newRecentFiles.removeLast();
-        }
+
         // Store the recent files
         int index = 0;
         for (String fileName : newRecentFiles) {
-            if (fileName == null) {
-                continue;
-            }
             setRecentFile(index, fileName);
             index++;
             if (index >= NUMBER_OF_MENU_ITEMS) {
                 break;
             }
+        }
+        while (index < NUMBER_OF_MENU_ITEMS) {
+            removeRecentFile(index);
+            index++;
         }
         // Update menu items to reflect recent files
         updateMenuItems(menuItems);
@@ -248,6 +241,10 @@ public class LoadRecentProject extends Load {
      */
     private static void setRecentFile(int index, String fileName) {
         prefs.put(USER_PREFS_KEY + index, fileName);
+    }
+
+    private static void removeRecentFile(int index) {
+        prefs.remove(USER_PREFS_KEY + index);
     }
 
     /**

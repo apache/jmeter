@@ -27,11 +27,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.protocol.http.control.Cookie;
+import org.apache.jmeter.protocol.http.curl.ArgumentHolder;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser;
+import org.apache.jmeter.protocol.http.curl.FileArgumentHolder;
+import org.apache.jmeter.protocol.http.curl.StringArgumentHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -57,10 +60,10 @@ public class BasicCurlParserTest {
         assertEquals(5, request.getHeaders().size());
         assertTrue(request.isCompressed());
         assertEquals("GET", request.getMethod());
-        String resParser = "Request [compressed=true, url=http://jmeter.apache.org/, method=GET, headers={User-Agent=Mozilla/5.0 "
-                + "(Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0, Accept=text/html,application/xhtml+xml,"
-                + "application/xml;q=0.9,*/*;q=0.8, Accept-Language=en-US,en;q=0.5, DNT=1, "
-                + "Upgrade-Insecure-Requests=1}]";
+        String resParser = "Request [compressed=true, url=http://jmeter.apache.org/, method=GET, headers=[(User-Agent,Mozilla/5.0 "
+                +"(Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0), (Accept,text/html,application/xhtml+xml,"
+                + "application/xml;q=0.9,*/*;q=0.8), (Accept-Language,en-US,en;q=0.5), (DNT,1), "
+                + "(Upgrade-Insecure-Requests,1)]]";
         assertEquals(resParser, request.toString(),
                 "The method 'toString' should get all parameters correctly");
     }
@@ -139,7 +142,7 @@ public class BasicCurlParserTest {
         String cmdLine = "";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        assertEquals("Request [compressed=false, url=null, method=GET, headers={}]", request.toString(),
+        assertEquals("Request [compressed=false, url=null, method=GET, headers=[]]", request.toString(),
                 "The method 'translateCommandline' should return 'null' when command is empty, ");
     }
 
@@ -208,7 +211,7 @@ public class BasicCurlParserTest {
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         assertEquals(5, request.getHeaders().size(),
                 "With method 'parser', the quantity of Headers should be 5'");
-        assertEquals("Mozilla/5.0", request.getHeaders().get("User-Agent"),
+        assertTrue(request.getHeaders().contains(Pair.of("User-Agent", "Mozilla/5.0")),
                 "With method 'parser', Headers need to add 'user-agent' with value 'Mozilla/5.0' ");
     }
 
@@ -319,6 +322,15 @@ public class BasicCurlParserTest {
     }
 
     @Test
+    public void testDuplicatedKeyInData() {
+        String cmdLine = "curl 'https://example.invalid' "
+                + "-H 'cache-control: no-cache' --data 'name=one' --data 'name=two' ";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        assertEquals("name=one&name=two", request.getPostData());
+    }
+
+    @Test
     public void testDataReadFromFile() throws IOException {
         String encoding = StandardCharsets.UTF_8.name();
         FileUtils.writeStringToFile(tempFile, "name=test" + System.lineSeparator(), encoding, true);
@@ -417,9 +429,75 @@ public class BasicCurlParserTest {
                 + "-H 'cache-control: no-cache' -F 'test=name' -F 'test1=name1' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Map<String, String> res = request.getFormData();
-        assertEquals("name1", res.get("test1"),
+        List<Pair<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(Pair.of("test1", StringArgumentHolder.of("name1"))),
                 "With method 'parser', we should post form data");
+    }
+
+    @Test
+    public void testFormWithEmptyValue() {
+        String cmdLine = "curl 'https://example.invalid' -F 'test=\"\"' ";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        List<Pair<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(Pair.of("test", StringArgumentHolder.of(""))),
+                "With method 'parser', we should post form data: " + request.getFormData());
+    }
+
+    @Test
+    public void testFormWithEmptyHeader() {
+        String cmdLine = "curl 'https://example.invalid' -H 'X-Something;' ";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        List<Pair<String, String>> res = request.getHeaders();
+        assertTrue(res.contains(Pair.of("X-Something", "")),
+                "With method 'parser', we should post form data: " + request.getFormData());
+    }
+
+    @Test
+    public void testFormWithQuotedValue() {
+        String cmdLine = "curl 'https://www.exaple.invalid/' "
+                + "--form 'test=\"something quoted\"'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        List<Pair<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(Pair.of("test", StringArgumentHolder.of("something quoted"))),
+                "With method 'form', we should post form data");
+    }
+
+    @Test
+    public void testFormWithQuotedValueWithQuotes() {
+        String cmdLine = "curl 'https://www.exaple.invalid/' "
+                + "--form 'test=\"something \\\"quoted\\\"\"'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        List<Pair<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(Pair.of("test", StringArgumentHolder.of("something \"quoted\""))),
+                "With method 'form', we should post form data");
+    }
+
+    @Test
+    public void testFormWithQuotedFilename() {
+        // The quotes will be removed later by the consumer, which is ParseCurlCommandAction
+        String cmdLine = "curl 'https://www.exaple.invalid/' "
+                + "--form 'image=@\"/some/file.jpg\"'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        List<Pair<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(Pair.of("image", FileArgumentHolder.of("/some/file.jpg"))),
+                "With method 'form', we should post form data: " + request.getFormData());
+    }
+
+    @Test
+    public void testFormWithQuotedNotFilename() {
+        // The quotes will be removed later by the consumer, which is ParseCurlCommandAction
+        String cmdLine = "curl 'https://www.exaple.invalid/' "
+                + "--form 'image=\"@/some/file.jpg\"'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        List<Pair<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(Pair.of("image", StringArgumentHolder.of("@/some/file.jpg"))),
+                "With method 'form', we should post form data");
     }
 
     @Test
@@ -428,9 +506,9 @@ public class BasicCurlParserTest {
                 + "-H 'cache-control: no-cache' --form-string 'image=@C:\\Test\\test.jpg' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        Map<String, String> res = request.getFormStringData();
-        assertEquals("@C:\\Test\\test.jpg", res.get("image"),
-                "With method 'parser', we should post form data");
+        List<Pair<String,String>> res = request.getFormStringData();
+        assertTrue(res.contains(Pair.of("image", "@C:\\Test\\test.jpg")),
+                "With method 'parser', we should post form data: " + request.getFormStringData());
     }
 
     @Test
@@ -522,7 +600,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --referer 'www.baidu.com'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        assertEquals("www.baidu.com", request.getHeaders().get("Referer"));
+        assertTrue(request.getHeaders().contains(Pair.of("Referer", "www.baidu.com")));
     }
 
     @Test

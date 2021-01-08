@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -43,6 +44,8 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.Cookie;
@@ -123,7 +126,7 @@ public class BasicCurlParser {
     public static final class Request {
         private boolean compressed;
         private String url;
-        private Map<String, String> headers = new LinkedHashMap<>();
+        private List<Pair<String, String>> headers = new ArrayList<>();
         private String method = "GET";
         private String postData;
         private String interfaceName;
@@ -133,8 +136,8 @@ public class BasicCurlParser {
         private String filepathCookie="";
         private Authorization authorization = new Authorization();
         private String caCert = "";
-        private Map<String, String> formData = new LinkedHashMap<>();
-        private Map<String, String> formStringData = new LinkedHashMap<>();
+        private List<Pair<String, ArgumentHolder>> formData = new ArrayList<>();
+        private List<Pair<String, String>> formStringData = new ArrayList<>();
         private Set<String> dnsServers = new HashSet<>();
         private boolean isKeepAlive = true;
         private double maxTime = -1;
@@ -146,6 +149,7 @@ public class BasicCurlParser {
         private int limitRate = 0;
         private String noproxy;
         private static final List<String> HEADERS_TO_IGNORE = Arrays.asList("Connection", "Host");// $NON-NLS-1$
+        private static final List<String> UNIQUE_HEADERS = Arrays.asList("user-agent"); // $NON-NLS-1$
         private static final int ONE_KILOBYTE_IN_CPS = 1024;
         public Request() {
             super();
@@ -169,7 +173,11 @@ public class BasicCurlParser {
          * @param value the post data
          */
         public void setPostData(String value) {
-            this.postData = value;
+            if (StringUtils.isBlank(this.postData)) {
+                this.postData = value;
+            } else {
+                this.postData = this.postData + "&" + value;
+            }
         }
 
         /**
@@ -200,8 +208,13 @@ public class BasicCurlParser {
         public void addHeader(String name, String value) {
             if ("COOKIE".equalsIgnoreCase(name)) {
                 this.cookieInHeaders = value;
-            } else if (!HEADERS_TO_IGNORE.contains(name)) {
-                headers.put(name, value);
+            } else if (HEADERS_TO_IGNORE.contains(name)) {
+                return;
+            } else {
+                if (UNIQUE_HEADERS.contains(name.toLowerCase(Locale.US))) {
+                    headers.removeIf(p -> p.getLeft().equalsIgnoreCase(name));
+                }
+                headers.add(Pair.of(name, value));
             }
         }
 
@@ -239,8 +252,8 @@ public class BasicCurlParser {
         /**
          * @return the headers
          */
-        public Map<String, String> getHeaders() {
-            return Collections.unmodifiableMap(this.headers);
+        public List<Pair<String, String>> getHeaders() {
+            return Collections.unmodifiableList(this.headers);
         }
 
         /**
@@ -406,8 +419,8 @@ public class BasicCurlParser {
         /**
          * @return the map of form data
          */
-        public Map<String, String> getFormStringData() {
-            return Collections.unmodifiableMap(this.formStringData);
+        public List<Pair<String,String>> getFormStringData() {
+            return Collections.unmodifiableList(this.formStringData);
         }
 
         /**
@@ -415,22 +428,22 @@ public class BasicCurlParser {
          * @param value the value of form data
          */
         public void addFormStringData(String key, String value) {
-            formStringData.put(key, value);
+            formStringData.add(Pair.of(key, value));
         }
 
         /**
          * @return the map of form data
          */
-        public Map<String, String> getFormData() {
-            return Collections.unmodifiableMap(this.formData);
+        public List<Pair<String,ArgumentHolder>> getFormData() {
+            return Collections.unmodifiableList(this.formData);
         }
 
         /**
          * @param key   the key of form data
          * @param value the value of form data
          */
-        public void addFormData(String key, String value) {
-            formData.put(key, value);
+        public void addFormData(String key, ArgumentHolder value) {
+            formData.add(Pair.of(key, value));
         }
 
         /**
@@ -541,7 +554,7 @@ public class BasicCurlParser {
             new CLOptionDescriptor("request", CLOptionDescriptor.ARGUMENT_REQUIRED, METHOD_OPT,
                     "Pass custom header LINE to server");
     private static final CLOptionDescriptor D_DATA_OPT =
-            new CLOptionDescriptor("data", CLOptionDescriptor.ARGUMENT_REQUIRED, DATA_OPT,
+            new CLOptionDescriptor("data", CLOptionDescriptor.ARGUMENT_REQUIRED | CLOptionDescriptor.DUPLICATES_ALLOWED, DATA_OPT,
                     "HTTP POST data");
     private static final CLOptionDescriptor D_DATA_ASCII_OPT = new CLOptionDescriptor("data-ascii",
             CLOptionDescriptor.ARGUMENT_REQUIRED, DATA_ASCII_OPT, "HTTP POST ascii data ");
@@ -689,10 +702,16 @@ public class BasicCurlParser {
                     request.setCompressed(true);
                 } else if (option.getDescriptor().getId() == HEADER_OPT) {
                     String nameAndValue = option.getArgument(0);
-                    int indexOfSemicolon = nameAndValue.indexOf(':');
-                    String name = nameAndValue.substring(0, indexOfSemicolon).trim();
-                    String value = nameAndValue.substring(indexOfSemicolon + 1).trim();
-                    request.addHeader(name, value);
+                    int indexOfColon = nameAndValue.indexOf(':');
+                    if (indexOfColon >= 0) {
+                        String name = nameAndValue.substring(0, indexOfColon).trim();
+                        String value = nameAndValue.substring(indexOfColon + 1).trim();
+                        request.addHeader(name, value);
+                    } else if (nameAndValue.endsWith(";")) {
+                            request.addHeader(nameAndValue.substring(0, nameAndValue.length() - 1), "");
+                    } else {
+                        LOGGER.warn("Could not parse header argument [{}] as it didn't contain a colon nor ended with a semicolon", nameAndValue);
+                    }
                 } else if (option.getDescriptor().getId() == METHOD_OPT) {
                     String value = option.getArgument(0);
                     request.setMethod(value);
@@ -710,9 +729,13 @@ public class BasicCurlParser {
                     String key = nameAndValue.substring(0, indexOfEqual).trim();
                     String value = nameAndValue.substring(indexOfEqual + 1).trim();
                     if ("form-string".equals(option.getDescriptor().getName())) {
-                        request.addFormStringData(key, value);
+                        request.addFormStringData(key, unquote(value));
                     } else {
-                        request.addFormData(key, value);
+                        if (value.charAt(0) == '@') {
+                            request.addFormData(key, FileArgumentHolder.of(unquote(value.substring(1))));
+                        } else {
+                            request.addFormData(key, StringArgumentHolder.of(unquote(value)));
+                        }
                     }
                     request.setMethod("POST");
                 } else if (option.getDescriptor().getId() == USER_AGENT_OPT) {
@@ -955,7 +978,7 @@ public class BasicCurlParser {
            postdata = encodePostdata(postdata);
        } else {
            if (postdata.charAt(0) == '@' && !"data-raw".equals(dataOptionName)) {
-               postdata = postdata.substring(1, postdata.length());
+               postdata = unquote(postdata.substring(1, postdata.length()));
                postdata = readFromFile(postdata);
                if (!"data-binary".equals(dataOptionName)) {
                    postdata = deleteLineBreak(postdata);
@@ -963,6 +986,15 @@ public class BasicCurlParser {
            }
        }
        return postdata;
+   }
+
+   private String unquote(String value) {
+       LoggerFactory.getLogger(this.getClass()).info("Unquote {}", value, new RuntimeException(""));
+       if (value.charAt(0) == '"') {
+           String result = value.substring(1, value.length() - 1);
+           return result.replaceAll("\\\\(.)", "$1");
+       }
+       return value;
    }
 
    /**
@@ -975,7 +1007,7 @@ public class BasicCurlParser {
         if (postdata.contains("@")) {
             String contentFile = null;
             String[] arr = postdata.split("@", 2);
-            String dataToEncode = readFromFile(arr[1]);
+            String dataToEncode = readFromFile(unquote(arr[1]));
             try {
                 contentFile = URLEncoder.encode(dataToEncode, StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {

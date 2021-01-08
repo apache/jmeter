@@ -111,7 +111,16 @@ class JTidyHTMLParser extends HTMLParser {
             }
 
             if (name.equalsIgnoreCase(TAG_APPLET)) {
-                urls.addURL(getValue(attrs, "code"), baseUrl);
+                String codebase = getValue(attrs, ATT_CODEBASE);
+                String code = getValue(attrs, ATT_ARCHIVE);
+                if (StringUtils.isBlank(code)) {
+                    code = getValue(attrs, ATT_CODE);
+                }
+                if (StringUtils.isBlank(codebase)) {
+                    urls.addURL(code, baseUrl);
+                } else {
+                    urls.addURL(codebase + "/" + code, baseUrl);
+                }
                 break;
             }
 

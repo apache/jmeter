@@ -1559,7 +1559,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (arg.isSkippable(parameterName)) {
                     continue;
                 }
-                StringBody stringBody = new StringBody(arg.getValue(), ContentType.create(arg.getContentType(), charset));
+                ContentType contentType;
+                if (arg.getContentType().indexOf(';') >= 0) {
+                    // assume, that the content type contains charset info
+                    // don't add another charset and use parse to cope with the semicolon
+                    contentType = ContentType.parse(arg.getContentType());
+                } else {
+                    contentType = ContentType.create(arg.getContentType(), charset);
+                }
+                StringBody stringBody = new StringBody(arg.getValue(), contentType);
                 FormBodyPart formPart = FormBodyPartBuilder.create(
                         parameterName, stringBody).build();
                 multipartEntityBuilder.addPart(formPart);
@@ -1572,7 +1580,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HTTPFileArg file = files[i];
 
                 File reservedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
-                fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.create(file.getMimeType()));
+                fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.parse(file.getMimeType()));
                 multipartEntityBuilder.addPart(file.getParamName(), fileBodies[i] );
             }
 

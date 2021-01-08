@@ -71,6 +71,7 @@ Summary
 
 <ch_section>Incompatible changes</ch_section>
 <ul>
+    <li>Restart after LAF change has been reinstated, it had been removed in JMeter 5.3</li>
 </ul>
 <!-- =================== Improvements =================== -->
 
@@ -115,10 +116,26 @@ Summary
 
 <h3>General</h3>
 <ul>
+  <li><bug>65028</bug>Add documentation for the property <code>client.rmi.localport</code></li>
+  <li><bug>65012</bug>Better handling of displaying long comments in the GUI</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Updated SaxonHE to 9.9.1-8 (from 9.9.1-7)</li>
+    <li>Updated asm to 9.0 (from 7.3.1)</li>
+    <li>Updated bouncycastle to 1.67 (from 1.66)</li>
+    <li>Updated caffeine to 2.8.8 (from 2.8.0)</li>
+    <li>Updated commons-codec to 1.15 (from 1.14)</li>
+    <li>Updated commons-io to 2.8.0 (from 2.7)</li>
+    <li>Updated commons-net to 3.7.2 (from 3.7)</li>
+    <li>Updated jackson to 2.10.5 (from 2.10.3)</li>
+    <li>Updated json-path to 2.5.0 (from 2.4.0)</li>
+    <li>Updated junit to 4.13.1 (from 4.13)</li>
+    <li>Updated ph-commons to 9.5.1 (from 9.4.1)</li>
+    <li>Updated ph-css to 6.2.3 (from 6.2.1)</li>
+    <li>Updated groovy to 3.0.7 (from 3.0.5)</li>
+    <li>Updated xstream to 1.4.15 (from 1.4.14)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -128,6 +145,11 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><bug>64955</bug>Keystore password not reset on reload</li>
+  <li><bug>65002</bug>HTTP(S) Test Script recorder creates an invalid Basic authentication URL. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
+  <li><bug>65004</bug>HTTP(S) Test Script recorder computes wrong HTTP Request breaking the application. Contributed by Ubik Load Pack (https://ubikloadpack.com)</li>
+  <li><bug>64543</bug>On MacOSX, Darklaf- IntelliJ Theme throws NPE in javax.swing.ToolTipManager.initiateToolTip</li>
+  <li><bug>65024</bug>Sending mime type with parameter throws IllegalArgumentException</li>
+  <li><bug>65029</bug>Try harder to correctly guess the URL for applets, when download embedded URLs is enabled</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -162,6 +184,7 @@ Summary
 <h3>Documentation</h3>
 <ul>
   <li><bug>64960</bug>Change scheduler reference in Thread Group documentation. Contributed by Ori Marko</li>
+  <li><bug>65006</bug>Illustration for completed HTTP Request Defaults element (Figure 4.4) contains misleading info</li>
 </ul>
 
 <h3>General</h3>
@@ -170,6 +193,10 @@ Summary
   <li><bug>64961</bug>Darklaf: On Windows 7, NPE in BasicEditorPaneUI.cleanDisplayProperties with Darklaf Intellij</li>
   <li><bug>64963</bug>Blank comment tooltip is visible</li>
   <li><bug>64969</bug>RemoteJMeterEngineImpl#rexit doesn't unexport RemoteJMeterEngineImpl on exit. Contributed by luo_isaiah at qq.com</li>
+  <li><bug>64984</bug>Darklaf LAF: Selecting a Test element does not work under certain screen resolutions on Windows. With the help of Jannis Weis</li>
+  <li><bug>65008</bug>SampleResult.setIgnore() called from PostProcessor is not considered</li>
+  <li><bug>64993</bug>Daklaf LAF: Menu navigation not working with keyboard shortcuts. With the help of Jannis Weis</li>
+  <li><bug>65013</bug>POST multipart/form-data cURL code with quoted arguments is not imported correctly</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -180,6 +207,8 @@ Summary
 <ul>
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>罗寅卓 (luo_isaiah at qq.com)</li>
+  <li><a href="https://ubikloadpack.com" >Ubik Load Pack</a></li>
+  <li><a href="https://github.com/weisJ/darklaf">Jannis Weis</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
