@@ -33,7 +33,7 @@ public class BoltConnectionElementBeanInfo extends BeanInfoSupport {
     public BoltConnectionElementBeanInfo() {
         super(BoltConnectionElement.class);
 
-        createPropertyGroup("connection", new String[] { "boltUri", "username", "password" });
+        createPropertyGroup("connection", new String[] { "boltUri", "username", "password", "maxConnectionPoolSize" });
 
         PropertyDescriptor propertyDescriptor =  property("boltUri");
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -44,6 +44,9 @@ public class BoltConnectionElementBeanInfo extends BeanInfoSupport {
         propertyDescriptor = property("password", TypeEditor.PasswordEditor);
         propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
         propertyDescriptor.setValue(DEFAULT, "");
+        propertyDescriptor = property("maxConnectionPoolSize");
+        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(DEFAULT, 100);
 
         if(log.isDebugEnabled()) {
             String descriptorsAsString = Arrays.stream(getPropertyDescriptors())
