@@ -128,7 +128,20 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 } else if (tag.nameEquals(TAG_IMAGE)) {
                     extractAttribute(tag, ATT_SRC);
                 } else if (tag.nameEquals(TAG_APPLET)) {
-                    extractAttribute(tag, ATT_CODE);
+                    CharSequence codebase = tag.getAttributeValue(ATT_CODEBASE);
+                    CharSequence archive = tag.getAttributeValue(ATT_ARCHIVE);
+                    CharSequence code = tag.getAttributeValue(ATT_CODE);
+                    if (StringUtils.isNotBlank(codebase)) {
+                        String result;
+                        if (StringUtils.isNotBlank(archive)) {
+                            result = codebase.toString() + "/" + archive;
+                        } else {
+                            result = codebase.toString() + "/" + code;
+                        }
+                        urls.addURL(normalizeUrlValue(result), baseUrl.url);
+                    } else {
+                        extractAttribute(tag, ATT_CODE);
+                    }
                 } else if (tag.nameEquals(TAG_OBJECT)) {
                     extractAttribute(tag, ATT_CODEBASE);
                     extractAttribute(tag, ATT_DATA);

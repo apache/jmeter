@@ -36,6 +36,7 @@ public abstract class HTMLParser extends BaseParser {
 
     private static final Logger log = LoggerFactory.getLogger(HTMLParser.class);
 
+    protected static final String ATT_ARCHIVE       = "archive"; // $NON-NLS-1$
     protected static final String ATT_BACKGROUND    = "background";// $NON-NLS-1$
     protected static final String ATT_CODE          = "code";// $NON-NLS-1$
     protected static final String ATT_CODEBASE      = "codebase";// $NON-NLS-1$

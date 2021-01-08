@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -52,6 +51,7 @@ import javax.swing.tree.TreePath;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.KeystoreConfig;
 import org.apache.jmeter.control.Controller;
@@ -79,8 +79,10 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.StaticHost;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
+import org.apache.jmeter.protocol.http.curl.ArgumentHolder;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser.Request;
+import org.apache.jmeter.protocol.http.curl.FileArgumentHolder;
 import org.apache.jmeter.protocol.http.gui.AuthPanel;
 import org.apache.jmeter.protocol.http.gui.CookiePanel;
 import org.apache.jmeter.protocol.http.gui.DNSCachePanel;
@@ -101,6 +103,7 @@ import org.apache.jmeter.visualizers.ViewResultsFullVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JMeterUIDefaults;
+import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,6 +121,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
     private static final String TYPE_FORM = ";type=";
     private static final String CERT = "cert";
+    private Logger log = LoggerFactory.getLogger(getClass());
     /** A panel allowing results to be saved. */
     private FilePanel filePanel = null;
     static {
@@ -126,6 +130,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private JSyntaxTextArea cURLCommandTA;
     private JLabel statusText;
     private JCheckBox uploadCookiesCheckBox;
+    private final Tika tika = new Tika();
     public ParseCurlCommandAction() {
         super();
     }
@@ -344,9 +349,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         headerManager.setProperty(TestElement.GUI_CLASS, HeaderPanel.class.getName());
         headerManager.setProperty(TestElement.NAME, "HTTP HeaderManager");
         headerManager.setProperty(TestElement.COMMENTS, getDefaultComment());
-        Map<String, String> map = request.getHeaders();
         boolean hasAcceptEncoding = false;
-        for (Map.Entry<String, String> header : map.entrySet()) {
+        for (Pair<String, String> header : request.getHeaders()) {
             String key = header.getKey();
             hasAcceptEncoding = hasAcceptEncoding || key.equalsIgnoreCase(ACCEPT_ENCODING);
             headerManager.getHeaders().addItem(new Header(key, header.getValue()));
@@ -515,33 +519,39 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             throw new IllegalArgumentException("--form and --data can't appear in the same command");
         }
         List<HTTPFileArg> httpFileArgs = new ArrayList<>();
-        for (Map.Entry<String, String> entry : request.getFormStringData().entrySet()) {
+        for (Pair<String, String> entry : request.getFormStringData()) {
             String formName = entry.getKey();
             String formValue = entry.getValue();
             httpSampler.addNonEncodedArgument(formName, formValue, "");
         }
-        for (Map.Entry<String, String> entry : request.getFormData().entrySet()) {
+        for (Pair<String, ArgumentHolder> entry : request.getFormData()) {
             String formName = entry.getKey();
-            String formValue = entry.getValue();
-            boolean isContainsFile = "@".equals(formValue.substring(0, 1));
-            boolean isContainsContentType = formValue.toLowerCase().contains(TYPE_FORM);
-            if (isContainsFile) {
-                formValue = formValue.substring(1, formValue.length());
+            ArgumentHolder formValueObject = entry.getValue();
+            String formValue = formValueObject.getName();
+            if (formValueObject instanceof FileArgumentHolder) {
                 String contentType;
-                if (isContainsContentType) {
-                    String[] formValueWithType = formValue.split(TYPE_FORM);
-                    formValue = formValueWithType[0];
-                    contentType = formValueWithType[1];
+                if (formValueObject.hasContenType()) {
+                    contentType = formValueObject.getContentType();
                 } else {
-                    contentType = new MimetypesFileTypeMap().getContentType(formValue);
+                    try {
+                        final File contentFile = new File(formValue);
+                        if (contentFile.canRead()) {
+                            contentType = tika.detect(contentFile);
+                        } else {
+                            log.info("Can not read file {}, so guessing contentType by extension.", formValue);
+                            contentType = tika.detect(formValue);
+                        }
+                    } catch (IOException e) {
+                        log.info(
+                                "Could not detect contentType for file {} by content, so falling back to detection by filename",
+                                formValue);
+                        contentType = tika.detect(formValue);
+                    }
                 }
                 httpFileArgs.add(new HTTPFileArg(formValue, formName, contentType));
             } else {
-                if (isContainsContentType) {
-                    String[] formValueWithType = formValue.split(TYPE_FORM);
-                    formValue = formValueWithType[0];
-                    String contentType = formValueWithType[1];
-                    httpSampler.addNonEncodedArgument(formName, formValue, "", contentType);
+                if (formValueObject.hasContenType()) {
+                    httpSampler.addNonEncodedArgument(formName, formValue, "", formValueObject.getContentType());
                 } else {
                     httpSampler.addNonEncodedArgument(formName, formValue, "");
                 }

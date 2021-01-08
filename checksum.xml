@@ -10,6 +10,7 @@
     <trusted-key id='af10873874630863' group='com.flipkart.zjsonpatch' />
     <trusted-key id='379ce192d401ab61' group='com.formdev' />
     <trusted-key id='105cb91cac2aee0e' group='com.github.autostyle' />
+    <trusted-key id='07d3516820bcf6b1' group='com.github.ben-manes.caffeine' />
     <trusted-key id='3c0a8f4744f37328' group='com.github.ben-manes.caffeine' />
     <trusted-key id='8ea48d105232855d' group='com.github.jknack' />
     <trusted-key id='218fa0f6a941a037' group='com.github.kevinstern' />
@@ -51,6 +52,7 @@
     <trusted-key id='3faad2cd5ecbb314' group='commons-beanutils' />
     <trusted-key id='411063a3a0ffd119' group='commons-beanutils' />
     <trusted-key id='9daadc1c9fcc82d0' group='commons-cli' />
+    <trusted-key id='21939ff0ca2a6567' group='commons-codec' />
     <trusted-key id='86fdc7e2a11262cb' group='commons-codec' />
     <trusted-key id='1861c322c56014b2' group='commons-collections' />
     <trusted-key id='a41f13c999945293' group='commons-collections' />
@@ -63,7 +65,9 @@
     <trusted-key id='33cd6733af5ec452' group='commons-logging' />
     <trusted-key id='a41f13c999945293' group='commons-logging' />
     <trusted-key id='7a8860944fad5f62' group='commons-net' />
+    <trusted-key id='86fdc7e2a11262cb' group='commons-net' />
     <trusted-key id='3449ec3ac2efe8aa' group='dnsjava' />
+    <trusted-key id='a5c8dbb8a1599bd4' group='dnsjava' />
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='5b30d3b10694f057' group='io.codearte.gradle.nexus' />

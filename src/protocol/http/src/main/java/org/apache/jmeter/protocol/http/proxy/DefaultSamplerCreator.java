@@ -55,6 +55,9 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Default implementation that handles classical HTTP textual + Multipart requests
  */
@@ -69,6 +72,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private static final int SAMPLER_NAME_NAMING_MODE_SUFFIX = 2; // $NON-NLS-1$
     private static final int SAMPLER_NAME_NAMING_MODE_FORMATTER = 3; // $NON_NLS-1$
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     /**
      *
      */
@@ -248,7 +252,8 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             // used when postData is pure xml (eg. an xml-rpc call) or for PUT
             } else if (postData.trim().startsWith("<?")
                     || HTTPConstants.PUT.equals(sampler.getMethod())
-                    || isPotentialXml(postData)) {
+                    || isPotentialXml(postData)
+                    || isPotentialJson(postData)) {
                 sampler.addNonEncodedArgument("", postData, "");
             } else if (contentType == null ||
                     (contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) &&
@@ -277,11 +282,28 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     }
 
     /**
+     * Tries parsing to see if content is JSON
+     * @param postData String
+     * @return boolean
+     */
+    public static boolean isPotentialJson(final String postData) {
+        boolean valid = true;
+        try{
+            OBJECT_MAPPER.readTree(postData);
+        } catch(JsonProcessingException e){
+            valid = false;
+        }
+        log.debug("Is Post data {} JSON ? {}", postData, valid);
+        return valid;
+    }
+
+    /**
      * Tries parsing to see if content is xml
      * @param postData String
      * @return boolean
      */
     private static boolean isPotentialXml(String postData) {
+        boolean isXml;
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();
             spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -292,10 +314,12 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             xmlReader.setContentHandler(detectionHandler);
             xmlReader.setErrorHandler(detectionHandler);
             xmlReader.parse(new InputSource(new StringReader(postData)));
-            return !detectionHandler.isErrorDetected();
+            isXml = !detectionHandler.isErrorDetected();
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            return false;
+            isXml = false;
         }
+        log.debug("Is Post data {} XML ? {}", postData, isXml);
+        return isXml;
     }
 
     private static final class ErrorDetectionHandler extends DefaultHandler {
