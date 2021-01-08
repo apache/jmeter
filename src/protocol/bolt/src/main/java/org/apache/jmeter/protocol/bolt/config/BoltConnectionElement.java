@@ -26,10 +26,12 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.neo4j.driver.AuthTokens;
+import org.neo4j.driver.Config;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 @TestElementMetadata(labelResource = "displayName")
 public class BoltConnectionElement extends AbstractTestElement
@@ -39,6 +41,7 @@ public class BoltConnectionElement extends AbstractTestElement
     private String boltUri;
     private String username;
     private String password;
+    private int maxConnectionPoolSize;
     private Driver driver;
 
     public static final String BOLT_CONNECTION = "boltConnection";
@@ -65,7 +68,10 @@ public class BoltConnectionElement extends AbstractTestElement
             log.error("Bolt connection already exists");
         } else {
             synchronized (this) {
-                driver = GraphDatabase.driver(getBoltUri(), AuthTokens.basic(getUsername(), getPassword()));
+                Config config = Config.builder()
+                        .withMaxConnectionPoolSize( getMaxConnectionPoolSize() )
+                        .build();
+                driver = GraphDatabase.driver(getBoltUri(), AuthTokens.basic(getUsername(), getPassword()), config);
                 variables.putObject(BOLT_CONNECTION, driver);
             }
         }
@@ -98,6 +104,14 @@ public class BoltConnectionElement extends AbstractTestElement
 
     public void setBoltUri(String boltUri) {
         this.boltUri = boltUri;
+    }
+
+    public int getMaxConnectionPoolSize() {
+        return maxConnectionPoolSize;
+    }
+
+    public void setMaxConnectionPoolSize(int maxConnectionPoolSize) {
+        this.maxConnectionPoolSize = maxConnectionPoolSize;
     }
 
     public String getUsername() {
