@@ -125,7 +125,6 @@ Summary
     <li>Updated commons-io to 2.8.0 (from 2.7)</li>
     <li>Updated commons-net to 3.7.2 (from 3.7)</li>
     <li>Updated jackson to 2.10.5 (from 2.10.3)</li>
-    <li>Updated json-path to 2.5.0 (from 2.4.0)</li>
     <li>Updated junit to 4.13.1 (from 4.13)</li>
     <li>Updated ph-commons to 9.5.1 (from 9.4.1)</li>
     <li>Updated ph-css to 6.2.3 (from 6.2.1)</li>
