@@ -99,7 +99,7 @@ Summary
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<ul>
+<ul>Bolt Connection Configuration: added ConnectionPoolMaxSize parameter
 </ul>
 
 <h3>Functions</h3>

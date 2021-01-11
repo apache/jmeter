@@ -1968,7 +1968,7 @@ MongoDB Script is more suitable for functional testing or test setup (setup/tear
         <p>This sampler allows you to run Cypher queries through the Bolt protocol.</p>
         <p>Before using this you need to set up a <complink name="Bolt Connection Configuration"/></p>
         <p>Every request uses a connection acquired from the pool and returns it to the pool when the sampler completes.
-        The connection pool size use the driver defaults (~100) and is not configurable at the moment.</p>
+        The connection pool size defaults to 100 and is configurable.</p>
         <p>The measured response time corresponds to the "full" query execution, including both
         the time to execute the cypher query AND the time to consume the results sent back by the database.</p>
     </description>
@@ -1984,6 +1984,13 @@ MongoDB Script is more suitable for functional testing or test setup (setup/tear
             Whether to add or not query result data to the sampler response (default false).
             Note that activating this has a memory overhead, use it wisely.
         </property>
+        <property name="Access Mode" required="Yes">Whether to access the database in WRITE or READ mode.
+            Use WRITE for a standalone Neo4j instance.
+            For a Neo4j cluster, select mode depending on whether the query writes to the database.
+            That setting will allow correct routing to the cluster leader, followers or read replicas.</property>
+        <property name="Database" required="No">The database to run the query against.
+            Required for Neo4j 4.0+, unless querying the default database. Must be undefined for Neo4j 3.5.</property>
+        <property name="Transaction timeout" required="No">Timeout for the transaction.</property>
     </properties>
 
     <note>It is strongly advised to use query parameters, allowing the database to cache and reuse execution plans.</note>
@@ -4522,6 +4529,8 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         <property name="Bolt URI" required="Yes">The database URI.</property>
         <property name="Username" required="No">User account.</property>
         <property name="Password" required="No">User credentials.</property>
+        <property name="Connection Pool Max Size" required="Yes">Max size of the Neo4j driver Bolt connection pool.
+            Raise the value if running large number of concurrent threads, so that JMeter threads are not blocked waiting for a connection to be released to the pool.</property>
     </properties>
 </component>
 

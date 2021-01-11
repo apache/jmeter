@@ -44,11 +44,10 @@ public abstract class AbstractBoltTestElement extends AbstractTestElement {
     }
 
     public String getAccessMode() {
-        if (accessMode != null) {
-            return accessMode;
-        } else {
+        if (accessMode == null) {
             return AccessMode.WRITE.toString();
         }
+        return accessMode;
     }
 
     public void setAccessMode(String accessMode) {
