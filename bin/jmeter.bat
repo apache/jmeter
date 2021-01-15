@@ -162,7 +162,7 @@ if not defined GC_ALGO (
     set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20
 )
 
-set SYSTEM_PROPS=-Djava.security.egd=file:/dev/urandom -Dtika.config=%JMETER_BIN%tika-config.xml
+set SYSTEM_PROPS=-Djava.security.egd=file:/dev/urandom
 
 rem Always dump on OOM (does not cost anything unless triggered)
 set DUMP=-XX:+HeapDumpOnOutOfMemoryError

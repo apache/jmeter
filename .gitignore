@@ -51,7 +51,7 @@
 /bin/*.jmx
 /bin/*.jtl
 /bin/*.xml
-# We need log4j2.xml even though we want to exclude xml created by batch tests
+# We need log4j2.xml and tika-config.xml even though we want to exclude xml created by batch tests
 !/bin/log4j2.xml
 !/bin/tika-config.xml
 

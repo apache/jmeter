@@ -187,7 +187,7 @@ esac
 
 # Always dump on OOM (does not cost anything unless triggered)
 DUMP="-XX:+HeapDumpOnOutOfMemoryError"
-SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom -Dtika.config=${JMETER_HOME}/bin/tika-config.xml"
+SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
 if [ -z "${JMETER_COMPLETE_ARGS}" ]; then
