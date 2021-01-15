@@ -123,7 +123,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private static final Set<String> commands = new HashSet<>();
     public static final String IMPORT_CURL = "import_curl";
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
-    private static final String TYPE_FORM = ";type=";
     private static final String CERT = "cert";
     private Logger log = LoggerFactory.getLogger(getClass());
     /** A panel allowing results to be saved. */
