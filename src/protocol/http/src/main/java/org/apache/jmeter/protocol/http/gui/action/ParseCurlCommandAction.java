@@ -136,7 +136,8 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
 
     private Tika createTika() {
         try {
-            return new Tika(new TikaConfig(this.getClass().getClassLoader().getResourceAsStream("tika-config.xml")));
+            return new Tika(new TikaConfig(this.getClass().getClassLoader()
+                    .getResourceAsStream("org/apache/jmeter/protocol/http/gui/action/tika-config.xml")));
         } catch (TikaException | IOException | SAXException e) {
             return new Tika();
         }
