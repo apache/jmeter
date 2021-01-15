@@ -989,7 +989,7 @@ public class BasicCurlParser {
    }
 
    private String unquote(String value) {
-       LoggerFactory.getLogger(this.getClass()).info("Unquote {}", value, new RuntimeException(""));
+       LoggerFactory.getLogger(this.getClass()).debug("Unquote {}", value);
        if (value.charAt(0) == '"') {
            String result = value.substring(1, value.length() - 1);
            return result.replaceAll("\\\\(.)", "$1");
