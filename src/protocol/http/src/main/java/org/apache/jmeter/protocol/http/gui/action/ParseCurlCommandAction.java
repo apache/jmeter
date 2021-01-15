@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -137,7 +136,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
 
     private Tika createTika() {
         try {
-            return new Tika(new TikaConfig(Paths.get(JMeterUtils.getJMeterBinDir(), "tika-config.xml")));
+            return new Tika(new TikaConfig(this.getClass().getClassLoader().getResourceAsStream("tika-config.xml")));
         } catch (TikaException | IOException | SAXException e) {
             return new Tika();
         }
