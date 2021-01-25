@@ -494,6 +494,9 @@ allprojects {
         // This block is executed right after `java` plugin is added to a project
         java {
             sourceCompatibility = JavaVersion.VERSION_1_8
+            consistentResolution {
+                useCompileClasspathVersions()
+            }
         }
 
         repositories {
