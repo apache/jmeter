@@ -168,6 +168,7 @@
     <trusted-key id='72385ff0af338d52' group='org.threeten' />
     <trusted-key id='a2115ae15f6b8b72' group='org.xmlunit' />
     <trusted-key id='9ff25980f5ba7e4f' group='xalan' />
+    <trusted-key id='7d713008cc07e9ad' group='xerces' />
     <trusted-key id='858fc4c4f43856a3' group='xerces' />
     <trusted-key id='86fdc7e2a11262cb' group='xml-apis' />
   </trusted-keys>

@@ -130,6 +130,7 @@ Summary
     <li>Updated ph-css to 6.2.3 (from 6.2.1)</li>
     <li>Updated groovy to 3.0.7 (from 3.0.5)</li>
     <li>Updated xstream to 1.4.15 (from 1.4.14)</li>
+    <li>Updated xercesImpl to 2.12.1 (from 2.12.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
