@@ -125,7 +125,7 @@ public class LoadRecentProject extends Load {
         Deque<String> newRecentFiles = IntStream.range(0, NUMBER_OF_MENU_ITEMS)
                 .mapToObj(LoadRecentProject::getRecentFile)
                 .filter(Objects::nonNull)
-                .filter(s -> !(s.equals(loadedFileName)))
+                .filter(s -> !s.equals(loadedFileName))
                 .collect(Collectors.toCollection(ArrayDeque::new));
         newRecentFiles.addFirst(loadedFileName);
 
