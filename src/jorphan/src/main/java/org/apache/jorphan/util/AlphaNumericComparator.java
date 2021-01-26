@@ -57,13 +57,8 @@ public class AlphaNumericComparator<T> implements Comparator<T> {
             }
             String numberPart1 = m1.group(NUM_PART);
             String numberPart2 = m2.group(NUM_PART);
-            if (numberPart1.isEmpty()) {
-                if (numberPart2.isEmpty()) {
-                    return 0;
-                }
-                return -1;
-            } else if (numberPart2.isEmpty()) {
-                return 1;
+            if (numberPart1.isEmpty() || numberPart2.isEmpty()) {
+                return compareOneEmptyPart(numberPart1, numberPart2);
             }
             String nonZeroNumberPart1 = trimLeadingZeroes(numberPart1);
             String nonZeroNumberPart2 = trimLeadingZeroes(numberPart2);
@@ -87,6 +82,18 @@ public class AlphaNumericComparator<T> implements Comparator<T> {
             return -1;
         }
         return 1;
+    }
+
+    private int compareOneEmptyPart(String numberPart1, String numberPart2) {
+        if (numberPart1.isEmpty()) {
+            if (numberPart2.isEmpty()) {
+                return 0;
+            }
+            return -1;
+        } else if (numberPart2.isEmpty()) {
+            return 1;
+        }
+        throw new IllegalArgumentException("At least one of the parameters have to be empty");
     }
 
     private String trimLeadingZeroes(String numberPart) {
