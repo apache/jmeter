@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.jorphan.util;
 
 import java.util.Comparator;
@@ -26,10 +27,10 @@ import java.util.Map;
  * Heavily influenced by https://codereview.stackexchange.com/questions/37192/number-aware-string-sorting-with-comparator
  */
 public class AlphaNumericKeyComparator implements Comparator<Map.Entry<Object, Object>> {
-    
+
     public static final AlphaNumericKeyComparator INSTANCE = new AlphaNumericKeyComparator();
     private AlphaNumericComparator<Map.Entry<Object, Object>> comparator;
-    
+
     private AlphaNumericKeyComparator() {
         // don't instantiate this class on your own.
         this.comparator = new AlphaNumericComparator<Map.Entry<Object, Object>>(e -> e.getKey().toString());
