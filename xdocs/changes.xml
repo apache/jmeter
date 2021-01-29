@@ -92,6 +92,9 @@ Summary
 </ul>
 <ul>Bolt Sampler : added "access mode" option, that allows running against a Neo4j Enterprise causal cluster,
     with proper query routing using the "neo4://" or "bolt+routing://" URL schemes.
+    <li>Bolt Sampler : added "transaction timeout" option</li>
+    <li>Bolt Sampler : added "database" option, required for Neo4j 4.x (with multi-database support)</li>
+    <li>Bolt Sampler : added "access mode" option, that allows running against a Neo4j Enterprise causal cluster</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -105,7 +108,8 @@ Summary
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<ul>Bolt Connection Configuration: added ConnectionPoolMaxSize parameter
+<ul>
+    <li>Bolt Connection Configuration: added ConnectionPoolMaxSize parameter</li>
 </ul>
 
 <h3>Functions</h3>
