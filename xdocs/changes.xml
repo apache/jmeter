@@ -151,8 +151,8 @@ Summary
 </ul>
 
 <h3>Other Samplers</h3>
-<ul>Bolt Sampler : fixed error displaying results when "Record Query Results" is enabled.
 <ul>
+  <li>Bolt Sampler : fixed error displaying results when "Record Query Results" is enabled.</li>
   <li><bug>65034</bug>Ignore <code>SocketTimeoutException</code> on <code>BinaryTCPClientImpl</code>, when no EOM Byte is set. Regression
      introduced by commit c190641e4f0474a34a366a72364b0a8dd25bfc81 which fixed <bug>52104</bug>. That bug was bout handling
      the case of waiting for an EOM.</li>
