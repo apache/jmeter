@@ -249,12 +249,11 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
                 throw new UnknownHostException("Could not resolve host:" + host
                         + ", failed to initialize resolver or no resolver found");
             } else if (extendedResolver.getResolvers().length > 0) {
-                addresses = customRequestLookup(host);
+                return customRequestLookup(host);
             }
-        } else {
-            addresses = systemDefaultDnsResolver.resolve(host);
-            logCache("miss (resolved with system resolver)", host, addresses);
         }
+        addresses = systemDefaultDnsResolver.resolve(host);
+        logCache("miss (resolved with system resolver)", host, addresses);
 
         return addresses;
     }
