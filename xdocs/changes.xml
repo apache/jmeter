@@ -163,6 +163,7 @@ Summary
 <h3>General</h3>
 <ul>
   <li><bug>64318</bug>DNS Cache Manager - custom DNS resolver does not use system resolver by default</li>
+  <li><pr>641</pr>Updated xercesImpl to 2.12.1 (from 2.12.0). Based on patch by Stefan Seide (stefan at trilobyte-se.de).</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -171,6 +172,7 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+  <li>Stefan Seide (stefan at trilobyte-se.de)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
