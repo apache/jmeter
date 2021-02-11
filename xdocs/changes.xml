@@ -117,6 +117,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+  <li><bug>65128</bug><pr>643</pr>Add missing documentation about <code>Same user on each iteration</code> for Thread Groups. Contributed by njkuzas.</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -173,6 +174,7 @@ Summary
 </p>
 <ul>
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
+  <li>njzukas (github.com/njzukas)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
