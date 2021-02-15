@@ -1123,9 +1123,9 @@ public final class CSVSaveService {
         }
         String formattedResult;
         for (SampleResult subResult : result.getSubResults()) {
-            saveSubResults(event, out, saveConfiguration, delimiter, subResult, recursionLevel + 1);
             formattedResult = resultToDelimitedString(event, subResult, saveConfiguration, delimiter);
             out.println(formattedResult);
+            saveSubResults(event, out, saveConfiguration, delimiter, subResult, recursionLevel + 1);
         }
     }
 }
