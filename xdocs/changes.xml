@@ -83,6 +83,7 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
+  <li><bug>65149</bug><pr>644</pr>Encode the personal part of email addresses in SMTP Sampler</li>
 </ul>
 
 <h3>Controllers</h3>
