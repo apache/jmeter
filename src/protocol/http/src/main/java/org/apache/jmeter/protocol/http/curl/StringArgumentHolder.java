@@ -63,6 +63,7 @@ public class StringArgumentHolder implements ArgumentHolder {
         return this.name;
     }
 
+    @Override
     public Map<String, String> getMetadata() {
         return Collections.unmodifiableMap(metadata);
     }
