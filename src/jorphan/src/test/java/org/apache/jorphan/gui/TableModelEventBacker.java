@@ -21,9 +21,9 @@ import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.ObjIntConsumer;
 import java.util.function.ToIntFunction;
@@ -39,7 +39,7 @@ public class TableModelEventBacker implements TableModelListener {
     /**
      * Makes assertions for a single {@link TableModelEvent}.
      */
-    public class EventAssertion {
+    public static class EventAssertion {
         private List<ObjIntConsumer<TableModelEvent>> assertions = new ArrayList<>();
 
         /**
@@ -118,14 +118,16 @@ public class TableModelEventBacker implements TableModelListener {
         }
     }
 
-    private Deque<TableModelEvent> events = new LinkedList<>();
+    private Deque<TableModelEvent> events = new ArrayDeque<>();
 
     /**
      * Stores event.
      */
     @Override
     public void tableChanged(TableModelEvent e) {
-        events.add(e);
+        if (e != null) {
+            events.add(e);
+        }
     }
 
     public Deque<TableModelEvent> getEvents() {
