@@ -17,12 +17,12 @@
 
 package org.apache.jmeter.junit;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -113,14 +113,10 @@ public abstract class JMeterTestCase {
 
     protected void checkInvalidParameterCounts(AbstractFunction func, int minimum)
             throws Exception {
-        Collection<CompoundVariable> parms = new LinkedList<>();
+        Collection<CompoundVariable> parms = new ArrayDeque<>();
         for (int c = 0; c < minimum; c++) {
-            try {
-                func.setParameters(parms);
-                fail("Should have generated InvalidVariableException for " + parms.size()
-                        + " parameters");
-            } catch (InvalidVariableException ignored) {
-            }
+            assertThrows(InvalidVariableException.class, () -> func.setParameters(parms),
+                    "parms.size() = " + parms.size() + " is too small");
             parms.add(new CompoundVariable());
         }
         func.setParameters(parms);
@@ -128,14 +124,10 @@ public abstract class JMeterTestCase {
 
     protected void checkInvalidParameterCounts(AbstractFunction func, int min,
             int max) throws Exception {
-        Collection<CompoundVariable> parms = new LinkedList<>();
+        Collection<CompoundVariable> parms = new ArrayDeque<>();
         for (int count = 0; count < min; count++) {
-            try {
-                func.setParameters(parms);
-                fail("Should have generated InvalidVariableException for " + parms.size()
-                        + " parameters");
-            } catch (InvalidVariableException ignored) {
-            }
+            assertThrows(InvalidVariableException.class, () -> func.setParameters(parms),
+                    "parms.size() = " + parms.size() + " is too small");
             parms.add(new CompoundVariable());
         }
         for (int count = min; count <= max; count++) {
@@ -143,12 +135,8 @@ public abstract class JMeterTestCase {
             parms.add(new CompoundVariable());
         }
         parms.add(new CompoundVariable());
-        try {
-            func.setParameters(parms);
-            fail("Should have generated InvalidVariableException for " + parms.size()
-                    + " parameters");
-        } catch (InvalidVariableException ignored) {
-        }
+        assertThrows(InvalidVariableException.class, () -> func.setParameters(parms),
+                "parms.size() = " + parms.size() + " is too big");
     }
 
     public static void assertPrimitiveEquals(boolean expected, boolean actual) {
