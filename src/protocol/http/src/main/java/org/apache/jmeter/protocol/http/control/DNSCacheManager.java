@@ -241,7 +241,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
      * @return array of {@link InetAddress} or null if lookup did not return result
      */
     private InetAddress[] requestLookup(String host) throws UnknownHostException {
-        InetAddress[] addresses = null;
+        InetAddress[] addresses;
 
         if (isCustomResolver()) {
             ExtendedResolver extendedResolver = getOrCreateResolver();
