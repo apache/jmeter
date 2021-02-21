@@ -21,12 +21,12 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -38,6 +38,7 @@ import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -45,6 +46,8 @@ import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.ObjectTableModel;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Show detail of a Row
@@ -64,13 +67,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
 
     private static final String UPDATE = "update"; // $NON-NLS-1$
 
-    private JLabel nameLabel;
-
-    private JTextField nameTF;
-
-    private JLabel valueLabel;
-
-    private JSyntaxTextArea valueTA;
+    private List<JTextComponent> dataAreas;
 
     private JButton nextButton;
 
@@ -132,30 +129,31 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
-        nameLabel = new JLabel(JMeterUtils.getResString("name")); //$NON-NLS-1$
-        nameTF = new JTextField(JMeterUtils.getResString("name"), 20); //$NON-NLS-1$
-        nameTF.getDocument().addDocumentListener(this);
-        JPanel namePane = new JPanel(new BorderLayout());
-        namePane.add(nameLabel, BorderLayout.WEST);
-        namePane.add(nameTF, BorderLayout.CENTER);
+        JPanel dataPanel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill, grow]"));
+        dataAreas = new ArrayList<>();
 
-        valueLabel = new JLabel(JMeterUtils.getResString("value")); //$NON-NLS-1$
-        valueTA = JSyntaxTextArea.getInstance(30, 80);
-        valueTA.getDocument().addDocumentListener(this);
+        for (int i=0; i < tableModel.getColumnCount(); i++) {
+            JLabel dataLabel = new JLabel(JMeterUtils.getResString(tableModel.getColumnName(i)));
+            dataPanel.add(dataLabel);
+            if (i > 0 || tableModel.getColumnCount() == 1) {
+                JSyntaxTextArea dataArea = JSyntaxTextArea.getInstance(30, 80);
+                dataArea.getDocument().addDocumentListener(this);
+                dataAreas.add(dataArea);
+                dataPanel.add(JTextScrollPane.getInstance(dataArea));
+                dataLabel.setLabelFor(dataArea);
+            } else {
+                final JTextField nameTF = new JTextField("", 20);
+                dataAreas.add(nameTF);
+                nameTF.getDocument().addDocumentListener(this);
+                dataPanel.add(nameTF);
+                dataLabel.setLabelFor(nameTF);
+            }
+        }
+
         setValues(selectedRow);
-        JPanel valuePane = new JPanel(new BorderLayout());
-        valuePane.add(valueLabel, BorderLayout.NORTH);
-        JTextScrollPane jTextScrollPane = JTextScrollPane.getInstance(valueTA);
-        valuePane.add(jTextScrollPane, BorderLayout.CENTER);
 
-        JPanel detailPanel = new JPanel(new BorderLayout());
-        detailPanel.add(namePane, BorderLayout.NORTH);
-        detailPanel.add(valuePane, BorderLayout.CENTER);
-
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(7, 3, 3, 3));
-        mainPanel.add(detailPanel, BorderLayout.CENTER);
+        JPanel mainPanel = new JPanel(new MigLayout());
+        mainPanel.add(dataPanel, "wrap");
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -178,9 +176,9 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
         buttonsPanel.add(previousButton);
         buttonsPanel.add(nextButton);
         buttonsPanel.add(closeButton);
-        mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
+        mainPanel.add(buttonsPanel, "center");
         this.getContentPane().add(mainPanel);
-        nameTF.requestFocusInWindow();
+        dataAreas.get(0).requestFocusInWindow();
 
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
@@ -218,9 +216,13 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
      * @param selectedRow Selected row
      */
     private void setValues(int selectedRow) {
-        nameTF.setText((String)tableModel.getValueAt(selectedRow, 0));
-        valueTA.setInitialText((String)tableModel.getValueAt(selectedRow, 1));
-        valueTA.setCaretPosition(0);
+        for (int i=0; i < tableModel.getColumnCount(); i++) {
+            final JTextComponent dataArea = dataAreas.get(i);
+            dataArea.setText((String)tableModel.getValueAt(selectedRow, i));
+            if (dataArea instanceof JSyntaxTextArea) {
+                dataArea.setCaretPosition(0);
+            }
+        }
         textChanged = false;
     }
 
@@ -229,8 +231,9 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
      * @param actionEvent the event that led to this call
      */
     protected void doUpdate(ActionEvent actionEvent) {
-        tableModel.setValueAt(nameTF.getText(), selectedRow, 0);
-        tableModel.setValueAt(valueTA.getText(), selectedRow, 1);
+        for (int i=0; i < tableModel.getColumnCount(); i++) {
+            tableModel.setValueAt(dataAreas.get(i).getText(), selectedRow, i);
+        }
         // Change Cancel label to Close
         closeButton.setText(JMeterUtils.getResString("close")); //$NON-NLS-1$
         textChanged = false;
