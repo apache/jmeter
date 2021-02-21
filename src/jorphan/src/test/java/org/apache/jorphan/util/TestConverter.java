@@ -65,18 +65,21 @@ public class TestConverter {
     }
 
     @Test
+    @SuppressWarnings({ "UndefinedEquals", "JdkObsolete" })
     public void testGetDateObjectDateWithTimeAndNullDefault() {
         Date time = new Date();
         assertEquals(time, Converter.getDate(time, null));
     }
 
     @Test
+    @SuppressWarnings({ "UndefinedEquals", "JdkObsolete" })
     public void testGetDateObjectDateWithNullAndDateAsDefault() {
         Date date = new Date();
         assertEquals(date, Converter.getDate(null, date));
     }
 
     @Test
+    @SuppressWarnings("UndefinedEquals")
     public void testGetDateObjectDateWithValidStringAndNullDefault() {
         Calendar cal = new GregorianCalendar();
         cal.set(Calendar.HOUR_OF_DAY, 0);
