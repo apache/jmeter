@@ -146,7 +146,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         assertValidEntry();
-        sleepTill(start + 1010);
+        sleepTill(start + 2010);
         assertInvalidEntry();
     }
 
@@ -248,7 +248,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         setCacheControl("private, max-age=1");
         cacheResult(sampleResultOK);
         assertValidEntry();
-        sleepTill(start + 1050);
+        sleepTill(start + 2020);
         assertInvalidEntry();
     }
 
@@ -344,7 +344,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         setCacheControl("public, max-age=1, no-transform");
         cacheResult(sampleResultOK);
         assertValidEntry();
-        sleepTill(start + 1010);
+        sleepTill(start + 2010);
         assertInvalidEntry();
     }
 
