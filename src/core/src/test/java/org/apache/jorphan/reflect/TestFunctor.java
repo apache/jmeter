@@ -41,7 +41,7 @@ public class TestFunctor extends JMeterTestCase {
         String getString(String s);
     }
 
-    class Test1 implements HasName {
+    static class Test1 implements HasName {
         private final String name;
         public Test1(){
             this("");
@@ -57,7 +57,7 @@ public class TestFunctor extends JMeterTestCase {
             return s;
         }
     }
-    class Test1a extends Test1{
+    static class Test1a extends Test1{
         Test1a(){
             super("1a");
         }
