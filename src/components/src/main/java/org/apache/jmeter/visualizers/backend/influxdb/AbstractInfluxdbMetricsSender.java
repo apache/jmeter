@@ -19,6 +19,7 @@ package org.apache.jmeter.visualizers.backend.influxdb;
 
 /**
  * Base class for {@link InfluxdbMetricsSender}
+ *
  * @since 3.2
  */
 abstract class AbstractInfluxdbMetricsSender implements InfluxdbMetricsSender {
@@ -28,7 +29,11 @@ abstract class AbstractInfluxdbMetricsSender implements InfluxdbMetricsSender {
      * \ to escape List of special characters : commas , equal sign = spaces
      */
     static final String tagToStringValue(String s) {
-        return s.trim().replaceAll(" ", "\\\\ ").replaceAll(",", "\\\\,").replaceAll("=", "\\\\=");
+        return s.trim()
+                .replace(" ", "\\ ")
+                .replace(",", "\\,")
+                .replace("=", "\\=")
+                .replace("\n", "\\n");
     }
 
     /**
@@ -36,7 +41,8 @@ abstract class AbstractInfluxdbMetricsSender implements InfluxdbMetricsSender {
      * \ to escape " character
      */
     static final String fieldToStringValue(String s) {
-        return s.trim().replaceAll("\"", "\\\\\"");
+        return s.trim()
+                .replace("\"", "\\\"");
     }
 
 }

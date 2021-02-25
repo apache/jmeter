@@ -165,6 +165,7 @@ Summary
 <ul>
   <li><bug>64318</bug>DNS Cache Manager - custom DNS resolver does not use system resolver by default</li>
   <li><pr>641</pr>Updated xercesImpl to 2.12.1 (from 2.12.0). Based on patch by Stefan Seide (stefan at trilobyte-se.de).</li>
+  <li><pr>645</pr>Add escaping for new lines in AbstractInfluxdbMetricsSender. Contributed by David Getzlaff (david.getzlaff at t-systems.com>)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -175,6 +176,7 @@ Summary
 <ul>
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
   <li>njzukas (github.com/njzukas)</li>
+  <li>David Getzlaff (david.getzlaff at t-systems.com>)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
