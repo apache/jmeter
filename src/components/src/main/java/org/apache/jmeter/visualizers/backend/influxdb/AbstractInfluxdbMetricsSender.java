@@ -30,10 +30,10 @@ abstract class AbstractInfluxdbMetricsSender implements InfluxdbMetricsSender {
      */
     static final String tagToStringValue(String s) {
         return s.trim()
-                .replaceAll(" ", "\\\\ ")
-                .replaceAll(",", "\\\\,")
-                .replaceAll("=", "\\\\=")
-                .replaceAll("\n", "\\\\n");
+                .replace(" ", "\\ ")
+                .replace(",", "\\,")
+                .replace("=", "\\=")
+                .replace("\n", "\\n");
     }
 
     /**
@@ -41,7 +41,8 @@ abstract class AbstractInfluxdbMetricsSender implements InfluxdbMetricsSender {
      * \ to escape " character
      */
     static final String fieldToStringValue(String s) {
-        return s.trim().replaceAll("\"", "\\\\\"");
+        return s.trim()
+                .replace("\"", "\\\"");
     }
 
 }
