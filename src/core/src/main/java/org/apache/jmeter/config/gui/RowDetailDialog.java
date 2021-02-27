@@ -39,6 +39,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -81,6 +82,9 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
     private ObjectTableModel tableModel;
 
     private int selectedRow;
+
+    /** Gui Package */
+    private GuiPackage guiPackage = GuiPackage.getInstance();
 
     private boolean textChanged = true; // change to false after the first insert
 
@@ -229,6 +233,9 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
      * @param actionEvent the event that led to this call
      */
     protected void doUpdate(ActionEvent actionEvent) {
+        if(guiPackage != null){
+            guiPackage.setDirty(true);
+        }
         tableModel.setValueAt(nameTF.getText(), selectedRow, 0);
         tableModel.setValueAt(valueTA.getText(), selectedRow, 1);
         // Change Cancel label to Close

@@ -44,6 +44,7 @@ import javax.swing.ListSelectionModel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.testelement.TestElement;
@@ -100,6 +101,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /** Button to show the detail of an argument*/
     private JButton showDetail;
+
+    /** Gui Package */
+    private GuiPackage guiPackage = GuiPackage.getInstance();
 
     /** Enable Up and Down buttons */
     private final boolean enableUpDown;
@@ -405,6 +409,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Move a row down
      */
     private void moveDown() {
+        if(guiPackage != null){
+            guiPackage.setDirty(true);
+        }
         //get the selected rows before stopping editing
         // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
@@ -459,6 +466,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      *  Move a row down
      */
     private void moveUp() {
+        if(guiPackage != null){
+            guiPackage.setDirty(true);
+        }
         //get the selected rows before stopping editing
         // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
@@ -494,10 +504,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         }
     }
 
+
     /**
      * Remove the currently selected argument from the table.
      */
     protected void deleteArgument() {
+        if(guiPackage != null){
+            guiPackage.setDirty(true);
+        }
         GuiUtils.cancelEditing(table);
 
         int[] rowsSelected = table.getSelectedRows();
@@ -525,6 +539,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Add a new argument row to the table.
      */
     protected void addArgument() {
+        if(guiPackage != null){
+            guiPackage.setDirty(true);
+        }
         // If a table cell is being edited, we should accept the current value
         // and stop the editing before adding a new row.
         GuiUtils.stopTableEditing(table);
@@ -580,6 +597,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     }
 
     protected void addFromClipboard() {
+        if(guiPackage != null){
+            guiPackage.setDirty(true);
+        }
         addFromClipboard(CLIPBOARD_LINE_DELIMITERS, CLIPBOARD_ARG_DELIMITERS);
     }
 
