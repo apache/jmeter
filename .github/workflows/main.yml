@@ -2,11 +2,10 @@ name: CI
 
 on:
   push:
-    branches:
-      - '*'
+    branches: [ master, develop ]
   pull_request:
-    branches:
-      - '*'
+    branches: master
+  workflow_dispatch:
 
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/software-installed-on-github-hosted-runners
 
