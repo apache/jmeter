@@ -1,11 +1,12 @@
-name: Build
+name: Run SonarCloud Analysis
 # https://github.com/SonarSource/sonarcloud-github-action-samples/blob/gradle/.github/workflows/build-workflow.yml
 on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
   push:
     branches:
-      - [ master, develop ]
+      - master
+      - develop
   pull_request:
     types:
       - opened
