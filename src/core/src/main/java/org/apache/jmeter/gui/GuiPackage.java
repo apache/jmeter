@@ -525,6 +525,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
+        mainFrame.setDirtyTitle(dirty);
     }
 
     /**
