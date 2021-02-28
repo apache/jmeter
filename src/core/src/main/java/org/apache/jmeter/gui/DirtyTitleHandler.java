@@ -21,7 +21,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 
 /**
- * This class decides if we need to set/clear asterix on 
+ * This class decides if we need to set/clear asterix on
  * the main window title after tree changes
  *
  * @since 5.5
@@ -67,7 +67,7 @@ public class DirtyTitleHandler implements TreeModelListener {
     public void treeStructureChanged(TreeModelEvent tme) {
         handleChangedTree();
     }
-    
+
     /**
      * Handles the title change
      *

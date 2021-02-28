@@ -584,16 +584,15 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
     /**
      * Add asterisk to the frame title when there is unsaved changes and deletes it when saved.
-     * See {@link GuiPackage.setDirty }
-     * 
+     *
      * @param dirty boolean flag of unsaved changes.
      */
     public void setDirtyTitle(boolean dirty) {
         String oldTitle = getTitle();
-        if (dirty & (!oldTitle.substring(0, 2).equals("* "))) {
+        if (dirty && !oldTitle.substring(0, 2).equals("* ")) {
             setTitle("* " + oldTitle);
         }
-        else if (!dirty & (oldTitle.substring(0, 2).equals("* "))) {
+        else if (!dirty && oldTitle.substring(0, 2).equals("* ")) {
             setTitle(oldTitle.substring(2));
         }
     }
