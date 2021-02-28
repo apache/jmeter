@@ -103,7 +103,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private JButton showDetail;
 
     /** Gui Package */
-    private GuiPackage guiPackage = GuiPackage.getInstance();
+    private GuiPackage guiPackage;
 
     /** Enable Up and Down buttons */
     private final boolean enableUpDown;
@@ -793,6 +793,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
         table.revalidate();
         sizeColumns(table);
+        
+        guiPackage = GuiPackage.getInstance();
     }
 
     /**

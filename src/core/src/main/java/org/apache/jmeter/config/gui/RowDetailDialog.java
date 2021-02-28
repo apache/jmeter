@@ -83,8 +83,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
 
     private int selectedRow;
 
-    /** Gui Package */
-    private GuiPackage guiPackage = GuiPackage.getInstance();
+    private GuiPackage guiPackage;
 
     private boolean textChanged = true; // change to false after the first insert
 
@@ -188,6 +187,8 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
 
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
+
+        guiPackage = GuiPackage.getInstance();
     }
 
     /**
