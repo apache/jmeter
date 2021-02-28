@@ -793,7 +793,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
         table.revalidate();
         sizeColumns(table);
-        
+
         guiPackage = GuiPackage.getInstance();
     }
 
