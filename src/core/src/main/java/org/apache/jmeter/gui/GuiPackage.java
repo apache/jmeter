@@ -151,6 +151,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** History for tree states */
     private UndoHistory undoHistory = new UndoHistory();
 
+    /** Asterix on title when test plan has unsaved changes */
+    private DirtyTitleHandler dirtyTitleHandler = new DirtyTitleHandler();
+
     /** GUI Logging Event Bus. */
     private GuiLogEventBus logEventBus = new GuiLogEventBus();
 
@@ -166,6 +169,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         if (UndoHistory.isEnabled()) {
             this.treeModel.addTreeModelListener(undoHistory);
         }
+        this.treeModel.addTreeModelListener(dirtyTitleHandler);
         this.treeListener = treeListener;
     }
 
@@ -181,12 +185,14 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /**
      * Register as listener of:
      * - UndoHistory
+     * - Dirty Title
      * - Locale Changes
      */
     public void registerAsListener() {
         if(UndoHistory.isEnabled()) {
             this.undoHistory.registerHistoryListener(this);
         }
+        this.treeModel.addTreeModelListener(dirtyTitleHandler);
         JMeterUtils.addLocaleChangeListener(this);
     }
 
@@ -525,6 +531,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
+        mainFrame.setDirtyTitle(dirty);
     }
 
     /**
