@@ -83,7 +83,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
 
     private int selectedRow;
 
-    private GuiPackage guiPackage;
+    private transient GuiPackage guiPackage;
 
     private boolean textChanged = true; // change to false after the first insert
 

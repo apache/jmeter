@@ -103,7 +103,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private JButton showDetail;
 
     /** Gui Package */
-    private GuiPackage guiPackage;
+    private transient GuiPackage guiPackage;
 
     /** Enable Up and Down buttons */
     private final boolean enableUpDown;
