@@ -172,22 +172,30 @@ allprojects {
     }
 }
 
+// sonarqube {
+//     properties {
+//         // See https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner+for+Gradle#AnalyzingwithSonarQubeScannerforGradle-Configureanalysisproperties
+//         property("sonar.sourceEncoding", "UTF-8")
+//         val projectName = "SoftasenseitJMeter"
+//         property("sonar.projectName", projectName)
+//         property("sonar.projectKey", "SoftasenseitJMeter")
+//         property("sonar.organization", "softasenseit")
+//         property("sonar.projectVersion", project.version.toString())
+//         property("sonar.host.url", System.getenv()["SONAR_HOST_URL"] ?: "http://localhost:9000")
+//         property("sonar.login", System.getenv()["SONAR_LOGIN"] ?: "")
+//         property("sonar.password", System.getenv()["SONAR_PASSWORD"] ?: "")
+//         property("sonar.links.homepage", "https://jmeter.apache.org")
+//         property("sonar.links.ci", "https://builds.apache.org/job/JMeter-trunk/")
+//         property("sonar.links.scm", "https://jmeter.apache.org/svnindex.html")
+//         property("sonar.links.issue", "https://jmeter.apache.org/issues.html")
+//     }
+// }
+
 sonarqube {
     properties {
-        // See https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner+for+Gradle#AnalyzingwithSonarQubeScannerforGradle-Configureanalysisproperties
-        property("sonar.sourceEncoding", "UTF-8")
-        val projectName = "SoftasenseitJMeter"
-        property("sonar.projectName", projectName)
         property("sonar.projectKey", "SoftasenseitJMeter")
         property("sonar.organization", "softasenseit")
-        property("sonar.projectVersion", project.version.toString())
-        property("sonar.host.url", System.getenv()["SONAR_HOST_URL"] ?: "http://localhost:9000")
-        property("sonar.login", System.getenv()["SONAR_LOGIN"] ?: "")
-        property("sonar.password", System.getenv()["SONAR_PASSWORD"] ?: "")
-        property("sonar.links.homepage", "https://jmeter.apache.org")
-        property("sonar.links.ci", "https://builds.apache.org/job/JMeter-trunk/")
-        property("sonar.links.scm", "https://jmeter.apache.org/svnindex.html")
-        property("sonar.links.issue", "https://jmeter.apache.org/issues.html")
+        property("sonar.host.url", "https://sonarcloud.io")
     }
 }
 

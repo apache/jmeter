@@ -1,4 +1,4 @@
-name: Build to SonarCloud
+name: Build headless to SonarCloud
 on:
   push:
     branches:
@@ -36,4 +36,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --debug --info --stacktrace
+        run: ./gradlew build -Djava.awt.headless=true sonarqube --debug --info --stacktrace
