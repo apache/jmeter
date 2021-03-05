@@ -119,6 +119,7 @@ Summary
 <ch_section>Non-functional changes</ch_section>
 <ul>
   <li><bug>65128</bug><pr>643</pr>Add missing documentation about <code>Same user on each iteration</code> for Thread Groups. Contributed by njkuzas.</li>
+  <li>Updated xmlgraphics-commons to 2.6 (from 2.3)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

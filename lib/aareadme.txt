@@ -44,7 +44,7 @@ https://github.com/ben-manes/caffeine/
 commons-codec-1.13
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
-- Used by ProxyControl and JSR223Test Element for Base64 and md5 
+- Used by ProxyControl and JSR223Test Element for Base64 and md5
 
 commons-collections-3.2.2
 -------------------------
@@ -287,7 +287,7 @@ http://xerces.apache.org/xerces2-j/download.cgi
 
 The x* jars above are used for XML handling
 
-xmlgraphics-commons-2.3 (org.apache.xmlgraphics.image.codec)
+xmlgraphics-commons-2.6 (org.apache.xmlgraphics.image.codec)
 ------------------
 http://xmlgraphics.apache.org/commons/download.html
 - SaveGraphicsService
