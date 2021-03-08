@@ -379,7 +379,7 @@ public class SmtpSampler extends AbstractSampler {
         }
     }
 
-    private String encodeAddress(String address) throws AddressException {
+    private String encodeAddress(String address) {
         String trimmedAddress = address.trim();
         if (!StringUtils.isAsciiPrintable(trimmedAddress)) {
             try {
