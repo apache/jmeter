@@ -121,7 +121,9 @@ public class SSLRMIClientSocketFactory
             throws IOException {
         try {
             KeyStore store = KeyStore.getInstance(type);
-            store.load(new FileInputStream(location), passphrase);
+            try (FileInputStream fis = new FileInputStream(location)) {
+                store.load(fis, passphrase);
+            }
             return store;
         } catch (NoSuchAlgorithmException | CertificateException
                 | KeyStoreException e) {
