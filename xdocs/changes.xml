@@ -80,6 +80,7 @@ Summary
 <ul>
   <li><bug>65027</bug>Detect mime-type for files automatically when adding files to HTTP Sampler</li>
   <li><bug>65020</bug>HTTP Sampler/Files upload tab - add missing buttons</li>
+  <li><pr>650</pr>HTTP Sampler timestamp fix when exception is caught. Contributed by Konstantin Kalinin (konstantin at kkalinin.pro)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -181,6 +182,7 @@ Summary
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
   <li>njzukas (github.com/njzukas)</li>
   <li>David Getzlaff (david.getzlaff at t-systems.com>)</li>
+  <li>Konstantin Kalinin (konstantin at kkalinin.pro)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
