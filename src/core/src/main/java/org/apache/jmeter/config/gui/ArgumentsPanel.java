@@ -249,7 +249,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param disableButtons Remove all buttons
      * @param argCreator function to create {@link Argument}s from Strings taken from clipboard
      */
-    public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone, ObjectTableModel model, boolean disableButtons, Function<String[], Argument> argCreator) {
+    public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone, ObjectTableModel model,
+            boolean disableButtons, Function<String[], Argument> argCreator) {
         tableLabel = new JLabel(label);
         this.enableUpDown = enableUpDown;
         this.disableButtons = disableButtons;
