@@ -1299,7 +1299,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             return res;
         } catch (Exception e) {
-            return errorResult(e, new HTTPSampleResult());
+            return errorResult(e, new HTTPSampleResult(0));
         }
     }
 
