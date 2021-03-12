@@ -51,7 +51,7 @@ public class BoltConnectionElementBeanInfo extends BeanInfoSupport {
         if(log.isDebugEnabled()) {
             String descriptorsAsString = Arrays.stream(getPropertyDescriptors())
                     .map(pd -> pd.getName() + "=" + pd.getDisplayName())
-                    .collect(Collectors.joining(" ,"));
+                    .collect(Collectors.joining(", "));
             log.debug(descriptorsAsString);
         }
 
