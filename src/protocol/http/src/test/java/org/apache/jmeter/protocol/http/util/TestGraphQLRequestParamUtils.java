@@ -68,7 +68,7 @@ class TestGraphQLRequestParamUtils {
     private static final String EXPECTED_POST_BODY =
             "{"
             + "\"operationName\":null,"
-            + "\"variables\":" + EXPECTED_VARIABLES_GET_PARAM_VALUE + ","
+            + "\"variables\":" + VARIABLES.trim() + ","
             + "\"query\":\"" + StringUtils.replace(QUERY.trim(), "\n", "\\n") + "\""
             + "}";
 
@@ -98,6 +98,14 @@ class TestGraphQLRequestParamUtils {
     }
 
     @Test
+    void testToBodyStringWithJMeterVarBug65108() throws Exception {
+        GraphQLRequestParams paramsWithVar = new GraphQLRequestParams(OPERATION_NAME, QUERY,
+                VARIABLES.replace("\"2001\"", "${my_var}"));
+        assertEquals(EXPECTED_POST_BODY.replace("\"2001\"", "${my_var}"),
+                GraphQLRequestParamUtils.toPostBodyString(paramsWithVar));
+    }
+
+    @Test
     void testToPostBodyString() throws Exception {
         assertEquals(EXPECTED_POST_BODY, GraphQLRequestParamUtils.toPostBodyString(params));
     }
@@ -109,7 +117,7 @@ class TestGraphQLRequestParamUtils {
 
     @Test
     void testVariablesToGetParamValue() throws Exception {
-        assertEquals(EXPECTED_VARIABLES_GET_PARAM_VALUE,
+        assertEquals(VARIABLES,
                 GraphQLRequestParamUtils.variablesToGetParamValue(params.getVariables()));
     }
 

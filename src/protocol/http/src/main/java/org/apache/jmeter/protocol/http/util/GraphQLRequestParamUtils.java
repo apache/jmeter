@@ -31,13 +31,10 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -46,13 +43,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  */
 public final class GraphQLRequestParamUtils {
 
+    private static final char QUOTE = '"';
+
     private static final String VARIABLES_FIELD = "variables";
 
     private static final String OPERATION_NAME_FIELD = "operationName";
 
     private static final String QUERY_FIELD = "query";
-
-    private static Logger log = LoggerFactory.getLogger(GraphQLRequestParamUtils.class);
 
     private static final Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
 
@@ -79,27 +76,32 @@ public final class GraphQLRequestParamUtils {
      * @throws RuntimeException if JSON serialization fails for some reason due to any runtime environment issues
      */
     public static String toPostBodyString(final GraphQLRequestParams params) {
-        final ObjectMapper mapper = new ObjectMapper();
-        final ObjectNode postBodyJson = mapper.createObjectNode();
-        postBodyJson.set(OPERATION_NAME_FIELD,
-                JsonNodeFactory.instance.textNode(StringUtils.trimToNull(params.getOperationName())));
-
+        final StringBuilder result = new StringBuilder();
+        result.append('{');
+        addJsonLikeKV(result, OPERATION_NAME_FIELD, params.getOperationName().trim(), true);
+        result.append(',');
         if (StringUtils.isNotBlank(params.getVariables())) {
-            try {
-                final ObjectNode variablesJson = mapper.readValue(params.getVariables(), ObjectNode.class);
-                postBodyJson.set(VARIABLES_FIELD, variablesJson);
-            } catch (JsonProcessingException e) {
-                log.error("Ignoring the GraphQL query variables content due to the syntax error: {}",
-                        e.getLocalizedMessage());
-            }
+            addJsonLikeKV(result, VARIABLES_FIELD, params.getVariables().trim(), false);
+            result.append(',');
         }
+        addJsonLikeKV(result, QUERY_FIELD, params.getQuery().trim(), true);
+        result.append('}');
 
-        postBodyJson.set(QUERY_FIELD, JsonNodeFactory.instance.textNode(StringUtils.trim(params.getQuery())));
+        return result.toString();
+    }
 
-        try {
-            return mapper.writeValueAsString(postBodyJson);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Cannot serialize JSON for POST body string", e);
+    private static void addJsonLikeKV(StringBuilder sb, String key, String value, boolean quoteAndGuardNewLines) {
+        sb.append(QUOTE).append(key).append("\":");
+        if (StringUtils.isBlank(value)) {
+            sb.append("null");
+        } else {
+            if (quoteAndGuardNewLines) {
+                sb.append(QUOTE);
+                sb.append(value.replace("\n", "\\n"));
+                sb.append(QUOTE);
+            } else {
+                sb.append(value);
+            }
         }
     }
 
@@ -118,17 +120,7 @@ public final class GraphQLRequestParamUtils {
      * @return an HTTP GET request parameter value converted from the GraphQL Variables JSON input string
      */
     public static String variablesToGetParamValue(final String variables) {
-        final ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            final ObjectNode variablesJson = mapper.readValue(variables, ObjectNode.class);
-            return mapper.writeValueAsString(variablesJson);
-        } catch (JsonProcessingException e) {
-            log.error("Ignoring the GraphQL query variables content due to the syntax error: {}",
-                    e.getLocalizedMessage());
-        }
-
-        return null;
+        return variables;
     }
 
     /**
