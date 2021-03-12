@@ -4532,7 +4532,8 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         <property name="Username" required="No">User account.</property>
         <property name="Password" required="No">User credentials.</property>
         <property name="Connection Pool Max Size" required="Yes">Max size of the Neo4j driver Bolt connection pool.
-            Raise the value if running large number of concurrent threads, so that JMeter threads are not blocked waiting for a connection to be released to the pool.</property>
+            Raise the value if running large number of concurrent threads, so that JMeter threads are not blocked waiting
+            for a connection to be released to the pool.</property>
     </properties>
 </component>
 
