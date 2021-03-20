@@ -239,6 +239,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             Arguments args = (Arguments) parameterPanel.createTestElement();
             String functionCall = buildFunctionCallString(functionName, args);
             cutPasteFunction.setText(functionCall);
+            cutPasteFunction.setEnabled(true);
             GuiUtils.copyTextToClipboard(cutPasteFunction.getText());
             CompoundVariable function = new CompoundVariable(functionCall);
             JMeterContext threadContext = JMeterContextService.getContext();
