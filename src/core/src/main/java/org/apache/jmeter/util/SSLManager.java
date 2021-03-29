@@ -143,7 +143,12 @@ public abstract class SSLManager {
               } else {
                  File initStore = new File(fileName);
                  if (fileName.length() > 0 && initStore.exists()) {
-                     retryLoadKeys(initStore, true);
+                     String os = System.getProperty("os.name");
+                     if ( os.equals("z/OS") ) {
+                         retryLoadKeys(initStore, false);
+                     } else {
+                         retryLoadKeys(initStore, true);
+                     }
                      if (log.isInfoEnabled()) {
                          log.info("Total of {} aliases loaded OK from keystore {}",
                                  keyStore.getAliasCount(), fileName);
@@ -215,9 +220,9 @@ public abstract class SSLManager {
                 }
                 System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
                 password = this.defaultpw;
+            } else {
+                log.warn("No password provided, and no GUI present so cannot prompt");
             }
-        } else {
-            log.warn("No password provided, and no GUI present so cannot prompt");
         }
         return password;
     }
