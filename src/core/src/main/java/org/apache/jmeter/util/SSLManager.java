@@ -143,12 +143,9 @@ public abstract class SSLManager {
               } else {
                  File initStore = new File(fileName);
                  if (fileName.length() > 0 && initStore.exists()) {
-                     String os = System.getProperty("os.name");
-                     if ( os.equals("z/OS") ) {
-                         retryLoadKeys(initStore, false);
-                     } else {
-                         retryLoadKeys(initStore, true);
-                     }
+                     boolean isZOS = System.getProperty("os.name").equals("z/OS");
+                     boolean allowEmptyPassword = !isZOS;
+                     retryLoadKeys(initStore, allowEmptyPassword);
                      if (log.isInfoEnabled()) {
                          log.info("Total of {} aliases loaded OK from keystore {}",
                                  keyStore.getAliasCount(), fileName);
