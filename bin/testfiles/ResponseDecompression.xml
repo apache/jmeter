@@ -23,6 +23,8 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
+  <httpSample s="true" lb="HR-BROTLI-0" rc="302" rm="Found" dt="text"/>
+  <httpSample s="true" lb="HR-BROTLI-1" rc="200" rm="OK" dt="text"/>
 </httpSample>
 
 </testResults>
