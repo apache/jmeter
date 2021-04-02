@@ -179,6 +179,7 @@ Summary
   <li><pr>641</pr>Updated xercesImpl to 2.12.1 (from 2.12.0). Based on patch by Stefan Seide (stefan at trilobyte-se.de).</li>
   <li><pr>645</pr>Add escaping for new lines in AbstractInfluxdbMetricsSender. Contributed by David Getzlaff (david.getzlaff at t-systems.com>)</li>
   <li><bug>65198</bug>Can't copy generated function from FunctionHelper</li>
+  <li>Updated Apache Tika to 1.26 (from 1.24.1)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
