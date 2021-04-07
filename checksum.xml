@@ -80,6 +80,7 @@
     <trusted-key id='efe8086f9e93774e' group='junit' />
     <trusted-key id='15c71c0a4e0b8edd' group='net.java.dev.jna' />
     <trusted-key id='75bf031b7c94e183' group='net.java.dev.jna' />
+    <trusted-key id='1d0690e353be126d' group='net.minidev' />
     <trusted-key id='f6bc09712c8df6ec' group='net.minidev' />
     <trusted-key id='0da8a5ec02d11ead' group='net.sf.jopt-simple' />
     <trusted-key id='d4012dda1f1f0f82' group='net.sf.jtidy' />
