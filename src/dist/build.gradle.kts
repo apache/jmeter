@@ -98,6 +98,7 @@ tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
         delete(fileTree("$rootDir/bin") { include("ApacheJMeter.jar") })
         delete(fileTree("$rootDir/lib") { include("*.jar") })
         delete(fileTree("$rootDir/lib/ext") { include("ApacheJMeter*.jar") })
+        delete(fileTree("$rootDir/lib/junit") { include("*.jar") })
     }
 }
 
