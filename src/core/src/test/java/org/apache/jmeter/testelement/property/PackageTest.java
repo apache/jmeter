@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.testelement.property;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.jmeter.config.LoginConfig;
 import org.junit.jupiter.api.Test;
@@ -103,6 +103,11 @@ public class PackageTest {
     }
 
     @Test
+    public void testInvalidBooleanConstructors() {
+        assertThrows(IllegalArgumentException.class, () -> new BooleanProperty(null, false));
+    }
+
+    @Test
     public void testDoubleEquality() throws Exception {
         DoubleProperty jpn1 = new DoubleProperty();
         DoubleProperty jpn2 = new DoubleProperty();
@@ -145,6 +150,11 @@ public class PackageTest {
     }
 
     @Test
+    public void testInvalidDoubleConstructors() {
+        assertThrows(IllegalArgumentException.class, () -> new DoubleProperty(null, 0));
+    }
+
+    @Test
     public void testFloatEquality() throws Exception {
         FloatProperty jp1 = new FloatProperty("name1", 123.4f);
         FloatProperty jp2 = new FloatProperty("name1", 123.4f);
@@ -182,6 +192,11 @@ public class PackageTest {
     }
 
     @Test
+    public void testInvalidFloatConstructors() {
+        assertThrows(IllegalArgumentException.class, () -> new FloatProperty(null, 0));
+    }
+
+    @Test
     public void testIntegerEquality() throws Exception {
         IntegerProperty jp1 = new IntegerProperty("name1", 123);
         IntegerProperty jp2 = new IntegerProperty("name1", 123);
@@ -204,16 +219,12 @@ public class PackageTest {
         checkNotEquals(jp9, jp5);
         checkNotEquals(jp10, jp7);
         checkNotEquals(jp9, jp10);
-        try {
-            new IntegerProperty(null);
-            fail("Should have generated an Illegal Argument Exception");
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new IntegerProperty(null, 0);
-            fail("Should have generated an Illegal Argument Exception");
-        } catch (IllegalArgumentException e) {
-        }
+    }
+
+    @Test
+    public void testInvalidIntegerConstructors() {
+        assertThrows(IllegalArgumentException.class, () -> new IntegerProperty(null));
+        assertThrows(IllegalArgumentException.class, () -> new IntegerProperty(null, 0));
     }
 
     @Test
@@ -239,31 +250,22 @@ public class PackageTest {
         checkNotEquals(jp9, jp5);
         checkNotEquals(jp10, jp7);
         checkNotEquals(jp9, jp10);
-        try {
-            new LongProperty(null, 0L);
-            fail("Should have generated an Illegal Argument Exception");
-        } catch (IllegalArgumentException e) {
-        }
     }
 
     @Test
-    public void testMapEquality() throws Exception {
-        try {
-            new MapProperty(null, null);
-            fail("Should have generated an Illegal Argument Exception");
-        } catch (IllegalArgumentException e) {
-        }
+    public void testInvalidLongConstructors() {
+        assertThrows(IllegalArgumentException.class, () -> new LongProperty(null, 0L));
+    }
+
+    @Test
+    public void testInvalidMapConstructors() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> new MapProperty(null, null));
     }
 
     @Test
     public void testNullEquality() throws Exception {
         NullProperty jpn1 = new NullProperty();
         NullProperty jpn2 = new NullProperty();
-        try {
-            new NullProperty(null);
-            fail("Should have generated an Illegal Argument Exception");
-        } catch (IllegalArgumentException e) {
-        }
         NullProperty jp1 = new NullProperty("name1");
         NullProperty jp2 = new NullProperty("name1");
         NullProperty jp3 = new NullProperty("name2");
@@ -274,6 +276,11 @@ public class PackageTest {
         checkNotEquals(jp1, jp3);
         checkNotEquals(jp2, jp3);
         checkEquals(jp3, jp4);
+    }
+
+    @Test
+    public void testInvalidNullConstructors() {
+        assertThrows(IllegalArgumentException.class, () -> new NullProperty(null));
     }
 
     @Test
@@ -296,16 +303,12 @@ public class PackageTest {
         checkEquals(jp5, jp6);
         checkNotEquals(jp3, jp5);
         checkNotEquals(jp6, jp7);
-        try {
-            new StringProperty(null, "");
-            fail("Should have generated an Illegal Argument Exception");
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            new StringProperty(null, null);
-            fail("Should have generated an Illegal Argument Exception");
-        } catch (IllegalArgumentException e) {
-        }
+    }
+
+    @Test
+    public void testInvalidStringConstructors() {
+        assertThrows(IllegalArgumentException.class, () -> new StringProperty(null, ""));
+        assertThrows(IllegalArgumentException.class, () -> new StringProperty(null, null));
     }
 
     @Test
