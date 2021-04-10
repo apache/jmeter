@@ -129,7 +129,6 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
         return rootPane;
     }
 
-    @SuppressWarnings("MathRoundIntLong")
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
