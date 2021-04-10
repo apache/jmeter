@@ -427,9 +427,11 @@ public class JMeter implements JMeterPlugin {
                 Load.insertLoadedTree(1, tree);
             } catch (ConversionException e) {
                 log.error("Failure loading test file", e);
+                splash.close();
                 JMeterUtils.reportErrorToUser(SaveService.CEtoString(e));
             } catch (Exception e) {
                 log.error("Failure loading test file", e);
+                splash.close();
                 JMeterUtils.reportErrorToUser(e.toString());
             }
         } else {
