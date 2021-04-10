@@ -137,7 +137,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
         dataComponents = new ArrayList<>();
 
         final int columnCount = tableModel.getColumnCount();
-        final int linesPerTextArea = Math.max(5, Math.round(30 / Math.max(columnCount - 1, 1)));
+        final int linesPerTextArea = Math.max(5, 30 / Math.max(columnCount - 1, 1));
         for (int column = 0; column < columnCount; column++) {
             JLabel dataLabel = new JLabel(JMeterUtils.getResString(tableModel.getColumnName(column)));
             dataPanel.add(dataLabel);
