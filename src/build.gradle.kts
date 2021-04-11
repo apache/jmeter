@@ -109,7 +109,6 @@ subprojects {
     }
 
     val testClasses by configurations.creating {
-        extendsFrom(configurations["testRuntime"])
     }
 
     if (testsPresent) {

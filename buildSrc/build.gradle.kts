@@ -25,13 +25,11 @@ plugins {
 }
 
 repositories {
-    jcenter()
     gradlePluginPortal()
 }
 
 allprojects {
     repositories {
-        jcenter()
         gradlePluginPortal()
     }
     applyKotlinProjectConventions()
@@ -39,12 +37,6 @@ allprojects {
 
 fun Project.applyKotlinProjectConventions() {
     apply(plugin = "org.gradle.kotlin.kotlin-dsl")
-
-    plugins.withType<KotlinDslPlugin> {
-        configure<KotlinDslPluginOptions> {
-            experimentalWarning.set(false)
-        }
-    }
 
     tasks.withType<KotlinCompile> {
         sourceCompatibility = "unused"

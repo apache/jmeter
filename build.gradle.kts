@@ -500,7 +500,7 @@ allprojects {
         }
 
         repositories {
-            jcenter()
+            mavenCentral()
         }
 
         tasks {

@@ -35,4 +35,4 @@ fun Writer.withPrefix(prefix: String) =
                 throw failure
             }
         }
-    })
+    }, System.lineSeparator())
