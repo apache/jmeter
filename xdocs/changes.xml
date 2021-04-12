@@ -184,6 +184,7 @@ Summary
   <li><pr>645</pr>Add escaping for new lines in AbstractInfluxdbMetricsSender. Contributed by David Getzlaff (david.getzlaff at t-systems.com>)</li>
   <li><bug>65198</bug>Can't copy generated function from FunctionHelper</li>
   <li>Updated Apache Tika to 1.26 (from 1.24.1)</li>
+  <li><pr>658</pr>Improve javadoc. Contributed by Ori Marko (orimarko at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -197,6 +198,7 @@ Summary
   <li>David Getzlaff (david.getzlaff at t-systems.com>)</li>
   <li>Konstantin Kalinin (konstantin at kkalinin.pro)</li>
   <li>David Pecollet (david.pecollet at gmail.com)</li>
+  <li>Ori Marko (orimarko at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

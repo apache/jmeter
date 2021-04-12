@@ -315,9 +315,9 @@ public interface TestElement extends Cloneable {
     String getName();
 
     /**
-     * Returns name of this element.
+     * Associates a name with this element.
      * @param name
-     *            of this element
+     *            to be associated
      */
     void setName(String name);
 
