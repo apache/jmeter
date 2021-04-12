@@ -178,6 +178,7 @@ public final class JmeterKeyStore {
     private static final List<String> SAN_GENERAL_NAMES = Arrays.asList("otherName", "rfc822Name", "dNSName", "x400Address",
             "directoryName", "ediPartyName", "uniformResourceIdentifier", "iPAddress", "registeredID");
 
+    @SuppressWarnings("JdkObsolete")
     private void logDetailsOnKeystore(KeyStore keystore) {
         Enumeration<String> aliases;
         try {
