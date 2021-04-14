@@ -232,6 +232,7 @@ however, the profile can't be updated while the test is running.
   <li><bug>65269</bug>JSON Extractor and JSON JMESPath Extractor ignore sub-samples</li>
   <li><bug>65352</bug>Warning logged when Boundary Extractor doesn't find any match</li>
   <li><bug>65681</bug>Use default values for null values when extracting with JSONPostProcessor</li>
+  <li>Allow setters in ConstantThroughputTimer to updating the values during the run time</li>
 </ul>
 
 <h3>Functions</h3>
@@ -286,6 +287,7 @@ however, the profile can't be updated while the test is running.
   <li>Rithvik Patibandla (rithvikp98 at gmail.com)</li>
   <li>Mariusz (mawasak at gmail.com)</li>
   <li>peter.wong@csexperts.com</li>
+  <li>Magnus Spångdal (magnus.spangdal as avanza.se)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

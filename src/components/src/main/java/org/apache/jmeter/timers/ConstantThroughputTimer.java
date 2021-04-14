@@ -30,6 +30,8 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jmeter.testelement.property.DoubleProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
@@ -60,6 +62,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     private static final double MILLISEC_PER_MIN = 60000.0;
 
+    private static final Mode DEFAULT_CALC_MODE = Mode.ThisThreadOnly;
+
+    // TODO: most props use class simpleName as prefix but that would break backward compatiblity here
+    public static final String THROUGHPUT = "throughput";
+    public static final String CALC_MODE = "calcMode";
+
     /**
      * This enum defines the calculation modes used by the ConstantThroughputTimer.
      */
@@ -72,6 +80,8 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         ;
 
         private final String propertyName; // The property name to be used to look up the display string
+        // Enum#values() clones the array, and we don't want to pay that cost as we know we don't modify the array
+        private static final Mode[] CACHED_VALUES = values();
 
         Mode(String name) {
             this.propertyName = name;
@@ -88,13 +98,6 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * timer will be calculated so that the next request happens at this time.
      */
     private long previousTime = 0;
-
-    private Mode mode = Mode.ThisThreadOnly;
-
-    /**
-     * Desired throughput, in samples per minute.
-     */
-    private double throughput;
 
     //For calculating throughput across all threads
     private static final ThroughputInfo allThreadsInfo = new ThroughputInfo();
@@ -117,7 +120,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      *            Desired sampling rate, in samples per minute.
      */
     public void setThroughput(double throughput) {
-        this.throughput = throughput;
+        setProperty(new DoubleProperty(THROUGHPUT, throughput));
     }
 
     /**
@@ -126,15 +129,16 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * @return the rate at which samples should occur, in samples per minute.
      */
     public double getThroughput() {
-        return throughput;
+        return getPropertyAsDouble(THROUGHPUT);
     }
 
     public int getCalcMode() {
-        return mode.ordinal();
+        return getPropertyAsInt(CALC_MODE, DEFAULT_CALC_MODE.ordinal());
     }
 
     public void setCalcMode(int mode) {
-        this.mode = Mode.values()[mode];
+        Mode resolved = Mode.CACHED_VALUES[mode];
+        setProperty(new IntegerProperty(CALC_MODE, resolved.ordinal()));
     }
 
     /**
@@ -178,7 +182,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         long delay;
         // N.B. we fetch the throughput each time, as it may vary during a test
         double msPerRequest = MILLISEC_PER_MIN / getThroughput();
-        switch (mode) {
+        switch (getMode()) {
         case AllActiveThreads: // Total number of threads
             delay = Math.round(JMeterContextService.getNumberOfThreads() * msPerRequest);
             break;
@@ -279,7 +283,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
                 try {
                     final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
                     final ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
-                    for(Enum<Mode> e : Mode.values()) {
+                    for(Enum<Mode> e : Mode.CACHED_VALUES) {
                         final String propName = e.toString();
                         if (objectValue.equals(rb.getObject(propName))) {
                             final int tmpMode = e.ordinal();
@@ -324,11 +328,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     // For access from test code
     Mode getMode() {
-        return mode;
+        int mode = getCalcMode();
+        return Mode.CACHED_VALUES[mode];
     }
 
     // For access from test code
     void setMode(Mode newMode) {
-        mode = newMode;
+        setCalcMode(newMode.ordinal());
     }
 }
