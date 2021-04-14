@@ -2249,7 +2249,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
 
 <component name="Runtime Controller" index="&sect-num;.2.8" width="328" height="100" screenshot="runtimecontroller.png">
     <description>
-        <p>The Runtime Controller controls how long its children how long its children will run.
+        <p>The Runtime Controller controls how long its children will run.
         Controller will run its children until configured <code>Runtime(s)</code> is exceeded.
         </p>
     </description>
