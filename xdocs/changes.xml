@@ -126,6 +126,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+  <li><bug>61805</bug><pr>663</pr>Add simple HTTP request template. Contributed by Ori Marko (orimarko at gmail.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

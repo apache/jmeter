@@ -251,4 +251,26 @@
             </ul>
         ]]></description>
     </template>
+    <template isTestPlan="true">
+        <name>Simple HTTP request</name>
+        <fileName>/bin/templates/simple-http-request-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Template for simple HTTP request</h1>
+        <h2>JMeter Configuration</h2>
+        <p>Configure your HTTP request, set:
+            <ul>
+                <li>Full URL</li>
+                <li>Content Type</li>
+                <li>HTTP method</li>
+                <li>Body data</li>
+            </ul>
+        </p>
+        ]]></description>
+        <parameters>
+            <parameter defaultValue="https://example.invalid/" key="url"/>
+            <parameter defaultValue="application/json" key="contentType"/>
+            <parameter defaultValue="POST" key="method"/>
+            <parameter defaultValue="" key="body"/>
+        </parameters>
+    </template>
 </templates>
