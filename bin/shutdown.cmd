@@ -20,5 +20,5 @@ rem   Run the Shutdown client to stop a non-GUI instance gracefully
 
 rem   P1 = command port for JMeter instance (defaults to 4445)
 
-java -cp %~dp0ApacheJMeter.jar org.apache.jmeter.util.ShutdownClient Shutdown %*
+java -cp "%~dp0ApacheJMeter.jar" org.apache.jmeter.util.ShutdownClient Shutdown %*
 pause
