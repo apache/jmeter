@@ -63,7 +63,12 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         String jsonResponse = getData(vars, context);
         String refName = getRefName();
         String defaultValue = getDefaultValue();
-        int matchNumber = Integer.parseInt(getMatchNumber());
+        int matchNumber;
+        if (StringUtils.isBlank(getMatchNumber())) {
+            matchNumber = 0;
+        } else {
+            matchNumber = Integer.parseInt(getMatchNumber());
+        }
         final String jsonPathExpression = getJmesPathExpression().trim();
         clearOldRefVars(vars, refName);
         if (StringUtils.isEmpty(jsonResponse)) {

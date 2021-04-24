@@ -58,6 +58,18 @@ public class TestJMESPathExtractor {
         return processor;
     }
 
+    public static class NonParemeterizedTests {
+        @Test
+        public void testNoMatchNumberSet() {
+            JMeterVariables vars = new JMeterVariables();
+            SampleResult sampleResult = new SampleResult();
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "[1]", false, "");
+            processor.setJmesPathExpression("[*]");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("1"));
+        }
+    }
+
     @RunWith(Parameterized.class)
     public static class OneMatchOnAllExtractedValues {
 
