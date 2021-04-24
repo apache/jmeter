@@ -88,7 +88,8 @@ public class JMESPathExtractor extends AbstractScopedTestElement
             if (resultList.size() > 1) {
                 handleListResult(vars, refName, defaultValue, matchNumber, resultList);
             } else if (resultList.isEmpty()){
-                // no value extracted. Use defaultValue
+                handleNullResult(vars, refName, defaultValue, matchNumber);
+                return;
             } else {
                 // else just one value extracted
                 handleSingleResult(vars, refName, matchNumber, resultList);
