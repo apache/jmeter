@@ -79,7 +79,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         try {
             JsonNode actualObj = OBJECT_MAPPER.readValue(jsonResponse, JsonNode.class);
             JsonNode result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
-            if (result.isNull() || result.isEmpty()) {
+            if (result.isNull()) {
                 handleNullResult(vars, refName, defaultValue, matchNumber);
                 return;
             }
@@ -87,6 +87,8 @@ public class JMESPathExtractor extends AbstractScopedTestElement
             // if more than one value extracted, suffix with "_index"
             if (resultList.size() > 1) {
                 handleListResult(vars, refName, defaultValue, matchNumber, resultList);
+            } else if (resultList.isEmpty()){
+                // no value extracted. Use defaultValue
             } else {
                 // else just one value extracted
                 handleSingleResult(vars, refName, matchNumber, resultList);

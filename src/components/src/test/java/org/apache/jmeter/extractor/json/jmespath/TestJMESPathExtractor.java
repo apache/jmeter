@@ -73,7 +73,7 @@ public class TestJMESPathExtractor {
     @RunWith(Parameterized.class)
     public static class OneMatchOnAllExtractedValues {
 
-        @Parameters
+        @Parameters(name = "Extract from {0} with path {1} should result in {2} for match {3}")
         public static Collection<String[]> data() {
             return Arrays.asList(new String[][] {
                 {"[\"one\"]", "[*]", "one", "1"},
