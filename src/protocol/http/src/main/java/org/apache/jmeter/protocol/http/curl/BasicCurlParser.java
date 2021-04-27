@@ -561,7 +561,7 @@ public class BasicCurlParser {
     private static final CLOptionDescriptor D_DATA_BINARY_OPT = new CLOptionDescriptor("data-binary",
             CLOptionDescriptor.ARGUMENT_REQUIRED, DATA_BINARY_OPT, "HTTP POST binary data ");
     private static final CLOptionDescriptor D_DATA_URLENCODE_OPT = new CLOptionDescriptor("data-urlencode",
-            CLOptionDescriptor.ARGUMENT_REQUIRED, DATA_URLENCODE_OPT, "HTTP POST url encoding data ");
+            CLOptionDescriptor.ARGUMENT_REQUIRED | CLOptionDescriptor.DUPLICATES_ALLOWED, DATA_URLENCODE_OPT, "HTTP POST url encoding data ");
     private static final CLOptionDescriptor D_DATA_RAW_OPT = new CLOptionDescriptor("data-raw",
             CLOptionDescriptor.ARGUMENT_REQUIRED, DATA_RAW_OPT, "HTTP POST url allowed '@' ");
     private static final CLOptionDescriptor D_FORM_OPT = new CLOptionDescriptor("form",
@@ -718,6 +718,9 @@ public class BasicCurlParser {
                 } else if (DATAS_OPT.contains(option.getDescriptor().getId())) {
                     String value = option.getArgument(0);
                     String dataOptionName = option.getDescriptor().getName();
+                    if (value == null) {
+                        value = "";
+                    }
                     value = getPostDataByDifferentOption(value.trim(), dataOptionName);
                     if ("GET".equals(request.getMethod())) {
                         request.setMethod("POST");

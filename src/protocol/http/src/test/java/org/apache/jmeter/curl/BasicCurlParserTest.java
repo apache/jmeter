@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -46,6 +47,39 @@ public class BasicCurlParserTest {
     @BeforeEach
     public void setUpTempFolder(@TempDir Path tempDir) {
         tempFile = tempDir.resolve("test.txt").toFile();
+    }
+
+    @Test
+    public void testBug65270SingleEqualsWithDataUrlEncodeOptions() {
+        String cmdLine = String.join(" \\\n",
+        Arrays.asList("curl --location --request POST 'https://example.invalid/access/token'",
+        "--header 'HTTP_X_FORWARDED_FOR: 127.0.0.1'",
+        "--header 'Accept-Language: it-IT'",
+        "--header 'Content-Type: application/x-www-form-urlencoded'",
+        "--data-urlencode '='"));
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        assertEquals("https://example.invalid/access/token", request.getUrl());
+        assertEquals(3, request.getHeaders().size());
+        assertEquals("", request.getPostData());
+    }
+
+    @Test
+    public void testBug65270DuplicateDataUrlEncodeOptions() {
+        String cmdLine = String.join(" \\\n",
+                Arrays.asList("curl --location --request POST 'http://example.invalid/access/token'",
+                        "--header 'HTTP_X_FORWARDED_FOR: 127.0.0'", "--header 'Accept-Language: it-IT'",
+                        "--header 'Content-Type: application/x-www-form-urlencoded'",
+                        "--data-urlencode 'client_id=someID'", "--data-urlencode 'client_secret=someSecret'",
+                        "--data-urlencode 'grant_type=password'", "--data-urlencode 'username=test'",
+                        "--data-urlencode 'password=Password1234'"));
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
+        assertEquals("http://example.invalid/access/token", request.getUrl());
+        assertEquals(3, request.getHeaders().size());
+        assertEquals(
+                "client_id=someID&client_secret=someSecret&grant_type=password&username=test&password=Password1234",
+                request.getPostData());
     }
 
     @Test
