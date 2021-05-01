@@ -33,7 +33,6 @@ matrix:
         - xvfb-run ./gradlew build jacocoReport $SKIP_TAR
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-        - test -z ${TEMP_UPLOAD_CREDENTIALS} || curl -s -u ${TEMP_UPLOAD_CREDENTIALS} -T <(env) ${TEMP_UPLOAD_URL}/env.$(date +"%Y%m%d%H%M%S").txt || true
     - name: Tests with OpenJDK 11
       jdk: openjdk11
       addons:
