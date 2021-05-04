@@ -190,6 +190,7 @@ Summary
   <li><pr>661</pr>Fix wording in doc. Contributed by BugKing (wangzhen at fit2cloud.com)</li>
   <li><pr>664</pr>Allow whitespace in path. Contributed by Till Neunast (github.com/tilln)</li>
   <li><bug>65270</bug>POST application/x-www-form-urlencoded cURL code generated from Postman is not imported correctly</li>
+  <li>Silence warnings of missing font Arial on startup under linux</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
