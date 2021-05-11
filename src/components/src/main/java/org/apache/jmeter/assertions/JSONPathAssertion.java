@@ -20,6 +20,7 @@ package org.apache.jmeter.assertions;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 
 import com.jayway.jsonpath.JsonPath;
 
@@ -153,12 +155,13 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
     }
 
     private boolean isEquals(Object subj) {
-        String str = objectToString(subj);
         if (isUseRegex()) {
+            String str = objectToString(subj);
             Pattern pattern = JMeterUtils.getPatternCache().getPattern(getExpectedValue());
             return JMeterUtils.getMatcher().matches(str, pattern);
         } else {
-            return str.equals(getExpectedValue());
+            Object expected = JSONValue.parse(getExpectedValue());
+            return Objects.equals(expected, subj);
         }
     }
 

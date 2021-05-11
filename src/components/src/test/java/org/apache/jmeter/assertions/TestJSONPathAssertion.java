@@ -17,19 +17,20 @@
 
 package org.apache.jmeter.assertions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Locale;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.Test;
 
-public class TestJSONPathAssertion {
+class TestJSONPathAssertion {
 
     @Test
-    public void testGetJsonPath() {
+    void testGetJsonPath() {
         JSONPathAssertion instance = new JSONPathAssertion();
         String expResult = "";
         String result = instance.getJsonPath();
@@ -37,14 +38,14 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testSetJsonPath() {
+    void testSetJsonPath() {
         String jsonPath = "";
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath(jsonPath);
     }
 
     @Test
-    public void testGetExpectedValue() {
+    void testGetExpectedValue() {
         JSONPathAssertion instance = new JSONPathAssertion();
         String expResult = "";
         String result = instance.getExpectedValue();
@@ -52,27 +53,27 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testSetExpectedValue() {
+    void testSetExpectedValue() {
         String expectedValue = "";
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setExpectedValue(expectedValue);
     }
 
     @Test
-    public void testSetJsonValidationBool() {
+    void testSetJsonValidationBool() {
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonValidationBool(false);
     }
 
     @Test
-    public void testIsJsonValidationBool() {
+    void testIsJsonValidationBool() {
         JSONPathAssertion instance = new JSONPathAssertion();
         boolean result = instance.isJsonValidationBool();
         assertFalse(result);
     }
 
     @Test
-    public void testGetResult_positive() {
+    void testGetResult_positive() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -87,7 +88,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_positive_regexp() {
+    void testGetResult_positive_regexp() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -106,7 +107,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_positive_invert() {
+    void testGetResult_positive_invert() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -122,7 +123,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_not_regexp() {
+    void testGetResult_not_regexp() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": \"some complicated value\"}".getBytes());
 
@@ -139,7 +140,21 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_negative() {
+    void testGetResult_complex_map() {
+        SampleResult samplerResult = new SampleResult();
+        samplerResult.setResponseData("{\"myval\": { \"a\": 23, \"b\": 42, \"c\": \"something\" } }".getBytes());
+
+        JSONPathAssertion instance = new JSONPathAssertion();
+        instance.setJsonPath("$.myval");
+        instance.setJsonValidationBool(true);
+        instance.setIsRegex(false);
+        instance.setExpectedValue("{\n\t\"a\": 23,\n\"b\": 42,\n\t\"c\": \"something\"\n}");
+        AssertionResult result = instance.getResult(samplerResult);
+        assertFalse(result.isFailure());
+    }
+
+    @Test
+    void testGetResult_negative() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -154,7 +169,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_negative_invert() {
+    void testGetResult_negative_invert() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -170,7 +185,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_null() {
+    void testGetResult_null() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": null}".getBytes());
 
@@ -185,7 +200,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_null_not_found() {
+    void testGetResult_null_not_found() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes());
 
@@ -200,7 +215,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_null_novalidate() {
+    void testGetResult_null_novalidate() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": null}".getBytes());
 
@@ -214,7 +229,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_no_such_path() {
+    void testGetResult_no_such_path() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": null}".getBytes());
 
@@ -228,7 +243,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_list_val() {
+    void testGetResult_list_val() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}".getBytes());
 
@@ -243,7 +258,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_list_negative() {
+    void testGetResult_list_negative() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}".getBytes());
 
@@ -258,7 +273,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_list_empty_novalidate() {
+    void testGetResult_list_empty_novalidate() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": []}".getBytes());
 
@@ -272,7 +287,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_list_empty_validate() {
+    void testGetResult_list_empty_validate() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": []}".getBytes());
 
@@ -287,7 +302,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_dict() {
+    void testGetResult_dict() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": {\"key\": \"val\"}}".getBytes());
 
@@ -302,7 +317,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_inverted_null() {
+    void testGetResult_inverted_null() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": [{\"key\": null}]}".getBytes());
 
@@ -318,7 +333,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_match_msg_problem() {
+    void testGetResult_match_msg_problem() {
         SampleResult samplerResult = new SampleResult();
         String str = "{\"execution\":[{\"scenario\":{\"requests\":[{\"headers\":{\"headerkey\":\"header value\"}}]}}]}";
         samplerResult.setResponseData(str.getBytes());
@@ -339,7 +354,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResult_match_msg_problem2() {
+    void testGetResult_match_msg_problem2() {
         SampleResult samplerResult = new SampleResult();
         String str = "{\n" +
                 " \"code\":200,\n" +
@@ -370,7 +385,7 @@ public class TestJSONPathAssertion {
     }
 
     @Test
-    public void testGetResultFloat() {
+    void testGetResultFloat() {
         Locale prevLocale = Locale.getDefault();
         try {
             // 0.0000123456789 is locale-dependent

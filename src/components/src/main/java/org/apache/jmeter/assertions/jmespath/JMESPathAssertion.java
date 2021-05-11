@@ -18,6 +18,7 @@
 package org.apache.jmeter.assertions.jmespath;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -179,7 +180,15 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
             Pattern pattern = JMeterUtils.getPatternCache().getPattern(getExpectedValue());
             return JMeterUtils.getMatcher().matches(str, pattern);
         } else {
-            return str.equals(getExpectedValue());
+            String expectedValueString = getExpectedValue();
+            // first try to match as a string value, as
+            // we did in the old days
+            if (str.equals(expectedValueString)) {
+                return true;
+            }
+            // now try harder and compare it as an JSON object
+            JsonNode expected = OBJECT_MAPPER.readValue(expectedValueString, JsonNode.class);
+            return Objects.equals(expected, jsonNode);
         }
     }
 

@@ -143,7 +143,11 @@ public class TestJMESPathAssertion {
                                     + "      ]\n" + "    }\n" + "  ]\n" + "}",
                             "reservations[*].instances[*].state", ValidationType.USE_VALIDATION,
                             ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL,
-                            "[[\"running\",\"stopped\"],[\"terminated\",\"running\"]]", ResultType.SUCCESS, "" } });
+                            "[[\"running\",\"stopped\"],[\"terminated\",\"running\"]]", ResultType.SUCCESS, "" },
+                    { InvertType.USE_NO_INVERT, "{\"x\": {\"a\": 23, \"b\": 42, \"c\": \"something\"}}", "x",
+                            ValidationType.USE_VALIDATION, ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL,
+                            "{\n\t\"a\": 23,\n\t\"b\": 42,\n\t\"c\": \"something\"\n}", ResultType.SUCCESS,
+                            "" } });
         }
 
 
