@@ -191,6 +191,7 @@ Summary
   <li><pr>664</pr>Allow whitespace in path. Contributed by Till Neunast (github.com/tilln)</li>
   <li><bug>65270</bug>POST application/x-www-form-urlencoded cURL code generated from Postman is not imported correctly</li>
   <li>Silence warnings of missing font Arial on startup under linux</li>
+  <li><bug>65300</bug>IllegalAccessError when opening file dialog with Java 16</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
