@@ -201,7 +201,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
         conditionLabel.setName("if_controller_label"); // $NON-NLS-1$
 
         // Condition
-        theCondition = JSyntaxTextArea.getInstance(5, 50);
+        theCondition = JSyntaxTextArea.getInstance(15, 50);
         conditionLabel.setLabelFor(theCondition);
         conditionPanel.add(JTextScrollPane.getInstance(theCondition));
 
