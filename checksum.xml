@@ -124,6 +124,7 @@
     <trusted-key id='be84d764623a3644' group='org.brotli' />
     <trusted-key id='b16698a4adf4d638' group='org.checkerframework' />
     <trusted-key id='41321490758aad6f' group='org.codehaus.groovy' />
+    <trusted-key id='6a65176a0fb1cd0b' group='org.codehaus.groovy' />
     <trusted-key id='6525fd70cc303655' group='org.codehaus.mojo' />
     <trusted-key id='873a8e86b4372146' group='org.codehaus.mojo' />
     <trusted-key id='466caed6e0747d50' group='org.codehaus.plexus' />
