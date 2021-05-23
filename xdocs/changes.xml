@@ -93,6 +93,8 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+  <li><pr>665</pr>Increase visible lines of code in <code>IfController</code> and <code>WhileController</code>.
+    Based on an idea by David Getzlaff (david.getzlaff at t-systems.com>).</li>
 </ul>
 
 <h3>Listeners</h3>
