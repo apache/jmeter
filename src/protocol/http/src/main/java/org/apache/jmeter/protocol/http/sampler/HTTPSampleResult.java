@@ -102,7 +102,7 @@ public class HTTPSampleResult extends SampleResult {
 
     /**
      * Determine whether this result is a redirect.
-     * Returns true for: 301,302,303 and 307(GET or HEAD)
+     * Returns true for: 301,302,303,307 and 308 (GET or HEAD)
      * @return true iff res is an HTTP redirect response
      */
     public boolean isRedirect() {
@@ -115,7 +115,8 @@ public class HTTPSampleResult extends SampleResult {
          */
         final String[] redirectCodes = { HTTPConstants.SC_MOVED_PERMANENTLY,
                 HTTPConstants.SC_MOVED_TEMPORARILY,
-                HTTPConstants.SC_SEE_OTHER };
+                HTTPConstants.SC_SEE_OTHER,
+                HTTPConstants.SC_PERMANENT_REDIRECT };
         String code = getResponseCode();
         for (String redirectCode : redirectCodes) {
             if (redirectCode.equals(code)) {
