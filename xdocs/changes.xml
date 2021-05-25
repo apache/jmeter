@@ -81,6 +81,8 @@ Summary
   <li><bug>65027</bug>Detect mime-type for files automatically when adding files to HTTP Sampler</li>
   <li><bug>65020</bug>HTTP Sampler/Files upload tab - add missing buttons</li>
   <li><pr>650</pr>HTTP Sampler timestamp fix when exception is caught. Contributed by Konstantin Kalinin (konstantin at kkalinin.pro)</li>
+  <li><bug>65328</bug><pr>666</pr>HTTP 308 Permanent Redirect is not supported. Contributed by
+    Baptiste Gaillard (baptiste.gaillard at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -211,6 +213,7 @@ Summary
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>BugKing (wangzhen at fit2cloud.com)</li>
   <li>Till Neunast (github.com/tilln)</li>
+  <li>Baptiste Gaillard (baptiste.gaillard at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

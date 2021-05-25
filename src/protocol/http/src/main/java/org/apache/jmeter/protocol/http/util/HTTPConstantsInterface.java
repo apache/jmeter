@@ -25,6 +25,7 @@ public interface HTTPConstantsInterface { // CHECKSTYLE IGNORE InterfaceIsType
     String SC_MOVED_TEMPORARILY = "302";
     String SC_SEE_OTHER = "303";
     String SC_TEMPORARY_REDIRECT = "307";
+    String SC_PERMANENT_REDIRECT = "308";
 
     int DEFAULT_HTTPS_PORT = 443;
     String DEFAULT_HTTPS_PORT_STRING = "443"; // $NON-NLS-1$
