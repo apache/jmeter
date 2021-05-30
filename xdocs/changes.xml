@@ -144,6 +144,8 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+  <li><bug>65310</bug>Don't let users override <code>multipart/form-data</code> <code>content-type</code>
+    header in HC4 sampler.</li>
 </ul>
 
 <h3>Other Samplers</h3>

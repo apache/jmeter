@@ -1531,6 +1531,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(getUseMultipart()) {
+            if (entityEnclosingRequest.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE).length > 0) {
+                log.info(
+                        "Content-Header is set already on the request! Will be replaced by a Multipart-Header. Old headers: {}",
+                        Arrays.asList(entityEnclosingRequest.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE)));
+                entityEnclosingRequest.removeHeaders(HTTPConstants.HEADER_CONTENT_TYPE);
+            }
             // If a content encoding is specified, we use that as the
             // encoding of any parameter values
             Charset charset;
