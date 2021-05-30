@@ -18,10 +18,12 @@
 package org.apache.jmeter.extractor.json.jsonpath;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -62,7 +64,7 @@ public class JSONPostProcessor
     public void process() {
         JMeterContext context = getThreadContext();
         JMeterVariables vars = context.getVariables();
-        String jsonResponse = extractJsonResponse(context, vars);
+        List<String> jsonResponses = extractJsonResponse(context, vars);
         String[] refNames = getRefNames().split(SEPARATOR);
         String[] jsonPathExpressions = getJsonPathExpressions().split(SEPARATOR);
         String[] defaultValues = getDefaultValues().split(SEPARATOR);
@@ -76,11 +78,13 @@ public class JSONPostProcessor
             String currentJsonPath = jsonPathExpressions[i].trim();
             clearOldRefVars(vars, currentRefName);
             try {
-                if (StringUtils.isEmpty(jsonResponse)) {
+                if (jsonResponses.isEmpty()) {
                     handleEmptyResponse(vars, defaultValues, i, currentRefName);
                 } else {
-                    List<Object> extractedValues = localMatcher.get()
-                            .extractWithJsonPath(jsonResponse, currentJsonPath);
+                    List<Object> extractedValues = new ArrayList<>();
+                    for (String jsonResponse: jsonResponses) {
+                        extractedValues.addAll(localMatcher.get().extractWithJsonPath(jsonResponse, currentJsonPath));
+                    }
                     // if no values extracted, default value added
                     if (extractedValues.isEmpty()) {
                         handleEmptyResult(vars, defaultValues, i, matchNumber, currentRefName);
@@ -198,23 +202,26 @@ public class JSONPostProcessor
         vars.put(currentRefName, defaultValues[i]);
     }
 
-    private String extractJsonResponse(JMeterContext context, JMeterVariables vars) {
+    private List<String> extractJsonResponse(JMeterContext context, JMeterVariables vars) {
         String jsonResponse = "";
         if (isScopeVariable()) {
-            jsonResponse = vars.get(getVariableName());
             if (log.isDebugEnabled()) {
                 log.debug("JSON Extractor is using variable: {}, which content is: {}", getVariableName(), jsonResponse);
             }
+            return Arrays.asList(vars.get(getVariableName()));
         } else {
             SampleResult previousResult = context.getPreviousResult();
             if (previousResult != null) {
-                jsonResponse = previousResult.getResponseDataAsString();
+                List<String> results = getSampleList(previousResult).stream()
+                        .map(SampleResult::getResponseDataAsString)
+                        .collect(Collectors.toList());
                 if (log.isDebugEnabled()) {
-                    log.debug("JSON Extractor {} working on Response: {}", getName(), jsonResponse);
+                    log.debug("JSON Extractor {} working on Responses: {}", getName(), results);
                 }
+                return results;
             }
         }
-        return jsonResponse;
+        return Collections.emptyList();
     }
 
     private void clearOldRefVars(JMeterVariables vars, String refName) {

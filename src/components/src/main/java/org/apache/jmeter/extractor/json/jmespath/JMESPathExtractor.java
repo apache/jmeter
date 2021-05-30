@@ -20,7 +20,10 @@ package org.apache.jmeter.extractor.json.jmespath;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.processor.PostProcessor;
@@ -37,6 +40,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import io.burt.jmespath.Expression;
 
 /**
  * JMESPATH based extractor
@@ -60,7 +65,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
     public void process() {
         JMeterContext context = getThreadContext();
         JMeterVariables vars = context.getVariables();
-        String jsonResponse = getData(vars, context);
+        List<String> jsonResponse = getData(vars, context);
         String refName = getRefName();
         String defaultValue = getDefaultValue();
         int matchNumber;
@@ -71,21 +76,25 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         }
         final String jsonPathExpression = getJmesPathExpression().trim();
         clearOldRefVars(vars, refName);
-        if (StringUtils.isEmpty(jsonResponse)) {
+        if (jsonResponse.isEmpty()) {
             handleEmptyResponse(vars, refName, defaultValue);
             return;
         }
 
         try {
-            JsonNode actualObj = OBJECT_MAPPER.readValue(jsonResponse, JsonNode.class);
-            JsonNode result = JMESPathCache.getInstance().get(jsonPathExpression).search(actualObj);
-            if (result.isNull()) {
-                handleNullResult(vars, refName, defaultValue, matchNumber);
-                return;
+            List<String> resultList = new ArrayList<>();
+            Expression<JsonNode> searchExpression = JMESPathCache.getInstance().get(jsonPathExpression);
+            for (String response: jsonResponse) {
+                JsonNode actualObj = OBJECT_MAPPER.readValue(response, JsonNode.class);
+                JsonNode result = searchExpression.search(actualObj);
+                if (result.isNull()) {
+                    continue;
+                }
+                resultList.addAll(splitJson(result));
             }
-            List<String> resultList = splitJson(result);
             // if more than one value extracted, suffix with "_index"
-            if (resultList.size() > 1) {
+            int size = resultList.size();
+            if (size > 1) {
                 handleListResult(vars, refName, defaultValue, matchNumber, resultList);
             } else if (resultList.isEmpty()){
                 handleNullResult(vars, refName, defaultValue, matchNumber);
@@ -94,7 +103,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
                 // else just one value extracted
                 handleSingleResult(vars, refName, matchNumber, resultList);
             }
-            vars.put(refName + REF_MATCH_NR, Integer.toString(resultList.size()));
+            vars.put(refName + REF_MATCH_NR, Integer.toString(size));
         } catch (Exception e) {
             // if something wrong, default value added
             if (log.isDebugEnabled()) {
@@ -155,23 +164,26 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         vars.put(refName, defaultValue);
     }
 
-    private String getData(JMeterVariables vars, JMeterContext context) {
-        String jsonResponse = null;
+    private List<String> getData(JMeterVariables vars, JMeterContext context) {
         if (isScopeVariable()) {
-            jsonResponse = vars.get(getVariableName());
+            String jsonResponse = vars.get(getVariableName());
             if (log.isDebugEnabled()) {
                 log.debug("JMESExtractor is using variable: {}, which content is: {}", getVariableName(), jsonResponse);
             }
+            return Arrays.asList(jsonResponse);
         } else {
             SampleResult previousResult = context.getPreviousResult();
             if (previousResult != null) {
-                jsonResponse = previousResult.getResponseDataAsString();
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("JMESExtractor {} working on Response: {}", getName(), jsonResponse);
+                List<String> results = getSampleList(previousResult).stream()
+                        .map(SampleResult::getResponseDataAsString)
+                        .collect(Collectors.toList());
+                if (log.isDebugEnabled()) {
+                    log.debug("JMESExtractor {} working on Responses: {}", getName(), results);
+                }
+                return results;
             }
         }
-        return jsonResponse;
+        return Collections.emptyList();
     }
 
     public List<String> splitJson(JsonNode jsonNode) throws IOException {
