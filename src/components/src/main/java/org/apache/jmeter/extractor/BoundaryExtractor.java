@@ -163,6 +163,9 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
      * @return 0 if there is only one match, else the number of matches, this is used to remove
      */
     private int saveMatches(JMeterVariables vars, String refName, int matchNumber, List<String> matches) {
+        if (matches.isEmpty()) {
+            return 0;
+        }
         int matchCount = 0;
         if (matchNumber == 0) {
             saveRandomMatch(vars, refName, matches);

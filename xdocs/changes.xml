@@ -169,6 +169,7 @@ Summary
   <li><bug>65257</bug>JMESPathExtractor writes error log entries if JMESPath filter returns empty result</li>
   <li><bug>65259</bug>JMESPathExtractor Attribute <code>Match No.</code> Required</li>
   <li><bug>65269</bug>JSON Extractor and JSON JMESPath Extractor ignore sub-samples</li>
+  <li><bug>65352</bug>Warning logged when Boundary Extractor doesn't find any match</li>
 </ul>
 
 <h3>Functions</h3>
