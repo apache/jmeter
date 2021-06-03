@@ -121,6 +121,7 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+  <li><bug>65353</bug>Make the estimator used for calculating percentiles on the dashboard configurable</li>
 </ul>
 
 <h3>General</h3>
