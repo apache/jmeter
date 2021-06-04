@@ -36,7 +36,7 @@ public class DescriptiveStatisticsFactory {
     }
 
     public static DescriptiveStatistics createDescriptiveStatistics(int windowSize) {
-        DescriptiveStatistics statistics = new DescriptiveStatistics();
+        DescriptiveStatistics statistics = new DescriptiveStatistics(windowSize);
         statistics.setPercentileImpl(new Percentile().withEstimationType(ESTIMATION_TYPE));
         return statistics;
     }
