@@ -546,11 +546,19 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             temporaryProperties = new LinkedHashSet<>();
         }
         temporaryProperties.add(property);
-        if (property instanceof MultiProperty) {
+        if (isMergingEnclosedProperties(property)) {
             for (JMeterProperty jMeterProperty : (MultiProperty) property) {
                 setTemporary(jMeterProperty);
             }
         }
+    }
+
+    // While TestElementProperty is implementing MultiProperty, it works differently.
+    // It doesn't merge the inner properties one by one as MultiProperty would do.
+    // Therefore we must not mark the enclosed properties of TestElementProperty as
+    // temporary (Bug 65336)
+    private boolean isMergingEnclosedProperties(JMeterProperty property) {
+        return property instanceof MultiProperty && !(property instanceof TestElementProperty);
     }
 
     /**
