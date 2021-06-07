@@ -1,6 +1,6 @@
-29863,accessors-smart-1.3.jar
+29489,accessors-smart-2.4.7.jar
 2387,apiguardian-api-1.1.0.jar
-121783,asm-9.0.jar
+121790,asm-9.1.jar
 113369,bsf-2.4.0.jar
 389033,bsh-2.0b6.jar
 921827,caffeine-2.8.8.jar
@@ -63,7 +63,7 @@
 19858,jodd-log-5.0.13.jar
 26047,jodd-props-5.0.13.jar
 223186,json-path-2.4.0.jar
-119759,json-smart-2.4.1.jar
+119227,json-smart-2.4.7.jar
 393851,jsoup-1.13.1.jar
 249924,jtidy-r938.jar
 382708,junit-4.13.1.jar
