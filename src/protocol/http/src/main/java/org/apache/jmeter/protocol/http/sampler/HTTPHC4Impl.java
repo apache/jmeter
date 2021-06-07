@@ -249,6 +249,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (authScope == null) {
                 return null;
             }
+            if (authManager == null) {
+                log.debug("No authManager found");
+                return null;
+            }
             for (JMeterProperty authProp : authManager.getAuthObjects()) {
                 Object authObject = authProp.getObjectValue();
                 if (authObject instanceof Authorization) {
