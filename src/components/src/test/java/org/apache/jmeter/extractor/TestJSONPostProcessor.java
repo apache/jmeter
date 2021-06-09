@@ -213,6 +213,28 @@ class TestJSONPostProcessor {
     }
 
     @Test
+    void testEmptyInput() throws ParseException {
+        JMeterContext context = JMeterContextService.getContext();
+        JSONPostProcessor processor = setupProcessor(context, "0", false);
+
+        SampleResult result = new SampleResult();
+        result.setResponseData("".getBytes(StandardCharsets.UTF_8));
+
+        JMeterVariables vars = new JMeterVariables();
+        context.setVariables(vars);
+        context.setPreviousResult(result);
+
+        processor.setJsonPathExpressions("$.context");
+        processor.setDefaultValues("NONE");
+        processor.setScopeAll();
+        processor.process();
+
+        assertThat(vars.get(VAR_NAME), CoreMatchers.is("NONE"));
+        assertThat(vars.get(VAR_NAME + "_matchNr"), CoreMatchers.nullValue());
+        assertThat(vars.get(VAR_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+    }
+
+    @Test
     void testBug59609() throws ParseException {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "0", false);

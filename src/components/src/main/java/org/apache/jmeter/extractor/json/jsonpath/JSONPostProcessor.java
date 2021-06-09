@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -214,6 +215,7 @@ public class JSONPostProcessor
             if (previousResult != null) {
                 List<String> results = getSampleList(previousResult).stream()
                         .map(SampleResult::getResponseDataAsString)
+                        .filter(StringUtils::isNotBlank)
                         .collect(Collectors.toList());
                 if (log.isDebugEnabled()) {
                     log.debug("JSON Extractor {} working on Responses: {}", getName(), results);

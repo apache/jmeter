@@ -385,5 +385,19 @@ public class TestJMESPathExtractor {
             assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
             assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("0"));
         }
+
+        @Test
+        public void testNoInput() {
+            SampleResult sampleResult = new SampleResult();
+            JMeterVariables vars = new JMeterVariables();
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "", fromVariables, "0");
+
+            processor.setJmesPathExpression("a.b");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
+            assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.nullValue());
+        }
+
     }
 }

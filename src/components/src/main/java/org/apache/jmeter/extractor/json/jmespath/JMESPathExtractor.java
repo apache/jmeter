@@ -176,6 +176,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
             if (previousResult != null) {
                 List<String> results = getSampleList(previousResult).stream()
                         .map(SampleResult::getResponseDataAsString)
+                        .filter(StringUtils::isNotBlank)
                         .collect(Collectors.toList());
                 if (log.isDebugEnabled()) {
                     log.debug("JMESExtractor {} working on Responses: {}", getName(), results);
