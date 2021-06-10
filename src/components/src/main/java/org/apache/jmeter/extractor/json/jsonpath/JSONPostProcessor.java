@@ -18,6 +18,7 @@
 package org.apache.jmeter.extractor.json.jsonpath;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,27 +83,37 @@ public class JSONPostProcessor
                 if (jsonResponses.isEmpty()) {
                     handleEmptyResponse(vars, defaultValues, i, currentRefName);
                 } else {
-                    List<Object> extractedValues = new ArrayList<>();
-                    for (String jsonResponse: jsonResponses) {
-                        extractedValues.addAll(localMatcher.get().extractWithJsonPath(jsonResponse, currentJsonPath));
-                    }
-                    // if no values extracted, default value added
-                    if (extractedValues.isEmpty()) {
-                        handleEmptyResult(vars, defaultValues, i, matchNumber, currentRefName);
-                    } else {
-                        handleNonEmptyResult(vars, defaultValues, i, matchNumber, currentRefName, extractedValues);
-                    }
+                    List<Object> extractedValues = extractValues(jsonResponses, currentJsonPath);
+                    handleResult(vars, defaultValues, i, matchNumber, currentRefName, extractedValues);
                 }
             } catch (Exception e) {
-                // if something wrong, default value added
                 if (log.isDebugEnabled()) {
                     log.error("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage(), e);
                 } else {
                     log.error("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage());
                 }
+                // if something goes wrong, add default value
                 vars.put(currentRefName, defaultValues[i]);
             }
         }
+    }
+
+    private void handleResult(JMeterVariables vars, String[] defaultValues, int i, int matchNumber,
+            String currentRefName, List<Object> extractedValues) {
+        // if no values extracted, default value added
+        if (extractedValues.isEmpty()) {
+            handleEmptyResult(vars, defaultValues, i, matchNumber, currentRefName);
+        } else {
+            handleNonEmptyResult(vars, defaultValues, i, matchNumber, currentRefName, extractedValues);
+        }
+    }
+
+    private List<Object> extractValues(List<String> jsonResponses, String currentJsonPath) throws ParseException {
+        List<Object> extractedValues = new ArrayList<>();
+        for (String jsonResponse: jsonResponses) {
+            extractedValues.addAll(localMatcher.get().extractWithJsonPath(jsonResponse, currentJsonPath));
+        }
+        return extractedValues;
     }
 
     private void handleNonEmptyResult(JMeterVariables vars, String[] defaultValues, int i, int matchNumber,
