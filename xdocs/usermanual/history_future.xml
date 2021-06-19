@@ -18,10 +18,10 @@
 
 <!DOCTYPE document
 [
-<!ENTITY sect-num '25'>
+<!ENTITY sect-num '26'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
-<document id="$Id$" prev="curl.html" >
+<document id="$Id$" prev="correlation.html" >
 
 <properties>
   <title>User's Manual: History/Future</title>

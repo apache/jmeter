@@ -286,8 +286,19 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         toolsMenu.add(threadDump);
         toolsMenu.addSeparator();
         toolsMenu.add(makeMenuItemRes("function_dialog_menu_item", 'F', ActionNames.FUNCTIONS, KeyStrokes.FUNCTIONS));
+        // add Correlation Menu
+        toolsMenu.addSeparator();
+        toolsMenu.add(makeCorrelationMenu());
 
         addPluginsMenuItems(toolsMenu, menuCreators, MENU_LOCATION.TOOLS);
+    }
+
+    private JMenu makeCorrelationMenu() {
+        JMenu correlationMenu = makeMenuRes("correlation_title"); //$NON-NLS-1$
+        correlationMenu.add(makeMenuItemRes("correlation_export_rule", ActionNames.CORRELATION_EXPORT_RULE));
+        correlationMenu.add(makeMenuItemRes("correlation_import_rule", ActionNames.CORRELATION_IMPORT_RULE));
+        correlationMenu.add(makeMenuItemRes("correlation_jmx_file", ActionNames.CORRELATION_JMX_FILE));
+        return correlationMenu;
     }
 
     private void makeOptionsMenu() {

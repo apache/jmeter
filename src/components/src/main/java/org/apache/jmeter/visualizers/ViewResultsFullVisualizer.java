@@ -131,7 +131,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private JCheckBox autoScrollCB;
     private final Queue<SampleResult> buffer;
     private boolean dataChanged;
-
     /**
      * Constructor
      */

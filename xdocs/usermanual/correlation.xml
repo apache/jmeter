@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE document
+[
+<!ENTITY sect-num '25'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+<document id="$Id$" prev="curl.html" next="history_future.html" >
+
+<properties>
+  <title>User's Manual: Auto-Correlation</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Auto-Correlation" anchor="auto_correlation">
+<p>Auto-Correlation feature detects the dynamic parameters and adds response data extractors for them.<br/>
+A Test Plan using HTTP(S) requests can be correlated using this functionality.
+</p>
+
+<subsection name="&sect-num;.1 How to perform Auto-Correlation" anchor="how_to_correlation">
+<p>
+There are two ways to perform Auto-Correlation.<br/>
+<ul>
+<li><a href="#jmx_file">JMX File</a></li>
+<li><a href="#import_rule">Import Rule</a></li>
+</ul>
+<p>
+<note>Auto-Correlation requires recording Test Plan with <code>Auto-Correlation Recording Template</code>.</note>
+<p><code>Auto-Correlation Recording Template</code> is a modified version of <code>Recording Template</code> which
+uses <code><a href="component_reference.html#Correlation_Response_Recorder">Correlation Response Recorder</a></code> instead of <code>View Results Tree</code> to record response data.</p>
+<p><b>Steps to record a Test Plan</b></p>
+<ol>
+  <li>Go to <code>JMETER_HOME/bin</code> and start JMeter with <code>jmeter.bat</code> on Windows
+      and <code>jmeter.sh
+      </code> on Linux/Unix.</li>
+  <li>Select <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Templates...</guimenuitem></menuchoice> on the menu bar.</li>
+  <figure image="correlation/correlation_how_to_1.png"></figure>
+  <li>Select <code>Auto-Correlation Recording Template</code> on the list and click <code>Create</code> button.</li>
+  <figure image="correlation/correlation_how_to_2.png"></figure>
+  Fill the parameters and click <code>Create</code> button.
+  <figure image="correlation/correlation_how_to_2b.png"></figure>
+  <li>A complete <code>Test Plan</code> is generated</li>
+  <figure image="correlation/correlation_how_to_3.png"></figure>
+</ol>
+<p>
+Please follow the Recording documentation <a href="jmeter_proxy_step_by_step.html#basic-instructions">here</a> from Step 5 onwards.
+</p>
+</p>
+</p>
+<subsection name="&sect-num;.1.1 JMX File" anchor="jmx_file">
+<p>
+Auto-Correlation using a JMX Test Plan.
+</p>
+<p><b>Steps</b></p>
+
+1. Record a Test Plan for a testing scenario using the steps mentioned <a href="#how_to_correlation">here</a>
+and save it (say TestPlan_recording_one.jmx).<br/>
+2. Record another Test Plan with the same scenario. It is not required to save this test plan.<br/>
+3. Click on <menuchoice><guimenuitem>Tools</guimenuitem><guimenuitem>Correlation</guimenuitem><guimenuitem>JMX File</guimenuitem></menuchoice>.<br/>
+<figure width="751" height="292" image="correlation/correlation_jmx_file.png">
+Figure 1 - The menu where correlation via JMX file is located</figure><br/>
+A file browse menu will open.
+<figure width="945" height="442" image="correlation/correlation_jmx_file_browse.png">
+Figure 2 - The browse menu for JMX file</figure>
+4. Browse for the Test Plan saved in Step 1 (TestPlan_recording_one.jmx)<br/>
+5. Click on <code>Correlation</code> button.<br/><br/>
+A list of dynamic parameters for correlation will be displayed in the table.<br/>
+For more details on the parameter naming convention refer <a href="#naming_convention">here</a>.
+<br/>
+<figure width="968" height="362" image="correlation/correlation_jmx_file_parameters.png">
+Figure 3 - The list of parameters which can be correlated</figure>
+6. Select (click check-box) the parameters you want to correlate and Click <code>OK</code> button.<br/>
+If successful, the following dialog box will be displayed and extractors
+will be added in the script.
+<figure width="812" height="366" image="correlation/correlation_jmx_file_success.png">
+Figure 4 - Successful Correlation</figure>
+If unsuccessful or partially successful, one of the following errors will be displayed.
+<p>
+<figure width="979" height="280" image="correlation/correlation_jmx_file_success_failure.png">
+Figure 5 - Failure and Partial failure dialog boxes</figure>
+</p>
+If successful, you may try out the test plan.
+</subsection>
+
+<subsection name="&sect-num;.1.2 Import/Export Rule" anchor="import_rule">
+<p>Before correlating a Test Plan using Import/Export rule functionality,
+you need to export the rule from an existing correlated Test Plan.</p>
+<ch_section>Export Rule</ch_section>
+<p>
+It allows you to export the response extractors in your Test Plan into a rule file.
+</p>
+<p><b>Steps</b></p>
+<ol>
+<li>Create/Open a Test Plan which has correlated parameters in it.</li>
+<li>Click on <menuchoice><guimenuitem>Tools</guimenuitem><guimenuitem>Correlation</guimenuitem><guimenuitem>Export Rule</guimenuitem></menuchoice>.<br/>
+A list of extractors for which the rules can be created will be displayed.
+</li>
+<li>Select the extractors for which you want to create rule and Click <code>Export</code> button.
+</li>
+<figure width="612" height="349" image="correlation/correlation_export_rule_1.png">
+Figure 6 - Export rule extractor list</figure>
+<li>Browse for the directory where you want to save the rule file and Click <code>Save</code> button.<br/>
+<figure width="594" height="406" image="correlation/correlation_export_rule_2.png">
+Figure 7 - Save Rule File</figure>
+A popup will be displayed for successful/failed rule export.
+<figure width="977" height="280" image="correlation/correlation_export_rule_3.png">
+Figure 8 - Success/Failure dialog boxes</figure>
+</li>
+</ol>
+<ch_section>Import Rule</ch_section>
+<p>
+After you have created the rule file, a Test Plan can be correlated using that rule file.<br/>
+Details about the rule file format can be referred <a href="#rule_file_format">here</a>.
+</p>
+<p><b>Steps</b></p>
+<ol>
+<li>Record a Test Plan using the steps mentioned <a href="#how_to_correlation">here</a>.</li>
+<li>Click on <menuchoice><guimenuitem>Tools</guimenuitem><guimenuitem>Correlation</guimenuitem><guimenuitem>Import Rule</guimenuitem></menuchoice>.<br/>
+A list of parameters which can be correlated based on the rule will be displayed.
+</li>
+<figure width="605" height="430" image="correlation/correlation_import_rule_1.png">
+Figure 9 - Import Rule parameter list</figure>
+<li>Select the parameters you want to correlate and Click <code>OK</code> button.<br/><br/>
+Popups will be displayed for successful/failed correlation similar to the ones in correlation via JMX file.<br/>
+If successful, you may try out the test plan.
+</li>
+</ol>
+</subsection>
+
+</subsection>
+
+<subsection name="&sect-num;.2 Mistakes to avoid and Best practices" anchor="avoid_mistakes">
+<ch_section>Mistakes to avoid</ch_section>
+<ul>
+<li>Correlate an empty test plan or a test plan with no HTTP Requests.<br/>
+Example: Create a new test plan and try to correlate it using either JMX File or rule file.<br/>
+Error: Current GUI TestPlan doesn't have any HTTP(S) Requests. Please record a plan and try again.
+</li>
+<li>Correlate a test plan which is not a recorded plan.<br/>
+Example: Open an existing test plan and try to correlate it using either JMX file or rule file.<br/>
+Error: No Response data found. Make sure you have recorded the script and not opened it.
+</li>
+<li>Correlate using an empty/invalid JMX file.<br/>
+Example: Record a test plan and try to correlate it using an empty JMX test plan.<br/>
+Error: Could not load the JMX file. Please check the file and try again.
+</li>
+<li>Correlate using a JMX file with no HTTP requests.<br/>
+Example: Record a test plan and try to correlate it using a JMX test plan with no HTTP Requests.<br/>
+Error: Imported JMX file doesn't have any HTTP(S) Requests. Please check the file and try again.
+</li>
+<li>Rule file should not be created manually, and if you are creating manually then user should follow <a href="#rule_file_format">rule file format</a></li>
+<li>User should not try to perform correlation multiple times on extracted parameters.</li>
+<li>Correlate while recording is still running.<br/>
+This must be avoided in order to avoid any crashes.
+</li>
+</ul>
+<ch_section>Best practices</ch_section>
+<ul>
+<li>Only select the parameters which you thing should be correlated.<br/>
+Dynamic parameters' list include parameters which should not be correlated for example username, password, date, etc...<br/>
+Hence, select the parameters from the list who you think should be correlated for example authToken, csrf token, etc...
+</li>
+</ul>
+</subsection>
+<subsection name="&sect-num;.3 Correlatable parameter Naming Convention" anchor="naming_convention">
+<p>
+Correlatable parameters are named as follows
+</p>
+<ul>
+<li>Parameter in request header (Authorisation)<br/>
+Correlatable Parameter Name = "<code>Authorisation</code>"</li>
+<li>Parameter in request body or query string<br/>
+Correlatable Parameter Name = <code>Actual Parameter Name</code><br/>
+If parameter occurs twice or more then correlatable parameter name is appended by
+"(parameter count)"<br/>
+Example: <code>authenticity_token, authenticity_token(1)</code>
+</li>
+</ul>
+</subsection>
+<subsection name="&sect-num;.4 Rule file format" anchor="rule_file_format">
+<p>List of rule file Extractors and their attributes </p>
+<table border="1">
+    <tr>
+        <th>Type of Extractors</th>
+        <th>Details about extractor's attribute </th>
+        <th>Example of Rule File</th>
+    </tr>
+    <tr>
+        <td>CSS Selector Extractor Rule</td>
+        <td>
+           <li>attribute</li>
+           <li>expr</li>
+           <li>name </li>
+           <li>type</li>
+
+        </td>
+        <td>{
+	    "rule": [{
+		"name": "$name",
+		"expr": "$expr",
+		"attribute": "$attribute",
+		"type": "css_extractor"
+	   }]
+}</td>
+ </tr>
+ <tr><td><br> </br></td></tr>
+
+		<tr>
+        <td>JsonPathExtractor Rule</td>
+        <td>
+           <li>expr</li>
+           <li>name </li>
+           <li>type</li>
+
+        </td>
+        <td>
+		{
+	    "rule": [{
+		"name": "$name",
+		"expr": "$expr",
+		"type": "jsonpath_extractor"
+	      }]
+        }
+        </td>
+    </tr>
+<tr><td><br> </br></td></tr>
+	<tr>
+        <td>XPath Extractor Rule</td>
+        <td>
+
+           <li>expr</li>
+           <li>name </li>
+           <li>type</li>
+
+        </td>
+        <td>{{
+	    "rule": [{
+		"name": "$name",
+		"expr": "$expr",
+		"type": "xpath2_extractor"
+	       }]
+}</td>
+    </tr>
+<tr><td><br> </br></td></tr>
+	<tr>
+        <td>RegexExtractor Rule</td>
+        <td>
+
+           <li>expr</li>
+           <li>name </li>
+           <li>type</li>
+
+        </td>
+        <td>{
+	   "rule": [{
+		"name": "$name",
+		"expr": "$expr",
+		"type": "regex_extractor"
+	            }]
+        }
+        <ul><li>type attribute value can be "regex_extractor" or "regex_header" based on the applied extractor type</li></ul>
+		</td>
+    </tr>
+	<tr>
+        <td>BoundaryExtractor Rule</td>
+        <td>
+
+           <li>name </li>
+           <li>type</li>
+		   <li>lBoundary</li>
+           <li>rBoundary</li>
+
+        </td>
+        <td>{
+	    "rule": [{
+		"name": "$name",
+		"lBoundary": "$lBoundary",
+	    "rBoundary": "$rBoundary",
+		"type": "boundary_extractor"
+	            }]
+         }</td>
+    </tr>
+</table>
+</subsection>
+<subsection name="&sect-num;.5 Limitations" anchor="limitations">
+<ul>
+<li>If the auto-correlation is done once then it cannot be undone,
+you need to record the plan again to correlate the script.</li>
+</ul>
+</subsection>
+</section>
+
+</body>
+</document>

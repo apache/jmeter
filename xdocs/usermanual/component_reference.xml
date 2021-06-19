@@ -3073,6 +3073,13 @@ See the <code>jmeter.properties</code> file for details.
 </description>
 </component>
 
+<component name="Correlation Response Recorder" index="&sect-num;.3.10"  width="741" height="141" screenshot="correlation_response_recorder.png">
+<description>This listener is used to record results in memory
+which can be used for <a href="correlation.html">Auto-Correlation</a>.
+It also allows to write the results to a file.
+</description>
+</component>
+
 <component name="Aggregate Graph" index="&sect-num;.3.12"  width="1132" height="872" screenshot="aggregate_graph.png">
 <description>The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
