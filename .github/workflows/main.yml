@@ -27,7 +27,8 @@ jobs:
       with:
         job-id: jdk14
         multi-cache-enabled: false
-        arguments: --scan --no-parallel build -x distTar -x distTarSource
+        # An explicit skip for Sha512 tasks is required due to https://github.com/gradle/gradle/issues/16789
+        arguments: --scan --no-parallel build -x distTar -x distTarSource -x distTarSha512 -x distTarSourceSha512
 
   mac:
     name: 'macOS (JDK 14)'
@@ -45,7 +46,7 @@ jobs:
       with:
         job-id: jdk14
         multi-cache-enabled: false
-        arguments: --scan --no-parallel build -x distTar -x distTarSource -Dskip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
+        arguments: --scan --no-parallel build -x distTar -x distTarSource -x distTarSha512 -x distTarSourceSha512 -Dskip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
 
   errorprone:
     name: 'Error Prone (JDK 11)'

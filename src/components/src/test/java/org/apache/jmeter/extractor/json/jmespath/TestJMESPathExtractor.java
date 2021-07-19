@@ -21,8 +21,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -58,10 +60,22 @@ public class TestJMESPathExtractor {
         return processor;
     }
 
+    public static class NonParemeterizedTests {
+        @Test
+        public void testNoMatchNumberSet() {
+            JMeterVariables vars = new JMeterVariables();
+            SampleResult sampleResult = new SampleResult();
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "[1]", false, "");
+            processor.setJmesPathExpression("[*]");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("1"));
+        }
+    }
+
     @RunWith(Parameterized.class)
     public static class OneMatchOnAllExtractedValues {
 
-        @Parameters
+        @Parameters(name = "Extract from {0} with path {1} should result in {2} for match {3}")
         public static Collection<String[]> data() {
             return Arrays.asList(new String[][] {
                 {"[\"one\"]", "[*]", "one", "1"},
@@ -223,6 +237,77 @@ public class TestJMESPathExtractor {
     }
 
     @RunWith(Parameterized.class)
+    public static class ScopedSamples {
+
+        enum AccessMode {
+            ALL(AbstractScopedTestElement::setScopeAll),
+            PARENT(AbstractScopedTestElement::setScopeParent),
+            CHILDREN(AbstractScopedTestElement::setScopeChildren);
+
+            private Consumer<AbstractScopedTestElement> applier;
+
+            AccessMode(Consumer<AbstractScopedTestElement> applier) {
+                this.applier = applier;
+            }
+
+            void configure(AbstractScopedTestElement element) {
+                applier.accept(element);
+            }
+        }
+
+        private AccessMode accessMode;
+        private String resultObject;
+        private String resultCount;
+        private String matchNumber;
+        private String path;
+
+        public ScopedSamples(AccessMode accessMode, String path, String matchNumber, String result, String resultCount) {
+            this.accessMode = accessMode;
+            this.path = path;
+            this.matchNumber = matchNumber;
+            this.resultObject = result;
+            this.resultCount = resultCount;
+        }
+
+        @Parameters(name = "{index}: Mode: {0} Path: {1} MatchNr: {2} Result: {3} Count: {4}")
+        public static Collection<Object[]> data() {
+            return Arrays.asList(
+                    new Object[][] {
+                        { AccessMode.ALL, "a", "1", "23", "2" },
+                        { AccessMode.ALL, "a", "2", "42", "2" },
+                        { AccessMode.ALL, "b", "0", "parent_only", "1" },
+                        { AccessMode.ALL, "c", "0", "child_only", "1" },
+                        { AccessMode.PARENT, "a", "1", "23", "1" },
+                        { AccessMode.PARENT, "b", "0", "parent_only", "1" },
+                        { AccessMode.PARENT, "c", "0", "NONE", "0" },
+                        { AccessMode.CHILDREN, "a", "1", "42", "1" },
+                        { AccessMode.CHILDREN, "b", "0", "NONE", "0" },
+                        { AccessMode.CHILDREN, "c", "0", "child_only", "1" },
+                    }
+            );
+        }
+
+        @Test
+        public void testRandomElementAllMatches() {
+            SampleResult sampleResult = new SampleResult();
+            JMeterVariables vars = new JMeterVariables();
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "{\"a\": 23, \"b\": \"parent_only\"}", false, matchNumber);
+            SampleResult subSample = new SampleResult();
+            subSample.setResponseData("{\"a\": 42, \"c\": \"child_only\"}", null);
+            sampleResult.addSubResult(subSample);
+
+            processor.setJmesPathExpression(path);
+            accessMode.configure(processor);
+
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(resultObject));
+            assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(resultCount));
+        }
+
+    }
+
+    @RunWith(Parameterized.class)
     public static class SourceVarOrResponse {
         private boolean fromVariables;
 
@@ -300,5 +385,19 @@ public class TestJMESPathExtractor {
             assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
             assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("0"));
         }
+
+        @Test
+        public void testNoInput() {
+            SampleResult sampleResult = new SampleResult();
+            JMeterVariables vars = new JMeterVariables();
+            JMESPathExtractor processor = setupProcessor(vars, sampleResult, "", fromVariables, "0");
+
+            processor.setJmesPathExpression("a.b");
+            processor.process();
+            assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
+            assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
+            assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.nullValue());
+        }
+
     }
 }

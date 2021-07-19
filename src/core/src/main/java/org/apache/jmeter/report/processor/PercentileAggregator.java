@@ -42,7 +42,7 @@ public class PercentileAggregator implements Aggregator {
      *            the index of the percentile
      */
     public PercentileAggregator(double index) {
-        statistics = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+        statistics = DescriptiveStatisticsFactory.createDescriptiveStatistics(SLIDING_WINDOW_SIZE);
         percentileIndex = index;
     }
 
@@ -50,7 +50,7 @@ public class PercentileAggregator implements Aggregator {
      * @param lastAggregator {@link PercentileAggregator}
      */
     public PercentileAggregator(PercentileAggregator lastAggregator) {
-        statistics = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+        statistics = DescriptiveStatisticsFactory.createDescriptiveStatistics(SLIDING_WINDOW_SIZE);
         this.percentileIndex = lastAggregator.percentileIndex;
     }
 

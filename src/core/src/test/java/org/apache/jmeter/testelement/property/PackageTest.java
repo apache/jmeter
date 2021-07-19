@@ -18,17 +18,17 @@
 package org.apache.jmeter.testelement.property;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.jmeter.config.LoginConfig;
 import org.junit.jupiter.api.Test;
 
 /** Class for testing the property package. */
-public class PackageTest {
+class PackageTest {
 
     @Test
-    public void testStringProperty() throws Exception {
+    void testStringProperty() throws Exception {
         StringProperty prop = new StringProperty("name", "value");
         prop.setRunningVersion(true);
         prop.setObjectValue("new Value");
@@ -43,7 +43,7 @@ public class PackageTest {
     }
 
     @Test
-    public void testElementProperty() throws Exception {
+    void testElementProperty() throws Exception {
         LoginConfig config = new LoginConfig();
         config.setUsername("username");
         config.setPassword("password");
@@ -80,13 +80,13 @@ public class PackageTest {
     private void checkNotEquals(JMeterProperty jp1, JMeterProperty jp2) {
         assertEquals(jp1, jp1);
         assertEquals(jp2, jp2);
-        assertFalse(jp1.equals(jp2));
-        assertFalse(jp2.equals(jp1));
+        assertNotEquals(jp1, jp2);
+        assertNotEquals(jp2, jp1);
         // do not check hashcodes; unequal objects may have equal hashcodes
     }
 
     @Test
-    public void testBooleanEquality() throws Exception {
+    void testBooleanEquality() throws Exception {
         BooleanProperty jpn1 = new BooleanProperty();
         BooleanProperty jpn2 = new BooleanProperty();
         BooleanProperty jp1 = new BooleanProperty("name1", true);
@@ -103,12 +103,12 @@ public class PackageTest {
     }
 
     @Test
-    public void testInvalidBooleanConstructors() {
+    void testInvalidBooleanConstructors() {
         assertThrows(IllegalArgumentException.class, () -> new BooleanProperty(null, false));
     }
 
     @Test
-    public void testDoubleEquality() throws Exception {
+    void testDoubleEquality() throws Exception {
         DoubleProperty jpn1 = new DoubleProperty();
         DoubleProperty jpn2 = new DoubleProperty();
         DoubleProperty jp1 = new DoubleProperty("name1", 123.4);
@@ -150,12 +150,12 @@ public class PackageTest {
     }
 
     @Test
-    public void testInvalidDoubleConstructors() {
+    void testInvalidDoubleConstructors() {
         assertThrows(IllegalArgumentException.class, () -> new DoubleProperty(null, 0));
     }
 
     @Test
-    public void testFloatEquality() throws Exception {
+    void testFloatEquality() throws Exception {
         FloatProperty jp1 = new FloatProperty("name1", 123.4f);
         FloatProperty jp2 = new FloatProperty("name1", 123.4f);
         FloatProperty jp3 = new FloatProperty("name2", -123.4f);
@@ -192,12 +192,12 @@ public class PackageTest {
     }
 
     @Test
-    public void testInvalidFloatConstructors() {
+    void testInvalidFloatConstructors() {
         assertThrows(IllegalArgumentException.class, () -> new FloatProperty(null, 0));
     }
 
     @Test
-    public void testIntegerEquality() throws Exception {
+    void testIntegerEquality() throws Exception {
         IntegerProperty jp1 = new IntegerProperty("name1", 123);
         IntegerProperty jp2 = new IntegerProperty("name1", 123);
         IntegerProperty jp3 = new IntegerProperty("name2", -123);
@@ -222,13 +222,13 @@ public class PackageTest {
     }
 
     @Test
-    public void testInvalidIntegerConstructors() {
+    void testInvalidIntegerConstructors() {
         assertThrows(IllegalArgumentException.class, () -> new IntegerProperty(null));
         assertThrows(IllegalArgumentException.class, () -> new IntegerProperty(null, 0));
     }
 
     @Test
-    public void testLongEquality() throws Exception {
+    void testLongEquality() throws Exception {
         LongProperty jp1 = new LongProperty("name1", 123);
         LongProperty jp2 = new LongProperty("name1", 123);
         LongProperty jp3 = new LongProperty("name2", -123);
@@ -253,17 +253,17 @@ public class PackageTest {
     }
 
     @Test
-    public void testInvalidLongConstructors() {
+    void testInvalidLongConstructors() {
         assertThrows(IllegalArgumentException.class, () -> new LongProperty(null, 0L));
     }
 
     @Test
-    public void testInvalidMapConstructors() throws Exception {
+    void testInvalidMapConstructors() throws Exception {
         assertThrows(IllegalArgumentException.class, () -> new MapProperty(null, null));
     }
 
     @Test
-    public void testNullEquality() throws Exception {
+    void testNullEquality() throws Exception {
         NullProperty jpn1 = new NullProperty();
         NullProperty jpn2 = new NullProperty();
         NullProperty jp1 = new NullProperty("name1");
@@ -279,12 +279,12 @@ public class PackageTest {
     }
 
     @Test
-    public void testInvalidNullConstructors() {
+    void testInvalidNullConstructors() {
         assertThrows(IllegalArgumentException.class, () -> new NullProperty(null));
     }
 
     @Test
-    public void testStringEquality() throws Exception {
+    void testStringEquality() throws Exception {
         StringProperty jpn1 = new StringProperty();
         StringProperty jpn2 = new StringProperty();
         StringProperty jp1 = new StringProperty("name1", "value1");
@@ -306,13 +306,13 @@ public class PackageTest {
     }
 
     @Test
-    public void testInvalidStringConstructors() {
+    void testInvalidStringConstructors() {
         assertThrows(IllegalArgumentException.class, () -> new StringProperty(null, ""));
         assertThrows(IllegalArgumentException.class, () -> new StringProperty(null, null));
     }
 
     @Test
-    public void testAddingProperties() throws Exception {
+    void testAddingProperties() throws Exception {
         CollectionProperty coll = new CollectionProperty();
         coll.addItem("joe");
         coll.addProperty(new FunctionProperty());

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /** Unit tests for classes that use Functors */
-public class TestFunctor extends JMeterTestCase {
+class TestFunctor extends JMeterTestCase {
 
     interface HasName {
         String getName();
@@ -88,12 +88,12 @@ public class TestFunctor extends JMeterTestCase {
     }
 
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         Configurator.setAllLevels(Functor.class.getName(), Level.FATAL);
     }
 
     @Test
-    public void testName() throws Exception{
+    void testName() throws Exception{
         Functor f1 = new Functor("getName");
         Functor f2 = new Functor("getName");
         Functor f1a = new Functor("getName");
@@ -110,7 +110,7 @@ public class TestFunctor extends JMeterTestCase {
     }
 
     @Test
-    public void testNameTypes() throws Exception{
+    void testNameTypes() throws Exception{
         Functor f = new Functor("getString",new Class[]{String.class});
         Functor f2 = new Functor("getString");// Args will be provided later
         Test1 t1 = new Test1("t1");
@@ -121,7 +121,7 @@ public class TestFunctor extends JMeterTestCase {
     }
 
     @Test
-    public void testObjectName() throws Exception{
+    void testObjectName() throws Exception{
         Test1 t1 = new Test1("t1");
         Test2 t2 = new Test2("t2");
         Functor f1 = new Functor(t1,"getName");
@@ -131,7 +131,7 @@ public class TestFunctor extends JMeterTestCase {
 
     // Check how Class definition behaves
     @Test
-    public void testClass() throws Exception{
+    void testClass() throws Exception{
         Test1 t1 = new Test1("t1");
         Test1 t1a = new Test1a("t1a");
         Test2 t2 = new Test2("t2");
@@ -156,18 +156,19 @@ public class TestFunctor extends JMeterTestCase {
     }
 
     @Test
-    public void testBadParameters() throws Exception{
+    void testBadParameters() throws Exception{
         assertThrows(IllegalArgumentException.class, () -> new Functor(null));
         assertThrows(IllegalArgumentException.class, () -> new Functor(null, new Class[] {}));
         assertThrows(IllegalArgumentException.class, () -> new Functor(null, new Object[] {}));
         assertThrows(IllegalArgumentException.class, () -> new Functor(String.class, null));
-        assertThrows(IllegalArgumentException.class, () -> new Functor(new Object(), null));
-        assertThrows(IllegalArgumentException.class, () -> new Functor(new Object(), null, new Class[] {}));
-        assertThrows(IllegalArgumentException.class, () -> new Functor(new Object(), null, new Object[] {}));
+        final Object someInvokee = new Object();
+        assertThrows(IllegalArgumentException.class, () -> new Functor(someInvokee, null));
+        assertThrows(IllegalArgumentException.class, () -> new Functor(someInvokee, null, new Class[] {}));
+        assertThrows(IllegalArgumentException.class, () -> new Functor(someInvokee, null, new Object[] {}));
     }
 
     @Test
-    public void testIllegalState() throws Exception{
+    void testIllegalState() throws Exception{
         Functor f = new Functor("method");
         assertThrows(IllegalStateException.class, ()-> f.invoke());
         assertThrows(IllegalStateException.class, () -> f.invoke(new Object[]{}));

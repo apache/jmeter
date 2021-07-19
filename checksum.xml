@@ -12,6 +12,7 @@
     <trusted-key id='105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='07d3516820bcf6b1' group='com.github.ben-manes.caffeine' />
     <trusted-key id='3c0a8f4744f37328' group='com.github.ben-manes.caffeine' />
+    <trusted-key id='379ce192d401ab61' group='com.github.javaparser' />
     <trusted-key id='8ea48d105232855d' group='com.github.jknack' />
     <trusted-key id='218fa0f6a941a037' group='com.github.kevinstern' />
     <trusted-key id='461a804f2609fd89' group='com.github.shyiko.klob' />
@@ -47,6 +48,7 @@
     <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
     <trusted-key id='1063fe98bcecb758' group='com.puppycrawl.tools' />
     <trusted-key id='6425559c47cc79c4' group='com.sun.activation' />
+    <trusted-key id='1b2718089ce964b8' group='com.thoughtworks.qdox' />
     <trusted-key id='602ec18d20c4661c' group='com.thoughtworks.xstream' />
     <trusted-key id='1861c322c56014b2' group='commons-beanutils' />
     <trusted-key id='3faad2cd5ecbb314' group='commons-beanutils' />
@@ -122,6 +124,7 @@
     <trusted-key id='be84d764623a3644' group='org.brotli' />
     <trusted-key id='b16698a4adf4d638' group='org.checkerframework' />
     <trusted-key id='41321490758aad6f' group='org.codehaus.groovy' />
+    <trusted-key id='6a65176a0fb1cd0b' group='org.codehaus.groovy' />
     <trusted-key id='6525fd70cc303655' group='org.codehaus.mojo' />
     <trusted-key id='873a8e86b4372146' group='org.codehaus.mojo' />
     <trusted-key id='466caed6e0747d50' group='org.codehaus.plexus' />

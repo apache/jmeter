@@ -64,11 +64,11 @@ public class CustomX509TrustManager implements X509TrustManager
                         + "  Valid until: {}\n"
                         + "  Issuer: {}",
                         i + 1,
-                        cert.getSubjectDN(),
+                        cert.getSubjectX500Principal(),
                         cert.getSigAlgName(),
                         cert.getNotBefore(),
                         cert.getNotAfter(),
-                        cert.getIssuerDN());
+                        cert.getIssuerX500Principal());
             }
         }
     }
@@ -90,11 +90,11 @@ public class CustomX509TrustManager implements X509TrustManager
                         + "  Valid until: {}\n"
                         + "  Issuer: {}",
                         i + 1,
-                        cert.getSubjectDN(),
+                        cert.getSubjectX500Principal(),
                         cert.getSigAlgName(),
                         cert.getNotBefore(),
                         cert.getNotAfter(),
-                        cert.getIssuerDN());
+                        cert.getIssuerX500Principal());
             }
         }
     }

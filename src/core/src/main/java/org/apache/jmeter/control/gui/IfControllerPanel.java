@@ -197,13 +197,13 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
 
         // Condition LABEL
         conditionLabel = new JLabel(JMeterUtils.getResString("if_controller_label")); // $NON-NLS-1$
-        conditionPanel.add(conditionLabel);
+        conditionPanel.add(conditionLabel, "top");
         conditionLabel.setName("if_controller_label"); // $NON-NLS-1$
 
         // Condition
         theCondition = JSyntaxTextArea.getInstance(5, 50);
         conditionLabel.setLabelFor(theCondition);
-        conditionPanel.add(JTextScrollPane.getInstance(theCondition));
+        conditionPanel.add(JTextScrollPane.getInstance(theCondition), "push, grow");
 
         JLabel ifControllerTipLabel = new JLabel(JMeterUtils.getResString("if_controller_tip")); // $NON-NLS-1$
         useLastSampleStatusButton = new JButton(JMeterUtils.getResString("if_controller_use_last_sample_ok")); // $NON-NLS-1$

@@ -628,7 +628,7 @@
        id="path3720"
        inkscape:connector-curvature="0" />
     <g
-       style="font-size:35.26461411px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#4d4d4d;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Sans Bold"
+       style="font-size:35.26461411px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#4d4d4d;fill-opacity:1;stroke:none;font-family:sans-serif;-inkscape-font-specification:Sans Bold"
        id="text3756"
        transform="matrix(0.40958848,0,0,0.40958848,409.7852,177.21243)">
       <path
@@ -644,18 +644,6 @@
          id="path3881"
          inkscape:connector-curvature="0" />
     </g>
-    <text
-       xml:space="preserve"
-       style="font-size:48px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Sans Bold"
-       x="175.76654"
-       y="103.82894"
-       id="text3762"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3764"
-         x="175.76654"
-         y="103.82894"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Droid Sans;-inkscape-font-specification:Droid Sans Bold" /></text>
     <g
        id="g8126"
        transform="matrix(0.14276681,0,0,0.14276681,453.68012,190.16516)">
