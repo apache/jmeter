@@ -267,10 +267,10 @@
         </p>
         ]]></description>
         <parameters>
-            <parameter defaultValue="https://jmeter.apache.org/" key="url"/>
+            <parameter defaultValue="https://example.invalid/" key="url"/>
             <parameter defaultValue="application/json" key="contentType"/>
             <parameter defaultValue="POST" key="method"/>
-	    <parameter defaultValue="" key="body"/>
+            <parameter defaultValue="" key="body"/>
         </parameters>
     </template>    
 </templates>
