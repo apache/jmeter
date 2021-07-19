@@ -272,5 +272,5 @@
             <parameter defaultValue="POST" key="method"/>
             <parameter defaultValue="" key="body"/>
         </parameters>
-    </template>    
+    </template>
 </templates>
