@@ -19,21 +19,29 @@ package org.apache.jmeter.protocol.http.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Rectangle;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.config.gui.RowDetailDialog;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -72,14 +80,25 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     /** A button for removing files from the table. */
     private JButton delete;
 
+    private AbstractButton showDetail;
+
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
 
     /** Command for browsing filesystem to set path of selected row in table. */
     private static final String BROWSE = "browse"; // $NON-NLS-1$
 
+    /** Command for adding rows from the clipboard */
+    private static final String ADD_FROM_CLIPBOARD = "addFromClipboard"; // $NON-NLS-1$
+
     /** Command for removing a row from the table. */
     private static final String DELETE = "delete"; // $NON-NLS-1$
+
+    /** Command for moving a row up in the table. */
+    private static final String UP = "up"; // $NON-NLS-1$
+
+    /** Command for moving a row down in the table. */
+    private static final String DOWN = "down"; // $NON-NLS-1$
 
     private static final String FILEPATH = "send_file_filename_label"; // $NON-NLS-1$
 
@@ -89,6 +108,14 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     /** The mime type column title of file table. */
     private static final String MIMETYPE = "send_file_mime_label"; //$NON-NLS-1$
 
+    /** When pasting from the clipboard, split lines on linebreak */
+    private static final String CLIPBOARD_LINE_DELIMITERS = "\n"; //$NON-NLS-1$
+
+    /** When pasting from the clipboard, split parameters on tab */
+    private static final String CLIPBOARD_ARG_DELIMITERS = "\t"; //$NON-NLS-1$
+
+    /** Command for showing detail. */
+    private static final String DETAIL = "detail"; // $NON-NLS-1$
 
     /**
      * Create a new HTTPFileArgsPanel as an embedded component
@@ -162,7 +189,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
             for(HTTPFileArg file : base.getHTTPFiles()){
                 tableModel.addRow(file);
             }
-            checkDeleteAndBrowseStatus();
+            checkButtonsStatus();
         }
     }
 
@@ -171,16 +198,13 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      * Enable or disable the delete button depending on whether or not there is
      * a row to be deleted.
      */
-    private void checkDeleteAndBrowseStatus() {
-        // Disable DELETE and BROWSE buttons if there are no rows in
+    private void checkButtonsStatus() {
+        // Disable DETAILS, DELETE and BROWSE buttons if there are no rows in
         // the table to delete.
-        if (tableModel.getRowCount() == 0) {
-            browse.setEnabled(false);
-            delete.setEnabled(false);
-        } else {
-            browse.setEnabled(true);
-            delete.setEnabled(true);
-        }
+        final boolean hasRows = tableModel.getRowCount() > 0;
+        browse.setEnabled(hasRows);
+        delete.setEnabled(hasRows);
+        showDetail.setEnabled(hasRows);
     }
 
     /**
@@ -203,6 +227,14 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         String action = e.getActionCommand();
         if (action.equals(ADD)) {
             addFile(""); //$NON-NLS-1$
+        } else if (action.equals(ADD_FROM_CLIPBOARD)) {
+            addFromClipboard();
+        } else if (action.equals(UP)) {
+            moveUp();
+        } else if (action.equals(DOWN)) {
+            moveDown();
+        } else if (action.equals(DETAIL)) {
+            showDetail();
         }
         runCommandOnSelectedFile(action);
     }
@@ -224,7 +256,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
             runCommandOnRow(command, rowSelected);
             tableModel.fireTableDataChanged();
             // Disable DELETE and BROWSE if there are no rows in the table to delete.
-            checkDeleteAndBrowseStatus();
+            checkButtonsStatus();
             // Table still contains one or more rows, so highlight (select)
             // the appropriate one.
             if (tableModel.getRowCount() != 0) {
@@ -267,7 +299,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
         tableModel.addRow(new HTTPFileArg(path));
 
-        checkDeleteAndBrowseStatus();
+        checkButtonsStatus();
 
         // Highlight (select) the appropriate row.
         int rowToSelect = tableModel.getRowCount() - 1;
@@ -330,16 +362,38 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
         delete.setActionCommand(DELETE);
 
-        checkDeleteAndBrowseStatus();
+        showDetail = new JButton(JMeterUtils.getResString("detail")); // $NON-NLS-1$
+        showDetail.setActionCommand(DETAIL);
+        showDetail.setEnabled(true);
+        showDetail.addActionListener(this);
+
+        // A button for adding new arguments to the table from the clipboard
+        JButton addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
+        addFromClipboard.setActionCommand(ADD_FROM_CLIPBOARD);
+
+        JButton up = new JButton(JMeterUtils.getResString("up")); // $NON-NLS-1$
+        up.setActionCommand(UP);
+
+        JButton down = new JButton(JMeterUtils.getResString("down")); // $NON-NLS-1$
+        down.setActionCommand(DOWN);
+
+        checkButtonsStatus();
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         add.addActionListener(this);
         browse.addActionListener(this);
+        addFromClipboard.addActionListener(this);
         delete.addActionListener(this);
+        up.addActionListener(this);
+        down.addActionListener(this);
+        buttonPanel.add(showDetail);
         buttonPanel.add(add);
         buttonPanel.add(browse);
+        buttonPanel.add(addFromClipboard);
         buttonPanel.add(delete);
+        buttonPanel.add(up);
+        buttonPanel.add(down);
         return buttonPanel;
     }
 
@@ -364,4 +418,155 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         pane.setPreferredSize(pane.getMinimumSize());
         return GuiUtils.emptyBorder(pane);
     }
+
+
+    /**
+     * Move a row down
+     */
+    private void moveDown() {
+        //get the selected rows before stopping editing
+        // or the selected rows will be unselected
+        int[] rowsSelected = table.getSelectedRows();
+        GuiUtils.stopTableEditing(table);
+
+        if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
+            table.clearSelection();
+            for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                int rowSelected = rowsSelected[i];
+                tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected + 1);
+            }
+            for (int rowSelected : rowsSelected) {
+                table.addRowSelectionInterval(rowSelected + 1, rowSelected + 1);
+            }
+
+            scrollToRowIfNotVisible(rowsSelected[0]+1);
+        }
+    }
+
+    /**
+     * ensure that a row is visible in the viewport
+     * @param rowIndex row index
+     */
+    private void scrollToRowIfNotVisible(int rowIndex) {
+        if(table.getParent() instanceof JViewport) {
+            Rectangle visibleRect = table.getVisibleRect();
+            final int cellIndex = 0;
+            Rectangle cellRect = table.getCellRect(rowIndex, cellIndex, false);
+            if (visibleRect.y > cellRect.y) {
+                table.scrollRectToVisible(cellRect);
+            } else {
+                Rectangle rect2 = table.getCellRect(rowIndex + getNumberOfVisibleRows(table), cellIndex, true);
+                int width = rect2.y - cellRect.y;
+                table.scrollRectToVisible(new Rectangle(cellRect.x, cellRect.y, cellRect.width, cellRect.height + width));
+            }
+        }
+    }
+
+    /**
+     * @param table {@link JTable}
+     * @return number of visible rows
+     */
+    private static int getNumberOfVisibleRows(JTable table) {
+        Rectangle vr = table.getVisibleRect();
+        int first = table.rowAtPoint(vr.getLocation());
+        vr.translate(0, vr.height);
+        return table.rowAtPoint(vr.getLocation()) - first;
+    }
+
+    /**
+     *  Move a row down
+     */
+    private void moveUp() {
+        //get the selected rows before stopping editing
+        // or the selected rows will be unselected
+        int[] rowsSelected = table.getSelectedRows();
+        GuiUtils.stopTableEditing(table);
+
+        if (rowsSelected.length > 0 && rowsSelected[0] > 0) {
+            table.clearSelection();
+            for (int rowSelected : rowsSelected) {
+                tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected - 1);
+            }
+
+            for (int rowSelected : rowsSelected) {
+                table.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
+            }
+
+            scrollToRowIfNotVisible(rowsSelected[0]-1);
+        }
+    }
+
+    private void addFromClipboard() {
+        addFromClipboard(CLIPBOARD_LINE_DELIMITERS, CLIPBOARD_ARG_DELIMITERS);
+    }
+
+    /**
+     * Add values from the clipboard
+     * @param lineDelimiter Delimiter string to split clipboard into lines
+     * @param argDelimiter Delimiter string to split line into key-value pair
+     */
+    private void addFromClipboard(String lineDelimiter, String argDelimiter) {
+        GuiUtils.stopTableEditing(table);
+        int rowCount = table.getRowCount();
+        try {
+            String clipboardContent = GuiUtils.getPastedText();
+            if(clipboardContent == null) {
+                return;
+            }
+            String[] clipboardLines = clipboardContent.split(lineDelimiter);
+            for (String clipboardLine : clipboardLines) {
+                String[] clipboardCols = clipboardLine.split(argDelimiter);
+                if (clipboardCols.length > 0) {
+                    HTTPFileArg argument = createHTTPFileArgFromClipboard(clipboardCols);
+                    if (argument != null) {
+                        tableModel.addRow(argument);
+                    }
+                }
+            }
+            if (table.getRowCount() > rowCount) {
+                checkButtonsStatus();
+
+                // Highlight (select) and scroll to the appropriate rows.
+                int rowToSelect = tableModel.getRowCount() - 1;
+                table.setRowSelectionInterval(rowCount, rowToSelect);
+                table.scrollRectToVisible(table.getCellRect(rowCount, 0, true));
+            }
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not add read file arguments from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (UnsupportedFlavorException ufe) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
+                            + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private HTTPFileArg createHTTPFileArgFromClipboard(String[] clipboardCols) {
+        if (clipboardCols.length == 1) {
+            return new HTTPFileArg(clipboardCols[0]);
+        } else if (clipboardCols.length == 2) {
+            return new HTTPFileArg(clipboardCols[0], clipboardCols[1], "");
+        } else if (clipboardCols.length == 3) {
+            return new HTTPFileArg(clipboardCols[0], clipboardCols[1], clipboardCols[2]);
+        }
+        return null;
+    }
+
+    /**
+     * Show Row Detail
+     */
+    private void showDetail() {
+        //get the selected rows before stopping editing
+        // or the selected will be unselected
+        int[] rowsSelected = table.getSelectedRows();
+        GuiUtils.stopTableEditing(table);
+
+        if (rowsSelected.length == 1) {
+            table.clearSelection();
+            RowDetailDialog detailDialog = new RowDetailDialog(tableModel, rowsSelected[0]);
+            detailDialog.setVisible(true);
+        }
+    }
+
 }

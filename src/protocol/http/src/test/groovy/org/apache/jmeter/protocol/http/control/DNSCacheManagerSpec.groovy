@@ -80,6 +80,16 @@ class DNSCacheManagerSpec extends Specification {
             !sut.resolve(VALID_HOSTNAME).contains(InetAddress.getByName("127.0.0.1"))
     }
 
+    @Requires({ localDNSResolverOK })
+    def "A custom resolver with a host entry will still fall back to system lookup"() {
+        given:
+            sut.setCustomResolver(true)
+            sut.addHost("jmeter.example.org", "127.0.0.1")
+        expect:
+            // uses real DNS server
+            sut.resolve(VALID_HOSTNAME).contains(InetAddress.getByName(VALID_HOSTNAME))
+    }
+
     def "If using an invalid server resolve throws UnknownHostException"() {
         given:
             sut.addServer(INVALID_DNS_SERVER)

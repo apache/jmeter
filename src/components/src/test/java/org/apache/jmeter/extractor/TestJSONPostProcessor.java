@@ -21,24 +21,80 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.apache.jmeter.extractor.json.jsonpath.JSONPostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
-public class TestJSONPostProcessor {
+class TestJSONPostProcessor {
 
     private static final String VAR_NAME = "varName";
 
+    private enum AccessMode {
+        ALL(AbstractScopedTestElement::setScopeAll),
+        PARENT(AbstractScopedTestElement::setScopeParent),
+        CHILDREN(AbstractScopedTestElement::setScopeChildren);
+
+        private Consumer<AbstractScopedTestElement> applier;
+
+        AccessMode(Consumer<AbstractScopedTestElement> applier) {
+            this.applier = applier;
+        }
+
+        void configure(AbstractScopedTestElement element) {
+            applier.accept(element);
+        }
+    }
+
+    private static Stream<Arguments> provideArgumentsForScopes() {
+        return Stream.of(
+                Arguments.of(AccessMode.ALL, "$.a", "1", "23", "2"),
+                Arguments.of(AccessMode.ALL, "$.a", "2", "42", "2"),
+                Arguments.of(AccessMode.ALL, "$.b", "0", "parent_only", "1"),
+                Arguments.of(AccessMode.ALL, "$.c", "0", "child_only", "1"),
+                Arguments.of(AccessMode.PARENT, "$.a", "1", "23", "1"),
+                Arguments.of(AccessMode.PARENT, "$.b", "0", "parent_only", "1"),
+                Arguments.of(AccessMode.PARENT, "$.c", "0", "NONE", "0"),
+                Arguments.of(AccessMode.CHILDREN, "$.a", "1", "42", "1"),
+                Arguments.of(AccessMode.CHILDREN, "$.b", "0", "NONE", "0"),
+                Arguments.of(AccessMode.CHILDREN, "$.c", "0", "child_only", "1")
+            );
+    }
+
+    @ParameterizedTest()
+    @MethodSource("provideArgumentsForScopes")
+    void testAssertionWithScope(AccessMode accessMode, String path, String matchNumber, String resultObject,
+            String resultCount) {
+        JMeterContext context = JMeterContextService.getContext();
+        JSONPostProcessor processor = setupProcessor(context, matchNumber, false);
+        JMeterVariables vars = new JMeterVariables();
+        processor.setDefaultValues("NONE");
+        processor.setJsonPathExpressions(path);
+        processor.setRefNames("result");
+        accessMode.configure(processor);
+        SampleResult sampleResult = createSampleResult("{\"a\": 23, \"b\": \"parent_only\"}");
+        sampleResult.addSubResult(createSampleResult("{\"a\": 42, \"c\": \"child_only\"}"));
+        context.setPreviousResult(sampleResult);
+        context.setVariables(vars);
+        processor.process();
+        assertThat(vars.get("result"), CoreMatchers.is(resultObject));
+    }
+
     @Test
-    public void testProcessAllElementsOneMatch() {
+    void testProcessAllElementsOneMatch() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "-1", true);
         JMeterVariables vars = new JMeterVariables();
@@ -55,7 +111,7 @@ public class TestJSONPostProcessor {
     }
 
     @Test
-    public void testProcessAllElementsMultipleMatches() {
+    void testProcessAllElementsMultipleMatches() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "-1", true);
         JMeterVariables vars = new JMeterVariables();
@@ -72,7 +128,7 @@ public class TestJSONPostProcessor {
     }
 
     @Test
-    public void testProcessRandomElementMultipleMatches() {
+    void testProcessRandomElementMultipleMatches() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "0", true);
         JMeterVariables vars = new JMeterVariables();
@@ -90,7 +146,7 @@ public class TestJSONPostProcessor {
     }
 
     @Test
-    public void testPR235CaseEmptyResponse() {
+    void testPR235CaseEmptyResponse() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "-1", true);
         JMeterVariables vars = new JMeterVariables();
@@ -112,7 +168,7 @@ public class TestJSONPostProcessor {
     }
 
     @Test
-    public void testCaseEmptyVarBug62860() {
+    void testCaseEmptyVarBug62860() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "0", false);
         JMeterVariables vars = new JMeterVariables();
@@ -133,7 +189,7 @@ public class TestJSONPostProcessor {
     }
 
     @Test
-    public void testPR235CaseMatchOneWithZero() {
+    void testPR235CaseMatchOneWithZero() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "-1", true);
         JMeterVariables vars = new JMeterVariables();
@@ -157,7 +213,29 @@ public class TestJSONPostProcessor {
     }
 
     @Test
-    public void testBug59609() throws ParseException {
+    void testEmptyInput() throws ParseException {
+        JMeterContext context = JMeterContextService.getContext();
+        JSONPostProcessor processor = setupProcessor(context, "0", false);
+
+        SampleResult result = new SampleResult();
+        result.setResponseData("".getBytes(StandardCharsets.UTF_8));
+
+        JMeterVariables vars = new JMeterVariables();
+        context.setVariables(vars);
+        context.setPreviousResult(result);
+
+        processor.setJsonPathExpressions("$.context");
+        processor.setDefaultValues("NONE");
+        processor.setScopeAll();
+        processor.process();
+
+        assertThat(vars.get(VAR_NAME), CoreMatchers.is("NONE"));
+        assertThat(vars.get(VAR_NAME + "_matchNr"), CoreMatchers.nullValue());
+        assertThat(vars.get(VAR_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+    }
+
+    @Test
+    void testBug59609() throws ParseException {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "0", false);
 
@@ -181,7 +259,7 @@ public class TestJSONPostProcessor {
     }
 
     @Test
-    public void testExtractSimpleArrayElements() {
+    void testExtractSimpleArrayElements() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "-1");
         String data = "[1,2,3]";
@@ -204,7 +282,7 @@ public class TestJSONPostProcessor {
     }
 
     @Test
-    public void testExtractComplexElements() {
+    void testExtractComplexElements() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "-1");
         String data = "[{\"a\":[1,{\"d\":2},3]},[\"b\",{\"h\":23}],3]";
@@ -227,11 +305,18 @@ public class TestJSONPostProcessor {
         assertEquals("3", vars.get(VAR_NAME + "_matchNr"));
     }
 
-    private JSONPostProcessor setupProcessor(JMeterContext context, String matchNumbers) {
+
+    private static JSONPostProcessor setupProcessor(JMeterContext context, String matchNumbers) {
         return setupProcessor(context, matchNumbers, true);
     }
 
-    private JSONPostProcessor setupProcessor(JMeterContext context,
+    private static SampleResult createSampleResult(String data) {
+        SampleResult result = new SampleResult();
+        result.setResponseData(data, null);
+        return result;
+    }
+
+    private static JSONPostProcessor setupProcessor(JMeterContext context,
             String matchNumbers, boolean computeConcatenation) {
         JSONPostProcessor processor = new JSONPostProcessor();
         processor.setThreadContext(context);
@@ -240,5 +325,6 @@ public class TestJSONPostProcessor {
         processor.setComputeConcatenation(computeConcatenation);
         return processor;
     }
+
 
 }

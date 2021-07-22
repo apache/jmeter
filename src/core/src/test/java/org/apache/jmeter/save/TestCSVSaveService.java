@@ -18,7 +18,7 @@
 package org.apache.jmeter.save;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -94,11 +94,7 @@ public class TestCSVSaveService extends JMeterTestCase {
 
     @Test
     public void testSplitBadQuote() throws Exception {
-        try {
-            checkSplitString("a\"b",',',new String[]{});
-            fail("Should have generated IOException");
-        } catch (IOException e) {
-        }
+        assertThrows(IOException.class, () -> checkSplitString("a\"b", ',', new String[] {}));
     }
 
     @Test

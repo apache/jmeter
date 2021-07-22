@@ -323,10 +323,12 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         <p>
-        If it is a <code>POST</code> or <code>PUT</code> or <code>PATCH</code> request and there is a single file whose 'Parameter name' attribute (below) is omitted,
-        then the file is sent as the entire body
-        of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for <code>POST</code> requests,
-        and also for <code>PUT</code> requests.
+        When <code>MIME Type</code> is empty, JMeter will try to guess the MIME type of the given file.
+        </p>
+        <p>
+        If it is a <code>POST</code> or <code>PUT</code> or <code>PATCH</code> request and there is a single file whose '<code>Parameter name</code>'
+        attribute (below) is omitted, then the file is sent as the entire body of the request, i.e. no wrappers are added. This allows arbitrary
+        bodies to be sent. This functionality is present for <code>POST</code> requests, and also for <code>PUT</code> requests.
         <b>See below for some further information on parameter handling.</b>
         </p>
         </property>
@@ -1968,7 +1970,7 @@ MongoDB Script is more suitable for functional testing or test setup (setup/tear
         <p>This sampler allows you to run Cypher queries through the Bolt protocol.</p>
         <p>Before using this you need to set up a <complink name="Bolt Connection Configuration"/></p>
         <p>Every request uses a connection acquired from the pool and returns it to the pool when the sampler completes.
-        The connection pool size use the driver defaults (~100) and is not configurable at the moment.</p>
+        The connection pool size defaults to 100 and is configurable.</p>
         <p>The measured response time corresponds to the "full" query execution, including both
         the time to execute the cypher query AND the time to consume the results sent back by the database.</p>
     </description>
@@ -1984,6 +1986,13 @@ MongoDB Script is more suitable for functional testing or test setup (setup/tear
             Whether to add or not query result data to the sampler response (default false).
             Note that activating this has a memory overhead, use it wisely.
         </property>
+        <property name="Access Mode" required="Yes">Whether to access the database in WRITE or READ mode.
+            Use WRITE for a standalone Neo4j instance.
+            For a Neo4j cluster, select mode depending on whether the query writes to the database.
+            That setting will allow correct routing to the cluster leader, followers or read replicas.</property>
+        <property name="Database" required="No">The database to run the query against.
+            Required for Neo4j 4.0+, unless querying the default database. Must be undefined for Neo4j 3.5.</property>
+        <property name="Transaction timeout" required="No">Timeout for the transaction.</property>
     </properties>
 
     <note>It is strongly advised to use query parameters, allowing the database to cache and reuse execution plans.</note>
@@ -2240,7 +2249,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
 
 <component name="Runtime Controller" index="&sect-num;.2.8" width="328" height="100" screenshot="runtimecontroller.png">
     <description>
-        <p>The Runtime Controller controls how long its children how long its children will run.
+        <p>The Runtime Controller controls how long its children will run.
         Controller will run its children until configured <code>Runtime(s)</code> is exceeded.
         </p>
     </description>
@@ -4522,6 +4531,9 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         <property name="Bolt URI" required="Yes">The database URI.</property>
         <property name="Username" required="No">User account.</property>
         <property name="Password" required="No">User credentials.</property>
+        <property name="Connection Pool Max Size" required="Yes">Max size of the Neo4j driver Bolt connection pool.
+            Raise the value if running large number of concurrent threads, so that JMeter threads are not blocked waiting
+            for a connection to be released to the pool.</property>
     </properties>
 </component>
 
@@ -6315,15 +6327,26 @@ It will allow you to extract in a very easy way text content, see <a href="https
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-    <property name="Names of created variables" required="Yes">Semi-colon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</property>
-    <property name="JSON Path Expressions" required="Yes">Semi-colon separated JSON-PATH expressions (must match number of variables)</property>
-    <property name="Default Values" required="No">Semi-colon separated default values if JSON-PATH expressions do not return any result(must match number of variables)</property>
-    <property name="Match No. (0 for Random)" required="No">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
+    <property name="Apply to:" required="Yes">
+        This is for use with samplers that can generate sub-samples,
+        e.g. HTTP Sampler with embedded resources, Mail Reader or samples generated by the Transaction Controller.
+        <dl>
+        <dt><code>Main sample only</code></dt><dd>only applies to the main sample</dd>
+        <dt><code>Sub-samples only</code></dt><dd>only applies to the sub-samples</dd>
+        <dt><code>Main sample and sub-samples</code></dt><dd>applies to both.</dd>
+        <dt><code>JMeter Variable Name to use</code></dt><dd>extraction is to be applied to the contents of the named variable</dd>
+        </dl>
+    </property>
+    <property name="Names of created variables" required="Yes">Semicolon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</property>
+    <property name="JSON Path Expressions" required="Yes">Semicolon separated JSON-PATH expressions (must match number of variables)</property>
+    <property name="Default Values" required="No">Semicolon separated default values if JSON-PATH expressions do not return any result(must match number of variables)</property>
+    <property name="Match Numbers" required="No">For each JSON Path Expression, if the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
         <li><code>0</code>: means random (Default Value)</li>
         <li><code>-1</code> means extract all results, they will be named as <code><em>&lt;variable name&gt;</em>_N</code> (where <code>N</code> goes from 1 to Number of results)</li>
-        <li><code>X</code>: means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
+        <li><code>X</code>: means extract the <em>X</em><sup>th</sup> result. If this <em>X</em><sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
     </ul>
+    The numbers have to be given as a Semicolon separated list. The number of elements in that list have to match the number of given JSON Path Expressions. If left empty, the value <code>0</code> will be used as default for every expression.
     </property>
     <property name="Compute concatenation var" required="No">If many results are found, plugin will concatenate them using ‘<code>,</code>’ separator and store it in a var named <code><em>&lt;variable name&gt;</em>_ALL</code></property>
 </properties>
@@ -6531,6 +6554,12 @@ Behaviour can be modified with some properties by setting in <code>user.properti
             <note>The first thread will always start directly, so if you configured <strong>one</strong> thread,
                 the ramp-up time is effectively <strong>zero</strong>. For the same reason, the tenth thread in
                 the above example will actually be started after 90 seconds and not 100 seconds.</note>
+        </property>
+        <property name="Same user on each iteration" required="Yes">
+            If selected, cookie and cache data from the first sampler response are used in subsequent requests (requires a global Cookie and Cache Manager respectively).
+            <br></br>
+            If not selected, cookie and cache data from the first sampler response are not used in subsequent requests.
+            <note>If not selected, a new connection will be opened between iterations which will result in increased response times and consume more resources (memory and cpu).</note>
         </property>
         <property name="Loop Count" required="Yes, unless Infinite is selected">Number of times to perform the test case.  Alternatively, "<code>infinite</code>" can be selected causing the test to run until manually stopped or end of the thread lifetime is reached.</property>
         <property name="Delay Thread creation until needed" required="Yes">

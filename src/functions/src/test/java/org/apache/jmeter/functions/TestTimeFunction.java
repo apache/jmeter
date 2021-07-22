@@ -20,7 +20,7 @@ package org.apache.jmeter.functions;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -102,11 +102,7 @@ public class TestTimeFunction extends JMeterTestCase {
         params.add(new CompoundVariable("YMD"));
         params.add(new CompoundVariable("NAME"));
         params.add(new CompoundVariable("YMD"));
-        try {
-            variable.setParameters(params);
-            fail("Should have raised InvalidVariableException");
-        } catch (InvalidVariableException ignored) {
-        }
+        assertThrows(InvalidVariableException.class, () -> variable.setParameters(params));
     }
 
     @Test

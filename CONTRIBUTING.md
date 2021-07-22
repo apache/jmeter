@@ -45,7 +45,7 @@ You require IntelliJ 2018.3.1 or newer.
 
 Eclipse can import Gradle projects automatically via `Import...->Gradle project` wizard.
 
-Optionally you can generate Eclipse project by running
+Optionally you can generate an Eclipse project by running
 
     ./gradlew eclipse
 
@@ -80,14 +80,14 @@ However, before sending a patch, please make sure that the following applies:
 ## :heart: Adding something new
 
 We do love to enhance Apache JMeter with you to become more powerful!
-The best way to workout your idea is to discuss it first at our dev mailing list:
+The best way to work out your idea is to discuss it first at our dev mailing list:
 
 * [JMeter developers mailing list](https://jmeter.apache.org/mail2.html#JMeterDev)
 
 Please, if you can, don't just throw us the code of a new feature; lets figure first together
 what would be the best approach regarding the current architecture and future plans,
 before any development.
-This way we all get sure that your idea is aligned with the codebase and you can enjoy
+This way we all get sure that your idea is aligned with the codebase, and you can enjoy
 your happy coding even more :)
 
 ## :closed_book: Want to write docs

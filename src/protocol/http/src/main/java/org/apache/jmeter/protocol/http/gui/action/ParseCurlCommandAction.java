@@ -104,8 +104,11 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.tika.Tika;
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.exception.TikaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 /**
  * Opens a popup where user can enter a cURL command line and create a test plan
@@ -119,7 +122,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private static final Set<String> commands = new HashSet<>();
     public static final String IMPORT_CURL = "import_curl";
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
-    private static final String TYPE_FORM = ";type=";
     private static final String CERT = "cert";
     private Logger log = LoggerFactory.getLogger(getClass());
     /** A panel allowing results to be saved. */
@@ -130,7 +132,17 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private JSyntaxTextArea cURLCommandTA;
     private JLabel statusText;
     private JCheckBox uploadCookiesCheckBox;
-    private final Tika tika = new Tika();
+    private final Tika tika = createTika();
+
+    private Tika createTika() {
+        try {
+            return new Tika(new TikaConfig(this.getClass().getClassLoader()
+                    .getResourceAsStream("org/apache/jmeter/protocol/http/gui/action/tika-config.xml")));
+        } catch (TikaException | IOException | SAXException e) {
+            return new Tika();
+        }
+    }
+
     public ParseCurlCommandAction() {
         super();
     }

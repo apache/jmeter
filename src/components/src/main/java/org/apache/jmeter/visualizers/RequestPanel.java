@@ -71,8 +71,13 @@ public class RequestPanel {
                 } else {
                     listRequestView.add(requestView);
                 }
+            }
+            catch (NoClassDefFoundError e) {
+                log.error("Exception registering implementation: [{}] of interface: [{}], a dependency used by the plugin class is missing",
+                        clazz, RequestView.class, e);
             } catch (Exception e) {
-                log.warn("Error in load result render: {}", clazz, e); // $NON-NLS-1$
+                log.error("Exception registering implementation: [{}] of interface: [{}], a jar is probably missing",
+                        clazz, RequestView.class, e);
             }
         }
         // place raw tab in first position (first tab)

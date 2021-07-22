@@ -18,6 +18,7 @@
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
 
@@ -95,17 +96,9 @@ public class PackageTest extends JMeterTestCaseJUnit {
 
     public void BSH1() throws Exception {
         String fn = "src/test/resources/org/apache/jmeter/functions/testfiles/BeanShellTest.bsh";
-        try {
-            BSHFParams(null, null, null);
-            fail("Expected InvalidVariableException");
-        } catch (InvalidVariableException e) {
-        }
 
-        try {
-            BSHFParams("", "", "");
-            fail("Expected InvalidVariableException");
-        } catch (InvalidVariableException e) {
-        }
+        assertThrows(InvalidVariableException.class, () -> BSHFParams(null, null, null));
+        assertThrows(InvalidVariableException.class, () -> BSHFParams("", "", ""));
 
         BeanShell bsh;
         try {
@@ -187,11 +180,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
     // XPathFileContainer tests
 
     public void XPathtestNull() throws Exception {
-        try {
-            new XPathFileContainer("nosuch.xml", "/");
-            fail("Should not find the file");
-        } catch (FileNotFoundException e) {
-        }
+        assertThrows(FileNotFoundException.class, () -> new XPathFileContainer("nosuch.xml", "/"));
     }
 
     public void XPathtestrowNum() throws Exception {

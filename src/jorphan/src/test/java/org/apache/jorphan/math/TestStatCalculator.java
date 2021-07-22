@@ -80,7 +80,7 @@ public class TestStatCalculator {
         calc.addValue(15);
         calc.addValue(21);
         assertEquals(16, (int) calc.getMean());
-        assertEquals(8.0622577F, (float) calc.getStandardDeviation(), 0F);
+        assertEquals(8.062258F, (float) calc.getStandardDeviation(), 0F);
         assertEquals(30, calc.getMax().intValue());
         assertEquals(3, calc.getMin().intValue());
         assertEquals(15, calc.getMedian().intValue());

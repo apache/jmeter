@@ -20,5 +20,5 @@ rem   Ask the JMeter client to perform a HeapDump
 
 rem   P1 = command port for JMeter instance (defaults to 4445)
 
-java -cp %~dp0ApacheJMeter.jar org.apache.jmeter.util.ShutdownClient HeapDump %*
+java -cp "%~dp0ApacheJMeter.jar" org.apache.jmeter.util.ShutdownClient HeapDump %*
 pause

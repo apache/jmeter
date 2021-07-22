@@ -241,6 +241,17 @@ jmeter.save.saveservice.timestamp_format = ms
                             <dd><source>${jmeter.reportgenerator.overall_granularity}</source></dd>
                         </dl>
                     </note>
+                    <note>
+                       <p>The calculated percentiles might differ from those from the Aggregate Report in the GUI.
+                       This is because the dashboard uses a different formula to estimate the percentiles.
+                       It will be most observable when the distribution of the timing values is spread
+                       too wide. That can happen if too few samples were taken. If you want the numbers
+                       to be more or less the same as those from the Aggregate Report, you will have to switch the used
+                       <a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6/org/apache/commons/math3/stat/descriptive/rank/Percentile.EstimationType.html">estimator</a>
+                       from <code>LEGACY</code> to <code>R_3</code>, by specifying the JMeter property
+                       <code>backend_metrics_percentile_estimator=R_3</code> (this time without any
+                       prefix).</p>
+                    </note>
                 </subsection>
 
                 <subsection name="&sect-num;.2.3 Graph settings" anchor="configure_graph">

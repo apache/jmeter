@@ -12,6 +12,7 @@
     <trusted-key id='105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='07d3516820bcf6b1' group='com.github.ben-manes.caffeine' />
     <trusted-key id='3c0a8f4744f37328' group='com.github.ben-manes.caffeine' />
+    <trusted-key id='379ce192d401ab61' group='com.github.javaparser' />
     <trusted-key id='8ea48d105232855d' group='com.github.jknack' />
     <trusted-key id='218fa0f6a941a037' group='com.github.kevinstern' />
     <trusted-key id='461a804f2609fd89' group='com.github.shyiko.klob' />
@@ -47,6 +48,7 @@
     <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
     <trusted-key id='1063fe98bcecb758' group='com.puppycrawl.tools' />
     <trusted-key id='6425559c47cc79c4' group='com.sun.activation' />
+    <trusted-key id='1b2718089ce964b8' group='com.thoughtworks.qdox' />
     <trusted-key id='602ec18d20c4661c' group='com.thoughtworks.xstream' />
     <trusted-key id='1861c322c56014b2' group='commons-beanutils' />
     <trusted-key id='3faad2cd5ecbb314' group='commons-beanutils' />
@@ -71,6 +73,7 @@
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='5b30d3b10694f057' group='io.codearte.gradle.nexus' />
+    <trusted-key id='602ec18d20c4661c' group='io.github.x-stream' />
     <trusted-key id='6425559c47cc79c4' group='javax.activation' />
     <trusted-key id='6425559c47cc79c4' group='javax.mail' />
     <trusted-key id='6425559c47cc79c4' group='javax.servlet' />
@@ -80,6 +83,7 @@
     <trusted-key id='efe8086f9e93774e' group='junit' />
     <trusted-key id='15c71c0a4e0b8edd' group='net.java.dev.jna' />
     <trusted-key id='75bf031b7c94e183' group='net.java.dev.jna' />
+    <trusted-key id='1d0690e353be126d' group='net.minidev' />
     <trusted-key id='f6bc09712c8df6ec' group='net.minidev' />
     <trusted-key id='0da8a5ec02d11ead' group='net.sf.jopt-simple' />
     <trusted-key id='d4012dda1f1f0f82' group='net.sf.jtidy' />
@@ -120,6 +124,7 @@
     <trusted-key id='be84d764623a3644' group='org.brotli' />
     <trusted-key id='b16698a4adf4d638' group='org.checkerframework' />
     <trusted-key id='41321490758aad6f' group='org.codehaus.groovy' />
+    <trusted-key id='6a65176a0fb1cd0b' group='org.codehaus.groovy' />
     <trusted-key id='6525fd70cc303655' group='org.codehaus.mojo' />
     <trusted-key id='873a8e86b4372146' group='org.codehaus.mojo' />
     <trusted-key id='466caed6e0747d50' group='org.codehaus.plexus' />
@@ -270,6 +275,9 @@
     </dependency>
     <dependency group='oro' module='oro' version='2.0.8'>
       <sha512>9A98E493C4D771322B1331EC05AB0E363A83D8AC2AF8018D96A44DF2BF5BFC97D33EBE6F6F93E46AB10BF1536F0C29E9D9569318ED49BC18B4E96B1A8B476D37</sha512>
+    </dependency>
+    <dependency group='xerces' module='xercesImpl' version='2.12.1'>
+      <sha512>811AFD85CDD19545785FDE7FB39511F1E171E1D021A96117D105E2B2F37715536E17259E6AD0CE897B4C7C8A5BD1E88C9FA0825B0A2EF9F3956CD82944A33957</sha512>
     </dependency>
     <dependency group='xerces' module='xercesImpl' version='2.9.1'>
       <sha512>37A13B129F3536A53F2A553151A53997DA6DE7CE4D7231EFEEFD26A68C92BE309666F2EE1F527D3B8C38BC6ADDC9FCCBBDD0D134759FD88667976B0CFF842435</sha512>

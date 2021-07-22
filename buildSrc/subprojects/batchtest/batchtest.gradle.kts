@@ -17,7 +17,8 @@
  */
 
 dependencies {
-    implementation("org.ajoberstar.grgit:grgit-gradle:3.1.1")
+    implementation("org.ajoberstar.grgit:grgit-gradle:4.1.0")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:5.11.0.202103091610-r")
 }
 
 gradlePlugin {

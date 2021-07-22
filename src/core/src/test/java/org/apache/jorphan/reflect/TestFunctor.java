@@ -18,7 +18,7 @@
 package org.apache.jorphan.reflect;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Map;
 import java.util.Properties;
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /** Unit tests for classes that use Functors */
-public class TestFunctor extends JMeterTestCase {
+class TestFunctor extends JMeterTestCase {
 
     interface HasName {
         String getName();
@@ -41,7 +41,7 @@ public class TestFunctor extends JMeterTestCase {
         String getString(String s);
     }
 
-    class Test1 implements HasName {
+    static class Test1 implements HasName {
         private final String name;
         public Test1(){
             this("");
@@ -57,7 +57,7 @@ public class TestFunctor extends JMeterTestCase {
             return s;
         }
     }
-    class Test1a extends Test1{
+    static class Test1a extends Test1{
         Test1a(){
             super("1a");
         }
@@ -88,12 +88,12 @@ public class TestFunctor extends JMeterTestCase {
     }
 
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         Configurator.setAllLevels(Functor.class.getName(), Level.FATAL);
     }
 
     @Test
-    public void testName() throws Exception{
+    void testName() throws Exception{
         Functor f1 = new Functor("getName");
         Functor f2 = new Functor("getName");
         Functor f1a = new Functor("getName");
@@ -101,45 +101,27 @@ public class TestFunctor extends JMeterTestCase {
         Test2 t2 = new Test2("t2");
         Test1a t1a = new Test1a("aa");
         assertEquals("t1",f1.invoke(t1));
-        try {
-            f1.invoke(t2);
-            fail("Should have generated error");
-        } catch (JMeterError e){
-
-        }
+        assertThrows(JMeterError.class, () -> f1.invoke(t2));
         assertEquals("t2",f2.invoke(t2));
         assertEquals("1a:aa.",f1a.invoke(t1a));
-        try {
-            f1a.invoke(t1);// can't call invoke using super class
-            fail("Should have generated error");
-        } catch (JMeterError e){
-
-        }
+        assertThrows(JMeterError.class, () -> f1a.invoke(t1));
         // OK (currently) to invoke using sub-class
         assertEquals("1a:aa.",f1.invoke(t1a));
     }
 
     @Test
-    public void testNameTypes() throws Exception{
+    void testNameTypes() throws Exception{
         Functor f = new Functor("getString",new Class[]{String.class});
         Functor f2 = new Functor("getString");// Args will be provided later
         Test1 t1 = new Test1("t1");
         assertEquals("x1",f.invoke(t1,new String[]{"x1"}));
-        try {
-            assertEquals("x1",f.invoke(t1));
-            fail("Should have generated an Exception");
-        } catch (JMeterError ok){
-        }
+        assertThrows(JMeterError.class, () -> f.invoke(t1));
         assertEquals("x2",f2.invoke(t1,new String[]{"x2"}));
-        try {
-            assertEquals("x2",f2.invoke(t1));
-            fail("Should have generated an Exception");
-        } catch (JMeterError ok){
-        }
+        assertThrows(JMeterError.class, () -> f2.invoke(t1));
     }
 
     @Test
-    public void testObjectName() throws Exception{
+    void testObjectName() throws Exception{
         Test1 t1 = new Test1("t1");
         Test2 t2 = new Test2("t2");
         Functor f1 = new Functor(t1,"getName");
@@ -149,7 +131,7 @@ public class TestFunctor extends JMeterTestCase {
 
     // Check how Class definition behaves
     @Test
-    public void testClass() throws Exception{
+    void testClass() throws Exception{
         Test1 t1 = new Test1("t1");
         Test1 t1a = new Test1a("t1a");
         Test2 t2 = new Test2("t2");
@@ -157,20 +139,10 @@ public class TestFunctor extends JMeterTestCase {
         assertEquals("t1",f1.invoke(t1));
         assertEquals("1a:t1a.",f1.invoke(t1a));
         assertEquals("t2",f1.invoke(t2));
-        try {
-            f1.invoke();
-            fail("Should have failed");
-        } catch (IllegalStateException ok){
-
-        }
+        assertThrows(IllegalStateException.class, () -> f1.invoke());
         Functor f2 = new Functor(HasString.class,"getString");
         assertEquals("xyz",f2.invoke(t2,new String[]{"xyz"}));
-        try {
-            f2.invoke(t1,new String[]{"xyz"});
-            fail("Should have failed");
-        } catch (JMeterError ok){
-
-        }
+        assertThrows(JMeterError.class, () -> f2.invoke(t1,new String[]{"xyz"}));
         Functor f3 = new Functor(t2,"getString");
         assertEquals("xyz",f3.invoke(t2,new Object[]{"xyz"}));
 
@@ -184,47 +156,21 @@ public class TestFunctor extends JMeterTestCase {
     }
 
     @Test
-    public void testBadParameters() throws Exception{
-        try {
-            new Functor(null);
-            fail("should have generated IllegalArgumentException;");
-        } catch (IllegalArgumentException ok){}
-        try {
-            new Functor(null,new Class[]{});
-            fail("should have generated IllegalArgumentException;");
-        } catch (IllegalArgumentException ok){}
-        try {
-            new Functor(null,new Object[]{});
-            fail("should have generated IllegalArgumentException;");
-        } catch (IllegalArgumentException ok){}
-        try {
-            new Functor(String.class,null);
-            fail("should have generated IllegalArgumentException;");
-        } catch (IllegalArgumentException ok){}
-        try {
-            new Functor(new Object(),null);
-            fail("should have generated IllegalArgumentException;");
-        } catch (IllegalArgumentException ok){}
-        try {
-            new Functor(new Object(),null, new Class[]{});
-            fail("should have generated IllegalArgumentException;");
-        } catch (IllegalArgumentException ok){}
-        try {
-            new Functor(new Object(),null, new Object[]{});
-            fail("should have generated IllegalArgumentException;");
-        } catch (IllegalArgumentException ok){}
+    void testBadParameters() throws Exception{
+        assertThrows(IllegalArgumentException.class, () -> new Functor(null));
+        assertThrows(IllegalArgumentException.class, () -> new Functor(null, new Class[] {}));
+        assertThrows(IllegalArgumentException.class, () -> new Functor(null, new Object[] {}));
+        assertThrows(IllegalArgumentException.class, () -> new Functor(String.class, null));
+        final Object someInvokee = new Object();
+        assertThrows(IllegalArgumentException.class, () -> new Functor(someInvokee, null));
+        assertThrows(IllegalArgumentException.class, () -> new Functor(someInvokee, null, new Class[] {}));
+        assertThrows(IllegalArgumentException.class, () -> new Functor(someInvokee, null, new Object[] {}));
     }
 
     @Test
-    public void testIllegalState() throws Exception{
+    void testIllegalState() throws Exception{
         Functor f = new Functor("method");
-        try {
-            f.invoke();
-            fail("should have generated IllegalStateException;");
-        } catch (IllegalStateException ok){}
-        try {
-            f.invoke(new Object[]{});
-            fail("should have generated IllegalStateException;");
-        } catch (IllegalStateException ok){}
+        assertThrows(IllegalStateException.class, ()-> f.invoke());
+        assertThrows(IllegalStateException.class, () -> f.invoke(new Object[]{}));
     }
 }
