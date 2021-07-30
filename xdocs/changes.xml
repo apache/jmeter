@@ -168,6 +168,9 @@ Summary
   <li>Updated SvgSalamander to 1.1.2.4 (from 1.1.2.1).</li>
   <li>Updated Apache Tika to 1.27 (from 1.26).</li>
   <li>Updated WireMock-JRE8 to 2.30.0 (from 2.24.1).</li>
+  <li><pr>671</pr>Move example definition of property <code>jmeter.reportgenerator.statistic_window</code>
+     to <code>user.properties</code>, as it is read from that place.
+     Contributed by Rithvik Patibandla (rithvikp98 at gmail.com)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -251,6 +254,7 @@ Summary
   <li>BugKing (wangzhen at fit2cloud.com)</li>
   <li>Till Neunast (github.com/tilln)</li>
   <li>Baptiste Gaillard (baptiste.gaillard at gmail.com)</li>
+  <li>Rithvik Patibandla (rithvikp98 at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
