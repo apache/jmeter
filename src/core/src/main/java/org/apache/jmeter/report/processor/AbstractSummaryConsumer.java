@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.report.processor;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
@@ -88,7 +88,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
     public static final String RESULT_VALUE_SUPPORTS_CONTROLLERS_DISCRIMINATION = "supportsControllersDiscrimination";
     public static final String RESULT_VALUE_TITLES = "titles";
 
-    private final Map<String, SummaryInfo> infos = new HashMap<>();
+    private final Map<String, SummaryInfo> infos = new LinkedHashMap<>();
     private final SummaryInfo overallInfo = new SummaryInfo(false);
     private final boolean supportsControllersDiscrimination;
 
