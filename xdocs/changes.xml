@@ -161,6 +161,7 @@ Summary
   <li>Updated Apache log4j2 to 2.14.1 (from 2.13.3).</li>
   <li>Updated Miglayout to 5.3 (from 5.2).</li>
   <li>Updated Neo4j Java driver to 4.3.3 (from 4.2.0).</li>
+  <li>Updated Objenesis to 3.2 (from 2.6).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
