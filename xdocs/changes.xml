@@ -143,6 +143,7 @@ Summary
   <li>Updated Apache ActiveMQ to 15.6.2 (from 15.6.0).</li>
   <li>Updated Asm to 9.2 (from 9.1).</li>
   <li>Updated Bouncycastle to 1.69 (from 1.67).</li>
+  <li>Updated Caffeine to 2.9.2 (from 2.8.8).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

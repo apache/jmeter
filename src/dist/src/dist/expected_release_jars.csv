@@ -4,8 +4,8 @@
 122004,asm-9.2.jar
 113369,bsf-2.4.0.jar
 389033,bsh-2.0b6.jar
-921827,caffeine-2.8.8.jar
-230905,checker-qual-3.8.0.jar
+925272,caffeine-2.9.2.jar
+207036,checker-qual-3.10.0.jar
 353793,commons-codec-1.15.jar
 588337,commons-collections-3.2.2.jar
 751914,commons-collections4-4.4.jar
@@ -30,7 +30,7 @@
 217794,darklaf-windows-2.7.2.jar
 98115,dec-0.1.2.jar
 320748,dnsjava-2.1.9.jar
-13854,error_prone_annotations-2.4.0.jar
+13854,error_prone_annotations-2.5.1.jar
 1702975,freemarker-2.3.30.jar
 32359,geronimo-jms_1.1_spec-1.1.1.jar
 7987432,groovy-3.0.8.jar
