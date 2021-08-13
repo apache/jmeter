@@ -7,6 +7,7 @@
   <trusted-keys>
     <trusted-key id='1c8d5ef0df2b70d4' group='cglib' />
     <trusted-key id='379ce192d401ab61' group='com.diffplug.durian' />
+    <trusted-key id='8d7f1bec1e2ecae7' group='com.fasterxml.jackson.core' />
     <trusted-key id='c9fbaa83a8753994' group='com.fasterxml.jackson.core' />
     <trusted-key id='4c00043bec5cb7cb' group='com.fifesoft' />
     <trusted-key id='af10873874630863' group='com.flipkart.zjsonpatch' />
@@ -21,6 +22,7 @@
     <trusted-key id='1756b920eecf0e90' group='com.github.spotbugs' />
     <trusted-key id='a5def5a76f94a471' group='com.github.spotbugs' />
     <trusted-key id='78fcd238c26ea995' group='com.github.tomakehurst' />
+    <trusted-key id='b9729775c0352d3a' group='com.github.tomakehurst' />
     <trusted-key id='105cb91cac2aee0e' group='com.github.vlsi.gradle' />
     <trusted-key id='254e9c64c264c176' group='com.github.weisj' />
     <trusted-key id='5e1f79a7c298661e' group='com.google.auto' />
@@ -63,6 +65,7 @@
     <trusted-key id='a41f13c999945293' group='commons-collections' />
     <trusted-key id='1861c322c56014b2' group='commons-collections4' />
     <trusted-key id='a41f13c999945293' group='commons-collections4' />
+    <trusted-key id='3faad2cd5ecbb314' group='commons-fileupload' />
     <trusted-key id='86fdc7e2a11262cb' group='commons-io' />
     <trusted-key id='9daadc1c9fcc82d0' group='commons-io' />
     <trusted-key id='1241bc872c5e4ec0' group='commons-lang' />
@@ -86,6 +89,7 @@
     <trusted-key id='efe8086f9e93774e' group='junit' />
     <trusted-key id='15c71c0a4e0b8edd' group='net.java.dev.jna' />
     <trusted-key id='75bf031b7c94e183' group='net.java.dev.jna' />
+    <trusted-key id='c51e10bd96d06071' group='net.javacrumbs.json-unit' />
     <trusted-key id='1d0690e353be126d' group='net.minidev' />
     <trusted-key id='f6bc09712c8df6ec' group='net.minidev' />
     <trusted-key id='0da8a5ec02d11ead' group='net.sf.jopt-simple' />
@@ -131,10 +135,12 @@
     <trusted-key id='6525fd70cc303655' group='org.codehaus.mojo' />
     <trusted-key id='873a8e86b4372146' group='org.codehaus.mojo' />
     <trusted-key id='466caed6e0747d50' group='org.codehaus.plexus' />
+    <trusted-key id='3f00db67ae236e2e' group='org.conscrypt' />
     <trusted-key id='79e193516be7998f' group='org.dom4j' />
     <trusted-key id='0e91c2de43b72bb1' group='org.ec4j.core' />
     <trusted-key id='c7bf26d0bb617866' group='org.eclipse.aether' />
     <trusted-key id='2d0e1fb8fe4b68b4' group='org.eclipse.jetty' />
+    <trusted-key id='2d0e1fb8fe4b68b4' group='org.eclipse.jetty.http2' />
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
     <trusted-key id='694db6f419c8d1fd' group='org.exparity' />
     <trusted-key id='8759d8f56d022006' group='org.exparity' />

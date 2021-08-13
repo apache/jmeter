@@ -167,6 +167,7 @@ Summary
   <li>Updated SLF4J to 1.7.32 (from 1.7.30).</li>
   <li>Updated SvgSalamander to 1.1.2.4 (from 1.1.2.1).</li>
   <li>Updated Apache Tika to 1.27 (from 1.26).</li>
+  <li>Updated WireMock-JRE8 to 2.30.0 (from 2.24.1).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
