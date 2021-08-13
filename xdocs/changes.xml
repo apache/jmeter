@@ -142,6 +142,7 @@ Summary
   <li>Updated Darklaf to 2.7.2 (from 2.5.4).</li>
   <li>Updated Apache ActiveMQ to 15.6.2 (from 15.6.0).</li>
   <li>Updated Asm to 9.2 (from 9.1).</li>
+  <li>Updated Bouncycastle to 1.69 (from 1.67).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
