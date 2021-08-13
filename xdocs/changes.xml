@@ -152,6 +152,8 @@ Summary
   <li>Updated equalsverifier to 3.7 (from 3.4.2).</li>
   <li>Updated Apache Freemarker to 2.3.31 (from 2.3.30).</li>
   <li>Updated hsqldb to 2.5.2 (from 2.5.0).</li>
+  <li>Updated hsqldb to 2.6.0 (from 2.5.0).</li>
+  <li>Updated Apache HttpClient to 4.5.13 (from 4.5.12).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
