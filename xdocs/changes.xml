@@ -157,6 +157,7 @@ Summary
   <li>Updated Apache HttpCore to 4.4.14 (from 4.4.13).</li>
   <li>Updated json-path to 2.6.0 (from 2.4.0).</li>
   <li>Updated jsoup to 1.14.1 (from 1.13.1).</li>
+  <li>Updated JUnit to 4.13.2 and 5.7.2 (from 4.13.1 and 5.7.0).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
