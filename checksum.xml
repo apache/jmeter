@@ -40,6 +40,7 @@
     <trusted-key id='476634a4694e716a' group='com.googlecode.java-diff-utils' />
     <trusted-key id='72475fd306b9cab7' group='com.googlecode.javaewah' />
     <trusted-key id='e57428da9e879e7d' group='com.helger' />
+    <trusted-key id='e57428da9e879e7d' group='com.helger.commons' />
     <trusted-key id='3684155e9365c30e' group='com.jayway.jsonpath' />
     <trusted-key id='a50569c7ca7fa1f0' group='com.jcraft' />
     <trusted-key id='0a36eef644cff773' group='com.metsci.ext.com.kitfox.svg' />

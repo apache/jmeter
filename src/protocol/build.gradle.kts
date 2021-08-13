@@ -72,7 +72,7 @@ project("http") {
         implementation("oro:oro")
         implementation("org.apache.commons:commons-collections4")
         implementation("commons-net:commons-net")
-        implementation("com.helger:ph-commons") {
+        implementation("com.helger.commons:ph-commons") {
             // We don't really need to use/distribute jsr305
             exclude("com.google.code.findbugs", "jsr305")
         }
