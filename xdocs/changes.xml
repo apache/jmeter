@@ -151,6 +151,7 @@ Summary
   <li>Updated Apache commons-pool2 to 2.11.0 (from 2.9.0).</li>
   <li>Updated equalsverifier to 3.7 (from 3.4.2).</li>
   <li>Updated Apache Freemarker to 2.3.31 (from 2.3.30).</li>
+  <li>Updated hsqldb to 2.5.2 (from 2.5.0).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
