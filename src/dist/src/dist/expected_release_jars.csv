@@ -1,4 +1,5 @@
 29489,accessors-smart-2.4.7.jar
+18538,annotations-16.0.2.jar
 2387,apiguardian-api-1.1.0.jar
 121790,asm-9.1.jar
 113369,bsf-2.4.0.jar
@@ -18,15 +19,15 @@
 307003,commons-net-3.7.2.jar
 134858,commons-pool2-2.9.0.jar
 216211,commons-text-1.9.jar
-1556912,darklaf-core-2.5.4.jar
+1547038,darklaf-core-2.7.2.jar
 20650,darklaf-extensions-rsyntaxarea-0.3.4.jar
-33687,darklaf-macos-2.5.4.jar
-6204,darklaf-native-utils-2.5.4.jar
-3243,darklaf-platform-base-2.5.4.jar
-74932,darklaf-property-loader-2.5.4.jar
-87738,darklaf-theme-2.5.4.jar
-46878,darklaf-utils-2.5.4.jar
-336136,darklaf-windows-2.5.4.jar
+93789,darklaf-macos-2.7.2.jar
+8491,darklaf-native-utils-2.7.2.jar
+4049,darklaf-platform-base-2.7.2.jar
+98113,darklaf-property-loader-2.7.2.jar
+89455,darklaf-theme-2.7.2.jar
+69123,darklaf-utils-2.7.2.jar
+217794,darklaf-windows-2.7.2.jar
 98115,dec-0.1.2.jar
 320748,dnsjava-2.1.9.jar
 13854,error_prone_annotations-2.4.0.jar
@@ -57,7 +58,6 @@
 16537,jcl-over-slf4j-1.7.30.jar
 490565,jmespath-core-0.5.0.jar
 7041,jmespath-jackson-0.5.0.jar
-1506993,jna-5.5.0.jar
 403497,jodd-core-5.0.13.jar
 220475,jodd-lagarto-5.0.13.jar
 19858,jodd-log-5.0.13.jar
@@ -67,7 +67,6 @@
 393851,jsoup-1.13.1.jar
 249924,jtidy-r938.jar
 382708,junit-4.13.1.jar
-48483,jxlayer-3.0.4.jar
 201685,log4j-1.2-api-2.13.3.jar
 292301,log4j-api-2.13.3.jar
 1714164,log4j-core-2.13.3.jar
@@ -87,7 +86,9 @@
 5506669,Saxon-HE-9.9.1-8.jar
 276420,serializer-2.7.2.jar
 41472,slf4j-api-1.7.30.jar
-301161,svgSalamander-1.1.2.3.jar
+301279,svgSalamander-1.1.2.4.jar
+10192,swing-extensions-laf-support-0.1.3.jar
+2539,swing-extensions-visual-padding-0.1.3.jar
 730245,tika-core-1.26.jar
 1378216,tika-parsers-1.26.jar
 3154938,xalan-2.7.2.jar

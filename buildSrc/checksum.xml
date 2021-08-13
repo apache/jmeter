@@ -34,6 +34,7 @@
     <trusted-key id='5b05ccde140c2876' group='org.eclipse.jgit' />
     <trusted-key id='a6adfc93ef34893e' group='org.hamcrest' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
+    <trusted-key id='379ce192d401ab61' group='org.jetbrains' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.intellij.deps' />
     <trusted-key id='6a0975f8b1127b83' group='org.jetbrains.kotlin' />
     <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />

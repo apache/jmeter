@@ -143,6 +143,7 @@
     <trusted-key id='313cba932516c4d3' group='org.hsqldb' />
     <trusted-key id='cb43338e060cf9fa' group='org.jacoco' />
     <trusted-key id='8799af90c06efbbd' group='org.jdom' />
+    <trusted-key id='379ce192d401ab61' group='org.jetbrains' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.intellij.deps' />
     <trusted-key id='6a0975f8b1127b83' group='org.jetbrains.kotlin' />
