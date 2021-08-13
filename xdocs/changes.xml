@@ -156,6 +156,7 @@ Summary
   <li>Updated Apache HttpClient to 4.5.13 (from 4.5.12).</li>
   <li>Updated Apache HttpCore to 4.4.14 (from 4.4.13).</li>
   <li>Updated json-path to 2.6.0 (from 2.4.0).</li>
+  <li>Updated jsoup to 1.14.1 (from 1.13.1).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
