@@ -155,6 +155,7 @@ Summary
   <li>Updated hsqldb to 2.6.0 (from 2.5.0).</li>
   <li>Updated Apache HttpClient to 4.5.13 (from 4.5.12).</li>
   <li>Updated Apache HttpCore to 4.4.14 (from 4.4.13).</li>
+  <li>Updated json-path to 2.6.0 (from 2.4.0).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
