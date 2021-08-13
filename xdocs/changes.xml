@@ -141,6 +141,7 @@ Summary
   <li>Updated Groovy to 3.0.8 (from 3.0.7).</li>
   <li>Updated Darklaf to 2.7.2 (from 2.5.4).</li>
   <li>Updated Apache ActiveMQ to 15.6.2 (from 15.6.0).</li>
+  <li>Updated Asm to 9.2 (from 9.1).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
