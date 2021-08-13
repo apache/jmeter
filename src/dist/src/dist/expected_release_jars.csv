@@ -72,8 +72,8 @@
 1745700,log4j-core-2.14.1.jar
 23625,log4j-slf4j-impl-2.14.1.jar
 519087,mail-1.5.0-b01.jar
-106939,miglayout-core-5.2.jar
-22390,miglayout-swing-5.2.jar
+106949,miglayout-core-5.3.jar
+22576,miglayout-swing-5.3.jar
 419054,mongo-java-driver-2.11.3.jar
 29631,mxparser-1.2.1.jar
 4580832,neo4j-java-driver-4.2.0.jar

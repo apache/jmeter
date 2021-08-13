@@ -159,6 +159,7 @@ Summary
   <li>Updated jsoup to 1.14.1 (from 1.13.1).</li>
   <li>Updated JUnit to 4.13.2 and 5.7.2 (from 4.13.1 and 5.7.0).</li>
   <li>Updated Apache log4j2 to 2.14.1 (from 2.13.3).</li>
+  <li>Updated Miglayout to 5.3 (from 5.2).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
