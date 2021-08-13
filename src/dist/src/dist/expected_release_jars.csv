@@ -67,10 +67,10 @@
 415074,jsoup-1.14.1.jar
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar
-201685,log4j-1.2-api-2.13.3.jar
-292301,log4j-api-2.13.3.jar
-1714164,log4j-core-2.13.3.jar
-23590,log4j-slf4j-impl-2.13.3.jar
+206756,log4j-1.2-api-2.14.1.jar
+300365,log4j-api-2.14.1.jar
+1745700,log4j-core-2.14.1.jar
+23625,log4j-slf4j-impl-2.14.1.jar
 519087,mail-1.5.0-b01.jar
 106939,miglayout-core-5.2.jar
 22390,miglayout-swing-5.2.jar
