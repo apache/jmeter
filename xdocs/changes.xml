@@ -145,6 +145,7 @@ Summary
   <li>Updated Bouncycastle to 1.69 (from 1.67).</li>
   <li>Updated Caffeine to 2.9.2 (from 2.8.8).</li>
   <li>Updated Apache commons-dbcp2 to 2.9.0 (from 2.8.0).</li>
+  <li>Updated Apache commons-io to 2.11.0 (from 2.8.0).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
