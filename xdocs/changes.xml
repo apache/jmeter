@@ -154,6 +154,7 @@ Summary
   <li>Updated hsqldb to 2.5.2 (from 2.5.0).</li>
   <li>Updated hsqldb to 2.6.0 (from 2.5.0).</li>
   <li>Updated Apache HttpClient to 4.5.13 (from 4.5.12).</li>
+  <li>Updated Apache HttpCore to 4.4.14 (from 4.4.13).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
