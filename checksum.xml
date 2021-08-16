@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <dependency-verification version='1'>
   <trust-requirement pgp='GROUP' checksum='NONE' />
-  <ignored-keys />
+  <ignored-keys>
+    <ignored-key id='1d0690e353be126d' />
+  </ignored-keys>
   <trusted-keys>
     <trusted-key id='1c8d5ef0df2b70d4' group='cglib' />
     <trusted-key id='379ce192d401ab61' group='com.diffplug.durian' />
@@ -212,6 +214,12 @@
     </dependency>
     <dependency group='net.ltgt.gradle' module='gradle-errorprone-plugin' version='1.2.1'>
       <sha512>DC1FA477AE67F94B7CA427F1F88FD3C56E562EB3ED92A3CBC4CC116258EB3856F4B53C99506FDC279F6983EAE74BA21271E4A152F5DB8B41392FFCBB6B087C78</sha512>
+    </dependency>
+    <dependency group='net.minidev' module='accessors-smart' version='2.4.7'>
+      <sha512>6DAAF2FE1B278599D6D0BBD3F157096F8BCCF3D25616099C128139CE164B29461860EB2786F3D3728937A0D0505DF73F1C9673B0766F946C50878E5F60305736</sha512>
+    </dependency>
+    <dependency group='net.minidev' module='json-smart' version='2.4.7'>
+      <sha512>3E9E1EE9A44EA15044B588B06A956AC150A37B63C161BF9B08A60539F5C90EFC7718DEB24FD084F503B68092516AAC3349DBB74049777EA4C6619AC26090A1D</sha512>
     </dependency>
     <dependency group='net.sf.ezmorph' module='ezmorph' version='1.0.6'>
       <sha512>16D30BE564723B74F312B4E7D06F349370FB6726B3162778C869CD723ECA2A40C4972C2757B3E107E1820CEC0D70B0BD2B96EFCD466518FC64495F7AEF97967A</sha512>
