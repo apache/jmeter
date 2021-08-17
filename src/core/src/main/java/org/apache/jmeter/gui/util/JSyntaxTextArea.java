@@ -27,6 +27,7 @@ import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.text.BadLocationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.action.LookAndFeelCommand;
@@ -290,7 +291,13 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The initial text to be set
      */
     public void setInitialText(String string) {
-        setText(StringUtils.defaultString(string, ""));
+        try {
+            setText(StringUtils.defaultString(string, ""));
+        } catch (Exception e) {
+            if (e instanceof BadLocationException) {
+                log.error("Dubious problem while setting text to {}", string, e);
+            }
+        }
         discardAllEdits();
     }
 
