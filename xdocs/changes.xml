@@ -109,6 +109,7 @@ Summary
 <ul>
     <li><pr>638</pr>Bolt Connection Configuration: added <code>ConnectionPoolMaxSize</code> parameter. Contributed by
         David Pecollet (david.pecollet at gmail.com)</li>
+    <li><bug>65515</bug>Allow pooling of Prepared Statements in JDBC</li>
 </ul>
 
 <h3>Functions</h3>
