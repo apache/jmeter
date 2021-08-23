@@ -112,6 +112,7 @@
     <trusted-key id='9daadc1c9fcc82d0' group='org.apache.commons' />
     <trusted-key id='a2115ae15f6b8b72' group='org.apache.commons' />
     <trusted-key id='f513c419e4b9d0ac' group='org.apache.commons' />
+    <trusted-key id='4e066e0459cd109b' group='org.apache.commons' />
     <trusted-key id='31474e5e7c6b7034' group='org.apache.ftpserver' />
     <trusted-key id='cbaebe39a46c4ca1' group='org.apache.geronimo.specs' />
     <trusted-key id='ecdfea3cb4493b94' group='org.apache.geronimo.specs' />

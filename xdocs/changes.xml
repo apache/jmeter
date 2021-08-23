@@ -171,6 +171,7 @@ Summary
   <li><pr>671</pr>Move example definition of property <code>jmeter.reportgenerator.statistic_window</code>
      to <code>user.properties</code>, as it is read from that place.
      Contributed by Rithvik Patibandla (rithvikp98 at gmail.com)</li>
+  <li><bug>65456</bug>Updated commons-jexl 3 to 3.2.1 (from 3.1). Contributed by Ori Marko (orimarko at gmail.com>)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
