@@ -575,7 +575,7 @@ allprojects {
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP
                 if (enableSpotBugs) {
-                    description = "$description (skipped by default, to enable it add -Dspotbugs)"
+                    description = "$description (skipped by default, to enable it add -Pspotbugs)"
                 }
                 reports {
                     // xml goes for SonarQube, so we always create it just in case
