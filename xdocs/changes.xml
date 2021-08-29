@@ -238,6 +238,7 @@ Summary
   <li><bug>65270</bug>POST application/x-www-form-urlencoded cURL code generated from Postman is not imported correctly</li>
   <li>Silence warnings of missing font Arial on startup under linux</li>
   <li><bug>65300</bug>IllegalAccessError when opening file dialog with Java 16</li>
+  <li><bug>65336</bug>Blank labels when different elements had the same name</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
