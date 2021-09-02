@@ -25,6 +25,8 @@ import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import net.miginfocom.swing.MigLayout;
+
 public class VerticalPanel extends JPanel {
     private static final long serialVersionUID = 240L;
 
@@ -45,8 +47,8 @@ public class VerticalPanel extends JPanel {
     }
 
     public VerticalPanel(int vgap, float horizontalAlign) {
-        super(new BorderLayout());
-        add(subPanel, BorderLayout.NORTH);
+        super(new MigLayout("fillx, wrap 1, insets 0", "[95%!,fill,grow]"));
+        add(subPanel, "north");
         this.vgap = vgap;
         this.horizontalAlign = horizontalAlign;
     }
