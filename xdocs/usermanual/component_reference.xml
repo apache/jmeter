@@ -6563,6 +6563,12 @@ Behaviour can be modified with some properties by setting in <code>user.properti
             <note>If not selected, a new connection will be opened between iterations which will result in increased response times and consume more resources (memory and cpu).</note>
         </property>
         <property name="Loop Count" required="Yes, unless Infinite is selected">Number of times to perform the test case.  Alternatively, "<code>infinite</code>" can be selected causing the test to run until manually stopped or end of the thread lifetime is reached.</property>
+        <property name="Same user on each iteration" required="Yes">
+            If selected, cookie and cache data from the first sampler response are used in subsequent requests (requires a global Cookie and Cache Manager respectively).
+            <br></br>
+            If not selected, cookie and cache data from the first sampler response are not used in subsequent requests.
+            <note>If not selected, a new connection will be opened between iterations which will result in increased response times and consume more resources (memory and cpu).</note>
+        </property>
         <property name="Delay Thread creation until needed" required="Yes">
         If selected, threads are created only when the appropriate proportion of the ramp-up time has elapsed.
         This is most appropriate for tests with a ramp-up time that is significantly longer than the time to execute a single thread.
