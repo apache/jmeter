@@ -242,7 +242,6 @@ Summary
   <li><bug>65300</bug>IllegalAccessError when opening file dialog with Java 16</li>
   <li><bug>65336</bug>Blank labels when different elements had the same name</li>
   <li><bug>65522</bug>Restart doesn't work, when parameters contain spaces</li>
-  <li><bug>65545</bug>SplitPanel shows a scrollbar instead of shrinking the right panel in the main view</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

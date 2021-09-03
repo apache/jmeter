@@ -17,14 +17,13 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-
-import net.miginfocom.swing.MigLayout;
 
 public class VerticalPanel extends JPanel {
     private static final long serialVersionUID = 240L;
@@ -46,8 +45,8 @@ public class VerticalPanel extends JPanel {
     }
 
     public VerticalPanel(int vgap, float horizontalAlign) {
-        super(new MigLayout("fillx, wrap 1, insets 0", "[95%!,fill,grow]"));
-        add(subPanel, "north");
+        super(new BorderLayout());
+        add(subPanel, BorderLayout.NORTH);
         this.vgap = vgap;
         this.horizontalAlign = horizontalAlign;
     }
