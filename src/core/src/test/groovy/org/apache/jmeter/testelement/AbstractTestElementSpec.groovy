@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.testelement
 
+import org.apache.commons.lang3.NotImplementedException
 import org.apache.jmeter.junit.spock.JMeterSpec
 import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apache.jmeter.testelement.property.MultiProperty
@@ -24,7 +25,6 @@ import org.apache.jmeter.testelement.property.PropertyIterator
 import org.apache.jmeter.testelement.property.TestElementProperty
 
 import spock.lang.Unroll
-import sun.reflect.generics.reflectiveObjects.NotImplementedException
 
 @Unroll
 class AbstractTestElementSpec extends JMeterSpec {
