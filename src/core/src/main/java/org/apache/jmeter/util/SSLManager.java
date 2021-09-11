@@ -191,7 +191,7 @@ public abstract class SSLManager {
                 }
                 return;
             } catch (IOException e) {
-                log.warn("Could not load keystore '" + initStore + "'. Wrong password for keystore?", e);
+                log.warn("Could not load keystore '{}'. Wrong password for keystore?", initStore, e);
             }
             this.defaultpw = null;
         }
