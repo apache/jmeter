@@ -26,6 +26,8 @@ import java.util.Locale;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class TestJSONPathAssertion {
 
@@ -39,9 +41,10 @@ class TestJSONPathAssertion {
 
     @Test
     void testSetJsonPath() {
-        String jsonPath = "";
+        String jsonPath = "$.someVar";
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath(jsonPath);
+        assertEquals(jsonPath, instance.getJsonPath());
     }
 
     @Test
@@ -54,15 +57,17 @@ class TestJSONPathAssertion {
 
     @Test
     void testSetExpectedValue() {
-        String expectedValue = "";
+        String expectedValue = "some value";
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setExpectedValue(expectedValue);
+        assertEquals(expectedValue, instance.getExpectedValue());
     }
 
     @Test
     void testSetJsonValidationBool() {
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonValidationBool(false);
+        assertFalse(instance.isJsonValidationBool());
     }
 
     @Test
@@ -72,15 +77,21 @@ class TestJSONPathAssertion {
         assertFalse(result);
     }
 
-    @Test
-    void testGetResult_positive() {
+    @ParameterizedTest
+    @CsvSource(value={
+        "{\"myval\": 123}; $.myval; 123",
+        "{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}; $.myval[*].test; 2",
+        "{\"myval\": []}; $.myval; []",
+        "{\"myval\": {\"key\": \"val\"}}; $.myval; {\"key\":\"val\"}"
+    }, delimiterString=";")
+    void testGetResult_pathsWithOneResult(String data, String jsonPath, String expectedResult) {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123}".getBytes());
+        samplerResult.setResponseData(data.getBytes());
 
         JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.myval");
+        instance.setJsonPath(jsonPath);
         instance.setJsonValidationBool(true);
-        instance.setExpectedValue("123");
+        instance.setExpectedValue(expectedResult);
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
@@ -243,21 +254,6 @@ class TestJSONPathAssertion {
     }
 
     @Test
-    void testGetResult_list_val() {
-        SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}".getBytes());
-
-        JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.myval[*].test");
-        instance.setJsonValidationBool(true);
-        instance.setExpectedValue("2");
-        AssertionResult expResult = new AssertionResult("");
-        AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(expResult.getName(), result.getName());
-        assertFalse(result.isFailure());
-    }
-
-    @Test
     void testGetResult_list_negative() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}".getBytes());
@@ -280,36 +276,6 @@ class TestJSONPathAssertion {
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval[*]");
         instance.setJsonValidationBool(false);
-        AssertionResult expResult = new AssertionResult("");
-        AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(expResult.getName(), result.getName());
-        assertFalse(result.isFailure());
-    }
-
-    @Test
-    void testGetResult_list_empty_validate() {
-        SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": []}".getBytes());
-
-        JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.myval");
-        instance.setJsonValidationBool(true);
-        instance.setExpectedValue("[]");
-        AssertionResult expResult = new AssertionResult("");
-        AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(expResult.getName(), result.getName());
-        assertFalse(result.isFailure());
-    }
-
-    @Test
-    void testGetResult_dict() {
-        SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": {\"key\": \"val\"}}".getBytes());
-
-        JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.myval");
-        instance.setJsonValidationBool(true);
-        instance.setExpectedValue("{\"key\":\"val\"}");
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
