@@ -174,7 +174,7 @@ Summary
      to <code>user.properties</code>, as it is read from that place.
      Contributed by Rithvik Patibandla (rithvikp98 at gmail.com)</li>
   <li><bug>65456</bug>Updated commons-jexl 3 to 3.2.1 (from 3.1). Contributed by Ori Marko (orimarko at gmail.com>)</li>
-  <li><pr>654<pr>Try do give better feedback while loading keystores</li>
+  <li><pr>654</pr>Try do give better feedback while loading keystores</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
