@@ -17,41 +17,30 @@
 
 package org.apache.jorphan.gui;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class MinMaxLongRendererTest {
 
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-            {Long.MAX_VALUE, "#N/A" },
-            {Long.MIN_VALUE, "#N/A" },
-            {0L, "0" },
-            { null, "#N/A" },
-            { "invalid", "#N/A" },
-            });
+    private static Stream<Arguments> data() {
+        return Stream.of(
+            Arguments.of(Long.MAX_VALUE, "#N/A"),
+            Arguments.of(Long.MIN_VALUE, "#N/A"),
+            Arguments.of(0L, "0"),
+            Arguments.of(null, "#N/A"),
+            Arguments.of("invalid", "#N/A")
+            );
     }
 
-    private final Object value;
-    private final String expected;
-
-    public MinMaxLongRendererTest(Object value, String expected) {
-        this.value = value;
-        this.expected = expected;
-    }
-
-    @Test
-    public void testRendering() {
+    @ParameterizedTest
+    @MethodSource("data")
+    void testRendering(Object value, String expected) {
         final AtomicBoolean afterInit = new AtomicBoolean(false);
         MinMaxLongRenderer renderer = new MinMaxLongRenderer("#0") {
             private static final long serialVersionUID = 2L;

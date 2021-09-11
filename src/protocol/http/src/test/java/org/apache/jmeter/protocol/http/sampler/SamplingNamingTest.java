@@ -19,38 +19,32 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.stream.Stream;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTest {
     private static final String JMETER_HOME_PAGE = "https://jmeter.apache.org";
     private static final String LABEL = "JMeter-HP";
-    private String implementation;
 
-    public SamplingNamingTest(String implementation) {
-        this.implementation = implementation;
+    private static Stream<Arguments> getImplementations() {
+        return Stream.of(
+                Arguments.of(HTTPSamplerFactory.IMPL_HTTP_CLIENT4),
+                Arguments.of(HTTPSamplerFactory.IMPL_JAVA));
     }
 
-    @Parameters(name = "Run {index}: implementation:{0}")
-    public static String[] getImplementations() {
-        return new String[]{
-                HTTPSamplerFactory.IMPL_HTTP_CLIENT4,
-                HTTPSamplerFactory.IMPL_JAVA};
-    }
-
-    @Test
+    @ParameterizedTest(name="Run {index}: implementation:{0}")
     @Ignore(value = "Test produces: We should have at least one sample result, we had none too often")
-    @Parameters(name = "getImplementations")
-    public void testBug63364() {
+    @MethodSource("getImplementations")
+    void testBug63364(String implementation) {
         TestPlan plan = new TestPlan();
         SampleResult[] subResults = doSample(implementation);
         Assert.assertTrue("We should have at least one sample result, we had none", subResults.length > 0);
