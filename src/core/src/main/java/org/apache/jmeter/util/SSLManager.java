@@ -154,8 +154,16 @@ public abstract class SSLManager {
                     this.keyStore.load(null, "");
                  }
               }
-           } catch (Exception e) {
-              log.error("Problem loading keystore: {}", e.getMessage(), e);
+           } catch (IOException e) {
+               log.error("Can't load keystore '{}'. Wrong password?", fileName, e);
+           } catch (UnrecoverableKeyException e) {
+               log.error("Can't recover keys from keystore '{}'", fileName, e);
+           } catch (NoSuchAlgorithmException e) {
+               log.error("Problem finding the correct algorithm while loading keys from keystore '{}'", fileName, e);
+           } catch (CertificateException e) {
+               log.error("Problem with one of the certificates/keys in keystore '{}'", fileName, e);
+           } catch (KeyStoreException e) {
+               log.error("Problem loading keystore: {}", e.getMessage(), e);
            }
 
            if (log.isDebugEnabled()) {
@@ -167,7 +175,7 @@ public abstract class SSLManager {
     }
 
     private void retryLoadKeys(File initStore, boolean allowEmptyPassword) throws NoSuchAlgorithmException,
-            CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
+            CertificateException, KeyStoreException, UnrecoverableKeyException {
         for (int i = 0; i < 3; i++) {
             String password = getPassword();
             if (!allowEmptyPassword) {
@@ -183,7 +191,7 @@ public abstract class SSLManager {
                 }
                 return;
             } catch (IOException e) {
-                log.debug("Could not load keystore. Wrong password for keystore?", e);
+                log.warn("Could not load keystore '" + initStore + "'. Wrong password for keystore?", e);
             }
             this.defaultpw = null;
         }
