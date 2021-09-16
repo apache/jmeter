@@ -33,7 +33,7 @@ import org.apache.jorphan.collections.HashTree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TestJMeterThread {
+class TestJMeterThread {
 
     private static final class DummySampler extends AbstractSampler {
         private static final long serialVersionUID = 1L;
@@ -114,7 +114,7 @@ public class TestJMeterThread {
     }
 
     @Test
-    public void testBug61661OnError() {
+    void testBug61661OnError() {
         HashTree hashTree = new HashTree();
         hashTree.add("Test", new ThrowingThreadListener(true));
         JMeterThread.ThreadListenerTraverser traverser =
@@ -125,7 +125,7 @@ public class TestJMeterThread {
     }
 
     @Test
-    public void testBug61661OnException() {
+    void testBug61661OnException() {
         HashTree hashTree = new HashTree();
         hashTree.add("Test", new ThrowingThreadListener(false));
         JMeterThread.ThreadListenerTraverser traverser =
@@ -134,7 +134,7 @@ public class TestJMeterThread {
     }
 
     @Test
-    public void testBug63490EndTestWhenDelayIsTooLongForScheduler() {
+    void testBug63490EndTestWhenDelayIsTooLongForScheduler() {
         JMeterContextService.getContext().setVariables(new JMeterVariables());
 
         HashTree testTree = new HashTree();
