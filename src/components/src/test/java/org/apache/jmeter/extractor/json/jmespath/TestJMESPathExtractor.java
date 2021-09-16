@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runners.Parameterized.Parameters;
 
-public class TestJMESPathExtractor {
+class TestJMESPathExtractor {
     private static final String DEFAULT_VALUE = "NONE"; // $NON-NLS-1$
     private static final String REFERENCE_NAME = "varname"; // $NON-NLS-1$
     private static final String REFERENCE_NAME_MATCH_NUMBER = "varname_matchNr"; // $NON-NLS-1$

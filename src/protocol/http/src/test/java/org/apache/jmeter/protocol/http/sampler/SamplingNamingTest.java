@@ -31,7 +31,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTest {
+class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTest {
     private static final String JMETER_HOME_PAGE = "https://jmeter.apache.org";
     private static final String LABEL = "JMeter-HP";
 
