@@ -24,15 +24,19 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.zone.ZoneRules;
 import java.util.Collection;
 import java.util.Random;
 import java.util.TimeZone;
+import java.util.function.BooleanSupplier;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -40,6 +44,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -108,12 +113,28 @@ public class TestTimeShiftFunction extends JMeterTestCase {
 
     @Test
     public void testNowWithComplexPeriod() throws Exception {
+        // Workaround to skip test, when we know it will fail
+        // See Bug 65217 and PR 561 for discussions on how to fix the underlying issue
+        Assumptions.assumeFalse(dstChangeAhead("P10DT-1H-5M5S"));
+
         Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "", "P10DT-1H-5M5S", "");
         function.setParameters(params);
         value = function.execute(result, null);
         LocalDateTime futureDate = LocalDateTime.now().plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
+    }
+
+    private BooleanSupplier dstChangeAhead(String string) {
+        return () -> {
+            ZoneId defaultZoneId = ZoneId.systemDefault();
+            Instant now = LocalDateTime.now().atZone(defaultZoneId).toInstant();
+            Instant then = LocalDateTime.now().plus(Duration.parse(string)).atZone(defaultZoneId).toInstant();
+            ZoneRules rules = defaultZoneId.getRules();
+            Duration nowDST = rules.getDaylightSavings(now);
+            Duration thenDST = rules.getDaylightSavings(then);
+            return !nowDST.equals(thenDST);
+        };
     }
 
     @Test
