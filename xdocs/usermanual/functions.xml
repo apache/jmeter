@@ -1586,7 +1586,8 @@ returns:
         <property name="value to shift" required="No">
         Indicate the specified amount of seconds, minutes, hours or days to shift according to a textual
         representation of a duration such as <code>PnDTnHnMn.nS</code>. See
-        <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse(CharSequence)</a>
+        <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse(CharSequence)</a>.
+        If ommitted, no shifting will be done.
         <ul>
         <li><code>PT20.345S</code> parses as 20.345 seconds</li>
         <li><code>PT15M</code> parses as 15 minutes</li>
