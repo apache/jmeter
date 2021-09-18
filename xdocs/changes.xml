@@ -141,7 +141,7 @@ Summary
   <li><bug>64831</bug>Log truststore entries in debug level for logger <code>org.apache.jmeter.util.keystore.JmeterKeyStore</code></li>
   <li><bug>65232</bug>Hide splash screen when an error is displayed because the test plan could not be parsed.</li>
   <li>Updated Groovy to 3.0.9 (from 3.0.7).</li>
-  <li>Updated Darklaf to 2.7.2 (from 2.5.4).</li>
+  <li>Updated Darklaf to 2.7.3 (from 2.5.4).</li>
   <li>Updated Apache ActiveMQ to 15.6.2 (from 15.6.0).</li>
   <li>Updated Asm to 9.2 (from 9.1).</li>
   <li>Updated Bouncycastle to 1.69 (from 1.67).</li>
