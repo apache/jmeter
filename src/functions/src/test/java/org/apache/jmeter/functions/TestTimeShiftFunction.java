@@ -125,11 +125,11 @@ class TestTimeShiftFunction extends JMeterTestCase {
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
     }
 
-    private BooleanSupplier dstChangeAhead(String string) {
+    private BooleanSupplier dstChangeAhead(String duration) {
         return () -> {
             ZoneId defaultZoneId = ZoneId.systemDefault();
             Instant now = LocalDateTime.now().atZone(defaultZoneId).toInstant();
-            Instant then = LocalDateTime.now().plus(Duration.parse(string)).atZone(defaultZoneId).toInstant();
+            Instant then = LocalDateTime.now().plus(Duration.parse(duration)).atZone(defaultZoneId).toInstant();
             ZoneRules rules = defaultZoneId.getRules();
             Duration nowDST = rules.getDaylightSavings(now);
             Duration thenDST = rules.getDaylightSavings(then);
