@@ -1575,13 +1575,14 @@ returns:
     </description>
 <properties>
         <property name="Format" required="No">
-        The format to be passed to DateTimeFormatter.
+        The format to be passed to DateTimeFormatter (for input data parsing and output formating).
         See <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
-        If omitted, the function uses milliseconds since epoch format.
+        If omitted, the function returns milliseconds.
         </property>
         <property name="Date to shift" required="No">
         Indicate the date in the format set by the parameter <code>Format</code> to shift.
-        If omitted, the date is set to <em>now</em>.
+        If omitted, the date is set to <em>ZonedDateTime.now</em> with system zone <em>ZoneId.systemDefault()</em>.
+        If <code>Format</code> parameter is not set then this property (if required) must be set as number of milliseconds eg.: Format="" and "Date to shift"=10000 then if "value to shift"=PT10S then result=20000 (20sec)
         </property>
         <property name="value to shift" required="No">
         Indicate the specified amount of seconds, minutes, hours or days to shift according to a textual
