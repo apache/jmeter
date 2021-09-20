@@ -1577,12 +1577,12 @@ returns:
         <property name="Format" required="No">
         The format to be passed to DateTimeFormatter (for input data parsing and output formating).
         See <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
-        If omitted, the function returns milliseconds.
+        If omitted, the function uses milliseconds since epoch format.
         </property>
         <property name="Date to shift" required="No">
         Indicate the date in the format set by the parameter <code>Format</code> to shift.
         If omitted, the date is set to <em>ZonedDateTime.now</em> with system zone <em>ZoneId.systemDefault()</em>.
-        If <code>Format</code> parameter is not set then this property (if required) must be set as number of milliseconds eg.: Format="" and "Date to shift"=10000 then if "value to shift"=PT10S then result=20000 (20sec)
+        <note>If <code>Format</code> is empty then this parameter must be long value (look at examples).</note>
         </property>
         <property name="value to shift" required="No">
         Indicate the specified amount of seconds, minutes, hours or days to shift according to a textual
@@ -1608,6 +1608,8 @@ returns:
 <p>Examples:
 <source>${__timeShift(dd/MM/yyyy,21/01/2018,P2D,,)}</source> returns <code>23/01/2018</code>
 <source>${__timeShift(dd MMMM yyyy,21 février 2018,P2D,fr_FR,)}</source> returns <code>23 février 2018</code>
+<source>${__timeShift(,10000,PT10S,,)}</source> returns <code>20000</code> = 10sec input + 10sec shift
+<source>${__timeShift(,,PT10S,,)}</source> returns <code>1632158276770</code> = 1632158266770 ms (now) + 10sec shift
 </p>
 </component>
 <component index="&sect-num;.5.34" name="__digest">
