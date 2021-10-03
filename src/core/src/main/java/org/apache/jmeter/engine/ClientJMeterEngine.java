@@ -59,7 +59,7 @@ public class ClientJMeterEngine implements JMeterEngine {
         final String name = RemoteJMeterEngineImpl.JMETER_ENGINE_RMI_NAME; // $NON-NLS-1$ $NON-NLS-2$
         String host = hostAndPort;
         int port = RmiUtils.DEFAULT_RMI_PORT;
-		
+
         if (!isIPv6Address(host)){
             int indexOfSeparator = hostAndPort.indexOf(':');
             if (indexOfSeparator >= 0) {
@@ -68,9 +68,9 @@ public class ClientJMeterEngine implements JMeterEngine {
                 port = Integer.parseInt(portAsString);
             }
         } else {
-            // do nothing
+            System.out.println("IPv4 address detected.  No parsing is required.");
         }
-		
+
         Registry registry = LocateRegistry.getRegistry(
                host,
                port,
@@ -86,7 +86,7 @@ public class ClientJMeterEngine implements JMeterEngine {
         }
         throw new RemoteException("Could not find "+name);
     }
-	
+
     private static boolean isIPv6Address(String ip) {
         InetAddressValidator val = InetAddressValidator.getInstance();
         return val.isValidInet6Address(ip);
