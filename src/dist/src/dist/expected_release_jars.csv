@@ -6,10 +6,12 @@
 389033,bsh-2.0b6.jar
 925272,caffeine-2.9.2.jar
 207036,checker-qual-3.10.0.jar
+246918,commons-beanutils-1.9.4.jar
 353793,commons-codec-1.15.jar
 588337,commons-collections-3.2.2.jar
 751914,commons-collections4-4.4.jar
 211301,commons-dbcp2-2.9.0.jar
+196768,commons-digester-2.1.jar
 327135,commons-io-2.11.0.jar
 267634,commons-jexl-2.1.1.jar
 462124,commons-jexl3-3.2.1.jar
@@ -19,6 +21,7 @@
 307305,commons-net-3.8.0.jar
 145267,commons-pool2-2.11.0.jar
 216211,commons-text-1.9.jar
+189675,commons-validator-1.7.jar
 1547509,darklaf-core-2.7.3.jar
 20650,darklaf-extensions-rsyntaxarea-0.3.4.jar
 93477,darklaf-macos-2.7.3.jar

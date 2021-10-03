@@ -123,6 +123,7 @@ dependencies {
         apiv("org.apache.httpcomponents:httpasyncclient")
         apiv("org.apache.httpcomponents:httpclient")
         apiv("org.apache.httpcomponents:httpcore-nio")
+        apiv("commons-validator:commons-validator")
         apiv("org.apache.httpcomponents:httpcore")
         apiv("org.apache.httpcomponents:httpmime")
         apiv("org.apache.logging.log4j:log4j-1.2-api", "log4j")

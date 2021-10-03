@@ -24,6 +24,8 @@
     <trusted-key id='6b1b008864323b92' group='org.antlr' />
     <trusted-key id='9daadc1c9fcc82d0' group='org.apache.commons' />
     <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
+    <trusted-key id='caf5ec5919fea27d' group='commons-digester' />
+    <trusted-key id='7a8860944fad5f62' group='commons-validator' />  
     <trusted-key id='c7bf26d0bb617866' group='org.apache.maven' />
     <trusted-key id='e2b3d84202b812d9' group='org.assertj' />
     <trusted-key id='b341ddb020fcb6ab' group='org.bouncycastle' />

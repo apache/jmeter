@@ -66,6 +66,7 @@ dependencies {
         }
     }
 
+    implementation("commons-validator:commons-validator")
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")

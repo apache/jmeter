@@ -50,6 +50,7 @@ dependencies {
     implementation("com.jayway.jsonpath:json-path")
     implementation("org.apache.httpcomponents:httpasyncclient")
     implementation("org.apache.httpcomponents:httpcore-nio")
+    implementation("commons-validator:commons-validator")
     implementation("org.jsoup:jsoup")
     implementation("org.apache.commons:commons-lang3")
     implementation("net.sf.jtidy:jtidy")

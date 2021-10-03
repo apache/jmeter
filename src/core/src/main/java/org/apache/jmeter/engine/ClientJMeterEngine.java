@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import org.apache.commons.validator.routines.InetAddressValidator;
 import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -58,12 +59,18 @@ public class ClientJMeterEngine implements JMeterEngine {
         final String name = RemoteJMeterEngineImpl.JMETER_ENGINE_RMI_NAME; // $NON-NLS-1$ $NON-NLS-2$
         String host = hostAndPort;
         int port = RmiUtils.DEFAULT_RMI_PORT;
-        int indexOfSeparator = hostAndPort.indexOf(':');
-        if (indexOfSeparator >= 0) {
-            host = hostAndPort.substring(0, indexOfSeparator);
-            String portAsString = hostAndPort.substring(indexOfSeparator+1);
-            port = Integer.parseInt(portAsString);
+		
+        if (!isIPv6Address(host)){
+            int indexOfSeparator = hostAndPort.indexOf(':');
+            if (indexOfSeparator >= 0) {
+                host = hostAndPort.substring(0, indexOfSeparator);
+                String portAsString = hostAndPort.substring(indexOfSeparator+1);
+                port = Integer.parseInt(portAsString);
+            }
+        } else {
+            // do nothing
         }
+		
         Registry registry = LocateRegistry.getRegistry(
                host,
                port,
@@ -78,6 +85,11 @@ public class ClientJMeterEngine implements JMeterEngine {
             return rje;
         }
         throw new RemoteException("Could not find "+name);
+    }
+	
+    private static boolean isIPv6Address(String ip) {
+        InetAddressValidator val = InetAddressValidator.getInstance();
+        return val.isValidInet6Address(ip);
     }
 
     public ClientJMeterEngine(String hostAndPort) throws NotBoundException, RemoteException {
