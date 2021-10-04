@@ -67,8 +67,6 @@ public class ClientJMeterEngine implements JMeterEngine {
                 String portAsString = hostAndPort.substring(indexOfSeparator+1);
                 port = Integer.parseInt(portAsString);
             }
-        } else {
-            System.out.println("IPv6 address detected.  No parsing is required.");
         }
 
         Registry registry = LocateRegistry.getRegistry(
