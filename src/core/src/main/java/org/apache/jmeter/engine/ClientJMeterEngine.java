@@ -58,7 +58,8 @@ public class ClientJMeterEngine implements JMeterEngine {
         final String name = RemoteJMeterEngineImpl.JMETER_ENGINE_RMI_NAME; // $NON-NLS-1$ $NON-NLS-2$
         String host = hostAndPort;
         int port = RmiUtils.DEFAULT_RMI_PORT;
-        int indexOfSeparator = hostAndPort.indexOf(':');
+        int closingBracket = hostAndPort.indexOf(']');
+        int indexOfSeparator = hostAndPort.indexOf(':', closingBracket);
         if (indexOfSeparator >= 0) {
             host = hostAndPort.substring(0, indexOfSeparator);
             String portAsString = hostAndPort.substring(indexOfSeparator+1);
