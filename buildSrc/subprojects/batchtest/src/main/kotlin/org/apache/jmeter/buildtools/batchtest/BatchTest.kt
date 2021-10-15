@@ -112,7 +112,7 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
         group = BATCH_TESTS_GROUP_NAME
         description = "Runs jmx file via process fork and verifies outputs"
         workingDir = File(project.rootDir, "bin")
-        main = "org.apache.jmeter.NewDriver"
+        mainClass.set("org.apache.jmeter.NewDriver")
         classpath(jmeterJar)
 
         // This does not depend on the task configuration, so the properties are initialized early

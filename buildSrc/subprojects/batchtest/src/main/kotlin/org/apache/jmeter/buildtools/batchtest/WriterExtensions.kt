@@ -24,7 +24,7 @@ import java.io.Writer
 
 fun Writer.withPrefix(prefix: String) =
     LineBufferingOutputStream(object : TextStream {
-        override fun text(text: String?) {
+        override fun text(text: String) {
             write(prefix)
             write(text)
             flush()
