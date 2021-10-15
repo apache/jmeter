@@ -108,7 +108,7 @@ open class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTe
         val server = executor.submit {
             project.javaexec {
                 workingDir = File(project.rootDir, "bin")
-                main = "org.apache.jmeter.NewDriver"
+                mainClass.set("org.apache.jmeter.NewDriver")
                 classpath(client.classpath)
                 standardOutput = System.out.writer().withPrefix("[server] ")
                 errorOutput = System.err.writer().withPrefix("[server] ")
