@@ -587,6 +587,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 // This call is done by checkAssertions() , as we don't call it
                 // for isIgnore, we explictely call it here
                 setLastSampleOk(threadContext.getVariables(), result.isSuccessful());
+                compiler.done(pack);
             }
             // Check if thread or test should be stopped
             if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)) {
