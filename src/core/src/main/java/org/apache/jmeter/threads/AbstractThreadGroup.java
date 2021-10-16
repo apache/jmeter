@@ -18,6 +18,7 @@
 package org.apache.jmeter.threads;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.engine.StandardJMeterEngine;
+import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -33,7 +35,9 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.apiguardian.api.API;
 
 /**
  * ThreadGroup holds the settings for a JMeter thread group.
@@ -49,6 +53,10 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     private final transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
 
     private static final Object DUMMY = new Object();
+
+    public static final Duration DEFAULT_THREAD_STOP_TIMEOUT =
+            Duration.ofMillis(
+                    JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000L));
 
     /** Action to be taken when a Sampler error occurs */
     public static final String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
@@ -325,5 +333,54 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      */
     public boolean isSameUserOnNextIteration() {
         return getPropertyAsBoolean(ThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, true);
+    }
+
+    /**
+     * Create {@link JMeterThread}. Note: the input tree is not cloned.
+     * @param monitor {@link JMeterThreadMonitor}
+     * @param notifier {@link ListenerNotifier}
+     * @param threadGroupTree {@link ListedHashTree}
+     * @param engine {@link StandardJMeterEngine}
+     * @param threadNumber int thread number
+     * @param variables initial variables
+     * @return {@link JMeterThread}
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "5.5")
+    protected JMeterThread makeThread(
+            StandardJMeterEngine engine,
+            JMeterThreadMonitor monitor, ListenerNotifier notifier,
+            int groupNumber, int threadNumber,
+            ListedHashTree threadGroupTree,
+            JMeterVariables variables) {
+        boolean onErrorStopTest = getOnErrorStopTest();
+        boolean onErrorStopTestNow = getOnErrorStopTestNow();
+        boolean onErrorStopThread = getOnErrorStopThread();
+        boolean onErrorStartNextLoop = getOnErrorStartNextLoop();
+        String groupName = getName();
+        final JMeterThread jmeterThread = new JMeterThread(threadGroupTree, monitor, notifier, isSameUserOnNextIteration());
+        jmeterThread.setThreadNum(threadNumber);
+        jmeterThread.setThreadGroup(this);
+        jmeterThread.putVariables(variables);
+        String distributedPrefix =
+                JMeterUtils.getPropDefault(JMeterUtils.THREAD_GROUP_DISTRIBUTED_PREFIX_PROPERTY_NAME, "");
+        final String threadName = distributedPrefix + (distributedPrefix.isEmpty() ? "":"-") +groupName + " " + groupNumber + "-" + (threadNumber + 1);
+        jmeterThread.setThreadName(threadName);
+        jmeterThread.setEngine(engine);
+        jmeterThread.setOnErrorStopTest(onErrorStopTest);
+        jmeterThread.setOnErrorStopTestNow(onErrorStopTestNow);
+        jmeterThread.setOnErrorStopThread(onErrorStopThread);
+        jmeterThread.setOnErrorStartNextLoop(onErrorStartNextLoop);
+        return jmeterThread;
+    }
+
+    /**
+     * @param tree {@link ListedHashTree}
+     * @return a clone of tree
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "5.5")
+    public static ListedHashTree cloneTree(ListedHashTree tree) {
+        TreeCloner cloner = new TreeCloner(true);
+        tree.traverse(cloner);
+        return cloner.getClonedTree();
     }
 }

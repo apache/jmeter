@@ -59,6 +59,7 @@ import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JMeterStopTestException;
 import org.apache.jorphan.util.JMeterStopTestNowException;
 import org.apache.jorphan.util.JMeterStopThreadException;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,8 +171,19 @@ public class JMeterThread implements Runnable, Interruptible {
         this.isSameUserOnNextIteration = isSameUserOnNextIteration;
     }
 
+    @Deprecated
+    @API(status = API.Status.DEPRECATED, since = "5.5")
     public void setInitialContext(JMeterContext context) {
-        threadVars.putAll(context.getVariables());
+        putVariables(context.getVariables());
+    }
+
+    /**
+     * Updates the variables with all entries found in the variables in {@code vars}
+     * @param variables {@link JMeterVariables} with the entries to be updated
+     */
+    @API(status = API.Status.STABLE, since = "5.5")
+    public void putVariables(JMeterVariables variables) {
+        threadVars.putAll(variables);
     }
 
     /**
