@@ -139,6 +139,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+  <li>Added Kotlin 1.6.0 for JMeter engine implementation (apiVersion=1.5). The set of JSR 223 languages is intact.</li>
   <li><bug>65128</bug><pr>643</pr>Add missing documentation about <code>Same user on each iteration</code> for Thread Groups. Contributed by njkuzas.</li>
   <li><pr>648</pr>Updated xmlgraphics-commons to 2.6 (from 2.3). Contributed by Stefan Seide (stefan at trilobyte-se.de)</li>
   <li><pr>655</pr><pr>667</pr><pr>675</pr>Updated x-stream to 1.4.18 (from 1.4.15). Contributed by Stefan Seide (stefan at trilobyte-se.de)</li>

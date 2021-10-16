@@ -15,6 +15,7 @@
     <trusted-key id='105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='07d3516820bcf6b1' group='com.github.ben-manes.caffeine' />
     <trusted-key id='3c0a8f4744f37328' group='com.github.ben-manes.caffeine' />
+    <trusted-key id='62c82e50836eb3ee' group='com.github.gundy' />
     <trusted-key id='379ce192d401ab61' group='com.github.javaparser' />
     <trusted-key id='431b8f80403a7dc1' group='com.github.javaparser' />
     <trusted-key id='8ea48d105232855d' group='com.github.jknack' />
@@ -77,6 +78,7 @@
     <trusted-key id='a41f13c999945293' group='commons-logging' />
     <trusted-key id='7a8860944fad5f62' group='commons-net' />
     <trusted-key id='86fdc7e2a11262cb' group='commons-net' />
+    <trusted-key id='6449005f96bc97a3' group='de.undercouch' />
     <trusted-key id='3449ec3ac2efe8aa' group='dnsjava' />
     <trusted-key id='a5c8dbb8a1599bd4' group='dnsjava' />
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
@@ -159,10 +161,12 @@
     <trusted-key id='8799af90c06efbbd' group='org.jdom' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
+    <trusted-key id='c2148900bcd3c2af' group='org.jetbrains' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.intellij.deps' />
     <trusted-key id='6a0975f8b1127b83' group='org.jetbrains.kotlin' />
     <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
+    <trusted-key id='3d5839a2262cbbfb' group='org.jetbrains.kotlinx' />
     <trusted-key id='91ae1504568ec4dd' group='org.jodd' />
     <trusted-key id='145d819475314d97' group='org.json' />
     <trusted-key id='f42e87f9665015c9' group='org.jsoup' />

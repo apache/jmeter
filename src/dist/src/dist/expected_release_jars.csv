@@ -1,5 +1,5 @@
 29489,accessors-smart-2.4.7.jar
-18538,annotations-16.0.2.jar
+29371,annotations-23.0.0.jar
 2387,apiguardian-api-1.1.0.jar
 122004,asm-9.2.jar
 113369,bsf-2.4.0.jar
@@ -67,6 +67,10 @@
 415074,jsoup-1.14.1.jar
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar
+1508076,kotlin-stdlib-1.6.0.jar
+200616,kotlin-stdlib-common-1.6.0.jar
+22357,kotlin-stdlib-jdk7-1.6.0.jar
+16201,kotlin-stdlib-jdk8-1.6.0.jar
 206756,log4j-1.2-api-2.14.1.jar
 300365,log4j-api-2.14.1.jar
 1745700,log4j-core-2.14.1.jar

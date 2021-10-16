@@ -27,10 +27,13 @@ import com.github.vlsi.gradle.release.RepositoryType
 import net.ltgt.gradle.errorprone.errorprone
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarqube.gradle.SonarQubeProperties
 
 plugins {
     java
+    kotlin("jvm") apply false
     jacoco
     checkstyle
     id("org.jetbrains.gradle.plugin.idea-ext") apply false
@@ -424,6 +427,33 @@ allprojects {
                     license()
                     importOrder("static ", "java.", "javax", "org", "net", "com", "")
                     indentWithSpaces(4)
+                }
+            }
+        }
+    }
+
+    plugins.withId("org.jetbrains.kotlin.jvm") {
+        configure<KotlinJvmProjectExtension> {
+            // Require explicit access modifiers and require explicit types for public APIs.
+            // See https://kotlinlang.org/docs/whatsnew14.html#explicit-api-mode-for-library-authors
+            if (props.bool("kotlin.explicitApi", default = true)) {
+                explicitApi()
+            }
+        }
+        tasks.withType<KotlinCompile>().configureEach {
+            kotlinOptions {
+                if (!name.startsWith("compileTest")) {
+                    apiVersion = "kotlin.api".v
+                }
+            }
+        }
+        if (!skipAutostyle) {
+            autostyle {
+                kotlin {
+                    license()
+                    trimTrailingWhitespace()
+                    ktlint("ktlint".v)
+                    endWithNewline()
                 }
             }
         }

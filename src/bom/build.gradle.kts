@@ -99,6 +99,7 @@ dependencies {
         apiv("javax.mail:mail")
         apiv("jcharts:jcharts")
         apiv("junit:junit", "junit4")
+        apiv("org.jetbrains:annotations", "jetbrains-annotations")
         apiv("org.junit.jupiter:junit-jupiter", "junit5")
         apiv("org.junit.jupiter:junit-jupiter-api", "junit5")
         apiv("org.junit.jupiter:junit-jupiter-params", "junit5")
