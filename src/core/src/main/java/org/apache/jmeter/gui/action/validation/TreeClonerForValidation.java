@@ -21,6 +21,7 @@ import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.openmodel.OpenModelThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.Backend;
@@ -86,6 +87,11 @@ public class TreeClonerForValidation extends TreeCloner {
                 if(((AbstractThreadGroup)clonedNode).getSamplerController() instanceof LoopController) {
                     ((LoopController)((AbstractThreadGroup)clonedNode).getSamplerController()).setLoops(VALIDATION_ITERATIONS);
                 }
+            } else if (clonedNode instanceof OpenModelThreadGroup) {
+                OpenModelThreadGroup tg = (OpenModelThreadGroup) clonedNode;
+                tg.setRandomSeedString("0");
+                // Launch all the iterations during the first second, and leave one hour for the threads to complete
+                tg.setScheduleString("rate(" + VALIDATION_ITERATIONS + " / sec) even_arrivals(1 sec) pause(1 hour)");
             }
             return clonedNode;
         }

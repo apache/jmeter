@@ -61,6 +61,7 @@ Summary
 <ch_section>New and Noteworthy</ch_section>
 <ul>
   <li>Support building and running JMeter with Java 17</li>
+  <li>Open Model Thread Group: load generator with programmable profile</li>
 </ul>
 <!--
 <ch_title>Core improvements</ch_title>

@@ -84,6 +84,7 @@
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='5b30d3b10694f057' group='io.codearte.gradle.nexus' />
+    <trusted-key id='67631bc0568801c3' group='io.github.microutils' />
     <trusted-key id='602ec18d20c4661c' group='io.github.x-stream' />
     <trusted-key id='6425559c47cc79c4' group='javax.activation' />
     <trusted-key id='6425559c47cc79c4' group='javax.mail' />
@@ -166,7 +167,10 @@
     <trusted-key id='6a0975f8b1127b83' group='org.jetbrains.kotlin' />
     <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
+    <trusted-key id='3967d4eda591b991' group='org.jetbrains.kotlinx' />
     <trusted-key id='3d5839a2262cbbfb' group='org.jetbrains.kotlinx' />
+    <trusted-key id='16fbb6b6e3120829' group='org.jetbrains.lets-plot' />
+    <trusted-key id='be6397e958ab7594' group='org.jetbrains.lets-plot' />
     <trusted-key id='91ae1504568ec4dd' group='org.jodd' />
     <trusted-key id='145d819475314d97' group='org.json' />
     <trusted-key id='f42e87f9665015c9' group='org.jsoup' />
@@ -306,6 +310,9 @@
     </dependency>
     <dependency group='xerces' module='xercesImpl' version='2.9.1'>
       <sha512>37A13B129F3536A53F2A553151A53997DA6DE7CE4D7231EFEEFD26A68C92BE309666F2EE1F527D3B8C38BC6ADDC9FCCBBDD0D134759FD88667976B0CFF842435</sha512>
+    </dependency>
+    <dependency group='xml-apis' module='xml-apis-ext' version='1.3.04'>
+      <sha512>AC0896B9A3FEA71644330DAEF4ECCB33005B5B7AC1E1D1D73EED2B2A1F4B2282057F3C0F3698B899E1C76B19C09C69BF4CD0EE548427B9BCC676B791DB5C36BC</sha512>
     </dependency>
     <dependency group='xml-resolver' module='xml-resolver' version='1.2'>
       <sha512>ECA19B8A6B04C279B7982B16F1763CA1D49B0081A8D4CA2B7419F057D22A0EC60795EB4D901C5EB25DD4A733248876AA2F522C17A6144A26C8EDE9FB2F84531A</sha512>

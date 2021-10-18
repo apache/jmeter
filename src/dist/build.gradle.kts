@@ -187,7 +187,7 @@ val verifyReleaseDependencies by tasks.registering {
         }
 
         val sb = StringBuilder()
-        sb.append("External dependencies differ (you could update ${expectedLibs.relativeTo(rootDir)} if you add -PupdateExpectedJars):")
+        sb.append("External dependencies differ (you could update ${expectedLibs.relativeTo(rootDir)} if you run $path -PupdateExpectedJars):")
 
         val sizeBefore = expected.values.sum()
         val sizeAfter = libs.values.sum()
