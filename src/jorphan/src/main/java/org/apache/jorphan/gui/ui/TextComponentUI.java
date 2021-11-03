@@ -20,12 +20,14 @@ package org.apache.jorphan.gui.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
-import javax.swing.event.UndoableEditEvent;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.undo.UndoManager;
@@ -70,44 +72,10 @@ public class TextComponentUI {
         // JComponent#name is updated. However, we don't want user to be able to "undo" that
         // So when tree selection is changed, we increase undoEpoch. That enables
         // UndoManagers to treat that as "end of undo history"
-        UndoManager manager = new UndoManager() {
-            private int ourUndoEpoch = undoEpoch.get();
-
-            @Override
-            public synchronized void discardAllEdits() {
-                super.discardAllEdits();
-                ourUndoEpoch = undoEpoch.get();
-            }
-
-            @Override
-            public void undoableEditHappened(UndoableEditEvent e) {
-                int epoch = undoEpoch.get();
-                if (ourUndoEpoch != epoch) {
-                    discardAllEdits();
-                }
-                super.undoableEditHappened(e);
-            }
-
-            @Override
-            public synchronized boolean canUndo() {
-                return ourUndoEpoch == undoEpoch.get() && super.canUndo();
-            }
-
-            @Override
-            public synchronized boolean canRedo() {
-                return ourUndoEpoch == undoEpoch.get() && super.canRedo();
-            }
-        };
+        UndoManager manager = new DefaultUndoManager(undoEpoch);
         manager.setLimit(200);
-        component.addPropertyChangeListener("document", evt -> {
-            manager.discardAllEdits();
-            if (evt.getOldValue() != null) {
-                ((Document) evt.getOldValue()).removeUndoableEditListener(manager);
-            }
-            if (evt.getNewValue() != null) {
-                ((Document) evt.getNewValue()).addUndoableEditListener(manager);
-            }
-        });
+        component.addPropertyChangeListener("document",
+                new AddUndoableEditListenerPropertyChangeListener(manager));
         component.getActionMap().put("undo", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,5 +97,33 @@ public class TextComponentUI {
         component.getInputMap().put(commandZ, "undo");
         KeyStroke shiftCommandZ = KeyStroke.getKeyStroke(KeyEvent.VK_Z, COMMAND_KEY | InputEvent.SHIFT_DOWN_MASK);
         component.getInputMap().put(shiftCommandZ, "redo");
+    }
+
+    /**
+     * Removes the default undo manager.
+     * By default, JMeter installs undo manager to all text fields via {@code Swing -> createUI},
+     * however, undo is not always needed (e.g. log panel), so here's an API to remove it.
+     * @param component JTextField or JTextArea
+     */
+    @API(since = "5.5", status = API.Status.INTERNAL)
+    public static void uninstallUndo(JTextComponent component) {
+        List<PropertyChangeListener> listenersToRemove = new ArrayList<>();
+        for (PropertyChangeListener listener : component.getPropertyChangeListeners("document")) {
+            if (listener instanceof AddUndoableEditListenerPropertyChangeListener) {
+                AddUndoableEditListenerPropertyChangeListener v =
+                        (AddUndoableEditListenerPropertyChangeListener) listener;
+                listenersToRemove.add(v);
+
+                UndoManager undoManager = v.getUndoManager();
+                undoManager.discardAllEdits();
+                Document document = component.getDocument();
+                if (document != null) {
+                    document.removeUndoableEditListener(undoManager);
+                }
+            }
+        }
+        for (PropertyChangeListener listener : listenersToRemove) {
+            component.removePropertyChangeListener("document", listener);
+        }
     }
 }
