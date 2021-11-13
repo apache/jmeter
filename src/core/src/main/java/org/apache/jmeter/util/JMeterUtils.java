@@ -870,14 +870,17 @@ public class JMeterUtils implements UnitTestManager {
             System.out.println(errorMsg); // NOSONAR intentional
             return; // Done
         }
-        try {
-            JOptionPane.showMessageDialog(instance.getMainFrame(),
-                    formatMessage(errorMsg),
-                    titleMsg,
-                    JOptionPane.ERROR_MESSAGE);
-        } catch (HeadlessException e) {
-            log.warn("reportErrorToUser(\"{}\") caused", errorMsg, e);
-        }
+        String errorMessage = errorMsg;
+        SwingUtilities.invokeLater(() -> {
+            try {
+                JOptionPane.showMessageDialog(instance.getMainFrame(),
+                        formatMessage(errorMessage),
+                        titleMsg,
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (HeadlessException e) {
+                log.warn("reportErrorToUser(\"{}\") caused", errorMessage, e);
+            }
+        });
     }
 
     /**
@@ -893,14 +896,16 @@ public class JMeterUtils implements UnitTestManager {
             System.out.println(msg); // NOSONAR intentional
             return; // Done
         }
-        try {
-            JOptionPane.showMessageDialog(instance.getMainFrame(),
-                    formatMessage(msg),
-                    titleMsg,
-                    JOptionPane.INFORMATION_MESSAGE);
-        } catch (HeadlessException e) {
-            log.warn("reportInfoToUser(\"{}\") caused", msg, e);
-        }
+        SwingUtilities.invokeLater(() -> {
+            try {
+                JOptionPane.showMessageDialog(instance.getMainFrame(),
+                        formatMessage(msg),
+                        titleMsg,
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (HeadlessException e) {
+                log.warn("reportInfoToUser(\"{}\") caused", msg, e);
+            }
+        });
     }
 
     private static JScrollPane formatMessage(String errorMsg) {
