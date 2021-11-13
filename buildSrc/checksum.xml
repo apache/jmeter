@@ -46,6 +46,8 @@
     <trusted-key id='6a0975f8b1127b83' group='org.jetbrains.kotlin' />
     <trusted-key id='98fe03a974ce0a0b' group='org.jetbrains.kotlin' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains.kotlinx' />
+    <trusted-key id='3967d4eda591b991' group='org.jetbrains.kotlinx' />
+    <trusted-key id='3d5839a2262cbbfb' group='org.jetbrains.kotlinx' />
     <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
   </trusted-keys>
   <dependencies>
@@ -57,6 +59,9 @@
     </dependency>
     <dependency group='org.gradle.kotlin' module='gradle-kotlin-dsl-plugins' version='2.1.6'>
       <sha512>59E0C00C153296770FD8ED56CF0B2BDC2C5525557562C63D035E6E325557734940CDC5882407D93AD29C20727CA8C85BC9C50A683B62F67484A9BBE608F26A46</sha512>
+    </dependency>
+    <dependency group='org.gradle.kotlin' module='gradle-kotlin-dsl-plugins' version='2.1.7'>
+      <sha512>2FE2FE885E48F7D3592751F0E824E21BE2478B9046E25E0AF109E6683F126B1ACE3DA7CB0FF3DA586C08498EF9FEFF445A00A63B2B86CC8BE22D0B3242F801B8</sha512>
     </dependency>
     <dependency group='org.gradle.kotlin' module='plugins' version='1.2.8'>
       <sha512>8EA1B7517CCCC6DD1A41CF0E88613F14548AF9052A0A8E1C68004F3B58A1D26B47A8BDA2D9F663213F59FCDBCEC4BE1A596D8B0B50013C7DD0276140D9DE3391</sha512>
