@@ -826,8 +826,8 @@ This daemon thread waits a short while; if it returns from the wait, then clearl
 JVM has not been able to exit, and the thread prints a message to say why.
 </p>
 <p>
-The property <code>jmeter.exit.check.pause</code> can be used to override the default pause of 2000ms (2secs).
-If set to <code>0</code>, then JMeter does not start the daemon thread.
+The property <code>jmeter.exit.check.pause</code> can be used to configure the delay before printing non-daemon threads.
+If set to <code>0</code> (default value), then JMeter does not print non-terminated threads at the end of the test.
 </p>
 </subsection>
 
