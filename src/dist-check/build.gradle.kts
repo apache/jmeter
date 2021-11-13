@@ -232,10 +232,12 @@ createBatchServerTestTask("BatchTestLocal") {
     batchTestServerStartupTimeoutDuration?.let { startupTimeout.set(it) }
 }
 
-tasks.named(JavaPlugin.TEST_TASK_NAME).configure {
+tasks.test {
     // Test examine JAR contents in /lib/..., so we need to copy jars to the projectRoot/lib/
     dependsOn(createDist)
-    // This is a convenience, so batch tests are executed as a part of default "test" task
+}
+
+tasks.check {
     dependsOn(batchTests)
 }
 
