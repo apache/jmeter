@@ -79,6 +79,6 @@ public class Top5ErrorsSummaryData {
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .limit(maxSize)
                 .map(e -> new Object[]{e.getKey(), e.getValue()})
-                .toArray(e -> new Object[maxSize][2]);
+                .toArray(Object[][]::new);
     }
 }

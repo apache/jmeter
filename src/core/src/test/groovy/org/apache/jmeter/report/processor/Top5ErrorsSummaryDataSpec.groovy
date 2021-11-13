@@ -40,7 +40,7 @@ class Top5ErrorsSummaryDataSpec extends Specification {
 
     def "when no errors are registered an array with null values is returned"() {
         expect:
-            sut.getTop5ErrorsMetrics() == new Object[5][2]
+            sut.getTop5ErrorsMetrics() == new Object[0][0]
     }
 
     def "error messages with the same frequency are preserved up until the size limit"() {
@@ -54,7 +54,7 @@ class Top5ErrorsSummaryDataSpec extends Specification {
         given:
             ["A", "A", "A", "B", "B", "C"].each { sut.registerError(it) }
         expect:
-            sut.getTop5ErrorsMetrics() == [["A", 3], ["B", 2], ["C", 1], [null, null], [null, null]]
+            sut.getTop5ErrorsMetrics() == [["A", 3], ["B", 2], ["C", 1]]
     }
 
 }

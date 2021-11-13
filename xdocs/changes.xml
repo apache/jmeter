@@ -59,6 +59,9 @@ Summary
 </ul>
 
 <ch_section>New and Noteworthy</ch_section>
+<ul>
+  <li>Support building and running JMeter with Java 17</li>
+</ul>
 <!--
 <ch_title>Core improvements</ch_title>
 <ch_title>Test Plan</ch_title>

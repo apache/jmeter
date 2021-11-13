@@ -19,7 +19,9 @@ package org.apache.jmeter.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.commons.lang3.JavaVersion;
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 public class JSR223TestElementTest {
@@ -30,6 +32,10 @@ public class JSR223TestElementTest {
 
     @Test
     public void testGetScriptEngineJS() throws Exception {
+        Assumptions.assumeTrue(
+                JavaVersion.JAVA_RECENT.atMost(JavaVersion.JAVA_14),
+                "The default JavaScript engine has been removed in Java 15+, current Java is " + JavaVersion.JAVA_RECENT
+        );
         element.setScriptLanguage("JavaScript");
         assertThat(element.getScriptEngine().getFactory().getLanguageName(),
                 CoreMatchers.containsString("Script"));
