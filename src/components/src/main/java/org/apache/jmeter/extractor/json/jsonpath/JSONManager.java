@@ -95,7 +95,7 @@ public class JSONManager {
         if (obj instanceof JSONArray) {
             return ((JSONArray)obj).toJSONString();
         }
-        return obj == null ? "" : obj.toString(); //$NON-NLS-1$
+        return obj == null ? null : obj.toString();
     }
 
 }

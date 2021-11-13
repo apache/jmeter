@@ -213,6 +213,7 @@ Summary
   <li><bug>65259</bug>JMESPathExtractor Attribute <code>Match No.</code> Required</li>
   <li><bug>65269</bug>JSON Extractor and JSON JMESPath Extractor ignore sub-samples</li>
   <li><bug>65352</bug>Warning logged when Boundary Extractor doesn't find any match</li>
+  <li><bug>65681</bug>Use default values for null values when extracting with JSONPostProcessor</li>
 </ul>
 
 <h3>Functions</h3>
