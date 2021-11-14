@@ -90,14 +90,6 @@ public class TestSaveService extends JMeterTestCase {
     }
 
     @Test
-    public void testFILEVERSION() {
-        assertEquals(
-                "SaveService class and saveservice.properties must be aligned. Please ensure you have edited both files," +
-                        " and update SaveService.FILEVERSION",
-                SaveService.FILEVERSION, SaveService.getFileVersion());
-    }
-
-    @Test
     public void testLoadAndSave() throws Exception {
         boolean failed = false; // Did a test fail?
 
