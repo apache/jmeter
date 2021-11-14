@@ -45,12 +45,15 @@ public final class LazyLayeredConnectionSocketFactory implements LayeredConnecti
     private static final String CIPHER_LIST =
             JMeterUtils.getPropDefault("https.socket.ciphers", ""); // $NON-NLS-1$ $NON-NLS-2$
 
+    private static final String CIPHER_SUITE_LIST =
+            JMeterUtils.getPropDefault("https.cipherSuites", CIPHER_LIST); // $NON-NLS-1$ $NON-NLS-2$
+
     private static final String[] SUPPORTED_PROTOCOL_LIST =
             PROTOCOL_LIST.isEmpty() ?
                     null: PROTOCOL_LIST.split(" "); // $NON-NLS-1$
     private static final String[] SUPPORTED_CIPHER_LIST =
-            CIPHER_LIST.isEmpty() ?
-                    null : CIPHER_LIST.split(" "); // $NON-NLS-1$
+            CIPHER_SUITE_LIST.isEmpty() ?
+                    null : CIPHER_SUITE_LIST.split(" "); // $NON-NLS-1$
 
     private static class AdapteeHolder { // IODH idiom
         private static final LayeredConnectionSocketFactory ADAPTEE = checkAndInit();
