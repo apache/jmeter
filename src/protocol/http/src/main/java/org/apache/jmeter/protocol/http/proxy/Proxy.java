@@ -466,8 +466,12 @@ public class Proxy extends Thread {
                 secureSocket = (SSLSocket) sslFactory.createSocket(sock,
                         sock.getInetAddress().getHostName(), sock.getPort(), true);
                 secureSocket.setUseClientMode(false);
-                secureSocket.setEnabledCipherSuites(SUPPORTED_CIPHER_LIST);
-                secureSocket.setEnabledProtocols(SUPPORTED_PROTOCOL_LIST);
+                if (SUPPORTED_CIPHER_LIST != null) {
+                    secureSocket.setEnabledCipherSuites(SUPPORTED_CIPHER_LIST);
+                }
+                if (SUPPORTED_PROTOCOL_LIST != null) {
+                    secureSocket.setEnabledProtocols(SUPPORTED_PROTOCOL_LIST);
+                }
                 if (log.isDebugEnabled()){
                     log.debug("{} SSL transaction ok with cipher: {}", port, secureSocket.getSession().getCipherSuite());
                 }
