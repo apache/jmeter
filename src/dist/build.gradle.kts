@@ -570,6 +570,10 @@ for (type in listOf("binary", "source")) {
             if (this is Tar) {
                 compression = Compression.GZIP
             }
+            // dist task excludes jar files from bin/, and lib/ however Gradle does not see that
+            // So we add an artificial dependency
+            mustRunAfter(copyBinLibs)
+            mustRunAfter(copyLibs)
             // Gradle does not track "filters" as archive/copy task dependencies,
             // So a mere change of a file attribute won't trigger re-execution of a task
             // So we add a custom property to re-execute the task in case attributes change
