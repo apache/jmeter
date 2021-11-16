@@ -16,9 +16,9 @@
  */
 
 import com.github.vlsi.gradle.properties.dsl.props
-import java.time.Duration
 import org.apache.jmeter.buildtools.batchtest.BatchTest
 import org.apache.jmeter.buildtools.batchtest.BatchTestServer
+import java.time.Duration
 
 plugins {
     jmeterbuild.batchtest
@@ -107,7 +107,7 @@ val detailBatchTasks = findProperty("allBatch") is String
 val batchTests by tasks.registering() {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = "Executes all the batch tests" +
-            if (detailBatchTasks) "" else " (add -PallBatch to see individual batch tasks)"
+        if (detailBatchTasks) "" else " (add -PallBatch to see individual batch tasks)"
 }
 
 val jacoco = project.extensions.findByType<JacocoPluginExtension>()
@@ -117,8 +117,11 @@ inline fun <reified T : BatchTest> createBatchTask(
     suffix: String = "",
     noinline action: (T.() -> Unit)? = null
 ) =
-    tasks.register("batch" + (if (T::class == BatchTestServer::class) "Server" else "") +
-            name.capitalize() + suffix.capitalize(), T::class) {
+    tasks.register(
+        "batch" + (if (T::class == BatchTestServer::class) "Server" else "") +
+            name.capitalize() + suffix.capitalize(),
+        T::class
+    ) {
         group = when {
             detailBatchTasks -> LifecycleBasePlugin.VERIFICATION_GROUP
             else -> ""
@@ -219,7 +222,8 @@ val batchTestServerStartupTimeoutDuration =
         } catch (e: Exception) {
             throw IllegalArgumentException(
                 "Unable to parse the value of batchTestServerStartupTimeout property as duration $it." +
-                        " Please ensure it follows java.time.Duration format (e.g. PT5S)", e
+                    " Please ensure it follows java.time.Duration format (e.g. PT5S)",
+                e
             )
         }
     }

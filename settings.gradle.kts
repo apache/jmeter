@@ -42,35 +42,36 @@ plugins {
 rootProject.name = "jmeter"
 
 include(
-        "src:bom",
-        "src:bshclient",
-        "src:launcher",
-        "src:components",
-        "src:config",
-        "src:core",
-        "src:examples",
-        "src:functions",
-        "src:generator",
-        "src:jorphan",
-        "src:licenses",
-        "src:protocol:bolt",
-        "src:protocol:ftp",
-        "src:protocol:http",
-        "src:protocol:java",
-        "src:protocol:jdbc",
-        "src:protocol:jms",
-        "src:protocol:junit",
-        "src:protocol:junit-sample",
-        "src:protocol:ldap",
-        "src:protocol:mail",
-        "src:protocol:mongodb",
-        "src:protocol:native",
-        "src:protocol:tcp",
-        "src:release",
-        "src:testkit",
-        "src:testkit-wiremock",
-        "src:dist",
-        "src:dist-check")
+    "src:bom",
+    "src:bshclient",
+    "src:launcher",
+    "src:components",
+    "src:config",
+    "src:core",
+    "src:examples",
+    "src:functions",
+    "src:generator",
+    "src:jorphan",
+    "src:licenses",
+    "src:protocol:bolt",
+    "src:protocol:ftp",
+    "src:protocol:http",
+    "src:protocol:java",
+    "src:protocol:jdbc",
+    "src:protocol:jms",
+    "src:protocol:junit",
+    "src:protocol:junit-sample",
+    "src:protocol:ldap",
+    "src:protocol:mail",
+    "src:protocol:mongodb",
+    "src:protocol:native",
+    "src:protocol:tcp",
+    "src:release",
+    "src:testkit",
+    "src:testkit-wiremock",
+    "src:dist",
+    "src:dist-check"
+)
 
 // See https://github.com/gradle/gradle/issues/1348#issuecomment-284758705 and
 // https://github.com/gradle/gradle/issues/5321#issuecomment-387561204
@@ -87,14 +88,14 @@ fun String?.toBool(nullAs: Boolean, blankAs: Boolean, default: Boolean) =
     }
 
 fun property(name: String) =
-        when (extra.has(name)) {
-                true -> extra.get(name) as? String
-                else -> null
-        }
+    when (extra.has(name)) {
+        true -> extra.get(name) as? String
+        else -> null
+    }
 
 if (property("localReleasePlugins").toBool(nullAs = false, blankAs = true, default = false)) {
-        // This enables to use local clone of vlsi-release-plugins for debugging purposes
-        includeBuild("../vlsi-release-plugins")
+    // This enables to use local clone of vlsi-release-plugins for debugging purposes
+    includeBuild("../vlsi-release-plugins")
 }
 
 val isCiServer = System.getenv().containsKey("CI")
@@ -125,25 +126,25 @@ buildscript {
 // Note: we need to verify the checksum for checksum-dependency-plugin itself
 val expectedSha512 = mapOf(
     "F7040C571C2A2727F2EED4EA772F5A7C5D9CB393828B7A2331F7167E467429486F5F3E9423883FE9A6D652FFB0484EAE722CDFB46D97180209BCBEEBF9C25DE3"
-            to "gradle-enterprise-gradle-plugin-3.4.jar",
+        to "gradle-enterprise-gradle-plugin-3.4.jar",
     "D5B49D90170DEA96E3D05D893B2B6C04E3B16F3DB6B6BB1DF82D3DE3247E5B0457721F232FAA237E689100980E97F4C04C1234FBEDBDAB7AE0CEAA91C40392C9"
-            to "gradle-enterprise-gradle-plugin-3.4.1.jar",
+        to "gradle-enterprise-gradle-plugin-3.4.1.jar",
     "AA8D06BDF95A6BAAEFE2B0DAE530FCD324A92238F7B790C0FF4A4B5C6454A6BE83D2C81BFEC013A7368697A0A9FC61B97E91775EF9948EF5572FA1DAA9E82052"
-            to "gradle-enterprise-gradle-plugin-3.5.jar",
+        to "gradle-enterprise-gradle-plugin-3.5.jar",
     "2A01A91008DF02AA0256D64EAB9238B23B85EA2A886E024E07C3880D642C5E4B96E66DE0D90832BCCEFE5F7C8EF045EBB9905B2A74398E38FAD6A5B28BEBA54D"
-            to "gradle-enterprise-gradle-plugin-3.6.jar",
+        to "gradle-enterprise-gradle-plugin-3.6.jar",
     "43BC9061DFDECA0C421EDF4A76E380413920E788EF01751C81BDC004BD28761FBD4A3F23EA9146ECEDF10C0F85B7BE9A857E9D489A95476525565152E0314B5B"
-            to "gradle-enterprise-gradle-plugin-3.6.3.jar",
+        to "gradle-enterprise-gradle-plugin-3.6.3.jar",
     "FA305ACAAF45D005F5032D93C4F37CD097936C802943885A8F2B9EC27DA24F148DB41748655347C9A707C62614087432B3D32CC1B297381D45F3D8063BFFFA6D"
-            to "bcpg-jdk15on-1.62.jar",
+        to "bcpg-jdk15on-1.62.jar",
     "2BA6A5DEC9C8DAC2EB427A65815EB3A9ADAF4D42D476B136F37CD57E6D013BF4E9140394ABEEA81E42FBDB8FC59228C7B85C549ED294123BF898A7D048B3BD95"
-            to "bcprov-jdk15on-1.62.jar",
+        to "bcprov-jdk15on-1.62.jar",
     "17DAAF511BE98F99007D7C6B3762C9F73ADD99EAB1D222985018B0258EFBE12841BBFB8F213A78AA5300F7A3618ACF252F2EEAD196DF3F8115B9F5ED888FE827"
-            to "okhttp-4.1.0.jar",
+        to "okhttp-4.1.0.jar",
     "93E7A41BE44CC17FB500EA5CD84D515204C180AEC934491D11FC6A71DAEA761FB0EECEF865D6FD5C3D88AAF55DCE3C2C424BE5BA5D43BEBF48D05F1FA63FA8A7"
-            to "okio-2.2.2.jar",
+        to "okio-2.2.2.jar",
     settings.extra["com.github.vlsi.checksum-dependency.sha512"].toString()
-            to "checksum-dependency-plugin.jar"
+        to "checksum-dependency-plugin.jar"
 )
 
 fun File.sha512(): String {

@@ -75,19 +75,25 @@ subprojects {
             testImplementation("org.spockframework:spock-core")
         }
         testRuntimeOnly("cglib:cglib-nodep") {
-            because("""
+            because(
+                """
                 org.spockframework.mock.CannotCreateMockException: Cannot create mock for
                  class org.apache.jmeter.report.processor.AbstractSummaryConsumer${'$'}SummaryInfo.
                  Mocking of non-interface types requires a code generation library.
-                 Please put an up-to-date version of byte-buddy or cglib-nodep on the class path.""".trimIndent())
+                 Please put an up-to-date version of byte-buddy or cglib-nodep on the class path.
+                """.trimIndent()
+            )
         }
         testRuntimeOnly("org.objenesis:objenesis") {
-            because("""
+            because(
+                """
                 org.spockframework.mock.CannotCreateMockException: Cannot create mock for
                  class org.apache.jmeter.report.core.Sample. To solve this problem,
                  put Objenesis 1.2 or higher on the class path (recommended),
                  or supply constructor arguments (e.g. 'constructorArgs: [42]') that allow to construct
-                 an object of the mocked type.""".trimIndent())
+                 an object of the mocked type.
+                """.trimIndent()
+            )
         }
     }
 

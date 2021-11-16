@@ -18,7 +18,9 @@
     <trusted-key id='72475fd306b9cab7' group='com.googlecode.javaewah' />
     <trusted-key id='a50569c7ca7fa1f0' group='com.jcraft' />
     <trusted-key id='aa49c633b4734832' group='com.pinterest' />
+    <trusted-key id='995efbf4a3d20beb' group='com.pinterest' />
     <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
+    <trusted-key id='995efbf4a3d20beb' group='com.pinterest.ktlint' />
     <trusted-key id='86fdc7e2a11262cb' group='commons-codec' />
     <trusted-key id='a41f13c999945293' group='commons-logging' />
     <trusted-key id='6449005f96bc97a3' group='de.undercouch' />

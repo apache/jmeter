@@ -66,13 +66,13 @@ version = "jmeter".v + releaseParams.snapshotSuffix
 
 val displayVersion by extra {
     version.toString() +
-            if (releaseParams.release.get()) {
-                ""
-            } else {
-                // Append 7 characters of Git commit id for snapshot version
-                val grgit: Grgit? by project
-                grgit?.let { " " + it.head().abbreviatedId }
-            }
+        if (releaseParams.release.get()) {
+            ""
+        } else {
+            // Append 7 characters of Git commit id for snapshot version
+            val grgit: Grgit? by project
+            grgit?.let { " " + it.head().abbreviatedId }
+        }
 }
 
 println("Building JMeter $version")
@@ -284,7 +284,7 @@ allprojects {
         autostyle {
             kotlinGradle {
                 license()
-                ktlint()
+                ktlint("ktlint".v)
             }
             format("configs") {
                 filter {
@@ -475,9 +475,11 @@ allprojects {
                 sourceDirectories.from(mainCode.allSource.srcDirs)
                 // IllegalStateException: Can't add different class with same name: module-info
                 // https://github.com/jacoco/jacoco/issues/858
-                classDirectories.from(mainCode.output.asFileTree.matching {
-                    exclude("module-info.class")
-                })
+                classDirectories.from(
+                    mainCode.output.asFileTree.matching {
+                        exclude("module-info.class")
+                    }
+                )
             }
         }
     }
@@ -520,7 +522,8 @@ allprojects {
                         filter(org.apache.tools.ant.filters.EscapeUnicode::class)
                         filter(LineEndings.LF)
                     } else if (name.endsWith(".dtd") || name.endsWith(".svg") ||
-                        name.endsWith(".txt")) {
+                        name.endsWith(".txt")
+                    ) {
                         filter(LineEndings.LF)
                     }
                 }

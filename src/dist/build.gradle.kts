@@ -20,8 +20,8 @@ import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.properties.dsl.props
-import kotlin.math.absoluteValue
 import org.gradle.api.internal.TaskOutputsInternal
+import kotlin.math.absoluteValue
 
 plugins {
     id("com.github.vlsi.crlf")
@@ -29,25 +29,26 @@ plugins {
 }
 
 var jars = arrayOf(
-        ":src:bshclient",
-        ":src:launcher",
-        ":src:components",
-        ":src:core",
-        // ":src:examples",
-        ":src:functions",
-        ":src:jorphan",
-        ":src:protocol:bolt",
-        ":src:protocol:ftp",
-        ":src:protocol:http",
-        ":src:protocol:java",
-        ":src:protocol:jdbc",
-        ":src:protocol:jms",
-        ":src:protocol:junit",
-        ":src:protocol:ldap",
-        ":src:protocol:mail",
-        ":src:protocol:mongodb",
-        ":src:protocol:native",
-        ":src:protocol:tcp")
+    ":src:bshclient",
+    ":src:launcher",
+    ":src:components",
+    ":src:core",
+    // ":src:examples",
+    ":src:functions",
+    ":src:jorphan",
+    ":src:protocol:bolt",
+    ":src:protocol:ftp",
+    ":src:protocol:http",
+    ":src:protocol:java",
+    ":src:protocol:jdbc",
+    ":src:protocol:jms",
+    ":src:protocol:junit",
+    ":src:protocol:ldap",
+    ":src:protocol:mail",
+    ":src:protocol:mongodb",
+    ":src:protocol:native",
+    ":src:protocol:tcp"
+)
 
 // isCanBeConsumed = false ==> other modules must not use the configuration as a dependency
 val buildDocs by configurations.creating {
@@ -332,28 +333,34 @@ fun createAnakiaTask(
     return tasks.register(taskName) {
         inputs.file("$baseDir/$style")
         inputs.file("$baseDir/$projectFile")
-        inputs.files(fileTree(baseDir) {
-            include(*includes)
-            exclude(*excludes)
-        })
+        inputs.files(
+            fileTree(baseDir) {
+                include(*includes)
+                exclude(*excludes)
+            }
+        )
         inputs.property("extension", extension)
         outputs.dir(outputDir)
         dependsOn(prepareProps)
 
         doLast {
             ant.withGroovyBuilder {
-                "taskdef"("name" to "anakia",
-                        "classname" to "org.apache.velocity.anakia.AnakiaTask",
-                        "classpath" to buildDocs.asPath)
-                "anakia"("basedir" to baseDir,
-                        "destdir" to outputDir,
-                        "extension" to extension,
-                        "style" to style,
-                        "projectFile" to projectFile,
-                        "excludes" to excludes.joinToString(" "),
-                        "includes" to includes.joinToString(" "),
-                        "lastModifiedCheck" to "true",
-                        "velocityPropertiesFile" to prepareProps.get().outputs.files.singleFile)
+                "taskdef"(
+                    "name" to "anakia",
+                    "classname" to "org.apache.velocity.anakia.AnakiaTask",
+                    "classpath" to buildDocs.asPath
+                )
+                "anakia"(
+                    "basedir" to baseDir,
+                    "destdir" to outputDir,
+                    "extension" to extension,
+                    "style" to style,
+                    "projectFile" to projectFile,
+                    "excludes" to excludes.joinToString(" "),
+                    "includes" to includes.joinToString(" "),
+                    "lastModifiedCheck" to "true",
+                    "velocityPropertiesFile" to prepareProps.get().outputs.files.singleFile
+                )
             }
         }
     }
@@ -387,12 +394,14 @@ fun CopySpec.printableDocumentation() {
     }
 }
 
-val buildPrintableDoc = createAnakiaTask("buildPrintableDoc", baseDir = xdocs,
-        style = "stylesheets/site_printable.vsl",
-        velocityProperties = "$xdocs/velocity.properties",
-        projectFile = "stylesheets/printable_project.xml",
-        excludes = arrayOf("**/stylesheets/**", "extending.xml", "extending/*.xml"),
-        includes = arrayOf("**/*.xml"))
+val buildPrintableDoc = createAnakiaTask(
+    "buildPrintableDoc", baseDir = xdocs,
+    style = "stylesheets/site_printable.vsl",
+    velocityProperties = "$xdocs/velocity.properties",
+    projectFile = "stylesheets/printable_project.xml",
+    excludes = arrayOf("**/stylesheets/**", "extending.xml", "extending/*.xml"),
+    includes = arrayOf("**/*.xml")
+)
 
 val previewPrintableDocs by tasks.registering(Copy::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
@@ -415,7 +424,8 @@ fun xslt(
 
     val relativePath = if (subdir.isEmpty()) "." else ".."
     ant.withGroovyBuilder {
-        "xslt"("style" to "$xdocs/stylesheets/website-style.xsl",
+        "xslt"(
+            "style" to "$xdocs/stylesheets/website-style.xsl",
             "basedir" to "$xdocs/$subdir",
             "destdir" to "$outputDir/$subdir",
             "excludes" to excludes.joinToString(" "),

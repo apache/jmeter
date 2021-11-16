@@ -51,7 +51,9 @@
     <trusted-key id='0a36eef644cff773' group='com.metsci.ext.com.kitfox.svg' />
     <trusted-key id='db45d3a62a183ce2' group='com.miglayout' />
     <trusted-key id='aa49c633b4734832' group='com.pinterest' />
+    <trusted-key id='995efbf4a3d20beb' group='com.pinterest' />
     <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
+    <trusted-key id='995efbf4a3d20beb' group='com.pinterest.ktlint' />
     <trusted-key id='1063fe98bcecb758' group='com.puppycrawl.tools' />
     <trusted-key id='6425559c47cc79c4' group='com.sun.activation' />
     <trusted-key id='1b2718089ce964b8' group='com.thoughtworks.qdox' />
