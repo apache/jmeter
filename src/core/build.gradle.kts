@@ -135,10 +135,6 @@ ide {
 }
 
 // <editor-fold defaultstate="collapsed" desc="Gradle can't infer task dependencies, however it sees they use the same directories. So we add the dependencies">
-tasks.compileKotlin {
-    dependsOn(versionClass)
-}
-
 tasks.withType<Checkstyle>().matching { it.name == "checkstyleMain" }
     .configureEach {
         mustRunAfter(versionClass)
