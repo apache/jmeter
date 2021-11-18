@@ -358,18 +358,18 @@ With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jep
     <dd>Copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_13_Release/rhino-engine-1.7.13.jar">rhino-engine-1.7.13.jar</a> into <code>$JMETER_HOME/lib/ext</code>.</dd>
     <dt>Use OpenJDK Nashorn</dt>
     <dd>
-      The OpenJDK Nashorn implementation comes as a module. To use it, you will have to download it and add it to the module path. A hacky way to download the version 15.0 and its dependencies and set the module path is outlined below:
+      The OpenJDK Nashorn implementation comes as a module. To use it, you will have to download it and add it to the module path. A hacky way to download the version 15.0 (or later) and its dependencies and set the module path is outlined below:
       <source>
 mkdir lib/modules
 pushd lib/modules
-wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.0/nashorn-core-15.0.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.0/asm-commons-9.0.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.0/asm-util-9.0.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.0/asm-tree-9.0.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.0/asm-analysis-9.0.jar
+wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.3/nashorn-core-15.3.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.2/asm-9.2.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.2/asm-commons-9.2.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.2/asm-util-9.2.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.2/asm-tree-9.2.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.2/asm-analysis-9.2.jar
 popd
-export JVM_ARGS="--modulepath $PWD/lib/modules"
+export JVM_ARGS="--module-path $PWD/lib/modules"
 ./bin/jmeter
       </source>
     </dd>
