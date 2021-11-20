@@ -730,7 +730,8 @@ public class JMeterUtils implements UnitTestManager {
                 return strVal.trim().split("\\s+");
             }
         } catch (Exception e) {
-            log.warn("Exception '{}' occurred when fetching boolean property:'{}', defaulting to: {}", e.getMessage(), propName, defaultVal);
+            log.warn("Exception '{}' occurred when fetching Array property:'{}', defaulting to: {}",
+                    e.getMessage(), propName, defaultVal != null ? Arrays.toString(defaultVal) : null);
         }
         return defaultVal;
     }
