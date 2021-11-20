@@ -189,6 +189,7 @@ Summary
   <li><bug>65310</bug>Don't let users override <code>multipart/form-data</code> <code>content-type</code>
     header in HC4 sampler.</li>
   <li><bug>65363</bug><code>NullPointerException</code> in <code>HTTPHC4Impl$ManagedCredentialsProvider.getAuthorizationForAuthScope</code> when <code>401</code> response from remote and <code>httpclient4.auth.preemptive=false</code></li>
+  <li><bug>65692</bug>HTTP(s) Test Script Recorder: Enable setting enabled cipher suite and enabled protocols on SSLContext/ Align ssl properties between Java and HC4 impl</li>
 </ul>
 
 <h3>Other Samplers</h3>
