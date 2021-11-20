@@ -89,18 +89,11 @@ public class Proxy extends Thread {
     private static final String SSLCONTEXT_PROTOCOL =
         JMeterUtils.getPropDefault("proxy.ssl.protocol", "TLS"); // $NON-NLS-1$ $NON-NLS-2$
 
-    private static final String PROTOCOL_LIST =
-            JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
+    private static final String[] SOCKET_PROTOCOL_ARRAY =
+            JMeterUtils.getArrayPropDefault("https.socket.protocols", null); // $NON-NLS-1$
 
-    private static final String CIPHER_SUITE_LIST =
-            JMeterUtils.getPropDefault("https.cipherSuites", ""); // $NON-NLS-1$ $NON-NLS-2$
-
-    private static final String[] SUPPORTED_PROTOCOL_LIST =
-            PROTOCOL_LIST.isEmpty() ?
-                    null: PROTOCOL_LIST.split(" "); // $NON-NLS-1$
-    private static final String[] SUPPORTED_CIPHER_LIST =
-            CIPHER_SUITE_LIST.isEmpty() ?
-                    null : CIPHER_SUITE_LIST.split(" "); // $NON-NLS-1$
+    private static final String[] SUPPORTED_CIPHER_ARRAY =
+            JMeterUtils.getArrayPropDefault("https.cipherSuites", null); // $NON-NLS-1$
 
     // HashMap to save ssl connection between Jmeter proxy and browser
     private static final HashMap<String, SSLSocketFactory> HOST2SSL_SOCK_FAC = new HashMap<>();
@@ -466,11 +459,11 @@ public class Proxy extends Thread {
                 secureSocket = (SSLSocket) sslFactory.createSocket(sock,
                         sock.getInetAddress().getHostName(), sock.getPort(), true);
                 secureSocket.setUseClientMode(false);
-                if (SUPPORTED_CIPHER_LIST != null) {
-                    secureSocket.setEnabledCipherSuites(SUPPORTED_CIPHER_LIST);
+                if (SUPPORTED_CIPHER_ARRAY != null) {
+                    secureSocket.setEnabledCipherSuites(SUPPORTED_CIPHER_ARRAY);
                 }
-                if (SUPPORTED_PROTOCOL_LIST != null) {
-                    secureSocket.setEnabledProtocols(SUPPORTED_PROTOCOL_LIST);
+                if (SOCKET_PROTOCOL_ARRAY != null) {
+                    secureSocket.setEnabledProtocols(SOCKET_PROTOCOL_ARRAY);
                 }
                 if (log.isDebugEnabled()){
                     log.debug("{} SSL transaction ok with cipher: {}", port, secureSocket.getSession().getCipherSuite());

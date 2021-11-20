@@ -19,7 +19,11 @@ package org.apache.jmeter.util;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class TestJMeterUtils {
 
@@ -37,5 +41,19 @@ public class TestJMeterUtils {
     @Test
     public void testGesResStringDefaultWithNonExistantKey() throws Exception {
         assertEquals("[res_key=noValidKey]", JMeterUtils.getResString("noValidKey"));
+    }
+
+    @Test
+    public void testGetArrayPropDefault() throws Exception {
+        Path props = Files.createTempFile("testGetArrayPropDefault", ".properties");
+        JMeterUtils.loadJMeterProperties(props.toString());
+        JMeterUtils.getJMeterProperties().setProperty("testGetArrayPropDefaultEmpty", "    ");
+        JMeterUtils.getJMeterProperties().setProperty("testGetArrayPropDefault", " Tolstoi  Dostoievski    Pouchkine       Gorki ");
+        Assertions.assertArrayEquals(new String[]{"Tolstoi", "Dostoievski", "Pouchkine", "Gorki"},
+                JMeterUtils.getArrayPropDefault("testGetArrayPropDefault", null));
+        Assertions.assertArrayEquals(new String[]{"Gilels", "Richter"},
+                JMeterUtils.getArrayPropDefault("testGetArrayPropDefaultMissing", new String[]{"Gilels", "Richter"}));
+        Assertions.assertArrayEquals(null,
+                JMeterUtils.getArrayPropDefault("testGetArrayPropDefaultEmpty", null));
     }
 }
