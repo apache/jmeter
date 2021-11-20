@@ -97,10 +97,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
 
     private static final boolean DEFAULT_CLEAR_VALUE = false;
 
-    /** Decides whether port should be omitted from SPN for kerberos spnego authentication */
+    /** Decides whether port should be omitted from SPN for Kerberos SPNEGO authentication */
     public static final boolean STRIP_PORT = JMeterUtils.getPropDefault("kerberos.spnego.strip_port", true);
 
-    /** Decides whether port should be omitted from SPN for kerberos spnego authentication */
+    /** Decides whether SPN for Kerberos SPNEGO authentication should be acquired for the canonicalized host name*/
     public static final boolean USE_CANONICAL_HOST_NAME = JMeterUtils.getPropDefault("kerberos.spnego.use_canonical_host_name", true);
 
     public enum Mechanism {
