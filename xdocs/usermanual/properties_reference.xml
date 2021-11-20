@@ -484,6 +484,9 @@ JMETER-SERVER</source>
     Should port be stripped from urls before constructing SPNs for SPNEGO authentication.
     Defaults to: <code>true</code>
 </property>
+<property name="kerberos.spnego.use_canonical_host_name">
+    Should the host name for constructing SPN be canonicalized for SPNEGO authentication.
+</property>
 <property name="kerberos.spnego.delegate_cred">
     Should SPNEGO authentication should use delegation of credentials.
     Defaults to: <code>false</code>
