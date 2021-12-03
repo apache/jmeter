@@ -118,6 +118,8 @@ buildscript {
             // Gradle ships kotlin-stdlib which is good enough
             exclude("org.jetbrains.kotlin", "kotlin-stdlib")
         }
+        // Remove when Autostyle updates jgit dependency
+        classpath("org.eclipse.jgit:org.eclipse.jgit:5.13.0.202109080827-r")
     }
     repositories {
         gradlePluginPortal()
@@ -126,6 +128,13 @@ buildscript {
 
 // Note: we need to verify the checksum for checksum-dependency-plugin itself
 val expectedSha512 = mapOf(
+    // TODO: remove JavaEWAH-1.1.12.jar, org.eclipse.jgit-5.13.0.202109080827-r.jar, slf4j-api-1.7.30.jar when Autostyle updates jgit
+    "ECBBFD1C6593AFBAA4CA7F65E10BC67B12FF75EB221E490051522FAC8D291B202A0A165644A9C5AC9E5618CD771817C9052F171E5E6210CB021DF5A6E4CBF787"
+        to "JavaEWAH-1.1.12.jar",
+    "768DBB3BA2649A7025338197B4703B414983E4608138719B0D69201F7F49E57E0454846B41B775B135B083F820824749DA6121F20A812C4F155A97F09C9B15AC"
+        to "org.eclipse.jgit-5.13.0.202109080827-r.jar",
+    "E5435852569DDA596BA46138AF8EE9C4ECBA8A7A43F4F1E7897AEB4430523A0F037088A7B63877DF5734578F19D331F03D7B0F32D5AE6C425DF211947B3E6173"
+        to "slf4j-api-1.7.30.jar",
     "F7040C571C2A2727F2EED4EA772F5A7C5D9CB393828B7A2331F7167E467429486F5F3E9423883FE9A6D652FFB0484EAE722CDFB46D97180209BCBEEBF9C25DE3"
         to "gradle-enterprise-gradle-plugin-3.4.jar",
     "D5B49D90170DEA96E3D05D893B2B6C04E3B16F3DB6B6BB1DF82D3DE3247E5B0457721F232FAA237E689100980E97F4C04C1234FBEDBDAB7AE0CEAA91C40392C9"
