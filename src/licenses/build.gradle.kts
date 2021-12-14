@@ -135,24 +135,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    for (
-        a in listOf(
-            "lets-plot-kotlin-jvm",
-            "lets-plot-common",
-            "plot-config-portable-jvm",
-            "plot-builder-portable-jvm",
-            "plot-base-portable-jvm",
-            "plot-common-portable-jvm",
-            "vis-svg-portable-jvm",
-            "base-portable-jvm"
-        )
-    ) {
-        overrideLicense("org.jetbrains.lets-plot:$a") {
-            expectedLicense = SpdxLicense.MIT
-            licenseFiles = "lets-plot"
-        }
-    }
-
     overrideLicense("com.sun.mail:all:1.5.0-b01") {
         // Multiple licenses, specify explicitly
         expectedLicense = SimpleLicense("CDDL", uri("http://www.sun.com/cddl")) and SimpleLicense("GPLv2+CE", uri("https://glassfish.java.net/public/CDDL+GPL_1_1.html"))
