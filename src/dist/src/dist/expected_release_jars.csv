@@ -2,7 +2,7 @@
 29371,annotations-23.0.0.jar
 2387,apiguardian-api-1.1.0.jar
 122004,asm-9.2.jar
-517353,base-portable-jvm-2.2.0.jar
+518460,base-portable-jvm-2.2.1.jar
 485809,batik-anim-1.14.jar
 424624,batik-awt-util-1.14.jar
 703757,batik-bridge-1.14.jar
@@ -92,8 +92,8 @@
 22357,kotlin-stdlib-jdk7-1.6.0.jar
 16201,kotlin-stdlib-jdk8-1.6.0.jar
 792176,kotlinx-html-jvm-0.7.3.jar
-191102,lets-plot-batik-2.2.0.jar
-3995999,lets-plot-common-2.2.0.jar
+181223,lets-plot-batik-2.2.1.jar
+4025480,lets-plot-common-2.2.1.jar
 208235,log4j-1.2-api-2.17.0.jar
 301776,log4j-api-2.17.0.jar
 1789339,log4j-core-2.17.0.jar
@@ -107,11 +107,11 @@
 65261,oro-2.0.8.jar
 1307434,ph-commons-10.1.2.jar
 506616,ph-css-6.3.4.jar
-640740,plot-api-jvm-3.1.0.jar
-882161,plot-base-portable-jvm-2.2.0.jar
-847234,plot-builder-portable-jvm-2.2.0.jar
-115295,plot-common-portable-jvm-2.2.0.jar
-744679,plot-config-portable-jvm-2.2.0.jar
+642167,plot-api-jvm-3.1.1.jar
+891618,plot-base-portable-jvm-2.2.1.jar
+845777,plot-builder-portable-jvm-2.2.1.jar
+116030,plot-common-portable-jvm-2.2.1.jar
+749095,plot-config-portable-jvm-2.2.1.jar
 11369,reactive-streams-1.0.3.jar
 1315838,rhino-1.7.13.jar
 1242230,rsyntaxtextarea-3.1.3.jar
@@ -123,7 +123,7 @@
 2539,swing-extensions-visual-padding-0.1.3.jar
 734528,tika-core-1.27.jar
 1397879,tika-parsers-1.27.jar
-173926,vis-svg-portable-jvm-2.2.0.jar
+174661,vis-svg-portable-jvm-2.2.1.jar
 3154938,xalan-2.7.2.jar
 1386502,xercesImpl-2.12.1.jar
 220536,xml-apis-1.4.01.jar
