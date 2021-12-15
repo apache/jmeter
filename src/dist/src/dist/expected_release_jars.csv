@@ -68,10 +68,10 @@
 249924,jtidy-r938.jar
 382708,junit-4.13.1.jar
 48483,jxlayer-3.0.4.jar
-201685,log4j-1.2-api-2.13.3.jar
-292301,log4j-api-2.13.3.jar
-1714164,log4j-core-2.13.3.jar
-23590,log4j-slf4j-impl-2.13.3.jar
+207909,log4j-1.2-api-2.16.0.jar
+301892,log4j-api-2.16.0.jar
+1789565,log4j-core-2.16.0.jar
+24258,log4j-slf4j-impl-2.16.0.jar
 519087,mail-1.5.0-b01.jar
 106939,miglayout-core-5.2.jar
 22390,miglayout-swing-5.2.jar
