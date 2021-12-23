@@ -41,13 +41,13 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 5.4.2 =================== -->
+<!--  =================== 5.4.3 =================== -->
 
-<h1>Version 5.4.2</h1>
+<h1>Version 5.4.3</h1>
 <p>
 Summary
 </p>
-<p>This version is a fix release against the vulnerability CVE-2021-44228: Apache Log4j2 JNDI features do not protect against attacker controlled LDAP and other JNDI related endpoints.
+<p>This version is a fix release against the vulnerability CVE-2021-45105: Apache Log4j2 versions 2.0-alpha1 through 2.16.0 (excluding 2.12.3) did not protect from uncontrolled recursion from self-referential lookups. This allows an attacker with control over Thread Context Map data to cause a denial of service when a crafted string is interpreted.
 </p>
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
@@ -114,7 +114,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Updated Apache log4j2 to 2.16.0 (from 2.13.3).</li>
+    <li>Updated Apache Log4j2 to 2.17.0 (from 2.16.0).</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
