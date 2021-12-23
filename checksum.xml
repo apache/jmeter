@@ -105,7 +105,7 @@
     <trusted-key id='cbaebe39a46c4ca1' group='org.apache.geronimo.specs' />
     <trusted-key id='ecdfea3cb4493b94' group='org.apache.geronimo.specs' />
     <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
-    <trusted-key id='b4c70893b62babe8' group='org.apache.logging.log4j' />
+    <trusted-key id='3595395eb3d8e1ba' group='org.apache.logging.log4j' />
     <trusted-key id='c7bf26d0bb617866' group='org.apache.maven' />
     <trusted-key id='31474e5e7c6b7034' group='org.apache.mina' />
     <trusted-key id='9c8c892f91f8e6d1' group='org.apache.rat' />
