@@ -59,26 +59,41 @@ Summary
 </ul>
 
 <ch_section>New and Noteworthy</ch_section>
-<ul>
-  <li>Support building and running JMeter with Java 17</li>
-  <li>Open Model Thread Group: load generator with programmable profile</li>
-</ul>
-<!--
+<p>JMeter now supports Java 17</p>
+
+<p>JMeter 5.5 ships with log4j2 2.17</p>
+
+<p>New component: <code><a href="./usermanual/component_reference.html#Open_Model_Thread_Group">Open Model Thread Group</a></code>
+allows creating load profiles with variable load.</p>
+
+<p>For example, if you need to gradually increase load from <code>0/sec</code> to <code>10/sec</code> during <code>minute</code>
+you could previously use <code>Thread Group + Timer</code> combinations. However, then you need to compute
+the expected number of threads, ensure they are created only when needed, and so on.</p>
+
+<p>With <code>Open Model Thread Group</code> you can configure the same load profile as <code>rate(0/sec) random_arrivals(1 minute) rate(10/sec)</code>.
+The thread group would spawn threads as needed to drive the configured load.
+The load profile can use properties, so you can launch the same script with slightly different load levels,
+however, the profile can't be updated while the test is running.
+</p>
+
+<p>The new thread group is experimental in JMeter 5.5, so please feel free to submit your feedback.</p>
+<figure width="1398" height="1117" image="open_model_thread_group.png">Open Model Thread Group sample</figure>
+
 <ch_title>Core improvements</ch_title>
-<ch_title>Test Plan</ch_title>
-<ch_title>Scripting / Debugging enhancements</ch_title>
-<ch_title>Functions</ch_title>
--->
-<ch_title>UX improvements</ch_title>
+<p>Kotlin language is now used in some core classes and tests (e.g. Open Model Thread Group).
+    JMeter is compiled with <code>apiTarget=1.5</code>, and it ships with <code>kotlin-stdlib</code> 1.6.
+</p>
 
-<!-- =================== Incompatible changes =================== -->
-
-<ch_section>Incompatible changes</ch_section>
-<ul>
-</ul>
-<!-- =================== Improvements =================== -->
+<p><a href="https://github.com/JetBrains/lets-plot-kotlin">lets-plot-kotlin</a> charting library is added,
+    so it will be easier to refine and create new charts in UI in the future.
+</p>
 
 <ch_section>Improvements</ch_section>
+
+<h3>Thread Groups</h3>
+<ul>
+  <li>New component: <code><a href="./usermanual/component_reference.html#Open_Model_Thread_Group">Open Model Thread Group</a></code></li>
+</ul>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
@@ -116,14 +131,6 @@ Summary
     <li><bug>65515</bug>Allow pooling of Prepared Statements in JDBC</li>
     <li><bug>65299</bug>JSONPathAssertion attributes are out of order/Compare JSON objects and
         not their string representations.</li>
-</ul>
-
-<h3>Functions</h3>
-<ul>
-</ul>
-
-<h3>I18N</h3>
-<ul>
 </ul>
 
 <h3>Report / Dashboard</h3>
