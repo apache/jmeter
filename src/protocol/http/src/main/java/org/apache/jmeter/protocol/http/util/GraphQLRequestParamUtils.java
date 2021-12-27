@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.util;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.regex.Pattern;
@@ -31,13 +32,12 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -46,15 +46,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  */
 public final class GraphQLRequestParamUtils {
 
-    private static final String VARIABLES_FIELD = "variables";
+    public static final String VARIABLES_FIELD = "variables";
 
-    private static final String OPERATION_NAME_FIELD = "operationName";
+    public static final String OPERATION_NAME_FIELD = "operationName";
 
-    private static final String QUERY_FIELD = "query";
-
-    private static Logger log = LoggerFactory.getLogger(GraphQLRequestParamUtils.class);
+    public static final String QUERY_FIELD = "query";
 
     private static final Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
+
+    private static final JsonFactory jsonFactory = new JsonFactory();
 
     private GraphQLRequestParamUtils() {
     }
@@ -79,28 +79,26 @@ public final class GraphQLRequestParamUtils {
      * @throws RuntimeException if JSON serialization fails for some reason due to any runtime environment issues
      */
     public static String toPostBodyString(final GraphQLRequestParams params) {
-        final ObjectMapper mapper = new ObjectMapper();
-        final ObjectNode postBodyJson = mapper.createObjectNode();
-        postBodyJson.set(OPERATION_NAME_FIELD,
-                JsonNodeFactory.instance.textNode(StringUtils.trimToNull(params.getOperationName())));
+        final StringWriter writer = new StringWriter();
 
-        if (StringUtils.isNotBlank(params.getVariables())) {
-            try {
-                final ObjectNode variablesJson = mapper.readValue(params.getVariables(), ObjectNode.class);
-                postBodyJson.set(VARIABLES_FIELD, variablesJson);
-            } catch (JsonProcessingException e) {
-                log.error("Ignoring the GraphQL query variables content due to the syntax error: {}",
-                        e.getLocalizedMessage());
+        try (JsonGenerator gen = jsonFactory.createGenerator(writer)) {
+            gen.writeStartObject();
+
+            gen.writeStringField(OPERATION_NAME_FIELD, StringUtils.trimToNull(params.getOperationName()));
+
+            if (StringUtils.isNotBlank(params.getVariables())) {
+                gen.writeFieldName(VARIABLES_FIELD);
+                gen.writeRawValue(StringUtils.trim(params.getVariables()));
             }
+
+            gen.writeStringField(QUERY_FIELD, StringUtils.trim(params.getQuery()));
+
+            gen.writeEndObject();
+        } catch (IOException e) {
+            throw new IllegalStateException("Error while writing graphql post body " + params, e);
         }
 
-        postBodyJson.set(QUERY_FIELD, JsonNodeFactory.instance.textNode(StringUtils.trim(params.getQuery())));
-
-        try {
-            return mapper.writeValueAsString(postBodyJson);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Cannot serialize JSON for POST body string", e);
-        }
+        return writer.toString();
     }
 
     /**
@@ -118,17 +116,7 @@ public final class GraphQLRequestParamUtils {
      * @return an HTTP GET request parameter value converted from the GraphQL Variables JSON input string
      */
     public static String variablesToGetParamValue(final String variables) {
-        final ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            final ObjectNode variablesJson = mapper.readValue(variables, ObjectNode.class);
-            return mapper.writeValueAsString(variablesJson);
-        } catch (JsonProcessingException e) {
-            log.error("Ignoring the GraphQL query variables content due to the syntax error: {}",
-                    e.getLocalizedMessage());
-        }
-
-        return null;
+        return StringUtils.trimToNull(variables);
     }
 
     /**
@@ -151,7 +139,7 @@ public final class GraphQLRequestParamUtils {
         try (InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(postData), encoding)) {
             data = mapper.readValue(reader, ObjectNode.class);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid json data: " + e.getLocalizedMessage());
+            throw new IllegalArgumentException("Invalid json data: " + e.getLocalizedMessage(), e);
         }
 
         String operationName = null;

@@ -206,6 +206,7 @@ however, the profile can't be updated while the test is running.
     header in HC4 sampler.</li>
   <li><bug>65363</bug><code>NullPointerException</code> in <code>HTTPHC4Impl$ManagedCredentialsProvider.getAuthorizationForAuthScope</code> when <code>401</code> response from remote and <code>httpclient4.auth.preemptive=false</code></li>
   <li><bug>65692</bug>HTTP(s) Test Script Recorder: Enable setting enabled cipher suite and enabled protocols on SSLContext/ Align ssl properties between Java and HC4 impl</li>
+  <li><bug>65108</bug>Support JMeter variables in <a href="./usermanual/component_reference.html#HTTP_Request">GraphQL HTTP Request</a></li>
 </ul>
 
 <h3>Other Samplers</h3>
