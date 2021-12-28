@@ -92,14 +92,13 @@ dependencies {
     buildDocs("org.jdom:jdom")
 }
 
-tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
-    doLast {
-        // createDist can't yet remove outdated jars (e.g. when dependency is updated to a newer version)
-        // so we enhance "clean" task to kill the jars
-        delete(fileTree("$rootDir/bin") { include("ApacheJMeter.jar") })
-        delete(fileTree("$rootDir/lib") { include("*.jar") })
-        delete(fileTree("$rootDir/lib/ext") { include("ApacheJMeter*.jar") })
-    }
+tasks.clean {
+    // copyLibs uses Sync task, so it can't predict all the possible output files (e.g. from previous executions)
+    // So we register patterns to remove explicitly
+    delete(fileTree("$rootDir/bin") { include("ApacheJMeter.jar") })
+    delete(fileTree("$rootDir/lib") { include("*.jar") })
+    delete(fileTree("$rootDir/lib/ext") { include("ApacheJMeter*.jar") })
+    delete(fileTree("$rootDir/lib/junit") { include("test.jar") })
 }
 
 // Libs are populated dynamically since we can't get the full set of dependencies

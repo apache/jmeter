@@ -265,6 +265,7 @@ however, the profile can't be updated while the test is running.
   <li><bug>65300</bug>IllegalAccessError when opening file dialog with Java 16</li>
   <li><bug>65336</bug>Blank labels when different elements had the same name</li>
   <li><bug>65522</bug>Restart doesn't work, when parameters contain spaces</li>
+  <li><bug>63914</bug>Simplify :src:dist:clean configuration, ensure /lib/junit/test.jar is removed on clean</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
