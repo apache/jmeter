@@ -53,7 +53,7 @@ public class DistributedRunnerTest {
     }
 
     @Test
-    public void testSuccess() throws Exception {
+    public void testSuccess() {
         createJmeterEnv();
         JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "1");
         JMeterUtils.setProperty(DistributedRunner.CONTINUE_ON_FAIL, "false");
@@ -69,7 +69,7 @@ public class DistributedRunnerTest {
     }
 
     @Test
-    public void testFailure1() throws Exception {
+    public void testFailure1() {
         createJmeterEnv();
         JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "2");
         JMeterUtils.setProperty(DistributedRunner.RETRIES_DELAY, "1");
@@ -101,7 +101,7 @@ public class DistributedRunnerTest {
     }
 
     @Test
-    public void testFailure2() throws Exception {
+    public void testFailure2() {
         createJmeterEnv();
         JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "1");
         JMeterUtils.setProperty(DistributedRunner.RETRIES_DELAY, "1");
@@ -112,7 +112,7 @@ public class DistributedRunnerTest {
     }
 
     @Test
-    public void testFailure3() throws Exception {
+    public void testFailure3() {
         createJmeterEnv();
         JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "1");
         JMeterUtils.setProperty(DistributedRunner.RETRIES_DELAY, "1");
@@ -154,7 +154,7 @@ public class DistributedRunnerTest {
         }
 
         @Override
-        public void runTest() throws JMeterEngineException {
+        public void runTest() {
             log.debug("Running {}", host);
         }
 
