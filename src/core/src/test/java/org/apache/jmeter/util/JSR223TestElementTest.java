@@ -20,6 +20,7 @@ package org.apache.jmeter.util;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.Test;
 
 public class JSR223TestElementTest {
 
@@ -27,14 +28,14 @@ public class JSR223TestElementTest {
     private JSR223TestElement element = new JSR223TestElement() {
     };
 
-    //@Test
+    @Test
     public void testGetScriptEngineJS() throws Exception {
         element.setScriptLanguage("JavaScript");
         assertThat(element.getScriptEngine().getFactory().getLanguageName(),
                 CoreMatchers.containsString("Script"));
     }
 
-    //@Test
+    @Test
     public void testGetScriptEngineDefault() throws Exception {
         element.setScriptLanguage("");
         assertThat(element.getScriptEngine().getFactory().getLanguageName(),
