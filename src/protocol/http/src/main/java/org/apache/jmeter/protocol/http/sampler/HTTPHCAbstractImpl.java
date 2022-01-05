@@ -198,10 +198,12 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     /**
       * Invokes {@link HTTPAbstractImpl#getResponseTimeout()}
       *
-      * @return the socket timeout for responses in the following preference order:
+      * Returns the socket timeout for responses in the following preference order:
       *  1. Response timeout in HTTP Sampler/ HTTP Request Defaults
       *  2. http.socket.timeout in hc.parameters
       *  3. httpclient.timeout property
+      *
+      *  @return the socket timeout
       */
     protected int getResponseTimeout() {
         int rto = super.getResponseTimeout();
