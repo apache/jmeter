@@ -399,7 +399,7 @@ public class AxisGraph extends JPanel {
             // Y Axis
             try {
                 BigDecimal round = BigDecimal.valueOf(max / 1000d);
-                round = round.setScale(0, RoundingMode.HALF_EVEN);
+                round = round.setScale(0, RoundingMode.UP);
                 double topValue = round.doubleValue() * 1000;
                 yaxis.setUserDefinedScale(0, 500);
                 yaxis.setNumItems((int) (topValue / 500)+1);
