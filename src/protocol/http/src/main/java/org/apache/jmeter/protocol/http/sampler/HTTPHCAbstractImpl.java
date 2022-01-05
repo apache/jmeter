@@ -19,7 +19,12 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
@@ -107,6 +112,11 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
             log.warn("You're using property 'httpclient.timeout' that will soon be deprecated for HttpClient3.1, you should either set "
                     + "timeout in HTTP Request GUI, HTTP Request Defaults or set http.socket.timeout in hc.parameters");
         }
+
+        if(!StringUtils.isEmpty(JMeterUtils.getProperty("hc.parameters.file"))) { //$NON-NLS-1$
+            HttpClientDefaultParameters.load(JMeterUtils.getProperty("hc.parameters.file"), HTTPCLIENT_PARAMS);
+        }
+
         if (NONPROXY_HOSTS.length() > 0) {
             StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$
             while (s.hasMoreTokens()) {
@@ -141,9 +151,6 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected HTTPHCAbstractImpl(HTTPSamplerBase testElement) {
         super(testElement);
-        if(!StringUtils.isEmpty(JMeterUtils.getProperty("hc.parameters.file"))) { //$NON-NLS-1$
-            HttpClientDefaultParameters.load(JMeterUtils.getProperty("hc.parameters.file"), HTTPCLIENT_PARAMS);
-        }
     }
 
     protected static boolean isNonProxy(String host){

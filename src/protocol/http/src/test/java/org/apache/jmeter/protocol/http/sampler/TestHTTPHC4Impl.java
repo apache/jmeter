@@ -45,8 +45,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import static org.junit.Assert.*;
-
 @Execution(ExecutionMode.CONCURRENT)
 public class TestHTTPHC4Impl {
     private JMeterContext jmctx;
