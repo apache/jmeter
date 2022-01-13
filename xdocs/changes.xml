@@ -196,6 +196,7 @@ however, the profile can't be updated while the test is running.
   <li>Updated Gradle to 7.3 (from 7.2)</li>
   <li><pr>689</pr>Code clean up in StringFromFile. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
   <li><pr>690</pr>Refactor a few unit tests. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
+  <li><pr>692></pr>Fix a few deprecation warnings for Gradle. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
