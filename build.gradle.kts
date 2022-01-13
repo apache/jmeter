@@ -207,7 +207,7 @@ fun SonarQubeProperties.add(name: String, valueProvider: () -> String) {
 }
 
 if (jacocoEnabled) {
-    val mergedCoverage = jacocoReport.get().reports.xml.destination.toString()
+    val mergedCoverage = jacocoReport.get().reports.xml.outputLocation.toString()
 
     // For every module we pass merged coverage report
     // That enables to see ":src:core" lines covered even in case they are covered from
@@ -493,8 +493,8 @@ allprojects {
 
         tasks.withType<JacocoReport>().configureEach {
             reports {
-                html.isEnabled = reportsForHumans()
-                xml.isEnabled = !reportsForHumans()
+                html.required.set(reportsForHumans())
+                xml.required.set(!reportsForHumans())
             }
         }
         // Add each project to combined report
