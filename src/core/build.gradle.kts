@@ -16,6 +16,7 @@
  */
 
 import com.github.autostyle.gradle.AutostyleTask
+import com.github.vlsi.gradle.ide.IdeExtension
 
 plugins {
     id("build-logic.jvm-published-library")
@@ -140,7 +141,10 @@ val versionClass by tasks.registering(Sync::class) {
     into(generatedVersionDir)
 }
 
-ide {
+// For some reason, using `ide { ... }` sometimes causes
+// Caused by: java.lang.IllegalStateException: couldn't find inline method
+// Lorg/gradle/kotlin/dsl/Accessorslkzxmv806rumtqvft7195qyhKt;.getIde(Lorg/gradle/api/Project;)Lcom/github/vlsi/gradle/ide/IdeExtension;
+configure<IdeExtension> {
     generatedJavaSources(versionClass.get(), generatedVersionDir)
 }
 
