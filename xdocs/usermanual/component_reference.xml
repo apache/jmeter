@@ -5037,7 +5037,9 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
             Note that if the path will return array object, it will be iterated and if expected value is found, the assertion will succeed. To validate empty array use <code>[]</code> string. Also, if patch will return dictionary object, it will be converted to string before comparison.
            <note>When using <a href="https://github.com/json-path/JsonPath#what-is-returned-when">indefinite JSON Paths</a>
              you must assert the value due to the existing JSON library implementation, otherwise the assertion could always
-             return successful</note>
+             return successful.<br>
+             Since JMeter version 5.5 the assertion will fail, if an indefinite path is given, an empty list is extracted and
+             no assertion value is set.</note>
         </p>
     </description>
     <properties>

@@ -237,6 +237,7 @@ however, the profile can't be updated while the test is running.
   <li><bug>65681</bug>Use default values for null values when extracting with JSONPostProcessor</li>
   <li>Allow setters in ConstantThroughputTimer to updating the values during the run time</li>
   <li><bug>65782</bug>Use correct message format for MessageFormat in HTMLAssertion</li>
+  <li><bug>65794</bug>JSON Assertion always successful with indefinite paths</li>
 </ul>
 
 <h3>Functions</h3>
@@ -253,7 +254,6 @@ however, the profile can't be updated while the test is running.
 
 <h3>Documentation</h3>
 <ul>
-  <li><bug>65794</bug>JSON Assertion always successful with indefinite paths</li>
 </ul>
 
 <h3>General</h3>

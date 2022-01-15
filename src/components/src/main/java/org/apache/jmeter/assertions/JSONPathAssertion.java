@@ -30,11 +30,11 @@ import org.apache.oro.text.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jayway.jsonpath.JsonPath;
+
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
-
-import com.jayway.jsonpath.JsonPath;
 
 /**
  * This is main class for JSONPath Assertion which verifies assertion on
@@ -112,6 +112,12 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
         Object value = JsonPath.read(jsonString, getJsonPath());
 
         if (!isJsonValidationBool()) {
+            if (value instanceof JSONArray) {
+                JSONArray arrayValue = (JSONArray) value;
+                if (arrayValue.isEmpty() && !JsonPath.isPathDefinite(getJsonPath())) {
+                    throw new IllegalStateException("JSONPath is indefinite and the extracted Value is an empty Array. Please use an assertion value, to be sure to get a correct result. " + getExpectedValue());
+                }
+            }
             return;
         }
 
