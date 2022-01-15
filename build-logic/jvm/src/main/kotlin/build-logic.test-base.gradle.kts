@@ -16,6 +16,7 @@
  */
 
 import com.github.vlsi.gradle.dsl.configureEach
+import com.github.vlsi.gradle.properties.dsl.props
 import org.gradle.api.JavaVersion
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -45,6 +46,14 @@ tasks.configureEach<Test> {
         it.key.toString().startsWith("jmeter.properties.")
     }.forEach {
         systemProperty(it.key.toString().substring("jmeter.properties.".length), it.value)
+    }
+    props.string("testExtraJvmArgs").trim().takeIf { it.isNotBlank() }?.let {
+        jvmArgs(it.split(" ::: "))
+    }
+    props.string("testDisableCaching").trim().takeIf { it.isNotBlank() }?.let {
+        outputs.doNotCacheIf(it) {
+            true
+        }
     }
     passProperty("java.awt.headless")
     passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
