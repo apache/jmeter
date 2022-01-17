@@ -287,6 +287,7 @@ however, the profile can't be updated while the test is running.
   <li><bug>65336</bug>Blank labels when different elements had the same name</li>
   <li><bug>65522</bug>Restart doesn't work, when parameters contain spaces</li>
   <li><bug>63914</bug>Simplify <code>:src:dist:clean</code> configuration, ensure <code>/lib/junit/test.jar</code> is removed on clean</li>
+  <li><pr>696</pr>Keep JSyntaxTextArea text value for use in headless mode. Contributed by Peter Paul Bakker (peter.paul.bakker at stokpop.nl)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -313,6 +314,7 @@ however, the profile can't be updated while the test is running.
   <li>Piotr Smietana (piotrsmietana1998 at gmail.com)</li>
   <li>Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
   <li>Ji Hun (jihunkimkw at gmail.com)</li>
+  <li>Peter Paul Bakker (peter.paul.bakker at stokpop.nl)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

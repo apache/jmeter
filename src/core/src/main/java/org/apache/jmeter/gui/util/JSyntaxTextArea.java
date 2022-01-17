@@ -101,6 +101,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             // Allow override for unit testing only
             if ("true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
                 return new JSyntaxTextArea(disableUndo) {
+                    private String savedText = "";
                     private static final long serialVersionUID = 1L;
                     @Override
                     protected void init() {
@@ -118,7 +119,15 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
                     @Override
                     public void discardAllEdits() { }
                     @Override
-                    public void setText(String t) { }
+                    public void setText(String t) {
+                        savedText = t;
+                    }
+
+                    @Override
+                    public String getText() {
+                        return savedText;
+                    }
+
                     @Override
                     public boolean isCodeFoldingEnabled(){ return true; }
                 };
