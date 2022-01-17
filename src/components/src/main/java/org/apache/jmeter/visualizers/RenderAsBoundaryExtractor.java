@@ -212,6 +212,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
     public void renderResult(SampleResult sampleResult) {
         clearData();
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
+        response = ViewResultsFullVisualizer.wrapLongLines(response);
         boundaryExtractorDataField.setText(response);
         boundaryExtractorDataField.setCaretPosition(0);
     }

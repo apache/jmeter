@@ -180,6 +180,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
+        response = ViewResultsFullVisualizer.wrapLongLines(response);
         try {
             xmlDataField.setText(response == null ? "" : response);
             xmlDataField.setCaretPosition(0);

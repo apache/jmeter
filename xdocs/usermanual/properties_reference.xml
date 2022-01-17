@@ -1510,6 +1510,18 @@ JMETER-SERVER</source>
     Set to zero to disable the size check and display the whole response.<br/>
     Defaults to: <code>10485760</code>
 </property>
+<property name="view.results.tree.max_line_size">
+    Maximum size (in characters) of the line in the displayed.<br/>
+    This property works around Bug 63620 since Swing hangs when displaying very long lines.<br/>
+    Set to zero to disable line wrapping.<br/>
+    Defaults to: <code>110000</code>
+</property>
+<property name="view.results.tree.soft_wrap_line_size">
+    Line size (in characters) to consider wrapping to make UI faster.<br/>
+    This property works around Bug 63620 since Swing hangs when displaying very long lines.<br/>
+    Set to zero to disable line wrapping.<br/>
+    Defaults to: <code>view.results.tree.max_line_size / 1.1f</code>
+</property>
 <property name="view.results.tree.renderers_order">
     Order of Renderers in View Results Tree.<br/>
     <note>Note full class names should be used for non JMeter core renderers</note>

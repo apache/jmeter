@@ -164,6 +164,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
+        response = ViewResultsFullVisualizer.wrapLongLines(response);
         try {
             xmlDataField.setText(response == null ? "" : response);
             xmlDataField.setCaretPosition(0);

@@ -143,6 +143,7 @@ however, the profile can't be updated while the test is running.
   <li><bug>61805</bug><pr>663</pr>Add simple HTTP request template. Contributed by Ori Marko (orimarko at gmail.com)</li>
   <li><bug>65611</bug><pr>673</pr>Add support for IPv6 addresses when specifying a remote worker node. Based on a patch by Peter Wong (peter.wong at csexperts.com)</li>
   <li>Reduce memory consumption by the logging panel (disable undo events for it)</li>
+  <li><bug>63620</bug><pr>694</pr>Fix GUI freeze when viewing response body with long line breaks</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

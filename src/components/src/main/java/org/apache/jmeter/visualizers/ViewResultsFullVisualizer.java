@@ -74,6 +74,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JMeterUIDefaults;
+import org.apache.jorphan.util.StringWrap;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,6 +104,14 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     // Default limited to 10 megabytes
     private static final int MAX_DISPLAY_SIZE =
             JMeterUtils.getPropDefault("view.results.tree.max_size", 10485760); // $NON-NLS-1$
+
+    // Default limited to 110K
+    private static final int MAX_LINE_SIZE =
+            JMeterUtils.getPropDefault("view.results.tree.max_line_size", 110000); // $NON-NLS-1$
+
+    // Limit the soft wrap to 100K (hard limit divided by 1.1)
+    private static final int SOFT_WRAP_LINE_SIZE =
+            JMeterUtils.getPropDefault("view.results.tree.soft_wrap_line_size", (int) (MAX_LINE_SIZE / 1.1f)); // $NON-NLS-1$
 
     // default display order
     private static final String VIEWERS_ORDER =
@@ -562,6 +572,19 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         return response;
     }
+
+    @API(status = API.Status.INTERNAL, since = "5.5")
+    public static String wrapLongLines(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        if (SOFT_WRAP_LINE_SIZE > 0 && MAX_LINE_SIZE > 0) {
+            StringWrap stringWrap = new StringWrap(SOFT_WRAP_LINE_SIZE, MAX_LINE_SIZE);
+            return stringWrap.wrap(input, "\n");
+        }
+        return input;
+    }
+
 
     private static class ResultsNodeRenderer extends DefaultTreeCellRenderer {
         private static final long serialVersionUID = 4159626601097711565L;

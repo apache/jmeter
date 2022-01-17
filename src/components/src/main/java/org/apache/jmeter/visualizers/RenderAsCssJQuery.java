@@ -145,6 +145,7 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
    public void renderResult(SampleResult sampleResult) {
        clearData();
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
+        response = ViewResultsFullVisualizer.wrapLongLines(response);
         cssJqueryDataField.setText(response);
         cssJqueryDataField.setCaretPosition(0);
     }

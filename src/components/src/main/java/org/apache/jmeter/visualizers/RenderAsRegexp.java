@@ -143,6 +143,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     public void renderResult(SampleResult sampleResult) {
         clearData();
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
+        response = ViewResultsFullVisualizer.wrapLongLines(response);
         regexpDataField.setText(response);
         regexpDataField.setCaretPosition(0);
     }

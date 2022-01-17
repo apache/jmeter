@@ -688,6 +688,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         Document blank = new DefaultStyledDocument();
         results.setDocument(blank);
         try {
+            data = ViewResultsFullVisualizer.wrapLongLines(data);
             document.insertString(0, data == null ? "" : data, null);
         } catch (BadLocationException ex) {
             LOGGER.error("Error inserting text", ex);
