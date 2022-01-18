@@ -253,6 +253,7 @@ however, the profile can't be updated while the test is running.
 
 <h3>Documentation</h3>
 <ul>
+  <li><bug>65794</bug>JSON Assertion always successful with indefinite paths</li>
 </ul>
 
 <h3>General</h3>
@@ -300,6 +301,7 @@ however, the profile can't be updated while the test is running.
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
   <li>Nikola Aleksic (nalexic at gmail.com)</li>
+  <li>Vladimir Rosu (rosuvladimir at gmail.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

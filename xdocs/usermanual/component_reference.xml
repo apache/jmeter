@@ -5035,6 +5035,9 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
             Second, it will search for specified path, using syntax from <a href="https://github.com/json-path/JsonPath" >Jayway JsonPath 1.2.0</a>. If the path is not found, it will fail.
             Third, if JSON path was found in the document, and validation against expected value was requested, it will perform validation. For the <code>null</code> value there is special checkbox in the GUI.
             Note that if the path will return array object, it will be iterated and if expected value is found, the assertion will succeed. To validate empty array use <code>[]</code> string. Also, if patch will return dictionary object, it will be converted to string before comparison.
+           <note>When using <a href="https://github.com/json-path/JsonPath#what-is-returned-when">indefinite JSON Paths</a>
+             you must assert the value due to the existing JSON library implementation, otherwise the assertion could always
+             return successful</note>
         </p>
     </description>
     <properties>
