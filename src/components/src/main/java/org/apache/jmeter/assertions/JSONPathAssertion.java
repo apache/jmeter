@@ -115,7 +115,8 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
             if (value instanceof JSONArray) {
                 JSONArray arrayValue = (JSONArray) value;
                 if (arrayValue.isEmpty() && !JsonPath.isPathDefinite(getJsonPath())) {
-                    throw new IllegalStateException("JSONPath is indefinite and the extracted Value is an empty Array. Please use an assertion value, to be sure to get a correct result. " + getExpectedValue());
+                    throw new IllegalStateException("JSONPath is indefinite and the extracted Value is an empty Array." +
+                            " Please use an assertion value, to be sure to get a correct result. " + getExpectedValue());
                 }
             }
             return;
