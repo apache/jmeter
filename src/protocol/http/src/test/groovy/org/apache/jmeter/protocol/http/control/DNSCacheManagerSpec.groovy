@@ -32,12 +32,15 @@ class DNSCacheManagerSpec extends Specification {
 
     private static final boolean localDNSResolverOK = {
         try {
+            if (VALID_DNS_SERVERS == null) {
+                return false
+            }
             new DNSCacheManager().resolve("apache.org")
             return true
         } catch (UnknownHostException uhe) {
             return false
         }
-    }
+    }.call() // <-- this avoids automatic casting of Closure to boolean which yields true in Groovy
 
     def sut = new DNSCacheManager()
 

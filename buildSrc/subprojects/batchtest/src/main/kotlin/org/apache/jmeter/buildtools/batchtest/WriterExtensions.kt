@@ -23,16 +23,19 @@ import org.gradle.internal.io.TextStream
 import java.io.Writer
 
 fun Writer.withPrefix(prefix: String) =
-    LineBufferingOutputStream(object : TextStream {
-        override fun text(text: String?) {
-            write(prefix)
-            write(text)
-            flush()
-        }
-
-        override fun endOfStream(failure: Throwable?) {
-            if (failure != null) {
-                throw failure
+    LineBufferingOutputStream(
+        object : TextStream {
+            override fun text(text: String) {
+                write(prefix)
+                write(text)
+                flush()
             }
-        }
-    }, System.lineSeparator())
+
+            override fun endOfStream(failure: Throwable?) {
+                if (failure != null) {
+                    throw failure
+                }
+            }
+        },
+        System.lineSeparator()
+    )

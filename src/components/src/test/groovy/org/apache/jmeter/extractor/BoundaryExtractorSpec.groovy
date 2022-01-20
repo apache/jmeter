@@ -60,7 +60,7 @@ class BoundaryExtractorSpec extends Specification {
         context.setPreviousResult(prevResult)
     }
 
-    def "Extract, where pattern exists, with matchNumber=#matchNumber from #occurences returns #expected"() {
+    def "Extract, where pattern exists, with matchNumber=#matchNumber from #occurrences returns #expected"() {
         given:
             def input = createInputString(occurrences)
         when:
@@ -86,7 +86,7 @@ class BoundaryExtractorSpec extends Specification {
             matchNumber << [-1, 0, 1, 2, 100]
     }
 
-    def "Extract, where pattern exists in the stream, with matchNumber=#matchNumber from #occurances returns #expected"() {
+    def "Extract, where pattern exists in the stream, with matchNumber=#matchNumber from #occurrences returns #expected"() {
         given:
             def input = createInputString(occurrences)
             Stream<String> stream = ([input, "", null] * 10).stream()

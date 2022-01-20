@@ -212,25 +212,36 @@ class TestJSONPostProcessor {
         assertThat(vars.get("varname_2"), CoreMatchers.is(CoreMatchers.nullValue()));
     }
 
-    @Test
-    void testEmptyInput() throws ParseException {
+    private static Stream<Arguments> provideEmptyOrNullResultArgs() {
+        return Stream.of(
+                Arguments.of("{\"context\": null}", "$.context", "0", null, "NONE"), // bug 65681
+                Arguments.of("[{\"context\": null}, {\"context\": \"\"}]", "$[*].context", "1", "2", "NONE"),
+                Arguments.of("[{\"context\": null}, {\"context\": \"\"}]", "$[*].context", "2", "2", ""),
+                Arguments.of("{\"context\": \"\"}", "$.context", "0", null, ""),
+                Arguments.of("", "$.context", "0", null, "NONE"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideEmptyOrNullResultArgs")
+    void testEmptyOrNullResult(String contextValue, String jsonPath, String matchNumber, String expectedMatchNumber,
+            String expectedResult) throws ParseException {
         JMeterContext context = JMeterContextService.getContext();
-        JSONPostProcessor processor = setupProcessor(context, "0", false);
+        JSONPostProcessor processor = setupProcessor(context, matchNumber, false);
 
         SampleResult result = new SampleResult();
-        result.setResponseData("".getBytes(StandardCharsets.UTF_8));
+        result.setResponseData(contextValue.getBytes(StandardCharsets.UTF_8));
 
         JMeterVariables vars = new JMeterVariables();
         context.setVariables(vars);
         context.setPreviousResult(result);
 
-        processor.setJsonPathExpressions("$.context");
+        processor.setJsonPathExpressions(jsonPath);
         processor.setDefaultValues("NONE");
         processor.setScopeAll();
         processor.process();
 
-        assertThat(vars.get(VAR_NAME), CoreMatchers.is("NONE"));
-        assertThat(vars.get(VAR_NAME + "_matchNr"), CoreMatchers.nullValue());
+        assertThat(vars.get(VAR_NAME), CoreMatchers.is(expectedResult));
+        assertThat(vars.get(VAR_NAME + "_matchNr"), CoreMatchers.is(expectedMatchNumber));
         assertThat(vars.get(VAR_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
     }
 

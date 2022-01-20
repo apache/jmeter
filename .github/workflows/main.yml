@@ -10,37 +10,44 @@ on:
 
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/software-installed-on-github-hosted-runners
 
+concurrency:
+  # On master/release, we don't want any jobs cancelled so the sha is used to name the group
+  # On PR branches, we cancel the job if new commits are pushed
+  # More info: https://stackoverflow.com/a/68422069/253468
+  group: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
+  cancel-in-progress: true
+
 jobs:
   windows:
-    name: 'Windows (JDK 14)'
+    name: 'Windows (JDK 17)'
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1.1.0
       with:
         fetch-depth: 50
-    - name: 'Set up JDK 14'
+    - name: 'Set up JDK 17'
       uses: actions/setup-java@v1
       with:
-        java-version: 14
+        java-version: 17
     - uses: burrunan/gradle-cache-action@v1
       name: Test
       with:
-        job-id: jdk14
+        job-id: jdk17
         multi-cache-enabled: false
         # An explicit skip for Sha512 tasks is required due to https://github.com/gradle/gradle/issues/16789
         arguments: --scan --no-parallel build -x distTar -x distTarSource -x distTarSha512 -x distTarSourceSha512
 
   mac:
-    name: 'macOS (JDK 14)'
+    name: 'macOS (JDK 17)'
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v1.1.0
       with:
         fetch-depth: 50
-    - name: 'Set up JDK 14'
+    - name: 'Set up JDK 17'
       uses: actions/setup-java@v1
       with:
-        java-version: 14
+        java-version: 17
     - uses: burrunan/gradle-cache-action@v1
       name: Test
       with:

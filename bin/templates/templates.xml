@@ -154,18 +154,18 @@
             </ul>
         ]]></description>
     </template>
-	<template isTestPlan="true">
+    <template isTestPlan="true">
         <name>Functional Testing Test Plan [01]</name>
         <fileName>/bin/templates/functional-testing-01-test-plan.jmx</fileName>
         <description><![CDATA[
         <h1>Building a Functional Testing Test Plan [01]</h1>
-		<p>You can use JMeter to automate API Testing</p>
-		<p>This template of Test Plan contains first step when starting creating JMeter script</p>
+        <p>You can use JMeter to automate API Testing</p>
+        <p>This template of Test Plan contains first step when starting creating JMeter script</p>
         <h2>Useful links</h2>
             <ul>
                 <li><a href="https://jmeter.apache.org/usermanual/test_plan.html" >https://jmeter.apache.org/usermanual/test_plan.html</a></li>
-				<li><a href="https://jmeter.apache.org/usermanual/listeners.html" >https://jmeter.apache.org/usermanual/listeners.html</a></li>
-				<li><a href="https://jmeter.apache.org/usermanual/component_reference.html#View_Results_Tree" >https://jmeter.apache.org/usermanual/component_reference.html#View_Results_Tree</a></li>
+                <li><a href="https://jmeter.apache.org/usermanual/listeners.html" >https://jmeter.apache.org/usermanual/listeners.html</a></li>
+                <li><a href="https://jmeter.apache.org/usermanual/component_reference.html#View_Results_Tree" >https://jmeter.apache.org/usermanual/component_reference.html#View_Results_Tree</a></li>
 
             </ul>
         ]]></description>
@@ -250,5 +250,27 @@
                 <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#Uniform_Random_Timer" >Uniform Random Timer</a></li>
             </ul>
         ]]></description>
+    </template>
+    <template isTestPlan="true">
+        <name>Simple HTTP request</name>
+        <fileName>/bin/templates/simple-http-request-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Template for simple HTTP request</h1>
+        <h2>JMeter Configuration</h2>
+        <p>Configure your HTTP request, set:
+            <ul>
+                <li>Full URL</li>
+                <li>Content Type</li>
+                <li>HTTP method</li>
+                <li>Body data</li>
+            </ul>
+        </p>
+        ]]></description>
+        <parameters>
+            <parameter defaultValue="https://example.invalid/" key="url"/>
+            <parameter defaultValue="application/json" key="contentType"/>
+            <parameter defaultValue="POST" key="method"/>
+            <parameter defaultValue="" key="body"/>
+        </parameters>
     </template>
 </templates>

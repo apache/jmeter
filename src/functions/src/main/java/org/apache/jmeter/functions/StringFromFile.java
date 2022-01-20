@@ -122,7 +122,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
 
     public StringFromFile() {
         if (log.isDebugEnabled()) {
-            log.debug("++++++++ Construct {}" + this);
+            log.debug("++++++++ Construct {}", this);
         }
     }
 
@@ -147,9 +147,8 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         String tn = Thread.currentThread().getName();
         fileName = ((CompoundVariable) values[0]).execute();
 
-        String start = "";
         if (values.length >= PARAM_START) {
-            start = ((CompoundVariable) values[PARAM_START - 1]).execute();
+            String start = ((CompoundVariable) values[PARAM_START - 1]).execute();
             try {
                 // Low chances to be non numeric, we parse
                 myStart = Integer.parseInt(start);

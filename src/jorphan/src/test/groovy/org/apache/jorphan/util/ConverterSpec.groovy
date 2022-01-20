@@ -94,6 +94,9 @@ class ConverterSpec extends Specification {
 
     def "Convert '#value' to #type"() {
         expect:
+            if (value == "OBJECT_WITH_BROKEN_TO_STRING") {
+                value = new Object() { String toString() { 1/0 } }
+            }
             Converter.convert(value, type) == expected
         where:
             value                | type            | expected
@@ -114,7 +117,7 @@ class ConverterSpec extends Specification {
             ''                   | char.class      | ' '
             Character.valueOf((char) 65)       | char.class | 'A'
             Byte.valueOf((byte)65)             | char.class | 'A'
-            new Object() { String toString() {1/0}} | char.class | ' '
+            "OBJECT_WITH_BROKEN_TO_STRING" | char.class | ' '
     }
 
     def "Convert to date from '#value'"() {

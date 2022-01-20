@@ -27,10 +27,13 @@ import com.github.vlsi.gradle.release.RepositoryType
 import net.ltgt.gradle.errorprone.errorprone
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarqube.gradle.SonarQubeProperties
 
 plugins {
     java
+    kotlin("jvm") apply false
     jacoco
     checkstyle
     id("org.jetbrains.gradle.plugin.idea-ext") apply false
@@ -66,13 +69,13 @@ version = "jmeter".v + releaseParams.snapshotSuffix
 
 val displayVersion by extra {
     version.toString() +
-            if (releaseParams.release.get()) {
-                ""
-            } else {
-                // Append 7 characters of Git commit id for snapshot version
-                val grgit: Grgit? by project
-                grgit?.let { " " + it.head().abbreviatedId }
-            }
+        if (releaseParams.release.get()) {
+            ""
+        } else {
+            // Append 7 characters of Git commit id for snapshot version
+            val grgit: Grgit? by project
+            grgit?.let { " " + it.head().abbreviatedId }
+        }
 }
 
 println("Building JMeter $version")
@@ -284,7 +287,7 @@ allprojects {
         autostyle {
             kotlinGradle {
                 license()
-                ktlint()
+                ktlint("ktlint".v)
             }
             format("configs") {
                 filter {
@@ -429,6 +432,33 @@ allprojects {
         }
     }
 
+    plugins.withId("org.jetbrains.kotlin.jvm") {
+        configure<KotlinJvmProjectExtension> {
+            // Require explicit access modifiers and require explicit types for public APIs.
+            // See https://kotlinlang.org/docs/whatsnew14.html#explicit-api-mode-for-library-authors
+            if (props.bool("kotlin.explicitApi", default = true)) {
+                explicitApi()
+            }
+        }
+        tasks.withType<KotlinCompile>().configureEach {
+            kotlinOptions {
+                if (!name.startsWith("compileTest")) {
+                    apiVersion = "kotlin.api".v
+                }
+            }
+        }
+        if (!skipAutostyle) {
+            autostyle {
+                kotlin {
+                    license()
+                    trimTrailingWhitespace()
+                    ktlint("ktlint".v)
+                    endWithNewline()
+                }
+            }
+        }
+    }
+
     plugins.withType<JacocoPlugin> {
         the<JacocoPluginExtension>().toolVersion = "jacoco".v
 
@@ -475,9 +505,11 @@ allprojects {
                 sourceDirectories.from(mainCode.allSource.srcDirs)
                 // IllegalStateException: Can't add different class with same name: module-info
                 // https://github.com/jacoco/jacoco/issues/858
-                classDirectories.from(mainCode.output.asFileTree.matching {
-                    exclude("module-info.class")
-                })
+                classDirectories.from(
+                    mainCode.output.asFileTree.matching {
+                        exclude("module-info.class")
+                    }
+                )
             }
         }
     }
@@ -520,7 +552,8 @@ allprojects {
                         filter(org.apache.tools.ant.filters.EscapeUnicode::class)
                         filter(LineEndings.LF)
                     } else if (name.endsWith(".dtd") || name.endsWith(".svg") ||
-                        name.endsWith(".txt")) {
+                        name.endsWith(".txt")
+                    ) {
                         filter(LineEndings.LF)
                     }
                 }
@@ -575,7 +608,7 @@ allprojects {
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP
                 if (enableSpotBugs) {
-                    description = "$description (skipped by default, to enable it add -Dspotbugs)"
+                    description = "$description (skipped by default, to enable it add -Pspotbugs)"
                 }
                 reports {
                     // xml goes for SonarQube, so we always create it just in case

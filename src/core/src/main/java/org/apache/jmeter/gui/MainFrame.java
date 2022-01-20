@@ -915,6 +915,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 if (log.isWarnEnabled()) {
                     log.warn("Error awt title: {}", nsfe.toString()); // $NON-NLS-1$
                 }
+            } catch (RuntimeException e) {
+                // By default, strong encapsulation prevents setAccessible on java.desktop
+                if ("java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) {
+                    /* ignore */
+                    log.info("Unable to adjust awtAppClassName to {}", DEFAULT_APP_NAME);
+                    return;
+                }
+                throw e;
             }
         }
     }

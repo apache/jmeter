@@ -107,7 +107,12 @@ public class StringToFile extends AbstractFunction {
             File file = new File(fileName);
             File fileParent = file.getParentFile();
             if (fileParent == null || (fileParent.exists() && fileParent.isDirectory() && fileParent.canWrite())) {
-                FileUtils.writeStringToFile(file, content, charset, append);
+                try {
+                    FileUtils.writeStringToFile(file, content, charset, append);
+                } catch (IllegalArgumentException e) {
+                    log.error("The file {} can't be written to", file, e);
+                    return false;
+                }
             } else {
                 log.error("The parent file of {} doesn't exist or is not writable", file);
                 return false;

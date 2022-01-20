@@ -1575,16 +1575,20 @@ returns:
     </description>
 <properties>
         <property name="Format" required="No">
-        The format to be passed to DateTimeFormatter.
+        The format to be passed to DateTimeFormatter (for input data parsing and output formating).
         See <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
         If omitted, the function uses milliseconds since epoch format.
         </property>
         <property name="Date to shift" required="No">
-        Indicate the date in the format set by the parameter 'Format' to shift
-        If omitted, the date is set to now
+        Indicate the date in the format set by the parameter <code>Format</code> to shift.
+        If omitted, the date is set to <em>ZonedDateTime.now</em> with system zone <em>ZoneId.systemDefault()</em>.
+        <note>If <code>Format</code> is empty then this parameter must be long value (look at examples).</note>
         </property>
         <property name="value to shift" required="No">
-        Indicate the specified amount of seconds, minutes, hours or days to shift according to a textual representation of a duration such as PnDTnHnMn.nS. See https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-
+        Indicate the specified amount of seconds, minutes, hours or days to shift according to a textual
+        representation of a duration such as <code>PnDTnHnMn.nS</code>. See
+        <a href="https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-">Duration#parse(CharSequence)</a>.
+        If ommitted, no shifting will be done.
         <ul>
         <li><code>PT20.345S</code> parses as 20.345 seconds</li>
         <li><code>PT15M</code> parses as 15 minutes</li>
@@ -1594,15 +1598,18 @@ returns:
         </ul>
         </property>
         <property name="Locale to use for format" required="No">
-        The string format of a locale. The language code must be lowercase. The country code must be uppercase. The separator must be an underscore. ex: en_EN
-        See http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html
-        If omitted, by default the function use the ApacheJMeter locale one.
+        The string format of a locale. The language code must be lowercase. The country code must be uppercase.
+        The separator must be an underscore (<code>_</code>). For example <code>en_EN</code>
+        See <a href="http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html">supported locales on Java 7</a>.
+        If omitted, by default the function uses the current locale from the JVM.
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 <p>Examples:
 <source>${__timeShift(dd/MM/yyyy,21/01/2018,P2D,,)}</source> returns <code>23/01/2018</code>
 <source>${__timeShift(dd MMMM yyyy,21 février 2018,P2D,fr_FR,)}</source> returns <code>23 février 2018</code>
+<source>${__timeShift(,10000,PT10S,,)}</source> returns <code>20000</code> = 10sec input + 10sec shift
+<source>${__timeShift(,,PT10S,,)}</source> returns <code>1632158276770</code> = 1632158266770 ms (now) + 10sec shift
 </p>
 </component>
 <component index="&sect-num;.5.34" name="__digest">

@@ -123,7 +123,6 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     public static final String IMPORT_CURL = "import_curl";
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
     private static final String CERT = "cert";
-    private Logger log = LoggerFactory.getLogger(getClass());
     /** A panel allowing results to be saved. */
     private FilePanel filePanel = null;
     static {
@@ -550,11 +549,11 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                         if (contentFile.canRead()) {
                             contentType = tika.detect(contentFile);
                         } else {
-                            log.info("Can not read file {}, so guessing contentType by extension.", formValue);
+                            LOGGER.info("Can not read file {}, so guessing contentType by extension.", formValue);
                             contentType = tika.detect(formValue);
                         }
                     } catch (IOException e) {
-                        log.info(
+                        LOGGER.info(
                                 "Could not detect contentType for file {} by content, so falling back to detection by filename",
                                 formValue);
                         contentType = tika.detect(formValue);

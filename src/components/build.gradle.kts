@@ -20,11 +20,13 @@ dependencies {
     testImplementation(project(":src:core", "testClasses"))
 
     api("org.apache-extras.beanshell:bsh") {
-        because("""
+        because(
+            """
             BeanShell is not required for JMeter, however it is commonly used in the jmx scripts.
             New scripts should refrain from using BeanShell though and migrate to Groovy or other
             faster engines
-        """.trimIndent())
+            """.trimIndent()
+        )
     }
 
     api("javax.mail:mail") {
@@ -91,7 +93,7 @@ fun classExists(name: String) =
     }
 
 if (!(project.findProperty("enableJavaFx") as? String)
-        .toBool(nullAs = classExists("javafx.application.Platform"), blankAs = true, default = false)
+    .toBool(nullAs = classExists("javafx.application.Platform"), blankAs = true, default = false)
 ) {
     // JavaFX is not present in Maven Central, so exclude the file unless explicitly asked by
     // -PenableJavaFx

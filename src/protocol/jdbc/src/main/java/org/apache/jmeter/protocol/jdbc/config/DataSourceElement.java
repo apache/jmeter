@@ -45,7 +45,7 @@ public class DataSourceElement extends AbstractTestElement
     implements ConfigElement, TestStateListener, TestBean {
     private static final Logger log = LoggerFactory.getLogger(DataSourceElement.class);
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
     private transient String dataSource;
     private transient String driver;
@@ -60,6 +60,7 @@ public class DataSourceElement extends AbstractTestElement
     private transient String timeout;
     private transient String trimInterval;
     private transient String transactionIsolation;
+    private transient String poolPreparedStatements;
 
     private transient boolean keepAlive;
     private transient boolean autocommit;
@@ -214,18 +215,8 @@ public class DataSourceElement extends AbstractTestElement
         BasicDataSource dataSource = new BasicDataSource();
 
         if (log.isDebugEnabled()) {
-            StringBuilder sb = new StringBuilder(40);
-            sb.append("MaxPool: ");
-            sb.append(maxPool);
-            sb.append(" Timeout: ");
-            sb.append(getTimeout());
-            sb.append(" TrimInt: ");
-            sb.append(getTrimInterval());
-            sb.append(" Auto-Commit: ");
-            sb.append(isAutocommit());
-            sb.append(" Preinit: ");
-            sb.append(isPreinit());
-            log.debug(sb.toString());
+            log.debug("MaxPool: {} Timeout: {} TrimInt: {} Auto-Commit: {} Preinit: {} poolPreparedStatements: {}",
+                    maxPool, getTimeout(), getTrimInterval(), isAutocommit(), isPreinit(), poolPreparedStatements);
         }
         int poolSize = Integer.parseInt(maxPool);
         dataSource.setMinIdle(0);
@@ -239,6 +230,15 @@ public class DataSourceElement extends AbstractTestElement
         }
         if(StringUtils.isNotEmpty(connectionProperties)) {
             dataSource.setConnectionProperties(connectionProperties);
+        }
+        if (StringUtils.isNotEmpty(poolPreparedStatements)) {
+            int maxPreparedStatements = Integer.parseInt(poolPreparedStatements);
+            if (maxPreparedStatements < 0) {
+                dataSource.setPoolPreparedStatements(false);
+            } else {
+                dataSource.setPoolPreparedStatements(true);
+                dataSource.setMaxOpenPreparedStatements(10);
+            }
         }
         dataSource.setRollbackOnReturn(false);
         dataSource.setMaxIdle(poolSize);
@@ -642,5 +642,25 @@ public class DataSourceElement extends AbstractTestElement
      */
     public void setConnectionProperties(String connectionProperties) {
         this.connectionProperties = connectionProperties;
+    }
+
+    /**
+     * Return the max number of pooled prepared statements. "0" means no limit
+     * on prepared statements to pool and "-1" disables pooling.
+     *
+     * @return the max number of pooled prepared statements
+     */
+    public String getPoolPreparedStatements() {
+        return poolPreparedStatements;
+    }
+
+    /**
+     * Set the max number of pooled prepared statements. "0" means no limit
+     * on prepared statements to pool and "-1" disables pooling.
+     *
+     * @param poolPreparedStatements max number of prepared statements
+     */
+    public void setPoolPreparedStatements(String poolPreparedStatements) {
+        this.poolPreparedStatements = poolPreparedStatements;
     }
 }

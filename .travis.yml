@@ -61,10 +61,9 @@ matrix:
         - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-s390x/
         - export PATH=$JAVA_HOME/bin:$PATH
         - ./gradlew build -Djava.awt.headless=true -PskipCheckstyle -PskipSpotless $SKIP_TAR
-    # Java 12 is not here because it has been superceeded by Java 13
-    # Tests with Java 12 do not surface much new, so Java 11 (LTS) and Java 13 (non-LTS) are enough for "post Java 9" testing
-    - name: Tests with OpenJDK 14
-      jdk: openjdk14
+    # We test with so-called LTS releases: 8, 11, 17
+    - name: Tests with OpenJDK 17
+      jdk: openjdk17
       addons:
         apt:
           packages:

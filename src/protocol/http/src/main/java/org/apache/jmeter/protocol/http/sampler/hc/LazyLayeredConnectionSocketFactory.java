@@ -39,18 +39,14 @@ import org.slf4j.LoggerFactory;
  */
 public final class LazyLayeredConnectionSocketFactory implements LayeredConnectionSocketFactory{
     private static final Logger LOG = LoggerFactory.getLogger(LazyLayeredConnectionSocketFactory.class);
-    private static final String PROTOCOL_LIST =
-            JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
+    private static final String[] SOCKET_PROTOCOL_ARRAY =
+            JMeterUtils.getArrayPropDefault("https.socket.protocols", null); // $NON-NLS-1$
 
-    private static final String CIPHER_LIST =
-            JMeterUtils.getPropDefault("https.socket.ciphers", ""); // $NON-NLS-1$ $NON-NLS-2$
+    private static final String[] SOCKET_CIPHER_ARRAY =
+            JMeterUtils.getArrayPropDefault("https.socket.ciphers", null); // $NON-NLS-1$
 
-    private static final String[] SUPPORTED_PROTOCOL_LIST =
-            PROTOCOL_LIST.isEmpty() ?
-                    null: PROTOCOL_LIST.split(" "); // $NON-NLS-1$
-    private static final String[] SUPPORTED_CIPHER_LIST =
-            CIPHER_LIST.isEmpty() ?
-                    null : CIPHER_LIST.split(" "); // $NON-NLS-1$
+    private static final String[] CIPHER_SUITE_ARRAY =
+            JMeterUtils.getArrayPropDefault("https.cipherSuites", SOCKET_CIPHER_ARRAY); // $NON-NLS-1$
 
     private static class AdapteeHolder { // IODH idiom
         private static final LayeredConnectionSocketFactory ADAPTEE = checkAndInit();
@@ -62,8 +58,8 @@ public final class LazyLayeredConnectionSocketFactory implements LayeredConnecti
             LOG.info("Setting up HTTPS TrustAll Socket Factory");
             return new SSLConnectionSocketFactory(
                     new HttpSSLProtocolSocketFactory(JsseSSLManager.CPS),
-                    SUPPORTED_PROTOCOL_LIST,
-                    SUPPORTED_CIPHER_LIST,
+                    SOCKET_PROTOCOL_ARRAY,
+                    CIPHER_SUITE_ARRAY,
                     NoopHostnameVerifier.INSTANCE);
         }
 

@@ -15,6 +15,11 @@
  * limitations under the License.
  */
 
+plugins {
+    // Bring Kotlin plugin to the build script class path, so it can be found when required
+    // in apply(plugin = ...) below
+    kotlin("jvm") apply false
+}
 val skipMavenPublication = setOf(
     ":src:bshclient",
     ":src:dist",
@@ -45,11 +50,15 @@ subprojects {
     }
 
     val groovyUsed = file("src/main/groovy").isDirectory || file("src/test/groovy").isDirectory
+    val kotlinUsed = file("src/main/kotlin").isDirectory || file("src/test/kotlin").isDirectory
     val testsPresent = file("src/test").isDirectory
 
     apply<JavaLibraryPlugin>()
     if (groovyUsed) {
         apply<GroovyPlugin>()
+    }
+    if (kotlinUsed) {
+        apply(plugin = "org.jetbrains.kotlin.jvm")
     }
     if (project.path !in skipMavenPublication) {
         apply<MavenPublishPlugin>()
@@ -64,32 +73,40 @@ subprojects {
             // No tests => no dependencies required
             return@dependencies
         }
+        val implementation by configurations
         val testImplementation by configurations
         val testRuntimeOnly by configurations
-        testImplementation("org.junit.jupiter:junit-jupiter-api")
-        testImplementation("org.junit.jupiter:junit-jupiter-params")
+        testImplementation("org.junit.jupiter:junit-jupiter")
         testImplementation("org.hamcrest:hamcrest")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
         testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
         testImplementation("junit:junit")
         testImplementation(testFixtures(project(":src:testkit")))
         if (groovyUsed) {
             testImplementation("org.spockframework:spock-core")
         }
+        if (kotlinUsed) {
+            testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+        }
         testRuntimeOnly("cglib:cglib-nodep") {
-            because("""
+            because(
+                """
                 org.spockframework.mock.CannotCreateMockException: Cannot create mock for
                  class org.apache.jmeter.report.processor.AbstractSummaryConsumer${'$'}SummaryInfo.
                  Mocking of non-interface types requires a code generation library.
-                 Please put an up-to-date version of byte-buddy or cglib-nodep on the class path.""".trimIndent())
+                 Please put an up-to-date version of byte-buddy or cglib-nodep on the class path.
+                """.trimIndent()
+            )
         }
         testRuntimeOnly("org.objenesis:objenesis") {
-            because("""
+            because(
+                """
                 org.spockframework.mock.CannotCreateMockException: Cannot create mock for
                  class org.apache.jmeter.report.core.Sample. To solve this problem,
                  put Objenesis 1.2 or higher on the class path (recommended),
                  or supply constructor arguments (e.g. 'constructorArgs: [42]') that allow to construct
-                 an object of the mocked type.""".trimIndent())
+                 an object of the mocked type.
+                """.trimIndent()
+            )
         }
     }
 

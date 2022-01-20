@@ -52,6 +52,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.gui.JFactory;
@@ -714,6 +715,28 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
+     * Get an array of String if present and not empty, defaultValue if not present.
+     *
+     * @param propName
+     *            the name of the property.
+     * @param defaultVal
+     *            the default value.
+     * @return The PropDefault value
+     */
+    public static String[] getArrayPropDefault(String propName, String[] defaultVal) {
+        try {
+            String strVal = appProperties.getProperty(propName);
+            if (StringUtils.isNotBlank(strVal)) {
+                return strVal.trim().split("\\s+");
+            }
+        } catch (Exception e) {
+            log.warn("Exception '{}' occurred when fetching Array property:'{}', defaulting to: {}",
+                    e.getMessage(), propName, defaultVal != null ? Arrays.toString(defaultVal) : null);
+        }
+        return defaultVal;
+    }
+
+    /**
      * Get a long value with default if not present.
      *
      * @param propName
@@ -870,14 +893,17 @@ public class JMeterUtils implements UnitTestManager {
             System.out.println(errorMsg); // NOSONAR intentional
             return; // Done
         }
-        try {
-            JOptionPane.showMessageDialog(instance.getMainFrame(),
-                    formatMessage(errorMsg),
-                    titleMsg,
-                    JOptionPane.ERROR_MESSAGE);
-        } catch (HeadlessException e) {
-            log.warn("reportErrorToUser(\"{}\") caused", errorMsg, e);
-        }
+        String errorMessage = errorMsg;
+        SwingUtilities.invokeLater(() -> {
+            try {
+                JOptionPane.showMessageDialog(instance.getMainFrame(),
+                        formatMessage(errorMessage),
+                        titleMsg,
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (HeadlessException e) {
+                log.warn("reportErrorToUser(\"{}\") caused", errorMessage, e);
+            }
+        });
     }
 
     /**
@@ -893,14 +919,16 @@ public class JMeterUtils implements UnitTestManager {
             System.out.println(msg); // NOSONAR intentional
             return; // Done
         }
-        try {
-            JOptionPane.showMessageDialog(instance.getMainFrame(),
-                    formatMessage(msg),
-                    titleMsg,
-                    JOptionPane.INFORMATION_MESSAGE);
-        } catch (HeadlessException e) {
-            log.warn("reportInfoToUser(\"{}\") caused", msg, e);
-        }
+        SwingUtilities.invokeLater(() -> {
+            try {
+                JOptionPane.showMessageDialog(instance.getMainFrame(),
+                        formatMessage(msg),
+                        titleMsg,
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (HeadlessException e) {
+                log.warn("reportInfoToUser(\"{}\") caused", msg, e);
+            }
+        });
     }
 
     private static JScrollPane formatMessage(String errorMsg) {

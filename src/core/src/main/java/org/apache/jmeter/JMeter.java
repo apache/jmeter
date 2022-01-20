@@ -1364,7 +1364,7 @@ public class JMeter implements JMeterPlugin {
             // This cannot be a JMeter class variable, because properties
             // are not initialised until later.
             final int pauseToCheckForRemainingThreads =
-                    JMeterUtils.getPropDefault("jmeter.exit.check.pause", 2000); // $NON-NLS-1$
+                    JMeterUtils.getPropDefault("jmeter.exit.check.pause", 0); // $NON-NLS-1$
 
             if (pauseToCheckForRemainingThreads > 0) {
                 Thread daemon = new Thread(){

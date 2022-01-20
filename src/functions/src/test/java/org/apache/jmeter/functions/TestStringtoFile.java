@@ -129,7 +129,7 @@ public class TestStringtoFile extends JMeterTestCase {
 
     @Test
     public void testWriteToFileIOException(@TempDir Path tempDir) throws Exception {
-        File file = new File(tempDir.toAbsolutePath() + "/output.txt");
+        File file = new File(tempDir.toAbsolutePath() + "/output_ro.txt");
         try {
             assertTrue(file.createNewFile() && file.setWritable(false), file + " should be set read-only");
             String tempAbsolutePath = file.getAbsolutePath();

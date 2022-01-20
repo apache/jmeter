@@ -25,8 +25,8 @@ import java.util.Arrays;
 import java.util.Properties;
 
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class SecurityProviderLoaderTest {
 
     @AfterEach
-    public void removeAllDummyProviders() {
+    void removeAllDummyProviders() {
         Security.removeProvider(DummyProvider.PROVIDER_NAME);
         Security.removeProvider(DummyProviderWithConfig.PROVIDER_NAME);
         Assert.assertNull(Security.getProvider(DummyProvider.PROVIDER_NAME));
@@ -42,7 +42,7 @@ public class SecurityProviderLoaderTest {
     }
 
     @Test
-    public void utilityClassTest() throws Exception {
+    void utilityClassTest() throws Exception {
         Constructor<SecurityProviderLoader> privateConstructor = SecurityProviderLoader.class.getDeclaredConstructor();
         privateConstructor.setAccessible(true);
         try {
@@ -53,7 +53,7 @@ public class SecurityProviderLoaderTest {
     }
 
     @Test
-    public void addSecurityProviderTest() {
+    void addSecurityProviderTest() {
         removeAllDummyProviders();
         Provider[] providers = Security.getProviders();
         int providersCountBefore = providers.length;
@@ -74,7 +74,7 @@ public class SecurityProviderLoaderTest {
     }
 
     @Test
-    public void addSecurityProviderTestWithConfigForUnconfigurableProvider() {
+    void addSecurityProviderTestWithConfigForUnconfigurableProvider() {
         removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
@@ -91,7 +91,7 @@ public class SecurityProviderLoaderTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "java.lang.Object", "org.apache.jmeter.util.SecurityProviderLoaderTest.UnknownProvider"})
-    public void addInvalidProviderClassTest(String invalidClassname) {
+    void addInvalidProviderClassTest(String invalidClassname) {
         removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
@@ -104,7 +104,7 @@ public class SecurityProviderLoaderTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3})
-    public void addSecurityProviderWithPositionTest(int position) {
+    void addSecurityProviderWithPositionTest(int position) {
         removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
@@ -128,7 +128,7 @@ public class SecurityProviderLoaderTest {
 
     @ParameterizedTest
     @CsvSource({":0:TestConfig,0", ":2:TEST,2", ":3:TEST,3"})
-    public void addSecurityProviderWithPositionAndConfigTest(String config, int position) {
+    void addSecurityProviderWithPositionAndConfigTest(String config, int position) {
         removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
@@ -145,7 +145,7 @@ public class SecurityProviderLoaderTest {
     }
 
     @Test
-    public void addSecurityProvidersViaProperties() {
+    void addSecurityProvidersViaProperties() {
         removeAllDummyProviders();
         int providersCountBefore = Security.getProviders().length;
 
@@ -171,7 +171,7 @@ public class SecurityProviderLoaderTest {
         Assert.assertEquals("CONFIG", ((DummyProviderWithConfig) providerWithConfig).getConfig());
     }
 
-    public static class DummyProvider extends Provider {
+    static class DummyProvider extends Provider {
         private static final long serialVersionUID = 1L;
         public static final String PROVIDER_NAME = "DUMMY";
 
@@ -182,7 +182,7 @@ public class SecurityProviderLoaderTest {
 
     }
 
-    public static class DummyProviderWithConfig extends Provider {
+    static class DummyProviderWithConfig extends Provider {
         private static final long serialVersionUID = 1L;
         public static final String PROVIDER_NAME = "DUMMY_CONFIG";
 

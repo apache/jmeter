@@ -48,7 +48,7 @@ fun Project.applyKotlinProjectConventions() {
     apply(plugin = "com.github.autostyle")
     autostyle {
         kotlin {
-            ktlint {
+            ktlint(project.extra["ktlint.version"] as String) {
                 userData(mapOf("disabled_rules" to "import-ordering"))
             }
             trimTrailingWhitespace()

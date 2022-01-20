@@ -20,6 +20,7 @@ package org.apache.jmeter.assertions;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 
 import com.jayway.jsonpath.JsonPath;
 
@@ -110,6 +112,13 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
         Object value = JsonPath.read(jsonString, getJsonPath());
 
         if (!isJsonValidationBool()) {
+            if (value instanceof JSONArray) {
+                JSONArray arrayValue = (JSONArray) value;
+                if (arrayValue.isEmpty() && !JsonPath.isPathDefinite(getJsonPath())) {
+                    throw new IllegalStateException("JSONPath is indefinite and the extracted Value is an empty Array." +
+                            " Please use an assertion value, to be sure to get a correct result. " + getExpectedValue());
+                }
+            }
             return;
         }
 
@@ -153,12 +162,13 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
     }
 
     private boolean isEquals(Object subj) {
-        String str = objectToString(subj);
         if (isUseRegex()) {
+            String str = objectToString(subj);
             Pattern pattern = JMeterUtils.getPatternCache().getPattern(getExpectedValue());
             return JMeterUtils.getMatcher().matches(str, pattern);
         } else {
-            return str.equals(getExpectedValue());
+            Object expected = JSONValue.parse(getExpectedValue());
+            return Objects.equals(expected, subj);
         }
     }
 

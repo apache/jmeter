@@ -33,6 +33,7 @@ import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
+import org.apache.jorphan.gui.ui.TextComponentUI;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -240,6 +241,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             }
         }
         if(disableUndo) {
+            TextComponentUI.uninstallUndo(this);
             // We need to do this to force recreation of undoManager which
             // will use the disableUndo otherwise it would always be false
             // See BUG 57440
@@ -276,7 +278,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     protected RUndoManager createUndoManager() {
         RUndoManager undoManager = super.createUndoManager();
         if(disableUndo) {
-            undoManager.setLimit(0);
+            undoManager.setLimit(1);
         } else {
             undoManager.setLimit(MAX_UNDOS);
         }
@@ -290,7 +292,11 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The initial text to be set
      */
     public void setInitialText(String string) {
-        setText(StringUtils.defaultString(string, ""));
+        try {
+            setText(StringUtils.defaultString(string, ""));
+        } catch (Exception e) {
+            log.error("Dubious problem while setting text to {}", string, e);
+        }
         discardAllEdits();
     }
 

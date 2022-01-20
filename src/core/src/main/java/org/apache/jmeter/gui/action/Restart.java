@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -100,6 +101,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
      */
     public static void restartApplication(Runnable runBeforeRestart) {
         String javaCommand = System.getProperty(SUN_JAVA_COMMAND);
+        List<String> processArgs = new ArrayList<>();
         if(StringUtils.isEmpty(javaCommand)) {
             JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
                     JMeterUtils.getResString("restart_error")+":\n This command is only supported on Open JDK or Oracle JDK" ,  //$NON-NLS-1$  //$NON-NLS-2$
@@ -107,46 +109,43 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
             return;
         }
         // java binary
-        String java = System.getProperty("java.home") + "/bin/java";
+        processArgs.add(System.getProperty("java.home") + "/bin/java");
         // vm arguments
         List<String> vmArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
-        StringBuilder vmArgsOneLine = new StringBuilder();
         for (String arg : vmArguments) {
             // if it's the agent argument : we ignore it otherwise the
             // address of the old application and the new one will be in
             // conflict
             if (!arg.contains("-agentlib")) {
-                vmArgsOneLine.append(arg);
-                vmArgsOneLine.append(" ");
+                processArgs.add(arg);
             }
         }
-        // init the command to execute, add the vm args
-        final StringBuilder cmd = new StringBuilder(java + " " + vmArgsOneLine);
 
         // program main and program arguments
         String[] mainCommand = javaCommand.split(" ");
         // program main is a jar
         if (mainCommand[0].endsWith(".jar")) {
             // if it's a jar, add -jar mainJar
-            cmd.append("-jar " + new File(mainCommand[0]).getPath());
+            processArgs.add("-jar");
+            processArgs.add(new File(mainCommand[0]).getPath());
         } else {
             // else it's a .class, add the classpath and mainClass
-            cmd.append("-cp \"" + System.getProperty("java.class.path") + "\" " + mainCommand[0]);
+            processArgs.add("-cp");
+            processArgs.add(System.getProperty("java.class.path"));
+            processArgs.add(mainCommand[0]);
         }
         // finally add program arguments
-        for (int i = 1; i < mainCommand.length; i++) {
-            cmd.append(" ");
-            cmd.append(mainCommand[i]);
-        }
+        processRemainingArgs(processArgs, mainCommand);
+        log.debug("Restart with {} from [{}]", processArgs, javaCommand);
         // execute the command in a shutdown hook, to be sure that all the
         // resources have been disposed before restarting the application
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
                 try {
-                    Runtime.getRuntime().exec(cmd.toString());
+                    new ProcessBuilder(processArgs).start();
                 } catch (IOException e) {
-                    log.error("Error calling restart command {}", cmd.toString(), e);
+                    log.error("Error calling restart command {}", processArgs, e);
                 }
             }
         });
@@ -157,6 +156,49 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
         // exit
         System.exit(0); // NOSONAR Required
 
+    }
+
+    /**
+     * Try to re-combine the parameters to regard spaces in file names
+     * <p>
+     * Java command line has no knowledge of the 'real' parameters and
+     * we have to do a bit of guessing to re-assemble the parameters with
+     * spaces and the drop the spaces, that should split the parameters.
+     * <p>
+     * So we guess, that each parameter starts with a dash ({@code -}) and
+     * everything else are values, that should be stitched together.
+     *
+     * @param processArgs arguments to be given to ProcessBuilder
+     * @param mainCommand original command line split at spaces
+     */
+    private static void processRemainingArgs(List<String> processArgs, String[] mainCommand) {
+        boolean paramValue = false;
+        StringBuilder partialParamValue = new StringBuilder();
+        for (int i = 1; i < mainCommand.length; i++) {
+            String currentPart = mainCommand[i];
+            if (paramValue) {
+                if (currentPart.startsWith("-")) {
+                    paramValue = false;
+                    processArgs.add(partialParamValue.toString());
+                    partialParamValue.setLength(0);
+                    processArgs.add(currentPart);
+                } else {
+                    partialParamValue.append(" ");
+                    partialParamValue.append(currentPart);
+                }
+            } else {
+                if (currentPart.startsWith("-")) {
+                    processArgs.add(currentPart);
+                } else {
+                    paramValue = true;
+                    partialParamValue.setLength(0);
+                    partialParamValue.append(currentPart);
+                }
+            }
+        }
+        if (paramValue) {
+            processArgs.add(partialParamValue.toString());
+        }
     }
 
     /**

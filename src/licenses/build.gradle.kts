@@ -120,10 +120,10 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     overrideLicense("xpp3:xpp3_min:1.1.4c") {
         // pom.xml contains multiple licenses
         expectedLicense = SpdxLicense.CC0_1_0 and
-                SimpleLicense(
-                    "Indiana University Extreme! Lab Software License, vesion 1.1.1",
-                    uri("http://www.extreme.indiana.edu/viewcvs/~checkout~/XPP3/java/LICENSE.txt")
-                )
+            SimpleLicense(
+                "Indiana University Extreme! Lab Software License, vesion 1.1.1",
+                uri("http://www.extreme.indiana.edu/viewcvs/~checkout~/XPP3/java/LICENSE.txt")
+            )
         effectiveLicense = SpdxLicense.CC0_1_0 and ExtraLicense.Indiana_University_1_1_1
     }
 
