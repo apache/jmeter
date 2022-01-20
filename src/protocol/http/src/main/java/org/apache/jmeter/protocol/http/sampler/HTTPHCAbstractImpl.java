@@ -196,8 +196,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     }
 
     /**
-      * Invokes {@link HTTPAbstractImpl#getResponseTimeout()}
-      *
+      * 
       * Returns the socket timeout for responses in the following preference order:
       *  1. Response timeout in HTTP Sampler/ HTTP Request Defaults
       *  2. http.socket.timeout in hc.parameters
