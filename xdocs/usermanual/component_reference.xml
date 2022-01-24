@@ -1211,7 +1211,7 @@ props.put("PROP1","1234");</source>
     </property>
     <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
-    <property name="Cache compiled script if available" required="No">If checked (advised) and the language used supports <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</property>
+    <property name="Cache compiled script if available" required="No">If checked (advised) and the language used supports <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using its MD5 hash as unique cache key</property>
     <property name="Script" required="Yes (unless script file is provided)">Script to be passed to JSR223 language</property>
 </properties>
 <p>
@@ -6044,7 +6044,7 @@ extracting the node as text or attribute value and store the result into the giv
     use namespaces than with the old XPathExtractor version.</property>
    </properties>
    <p>To allow for use in a <complink name="ForEach Controller"/>, it works exactly the same as the above XPath Extractor</p>
-   <p>XPath2 Extractor provides some interestings tools such as an improved syntax and much more functions than in it's first version.</p>
+   <p>XPath2 Extractor provides some interestings tools such as an improved syntax and much more functions than in its first version.</p>
    <p>Here are some exemples: </p>
    <dl>
    <dt><code>abs(/book/page[2])</code></dt>
