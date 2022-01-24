@@ -117,7 +117,7 @@ defined in the <code>system.properties</code> file or on the command-line. The
     JVM does not support the specified cipher suites, or if the cipher suites
     supported by the HTTPS server do not overlap this list.  See the
     <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#Customization">JSSE
-	    Reference Guide.</a><br/>
+    Reference Guide.</a><br/>
     For example: <source>https.cipherSuites=TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256</source>
     If not specified, JMeter will use the default list of cipher suites
     supported by the JVM.
