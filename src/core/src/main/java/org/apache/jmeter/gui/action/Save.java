@@ -92,7 +92,7 @@ public class Save extends AbstractAction {
     private static final int BACKUP_MAX_COUNT = JMeterUtils.getPropDefault(JMX_BACKUP_MAX_COUNT, 10);
 
     // NumberFormat to format version number in backup file names
-    private static final DecimalFormat BACKUP_VERSION_FORMATER = new DecimalFormat("000000"); //$NON-NLS-1$
+    private static final DecimalFormat BACKUP_VERSION_FORMAT = new DecimalFormat("000000"); //$NON-NLS-1$
 
     private static final int MS_PER_HOUR = 60 * 60 * 1000;
 
@@ -373,7 +373,7 @@ public class Save extends AbstractAction {
         // {baseName}{versionSeparator}{version}{jmxExtension}  // NOSONAR
         String backupName = baseName
                 + versionSeparator
-                + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L)
+                + BACKUP_VERSION_FORMAT.format(lastVersionNumber + 1L)
                 + JMX_FILE_EXTENSION;
         File backupFile = new File(backupDir, backupName);
         // create file backup
