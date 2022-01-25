@@ -17,9 +17,6 @@
 
 package org.apache.jmeter.gui.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.awt.HeadlessException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -30,7 +27,14 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+// should not run in parallel due to using a System property that can impact
+// other tests
+@Isolated
 public class JSyntaxTextAreaTest extends JMeterTestCase {
 
     @Test
@@ -41,7 +45,37 @@ public class JSyntaxTextAreaTest extends JMeterTestCase {
             textArea.setLanguage(null);
             assertEquals(SyntaxConstants.SYNTAX_STYLE_NONE, textArea.getSyntaxEditingStyle());
         } catch (HeadlessException he) {
-            // Does not work in headless mode
+            // Does not work in headless mode, which depends on value of java.awt.headless property
+            // and the OS (e.g. might work on MacOS and not on Linux due to missing X11).
+            System.out.println("WARNING for JSyntaxTextAreaTest.testSetLanguage test: does not work in headless mode");
+        }
+    }
+
+    @Test
+    public void testHeadless() {
+        String key = "java.awt.headless";
+        String initialValue = System.getProperty(key);
+        try {
+            System.setProperty(key, "true");
+            // getInstance returns anonymous class with some overridden methods
+            // to avoid errors due to 'java.awt.headless=true'
+            JSyntaxTextArea textArea = JSyntaxTextArea.getInstance(10,20);
+
+            String myText = "my text";
+            textArea.setText(myText);
+            // next one fails with NPE when getInstance does not provide overridden method
+            textArea.setCodeFoldingEnabled(true);
+            assertEquals(myText, textArea.getText());
+
+        } catch (HeadlessException he) {
+            fail("WARNING: Does not work in headless mode");
+        } finally {
+            if (initialValue != null) {
+                System.setProperty(key, initialValue);
+            }
+            else {
+                System.clearProperty(key);
+            }
         }
     }
 
