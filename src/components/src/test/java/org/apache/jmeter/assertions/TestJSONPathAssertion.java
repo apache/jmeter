@@ -270,6 +270,9 @@ class TestJSONPathAssertion {
 
     @Test
     void testGetResult_list_empty_novalidate() {
+        // With bug 65794 the outcome of this test has changed
+        // we now consider an indefinite path with no assertion value
+        // an error and set the AssertionResult to failure
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": []}".getBytes());
 
@@ -279,7 +282,7 @@ class TestJSONPathAssertion {
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertFalse(result.isFailure());
+        assertTrue(result.isFailure());
     }
 
     @Test

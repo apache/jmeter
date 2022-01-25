@@ -768,7 +768,7 @@ JMeter's <code>src/components</code> directory).
         attention to your properties. These properties will become the basis of a GUI form by
         which users will configure the <code>CSVDataSet</code> element.
       </li>
-      <li>Your element will be cloned by JMeter when the test starts. Each thread will get it's
+      <li>Your element will be cloned by JMeter when the test starts. Each thread will get its
         own instance. However, you will have a chance to control how the cloning is done, if
         you need it.
       </li>
@@ -785,7 +785,7 @@ JMeter's <code>src/components</code> directory).
       </li>
       <li>I then implemented the <code>IterationStart</code> method of the <code>LoopIterationListener</code> interface.
         The point of this "event" is that your component is notified of when the test has entered
-        it's parent controller. For our purposes, every time the <code>CSVDataSet</code>'s parent controller
+        its parent controller. For our purposes, every time the <code>CSVDataSet</code>'s parent controller
         is entered, we will read a new line of the data file and set the variables. Thus, for a
         regular controller, each loop through the test will result in a new set of values being
         read. For a loop controller, each iteration will do likewise. Every test thread will get

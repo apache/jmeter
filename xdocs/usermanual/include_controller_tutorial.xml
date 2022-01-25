@@ -38,7 +38,7 @@ in a couple of ways.
 </p>
 
 <ul>
-<li>the Include Controller loads a simple controller with all it's samples, where as the Module
+<li>the Include Controller loads a simple controller with all its samples, where as the Module
     Controller can use any controller</li>
 <li>the Include Controller doesn't use the workbench</li>
 <li>the Module Controller doesn't load from a file</li>
