@@ -69,9 +69,9 @@
 328436,httpcore-4.4.14.jar
 369365,httpcore-nio-4.4.14.jar
 41790,httpmime-4.5.13.jar
-68080,jackson-annotations-2.10.5.jar
-349331,jackson-core-2.10.5.jar
-1404939,jackson-databind-2.10.5.jar
+75717,jackson-annotations-2.13.1.jar
+374588,jackson-core-2.13.1.jar
+1534017,jackson-databind-2.13.1.jar
 78030,javax.activation-1.2.0.jar
 142391,jcharts-0.7.5.jar
 16630,jcl-over-slf4j-1.7.32.jar
@@ -83,7 +83,7 @@
 26047,jodd-props-5.0.13.jar
 238605,json-path-2.6.0.jar
 119227,json-smart-2.4.7.jar
-415074,jsoup-1.14.1.jar
+423395,jsoup-1.14.3.jar
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar
 32033,kotlin-logging-jvm-2.0.5.jar
@@ -121,8 +121,8 @@
 301279,svgSalamander-1.1.2.4.jar
 10192,swing-extensions-laf-support-0.1.3.jar
 2539,swing-extensions-visual-padding-0.1.3.jar
-734528,tika-core-1.27.jar
-1397879,tika-parsers-1.27.jar
+735635,tika-core-1.28.jar
+1585374,tika-parsers-1.28.jar
 174661,vis-svg-portable-jvm-2.2.1.jar
 3154938,xalan-2.7.2.jar
 1386502,xercesImpl-2.12.1.jar
