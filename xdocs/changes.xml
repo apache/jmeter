@@ -167,13 +167,12 @@ however, the profile can't be updated while the test is running.
   <li>Updated Apache commons-pool2 to 2.11.0 (from 2.9.0).</li>
   <li>Updated equalsverifier to 3.7 (from 3.4.2).</li>
   <li>Updated Apache Freemarker to 2.3.31 (from 2.3.30).</li>
-  <li>Updated hsqldb to 2.5.2 (from 2.5.0).</li>
   <li>Updated hsqldb to 2.6.0 (from 2.5.0).</li>
   <li>Updated Apache HttpClient to 4.5.13 (from 4.5.12).</li>
   <li>Updated Apache HttpCore to 4.4.14 (from 4.4.13).</li>
   <li>Updated jacoco to 0.8.7 (from 0.8.5).</li>
   <li>Updated json-path to 2.6.0 (from 2.4.0).</li>
-  <li>Updated jsoup to 1.14.1 (from 1.13.1).</li>
+  <li>Updated jsoup to 1.14.3 (from 1.13.1).</li>
   <li>Updated JUnit to 4.13.2 and 5.8.1 (from 4.13.1 and 5.7.0).</li>
   <li>Updated Apache log4j2 to 2.17.1 (from 2.13.3).</li>
   <li>Updated Miglayout to 5.3 (from 5.2).</li>
@@ -184,9 +183,10 @@ however, the profile can't be updated while the test is running.
   <li>Updated RSyntaxTextArea to 3.1.3 (from 3.1.1).</li>
   <li>Updated SLF4J to 1.7.32 (from 1.7.30).</li>
   <li>Updated SvgSalamander to 1.1.2.4 (from 1.1.2.1).</li>
-  <li>Updated Apache Tika to 1.27 (from 1.26).</li>
+  <li>Updated Apache Tika to 1.28 (from 1.26).</li>
   <li>Updated WireMock-JRE8 to 2.30.0 (from 2.24.1).</li>
   <li>Updated com.github.vlsi.vlsi-release-plugins 1.76 (from 1.74).</li>
+  <li>Updated jackson to 2.13.1 (from 2.10.5)</li>
   <li><pr>671</pr>Move example definition of property <code>jmeter.reportgenerator.statistic_window</code>
      to <code>user.properties</code>, as it is read from that place.
      Contributed by Rithvik Patibandla (rithvikp98 at gmail.com)</li>
