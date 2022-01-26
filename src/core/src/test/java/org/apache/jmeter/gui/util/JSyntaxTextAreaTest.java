@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.gui.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.awt.HeadlessException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -28,9 +31,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 // should not run in parallel due to using a System property that can impact
 // other tests
