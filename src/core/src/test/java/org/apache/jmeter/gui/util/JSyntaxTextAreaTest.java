@@ -68,7 +68,7 @@ public class JSyntaxTextAreaTest extends JMeterTestCase {
             assertEquals(myText, textArea.getText());
 
         } catch (HeadlessException he) {
-            fail("WARNING: Does not work in headless mode");
+            fail("Unexpected HeadlessException, because of the explicit `java.awt.headless=true`.");
         } finally {
             if (initialValue != null) {
                 System.setProperty(key, initialValue);
