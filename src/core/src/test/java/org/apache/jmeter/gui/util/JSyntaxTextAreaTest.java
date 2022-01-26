@@ -63,8 +63,6 @@ public class JSyntaxTextAreaTest extends JMeterTestCase {
 
             String myText = "my text";
             textArea.setText(myText);
-            // next one fails with NPE when getInstance does not provide overridden method
-            textArea.setCodeFoldingEnabled(true);
             assertEquals(myText, textArea.getText());
 
         } catch (HeadlessException he) {
