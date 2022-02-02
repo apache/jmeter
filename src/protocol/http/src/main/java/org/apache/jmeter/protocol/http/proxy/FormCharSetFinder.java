@@ -52,7 +52,11 @@ public class FormCharSetFinder {
             throws HTMLParseException {
         log.debug("Parsing html of: {}", html);
 
-        Document document = Jsoup.parse(html);
+        try {
+            Document document = Jsoup.parse(html);
+        } catch (RuntimeException e) {
+            throw new HTMLParseException("Could not parse HTML to look for forms charsets", e);
+        }
         Elements forms = document.select("form");
         for (Element element : forms) {
             String action = element.attr("action");
