@@ -67,7 +67,7 @@ public class FormCharSetFinder {
                     // Just use the first one of the possible many charsets
                     if(charSets.length > 0) {
                         formCharSet = charSets[0].trim();
-                        if(formCharSet.length() == 0) {
+                        if (formCharSet.isEmpty()) {
                             formCharSet = null;
                         }
                     }
