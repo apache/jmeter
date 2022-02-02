@@ -62,17 +62,17 @@ public class FormCharSetFinder {
                 String formCharSet = pageEncoding;
                 String acceptCharSet = element.attr("accept-charset");
                 // Check if we found an accept-charset attribute on the form
-                if(acceptCharSet != null) {
+                if (acceptCharSet != null) {
                     String[] charSets = JOrphanUtils.split(acceptCharSet, ",");
                     // Just use the first one of the possible many charsets
-                    if(charSets.length > 0) {
+                    if (charSets.length > 0) {
                         formCharSet = charSets[0].trim();
                         if (formCharSet.isEmpty()) {
                             formCharSet = null;
                         }
                     }
                 }
-                if(formCharSet != null) {
+                if (formCharSet != null) {
                     formEncodings.put(action, formCharSet);
                 }
             }
