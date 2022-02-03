@@ -52,21 +52,19 @@ public class JSyntaxTextAreaTest extends JMeterTestCase {
     }
 
     @Test
-    public void testHeadless() {
+    public void testHeadlessGetText() {
         String key = "java.awt.headless";
         String initialValue = System.getProperty(key);
         try {
             System.setProperty(key, "true");
-            // getInstance returns anonymous class with some overridden methods
-            // to avoid errors due to 'java.awt.headless=true'
+            // getInstance() returns anonymous class with some overridden methods
+            // to avoid errors due to 'java.awt.headless=true'.
+            // E.g. it should not throw a HeadlessException.
             JSyntaxTextArea textArea = JSyntaxTextArea.getInstance(10,20);
 
             String myText = "my text";
             textArea.setText(myText);
             assertEquals(myText, textArea.getText());
-
-        } catch (HeadlessException he) {
-            fail("Unexpected HeadlessException, because of the explicit `java.awt.headless=true`.");
         } finally {
             if (initialValue != null) {
                 System.setProperty(key, initialValue);
