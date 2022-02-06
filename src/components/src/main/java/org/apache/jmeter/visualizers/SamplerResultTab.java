@@ -61,6 +61,7 @@ import org.apache.jmeter.visualizers.SearchTextExtension.JEditorPaneSearchProvid
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
+import org.apache.jorphan.gui.ui.KerningOptimizer;
 import org.apache.jorphan.reflect.Functor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -693,6 +694,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         } catch (BadLocationException ex) {
             LOGGER.error("Error inserting text", ex);
         }
+        KerningOptimizer.INSTANCE.configureKerning(results, document.getLength());
         results.setDocument(document);
     }
 }

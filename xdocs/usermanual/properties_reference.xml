@@ -1535,6 +1535,10 @@ JMETER-SERVER</source>
     Set to zero to disable the size check.<br/>
     Defaults to: <code>10485760</code>
 </property>
+<property name="text.kerning.max_document_size">
+    Configures the maximum document length for rendering with kerning enabled.<br/>
+    Defaults to: <code>10000</code>
+</property>
 <property name="JMSSampler.useSecurity.properties">
     JMS options.<br/>
     Enable the following property to stop JMS Point-to-Point Sampler from using

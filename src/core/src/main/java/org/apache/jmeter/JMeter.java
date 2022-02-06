@@ -105,6 +105,7 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JMeterUIDefaults;
+import org.apache.jorphan.gui.ui.KerningOptimizer;
 import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
@@ -374,6 +375,9 @@ public class JMeter implements JMeterPlugin {
         System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
 
+        KerningOptimizer.INSTANCE.setMaxTextLengthWithKerning(
+                JMeterUtils.getPropDefault("text.kerning.max_document_size", 10000)
+        );
         JMeterUIDefaults.INSTANCE.install();
 
         String jMeterLaf = LookAndFeelCommand.getPreferredLafCommand();
