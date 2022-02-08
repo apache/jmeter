@@ -28,8 +28,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.AbstractMap;
@@ -125,7 +125,7 @@ public class ObjectTableSorterTest {
     @Test
     public void customKeyOrder() {
         HashMap<String, Integer> customKeyOrder = Stream.of("a", "c", "b", "d")
-                .reduce(new HashMap<String, Integer>(), (map, key) -> {
+                .reduce(new HashMap<>(), (map, key) -> {
                     map.put(key, map.size());
                     return map;
                 }, (a, b) -> a);
