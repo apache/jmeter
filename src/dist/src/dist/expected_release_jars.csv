@@ -121,13 +121,13 @@
 301279,svgSalamander-1.1.2.4.jar
 10192,swing-extensions-laf-support-0.1.3.jar
 2539,swing-extensions-visual-padding-0.1.3.jar
-735635,tika-core-1.28.jar
-1585374,tika-parsers-1.28.jar
+735645,tika-core-1.28.1.jar
+1585382,tika-parsers-1.28.1.jar
 174661,vis-svg-portable-jvm-2.2.1.jar
 3154938,xalan-2.7.2.jar
-1386502,xercesImpl-2.12.1.jar
+1446149,xercesImpl-2.12.2.jar
 220536,xml-apis-1.4.01.jar
 85686,xml-apis-ext-1.3.04.jar
 674607,xmlgraphics-commons-2.6.jar
 7188,xmlpull-1.1.3.1.jar
-629707,xstream-1.4.18.jar
+633140,xstream-1.4.19.jar
