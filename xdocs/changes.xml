@@ -230,6 +230,7 @@ however, the profile can't be updated while the test is running.
 <ul>
   <li><bug>64962</bug>Save CSV sub-results recursively from View Results Tree</li>
   <li><bug>65784</bug>No Graphs displayed in Aggregate Report/Response Time Graph</li>
+  <li><bug>65884</bug>GUI doesn't display response for multipart request <em>manually</em> encoded</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

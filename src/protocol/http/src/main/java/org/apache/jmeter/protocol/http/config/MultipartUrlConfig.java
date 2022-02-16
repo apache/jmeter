@@ -20,6 +20,10 @@ package org.apache.jmeter.protocol.http.config;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HeaderElement;
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.message.BasicHeaderValueParser;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
@@ -28,6 +32,8 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Configuration element which handles HTTP Parameters and files to be uploaded
@@ -45,6 +51,8 @@ public class MultipartUrlConfig implements Serializable {
     private final String boundary;
 
     private final Arguments args;
+
+    private static final Logger log = LoggerFactory.getLogger(MultipartUrlConfig.class);
 
     /**
      * HTTPFileArgs list to be uploaded with http request.
@@ -129,20 +137,25 @@ public class MultipartUrlConfig implements Serializable {
             // Check if it is form data
             if (contentDisposition != null && contentDisposition.contains("form-data")) { //$NON-NLS-1$
                 // Get the form field name
-                final String namePrefix = "name=\""; //$NON-NLS-1$
-                int index = contentDisposition.indexOf(namePrefix) + namePrefix.length();
-                String name = contentDisposition.substring(index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
-
-                // Check if it is a file being uploaded
-                final String filenamePrefix = "filename=\""; //$NON-NLS-1$
-                if (contentDisposition.contains(filenamePrefix)) {
-                    // Get the filename
-                    index = contentDisposition.indexOf(filenamePrefix) + filenamePrefix.length();
-                    String path = contentDisposition.substring(index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$
-                    if (path != null && path.length() > 0) {
-                        // Set the values retrieved for the file upload
-                        files.addHTTPFileArg(path, name, contentType);
+                HeaderElement[] headerElements = null;
+                try {
+                    headerElements = BasicHeaderValueParser.parseElements(
+                            contentDisposition,
+                            BasicHeaderValueParser.INSTANCE);
+                } catch (ParseException e) {
+                    log.info("Can't parse header {}", contentDisposition, e);
+                }
+                String name = "";
+                String path = null;
+                if (headerElements != null) {
+                    for (HeaderElement element : headerElements) {
+                        name = getParameterValue(element, "name", "");
+                        path = getParameterValue(element, "filename", null);
                     }
+                }
+                if (path != null && !path.isEmpty()) {
+                    // Set the values retrieved for the file upload
+                    files.addHTTPFileArg(path, name, contentType);
                 } else {
                     // Find the first empty line of the multipart, it signals end of headers for multipart
                     // Agents are supposed to terminate lines in CRLF:
@@ -158,6 +171,14 @@ public class MultipartUrlConfig implements Serializable {
                 }
             }
         }
+    }
+
+    private static String getParameterValue(HeaderElement element, String name, String defaultValue) {
+        NameValuePair parameter = element.getParameterByName(name);
+        if (parameter == null) {
+            return defaultValue;
+        }
+        return parameter.getValue();
     }
 
     private static String getHeaderValue(String headerName, String multiPart) {
