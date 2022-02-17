@@ -612,7 +612,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
             String fileMimeType, String fileContent, String boundary, String endOfLine) {
         // File upload multipart
         String postBody = "--" + boundary + endOfLine
-            + "Content-Disposition: form-data; name=\"" + fileField + "\" filename=\"" + fileName + "\"" + endOfLine
+            + "Content-Disposition: form-data; name=\"" + fileField + "\"; filename=\"" + fileName + "\"" + endOfLine
             + "Content-Type: " + fileMimeType + endOfLine
             + "Content-Transfer-Encoding: binary" + endOfLine
             + endOfLine
