@@ -54,6 +54,7 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.cli.avalon.CLArgsParser;
@@ -563,7 +564,8 @@ public class JMeter implements JMeterPlugin {
                     ReportGenerator generator = new ReportGenerator(reportFile, null);
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
-                    startGui(testFile);
+                    String initialTestFile = testFile;
+                    SwingUtilities.invokeAndWait(() -> startGui(initialTestFile));
                     startOptionalServers();
                 } else { // NON-GUI must be true
                     extractAndSetReportOutputFolder(parser, deleteResultFile);
