@@ -533,7 +533,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         String compDeltaSeq;
         String endingEqSeq = trunc(true, received.substring(lastRecDiff + 1, recLength));
         String                  recDeltaSeq;
-        if (endingEqSeq.length() == 0) {
+        if (endingEqSeq.isEmpty()) {
             recDeltaSeq = trunc(true, received.substring(firstDiff, recLength));
             compDeltaSeq = trunc(true, comparison.substring(firstDiff, compLength));
         } else {
