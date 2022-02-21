@@ -100,8 +100,8 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
      * @param textToParse
      */
     private void executeAndShowRegexpTester(String textToParse) {
-        if (textToParse != null && textToParse.length() > 0
-                && this.regexpField.getText().length() > 0) {
+        if (textToParse != null && !textToParse.isEmpty()
+                && !this.regexpField.getText().isEmpty()) {
             this.regexpResultField.setText(process(textToParse));
             this.regexpResultField.setCaretPosition(0); // go to first line
         }
