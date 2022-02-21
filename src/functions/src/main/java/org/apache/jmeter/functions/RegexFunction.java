@@ -99,7 +99,7 @@ public class RegexFunction extends AbstractFunction {
             if (values.length > 2) {
                 valueIndex = ((CompoundVariable) values[2]).execute();
             }
-            if (valueIndex.length() == 0) {
+            if (valueIndex.isEmpty()) {
                 valueIndex = "1"; //$NON-NLS-1$
             }
 
@@ -109,7 +109,7 @@ public class RegexFunction extends AbstractFunction {
 
             if (values.length > 4) {
                 String dv = ((CompoundVariable) values[4]).execute();
-                if (dv.length() != 0) {
+                if (!dv.isEmpty()) {
                     defaultValue = dv;
                 }
             }
@@ -133,19 +133,19 @@ public class RegexFunction extends AbstractFunction {
             return defaultValue;
         }
 
-        if (name.length() > 0) {
+        if (!name.isEmpty()) {
             vars.put(name, defaultValue);
         }
 
         String textToMatch=null;
 
-        if (inputVariable.length() > 0){
+        if (!inputVariable.isEmpty()){
             textToMatch=vars.get(inputVariable);
         } else if (previousResult != null){
             textToMatch = previousResult.getResponseDataAsString();
         }
 
-        if (textToMatch == null || textToMatch.length() == 0) {
+        if (textToMatch == null || textToMatch.isEmpty()) {
             return defaultValue;
         }
 
@@ -160,7 +160,7 @@ public class RegexFunction extends AbstractFunction {
                 }
             }
         } finally {
-            if (name.length() > 0){
+            if (!name.isEmpty()){
                 vars.put(name + "_matchNr", Integer.toString(collectAllMatches.size())); //$NON-NLS-1$
             }
         }
@@ -225,7 +225,7 @@ public class RegexFunction extends AbstractFunction {
                 result.append(match.group((Integer) t));
             }
         }
-        if (namep.length() > 0){
+        if (!namep.isEmpty()){
             vars.put(namep, result.toString());
         }
         return result.toString();
