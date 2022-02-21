@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -64,6 +66,8 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     private JTextArea regexpResultField;
 
     private JTabbedPane rightSide;
+
+    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
 
     /** {@inheritDoc} */
     @Override
@@ -108,7 +112,40 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     }
 
     private String process(String textToParse) {
+        if (useJavaRegex) {
+            return processJavaRegex(textToParse);
+        }
+        return processOroRegex(textToParse);
+    }
 
+    private String processJavaRegex(String textToParse) {
+        java.util.regex.Pattern pattern;
+        try {
+            pattern = java.util.regex.Pattern.compile(regexpField.getText());
+        } catch (PatternSyntaxException e) {
+            return e.toString();
+        }
+        Matcher matcher = pattern.matcher(textToParse);
+        List<java.util.regex.MatchResult> matches = new ArrayList<>();
+        while (matcher.find()) {
+            matches.add(matcher.toMatchResult());
+        }
+
+        // Construct a multi-line string with all matches
+        StringBuilder sb = new StringBuilder();
+        final int size = matches.size();
+        sb.append("Match count: ").append(size).append("\n");
+        for (int j = 0; j < size; j++) {
+            java.util.regex.MatchResult mr = matches.get(j);
+            final int groups = mr.groupCount();
+            for (int i = 0; i < groups; i++) {
+                sb.append("Match[").append(j+1).append("][").append(i).append("]=").append(mr.group(i)).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private String processOroRegex(String textToParse) {
         Perl5Matcher matcher = new Perl5Matcher();
         PatternMatcherInput input = new PatternMatcherInput(textToParse);
 
@@ -123,6 +160,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         while (matcher.contains(input, pattern)) {
             matches.add(matcher.getMatch());
         }
+
         // Construct a multi-line string with all matches
         StringBuilder sb = new StringBuilder();
         final int size = matches.size();
