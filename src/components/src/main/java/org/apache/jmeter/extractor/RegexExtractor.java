@@ -491,7 +491,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         }
 
         if (beginOffset < rawTemplate.length()) { // trailing string is not empty
-            combined.add(rawTemplate.substring(beginOffset, rawTemplate.length()));
+            combined.add(rawTemplate.substring(beginOffset));
         }
         if (log.isDebugEnabled()) {
             log.debug("Template item count: {}", combined.size());
