@@ -49,6 +49,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     // What to match against. N.B. do not change the string value or test plans will break!
     private static final String MATCH_AGAINST = "RegexExtractor.useHeaders"; // $NON-NLS-1$
+
     /*
      * Permissible values:
      *  true - match against headers
@@ -104,7 +105,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         int matchNumber = getMatchNumber();
 
         final String defaultValue = getDefaultValue();
-        if (defaultValue.length() > 0 || isEmptyDefaultValue()) {// Only replace default if it is provided or empty default value is explicitly requested
+        if (!defaultValue.isEmpty() || isEmptyDefaultValue()) {// Only replace default if it is provided or empty default value is explicitly requested
             vars.put(refName, defaultValue);
         }
 
@@ -479,7 +480,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     // Allow for property not yet being set (probably only applies to Test cases)
     public boolean useBody() {
         String prop = getPropertyAsString(MATCH_AGAINST);
-        return prop.length()==0 || USE_BODY.equalsIgnoreCase(prop);// $NON-NLS-1$
+        return prop.isEmpty() || USE_BODY.equalsIgnoreCase(prop);// $NON-NLS-1$
     }
 
     public boolean useUnescapedBody() {
