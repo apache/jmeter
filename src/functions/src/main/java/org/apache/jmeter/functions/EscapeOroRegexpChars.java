@@ -75,7 +75,7 @@ public class EscapeOroRegexpChars extends AbstractFunction {
 
         String escapedValue = Perl5Compiler.quotemeta(valueToEscape);
 
-        if (varName.length() > 0) {
+        if (!varName.isEmpty()) {
             JMeterVariables vars = getVariables();
             if (vars != null) {// Can be null if called from Config item testEnded() method
                 vars.put(varName, escapedValue);
