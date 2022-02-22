@@ -18,10 +18,13 @@
 package org.apache.jmeter.functions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -60,6 +63,8 @@ public class RegexFunction extends AbstractFunction {
     private static final String TEMPLATE_PATTERN = "\\$(\\d+)\\$";  //$NON-NLS-1$
     /** initialised to the regex \$(\d+)\$ */
     private final Pattern templatePattern;
+    private static final java.util.regex.Pattern templatePatternJava =
+            java.util.regex.Pattern.compile(TEMPLATE_PATTERN);
 
     // Number of parameters expected - used to reject invalid calls
     private static final int MIN_PARAMETER_COUNT = 2;
@@ -75,6 +80,8 @@ public class RegexFunction extends AbstractFunction {
         desc.add(JMeterUtils.getResString("regexfunc_param_7"));// input variable //$NON-NLS-1$
     }
 
+    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+
     public RegexFunction() {
         templatePattern = JMeterUtils.getPatternCache().getPattern(TEMPLATE_PATTERN,
                 Perl5Compiler.READ_ONLY_MASK);
@@ -89,42 +96,34 @@ public class RegexFunction extends AbstractFunction {
         String between = ""; //$NON-NLS-1$
         String name = ""; //$NON-NLS-1$
         String inputVariable = ""; //$NON-NLS-1$
-        Pattern searchPattern;
         Object[] tmplt;
-        try {
-            searchPattern = JMeterUtils.getPatternCache().getPattern(((CompoundVariable) values[0]).execute(),
-                    Perl5Compiler.READ_ONLY_MASK);
-            tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
-
-            if (values.length > 2) {
-                valueIndex = ((CompoundVariable) values[2]).execute();
-            }
-            if (valueIndex.isEmpty()) {
-                valueIndex = "1"; //$NON-NLS-1$
-            }
-
-            if (values.length > 3) {
-                between = ((CompoundVariable) values[3]).execute();
-            }
-
-            if (values.length > 4) {
-                String dv = ((CompoundVariable) values[4]).execute();
-                if (!dv.isEmpty()) {
-                    defaultValue = dv;
-                }
-            }
-
-            if (values.length > 5) {
-                name = ((CompoundVariable) values[5]).execute();
-            }
-
-            if (values.length > 6) {
-                inputVariable = ((CompoundVariable) values[6]).execute();
-            }
-        } catch (MalformedCachePatternException e) {
-            log.error("Malformed cache pattern:{}", values[0], e);
-            throw new InvalidVariableException("Malformed cache pattern:"+values[0], e);
+        tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
+        if (values.length > 2) {
+            valueIndex = ((CompoundVariable) values[2]).execute();
         }
+        if (valueIndex.isEmpty()) {
+            valueIndex = "1"; //$NON-NLS-1$
+        }
+
+        if (values.length > 3) {
+            between = ((CompoundVariable) values[3]).execute();
+        }
+
+        if (values.length > 4) {
+            String dv = ((CompoundVariable) values[4]).execute();
+            if (!dv.isEmpty()) {
+                defaultValue = dv;
+            }
+        }
+
+        if (values.length > 5) {
+            name = ((CompoundVariable) values[5]).execute();
+        }
+
+        if (values.length > 6) {
+            inputVariable = ((CompoundVariable) values[6]).execute();
+        }
+
 
         // Relatively expensive operation, so do it once
         JMeterVariables vars = getVariables();
@@ -149,8 +148,84 @@ public class RegexFunction extends AbstractFunction {
             return defaultValue;
         }
 
+        if (useJavaRegex) {
+            return getResultWithJavaRegex(valueIndex, defaultValue, between, name, tmplt, vars, textToMatch);
+        }
+        return getResultWithOroRegex(valueIndex, defaultValue, between, name, tmplt, vars, textToMatch);
+
+    }
+
+    private String getResultWithJavaRegex(String valueIndex, String defaultValue, String between, String name,
+                                         Object[] tmplt, JMeterVariables vars, String textToMatch)
+            throws InvalidVariableException {
+        List<java.util.regex.MatchResult> collectAllMatches = new ArrayList<>();
+        try {
+            java.util.regex.Pattern searchPattern = generateJavaPattern();
+            Matcher matcher = searchPattern.matcher(textToMatch);
+            while (matcher.find()) {
+                java.util.regex.MatchResult match = matcher.toMatchResult();
+                collectAllMatches.add(match);
+            }
+        } finally {
+            if (!name.isEmpty()){
+                vars.put(name + "_matchNr", Integer.toString(collectAllMatches.size())); //$NON-NLS-1$
+            }
+        }
+
+        if (collectAllMatches.isEmpty()) {
+            return defaultValue;
+        }
+
+        if (valueIndex.equals(ALL)) {
+            StringBuilder value = new StringBuilder();
+            Iterator<java.util.regex.MatchResult> it = collectAllMatches.iterator();
+            boolean first = true;
+            while (it.hasNext()) {
+                if (!first) {
+                    value.append(between);
+                } else {
+                    first = false;
+                }
+                value.append(generateResult(it.next(), name, tmplt, vars));
+            }
+            return value.toString();
+        } else if (valueIndex.equals(RAND)) {
+            java.util.regex.MatchResult result = collectAllMatches.get(
+                    ThreadLocalRandom.current().nextInt(collectAllMatches.size()));
+            return generateResult(result, name, tmplt, vars);
+        } else {
+            try {
+                int index = Integer.parseInt(valueIndex) - 1;
+                if(index >= collectAllMatches.size()) {
+                    return defaultValue;
+                }
+                java.util.regex.MatchResult result = collectAllMatches.get(index);
+                return generateResult(result, name, tmplt, vars);
+            } catch (NumberFormatException e) {
+                float ratio = Float.parseFloat(valueIndex);
+                java.util.regex.MatchResult result = collectAllMatches
+                        .get((int) (collectAllMatches.size() * ratio + .5) - 1);
+                return generateResult(result, name, tmplt, vars);
+            }
+        }
+    }
+
+    private java.util.regex.Pattern generateJavaPattern() throws InvalidVariableException {
+        try {
+            return java.util.regex.Pattern.compile(((CompoundVariable) values[0]).execute());
+
+        } catch (PatternSyntaxException e) {
+            log.error("Malformed regex pattern:{}", values[0], e);
+            throw new InvalidVariableException("Malformed regex pattern:" + values[0], e);
+        }
+    }
+
+    private String getResultWithOroRegex(String valueIndex, String defaultValue, String between, String name,
+                                         Object[] tmplt, JMeterVariables vars, String textToMatch)
+            throws InvalidVariableException {
         List<MatchResult> collectAllMatches = new ArrayList<>();
         try {
+            Pattern searchPattern = generateOroPattern();
             PatternMatcher matcher = JMeterUtils.getMatcher();
             PatternMatcherInput input = new PatternMatcherInput(textToMatch);
             while (matcher.contains(input, searchPattern)) {
@@ -200,7 +275,23 @@ public class RegexFunction extends AbstractFunction {
                 return generateResult(result, name, tmplt, vars);
             }
         }
+    }
 
+    private Pattern generateOroPattern() throws InvalidVariableException {
+        try {
+            return JMeterUtils.getPatternCache().getPattern(((CompoundVariable) values[0]).execute(),
+                    Perl5Compiler.READ_ONLY_MASK);
+
+        } catch (MalformedCachePatternException e) {
+            log.error("Malformed cache pattern:{}", values[0], e);
+            throw new InvalidVariableException("Malformed cache pattern:" + values[0], e);
+        }
+    }
+
+    private void saveGroups(java.util.regex.MatchResult result, String namep, JMeterVariables vars) {
+        for (int x = 0; x < result.groupCount(); x++) {
+            vars.put(namep + "_g" + x, result.group(x)); //$NON-NLS-1$
+        }
     }
 
     private void saveGroups(MatchResult result, String namep, JMeterVariables vars) {
@@ -231,6 +322,23 @@ public class RegexFunction extends AbstractFunction {
         return result.toString();
     }
 
+    private String generateResult(java.util.regex.MatchResult match, String namep, Object[] template,
+                                  JMeterVariables vars) {
+        saveGroups(match, namep, vars);
+        StringBuilder result = new StringBuilder();
+        for (Object t : template) {
+            if (t instanceof String) {
+                result.append(t);
+            } else {
+                result.append(match.group((Integer) t));
+            }
+        }
+        if (!namep.isEmpty()){
+            vars.put(namep, result.toString());
+        }
+        return result.toString();
+    }
+
     /** {@inheritDoc} */
     @Override
     public String getReferenceKey() {
@@ -245,6 +353,43 @@ public class RegexFunction extends AbstractFunction {
     }
 
     private Object[] generateTemplate(String rawTemplate) {
+        if (useJavaRegex) {
+            return generateTemplateWithJavaRegex(rawTemplate);
+        }
+        return generateTemplateWithOroRegex(rawTemplate);
+    }
+
+    private Object[] generateTemplateWithJavaRegex(String rawTemplate) {
+        // String or Integer
+        List<Object> combined = new ArrayList<>();
+        List<String> pieces = Arrays.asList(templatePatternJava.split(rawTemplate));
+        Matcher matcher = templatePatternJava.matcher(rawTemplate);
+        boolean startsWith = isFirstElementGroup(rawTemplate);
+        if (startsWith) {
+            pieces.remove(0);// Remove initial empty entry
+        }
+        Iterator<String> iter = pieces.iterator();
+        while (iter.hasNext()) {
+            boolean matchExists = matcher.find();
+            if (startsWith) {
+                if (matchExists) {
+                    combined.add(Integer.valueOf(matcher.group(1)));
+                }
+                combined.add(iter.next());
+            } else {
+                combined.add(iter.next());
+                if (matchExists) {
+                    combined.add(Integer.valueOf(matcher.group(1)));
+                }
+            }
+        }
+        if (matcher.find()) {
+            combined.add(Integer.valueOf(matcher.group(1)));
+        }
+        return combined.toArray();
+    }
+
+    private Object[] generateTemplateWithOroRegex(String rawTemplate) {
         List<String> pieces = new ArrayList<>();
         // String or Integer
         List<Object> combined = new ArrayList<>();
@@ -277,9 +422,13 @@ public class RegexFunction extends AbstractFunction {
     }
 
     private boolean isFirstElementGroup(String rawData) {
-        Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
-                Perl5Compiler.READ_ONLY_MASK);
-        return JMeterUtils.getMatcher().contains(rawData, pattern);
+        if (useJavaRegex) {
+            return java.util.regex.Pattern.compile("^\\$\\d+\\$").matcher(rawData).find();
+        } else {
+            Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
+                    Perl5Compiler.READ_ONLY_MASK);
+            return JMeterUtils.getMatcher().contains(rawData, pattern);
+        }
     }
 
 }
