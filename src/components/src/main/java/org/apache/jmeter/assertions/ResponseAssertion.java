@@ -308,7 +308,6 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         boolean contains = isContainsType(); // do it once outside loop
         boolean equals = isEqualsType();
         boolean substring = isSubstringType();
-        boolean matches = isMatchType();
 
         log.debug("Test Type Info: contains={}, notTest={}, orTest={}", contains, notTest, orTest);
 
@@ -342,7 +341,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                     found = toCheck.equals(stringPattern);
                 } else if (substring) {
                     found = toCheck.contains(stringPattern);
-                } else {
+                } else { // this is the old `matches` part which means `isMatchType()` is true
                     if (useJavaRegex) {
                         found = matchesWithJavaRegex(toCheck, stringPattern);
                     } else {
