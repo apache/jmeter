@@ -109,7 +109,7 @@ public class HttpMirrorThread implements Runnable {
 
             baos.close();
             final String headerString = headers.toString();
-            if(headerString.length() == 0 || headerString.indexOf('\r') < 0) {
+            if(headerString.isEmpty() || headerString.indexOf('\r') < 0) {
                 log.error("Invalid request received:'{}'", headerString);
                 return;
             }
