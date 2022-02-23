@@ -89,7 +89,7 @@ public final class HtmlParsingUtils {
         }
 
         final String domain = config.getDomain();
-        if (domain != null && domain.length() > 0) {
+        if (domain != null && !domain.isEmpty()) {
             if (!isEqualOrMatches(newLink.getDomain(), domain, matcher, patternCache)){
                 return false;
             }
