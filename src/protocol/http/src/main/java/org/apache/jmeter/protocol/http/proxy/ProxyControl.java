@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.prefs.Preferences;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -244,6 +245,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     // Although this field is mutable, it is only accessed within the synchronized method deliverSampler()
     private static String LAST_REDIRECT = null;
+
+    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
 
     private transient Daemon server;
 
@@ -868,24 +871,40 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @return boolean true if Matching expression
      */
     private boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
-        if(expression != null && !expression.isEmpty()) {
-            if(log.isDebugEnabled()) {
-                log.debug(
-                        "Testing Expression : {} on sampleContentType: {}, expected to match: {}",
-                        expression, sampleContentType, expectedToMatch);
-            }
+        if (expression == null || expression.isEmpty()) {
+            return true;
+        }
+        if(log.isDebugEnabled()) {
+            log.debug(
+                    "Testing Expression : {} on sampleContentType: {}, expected to match: {}",
+                    expression, sampleContentType, expectedToMatch);
+        }
 
-            Pattern pattern = null;
-            try {
-                pattern = JMeterUtils.getPatternCache().getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-                if(JMeterUtils.getMatcher().contains(sampleContentType, pattern) != expectedToMatch) {
-                    return false;
-                }
-            } catch (MalformedCachePatternException e) {
-                log.warn("Skipped invalid content pattern: {}", expression, e);
+        try {
+            boolean contains;
+            if (useJavaRegex) {
+                contains = isContainedWithJavaRegex(expression, sampleContentType);
+            } else {
+                contains = isContainedWithOroRegex(expression, sampleContentType);
             }
+            if (contains != expectedToMatch) {
+                return false;
+            }
+        } catch (PatternSyntaxException | MalformedCachePatternException e) {
+            log.warn("Skipped invalid content pattern: {}", expression, e);
         }
         return true;
+    }
+
+    private boolean isContainedWithJavaRegex(String expression, String sampleContentType) {
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(expression);
+        return pattern.matcher(sampleContentType).find();
+    }
+
+    private boolean isContainedWithOroRegex(String expression, String sampleContentType) {
+        Pattern pattern = JMeterUtils.getPatternCache().getPattern(expression,
+                Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+        return JMeterUtils.getMatcher().contains(sampleContentType, pattern);
     }
 
     /**
@@ -1348,6 +1367,28 @@ public class ProxyControl extends GenericController implements NonTestElement {
     }
 
     private boolean matchesPatterns(String url, CollectionProperty patterns) {
+        if (useJavaRegex) {
+            return matchesPatternsWithJavaRegex(url, patterns);
+        }
+        return matchesPatternsWithOroRegex(url, patterns);
+    }
+
+    private boolean matchesPatternsWithJavaRegex(String url, CollectionProperty patterns) {
+        for (JMeterProperty jMeterProperty : patterns) {
+            String item = jMeterProperty.getStringValue();
+            try {
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(item);
+                if (pattern.matcher(url).matches()) {
+                    return true;
+                }
+            } catch (PatternSyntaxException e) {
+                log.warn("Skipped invalid pattern: {}", item, e);
+            }
+        }
+        return false;
+    }
+
+    private boolean matchesPatternsWithOroRegex(String url, CollectionProperty patterns) {
         for (JMeterProperty jMeterProperty : patterns) {
             String item = jMeterProperty.getStringValue();
             try {
