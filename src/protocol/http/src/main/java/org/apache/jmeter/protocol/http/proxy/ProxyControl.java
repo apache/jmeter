@@ -794,18 +794,18 @@ public class ProxyControl extends GenericController implements NonTestElement {
     // Package protected to allow test case access
     boolean filterUrl(HTTPSamplerBase sampler) {
         String domain = sampler.getDomain();
-        if (domain == null || domain.length() == 0) {
+        if (domain == null || domain.isEmpty()) {
             return false;
         }
 
         String url = generateMatchUrl(sampler);
         CollectionProperty includePatterns = getIncludePatterns();
-        if (includePatterns.size() > 0 && !matchesPatterns(url, includePatterns)) {
+        if (!includePatterns.isEmpty() && !matchesPatterns(url, includePatterns)) {
             return false;
         }
 
         CollectionProperty excludePatterns = getExcludePatterns();
-        if (excludePatterns.size() > 0 && matchesPatterns(url, excludePatterns)) {
+        if (!excludePatterns.isEmpty() && matchesPatterns(url, excludePatterns)) {
             return false;
         }
 
@@ -826,16 +826,14 @@ public class ProxyControl extends GenericController implements NonTestElement {
         String excludeExp = getContentTypeExclude();
 
         // If no expressions are specified, we let the sample pass
-        if((includeExp == null || includeExp.length() == 0) &&
-                (excludeExp == null || excludeExp.length() == 0)
-                )
-        {
+        if ((includeExp == null || includeExp.isEmpty()) &&
+                (excludeExp == null || excludeExp.isEmpty())) {
             return true;
         }
 
         // Check that we have a content type
         String sampleContentType = result.getContentType();
-        if (sampleContentType == null || sampleContentType.length() == 0) {
+        if (sampleContentType == null || sampleContentType.isEmpty()) {
             if (log.isDebugEnabled()) {
                 log.debug("No Content-type found for : {}", result.getUrlAsString());
             }
@@ -870,7 +868,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @return boolean true if Matching expression
      */
     private boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
-        if(expression != null && expression.length() > 0) {
+        if(expression != null && !expression.isEmpty()) {
             if(log.isDebugEnabled()) {
                 log.debug(
                         "Testing Expression : {} on sampleContentType: {}, expected to match: {}",
@@ -1324,7 +1322,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             for (ConfigTestElement config : configurations) {
                 String configValue = config.getPropertyAsString(name);
 
-                if (configValue != null && configValue.length() > 0) {
+                if (configValue != null && !configValue.isEmpty()) {
                     if (configValue.equals(value)) {
                         sampler.setProperty(name, ""); // $NON-NLS-1$
                     }
@@ -1342,7 +1340,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         buf.append(':'); // $NON-NLS-1$
         buf.append(sampler.getPort());
         buf.append(sampler.getPath());
-        if (sampler.getQueryString().length() > 0) {
+        if (!sampler.getQueryString().isEmpty()) {
             buf.append('?'); // $NON-NLS-1$
             buf.append(sampler.getQueryString());
         }
@@ -1577,7 +1575,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work
         }
         final String sslDomains = getSslDomains().trim();
-        if (sslDomains.length() > 0) {
+        if (!sslDomains.isEmpty()) {
             final String[] domains = sslDomains.split(",");
             // The subject may be either a host or a domain
             for (String subject : domains) {
