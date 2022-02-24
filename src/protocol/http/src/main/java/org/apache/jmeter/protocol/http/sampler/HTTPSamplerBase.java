@@ -381,9 +381,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         // If there is one file with no parameter name, the file will
         // be sent as post body.
         HTTPFileArg[] files = getHTTPFiles();
-        return (files.length == 1)
-                && (files[0].getPath().length() > 0)
-                && (files[0].getParamName().length() == 0);
+        return files.length == 1
+                && !files[0].getPath().isEmpty()
+                && files[0].getParamName().isEmpty();
     }
 
     /**
@@ -402,7 +402,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             for (JMeterProperty jMeterProperty : getArguments()) {
                 hasArguments = true;
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-                if (arg.getName() != null && arg.getName().length() > 0) {
+                if (arg.getName() != null && !arg.getName().isEmpty()) {
                     return false;
                 }
             }
@@ -458,7 +458,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public String getProtocol() {
         String protocol = getPropertyAsString(PROTOCOL);
-        if (protocol == null || protocol.length() == 0) {
+        if (protocol == null || protocol.isEmpty()) {
             return DEFAULT_PROTOCOL;
         }
         return protocol;
@@ -1104,7 +1104,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // If no encoding is specified by user, we will get it
             // encoded in UTF-8, which is what the HTTP spec says
             String queryString = getQueryString(getContentEncoding());
-            if (queryString.length() > 0) {
+            if (!queryString.isEmpty()) {
                 if (path.contains(QRY_PFX)) {// Already contains a prefix
                     pathAndQuery.append(QRY_SEP);
                 } else {
@@ -1236,7 +1236,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 name = arg;
                 value = "";
             }
-            if (name.length() > 0) {
+            if (!name.isEmpty()) {
                 log.debug("Name: {} Value: {} Metadata: {}", name, value, metaData);
                 // If we know the encoding, we can decode the argument value,
                 // to make it easier to read for the user
@@ -1367,7 +1367,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             String allowRegex = getEmbeddedUrlRE();
             Perl5Matcher localMatcher = null;
             Pattern allowPattern = null;
-            if (allowRegex.length() > 0) {
+            if (!allowRegex.isEmpty()) {
                 try {
                     allowPattern = JMeterUtils.getPattern(allowRegex);
                     localMatcher = JMeterUtils.getMatcher();// don't fetch unless pattern compiles
@@ -1377,7 +1377,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             Pattern excludePattern = null;
             String excludeRegex = getEmbededUrlExcludeRE();
-            if (excludeRegex.length() > 0) {
+            if (!excludeRegex.isEmpty()) {
                 try {
                     excludePattern = JMeterUtils.getPattern(excludeRegex);
                     if (localMatcher == null) {
