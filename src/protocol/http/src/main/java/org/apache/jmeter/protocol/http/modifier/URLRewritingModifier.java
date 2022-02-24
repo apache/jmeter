@@ -119,7 +119,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
         // Bug 15025 - save session value across samplers
         if (shouldCache()){
-            if (value == null || value.length() == 0) {
+            if (value == null || value.isEmpty()) {
                 value = savedValue;
             } else {
                 savedValue = value;
@@ -132,7 +132,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         if (isPathExtension()) {
             String oldPath = sampler.getPath();
             int indexOfSessionId = oldPath.indexOf(SEMI_COLON + getArgumentName());
-            if(oldPath.indexOf(SEMI_COLON + getArgumentName())>=0) {
+            if(oldPath.contains(SEMI_COLON + getArgumentName())) {
                 int indexOfQuestionMark = oldPath.indexOf('?');
                 if(indexOfQuestionMark < 0) {
                     oldPath = oldPath.substring(0, indexOfSessionId);
