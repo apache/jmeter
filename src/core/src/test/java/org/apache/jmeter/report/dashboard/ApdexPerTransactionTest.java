@@ -24,6 +24,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
@@ -38,6 +40,8 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
     // prop in the file mixes comma, semicolon and spans several lines.
     // it also includes hardcoded sample names mixed with regexes
     private static final String apdexString = "sample(\\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000";
+
+    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
 
     @Test
     public void testgetApdexPerTransactionProperty() throws Exception {
@@ -118,10 +122,18 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         for (String sampleName : sampleNames) {
             boolean hasMatched = false;
             for (Map.Entry<String, Long[]> entry : apdex.entrySet()) {
-                org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(entry.getKey());
-                PatternMatcher matcher = JMeterUtils.getMatcher();
-                if(matcher.matches(sampleName, regex)) {
-                    hasMatched= true;
+                if (useJavaRegex) {
+                    Pattern pattern = JMeterUtils.compilePattern(entry.getKey());
+                    Matcher matcher = pattern.matcher(sampleName);
+                    if (matcher.matches()) {
+                        hasMatched = true;
+                    }
+                } else {
+                    org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(entry.getKey());
+                    PatternMatcher matcher = JMeterUtils.getMatcher();
+                    if (matcher.matches(sampleName, regex)) {
+                        hasMatched = true;
+                    }
                 }
             }
             assertTrue(hasMatched);
