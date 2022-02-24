@@ -21,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.util.JMeterUtils;
@@ -115,6 +117,8 @@ class RegexpHTMLParser extends HTMLParser {
     private static final ThreadLocal<PatternMatcherInput> localInput =
             ThreadLocal.withInitial(() -> new PatternMatcherInput(new char[0]));
 
+    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+
     /**
      * Make sure to compile the regular expression upon instantiation:
      */
@@ -127,6 +131,64 @@ class RegexpHTMLParser extends HTMLParser {
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
+        if (useJavaRegex) {
+            return getEmbeddedResourceURLsWithJavaRegex(userAgent,html, baseUrl, urls, encoding);
+        }
+        return getEmbeddedResourceURLsWithOroRegex(userAgent,html, baseUrl, urls, encoding);
+    }
+
+    private Iterator<URL> getEmbeddedResourceURLsWithJavaRegex(String userAgent, byte[] html, URL baseUrl,
+                                                               URLCollection urls, String encoding) throws HTMLParseException {
+        try {
+
+            // TODO: find a way to avoid the cost of creating a String here --
+            // probably a new PatternMatcherInput working on a byte[] would do
+            // better.
+            String input = new String(html, encoding);
+            java.util.regex.Pattern pattern = JMeterUtils.compilePattern(
+                    REGEXP,
+                    java.util.regex.Pattern.CASE_INSENSITIVE
+            );
+
+            Matcher matcher = pattern.matcher(input);
+            while (matcher.find()) {
+                java.util.regex.MatchResult match = matcher.toMatchResult();
+                String s;
+                if (log.isDebugEnabled()) {
+                    log.debug("match groups {} {}", match.groupCount(), match);
+                }
+                // Check for a BASE HREF:
+                for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groupCount(); g++) {
+                    s = match.group(g);
+                    if (s != null) {
+                        log.debug("new baseUrl: {} - {}", s, baseUrl);
+                        try {
+                            baseUrl = ConversionUtils.makeRelativeURL(baseUrl, s);
+                        } catch (MalformedURLException e) {
+                            // Doesn't even look like a URL?
+                            // Maybe it isn't: Ignore the exception.
+                            log.debug("Can't build base URL from URL {} in page {}", s, baseUrl, e);
+                        }
+                    }
+                }
+                for (int g = NUM_BASE_GROUPS + 1; g <= match.groupCount(); g++) {
+                    s = match.group(g);
+                    if (s != null) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("group {} - {}", g, match.group(g));
+                        }
+                        urls.addURL(s, baseUrl);
+                    }
+                }
+            }
+            return urls.iterator();
+        } catch (UnsupportedEncodingException
+                | PatternSyntaxException e) {
+            throw new HTMLParseException(e.getMessage(), e);
+        }
+    }
+
+    private Iterator<URL> getEmbeddedResourceURLsWithOroRegex(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
         Pattern pattern= null;
         Perl5Matcher matcher = null;
         try {
