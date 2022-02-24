@@ -187,12 +187,12 @@ public class MultipartUrlConfig implements Serializable {
     private static String getHeaderValue(String headerName, String multiPart) {
         String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
         if (useJavaRegex) {
-            return getHeaderValueWithJavaRegex(headerName, multiPart, regularExpression);
+            return getHeaderValueWithJavaRegex(multiPart, regularExpression);
         }
-        return getHeaderValueWithOroRegex(headerName, multiPart, regularExpression);
+        return getHeaderValueWithOroRegex(multiPart, regularExpression);
     }
 
-    private static String getHeaderValueWithJavaRegex(String headerName, String multiPart, String regularExpression) {
+    private static String getHeaderValueWithJavaRegex(String multiPart, String regularExpression) {
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regularExpression,
                  java.util.regex.Pattern.CASE_INSENSITIVE
                         | java.util.regex.Pattern.MULTILINE);
@@ -203,7 +203,7 @@ public class MultipartUrlConfig implements Serializable {
         return null;
     }
 
-    private static String getHeaderValueWithOroRegex(String headerName, String multiPart, String regularExpression) {
+    private static String getHeaderValueWithOroRegex(String multiPart, String regularExpression) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         Pattern pattern = JMeterUtils.getPattern(regularExpression,
                 Perl5Compiler.READ_ONLY_MASK
