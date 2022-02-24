@@ -27,6 +27,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.regex.Matcher;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
@@ -75,6 +76,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private static File temporaryFile;
 
     private final int item;
+
+    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
 
     public TestHTTPSamplersAgainstHttpMirrorServer(String arg0) {
         super(arg0);
@@ -1178,6 +1181,25 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private String getSentRequestHeaderValue(String requestHeaders, String headerName) {
+        if (useJavaRegex) {
+            return getSentRequestHeaderValueWithJavaRegex(requestHeaders, headerName);
+        }
+        return getSentRequestHeaderValueWithOroRegex(requestHeaders, headerName);
+    }
+
+    private String getSentRequestHeaderValueWithJavaRegex(String requestHeaders, String headerName) {
+        String expression = ".*" + headerName + ": (\\d*).*";
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(expression,
+                        java.util.regex.Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(requestHeaders);
+        if (matcher.matches()) {
+            // The value is in the first group, group 0 is the whole match
+            return matcher.group(1);
+        }
+        return null;
+    }
+
+    private String getSentRequestHeaderValueWithOroRegex(String requestHeaders, String headerName) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         String expression = ".*" + headerName + ": (\\d*).*";
         Pattern pattern = JMeterUtils.getPattern(expression,
@@ -1192,6 +1214,19 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private boolean checkRegularExpression(String stringToCheck, String regularExpression) {
+        if (useJavaRegex) {
+            return checkRegularExpressionWithJavaRegex(stringToCheck, regularExpression);
+        }
+        return checkRegularExpressionWithOroRegex(stringToCheck, regularExpression);
+    }
+
+    private boolean checkRegularExpressionWithJavaRegex(String stringToCheck, String regularExpression) {
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
+                java.util.regex.Pattern.CASE_INSENSITIVE);
+        return pattern.matcher(stringToCheck).find();
+    }
+
+    private boolean checkRegularExpressionWithOroRegex(String stringToCheck, String regularExpression) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         Pattern pattern = JMeterUtils.getPattern(regularExpression,
                 Perl5Compiler.READ_ONLY_MASK
@@ -1201,6 +1236,28 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private int getPositionOfBody(String stringToCheck) {
+        if (useJavaRegex) {
+            return getPositionOfBodyWithJavaRegex(stringToCheck);
+        }
+        return getPositionOfBodyWithOroRegex(stringToCheck);
+    }
+
+    private int getPositionOfBodyWithJavaRegex(String stringToCheck) {
+        // The headers and body are divided by a blank line
+        String regularExpression = "^.$";
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
+                java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
+
+        Matcher localMatcher = pattern.matcher(stringToCheck);
+        if (localMatcher.find()) {
+            java.util.regex.MatchResult match = localMatcher.toMatchResult();
+            return match.start(0);
+        }
+        // No divider was found
+        return -1;
+    }
+
+    private int getPositionOfBodyWithOroRegex(String stringToCheck) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         // The headers and body are divided by a blank line
         String regularExpression = "^.$";
@@ -1210,7 +1267,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                         | Perl5Compiler.MULTILINE_MASK);
 
         PatternMatcherInput input = new PatternMatcherInput(stringToCheck);
-        while (localMatcher.contains(input, pattern)) {
+        if (localMatcher.contains(input, pattern)) {
             MatchResult match = localMatcher.getMatch();
             return match.beginOffset(0);
         }
@@ -1219,6 +1276,32 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private String getBoundaryStringFromContentType(String requestHeaders) {
+        if (useJavaRegex) {
+            return getBoundaryStringFromContentTypeWithJavaRegex(requestHeaders);
+        }
+        return getBoundaryStringFromContentTypeWithOroRegex(requestHeaders);
+    }
+
+    private String getBoundaryStringFromContentTypeWithJavaRegex(String requestHeaders) {
+        String regularExpression = "^" + HTTPConstants.HEADER_CONTENT_TYPE + ": multipart/form-data; boundary=(.+)$";
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
+                java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
+        Matcher localMatcher = pattern.matcher(requestHeaders);
+        if (localMatcher.find()) {
+            String matchString = localMatcher.group(1);
+            // Header may contain ;charset= , regexp extracts it so computed boundary is wrong
+            int indexOf = matchString.indexOf(';');
+            if (indexOf >= 0) {
+                return matchString.substring(0, indexOf);
+            } else {
+                return matchString;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private String getBoundaryStringFromContentTypeWithOroRegex(String requestHeaders) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         String regularExpression = "^" + HTTPConstants.HEADER_CONTENT_TYPE + ": multipart/form-data; boundary=(.+)$";
         Pattern pattern = JMeterUtils.getPattern(regularExpression,
