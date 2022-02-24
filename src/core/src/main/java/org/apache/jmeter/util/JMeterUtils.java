@@ -105,7 +105,7 @@ public class JMeterUtils implements UnitTestManager {
         public static final LoadingCache<Pair<String, Integer>, java.util.regex.Pattern> INSTANCE =
                 Caffeine
                         .newBuilder()
-                        .maximumSize(getPropDefault("java_regex.patterncache.size", 1000))
+                        .maximumSize(getPropDefault("jmeter.regex.patterncache.size", 1000))
                         .build(key -> {
                             //noinspection MagicConstant
                             return java.util.regex.Pattern.compile(key.getLeft(), key.getRight().intValue());
