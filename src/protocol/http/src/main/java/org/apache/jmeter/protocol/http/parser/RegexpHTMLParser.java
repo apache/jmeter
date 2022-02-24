@@ -130,15 +130,16 @@ class RegexpHTMLParser extends HTMLParser {
      * {@inheritDoc}
      */
     @Override
-    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl,
+                                                 URLCollection urls, String encoding) throws HTMLParseException {
         if (useJavaRegex) {
-            return getEmbeddedResourceURLsWithJavaRegex(userAgent,html, baseUrl, urls, encoding);
+            return getEmbeddedResourceURLsWithJavaRegex(html, baseUrl, urls, encoding);
         }
-        return getEmbeddedResourceURLsWithOroRegex(userAgent,html, baseUrl, urls, encoding);
+        return getEmbeddedResourceURLsWithOroRegex(html, baseUrl, urls, encoding);
     }
 
-    private Iterator<URL> getEmbeddedResourceURLsWithJavaRegex(String userAgent, byte[] html, URL baseUrl,
-                                                               URLCollection urls, String encoding) throws HTMLParseException {
+    private Iterator<URL> getEmbeddedResourceURLsWithJavaRegex(byte[] html, URL baseUrl, URLCollection urls,
+                                                               String encoding) throws HTMLParseException {
         try {
 
             // TODO: find a way to avoid the cost of creating a String here --
@@ -188,7 +189,8 @@ class RegexpHTMLParser extends HTMLParser {
         }
     }
 
-    private Iterator<URL> getEmbeddedResourceURLsWithOroRegex(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
+    private Iterator<URL> getEmbeddedResourceURLsWithOroRegex(byte[] html, URL baseUrl, URLCollection urls,
+                                                              String encoding) throws HTMLParseException {
         Pattern pattern= null;
         Perl5Matcher matcher = null;
         try {
