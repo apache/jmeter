@@ -81,13 +81,13 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         String text = responseText.getResponseDataAsString();
         String value;
         if (isPathExtension() && isPathExtensionNoEquals() && isPathExtensionNoQuestionmark()) {
-            value = pathExtensionEqualsQuestionmarkExtractor.apply(text);
-        } else if (isPathExtension() && isPathExtensionNoEquals()) { // && !isPathExtensionNoQuestionmark()
-            value = pathExtensionEqualsNoQuestionmarkExtractor.apply(text);
-        } else if (isPathExtension() && isPathExtensionNoQuestionmark()) { // && !isPathExtensionNoEquals()
-            value = pathExtensionNoEqualsQuestionmarkExtractor.apply(text);
-        } else if (isPathExtension()) { // && !isPathExtensionNoEquals() && !isPathExtensionNoQuestionmark()
             value = pathExtensionNoEqualsNoQuestionmarkExtractor.apply(text);
+        } else if (isPathExtension() && isPathExtensionNoEquals()) { // && !isPathExtensionNoQuestionmark()
+            value = pathExtensionNoEqualsQuestionmarkExtractor.apply(text);
+        } else if (isPathExtension() && isPathExtensionNoQuestionmark()) { // && !isPathExtensionNoEquals()
+            value = pathExtensionEqualsNoQuestionmarkExtractor.apply(text);
+        } else if (isPathExtension()) { // && !isPathExtensionNoEquals() && !isPathExtensionNoQuestionmark()
+            value = pathExtensionEqualsQuestionmarkExtractor.apply(text);
         } else { // if ! isPathExtension()
             value = parameterExtractor.apply(text);
         }
