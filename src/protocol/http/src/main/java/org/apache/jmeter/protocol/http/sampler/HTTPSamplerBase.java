@@ -41,6 +41,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.function.Predicate;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -319,6 +321,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     // Bug 51939
     private static final boolean SEPARATE_CONTAINER =
             JMeterUtils.getPropDefault("httpsampler.separate.container", true); // $NON-NLS-1$
+
+    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
 
     static {
         String[] parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
@@ -1365,28 +1369,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
             // Get the URL matcher
             String allowRegex = getEmbeddedUrlRE();
-            Perl5Matcher localMatcher = null;
-            Pattern allowPattern = null;
-            if (!allowRegex.isEmpty()) {
-                try {
-                    allowPattern = JMeterUtils.getPattern(allowRegex);
-                    localMatcher = JMeterUtils.getMatcher();// don't fetch unless pattern compiles
-                } catch (MalformedCachePatternException e) { // NOSONAR
-                    log.warn("Ignoring embedded URL match string: {}", e.getMessage());
-                }
-            }
-            Pattern excludePattern = null;
+            Predicate<URL> allowPredicate = generateMatcherPredicate(allowRegex, "allow", true);
             String excludeRegex = getEmbededUrlExcludeRE();
-            if (!excludeRegex.isEmpty()) {
-                try {
-                    excludePattern = JMeterUtils.getPattern(excludeRegex);
-                    if (localMatcher == null) {
-                        localMatcher = JMeterUtils.getMatcher();// don't fetch unless pattern compiles
-                    }
-                } catch (MalformedCachePatternException e) { // NOSONAR
-                    log.warn("Ignoring embedded URL exclude string: {}", e.getMessage());
-                }
-            }
+            Predicate<URL> excludePredicate = generateMatcherPredicate(excludeRegex, "exclude", false);
 
             // For concurrent get resources
             final List<Callable<AsynSamplerResultHolder>> list = new ArrayList<>();
@@ -1423,12 +1408,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             setParentSampleSuccess(res, false);
                             continue;
                         }
-                        log.debug("allowPattern: {}, excludePattern: {}, localMatcher: {}, url: {}", allowPattern, excludePattern, localMatcher, url);
-                        // I don't think localMatcher can be null here, but check just in case
-                        if (allowPattern != null && localMatcher != null && !localMatcher.matches(url.toString(), allowPattern)) {
+                        log.debug("allowPattern: {}, excludePattern: {}, url: {}", allowRegex, excludeRegex, url);
+                        if (!allowPredicate.test(url)) {
                             continue; // we have a pattern and the URL does not match, so skip it
                         }
-                        if (excludePattern != null && localMatcher != null && localMatcher.matches(url.toString(), excludePattern)) {
+                        if (excludePredicate.test(url)) {
                             continue; // we have a pattern and the URL does not match, so skip it
                         }
                         try {
@@ -1489,6 +1473,29 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
         }
         return res;
+    }
+
+    private Predicate<URL> generateMatcherPredicate(String regex, String explanation, boolean defaultAnswer) {
+        if (StringUtils.isEmpty(regex)) {
+            return s -> defaultAnswer;
+        }
+        if (useJavaRegex) {
+            try {
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
+                return s -> pattern.matcher(s.toString()).matches();
+            } catch (PatternSyntaxException e) {
+                log.warn("Ignoring embedded URL {} string: {}", explanation, e.getMessage());
+                return s -> defaultAnswer;
+            }
+        }
+        try {
+            Pattern pattern = JMeterUtils.getPattern(regex);
+            Perl5Matcher matcher = JMeterUtils.getMatcher();
+            return s -> matcher.matches(s.toString(), pattern);
+        } catch (MalformedCachePatternException e) { // NOSONAR
+            log.warn("Ignoring embedded URL {} string: {}", explanation, e.getMessage());
+            return s -> defaultAnswer;
+        }
     }
 
     static void registerParser(String contentType, String className) {
