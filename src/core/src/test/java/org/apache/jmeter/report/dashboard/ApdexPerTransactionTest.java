@@ -17,11 +17,6 @@
 
 package org.apache.jmeter.report.dashboard;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -31,6 +26,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.PatternMatcher;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import jodd.props.Props;
@@ -54,7 +50,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
         final String apdexPerTransaction = getOptionalProperty(props,
                 REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION);
-        assertEquals(apdexString, apdexPerTransaction);
+        Assertions.assertEquals(apdexString, apdexPerTransaction);
     }
 
     @Test
@@ -63,48 +59,48 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
         final String title = getOptionalProperty(props,
                 "jmeter.reportgenerator.graph.responseTimePercentiles.title");
-        assertNotNull("title should not be null", title);
+        Assertions.assertNotNull(title, "title should not be null");
     }
 
     @Test
     public void testGetApdexPerTransactionParts() {
         Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts(apdexString);
-        assertNotNull("map should not be null", apdex);
-        assertEquals(3, apdex.size());
+        Assertions.assertNotNull(apdex, "map should not be null");
+        Assertions.assertEquals(3, apdex.size());
         Set<String> keys = apdex.keySet();
-        assertTrue(keys.contains("samples12"));
-        assertTrue(keys.contains("scenar01-12"));
-        assertTrue(keys.contains("sample(\\d+)"));
-        assertArrayEquals(new Long[] {1000L,  2000L}, apdex.get("sample(\\d+)"));
+        Assertions.assertTrue(keys.contains("samples12"));
+        Assertions.assertTrue(keys.contains("scenar01-12"));
+        Assertions.assertTrue(keys.contains("sample(\\d+)"));
+        Assertions.assertArrayEquals(new Long[] {1000L,  2000L}, apdex.get("sample(\\d+)"));
     }
 
    @Test
     public void testGetApdexPerTransactionPartsOneCustomization() {
         Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts("sample(\\d+):1000|2000");
-        assertNotNull("map should not be null", apdex);
-        assertEquals(1, apdex.size());
+        Assertions.assertNotNull(apdex, "map should not be null");
+        Assertions.assertEquals(1, apdex.size());
         Set<String> keys = apdex.keySet();
-        assertTrue(keys.contains("sample(\\d+)"));
-        assertArrayEquals(new Long[] {1000L,  2000L}, apdex.get("sample(\\d+)"));
+        Assertions.assertTrue(keys.contains("sample(\\d+)"));
+        Assertions.assertArrayEquals(new Long[] {1000L,  2000L}, apdex.get("sample(\\d+)"));
     }
 
    @Test
    public void testGetApdexPerTransactionNoValue() {
        Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts("");
-       assertNotNull("map should not be null", apdex);
-       assertEquals(0, apdex.size());
+       Assertions.assertNotNull(apdex, "map should not be null");
+       Assertions.assertEquals(0, apdex.size());
 
        apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts(" ");
-       assertNotNull("map should not be null", apdex);
-       assertEquals(0, apdex.size());
+       Assertions.assertNotNull(apdex, "map should not be null");
+       Assertions.assertEquals(0, apdex.size());
    }
 
    @Test
    public void testGetApdexPerTransactionWrongFormat() {
        Map<String, Long[]> apdex =
                ReportGeneratorConfiguration.getApdexPerTransactionParts("sample1|123:434");
-       assertNotNull("map should not be null", apdex);
-       assertEquals(0, apdex.size());
+       Assertions.assertNotNull(apdex, "map should not be null");
+       Assertions.assertEquals(0, apdex.size());
    }
 
     @Test
@@ -136,7 +132,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
                     }
                 }
             }
-            assertTrue(hasMatched);
+            Assertions.assertTrue(hasMatched);
         }
 
     }
