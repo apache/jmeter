@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * HtmlParser implementation using regular expressions.
  * <p>
  * This class will find URLs specified in the following ways (where <b>url</b>
- * represents the URL being found:
+ * represents the URL being found):
  * <ul>
  * <li>&lt;img src=<b>url</b> ... &gt;
  * <li>&lt;script src=<b>url</b> ... &gt;
