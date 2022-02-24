@@ -215,10 +215,12 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
                 java.util.regex.Pattern.MULTILINE);
         return text -> {
             Matcher matcher = pattern.matcher(text);
-            for (int i = 1; i < matcher.groupCount(); i++) {
-                String value = matcher.group(i);
-                if (value != null) {
-                    return value;
+            if (matcher.find()) {
+                for (int i = 1; i < matcher.groupCount(); i++) {
+                    String value = matcher.group(i);
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
             return "";
@@ -231,11 +233,13 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
                 Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         return text -> {
-            MatchResult result = matcher.getMatch();
-            for (int i = 1; i < result.groups(); i++) {
-                String value = result.group(i);
-                if (value != null) {
-                    return value;
+            if (matcher.contains(text, pattern)) {
+                MatchResult result = matcher.getMatch();
+                for (int i = 1; i < result.groups(); i++) {
+                    String value = result.group(i);
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
             return "";
