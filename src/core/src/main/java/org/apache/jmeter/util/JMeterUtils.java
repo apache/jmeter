@@ -101,7 +101,7 @@ public class JMeterUtils implements UnitTestManager {
     private static final class LazyJavaPatternCacheHolder {
         private LazyJavaPatternCacheHolder() {
             super();
-        };
+        }
         public static final LoadingCache<Pair<String, Integer>, java.util.regex.Pattern> INSTANCE =
                 Caffeine
                         .newBuilder()
