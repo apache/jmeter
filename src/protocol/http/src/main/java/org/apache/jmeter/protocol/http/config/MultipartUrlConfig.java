@@ -193,7 +193,7 @@ public class MultipartUrlConfig implements Serializable {
     }
 
     private static String getHeaderValueWithJavaRegex(String multiPart, String regularExpression) {
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regularExpression,
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
                  java.util.regex.Pattern.CASE_INSENSITIVE
                         | java.util.regex.Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(multiPart);
