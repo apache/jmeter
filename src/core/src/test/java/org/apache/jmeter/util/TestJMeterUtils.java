@@ -18,9 +18,13 @@
 package org.apache.jmeter.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,5 +59,27 @@ public class TestJMeterUtils {
                 JMeterUtils.getArrayPropDefault("testGetArrayPropDefaultMissing", new String[]{"Gilels", "Richter"}));
         Assertions.assertArrayEquals(null,
                 JMeterUtils.getArrayPropDefault("testGetArrayPropDefaultEmpty", null));
+    }
+
+    @Test
+    void testCompilePatternOK() {
+        Pattern pattern = JMeterUtils.compilePattern("some.*");
+        assertTrue(pattern.matcher("something").matches());
+    }
+
+    @Test
+    void testCompilePatternMultilineCaseIgnoreOK() {
+        Pattern pattern = JMeterUtils.compilePattern("^some.*g$", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+        assertTrue(pattern.matcher("abc\nsome good thing").find());
+    }
+
+    @Test
+    void testCompilePatternNull() {
+        assertThrows(NullPointerException.class, () -> JMeterUtils.compilePattern(null));
+    }
+
+    @Test
+    void testCompilePatternInvalid() {
+        assertThrows(PatternSyntaxException.class, () -> JMeterUtils.compilePattern("[missing closing bracket"));
     }
 }
