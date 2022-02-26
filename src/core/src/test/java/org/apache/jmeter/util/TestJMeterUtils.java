@@ -32,7 +32,8 @@ public class TestJMeterUtils {
     @Test
     public void testGetResourceFileAsText() throws Exception{
         String sep = System.getProperty("line.separator");
-        Assertions.assertEquals("line one" + sep + "line two" + sep, JMeterUtils.getResourceFileAsText("resourcefile.txt"));
+        Assertions.assertEquals("line one" + sep + "line two" + sep,
+                JMeterUtils.getResourceFileAsText("resourcefile.txt"));
     }
 
     @Test
@@ -50,11 +51,13 @@ public class TestJMeterUtils {
         Path props = Files.createTempFile("testGetArrayPropDefault", ".properties");
         JMeterUtils.loadJMeterProperties(props.toString());
         JMeterUtils.getJMeterProperties().setProperty("testGetArrayPropDefaultEmpty", "    ");
-        JMeterUtils.getJMeterProperties().setProperty("testGetArrayPropDefault", " Tolstoi  Dostoievski    Pouchkine       Gorki ");
+        JMeterUtils.getJMeterProperties().setProperty("testGetArrayPropDefault",
+                " Tolstoi  Dostoievski    Pouchkine       Gorki ");
         Assertions.assertArrayEquals(new String[]{"Tolstoi", "Dostoievski", "Pouchkine", "Gorki"},
                 JMeterUtils.getArrayPropDefault("testGetArrayPropDefault", null));
         Assertions.assertArrayEquals(new String[]{"Gilels", "Richter"},
-                JMeterUtils.getArrayPropDefault("testGetArrayPropDefaultMissing", new String[]{"Gilels", "Richter"}));
+                JMeterUtils.getArrayPropDefault("testGetArrayPropDefaultMissing",
+                        new String[]{"Gilels", "Richter"}));
         Assertions.assertArrayEquals(null,
                 JMeterUtils.getArrayPropDefault("testGetArrayPropDefaultEmpty", null));
     }
