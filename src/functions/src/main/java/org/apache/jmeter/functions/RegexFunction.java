@@ -60,6 +60,8 @@ public class RegexFunction extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();
 
+    private static final java.util.regex.Pattern FIRST_ELEMENT_PATTERN = java.util.regex.Pattern.compile("^\\$\\d+\\$");
+
     private static final String TEMPLATE_PATTERN = "\\$(\\d+)\\$";  //$NON-NLS-1$
     /** initialised to the regex \$(\d+)\$ */
     private final Pattern templatePattern;
@@ -212,7 +214,7 @@ public class RegexFunction extends AbstractFunction {
 
     private java.util.regex.Pattern generateJavaPattern() throws InvalidVariableException {
         try {
-            return java.util.regex.Pattern.compile(((CompoundVariable) values[0]).execute());
+            return JMeterUtils.compilePattern(((CompoundVariable) values[0]).execute());
 
         } catch (PatternSyntaxException e) {
             log.error("Malformed regex pattern:{}", values[0], e);
@@ -423,7 +425,7 @@ public class RegexFunction extends AbstractFunction {
 
     private boolean isFirstElementGroup(String rawData) {
         if (useJavaRegex) {
-            return java.util.regex.Pattern.compile("^\\$\\d+\\$").matcher(rawData).find();
+            return FIRST_ELEMENT_PATTERN.matcher(rawData).find();
         } else {
             Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
                     Perl5Compiler.READ_ONLY_MASK);
