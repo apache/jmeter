@@ -381,7 +381,7 @@ public class LogFilter implements Filter, Serializable {
     protected boolean excPatternWithJavaRegex(String text) {
         this.USEFILE = true;
         for (String excludePattern : this.excludePatternStrings) {
-            if (JMeterUtils.compilePattern(text).matcher(text).find()) {
+            if (JMeterUtils.compilePattern(excludePattern).matcher(text).find()) {
                 this.USEFILE = false;
                 return true;
             }
