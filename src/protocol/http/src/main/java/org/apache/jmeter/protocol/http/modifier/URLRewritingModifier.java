@@ -176,7 +176,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     }
 
     private Function<String, String> generateExtractorWithJavaRegex(String regex) {
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(
                 regex,
                 java.util.regex.Pattern.MULTILINE);
         return text -> {
@@ -210,7 +210,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     }
 
     private Function<String, String> generateFirstMatchExtractorWithJavaRegex(String regex) {
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(
                 regex,
                 java.util.regex.Pattern.MULTILINE);
         return text -> {
