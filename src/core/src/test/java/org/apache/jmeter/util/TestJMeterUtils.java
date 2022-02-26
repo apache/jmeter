@@ -17,9 +17,7 @@
 
 package org.apache.jmeter.util;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,17 +32,17 @@ public class TestJMeterUtils {
     @Test
     public void testGetResourceFileAsText() throws Exception{
         String sep = System.getProperty("line.separator");
-        assertEquals("line one" + sep + "line two" + sep, JMeterUtils.getResourceFileAsText("resourcefile.txt"));
+        Assertions.assertEquals("line one" + sep + "line two" + sep, JMeterUtils.getResourceFileAsText("resourcefile.txt"));
     }
 
     @Test
     public void testGetResourceFileAsTextWithMisingResource() throws Exception{
-        assertEquals("", JMeterUtils.getResourceFileAsText("not_existant_resourcefile.txt"));
+        Assertions.assertEquals("", JMeterUtils.getResourceFileAsText("not_existant_resourcefile.txt"));
     }
 
     @Test
     public void testGesResStringDefaultWithNonExistantKey() throws Exception {
-        assertEquals("[res_key=noValidKey]", JMeterUtils.getResString("noValidKey"));
+        Assertions.assertEquals("[res_key=noValidKey]", JMeterUtils.getResString("noValidKey"));
     }
 
     @Test
@@ -64,13 +62,13 @@ public class TestJMeterUtils {
     @Test
     void testCompilePatternOK() {
         Pattern pattern = JMeterUtils.compilePattern("some.*");
-        assertTrue(pattern.matcher("something").matches());
+        Assertions.assertTrue(pattern.matcher("something").matches());
     }
 
     @Test
     void testCompilePatternMultilineCaseIgnoreOK() {
         Pattern pattern = JMeterUtils.compilePattern("^some.*g$", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
-        assertTrue(pattern.matcher("abc\nsome good thing").find());
+        Assertions.assertTrue(pattern.matcher("abc\nsome good thing").find());
     }
 
     @Test
