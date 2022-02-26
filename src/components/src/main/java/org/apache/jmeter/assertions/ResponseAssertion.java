@@ -394,11 +394,11 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     }
 
     private static boolean matchesWithJavaRegex(String toCheck, String stringPattern) {
-        return java.util.regex.Pattern.compile(stringPattern).matcher(toCheck).matches();
+        return JMeterUtils.compilePattern(stringPattern).matcher(toCheck).matches();
     }
 
     private static boolean containsWithJavaRegex(String toCheck, String stringPattern) {
-        return java.util.regex.Pattern.compile(stringPattern).matcher(toCheck).find();
+        return JMeterUtils.compilePattern(stringPattern).matcher(toCheck).find();
     }
 
     private String getStringToCheck(SampleResult response) {
