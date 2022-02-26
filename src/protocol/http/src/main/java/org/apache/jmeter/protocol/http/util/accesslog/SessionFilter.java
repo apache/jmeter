@@ -96,7 +96,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return getIpAddressWithOroRegex(logLine);
     }
 
-    protected String getIpAddressWithJavaRegex(String logLine) {
+    private String getIpAddressWithJavaRegex(String logLine) {
         java.util.regex.Pattern incIp = JMeterUtils.compilePattern("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
         Matcher matcher = incIp.matcher(logLine);
         if (matcher.find()) {
@@ -105,7 +105,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return "";
     }
 
-    protected String getIpAddressWithOroRegex(String logLine) {
+    private String getIpAddressWithOroRegex(String logLine) {
         Pattern incIp = JMeterUtils.getPatternCache().getPattern("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
                 Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
         Perl5Matcher matcher = JMeterUtils.getMatcher();

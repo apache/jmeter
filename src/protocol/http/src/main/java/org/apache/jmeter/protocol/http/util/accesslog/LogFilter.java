@@ -378,7 +378,7 @@ public class LogFilter implements Filter, Serializable {
         return excPatternWithOroRegex(text);
     }
 
-    protected boolean excPatternWithJavaRegex(String text) {
+    private boolean excPatternWithJavaRegex(String text) {
         this.USEFILE = true;
         for (String excludePattern : this.excludePatternStrings) {
             if (JMeterUtils.compilePattern(excludePattern).matcher(text).find()) {
@@ -389,7 +389,7 @@ public class LogFilter implements Filter, Serializable {
         return false;
     }
 
-    protected boolean excPatternWithOroRegex(String text) {
+    private boolean excPatternWithOroRegex(String text) {
         this.USEFILE = true;
         boolean exc = false;
         for (Pattern excludePattern : this.EXCPATTERNS) {
