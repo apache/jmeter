@@ -1481,7 +1481,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         if (useJavaRegex) {
             try {
-                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
+                java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regex);
                 return s -> pattern.matcher(s.toString()).matches();
             } catch (PatternSyntaxException e) {
                 log.warn("Ignoring embedded URL {} string: {}", explanation, e.getMessage());
