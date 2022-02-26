@@ -111,7 +111,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
             String value = entry.getValue();
             if (regexMatch) {
                 try {
-                    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(constructPattern(value));
+                    java.util.regex.Pattern pattern = JMeterUtils.compilePattern(constructPattern(value));
                     input = pattern.matcher(input).replaceAll(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
                 } catch (PatternSyntaxException e) {
                     log.warn("Malformed pattern: {}", value);
