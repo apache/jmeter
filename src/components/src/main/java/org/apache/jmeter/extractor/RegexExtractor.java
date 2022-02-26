@@ -183,7 +183,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         String regex = getRegex();
         java.util.regex.Pattern pattern = null;
         try {
-            pattern = java.util.regex.Pattern.compile(regex);
+            pattern = JMeterUtils.compilePattern(regex);
             List<java.util.regex.MatchResult> matches = processMatches(pattern, previousResult, matchNumber, vars);
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
