@@ -47,6 +47,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
      * Functions are wrapped in ${ and }
      */
     private static final String FUNCTION_REF_PREFIX = "${"; //$NON-NLS-1$
+    private static final String FUNCTION_REF_PREFIX_REGEX_SAFE = "\\${"; //$NON-NLS-1$
     /**
      * Functions are wrapped in ${ and }
      */
@@ -112,7 +113,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
             if (regexMatch) {
                 try {
                     java.util.regex.Pattern pattern = JMeterUtils.compilePattern(constructPattern(value));
-                    input = pattern.matcher(input).replaceAll(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
+                    input = pattern.matcher(input).replaceAll(FUNCTION_REF_PREFIX_REGEX_SAFE + key + FUNCTION_REF_SUFFIX);
                 } catch (PatternSyntaxException e) {
                     log.warn("Malformed pattern: {}", value);
                 }
