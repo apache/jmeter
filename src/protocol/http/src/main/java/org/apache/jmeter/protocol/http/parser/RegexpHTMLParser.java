@@ -148,7 +148,7 @@ class RegexpHTMLParser extends HTMLParser {
             String input = new String(html, encoding);
             java.util.regex.Pattern pattern = JMeterUtils.compilePattern(
                     REGEXP,
-                    java.util.regex.Pattern.CASE_INSENSITIVE
+                    java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL
             );
 
             Matcher matcher = pattern.matcher(input);
