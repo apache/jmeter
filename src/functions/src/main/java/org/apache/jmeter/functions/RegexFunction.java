@@ -291,7 +291,7 @@ public class RegexFunction extends AbstractFunction {
     }
 
     private void saveGroups(java.util.regex.MatchResult result, String namep, JMeterVariables vars) {
-        for (int x = 0; x < result.groupCount(); x++) {
+        for (int x = 0; x <= result.groupCount(); x++) {
             vars.put(namep + "_g" + x, result.group(x)); //$NON-NLS-1$
         }
     }
@@ -363,32 +363,20 @@ public class RegexFunction extends AbstractFunction {
 
     private Object[] generateTemplateWithJavaRegex(String rawTemplate) {
         // String or Integer
-        List<Object> combined = new ArrayList<>();
-        List<String> pieces = Arrays.asList(templatePatternJava.split(rawTemplate));
+        List<Object> pieces = new ArrayList<>();
         Matcher matcher = templatePatternJava.matcher(rawTemplate);
-        boolean startsWith = isFirstElementGroup(rawTemplate);
-        if (startsWith) {
-            pieces.remove(0);// Remove initial empty entry
-        }
-        Iterator<String> iter = pieces.iterator();
-        while (iter.hasNext()) {
-            boolean matchExists = matcher.find();
-            if (startsWith) {
-                if (matchExists) {
-                    combined.add(Integer.valueOf(matcher.group(1)));
-                }
-                combined.add(iter.next());
-            } else {
-                combined.add(iter.next());
-                if (matchExists) {
-                    combined.add(Integer.valueOf(matcher.group(1)));
-                }
+        int pos = 0;
+        while (matcher.find()) {
+            if (pos < matcher.start()) {
+                pieces.add(rawTemplate.substring(pos, matcher.start()));
             }
+            pieces.add(Integer.valueOf(matcher.group(1)));
+            pos = matcher.end();
         }
-        if (matcher.find()) {
-            combined.add(Integer.valueOf(matcher.group(1)));
+        if (pos < rawTemplate.length()) {
+            pieces.add(rawTemplate.substring(pos));
         }
-        return combined.toArray();
+        return pieces.toArray();
     }
 
     private Object[] generateTemplateWithOroRegex(String rawTemplate) {
