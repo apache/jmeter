@@ -216,7 +216,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         return text -> {
             Matcher matcher = pattern.matcher(text);
             if (matcher.find()) {
-                for (int i = 1; i < matcher.groupCount(); i++) {
+                for (int i = 1; i <= matcher.groupCount(); i++) {
                     String value = matcher.group(i);
                     if (value != null) {
                         return value;

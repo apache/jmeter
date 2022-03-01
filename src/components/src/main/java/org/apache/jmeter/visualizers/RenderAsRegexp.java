@@ -138,7 +138,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         for (int j = 0; j < size; j++) {
             java.util.regex.MatchResult mr = matches.get(j);
             final int groups = mr.groupCount();
-            for (int i = 0; i < groups; i++) {
+            for (int i = 0; i <= groups; i++) {
                 sb.append("Match[").append(j+1).append("][").append(i).append("]=").append(mr.group(i)).append("\n");
             }
         }
