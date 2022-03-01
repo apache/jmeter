@@ -82,7 +82,7 @@ class TestJSONPathAssertion {
         "{\"myval\": 123}; $.myval; 123",
         "{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}; $.myval[*].test; 2",
         "{\"myval\": []}; $.myval; []",
-        "{\"myval\": {\"key\": \"val\"}}; $.myval; {\"key\":\"val\"}"
+        "{\"myval\": {\"key\": \"val\"}}; $.myval; \\{\"key\":\"val\"\\}"
     }, delimiterString=";")
     void testGetResult_pathsWithOneResult(String data, String jsonPath, String expectedResult) {
         SampleResult samplerResult = new SampleResult();
@@ -311,14 +311,14 @@ class TestJSONPathAssertion {
         instance.setJsonPath("$.execution[0].scenario.requests[0].headers");
         instance.setJsonValidationBool(true);
         instance.setExpectNull(false);
-        instance.setExpectedValue("{headerkey=header value}");
+        instance.setExpectedValue("\\{headerkey=header value\\}");
         instance.setInvert(false);
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
         assertTrue(result.isFailure());
         assertEquals(
-                "Value expected to match regexp '{headerkey=header value}', but it did not match: '{\"headerkey\":\"header value\"}'",
+                "Value expected to match regexp '\\{headerkey=header value\\}', but it did not match: '{\"headerkey\":\"header value\"}'",
                 result.getFailureMessage());
     }
 
