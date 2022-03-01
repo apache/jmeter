@@ -258,7 +258,7 @@ public class ResponseAssertionTest {
         assertion.unsetNotType();
         assertion.setToContainsType();
         assertion.setTestFieldResponseData();
-        assertion.addTestString("value=\"\\${ID}\" Group\\$ctl00\\$drpEmails");
+        assertion.addTestString("value=\"\\$\\{ID\\}\" Group\\$ctl00\\$drpEmails");
 
         result = assertion.getResult(sample);
         assertPassed();
