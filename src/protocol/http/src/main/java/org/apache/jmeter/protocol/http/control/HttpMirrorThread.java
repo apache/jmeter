@@ -337,7 +337,7 @@ public class HttpMirrorThread implements Runnable {
 
     private static int getPositionOfBodyWithJavaRegex(String stringToCheck) {
         // The headers and body are divided by a blank line (the \r is to allow for the CR before LF)
-        String regularExpression = "^\\r$"; // $NON-NLS-1$
+        String regularExpression = "^$"; // $NON-NLS-1$
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regularExpression,
                 java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
 

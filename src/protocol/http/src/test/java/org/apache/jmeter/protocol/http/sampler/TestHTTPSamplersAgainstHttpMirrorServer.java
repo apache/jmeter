@@ -1190,7 +1190,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private String getSentRequestHeaderValueWithJavaRegex(String requestHeaders, String headerName) {
         String expression = ".*" + headerName + ": (\\d*).*";
         java.util.regex.Pattern pattern = JMeterUtils.compilePattern(expression,
-                        java.util.regex.Pattern.CASE_INSENSITIVE);
+                        java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
         Matcher matcher = pattern.matcher(requestHeaders);
         if (matcher.matches()) {
             // The value is in the first group, group 0 is the whole match
@@ -1244,7 +1244,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
     private int getPositionOfBodyWithJavaRegex(String stringToCheck) {
         // The headers and body are divided by a blank line
-        String regularExpression = "^.$";
+        String regularExpression = "^$";
         java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
                 java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
 
