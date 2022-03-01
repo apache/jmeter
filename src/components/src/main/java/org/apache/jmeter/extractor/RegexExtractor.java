@@ -391,8 +391,8 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 log.warn("Could not parse number: '{}'.", prevString);
             }
         }
-        //Note: match.groups() includes group 0
-        final int groups = match.groupCount();
+        //Note: match.groups() includes group 0, groupCount() not
+        final int groups = match.groupCount() + 1;
         for (int x = 0; x < groups; x++) {
             buf.append(x);
             vars.put(buf.toString(), match.group(x));
