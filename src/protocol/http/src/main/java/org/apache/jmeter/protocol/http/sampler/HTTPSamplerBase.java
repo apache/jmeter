@@ -322,7 +322,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final boolean SEPARATE_CONTAINER =
             JMeterUtils.getPropDefault("httpsampler.separate.container", true); // $NON-NLS-1$
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     static {
         String[] parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
@@ -1479,7 +1480,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if (StringUtils.isEmpty(regex)) {
             return s -> defaultAnswer;
         }
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             try {
                 java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regex);
                 return s -> pattern.matcher(s.toString()).matches();

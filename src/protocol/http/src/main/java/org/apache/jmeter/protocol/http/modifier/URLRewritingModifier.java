@@ -61,7 +61,8 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
     private static final String ENCODE = "encode"; // $NON-NLS-1$
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     // PreProcessors are cloned per-thread, so this will be saved per-thread
     private transient String savedValue = ""; // $NON-NLS-1$
@@ -169,7 +170,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     }
 
     private Function<String, String> generateExtractor(String regex) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return generateExtractorWithJavaRegex(regex);
         }
         return generateExtractorWithOroRegex(regex);
@@ -203,7 +204,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     }
 
     private Function<String, String> generateFirstMatchExtractor(String regex) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return generateFirstMatchExtractorWithJavaRegex(regex);
         }
         return generateFirstMatchExtractorWithOroRegex(regex);

@@ -95,7 +95,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     private static final String DIFF_DELTA_END
             = JMeterUtils.getPropDefault("assertion.equals_diff_delta_end", "]]]");
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     public ResponseAssertion() {
         setProperty(new CollectionProperty(TEST_STRINGS, new ArrayList<String>()));
@@ -330,7 +331,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 String stringPattern = jMeterProperty.getStringValue();
                 boolean found;
                 if (contains) {
-                    if (useJavaRegex) {
+                    if (USE_JAVA_REGEX) {
                         found = containsWithJavaRegex(toCheck, stringPattern);
                     } else {
                         Pattern pattern = JMeterUtils.getPatternCache()
@@ -342,7 +343,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 } else if (substring) {
                     found = toCheck.contains(stringPattern);
                 } else { // this is the old `matches` part which means `isMatchType()` is true
-                    if (useJavaRegex) {
+                    if (USE_JAVA_REGEX) {
                         found = matchesWithJavaRegex(toCheck, stringPattern);
                     } else {
                         Pattern pattern = JMeterUtils.getPatternCache()

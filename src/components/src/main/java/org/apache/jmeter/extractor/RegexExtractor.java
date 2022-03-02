@@ -83,7 +83,8 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     private static final boolean DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE = false;
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     private transient List<Object> template;
 
@@ -113,7 +114,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             vars.put(refName, defaultValue);
         }
 
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             extractWithJavaRegex(previousResult, vars, refName, matchNumber);
         } else {
             extractWithOroRegex(previousResult, vars, refName, matchNumber);

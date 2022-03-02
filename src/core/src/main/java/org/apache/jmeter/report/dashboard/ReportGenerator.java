@@ -103,7 +103,8 @@ public class ReportGenerator {
     private final File testFile;
     private final ReportGeneratorConfiguration configuration;
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /**
      * ResultCollector used
@@ -462,7 +463,7 @@ public class ReportGenerator {
         if (sampleName == null) {
             return false;
         }
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             java.util.regex.Pattern pattern = JMeterUtils.compilePattern(keyName);
             return pattern.matcher(sampleName).matches();
         }

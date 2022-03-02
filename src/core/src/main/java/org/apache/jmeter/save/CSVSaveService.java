@@ -125,7 +125,8 @@ public final class CSVSaveService {
 
     private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
 
-    private static boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /**
      * Private constructor to prevent instantiation.
@@ -558,7 +559,7 @@ public final class CSVSaveService {
     }
 
     private static String extractDelimiter(String headerLine) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return extractDelimWithJavaRegex(headerLine);
         }
         return extractDelimWithOroRegex(headerLine);

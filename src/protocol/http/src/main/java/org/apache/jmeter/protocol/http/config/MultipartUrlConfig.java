@@ -55,7 +55,8 @@ public class MultipartUrlConfig implements Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(MultipartUrlConfig.class);
 
-    private static boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /**
      * HTTPFileArgs list to be uploaded with http request.
@@ -186,7 +187,7 @@ public class MultipartUrlConfig implements Serializable {
 
     private static String getHeaderValue(String headerName, String multiPart) {
         String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getHeaderValueWithJavaRegex(multiPart, regularExpression);
         }
         return getHeaderValueWithOroRegex(multiPart, regularExpression);

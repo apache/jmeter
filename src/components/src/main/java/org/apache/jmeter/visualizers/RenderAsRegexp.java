@@ -67,7 +67,8 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
 
     private JTabbedPane rightSide;
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /** {@inheritDoc} */
     @Override
@@ -112,7 +113,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     }
 
     private String process(String textToParse) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return processJavaRegex(textToParse);
         }
         return processOroRegex(textToParse);

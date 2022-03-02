@@ -54,7 +54,8 @@ public final class HtmlParsingUtils {
             java.util.regex.Pattern.CASE_INSENSITIVE);
     private static final Logger log = LoggerFactory.getLogger(HtmlParsingUtils.class);
 
-    private static boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /**
      * Private constructor to prevent instantiation.
@@ -87,7 +88,7 @@ public final class HtmlParsingUtils {
 
         final Arguments arguments = config.getArguments();
 
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return isAnchorMatchedWithJavaRegex(newLink, config, query, arguments);
         }
         return isAnchorMatchedWithOroRegex(newLink, config, query, arguments);
@@ -171,7 +172,7 @@ public final class HtmlParsingUtils {
      * @return true if both name and value match
      */
     public static boolean isArgumentMatched(Argument arg, Argument patternArg) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return isEqualOrMatchesWithJavaRegex(arg.getName(), patternArg.getName())
                     && isEqualOrMatchesWithJavaRegex(arg.getValue(), patternArg.getValue());
         }
@@ -240,7 +241,7 @@ public final class HtmlParsingUtils {
      * @return true if input matches the pattern
      */
     public static boolean isEqualOrMatches(String arg, String pat) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return isEqualOrMatchesWithJavaRegex(arg, pat);
         }
         return isEqualOrMatches(arg, pat, JMeterUtils.getMatcher(), JMeterUtils.getPatternCache());
@@ -256,7 +257,7 @@ public final class HtmlParsingUtils {
      * @return true if input matches the pattern
      */
     public static boolean isEqualOrMatchesCaseBlind(String arg, String pat) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return isEqualOrMatchesCaseBlindWithJavaRegex(arg, pat);
         }
         return isEqualOrMatchesCaseBlind(arg, pat, JMeterUtils.getMatcher(), JMeterUtils.getPatternCache());
@@ -445,7 +446,7 @@ public final class HtmlParsingUtils {
     }
 
     public static void extractStyleURLs(final URL baseUrl, final URLCollection urls, String styleTagStr) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             extractStyleURLsWithJavaRegex(baseUrl, urls, styleTagStr);
         } else {
             extractStyleURLsWithOroRegex(baseUrl, urls, styleTagStr);

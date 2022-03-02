@@ -48,7 +48,8 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
     private Collection<SubstitutionElement> stringsToSkip;
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     public CompareAssertion() {
         super();
@@ -157,7 +158,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
             return content;
         }
 
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             String result = content;
             for (SubstitutionElement element: stringsToSkip) {
                 result = result.replaceAll(element.getRegex(), element.getSubstitute());

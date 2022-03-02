@@ -81,7 +81,8 @@ public class RegexFunction extends AbstractFunction {
         desc.add(JMeterUtils.getResString("regexfunc_param_7"));// input variable //$NON-NLS-1$
     }
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     public RegexFunction() {
         templatePattern = JMeterUtils.getPatternCache().getPattern(TEMPLATE_PATTERN,
@@ -149,7 +150,7 @@ public class RegexFunction extends AbstractFunction {
             return defaultValue;
         }
 
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getResultWithJavaRegex(valueIndex, defaultValue, between, name, tmplt, vars, textToMatch);
         }
         return getResultWithOroRegex(valueIndex, defaultValue, between, name, tmplt, vars, textToMatch);
@@ -354,7 +355,7 @@ public class RegexFunction extends AbstractFunction {
     }
 
     private Object[] generateTemplate(String rawTemplate) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return generateTemplateWithJavaRegex(rawTemplate);
         }
         return generateTemplateWithOroRegex(rawTemplate);
@@ -411,7 +412,7 @@ public class RegexFunction extends AbstractFunction {
     }
 
     private boolean isFirstElementGroup(String rawData) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return FIRST_ELEMENT_PATTERN.matcher(rawData).find();
         } else {
             Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$",  //$NON-NLS-1$

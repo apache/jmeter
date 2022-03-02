@@ -121,7 +121,8 @@ class RegexpHTMLParser extends HTMLParser {
     private static final ThreadLocal<PatternMatcherInput> localInput =
             ThreadLocal.withInitial(() -> new PatternMatcherInput(new char[0]));
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /**
      * Make sure to compile the regular expression upon instantiation:
@@ -136,7 +137,7 @@ class RegexpHTMLParser extends HTMLParser {
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl,
                                                  URLCollection urls, String encoding) throws HTMLParseException {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getEmbeddedResourceURLsWithJavaRegex(html, baseUrl, urls, encoding);
         }
         return getEmbeddedResourceURLsWithOroRegex(html, baseUrl, urls, encoding);
