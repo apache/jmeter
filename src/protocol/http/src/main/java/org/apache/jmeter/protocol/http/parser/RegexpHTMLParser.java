@@ -107,6 +107,10 @@ class RegexpHTMLParser extends HTMLParser {
             + "|LINK(?:" + SEP + "(?:HREF" + VALUE+"|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}"
             + "|LINK(?:" + SEP + "(?:HREF" + VALUE+"|REL\\s*=\\s*(?:\"icon\"|'icon'|icon(?=[\\s>])))){2,}"
             + "|LINK(?:" + SEP + "(?:HREF" + VALUE+"|REL\\s*=\\s*(?:\"shortcut icon\"|'shortcut icon'|shortcut icon(?=[\\s>])))){2,})";
+    private static final java.util.regex.Pattern HTML_PATTERN = java.util.regex.Pattern.compile(
+            REGEXP,
+            java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL
+    );
 
     // Number of capturing groups possibly containing Base HREFs:
     private static final int NUM_BASE_GROUPS = 3;
@@ -146,12 +150,8 @@ class RegexpHTMLParser extends HTMLParser {
             // probably a new PatternMatcherInput working on a byte[] would do
             // better.
             String input = new String(html, encoding);
-            java.util.regex.Pattern pattern = JMeterUtils.compilePattern(
-                    REGEXP,
-                    java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL
-            );
 
-            Matcher matcher = pattern.matcher(input);
+            Matcher matcher = HTML_PATTERN.matcher(input);
             while (matcher.find()) {
                 java.util.regex.MatchResult match = matcher.toMatchResult();
                 String s;
