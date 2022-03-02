@@ -1426,6 +1426,17 @@ JMETER-SERVER</source>
     If you want to use Rhino, set this value to <code>true</code></note>
     Defaults to: <code>false</code>
 </property>
+<property name="jmeter.regex.engine">
+    Ability to switch out the old Oro Regex implementation with the JDK built-in implementation.
+    Any value different to <code>oro</code> will disable the Oro implementation and enable the JDK based.
+    <note>We intend to switch the default to the JDK based one in a later version of JMeter.</note>
+    Defaults to: <code>oro</code>
+</property>
+<property name="jmeter.regex.patterncache.size">
+    We assist the JDK based Regex implementation by caching Pattern objects. The size of the
+    cache can be set with this setting. It can be disabled by setting it to <code>0</code>.
+    Defaults to: <code>1000</code>
+</property>
 <property name="jmeterengine.threadstop.wait">
     Number of milliseconds to wait for a thread to stop.<br/>
     Defaults to: <code>5000</code>
