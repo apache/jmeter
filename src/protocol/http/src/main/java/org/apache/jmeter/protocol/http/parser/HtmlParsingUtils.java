@@ -49,6 +49,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 
 public final class HtmlParsingUtils {
+    private static final java.util.regex.Pattern EXTRACT_STYLE_PATTERN = java.util.regex.Pattern.compile(
+            "URL\\(\\s*('|\")(.*)('|\")\\s*\\)", // $NON-NLS-1$
+            java.util.regex.Pattern.CASE_INSENSITIVE);
     private static final Logger log = LoggerFactory.getLogger(HtmlParsingUtils.class);
 
     private static boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
@@ -451,10 +454,7 @@ public final class HtmlParsingUtils {
 
     private static void extractStyleURLsWithJavaRegex(URL baseUrl, URLCollection urls, String styleTagStr) {
 
-        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(
-                "URL\\(\\s*('|\")(.*)('|\")\\s*\\)", // $NON-NLS-1$
-                java.util.regex.Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(styleTagStr);
+        Matcher matcher = EXTRACT_STYLE_PATTERN.matcher(styleTagStr);
         while (matcher.find()) {
             // The value is in the second group
             String styleUrl = matcher.group(2);

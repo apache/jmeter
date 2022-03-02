@@ -60,6 +60,8 @@ import junit.framework.TestSuite;
  * started when the unit tests are executed.
  */
 public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit implements Describable {
+    private static final java.util.regex.Pattern EMPTY_LINE_PATTERN = java.util.regex.Pattern.compile("^$",
+            java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
     private static final int HTTP_SAMPLER = 0;
     private static final int HTTP_SAMPLER3 = 2;
 
@@ -1244,11 +1246,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
     private int getPositionOfBodyWithJavaRegex(String stringToCheck) {
         // The headers and body are divided by a blank line
-        String regularExpression = "^$";
-        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
-                java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
 
-        Matcher localMatcher = pattern.matcher(stringToCheck);
+        Matcher localMatcher = EMPTY_LINE_PATTERN.matcher(stringToCheck);
         if (localMatcher.find()) {
             java.util.regex.MatchResult match = localMatcher.toMatchResult();
             return match.start(0);

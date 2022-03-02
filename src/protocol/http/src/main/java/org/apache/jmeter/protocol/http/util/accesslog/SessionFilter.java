@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
  * Provides Session Filtering for the AccessLog Sampler.
  */
 public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
+    private static final java.util.regex.Pattern IP_PATTERN = java.util.regex.Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
     private static final long serialVersionUID = 233L;
     private static final Logger log = LoggerFactory.getLogger(SessionFilter.class);
 
@@ -97,8 +98,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     }
 
     private String getIpAddressWithJavaRegex(String logLine) {
-        java.util.regex.Pattern incIp = JMeterUtils.compilePattern("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
-        Matcher matcher = incIp.matcher(logLine);
+        Matcher matcher = IP_PATTERN.matcher(logLine);
         if (matcher.find()) {
             return matcher.group(0);
         }
