@@ -63,6 +63,14 @@ import org.slf4j.LoggerFactory;
  */
 // For unit tests, @see TestCSVSaveService
 public final class CSVSaveService {
+    private static final java.util.regex.Pattern DELIMITER_PATTERN = java.util.regex.Pattern
+            // This assumes the header names are all single words with no spaces
+            // word followed by 0 or more repeats of (non-word char + word)
+            // where the non-word char (\2) is the same
+            // e.g. abc|def|ghi but not abd|def~ghi
+            .compile("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*" // $NON-NLS-1$
+                    // last entries may be quoted strings
+            );
     private static final Logger log = LoggerFactory.getLogger(CSVSaveService.class);
 
     // ---------------------------------------------------------------------
@@ -557,15 +565,7 @@ public final class CSVSaveService {
     }
 
     private static String extractDelimWithJavaRegex(String headerLine) {
-        java.util.regex.Pattern pattern = java.util.regex.Pattern
-                // This assumes the header names are all single words with no spaces
-                // word followed by 0 or more repeats of (non-word char + word)
-                // where the non-word char (\2) is the same
-                // e.g. abc|def|ghi but not abd|def~ghi
-                .compile("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*" // $NON-NLS-1$
-                        // last entries may be quoted strings
-                        );
-        Matcher matcher = pattern.matcher(headerLine);
+        Matcher matcher = DELIMITER_PATTERN.matcher(headerLine);
         if (matcher.matches()) {
             return matcher.group(2);
         }
