@@ -600,7 +600,11 @@ allprojects {
                     val value = System.getProperty(name) ?: default
                     value?.let { systemProperty(name, it) }
                 }
-                passProperty("jmeter.use_java_regex")
+                System.getProperties().filter {
+                    it.key.toString().startsWith("jmeter.properties.")
+                }.forEach {
+                    systemProperty(it.key.toString().substring("jmeter.properties.".length), it.value)
+                }
                 passProperty("java.awt.headless")
                 passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
                 passProperty("junit.jupiter.execution.parallel.enabled", "true")
