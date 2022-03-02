@@ -246,7 +246,8 @@ public class ProxyControl extends GenericController implements NonTestElement {
     // Although this field is mutable, it is only accessed within the synchronized method deliverSampler()
     private static String LAST_REDIRECT = null;
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     private transient Daemon server;
 
@@ -882,7 +883,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
         try {
             boolean contains;
-            if (useJavaRegex) {
+            if (USE_JAVA_REGEX) {
                 contains = isContainedWithJavaRegex(expression, sampleContentType);
             } else {
                 contains = isContainedWithOroRegex(expression, sampleContentType);
@@ -1367,7 +1368,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     }
 
     private boolean matchesPatterns(String url, CollectionProperty patterns) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return matchesPatternsWithJavaRegex(url, patterns);
         }
         return matchesPatternsWithOroRegex(url, patterns);

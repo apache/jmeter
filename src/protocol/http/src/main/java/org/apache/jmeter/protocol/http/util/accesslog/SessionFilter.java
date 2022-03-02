@@ -45,7 +45,8 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     private static final long serialVersionUID = 233L;
     private static final Logger log = LoggerFactory.getLogger(SessionFilter.class);
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
 
     /**
@@ -91,7 +92,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     }
 
     protected String getIpAddress(String logLine) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getIpAddressWithJavaRegex(logLine);
         }
         return getIpAddressWithOroRegex(logLine);

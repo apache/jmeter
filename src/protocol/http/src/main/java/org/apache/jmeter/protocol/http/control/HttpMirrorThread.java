@@ -69,7 +69,8 @@ public class HttpMirrorThread implements Runnable {
 
     private static final String VERBOSE = "v"; // $NON-NLS-1$
 
-    private static boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /** Socket to client. */
     private final Socket clientSocket;
@@ -293,7 +294,7 @@ public class HttpMirrorThread implements Runnable {
     }
 
     private static String getRequestHeaderValue(String requestHeaders, String headerName) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getRequestHeaderValueWithJavaRegex(requestHeaders, headerName);
         }
         return getRequestHeaderValueWithOroRegex(requestHeaders, headerName);
@@ -329,7 +330,7 @@ public class HttpMirrorThread implements Runnable {
     }
 
     private static int getPositionOfBody(String stringToCheck) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getPositionOfBodyWithJavaRegex(stringToCheck);
         }
         return getPositionOfBodyWithOroRegex(stringToCheck);

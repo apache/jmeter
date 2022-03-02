@@ -55,7 +55,8 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 
     private final boolean regexMatch;// Should we match using regexes?
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map<String, String> variables) {
         this(masterFunction, variables, false);
@@ -70,7 +71,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 
     @Override
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return transformValueWithJavaRegex(prop);
         }
         return transformValueWithOroRegex(prop);

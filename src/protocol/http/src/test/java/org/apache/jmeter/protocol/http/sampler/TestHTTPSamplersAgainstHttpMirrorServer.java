@@ -79,7 +79,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
 
     private final int item;
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     public TestHTTPSamplersAgainstHttpMirrorServer(String arg0) {
         super(arg0);
@@ -1183,7 +1184,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private String getSentRequestHeaderValue(String requestHeaders, String headerName) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getSentRequestHeaderValueWithJavaRegex(requestHeaders, headerName);
         }
         return getSentRequestHeaderValueWithOroRegex(requestHeaders, headerName);
@@ -1216,7 +1217,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private boolean checkRegularExpression(String stringToCheck, String regularExpression) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return checkRegularExpressionWithJavaRegex(stringToCheck, regularExpression);
         }
         return checkRegularExpressionWithOroRegex(stringToCheck, regularExpression);
@@ -1238,7 +1239,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private int getPositionOfBody(String stringToCheck) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getPositionOfBodyWithJavaRegex(stringToCheck);
         }
         return getPositionOfBodyWithOroRegex(stringToCheck);
@@ -1275,7 +1276,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     private String getBoundaryStringFromContentType(String requestHeaders) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return getBoundaryStringFromContentTypeWithJavaRegex(requestHeaders);
         }
         return getBoundaryStringFromContentTypeWithOroRegex(requestHeaders);

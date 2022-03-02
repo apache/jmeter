@@ -37,7 +37,8 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
     // it also includes hardcoded sample names mixed with regexes
     private static final String apdexString = "sample(\\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000";
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     @Test
     public void testgetApdexPerTransactionProperty() throws Exception {
@@ -118,7 +119,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         for (String sampleName : sampleNames) {
             boolean hasMatched = false;
             for (Map.Entry<String, Long[]> entry : apdex.entrySet()) {
-                if (useJavaRegex) {
+                if (USE_JAVA_REGEX) {
                     Pattern pattern = JMeterUtils.compilePattern(entry.getKey());
                     Matcher matcher = pattern.matcher(sampleName);
                     if (matcher.matches()) {

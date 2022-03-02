@@ -75,7 +75,8 @@ public class LogFilter implements Filter, Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(LogFilter.class);
 
-    private boolean useJavaRegex = JMeterUtils.getPropDefault("jmeter.use_java_regex", false);
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     // protected members used by class to filter
 
@@ -336,7 +337,7 @@ public class LogFilter implements Filter, Serializable {
      * @return <code>true</code> if text is included
      */
     protected boolean incPattern(String text) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return incPatternWithJavaRegex(text);
         }
         return incPatternWithOroRegex(text);
@@ -372,7 +373,7 @@ public class LogFilter implements Filter, Serializable {
      * @return <code>true</code> if text is excluded
      */
     protected boolean excPattern(String text) {
-        if (useJavaRegex) {
+        if (USE_JAVA_REGEX) {
             return excPatternWithJavaRegex(text);
         }
         return excPatternWithOroRegex(text);
