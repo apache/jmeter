@@ -897,7 +897,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     }
 
     private boolean isContainedWithJavaRegex(String expression, String sampleContentType) {
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(expression);
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(expression);
         return pattern.matcher(sampleContentType).find();
     }
 
@@ -1377,7 +1377,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         for (JMeterProperty jMeterProperty : patterns) {
             String item = jMeterProperty.getStringValue();
             try {
-                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(item);
+                java.util.regex.Pattern pattern = JMeterUtils.compilePattern(item);
                 if (pattern.matcher(url).matches()) {
                     return true;
                 }

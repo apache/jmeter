@@ -317,7 +317,7 @@ public class HttpMirrorThread implements Runnable {
     private static String getRequestHeaderValueWithJavaRegex(String requestHeaders, String headerName) {
         // We use multi-line mask so can prefix the line with ^
         String expression = "^" + headerName + ":\\s+([^\\r\\n]+)"; // $NON-NLS-1$ $NON-NLS-2$
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(expression,
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(expression,
                 java.util.regex.Pattern.CASE_INSENSITIVE
                         | java.util.regex.Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(requestHeaders);
