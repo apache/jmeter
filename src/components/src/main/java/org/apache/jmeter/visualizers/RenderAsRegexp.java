@@ -121,7 +121,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     private String processJavaRegex(String textToParse) {
         java.util.regex.Pattern pattern;
         try {
-            pattern = java.util.regex.Pattern.compile(regexpField.getText());
+            pattern = JMeterUtils.compilePattern(regexpField.getText());
         } catch (PatternSyntaxException e) {
             return e.toString();
         }

@@ -180,7 +180,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         String str = objectToString(mapper, jsonNode);
         if (isUseRegex()) {
             if (useJavaRegex) {
-                return java.util.regex.Pattern.matches(getExpectedValue(), str);
+                return JMeterUtils.compilePattern(getExpectedValue()).matcher(str).matches();
             } else {
                 Pattern pattern = JMeterUtils.getPatternCache().getPattern(getExpectedValue());
                 return JMeterUtils.getMatcher().matches(str, pattern);

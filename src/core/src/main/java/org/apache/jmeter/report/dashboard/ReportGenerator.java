@@ -463,7 +463,7 @@ public class ReportGenerator {
             return false;
         }
         if (useJavaRegex) {
-            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(keyName);
+            java.util.regex.Pattern pattern = JMeterUtils.compilePattern(keyName);
             return pattern.matcher(sampleName).matches();
         }
         org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(keyName);
