@@ -51,10 +51,10 @@
     <trusted-key id='a50569c7ca7fa1f0' group='com.jcraft' />
     <trusted-key id='0a36eef644cff773' group='com.metsci.ext.com.kitfox.svg' />
     <trusted-key id='db45d3a62a183ce2' group='com.miglayout' />
-    <trusted-key id='aa49c633b4734832' group='com.pinterest' />
     <trusted-key id='995efbf4a3d20beb' group='com.pinterest' />
-    <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
+    <trusted-key id='aa49c633b4734832' group='com.pinterest' />
     <trusted-key id='995efbf4a3d20beb' group='com.pinterest.ktlint' />
+    <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
     <trusted-key id='1063fe98bcecb758' group='com.puppycrawl.tools' />
     <trusted-key id='6425559c47cc79c4' group='com.sun.activation' />
     <trusted-key id='1b2718089ce964b8' group='com.thoughtworks.qdox' />
@@ -197,8 +197,8 @@
     <trusted-key id='72385ff0af338d52' group='org.threeten' />
     <trusted-key id='a2115ae15f6b8b72' group='org.xmlunit' />
     <trusted-key id='9ff25980f5ba7e4f' group='xalan' />
-    <trusted-key id='858fc4c4f43856a3' group='xerces' />
     <trusted-key id='7d713008cc07e9ad' group='xerces' />
+    <trusted-key id='858fc4c4f43856a3' group='xerces' />
     <trusted-key id='86fdc7e2a11262cb' group='xml-apis' />
   </trusted-keys>
   <dependencies>
@@ -238,8 +238,14 @@
     <dependency group='net.minidev' module='accessors-smart' version='2.4.7'>
       <sha512>6DAAF2FE1B278599D6D0BBD3F157096F8BCCF3D25616099C128139CE164B29461860EB2786F3D3728937A0D0505DF73F1C9673B0766F946C50878E5F60305736</sha512>
     </dependency>
+    <dependency group='net.minidev' module='accessors-smart' version='2.4.8'>
+      <sha512>45405C083334B05EFA07572497B9D510CA771AF32CE93D960BE802216A9714FFFF8418384EA48E197D3DFB6EBEC4EC3E610155841E8A257A7FB9A4BD6A1B668F</sha512>
+    </dependency>
     <dependency group='net.minidev' module='json-smart' version='2.4.7'>
       <sha512>3E9E1EE9A44EA15044B588B06A956AC150A37B63C161BF9B08A60539F5C90EFC7718DEB24FD084F503B68092516AAC3349DBB74049777EA4C6619AC26090A1D</sha512>
+    </dependency>
+    <dependency group='net.minidev' module='json-smart' version='2.4.8'>
+      <sha512>13F4609FE72DF98C81F86D25616E5B0CE1426688AA5A9DD953733FA98A8DEADB87B3E69A77741DC9D31DD4485265D3B9E4EC71D99346E4A7558F2500F3677714</sha512>
     </dependency>
     <dependency group='net.sf.ezmorph' module='ezmorph' version='1.0.6'>
       <sha512>16D30BE564723B74F312B4E7D06F349370FB6726B3162778C869CD723ECA2A40C4972C2757B3E107E1820CEC0D70B0BD2B96EFCD466518FC64495F7AEF97967A</sha512>
