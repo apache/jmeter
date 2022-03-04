@@ -44,7 +44,7 @@ javaPlatform {
 }
 
 dependencies {
-    api(platform("org.codehaus.groovy:groovy-bom:${"groovy".v}"))
+    api(platform("org.apache.groovy:groovy-bom:${"groovy".v}"))
 
     // Parenthesis are needed here: https://github.com/gradle/gradle/issues/9248
     (constraints) {
@@ -71,6 +71,8 @@ dependencies {
         apiv("com.fasterxml.jackson.core:jackson-annotations", "jackson")
         apiv("com.fasterxml.jackson.core:jackson-core", "jackson")
         apiv("com.fasterxml.jackson.core:jackson-databind", "jackson-databind")
+        apiv("com.fasterxml.jackson.dataformat:jackson-dataformat-toml", "jackson-dataformat-toml")
+
         apiv("com.fifesoft:rsyntaxtextarea")
         apiv("com.formdev:svgSalamander")
         apiv("com.github.ben-manes.caffeine:caffeine")

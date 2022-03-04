@@ -59,18 +59,20 @@ dependencies {
         because("XPathUtil: throws SaxonApiException")
     }
 
-    runtimeOnly("org.codehaus.groovy:groovy") {
-        because("Groovy is a default JSR232 engine")
+    runtimeOnly("org.apache.groovy:groovy") {
+        because("Groovy is a default JSR223 engine")
     }
-    arrayOf("dateutil", "datetime", "jmx", "json", "jsr223", "sql", "templates").forEach {
-        runtimeOnly("org.codehaus.groovy:groovy-$it") {
-            because("Groovy is a default JSR232 engine")
+    arrayOf("dateutil", "datetime", "jmx", "json", "jsr223", "sql", "templates","toml").forEach {
+        runtimeOnly("org.apache.groovy:groovy-$it") {
+            because("Groovy is a default JSR223 engine")
         }
     }
 
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-toml")
+
     implementation("com.formdev:svgSalamander")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("com.github.weisj:darklaf-core")
