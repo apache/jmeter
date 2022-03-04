@@ -88,7 +88,7 @@ matrix:
       arch: s390x
       jdk: openjdk11
       script:
-        - wget http://www.eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        - wget https://www.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         - tar -xvzf apache-maven-3.6.3-bin.tar.gz
         - export PATH=`pwd`/apache-maven-3.6.3/bin/:$PATH
         - ./gradlew -PskipJavadoc publishToMavenLocal -Pjmeter.version=42.0 -PchecksumIgnore
