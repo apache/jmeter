@@ -93,6 +93,7 @@
     <trusted-key id='528dc75aa68f0923' group='jcharts' />
     <trusted-key id='85911f425ec61b51' group='junit' />
     <trusted-key id='efe8086f9e93774e' group='junit' />
+    <trusted-key id='7999befba1039e8b' group='net.bytebuddy' />
     <trusted-key id='15c71c0a4e0b8edd' group='net.java.dev.jna' />
     <trusted-key id='75bf031b7c94e183' group='net.java.dev.jna' />
     <trusted-key id='c51e10bd96d06071' group='net.javacrumbs.json-unit' />
