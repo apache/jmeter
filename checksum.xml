@@ -132,6 +132,7 @@
     <trusted-key id='d0eb627d4885ced1' group='org.apache.velocity' />
     <trusted-key id='73129f58de61ecbd' group='org.apache.xbean' />
     <trusted-key id='a2e92e06ddb37997' group='org.apache.xbean' />
+    <trusted-key id='e91287822fdb81b1' group='org.apache.xbean' />
     <trusted-key id='5b93f1df7cdb6dea' group='org.apache.xmlgraphics' />
     <trusted-key id='85911f425ec61b51' group='org.apiguardian' />
     <trusted-key id='e2b3d84202b812d9' group='org.assertj' />
