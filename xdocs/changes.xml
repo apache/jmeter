@@ -191,6 +191,7 @@ however, the profile can't be updated while the test is running.
   <li>Updated jackson to 2.13.1 (from 2.10.5)</li>
   <li>Updated jmespath to 0.5.1</li>
   <li>Updated Saxon-HE to 11.2 (from 9.9.1-8)</li>
+  <li>Updated Apache xmlgraphics commons to 2.7 (from 2.6)</li>
   <li><pr>671</pr>Move example definition of property <code>jmeter.reportgenerator.statistic_window</code>
      to <code>user.properties</code>, as it is read from that place.
      Contributed by Rithvik Patibandla (rithvikp98 at gmail.com)</li>
