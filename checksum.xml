@@ -102,6 +102,7 @@
     <trusted-key id='0da8a5ec02d11ead' group='net.sf.jopt-simple' />
     <trusted-key id='d4012dda1f1f0f82' group='net.sf.jtidy' />
     <trusted-key id='1d185615d0a84648' group='net.sf.saxon' />
+    <trusted-key id='a929ea2321fdbf8f' group='net.sf.saxon' />
     <trusted-key id='098a31f381819057' group='net.sourceforge.nekohtml' />
     <trusted-key id='4a1bac7f1e3b89b3' group='nl.jqno.equalsverifier' />
     <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
@@ -197,6 +198,7 @@
     <trusted-key id='9a2c7a98e457c53d' group='org.springframework' />
     <trusted-key id='e4b53844e02b191b' group='org.swinglabs' />
     <trusted-key id='72385ff0af338d52' group='org.threeten' />
+    <trusted-key id='a929ea2321fdbf8f' group='org.xmlresolver' />
     <trusted-key id='a2115ae15f6b8b72' group='org.xmlunit' />
     <trusted-key id='9ff25980f5ba7e4f' group='xalan' />
     <trusted-key id='7d713008cc07e9ad' group='xerces' />
