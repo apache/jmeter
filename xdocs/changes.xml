@@ -182,7 +182,7 @@ however, the profile can't be updated while the test is running.
   <li>Updated Objenesis to 3.2 (from 2.6).</li>
   <li>Updated ktlint to 0.40.0</li>
   <li>Updated PH CSS and PH commons to 6.5.4 and 10.1.6 (from 6.2.3 and 9.5.1).</li>
-  <li>Updated RSyntaxTextArea to 3.1.3 (from 3.1.1).</li>
+  <li>Updated RSyntaxTextArea to 3.1.6 (from 3.1.1).</li>
   <li>Updated SLF4J to 1.7.32 (from 1.7.30).</li>
   <li>Updated SvgSalamander to 1.1.2.4 (from 1.1.2.1).</li>
   <li><pr>698</pr>Updated Apache Tika to 1.28.1 (from 1.26).</li>
