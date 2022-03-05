@@ -178,7 +178,7 @@ however, the profile can't be updated while the test is running.
   <li>Updated JUnit to 4.13.2 and 5.8.2 (from 4.13.1 and 5.7.0).</li>
   <li>Updated Apache log4j2 to 2.17.2 (from 2.13.3).</li>
   <li>Updated Miglayout to 5.3 (from 5.2).</li>
-  <li>Updated Neo4j Java driver to 4.3.3 (from 4.2.0).</li>
+  <li>Updated Neo4j Java driver to 4.4.4 (from 4.2.0).</li>
   <li>Updated Objenesis to 3.2 (from 2.6).</li>
   <li>Updated ktlint to 0.40.0</li>
   <li>Updated PH CSS and PH commons to 6.3.4 and 9.5.5 (from 6.2.3 and 9.5.1).</li>
