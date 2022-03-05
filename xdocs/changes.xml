@@ -79,6 +79,10 @@ however, the profile can't be updated while the test is running.
 <p>The new thread group is experimental in JMeter 5.5, so please feel free to submit your feedback.</p>
 <figure width="1398" height="1117" image="open_model_thread_group.png">Open Model Thread Group sample</figure>
 
+<p>Another experimental feature in JMeter 5.5 is the ability to replace the Oro based Regex implementation
+  by the built-in Java based one. To choose the Java based one, set the JMeter propert <code>jmeter.regex.engine</code>
+  to the value <code>java</code>.</p>
+
 <ch_title>Core improvements</ch_title>
 <p>Kotlin language is now used in some core classes and tests (e.g. Open Model Thread Group).
     JMeter is compiled with <code>apiTarget=1.5</code>, and it ships with <code>kotlin-stdlib</code> 1.6.
@@ -146,6 +150,7 @@ however, the profile can't be updated while the test is running.
   <li>Reduce memory consumption by the logging panel (disable undo events for it)</li>
   <li><bug>63620</bug><pr>694</pr>Fix GUI freeze when viewing response body with long line breaks</li>
   <li><pr>699</pr>Add documentation for Graphite Backend Listener. Contributed by Ji Hun (jihunkimkw at gmail.com)</li>
+  <li><bug>57672</bug><pr>700</pr>Add a switch (<code>jmeter.regex.engine</code>) to replace Oro Regex implementation by the built-in Java one.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
