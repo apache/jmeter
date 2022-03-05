@@ -82,6 +82,7 @@
     <trusted-key id='3449ec3ac2efe8aa' group='dnsjava' />
     <trusted-key id='a5c8dbb8a1599bd4' group='dnsjava' />
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
+    <trusted-key id='6601e5c08dccbb96' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='5b30d3b10694f057' group='io.codearte.gradle.nexus' />
     <trusted-key id='67631bc0568801c3' group='io.github.microutils' />
@@ -106,6 +107,7 @@
     <trusted-key id='098a31f381819057' group='net.sourceforge.nekohtml' />
     <trusted-key id='4a1bac7f1e3b89b3' group='nl.jqno.equalsverifier' />
     <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
+    <trusted-key id='347cd0eaed975c5f' group='org.antlr' />
     <trusted-key id='6b1b008864323b92' group='org.antlr' />
     <trusted-key id='411063a3a0ffd119' group='org.apache-extras.beanshell' />
     <trusted-key id='87a7f75a6a8ba5fc' group='org.apache.activemq' />
@@ -165,6 +167,7 @@
     <trusted-key id='313cba932516c4d3' group='org.hsqldb' />
     <trusted-key id='ab049df4ab24c1ef' group='org.hsqldb' />
     <trusted-key id='cb43338e060cf9fa' group='org.jacoco' />
+    <trusted-key id='164779204e106a76' group='org.javassist' />
     <trusted-key id='8799af90c06efbbd' group='org.jdom' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
@@ -192,6 +195,7 @@
     <trusted-key id='5f69ad087600b22c' group='org.ow2.asm' />
     <trusted-key id='2be5d98f751f4136' group='org.pcollections' />
     <trusted-key id='1364c5e2df3e99c5' group='org.reactivestreams' />
+    <trusted-key id='f13d3e721d56bd54' group='org.reflections' />
     <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.api' />
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.gradle' />
