@@ -22,6 +22,7 @@
 <!ENTITY rarr     "&#x02192;" >
 <!ENTITY vellip   "&#x022EE;" >
 <!ENTITY nbsp     "&#x00A0;" >
+<!ENTITY ndash    "&#x02013;" >
 ]>
 <document>
 <properties>
@@ -80,7 +81,7 @@ however, the profile can't be updated while the test is running.
 <figure width="1398" height="1117" image="open_model_thread_group.png">Open Model Thread Group sample</figure>
 
 <p>Another experimental feature in JMeter 5.5 is the ability to replace the Oro based Regex implementation
-  by the built-in Java based one. To choose the Java based one, set the JMeter propert <code>jmeter.regex.engine</code>
+  by the built-in Java based one. To choose the Java based one, set the JMeter property <code>jmeter.regex.engine</code>
   to the value <code>java</code>.</p>
 
 <ch_title>Core improvements</ch_title>
@@ -102,7 +103,7 @@ however, the profile can't be updated while the test is running.
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><bug>65027</bug>Detect mime-type for files automatically when adding files to HTTP Sampler</li>
-  <li><bug>65020</bug>HTTP Sampler/Files upload tab - add missing buttons</li>
+  <li><bug>65020</bug>HTTP Sampler/Files upload tab &ndash; add missing buttons</li>
   <li><pr>650</pr>HTTP Sampler timestamp fix when exception is caught. Contributed by Konstantin Kalinin (konstantin at kkalinin.pro)</li>
   <li><bug>65328</bug><pr>666</pr>HTTP 308 Permanent Redirect is not supported. Contributed by
     Baptiste Gaillard (baptiste.gaillard at gmail.com)</li>
@@ -220,14 +221,14 @@ however, the profile can't be updated while the test is running.
   <li><bug>65310</bug>Don't let users override <code>multipart/form-data</code> <code>content-type</code>
     header in HC4 sampler.</li>
   <li><bug>65363</bug><code>NullPointerException</code> in <code>HTTPHC4Impl$ManagedCredentialsProvider.getAuthorizationForAuthScope</code> when <code>401</code> response from remote and <code>httpclient4.auth.preemptive=false</code></li>
-  <li><bug>65692</bug>HTTP(s) Test Script Recorder: Enable setting enabled cipher suite and enabled protocols on SSLContext/ Align ssl properties between Java and HC4 impl</li>
+  <li><bug>65692</bug>HTTP(s) Test Script Recorder: Enable setting enabled cipher suite and enabled protocols on SSLContext/ Align SSL properties between Java and HC4 implementation</li>
   <li><bug>65108</bug>Support JMeter variables in <a href="./usermanual/component_reference.html#HTTP_Request">GraphQL HTTP Request</a></li>
-  <li><bug>65864</bug>Catch NullPointerException from JSoup when recording a test plan</li>
+  <li><bug>65864</bug>Catch <code>NullPointerException</code> from JSoup when recording a test plan</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
-  <li><bug>65152</bug>OS Process Sampler - Cannot <code>Add from Clipboard</code> Command parameters</li>
+  <li><bug>65152</bug>OS Process Sampler &ndash; Cannot <code>Add from Clipboard</code> Command parameters</li>
   <li><pr>638</pr>Bolt Sampler: fixed error displaying results when "Record Query Results" is enabled. Contributed by
         David Pecollet (david.pecollet at gmail.com)</li>
 </ul>
@@ -249,8 +250,8 @@ however, the profile can't be updated while the test is running.
   <li><bug>65259</bug>JMESPathExtractor Attribute <code>Match No.</code> Required</li>
   <li><bug>65269</bug>JSON Extractor and JSON JMESPath Extractor ignore sub-samples</li>
   <li><bug>65352</bug>Warning logged when Boundary Extractor doesn't find any match</li>
-  <li><bug>65681</bug>Use default values for null values when extracting with JSONPostProcessor</li>
-  <li>Allow setters in ConstantThroughputTimer to updating the values during the run time</li>
+  <li><bug>65681</bug>Use default values for <code>null</code> values when extracting with JSONPostProcessor</li>
+  <li>Allow setters in ConstantThroughputTimer to update the values during run time</li>
   <li><bug>65782</bug>Use correct message format for MessageFormat in HTMLAssertion</li>
   <li><bug>65794</bug>JSON Assertion always successful with indefinite paths</li>
 </ul>
@@ -269,23 +270,23 @@ however, the profile can't be updated while the test is running.
 
 <h3>Documentation</h3>
 <ul>
+  <li><pr>658</pr>Improve javadoc. Contributed by Ori Marko (orimarko at gmail.com)</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-  <li><bug>64318</bug>DNS Cache Manager - custom DNS resolver does not use system resolver by default</li>
+  <li><bug>64318</bug>DNS Cache Manager &ndash; custom DNS resolver does not use system resolver by default</li>
   <li><pr>641</pr><pr>698</pr>Updated xercesImpl to 2.12.2 (from 2.12.0). Based on patch by Stefan Seide (stefan at trilobyte-se.de).</li>
   <li><pr>645</pr>Add escaping for new lines in <code>AbstractInfluxdbMetricsSender</code>. Contributed by David Getzlaff (david.getzlaff at t-systems.com>)</li>
   <li><bug>65198</bug>Can't copy generated function from FunctionHelper</li>
-  <li><pr>658</pr>Improve javadoc. Contributed by Ori Marko (orimarko at gmail.com)</li>
   <li><pr>661</pr>Fix wording in doc. Contributed by BugKing (wangzhen at fit2cloud.com)</li>
   <li><pr>664</pr>Allow whitespace in path. Contributed by Till Neunast (github.com/tilln)</li>
   <li><bug>65270</bug>POST <code>application/x-www-form-urlencoded</code> cURL code generated from Postman is not imported correctly</li>
-  <li>Silence warnings of missing font Arial on startup under linux</li>
-  <li><bug>65300</bug>IllegalAccessError when opening file dialog with Java 16</li>
+  <li>Silence warnings of missing font Arial on startup under Linux</li>
+  <li><bug>65300</bug><code>IllegalAccessError</code> when opening file dialog with Java 16</li>
   <li><bug>65336</bug>Blank labels when different elements had the same name</li>
   <li><bug>65522</bug>Restart doesn't work, when parameters contain spaces</li>
-  <li><bug>63914</bug>Simplify :src:dist:clean configuration, ensure /lib/junit/test.jar is removed on clean</li>
+  <li><bug>63914</bug>Simplify <code>:src:dist:clean</code> configuration, ensure <code>/lib/junit/test.jar</code> is removed on clean</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
