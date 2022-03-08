@@ -83,6 +83,7 @@
     <trusted-key id='3449ec3ac2efe8aa' group='dnsjava' />
     <trusted-key id='a5c8dbb8a1599bd4' group='dnsjava' />
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
+    <trusted-key id='6601e5c08dccbb96' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='5b30d3b10694f057' group='io.codearte.gradle.nexus' />
     <trusted-key id='67631bc0568801c3' group='io.github.microutils' />
@@ -103,9 +104,11 @@
     <trusted-key id='0da8a5ec02d11ead' group='net.sf.jopt-simple' />
     <trusted-key id='d4012dda1f1f0f82' group='net.sf.jtidy' />
     <trusted-key id='1d185615d0a84648' group='net.sf.saxon' />
+    <trusted-key id='a929ea2321fdbf8f' group='net.sf.saxon' />
     <trusted-key id='098a31f381819057' group='net.sourceforge.nekohtml' />
     <trusted-key id='4a1bac7f1e3b89b3' group='nl.jqno.equalsverifier' />
     <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
+    <trusted-key id='347cd0eaed975c5f' group='org.antlr' />
     <trusted-key id='6b1b008864323b92' group='org.antlr' />
     <trusted-key id='411063a3a0ffd119' group='org.apache-extras.beanshell' />
     <trusted-key id='87a7f75a6a8ba5fc' group='org.apache.activemq' />
@@ -126,6 +129,8 @@
     <trusted-key id='ecdfea3cb4493b94' group='org.apache.geronimo.specs' />
     <trusted-key id='6a65176a0fb1cd0b' group='org.apache.groovy' />
     <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
+    <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents.client5' />
+    <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents.core5' />
     <trusted-key id='3595395eb3d8e1ba' group='org.apache.logging.log4j' />
     <trusted-key id='b4c70893b62babe8' group='org.apache.logging.log4j' />
     <trusted-key id='c7bf26d0bb617866' group='org.apache.maven' />
@@ -135,6 +140,7 @@
     <trusted-key id='d0eb627d4885ced1' group='org.apache.velocity' />
     <trusted-key id='73129f58de61ecbd' group='org.apache.xbean' />
     <trusted-key id='a2e92e06ddb37997' group='org.apache.xbean' />
+    <trusted-key id='e91287822fdb81b1' group='org.apache.xbean' />
     <trusted-key id='5b93f1df7cdb6dea' group='org.apache.xmlgraphics' />
     <trusted-key id='85911f425ec61b51' group='org.apiguardian' />
     <trusted-key id='0cc0b712fee75827' group='org.assertj' />
@@ -164,6 +170,7 @@
     <trusted-key id='313cba932516c4d3' group='org.hsqldb' />
     <trusted-key id='ab049df4ab24c1ef' group='org.hsqldb' />
     <trusted-key id='cb43338e060cf9fa' group='org.jacoco' />
+    <trusted-key id='164779204e106a76' group='org.javassist' />
     <trusted-key id='8799af90c06efbbd' group='org.jdom' />
     <trusted-key id='379ce192d401ab61' group='org.jetbrains' />
     <trusted-key id='bcf4173966770193' group='org.jetbrains' />
@@ -191,6 +198,7 @@
     <trusted-key id='5f69ad087600b22c' group='org.ow2.asm' />
     <trusted-key id='2be5d98f751f4136' group='org.pcollections' />
     <trusted-key id='1364c5e2df3e99c5' group='org.reactivestreams' />
+    <trusted-key id='f13d3e721d56bd54' group='org.reflections' />
     <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.api' />
     <trusted-key id='cfca4a29d26468de' group='org.sonarsource.scanner.gradle' />
@@ -199,6 +207,7 @@
     <trusted-key id='9a2c7a98e457c53d' group='org.springframework' />
     <trusted-key id='e4b53844e02b191b' group='org.swinglabs' />
     <trusted-key id='72385ff0af338d52' group='org.threeten' />
+    <trusted-key id='a929ea2321fdbf8f' group='org.xmlresolver' />
     <trusted-key id='a2115ae15f6b8b72' group='org.xmlunit' />
     <trusted-key id='9ff25980f5ba7e4f' group='xalan' />
     <trusted-key id='7d713008cc07e9ad' group='xerces' />
@@ -242,8 +251,14 @@
     <dependency group='net.minidev' module='accessors-smart' version='2.4.7'>
       <sha512>6DAAF2FE1B278599D6D0BBD3F157096F8BCCF3D25616099C128139CE164B29461860EB2786F3D3728937A0D0505DF73F1C9673B0766F946C50878E5F60305736</sha512>
     </dependency>
+    <dependency group='net.minidev' module='accessors-smart' version='2.4.8'>
+      <sha512>45405C083334B05EFA07572497B9D510CA771AF32CE93D960BE802216A9714FFFF8418384EA48E197D3DFB6EBEC4EC3E610155841E8A257A7FB9A4BD6A1B668F</sha512>
+    </dependency>
     <dependency group='net.minidev' module='json-smart' version='2.4.7'>
       <sha512>3E9E1EE9A44EA15044B588B06A956AC150A37B63C161BF9B08A60539F5C90EFC7718DEB24FD084F503B68092516AAC3349DBB74049777EA4C6619AC26090A1D</sha512>
+    </dependency>
+    <dependency group='net.minidev' module='json-smart' version='2.4.8'>
+      <sha512>13F4609FE72DF98C81F86D25616E5B0CE1426688AA5A9DD953733FA98A8DEADB87B3E69A77741DC9D31DD4485265D3B9E4EC71D99346E4A7558F2500F3677714</sha512>
     </dependency>
     <dependency group='net.sf.ezmorph' module='ezmorph' version='1.0.6'>
       <sha512>16D30BE564723B74F312B4E7D06F349370FB6726B3162778C869CD723ECA2A40C4972C2757B3E107E1820CEC0D70B0BD2B96EFCD466518FC64495F7AEF97967A</sha512>

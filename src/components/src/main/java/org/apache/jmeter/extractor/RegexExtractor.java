@@ -21,6 +21,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.processor.PostProcessor;
@@ -49,6 +51,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     // What to match against. N.B. do not change the string value or test plans will break!
     private static final String MATCH_AGAINST = "RegexExtractor.useHeaders"; // $NON-NLS-1$
+
     /*
      * Permissible values:
      *  true - match against headers
@@ -80,6 +83,9 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     private static final boolean DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE = false;
 
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
+
     private transient List<Object> template;
 
     /**
@@ -104,10 +110,18 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         int matchNumber = getMatchNumber();
 
         final String defaultValue = getDefaultValue();
-        if (defaultValue.length() > 0 || isEmptyDefaultValue()) {// Only replace default if it is provided or empty default value is explicitly requested
+        if (!defaultValue.isEmpty() || isEmptyDefaultValue()) {// Only replace default if it is provided or empty default value is explicitly requested
             vars.put(refName, defaultValue);
         }
 
+        if (USE_JAVA_REGEX) {
+            extractWithJavaRegex(previousResult, vars, refName, matchNumber);
+        } else {
+            extractWithOroRegex(previousResult, vars, refName, matchNumber);
+        }
+    }
+
+    private void extractWithOroRegex(SampleResult previousResult, JMeterVariables vars, String refName, int matchNumber) {
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         String regex = getRegex();
         Pattern pattern = null;
@@ -166,6 +180,62 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         }
     }
 
+    private void extractWithJavaRegex(SampleResult previousResult, JMeterVariables vars, String refName, int matchNumber) {
+        String regex = getRegex();
+        java.util.regex.Pattern pattern = null;
+        try {
+            pattern = JMeterUtils.compilePattern(regex);
+            List<java.util.regex.MatchResult> matches = processMatches(pattern, previousResult, matchNumber, vars);
+            int prevCount = 0;
+            String prevString = vars.get(refName + REF_MATCH_NR);
+            if (prevString != null) {
+                vars.remove(refName + REF_MATCH_NR);// ensure old value is not left defined
+                try {
+                    prevCount = Integer.parseInt(prevString);
+                } catch (NumberFormatException nfe) {
+                    log.warn("Could not parse number: '{}'", prevString);
+                }
+            }
+            int matchCount=0;// Number of refName_n variable sets to keep
+            try {
+                java.util.regex.MatchResult match;
+                if (matchNumber >= 0) {// Original match behaviour
+                    match = getCorrectMatchJavaRegex(matches, matchNumber);
+                    if (match != null) {
+                        vars.put(refName, generateResult(match));
+                        saveGroups(vars, refName, match);
+                    } else {
+                        // refname has already been set to the default (if present)
+                        removeGroups(vars, refName);
+                    }
+                } else // < 0 means we save all the matches
+                {
+                    removeGroups(vars, refName); // remove any single matches
+                    matchCount = matches.size();
+                    vars.put(refName + REF_MATCH_NR, Integer.toString(matchCount));// Save the count
+                    for (int i = 1; i <= matchCount; i++) {
+                        match = getCorrectMatchJavaRegex(matches, i);
+                        if (match != null) {
+                            final String refName_n = refName + UNDERSCORE + i;
+                            vars.put(refName_n, generateResult(match));
+                            saveGroups(vars, refName_n, match);
+                        }
+                    }
+                }
+                // Remove any left-over variables
+                for (int i = matchCount + 1; i <= prevCount; i++) {
+                    final String refName_n = refName + UNDERSCORE + i;
+                    vars.remove(refName_n);
+                    removeGroups(vars, refName_n);
+                }
+            } catch (RuntimeException e) {
+                log.warn("Error while generating result");
+            }
+        } catch (PatternSyntaxException e) {
+            log.error("Error in pattern: '{}'", regex);
+        }
+    }
+
     private String getInputString(SampleResult result) {
         String inputString = useUrl() ? result.getUrlAsString() // Bug 39707
                 : useHeaders() ? result.getResponseHeaders()
@@ -212,6 +282,36 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         return Collections.unmodifiableList(matches);
     }
 
+    private List<java.util.regex.MatchResult> processMatches(
+            java.util.regex.Pattern pattern, SampleResult result, int matchNumber, JMeterVariables vars) {
+        log.debug("Regex = '{}'", pattern.pattern());
+
+        List<java.util.regex.MatchResult> matches = new ArrayList<>();
+        int found = 0;
+
+        if (isScopeVariable()) {
+            String inputString=vars.get(getVariableName());
+            if(inputString == null) {
+                if (log.isWarnEnabled()) {
+                    log.warn("No variable '{}' found to process by RegexExtractor '{}', skipping processing",
+                            getVariableName(), getName());
+                }
+                return Collections.emptyList();
+            }
+            matchStrings(matchNumber, pattern, matches, found, inputString);
+        } else {
+            List<SampleResult> sampleList = getSampleList(result);
+            for (SampleResult sr : sampleList) {
+                String inputString = getInputString(sr);
+                found = matchStrings(matchNumber, pattern, matches, found, inputString);
+                if (matchNumber > 0 && found == matchNumber) {// no need to process further
+                    break;
+                }
+            }
+        }
+        return Collections.unmodifiableList(matches);
+    }
+
     private int matchStrings(int matchNumber, Perl5Matcher matcher,
             Pattern pattern, List<MatchResult> matches, int found,
             String inputString) {
@@ -220,6 +320,22 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             if (matcher.contains(input, pattern)) {
                 log.debug("RegexExtractor: Match found!");
                 matches.add(matcher.getMatch());
+                found++;
+            } else {
+                break;
+            }
+        }
+        return found;
+    }
+
+    private int matchStrings(int matchNumber, java.util.regex.Pattern pattern,
+                             List<java.util.regex.MatchResult> matches, int found,
+                             String inputString) {
+        Matcher matcher = pattern.matcher(inputString);
+        while (matchNumber <=0 || found != matchNumber) {
+            if (matcher.find()) {
+                log.debug("RegexExtractor: Match found!");
+                matches.add(matcher.toMatchResult());
                 found++;
             } else {
                 break;
@@ -249,6 +365,35 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         }
         //Note: match.groups() includes group 0
         final int groups = match.groups();
+        for (int x = 0; x < groups; x++) {
+            buf.append(x);
+            vars.put(buf.toString(), match.group(x));
+            buf.setLength(pfxlen);
+        }
+        vars.put(buf.toString(), Integer.toString(groups-1));
+        for (int i = groups; i <= previous; i++){
+            buf.append(i);
+            vars.remove(buf.toString());// remove the remaining _gn vars
+            buf.setLength(pfxlen);
+        }
+    }
+
+    private void saveGroups(JMeterVariables vars, String basename, java.util.regex.MatchResult match) {
+        StringBuilder buf = new StringBuilder();
+        buf.append(basename);
+        buf.append("_g"); // $NON-NLS-1$
+        int pfxlen=buf.length();
+        String prevString=vars.get(buf.toString());
+        int previous=0;
+        if (prevString!=null){
+            try {
+                previous=Integer.parseInt(prevString);
+            } catch (NumberFormatException nfe) {
+                log.warn("Could not parse number: '{}'.", prevString);
+            }
+        }
+        //Note: match.groups() includes group 0, groupCount() not
+        final int groups = match.groupCount() + 1;
         for (int x = 0; x < groups; x++) {
             buf.append(x);
             vars.put(buf.toString(), match.group(x));
@@ -303,6 +448,22 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         return result.toString();
     }
 
+    private String generateResult(java.util.regex.MatchResult match) {
+        StringBuilder result = new StringBuilder();
+        for (Object obj : template) {
+            if(log.isDebugEnabled()) {
+                log.debug("RegexExtractor: Template piece {} ({})", obj, obj.getClass());
+            }
+            if (obj instanceof Integer) {
+                result.append(match.group((Integer) obj));
+            } else {
+                result.append(obj);
+            }
+        }
+        log.debug("Regex Extractor result = '{}'", result);
+        return result.toString();
+    }
+
     private void initTemplate() {
         if (template != null) {
             return;
@@ -331,7 +492,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         }
 
         if (beginOffset < rawTemplate.length()) { // trailing string is not empty
-            combined.add(rawTemplate.substring(beginOffset, rawTemplate.length()));
+            combined.add(rawTemplate.substring(beginOffset));
         }
         if (log.isDebugEnabled()) {
             log.debug("Template item count: {}", combined.size());
@@ -353,6 +514,21 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return MatchResult
      */
     private MatchResult getCorrectMatch(List<MatchResult> matches, int entry) {
+        int matchSize = matches.size();
+
+        if (matchSize <= 0 || entry > matchSize){
+            return null;
+        }
+
+        if (entry == 0) // Random match
+        {
+            return matches.get(JMeterUtils.getRandomInt(matchSize));
+        }
+
+        return matches.get(entry - 1);
+    }
+
+    private java.util.regex.MatchResult getCorrectMatchJavaRegex(List<java.util.regex.MatchResult> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){
@@ -479,7 +655,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     // Allow for property not yet being set (probably only applies to Test cases)
     public boolean useBody() {
         String prop = getPropertyAsString(MATCH_AGAINST);
-        return prop.length()==0 || USE_BODY.equalsIgnoreCase(prop);// $NON-NLS-1$
+        return prop.isEmpty() || USE_BODY.equalsIgnoreCase(prop);// $NON-NLS-1$
     }
 
     public boolean useUnescapedBody() {

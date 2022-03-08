@@ -103,6 +103,9 @@ public class ReportGenerator {
     private final File testFile;
     private final ReportGeneratorConfiguration configuration;
 
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
+
     /**
      * ResultCollector used
      */
@@ -439,9 +442,7 @@ public class ReportGenerator {
                 // by property jmeter.reportgenerator.apdex_per_transaction
                 // key in entry below can be a hardcoded name or a regex
                 for (Map.Entry<String, Long[]> entry : configuration.getApdexPerTransaction().entrySet()) {
-                    org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(entry.getKey());
-                    PatternMatcher matcher = JMeterUtils.getMatcher();
-                    if (sampleName != null && matcher.matches(sampleName, regex)) {
+                    if (isMatching(sampleName, entry.getKey())) {
                         Long satisfied = entry.getValue()[0];
                         Long tolerated = entry.getValue()[1];
                         if(log.isDebugEnabled()) {
@@ -456,6 +457,19 @@ public class ReportGenerator {
                 return info;
         });
         return apdexSummaryConsumer;
+    }
+
+    private boolean isMatching(String sampleName, String keyName) {
+        if (sampleName == null) {
+            return false;
+        }
+        if (USE_JAVA_REGEX) {
+            java.util.regex.Pattern pattern = JMeterUtils.compilePattern(keyName);
+            return pattern.matcher(sampleName).matches();
+        }
+        org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(keyName);
+        PatternMatcher matcher = JMeterUtils.getMatcher();
+        return matcher.matches(sampleName, regex);
     }
 
     /**

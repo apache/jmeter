@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.prefs.Preferences;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -244,6 +245,9 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     // Although this field is mutable, it is only accessed within the synchronized method deliverSampler()
     private static String LAST_REDIRECT = null;
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     private transient Daemon server;
 
@@ -794,18 +798,18 @@ public class ProxyControl extends GenericController implements NonTestElement {
     // Package protected to allow test case access
     boolean filterUrl(HTTPSamplerBase sampler) {
         String domain = sampler.getDomain();
-        if (domain == null || domain.length() == 0) {
+        if (domain == null || domain.isEmpty()) {
             return false;
         }
 
         String url = generateMatchUrl(sampler);
         CollectionProperty includePatterns = getIncludePatterns();
-        if (includePatterns.size() > 0 && !matchesPatterns(url, includePatterns)) {
+        if (!includePatterns.isEmpty() && !matchesPatterns(url, includePatterns)) {
             return false;
         }
 
         CollectionProperty excludePatterns = getExcludePatterns();
-        if (excludePatterns.size() > 0 && matchesPatterns(url, excludePatterns)) {
+        if (!excludePatterns.isEmpty() && matchesPatterns(url, excludePatterns)) {
             return false;
         }
 
@@ -826,16 +830,14 @@ public class ProxyControl extends GenericController implements NonTestElement {
         String excludeExp = getContentTypeExclude();
 
         // If no expressions are specified, we let the sample pass
-        if((includeExp == null || includeExp.length() == 0) &&
-                (excludeExp == null || excludeExp.length() == 0)
-                )
-        {
+        if ((includeExp == null || includeExp.isEmpty()) &&
+                (excludeExp == null || excludeExp.isEmpty())) {
             return true;
         }
 
         // Check that we have a content type
         String sampleContentType = result.getContentType();
-        if (sampleContentType == null || sampleContentType.length() == 0) {
+        if (sampleContentType == null || sampleContentType.isEmpty()) {
             if (log.isDebugEnabled()) {
                 log.debug("No Content-type found for : {}", result.getUrlAsString());
             }
@@ -870,24 +872,40 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @return boolean true if Matching expression
      */
     private boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
-        if(expression != null && expression.length() > 0) {
-            if(log.isDebugEnabled()) {
-                log.debug(
-                        "Testing Expression : {} on sampleContentType: {}, expected to match: {}",
-                        expression, sampleContentType, expectedToMatch);
-            }
+        if (expression == null || expression.isEmpty()) {
+            return true;
+        }
+        if(log.isDebugEnabled()) {
+            log.debug(
+                    "Testing Expression : {} on sampleContentType: {}, expected to match: {}",
+                    expression, sampleContentType, expectedToMatch);
+        }
 
-            Pattern pattern = null;
-            try {
-                pattern = JMeterUtils.getPatternCache().getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-                if(JMeterUtils.getMatcher().contains(sampleContentType, pattern) != expectedToMatch) {
-                    return false;
-                }
-            } catch (MalformedCachePatternException e) {
-                log.warn("Skipped invalid content pattern: {}", expression, e);
+        try {
+            boolean contains;
+            if (USE_JAVA_REGEX) {
+                contains = isContainedWithJavaRegex(expression, sampleContentType);
+            } else {
+                contains = isContainedWithOroRegex(expression, sampleContentType);
             }
+            if (contains != expectedToMatch) {
+                return false;
+            }
+        } catch (PatternSyntaxException | MalformedCachePatternException e) {
+            log.warn("Skipped invalid content pattern: {}", expression, e);
         }
         return true;
+    }
+
+    private boolean isContainedWithJavaRegex(String expression, String sampleContentType) {
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(expression);
+        return pattern.matcher(sampleContentType).find();
+    }
+
+    private boolean isContainedWithOroRegex(String expression, String sampleContentType) {
+        Pattern pattern = JMeterUtils.getPatternCache().getPattern(expression,
+                Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+        return JMeterUtils.getMatcher().contains(sampleContentType, pattern);
     }
 
     /**
@@ -1324,7 +1342,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             for (ConfigTestElement config : configurations) {
                 String configValue = config.getPropertyAsString(name);
 
-                if (configValue != null && configValue.length() > 0) {
+                if (configValue != null && !configValue.isEmpty()) {
                     if (configValue.equals(value)) {
                         sampler.setProperty(name, ""); // $NON-NLS-1$
                     }
@@ -1342,7 +1360,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         buf.append(':'); // $NON-NLS-1$
         buf.append(sampler.getPort());
         buf.append(sampler.getPath());
-        if (sampler.getQueryString().length() > 0) {
+        if (!sampler.getQueryString().isEmpty()) {
             buf.append('?'); // $NON-NLS-1$
             buf.append(sampler.getQueryString());
         }
@@ -1350,6 +1368,28 @@ public class ProxyControl extends GenericController implements NonTestElement {
     }
 
     private boolean matchesPatterns(String url, CollectionProperty patterns) {
+        if (USE_JAVA_REGEX) {
+            return matchesPatternsWithJavaRegex(url, patterns);
+        }
+        return matchesPatternsWithOroRegex(url, patterns);
+    }
+
+    private boolean matchesPatternsWithJavaRegex(String url, CollectionProperty patterns) {
+        for (JMeterProperty jMeterProperty : patterns) {
+            String item = jMeterProperty.getStringValue();
+            try {
+                java.util.regex.Pattern pattern = JMeterUtils.compilePattern(item);
+                if (pattern.matcher(url).matches()) {
+                    return true;
+                }
+            } catch (PatternSyntaxException e) {
+                log.warn("Skipped invalid pattern: {}", item, e);
+            }
+        }
+        return false;
+    }
+
+    private boolean matchesPatternsWithOroRegex(String url, CollectionProperty patterns) {
         for (JMeterProperty jMeterProperty : patterns) {
             String item = jMeterProperty.getStringValue();
             try {
@@ -1577,7 +1617,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work
         }
         final String sslDomains = getSslDomains().trim();
-        if (sslDomains.length() > 0) {
+        if (!sslDomains.isEmpty()) {
             final String[] domains = sslDomains.split(",");
             // The subject may be either a host or a domain
             for (String subject : domains) {

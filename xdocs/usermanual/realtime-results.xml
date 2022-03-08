@@ -186,10 +186,22 @@ InfluxDB data can be easily viewed in a browser through <a href="http://grafana.
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
 </subsection>
 
-<subsection name="&sect-num;.5 Graphite" anchor="graphite">
-<p>HELP WELCOME for this section, see <a href="../building.html" >Contributing documentation</a></p>
+<subsection name="&sect-num;.5 Graphite Configuration" anchor="graphite_configuration">
+    <p>To make JMeter send metrics to backend, add a BackendListener using the GraphiteBackendListenerClient.</p>
+    <p><a href="./component_reference.html#Backend_Listener">GraphiteBackendListenerClient</a> section will help you do the configuration.</p>
+    <figure width="902" height="341" image="backend_listener_graphite.png">Graphite configuration</figure>
 </subsection>
 
+<subsection name="&sect-num;.5.1 Graphite Sender" anchor="graphite_sendor">
+    <p>Two types of Senders are available. TextGraphiteMetricsSender, PickleGraphiteMetricsSender</p>
+    <ul>
+        <li>For plaintext protocol, set graphiteMetricsSender parameter to <code>org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender</code></li>
+        <li>For pickle protocol, set graphiteMetricsSender parameter to <code>org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</code></li>
+    </ul>
+    <p>To send large amounts of data, use the Pickle sender. It is a more efficient transmission method compared to textplain.
+    Read <a href="https://graphite.readthedocs.io/en/latest/feeding-carbon.html" target="_blank">the Graphite documentation</a> for more details.</p>
+    <figure width="902" height="341" image="backend_listener_graphite_pickle.png">Graphite pickle sender</figure>
+</subsection>
 </section>
 
 </body>

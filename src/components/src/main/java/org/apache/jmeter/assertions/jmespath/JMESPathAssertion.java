@@ -58,6 +58,9 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
     private static final String ISREGEX = "ISREGEX";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
+
     /**
      * Used to do a JMESPath query and compute result if the expectedValue matches
      * with the JMESPath query result
@@ -177,8 +180,12 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
     private boolean isEquals(ObjectMapper mapper, JsonNode jsonNode) throws JsonProcessingException {
         String str = objectToString(mapper, jsonNode);
         if (isUseRegex()) {
-            Pattern pattern = JMeterUtils.getPatternCache().getPattern(getExpectedValue());
-            return JMeterUtils.getMatcher().matches(str, pattern);
+            if (USE_JAVA_REGEX) {
+                return JMeterUtils.compilePattern(getExpectedValue()).matcher(str).matches();
+            } else {
+                Pattern pattern = JMeterUtils.getPatternCache().getPattern(getExpectedValue());
+                return JMeterUtils.getMatcher().matches(str, pattern);
+            }
         } else {
             String expectedValueString = getExpectedValue();
             // first try to match as a string value, as

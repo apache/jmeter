@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.http.config;
 
 import java.io.Serializable;
+import java.util.regex.Matcher;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HeaderElement;
@@ -53,6 +54,9 @@ public class MultipartUrlConfig implements Serializable {
     private final Arguments args;
 
     private static final Logger log = LoggerFactory.getLogger(MultipartUrlConfig.class);
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /**
      * HTTPFileArgs list to be uploaded with http request.
@@ -183,6 +187,24 @@ public class MultipartUrlConfig implements Serializable {
 
     private static String getHeaderValue(String headerName, String multiPart) {
         String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
+        if (USE_JAVA_REGEX) {
+            return getHeaderValueWithJavaRegex(multiPart, regularExpression);
+        }
+        return getHeaderValueWithOroRegex(multiPart, regularExpression);
+    }
+
+    private static String getHeaderValueWithJavaRegex(String multiPart, String regularExpression) {
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
+                 java.util.regex.Pattern.CASE_INSENSITIVE
+                        | java.util.regex.Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(multiPart);
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+        return null;
+    }
+
+    private static String getHeaderValueWithOroRegex(String multiPart, String regularExpression) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         Pattern pattern = JMeterUtils.getPattern(regularExpression,
                 Perl5Compiler.READ_ONLY_MASK
@@ -191,8 +213,6 @@ public class MultipartUrlConfig implements Serializable {
         if(localMatcher.contains(multiPart, pattern)) {
             return localMatcher.getMatch().group(1).trim();
         }
-        else {
-            return null;
-        }
+        return null;
     }
 }

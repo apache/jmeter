@@ -28,4 +28,5 @@
               files="test[\\/].*"/>
     <suppress checks="NewlineAtEndOfFile" files="test[\\/].*.xml"/>
     <suppress checks="NewlineAtEndOfFile" files="test[\\/].*.txt"/>
+    <suppress checks="UnnecessaryParentheses" files=".*.java"/>
 </suppressions>

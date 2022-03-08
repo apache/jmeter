@@ -98,7 +98,7 @@ public class TestValueReplacer extends JMeterTestCase {
     public void testOverlappingMatches() throws Exception {
         TestPlan plan = new TestPlan();
         plan.addParameter("longMatch", "servername");
-        plan.addParameter("shortMatch", ".*");
+        plan.addParameter("shortMatch", ".+");
         ValueReplacer replacer = new ValueReplacer(plan);
         TestElement element = new TestPlan();
         element.setProperty(new StringProperty("domain", "servername.domain"));

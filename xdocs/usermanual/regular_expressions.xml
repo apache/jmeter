@@ -41,6 +41,8 @@ a summary of the pattern matching characters</a>
 There is also documentation on an older incarnation of the product at
 <a href="http://www.savarese.org/oro/docs/OROMatcher/index.html">OROMatcher User's guide</a>, which might prove useful.
 </p>
+<note>With JMeter version 5.5 the Regex implementation can be switched from Oro to the JDK based one by setting
+the JMeter property <code>jmeter.regex.engine</code> to some value different than <code>oro</code>.</note>
 <p>
 The pattern matching is very similar to the pattern matching in Perl.
 A full installation of Perl will include plenty of documentation on regular expressions - look for <code>perlrequick</code>,

@@ -48,6 +48,9 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
     private Collection<SubstitutionElement> stringsToSkip;
 
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
+
     public CompareAssertion() {
         super();
     }
@@ -155,17 +158,25 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
             return content;
         }
 
-        String result = content;
-        for (SubstitutionElement regex : stringsToSkip) {
-            emptySub.setSubstitution(regex.getSubstitute());
-            result = Util.substitute(
-                    JMeterUtils.getMatcher(),
-                    JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
-                    emptySub,
-                    result,
-                    Util.SUBSTITUTE_ALL);
+        if (USE_JAVA_REGEX) {
+            String result = content;
+            for (SubstitutionElement element: stringsToSkip) {
+                result = result.replaceAll(element.getRegex(), element.getSubstitute());
+            }
+            return result;
+        } else {
+            String result = content;
+            for (SubstitutionElement regex : stringsToSkip) {
+                emptySub.setSubstitution(regex.getSubstitute());
+                result = Util.substitute(
+                        JMeterUtils.getMatcher(),
+                        JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
+                        emptySub,
+                        result,
+                        Util.SUBSTITUTE_ALL);
+            }
+            return result;
         }
-        return result;
     }
 
     @Override

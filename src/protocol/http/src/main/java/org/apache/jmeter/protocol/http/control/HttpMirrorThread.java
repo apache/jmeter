@@ -28,6 +28,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.util.JMeterUtils;
@@ -67,6 +68,9 @@ public class HttpMirrorThread implements Runnable {
     private static final String STATUS = "status"; //$NON-NLS-1$
 
     private static final String VERBOSE = "v"; // $NON-NLS-1$
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /** Socket to client. */
     private final Socket clientSocket;
@@ -109,7 +113,7 @@ public class HttpMirrorThread implements Runnable {
 
             baos.close();
             final String headerString = headers.toString();
-            if(headerString.length() == 0 || headerString.indexOf('\r') < 0) {
+            if(headerString.isEmpty() || headerString.indexOf('\r') < 0) {
                 log.error("Invalid request received:'{}'", headerString);
                 return;
             }
@@ -290,6 +294,13 @@ public class HttpMirrorThread implements Runnable {
     }
 
     private static String getRequestHeaderValue(String requestHeaders, String headerName) {
+        if (USE_JAVA_REGEX) {
+            return getRequestHeaderValueWithJavaRegex(requestHeaders, headerName);
+        }
+        return getRequestHeaderValueWithOroRegex(requestHeaders, headerName);
+    }
+
+    private static String getRequestHeaderValueWithOroRegex(String requestHeaders, String headerName) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         // We use multi-line mask so can prefix the line with ^
         String expression = "^" + headerName + ":\\s+([^\\r\\n]+)"; // $NON-NLS-1$ $NON-NLS-2$
@@ -297,16 +308,49 @@ public class HttpMirrorThread implements Runnable {
                 Perl5Compiler.READ_ONLY_MASK
                         | Perl5Compiler.CASE_INSENSITIVE_MASK
                         | Perl5Compiler.MULTILINE_MASK);
-        if(localMatcher.contains(requestHeaders, pattern)) {
+        if (localMatcher.contains(requestHeaders, pattern)) {
             // The value is in the first group, group 0 is the whole match
             return localMatcher.getMatch().group(1);
         }
-        else {
-            return null;
+        return null;
+    }
+
+    private static String getRequestHeaderValueWithJavaRegex(String requestHeaders, String headerName) {
+        // We use multi-line mask so can prefix the line with ^
+        String expression = "^" + headerName + ":\\s+([^\\r\\n]+)"; // $NON-NLS-1$ $NON-NLS-2$
+        java.util.regex.Pattern pattern = JMeterUtils.compilePattern(expression,
+                java.util.regex.Pattern.CASE_INSENSITIVE
+                        | java.util.regex.Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(requestHeaders);
+        if (matcher.find()) {
+            // The value is in the first group, group 0 is the whole match
+            return matcher.group(1);
         }
+        return null;
     }
 
     private static int getPositionOfBody(String stringToCheck) {
+        if (USE_JAVA_REGEX) {
+            return getPositionOfBodyWithJavaRegex(stringToCheck);
+        }
+        return getPositionOfBodyWithOroRegex(stringToCheck);
+    }
+
+    private static int getPositionOfBodyWithJavaRegex(String stringToCheck) {
+        // The headers and body are divided by a blank line (the \r is to allow for the CR before LF)
+        String regularExpression = "^$"; // $NON-NLS-1$
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regularExpression,
+                java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
+
+        Matcher matcher = pattern.matcher(stringToCheck);
+        if (matcher.find()) {
+            return matcher.start(0);
+        }
+        // No divider was found
+        return -1;
+    }
+
+    private static int getPositionOfBodyWithOroRegex(String stringToCheck) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         // The headers and body are divided by a blank line (the \r is to allow for the CR before LF)
         String regularExpression = "^\\r$"; // $NON-NLS-1$
@@ -316,7 +360,7 @@ public class HttpMirrorThread implements Runnable {
                         | Perl5Compiler.MULTILINE_MASK);
 
         PatternMatcherInput input = new PatternMatcherInput(stringToCheck);
-        if(localMatcher.contains(input, pattern)) {
+        if (localMatcher.contains(input, pattern)) {
             MatchResult match = localMatcher.getMatch();
             return match.beginOffset(0);
         }

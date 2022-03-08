@@ -266,3 +266,11 @@ Apache JMeter does not include any implementation of JSSE or JCE.
 ## Thanks
 
 **Thank you for using Apache JMeter.**
+
+### Third party notices
+
+* Notice for mxparser:
+
+  >  This product includes software developed by the Indiana
+  >  University Extreme! Lab.  For further information please visit
+  >  http://www.extreme.indiana.edu/

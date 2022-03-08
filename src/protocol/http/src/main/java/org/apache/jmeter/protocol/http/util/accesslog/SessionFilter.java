@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
 
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
@@ -40,8 +41,13 @@ import org.slf4j.LoggerFactory;
  * Provides Session Filtering for the AccessLog Sampler.
  */
 public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
+    private static final java.util.regex.Pattern IP_PATTERN = java.util.regex.Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
     private static final long serialVersionUID = 233L;
     private static final Logger log = LoggerFactory.getLogger(SessionFilter.class);
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
+
 
     /**
      * Protects access to managersInUse
@@ -86,6 +92,21 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     }
 
     protected String getIpAddress(String logLine) {
+        if (USE_JAVA_REGEX) {
+            return getIpAddressWithJavaRegex(logLine);
+        }
+        return getIpAddressWithOroRegex(logLine);
+    }
+
+    private String getIpAddressWithJavaRegex(String logLine) {
+        Matcher matcher = IP_PATTERN.matcher(logLine);
+        if (matcher.find()) {
+            return matcher.group(0);
+        }
+        return "";
+    }
+
+    private String getIpAddressWithOroRegex(String logLine) {
         Pattern incIp = JMeterUtils.getPatternCache().getPattern("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
                 Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
         Perl5Matcher matcher = JMeterUtils.getMatcher();
