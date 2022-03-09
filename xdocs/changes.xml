@@ -64,6 +64,8 @@ Summary
 
 <p>JMeter 5.5 ships with log4j2 2.17.2</p>
 
+<ch_title>Open Model Thread Group</ch_title>
+
 <p>New component: <code><a href="./usermanual/component_reference.html#Open_Model_Thread_Group">Open Model Thread Group</a></code>
 allows creating load profiles with variable load.</p>
 
@@ -71,7 +73,7 @@ allows creating load profiles with variable load.</p>
 you could previously use <code>Thread Group + Timer</code> combinations. However, then you need to compute
 the expected number of threads, ensure they are created only when needed, and so on.</p>
 
-<p>With <code>Open Model Thread Group</code> you can configure the same load profile as <code>rate(0/sec) random_arrivals(1 minute) rate(10/sec)</code>.
+<p>With <code>Open Model Thread Group</code> you can configure the same load profile as <code>rate(0/sec) random_arrivals(1&nbsp;minute) rate(10/sec)</code>.
 The thread group would spawn threads as needed to drive the configured load.
 The load profile can use properties, so you can launch the same script with slightly different load levels,
 however, the profile can't be updated while the test is running.
@@ -79,6 +81,8 @@ however, the profile can't be updated while the test is running.
 
 <p>The new thread group is experimental in JMeter 5.5, so please feel free to submit your feedback.</p>
 <figure width="1398" height="1117" image="open_model_thread_group.png">Open Model Thread Group sample</figure>
+
+<ch_title>Preparing the deprecation of Oro Regex usage</ch_title>
 
 <p>Another experimental feature in JMeter 5.5 is the ability to replace the Oro based Regex implementation
   by the built-in Java based one. To choose the Java based one, set the JMeter property <code>jmeter.regex.engine</code>
