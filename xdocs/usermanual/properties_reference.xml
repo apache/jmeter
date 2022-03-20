@@ -1541,6 +1541,12 @@ JMETER-SERVER</source>
     Defaults to:
     <source>.RenderAsText,.RenderAsRegexp,.RenderAsCssJQuery,.RenderAsXPath,.RenderAsHTML,.RenderAsHTMLWithEmbedded,.RenderAsDocument,.RenderAsJSON,.RenderAsXML</source>
 </property>
+<property name="view.results.tree.simple_view_limit">
+    Configures maximum document length for text view before switching to a simpler view, that does not do line breaks.<br/>
+    Works probably best, when combined with a low setting of <code>view.results.tree.max_line_size</code>.
+    Can be switched off by setting the value to <code>-1</code>.<br/>
+    Defaults to: <code>10000</code>
+</property>
 <property name="document.max_size">
     Maximum size (in bytes) of Document that can be parsed by Tika engine<br/>
     Set to zero to disable the size check.<br/>
