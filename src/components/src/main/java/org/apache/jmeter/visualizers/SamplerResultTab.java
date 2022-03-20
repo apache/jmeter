@@ -21,6 +21,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -43,11 +49,17 @@ import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
+import javax.swing.text.EditorKit;
+import javax.swing.text.Element;
+import javax.swing.text.PlainView;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -694,7 +706,69 @@ public abstract class SamplerResultTab implements ResultRenderer {
         } catch (BadLocationException ex) {
             LOGGER.error("Error inserting text", ex);
         }
+        if (document.getLength() > 10_000) {
+            results.setEditorKit(new NonWrappingPlainTextEditorKit(results.getEditorKit()));
+        }
         KerningOptimizer.INSTANCE.configureKerning(results, document.getLength());
         results.setDocument(document);
+    }
+    static class NonWrappingPlainTextEditorKit extends EditorKit {
+
+        private final EditorKit delegate;
+
+        NonWrappingPlainTextEditorKit(EditorKit delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public String getContentType() {
+            return delegate.getContentType();
+        }
+
+        @Override
+        public ViewFactory getViewFactory() {
+            //return new BasicTextAreaUI();
+            return new ViewFactory() {
+                @Override
+                public View create(Element elem) {
+                    return new PlainView(elem);
+                }
+            };
+        }
+
+        @Override
+        public Action[] getActions() {
+            return delegate.getActions();
+        }
+
+        @Override
+        public Caret createCaret() {
+            return delegate.createCaret();
+        }
+
+        @Override
+        public Document createDefaultDocument() {
+            return delegate.createDefaultDocument();
+        }
+
+        @Override
+        public void read(InputStream in, Document doc, int pos) throws IOException, BadLocationException {
+            delegate.read(in, doc, pos);
+        }
+
+        @Override
+        public void write(OutputStream out, Document doc, int pos, int len) throws IOException, BadLocationException {
+            delegate.write(out, doc, pos, len);
+        }
+
+        @Override
+        public void read(Reader in, Document doc, int pos) throws IOException, BadLocationException {
+            delegate.read(in, doc, pos);
+        }
+
+        @Override
+        public void write(Writer out, Document doc, int pos, int len) throws IOException, BadLocationException {
+            delegate.write(out, doc, pos, len);
+        }
     }
 }
