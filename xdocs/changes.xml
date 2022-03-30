@@ -214,6 +214,7 @@ however, the profile can't be updated while the test is running.
   <li><pr>690</pr>Refactor a few unit tests. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
   <li><pr>692></pr>Fix a few deprecation warnings for Gradle. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
   <li><pr>697></pr>Junit 5 tests to use asserts from Junit 5 API. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
+  <li><bug>65983</bug><pr>707</pr>Use current screenshot for save-to-file listener in documentation. Based on patch by NaveenKumar Namachivayam (catch.nkn at gmail.com)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -319,6 +320,7 @@ however, the profile can't be updated while the test is running.
   <li>Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
   <li>Ji Hun (jihunkimkw at gmail.com)</li>
   <li>Peter Paul Bakker (peter.paul.bakker at stokpop.nl)</li>
+  <li>NaveenKumar Namachivayam (catch.nkn at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
