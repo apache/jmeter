@@ -106,6 +106,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     private static final String STYLE_REDIRECT = "Redirect"; // $NON-NLS-1$
 
+    private static final int SIMPLE_VIEW_LIMIT =
+            JMeterUtils.getPropDefault("view.results.tree.simple_view_limit", 10_000); // $NON-NLS-1$
+
     private JTextPane stats;
 
     /** Response Data pane */
@@ -706,7 +709,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         } catch (BadLocationException ex) {
             LOGGER.error("Error inserting text", ex);
         }
-        if (document.getLength() > 10_000) {
+        if (SIMPLE_VIEW_LIMIT >= 0 && document.getLength() > SIMPLE_VIEW_LIMIT) {
             results.setEditorKit(new NonWrappingPlainTextEditorKit(results.getEditorKit()));
         }
         KerningOptimizer.INSTANCE.configureKerning(results, document.getLength());
