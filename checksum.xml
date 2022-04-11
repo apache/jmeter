@@ -28,6 +28,7 @@
     <trusted-key id='105cb91cac2aee0e' group='com.github.vlsi.gradle' />
     <trusted-key id='254e9c64c264c176' group='com.github.weisj' />
     <trusted-key id='5e1f79a7c298661e' group='com.google.auto' />
+    <trusted-key id='b0f3710fa64900e7' group='com.google.auto' />
     <trusted-key id='c51e6cbc7ff46f0b' group='com.google.auto.service' />
     <trusted-key id='b0f3710fa64900e7' group='com.google.auto.value' />
     <trusted-key id='353a436e043e3145' group='com.google.code.findbugs' />
@@ -85,6 +86,7 @@
     <trusted-key id='6601e5c08dccbb96' group='info.picocli' />
     <trusted-key id='b2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='5b30d3b10694f057' group='io.codearte.gradle.nexus' />
+    <trusted-key id='a6ea2e2bf22e0543' group='io.github.java-diff-utils' />
     <trusted-key id='67631bc0568801c3' group='io.github.microutils' />
     <trusted-key id='602ec18d20c4661c' group='io.github.x-stream' />
     <trusted-key id='6425559c47cc79c4' group='javax.activation' />
