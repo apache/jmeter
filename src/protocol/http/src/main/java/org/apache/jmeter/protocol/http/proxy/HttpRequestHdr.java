@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -164,7 +165,7 @@ public class HttpRequestHdr {
                     inHeaders = false;
                     firstLine = false; // cannot be first line either
                 }
-                final String reqLine = line.toString();
+                final String reqLine = line.toString(StandardCharsets.ISO_8859_1.name());
                 if (firstLine) {
                     parseFirstLine(reqLine);
                     firstLine = false;
@@ -189,7 +190,7 @@ public class HttpRequestHdr {
         if (log.isDebugEnabled()){
             log.debug("rawPostData in default JRE encoding: {}, Request: '{}'",
                     new String(rawPostData, Charset.defaultCharset()),
-                    clientRequest.toString().replaceAll("\r\n", CRLF));
+                    clientRequest.toString(StandardCharsets.ISO_8859_1.name()).replaceAll("\r\n", CRLF));
         }
         return clientRequest.toByteArray();
     }

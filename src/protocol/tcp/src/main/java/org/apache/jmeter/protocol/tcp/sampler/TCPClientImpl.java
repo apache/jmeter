@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import org.apache.commons.lang3.StringUtils;
@@ -115,11 +116,15 @@ public class TCPClientImpl extends AbstractTCPClient {
 
             // do we need to close byte array (or flush it?)
             if(log.isDebugEnabled()) {
-                log.debug("Read: {}\n{}", w.size(), w.toString());
+                log.debug("Read: {}\n{}", w.size(), w.toString(CHARSET));
             }
             return w.toString(CHARSET);
         } catch (IOException e) {
-            throw new ReadException("Error reading from server, bytes read: " + w.size(), e, w.toString());
+            try {
+                throw new ReadException("Error reading from server, bytes read: " + w.size(), e, w.toString(CHARSET));
+            } catch (UnsupportedEncodingException ue) {
+                throw new RuntimeException("Unsupported CHARSET: " + CHARSET, ue);
+            }
         }
     }
 

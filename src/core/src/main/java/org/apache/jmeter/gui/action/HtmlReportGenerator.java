@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,7 @@ public class HtmlReportGenerator {
             LOGGER.debug("Running report generation");
             resultCode = sc.run(generationCommand);
             if (resultCode != 0) {
-                errorMessageList.add(commandExecutionOutput.toString());
+                errorMessageList.add(commandExecutionOutput.toString(Charset.defaultCharset().name()));
                 LOGGER.info("The HTML report generation failed and returned: {}", commandExecutionOutput);
                 return errorMessageList;
             }
