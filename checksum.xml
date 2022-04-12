@@ -88,6 +88,7 @@
     <trusted-key id='67631bc0568801c3' group='io.github.microutils' />
     <trusted-key id='602ec18d20c4661c' group='io.github.x-stream' />
     <trusted-key id='6425559c47cc79c4' group='javax.activation' />
+    <trusted-key id='6425559c47cc79c4' group='javax.annotation' />
     <trusted-key id='6425559c47cc79c4' group='javax.mail' />
     <trusted-key id='6425559c47cc79c4' group='javax.servlet' />
     <trusted-key id='4044edf1bb73efea' group='jaxen' />
