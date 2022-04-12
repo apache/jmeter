@@ -19,8 +19,9 @@ package org.apache.jorphan.util;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
@@ -159,10 +160,9 @@ public class HeapDumper {
      * @return the name of the dump file that was created
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
-    @SuppressWarnings("JavaUtilDate")
     public static String dumpHeap(File basedir, boolean live) throws Exception {
-        SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
-        String stamp = timestampFormat.format(new Date());
+        DateTimeFormatter timestampFormat = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss_SSS").withZone(ZoneId.systemDefault());
+        String stamp = timestampFormat.format(Instant.now());
         File temp = new File(basedir,"dump_"+stamp+".hprof");
         final String path = temp.getPath();
         dumpHeap(path, live);
