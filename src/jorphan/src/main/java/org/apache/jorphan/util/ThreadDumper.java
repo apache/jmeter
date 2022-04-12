@@ -56,7 +56,7 @@ public class ThreadDumper {
      * @return Name of file containing thread dump
      * @throws Exception  if file cannot we written
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public static String threadDump(File basedir) throws Exception {
         SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
         String stamp = timestampFormat.format(new Date());

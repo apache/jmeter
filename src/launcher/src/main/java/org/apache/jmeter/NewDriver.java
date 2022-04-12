@@ -344,7 +344,7 @@ public final class NewDriver {
     /*
      * If the fileName contains at least one set of paired single-quotes, reformat using DateFormat
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private static String replaceDateFormatInFileName(String fileName) {
         try {
             StringBuilder builder = new StringBuilder();
