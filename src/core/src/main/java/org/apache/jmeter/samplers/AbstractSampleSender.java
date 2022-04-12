@@ -30,7 +30,7 @@ public abstract class AbstractSampleSender implements SampleSender {
     private final boolean isClientConfigured = JMeterUtils.getPropDefault("sample_sender_client_configured", true); // $NON-NLS-1$
 
     /**
-     * @return boolean indicates how SampleSender configuration is done, @{code true}
+     * @return boolean indicates how SampleSender configuration is done, {@code true}
      *         means use client properties and send to servers, {@code false} means use
      *         server configurations
      */
