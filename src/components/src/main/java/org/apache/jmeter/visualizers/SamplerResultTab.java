@@ -26,9 +26,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -86,7 +86,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SamplerResultTab.class);
     // N.B. these are not multi-threaded, so don't make it static
-    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
+    private final DateTimeFormatter dateFormat = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss z")  // ISO format $NON-NLS-1$
+            .withZone(ZoneId.systemDefault());
 
     private static final String NL = "\n"; // $NON-NLS-1$
 
@@ -262,7 +264,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                                 .getResString("view_results_thread_name")) //$NON-NLS-1$
                         .append(sampleResult.getThreadName()).append(NL);
                 String startTime = dateFormat
-                        .format(new Date(sampleResult.getStartTime()));
+                        .format(Instant.ofEpochMilli(sampleResult.getStartTime()));
                 statsBuff
                         .append(JMeterUtils
                                 .getResString("view_results_sample_start")) //$NON-NLS-1$

@@ -18,9 +18,13 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.jms.BytesMessage;
@@ -747,10 +751,17 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
-    @SuppressWarnings("JdkObsolete")
+    private static String formatLikeDate(Instant instant) {
+        return DateTimeFormatter
+                .ofLocalizedDateTime(FormatStyle.LONG)
+                .withLocale(Locale.ROOT)
+                .withZone(ZoneId.systemDefault())
+                .format(instant);
+    }
+
     private void logThreadStart() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Thread started {}", new Date());
+            LOGGER.debug("Thread started {}", formatLikeDate(Instant.now()));
             LOGGER.debug("JMSSampler: [{}], hashCode=[{}]", Thread.currentThread().getName(), hashCode());
             LOGGER.debug("QCF: [{}], sendQueue=[{}]", getQueueConnectionFactory(), getSendQueue());
             LOGGER.debug("Timeout = [{}]", getTimeout());
@@ -794,10 +805,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("JdkObsolete")
     public void threadFinished() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Thread ended {}", new Date());
+            LOGGER.debug("Thread ended {}", formatLikeDate(Instant.now()));
         }
 
         if (context != null) {

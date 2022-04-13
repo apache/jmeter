@@ -337,7 +337,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
      * @param message JMS Message
      * @return String with message header values.
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public static String getMessageHeaders(Message message) {
         final StringBuilder response = new StringBuilder(256);
         try {

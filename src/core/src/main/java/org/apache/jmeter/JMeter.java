@@ -32,10 +32,12 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -456,7 +458,6 @@ public class JMeter implements JMeterPlugin {
      * Called reflectively by {@link NewDriver#main(String[])}
      * @param args The arguments for JMeter
      */
-    @SuppressWarnings("JdkObsolete")
     public void start(String[] args) {
         CLArgsParser parser = new CLArgsParser(args, options);
         String error = parser.getErrorString();
@@ -524,11 +525,10 @@ public class JMeter implements JMeterPlugin {
             }
 
             // Set some (hopefully!) useful properties
-            long now=System.currentTimeMillis();
-            JMeterUtils.setProperty("START.MS",Long.toString(now));// $NON-NLS-1$
-            Date today=new Date(now); // so it agrees with above
-            JMeterUtils.setProperty("START.YMD",new SimpleDateFormat("yyyyMMdd").format(today));// $NON-NLS-1$ $NON-NLS-2$
-            JMeterUtils.setProperty("START.HMS",new SimpleDateFormat("HHmmss").format(today));// $NON-NLS-1$ $NON-NLS-2$
+            Instant now = Instant.now();
+            JMeterUtils.setProperty("START.MS",Long.toString(now.toEpochMilli()));// $NON-NLS-1$
+            JMeterUtils.setProperty("START.YMD", getFormatter("yyyyMMdd").format(now));// $NON-NLS-1$ $NON-NLS-2$
+            JMeterUtils.setProperty("START.HMS", getFormatter("HHmmss").format(now));// $NON-NLS-1$ $NON-NLS-2$
 
             if (parser.getArgumentById(VERSION_OPT) != null) {
                 displayAsciiArt();
@@ -597,6 +597,10 @@ public class JMeter implements JMeterPlugin {
             // FIXME Should we exit here ? If we are called by Maven or Jenkins
             System.exit(1);
         }
+    }
+
+    private static DateTimeFormatter getFormatter(String pattern) {
+        return DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
     }
 
     /**
@@ -1096,8 +1100,8 @@ public class JMeter implements JMeterPlugin {
                 clonedTree.add(clonedTree.getArray()[0], new ListenToTest(
                         org.apache.jmeter.JMeter.ListenToTest.RunMode.LOCAL, false, reportGenerator));
                 engine.configure(clonedTree);
-                long now=System.currentTimeMillis();
-                println("Starting standalone test @ "+new Date(now)+" ("+now+")");
+                Instant now = Instant.now();
+                println("Starting standalone test @ "+ formatLikeDate(now) + " (" + now.toEpochMilli() + ')');
                 engines.add(engine);
                 engine.runTest();
             } else {
@@ -1125,6 +1129,14 @@ public class JMeter implements JMeterPlugin {
             log.error("Error in NonGUIDriver", e);
             throw new ConfigurationException("Error in NonGUIDriver " + e.getMessage(), e);
         }
+    }
+
+    private static String formatLikeDate(Instant instant) {
+        return DateTimeFormatter
+                .ofLocalizedDateTime(FormatStyle.LONG)
+                .withLocale(Locale.ROOT)
+                .withZone(ZoneId.systemDefault())
+                .format(instant);
     }
 
     /**
@@ -1325,11 +1337,11 @@ public class JMeter implements JMeterPlugin {
 
         @SuppressWarnings("JdkObsolete")
         private void endTest(boolean isDistributed) {
-            long now = System.currentTimeMillis();
+            Instant now = Instant.now();
             if (isDistributed) {
-                println("Tidying up remote @ "+new Date(now)+" ("+now+")");
+                println("Tidying up remote @ " + formatLikeDate(now) + " (" + now.toEpochMilli() + ')');
             } else {
-                println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
+                println("Tidying up ...    @ " + formatLikeDate(now) + " (" + now.toEpochMilli() + ')');
             }
 
             if (isDistributed) {
