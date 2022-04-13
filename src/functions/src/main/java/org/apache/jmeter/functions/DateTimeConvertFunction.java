@@ -62,7 +62,7 @@ public class DateTimeConvertFunction extends AbstractFunction {
     }
 
     @Override
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String dateString = values[0].execute();
         String sourceDateFormat = values[1].execute();

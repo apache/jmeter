@@ -241,7 +241,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     }
 
     @Override
-    @SuppressWarnings({"boxing", "JdkObsolete"})
+    @SuppressWarnings({"boxing", "JavaUtilDate"})
     public void setupTabPane() {
         // Clear all data before display a new
         this.clearData();

@@ -773,7 +773,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
         }
     }
 
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public String[] getCertificateDetails() {
         if (isDynamicMode()) {
             try {
@@ -1540,7 +1540,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     /**
      * Initialise the user-provided keystore
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private void initUserKeyStore() {
         try {
             keyStore = getKeyStore(storePassword.toCharArray());
@@ -1562,7 +1562,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     /**
      * Initialise the dynamic domain keystore
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private void initDynamicKeyStore() throws IOException, GeneralSecurityException {
         if (storePassword  != null) { // Assume we have already created the store
             try {
@@ -1658,7 +1658,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     /**
      * Initialise the single key JMeter keystore (original behaviour)
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private void initJMeterKeyStore() throws IOException, GeneralSecurityException {
         if (storePassword != null) { // Assume we have already created the store
             try {

@@ -705,7 +705,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         return buttonPanel;
     }
 
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public String[] getXAxisLabels() {
         SimpleDateFormat formatter = new SimpleDateFormat(xAxisTimeFormat.getText()); //$NON-NLS-1$
         String[] xAxisLabels = new String[(int) durationTest]; // Test can't have a duration more than 2^31 secs (cast from long to int)

@@ -121,7 +121,7 @@ public class DistributedRunner {
      *
      * @param addresses list of the DNS names or IP addresses of the remote testing engines
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public void start(List<String> addresses) {
         long now = System.currentTimeMillis();
         println("Starting distributed test with remote engines: " + addresses + " @ " + new Date(now) + " (" + now + ")");

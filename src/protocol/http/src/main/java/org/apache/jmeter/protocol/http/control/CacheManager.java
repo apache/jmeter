@@ -63,7 +63,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
 
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private static final Date EXPIRED_DATE = new Date(0L);
     private static final int DEFAULT_MAX_SIZE = 5000;
     private static final long ONE_YEAR_MS = 365*24*60*60*1000L;
@@ -307,7 +307,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return expiresDate;
     }
 
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private Date extractExpiresDateFromCacheControl(String lastModified,
             String cacheControl, String expires, String etag, String url,
             String date, final String maxAge, Date defaultExpiresDate) {
@@ -327,7 +327,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return defaultExpiresDate;
     }
 
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private Date calcExpiresDate(String lastModified, String cacheControl,
             String expires, String etag, String url, String date) {
         if(!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(date)) {
@@ -516,7 +516,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     }
 
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private boolean entryStillValid(URL url, CacheEntry entry) {
         log.debug("Check if entry {} is still valid for url {}", entry, url);
         if (entry != null && entry.getVaryHeader() == null) {

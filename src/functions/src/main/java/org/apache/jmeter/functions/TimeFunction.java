@@ -77,7 +77,7 @@ public class TimeFunction extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String datetime;
         if (format.length() == 0){// Default to milliseconds

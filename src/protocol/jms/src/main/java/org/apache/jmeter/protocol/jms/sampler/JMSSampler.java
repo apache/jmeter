@@ -747,7 +747,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         }
     }
 
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private void logThreadStart() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Thread started {}", new Date());
@@ -794,7 +794,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public void threadFinished() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Thread ended {}", new Date());

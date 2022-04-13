@@ -456,7 +456,7 @@ public class JMeter implements JMeterPlugin {
      * Called reflectively by {@link NewDriver#main(String[])}
      * @param args The arguments for JMeter
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public void start(String[] args) {
         CLArgsParser parser = new CLArgsParser(args, options);
         String error = parser.getErrorString();
@@ -1016,7 +1016,7 @@ public class JMeter implements JMeterPlugin {
     }
 
     // run test in batch mode
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     void runNonGui(String testFile, String logFile, boolean remoteStart, String remoteHostsString, boolean generateReportDashboard)
             throws ConfigurationException {
         try {
@@ -1323,7 +1323,7 @@ public class JMeter implements JMeterPlugin {
             }
         }
 
-        @SuppressWarnings("JdkObsolete")
+        @SuppressWarnings("JavaUtilDate")
         private void endTest(boolean isDistributed) {
             long now = System.currentTimeMillis();
             if (isDistributed) {

@@ -76,7 +76,7 @@ public class TimeHelper {
      *            the format
      * @return the string
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public static String formatTimeStamp(long timeStamp, String format) {
         SimpleDateFormat dateFormat = format != null ? new SimpleDateFormat(
                 format) : new SimpleDateFormat();

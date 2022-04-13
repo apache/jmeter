@@ -89,7 +89,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
     }
 
     @Override
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public void consume(Sample s, int channel) {
         Date date = null;
         try {
