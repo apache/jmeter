@@ -22,11 +22,15 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -116,15 +120,23 @@ public class DistributedRunner {
         }
     }
 
+    private static String formatLikeDate(Instant instant) {
+        return DateTimeFormatter
+                .ofLocalizedDateTime(FormatStyle.LONG)
+                .withLocale(Locale.ROOT)
+                .withZone(ZoneId.systemDefault())
+                .format(instant);
+    }
+
     /**
      * Starts a remote testing engines
      *
      * @param addresses list of the DNS names or IP addresses of the remote testing engines
      */
-    @SuppressWarnings("JdkObsolete")
     public void start(List<String> addresses) {
-        long now = System.currentTimeMillis();
-        println("Starting distributed test with remote engines: " + addresses + " @ " + new Date(now) + " (" + now + ")");
+        Instant now = Instant.now();
+        println("Starting distributed test with remote engines: "
+                + addresses + " @ " + formatLikeDate(now) + " (" + now.toEpochMilli() + ')');
         List<String> startedEngines = new ArrayList<>(addresses.size());
         List<String> failedEngines = new ArrayList<>(addresses.size());
         for (String address : addresses) {
