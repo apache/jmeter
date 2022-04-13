@@ -403,6 +403,7 @@ allprojects {
                     disable(
                         "ComplexBooleanConstant",
                         "EqualsGetClass",
+                        "InlineMeSuggester",
                         "OperatorPrecedence",
                         "MutableConstantField",
                         // "ReferenceEquality",
