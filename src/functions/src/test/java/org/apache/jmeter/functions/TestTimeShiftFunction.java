@@ -111,6 +111,22 @@ class TestTimeShiftFunction extends JMeterTestCase {
         assertThat(tomorrowFromFunction, sameDay(tomorrow));
     }
 
+    /**
+     * Calculate the difference between the DST settings that are in use on the dates
+     * given by {@code from} and {@code to}.
+     *
+     * @param from first date used for the first DST setting probe
+     * @param to second date used for the second DST setting probe
+     * return difference between the DST settings as a Duration
+     */
+    private Duration dstDifference(LocalDateTime from, LocalDateTime to) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZoneRules rules = zoneId.getRules();
+        Duration fromDST = rules.getDaylightSavings(from.atZone(zoneId).toInstant());
+        Duration toDST = rules.getDaylightSavings(to.atZone(zoneId).toInstant());
+        return fromDST.minus(toDST);
+    }
+
     @Test
     void testNowWithComplexPeriod() throws Exception {
         // Workaround to skip test, when we know it will fail
@@ -120,8 +136,10 @@ class TestTimeShiftFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "", "P10DT-1H-5M5S", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        LocalDateTime futureDate = LocalDateTime.now().plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime futureDate = now.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
+        futureDateFromFunction = futureDateFromFunction.plus(dstDifference(now, futureDateFromFunction));
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
     }
 
