@@ -217,7 +217,7 @@ however, the profile can't be updated while the test is running.
   <li><pr>692></pr>Fix a few deprecation warnings for Gradle. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
   <li><pr>697></pr>Junit 5 tests to use asserts from Junit 5 API. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
   <li><bug>65983</bug><pr>707</pr>Use current screenshot for save-to-file listener in documentation. Based on patch by NaveenKumar Namachivayam (catch.nkn at gmail.com)</li>
-  <li><pr>708</pr>Make errorprone happier. Based on patch by Wilson Kurniawan (wilson at visenze.comr)></li>
+  <li><pr>708</pr>Make errorprone happier. Based on patch by Wilson Kurniawan (wilson at visenze.com)></li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
