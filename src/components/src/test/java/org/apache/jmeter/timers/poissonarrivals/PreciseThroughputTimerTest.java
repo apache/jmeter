@@ -25,11 +25,8 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PreciseThroughputTimerTest {
-    private static final Logger LOG = LoggerFactory.getLogger(PreciseThroughputTimerTest.class);
 
     @Test
     public void testTimer1() throws Exception {

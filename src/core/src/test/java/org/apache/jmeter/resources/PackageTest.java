@@ -23,8 +23,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,19 +66,11 @@ import junit.framework.TestSuite;
 
 public class PackageTest extends TestCase implements Describable {
     // We assume the test starts in "src/core" directory (which is true for Gradle and IDEs)
-    private static final File srcFiledir = new File("src/main/java");
     private static final File resourceFiledir = new File("src/main/resources");
 
     private static final String MESSAGES = "messages";
 
     private static PropertyResourceBundle defaultPRB; // current default language properties file
-
-    private static final CharsetEncoder ASCII_ENCODER =
-        Charset.forName("US-ASCII").newEncoder(); // Ensure properties files don't use special characters
-
-    private static boolean isPureAscii(String v) {
-      return ASCII_ENCODER.canEncode(v);
-    }
 
     // Read resource into ResourceBundle and store in List
     private PropertyResourceBundle getRAS(String res) throws Exception {
@@ -97,16 +88,16 @@ public class PackageTest extends TestCase implements Describable {
     private void readRF(String res, List<String> l) throws Exception {
         InputStream ras = this.getClass().getResourceAsStream(res);
         if (ras == null){
-            if (MESSAGES.equals(resourcePrefix)|| lang.length() == 0 ) {
+            if (MESSAGES.equals(resourcePrefix)|| lang.isEmpty()) {
                 throw new IOException("Cannot open resource file "+res);
             } else {
                 return;
             }
         }
-        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(ras));) {
+        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(ras, StandardCharsets.UTF_8))) {
             String s;
             while ((s = fileReader.readLine()) != null) {
-                if (s.length() > 0 && !s.startsWith("#") && !s.startsWith("!")) {
+                if (!s.isEmpty() && !s.startsWith("#") && !s.startsWith("!")) {
                     int equ = s.indexOf('=');
                     String key = s.substring(0, equ);
                     if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
@@ -147,7 +138,7 @@ public class PackageTest extends TestCase implements Describable {
 
     // Helper method to construct resource name
     private String getResName(String lang) {
-        if (lang.length() == 0) {
+        if (lang.isEmpty()) {
             return resourcePrefix+".properties";
         } else {
             return resourcePrefix+"_" + lang + ".properties";
@@ -177,7 +168,7 @@ public class PackageTest extends TestCase implements Describable {
             last = curr;
         }
 
-        if (resname.length() == 0) // Must be the default resource file
+        if (resname.isEmpty()) // Must be the default resource file
         {
             defaultPRB = getRAS(res);
             if (defaultPRB == null){
@@ -325,15 +316,14 @@ public class PackageTest extends TestCase implements Describable {
         for (String prefix : prefixList) {
             Properties messages = new Properties();
             messages.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(prefix.substring(1)+".properties"));
-            checkMessagesForLanguage( missingLabelsPerBundle , missingLabelsPerBundle, messages,prefix.substring(1), lang);
+            checkMessagesForLanguage( missingLabelsPerBundle , messages,prefix.substring(1), lang);
         }
 
         assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
     }
 
     private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle,
-            Map<String, Map<String, String>> missingLabelsPerBundle2,
-            Properties messages, String bundlePath, String language)
+                                          Properties messages, String bundlePath, String language)
             throws IOException {
         Properties messagesFr = new Properties();
         String languageBundle = bundlePath+"_"+language+ ".properties";
