@@ -65,14 +65,14 @@ public class TestConverter {
     }
 
     @Test
-    @SuppressWarnings({ "UndefinedEquals", "JdkObsolete" })
+    @SuppressWarnings({ "UndefinedEquals", "JavaUtilDate" })
     public void testGetDateObjectDateWithTimeAndNullDefault() {
         Date time = new Date();
         assertEquals(time, Converter.getDate(time, null));
     }
 
     @Test
-    @SuppressWarnings({ "UndefinedEquals", "JdkObsolete" })
+    @SuppressWarnings({ "UndefinedEquals", "JavaUtilDate" })
     public void testGetDateObjectDateWithNullAndDateAsDefault() {
         Date date = new Date();
         assertEquals(date, Converter.getDate(null, date));
