@@ -20,7 +20,7 @@ package org.apache.jmeter.threads;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -156,9 +156,9 @@ class TestJMeterThread {
         jMeterThread.setScheduled(true);
         jMeterThread.setEndTime(System.currentTimeMillis() + maxDuration);
         jMeterThread.setThreadGroup(threadGroup);
-        long startTime = new Date().getTime();
+        Instant startTime = Instant.now();
         jMeterThread.run();
-        long duration = new Date().getTime() - startTime;
+        long duration = Instant.now().toEpochMilli() - startTime.toEpochMilli();
 
         assertFalse("Sampler should not be called", dummySampler.isCalled());
 

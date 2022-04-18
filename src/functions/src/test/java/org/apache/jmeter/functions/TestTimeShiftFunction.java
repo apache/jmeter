@@ -98,7 +98,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         long resultat = Long.parseLong(value);
         LocalDateTime nowFromFunction = LocalDateTime.ofInstant(Instant.ofEpochMilli(resultat),
                 TimeZone.getDefault().toZoneId());
-        assertThat(nowFromFunction, within(5, ChronoUnit.SECONDS, LocalDateTime.now()));
+        assertThat(nowFromFunction, within(5, ChronoUnit.SECONDS, LocalDateTime.now(ZoneId.systemDefault())));
     }
 
     @Test
@@ -106,7 +106,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams("yyyy-MM-dd", "", "P1d", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        LocalDate tomorrow = LocalDate.now(ZoneId.systemDefault()).plusDays(1);
         LocalDate tomorrowFromFunction = LocalDate.parse(value);
         assertThat(tomorrowFromFunction, sameDay(tomorrow));
     }
@@ -120,16 +120,18 @@ class TestTimeShiftFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams("yyyy-MM-dd'T'HH:mm:ss", "", "P10DT-1H-5M5S", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        LocalDateTime futureDate = LocalDateTime.now().plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
+        LocalDateTime futureDate = LocalDateTime.now(ZoneId.systemDefault())
+                .plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
     }
 
-    private BooleanSupplier dstChangeAhead(String duration) {
+    private static BooleanSupplier dstChangeAhead(String duration) {
         return () -> {
             ZoneId defaultZoneId = ZoneId.systemDefault();
-            Instant now = LocalDateTime.now().atZone(defaultZoneId).toInstant();
-            Instant then = LocalDateTime.now().plus(Duration.parse(duration)).atZone(defaultZoneId).toInstant();
+            Instant now = LocalDateTime.now(defaultZoneId).atZone(defaultZoneId).toInstant();
+            Instant then = LocalDateTime.now(defaultZoneId).plus(Duration.parse(duration))
+                    .atZone(defaultZoneId).toInstant();
             ZoneRules rules = defaultZoneId.getRules();
             Duration nowDST = rules.getDaylightSavings(now);
             Duration thenDST = rules.getDaylightSavings(then);
@@ -180,7 +182,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         long resultat = Long.parseLong(value);
         LocalDateTime nowFromFunction = LocalDateTime.ofInstant(Instant.ofEpochMilli(resultat),
                 TimeZone.getDefault().toZoneId());
-        assertThat(nowFromFunction, within(5, ChronoUnit.SECONDS, LocalDateTime.now()));
+        assertThat(nowFromFunction, within(5, ChronoUnit.SECONDS, LocalDateTime.now(ZoneId.systemDefault())));
     }
 
     @Test
@@ -200,13 +202,13 @@ class TestTimeShiftFunction extends JMeterTestCase {
         function.setParameters(params);
         value = function.execute(result, null);
         LocalDateTime randomFutureDate = LocalDateTime.parse(value);
-        LocalDateTime checkFutureDate = LocalDateTime.now().plusMinutes(randomInt);
+        LocalDateTime checkFutureDate = LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(randomInt);
         assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate));
         randomInt = r.ints(1, 60).limit(1).findFirst().getAsInt();
         vars.put("random", String.valueOf(randomInt));
         value = function.execute(result, null);
         randomFutureDate = LocalDateTime.parse(value);
-        checkFutureDate = LocalDateTime.now().plusMinutes(randomInt);
+        checkFutureDate = LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(randomInt);
         assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate));
     }
 

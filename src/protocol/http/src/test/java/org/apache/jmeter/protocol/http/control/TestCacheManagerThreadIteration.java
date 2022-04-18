@@ -25,13 +25,13 @@ import static org.junit.Assert.assertTrue;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -62,7 +62,7 @@ public class TestCacheManagerThreadIteration {
     private static final String SAME_USER="__jmv_SAME_USER";
     protected static final String LOCAL_HOST = "http://localhost/";
     protected static final String EXPECTED_ETAG = "0xCAFEBABEDEADBEEF";
-    protected static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+    protected static final ZoneId GMT = ZoneId.of("GMT");
     protected CacheManager cacheManager;
     protected String currentTimeInGMT;
     protected String vary = null;
@@ -226,10 +226,11 @@ public class TestCacheManagerThreadIteration {
         }
     }
 
-    protected String makeDate(Date d) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-        simpleDateFormat.setTimeZone(GMT);
-        return simpleDateFormat.format(d);
+    protected String makeDate(Instant d) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z")
+                .withLocale(Locale.US)
+                .withZone(GMT);
+        return formatter.format(d);
     }
 
     protected HTTPSampleResult getSampleResultWithSpecifiedResponseCode(String code) {
@@ -246,7 +247,7 @@ public class TestCacheManagerThreadIteration {
     @BeforeEach
     public void setUp() throws Exception {
         this.cacheManager = new CacheManager();
-        this.currentTimeInGMT = makeDate(new Date());
+        this.currentTimeInGMT = makeDate(Instant.now());
         this.url = new URL(LOCAL_HOST);
         this.sampleResultOK = getSampleResultWithSpecifiedResponseCode("200");
         this.httpMethod = new HttpPostStub();
@@ -311,7 +312,7 @@ public class TestCacheManagerThreadIteration {
         Header[] headers = new Header[1];
         assertFalse("Should not find valid entry", this.cacheManager.inCache(url, headers));
         long start = System.currentTimeMillis();
-        setExpires(makeDate(new Date(start)));
+        setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         assertNotNull("Before iternation, should find entry", getThreadCacheEntry(LOCAL_HOST));
@@ -357,7 +358,7 @@ public class TestCacheManagerThreadIteration {
         Header[] headers = new Header[1];
         assertFalse("Should not find valid entry", this.cacheManager.inCache(url, headers));
         long start = System.currentTimeMillis();
-        setExpires(makeDate(new Date(start)));
+        setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         this.cacheManager.setThreadContext(jmctx);
@@ -373,7 +374,7 @@ public class TestCacheManagerThreadIteration {
         jmctx.setVariables(jmvars);
         this.cacheManager.setThreadContext(jmctx);
         start = System.currentTimeMillis();
-        setExpires(makeDate(new Date(start)));
+        setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         assertNotNull("Before iternation, should find entry", getThreadCacheEntry(LOCAL_HOST));
@@ -396,7 +397,7 @@ public class TestCacheManagerThreadIteration {
         Header[] headers = new Header[1];
         assertFalse("Should not find valid entry", this.cacheManager.inCache(url, headers));
         long start = System.currentTimeMillis();
-        setExpires(makeDate(new Date(start)));
+        setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         this.cacheManager.setThreadContext(jmctx);
@@ -411,7 +412,7 @@ public class TestCacheManagerThreadIteration {
         jmctx.setVariables(jmvars);
         this.cacheManager.setThreadContext(jmctx);
         start = System.currentTimeMillis();
-        setExpires(makeDate(new Date(start)));
+        setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         assertNotNull("Before iteration, should find entry", getThreadCacheEntry(LOCAL_HOST));
