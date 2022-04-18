@@ -17,18 +17,18 @@
 
 package org.apache.jmeter.protocol.mail.sampler;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestMailReaderSampler {
 
+    @SuppressWarnings("CatchAndPrintStackTrace")
     public static void createJMeterEnv() {
         File propsFile;
         try {
@@ -51,7 +51,7 @@ public class TestMailReaderSampler {
         MailReaderSampler sampler = new MailReaderSampler();
         Properties properties = new Properties();
         sampler.addCustomProperties(properties);
-        assertEquals(1, properties.size());
-        assertEquals("mail.prop2.value", properties.getProperty("mail.prop2.name"));
+        Assertions.assertEquals(1, properties.size());
+        Assertions.assertEquals("mail.prop2.value", properties.getProperty("mail.prop2.name"));
     }
 }
