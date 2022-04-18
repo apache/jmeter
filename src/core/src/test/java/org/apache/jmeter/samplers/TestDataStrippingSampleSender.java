@@ -92,7 +92,7 @@ class TestDataStrippingSampleSender extends JMeterTestCase implements JMeterSeri
         return result;
     }
 
-    private class SimpleSender implements SampleSender {
+    private static class SimpleSender implements SampleSender {
 
         private SampleResult result;
 

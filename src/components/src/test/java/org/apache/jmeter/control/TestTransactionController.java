@@ -17,8 +17,6 @@
 
 package org.apache.jmeter.control;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +33,7 @@ import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
@@ -81,11 +80,14 @@ public class TestTransactionController extends JMeterTestCase {
         thread.setOnErrorStopThread(true);
         thread.run();
 
-        assertEquals("Must one transaction samples with parent debug sample", 1, listener.events.size());
-        assertEquals("Number of samples in transaction : 1, number of failing samples : 1", listener.events.get(0).getResult().getResponseMessage());
+        Assertions.assertEquals(1, listener.events.size(),
+                "Must one transaction samples with parent debug sample");
+        Assertions.assertEquals("Number of samples in transaction : 1, number of failing samples : 1",
+                listener.events.get(0).getResult().getResponseMessage());
     }
 
-    public class TestSampleListener extends ResultCollector implements SampleListener {
+    public static class TestSampleListener extends ResultCollector implements SampleListener {
+        private static final long serialVersionUID = -1373192220822942714L;
         public List<SampleEvent> events = new ArrayList<>();
 
         @Override
