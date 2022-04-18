@@ -16,6 +16,7 @@
     <trusted-key id='07d3516820bcf6b1' group='com.github.ben-manes.caffeine' />
     <trusted-key id='3c0a8f4744f37328' group='com.github.ben-manes.caffeine' />
     <trusted-key id='62c82e50836eb3ee' group='com.github.gundy' />
+    <trusted-key id='249dee8e2c07a0a2' group='com.github.javaparser' />
     <trusted-key id='379ce192d401ab61' group='com.github.javaparser' />
     <trusted-key id='431b8f80403a7dc1' group='com.github.javaparser' />
     <trusted-key id='8ea48d105232855d' group='com.github.jknack' />
@@ -143,6 +144,7 @@
     <trusted-key id='e91287822fdb81b1' group='org.apache.xbean' />
     <trusted-key id='5b93f1df7cdb6dea' group='org.apache.xmlgraphics' />
     <trusted-key id='85911f425ec61b51' group='org.apiguardian' />
+    <trusted-key id='0cc0b712fee75827' group='org.assertj' />
     <trusted-key id='e2b3d84202b812d9' group='org.assertj' />
     <trusted-key id='b341ddb020fcb6ab' group='org.bouncycastle' />
     <trusted-key id='be84d764623a3644' group='org.brotli' />
@@ -189,6 +191,7 @@
     <trusted-key id='85911f425ec61b51' group='org.junit.platform' />
     <trusted-key id='85911f425ec61b51' group='org.junit.vintage' />
     <trusted-key id='82216a03caa86c78' group='org.mongodb' />
+    <trusted-key id='2f45f85cdf082e68' group='org.mozilla' />
     <trusted-key id='3f36885c24df4b75' group='org.mozilla' />
     <trusted-key id='7ad289796be2ffe2' group='org.neo4j.driver' />
     <trusted-key id='f8052e4e1bd0db31' group='org.neo4j.driver' />

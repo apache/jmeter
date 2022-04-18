@@ -169,39 +169,39 @@ however, the profile can't be updated while the test is running.
   <li><pr>656</pr><pr>668</pr>Updated json-smart to 2.4.8 (from 2.3), accessors-smart to 2.4.8 (from 1.2) and asm 9.1 (from 9.0). Contributed by Stefan Seide (stefan at trilobyte-se.de)</li>
   <li><bug>64831</bug>Log truststore entries in debug level for logger <code>org.apache.jmeter.util.keystore.JmeterKeyStore</code></li>
   <li><bug>65232</bug>Hide splash screen when an error is displayed because the test plan could not be parsed.</li>
-  <li>Updated Groovy to 3.0.9 (from 3.0.7).</li>
+  <li>Updated Groovy to 3.0.10 (from 3.0.7).</li>
   <li>Updated Darklaf to 2.7.3 (from 2.5.4).</li>
   <li>Updated Apache ActiveMQ to 15.6.4 (from 15.6.0).</li>
   <li>Updated Asm to 9.2 (from 9.1).</li>
-  <li>Updated Bouncycastle to 1.69 (from 1.67).</li>
+  <li>Updated Bouncycastle to 1.70 (from 1.67).</li>
   <li>Updated Caffeine to 2.9.3 (from 2.8.8).</li>
   <li>Updated Apache commons-dbcp2 to 2.9.0 (from 2.8.0).</li>
   <li>Updated Apache commons-io to 2.11.0 (from 2.8.0).</li>
   <li>Updated Apache commons-lang3 to 3.12.0 (from 3.11).</li>
   <li>Updated Apache commons-net to 3.8.0 (from 3.7.2).</li>
   <li>Updated Apache commons-pool2 to 2.11.1 (from 2.9.0).</li>
-  <li>Updated equalsverifier to 3.9 (from 3.4.2).</li>
+  <li>Updated equalsverifier to 3.10 (from 3.4.2).</li>
   <li>Updated Apache Freemarker to 2.3.31 (from 2.3.30).</li>
   <li>Updated hsqldb to 2.5.2 (from 2.5.0).</li>
   <li>Updated Apache HttpClient to 4.5.13 (from 4.5.12).</li>
   <li>Updated Apache HttpCore to 4.4.15 (from 4.4.13).</li>
   <li>Updated jacoco to 0.8.7 (from 0.8.5).</li>
-  <li>Updated json-path to 2.6.0 (from 2.4.0).</li>
+  <li>Updated json-path to 2.7.0 (from 2.4.0).</li>
   <li>Updated jsoup to 1.14.3 (from 1.13.1).</li>
   <li>Updated JUnit to 4.13.2 and 5.8.2 (from 4.13.1 and 5.7.0).</li>
   <li>Updated Apache log4j2 to 2.17.2 (from 2.13.3).</li>
   <li>Updated Miglayout to 5.3 (from 5.2).</li>
-  <li>Updated Neo4j Java driver to 4.4.4 (from 4.2.0).</li>
+  <li>Updated Neo4j Java driver to 4.4.5 (from 4.2.0).</li>
   <li>Updated Objenesis to 3.2 (from 2.6).</li>
   <li>Updated ktlint to 0.40.0</li>
   <li>Updated PH CSS and PH commons to 6.5.4 and 10.1.6 (from 6.2.3 and 9.5.1).</li>
-  <li>Updated RSyntaxTextArea to 3.1.6 (from 3.1.1).</li>
+  <li>Updated RSyntaxTextArea to 3.2.0 (from 3.1.1).</li>
   <li>Updated SLF4J to 1.7.36 (from 1.7.30).</li>
   <li>Updated SvgSalamander to 1.1.2.4 (from 1.1.2.1).</li>
   <li><pr>698</pr>Updated Apache Tika to 1.28.1 (from 1.26).</li>
   <li>Updated WireMock-JRE8 to 2.30.0 (from 2.24.1).</li>
   <li>Updated com.github.vlsi.vlsi-release-plugins 1.76 (from 1.74).</li>
-  <li>Updated jackson to 2.13.1 (from 2.10.5)</li>
+  <li>Updated jackson to 2.13.2 (from 2.10.5)</li>
   <li>Updated jmespath to 0.5.1</li>
   <li>Updated Saxon-HE to 11.2 (from 9.9.1-8)</li>
   <li>Updated Apache xmlgraphics commons to 2.7 (from 2.6)</li>
@@ -218,6 +218,7 @@ however, the profile can't be updated while the test is running.
   <li><pr>697></pr>Junit 5 tests to use asserts from Junit 5 API. Contributed by Sampath Kumar Krishnasamy (sampathkumar.krishnasamykuppusamy at aexp.com)</li>
   <li><bug>65983</bug><pr>707</pr>Use current screenshot for save-to-file listener in documentation. Based on patch by NaveenKumar Namachivayam (catch.nkn at gmail.com)</li>
   <li><pr>708</pr>Make errorprone happier. Based on patch by Wilson Kurniawan (wilson at visenze.com)></li>
+  <li>Updated Rhino JavaScript to 1.7.14 (from 1.7.13)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -407,7 +408,7 @@ export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
 With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jeps/372">Nashorn has been removed</a>. To add back a JSR-223 compatible JavaScript engine you have two options:
   <dl>
     <dt>Use Mozilla Rhino</dt>
-    <dd>Copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_13_Release/rhino-engine-1.7.13.jar">rhino-engine-1.7.13.jar</a> into <code>$JMETER_HOME/lib/ext</code>.</dd>
+    <dd>Copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_14_Release/rhino-engine-1.7.14.jar">rhino-engine-1.7.14.jar</a> into <code>$JMETER_HOME/lib/ext</code>.</dd>
     <dt>Use OpenJDK Nashorn</dt>
     <dd>
       The OpenJDK Nashorn implementation comes as a module. To use it, you will have to download it and add it to the module path. A hacky way to download the version 15.0 (or later) and its dependencies and set the module path is outlined below:
