@@ -90,6 +90,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
+    @SuppressWarnings("ClassCanBeStatic")
     private class TestClass // Can't instantiate
     {
         private TestClass() {
@@ -99,7 +100,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
     private static class TestData {
         private String fileName;
 
-        private String baseURL;
+        private String baseUrl;
 
         private String expectedSet;
 
@@ -113,10 +114,9 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
          * @param baseUrl Base URL
          * @param expectedSet Set of expected URLs
          * @param expectedList List of expected URLs
-         * @param userAgent User Agent
          */
         private TestData(String htmlFileName, String baseUrl, String expectedSet, String expectedList) {
-            this(htmlFileName, baseUrl, expectedList, expectedList, DEFAULT_UA);
+            this(htmlFileName, baseUrl, expectedSet, expectedList, DEFAULT_UA);
         }
         /**
          *
@@ -128,7 +128,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
          */
         private TestData(String htmlFileName, String baseUrl, String expectedSet, String expectedList, String userAgent) {
             this.fileName = htmlFileName;
-            this.baseURL = baseUrl;
+            this.baseUrl = baseUrl;
             this.expectedSet = expectedSet;
             this.expectedList = expectedList;
             this.userAgent = userAgent;
@@ -359,26 +359,28 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
 
     public void testParserSet() throws Exception {
         HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
-        filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseURL, TESTS[testNumber].expectedSet, null,
+        filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseUrl, TESTS[testNumber].expectedSet, null,
                 false, TESTS[testNumber].userAgent);
     }
 
+    @SuppressWarnings("JdkObsolete")
     public void testParserList() throws Exception {
         HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
-        filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseURL, TESTS[testNumber].expectedList,
+        filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseUrl, TESTS[testNumber].expectedList,
                 new Vector<URLString>(), true, TESTS[testNumber].userAgent);
     }
 
     public void testSpecificParserList() throws Exception {
         HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
         filetest(p, SPECIFIC_PARSER_TESTS[testNumber].fileName,
-                SPECIFIC_PARSER_TESTS[testNumber].baseURL,
+                SPECIFIC_PARSER_TESTS[testNumber].baseUrl,
                 SPECIFIC_PARSER_TESTS[testNumber].expectedList,
                 new ArrayList<URLString>(), true,
                 SPECIFIC_PARSER_TESTS[testNumber].userAgent);
     }
 
 
+    @SuppressWarnings("URLEqualsHashCode")
     private static void filetest(HTMLParser p, String file, String url, String resultFile, Collection<URLString> c,
             boolean orderMatters, // Does the order matter?
             String userAgent)
