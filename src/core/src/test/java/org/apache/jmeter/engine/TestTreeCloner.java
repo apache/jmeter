@@ -36,6 +36,7 @@ import org.junit.jupiter.api.Test;
 public class TestTreeCloner extends JMeterTestCase {
 
     @Test
+    @SuppressWarnings("ReferenceEquality")
     public void testCloning() throws Exception {
         ListedHashTree original = new ListedHashTree();
         GenericController controller = new GenericController();
