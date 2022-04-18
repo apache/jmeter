@@ -17,15 +17,13 @@
 
 package org.apache.jmeter.resources;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +32,10 @@ import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.jorphan.util.JOrphanUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ResourceKeyUsageTest {
+class ResourceKeyUsageTest {
     // We assume the test starts in "module" (e.g. src/core) directory (which is true for Gradle and IDEs)
     private static final File srcFiledir = new File("src/main/java");
 
@@ -52,23 +50,21 @@ public class ResourceKeyUsageTest {
 
     // Check that calls to getResString use a valid property key name
     @Test
-    @SuppressWarnings("CatchAndPrintStackTrace")
-    public void checkResourceReferences() throws Exception {
+    void checkResourceReferences() throws Exception {
         String resourceName = "/org/apache/jmeter/resources/messages.properties";
         PropertyResourceBundle messagePRB = getRAS(resourceName);
-        assertNotNull("Resource bundle " + resourceName + " was not found", resourceName);
+        Assertions.assertNotNull(resourceName, () -> "Resource bundle " + resourceName + " was not found");
         List<String> failures = new ArrayList<>();
+        final List<Exception> exceptions = new ArrayList<>();
 
-        PackageTest.findFile(srcFiledir, null, new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                final File file = new File(dir, name);
-                // Look for calls to JMeterUtils.getResString()
-                final Pattern pat = Pattern.compile(".*getResString\\(\"([^\"]+)\"\\).*");
-                if (name.endsWith(".java")) {
-                  BufferedReader fileReader = null;
-                  try {
-                    fileReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8));
+        PackageTest.findFile(srcFiledir, null, (dir, name) -> {
+            final File file = new File(dir, name);
+            // Look for calls to JMeterUtils.getResString()
+            final Pattern pat = Pattern.compile(".*getResString\\(\"([^\"]+)\"\\).*");
+            if (name.endsWith(".java")) {
+                try (FileInputStream fis = new FileInputStream(file);
+                     InputStreamReader is = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                     BufferedReader fileReader = new BufferedReader(is)) {
                     String s;
                     while ((s = fileReader.readLine()) != null) {
                         if (s.matches("\\s*//.*")) { // leading comment
@@ -81,28 +77,25 @@ public class ResourceKeyUsageTest {
                             String resKey = key.replace(' ', '_'); // $NON-NLS-1$ // $NON-NLS-2$
                             resKey = resKey.toLowerCase(java.util.Locale.ENGLISH);
                             if (!key.equals(resKey)) {
-                                System.out.println(file+": non-standard message key: '"+key+"'");
+                                System.out.println(file + ": non-standard message key: '" + key + "'");
                             }
                             try {
                                 messagePRB.getString(resKey);
                             } catch (MissingResourceException e) {
-                                failures.add(file+": missing message key: '"+key+"'");
+                                failures.add(file + ": missing message key: '" + key + "'");
                             }
                         }
                     }
                 } catch (IOException e) {
-                      e.printStackTrace();
-                } finally {
-                    JOrphanUtils.closeQuietly(fileReader);
+                    exceptions.add(e);
                 }
-
-                }
-                return file.isDirectory();
             }
+            return file.isDirectory();
         });
+        Assertions.assertTrue(exceptions.isEmpty());
         if (failures.isEmpty()) {
             return;
         }
-        fail(String.join("\n", failures));
+        Assertions.fail(() -> String.join("\n", failures));
     }
 }
