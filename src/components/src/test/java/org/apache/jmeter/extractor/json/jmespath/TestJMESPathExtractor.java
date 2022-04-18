@@ -193,7 +193,8 @@ class TestJMESPathExtractor {
         PARENT(AbstractScopedTestElement::setScopeParent),
         CHILDREN(AbstractScopedTestElement::setScopeChildren);
 
-        private Consumer<AbstractScopedTestElement> applier;
+        @SuppressWarnings("ImmutableEnumChecker")
+        private final Consumer<AbstractScopedTestElement> applier;
 
         AccessMode(Consumer<AbstractScopedTestElement> applier) {
             this.applier = applier;
