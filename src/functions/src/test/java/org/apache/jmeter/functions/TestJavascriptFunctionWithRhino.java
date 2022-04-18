@@ -25,12 +25,14 @@ import org.junit.jupiter.api.BeforeEach;
 public class TestJavascriptFunctionWithRhino extends TestJavascriptFunction {
 
     @BeforeEach
+    @Override
     public void setUp() {
         JMeterUtils.getJMeterProperties().put("javascript.use_rhino", "true");
         super.setUp();
     }
 
     @AfterEach
+    @Override
     public void tearDown() {
         JMeterUtils.getJMeterProperties().remove("javascript.use_rhino");
     }
