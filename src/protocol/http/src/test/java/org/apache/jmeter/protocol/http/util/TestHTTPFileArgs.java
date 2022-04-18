@@ -19,7 +19,7 @@ package org.apache.jmeter.protocol.http.util;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -56,7 +56,7 @@ public class TestHTTPFileArgs {
 
     @Test
     public void testSetHTTPFileArgs() throws Exception {
-        List<HTTPFileArg> newHTTPFileArgs = new LinkedList<>();
+        List<HTTPFileArg> newHTTPFileArgs = new ArrayList<>();
         newHTTPFileArgs.add(new HTTPFileArg("hede"));
         HTTPFileArgs files = new HTTPFileArgs();
         files.setHTTPFileArgs(newHTTPFileArgs);

@@ -17,10 +17,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -28,6 +26,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +39,7 @@ public class TestEscapeOroRegexpChars extends JMeterTestCase {
     private JMeterContext jmctx;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         function = new EscapeOroRegexpChars();
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();
@@ -49,53 +48,53 @@ public class TestEscapeOroRegexpChars extends JMeterTestCase {
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
     }
 
     @Test
-    public void testParameterCount() throws Exception {
+    void testParameterCount() throws Exception {
         checkInvalidParameterCounts(function, 1, 2);
     }
 
     @Test
-    public void testNOEscape() throws Exception {
+    void testNOEscape() throws Exception {
         params.add(new CompoundVariable("toto1titi"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("toto1titi", ret);
+        Assertions.assertEquals("toto1titi", ret);
     }
 
     @Test
-    public void testEscapeSpace() throws Exception {
+    void testEscapeSpace() throws Exception {
         params.add(new CompoundVariable("toto1 titi"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("toto1\\ titi", ret);
+        Assertions.assertEquals("toto1\\ titi", ret);
     }
 
     @Test
-    public void testEscape() throws Exception {
+    void testEscape() throws Exception {
         params.add(new CompoundVariable("toto(.+?)titi"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("toto\\(\\.\\+\\?\\)titi", ret);
+        Assertions.assertEquals("toto\\(\\.\\+\\?\\)titi", ret);
     }
 
     @Test
-    public void testEscapeWithVars() throws Exception {
+    void testEscapeWithVars() throws Exception {
         params.add(new CompoundVariable("toto(.+?)titi"));
         params.add(new CompoundVariable("exportedVar"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("toto\\(\\.\\+\\?\\)titi", ret);
-        assertEquals("toto\\(\\.\\+\\?\\)titi", vars.get("exportedVar"));
+        Assertions.assertEquals("toto\\(\\.\\+\\?\\)titi", ret);
+        Assertions.assertEquals("toto\\(\\.\\+\\?\\)titi", vars.get("exportedVar"));
     }
 
     @Test
-    public void testEscape2() throws Exception {
+    void testEscape2() throws Exception {
         params.add(new CompoundVariable("[^\"].+?"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("\\[\\^\\\"\\]\\.\\+\\?", ret);
+        Assertions.assertEquals("\\[\\^\\\"\\]\\.\\+\\?", ret);
     }
 }

@@ -17,10 +17,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.UUID;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -33,6 +31,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.test.JMeterSerialTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +51,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
         Thread.currentThread().setName("ThreadGroup-1");
     }
 
@@ -103,7 +102,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         AbstractFunction function = new ThreadNumber();
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("1", ret);
+        Assertions.assertEquals("1", ret);
     }
 
     @Test
@@ -120,7 +119,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         params.add(new CompoundVariable("\"bread\" & \"butter\""));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("&quot;bread&quot; &amp; &quot;butter&quot;", ret);
+        Assertions.assertEquals("&quot;bread&quot; &amp; &quot;butter&quot;", ret);
     }
 
     @Test
@@ -129,7 +128,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         params.add(new CompoundVariable("&quot;bread&quot; &amp; &quot;butter&quot;"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("\"bread\" & \"butter\"", ret);
+        Assertions.assertEquals("\"bread\" & \"butter\"", ret);
     }
 
     @Test
@@ -138,7 +137,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         params.add(new CompoundVariable("&lt;Fran&ccedil;ais&gt;"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("<Français>", ret);
+        Assertions.assertEquals("<Français>", ret);
     }
 
     @Test
@@ -147,7 +146,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         params.add(new CompoundVariable("&gt;&zzzz;x"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals(">&zzzz;x", ret);
+        Assertions.assertEquals(">&zzzz;x", ret);
     }
 
     @Test
@@ -156,7 +155,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
         params.add(new CompoundVariable("\"bread\" & <'butter'>"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals("&quot;bread&quot; &amp; &lt;&apos;butter&apos;&gt;", ret);
+        Assertions.assertEquals("&quot;bread&quot; &amp; &lt;&apos;butter&apos;&gt;", ret);
     }
 
     @Test
@@ -166,7 +165,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
             FileServer.getFileServer().setScriptName("Test");
             function.setParameters(params);
             String ret = function.execute(result, null);
-            assertEquals("Test", ret);
+            Assertions.assertEquals("Test", ret);
         } finally {
             FileServer.getFileServer().setScriptName(null);
         }
@@ -183,7 +182,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
             context.setCurrentSampler(httpRequest);
             context.setThreadGroup(threadGroup);
             String ret = function.execute(result, httpRequest);
-            assertEquals("ThreadGroup-1", ret);
+            Assertions.assertEquals("ThreadGroup-1", ret);
         } finally {
             FileServer.getFileServer().setScriptName(null);
         }
@@ -199,7 +198,7 @@ public class TestSimpleFunctions extends JMeterTestCase implements JMeterSerialT
             context.setThreadGroup(null);
             context.setCurrentSampler(httpRequest);
             String ret = function.execute(result, httpRequest);
-            assertEquals("", ret);
+            Assertions.assertEquals("", ret);
         } finally {
             FileServer.getFileServer().setScriptName(null);
         }

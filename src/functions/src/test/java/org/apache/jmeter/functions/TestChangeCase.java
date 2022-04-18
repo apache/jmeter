@@ -20,8 +20,8 @@ package org.apache.jmeter.functions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,7 +93,7 @@ public class TestChangeCase extends JMeterTestCase {
     public void testChangeCaseError() throws Exception {
         assertThrows(
                 InvalidVariableException.class,
-                () -> changeCase.setParameters(new LinkedList<>()));
+                () -> changeCase.setParameters(new ArrayList<>()));
     }
 
     @Test

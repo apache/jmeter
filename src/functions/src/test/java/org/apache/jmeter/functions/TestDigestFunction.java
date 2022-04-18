@@ -17,11 +17,10 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -29,6 +28,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +47,7 @@ public class TestDigestFunction extends JMeterTestCase {
         JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
     }
 
     @Test
@@ -62,9 +62,9 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("salt"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals(
-                "abc8c7a1c814c74d5882e527d21fabfccf480716df9d17bae73e5e767992d8a2a47033459a9ea91aca3186f75bfbe559419109bc44c1e6dfd618101fdc0beb1b",
-                returnValue);
+        Assertions.assertEquals(
+                "abc8c7a1c814c74d5882e527d21fabfccf480716df9d17bae73e5e767992d8a2a4703345" +
+                        "9a9ea91aca3186f75bfbe559419109bc44c1e6dfd618101fdc0beb1b", returnValue);
     }
 
     @Test
@@ -74,9 +74,9 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("salt "));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals(
-                "961451eb5870ded3fa484ad49fd1481ae3c6decdcc560200e70624a1d62ad0d1793edf3c8eccd0786bffab0b3e4421f54c7fd11a9e7461580352346d039b8e16",
-                returnValue);
+        Assertions.assertEquals(
+                "961451eb5870ded3fa484ad49fd1481ae3c6decdcc560200e70624a1d62ad0d1793edf3c8eccd0" +
+                        "786bffab0b3e4421f54c7fd11a9e7461580352346d039b8e16", returnValue);
     }
 
     @Test
@@ -86,9 +86,9 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("salt "));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals(
-                "3968fd028934466fa095f6323c527148e87d7b74601d1db5f474748dd7c643b4f508e46beb29a405ec658a64c0f581461e99eca063414099af0b63dc890b5739",
-                returnValue);
+        Assertions.assertEquals(
+                "3968fd028934466fa095f6323c527148e87d7b74601d1db5f474748dd7c643b4f508e46beb29a" +
+                        "405ec658a64c0f581461e99eca063414099af0b63dc890b5739", returnValue);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("nofile"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals("4ea2ced10057872be25371cfe638d3b096c58f2f", returnValue);
+        Assertions.assertEquals("4ea2ced10057872be25371cfe638d3b096c58f2f", returnValue);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("newVar"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals("4EA2CED10057872BE25371CFE638D3B096C58F2F", returnValue);
+        Assertions.assertEquals("4EA2CED10057872BE25371CFE638D3B096C58F2F", returnValue);
     }
 
     @Test
@@ -121,9 +121,9 @@ public class TestDigestFunction extends JMeterTestCase {
         params.add(new CompoundVariable("newVar"));
         digest.setParameters(params);
         String returnValue = digest.execute(result, null);
-        assertEquals(
-                "58DA94D45A97B35B31D7F76D2EBAC184BC4BDA512B966CDBE43FDE1CAE1CFAF89617082CA89928FB5DC1C75D60B93ADB5631F518F970CA6DCC196E1AFC678B8C",
-                returnValue);
+        Assertions.assertEquals(
+                "58DA94D45A97B35B31D7F76D2EBAC184BC4BDA512B966CDBE43FDE1CAE1CFAF89617082" +
+                        "CA89928FB5DC1C75D60B93ADB5631F518F970CA6DCC196E1AFC678B8C", returnValue);
     }
 
     @Test

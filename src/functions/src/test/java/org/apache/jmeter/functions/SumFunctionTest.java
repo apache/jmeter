@@ -17,11 +17,10 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -29,22 +28,23 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class SumFunctionTest extends JMeterTestCase {
+class SumFunctionTest extends JMeterTestCase {
 
     private JMeterVariables vars = null;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         JMeterContext jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());
         vars = jmctx.getVariables();
     }
 
     @Test
-    public void sumTest() throws Exception {
+    void sumTest() throws Exception {
         String maxIntVal = Integer.toString(Integer.MAX_VALUE);
         String minIntVal = Integer.toString(Integer.MIN_VALUE);
 
@@ -78,19 +78,19 @@ public class SumFunctionTest extends JMeterTestCase {
     private void checkSum(AbstractFunction func, String value, String[] addends)  throws Exception {
         Collection<CompoundVariable> parms = Arrays.stream(addends)
                 .map(CompoundVariable::new)
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toCollection(ArrayList::new));
         parms.add(new CompoundVariable("Result"));
         func.setParameters(parms);
-        assertEquals(value, func.execute(null,null));
-        assertEquals(value, vars.getObject("Result"));
+        Assertions.assertEquals(value, func.execute(null,null));
+        Assertions.assertEquals(value, vars.getObject("Result"));
     }
 
     // Perform a sum and check the results
     private void checkSumNoVar(AbstractFunction func, String value, String[] addends)  throws Exception {
         Collection<CompoundVariable> parms = Arrays.stream(addends)
                 .map(CompoundVariable::new)
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toCollection(ArrayList::new));
         func.setParameters(parms);
-        assertEquals(value,func.execute(null,null));
+        Assertions.assertEquals(value, func.execute(null,null));
     }
 }

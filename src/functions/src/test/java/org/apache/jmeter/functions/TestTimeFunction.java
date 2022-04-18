@@ -17,13 +17,10 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Locale;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -32,10 +29,11 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestTimeFunction extends JMeterTestCase {
+class TestTimeFunction extends JMeterTestCase {
 
     private Function variable;
     private SampleResult result;
@@ -45,39 +43,45 @@ public class TestTimeFunction extends JMeterTestCase {
     private String value;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         jmctx = JMeterContextService.getContext();
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
         result = new SampleResult();
         variable = new TimeFunction();
     }
 
     @Test
-    public void testDefault() throws Exception {
+    void testDefault() throws Exception {
         variable.setParameters(params);
         long before = System.currentTimeMillis();
         value = variable.execute(result, null);
         long now = Long.parseLong(value);
         long after = System.currentTimeMillis();
-        assertTrue(now >= before && now <= after);
+        assertBetween(before, after, now);
+    }
+
+    private static void assertBetween(long expectedLow, long expectedHigh, long actual) {
+        if (actual < expectedLow || actual > expectedHigh) {
+            Assertions.fail(() -> actual + " not within " + expectedLow + " and " + expectedHigh);
+        }
     }
 
     @Test
-    public void testDefault1() throws Exception {
+    void testDefault1() throws Exception {
         params.add(new CompoundVariable());
         variable.setParameters(params);
         long before = System.currentTimeMillis();
         value = variable.execute(result, null);
         long now = Long.parseLong(value);
         long after = System.currentTimeMillis();
-        assertTrue(now >= before && now <= after);
+        assertBetween(before, after, now);
     }
 
     @Test
-    public void testDefault2() throws Exception {
+    void testDefault2() throws Exception {
         params.add(new CompoundVariable());
         params.add(new CompoundVariable());
         variable.setParameters(params);
@@ -85,20 +89,20 @@ public class TestTimeFunction extends JMeterTestCase {
         value = variable.execute(result, null);
         long now = Long.parseLong(value);
         long after = System.currentTimeMillis();
-        assertTrue(now >= before && now <= after);
+        assertBetween(before, after, now);
     }
 
     @Test
-    public void testDefaultNone() throws Exception {
+    void testDefaultNone() throws Exception {
         long before = System.currentTimeMillis();
         value = variable.execute(result, null);
         long now = Long.parseLong(value);
         long after = System.currentTimeMillis();
-        assertTrue(now >= before && now <= after);
+        assertBetween(before, after, now);
     }
 
     @Test
-    public void testTooMany() throws Exception {
+    void testTooMany() throws Exception {
         params.add(new CompoundVariable("YMD"));
         params.add(new CompoundVariable("NAME"));
         params.add(new CompoundVariable("YMD"));
@@ -106,92 +110,92 @@ public class TestTimeFunction extends JMeterTestCase {
     }
 
     @Test
-    public void testYMD() throws Exception {
+    void testYMD() throws Exception {
         params.add(new CompoundVariable("YMD"));
         params.add(new CompoundVariable("NAME"));
         variable.setParameters(params);
         value = variable.execute(result, null);
-        assertEquals(8, value.length());
-        assertEquals(value, vars.get("NAME"));
+        Assertions.assertEquals(8, value.length());
+        Assertions.assertEquals(value, vars.get("NAME"));
     }
 
     @Test
-    public void testYMDnoV() throws Exception {
+    void testYMDnoV() throws Exception {
         params.add(new CompoundVariable("YMD"));
         variable.setParameters(params);
         value = variable.execute(result, null);
-        assertEquals(8, value.length());
-        assertNull(vars.get("NAME"));
+        Assertions.assertEquals(8, value.length());
+        Assertions.assertNull(vars.get("NAME"));
     }
 
     @Test
-    public void testHMS() throws Exception {
+    void testHMS() throws Exception {
         params.add(new CompoundVariable("HMS"));
         variable.setParameters(params);
         value = variable.execute(result, null);
-        assertEquals(6, value.length());
+        Assertions.assertEquals(6, value.length());
     }
 
     @Test
-    public void testYMDHMS() throws Exception {
+    void testYMDHMS() throws Exception {
         params.add(new CompoundVariable("YMDHMS"));
         variable.setParameters(params);
         value = variable.execute(result, null);
-        assertEquals(15, value.length());
+        Assertions.assertEquals(15, value.length());
     }
 
     @Test
-    public void testUSER1() throws Exception {
+    void testUSER1() throws Exception {
         params.add(new CompoundVariable("USER1"));
         variable.setParameters(params);
         value = variable.execute(result, null);
-        assertEquals(0, value.length());
+        Assertions.assertEquals(0, value.length());
     }
 
     @Test
-    public void testUSER2() throws Exception {
+    void testUSER2() throws Exception {
         params.add(new CompoundVariable("USER2"));
         variable.setParameters(params);
         value = variable.execute(result, null);
-        assertEquals(0, value.length());
+        Assertions.assertEquals(0, value.length());
     }
 
     @Test
-    public void testFixed() throws Exception {
+    void testFixed() throws Exception {
         params.add(new CompoundVariable("'Fixed text'"));
         variable.setParameters(params);
         value = variable.execute(result, null);
-        assertEquals("Fixed text", value);
+        Assertions.assertEquals("Fixed text", value);
     }
 
     @Test
-    public void testMixed() throws Exception {
+    void testMixed() throws Exception {
         params.add(new CompoundVariable("G"));
         variable.setParameters(params);
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
         value = variable.execute(result, null);
         Locale.setDefault(locale);
-        assertEquals("AD", value);
+        Assertions.assertEquals("AD", value);
     }
 
     @Test
-    public void testDivisor() throws Exception {
+    void testDivisor() throws Exception {
         params.add(new CompoundVariable("/1000"));
         variable.setParameters(params);
         long before = System.currentTimeMillis() / 1000;
         value = variable.execute(result, null);
         long now = Long.parseLong(value);
         long after = System.currentTimeMillis() / 1000;
-        assertTrue(now >= before && now <= after);
+        assertBetween(before, after, now);
     }
 
     @Test
-    public void testDivisorNoMatch() throws Exception {
+    void testDivisorNoMatch() throws Exception {
         params.add(new CompoundVariable("/1000 ")); // trailing space
         variable.setParameters(params);
         value = variable.execute(result, null);
-        assertEquals("/1000 ", value);
+        Assertions.assertEquals("/1000 ", value);
     }
 
 }

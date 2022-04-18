@@ -17,10 +17,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -29,6 +27,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,32 +41,32 @@ public class TestSamplerNameFunction extends JMeterTestCase {
     private String value;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         jmctx = JMeterContextService.getContext();
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
         result = new SampleResult();
         variable = new SamplerName();
     }
 
     @Test
-    public void testSamplerName() throws Exception {
+    void testSamplerName() throws Exception {
         variable.setParameters(params);
         TestSampler sampler = new TestSampler("UnitTestSampler");
         value = variable.execute(result, sampler);
-        assertEquals("UnitTestSampler", value);
+        Assertions.assertEquals("UnitTestSampler", value);
     }
 
     @Test
-    public void testSamplerNameWithVar() throws Exception {
+    void testSamplerNameWithVar() throws Exception {
         variable.setParameters(params);
         TestSampler sampler = new TestSampler("UnitTestSampler");
         variable.setParameters(FunctionTestHelper.makeParams("var1"));
         value = variable.execute(result, sampler);
 
-        assertEquals("UnitTestSampler", value);
-        assertEquals("UnitTestSampler", vars.get("var1"));
+        Assertions.assertEquals("UnitTestSampler", value);
+        Assertions.assertEquals("UnitTestSampler", vars.get("var1"));
     }
 }

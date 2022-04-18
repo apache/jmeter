@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -159,7 +159,7 @@ public class SplitFunctionTest extends JMeterTestCase {
     // Create the SplitFile function and set its parameters.
     private static SplitFunction splitParams(String p1, String p2, String p3) throws Exception {
         SplitFunction split = new SplitFunction();
-        Collection<CompoundVariable> parms = new LinkedList<>();
+        Collection<CompoundVariable> parms = new ArrayList<>();
         parms.add(new CompoundVariable(p1));
         if (p2 != null) {
             parms.add(new CompoundVariable(p2));

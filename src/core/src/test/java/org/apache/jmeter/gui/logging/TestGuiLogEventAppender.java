@@ -19,8 +19,8 @@ package org.apache.jmeter.gui.logging;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 public class TestGuiLogEventAppender {
 
-    private static List<String> log4j2LevelErrorMessages = Collections.synchronizedList(new LinkedList<>());
+    private static List<String> log4j2LevelErrorMessages = Collections.synchronizedList(new ArrayList<>());
 
     /*
      * Configure logging with GuiLogEventAppender for root logger, and override the handler of GuiLogEventAppender
@@ -74,14 +74,17 @@ public class TestGuiLogEventAppender {
 
         guiLogEventAppender.stop();
         guiLogEventAppender.setHandler(new ErrorHandler() {
+            @Override
             public void error(String msg) {
                 log4j2LevelErrorMessages.add(msg);
             }
 
+            @Override
             public void error(String msg, Throwable t) {
                 log4j2LevelErrorMessages.add(msg + " " + t);
             }
 
+            @Override
             public void error(String msg, LogEvent event, Throwable t) {
                 log4j2LevelErrorMessages.add(msg + " " + t);
             }

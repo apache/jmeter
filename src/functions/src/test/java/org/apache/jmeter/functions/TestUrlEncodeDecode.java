@@ -17,10 +17,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -28,6 +26,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +38,7 @@ public class TestUrlEncodeDecode extends JMeterTestCase {
     private JMeterContext jmctx;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();
         String data = "The quick brown fox";
@@ -47,11 +46,11 @@ public class TestUrlEncodeDecode extends JMeterTestCase {
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
     }
 
     @Test
-    public void testParameterCount() throws Exception {
+    void testParameterCount() throws Exception {
         AbstractFunction function = new UrlEncode();
         checkInvalidParameterCounts(function, 1, 1);
 
@@ -60,20 +59,20 @@ public class TestUrlEncodeDecode extends JMeterTestCase {
     }
 
     @Test
-    public void testUrlEncode() throws Exception {
+    void testUrlEncode() throws Exception {
         AbstractFunction function = new UrlEncode();
         params.add(new CompoundVariable("Veni, vidi, vici ?"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        assertEquals("Veni%2C+vidi%2C+vici+%3F", returnValue);
+        Assertions.assertEquals("Veni%2C+vidi%2C+vici+%3F", returnValue);
     }
 
     @Test
-    public void testUrlDecode() throws Exception {
+    void testUrlDecode() throws Exception {
         AbstractFunction function = new UrlDecode();
         params.add(new CompoundVariable("Veni%2C+vidi%2C+vici+%3F"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        assertEquals("Veni, vidi, vici ?", returnValue);
+        Assertions.assertEquals("Veni, vidi, vici ?", returnValue);
     }
 }

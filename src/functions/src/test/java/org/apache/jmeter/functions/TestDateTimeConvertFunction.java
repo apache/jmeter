@@ -17,11 +17,10 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.TimeZone;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -31,6 +30,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.test.JMeterSerialTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
  * Test {@link DateTimeConvertFunction}
  * We implement JMeterSerialTest as we change TimeZone
  */
-public class TestDateTimeConvertFunction extends JMeterTestCase implements JMeterSerialTest {
+class TestDateTimeConvertFunction extends JMeterTestCase implements JMeterSerialTest {
 
     private AbstractFunction dateConvert;
     private SampleResult result;
@@ -47,7 +47,7 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
     private JMeterContext jmctx;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         dateConvert = new DateTimeConvertFunction();
         result = new SampleResult();
         jmctx = JMeterContextService.getContext();
@@ -56,7 +56,7 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
     }
 
     @Test
@@ -65,17 +65,17 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
     }
 
     @Test
-    public void testDateTimeConvert() throws Exception {
+    void testDateTimeConvert() throws Exception {
         params.add(new CompoundVariable("2017-01-02 21:00:21"));
         params.add(new CompoundVariable("yyyy-MM-dd HH:mm:ss"));
         params.add(new CompoundVariable("dd-MM-yyyy hh:mm"));
         dateConvert.setParameters(params);
         String returnValue = dateConvert.execute(result, null);
-        assertEquals("02-01-2017 09:00", returnValue);
+        Assertions.assertEquals("02-01-2017 09:00", returnValue);
     }
 
     @Test
-    public void testDateTimeConvertEpochTime() throws Exception {
+    void testDateTimeConvertEpochTime() throws Exception {
         TimeZone initialTZ = TimeZone.getDefault();
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
         params.add(new CompoundVariable("1526574881000"));
@@ -83,33 +83,33 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
         params.add(new CompoundVariable("dd/MM/yyyy HH:mm"));
         dateConvert.setParameters(params);
         String returnValue = dateConvert.execute(result, null);
-        assertEquals("17/05/2018 16:34", returnValue);
+        Assertions.assertEquals("17/05/2018 16:34", returnValue);
         TimeZone.setDefault(initialTZ);
     }
 
     @Test
-    public void testDateConvert() throws Exception {
+    void testDateConvert() throws Exception {
         params.add(new CompoundVariable("2017-01-02"));
         params.add(new CompoundVariable("yyyy-MM-dd"));
         params.add(new CompoundVariable("dd-MM-yyyy"));
         dateConvert.setParameters(params);
         String returnValue = dateConvert.execute(result, null);
-        assertEquals("02-01-2017", returnValue);
+        Assertions.assertEquals("02-01-2017", returnValue);
     }
 
     @Test
-    public void testDateConvertWithVariable() throws Exception {
+    void testDateConvertWithVariable() throws Exception {
         params.add(new CompoundVariable("2017-01-02"));
         params.add(new CompoundVariable("yyyy-MM-dd"));
         params.add(new CompoundVariable("dd-MM-yyyy"));
         params.add(new CompoundVariable("varName"));
         dateConvert.setParameters(params);
         dateConvert.execute(result, null);
-        assertEquals("02-01-2017", vars.get("varName"));
+        Assertions.assertEquals("02-01-2017", vars.get("varName"));
     }
 
     @Test
-    public void testDateConvertError() throws Exception {
+    void testDateConvertError() throws Exception {
         params.add(new CompoundVariable("2017-01-02"));
         params.add(new CompoundVariable("yyyy-MM-dd"));
         assertThrows(
@@ -118,20 +118,20 @@ public class TestDateTimeConvertFunction extends JMeterTestCase implements JMete
     }
 
     @Test
-    public void testDateConvertErrorFormat() throws Exception {
+    void testDateConvertErrorFormat() throws Exception {
         params.add(new CompoundVariable("2017-01-02"));
         params.add(new CompoundVariable("yyyy-MM-dd"));
         params.add(new CompoundVariable("abcd"));
         dateConvert.setParameters(params);
-        assertEquals(dateConvert.execute(result, null), "");
+        Assertions.assertEquals(dateConvert.execute(result, null), "");
     }
 
     @Test
-    public void testDateConvertDateError() throws Exception {
+    void testDateConvertDateError() throws Exception {
         params.add(new CompoundVariable("a2017-01-02"));
         params.add(new CompoundVariable("yyyy-MM-dd"));
         params.add(new CompoundVariable("dd-MM-yyyy HH:mm:ss"));
         dateConvert.setParameters(params);
-        assertEquals(dateConvert.execute(result, null), "");
+        Assertions.assertEquals(dateConvert.execute(result, null), "");
     }
 }

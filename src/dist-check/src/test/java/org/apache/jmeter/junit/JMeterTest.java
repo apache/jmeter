@@ -30,10 +30,10 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -456,7 +456,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         Object myThis = "";
         Iterator<String> classes = ClassFinder
                 .findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { extendsClass }).iterator();
-        List<Object> objects = new LinkedList<>();
+        List<Object> objects = new ArrayList<>();
         String n = "";
         boolean caughtError = true;
         Throwable caught = null;

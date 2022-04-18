@@ -17,10 +17,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -29,6 +27,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +48,7 @@ public class TestMachineIPName extends JMeterTestCase {
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
     }
 
     @Test
@@ -66,7 +65,7 @@ public class TestMachineIPName extends JMeterTestCase {
         function = new MachineName();
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals(JMeterUtils.getLocalHostName(), ret);
+        Assertions.assertEquals(JMeterUtils.getLocalHostName(), ret);
     }
 
     @Test
@@ -75,8 +74,8 @@ public class TestMachineIPName extends JMeterTestCase {
         params.add(new CompoundVariable("HOST_NAME"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals(JMeterUtils.getLocalHostName(), ret);
-        assertEquals(JMeterUtils.getLocalHostName(), vars.get("HOST_NAME"));
+        Assertions.assertEquals(JMeterUtils.getLocalHostName(), ret);
+        Assertions.assertEquals(JMeterUtils.getLocalHostName(), vars.get("HOST_NAME"));
     }
 
     @Test
@@ -84,7 +83,7 @@ public class TestMachineIPName extends JMeterTestCase {
         function = new MachineIP();
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals(JMeterUtils.getLocalHostIP(), ret);
+        Assertions.assertEquals(JMeterUtils.getLocalHostIP(), ret);
     }
 
     @Test
@@ -93,7 +92,7 @@ public class TestMachineIPName extends JMeterTestCase {
         params.add(new CompoundVariable("HOST_IP"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        assertEquals(JMeterUtils.getLocalHostIP(), ret);
-        assertEquals(JMeterUtils.getLocalHostIP(), vars.get("HOST_IP"));
+        Assertions.assertEquals(JMeterUtils.getLocalHostIP(), ret);
+        Assertions.assertEquals(JMeterUtils.getLocalHostIP(), vars.get("HOST_IP"));
     }
 }

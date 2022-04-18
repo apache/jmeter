@@ -23,8 +23,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 @Execution(ExecutionMode.SAME_THREAD) // System.setOut must not be run concurrently with other tests
 public class DistributedRunnerTest {
 
+    @SuppressWarnings("CatchAndPrintStackTrace")
     public static void createJmeterEnv() {
         File propsFile;
         try {
@@ -127,7 +128,7 @@ public class DistributedRunnerTest {
     }
 
     private static class DistributedRunnerEmul extends DistributedRunner {
-        public List<EmulatorEngine> engines = new LinkedList<>();
+        public List<EmulatorEngine> engines = new ArrayList<>();
 
         @Override
         protected JMeterEngine createEngine(String address) {
