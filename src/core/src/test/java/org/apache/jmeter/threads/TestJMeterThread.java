@@ -17,9 +17,6 @@
 
 package org.apache.jmeter.threads;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.time.Instant;
 
 import org.apache.jmeter.control.LoopController;
@@ -65,7 +62,7 @@ class TestJMeterThread {
             if (!super.equals(obj)) {
                 return false;
             }
-            if (getClass() != obj.getClass()) {
+            if (!getClass().equals(obj.getClass())) {
                 return false;
             }
             DummySampler other = (DummySampler) obj;
@@ -75,6 +72,7 @@ class TestJMeterThread {
     }
 
     private static class DummyTimer extends AbstractTestElement implements Timer {
+        private static final long serialVersionUID = 5641410390783919241L;
         private long delay;
 
         void setDelay(long delay) {
@@ -160,11 +158,11 @@ class TestJMeterThread {
         jMeterThread.run();
         long duration = Instant.now().toEpochMilli() - startTime.toEpochMilli();
 
-        assertFalse("Sampler should not be called", dummySampler.isCalled());
+        Assertions.assertFalse(dummySampler.isCalled(), "Sampler should not be called");
 
         // the duration of this test plan should currently be around zero seconds,
         // but it is allowed to take up to maxDuration amount of time
-        assertTrue("Test plan should not run for longer than duration", duration <= maxDuration);
+        Assertions.assertTrue(duration <= maxDuration, "Test plan should not run for longer than duration");
     }
 
     private LoopController createLoopController() {
