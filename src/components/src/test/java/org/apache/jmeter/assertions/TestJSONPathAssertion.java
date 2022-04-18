@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -86,7 +87,7 @@ class TestJSONPathAssertion {
     }, delimiterString=";")
     void testGetResult_pathsWithOneResult(String data, String jsonPath, String expectedResult) {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData(data.getBytes());
+        samplerResult.setResponseData(data.getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath(jsonPath);
@@ -101,7 +102,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_positive_regexp() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123}".getBytes());
+        samplerResult.setResponseData("{\"myval\": 123}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -112,7 +113,7 @@ class TestJSONPathAssertion {
         assertEquals(expResult.getName(), result.getName());
         assertFalse(result.isFailure());
 
-        samplerResult.setResponseData("{\"myval\": 456}".getBytes());
+        samplerResult.setResponseData("{\"myval\": 456}".getBytes(Charset.defaultCharset()));
         AssertionResult result2 = instance.getResult(samplerResult);
         assertFalse(result2.isFailure());
     }
@@ -120,7 +121,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_positive_invert() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123}".getBytes());
+        samplerResult.setResponseData("{\"myval\": 123}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -136,7 +137,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_not_regexp() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": \"some complicated value\"}".getBytes());
+        samplerResult.setResponseData("{\"myval\": \"some complicated value\"}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -153,7 +154,8 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_complex_map() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": { \"a\": 23, \"b\": 42, \"c\": \"something\" } }".getBytes());
+        samplerResult.setResponseData(
+                "{\"myval\": { \"a\": 23, \"b\": 42, \"c\": \"something\" } }".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -167,7 +169,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_negative() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123}".getBytes());
+        samplerResult.setResponseData("{\"myval\": 123}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -182,7 +184,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_negative_invert() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123}".getBytes());
+        samplerResult.setResponseData("{\"myval\": 123}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -198,7 +200,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_null() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": null}".getBytes());
+        samplerResult.setResponseData("{\"myval\": null}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -213,7 +215,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_null_not_found() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123}".getBytes());
+        samplerResult.setResponseData("{\"myval\": 123}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -228,7 +230,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_null_novalidate() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": null}".getBytes());
+        samplerResult.setResponseData("{\"myval\": null}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
@@ -242,7 +244,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_no_such_path() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": null}".getBytes());
+        samplerResult.setResponseData("{\"myval\": null}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.notexist");
@@ -256,7 +258,8 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_list_negative() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}".getBytes());
+        samplerResult.setResponseData(
+                "{\"myval\": [{\"test\":1},{\"test\":2},{\"test\":3}]}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval[*].test");
@@ -274,7 +277,7 @@ class TestJSONPathAssertion {
         // we now consider an indefinite path with no assertion value
         // an error and set the AssertionResult to failure
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": []}".getBytes());
+        samplerResult.setResponseData("{\"myval\": []}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval[*]");
@@ -288,7 +291,7 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_inverted_null() {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": [{\"key\": null}]}".getBytes());
+        samplerResult.setResponseData("{\"myval\": [{\"key\": null}]}".getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval[*].key");
@@ -305,7 +308,7 @@ class TestJSONPathAssertion {
     void testGetResult_match_msg_problem() {
         SampleResult samplerResult = new SampleResult();
         String str = "{\"execution\":[{\"scenario\":{\"requests\":[{\"headers\":{\"headerkey\":\"header value\"}}]}}]}";
-        samplerResult.setResponseData(str.getBytes());
+        samplerResult.setResponseData(str.getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.execution[0].scenario.requests[0].headers");
@@ -338,7 +341,7 @@ class TestJSONPathAssertion {
                 "   }\n" +
                 " }\n" +
                 "}";
-        samplerResult.setResponseData(str.getBytes());
+        samplerResult.setResponseData(str.getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.contact.info.ngn_number");
@@ -361,7 +364,8 @@ class TestJSONPathAssertion {
             Locale.setDefault(Locale.US);
             SampleResult samplerResult = new SampleResult();
 
-            samplerResult.setResponseData("{\"myval\": [{\"test\":0.0000123456789}]}".getBytes());
+            samplerResult.setResponseData(
+                    "{\"myval\": [{\"test\":0.0000123456789}]}".getBytes(Charset.defaultCharset()));
 
             JSONPathAssertion instance = new JSONPathAssertion();
             instance.setJsonPath("$.myval[*].test");

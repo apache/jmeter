@@ -22,8 +22,11 @@ import static org.junit.Assert.fail;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.report.config.ConfigurationException;
@@ -59,7 +62,8 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
                 + "        <collectionProp name=\"Arguments.arguments\"/>\n" + "      </elementProp>\n"
                 + "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp></TestPlan>"
                 + "    <hashTree/></hashTree></jmeterTestPlan>";
-        try (FileWriter fw = new FileWriter(temp);
+        try (FileOutputStream os = new FileOutputStream(temp);
+                Writer fw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
                 BufferedWriter out = new BufferedWriter(fw)) {
             out.write(testPlan);
         }
@@ -102,7 +106,8 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
                 + "          <stringProp name=\"CONNECT\">${__Random(1,5)}</stringProp>\n"
                 + "        </kg.apc.jmeter.samplers.DummySampler></hashTree></hashTree>\n"
                 + "  </hashTree></jmeterTestPlan><hashTree/></hashTree>\n" + "</jmeterTestPlan>";
-        try (FileWriter fw = new FileWriter(temp);
+        try (FileOutputStream os = new FileOutputStream(temp);
+                Writer fw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
                 BufferedWriter out = new BufferedWriter(fw)) {
             out.write(testPlan);
         }

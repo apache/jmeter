@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -88,7 +89,8 @@ public class TestAuthManager extends JMeterTestCase {
     @Test
     public void testAddFileWithoutDomainAndRealmWithMechanism() throws IOException {
         File authFile = File.createTempFile("auth", ".txt");
-        Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\t\t\tBASIC_DIGEST".getBytes());
+        Files.write(authFile.toPath(),
+                "http://example.com\tuser\tpassword\t\t\tBASIC_DIGEST".getBytes(Charset.defaultCharset()));
         AuthManager manager = new AuthManager();
         manager.addFile(authFile.getAbsolutePath());
         Authorization authForURL = manager.getAuthForURL(new URL("http://example.com"));
@@ -98,7 +100,9 @@ public class TestAuthManager extends JMeterTestCase {
     @Test
     public void testAddFileWithDomainAndRealmAndDefaultMechanism() throws IOException {
         File authFile = File.createTempFile("auth", ".txt");
-        Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\tdomain\tEXAMPLE.COM\tBASIC_DIGEST".getBytes());
+        Files.write(authFile.toPath(),
+                "http://example.com\tuser\tpassword\tdomain\tEXAMPLE.COM\tBASIC_DIGEST"
+                        .getBytes(Charset.defaultCharset()));
         AuthManager manager = new AuthManager();
         manager.addFile(authFile.getAbsolutePath());
         Authorization authForURL = manager.getAuthForURL(new URL("http://example.com"));
@@ -109,7 +113,9 @@ public class TestAuthManager extends JMeterTestCase {
     @Test
     public void testAddFileWithDomainAndRealmAndMechanism() throws IOException {
         File authFile = File.createTempFile("auth", ".txt");
-        Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\tdomain\tEXAMPLE.COM\tKERBEROS".getBytes());
+        Files.write(authFile.toPath(),
+                "http://example.com\tuser\tpassword\tdomain\tEXAMPLE.COM\tKERBEROS"
+                        .getBytes(Charset.defaultCharset()));
         AuthManager manager = new AuthManager();
         manager.addFile(authFile.getAbsolutePath());
         Authorization authForURL = manager.getAuthForURL(new URL("http://example.com"));

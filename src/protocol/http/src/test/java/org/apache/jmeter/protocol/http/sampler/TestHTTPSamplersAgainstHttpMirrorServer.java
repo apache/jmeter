@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -117,7 +118,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             protected void setUp() throws Exception {
                 httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
                 // Create the test file content
-                TEST_FILE_CONTENT = "some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85"
+                TEST_FILE_CONTENT = "some foo content &?=01234+56789-|\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85"
                         .getBytes(StandardCharsets.UTF_8);
 
                 // create a temporary file to make sure we always have a file to give to the PostWriter
@@ -1457,7 +1458,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         if (contentEncoding != null) {
             output.write(titleValue.getBytes(contentEncoding));
         } else {
-            output.write(titleValue.getBytes()); // TODO - charset?
+            output.write(titleValue.getBytes(Charset.defaultCharset())); // TODO - charset?
         }
         output.write(CRLF);
         output.write(DASH_DASH);
@@ -1479,7 +1480,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         if (contentEncoding != null) {
             output.write(descriptionValue.getBytes(contentEncoding));
         } else {
-            output.write(descriptionValue.getBytes()); // TODO - charset?
+            output.write(descriptionValue.getBytes(Charset.defaultCharset())); // TODO - charset?
         }
         output.write(CRLF);
         output.write(DASH_DASH);

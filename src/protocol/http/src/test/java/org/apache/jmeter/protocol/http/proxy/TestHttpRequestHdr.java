@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -328,7 +329,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // A HTTP GET request, with UTF-8 encoding
         contentEncoding = "UTF-8";
         param1Value = "yes";
-        param2Value = "0+5 -\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
+        param2Value = "0+5 -|\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
         param2ValueEncoded = URLEncoder.encode(param2Value, contentEncoding);
         testGetRequest =
             "GET " + url
@@ -394,7 +395,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // A HTTP POST request, with UTF-8 encoding
         contentEncoding = "UTF-8";
         param1Value = "yes";
-        param2Value = "0+5 -\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
+        param2Value = "0+5 -|\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
         param2ValueEncoded = URLEncoder.encode(param2Value, contentEncoding);
         postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n";
         testPostRequest =
@@ -525,10 +526,9 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     @Test
     public void testParse1() throws Exception {// no space after :
         HttpRequestHdr req = new HttpRequestHdr();
-        ByteArrayInputStream bis = null;
-        bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:value \r\n".getBytes("ISO-8859-1"));
-        req.parse(bis);
-        bis.close();
+        try (ByteArrayInputStream bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:value \r\n".getBytes("ISO-8859-1"))) {
+            req.parse(bis);
+        }
         HeaderManager mgr = req.getHeaderManager();
         Header header;
         mgr.getHeaders();
@@ -541,10 +541,9 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     @Test
     public void testParse2() throws Exception {// spaces after :
         HttpRequestHdr req = new HttpRequestHdr();
-        ByteArrayInputStream bis = null;
-        bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:           value \r\n".getBytes("ISO-8859-1"));
-        req.parse(bis);
-        bis.close();
+        try (ByteArrayInputStream bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:           value \r\n".getBytes("ISO-8859-1"))) {
+            req.parse(bis);
+        }
         HeaderManager mgr = req.getHeaderManager();
         Header header;
         mgr.getHeaders();
@@ -679,12 +678,12 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     }
 
     private int getBodyLength(String postBody, String contentEncoding) throws IOException {
-        if(contentEncoding != null && contentEncoding.length() > 0) {
+        if(contentEncoding != null && !contentEncoding.isEmpty()) {
             return postBody.getBytes(contentEncoding).length;
         }
         else {
             // Most browsers use ISO-8859-1 as default encoding, even if spec says UTF-8
-            return postBody.getBytes().length; // TODO - charset?
+            return postBody.getBytes(Charset.defaultCharset()).length; // TODO - charset?
         }
     }
 }

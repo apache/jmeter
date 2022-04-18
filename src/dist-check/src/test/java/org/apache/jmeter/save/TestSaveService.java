@@ -25,12 +25,13 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -128,8 +129,8 @@ public class TestSaveService extends JMeterTestCase {
 
         final FileStats outputStats;
         try (ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
-                Reader insReader = new InputStreamReader(ins);
-                BufferedReader bufferedReader = new BufferedReader(insReader)) {
+             Reader insReader = new InputStreamReader(ins, Charset.defaultCharset());
+             BufferedReader bufferedReader = new BufferedReader(insReader)) {
             outputStats = computeFileStats(bufferedReader);
         }
         // We only check the length of the result. Comparing the
@@ -167,7 +168,8 @@ public class TestSaveService extends JMeterTestCase {
         if (testFile == null || !testFile.exists()) {
             return FileStats.NO_STATS;
         }
-        try (FileReader fileReader = new FileReader(testFile);
+        try (FileInputStream fis = new FileInputStream(testFile);
+             InputStreamReader fileReader = new InputStreamReader(fis, Charset.defaultCharset());
                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             return computeFileStats(bufferedReader);
         }

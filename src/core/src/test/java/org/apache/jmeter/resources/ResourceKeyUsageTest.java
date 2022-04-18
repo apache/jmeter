@@ -26,6 +26,7 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -51,6 +52,7 @@ public class ResourceKeyUsageTest {
 
     // Check that calls to getResString use a valid property key name
     @Test
+    @SuppressWarnings("CatchAndPrintStackTrace")
     public void checkResourceReferences() throws Exception {
         String resourceName = "/org/apache/jmeter/resources/messages.properties";
         PropertyResourceBundle messagePRB = getRAS(resourceName);
@@ -66,7 +68,7 @@ public class ResourceKeyUsageTest {
                 if (name.endsWith(".java")) {
                   BufferedReader fileReader = null;
                   try {
-                    fileReader = new BufferedReader(new FileReader(file));
+                    fileReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8));
                     String s;
                     while ((s = fileReader.readLine()) != null) {
                         if (s.matches("\\s*//.*")) { // leading comment
@@ -89,7 +91,7 @@ public class ResourceKeyUsageTest {
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                      e.printStackTrace();
                 } finally {
                     JOrphanUtils.closeQuietly(fileReader);
                 }
