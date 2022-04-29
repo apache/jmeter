@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Authenticator;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -377,7 +378,30 @@ public class JMeter implements JMeterPlugin {
         System.out.println("   Modify current env variable HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
         System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
+        invokeAndWait("LaF", JMeter::setupLaF);
 
+        // SplashScreen is created after LaF activation, otherwise it would cause splash flicker.
+        // bug 66044 split showing splash screen from the other parts to have content in the window
+        SplashScreen splash = new SplashScreen();
+        splash.showScreen();
+        splash.setProgress(10);
+        invokeAndWait("HiDPI settings", JMeterUtils::applyHiDPIOnFonts);
+        splash.setProgress(20);
+        invokeAndWait("main part", () -> startGuiPartTwo(testFile, splash));
+    }
+
+    private static void invokeAndWait(String part, Runnable doRun) {
+        try {
+            log.debug("Setting up {}", part);
+            SwingUtilities.invokeAndWait(doRun);
+        } catch (InterruptedException e) {
+            log.warn("Interrupted while setting up {}", part, e);
+        } catch (InvocationTargetException e) {
+            log.warn("Problem while setting up {}", part, e);
+        }
+    }
+
+    private static void setupLaF() {
         KerningOptimizer.INSTANCE.setMaxTextLengthWithKerning(
                 JMeterUtils.getPropDefault("text.kerning.max_document_size", 10000)
         );
@@ -390,13 +414,9 @@ public class JMeter implements JMeterPlugin {
         } catch (IllegalArgumentException ex) {
             log.warn("Could not set LAF to: {}", jMeterLaf, ex);
         }
-        // SplashWindow is created after LaF activation. Otherwise it would cause splash flicker
-        SplashScreen splash = new SplashScreen();
-        splash.showScreen();
-        splash.setProgress(10);
-        log.debug("Apply HiDPI on fonts");
-        JMeterUtils.applyHiDPIOnFonts();
-        splash.setProgress(20);
+    }
+
+    private void startGuiPartTwo(String testFile, SplashScreen splash) {
         log.debug("Configure PluginManager");
         PluginManager.install(this, true);
         splash.setProgress(30);
@@ -565,7 +585,7 @@ public class JMeter implements JMeterPlugin {
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
                     String initialTestFile = testFile;
-                    SwingUtilities.invokeAndWait(() -> startGui(initialTestFile));
+                    startGui(initialTestFile);
                     startOptionalServers();
                 } else { // NON-GUI must be true
                     extractAndSetReportOutputFolder(parser, deleteResultFile);
