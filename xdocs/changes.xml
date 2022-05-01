@@ -147,7 +147,6 @@ however, the profile can't be updated while the test is running.
 <h3>Report / Dashboard</h3>
 <ul>
   <li><bug>65353</bug>Make the estimator used for calculating percentiles on the dashboard configurable</li>
-  <li><bug>65885</bug>HTML Report: Error report displays wrong failure message when Response Assertion checks Ignore Status and response code is not 200</li>
 </ul>
 
 <h3>General</h3>
