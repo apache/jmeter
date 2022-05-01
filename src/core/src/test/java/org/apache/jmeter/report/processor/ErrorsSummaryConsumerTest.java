@@ -57,9 +57,6 @@ public class ErrorsSummaryConsumerTest {
         sample = new Sample(0, metadata, new String[] { "false", "403", "", "" });
         assertEquals("403", ErrorsSummaryConsumer.getErrorKey(sample));
 
-        sample = new Sample(0, metadata, new String[] { "false", "403", "", "FailureMessage" });
-        assertEquals("FailureMessage", ErrorsSummaryConsumer.getErrorKey(sample));
-
         sample = new Sample(0, metadata, new String[] { "false", "500", "Server Error", "" });
         assertEquals("500/Server Error", ErrorsSummaryConsumer.getErrorKey(sample));
     }

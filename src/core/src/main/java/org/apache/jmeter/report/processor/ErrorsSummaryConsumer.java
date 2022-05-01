@@ -97,7 +97,8 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
                  "/" + escapeJson(responseMessage) : "");
 
         if (MetricUtils.isSuccessCode(responseCode) ||
-                StringUtils.isNotBlank(sample.getFailureMessage())) {
+                (StringUtils.isEmpty(responseCode) && 
+                   StringUtils.isNotBlank(sample.getFailureMessage()))) {
             key = MetricUtils.ASSERTION_FAILED;
             if (ASSERTION_RESULTS_FAILURE_MESSAGE) {
                 String msg = sample.getFailureMessage();
