@@ -115,6 +115,7 @@ Summary
   <li><pr>5920</pr>Improve computation when many threads actively produce samplers by using <code>LongAdder</code> and similar concurrency classes to avoid synchronization in <code>Calculator</code></li>
   <li><pr>5920</pr>Reduce synchronization contention on <code>AbstractTestElement</code> that are shared between threads (the ones that implement <code>NoThreadClone</code>)</li>
   <li><pr>5934</pr>Added caching for date formatters for <code>__time</code> function</li>
+  <li><pr>710</pr><issue>5666</issue>Added Shortcut key event for Reset search: <code>ctrl + alt + F</code>, <code>cmd + alt + F</code></li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -212,6 +213,7 @@ Summary
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
   <li>andreaslind01 Lind (andreaslind01 at gmail.com)</li>
   <li>Victor Peralta (vperaltac at github)</li>
+  <li>Mohamed Ibrahim (rollno748 at github)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
