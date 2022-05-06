@@ -90,6 +90,8 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
 
     private JButton replaceAndFindButton;
 
+    private JButton resetSearchButton;
+
     private JButton cancelButton;
 
     private JTextField searchTF;
@@ -187,6 +189,10 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
         searchPanel.add(replaceTF);
         searchPanel.add(statusLabel, "span 2");
         searchPanel.add(searchCriterionPanel, "span 2");
+        resetSearchButton = createButton("menu_search_reset");
+        resetSearchButton.addActionListener(this);
+        searchPanel.add(resetSearchButton);
+
 
         JPanel buttonsPanel = new JPanel(new GridLayout(9, 1));
         searchButton = createButton("search_search_all"); //$NON-NLS-1$
@@ -256,7 +262,17 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
                 doReplace();
             }
             doNavigateToSearchResult(true);
+        } else if(source == resetSearchButton) {
+            doResetSearch(e);
         }
+    }
+
+
+    /**
+    * Provides Reset Search Action
+    */
+    private static void doResetSearch(ActionEvent event) {
+        ActionRouter.getInstance().doActionNow(new ActionEvent(event.getSource(), event.getID(), ActionNames.SEARCH_RESET));
     }
 
     /**
