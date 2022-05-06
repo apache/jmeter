@@ -100,13 +100,22 @@ will match any component that contains test in searchable elements of the compon
 
 </subsection>
 
-<subsection name="&sect-num;.4 JMeter with a HiDPI screen on Linux or Windows" anchor="hidpi">
+<subsection name="&sect-num;.4 JMeter and a HiDPI screen" anchor="hidpi">
 <description>
     <p>
-    The HiDPI mode isn't currently support by the Swing API in Java on Linux, MacOS or Windows. Therefore
-    JMeter can be very hard to read with a HiDPI screen (little icons and chars).
+    With <b>Java version 9 and up</b>, the HiDPI (High Dot Per Inch) screens are supported.
     </p>
-    <p>You can improve the JMeter's display on HiDPI screen by changing some properties:</p>
+    <p>
+    You can define the Java property <b>sun.java2d.uiScale</b> to change the scale of JMeter.
+    The value can be an integer or percentage value.
+    </p>
+    <p>For example, on Linux, with x2 factor (200%):</p>
+    <source>
+    $ export JVM_ARGS="-Dsun.java2d.uiScale=200%"
+    $ ./bin/jmeter</source>
+    <p>
+    With <b>Java version 8</b>, the HiDPI (High Dot Per Inch) screens aren't supported in the Swing API.
+    You can improve the JMeter's display on HiDPI screen by changing some properties:</p>
     <dl>
       <dt><code>jmeter.hidpi.mode</code></dt>
       <dd>set to <code>true</code> to activate a '<em>pseudo</em>'-hidpi mode allowing to increase size of some UI elements</dd>
