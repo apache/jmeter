@@ -14,9 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.jmeter
 
 import com.thoughtworks.xstream.converters.ConversionException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.swing.Swing
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import org.apache.jmeter.gui.GuiPackage
 import org.apache.jmeter.gui.MainFrame
 import org.apache.jmeter.gui.action.ActionNames
@@ -35,8 +42,6 @@ import org.apache.jorphan.gui.ui.KerningOptimizer
 import org.slf4j.LoggerFactory
 import java.awt.event.ActionEvent
 import java.io.File
-import java.lang.reflect.InvocationTargetException
-import javax.swing.SwingUtilities
 
 public object JMeterGuiLauncher {
     private val log = LoggerFactory.getLogger(JMeterGuiLauncher::class.java)
@@ -54,26 +59,18 @@ public object JMeterGuiLauncher {
         println("   Modify current env variable HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file") // NOSONAR
         println("Check : https://jmeter.apache.org/usermanual/best-practices.html") // NOSONAR
         println("================================================================================") // NOSONAR
-        invokeAndWait("LaF") { setupLaF() }
 
-        // SplashScreen is created after LaF activation, otherwise it would cause splash flicker.
-        // bug 66044 split showing splash screen from the other parts to have content in the window
-        val splash = SplashScreen()
-        splash.showScreen()
-        splash.setProgress(10)
-        invokeAndWait("HiDPI settings") { JMeterUtils.applyHiDPIOnFonts() }
-        splash.setProgress(20)
-        invokeAndWait("main part") { startGuiPartTwo(testFile, splash) }
-    }
-
-    private fun invokeAndWait(part: String, doRun: Runnable) {
-        try {
-            log.debug("Setting up {}", part)
-            SwingUtilities.invokeAndWait(doRun)
-        } catch (e: InterruptedException) {
-            log.warn("Interrupted while setting up {}", part, e)
-        } catch (e: InvocationTargetException) {
-            log.warn("Problem while setting up {}", part, e)
+        runBlocking {
+            // See https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md
+            launch(Dispatchers.Swing) {
+                setupLaF()
+                val splash = SplashScreen()
+                splash.showScreen()
+                setProgress(splash, 10)
+                JMeterUtils.applyHiDPIOnFonts()
+                setProgress(splash, 20)
+                startGuiPartTwo(testFile, splash)
+            }
         }
     }
 
@@ -90,25 +87,25 @@ public object JMeterGuiLauncher {
         }
     }
 
-    private fun startGuiPartTwo(testFile: String?, splash: SplashScreen) {
+    private suspend fun startGuiPartTwo(testFile: String?, splash: SplashScreen) {
         log.debug("Configure PluginManager")
-        splash.setProgress(30)
+        setProgress(splash, 30)
         log.debug("Setup tree")
         val treeModel = JMeterTreeModel()
         val treeLis = JMeterTreeListener(treeModel)
         val instance = ActionRouter.getInstance()
-        splash.setProgress(40)
+        setProgress(splash, 40)
         log.debug("populate command map")
         instance.populateCommandMap()
-        splash.setProgress(60)
+        setProgress(splash, 60)
         treeLis.setActionHandler(instance)
         log.debug("init instance")
-        splash.setProgress(70)
+        setProgress(splash, 70)
         GuiPackage.initInstance(treeLis, treeModel)
-        splash.setProgress(80)
+        setProgress(splash, 80)
         log.debug("constructing main frame")
         val main = MainFrame(treeModel, treeLis)
-        splash.setProgress(100)
+        setProgress(splash, 100)
         ComponentUtil.centerComponentInWindow(main, 80)
         main.setLocationRelativeTo(splash)
         main.isVisible = true
@@ -137,7 +134,13 @@ public object JMeterGuiLauncher {
             jTree.selectionPath = path
             FocusRequester.requestFocus(jTree)
         }
-        splash.setProgress(100)
+        setProgress(splash, 100)
         splash.close()
+    }
+
+    private suspend fun setProgress(splash: SplashScreen, progress: Int) {
+        splash.setProgress(progress)
+        // Allow UI updates
+        yield()
     }
 }

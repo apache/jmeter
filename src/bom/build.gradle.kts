@@ -45,6 +45,7 @@ javaPlatform {
 
 dependencies {
     api(platform("org.codehaus.groovy:groovy-bom:${"groovy".v}"))
+    api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:${"kotlinx-coroutines".v}"))
 
     // Parenthesis are needed here: https://github.com/gradle/gradle/issues/9248
     (constraints) {
