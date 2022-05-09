@@ -35,6 +35,7 @@
     <trusted-key id='353a436e043e3145' group='com.google.code.findbugs' />
     <trusted-key id='59a252fb1199d873' group='com.google.code.findbugs' />
     <trusted-key id='7a01b0f236e5430f' group='com.google.code.gson' />
+    <trusted-key id='b0f3710fa64900e7' group='com.google.code.gson' />
     <trusted-key id='1669c4bb543e0445' group='com.google.errorprone' />
     <trusted-key id='912d2c0eccda55c0' group='com.google.errorprone' />
     <trusted-key id='9a259c7ee636c5ed' group='com.google.errorprone' />

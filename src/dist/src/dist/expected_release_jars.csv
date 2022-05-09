@@ -87,10 +87,10 @@
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar
 32033,kotlin-logging-jvm-2.0.5.jar
-1508076,kotlin-stdlib-1.6.0.jar
-200616,kotlin-stdlib-common-1.6.0.jar
-22357,kotlin-stdlib-jdk7-1.6.0.jar
-16201,kotlin-stdlib-jdk8-1.6.0.jar
+1509405,kotlin-stdlib-1.6.21.jar
+200631,kotlin-stdlib-common-1.6.21.jar
+23898,kotlin-stdlib-jdk7-1.6.21.jar
+17772,kotlin-stdlib-jdk8-1.6.21.jar
 792176,kotlinx-html-jvm-0.7.3.jar
 181223,lets-plot-batik-2.2.1.jar
 4025480,lets-plot-common-2.2.1.jar
