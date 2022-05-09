@@ -85,67 +85,70 @@ public object JMeterGuiLauncher {
     private suspend fun startGuiInternal(testFile: String?) {
         setupLaF()
         val splash = SplashScreen()
+        suspend fun setProgress(progress: Int) {
+            splash.setProgress(progress)
+            // Allow UI updates
+            yield()
+        }
         splash.showScreen()
-        setProgress(splash, 10)
+        setProgress(10)
         JMeterUtils.applyHiDPIOnFonts()
-        setProgress(splash, 20)
+        setProgress(20)
         log.debug("Configure PluginManager")
-        setProgress(splash, 30)
+        setProgress(30)
         log.debug("Setup tree")
         val treeModel = JMeterTreeModel()
         val treeLis = JMeterTreeListener(treeModel)
         val instance = ActionRouter.getInstance()
-        setProgress(splash, 40)
-        log.debug("populate command map")
-        instance.populateCommandMap()
-        setProgress(splash, 60)
+        setProgress(40)
+        withContext(Dispatchers.Default) {
+            log.debug("populate command map")
+            instance.populateCommandMap()
+        }
+        setProgress(60)
         treeLis.setActionHandler(instance)
         log.debug("init instance")
-        setProgress(splash, 70)
+        setProgress(70)
         GuiPackage.initInstance(treeLis, treeModel)
-        setProgress(splash, 80)
+        setProgress(80)
         log.debug("constructing main frame")
         val main = MainFrame(treeModel, treeLis)
-        setProgress(splash, 100)
+        setProgress(90)
         ComponentUtil.centerComponentInWindow(main, 80)
         main.setLocationRelativeTo(splash)
         main.isVisible = true
         main.toFront()
         instance.actionPerformed(ActionEvent(main, 1, ActionNames.ADD_ALL))
         if (testFile != null) {
-            try {
-                val f: File
-                val tree: HashTree?
-                withContext(Dispatchers.Default) {
-                    f = File(testFile)
-                    log.info("Loading file: {}", f)
-                    FileServer.getFileServer().setBaseForScript(f)
-                    tree = SaveService.loadTree(f)
-                }
-                GuiPackage.getInstance().testPlanFile = f.absolutePath
-                Load.insertLoadedTree(1, tree)
-            } catch (e: ConversionException) {
-                log.error("Failure loading test file", e)
-                splash.close()
-                JMeterUtils.reportErrorToUser(SaveService.CEtoString(e))
-            } catch (e: Exception) {
-                log.error("Failure loading test file", e)
-                splash.close()
-                JMeterUtils.reportErrorToUser(e.toString())
-            }
+            loadFile(testFile)
         } else {
             val jTree = GuiPackage.getInstance().mainFrame.tree
             val path = jTree.getPathForRow(0)
             jTree.selectionPath = path
             FocusRequester.requestFocus(jTree)
         }
-        setProgress(splash, 100)
+        setProgress(100)
         splash.close()
     }
 
-    private suspend fun setProgress(splash: SplashScreen, progress: Int) {
-        splash.setProgress(progress)
-        // Allow UI updates
-        yield()
+    private suspend fun loadFile(testFile: String) {
+        try {
+            val f: File
+            val tree: HashTree?
+            withContext(Dispatchers.Default) {
+                f = File(testFile)
+                log.info("Loading file: {}", f)
+                FileServer.getFileServer().setBaseForScript(f)
+                tree = SaveService.loadTree(f)
+            }
+            GuiPackage.getInstance().testPlanFile = f.absolutePath
+            Load.insertLoadedTree(1, tree)
+        } catch (e: ConversionException) {
+            log.error("Failure loading test file", e)
+            JMeterUtils.reportErrorToUser(SaveService.CEtoString(e))
+        } catch (e: Exception) {
+            log.error("Failure loading test file", e)
+            JMeterUtils.reportErrorToUser(e.toString())
+        }
     }
 }
