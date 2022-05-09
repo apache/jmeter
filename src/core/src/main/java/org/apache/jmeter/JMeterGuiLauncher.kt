@@ -64,13 +64,7 @@ public object JMeterGuiLauncher {
         runBlocking {
             // See https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md
             launch(Dispatchers.Swing) {
-                setupLaF()
-                val splash = SplashScreen()
-                splash.showScreen()
-                setProgress(splash, 10)
-                JMeterUtils.applyHiDPIOnFonts()
-                setProgress(splash, 20)
-                startGuiPartTwo(testFile, splash)
+                startGuiInternal(testFile)
             }
         }
     }
@@ -88,7 +82,13 @@ public object JMeterGuiLauncher {
         }
     }
 
-    private suspend fun startGuiPartTwo(testFile: String?, splash: SplashScreen) {
+    private suspend fun startGuiInternal(testFile: String?) {
+        setupLaF()
+        val splash = SplashScreen()
+        splash.showScreen()
+        setProgress(splash, 10)
+        JMeterUtils.applyHiDPIOnFonts()
+        setProgress(splash, 20)
         log.debug("Configure PluginManager")
         setProgress(splash, 30)
         log.debug("Setup tree")
