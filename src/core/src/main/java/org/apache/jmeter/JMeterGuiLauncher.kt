@@ -36,6 +36,7 @@ import org.apache.jmeter.gui.util.FocusRequester
 import org.apache.jmeter.save.SaveService
 import org.apache.jmeter.services.FileServer
 import org.apache.jmeter.util.JMeterUtils
+import org.apache.jorphan.collections.HashTree
 import org.apache.jorphan.gui.ComponentUtil
 import org.apache.jorphan.gui.JMeterUIDefaults
 import org.apache.jorphan.gui.ui.KerningOptimizer
@@ -113,10 +114,14 @@ public object JMeterGuiLauncher {
         instance.actionPerformed(ActionEvent(main, 1, ActionNames.ADD_ALL))
         if (testFile != null) {
             try {
-                val f = File(testFile)
-                log.info("Loading file: {}", f)
-                FileServer.getFileServer().setBaseForScript(f)
-                val tree = SaveService.loadTree(f)
+                val f: File
+                val tree: HashTree?
+                withContext(Dispatchers.Default) {
+                    f = File(testFile)
+                    log.info("Loading file: {}", f)
+                    FileServer.getFileServer().setBaseForScript(f)
+                    tree = SaveService.loadTree(f)
+                }
                 GuiPackage.getInstance().testPlanFile = f.absolutePath
                 Load.insertLoadedTree(1, tree)
             } catch (e: ConversionException) {
