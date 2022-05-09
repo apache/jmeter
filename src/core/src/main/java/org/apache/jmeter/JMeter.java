@@ -17,14 +17,12 @@
 
 package org.apache.jmeter;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Authenticator;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -56,9 +54,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.tree.TreePath;
 
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
@@ -75,17 +70,9 @@ import org.apache.jmeter.engine.RemoteJMeterEngineImpl;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.MainFrame;
-import org.apache.jmeter.gui.action.ActionNames;
-import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.action.Load;
 import org.apache.jmeter.gui.action.LoadRecentProject;
-import org.apache.jmeter.gui.action.LookAndFeelCommand;
-import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.report.config.ConfigurationException;
@@ -107,9 +94,6 @@ import org.apache.jmeter.util.SecurityProviderLoader;
 import org.apache.jmeter.util.ShutdownClient;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.SearchByClass;
-import org.apache.jorphan.gui.ComponentUtil;
-import org.apache.jorphan.gui.JMeterUIDefaults;
-import org.apache.jorphan.gui.ui.KerningOptimizer;
 import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
@@ -119,8 +103,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
  * Main JMeter class; processes options and starts the GUI, non-GUI or server as appropriate.
@@ -367,111 +349,6 @@ public class JMeter implements JMeterPlugin {
 
 
     /**
-     * Starts up JMeter in GUI mode
-     */
-    private void startGui(String testFile) {
-        System.out.println("================================================================================");//NOSONAR
-        System.out.println("Don't use GUI mode for load testing !, only for Test creation and Test debugging.");//NOSONAR
-        System.out.println("For load testing, use CLI Mode (was NON GUI):");//NOSONAR
-        System.out.println("   jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]");//NOSONAR
-        System.out.println("& increase Java Heap to meet your test requirements:");//NOSONAR
-        System.out.println("   Modify current env variable HEAP=\"-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m\" in the jmeter batch file");//NOSONAR
-        System.out.println("Check : https://jmeter.apache.org/usermanual/best-practices.html");//NOSONAR
-        System.out.println("================================================================================");//NOSONAR
-        invokeAndWait("LaF", JMeter::setupLaF);
-
-        // SplashScreen is created after LaF activation, otherwise it would cause splash flicker.
-        // bug 66044 split showing splash screen from the other parts to have content in the window
-        SplashScreen splash = new SplashScreen();
-        splash.showScreen();
-        splash.setProgress(10);
-        invokeAndWait("HiDPI settings", JMeterUtils::applyHiDPIOnFonts);
-        splash.setProgress(20);
-        invokeAndWait("main part", () -> startGuiPartTwo(testFile, splash));
-    }
-
-    private static void invokeAndWait(String part, Runnable doRun) {
-        try {
-            log.debug("Setting up {}", part);
-            SwingUtilities.invokeAndWait(doRun);
-        } catch (InterruptedException e) {
-            log.warn("Interrupted while setting up {}", part, e);
-        } catch (InvocationTargetException e) {
-            log.warn("Problem while setting up {}", part, e);
-        }
-    }
-
-    private static void setupLaF() {
-        KerningOptimizer.INSTANCE.setMaxTextLengthWithKerning(
-                JMeterUtils.getPropDefault("text.kerning.max_document_size", 10000)
-        );
-        JMeterUIDefaults.INSTANCE.install();
-
-        String jMeterLaf = LookAndFeelCommand.getPreferredLafCommand();
-        try {
-            log.info("Setting LAF to: {}", jMeterLaf);
-            LookAndFeelCommand.activateLookAndFeel(jMeterLaf);
-        } catch (IllegalArgumentException ex) {
-            log.warn("Could not set LAF to: {}", jMeterLaf, ex);
-        }
-    }
-
-    private void startGuiPartTwo(String testFile, SplashScreen splash) {
-        log.debug("Configure PluginManager");
-        PluginManager.install(this, true);
-        splash.setProgress(30);
-        log.debug("Setup tree");
-        JMeterTreeModel treeModel = new JMeterTreeModel();
-        JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
-        final ActionRouter instance = ActionRouter.getInstance();
-        splash.setProgress(40);
-        log.debug("populate command map");
-        instance.populateCommandMap();
-        splash.setProgress(60);
-        treeLis.setActionHandler(instance);
-        log.debug("init instance");
-        splash.setProgress(70);
-        GuiPackage.initInstance(treeLis, treeModel);
-        splash.setProgress(80);
-        log.debug("constructing main frame");
-        MainFrame main = new MainFrame(treeModel, treeLis);
-        splash.setProgress(100);
-        ComponentUtil.centerComponentInWindow(main, 80);
-        main.setLocationRelativeTo(splash);
-        main.setVisible(true);
-        main.toFront();
-        instance.actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
-        if (testFile != null) {
-            try {
-                File f = new File(testFile);
-                log.info("Loading file: {}", f);
-                FileServer.getFileServer().setBaseForScript(f);
-
-                HashTree tree = SaveService.loadTree(f);
-
-                GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
-
-                Load.insertLoadedTree(1, tree);
-            } catch (ConversionException e) {
-                log.error("Failure loading test file", e);
-                splash.close();
-                JMeterUtils.reportErrorToUser(SaveService.CEtoString(e));
-            } catch (Exception e) {
-                log.error("Failure loading test file", e);
-                splash.close();
-                JMeterUtils.reportErrorToUser(e.toString());
-            }
-        } else {
-            JTree jTree = GuiPackage.getInstance().getMainFrame().getTree();
-            TreePath path = jTree.getPathForRow(0);
-            jTree.setSelectionPath(path);
-            FocusRequester.requestFocus(jTree);
-        }
-        splash.setProgress(100);
-        splash.close();
-    }
-
-    /**
      * Takes the command line arguments and uses them to determine how to
      * startup JMeter.
      *
@@ -584,8 +461,9 @@ public class JMeter implements JMeterPlugin {
                     ReportGenerator generator = new ReportGenerator(reportFile, null);
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
+                    PluginManager.install(this, true);
                     String initialTestFile = testFile;
-                    startGui(initialTestFile);
+                    JMeterGuiLauncher.startGui(initialTestFile);
                     startOptionalServers();
                 } else { // NON-GUI must be true
                     extractAndSetReportOutputFolder(parser, deleteResultFile);
