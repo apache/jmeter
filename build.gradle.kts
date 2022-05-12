@@ -65,7 +65,7 @@ fun Project.boolProp(name: String) =
 
 // Release candidate index
 val String.v: String get() = rootProject.extra["$this.version"] as String
-version = "jmeter".v + releaseParams.snapshotSuffix
+version = "jmeter".v + ".wps.1"
 
 val displayVersion by extra {
     version.toString() +
@@ -151,11 +151,11 @@ val jacocoEnabled by extra {
 }
 
 // Do not enable spotbugs by default. Execute it only when -Pspotbugs is present
-val enableSpotBugs = props.bool("spotbugs", default = false)
+val enableSpotBugs = false
 val enableErrorprone by props()
-val ignoreSpotBugsFailures by props()
-val skipCheckstyle by props()
-val skipAutostyle by props()
+val ignoreSpotBugsFailures = true
+val skipCheckstyle = true
+val skipAutostyle = true
 val werror by props(true) // treat javac warnings as errors
 // Allow to skip building source/binary distributions
 val skipDist by extra {

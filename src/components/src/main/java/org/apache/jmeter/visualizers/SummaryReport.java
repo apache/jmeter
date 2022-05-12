@@ -31,6 +31,7 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.function.Function;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -62,6 +63,7 @@ import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
@@ -122,6 +124,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     private final JCheckBox useGroupName =
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
+
+    private final boolean addSubResults = Boolean.parseBoolean(JMeterUtils.getPropDefault("summary_report.add_sub_results", "false"));
+    private final boolean subResultLeafNodesOnly = Boolean.parseBoolean(JMeterUtils.getPropDefault("summary_report.sub_result_leaf_nodes_only", "false"));
 
     private transient ObjectTableModel model;
 
@@ -221,22 +226,33 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     @Override
     public void add(final SampleResult res) {
-        Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()), label -> {
+        if (!addSubResults || !subResultLeafNodesOnly || res.getSubResults().length == 0) {
+            Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()), getStringCalculatorFunction());
+            /*
+             * Synch is needed because multiple threads can update the counts.
+             */
+            synchronized (row) {
+                row.addSample(res);
+            }
+            Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
+            synchronized (lock) {
+                tot.addSample(res);
+            }
+        }
+        if (addSubResults && res.getSubResults() != null) {
+            for (SampleResult subResult : res.getSubResults()) {
+                add(subResult);
+            }
+        }
+        dataChanged = true;
+    }
+
+    protected Function<String, Calculator> getStringCalculatorFunction() {
+        return label -> {
             Calculator newRow = new Calculator(label);
             newRows.add(newRow);
             return newRow;
-        });
-        /*
-         * Synch is needed because multiple threads can update the counts.
-         */
-        synchronized (row) {
-            row.addSample(res);
-        }
-        Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
-        synchronized (lock) {
-            tot.addSample(res);
-        }
-        dataChanged = true;
+        };
     }
 
     /**
