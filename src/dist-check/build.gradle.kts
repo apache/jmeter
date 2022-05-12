@@ -40,7 +40,6 @@ dependencies {
     testImplementation("com.fasterxml.jackson.core:jackson-databind") {
         because("It is used in ReportGeneratorSpec and HtmlReportGeneratorSpec")
     }
-    testImplementation("org.mockito:mockito-core:4.5.1")
 
     extraTestDependencies(platform(project(":src:bom")))
     extraTestDependencies("org.hsqldb:hsqldb")
