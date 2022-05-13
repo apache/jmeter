@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Function;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -60,19 +61,29 @@ class SummaryReportTest extends JMeterTestCase {
 
     @Test
     void add() {
-        JMeterUtils.setProperty("summary_report.add_sub_results", "false");
         SummaryReportForTest summaryReport = new SummaryReportForTest();
+        ResultCollector resultCollector = new ResultCollector();
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_PARENT, true);
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_ALL, false);
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_CHILDREN, false);
+        summaryReport.configure(resultCollector);
         sampleResult.addSubResult(new SampleResult(System.currentTimeMillis(), 1000));
         sampleResult.addSubResult(new SampleResult(System.currentTimeMillis(), 1000));
         sampleResult.addSubResult(new SampleResult(System.currentTimeMillis(), 1000));
         summaryReport.add(sampleResult);
         assertEquals(1, summaryReport.newRows.size());
-        JMeterUtils.setProperty("summary_report.add_sub_results", "true");
         summaryReport = new SummaryReportForTest();
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_PARENT, false);
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_ALL, true);
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_CHILDREN, false);
+        summaryReport.configure(resultCollector);
         summaryReport.add(sampleResult);
         assertEquals(4, summaryReport.newRows.size());
-        JMeterUtils.setProperty("summary_report.sub_result_leaf_nodes_only", "true");
         summaryReport = new SummaryReportForTest();
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_PARENT, false);
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_ALL, false);
+        resultCollector.setProperty(SummaryReport.SAMPLE_SCOPE_CHILDREN, true);
+        summaryReport.configure(resultCollector);
         summaryReport.add(sampleResult);
         assertEquals(3, summaryReport.newRows.size());
     }
