@@ -240,7 +240,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     @Override
     public void add(final SampleResult res) {
-        if (sampleScopeAll.isSelected() || sampleScopeChildren.isSelected() ||
+        if (sampleScopeAll.isSelected() || sampleScopeParent.isSelected() ||
                 res.getSubResults() == null || res.getSubResults().length == 0) {
             Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()),
                     getCalculatorFunctionForLabel());
