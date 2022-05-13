@@ -226,8 +226,10 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     @Override
     public void add(final SampleResult res) {
-        if (!addSubResults || !subResultLeafNodesOnly || res.getSubResults().length == 0) {
-            Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()), getStringCalculatorFunction());
+        if (!addSubResults || !subResultLeafNodesOnly ||
+                res.getSubResults() == null || res.getSubResults().length == 0) {
+            Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()),
+                    getCalculatorFunctionForLabel());
             /*
              * Synch is needed because multiple threads can update the counts.
              */
@@ -247,7 +249,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         dataChanged = true;
     }
 
-    protected Function<String, Calculator> getStringCalculatorFunction() {
+    protected Function<String, Calculator> getCalculatorFunctionForLabel() {
         return label -> {
             Calculator newRow = new Calculator(label);
             newRows.add(newRow);

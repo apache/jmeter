@@ -23,8 +23,6 @@ import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Function;
 
-import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jmeter.assertions.DurationAssertion;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
@@ -51,7 +49,7 @@ class SummaryReportTest extends JMeterTestCase {
         final Deque<Calculator> newRows = new ConcurrentLinkedDeque<>();
 
         @Override
-        protected Function<String, Calculator> getStringCalculatorFunction() {
+        protected Function<String, Calculator> getCalculatorFunctionForLabel() {
             return label -> {
                 Calculator newRow = new Calculator(label);
                 newRows.add(newRow);
