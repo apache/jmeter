@@ -65,7 +65,6 @@ import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
