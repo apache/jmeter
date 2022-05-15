@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.visualizers;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -45,7 +45,7 @@ class SummaryReportTest extends JMeterTestCase {
         sampleResult = new SampleResult();
     }
 
-    class SummaryReportForTest extends SummaryReport {
+    static class SummaryReportForTest extends SummaryReport {
         final Deque<Calculator> newRows = new ConcurrentLinkedDeque<>();
 
         @Override
