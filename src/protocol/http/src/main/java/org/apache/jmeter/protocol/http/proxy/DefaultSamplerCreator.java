@@ -417,7 +417,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             sampler.setPath(request.getPath(), null);
         }
         if (log.isDebugEnabled()) {
-            log.debug("Proxy: setting path: {}", sampler.getPath());
+            log.debug("Proxy: finished setting path: {}", sampler.getPath());
         }
     }
 
