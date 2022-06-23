@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.control.IteratingController;
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
@@ -168,7 +169,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * Start next iteration after an error
      */
     public void startNextLoop() {
-       ((LoopController) getSamplerController()).startNextLoop();
+       ((IteratingController) getSamplerController()).startNextLoop();
     }
 
     /**
@@ -309,7 +310,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     public abstract void stop();
 
     public void breakThreadLoop() {
-        ((LoopController) getSamplerController()).breakLoop();
+        ((IteratingController) getSamplerController()).breakLoop();
     }
 
     /**
