@@ -95,7 +95,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
      * Executor service to execute management tasks like "start test", "stop test".
      * The use of {@link ExecutorService} allows propagating the exception from the threads.
      */
-    private final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
     private volatile Future<?> runningTest;
 

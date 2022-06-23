@@ -193,8 +193,10 @@ public class OpenModelThreadGroup :
                     starter.run()
                 }
             )
-        } catch (expected: Throwable) {
-            log.error("Unable to start thread group", expected)
+        } catch (t: Throwable) {
+            throw t.apply {
+                addSuppressed(IllegalArgumentException("Failed to start OpenModelThreadGroup $name-$threadGroupIndex"))
+            }
         }
     }
 

@@ -69,6 +69,7 @@ Summary
 
 <h3>Thread Groups</h3>
 <ul>
+<li><issue>5682</issue><pr>717</pr> Open Model Thread Group: avoid skipping rows from CSV Data Set Config</li>
 </ul>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
