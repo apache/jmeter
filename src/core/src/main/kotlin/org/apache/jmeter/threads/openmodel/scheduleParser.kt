@@ -103,8 +103,9 @@ public class DefaultThreadSchedule(override val steps: List<ThreadScheduleStep>)
 @API(status = API.Status.EXPERIMENTAL, since = "5.5")
 public class ParserException(public val input: String, public val position: Int, message: String) :
     Exception(
-        "$message at position $position: " +
-            input.substring(position until (position + 20).coerceAtMost(input.length))
+        "$message at position $position: '" +
+            input.substring(position until (position + 20).coerceAtMost(input.length)) +
+            "' in '$input'"
     )
 
 /**
