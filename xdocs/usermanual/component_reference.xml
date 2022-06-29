@@ -6521,38 +6521,81 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
        The users are generated according to the schedule.
     </p>
     <p>The load profile consists of a sequence of constant, increasing or decreasing load.
-       The following commands are available:
-        <ul>
-            <li><code>rate(&lt;number&gt;/sec)</code> &mdash; configures target load rate.
+       The basic configuration is <code>rate(1/sec) random_arrivals(2 min) rate(3/sec)</code> which means the load will increase linearly
+        from one request per second to three requests per second during a period of two-minutes.
+       If you omit rate at the end, then it will be set to the same value as that from the start. For example,
+        <code>rate(1/sec) random_arrivals(2 min)</code> is exactly the same as <code>rate(1/sec) random_arrivals(2 min) rate(1/sec)</code>.
+       That is why <code>rate(1/sec) random_arrivals(2 min) random_arrivals(3 min) rate(4/sec)</code> is exactly the same as
+        <code>rate(1/sec) random_arrivals(2 min) rate(1/sec) random_arrivals(3 min) rate(4/sec)</code>, so the load is one request per second during the first two minutes,
+        after which it increases linearly from one request per second to four requests per second during three minutes.
+    </p>
+    <p>Here are examples for using the schedule:
+        <dl>
+            <dt><code>rate(10/sec) random_arrivals(1 min) rate(10/sec)</code></dt>
+            <dd>constant load rate of ten requests per second during one minute</dd>
+
+            <dt><code>rate(0) random_arrivals(1 min) rate(10/sec)</code></dt>
+            <dd>linearly increase the load from zero requests per second to ten requests per second during one minute</dd>
+
+            <dt><code>rate(0) random_arrivals(1 min) rate(10/sec) random_arrivals(1 min) rate(10/sec) random_arrivals(1 min) rate(0)</code></dt>
+            <dd>linearly increase the load from zero requests per second to ten requests per second during one minute, then hold the load during one minute,
+                then linearly decrease the load from ten requests per second to zero during one minute</dd>
+
+            <dt><code>rate(10) random_arrivals(1 min) rate(10/sec) random_arrivals(1 min) rate(10/sec) random_arrivals(1 min) rate(0)</code></dt>
+            <dd>linearly increase the load from zero requests per second to ten requests per second during one minute, then hold the load during one minute,
+                then linearly decrease the load from ten requests per second to zero requests per second during one minute</dd>
+
+            <dt><code>rate(10) random_arrivals(1 min) pause(2 sec) random_arrivals(1 min)</code></dt>
+            <dd>run with constant load of ten requests per second during one minute, then make two second pause, then resume the load of ten requests per second for one minute</dd>
+        </dl>
+    </p>
+    <p>The following commands are available:
+        <dl>
+            <dt><code>rate(&lt;number&gt;/sec)</code></dt>
+            <dd>configures target load rate.
                 The following time units are supported: <code>ms</code>, <code>sec</code>, <code>min</code>, <code>hour</code>, <code>day</code>.
-                You can omit time unit in case the rate is 0: <code>rate(0)</code></li>
-            <li><code>random_arrivals(&lt;number&gt; sec)</code> &mdash; configures random arrivals schedule with the given duration.
+                You can omit time unit in case the rate is 0: <code>rate(0)</code>
+            </dd>
+
+            <dt><code>random_arrivals(&lt;number&gt; sec)</code></dt>
+            <dd>configures random arrivals schedule with the given duration.
                 The starting load rate is configured before <code>random_arrivals</code>, and the finish load rate is configured after <code>random_arrivals</code>.
-                For example, 10 minute test from 5/sec at the beginning till 15/sec at the end could be configured as <code>rate(5/sec) random_arrivals(10 min) rate(15/sec)</code>.
-                <br/>The implicit rate at the beginning of the test is 0. If the finish rate is not provided (or if several <code>random_arrivals</code> steps go one after another),
+                For example, 10 minute test from five requests per second at the beginning to fifteen request per second at the end could be configured as <code>rate(5/sec) random_arrivals(10 min) rate(15/sec)</code>.
+                <br/>The implicit rate at the beginning of the test is <code>0</code>. If the finish rate is not provided (or if several <code>random_arrivals</code> steps go one after another),
                 then the load is constant. For instance, <code>rate(3/sec) random_arrivals(1 min) random_arrivals(2 min) rate(6/sec)</code> configures
-                constant rate of 3/sec for the first 1 minute, and then the load increases from 3/sec till 6/sec during the next 2 minutes.
+                constant rate of three requests per second for the first minute, and then the load increases from three requests per second to six requests per second during the next two minutes.
                 The time units are the same as in <code>rate</code>.
-            </li>
-            <li><code>even_arrivals(&lt;number&gt; sec)</code> &mdash; configures even arrivals (TODO: not implemented yet). For instance, if the desired load
-                is 1/sec, then <code>random_arrivals</code> would lauch samples with exactly 1 second intervals.</li>
-            <li><code>pause(&lt;number&gt; sec)</code> &mdash; configures a pause for the given duration.
+            </dd>
+
+            <dt><code>even_arrivals(&lt;number&gt; sec)</code></dt>
+            <dd>configures even arrivals (TODO: not implemented yet). For instance, if the desired load
+                is one request per second, then <code>random_arrivals</code> would lauch samples with exactly one second intervals.
+            </dd>
+
+            <dt><code>pause(&lt;number&gt; sec)</code></dt>
+            <dd>configures a pause for the given duration.
                 The rate is restored after the pause, so <code>rate(2/sec) random_arrivals(5 sec) pause(5 sec) random_arrivals(5 sec)</code>
-                generates random arrivals with 2/sec rate, then a pause for 5 seconds (no new arrivals), then 5 more seconds with 2/sec rate.<br/>
+                generates random arrivals with two requests per second rate, then a pause for five seconds (no new arrivals), then five more seconds with two requests per second rate.<br/>
                 Note: <code>pause</code> duration is always honoured, even if all the scenarios are complete, and no new ones will be scheduled.
                 For instance, if you use <code>rate(1/sec) random_arrivals(1 min) pause(1 hour)</code>, the thread group would
-                always last for 61 minutes no matter how much time do individual scenarios take.
-            </li>
-            <li><code>/* Comments */</code> can be used to clarify the schedule or temporary disable some steps. Comments
-                cannot be nested.</li>
-            <li><code>// line comments</code> can be used to clarify the schedule or temporary disable some steps.
-                Line comment lasts till the end of the line.</li>
-        </ul>
+                always last for sixty-one minutes no matter how much time do individual scenarios take.
+            </dd>
+
+            <dt><code>/* Comments */</code></dt>
+            <dd>can be used to clarify the schedule or temporary disable some steps. Comments
+                cannot be nested.
+            </dd>
+
+            <dt><code>// line comments</code></dt>
+            <dd>can be used to clarify the schedule or temporary disable some steps.
+                Line comment lasts till the end of the line.
+            </dd>
+        </dl>
     </p>
     <p>The thread groups terminates threads as soon as the schedule ends. In other words, the threads are interrupted
         after all <code>arrivals</code> and <code>pause</code> intervals.
         If you want to let the threads complete safely, consider adding <code>pause(5 min)</code> at the end of the schedule.
-        That will add 5 minutes for the threads to continue.
+        That will add five minutes for the threads to continue.
     </p>
     <p>There are no special functions for generating the load profile in a loop, however, the default JMeter templating functions
         can be helpful for generating the schedule.
