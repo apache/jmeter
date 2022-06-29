@@ -18,6 +18,7 @@
 package org.apache.jmeter.control;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
@@ -88,7 +89,7 @@ public class TestTransactionController extends JMeterTestCase {
 
     public static class TestSampleListener extends ResultCollector implements SampleListener {
         private static final long serialVersionUID = -1373192220822942714L;
-        public List<SampleEvent> events = new ArrayList<>();
+        public List<SampleEvent> events = Collections.synchronizedList(new ArrayList<>());
 
         @Override
         public void sampleOccurred(SampleEvent e) {

@@ -26,12 +26,13 @@ import org.apache.jmeter.testelement.TestPlan
 import org.apache.jmeter.testelement.property.TestElementProperty
 import org.apache.jmeter.threads.AbstractThreadGroup
 import org.apache.jorphan.collections.ListedHashTree
+import org.apache.jorphan.test.JMeterSerialTest
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
 import java.time.Duration
 
-class OpenModelThreadGroupConfigElementTest : JMeterTestCase() {
+class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest {
     /**
      * Create Test Plan with Open Model Thread Group and Counter Config.
      */
