@@ -19,11 +19,13 @@ package org.apache.jorphan.test;
 
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Used to tag tests which need to be run on their own (in serial) because
  * either, they cause other tests to fail, or they fail when run in parallel.
  */
+@Isolated
 @Execution(ExecutionMode.SAME_THREAD)
 public interface JMeterSerialTest {
 }
