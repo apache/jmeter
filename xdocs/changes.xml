@@ -145,6 +145,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+  <li><bug>66157<bug><pr>719</pr>Correct theme for darklaf on rsyntaxtextarea</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
