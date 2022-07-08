@@ -1,4 +1,5 @@
 language: java
+dist: focal
 
 # skip default "install" command
 install: true
