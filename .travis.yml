@@ -29,11 +29,16 @@ matrix:
     - name: Tests with OpenJDK 11 on s390x
   include:
     - name: Tests with OpenJDK 8 + code coverage
-      jdk: openjdk8
+      before_script:
+        - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
       script:
         - xvfb-run ./gradlew build jacocoReport $SKIP_TAR
       after_success:
         - bash <(curl -s https://codecov.io/bash)
+      addons:
+        apt:
+          packages:
+            - openjdk-8-jdk
     - name: Tests with OpenJDK 11
       jdk: openjdk11
       addons:
@@ -91,7 +96,12 @@ matrix:
         # Spotless, Checkstyle, and JaCoCo are verified here to ensure they all work with the latest supported Java
         - xvfb-run ./gradlew build jacocoReport -Duser.language=fr -Duser.country=FR $SKIP_TAR
     - name: jmeter-maven-plugin tests
-      jdk: openjdk8
+      addons:
+        apt:
+          packages:
+            - openjdk-8-jdk
+      before_script:
+        - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
       script:
         - ./gradlew -PskipJavadoc publishToMavenLocal -Pjmeter.version=42.0 -PchecksumIgnore
         - cd ..
