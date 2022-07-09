@@ -40,4 +40,19 @@ class SampleMetadataParserSpec extends Specification {
             ','       | "abcdef"          | ["abcdef"]
     }
 
+    def "Parse headers (#headers) with wrong separator (#separator) and get (#expectedColumns)"() {
+        given:
+        def sut = new SampleMetaDataParser(separator as char)
+        when:
+        def columns = sut.parse(headers).columns
+        then:
+        columns == expectedColumns
+        where:
+        separator | headers           | expectedColumns
+        ','       | "a;b;c;d;e"       | ["a", "b", "c", "d", "e"]
+        ','       | "a|b|c|d|e"       | ["a", "b", "c", "d", "e"]
+        ','       | "aa|bb|cc|dd|eef" | ["aa", "bb", "cc", "dd", "eef"]
+        ','       | "a&b&c&d&e"       | ["a", "b", "c", "d", "e"]
+        ','       | "a\tb c\td\te"    | ["a", "b c", "d", "e"]
+    }
 }

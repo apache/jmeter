@@ -39,9 +39,10 @@ public class SampleMetaDataParser {
             // word followed by 0 or more repeats of (non-word char + word)
             // where the non-word char (\2) is the same
             // e.g. abc|def|ghi but not abd|def~ghi
-            .compile("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*" // $NON-NLS-1$
+            .compile("\\w+((\\W)[\\w ]+)?(\\2[\\w ]+)*(\\2\"[\\w ]+\")*" // $NON-NLS-1$
                     // last entries may be quoted strings
             );
+    private static final Pattern ALL_WORD_CHARS = Pattern.compile("^\\w+$");
 
     public SampleMetaDataParser(char separator) {
         this.separator = separator;
@@ -49,7 +50,7 @@ public class SampleMetaDataParser {
 
     public SampleMetadata parse(String headRow) {
         char useSep = separator;
-        if (headRow.indexOf(useSep) < 0) {
+        if (headRow.indexOf(useSep) < 0 && !ALL_WORD_CHARS.matcher(headRow).matches()) {
             Matcher matcher = DELIMITER_PATTERN.matcher(headRow);
             if (matcher.matches()) {
                 String guessedSep = matcher.group(2);
