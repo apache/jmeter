@@ -17,11 +17,11 @@
 
 package org.apache.jmeter.report.core;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simple parser to get a {@link SampleMetadata} instance<br>
