@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -112,6 +113,13 @@ public class ParallelResourcesAndIpSource {
                 if ("localhost".equals(targetHost)) {
                     // Neither implementation supports resolving localhost
                     // with the given source IP
+                    continue;
+                }
+                try {
+                    if (!InetAddress.getByName(targetHost).isReachable(100)) {
+                        continue;
+                    }
+                } catch (IOException e) {
                     continue;
                 }
 
