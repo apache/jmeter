@@ -137,6 +137,8 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+  <li><bug>66140</bug>Guess the delimiter of the CSV source, when configured one seems wrong.
+    This is in line with the behaviour of CSVSaveService.</li>
 </ul>
 
 <h3>Documentation</h3>

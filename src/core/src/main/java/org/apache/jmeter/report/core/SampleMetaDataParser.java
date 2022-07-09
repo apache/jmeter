@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.report.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -26,14 +30,42 @@ import java.util.regex.Pattern;
  */
 public class SampleMetaDataParser {
 
-    private char separator;
+    private final char separator;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private static final Pattern DELIMITER_PATTERN = Pattern
+            // This assumes the header names are all single words with no spaces
+            // word followed by 0 or more repeats of (non-word char + word)
+            // where the non-word char (\2) is the same
+            // e.g. abc|def|ghi but not abd|def~ghi
+            .compile("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*" // $NON-NLS-1$
+                    // last entries may be quoted strings
+            );
 
     public SampleMetaDataParser(char separator) {
         this.separator = separator;
     }
 
     public SampleMetadata parse(String headRow) {
-        String[] cols = headRow.split(Pattern.quote(Character.toString(separator)));
-        return new SampleMetadata(separator, cols);
+        char useSep = separator;
+        if (headRow.indexOf(useSep) < 0) {
+            Matcher matcher = DELIMITER_PATTERN.matcher(headRow);
+            if (matcher.matches()) {
+                String guessedSep = matcher.group(2);
+                if (guessedSep.length() != 1) {
+                    throw new IllegalArgumentException(
+                            "We guessed a delimiter of '"+guessedSep+"', but we support only one-character-separators");
+                }
+                useSep = guessedSep.charAt(0);
+                logger.warn("Use guessed delimiter '{}' instead of configured '{}'. "
+                        +"Please configure the property 'jmeter.save.saveservice.default_delimiter={}'",
+                        useSep,
+                        separator,
+                        useSep);
+            }
+        }
+        String[] cols = headRow.split(Pattern.quote(Character.toString(useSep)));
+        return new SampleMetadata(useSep, cols);
     }
 }
