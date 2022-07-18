@@ -19,6 +19,13 @@ import com.github.autostyle.gradle.AutostyleTask
 
 plugins {
     id("com.github.vlsi.ide")
+    id "org.sonarqube" version "3.4.0.2513"
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "Eval12"
+  }
 }
 
 dependencies {
