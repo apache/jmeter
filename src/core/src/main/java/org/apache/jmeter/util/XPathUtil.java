@@ -27,7 +27,6 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletionException;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -309,26 +308,6 @@ public class XPathUtil {
             }
         }
     }
-
-    /**
-     * Return value for node including node element
-     * @param node Node
-     * @return String
-     */
-    private static String getNodeContent(Node node) {
-        StringWriter sw = new StringWriter();
-        try {
-            TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setFeature(FEATURE_SECURE_PROCESSING, true);
-            Transformer t = factory.newTransformer();
-            t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            t.transform(new DOMSource(node), new StreamResult(sw));
-        } catch (TransformerException e) {
-            sw.write(e.getMessageAndLocation());
-        }
-        return sw.toString();
-    }
-
 
     /**
      * @param node {@link Node}
