@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
@@ -34,10 +35,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
+import javax.xml.namespace.NamespaceContext;
+
 /**
  * {@link PrefixResolver} implementation that loads prefix configuration from jmeter property xpath.namespace.config
  */
-public class PropertiesBasedPrefixResolver extends PrefixResolverDefault {
+public class PropertiesBasedPrefixResolver extends PrefixResolverDefault implements NamespaceContext {
     private static final Logger log = LoggerFactory.getLogger(PropertiesBasedPrefixResolver.class);
     private static final String XPATH_NAMESPACE_CONFIG = "xpath.namespace.config";
     private static final Map<String, String> NAMESPACE_MAP = new HashMap<>();
@@ -85,11 +88,44 @@ public class PropertiesBasedPrefixResolver extends PrefixResolverDefault {
      */
     @Override
     public String getNamespaceForPrefix(String prefix, Node namespaceContext) {
-        String namespace = NAMESPACE_MAP.get(prefix);
+        String namespace = getNamespaceURI(prefix);
         if(namespace==null) {
             return super.getNamespaceForPrefix(prefix, namespaceContext);
         } else {
             return namespace;
         }
+    }
+
+    @Override
+    public String getNamespaceURI(String prefix) {
+        return NAMESPACE_MAP.get(prefix);
+    }
+
+    @Override
+    public String getPrefix(String namespaceURI) {
+        if (namespaceURI != null) {
+            for (Map.Entry<String, String> entry : NAMESPACE_MAP.entrySet()) {
+                if (namespaceURI.equals(entry.getValue())) {
+                    return entry.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Iterator<String> getPrefixes(String namespaceURI) {
+        return NAMESPACE_MAP.keySet().iterator();
+    }
+
+    String getNamespacesAsLineDelimitedProperties() {
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<String, String> entry : NAMESPACE_MAP.entrySet()) {
+            builder.append(entry.getKey())
+                    .append('=')
+                    .append(entry.getValue())
+                    .append('\n');
+        }
+        return builder.toString();
     }
 }
