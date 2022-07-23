@@ -42,7 +42,6 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
@@ -66,6 +65,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import net.sf.saxon.jaxp.SaxonTransformerFactory;
 import net.sf.saxon.s9api.ItemType;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -693,11 +693,12 @@ public class XPathUtil {
      */
     public static String formatXml(String xml){
         try {
-            TransformerFactory factory = TransformerFactory.newInstance();
+            SaxonTransformerFactory factory = new SaxonTransformerFactory();
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            Transformer serializer= factory.newTransformer();
+            Transformer serializer = factory.newTransformer();
+            serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
             serializer.setOutputProperty(OutputKeys.INDENT, "yes");
-            serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            //serializer.setOutputProperty("{http://saxon.sf.net/}indent-spaces", "2");
             Source xmlSource = new SAXSource(new InputSource(new StringReader(xml)));
             StringWriter stringWriter = new StringWriter();
             StreamResult res = new StreamResult(stringWriter);
