@@ -17,9 +17,10 @@
 
 package org.apache.jmeter.util;
 
-import org.apache.xml.utils.Constants;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+
+import javax.xml.XMLConstants;
 
 /**
  * This class implements a generic PrefixResolver that
@@ -79,7 +80,7 @@ public class PrefixResolverDefault
 
         if (prefix.equals("xml"))
         {
-            namespace = Constants.S_XMLNAMESPACEURI;
+            namespace = XMLConstants.XML_NS_URI;
         }
         else
         {
