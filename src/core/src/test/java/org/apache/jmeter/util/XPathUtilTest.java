@@ -20,6 +20,7 @@ package org.apache.jmeter.util;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -276,5 +277,15 @@ public class XPathUtilTest {
         Element e1 = (Element) nodeList.item(1);
         assertEquals("one", e0.getTextContent());
         assertEquals("two", e1.getTextContent());
+    }
+
+    @Test()
+    public void testSelectNodeListWithInvalidXPath() throws Exception {
+        String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+        Document testDoc = XPathUtil.makeDocument(
+                new ByteArrayInputStream(responseData.getBytes(StandardCharsets.UTF_8)), false, false, false, false,
+                false, false, false, false, false);
+        String xpathquery = "<";
+        assertThrows(TransformerException.class, () -> XPathUtil.selectNodeList(testDoc, xpathquery));
     }
 }
