@@ -646,8 +646,6 @@ public class XPathUtil {
         if (xPathExecutable != null) {
             XPathSelector selector = null;
             try {
-                Document doc;
-                doc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
                 selector = xPathExecutable.load();
                 selector.setContextItem(xdmNode);
                 XdmValue nodes = selector.evaluate();
@@ -662,9 +660,6 @@ public class XPathUtil {
                 result.setFailure(isNegated ? resultOfEval : !resultOfEval);
                 result.setFailureMessage(
                         isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
-            } catch (ParserConfigurationException e) { // NOSONAR Exception handled by return
-                result.setError(true);
-                result.setFailureMessage("Exception: " + e.getMessage() + " for:" + xPathQuery);
             } finally {
                 if (selector != null) {
                     try {
