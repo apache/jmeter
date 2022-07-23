@@ -240,7 +240,8 @@ public class XPathAssertionTest extends JMeterTestCase {
         testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
         testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
-        assertTrue("Should be a failure",res.isFailure());
+        //this used to result in isFailure()=true but is now fixed (after switching from Xalan to Saxon for XPath support)
+        assertFalse("Should not be a failure", res.isFailure());
     }
 
     @Test
