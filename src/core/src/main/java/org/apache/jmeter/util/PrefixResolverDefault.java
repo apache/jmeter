@@ -17,10 +17,10 @@
 
 package org.apache.jmeter.util;
 
+import javax.xml.XMLConstants;
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-
-import javax.xml.XMLConstants;
 
 /**
  * This class implements a generic PrefixResolver that
