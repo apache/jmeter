@@ -19,6 +19,7 @@ package org.apache.jmeter.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -251,7 +252,12 @@ public class XPathUtilTest {
         assertEquals("<page>two</page>", matchs.get(1));
         matchs=new ArrayList<>();
         XPathUtil.putValuesForXPathInList(testDoc, xpathquery, matchs, false);
+        assertEquals(2, matchs.size());
         assertEquals("one", matchs.get(0));
         assertEquals("two", matchs.get(1));
+        matchs=new ArrayList<>();
+        XPathUtil.putValuesForXPathInList(testDoc, "/book/a", matchs, false);
+        assertEquals(1, matchs.size());
+        assertNull(matchs.get(0));
     }
 }
