@@ -147,7 +147,7 @@ public class XPathUtilTest {
     @Test
     public void testFormatXmlSimple() {
         assertThat(XPathUtil.formatXml("<one foo='bar'>Test</one>"),
-                CoreMatchers.is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                CoreMatchers.is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + lineSeparator
                         + "<one foo=\"bar\">Test</one>" + lineSeparator));
     }
 
@@ -156,11 +156,12 @@ public class XPathUtilTest {
         assertThat(
                 XPathUtil.formatXml(
                         "<one foo='bar'><two/><three><four p=\"1\"/></three>...</one>"),
-                CoreMatchers.is(String.join(lineSeparator, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><one foo=\"bar\">",
-                        "  <two/>",
-                        "  <three>",
-                        "    <four p=\"1\"/>",
-                        "  </three>...</one>",
+                CoreMatchers.is(String.join(lineSeparator, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+                        "<one foo=\"bar\">",
+                        "   <two/>",
+                        "   <three>",
+                        "      <four p=\"1\"/>",
+                        "   </three>...</one>",
                         "")));
     }
 
