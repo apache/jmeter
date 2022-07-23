@@ -45,6 +45,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import net.sf.saxon.s9api.Processor;
@@ -259,5 +261,20 @@ public class XPathUtilTest {
         XPathUtil.putValuesForXPathInList(testDoc, "/book/a", matchs, false);
         assertEquals(1, matchs.size());
         assertNull(matchs.get(0));
+    }
+
+    @Test
+    public void testSelectNodeList() throws ParserConfigurationException, SAXException, IOException, TidyException, TransformerException {
+        String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
+        Document testDoc = XPathUtil.makeDocument(
+                new ByteArrayInputStream(responseData.getBytes(StandardCharsets.UTF_8)), false, false, false, false,
+                false, false, false, false, false);
+        String xpathquery = "/book/page";
+        NodeList nodeList = XPathUtil.selectNodeList(testDoc, xpathquery);
+        assertEquals(2, nodeList.getLength());
+        Element e0 = (Element) nodeList.item(0);
+        Element e1 = (Element) nodeList.item(1);
+        assertEquals("one", e0.getTextContent());
+        assertEquals("two", e1.getTextContent());
     }
 }
