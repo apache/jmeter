@@ -365,9 +365,9 @@ public class XPathUtil {
         net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
         try {
             XdmNode xdmNode = builder.build(new DOMSource(document));
-            putValuesForXPathInListUsingSaxon(xdmNode, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+            putValuesForXPathInListUsingSaxon(xdmNode, xPathQuery, matchStrings, fragment, matchNumber, namespaces, true);
         } catch (SaxonApiException|FactoryConfigurationError e) {
-            throw new TransformerException(e);
+            throw new TransformerException(unwrapException(e));
         }
     }
 
@@ -375,7 +375,7 @@ public class XPathUtil {
             String xmlFile, String xPathQuery,
             List<String> matchStrings, boolean fragment,
             int matchNumber, String namespaces)
-            throws SaxonApiException, FactoryConfigurationError {
+            throws SaxonApiException, TransformerException, FactoryConfigurationError {
         try (StringReader reader = new StringReader(xmlFile)) {
             // We could instantiate it once but might trigger issues in the future
             // Sharing of a DocumentBuilder across multiple threads is not recommended.
@@ -383,15 +383,15 @@ public class XPathUtil {
             // will only cause problems if a SchemaValidator is used.
             net.sf.saxon.s9api.DocumentBuilder builder = PROCESSOR.newDocumentBuilder();
             XdmNode xdmNode = builder.build(new SAXSource(new InputSource(reader)));
-            putValuesForXPathInListUsingSaxon(xdmNode, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
+            putValuesForXPathInListUsingSaxon(xdmNode, xPathQuery, matchStrings, fragment, matchNumber, namespaces, false);
         }
     }
 
     private static void putValuesForXPathInListUsingSaxon(
             XdmNode xdmNode, String xPathQuery,
             List<String> matchStrings, boolean fragment,
-            int matchNumber, String namespaces)
-            throws SaxonApiException, FactoryConfigurationError {
+            int matchNumber, String namespaces, boolean useNullForEmpty)
+            throws SaxonApiException, TransformerException, FactoryConfigurationError {
 
         // generating the cache key
         final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
@@ -399,7 +399,15 @@ public class XPathUtil {
         //check the cache
         XPathExecutable xPathExecutable;
         if(StringUtils.isNotEmpty(xPathQuery)) {
-            xPathExecutable = XPATH_CACHE.get(key);
+            try {
+                xPathExecutable = XPATH_CACHE.get(key);
+            } catch (RuntimeException e) {
+                Throwable unwrapped = unwrapException(e);
+                if (unwrapped instanceof TransformerException) {
+                    throw (TransformerException) unwrapped;
+                }
+                throw e;
+            }
         }
         else {
             log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));
@@ -421,7 +429,12 @@ public class XPathUtil {
                             matchStrings.add(item.toString());
                         }
                         else {
-                            matchStrings.add(item.getStringValue());
+                            String value = item.getStringValue();
+                            if (useNullForEmpty && value != null && value.isEmpty()) {
+                                matchStrings.add(null);
+                            } else {
+                                matchStrings.add(value);
+                            }
                         }
                     }
                 } else {

@@ -20,6 +20,7 @@ package org.apache.jmeter.util;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -72,7 +73,7 @@ public class XPathUtilTest {
     }
 
     @Test
-    public void testputValuesForXPathInListUsingSaxon() throws SaxonApiException, FactoryConfigurationError{
+    public void testputValuesForXPathInListUsingSaxon() throws Exception {
         String xPathQuery="//Employees/Employee/role";
         ArrayList<String> matchStrings = new ArrayList<String>();
         boolean fragment = false;
@@ -263,10 +264,13 @@ public class XPathUtilTest {
     }
 
     @Test
-    public void testPutValuesForXPathInList() throws ParserConfigurationException, SAXException, IOException, TidyException, TransformerException {
+    public void testPutValuesForXPathInList()
+            throws ParserConfigurationException, SAXException, IOException, TidyException, TransformerException {
         String responseData = "<book><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
         Document testDoc = XPathUtil.makeDocument(
-                new ByteArrayInputStream(responseData.getBytes(StandardCharsets.UTF_8)), false, false, false, false,
+                new ByteArrayInputStream(
+                        responseData.getBytes(StandardCharsets.UTF_8)),
+                false, false, false, false,
                 false, false, false, false, false);
         String xpathquery = "/book/page";
         List<String> matchs=new ArrayList<>();
@@ -275,8 +279,13 @@ public class XPathUtilTest {
         assertEquals("<page>two</page>", matchs.get(1));
         matchs=new ArrayList<>();
         XPathUtil.putValuesForXPathInList(testDoc, xpathquery, matchs, false);
+        assertEquals(2, matchs.size());
         assertEquals("one", matchs.get(0));
         assertEquals("two", matchs.get(1));
+        matchs=new ArrayList<>();
+        XPathUtil.putValuesForXPathInList(testDoc, "/book/a", matchs, false);
+        assertEquals(1, matchs.size());
+        assertNull(matchs.get(0));
     }
 
     @Test
