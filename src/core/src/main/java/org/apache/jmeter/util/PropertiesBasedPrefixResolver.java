@@ -29,8 +29,6 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.xml.utils.PrefixResolver;
-import org.apache.xml.utils.PrefixResolverDefault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
@@ -38,7 +36,7 @@ import org.w3c.dom.Node;
 import javax.xml.namespace.NamespaceContext;
 
 /**
- * {@link PrefixResolver} implementation that loads prefix configuration from jmeter property xpath.namespace.config
+ * PrefixResolver implementation that loads prefix configuration from jmeter property xpath.namespace.config
  */
 public class PropertiesBasedPrefixResolver extends PrefixResolverDefault implements NamespaceContext {
     private static final Logger log = LoggerFactory.getLogger(PropertiesBasedPrefixResolver.class);

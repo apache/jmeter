@@ -50,12 +50,11 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactoryConfigurationException;
 
+import net.sf.saxon.s9api.ItemType;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.xml.utils.PrefixResolver;
-import org.apache.xpath.XPathAPI;
-import org.apache.xpath.objects.XObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -560,7 +559,7 @@ public class XPathUtil {
      *
      * @param document XML Document
      * @param namespaces String series of prefix/namespace values separator by line break
-     * @return {@link PrefixResolver}
+     * @return {@link PropertiesBasedPrefixResolverForXpath2}
      */
     private static PropertiesBasedPrefixResolverForXpath2 getPrefixResolverForXPath2(Document document, String namespaces) {
         return new PropertiesBasedPrefixResolverForXpath2(document.getDocumentElement(), namespaces);
@@ -651,7 +650,6 @@ public class XPathUtil {
             try {
                 Document doc;
                 doc = XPathUtil.makeDocumentBuilder(false, false, false, false).newDocument();
-                XObject xObject = XPathAPI.eval(doc, xPathQuery, getPrefixResolverForXPath2(doc, namespaces));
                 selector = xPathExecutable.load();
                 selector.setContextItem(xdmNode);
                 XdmValue nodes = selector.evaluate();
@@ -660,13 +658,13 @@ public class XPathUtil {
                 // In case we need to extract everything
                 if (length == 0) {
                     resultOfEval = false;
-                } else if (xObject.getType() == XObject.CLASS_BOOLEAN) {
+                } else if (nodes.itemAt(0).matches(ItemType.BOOLEAN)) {
                     resultOfEval = Boolean.parseBoolean(nodes.itemAt(0).getStringValue());
                 }
                 result.setFailure(isNegated ? resultOfEval : !resultOfEval);
                 result.setFailureMessage(
                         isNegated ? "Nodes Matched for " + xPathQuery : "No Nodes Matched for " + xPathQuery);
-            } catch (ParserConfigurationException | TransformerException e) { // NOSONAR Exception handled by return
+            } catch (ParserConfigurationException e) { // NOSONAR Exception handled by return
                 result.setError(true);
                 result.setFailureMessage("Exception: " + e.getMessage() + " for:" + xPathQuery);
             } finally {

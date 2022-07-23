@@ -21,14 +21,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.xml.utils.PrefixResolver;
-import org.apache.xml.utils.PrefixResolverDefault;
 import org.w3c.dom.Node;
 
 import javax.xml.namespace.NamespaceContext;
 
 /**
- * {@link PrefixResolver} implementation that loads prefix configuration from
+ * PrefixResolver implementation that loads prefix configuration from
  * jmeter property xpath.namespace.config
  */
 public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefault implements NamespaceContext {
