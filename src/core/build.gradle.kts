@@ -50,11 +50,6 @@ dependencies {
     api("oro:oro") {
         because("Perl5Matcher org.apache.jmeter.util.JMeterUtils.getMatcher()")
     }
-    api("xalan:xalan") {
-        because("PropertiesBasedPrefixResolver extends PrefixResolverDefault")
-    }
-    // Note: Saxon should go AFTER xalan so xalan XSLT is used
-    // org.apache.jmeter.util.XPathUtilTest.testFormatXmlSimple assumes xalan transformer
     api("net.sf.saxon:Saxon-HE") {
         because("XPathUtil: throws SaxonApiException")
     }

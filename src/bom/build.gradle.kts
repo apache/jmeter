@@ -162,8 +162,6 @@ dependencies {
         apiv("org.slf4j:slf4j-api", "slf4j")
         apiv("org.spockframework:spock-core")
         apiv("oro:oro")
-        apiv("xalan:serializer", "xalan")
-        apiv("xalan:xalan", "xalan")
         apiv("xerces:xercesImpl")
         apiv("xml-apis:xml-apis")
         apiv("xmlpull:xmlpull")

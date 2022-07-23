@@ -237,11 +237,6 @@ rsyntaxtextarea-3.0.4
 http://fifesoft.com/rsyntaxtextarea/
 - syntax coloration
 
-serialiser-2.7.1
-----------------
-http://www.apache.org/dyn/closer.cgi/xml/xalan-j
-- xalan
-
 slf4j-api-1.7.28
 ----------------
 http://www.slf4j.org/
@@ -258,7 +253,7 @@ commons-dbcp2-2.5.0 (org.apache.commons.dbcp2)
 --------------------------
 - DataSourceElement (JDBC)
 
-Saxon-HE-9.9.1-5 (net.sf.saxon)
+Saxon-HE-11.3 (net.sf.saxon)
 --------------------------
 - XPath2Extractor (XML)
 
@@ -266,11 +261,6 @@ velocity-1.7
 --------------
 http://velocity.apache.org/download.cgi
 - Anakia (create documentation) Not used by JMeter runtime
-
-xalan_2.7.1
------------
-http://www.apache.org/dyn/closer.cgi/xml/xalan-j
-+org.apache.xalan|xml|xpath
 
 xercesImpl-2.12.0
 ----------------
