@@ -128,7 +128,7 @@ public class PrefixResolverDefault
     /**
      * Return the base identifier.
      *
-     * @return null
+     * @return null by default
      */
     public String getBaseIdentifier()
     {
@@ -136,7 +136,7 @@ public class PrefixResolverDefault
     }
 
     /**
-     * @see PrefixResolver#handlesNullPrefixes()
+     * @return false by default
      */
     public boolean handlesNullPrefixes() {
         return false;
