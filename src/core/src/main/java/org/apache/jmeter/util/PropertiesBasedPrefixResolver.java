@@ -27,13 +27,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.xml.namespace.NamespaceContext;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
-
-import javax.xml.namespace.NamespaceContext;
 
 /**
  * PrefixResolver implementation that loads prefix configuration from jmeter property xpath.namespace.config

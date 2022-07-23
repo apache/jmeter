@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -50,8 +51,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactoryConfigurationException;
 
-import net.sf.saxon.s9api.ItemType;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -67,6 +66,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import net.sf.saxon.s9api.ItemType;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XPathExecutable;
@@ -78,8 +78,6 @@ import net.sf.saxon.xpath.XPathFactoryImpl;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-
-import static javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING;
 
 /**
  * This class provides a few utility methods for dealing with XML/XPath.
@@ -127,7 +125,7 @@ public class XPathUtil {
                 || documentBuilderFactory.isIgnoringElementContentWhitespace() != whitespace) {
             // configure the document builder factory
             documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            documentBuilderFactory.setFeature(FEATURE_SECURE_PROCESSING, true);
+            documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             documentBuilderFactory.setValidating(validate);
             documentBuilderFactory.setNamespaceAware(namespace);
             documentBuilderFactory.setIgnoringElementContentWhitespace(whitespace);
@@ -528,7 +526,7 @@ public class XPathUtil {
     /**
      *
      * @param document XML Document
-     * @return {@link PrefixResolver}
+     * @return {@link PropertiesBasedPrefixResolver}
      */
     private static PropertiesBasedPrefixResolver getPrefixResolver(Document document) {
         return new PropertiesBasedPrefixResolver(document.getDocumentElement());
@@ -688,7 +686,7 @@ public class XPathUtil {
     public static String formatXml(String xml){
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setFeature(FEATURE_SECURE_PROCESSING, true);
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             Transformer serializer= factory.newTransformer();
             serializer.setOutputProperty(OutputKeys.INDENT, "yes");
             serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
@@ -708,7 +706,7 @@ public class XPathUtil {
 
     private static XPath newXPath(NamespaceContext namespaceContext) throws XPathFactoryConfigurationException {
         XPathFactoryImpl xPathFactory = new XPathFactoryImpl();
-        xPathFactory.setFeature(FEATURE_SECURE_PROCESSING, true);
+        xPathFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         XPath xPath = xPathFactory.newXPath();
         xPath.setNamespaceContext(namespaceContext);
         return xPath;

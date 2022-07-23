@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.w3c.dom.Node;
-
 import javax.xml.namespace.NamespaceContext;
+
+import org.w3c.dom.Node;
 
 /**
  * PrefixResolver implementation that loads prefix configuration from
