@@ -19,6 +19,8 @@ package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -58,7 +60,7 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
             ThreadLocal.withInitial(JSONPathAssertion::createDecimalFormat);
 
     private static DecimalFormat createDecimalFormat() {
-        DecimalFormat decimalFormatter = new DecimalFormat("#.#");
+        DecimalFormat decimalFormatter = new DecimalFormat("#.#", new DecimalFormatSymbols(Locale.US));
         decimalFormatter.setMaximumFractionDigits(340); // java.text.DecimalFormat.DOUBLE_FRACTION_DIGITS == 340
         decimalFormatter.setMinimumFractionDigits(1);
         return decimalFormatter;
