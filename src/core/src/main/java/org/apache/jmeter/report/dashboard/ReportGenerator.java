@@ -85,8 +85,7 @@ public class ReportGenerator {
                     .charAt(0);
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
-    private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
-    private static final String NOT_SUPPORTED_CONVERSION_FMT = "Not supported conversion to \"%s\"";
+
     public static final String NORMALIZER_CONSUMER_NAME = "normalizer";
     public static final String BEGIN_DATE_CONSUMER_NAME = "beginDate";
     public static final String END_DATE_CONSUMER_NAME = "endDate";
@@ -385,7 +384,7 @@ public class ReportGenerator {
             String error = String.format(INVALID_CLASS_FMT, className);
             throw new GenerationException(error, ex);
         } catch (ExportException ex) {
-            String error = String.format(INVALID_EXPORT_FMT, exporterName);
+            String error = String.format("Data exporter \"%s\" is unable to export data.", exporterName);
             throw new GenerationException(error, ex);
         }
     }
@@ -548,7 +547,7 @@ public class ReportGenerator {
                             if (converter == null) {
                                 throw new GenerationException(
                                         String.format(
-                                                NOT_SUPPORTED_CONVERSION_FMT,
+                                                "Not supported conversion to \"%s\"",
                                                 parameterType.getName()));
                             }
                             method.invoke(obj, converter.convert(propertyValue));
@@ -568,3 +567,4 @@ public class ReportGenerator {
         }
     }
 }
+
