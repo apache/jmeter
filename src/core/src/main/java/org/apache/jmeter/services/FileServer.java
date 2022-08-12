@@ -132,7 +132,7 @@ public class FileServer {
      * @throws IllegalArgumentException if scriptPath parameter is null
      */
     public synchronized void setBaseForScript(File scriptPath) {
-        if (scriptPath == null){
+        if (scriptPath == null) {
             throw new IllegalArgumentException("scriptPath must not be null");
         }
         setScriptName(scriptPath.getName());
@@ -175,7 +175,7 @@ public class FileServer {
         return base.getAbsolutePath();
     }
 
-    public static String getDefaultBase(){
+    public static String getDefaultBase() {
         return DEFAULT_BASE;
     }
 
@@ -191,12 +191,12 @@ public class FileServer {
         File f = base.getAbsoluteFile();
         ArrayDeque<String> l = new ArrayDeque<>();
         while (f != null) {
-            if (f.equals(parent)){
-                if (l.isEmpty()){
+            if (f.equals(parent)) {
+                if (l.isEmpty()) {
                     break;
                 }
                 File rel = new File(l.pop());
-                while(!l.isEmpty()) {
+                while (!l.isEmpty()) {
                     rel = new File(rel, l.pop());
                 }
                 return rel;
@@ -214,7 +214,7 @@ public class FileServer {
      * @param filename - relative (to base) or absolute file name (must not be null)
      */
     public void reserveFile(String filename) {
-        reserveFile(filename,null);
+        reserveFile(filename, null);
     }
 
     /**
@@ -252,16 +252,16 @@ public class FileServer {
      * @throws IllegalArgumentException if header could not be read or filename is null or empty
      */
     public synchronized String reserveFile(String filename, String charsetName, String alias, boolean hasHeader) {
-        if (filename == null || filename.isEmpty()){
+        if (filename == null || filename.isEmpty()) {
             throw new IllegalArgumentException("Filename must not be null or empty");
         }
-        if (alias == null){
+        if (alias == null) {
             throw new IllegalArgumentException("Alias must not be null");
         }
         FileEntry fileEntry = files.get(alias);
         if (fileEntry == null) {
             fileEntry = new FileEntry(resolveFileFromPath(filename), null, charsetName);
-            if (filename.equals(alias)){
+            if (filename.equals(alias)) {
                 log.info("Stored: {}", filename);
             } else {
                 log.info("Stored: {} Alias: {}", filename, alias);
@@ -356,7 +356,7 @@ public class FileServer {
             log.debug("Read:{}", line);
             return line;
         }
-        throw new IOException("File never reserved: "+filename);
+        throw new IOException("File never reserved: " + filename);
     }
 
     /**
@@ -415,19 +415,19 @@ public class FileServer {
             }
             return reader;
         } else {
-            throw new IOException("File never reserved: "+alias);
+            throw new IOException("File never reserved: " + alias);
         }
     }
 
     private BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
         if (!fileEntry.file.canRead() || !fileEntry.file.isFile()) {
-            throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
+            throw new IllegalArgumentException("File " + fileEntry.file.getName() + " must exist and be readable");
         }
         BOMInputStream fis = new BOMInputStream(Files.newInputStream(fileEntry.file.toPath())); //NOSONAR
         InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding
         String charsetName = fileEntry.charSetEncoding;
-        if(!JOrphanUtils.isBlank(charsetName)) {
+        if (!JOrphanUtils.isBlank(charsetName)) {
             isr = new InputStreamReader(fis, charsetName);
         } else if (fis.hasBOM()) {
             isr = new InputStreamReader(fis, fis.getBOM().getCharsetName());
@@ -451,7 +451,7 @@ public class FileServer {
             log.debug("Write:{}", value);
             writer.write(value);
         } else {
-            throw new IOException("File never reserved: "+filename);
+            throw new IOException("File never reserved: " + filename);
         }
     }
 
@@ -472,7 +472,7 @@ public class FileServer {
 
     public synchronized void closeFiles() throws IOException {
         for (Map.Entry<String, FileEntry> me : files.entrySet()) {
-            closeFile(me.getKey(),me.getValue() );
+            closeFile(me.getKey(), me.getValue() );
         }
         files.clear();
     }
@@ -537,7 +537,7 @@ public class FileServer {
         return files.get(path).file;
     }
 
-    private static class FileEntry{
+    private static class FileEntry {
         private String headerLine;
         private Throwable exception;
         private final File file;

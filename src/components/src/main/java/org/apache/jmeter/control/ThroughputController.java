@@ -56,14 +56,15 @@ public class ThroughputController
     private static final String MAXTHROUGHPUT = "ThroughputController.maxThroughput";// $NON-NLS-1$
     private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";// $NON-NLS-1$
 
-    private static class MutableInteger{
+    private static class MutableInteger {
         private int integer;
-        MutableInteger(int value){
+        MutableInteger(int value) {
             integer = value;
         }
-        int incr(){
+        int incr() {
             return ++integer;
         }
+
         int intValue() {
             return integer;
         }
@@ -203,7 +204,7 @@ public class ThroughputController
                             && current >= getSubControllers().size())
                             || (getMaxThroughputAsInt() == 0)))
                         || (getStyle() == BYPERCENT
-                            && Float.compare(getPercentThroughputAsFloat(), 0.0f)==0)
+                            && Float.compare(getPercentThroughputAsFloat(), 0.0f) == 0)
                         );
     }
 
@@ -265,7 +266,7 @@ public class ThroughputController
     }
 
     @Override
-    protected Object readResolve(){
+    protected Object readResolve() {
         super.readResolve();
         counterLock = new Object();
         return this;
