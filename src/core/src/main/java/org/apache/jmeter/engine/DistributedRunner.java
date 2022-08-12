@@ -275,7 +275,7 @@ public class DistributedRunner {
         this.stdout = stdout;
     }
 
-    public void setStderr(PrintStream stderr) {
+    public void setStdErr(PrintStream stderr) {
         this.stderr = stderr;
     }
 
