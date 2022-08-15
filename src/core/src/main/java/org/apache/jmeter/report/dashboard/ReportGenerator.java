@@ -352,7 +352,6 @@ public class ReportGenerator {
                         propertyValue, setterName);
             }
             graph.initialize();
-
             // Choose which entry point to use to plug the graph
             AbstractSampleConsumer entryPoint = graphConfiguration
                     .excludesControllers() ? excludeControllerFilter
@@ -377,7 +376,6 @@ public class ReportGenerator {
             Object obj = clazz.getDeclaredConstructor().newInstance();
             DataExporter exporter = (DataExporter) obj;
             exporter.setName(exporterName);
-
             // Export data
             exporter.export(sampleContext, testFile, configuration);
         } catch (ReflectiveOperationException | ClassCastException ex) {
