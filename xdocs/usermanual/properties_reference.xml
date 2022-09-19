@@ -602,6 +602,23 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
+
+  <section name="&sect-num;.14 HTTP Header Manager configuration" anchor="http_header_manager">
+    <properties>
+      <property name="http.header_manager.is_shareable">
+        By default, HTTP Header Manager elements are shared between threads. It enables to save memory by not
+        cloning the elements for each thread, however, the drawback is that HTTP Header Manager's can't be
+        modified in the runtime.<br/>
+        However, HTTP Header Managers still support <code>${...}</code> functions and variables, so it is still
+        possible to have dynamic headers.
+        <br/>
+        Defaults to:
+        <code>true</code>
+      </property>
+    </properties>
+  </section>
+
+
 <section name="&sect-num;.15 Results file configuration" anchor="results_file_config">
 <properties>
 <property name="jmeter.save.saveservice.output_format">

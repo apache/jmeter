@@ -29,10 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.Replaceable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -40,7 +42,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * with a request.
  *
  */
-public class HeaderManager extends ConfigTestElement implements Serializable, Replaceable {
+public class HeaderManager extends ConfigTestElement implements Serializable, Replaceable, NoThreadClone {
 
     private static final long serialVersionUID = 240L;
 
@@ -57,9 +59,24 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
         setProperty(new CollectionProperty(HEADERS, new ArrayList<>()));
     }
 
+    @Override
+    public boolean isShareable() {
+        return JMeterUtils.getPropDefault("http.header_manager.is_shareable", true); // $NON-NLS-1$
+    }
+
+    private void assertMutable() {
+        if (isRunningVersion()) {
+            throw new IllegalStateException(
+                    "Cannot modify HeaderManager " + getName() + " while test is running. " +
+                            "If you need dynamic headers, prefer using ${...} functions in variables if you need dynamic headers."
+            );
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     public void clear() {
+        assertMutable();
         super.clear();
         setProperty(new CollectionProperty(HEADERS, new ArrayList<>()));
     }
@@ -160,6 +177,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      * @param h {@link Header} to add
      */
     public void add(Header h) {
+        assertMutable();
         getHeaders().addItem(h);
     }
 
@@ -167,6 +185,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      * Add an empty header.
      */
     public void add() {
+        assertMutable();
         getHeaders().addItem(new Header());
     }
 
@@ -176,6 +195,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      * @param index index from the header to remove
      */
     public void remove(int index) {
+        assertMutable();
         getHeaders().remove(index);
     }
 
@@ -224,6 +244,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      * @param name header name
      */
     public void removeHeaderNamed(String name) {
+        assertMutable();
         List<Integer> removeIndices = new ArrayList<>();
         for (int i = getHeaders().size() - 1; i >= 0; i--) {
             Header header = (Header) getHeaders().get(i).getObjectValue();
@@ -304,6 +325,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
 
     @Override
     public int replace(String regex, String replaceBy, boolean caseSensitive) throws Exception {
+        assertMutable();
         final CollectionProperty hdrs = getHeaders();
         int totalReplaced = 0;
         for (int i = 0; i < hdrs.size(); i++) {

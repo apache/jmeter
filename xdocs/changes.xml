@@ -75,6 +75,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><pr>5911</pr> Use Caffeine for caching HTTP headers instead of commons-collections4 LRUMap</li>
+  <li><pr>727</pr> Save memory when test plan contains lots of HTTP Header Manager elements by sharing the managers across threads (add NoThreadClone to HeaderManager)</li>
 </ul>
 
 <h3>Other samplers</h3>
