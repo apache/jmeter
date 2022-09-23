@@ -1,0 +1,25 @@
+# https://cwiki.apache.org/confluence/display/INFRA/.asf.yaml+features+for+git+repositories
+
+github:
+  description: "Apache JMeter open-source load testing tool for analyzing and measuring the performance of a variety of services"
+  homepage: https://jmeter.apache.org/
+  labels:
+    - performance
+    - test
+    - java
+
+  enabled_merge_buttons:
+    squash: true
+    merge:  false
+    rebase: true
+
+  features:
+    wiki: false
+    issues: true
+    projects: false
+
+notifications:
+  commits:      commits@jmeter.apache.org
+  issues:       dev@jmeter.apache.org
+  pullrequests: dev@jmeter.apache.org
+  jira_options: link label
