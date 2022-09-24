@@ -1,0 +1,27 @@
+name: Feedback about the manual
+description: Found an issue with the documentation?
+labels:
+  - documentation
+  - to-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill in all required fields with as many details as possible.
+  - type: input
+    id: url
+    attributes:
+      label: The documentation URL
+      placeholder: ex. https://jmeter.apache.org/usermanual/best-practices.html
+    validations:
+      required: true
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Feedback
+      description: |
+        Describe what issue with the documentation you've found
+      placeholder: |
+        Here you can also attach log files, screenshots or a video
+    validations:
+      required: true
