@@ -101,6 +101,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+  <li><pr>5713</pr>update spockAdded randomized test GitHub Actions matrix for better coverage of locales and time zones</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
