@@ -101,7 +101,9 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-  <li><pr>5713</pr>update spockAdded randomized test GitHub Actions matrix for better coverage of locales and time zones</li>
+  <li><pr>725</pr>Add Chinese Simplified Translation for Open Model Thread Group</li>
+  <li><pr>5710</pr>Add GitHub Issue templates</li>
+  <li><pr>5713</pr>Update Spock to 2.2-groovy-3.0 (from 2.1-groovy-3.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
