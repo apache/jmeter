@@ -51,6 +51,12 @@
     <trusted-key id='2c7b12f2a511e325' group='org.slf4j' />
   </trusted-keys>
   <dependencies>
+    <dependency group='org.ajoberstar.grgit' module='grgit-gradle' version='4.1.1'>
+      <sha512>DB910E6A6A65DBB18E68D566F1CFD8B7CBF5F57F05A8FAC79EAB71830C5F5B5B7574F039A859EDEE6EF737E5B43B6E6985E0D1BC8D24195A11EB9E9807DFAC8A</sha512>
+    </dependency>
+    <dependency group='org.ajoberstar.grgit' module='grgit-core' version='4.1.1'>
+      <sha512>B1137C44F791BAD962C7D1FDE2DD54F6A2564097DA111BAE5D4764497E3679A8243728666C3947F6DCB464E2B6AE0592889DB9D4D69B407C4694DC01DE3C76E1</sha512>
+    </dependency>
     <dependency group='org.gradle.kotlin' module='gradle-kotlin-dsl-plugins' version='1.4.9'>
       <sha512>E2E7D75380BBFB3A6DAA93A75FAB9D8F4038D42FFBA93B9FE8A350C1BD735FF746A01E3FB76A62DFA7B26EDADA638EB045D45F47568A427E6C1505F70A92AE79</sha512>
     </dependency>
