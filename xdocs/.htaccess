@@ -29,3 +29,4 @@ RewriteCond %{HTTPS} !=on
 # Redirect to https version
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L]
 
+RewriteRule ^/download_jmeter$ /download_jmeter.cgi [L]
