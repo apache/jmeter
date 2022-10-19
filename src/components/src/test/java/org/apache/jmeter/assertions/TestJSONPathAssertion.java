@@ -311,18 +311,20 @@ class TestJSONPathAssertion {
         samplerResult.setResponseData(str.getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.execution[0].scenario.requests[0].headers");
+        String jsonPath = "$.execution[0].scenario.requests[0].headers";
+        String expectedValue = "\\{headerkey=header value\\}";
+        instance.setJsonPath(jsonPath);
         instance.setJsonValidationBool(true);
         instance.setExpectNull(false);
-        instance.setExpectedValue("\\{headerkey=header value\\}");
+        instance.setExpectedValue(expectedValue);
         instance.setInvert(false);
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
         assertTrue(result.isFailure());
-        assertEquals(
-                "Value expected to match regexp '\\{headerkey=header value\\}', but it did not match: '{\"headerkey\":\"header value\"}'",
-                result.getFailureMessage());
+        assertEquals(String.format(
+                "Value in json path '%s' expected to match regexp '%s', but it did not match: '{\"headerkey\":\"header value\"}'",
+                        jsonPath, expectedValue), result.getFailureMessage());
     }
 
     @Test

@@ -118,8 +118,8 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
             if (value instanceof JSONArray) {
                 JSONArray arrayValue = (JSONArray) value;
                 if (arrayValue.isEmpty() && !JsonPath.isPathDefinite(getJsonPath())) {
-                    throw new IllegalStateException("JSONPath is indefinite and the extracted Value is an empty Array." +
-                            " Please use an assertion value, to be sure to get a correct result. " + getExpectedValue());
+                    throw new IllegalStateException(String.format("JSONPath '%s' is indefinite and the extracted Value is an empty Array." +
+                            " Please use an assertion value, to be sure to get a correct result. '%s'", getJsonPath(), getExpectedValue()));
                 }
             }
             return;
@@ -137,15 +137,15 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
         }
 
         if (isExpectNull()) {
-            throw new IllegalStateException(String.format("Value expected to be null, but found '%s'", value));
+            throw new IllegalStateException(String.format("Value in json path '%s' expected to be null, but found '%s'", getJsonPath(), value));
         } else {
             String msg;
             if (isUseRegex()) {
-                msg = "Value expected to match regexp '%s', but it did not match: '%s'";
+                msg = "Value in json path '%s' expected to match regexp '%s', but it did not match: '%s'";
             } else {
-                msg = "Value expected to be '%s', but found '%s'";
+                msg = "Value in json path '%s' expected to be '%s', but found '%s'";
             }
-            throw new IllegalStateException(String.format(msg, getExpectedValue(), objectToString(value)));
+            throw new IllegalStateException(String.format(msg, getJsonPath(), getExpectedValue(), objectToString(value)));
         }
     }
 
