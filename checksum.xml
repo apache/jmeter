@@ -91,6 +91,7 @@
     <trusted-key id='a6ea2e2bf22e0543' group='io.github.java-diff-utils' />
     <trusted-key id='67631bc0568801c3' group='io.github.microutils' />
     <trusted-key id='602ec18d20c4661c' group='io.github.x-stream' />
+    <trusted-key id='d908a43fb7ec07ac' group='jakarta.activation' />
     <trusted-key id='6425559c47cc79c4' group='javax.activation' />
     <trusted-key id='6425559c47cc79c4' group='javax.mail' />
     <trusted-key id='6425559c47cc79c4' group='javax.servlet' />
