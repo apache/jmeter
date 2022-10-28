@@ -105,8 +105,7 @@ Summary
   <li><pr>5710</pr>Add GitHub Issue templates</li>
   <li><pr>5713</pr>Update Spock to 2.2-groovy-3.0 (from 2.1-groovy-3.0)</li>
   <li><issue>5718</issue>Update Apache commons-text to 1.10.0 (from 1.9)</li>
-  <li><issue>5720</issue>Replace javax.activation 1.2.0 with jakarta.activation-api 1.2.2</li>
-  <li><issue>5720</issue>Replace <code>javax.activation</code> 1.2.0 with <code>jakarta.activation</code> 1.2.2</li>
+  <li><pr>5721</pr><issue>5720</issue>Replace <code>javax.activation</code> 1.2.0 with <code>jakarta.activation</code> 1.2.2</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
