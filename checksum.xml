@@ -60,6 +60,7 @@
     <trusted-key id='aa49c633b4734832' group='com.pinterest.ktlint' />
     <trusted-key id='1063fe98bcecb758' group='com.puppycrawl.tools' />
     <trusted-key id='6425559c47cc79c4' group='com.sun.activation' />
+    <trusted-key id='d908a43fb7ec07ac' group='com.sun.activation' />
     <trusted-key id='1b2718089ce964b8' group='com.thoughtworks.qdox' />
     <trusted-key id='602ec18d20c4661c' group='com.thoughtworks.xstream' />
     <trusted-key id='1861c322c56014b2' group='commons-beanutils' />

@@ -177,7 +177,11 @@ project("mail") {
         api("javax.mail:mail") {
             exclude("javax.activation", "activation")
         }
-        implementation("jakarta.activation:jakarta.activation-api")
+        // Runtime dependency is different from compile time
+        runtimeOnly("com.sun.activation:jakarta.activation")
+        // This is an API-only jar. javax.activation is present in Java 8,
+        // however it is not there in Java 9
+        compileOnly("jakarta.activation:jakarta.activation-api")
         implementation("org.apache.commons:commons-lang3") {
             because("StringUtils")
         }
