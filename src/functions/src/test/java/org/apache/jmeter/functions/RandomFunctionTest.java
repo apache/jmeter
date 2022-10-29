@@ -90,7 +90,7 @@ public class RandomFunctionTest extends JMeterTestCase {
     private boolean stringOnlyContainsChars(String value, String allowedChars) {
         Set<Character> allowedCharsAsSet = allowedChars.chars()
                 .mapToObj(i -> (char) i)
-                .collect(Collectors.toCollection(HashSet::new));
+                .collect(Collectors.<Character, Set<Character>>toCollection(HashSet::new));
         return value.chars().allMatch(c -> allowedCharsAsSet.contains((char)c));
     }
 }

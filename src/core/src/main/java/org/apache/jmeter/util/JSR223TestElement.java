@@ -59,7 +59,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * Cache of compiled scripts
      */
     private static final Map<String, CompiledScript> compiledScriptsCache =
-            Collections.synchronizedMap(
+            Collections.<String, CompiledScript>synchronizedMap(
                     new LRUMap<>(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100)));
 
     /** If not empty then script in ScriptText will be compiled and cached */

@@ -126,7 +126,7 @@ public class LoadRecentProject extends Load {
                 .mapToObj(LoadRecentProject::getRecentFile)
                 .filter(Objects::nonNull)
                 .filter(s -> !s.equals(loadedFileName))
-                .collect(Collectors.toCollection(ArrayDeque::new));
+                .collect(Collectors.<String, ArrayDeque<String>>toCollection(ArrayDeque::new));
         newRecentFiles.addFirst(loadedFileName);
 
         // Store the recent files

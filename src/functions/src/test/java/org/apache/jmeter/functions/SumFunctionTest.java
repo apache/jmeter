@@ -78,7 +78,7 @@ class SumFunctionTest extends JMeterTestCase {
     private void checkSum(AbstractFunction func, String value, String[] addends)  throws Exception {
         Collection<CompoundVariable> parms = Arrays.stream(addends)
                 .map(CompoundVariable::new)
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.<CompoundVariable, ArrayList<CompoundVariable>>toCollection(ArrayList::new));
         parms.add(new CompoundVariable("Result"));
         func.setParameters(parms);
         Assertions.assertEquals(value, func.execute(null,null));
@@ -89,7 +89,7 @@ class SumFunctionTest extends JMeterTestCase {
     private void checkSumNoVar(AbstractFunction func, String value, String[] addends)  throws Exception {
         Collection<CompoundVariable> parms = Arrays.stream(addends)
                 .map(CompoundVariable::new)
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.<CompoundVariable, ArrayList<CompoundVariable>>toCollection(ArrayList::new));
         func.setParameters(parms);
         Assertions.assertEquals(value, func.execute(null,null));
     }
