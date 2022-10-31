@@ -22,12 +22,15 @@ import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
 
+import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
 class ChangeCaseSpec extends Specification {
 
+    // See https://github.com/apache/jmeter/issues/5723
+    @IgnoreIf({ 'i'.toUpperCase() != 'I' || 'I'.toLowerCase() != 'i' })
     def "convert '#input' using mode #mode to '#output'"() {
         given:
             def changeCase = new ChangeCase()
