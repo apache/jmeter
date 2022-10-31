@@ -421,8 +421,11 @@ public class KeyToolUtils {
             InputStream input, OutputStream output, String ... parameters)
             throws IOException {
         final File workingDir = keystore.getParentFile();
+        ByteArrayOutputStream stdErr = new ByteArrayOutputStream();
+        // If we omit stderr, then SystemCommand redirects stderr to stdout, and it might break keytool output
+        // with message like "Picked up _JAVA_OPTIONS: ..."
         final SystemCommand nativeCommand =
-                new SystemCommand(workingDir, 0L, 0, null, input, output, null);
+                new SystemCommand(workingDir, 0L, 0, null, input, output, stdErr);
         final List<String> arguments = new ArrayList<>();
         arguments.add(getKeyToolPath());
         arguments.add(command);
@@ -436,7 +439,14 @@ public class KeyToolUtils {
         arguments.add(alias);
         Collections.addAll(arguments, parameters);
 
-        runNativeCommand(nativeCommand, arguments);
+        try {
+            runNativeCommand(nativeCommand, arguments);
+        } catch (IOException e) {
+            if (stdErr.size() > 0) {
+                e.addSuppressed(new IOException("standard error (stderr) was: " + stdErr));
+            }
+            throw e;
+        }
     }
 
     /**
