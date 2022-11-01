@@ -101,7 +101,7 @@ tasks.configureEach<Javadoc> {
         addStringOption("source", "8")
         val lastEditYear: String by rootProject.extra
         bottom =
-            "Copyright © 1998-$lastEditYear Apache Software Foundation. All Rights Reserved."
+            "Copyright &copy; 1998-$lastEditYear Apache Software Foundation. All Rights Reserved."
         if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {
             addBooleanOption("html5", true)
             links("https://docs.oracle.com/javase/11/docs/api/")
