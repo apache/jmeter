@@ -83,7 +83,7 @@
 26047,jodd-props-5.0.13.jar
 271159,json-path-2.7.0.jar
 119545,json-smart-2.4.8.jar
-429123,jsoup-1.15.1.jar
+438018,jsoup-1.15.3.jar
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar
 32033,kotlin-logging-jvm-2.0.5.jar
@@ -123,8 +123,8 @@
 301279,svgSalamander-1.1.2.4.jar
 10192,swing-extensions-laf-support-0.1.3.jar
 2539,swing-extensions-visual-padding-0.1.3.jar
-735701,tika-core-1.28.3.jar
-1587751,tika-parsers-1.28.3.jar
+736051,tika-core-1.28.5.jar
+1588025,tika-parsers-1.28.5.jar
 174661,vis-svg-portable-jvm-2.2.1.jar
 3154938,xalan-2.7.2.jar
 1446149,xercesImpl-2.12.2.jar

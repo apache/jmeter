@@ -109,6 +109,8 @@ Summary
      Based on a patch by Ori Marko (orimarko at gmail.com)</li>
   <li><issue></issue>Update Jackson Core to 2.13.4 (from 2.13.2)</li>
   <li><issue></issue>Update Jackson Databind to 2.13.4.2 (from 2.13.4.2)</li>
+  <li><issue></issue>Update Tika Parser to 1.28.5 (from 1.28.3)</li>
+  <li><issue></issue>Update JSoup to 1.15.3 (from 1.15.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
