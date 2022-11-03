@@ -69,9 +69,9 @@
 328324,httpcore-4.4.15.jar
 369486,httpcore-nio-4.4.15.jar
 41790,httpmime-4.5.13.jar
-75714,jackson-annotations-2.13.3.jar
-374895,jackson-core-2.13.3.jar
-1536542,jackson-databind-2.13.3.jar
+75717,jackson-annotations-2.13.4.jar
+374895,jackson-core-2.13.4.jar
+1531681,jackson-databind-2.13.4.2.jar
 78030,javax.activation-1.2.0.jar
 142391,jcharts-0.7.5.jar
 16555,jcl-over-slf4j-1.7.36.jar

@@ -8,7 +8,7 @@
     <trusted-key id='1c8d5ef0df2b70d4' group='cglib' />
     <trusted-key id='379ce192d401ab61' group='com.diffplug.durian' />
     <trusted-key id='8d7f1bec1e2ecae7' group='com.fasterxml.jackson.core' />
-    <trusted-key id='c9fbaa83a8753994' group='com.fasterxml.jackson.core' />
+    <trusted-key id='3d12ca2ac19f3181' group='com.fasterxml.jackson.core' />
     <trusted-key id='4c00043bec5cb7cb' group='com.fifesoft' />
     <trusted-key id='af10873874630863' group='com.flipkart.zjsonpatch' />
     <trusted-key id='379ce192d401ab61' group='com.formdev' />
