@@ -105,10 +105,10 @@ Summary
   <li><pr>5710</pr>Add GitHub Issue templates</li>
   <li><pr>5713</pr>Update Spock to 2.2-groovy-3.0 (from 2.1-groovy-3.0)</li>
   <li><issue>5718</issue>Update Apache commons-text to 1.10.0 (from 1.9)</li>
-  <li><issue></issue>Update Jackson Core to 2.13.4 (from 2.13.2)</li>
-  <li><issue></issue>Update Jackson Databind to 2.13.4.2 (from 2.13.4.2)</li>
-  <li><issue></issue>Update Tika Parser to 1.28.5 (from 1.28.3)</li>
-  <li><issue></issue>Update JSoup to 1.15.3 (from 1.15.1)</li>
+  <li><issue>5725</issue>Update Jackson Core to 2.13.4 (from 2.13.2)</li>
+  <li><issue>5725</issue>Update Jackson Databind to 2.13.4.2 (from 2.13.4.2)</li>
+  <li><issue>5725</issue>Update Tika Parser to 1.28.5 (from 1.28.3)</li>
+  <li><issue>5725</issue>Update JSoup to 1.15.3 (from 1.15.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
