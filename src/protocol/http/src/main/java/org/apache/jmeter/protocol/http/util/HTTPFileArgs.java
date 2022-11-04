@@ -171,7 +171,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
         PropertyIterator iter = getHTTPFileArgsCollection().iterator();
         while (iter.hasNext()) {
             HTTPFileArg item = (HTTPFileArg) iter.next().getObjectValue();
-            if (file.equals(item)) {
+            if (file.contentEquals(item)) {
                 iter.remove();
             }
         }

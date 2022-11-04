@@ -48,7 +48,8 @@ public class TestElementProperty extends MultiProperty {
                 return true;
             }
             if (value != null) {
-                return value.equals(((JMeterProperty) o).getObjectValue());
+                Object other = ((JMeterProperty) o).getObjectValue();
+                return other instanceof TestElement && value.contentEquals((TestElement) other);
             }
         }
         return false;
@@ -56,7 +57,7 @@ public class TestElementProperty extends MultiProperty {
 
     @Override
     public int hashCode() {
-        return value == null ? 0 : value.hashCode();
+        return value == null ? 0 : value.contentHashCode();
     }
 
     /**

@@ -188,7 +188,7 @@ public class JMSProperties extends AbstractTestElement implements Serializable {
         PropertyIterator iter = getProperties().iterator();
         while (iter.hasNext()) {
             JMSProperty item = (JMSProperty) iter.next().getObjectValue();
-            if (arg.equals(item)) {
+            if (arg.contentEquals(item)) {
                 iter.remove();
             }
         }

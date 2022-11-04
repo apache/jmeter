@@ -143,7 +143,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
             // Only check if we have not found any differences so far
             if(!dirty) {
                 if (previousGuiItems.containsKey(treeNode)) {
-                    if (!previousGuiItems.get(treeNode).equals(treeNode.getTestElement())) {
+                    if (!previousGuiItems.get(treeNode).contentEquals(treeNode.getTestElement())) {
                         dirty = true;
                     }
                 } else {

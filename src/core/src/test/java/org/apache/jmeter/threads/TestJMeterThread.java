@@ -24,6 +24,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
@@ -47,22 +48,16 @@ class TestJMeterThread {
         }
 
         @Override
-        public int hashCode() {
+        public int contentHashCode() {
             final int prime = 31;
-            int result = super.hashCode();
+            int result = super.contentHashCode();
             result = prime * result + (called ? 1231 : 1237);
             return result;
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!super.equals(obj)) {
-                return false;
-            }
-            if (!getClass().equals(obj.getClass())) {
+        public boolean contentEquals(TestElement obj) {
+            if (!super.contentEquals(obj)) {
                 return false;
             }
             DummySampler other = (DummySampler) obj;

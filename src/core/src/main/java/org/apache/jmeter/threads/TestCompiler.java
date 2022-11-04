@@ -290,6 +290,7 @@ public class TestCompiler implements HashTreeTraverser {
 
         /** {@inheritDoc} */
         @Override
+        @SuppressWarnings("deprecation")
         public int hashCode() {
             return child.hashCode() + parent.hashCode();
         }

@@ -216,7 +216,7 @@ public class Arguments extends ConfigTestElement implements Serializable, Iterab
         PropertyIterator iter = getArguments().iterator();
         while (iter.hasNext()) {
             Argument item = (Argument) iter.next().getObjectValue();
-            if (arg.equals(item)) {
+            if (arg.contentEquals(item)) {
                 iter.remove();
             }
         }

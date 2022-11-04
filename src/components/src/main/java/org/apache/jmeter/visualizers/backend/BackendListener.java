@@ -137,6 +137,7 @@ public class BackendListener
      *
      * @return a String identifier for this sampler instance
      */
+    @SuppressWarnings("deprecation")
     private String whoAmI() {
         return Thread.currentThread().getName() + "@" + Integer.toHexString(hashCode()) + "-" + getName();
     }

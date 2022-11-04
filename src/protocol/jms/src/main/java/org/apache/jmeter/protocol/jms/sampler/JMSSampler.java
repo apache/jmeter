@@ -759,6 +759,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 .format(instant);
     }
 
+    @SuppressWarnings("deprecation")
     private void logThreadStart() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Thread started {}", formatLikeDate(Instant.now()));

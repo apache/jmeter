@@ -198,7 +198,7 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
         PropertyIterator iter = getArguments().iterator();
         while (iter.hasNext()) {
             LDAPArgument item = (LDAPArgument) iter.next().getObjectValue();
-            if (arg.equals(item)) {
+            if (arg.contentEquals(item)) {
                 iter.remove();
             }
         }

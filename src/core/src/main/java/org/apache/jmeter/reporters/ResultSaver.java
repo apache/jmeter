@@ -341,22 +341,6 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
         int num;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
     public void setAddTimestamp(boolean selected) {
         setProperty(ADD_TIMESTAMP, selected, false);
     }

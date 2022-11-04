@@ -42,8 +42,12 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.errorprone.annotations.InlineMe;
+import com.google.errorprone.annotations.InlineMeValidationDisabled;
 
 /**
  */
@@ -111,14 +115,35 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     /**
      * {@inheritDoc}
+     * <p>If you override {@link #equals(Object)} for comparing test element contents,
+     * then consider overriding {@link #contentEquals(TestElement)} instead.</p>
+     * @deprecated since 5.5 {@link #equals(Object)} uses reference equality, so consider
+     * using {@link #contentEquals(TestElement)} if you want comparing element contents
+     * @see #contentEquals(TestElement)
      */
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof AbstractTestElement) {
-            return ((AbstractTestElement) o).propMap.equals(propMap);
-        } else {
+    @Deprecated
+    @API(since = "5.5", status = API.Status.MAINTAINED)
+    @InlineMe(replacement = "this.contentEquals(o)")
+    @InlineMeValidationDisabled("most likely users need contentEquals")
+    public final boolean equals(Object o) {
+        return o == this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>The implementation returns {@code false} of the class of the input argument differs
+     * from the class of the current object</p>
+     */
+    @Override
+    public boolean contentEquals(TestElement other) {
+        if (other == this) {
+            return true;
+        }
+        if (other == null || other.getClass() != getClass()) {
             return false;
         }
+        return propMap.equals(((AbstractTestElement) other).propMap);
     }
 
     // TODO temporary hack to avoid unnecessary bug reports for subclasses
@@ -126,9 +151,28 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * {@inheritDoc}
      */
+    /**
+     * {@inheritDoc}
+     * <p>If you override {@link #hashCode()} for comparing test element hash code,
+     * then consider overriding {@link #contentHashCode()} instead.</p>
+     * @deprecated since 5.5 {@link #hashCode()} uses reference equality, so consider
+     *   using {@link #contentHashCode()} if you need the hashcode of the contents.
+     * @see #contentHashCode()
+     */
     @Override
-    public int hashCode(){
+    @Deprecated
+    @API(since = "5.5", status = API.Status.MAINTAINED)
+    @InlineMe(replacement = "this.contentHashCode()")
+    @InlineMeValidationDisabled("most likely users need contentHashCode")
+    public final int hashCode(){
         return System.identityHashCode(this);
+    }
+
+    @Override
+    public int contentHashCode() {
+        int hash = getClass().hashCode();
+        hash = hash * 31 + propMap.hashCode();
+        return hash;
     }
 
     /*

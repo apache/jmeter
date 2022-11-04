@@ -21,6 +21,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apiguardian.api.API;
 
 public interface TestElement extends Cloneable {
     String NAME = "TestElement.name"; //$NON-NLS-1$
@@ -35,6 +36,47 @@ public interface TestElement extends Cloneable {
     // Also TestElementConverter and TestElementPropertyConverter for handling empty comments
     String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
     // N.B. Comments originally only applied to Test Plans, hence the name - which can now not be easily changed
+
+    /**
+     * {@inheritDoc}
+     * @deprecated since 5.5 {@link #equals(Object)} uses reference equality, so consider
+     *   using {@link #contentEquals(TestElement)} if you want comparing element contents.
+     */
+    @Override
+    @Deprecated
+    @API(since = "5.5", status = API.Status.MAINTAINED)
+    boolean equals(Object o);
+
+    /**
+     * {@inheritDoc}
+     * @deprecated since 5.5 {@link #hashCode()} uses reference equality, so consider
+     *   using {@link #contentHashCode()} if you need the hashcode of the contents.
+     */
+    @Override
+    @Deprecated
+    @API(since = "5.5", status = API.Status.MAINTAINED)
+    int hashCode();
+
+    /**
+     * Returns the hash code of the contents of this element.
+     * Note: it should be consisten with {@link #contentEquals(TestElement)}
+     * @return hash code of the contents of this element.
+     */
+    default int contentHashCode() {
+        return System.identityHashCode(this);
+    }
+
+    /**
+     * Compares contents of two {@link TestElement} objects, and returns {@code true}
+     * if and only if they are the same.
+     * <p>{@code TestElement.equals(Object)} uses reference equality</p>
+     * @param other another TestElement
+     * @return true if other test element is the same as this one, or it has the same properties
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "5.5.1")
+    default boolean contentEquals(TestElement other) {
+        return this == other;
+    }
 
     void addTestElement(TestElement child);
 
