@@ -32,11 +32,11 @@ dependencies {
     api("javax.mail:mail") {
         exclude("javax.activation", "activation")
     }
-    // There's no javax.activation:activation:1.2.0, so we use com.sun...
-    runtimeOnly("com.sun.activation:javax.activation")
+    // The runtime dependency for jakarta.activation is different from the compile time
+    runtimeOnly("com.sun.activation:jakarta.activation")
     // This is an API-only jar. javax.activation is present in Java 8,
     // however it is not there in Java 9
-    compileOnly("javax.activation:javax.activation-api")
+    compileOnly("jakarta.activation:jakarta.activation-api")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("io.burt:jmespath-core")
     implementation("io.burt:jmespath-jackson")
