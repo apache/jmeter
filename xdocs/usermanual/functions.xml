@@ -1701,7 +1701,7 @@ returns:
     <properties>
     <property name="String to change case" required="Yes">The String
             which case will be changed</property>
-        <property name="change case mode" required="Yes">
+        <property name="change case mode" required="No, default=UPPER">
             The mode to be used to change case, for example for <code>ab-CD eF</code>:
             <ul>
                 <li><code>UPPER</code> result as AB-CD EF</li>
