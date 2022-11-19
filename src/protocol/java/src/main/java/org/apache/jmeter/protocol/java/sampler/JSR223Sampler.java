@@ -18,7 +18,6 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

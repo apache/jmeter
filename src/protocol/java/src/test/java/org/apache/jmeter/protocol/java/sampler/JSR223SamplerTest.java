@@ -17,10 +17,10 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class JSR223SamplerTest {
 
