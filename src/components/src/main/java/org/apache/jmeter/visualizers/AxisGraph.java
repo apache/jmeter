@@ -351,12 +351,15 @@ public class AxisGraph extends JPanel {
                 _maxLength = 3;
             }
             // if the "Title of Graph" is empty, we can assume some default
-            if (_title.length() == 0 ) {
+            if (_title.isEmpty()) {
                 _title = JMeterUtils.getResString("aggregate_graph_title"); //$NON-NLS-1$
             }
             // if the labels are too long, they'll be "squeezed" to make the chart viewable.
             for (int i = 0; i < _xAxisLabels.length; i++) {
                 String label = _xAxisLabels[i];
+                if (label.isEmpty()) {
+                    label = "<empty>";
+                }
                 _xAxisLabels[i]=squeeze(label, _maxLength);
             }
             this.setPreferredSize(new Dimension(_width,_height));
