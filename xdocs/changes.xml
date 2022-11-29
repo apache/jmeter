@@ -119,6 +119,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+  <li><pr>5736</pr><issue>5733</issue>Allow <code>SampleResult#setEndTime</code> be set in <code>JSR223Sampler</code></li>
 </ul>
 
 <h3>Controllers</h3>
