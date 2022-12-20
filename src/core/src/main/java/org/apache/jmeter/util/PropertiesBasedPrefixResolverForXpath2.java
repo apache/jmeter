@@ -18,17 +18,18 @@
 package org.apache.jmeter.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.xml.utils.PrefixResolver;
-import org.apache.xml.utils.PrefixResolverDefault;
+import javax.xml.namespace.NamespaceContext;
+
 import org.w3c.dom.Node;
 
 /**
- * {@link PrefixResolver} implementation that loads prefix configuration from
+ * PrefixResolver implementation that loads prefix configuration from
  * jmeter property xpath.namespace.config
  */
-public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefault {
+public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefault implements NamespaceContext {
     private Map<String, String> namespaceMap = new HashMap<>();
 
     /**
@@ -55,11 +56,33 @@ public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefaul
      */
     @Override
     public String getNamespaceForPrefix(String prefix, Node namespaceContext) {
-        String namespace = namespaceMap.get(prefix);
+        String namespace = getNamespaceURI(prefix);
         if (namespace == null) {
             return super.getNamespaceForPrefix(prefix, namespaceContext);
         } else {
             return namespace;
         }
+    }
+
+    @Override
+    public String getNamespaceURI(String prefix) {
+        return namespaceMap.get(prefix);
+    }
+
+    @Override
+    public String getPrefix(String namespaceURI) {
+        if (namespaceURI != null) {
+            for (Map.Entry<String, String> entry : namespaceMap.entrySet()) {
+                if (namespaceURI.equals(entry.getValue())) {
+                    return entry.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Iterator<String> getPrefixes(String namespaceURI) {
+        return namespaceMap.keySet().iterator();
     }
 }

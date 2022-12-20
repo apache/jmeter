@@ -78,7 +78,7 @@ public class XPathUtilTest {
     }
 
     @Test
-    public void testputValuesForXPathInListUsingSaxon() throws SaxonApiException, FactoryConfigurationError{
+    public void testputValuesForXPathInListUsingSaxon() throws Exception {
         String xPathQuery="//Employees/Employee/role";
         ArrayList<String> matchStrings = new ArrayList<String>();
         boolean fragment = false;
@@ -147,8 +147,8 @@ public class XPathUtilTest {
     @Test
     public void testFormatXmlSimple() {
         assertThat(XPathUtil.formatXml("<one foo='bar'>Test</one>"),
-                CoreMatchers.is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                        + "<one foo=\"bar\">Test</one>" + lineSeparator));
+                CoreMatchers.is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n"
+                        + "<one foo=\"bar\">Test</one>" + "\n"));
     }
 
     @Test
@@ -156,11 +156,12 @@ public class XPathUtilTest {
         assertThat(
                 XPathUtil.formatXml(
                         "<one foo='bar'><two/><three><four p=\"1\"/></three>...</one>"),
-                CoreMatchers.is(String.join(lineSeparator, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><one foo=\"bar\">",
-                        "  <two/>",
-                        "  <three>",
-                        "    <four p=\"1\"/>",
-                        "  </three>...</one>",
+                CoreMatchers.is(String.join("\n", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+                        "<one foo=\"bar\">",
+                        "   <two/>",
+                        "   <three>",
+                        "      <four p=\"1\"/>",
+                        "   </three>...</one>",
                         "")));
     }
 

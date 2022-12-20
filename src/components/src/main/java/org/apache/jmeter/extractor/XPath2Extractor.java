@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.transform.TransformerException;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.processor.PostProcessor;
@@ -223,7 +224,7 @@ public class XPath2Extractor
      * @throws FactoryConfigurationError
      */
     private void getValuesForXPath(String query, List<String> matchStrings, int matchNumber, String responseData)
-            throws SaxonApiException, FactoryConfigurationError {
+            throws SaxonApiException, TransformerException, FactoryConfigurationError {
         XPathUtil.putValuesForXPathInListUsingSaxon(responseData, query, matchStrings, getFragment(), matchNumber, getNamespaces());
     }
 

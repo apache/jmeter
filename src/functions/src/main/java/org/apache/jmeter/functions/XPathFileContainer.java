@@ -62,7 +62,7 @@ public class XPathFileContainer {
         nodeList=load(xpath);
     }
 
-    private NodeList load(String xpath) throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
+    private NodeList load(String xpath) throws IOException, ParserConfigurationException, SAXException,
             TransformerException {
         NodeList nl = null;
         try ( FileInputStream fis = new FileInputStream(fileName);

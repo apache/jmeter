@@ -32,6 +32,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.XPathUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -195,7 +196,7 @@ public class TestXPathExtractor {
         // No text, but using fragment mode
         extractor.setXPathQuery("//a");
         extractor.process();
-        assertEquals("<a><b/></a>", vars.get(VAL_NAME));
+        assertEquals(XPathUtil.formatXml("<a><b/></a>"), XPathUtil.formatXml(vars.get(VAL_NAME)));
     }
 
     @Test
@@ -283,7 +284,7 @@ public class TestXPathExtractor {
         if (Locale.getDefault().getLanguage().startsWith(Locale.ENGLISH.getLanguage())) {
             assertThat(
                     firstResult.getFailureMessage(),
-                    containsString("A location path was expected, but the following token was encountered")
+                    containsString("Unexpected token \"<\" at start of expression")
             );
         }
         assertEquals("Default", vars.get(VAL_NAME));
