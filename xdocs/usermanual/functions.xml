@@ -1701,7 +1701,7 @@ returns:
     <properties>
     <property name="String to change case" required="Yes">The String
             which case will be changed</property>
-        <property name="change case mode" required="Yes">
+        <property name="change case mode" required="No">
             The mode to be used to change case, for example for <code>ab-CD eF</code>:
             <ul>
                 <li><code>UPPER</code> result as AB-CD EF</li>
@@ -1709,6 +1709,7 @@ returns:
                 <li><code>CAPITALIZE</code> result as Ab-CD eF</li>
             </ul>
             <note><code>change case mode</code> is case insensitive</note>
+            If no mode is given, <code>UPPER</code> is used as default.
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
     </properties>

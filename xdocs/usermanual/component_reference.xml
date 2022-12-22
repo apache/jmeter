@@ -4649,8 +4649,8 @@ These can be used anywhere within the expression and remain in effect until over
                 HTTP Responses with statuses in the <code>4xx</code> and <code>5xx</code> ranges are normally
                 regarded as unsuccessful.
                 The "<code>Ignore status</code>" checkbox can be used to set the status successful before performing further checks.
-                Note that this will have the effect of clearing any previous assertion failures,
-                so make sure that this is only set on the first assertion.
+                <note>Note that this will have the effect of clearing any previous assertion failures,
+                so make sure that this is only set on the first assertion.</note>
         </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates how the text being tested
         is checked against the pattern.

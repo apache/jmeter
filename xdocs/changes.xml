@@ -109,6 +109,8 @@ Summary
   <li><issue>5725</issue>Update Jackson Databind to 2.13.4.2 (from 2.13.4.2)</li>
   <li><issue>5725</issue>Update Tika Parser to 1.28.5 (from 1.28.3)</li>
   <li><issue>5725</issue>Update JSoup to 1.15.3 (from 1.15.1)</li>
+  <li><pr>5731</pr>Update docs for <code>changeCase</code> function. <code>UPPER</code> is the default.
+     Based on a patch by Ori Marko (orimarko at gmail.com)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -121,6 +123,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+  <li><pr>5736</pr><issue>5733</issue>Allow <code>SampleResult#setEndTime</code> be set in <code>JSR223Sampler</code></li>
 </ul>
 
 <h3>Controllers</h3>
@@ -133,6 +136,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+  <li><pr>5717</pr>Add jsonpath string to jsonpath assertion error message so the error is easier to understand</li>
 </ul>
 
 <h3>Functions</h3>
@@ -164,6 +168,7 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+  <li>Kai Lehmann (klehmann at aservo.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
