@@ -118,6 +118,7 @@ Summary
   <li><issue>5725</issue>Update Apache commons-net to 3.9.0 (from 3.8.0)</li>
   <li><pr>5731</pr>Update docs for <code>changeCase</code> function. <code>UPPER</code> is the default.
      Based on a patch by Ori Marko (orimarko at gmail.com)</li>
+  <li><pr>5725</pr>Update XStream to 1.4.20 (from 1.4.19)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
