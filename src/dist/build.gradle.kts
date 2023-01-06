@@ -535,6 +535,7 @@ fun CrLfSpec.sourceLayout() = copySpec {
         from(rootDir) {
             gitignore(gitProps)
             excludeLicenseFromSourceRelease()
+            exclude("src/dist-check/temp")
         }
     }
 }
