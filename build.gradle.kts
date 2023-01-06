@@ -99,6 +99,7 @@ val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     // Note: patterns are in non-standard syntax for RAT, so we use exclude(..) instead of excludeFile
     exclude(rootDir.resolve(".ratignore").readLines())
     exclude("src/dist-check/temp")
+    dependsOn(":src:dist:copyBinLibs", ":src:dist:copyLibs")
 }
 
 tasks.validateBeforeBuildingReleaseArtifacts {
