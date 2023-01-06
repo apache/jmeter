@@ -25,6 +25,7 @@ import org.eclipse.jgit.diff.RawTextComparator
 import org.eclipse.jgit.util.io.AutoCRLFInputStream
 import org.gradle.api.GradleException
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
@@ -48,6 +49,7 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
     val testName = objects.property<String>()
 
     @InputDirectory
+    @IgnoreEmptyDirectories
     val inputDirectory = objects.directoryProperty().convention(
         project.rootProject.layout.projectDirectory.dir("bin/testfiles")
     )
