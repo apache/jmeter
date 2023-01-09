@@ -27,6 +27,7 @@
     <trusted-key id='379ce192d401ab61' group='info.picocli' />
     <trusted-key id='efe8086f9e93774e' group='junit' />
     <trusted-key id='c84125c13bf6f2f2' group='org.ajoberstar.grgit' />
+    <trusted-key id='ee8ecbbbc188fd5d' group='org.ajoberstar.grgit' />
     <trusted-key id='6b1b008864323b92' group='org.antlr' />
     <trusted-key id='9daadc1c9fcc82d0' group='org.apache.commons' />
     <trusted-key id='7c25280eae63ebe5' group='org.apache.httpcomponents' />
