@@ -8,6 +8,7 @@
     <trusted-key id='160a7a9cf46221a56b06ad64461a804f2609fd89' group='com.github.shyiko.klob' />
     <trusted-key id='7616eb882daf57a11477aaf559a252fb1199d873' group='com.google.code.findbugs' />
     <trusted-key id='afcc4c7594d09e2182c60e0f7a01b0f236e5430f' group='com.google.code.gson' />
+    <trusted-key id='c7be5bcc9fec15518cfda882b0f3710fa64900e7' group='com.google.code.gson' />
     <trusted-key id='7615ad56144df2376f49d98b1669c4bb543e0445' group='com.google.errorprone' />
     <trusted-key id='694621a7227d8d5289699830abe9f3126bb741c1' group='com.google.guava' />
     <trusted-key id='bdb5fa4fe719d787fb3d3197f6d4a1d411e9d1ae' group='com.google.guava' />
@@ -22,6 +23,7 @@
     <trusted-key id='1fa37fbe4453c1073e7ef61d6449005f96bc97a3' group='de.undercouch' />
     <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='info.picocli' />
     <trusted-key id='d4c89ea4aaf455fd88b22087efe8086f9e93774e' group='junit' />
+    <trusted-key id='fa7929f83ad44c4590f6cc6815c71c0a4e0b8edd' group='net.java.dev.jna' />
     <trusted-key id='124dac8350968ec2a8260584ee8ecbbbc188fd5d' group='org.ajoberstar.grgit' />
     <trusted-key id='a778fde933a96dda827840d8e2b3d84202b812d9' group='org.assertj' />
     <trusted-key id='08f0aab4d0c1a4bdde340765b341ddb020fcb6ab' group='org.bouncycastle' />
@@ -39,6 +41,15 @@
   <dependencies>
     <dependency group='org.gradle.kotlin' module='gradle-kotlin-dsl-plugins' version='2.1.7'>
       <sha512>2FE2FE885E48F7D3592751F0E824E21BE2478B9046E25E0AF109E6683F126B1ACE3DA7CB0FF3DA586C08498EF9FEFF445A00A63B2B86CC8BE22D0B3242F801B8</sha512>
+    </dependency>
+    <dependency group='org.gradle.kotlin' module='gradle-kotlin-dsl-plugins' version='2.4.1'>
+      <sha512>438E982D2C40426C18E4953AFA3A88A6A5BB69D37D11A60CFF03F28E8ACABD1009B5F10D07D99F61470DDDE194F489EA01425BB4D3AF798B10A2954E6D0ED095</sha512>
+    </dependency>
+    <dependency group='org.jetbrains.kotlin' module='kotlin-gradle-plugin' version='1.7.10'>
+      <sha512>CB887D0053A5C1656260BC77003BCAE612CAA018933CB7A752EC2A87AB571EA0CD683905436771ED1982A8DDE15299F861C513CC73A83E1C0F31F1154095D11D</sha512>
+    </dependency>
+    <dependency group='org.jetbrains.kotlin' module='kotlin-sam-with-receiver' version='1.7.10'>
+      <sha512>5A1FF4989B370946633B6BB2BE9E42729AE8CA323D59444F149EAB1AFC199AEED8ADC35199C672DB153AAA7D8E670C2FD9A9B78A36EC02130A342999943EB4B9</sha512>
     </dependency>
   </dependencies>
 </dependency-verification>

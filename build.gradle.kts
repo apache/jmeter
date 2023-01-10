@@ -610,6 +610,11 @@ allprojects {
                 passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
                 passProperty("junit.jupiter.execution.parallel.enabled", "true")
                 passProperty("junit.jupiter.execution.timeout.default", "2 m")
+                // Spock tests use cglib proxies that access ClassLoader.defineClass reflectively
+                // See https://github.com/apache/jmeter/pull/5763
+                if (JavaVersion.current().isJava9Compatible) {
+                    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+                }
             }
             withType<SpotBugsTask>().configureEach {
                 group = LifecycleBasePlugin.VERIFICATION_GROUP

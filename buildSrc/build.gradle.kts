@@ -39,8 +39,6 @@ fun Project.applyKotlinProjectConventions() {
     apply(plugin = "org.gradle.kotlin.kotlin-dsl")
 
     tasks.withType<KotlinCompile> {
-        sourceCompatibility = "unused"
-        targetCompatibility = "unused"
         kotlinOptions {
             jvmTarget = "1.8"
         }
