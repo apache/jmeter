@@ -29,6 +29,9 @@
 # Ignore Gradle project-specific cache directory
 .gradle
 
+# burrunan/gradle-cache-action creates this folder, so ignore it until the folder moved to another location
+/.cache-proxy
+
 # macOS
 .DS_Store
 
