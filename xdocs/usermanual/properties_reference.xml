@@ -1568,6 +1568,21 @@ JMETER-SERVER</source>
     confirmation dialogue.<br/>
     Defaults to: <code>false</code>
 </property>
+<property name="jmeter.test_plan.serialize_threadgroups">
+    For non gui test, set the following value to <code>true</code> in order to set
+    Run Thread Groups consecutively at the Test Plan level. Not in the jmeter.properties file but in parameter like : jmeter -n -Jjmeter.test_plan.serialize_threadgroups=[true/false] -t script.jmx<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.test_plan.functional_mode">
+    For non gui test, set the following value to <code>true</code> in order to set
+    Functional Test Mode at the Test Plan level. Not in the jmeter.properties file but in parameter like : jmeter -n -Jjmeter.test_plan.functional_mode=[true/false] -t script.jmx<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.test_plan.tearDown_on_shutdown">
+    For non gui test, set the following value to <code>true</code> in order to set
+    Run tearDown Thread Groups after shutdown of main threads at the Test Plan level. Not in the jmeter.properties file but in parameter like : jmeter -n -Jjmeter.test_plan.tearDown_on_shutdown=[true/false] -t script.jmx <br/>
+    Defaults to: <code>true</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.36 Classpath configuration" anchor="classpath">

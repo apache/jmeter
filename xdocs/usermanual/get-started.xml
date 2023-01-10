@@ -516,6 +516,7 @@ To do so, use the following options:</p>
 <dl>
 <dt><code>-D[prop_name]=[value]</code></dt><dd>defines a java system property value.</dd>
 <dt><code>-J[prop_name]=[value]</code></dt><dd>defines a local JMeter property.</dd>
+<dt><code>-q[propertyfile]</code></dt><dd>defines a file containing additional JMeter properties</dd>
 <dt><code>-G[prop_name]=[value]</code></dt><dd>defines a JMeter property to be sent to all remote servers.</dd>
 <dt><code>-G[propertyfile]</code></dt><dd>defines a file containing JMeter properties to be sent to all remote servers.</dd>
 <dt><code>-L[category]=[priority]</code></dt><dd>overrides a logging setting, setting a particular category to the given priority level.</dd>

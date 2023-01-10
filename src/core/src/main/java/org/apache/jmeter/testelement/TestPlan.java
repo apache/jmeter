@@ -31,6 +31,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,9 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     private static final String TEARDOWN_ON_SHUTDOWN = "TestPlan.tearDown_on_shutdown"; //$NON-NLS-1$
 
     //- JMX field names
-
+    private static final String PROP_FUNCTIONAL_MODE = "jmeter.test_plan.functional_mode"; //$NON-NLS-1$
+    private static final String PROP_SERIALIZE_THREADGROUPS = "jmeter.test_plan.serialize_threadgroups"; //$NON-NLS-1$
+    private static final String PROP_TEARDOWN_ON_SHUTDOWN = "jmeter.test_plan.tearDown_on_shutdown"; //$NON-NLS-1$
     private static final String CLASSPATH_SEPARATOR = ","; //$NON-NLS-1$
 
     private static final String BASEDIR = "basedir";
@@ -83,11 +86,23 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     /**
      * Fetches the functional mode property
-     *
+     * Could be change for no gui test with jmeter property : PROP_FUNCTIONAL_MODE
      * @return functional mode
      */
     public boolean isFunctionalMode() {
-        return getPropertyAsBoolean(FUNCTIONAL_MODE);
+        boolean bFunctionalModeDefault = getPropertyAsBoolean(FUNCTIONAL_MODE);
+        log.debug("bFunctionalModeDefault=" + bFunctionalModeDefault);
+        String sIsNonGui = System.getProperty(org.apache.jmeter.JMeter.JMETER_NON_GUI);
+        boolean bFunctionalModeReturn = bFunctionalModeDefault;
+        if ("true".equals(sIsNonGui)) {
+            String sPropFunctionalModeProperty = JMeterUtils.getProperty(PROP_FUNCTIONAL_MODE);
+            if (sPropFunctionalModeProperty != null) {
+                bFunctionalModeReturn = JMeterUtils.getPropDefault(PROP_FUNCTIONAL_MODE, bFunctionalModeDefault);
+                log.info("Change with property " + PROP_FUNCTIONAL_MODE + ", value=" + bFunctionalModeReturn);
+            }
+        }
+        functionalMode = bFunctionalModeReturn;
+        return bFunctionalModeReturn;
     }
 
     public void setUserDefinedVariables(Arguments vars) {
@@ -155,8 +170,23 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
         setProperty(TEARDOWN_ON_SHUTDOWN, tearDown, false);
     }
 
+    /** Fetches the Tear Down On Shutdown property
+     * Could be change for no gui test with jmeter property : PROP_TEARDOWN_ON_SHUTDOWN
+     * @return  TearDownOnShutdown setting
+     */
     public boolean isTearDownOnShutdown() {
-        return getPropertyAsBoolean(TEARDOWN_ON_SHUTDOWN, false);
+        boolean bTearDownOnShutdown = getPropertyAsBoolean(TEARDOWN_ON_SHUTDOWN, false);
+        log.debug("bTearDownOnShutdown=" + bTearDownOnShutdown);
+        String sIsNonGui = System.getProperty(org.apache.jmeter.JMeter.JMETER_NON_GUI);
+        boolean bTearDownOnShutdownReturn = bTearDownOnShutdown;
+        if ("true".equals(sIsNonGui)) {
+            String sTearDownOnShutdownProperty = JMeterUtils.getProperty(PROP_TEARDOWN_ON_SHUTDOWN);
+            if (sTearDownOnShutdownProperty != null) {
+                bTearDownOnShutdownReturn = JMeterUtils.getPropDefault(PROP_TEARDOWN_ON_SHUTDOWN, bTearDownOnShutdown);
+                log.info("Change with property " + PROP_TEARDOWN_ON_SHUTDOWN + ", value=" + bTearDownOnShutdownReturn);
+            }
+        }
+        return bTearDownOnShutdownReturn;
     }
 
     /**
@@ -196,11 +226,22 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     /**
      * Fetch the serialize threadgroups property
-     *
+     * Could be change for no gui test with jmeter property : PROP_SERIALIZE_THREADGROUPS
      * @return serialized setting
      */
     public boolean isSerialized() {
-        return getPropertyAsBoolean(SERIALIZE_THREADGROUPS);
+        boolean bSerializedThreadGroupDefault = getPropertyAsBoolean(SERIALIZE_THREADGROUPS);
+        log.debug("bSerializedThreadGroupDefault=" + bSerializedThreadGroupDefault);
+        String sIsNonGui = System.getProperty(org.apache.jmeter.JMeter.JMETER_NON_GUI);
+        boolean bSerializedThreadGroupReturn = bSerializedThreadGroupDefault;
+        if ("true".equals(sIsNonGui)) {
+            String sSerializedThreadGroupProperty = JMeterUtils.getProperty(PROP_SERIALIZE_THREADGROUPS);
+            if (sSerializedThreadGroupProperty != null) {
+                bSerializedThreadGroupReturn = JMeterUtils.getPropDefault(PROP_SERIALIZE_THREADGROUPS, bSerializedThreadGroupDefault);
+                log.info("Change with property " + PROP_SERIALIZE_THREADGROUPS + ", value=" + bSerializedThreadGroupReturn);
+            }
+        }
+        return bSerializedThreadGroupReturn;
     }
 
     public void addParameter(String name, String value) {
