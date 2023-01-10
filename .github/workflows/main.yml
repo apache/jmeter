@@ -27,6 +27,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: 17
+        distribution: 'zulu'
     - uses: burrunan/gradle-cache-action@v1
       name: Test
       with:
@@ -44,6 +45,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: 17
+        distribution: 'zulu'
     - uses: burrunan/gradle-cache-action@v1
       name: Test
       with:
@@ -60,6 +62,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: 11
+        distribution: 'zulu'
     - uses: burrunan/gradle-cache-action@v1
       name: Test
       with:
