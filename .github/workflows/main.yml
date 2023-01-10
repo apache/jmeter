@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: 'Set up JDK 17'
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 17
     - uses: burrunan/gradle-cache-action@v1
@@ -41,7 +41,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: 'Set up JDK 17'
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 17
     - uses: burrunan/gradle-cache-action@v1
@@ -57,7 +57,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: 'Set up JDK 11'
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 11
     - uses: burrunan/gradle-cache-action@v1
