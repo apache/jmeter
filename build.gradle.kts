@@ -98,6 +98,10 @@ val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     verbose.set(true)
     // Note: patterns are in non-standard syntax for RAT, so we use exclude(..) instead of excludeFile
     exclude(rootDir.resolve(".ratignore").readLines())
+    // Gradle validation might assume copyLibs and rat operate on the intersecting set of files
+    // Technically speaking, that is false positive since rat ignores *.jar files,
+    // and copyLibs copies jar files only
+    mustRunAfter(":src:dist:copyBinLibs", ":src:dist:copyLibs")
 }
 
 tasks.validateBeforeBuildingReleaseArtifacts {
