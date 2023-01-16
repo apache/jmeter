@@ -6491,15 +6491,15 @@ Selecting Functional Testing instructs JMeter to save the  additional sample inf
 This increases the resources needed to run a test, and may adversely impact JMeter performance.
 If more data is required for a particular sampler only, then add a Listener to it, and configure the fields as required.
 <note>The option does not affect CSV result files, which cannot currently store such information.</note>
-<note>For non gui test, you can set the Functional Testing with the jmeter property : jmeter.test_plan.functional_mode (true or false, false default value). This property is not by default in the jmeter.properties</note>
+<note>For non-GUI test, you can set the Functional Testing with the jmeter property: <code>jmeter.test_plan.functional_mode</code> (<code>true</code> or <code>false</code>, default value is <code>false</code>). This property is not by default in the <code>jmeter.properties</code></note>
 </p>
 <p>Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.
-<note>For non gui test, you can set the Serially with the jmeter property : jmeter.test_plan.serialize_threadgroups (true or false, false default value). This property is by default not in the jmeter.properties</note>
+<note>For non-GUI test, you can set the Serial mode with the jmeter property: <code>jmeter.test_plan.serialize_threadgroups</code> (<code>true</code> or <code>false</code>, default value is <code>false</code>). This property is by default not in the <code>jmeter.properties</code></note>
 </p>
 <p>Run tearDown Thread Groups after shutdown of main threads:
 if selected, the tearDown groups (if any) will be run after graceful shutdown of the main threads.
 The tearDown threads won't be run if the test is forcibly stopped.
-<note>For non gui test, you can set the Run tearDown Thread Groups after shutdown with the jmeter property : jmeter.test_plan.tearDown_on_shutdown (true or false, true default value). This property is not by default in the jmeter.properties</note>
+<note>For non-GUI test, you can set the Run tearDown Thread Groups after shutdown with the jmeter property: <code>jmeter.test_plan.tearDown_on_shutdown</code> (<code>true</code> or  <code>false</code>, default value is <code>true</code>). This property is not by default in the <code>jmeter.properties</code></note>
 </p>
 <p>
 Test plan now provides an easy way to add classpath setting to a specific test plan.
