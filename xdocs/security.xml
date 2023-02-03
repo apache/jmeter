@@ -16,6 +16,7 @@
   ~ limitations under the License.
   -->
 
+<!DOCTYPE document>
 <document>
 <properties>
     <title>Security</title>
@@ -32,6 +33,13 @@
     cases trigger code execution. If you want to use JMeter to
     evaluate untrusted jmx files, it is up to you to provide the
     required isolation.
+  </p>
+  <p>
+    Still in the area of security, when JMeter is used in distributed
+    environment, we recommend setting up the security manager in order
+    to avoid any execution of malicious code on the distributed
+    architecture. See the <a href="./usermanual/remote-test.html#security-manager">
+    Security-Manager documentation</a> for its implementation.
   </p>
 </section>
 <section name="Reporting security issues">
