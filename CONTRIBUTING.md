@@ -61,6 +61,23 @@ The steps to import the sources (based on Eclipse 2019-06) into Eclipse are as f
 1. Read `How to experience the best Gradle integration` and click `Next`
 1. Then you might just click `Finish`
 
+### Visual Studio Code
+
+Download the Visual Studio Code IDE
+
+1. `Open folder` option from `File` menu
+2. `Select Folder`
+3. Bring up VS Code search bar
+4. Type `task` into search bar
+5. Select `Tasks: Configure Task Runner`
+6. After selecting the type of tasks scroll down the list and select `Others` option for Gradle
+
+After completing these steps a `.vscode` folder and a file called `tasks.json` should be created
+
+7. Modify the 5 parameters of `tasks.json` for Gradle to run
+8. Bring up the actions bar and input `task gradle` and enter key
+
+
 ## :star2: Have a patch
 
 The best way to make sure your issue or feature is addressed is to submit a patch.
