@@ -1165,7 +1165,7 @@ JMETER-SERVER</source>
     Defaults to: <code>5000</code>
 </property>
 <property name="backend_metrics_percentile_estimator">
-    Specify the <a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.5/org/apache/commons/math3/stat/descriptive/rank/Percentile.EstimationType.html">Percentile Estimation Type</a> to use.<br/>
+    Specify the <a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/stat/descriptive/rank/Percentile.EstimationType.html">Percentile Estimation Type</a> to use.<br/>
     To make the values from the dashboard compatible with the Aggregate Report, use the value <code>R_3</code>.<br/>
     Defaults to: <code>LEGACY</code>
 </property>
