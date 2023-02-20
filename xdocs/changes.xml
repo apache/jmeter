@@ -160,6 +160,7 @@ Summary
 
 <h3>Documentation</h3>
 <ul>
+  <li><issue>5694</issue>Document changed formatter for <funclink name="__time()"/></li>
 </ul>
 
 <h3>General</h3>
