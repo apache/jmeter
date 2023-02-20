@@ -160,7 +160,9 @@ Summary
 
 <h3>Documentation</h3>
 <ul>
-  <li><issue>5694</issue>Document changed formatter for <funclink name="__time()"/></li>
+  <li><issue>5694</issue>Document changed formatter for <funclink name="__time()"/>. A warning will be logged,
+  if the code <code>u</code> is found in the format string, as the meaning for that code has changed from <em>day-of-week</em>
+  to <em>year</em>.</li>
 </ul>
 
 <h3>General</h3>

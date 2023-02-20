@@ -32,6 +32,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // See org.apache.jmeter.functions.TestTimeFunction for unit tests
 
@@ -49,6 +51,8 @@ public class TimeFunction extends AbstractFunction {
 
     // Only modified in class init
     private static final Map<String, String> aliases = new HashMap<>();
+
+    private static final Logger log = LoggerFactory.getLogger(TimeFunction.class);
 
     static {
         desc.add(JMeterUtils.getResString("time_format")); //$NON-NLS-1$
@@ -92,6 +96,9 @@ public class TimeFunction extends AbstractFunction {
                 long div = Long.parseLong(fmt.substring(1)); // should never case NFE
                 datetime = Long.toString(System.currentTimeMillis() / div);
             } else {
+                if (fmt.contains("u")) {
+                    log.warn(JMeterUtils.getResString("time_format_changed"));
+                }
                 DateTimeFormatter df = DateTimeFormatter // Not synchronised, so can't be shared
                         .ofPattern(fmt)
                         .withZone(ZoneId.systemDefault());
