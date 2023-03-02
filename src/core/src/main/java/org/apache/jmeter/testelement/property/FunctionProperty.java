@@ -21,18 +21,27 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Class that implements the Function property
  */
 public class FunctionProperty extends AbstractProperty {
     private static final long serialVersionUID = 233L;
+    private static final boolean FUNCTION_CACHE_PER_ITERATION =
+            JMeterUtils.getPropDefault("function.cache.per.iteration", false);
 
     private transient CompoundVariable function;
 
     private int testIteration = -1;
 
+    /**
+     * The cache will be removed in the subsequent releases.
+     * For now, it is kept for backward compatibility.
+     */
     private String cacheValue;
+
+    private String overrideValue;
 
     public FunctionProperty(String name, CompoundVariable func) {
         super(name);
@@ -48,7 +57,7 @@ public class FunctionProperty extends AbstractProperty {
         if (v instanceof CompoundVariable && !isRunningVersion()) {
             function = (CompoundVariable) v;
         } else {
-            cacheValue = v.toString();
+            overrideValue = v.toString();
         }
     }
 
@@ -87,7 +96,11 @@ public class FunctionProperty extends AbstractProperty {
             log.debug("Not running version, return raw function string");
             return function.getRawParameters();
         }
-        if(!ctx.isSamplingStarted()) {
+        String overrideValue = this.overrideValue;
+        if (overrideValue != null) {
+            return overrideValue;
+        }
+        if (!FUNCTION_CACHE_PER_ITERATION || !ctx.isSamplingStarted()) {
             return function.execute();
         }
         log.debug("Running version, executing function");
@@ -115,6 +128,7 @@ public class FunctionProperty extends AbstractProperty {
     public FunctionProperty clone() {
         FunctionProperty prop = (FunctionProperty) super.clone();
         prop.cacheValue = cacheValue;
+        prop.overrideValue = overrideValue;
         prop.testIteration = testIteration;
         prop.function = function;
         return prop;
@@ -126,5 +140,6 @@ public class FunctionProperty extends AbstractProperty {
     @Override
     public void recoverRunningVersion(TestElement owner) {
         cacheValue = null;
+        overrideValue = null;
     }
 }
