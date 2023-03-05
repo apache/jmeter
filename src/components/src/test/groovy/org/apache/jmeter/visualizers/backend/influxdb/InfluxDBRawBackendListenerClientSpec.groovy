@@ -33,6 +33,7 @@ class InfluxDBRawBackendListenerClientSpec extends Specification {
         okSample.setLatency(42)
         okSample.setConnectTime(7)
         okSample.setSampleLabel("myLabel")
+        okSample.setThreadName("myThread")
         okSample.setResponseOK()
         return okSample
     }
@@ -62,7 +63,7 @@ class InfluxDBRawBackendListenerClientSpec extends Specification {
             def tags = sut.createTags(okSample)
             def fields = sut.createFields(okSample)
         then:
-            tags == "status=ok,transaction=myLabel"
+            tags == "status=ok,transaction=myLabel,threadName=myThread"
             fields == "duration=100,ttfb=42,connectTime=7"
     }
 
@@ -70,8 +71,9 @@ class InfluxDBRawBackendListenerClientSpec extends Specification {
         given:
             def koSample = new SampleResult()
             koSample.setSampleLabel("myLabel")
+            koSample.setThreadName("myThread")
         expect:
-            sut.createTags(koSample) == "status=ko,transaction=myLabel"
+            sut.createTags(koSample) == "status=ko,transaction=myLabel,threadName=myThread"
     }
 
     def "Upon handling sample result data is added to influxDBMetricsManager and written"() {
