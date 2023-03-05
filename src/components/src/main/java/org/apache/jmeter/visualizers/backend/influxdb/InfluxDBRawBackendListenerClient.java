@@ -122,8 +122,10 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
         // remove surrounding quotes and spaces from sample label
         String label = StringUtils.strip(sampleResult.getSampleLabel(), "\" ");
         String transaction = AbstractInfluxdbMetricsSender.tagToStringValue(label);
+        String threadName = StringUtils.deleteWhitespace(sampleResult.getThreadName());
         return "status=" + status
-                + ",transaction=" + transaction;
+                + ",transaction=" + transaction
+                + ",threadName=" + threadName;
     }
 
     private String createFields(SampleResult sampleResult) {
