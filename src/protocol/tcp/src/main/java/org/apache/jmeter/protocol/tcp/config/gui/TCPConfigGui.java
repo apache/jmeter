@@ -59,6 +59,8 @@ public class TCPConfigGui extends AbstractConfigGui {
 
     private JTextField soLinger;
 
+    private JTextField charset;
+
     private JTextField eolByte;
 
     private JSyntaxTextArea requestData;
@@ -95,6 +97,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         requestData.setCaretPosition(0);
         closeConnection.setTristateFromProperty(element, TCPSampler.CLOSE_CONNECTION);
         soLinger.setText(element.getPropertyAsString(TCPSampler.SO_LINGER));
+        charset.setText(element.getPropertyAsString(TCPSampler.CHARSET));
         eolByte.setText(element.getPropertyAsString(TCPSampler.EOL_BYTE));
     }
 
@@ -124,6 +127,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         element.setProperty(TCPSampler.REQUEST, requestData.getText());
         closeConnection.setPropertyFromTristate(element, TCPSampler.CLOSE_CONNECTION); // Don't use default for saving tristates
         element.setProperty(TCPSampler.SO_LINGER, soLinger.getText(), "");
+        element.setProperty(TCPSampler.CHARSET, charset.getText(), "");
         element.setProperty(TCPSampler.EOL_BYTE, eolByte.getText(), "");
     }
 
@@ -141,6 +145,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         setNoDelay.setSelected(false); // TODO should this be indeterminate?
         closeConnection.setSelected(TCPSampler.CLOSE_CONNECTION_DEFAULT); // TODO should this be indeterminate?
         soLinger.setText(""); //$NON-NLS-1$
+        charset.setText(""); //$NON-NLS-1$
         eolByte.setText(""); //$NON-NLS-1$
     }
 
@@ -201,6 +206,19 @@ public class TCPConfigGui extends AbstractConfigGui {
         return soLingerPanel;
     }
 
+    private JPanel createCharsetPanel() {
+        JLabel label = new JLabel(JMeterUtils.getResString("charset")); //$NON-NLS-1$
+
+        charset = new JTextField(6); // 6 columns size
+        charset.setMaximumSize(new Dimension(charset.getPreferredSize()));
+        label.setLabelFor(charset);
+
+        JPanel charsetPanel = new JPanel(new FlowLayout());
+        charsetPanel.add(label);
+        charsetPanel.add(charset);
+        return charsetPanel;
+    }
+
     private JPanel createEolBytePanel() {
         JLabel label = new JLabel(JMeterUtils.getResString("eolbyte")); //$NON-NLS-1$
 
@@ -249,6 +267,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         optionsPanel.add(createCloseConnectionPanel());
         optionsPanel.add(createNoDelayPanel());
         optionsPanel.add(createSoLingerOption());
+        optionsPanel.add(createCharsetPanel());
         optionsPanel.add(createEolBytePanel());
         mainPanel.add(optionsPanel);
         mainPanel.add(createRequestPanel());
