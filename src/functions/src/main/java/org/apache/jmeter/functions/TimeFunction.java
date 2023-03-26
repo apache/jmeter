@@ -19,6 +19,7 @@ package org.apache.jmeter.functions;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,6 +77,8 @@ public class TimeFunction extends AbstractFunction {
     private String format   = ""; //$NON-NLS-1$
     private String variable = ""; //$NON-NLS-1$
 
+    private static volatile boolean warnedAboutFormatChange = false;
+
     public TimeFunction(){
         super();
     }
@@ -96,13 +99,17 @@ public class TimeFunction extends AbstractFunction {
                 long div = Long.parseLong(fmt.substring(1)); // should never case NFE
                 datetime = Long.toString(System.currentTimeMillis() / div);
             } else {
-                if (fmt.contains("u")) {
-                    log.warn(JMeterUtils.getResString("time_format_changed"));
-                }
                 DateTimeFormatter df = DateTimeFormatter // Not synchronised, so can't be shared
-                        .ofPattern(fmt)
-                        .withZone(ZoneId.systemDefault());
-                datetime = df.format(Instant.now());
+                        .ofPattern(fmt);
+                if (!warnedAboutFormatChange &&
+                        isPossibleUsageOfUInFormat(df, fmt)
+                ) {
+                    log.warn(JMeterUtils.getResString("time_format_changed"));
+                    this.warnedAboutFormatChange = true;
+                }
+
+                datetime = df.withZone(ZoneId.systemDefault())
+                        .format(Instant.now());
             }
         }
 
@@ -113,6 +120,14 @@ public class TimeFunction extends AbstractFunction {
             }
         }
         return datetime;
+    }
+
+    private boolean isPossibleUsageOfUInFormat(DateTimeFormatter df, String fmt) {
+        ZoneId mst = ZoneId.of("-07:00");
+        return fmt.contains("u") &&
+                df.withZone(mst)
+                        .format(ZonedDateTime.of(2006, 1, 2, 15, 4, 5, 6, mst))
+                        .contains("2006");
     }
 
     /** {@inheritDoc} */
