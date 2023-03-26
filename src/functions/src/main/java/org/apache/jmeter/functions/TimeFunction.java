@@ -99,7 +99,7 @@ public class TimeFunction extends AbstractFunction {
                 long div = Long.parseLong(fmt.substring(1)); // should never case NFE
                 datetime = Long.toString(System.currentTimeMillis() / div);
             } else {
-                DateTimeFormatter df = DateTimeFormatter // Not synchronised, so can't be shared
+                DateTimeFormatter df = DateTimeFormatter
                         .ofPattern(fmt);
                 if (!warnedAboutFormatChange &&
                         isPossibleUsageOfUInFormat(df, fmt)
