@@ -114,6 +114,7 @@ Summary
   <li><pr>5920</pr>Cache bean properties in <code>TestBeanHelper</code> and avoid synchronization, so test plans with <code>TestBean</code>-based elements is faster</li>
   <li><pr>5920</pr>Improve computation when many threads actively produce samplers by using <code>LongAdder</code> and similar concurrency classes to avoid synchronization in <code>Calculator</code></li>
   <li><pr>5920</pr>Reduce synchronization contention on <code>AbstractTestElement</code> that are shared between threads (the ones that implement <code>NoThreadClone</code>)</li>
+  <li><pr>5934</pr>Added caching for date formatters for <code>__time</code> function</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

@@ -17,24 +17,30 @@
 
 package org.apache.jmeter.functions;
 
+import java.text.MessageFormat;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.google.auto.service.AutoService;
 
 // See org.apache.jmeter.functions.TestTimeFunction for unit tests
@@ -44,7 +50,7 @@ import com.google.auto.service.AutoService;
  * @since 2.2
  */
 @AutoService(Function.class)
-public class TimeFunction extends AbstractFunction {
+public class TimeFunction extends AbstractFunction implements TestStateListener {
 
     private static final String KEY = "__time"; // $NON-NLS-1$
 
@@ -56,6 +62,34 @@ public class TimeFunction extends AbstractFunction {
     private static final Map<String, String> aliases = new HashMap<>();
 
     private static final Logger log = LoggerFactory.getLogger(TimeFunction.class);
+
+    private static final LoadingCache<String, Supplier<String>> DATE_TIME_FORMATTER_CACHE =
+            Caffeine.newBuilder()
+                    .maximumSize(1000)
+                    .build((fmt) -> {
+                        if (DIVISOR_PATTERN.matcher(fmt).matches()) {
+                            long div = Long.parseLong(fmt.substring(1)); // should never case NFE
+                            return () -> Long.toString(System.currentTimeMillis() / div);
+                        }
+                        DateTimeFormatter df = DateTimeFormatter
+                                .ofPattern(fmt)
+                                .withZone(ZoneId.systemDefault());
+                        if (isPossibleUsageOfUInFormat(df, fmt)) {
+                            log.warn(
+                                    MessageFormat.format(
+                                            JMeterUtils.getResString("time_format_changed"),
+                                            fmt));
+                        }
+                        return () -> df.format(Instant.now());
+                    });
+
+    private static boolean isPossibleUsageOfUInFormat(DateTimeFormatter df, String fmt) {
+        ZoneId mst = ZoneId.of("-07:00");
+        return fmt.contains("u") &&
+                df.withZone(mst)
+                        .format(ZonedDateTime.of(2006, 1, 2, 15, 4, 5, 6, mst))
+                        .contains("2006");
+    }
 
     static {
         desc.add(JMeterUtils.getResString("time_format")); //$NON-NLS-1$
@@ -95,18 +129,7 @@ public class TimeFunction extends AbstractFunction {
             if (fmt == null) {
                 fmt = format;// Not found
             }
-            if (DIVISOR_PATTERN.matcher(fmt).matches()) { // divisor is a positive number
-                long div = Long.parseLong(fmt.substring(1)); // should never case NFE
-                datetime = Long.toString(System.currentTimeMillis() / div);
-            } else {
-                if (fmt.contains("u")) {
-                    log.warn(JMeterUtils.getResString("time_format_changed"));
-                }
-                DateTimeFormatter df = DateTimeFormatter // Not synchronised, so can't be shared
-                        .ofPattern(fmt)
-                        .withZone(ZoneId.systemDefault());
-                datetime = df.format(Instant.now());
-            }
+            datetime = DATE_TIME_FORMATTER_CACHE.get(fmt).get();
         }
 
         if (!variable.isEmpty()) {
@@ -147,5 +170,27 @@ public class TimeFunction extends AbstractFunction {
     @Override
     public List<String> getArgumentDesc() {
         return desc;
+    }
+
+    @Override
+    public void testStarted() {
+        // We invalidate the cache so it will parse the formats again and will raise a warning if there are
+        // %u usages.
+        DATE_TIME_FORMATTER_CACHE.invalidateAll();
+    }
+
+    @Override
+    public void testStarted(String host) {
+        testStarted();
+    }
+
+    @Override
+    public void testEnded() {
+        DATE_TIME_FORMATTER_CACHE.invalidateAll();
+    }
+
+    @Override
+    public void testEnded(String host) {
+        testEnded();
     }
 }
