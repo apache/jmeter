@@ -137,6 +137,7 @@ Summary
 <h3>Listeners</h3>
 <ul>
   <li><issue>5740</issue><pr>5741</pr>Fix Aggregated Graph component to cope with empty names of samplers</li>
+  <li><issue>5807</issue>Fix an ArrayIndexOutOfBoundsException on HTTP parameters line on special case when key and value are empty, i.e.: "k1=v1&amp;&#61;&amp;k2=v2"</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
