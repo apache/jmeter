@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import junit.framework.TestCase;
@@ -193,4 +194,29 @@ public class RequestViewHTTPTest extends TestCase {
         Assert.assertEquals(query, param1.getValue()[0]);
         Assert.assertTrue(StringUtils.isBlank(param1.getKey()));
     }
+
+    @Test
+    public void testGetQueryMapWithEmptyKeyAndValue() {
+        String query = "k1=v1&=&k2=v2";
+        Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
+        Assert.assertNotNull(params);
+        Assertions.assertEquals(2, params.size()); // 2 params found
+    }
+
+    @Test
+    public void testGetQueryMapWithOnlyEmptyKeyAndValue() {
+        String query = "=";
+        Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
+        Assert.assertNotNull(params);
+        Assertions.assertEquals(0, params.size()); // 0 param found
+    }
+
+    @Test
+    public void testGetQueryMapWithNoKeyButOneValue() {
+        String query = "k1=v1&=value&k2=v2";
+        Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
+        Assert.assertNotNull(params);
+        Assertions.assertEquals(3, params.size()); // 3 params found with one have empty key
+    }
+
 }
