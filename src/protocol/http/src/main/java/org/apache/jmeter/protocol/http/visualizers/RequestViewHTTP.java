@@ -285,12 +285,17 @@ public class RequestViewHTTP implements RequestView {
 
         Map<String, String[]> map = new HashMap<>();
         String[] params = query.split(PARAM_CONCATENATE);
+        int i = 0;
         for (String param : params) {
+            i++;
             String[] paramSplit = param.split("=");
+            String name = "";
+            boolean noNameAndNoValue = false;
             if (paramSplit.length == 0) {
-                return map;
+                noNameAndNoValue = true;
+            } else {
+                name = decodeQuery(paramSplit[0]);
             }
-            String name = decodeQuery(paramSplit[0]);
 
             // hack for SOAP request (generally)
             if (name.trim().startsWith("<?")) { // $NON-NLS-1$
@@ -319,9 +324,11 @@ public class RequestViewHTTP implements RequestView {
                 System.arraycopy(known, 0, tmp, 0, known.length);
                 known = tmp;
             }
-            map.put(name, known);
+            if (!noNameAndNoValue) {
+                map.put(name, known);
+            }
         }
-
+        System.out.println("i: " + i + " map size: " + map.size());
         return map;
     }
 

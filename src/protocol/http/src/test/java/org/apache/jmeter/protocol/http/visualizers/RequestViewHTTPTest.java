@@ -200,7 +200,7 @@ public class RequestViewHTTPTest extends TestCase {
         String query = "k1=v1&=&k2=v2";
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
         Assert.assertNotNull(params);
-        Assertions.assertEquals(2, params.size() + 1); // 2 params found
+        Assertions.assertEquals(2, params.size()); // 2 params found
     }
 
     @Test
@@ -210,4 +210,13 @@ public class RequestViewHTTPTest extends TestCase {
         Assert.assertNotNull(params);
         Assertions.assertEquals(0, params.size()); // 0 param found
     }
+    
+    @Test
+    public void testGetQueryMapWithNoKeyButOneValue() {
+        String query = "k1=v1&=value&k2=v2";
+        Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
+        Assert.assertNotNull(params);
+        Assertions.assertEquals(3, params.size()); // 3 params found with one have empty key
+    }
+
 }
