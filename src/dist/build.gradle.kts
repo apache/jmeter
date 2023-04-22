@@ -202,7 +202,7 @@ val verifyReleaseDependencies by tasks.registering {
             sb.append("\n  ${expected.size} => ${libs.size} files")
             sb.append(" (${if (libs.size > expected.size) "+" else "-"}${(libs.size - expected.size).absoluteValue})")
         }
-        sb.appendln()
+        sb.appendLine()
         for (dep in (libs.keys + expected.keys).sortedWith(caseInsensitive)) {
             val old = expected[dep]
             val new = libs[dep]
@@ -270,6 +270,9 @@ val copyBinLibs by tasks.registering(Copy::class) {
     // Can't use $rootDir since Gradle somehow reports .gradle/caches/ as "always modified"
     rootSpec.into("$rootDir/bin")
     with(binLibs)
+    // :src:config:jar conflicts with copyBinLibs on bin, bin/templates, bin/report-template folders
+    // so we add explicit ordering
+    mustRunAfter(":src:config:jar")
 }
 
 val createDist by tasks.registering {
@@ -320,9 +323,9 @@ fun createAnakiaTask(
                 parentFile.run { isDirectory || mkdirs() } || throw IllegalStateException("Unable to create directory $parentFile")
 
                 writer().use {
-                    it.appendln("# Auto-generated from $velocityProperties to pass absolute path to Velocity")
+                    it.appendLine("# Auto-generated from $velocityProperties to pass absolute path to Velocity")
                     for (line in lines) {
-                        it.appendln(line)
+                        it.appendLine(line)
                     }
                 }
             }
@@ -563,7 +566,7 @@ for (type in listOf("binary", "source")) {
         break
     }
     for (archive in listOf(Zip::class, Tar::class)) {
-        val taskName = "dist${archive.simpleName}${type.replace("binary", "").capitalize()}"
+        val taskName = "dist${archive.simpleName}${type.replace("binary", "").replaceFirstChar { it.titlecaseChar() }}"
         val archiveTask = tasks.register(taskName, archive) {
             val eol = if (archive == Tar::class) LineEndings.LF else LineEndings.CRLF
             group = distributionGroup
@@ -610,7 +613,7 @@ val runGui by tasks.registering(JavaExec::class) {
     dependsOn(createDist)
 
     workingDir = File(project.rootDir, "bin")
-    main = "org.apache.jmeter.NewDriver"
+    mainClass.set("org.apache.jmeter.NewDriver")
     classpath("$rootDir/bin/ApacheJMeter.jar")
     jvmArgs("-Xss256k")
     jvmArgs("-XX:MaxMetaspaceSize=256m")

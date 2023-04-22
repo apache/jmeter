@@ -114,7 +114,7 @@ Summary
   <li><pr>5725</pr>Update JSoup to 1.15.3 (from 1.15.1)</li>
   <li><pr>5725</pr>Update Apache commons-net to 3.9.0 (from 3.8.0)</li>
   <li><pr>5725</pr>Update XStream to 1.4.20 (from 1.4.19)</li>
-  <li><pr>5763</pr>Updated Gradle to 7.3 (from 7.2)</li>
+  <li><pr>5763</pr>Updated Gradle to 8.1.1 (from 7.2)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

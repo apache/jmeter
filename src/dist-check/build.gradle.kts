@@ -119,7 +119,7 @@ inline fun <reified T : BatchTest> createBatchTask(
 ) =
     tasks.register(
         "batch" + (if (T::class == BatchTestServer::class) "Server" else "") +
-            name.capitalize() + suffix.capitalize(),
+            name.replaceFirstChar { it.titlecaseChar() } + suffix.replaceFirstChar { it.titlecaseChar() },
         T::class
     ) {
         group = when {
