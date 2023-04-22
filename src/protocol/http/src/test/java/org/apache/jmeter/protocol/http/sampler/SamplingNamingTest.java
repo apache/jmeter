@@ -25,8 +25,8 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -47,7 +47,7 @@ class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTest {
     void testBug63364(String implementation) {
         TestPlan plan = new TestPlan();
         SampleResult[] subResults = doSample(implementation);
-        Assert.assertTrue("We should have at least one sample result, we had none", subResults.length > 0);
+        Assertions.assertTrue(subResults.length > 0, "We should have at least one sample result, we had none");
         for (int i = 0; i < subResults.length; i++) {
             assertEquals("Expected sample label to be " + LABEL + "-" + i, LABEL + "-" + i,
                     subResults[i].getSampleLabel());
@@ -56,10 +56,9 @@ class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTest {
         plan.setFunctionalMode(true);
         try {
             subResults = doSample(implementation);
-            Assert.assertTrue("We should have at least one sample result, we had none", subResults.length > 0);
+            Assertions.assertTrue(subResults.length > 0, "We should have at least one sample result, we had none");
             for (SampleResult subResult : subResults) {
-                Assert.assertTrue("Expected sample label to start with " + JMETER_HOME_PAGE,
-                        subResult.getSampleLabel().startsWith(JMETER_HOME_PAGE));
+                Assertions.assertTrue(subResult.getSampleLabel().startsWith(JMETER_HOME_PAGE), "Expected sample label to start with " + JMETER_HOME_PAGE);
             }
         } finally {
             plan.setFunctionalMode(prevValue);
