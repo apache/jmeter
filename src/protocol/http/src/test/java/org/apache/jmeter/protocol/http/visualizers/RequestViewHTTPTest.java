@@ -23,9 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import junit.framework.TestCase;
-
-public class RequestViewHTTPTest extends TestCase {
+public class RequestViewHTTPTest {
 
     @Test
     public void testGetQueryMapValueContainingAmpersand() {
