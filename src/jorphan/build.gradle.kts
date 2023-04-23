@@ -15,9 +15,11 @@
  * limitations under the License.
  */
 
-dependencies {
-    api(platform(project(":src:bom")))
+plugins {
+    id("build-logic.jvm-published-library")
+}
 
+dependencies {
     api("org.apiguardian:apiguardian-api")
     api("org.slf4j:slf4j-api")
 

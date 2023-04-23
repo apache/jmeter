@@ -52,6 +52,7 @@ public class MessageAdmin {
             return reply;
         }
 
+        @SuppressWarnings("UnusedMethod")
         public Object getRequest() {
             return request;
         }

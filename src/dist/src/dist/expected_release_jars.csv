@@ -87,10 +87,10 @@
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar
 32033,kotlin-logging-jvm-2.0.5.jar
-1509405,kotlin-stdlib-1.6.21.jar
-200631,kotlin-stdlib-common-1.6.21.jar
-23898,kotlin-stdlib-jdk7-1.6.21.jar
-17772,kotlin-stdlib-jdk8-1.6.21.jar
+1670468,kotlin-stdlib-1.8.21.jar
+221490,kotlin-stdlib-common-1.8.21.jar
+963,kotlin-stdlib-jdk7-1.8.21.jar
+968,kotlin-stdlib-jdk8-1.8.21.jar
 1492143,kotlinx-coroutines-core-jvm-1.6.1.jar
 10026,kotlinx-coroutines-swing-1.6.1.jar
 792176,kotlinx-html-jvm-0.7.3.jar

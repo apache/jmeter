@@ -15,8 +15,12 @@
  * limitations under the License.
  */
 
+plugins {
+    id("build-logic.jvm-published-library")
+}
+
 dependencies {
-    api(project(":src:core"))
+    api(projects.src.core)
     testImplementation(project(":src:core", "testClasses"))
 
     api("org.apache-extras.beanshell:bsh") {
@@ -73,7 +77,7 @@ dependencies {
     testRuntimeOnly("org.bouncycastle:bcpkix-jdk15on")
     testRuntimeOnly("org.bouncycastle:bcprov-jdk15on")
     testImplementation("nl.jqno.equalsverifier:equalsverifier")
-    testImplementation(testFixtures(project(":src:testkit-wiremock")))
+    testImplementation(testFixtures(projects.src.testkitWiremock))
 }
 
 fun String?.toBool(nullAs: Boolean, blankAs: Boolean, default: Boolean) =

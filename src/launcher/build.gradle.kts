@@ -15,6 +15,10 @@
  * limitations under the License.
  */
 
+plugins {
+    id("build-logic.jvm-published-library")
+}
+
 val lastEditYear: String by rootProject.extra
 
 tasks.withType<ProcessResources>().configureEach {

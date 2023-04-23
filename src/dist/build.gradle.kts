@@ -24,8 +24,10 @@ import org.gradle.api.internal.TaskOutputsInternal
 import kotlin.math.absoluteValue
 
 plugins {
+    id("build-logic.build-params")
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.stage-vote-release")
+    id("build-logic.jvm-library")
 }
 
 var jars = arrayOf(
@@ -50,6 +52,10 @@ var jars = arrayOf(
     ":src:protocol:tcp"
 )
 
+// https://github.com/gradle/gradle/pull/16627
+inline fun <reified T : Named> AttributeContainer.attribute(attr: Attribute<T>, value: String) =
+    attribute(attr, objects.named<T>(value))
+
 // isCanBeConsumed = false ==> other modules must not use the configuration as a dependency
 val buildDocs by configurations.creating {
     isCanBeConsumed = false
@@ -59,6 +65,13 @@ val generatorJar by configurations.creating {
 }
 val junitSampleJar by configurations.creating {
     isCanBeConsumed = false
+    isTransitive = false
+    attributes {
+        attribute(Category.CATEGORY_ATTRIBUTE, Category.LIBRARY)
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, LibraryElements.JAR)
+        attribute(Usage.USAGE_ATTRIBUTE, Usage.JAVA_RUNTIME)
+        attribute(Bundling.BUNDLING_ATTRIBUTE, Bundling.EXTERNAL)
+    }
 }
 val binLicense by configurations.creating {
     isCanBeConsumed = false
@@ -83,9 +96,9 @@ dependencies {
     binLicense(project(":src:licenses", "binLicense"))
     srcLicense(project(":src:licenses", "srcLicense"))
     generatorJar(project(":src:generator", "archives"))
-    junitSampleJar(project(":src:protocol:junit-sample", "archives"))
+    junitSampleJar(project(":src:protocol:junit-sample"))
 
-    buildDocs(platform(project(":src:bom")))
+    buildDocs(platform(projects.src.bomThirdparty))
     buildDocs("org.apache.velocity:velocity")
     buildDocs("commons-lang:commons-lang")
     buildDocs("org.apache.commons:commons-collections4")
@@ -121,9 +134,9 @@ val populateLibs by tasks.registering {
     doLast {
         val deps = configurations.runtimeClasspath.get().resolvedConfiguration.resolvedArtifacts
         // This ensures project exists, if project is renamed, names should be corrected here as wells
-        val launcherProject = project(":src:launcher").path
-        val bshclientProject = project(":src:bshclient").path
-        val jorphanProject = project(":src:jorphan").path
+        val launcherProject = projects.src.launcher.dependencyProject.path
+        val bshclientProject = projects.src.bshclient.dependencyProject.path
+        val jorphanProject = projects.src.jorphan.dependencyProject.path
         listOf(libs, libsExt, binLibs).forEach {
             it.fileMode = "644".toInt(8)
             it.dirMode = "755".toInt(8)
@@ -557,12 +570,10 @@ val javadocAggregate by tasks.registering(Javadoc::class) {
     setDestinationDir(file("$buildDir/docs/javadocAggregate"))
 }
 
-val skipDist: Boolean by rootProject.extra
-
 // Generates distZip, distTar, distZipSource, and distTarSource tasks
 // The archives and checksums are put to build/distributions
 for (type in listOf("binary", "source")) {
-    if (skipDist) {
+    if (buildParameters.skipDist) {
         break
     }
     for (archive in listOf(Zip::class, Tar::class)) {

@@ -15,6 +15,10 @@
  * limitations under the License.
  */
 
+plugins {
+    id("build-logic.jvm-library")
+}
+
 dependencies {
-    api(project(":src:components"))
+    api(projects.src.components)
 }
