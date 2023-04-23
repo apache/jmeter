@@ -287,6 +287,9 @@ public class RequestViewHTTP implements RequestView {
         String[] params = query.split(PARAM_CONCATENATE);
         for (String param : params) {
             String[] paramSplit = param.split("=");
+            if (paramSplit.length == 0) {
+                continue; // We found no key-/value-pair, so continue on the next param
+            }
             String name = decodeQuery(paramSplit[0]);
 
             // hack for SOAP request (generally)
@@ -318,7 +321,6 @@ public class RequestViewHTTP implements RequestView {
             }
             map.put(name, known);
         }
-
         return map;
     }
 
