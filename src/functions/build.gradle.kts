@@ -15,8 +15,12 @@
  * limitations under the License.
  */
 
+plugins {
+    id("build-logic.jvm-published-library")
+}
+
 dependencies {
-    api(project(":src:components"))
+    api(projects.src.components)
     testImplementation(project(":src:core", "testClasses"))
 
     implementation("org.mozilla:rhino")

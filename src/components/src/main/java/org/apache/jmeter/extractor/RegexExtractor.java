@@ -474,7 +474,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
                 , Perl5Compiler.READ_ONLY_MASK
-                & Perl5Compiler.SINGLELINE_MASK);
+                | Perl5Compiler.SINGLELINE_MASK);
         if (log.isDebugEnabled()) {
             log.debug("Pattern = '{}', template = '{}'", templatePattern.getPattern(), rawTemplate);
         }

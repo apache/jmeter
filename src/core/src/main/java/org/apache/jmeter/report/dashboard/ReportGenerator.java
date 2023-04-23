@@ -319,7 +319,7 @@ public class ReportGenerator {
             log.error(message);
             throw new GenerationException(message);
         }
-        return tmpDirCreated;
+        return true;
     }
 
     private void addGraphConsumer(FilterConsumer nameFilter,

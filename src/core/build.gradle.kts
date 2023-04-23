@@ -18,12 +18,12 @@
 import com.github.autostyle.gradle.AutostyleTask
 
 plugins {
-    id("com.github.vlsi.ide")
+    id("build-logic.jvm-published-library")
 }
 
 dependencies {
-    api(project(":src:launcher"))
-    api(project(":src:jorphan"))
+    api(projects.src.launcher)
+    api(projects.src.jorphan)
     testImplementation(project(":src:jorphan", "testClasses"))
 
     api("bsf:bsf") {
@@ -145,6 +145,10 @@ ide {
 }
 
 // <editor-fold defaultstate="collapsed" desc="Gradle can't infer task dependencies, however it sees they use the same directories. So we add the dependencies">
+tasks.sourcesJar {
+    dependsOn(versionClass)
+}
+
 plugins.withId("org.jetbrains.kotlin.jvm") {
     tasks.named("compileKotlin") {
         dependsOn(versionClass)

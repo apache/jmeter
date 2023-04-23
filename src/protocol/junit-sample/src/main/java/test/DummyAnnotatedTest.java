@@ -60,7 +60,7 @@ public class DummyAnnotatedTest
 
     @Test
     // Succeeds only if Before method - verifyTwo() - is run.
-    @SuppressWarnings("UseCorrectAssertInTests")
+    @SuppressWarnings({"UseCorrectAssertInTests", "AlreadyChecked"})
     public void add() {
         int four = two + 2;
         if (4 != four) {

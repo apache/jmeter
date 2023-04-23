@@ -17,20 +17,7 @@
 
 pluginManagement {
     plugins {
-        fun String.v() = extra["$this.version"].toString()
-        fun PluginDependenciesSpec.idv(id: String, key: String = id) = id(id) version key.v()
-
-        idv("com.github.autostyle")
-        idv("com.github.spotbugs")
-        idv("com.github.vlsi.crlf", "com.github.vlsi.vlsi-release-plugins")
-        idv("com.github.vlsi.gradle-extensions", "com.github.vlsi.vlsi-release-plugins")
-        idv("com.github.vlsi.ide", "com.github.vlsi.vlsi-release-plugins")
-        idv("com.github.vlsi.stage-vote-release", "com.github.vlsi.vlsi-release-plugins")
-        idv("net.ltgt.errorprone")
-        idv("org.jetbrains.gradle.plugin.idea-ext")
-        kotlin("jvm") version extra["kotlin.version"].toString()
-        idv("org.nosphere.apache.rat")
-        idv("org.sonarqube")
+        id("com.github.vlsi.stage-vote-release") version "1.86"
     }
 }
 
@@ -38,12 +25,26 @@ plugins {
     `gradle-enterprise`
 }
 
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        // TODO: support enableMavenLocal
+        mavenCentral()
+    }
+}
+
 // This is the name of a current project
 // Note: it cannot be inferred from the directory name as developer might clone JMeter to jmeter_tmp folder
 rootProject.name = "jmeter"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+includeBuild("build-logic-commons")
+includeBuild("build-logic")
+
 include(
     "src:bom",
+    "src:bom-thirdparty",
     "src:bshclient",
     "src:launcher",
     "src:components",

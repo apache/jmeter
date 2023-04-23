@@ -118,10 +118,10 @@ build only the required jars and files.
 ## Coverage
 
       # Generates code coverage report for the test task to build/reports/jacoco/test/html
-      gw jacocoTestReport
+      gw jacocoTestReport -Pcoverage
 
       # Generate combined coverage report
-      gw jacocoReport
+      gw jacocoReport -Pcoverage
 
 ## Generate Javadocs
 

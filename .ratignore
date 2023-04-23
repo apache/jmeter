@@ -1,9 +1,9 @@
 checksum.xml
-buildSrc/checksum.xml
-buildSrc/gradle/checksum-dependency-plugin/cached-pgp-keys/**
+build-logic/checksum.xml
+build-logic/gradle/checksum-dependency-plugin/cached-pgp-keys/**
 gradle/wrapper/gradle-wrapper.jar
 gradle/checksum-dependency-plugin/cached-pgp-keys/**
-.*
+**/.*
 .*/**
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md

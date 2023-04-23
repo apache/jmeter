@@ -29,8 +29,24 @@ import com.github.vlsi.gradle.release.ExtraLicense
 import com.github.vlsi.gradle.release.dsl.dependencyLicenses
 import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 
+plugins {
+    base
+    // jvm-ecosystem workarounds issue with "ambiguous variants for caffeine"
+    `jvm-ecosystem`
+}
+
+// https://github.com/gradle/gradle/pull/16627
+inline fun <reified T : Named> AttributeContainer.attribute(attr: Attribute<T>, value: String) =
+    attribute(attr, objects.named<T>(value))
+
 val binaryDependencies by configurations.creating {
     isCanBeConsumed = false
+    attributes {
+        attribute(Category.CATEGORY_ATTRIBUTE, Category.LIBRARY)
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, LibraryElements.JAR)
+        attribute(Usage.USAGE_ATTRIBUTE, Usage.JAVA_RUNTIME)
+        attribute(Bundling.BUNDLING_ATTRIBUTE, Bundling.EXTERNAL)
+    }
 }
 val binLicense by configurations.creating {
     isCanBeResolved = false
@@ -71,8 +87,8 @@ val gatherSourceLicenses by tasks.registering(GatherLicenseTask::class) {
 
 val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     configuration(binaryDependencies)
-    ignoreMissingLicenseFor.add(SpdxLicense.Apache_2_0.asExpression())
-    defaultTextFor.add(SpdxLicense.MPL_2_0.asExpression())
+    ignoreMissingLicenseFor.add(SpdxLicense.Apache_2_0.expression)
+    defaultTextFor.add(SpdxLicense.MPL_2_0.expression)
     // There are three major cases here:
     // 1. License id needs to be overridden (e.g. "BSD style" -> BSD-3-Clause)
     // 2. Jar file misses LICENSE/NOTICE files, thus we need to specify local folder with relevant files (e.g. licenses/rsyntaxtextarea)

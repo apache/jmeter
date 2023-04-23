@@ -17,6 +17,7 @@
 
 plugins {
     `java-test-fixtures`
+    id("build-logic.jvm-library")
 }
 
 // test-fixtures enable to share code across test modules
