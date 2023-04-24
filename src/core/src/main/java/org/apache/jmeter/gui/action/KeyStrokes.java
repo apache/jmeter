@@ -72,6 +72,7 @@ public final class KeyStrokes {
     public static final KeyStroke OPEN              = KeyStroke.getKeyStroke(KeyEvent.VK_O, CONTROL_MASK);
     public static final KeyStroke EXIT              = KeyStroke.getKeyStroke(KeyEvent.VK_Q, CONTROL_MASK);
     public static final KeyStroke ACTION_START      = KeyStroke.getKeyStroke(KeyEvent.VK_R, CONTROL_MASK);
+    public static final KeyStroke ACTION_START_NO_PAUSE  = KeyStroke.getKeyStroke(KeyEvent.VK_N, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke REMOTE_START_ALL  = KeyStroke.getKeyStroke(KeyEvent.VK_R, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
     public static final KeyStroke SAVE              = KeyStroke.getKeyStroke(KeyEvent.VK_S, CONTROL_MASK);
     public static final KeyStroke SAVE_ALL_AS       = KeyStroke.getKeyStroke(KeyEvent.VK_S, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
