@@ -97,6 +97,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+  <li><pr>5792</pr>Add KeyStroke for start_no_timers (Start no pauses: CRTL+SHIFT+n)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
