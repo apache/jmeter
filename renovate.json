@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "labels": ["dependencies"],
+  "schedule": ["every 3 weeks on Monday"],
+  "packageRules": [
+    {
+      "matchPackagePrefixes": ["com.github.vlsi"],
+      "groupName": "com.github.vlsi"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.activemq"],
+      "groupName": "org.apache.activemq"
+    },
+    {
+      "matchPackagePatterns": ["^src:protocol:"],
+      "ignoreLookupWarnings": true
+    }
+  ]
+}
