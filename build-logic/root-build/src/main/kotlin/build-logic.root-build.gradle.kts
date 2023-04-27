@@ -53,6 +53,7 @@ val rat by tasks.getting(org.nosphere.apache.rat.RatTask::class) {
     // Technically speaking, that is false positive since rat ignores *.jar files,
     // and copyLibs copies jar files only
     mustRunAfter(":src:dist:copyBinLibs", ":src:dist:copyLibs")
+    mustRunAfter(":src:dist-check:copyExtraTestLibs")
 }
 
 if (buildParameters.coverage) {
