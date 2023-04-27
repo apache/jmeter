@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+import java.util.*
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -67,7 +69,7 @@ fun File.sha512(): String {
     forEachBlock { buffer, bytesRead ->
         md.update(buffer, 0, bytesRead)
     }
-    return BigInteger(1, md.digest()).toString(16).toUpperCase()
+    return BigInteger(1, md.digest()).toString(16).uppercase(Locale.ROOT)
 }
 
 val violations =
