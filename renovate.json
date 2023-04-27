@@ -7,15 +7,56 @@
   "schedule": ["every 3 weeks on Monday"],
   "packageRules": [
     {
+      "matchPackagePrefixes": ["com.fasterxml.jackson.core"],
+      "groupName": "com.fasterxml.jackson.core"
+    },
+    {
       "matchPackagePrefixes": ["com.github.vlsi"],
       "groupName": "com.github.vlsi"
+    },
+    {
+      "matchPackagePrefixes": ["com.github.weisj"],
+      "groupName": "com.github.weisj"
+    },
+    {
+      "matchPackagePrefixes": ["com.helger"],
+      "groupName": "com.helger"
+    },
+    {
+      "matchPackagePrefixes": ["com.miglayout"],
+      "groupName": "com.miglayout"
     },
     {
       "matchPackagePrefixes": ["org.apache.activemq"],
       "groupName": "org.apache.activemq"
     },
     {
-      "matchPackagePatterns": ["^src:protocol:"],
+      "matchPackagePrefixes": ["org.apache.httpcomponents"],
+      "groupName": "org.apache.httpcomponents"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.logging.log4j"],
+      "groupName": "org.apache.logging.log4j"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.tika"],
+      "groupName": "org.apache.tika"
+    },
+    {
+      "matchPackagePrefixes": ["org.checkerframework"],
+      "groupName": "org.checkerframework"
+    },
+    {
+      "matchPackagePrefixes": ["org.jodd"],
+      "groupName": "org.jodd"
+    },
+    {
+      "matchPackagePrefixes": ["org.slf4j"],
+      "groupName": "org.slf4j",
+      "allowedVersions": "< 2.0.0"
+    },
+    {
+      "matchPackagePatterns": ["^src:protocol"],
       "enabled": false
     }
   ]
