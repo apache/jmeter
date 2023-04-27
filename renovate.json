@@ -16,7 +16,7 @@
     },
     {
       "matchPackagePatterns": ["^src:protocol:"],
-      "ignoreLookupWarnings": true
+      "enabled": false
     }
   ]
 }
