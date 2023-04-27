@@ -19,7 +19,7 @@ import java.util.*
 
 pluginManagement {
     plugins {
-        id("com.github.vlsi.stage-vote-release") version "1.86"
+        id("com.github.vlsi.stage-vote-release") version "1.88"
     }
 }
 
