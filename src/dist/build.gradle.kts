@@ -589,6 +589,7 @@ for (type in listOf("binary", "source")) {
             // So we add an artificial dependency
             mustRunAfter(copyBinLibs)
             mustRunAfter(copyLibs)
+            mustRunAfter(":src:dist-check:copyExtraTestLibs")
             // Gradle does not track "filters" as archive/copy task dependencies,
             // So a mere change of a file attribute won't trigger re-execution of a task
             // So we add a custom property to re-execute the task in case attributes change
