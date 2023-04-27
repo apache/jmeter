@@ -237,6 +237,10 @@ val verifyReleaseDependencies by tasks.registering {
         if (updateExpectedJars) {
             println("Updating ${expectedLibs.relativeTo(rootDir)}")
             actualLibs.copyTo(expectedLibs, overwrite = true)
+        } else if (version.toString().endsWith("-SNAPSHOT")) {
+            // Renovate requires self-hosted runner for executing postUpgradeTasks,
+            // so we can't make Renovate to update expected_release_jars.csv at the moment
+            logger.lifecycle(sb.toString())
         } else {
             throw GradleException(sb.toString())
         }
