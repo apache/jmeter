@@ -116,6 +116,9 @@ Summary
   <li><pr>5725</pr>Update Apache commons-net to 3.9.0 (from 3.8.0)</li>
   <li><pr>5725</pr>Update XStream to 1.4.20 (from 1.4.19)</li>
   <li><pr>5763</pr>Updated Gradle to 8.1.1 (from 7.2)</li>
+  <li><pr>5763</pr>Updated Gradle to 7.3 (from 7.2)</li>
+  <li>Update lets-plot-jvm to 4.3.0 (from 3.1.1)</li>
+  <li>Update lets-plot-batik to 3.1.0 (from 2.1.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
