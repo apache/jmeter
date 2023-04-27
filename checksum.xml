@@ -87,6 +87,7 @@
     <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.mail' />
     <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.servlet' />
     <trusted-key id='4daded739cdf2cd0e48e0ec44044edf1bb73efea' group='jaxen' />
+    <trusted-key id='ca491704d613780d2bee00f2c6fc46eb51cf569c' group='jaxen' />
     <trusted-key id='b5569a15406ae682380f3ef8528dc75aa68f0923' group='jcharts' />
     <trusted-key id='ea23db1360d9029481e7f2efecdfea3cb4493b94' group='jline' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='junit' />
@@ -174,6 +175,7 @@
     <trusted-key id='a33a0b49a4c1ab590b0a4ddc1364c5e2df3e99c5' group='org.reactivestreams' />
     <trusted-key id='3f2a008a91d11a7fac4a0786f13d3e721d56bd54' group='org.reflections' />
     <trusted-key id='475f3b8e59e6e63aa78067482c7b12f2a511e325' group='org.slf4j' />
+    <trusted-key id='60200ac4ae761f1614d6c46766d68daa073be985' group='org.slf4j' />
     <trusted-key id='2b1042677fd8190c7b9fc0dc2161d72e7dcd4258' group='org.sonarsource.scanner.api' />
     <trusted-key id='f1182e81c792928921dbcab4cfca4a29d26468de' group='org.sonarsource.scanner.api' />
     <trusted-key id='76e94e8ff0ab5af3b6f8366972fefd1572eb75e1' group='org.spockframework' />
