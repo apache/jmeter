@@ -24,7 +24,7 @@ plugins {
 }
 
 checkstyle {
-    toolVersion = "10.8.1"
+    toolVersion = "10.10.0"
     configProperties = mapOf(
         "cache_file" to buildDir.resolve("checkstyle/cacheFile")
     )
