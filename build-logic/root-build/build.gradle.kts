@@ -22,9 +22,9 @@ plugins {
 dependencies {
     api(projects.buildParameters)
     api(projects.verification)
-    api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.86")
-    api("com.github.vlsi.ide:com.github.vlsi.ide.gradle.plugin:1.86")
-    api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.86")
+    api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.88")
+    api("com.github.vlsi.ide:com.github.vlsi.ide.gradle.plugin:1.88")
+    api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.88")
     api("org.nosphere.apache.rat:org.nosphere.apache.rat.gradle.plugin:0.8.0")
     api("org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin:0.5")
 }
