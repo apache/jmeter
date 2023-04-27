@@ -50,9 +50,9 @@ dependencies {
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.2.12")
-        api("com.fasterxml.jackson.core:jackson-annotations:2.13.4")
-        api("com.fasterxml.jackson.core:jackson-core:2.13.4")
-        api("com.fasterxml.jackson.core:jackson-databind:2.13.4.2")
+        api("com.fasterxml.jackson.core:jackson-annotations:2.15.0")
+        api("com.fasterxml.jackson.core:jackson-core:2.15.0")
+        api("com.fasterxml.jackson.core:jackson-databind:2.15.0")
         api("com.fifesoft:rsyntaxtextarea:3.2.0")
         api("com.formdev:svgSalamander:1.1.2.4")
         api("com.github.ben-manes.caffeine:caffeine:2.9.3")
