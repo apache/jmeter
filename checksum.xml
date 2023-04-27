@@ -6,6 +6,7 @@
   </ignored-keys>
   <trusted-keys>
     <trusted-key id='07dbc3c1ab1f4468471656061c8d5ef0df2b70d4' group='cglib' />
+    <trusted-key id='6ead752b3e2b38e8e2236d7ba9321edaa5cb3202' group='ch.randelshofer' />
     <trusted-key id='dcba03381ef6c89096acd985ac5ec74981f9cda6' group='com.beust' />
     <trusted-key id='28118c070cb22a0175a2e8d43d12ca2ac19f3181' group='com.fasterxml.jackson.core' />
     <trusted-key id='8a10792983023d5d14c93b488d7f1bec1e2ecae7' group='com.fasterxml.jackson.core' />
@@ -18,6 +19,7 @@
     <trusted-key id='635ee627345f3c1dd422b2e207d3516820bcf6b1' group='com.github.ben-manes.caffeine' />
     <trusted-key id='55e770230e69cc6de143fb5b62c82e50836eb3ee' group='com.github.gundy' />
     <trusted-key id='253e8e4c6fb28d11748115c1249dee8e2c07a0a2' group='com.github.javaparser' />
+    <trusted-key id='fc2c31fc25fede4e7ad0d18c2bfd7825a8984fbe' group='com.github.javaparser' />
     <trusted-key id='4bde772c338ba540e1057d0c8ea48d105232855d' group='com.github.jknack' />
     <trusted-key id='a4fd709cc4b0515f2e6af04e218fa0f6a941a037' group='com.github.kevinstern' />
     <trusted-key id='160a7a9cf46221a56b06ad64461a804f2609fd89' group='com.github.shyiko.klob' />
@@ -200,6 +202,9 @@
     </dependency>
     <dependency group='com.github.spotbugs.snom' module='spotbugs-gradle-plugin' version='5.0.13'>
       <sha512>2B171CABD12C1E2A89EA9DFEEDC4F97F89587AADADCBB6B4B093D7C558EE3CB2F7D2A6CC66787D5D7B664CF3DC9BC7E4CDAD3737CDCE109D7AB5A0EF0D8BC925</sha512>
+    </dependency>
+    <dependency group='com.github.spotbugs.snom' module='spotbugs-gradle-plugin' version='5.0.14'>
+      <sha512>F8768877E3B204EA886F7BDEE6B4D900DB80B1B63CF37800F56E3BB1E2D3C13B38F7BA4784160DB80A0CAB658D4948BEE1992E9FAFE519C156BEF8A4B0B3E903</sha512>
     </dependency>
     <dependency group='com.github.vlsi.gradle' module='crlf-plugin' version='1.85'>
       <sha512>59CD14C68456ADD477C6B6ACC8AC330EE5A10BA4394E3434450E958EC04968197C3EDAE8F3693D42CA32A5C0F639D6D60CF155B659D91CF89301744130087D9A</sha512>
