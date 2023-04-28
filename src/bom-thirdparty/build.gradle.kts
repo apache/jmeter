@@ -61,7 +61,7 @@ dependencies {
         api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.3.4")
         api("com.helger.commons:ph-commons:10.1.6")
         api("com.helger:ph-css:6.5.0")
-        api("com.jayway.jsonpath:json-path:2.7.0")
+        api("com.jayway.jsonpath:json-path:2.8.0")
         api("com.miglayout:miglayout-core:5.3")
         api("com.miglayout:miglayout-swing:5.3")
         api("com.sun.activation:javax.activation:1.2.0")

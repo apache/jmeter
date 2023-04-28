@@ -97,6 +97,7 @@
     <trusted-key id='a7892505cf1a58076453e52d7999befba1039e8b' group='net.bytebuddy' />
     <trusted-key id='fa7929f83ad44c4590f6cc6815c71c0a4e0b8edd' group='net.java.dev.jna' />
     <trusted-key id='d75a8c9fcf1016c0f54f2d4dc51e10bd96d06071' group='net.javacrumbs.json-unit' />
+    <trusted-key id='2f39e2a1eb9bc4e78f403b22f6bc09712c8df6ec' group='net.minidev' />
     <trusted-key id='517b94f8d0a46317a28d8ab30da8a5ec02d11ead' group='net.sf.jopt-simple' />
     <trusted-key id='4f752a9878e937049ef3fba7d4012dda1f1f0f82' group='net.sf.jtidy' />
     <trusted-key id='4c5f68d09d42ba7fac888df9a929ea2321fdbf8f' group='net.sf.saxon' />
