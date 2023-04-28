@@ -6,6 +6,7 @@
   </ignored-keys>
   <trusted-keys>
     <trusted-key id='07dbc3c1ab1f4468471656061c8d5ef0df2b70d4' group='cglib' />
+    <trusted-key id='60200ac4ae761f1614d6c46766d68daa073be985' group='ch.qos.logback' />
     <trusted-key id='6ead752b3e2b38e8e2236d7ba9321edaa5cb3202' group='ch.randelshofer' />
     <trusted-key id='dcba03381ef6c89096acd985ac5ec74981f9cda6' group='com.beust' />
     <trusted-key id='28118c070cb22a0175a2e8d43d12ca2ac19f3181' group='com.fasterxml.jackson.core' />
@@ -284,8 +285,14 @@
     <dependency group='org.jetbrains.kotlinx' module='atomicfu' version='0.17.0'>
       <sha512>1D66B1C76711E0F48800BA1EDFAABC0763A21FC0D4145DED508C8D9DCA0EDF5A61A791E58985578C25861435F5BFB4EFD5E0648A8D0E85A30CDFB01AD1559C6B</sha512>
     </dependency>
+    <dependency group='org.jetbrains.kotlinx' module='atomicfu' version='0.17.3'>
+      <sha512>A3E69E3B8416E71842921D439A45BCE30BD00043E17923B5071A298C79F4914B1CB1FAA8DAA779CBC234B576AA54A3DE4D816C2BD7E4C2712A119C357027C2B9</sha512>
+    </dependency>
     <dependency group='org.jetbrains.kotlinx' module='kotlinx-coroutines-core' version='1.6.1'>
       <sha512>44A5D6F34DB9A4BAE1C11CA10563F3A25F1C6A8F681ABD31C530C7D36C9B001AB6F345F0AB5E2AFD94AD5AB436C06D12D7B1AD9EB7F12DB3EF9487D692107921</sha512>
+    </dependency>
+    <dependency group='org.jetbrains.kotlinx' module='kotlinx-coroutines-core' version='1.6.4'>
+      <sha512>626213318BD0605586FC693969765FAE3BB15D2BCBBACB597C6E32AA1BDEF6430980480B6732556FCD93DE1E6BA99F9E050141AD59259AAE386D8D05A3C44C27</sha512>
     </dependency>
     <dependency group='org.nosphere.apache' module='creadur-rat-gradle' version='0.8.0'>
       <sha512>F9C0C770036768965D955BF849933DFA1B5805959D0C93C2C70DA31D67C200140CAC7B9B93CF28B3F86AA3A5993DD25D566E37B0C451264CB0F6F2B5CD88F760</sha512>

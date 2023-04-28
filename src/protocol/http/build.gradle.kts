@@ -46,6 +46,9 @@ dependencies {
         because("StringEscapeUtils")
     }
     implementation("org.jodd:jodd-lagarto")
+    implementation("org.jodd:jodd-log") {
+        because("jodd-lagarto 5 still uses custom jodd-log so we configure it to use slf4j")
+    }
     implementation("org.jsoup:jsoup")
     implementation("oro:oro")
     implementation("org.apache.commons:commons-collections4")
