@@ -86,8 +86,10 @@
     <trusted-key id='e52567d2589415bd74eb4c2867631bc0568801c3' group='io.github.microutils' />
     <trusted-key id='050a37a2e0577f4baa095b52602ec18d20c4661c' group='io.github.x-stream' />
     <trusted-key id='6dd3b8c64ef75253beb2c53ad908a43fb7ec07ac' group='jakarta.activation' />
+    <trusted-key id='a1483f88ba771993ab609c43590c2310cee1c9be' group='jakarta.jms' />
     <trusted-key id='fc411cd3cb7dcb0abc9801058118b3bcdb1a5000' group='jakarta.xml.bind' />
     <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.activation' />
+    <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.annotation' />
     <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.mail' />
     <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.servlet' />
     <trusted-key id='4daded739cdf2cd0e48e0ec44044edf1bb73efea' group='jaxen' />
@@ -129,6 +131,7 @@
     <trusted-key id='184454fad8697760f3e00d2e4a51a45b944ffd51' group='org.apache.tika' />
     <trusted-key id='7b9751fc3f01f134f476464cd0eb627d4885ced1' group='org.apache.velocity' />
     <trusted-key id='82d8419ba697f0e7fb85916ee91287822fdb81b1' group='org.apache.xbean' />
+    <trusted-key id='c758f9cc982ac877e7b295dd6e97418b04b11dcb' group='org.apache.xbean' />
     <trusted-key id='5c9a30ff22b2c02f30261c305b93f1df7cdb6dea' group='org.apache.xmlgraphics' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.apiguardian' />
     <trusted-key id='08f0aab4d0c1a4bdde340765b341ddb020fcb6ab' group='org.bouncycastle' />
