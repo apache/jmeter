@@ -138,7 +138,7 @@ dependencies {
         api("org.mongodb:mongo-java-driver:2.11.3")
         api("org.mozilla:rhino:1.7.14")
         api("org.neo4j.driver:neo4j-java-driver:4.4.6")
-        api("org.objenesis:objenesis:3.2")
+        api("org.objenesis:objenesis:3.3")
         api("org.slf4j:jcl-over-slf4j:1.7.36")
         api("org.slf4j:slf4j-api:1.7.36")
         api("org.spockframework:spock-core:2.2-groovy-3.0")
