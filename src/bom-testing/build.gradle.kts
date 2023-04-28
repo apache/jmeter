@@ -46,7 +46,7 @@ dependencies {
         api("org.apache.activemq:activemq-spring:5.16.4")
         api("org.apache.ftpserver:ftplet-api:1.2.0")
         api("org.apache.ftpserver:ftpserver-core:1.2.0")
-        api("org.apache.mina:mina-core:2.1.6")
+        api("org.apache.mina:mina-core:2.2.1")
         api("org.hamcrest:hamcrest-core:2.2")
         api("org.hamcrest:hamcrest-library:2.2")
         api("org.hamcrest:hamcrest:2.2")
