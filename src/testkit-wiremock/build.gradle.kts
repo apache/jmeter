@@ -21,6 +21,7 @@ plugins {
 }
 
 dependencies {
+    api(platform(projects.src.bomTesting))
     api("com.github.tomakehurst:wiremock-jre8")
     api("org.junit.jupiter:junit-jupiter-api")
 }

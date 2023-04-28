@@ -45,6 +45,9 @@ dependencies {
     findProject(":src:bom")?.let {
         api(platform(it))
     }
+    findProject(":src:bom-testing")?.let{
+        testImplementation(platform(it))
+    }
     findProject(":src:bom-thirdparty")?.let{
         api(platform(it))
     }
