@@ -147,6 +147,7 @@ Summary
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
   <li><pr>5717</pr>Add jsonpath string to jsonpath assertion error message so the error is easier to understand</li>
+  <li><pr>723</pr>Use correct number format on JSON Path Assertion. Contributed by andreaslind01 (andreaslind01 at gmail.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -184,6 +185,7 @@ Summary
   <li>Kai Lehmann (klehmann at aservo.com)</li>
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
+  <li>andreaslind01 Lind (andreaslind01 at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

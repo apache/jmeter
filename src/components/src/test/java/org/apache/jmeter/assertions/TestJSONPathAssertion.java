@@ -100,6 +100,35 @@ class TestJSONPathAssertion {
     }
 
     @Test
+    void testGetResult_positive_regexp_for_floating_point() {
+        SampleResult samplerResult = new SampleResult();
+        samplerResult.setResponseData("{\"myval\": 123.45}".getBytes(Charset.defaultCharset()));
+
+        JSONPathAssertion instance = new JSONPathAssertion();
+        instance.setJsonPath("$.myval");
+        instance.setJsonValidationBool(true);
+        instance.setExpectedValue("^\\d+\\.\\d+$");
+        AssertionResult expResult = new AssertionResult("");
+        AssertionResult result = instance.getResult(samplerResult);
+        assertEquals(expResult.getName(), result.getName());
+        assertFalse(result.isFailure());
+    }
+
+    @Test
+    void testGetResult_positive_wrong_regexp_for_floating_point() {
+        SampleResult samplerResult = new SampleResult();
+        samplerResult.setResponseData("{\"myval\": 123.45}".getBytes(Charset.defaultCharset()));
+
+        JSONPathAssertion instance = new JSONPathAssertion();
+        instance.setJsonPath("$.myval");
+        instance.setJsonValidationBool(true);
+        instance.setExpectedValue("^\\d+,\\d+$");
+        AssertionResult expResult = new AssertionResult("");
+        AssertionResult result = instance.getResult(samplerResult);
+        assertEquals(expResult.getName(), result.getName());
+        assertTrue(result.isFailure());
+    }
+    @Test
     void testGetResult_positive_regexp() {
         SampleResult samplerResult = new SampleResult();
         samplerResult.setResponseData("{\"myval\": 123}".getBytes(Charset.defaultCharset()));
