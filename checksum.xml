@@ -97,6 +97,7 @@
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='junit' />
     <trusted-key id='a7892505cf1a58076453e52d7999befba1039e8b' group='net.bytebuddy' />
     <trusted-key id='fa7929f83ad44c4590f6cc6815c71c0a4e0b8edd' group='net.java.dev.jna' />
+    <trusted-key id='3f999bb69041cf17e73bb1cec038787776a19d18' group='net.javacrumbs.json-unit' />
     <trusted-key id='d75a8c9fcf1016c0f54f2d4dc51e10bd96d06071' group='net.javacrumbs.json-unit' />
     <trusted-key id='2f39e2a1eb9bc4e78f403b22f6bc09712c8df6ec' group='net.minidev' />
     <trusted-key id='517b94f8d0a46317a28d8ab30da8a5ec02d11ead' group='net.sf.jopt-simple' />
@@ -141,7 +142,9 @@
     <trusted-key id='8f9a3c6d105b9f57844a721d79e193516be7998f' group='org.dom4j' />
     <trusted-key id='2e92113263fc31c74ccbaab20e91c2de43b72bb1' group='org.ec4j.core' />
     <trusted-key id='5989baf76217b843d66be55b2d0e1fb8fe4b68b4' group='org.eclipse.jetty' />
+    <trusted-key id='f254b35617dc255d9344bcfa873a8e86b4372146' group='org.eclipse.jetty' />
     <trusted-key id='5989baf76217b843d66be55b2d0e1fb8fe4b68b4' group='org.eclipse.jetty.http2' />
+    <trusted-key id='f254b35617dc255d9344bcfa873a8e86b4372146' group='org.eclipse.jetty.http2' />
     <trusted-key id='7c669810892cbd3148fa92995b05ccde140c2876' group='org.eclipse.jgit' />
     <trusted-key id='1def9646901a1652e5b3e5ea694db6f419c8d1fd' group='org.exparity' />
     <trusted-key id='13ac2213964abe1d1c147c0e1939a2520bab1d90' group='org.freemarker' />

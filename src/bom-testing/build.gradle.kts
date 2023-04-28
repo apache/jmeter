@@ -37,7 +37,7 @@ dependencies {
         // compilation classpath (e.g. it is used as a transitive by a third-party library)
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
-        api("com.github.tomakehurst:wiremock-jre8:2.32.0")
+        api("com.github.tomakehurst:wiremock-jre8:2.35.0")
 
         api("junit:junit:4.13.2")
 
