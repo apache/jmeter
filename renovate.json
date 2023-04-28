@@ -31,6 +31,10 @@
       "groupName": "org.apache.activemq"
     },
     {
+      "matchPackagePrefixes": ["org.apache.ftpserver"],
+      "groupName": "org.apache.ftpserver"
+    },
+    {
       "matchPackagePrefixes": ["org.apache.httpcomponents"],
       "groupName": "org.apache.httpcomponents"
     },

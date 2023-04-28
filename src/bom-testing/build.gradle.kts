@@ -38,14 +38,22 @@ dependencies {
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
         api("com.github.tomakehurst:wiremock-jre8:2.35.0")
-
         api("junit:junit:4.13.2")
-
         api("nl.jqno.equalsverifier:equalsverifier:3.14.1")
-        api("org.hamcrest:hamcrest:2.2")
+        // activemq-all should not be used as it provides secondary slf4j binding
+        api("org.apache.activemq:activemq-broker:5.16.4")
+        api("org.apache.activemq:activemq-client:5.16.4")
+        api("org.apache.activemq:activemq-spring:5.16.4")
+        api("org.apache.ftpserver:ftplet-api:1.2.0")
+        api("org.apache.ftpserver:ftpserver-core:1.2.0")
+        api("org.apache.mina:mina-core:2.1.6")
         api("org.hamcrest:hamcrest-core:2.2")
         api("org.hamcrest:hamcrest-library:2.2")
+        api("org.hamcrest:hamcrest:2.2")
+        api("org.hsqldb:hsqldb:2.5.2")
         api("org.objenesis:objenesis:3.3")
         api("org.spockframework:spock-core:2.2-groovy-3.0")
+        api("org.springframework:spring-beans:4.3.17.RELEASE")
+        api("org.springframework:spring-context:4.3.17.RELEASE")
     }
 }

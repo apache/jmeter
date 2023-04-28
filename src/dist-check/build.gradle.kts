@@ -43,6 +43,7 @@ dependencies {
     }
 
     extraTestDependencies(platform(projects.src.bomThirdparty))
+    extraTestDependencies(platform(projects.src.bomTesting))
     extraTestDependencies("org.hsqldb:hsqldb")
     extraTestDependencies("org.apache.mina:mina-core")
     extraTestDependencies("org.apache.ftpserver:ftplet-api")

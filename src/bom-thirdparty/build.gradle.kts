@@ -40,13 +40,6 @@ dependencies {
         // to make runtime classpath consistent with the compile one.
         api("org.ow2.asm:asm:9.5")
 
-        // activemq-all should not be used as it provides secondary slf4j binding
-        api("org.apache.activemq:activemq-broker:5.16.4")
-        api("org.apache.activemq:activemq-client:5.16.4")
-        api("org.apache.activemq:activemq-spring:5.16.4")
-        api("org.springframework:spring-context:4.3.17.RELEASE")
-        api("org.springframework:spring-beans:4.3.17.RELEASE")
-
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
         api("com.fasterxml.jackson.core:jackson-annotations:2.13.4")
@@ -95,8 +88,6 @@ dependencies {
         api("org.apache.commons:commons-math3:3.6.1")
         api("org.apache.commons:commons-pool2:2.11.1")
         api("org.apache.commons:commons-text:1.10.0")
-        api("org.apache.ftpserver:ftplet-api:1.2.0")
-        api("org.apache.ftpserver:ftpserver-core:1.2.0")
         api("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1")
         api("org.apache.httpcomponents:httpasyncclient:4.1.5")
         api("org.apache.httpcomponents:httpclient:4.5.13")
@@ -107,7 +98,6 @@ dependencies {
         api("org.apache.logging.log4j:log4j-api:2.17.2")
         api("org.apache.logging.log4j:log4j-core:2.17.2")
         api("org.apache.logging.log4j:log4j-slf4j-impl:2.17.2")
-        api("org.apache.mina:mina-core:2.1.6")
         api("org.apache.rat:apache-rat:0.15")
         api("org.apache.tika:tika-core:1.28.5")
         api("org.apache.tika:tika-parsers:1.28.5")
@@ -120,7 +110,6 @@ dependencies {
         api("org.brotli:dec:0.1.2")
         api("org.exparity:hamcrest-date:2.0.8")
         api("org.freemarker:freemarker:2.3.32")
-        api("org.hsqldb:hsqldb:2.5.2")
         api("org.jdom:jdom:1.1.3")
         api("org.jodd:jodd-core:5.1.5")
         api("org.jodd:jodd-lagarto:5.1.5")
