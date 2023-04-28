@@ -50,7 +50,7 @@ dependencies {
         api("org.hamcrest:hamcrest-core:2.2")
         api("org.hamcrest:hamcrest-library:2.2")
         api("org.hamcrest:hamcrest:2.2")
-        api("org.hsqldb:hsqldb:2.5.2")
+        api("org.hsqldb:hsqldb:2.7.1")
         api("org.objenesis:objenesis:3.3")
         api("org.spockframework:spock-core:2.2-groovy-3.0")
         api("org.springframework:spring-beans:4.3.17.RELEASE")
