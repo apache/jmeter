@@ -28,18 +28,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.TreeSet;
 import java.util.Vector;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
@@ -48,6 +41,9 @@ import org.junit.runner.Describable;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 import junit.framework.TestSuite;
 
