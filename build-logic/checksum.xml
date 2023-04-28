@@ -65,8 +65,8 @@
     <trusted-key id='fa1703b1d287caea3a60f931e0130a3ed5a2079e' group='org.webjars' />
   </trusted-keys>
   <dependencies>
-    <dependency group='com.github.spotbugs.snom' module='spotbugs-gradle-plugin' version='5.0.13'>
-      <sha512>2B171CABD12C1E2A89EA9DFEEDC4F97F89587AADADCBB6B4B093D7C558EE3CB2F7D2A6CC66787D5D7B664CF3DC9BC7E4CDAD3737CDCE109D7AB5A0EF0D8BC925</sha512>
+    <dependency group='com.github.spotbugs.snom' module='spotbugs-gradle-plugin' version='5.0.14'>
+      <sha512>F8768877E3B204EA886F7BDEE6B4D900DB80B1B63CF37800F56E3BB1E2D3C13B38F7BA4784160DB80A0CAB658D4948BEE1992E9FAFE519C156BEF8A4B0B3E903</sha512>
     </dependency>
     <dependency group='de.marcphilipp.gradle' module='nexus-publish-plugin' version='0.4.0'>
       <sha512>37EC6DFBDDD0458A2A341E371D038B3B0A25AB2F9006B295EBCF3BDE873A8D02C8CDAA6C69D875500F67593C618E8EF62C0269FB2F7F527A1367A7D6B8EA3CBE</sha512>
