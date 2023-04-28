@@ -39,7 +39,7 @@ dependencies {
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
         api("org.apache.tika:tika-parsers:1.28.5")
-        api("org.ow2.asm:asm:9.3")
+        api("org.ow2.asm:asm:9.5")
 
         // activemq-all should not be used as it provides secondary slf4j binding
         api("org.apache.activemq:activemq-broker:5.16.4")
