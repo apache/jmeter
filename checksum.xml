@@ -15,6 +15,7 @@
     <trusted-key id='8a10792983023d5d14c93b488d7f1bec1e2ecae7' group='com.fasterxml.jackson.module' />
     <trusted-key id='8a10792983023d5d14c93b488d7f1bec1e2ecae7' group='com.fasterxml.woodstox' />
     <trusted-key id='58f086abb0ede8f7a04b76c34c00043bec5cb7cb' group='com.fifesoft' />
+    <trusted-key id='4ac55a85d30c3499a3219500b7e2662a7640a051' group='com.formdev' />
     <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='com.formdev' />
     <trusted-key id='d112630c899f508198c09018105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='635ee627345f3c1dd422b2e207d3516820bcf6b1' group='com.github.ben-manes.caffeine' />

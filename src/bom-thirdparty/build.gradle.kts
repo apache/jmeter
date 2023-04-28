@@ -53,7 +53,7 @@ dependencies {
         api("com.fasterxml.jackson.core:jackson-core:2.13.4")
         api("com.fasterxml.jackson.core:jackson-databind:2.13.4.2")
         api("com.fifesoft:rsyntaxtextarea:3.3.3")
-        api("com.formdev:svgSalamander:1.1.2.4")
+        api("com.formdev:svgSalamander:1.1.4")
         api("com.github.ben-manes.caffeine:caffeine:2.9.3")
         api("com.github.weisj:darklaf-core:2.7.3")
         api("com.github.weisj:darklaf-theme:2.7.3")
