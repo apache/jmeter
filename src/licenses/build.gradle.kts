@@ -117,11 +117,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }
 
-    overrideLicense("org.swinglabs:jxlayer") {
-        // See https://repo1.maven.org/maven2/org/swinglabs/jxlayer/3.0.4/jxlayer-3.0.4-sources.jar
-        effectiveLicense = SpdxLicense.BSD_3_Clause
-    }
-
     for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {
         overrideLicense(mig) {
             expectedLicense = SimpleLicense("BSD", uri("http://www.debian.org/misc/bsd.license"))
@@ -137,21 +132,20 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         }
     }
 
-    overrideLicense("xpp3:xpp3_min:1.1.4c") {
-        // pom.xml contains multiple licenses
-        expectedLicense = SpdxLicense.CC0_1_0 and
+    overrideLicense("org.reactivestreams:reactive-streams") {
+        expectedLicense =
             SimpleLicense(
-                "Indiana University Extreme! Lab Software License, vesion 1.1.1",
-                uri("http://www.extreme.indiana.edu/viewcvs/~checkout~/XPP3/java/LICENSE.txt")
+                "CC0",
+                uri("http://creativecommons.org/publicdomain/zero/1.0/")
             )
-        effectiveLicense = SpdxLicense.CC0_1_0 and ExtraLicense.Indiana_University_1_1_1
+        effectiveLicense = SpdxLicense.CC0_1_0
     }
 
     overrideLicense("org.brotli:dec:0.1.2") {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("org.slf4j:slf4j-api:1.7.30") {
+    overrideLicense("org.slf4j:slf4j-api") {
         expectedLicense = SpdxLicense.MIT
     }
 
@@ -181,10 +175,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SimpleLicense("Java HTML Tidy License", uri("http://jtidy.svn.sourceforge.net/viewvc/jtidy/trunk/jtidy/LICENSE.txt?revision=95"))
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }
-    // https://github.com/typetools/checker-framework/issues/2798
-    overrideLicense("org.checkerframework:checker-qual:2.10.0") {
-        expectedLicense = SpdxLicense.MIT
-    }
 }
 
 val renderLicenseForSource by tasks.registering(Apache2LicenseRenderer::class) {
@@ -202,7 +192,13 @@ val renderLicenseForBinary by tasks.registering(Apache2LicenseRenderer::class) {
     artifactType.set(ArtifactType.BINARY)
     metadata.from(gatherSourceLicenses)
     metadata.from(gatherBinaryLicenses)
-    licenseCategory.put(ExtraLicense.Indiana_University_1_1_1.asExpression(), AsfLicenseCategory.A)
+    licenseCategory.put(
+        SimpleLicense(
+            "Indiana University Extreme! Lab Software License",
+            uri("https://raw.githubusercontent.com/x-stream/mxparser/master/LICENSE.txt")
+        ).expression,
+        AsfLicenseCategory.A
+    )
 }
 
 tasks.build.configure {
