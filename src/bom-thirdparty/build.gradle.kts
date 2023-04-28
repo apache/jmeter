@@ -91,7 +91,7 @@ dependencies {
         api("net.minidev:json-smart:2.4.8")
         api("net.sf.jtidy:jtidy:r938")
         api("net.sf.saxon:Saxon-HE:11.3")
-        api("nl.jqno.equalsverifier:equalsverifier:3.10")
+        api("nl.jqno.equalsverifier:equalsverifier:3.14.1")
         api("org.apache-extras.beanshell:bsh:2.0b6")
         api("org.apache.commons:commons-collections4:4.4")
         api("org.apache.commons:commons-dbcp2:2.9.0")
