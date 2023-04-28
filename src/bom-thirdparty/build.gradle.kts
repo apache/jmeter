@@ -124,7 +124,7 @@ dependencies {
         api("org.bouncycastle:bcprov-jdk15on:1.70")
         api("org.brotli:dec:0.1.2")
         api("org.exparity:hamcrest-date:2.0.8")
-        api("org.freemarker:freemarker:2.3.31")
+        api("org.freemarker:freemarker:2.3.32")
         api("org.hamcrest:hamcrest:2.2")
         api("org.hamcrest:hamcrest-core:2.2")
         api("org.hamcrest:hamcrest-library:2.2")
