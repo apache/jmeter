@@ -108,6 +108,10 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.BSD_2_Clause
     }
 
+    overrideLicense("ch.randelshofer:fastdoubleparser") {
+        expectedLicense = SpdxLicense.MIT
+    }
+
     overrideLicense("com.formdev:svgSalamander") {
         // See https://github.com/blackears/svgSalamander/blob/d6b6fe9a8ece7d0e0e7aeb3de82f027a38a6fe25/www/license/license-bsd.txt
         effectiveLicense = SpdxLicense.BSD_3_Clause
