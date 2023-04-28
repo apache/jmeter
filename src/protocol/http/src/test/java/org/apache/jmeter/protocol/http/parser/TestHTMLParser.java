@@ -35,6 +35,11 @@ import java.util.Properties;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit;
@@ -395,38 +400,18 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         } else {
             result = p.getEmbeddedResourceURLs(userAgent, buffer, new URL(url), c,System.getProperty("file.encoding"));
         }
+        List<String> actual = Lists.newArrayList(Iterators.transform(result, Object::toString));
         /*
          * TODO: Exact ordering is only required for some tests; change the
          * comparison to do a set compare where necessary.
          */
-        Iterator<String> expected;
-        if (orderMatters) {
-            expected = getFile(resultFile).iterator();
-        } else {
-            // Convert both to Sets
-            expected = new TreeSet<>(getFile(resultFile)).iterator();
-            TreeSet<URL> temp = new TreeSet<>(new Comparator<Object>() {
-                @Override
-                public int compare(Object o1, Object o2) {
-                    return o1.toString().compareTo(o2.toString());
-                }
-            });
-            while (result.hasNext()) {
-                temp.add(result.next());
-            }
-            result = temp.iterator();
+        List<String> expected = getFile(resultFile);
+        if (!orderMatters) {
+            Collections.sort(expected);
+            Collections.sort(actual);
         }
 
-        while (expected.hasNext()) {
-            Object next = expected.next();
-            assertTrue(userAgent+"::"+fname+"::"+parserName + "::Expecting another result " + next, result.hasNext());
-            try {
-                assertEquals(userAgent+"::"+fname+"::"+parserName + "(next)", next, result.next().toString());
-            } catch (ClassCastException e) {
-                fail(userAgent+"::"+fname+"::"+parserName + "::Expected URL, but got " + e.toString());
-            }
-        }
-        assertFalse(userAgent+"::"+fname+"::"+parserName + "::Should have reached the end of the results", result.hasNext());
+        assertEquals("userAgent=" + userAgent + ", fname=" + fname + ", parserName=" + parserName, expected, actual);
     }
 
     // Get expected results as a List
