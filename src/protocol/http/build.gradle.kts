@@ -45,9 +45,16 @@ dependencies {
     implementation("org.apache.commons:commons-text") {
         because("StringEscapeUtils")
     }
-    implementation("org.jodd:jodd-lagarto")
+    implementation("org.jodd:jodd-lagarto") {
+        exclude("ch.qos.logback")
+        exclude("commons-logging")
+        exclude("org.apache.logging.log4j")
+    }
     implementation("org.jodd:jodd-log") {
         because("jodd-lagarto 5 still uses custom jodd-log so we configure it to use slf4j")
+        exclude("ch.qos.logback")
+        exclude("commons-logging")
+        exclude("org.apache.logging.log4j")
     }
     implementation("org.jsoup:jsoup")
     implementation("oro:oro")

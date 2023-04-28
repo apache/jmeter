@@ -51,8 +51,16 @@ dependencies {
     implementation("org.apache.commons:commons-pool2")
     implementation("commons-codec:commons-codec")
     implementation("org.ow2.asm:asm")
-    implementation("org.jodd:jodd-log")
-    implementation("org.jodd:jodd-lagarto")
+    implementation("org.jodd:jodd-log") {
+        exclude("ch.qos.logback")
+        exclude("commons-logging")
+        exclude("org.apache.logging.log4j")
+    }
+    implementation("org.jodd:jodd-lagarto") {
+        exclude("ch.qos.logback")
+        exclude("commons-logging")
+        exclude("org.apache.logging.log4j")
+    }
     implementation("com.jayway.jsonpath:json-path")
     implementation("org.apache.httpcomponents:httpasyncclient")
     implementation("org.apache.httpcomponents:httpcore-nio")
