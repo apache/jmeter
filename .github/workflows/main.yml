@@ -25,7 +25,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     env:
       # Number of jobs to generate in matrix.js
-      MATRIX_JOBS: 4
+      MATRIX_JOBS: 10
     steps:
       - uses: actions/checkout@v3
       - id: set-matrix
