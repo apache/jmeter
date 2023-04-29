@@ -53,7 +53,7 @@ dependencies {
         api("org.hsqldb:hsqldb:2.7.1")
         api("org.objenesis:objenesis:3.3")
         api("org.spockframework:spock-core:2.2-groovy-3.0")
-        api("org.springframework:spring-beans:4.3.17.RELEASE")
-        api("org.springframework:spring-context:4.3.17.RELEASE")
+        api("org.springframework:spring-beans:4.3.30.RELEASE")
+        api("org.springframework:spring-context:4.3.30.RELEASE")
     }
 }
