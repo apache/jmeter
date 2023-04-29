@@ -140,7 +140,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("com.sun.mail:all:1.5.0-b01") {
+    overrideLicense("com.sun.mail:all:1.6.7") {
         // Multiple licenses, specify explicitly
         expectedLicense = SimpleLicense("CDDL", uri("http://www.sun.com/cddl")) and SimpleLicense("GPLv2+CE", uri("https://glassfish.java.net/public/CDDL+GPL_1_1.html"))
         effectiveLicense = SpdxLicense.CDDL_1_0 and (SpdxLicense.GPL_2_0_or_later with SpdxLicenseException.Classpath_exception_2_0)
