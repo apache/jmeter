@@ -71,7 +71,18 @@ dependencies {
         api("javax.activation:javax.activation-api:1.2.0")
         api("javax.mail:mail:1.5.0-b01")
         api("jcharts:jcharts:0.7.5")
-        api("junit:junit:4.13.2")
+        api("junit:junit:4.13.2") {
+            because("ApacheJMeter_junit depends on junit4")
+        }
+        api("org.hamcrest:hamcrest-core:2.2") {
+            because("ApacheJMeter_junit depends on junit4")
+        }
+        api("org.hamcrest:hamcrest-library:2.2") {
+            because("ApacheJMeter_junit depends on junit4")
+        }
+        api("org.hamcrest:hamcrest:2.2") {
+            because("ApacheJMeter_junit depends on junit4")
+        }
         api("org.jetbrains:annotations:23.1.0")
         api("org.jetbrains.lets-plot:lets-plot-batik:3.1.0")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.3.0")
