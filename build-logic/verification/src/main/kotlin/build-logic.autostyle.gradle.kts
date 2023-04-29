@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-import gradle.kotlin.dsl.accessors._156f30e0e6722a90ad34068ddbaee49e.ide
-
 plugins {
     id("com.github.autostyle")
     id("com.github.vlsi.ide")

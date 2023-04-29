@@ -16,7 +16,6 @@
  */
 
 import com.github.vlsi.gradle.dsl.configureEach
-import gradle.kotlin.dsl.accessors._8d406b70b7b518f23730b456e0c46f8d.buildParameters
 import net.ltgt.gradle.errorprone.errorprone
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies

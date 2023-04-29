@@ -241,11 +241,8 @@
     <dependency group='gradle.plugin.com.github.spotbugs' module='spotbugs-gradle-plugin' version='2.0.0'>
       <sha512>B3BFAD07E6A3D4D73CBCE802D8614CF4AC84E589166D243D41028DC077F84C027DF4D514F145360405F37DA73A8F2E7B65D90877A9EE1151174D2440530F9051</sha512>
     </dependency>
-    <dependency group='gradle.plugin.org.jetbrains.gradle.plugin.idea-ext' module='gradle-idea-ext' version='0.10'>
-      <sha512>35C037FC0BEAAA7179C4464281868F210E3F7EC7611106B876545726E02985F927A29A96864A24E728C259F6F91CF310AFAABF166CA35DBF5CBC5343D7D9E3FD</sha512>
-    </dependency>
-    <dependency group='gradle.plugin.org.jetbrains.gradle.plugin.idea-ext' module='gradle-idea-ext' version='0.7'>
-      <sha512>A85249BA2BB5713B3779B88F3593CA60EA8739860327DAACE205057F811BAA330E772E4DD4B7BC42BBBFA589ACE38210AAFB0CF2919F5691794E6D9C5C505DAD</sha512>
+    <dependency group='gradle.plugin.org.jetbrains.gradle.plugin.idea-ext' module='gradle-idea-ext' version='1.1.7'>
+      <sha512>B7B121AC6385206A03717E03A61C9514478934CF7E8BBDCD87BD2E8ECFC2DEB37B9B834DA34EAA14C16CA6F61DB6A4DCD1C89FEDEE22EEBDEF6EAE5423847CE1</sha512>
     </dependency>
     <dependency group='io.freefair.gradle' module='lombok-plugin' version='5.3.3.3'>
       <sha512>750C97C7BE33EEF83B43A94E4342F978F5FDB0E4A523ABB408CC1E2111CE214CEC3A6177265618A8429FFB6C09A0E47070C68F2F046F3A6CCC0F5DD77D2E2ED0</sha512>

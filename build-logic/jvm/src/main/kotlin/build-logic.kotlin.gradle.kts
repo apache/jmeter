@@ -17,7 +17,6 @@
 
 import com.github.vlsi.gradle.dsl.configureEach
 import com.github.vlsi.gradle.properties.dsl.props
-import gradle.kotlin.dsl.accessors._86d2c9a61c3426111b16050345f09882.testImplementation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
