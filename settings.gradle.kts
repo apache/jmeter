@@ -123,7 +123,7 @@ buildscript {
             exclude("org.jetbrains.kotlin", "kotlin-stdlib")
         }
         // Remove when Autostyle updates jgit dependency
-        classpath("org.eclipse.jgit:org.eclipse.jgit:5.13.0.202109080827-r")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r")
     }
     repositories {
         gradlePluginPortal()
