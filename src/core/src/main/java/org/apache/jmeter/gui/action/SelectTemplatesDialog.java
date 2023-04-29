@@ -47,6 +47,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.HyperlinkEvent;
@@ -260,7 +261,9 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
         this.pack();
         this.setMinimumSize(new Dimension(MINIMAL_BOX_WIDTH, MINIMAL_BOX_HEIGHT));
-        ComponentUtil.centerComponentInWindow(this, 50); // center position and 50% of screen size
+        SwingUtilities.invokeLater(() ->
+            ComponentUtil.centerComponentInWindow(this, 50) // center position and 50% of screen size
+        );
         populateTemplatePage();
     }
 
