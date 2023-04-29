@@ -24,8 +24,7 @@ plugins {
 
 dependencies {
     testImplementation("junit:junit")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.hamcrest:hamcrest")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }
