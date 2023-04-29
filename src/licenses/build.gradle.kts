@@ -129,12 +129,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     }
 
     overrideLicense("org.reactivestreams:reactive-streams") {
-        expectedLicense =
-            SimpleLicense(
-                "CC0",
-                uri("http://creativecommons.org/publicdomain/zero/1.0/")
-            )
-        effectiveLicense = SpdxLicense.CC0_1_0
+        expectedLicense = SpdxLicense.MIT_0
     }
 
     overrideLicense("org.brotli:dec:0.1.2") {
@@ -195,6 +190,7 @@ val renderLicenseForBinary by tasks.registering(Apache2LicenseRenderer::class) {
         ).expression,
         AsfLicenseCategory.A
     )
+    licenseCategory.put(SpdxLicense.MIT_0.expression, AsfLicenseCategory.A)
 }
 
 tasks.build.configure {

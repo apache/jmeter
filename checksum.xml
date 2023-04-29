@@ -183,6 +183,7 @@
     <trusted-key id='a5bd02b93e7a40482eb1d66a5f69ad087600b22c' group='org.ow2.asm' />
     <trusted-key id='908366594e746bf3c449f5622be5d98f751f4136' group='org.pcollections' />
     <trusted-key id='e0d98c5fd55a8af232290e58dee12b9896f97e34' group='org.pcollections' />
+    <trusted-key id='50a628ffaf58480736b1079fd1031d14464180e0' group='org.reactivestreams' />
     <trusted-key id='a33a0b49a4c1ab590b0a4ddc1364c5e2df3e99c5' group='org.reactivestreams' />
     <trusted-key id='3f2a008a91d11a7fac4a0786f13d3e721d56bd54' group='org.reflections' />
     <trusted-key id='475f3b8e59e6e63aa78067482c7b12f2a511e325' group='org.slf4j' />
