@@ -28,7 +28,8 @@
     },
     {
       "matchPackagePrefixes": ["org.apache.activemq"],
-      "groupName": "org.apache.activemq"
+      "groupName": "org.apache.activemq",
+      "allowedVersions": "< 5.17.0"
     },
     {
       "matchPackagePrefixes": ["org.apache.ftpserver"],

@@ -41,9 +41,9 @@ dependencies {
         api("junit:junit:4.13.2")
         api("nl.jqno.equalsverifier:equalsverifier:3.14.1")
         // activemq-all should not be used as it provides secondary slf4j binding
-        api("org.apache.activemq:activemq-broker:5.16.4")
-        api("org.apache.activemq:activemq-client:5.16.4")
-        api("org.apache.activemq:activemq-spring:5.16.4")
+        api("org.apache.activemq:activemq-broker:5.16.6")
+        api("org.apache.activemq:activemq-client:5.16.6")
+        api("org.apache.activemq:activemq-spring:5.16.6")
         api("org.apache.ftpserver:ftplet-api:1.2.0")
         api("org.apache.ftpserver:ftpserver-core:1.2.0")
         api("org.apache.mina:mina-core:2.2.1")
