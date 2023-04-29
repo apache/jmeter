@@ -142,6 +142,8 @@ Summary
 <ul>
   <li><issue>5740</issue><pr>5741</pr>Fix Aggregated Graph component to cope with empty names of samplers</li>
   <li><issue>5807</issue>Fix an ArrayIndexOutOfBoundsException on HTTP parameters line on special case when key and value are empty, i.e.: "k1=v1&amp;&#61;&amp;k2=v2"</li>
+  <li><issue>5654</issue><pr>5785</pr> Fix <code>InfluxDBRawBackendListenerClient</code> missing data. Allow InfluxDB to insert multiple entries with the
+    same <code>timestamp</code> but with different <code>threadName</code>. Contributed by Victor Peralta (vperaltac at github)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -186,6 +188,7 @@ Summary
   <li>Ori Marko (orimarko at gmail.com)</li>
   <li>Stefan Seide (stefan at trilobyte-se.de)</li>
   <li>andreaslind01 Lind (andreaslind01 at gmail.com)</li>
+  <li>Victor Peralta (vperaltac at github)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
