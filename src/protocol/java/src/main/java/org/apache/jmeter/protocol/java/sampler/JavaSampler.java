@@ -19,7 +19,6 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +32,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jorphan.collections.IdentityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,8 +58,8 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
      * Set used to register instances which implement tearDownTest.
      * This is used so that the JavaSamplerClient can be notified when the test ends.
      */
-    private static final Set<JavaSampler> TEAR_DOWN_SET =
-            Collections.newSetFromMap(new ConcurrentHashMap<JavaSampler,Boolean>());
+    private static final Set<IdentityKey<JavaSampler>> TEAR_DOWN_SET =
+            ConcurrentHashMap.newKeySet();
 
     /**
      * Property key representing the classname of the JavaSamplerClient to user.
@@ -226,7 +226,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
             }
 
             if(isToBeRegistered) {
-                TEAR_DOWN_SET.add(this);
+                TEAR_DOWN_SET.add(new IdentityKey<>(this));
             }
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
@@ -292,7 +292,8 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
             log.debug("{}\ttestEnded", whoAmI());
         }
         synchronized (TEAR_DOWN_SET) {
-            for (JavaSampler javaSampler : TEAR_DOWN_SET) {
+            for (IdentityKey<JavaSampler> key : TEAR_DOWN_SET) {
+                JavaSampler javaSampler = key.getValue();
                 JavaSamplerClient client = javaSampler.javaClient;
                 if (client != null) {
                     client.teardownTest(javaSampler.context);

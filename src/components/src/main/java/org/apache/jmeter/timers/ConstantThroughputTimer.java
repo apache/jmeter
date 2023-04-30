@@ -37,6 +37,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.collections.IdentityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,9 +104,9 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     private static final ThroughputInfo allThreadsInfo = new ThroughputInfo();
 
     //For holding the ThroughputInfo objects for all ThreadGroups. Keyed by AbstractThreadGroup objects
-    private static final ConcurrentMap<AbstractThreadGroup, ThroughputInfo> threadGroupsInfoMap =
+    //TestElements can't be used as keys in HashMap.
+    private static final ConcurrentMap<IdentityKey<AbstractThreadGroup>, ThroughputInfo> threadGroupsInfoMap =
             new ConcurrentHashMap<>();
-
 
     /**
      * Constructor for a non-configured ConstantThroughputTimer.
@@ -198,13 +199,10 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         case AllActiveThreadsInCurrentThreadGroup_Shared: //All threads in this group - alternate calculation
             final org.apache.jmeter.threads.AbstractThreadGroup group =
                 JMeterContextService.getContext().getThreadGroup();
-            ThroughputInfo groupInfo = threadGroupsInfoMap.get(group);
+            IdentityKey<AbstractThreadGroup> key = new IdentityKey<>(group);
+            ThroughputInfo groupInfo = threadGroupsInfoMap.get(key);
             if (groupInfo == null) {
-                groupInfo = new ThroughputInfo();
-                ThroughputInfo previous = threadGroupsInfoMap.putIfAbsent(group, groupInfo);
-                if (previous != null) { // We did not replace the entry
-                    groupInfo = previous; // so use the existing one
-                }
+                groupInfo = threadGroupsInfoMap.computeIfAbsent(key, (k) -> new ThroughputInfo());
             }
             delay = calculateSharedDelay(groupInfo,Math.round(msPerRequest));
             break;

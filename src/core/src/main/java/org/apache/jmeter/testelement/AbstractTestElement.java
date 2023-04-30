@@ -122,14 +122,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
     }
 
-    // TODO temporary hack to avoid unnecessary bug reports for subclasses
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public int hashCode(){
-        return System.identityHashCode(this);
+    public int hashCode() {
+        return propMap.hashCode();
     }
 
     /*

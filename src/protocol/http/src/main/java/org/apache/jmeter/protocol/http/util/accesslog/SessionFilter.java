@@ -19,7 +19,7 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -69,7 +69,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
      * Creates a new SessionFilter and initializes its fields to new collections
      */
     public SessionFilter() {
-        this(new ConcurrentHashMap<>(), Collections.synchronizedSet(new HashSet<>()));
+        this(new ConcurrentHashMap<>(), Collections.synchronizedSet(Collections.newSetFromMap(new IdentityHashMap<>())));
     }
 
     /**

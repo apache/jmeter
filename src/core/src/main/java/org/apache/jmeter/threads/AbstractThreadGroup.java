@@ -19,8 +19,7 @@ package org.apache.jmeter.threads;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.IdentityHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.control.Controller;
@@ -51,7 +50,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     private static final long serialVersionUID = 240L;
 
     // Only create the map if it is required
-    private final transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
+    private final transient IdentityHashMap<TestElement, Object> children = new IdentityHashMap<>();
 
     private static final Object DUMMY = new Object();
 
@@ -136,9 +135,11 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      */
     @Override
     public final boolean addTestElementOnce(TestElement child){
-        if (children.putIfAbsent(child, DUMMY) == null) {
-            addTestElement(child);
-            return true;
+        synchronized (children) {
+            if (children.putIfAbsent(child, DUMMY) == null) {
+                addTestElement(child);
+                return true;
+            }
         }
         return false;
     }

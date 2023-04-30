@@ -112,7 +112,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * large test plans.
      */
     private final Cache<TestElement, Customizer> customizers =
-            Caffeine.newBuilder() // TOOD: should this be made static?
+            Caffeine.newBuilder()  // TODO: should this be made static?
+                    .weakKeys() // So test elements are compared using identity == rather than .equals
                     .maximumSize(20)
                     .build();
 

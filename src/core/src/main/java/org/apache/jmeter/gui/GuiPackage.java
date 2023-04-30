@@ -24,6 +24,7 @@ import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -102,7 +103,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * to their corresponding GUI components.
      * <p>This enables to associate {@link UnsharedComponent} UIs with their {@link TestElement}.</p>
      */
-    private final Map<TestElement, JMeterGUIComponent> nodesToGui = new HashMap<>();
+    private final IdentityHashMap<TestElement, JMeterGUIComponent> nodesToGui = new IdentityHashMap<>();
 
     /**
      * Map from Class to JMeterGUIComponent, mapping the Class of a GUI

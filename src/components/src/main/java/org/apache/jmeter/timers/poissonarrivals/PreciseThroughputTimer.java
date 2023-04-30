@@ -28,6 +28,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.timers.Timer;
+import org.apache.jorphan.collections.IdentityKey;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -44,7 +45,10 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
     private static final Logger log = LoggerFactory.getLogger(PreciseThroughputTimer.class);
 
     private static final long serialVersionUID = 4;
-    private static final ConcurrentMap<AbstractThreadGroup, EventProducer> groupEvents = new ConcurrentHashMap<>();
+
+    // TestElements can't be used as keys in a HashMap, so we use IdentityHashMap
+    private static final ConcurrentMap<IdentityKey<AbstractThreadGroup>, EventProducer> groupEvents =
+            new ConcurrentHashMap<>();
 
     /**
      * Desired throughput configured as {@code throughput/throughputPeriod} per second.
@@ -134,9 +138,14 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
 
     private EventProducer getEventProducer() {
         AbstractThreadGroup tg = getThreadContext().getThreadGroup();
+        IdentityKey<AbstractThreadGroup> key = new IdentityKey<>(tg);
+        EventProducer eventProducer = groupEvents.get(key);
+        if (eventProducer != null) {
+            return eventProducer;
+        }
         Long seed = randomSeed == null || randomSeed == 0 ? null : randomSeed;
         return
-                groupEvents.computeIfAbsent(tg, x -> new ConstantPoissonProcessGenerator(
+                groupEvents.computeIfAbsent(key, x -> new ConstantPoissonProcessGenerator(
                         () -> PreciseThroughputTimer.this.getThroughput() / throughputPeriod,
                         batchSize, batchThreadDelay, this, seed, true));
     }

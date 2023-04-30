@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -54,7 +55,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
     private static final String FOUND = "found"; // $NON-NLS-1$
 
     // N.B. The keys can be either JMeterTreeNode or TestElement
-    protected final Map<Object, HashTree> data;
+    protected final IdentityHashMap<Object, HashTree> data;
 
     /**
      * Creates an empty new HashTree.
@@ -78,7 +79,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            name of the new top-level node
      */
     public HashTree(Object key) {
-        this(new HashMap<Object, HashTree>(), key);
+        this(new IdentityHashMap<>(), key);
     }
 
     /**
@@ -94,9 +95,17 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      */
     private HashTree(Map<Object, HashTree> _map, Object key) {
         if(_map != null) {
-            data = _map;
+            if (_map instanceof IdentityHashMap) {
+                data = (IdentityHashMap<Object, HashTree>) _map;
+            } else {
+                // Technically speaking, TestElements can't be placed in HashMapk keys,
+                // so we have to convert the map to an IdentityHashMap.
+                @SuppressWarnings("IdentityHashMapUsage")
+                IdentityHashMap<Object, HashTree> identityMap = new IdentityHashMap<>(_map);
+                data = identityMap;
+            }
         } else {
-            data = new HashMap<>();
+            data = new IdentityHashMap<>();
         }
         if(key != null) {
             data.put(key, new HashTree());
@@ -213,7 +222,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            a collection of objects to be added to the created HashTree.
      */
     public HashTree(Collection<?> keys) {
-        data = new HashMap<>();
+        data = new IdentityHashMap<>();
         for (Object o : keys) {
             data.put(o, new HashTree());
         }
@@ -227,7 +236,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            array with names for the new top-level nodes
      */
     public HashTree(Object[] keys) {
-        data = new HashMap<>();
+        data = new IdentityHashMap<>();
         for (Object key : keys) {
             data.put(key, new HashTree());
         }
@@ -873,7 +882,24 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      */
     @Override
     public int hashCode() {
-        return data.hashCode() * 7;
+        int xor = 0;
+        int sum = 0;
+        int mul = 0;
+        // Unordered hash function which uses reference equality for keys, and object equality for values
+        // We use several commutative functions to reduce the possibility of collisions.
+        // Note: IdentityHashMap.hashCode uses reference equality for both keys and values, so we can't use it.
+        for (Entry<Object, HashTree> objectHashTreeEntry : data.entrySet()) {
+            int key = System.identityHashCode(objectHashTreeEntry.getKey());
+            int value = objectHashTreeEntry.getValue().hashCode();
+            xor = xor + key ^ value;
+            sum = sum + key + value;
+            mul = mul + (key|1) * (value|1);
+        }
+        int hash = 1;
+        hash = hash * 31 + xor;
+        hash = hash * 31 + sum;
+        hash = hash * 31 + mul;
+        return hash;
     }
 
     /**
@@ -887,6 +913,9 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      */
     @Override
     public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
         if (!(o instanceof HashTree)) {
             return false;
         }
@@ -894,7 +923,14 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if (oo.size() != this.size()) {
             return false;
         }
-        return data.equals(oo.data);
+        // data.equals(oo.data); uses reference identity for keys
+        for (Entry<Object, HashTree> entry : data.entrySet()) {
+            HashTree otherValue = oo.data.get(entry.getKey());
+            if (!entry.getValue().equals(otherValue)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
