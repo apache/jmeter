@@ -39,7 +39,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
+import javax.swing.SwingUtilities;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -457,28 +459,41 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         Iterator<String> classes = ClassFinder
                 .findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { extendsClass }).iterator();
         List<Object> objects = new ArrayList<>();
-        String n = "";
+        String className = "";
         boolean caughtError = true;
-        Throwable caught = null;
+        final AtomicReference<Throwable> exceptionCatcher = new AtomicReference<>();
+        final AtomicReference<Exception> unexpectedExceptionCatcher = new AtomicReference<>();
         try {
             while (classes.hasNext()) {
-                n = classes.next();
+                className = classes.next();
                 // TODO - improve this check
-                if (n.endsWith("RemoteJMeterEngineImpl")) {
+                if (className.endsWith("RemoteJMeterEngineImpl")) {
                     continue; // Don't try to instantiate remote server
                 }
-                if (n.endsWith("RemoteSampleListenerImpl")) {
+                if (className.endsWith("RemoteSampleListenerImpl")) {
                     // TODO: Cannot start. travis-job-e984b3d5-f93f-4b0f-b6c0-50988a5ece9d is a loopback address.
                     continue;
                 }
-                caught = instantiateClass(exName, myThis, objects, n, caught);
+                String currentClassName = className;
+                // Construct classes in the AWT thread, as we may have found classes, that
+                // assume to be constructed in the AWT thread.
+                SwingUtilities.invokeAndWait(() -> {
+                    try {
+                        instantiateClass(exName, myThis, objects, currentClassName, exceptionCatcher);
+                    } catch (Exception e) {
+                        unexpectedExceptionCatcher.set(e);
+                    }
+                });
+                if (unexpectedExceptionCatcher.get() != null) {
+                    throw unexpectedExceptionCatcher.get();
+                }
             }
             caughtError = false;
         } finally {
             if (caughtError) {
-                System.out.println("Last class=" + n);
+                System.out.println("Last class=" + className);
                 System.out.println("objects.size=" + objects.size());
-                System.out.println("Last error=" + caught);
+                System.out.println("Last error=" + exceptionCatcher.get());
             }
         }
 
@@ -502,24 +517,23 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         return objects;
     }
 
-    private static Throwable instantiateClass(final String extendsClassName, final Object myThis,
-            final List<Object> objects, final String className, final Throwable oldCaught) throws Exception {
-        Throwable caught = oldCaught;
+    private static void instantiateClass(final String extendsClassName, final Object myThis,
+            final List<Object> objects, final String className, final AtomicReference<Throwable> exceptionCatcher) throws Exception {
         try {
-            Class<?> c = Class.forName(className);
+            Class<?> currentClass = Class.forName(className);
             try {
                 // Try with a parameter-less constructor first
-                objects.add(c.getDeclaredConstructor().newInstance());
+                objects.add(currentClass.getDeclaredConstructor().newInstance());
             } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
                     InvocationTargetException e) {
-                caught = e;
+                exceptionCatcher.set(e);
                 try {
                     // Events often have this constructor
-                    objects.add(c.getConstructor(new Class[] { Object.class }).newInstance(
+                    objects.add(currentClass.getConstructor(new Class[] { Object.class }).newInstance(
                             new Object[] { myThis }));
                 } catch (NoSuchMethodException f) {
                     // no luck. Ignore this class
-                    if (!Enum.class.isAssignableFrom(c)) { // ignore enums
+                    if (!Enum.class.isAssignableFrom(currentClass)) { // ignore enums
                         System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": NoSuchMethodException  " +
                             className + ", missing empty Constructor or Constructor with Object parameter");
                     }
@@ -530,22 +544,21 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
             System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": NoClassDefFoundError " + className + ":" + e.getMessage());
             e.printStackTrace(System.out);
         } catch (IllegalAccessException e) {
-            caught = e;
+            exceptionCatcher.set(e);
             System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": IllegalAccessException " + className + ":" + e.getMessage());
             e.printStackTrace(System.out);
             // We won't test restricted-access classes.
-        } catch (HeadlessException|ExceptionInInitializerError e) {// EIIE can be caused by Headless
-            caught = e;
+        } catch (HeadlessException | ExceptionInInitializerError e) {// EIIE can be caused by Headless
+            exceptionCatcher.set(e);
             System.out.println("o.a.j.junit.JMeterTest Error creating " + className + " " + e.toString());
         } catch (Exception e) {
-            caught = e;
+            exceptionCatcher.set(e);
             if (e instanceof RemoteException) { // not thrown, so need to check here
                 System.out.println("o.a.j.junit.JMeterTest WARN: " + "Error creating " + className + " " + e.toString());
             } else {
                 throw new Exception("Error creating " + className, e);
             }
         }
-        return caught;
     }
 
 }
