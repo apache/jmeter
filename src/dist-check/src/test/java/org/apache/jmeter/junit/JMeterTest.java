@@ -22,7 +22,6 @@ import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -63,7 +62,6 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -122,7 +120,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         StringBuilder sb = new StringBuilder();
         sb.append(getName());
         if (guiItem instanceof TestBeanGUI) {
-            sb.append(" ").append(guiItem.toString());
+            sb.append(" ").append(guiItem);
         } else if (guiItem != null) {
             sb.append(" ").append(guiItem.getClass().getName());
         } else if (serObj != null) {
@@ -190,13 +188,12 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
     }
 
     /**
-     * @return
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
-     * @throws FileNotFoundException
+     * @return first element named {@code body}
+     * @throws ParserConfigurationException when stream contains invalid XML
+     * @throws IOException when stream can not be read
+     * @throws SAXException in case of XML parsing error
      */
-    private Element getBodyFromXMLDocument(InputStream stream)
+    private org.w3c.dom.Element getBodyFromXMLDocument(InputStream stream)
             throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setIgnoringElementContentWhitespace(true);
@@ -242,14 +239,14 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         }
 
         int unseen = 0;
-        for (String key : s) {
-            if (!m.get(key).equals(Boolean.TRUE)) {
+        for (Map.Entry<String, Boolean> entry : m.entrySet()) {
+            if (!entry.getValue().equals(Boolean.TRUE)) {
                 if (unseen == 0)// first time
                 {
                     System.out.println("\nNames remaining in " + t + " Map:");
                 }
                 unseen++;
-                System.out.println(key);
+                System.out.println(entry.getKey());
             }
         }
         return unseen;
@@ -318,7 +315,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
      * Test GUI elements - run the test
      */
     public void runGUITitle() throws Exception {
-        if (guiTitles.size() > 0) {
+        if (!guiTitles.isEmpty()) {
             String title = guiItem.getDocAnchor();
             boolean ct = guiTitles.containsKey(title);
             if (ct) {
@@ -326,7 +323,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
             }
             String name = guiItem.getClass().getName();
             if (// Is this a work in progress or an internal GUI component?
-                title != null && title.length() > 0 // Will be "" for internal components
+                title != null && !title.isEmpty() // Will be "" for internal components
                 && !title.toUpperCase(Locale.ENGLISH).contains("(ALPHA")
                 && !title.toUpperCase(Locale.ENGLISH).contains("(BETA")
                 && !title.toUpperCase(Locale.ENGLISH).contains("(DEPRECATED")
@@ -356,7 +353,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
             try {
                 String label = guiItem.getLabelResource();
                 assertNotNull("Label should not be null for "+name, label);
-                assertTrue("Label should not be empty for "+name, label.length() > 0);
+                assertTrue("Label should not be empty for "+name, !label.isEmpty());
                 assertFalse("'" + label + "' should be in resource file for " + name, JMeterUtils.getResString(
                         label).startsWith(JMeterUtils.RES_KEY_PFX));
             } catch (UnsupportedOperationException uoe) {
