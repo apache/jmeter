@@ -1,0 +1,7 @@
+package javax.swing.undo;
+
+import org.checkerframework.checker.guieffect.qual.SafeType;
+
+@SafeType
+class UndoManager {
+}

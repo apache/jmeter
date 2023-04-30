@@ -35,6 +35,7 @@ import javax.swing.text.StyleContext;
 import org.apache.jorphan.gui.ui.TextAreaUIWithUndo;
 import org.apache.jorphan.gui.ui.TextFieldUIWithUndo;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,11 +151,11 @@ public class JMeterUIDefaults {
         addDerivedFont(defaults, output, input, f -> f.deriveFont(f.getSize2D() * scale));
     }
 
-    private static void addDerivedFont(UIDefaults defaults, String output, String input, Function<Font, Font> f) {
-        defaults.put(output, (UIDefaults.LazyValue) d -> map(d.getFont(input), f));
+    private static void addDerivedFont(UIDefaults defaults, String output, String input, @UI Function<Font, Font> f) {
+        defaults.put(output, (UIDefaults.@UI LazyValue) d -> map(d.getFont(input), f));
     }
 
-    private static Font map(Font input, Function<Font, Font> mapper) {
+    private static Font map(Font input, @UI Function<Font, Font> mapper) {
         Font output = mapper.apply(input);
         // Note: we drop UIResource here so LaF treats the font as user-provided rather than
         // LaF-provided.

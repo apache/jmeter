@@ -22,6 +22,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 
+import org.checkerframework.checker.guieffect.qual.SafeType;
+
+@SafeType
 class DefaultUndoManager extends UndoManager {
     private final AtomicInteger undoEpoch;
     private int ourUndoEpoch;

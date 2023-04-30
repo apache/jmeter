@@ -1,0 +1,10 @@
+package java.awt;
+
+import java.beans.PropertyChangeListener;
+import org.checkerframework.checker.guieffect.qual.UI;
+
+class Component {
+  public void addPropertyChangeListener(
+    String propertyName,
+    @UI PropertyChangeListener listener);
+}

@@ -1,0 +1,10 @@
+package javax.swing.text;
+
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
+interface Document {
+    @SafeEffect
+    public void removeDocumentListener(DocumentListener listener);
+    @SafeEffect
+    public void addDocumentListener(DocumentListener listener);
+}

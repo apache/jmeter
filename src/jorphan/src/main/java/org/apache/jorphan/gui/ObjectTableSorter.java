@@ -32,17 +32,20 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.checkerframework.checker.guieffect.qual.SafeType;
 
 /**
  * Implementation of a {@link RowSorter} for {@link ObjectTableModel}
  * @since 3.2
  *
  */
+@SafeType
 public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
 
     /**
      * View row with model mapping. All data relates to model.
      */
+    @SafeType
     public class Row {
         private int index;
 
@@ -63,6 +66,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         }
     }
 
+    @SafeType
     protected class PreserveLastRowComparator implements Comparator<Row> {
         @Override
         public int compare(Row o1, Row o2) {

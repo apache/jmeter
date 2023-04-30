@@ -1,0 +1,15 @@
+package java.util.function;
+import org.checkerframework.checker.guieffect.qual.PolyUI;
+import org.checkerframework.checker.guieffect.qual.PolyUIType;
+import org.checkerframework.checker.guieffect.qual.PolyUIEffect;
+
+@PolyUIType
+public interface Function<T, R> {
+  @PolyUIEffect
+  R apply(T t);
+  @PolyUIEffect
+  <V> Function<V, R> compose(@PolyUI Function<? super V, ? extends T> before);
+  @PolyUIEffect
+  <V> Function<T, V> andThen(@PolyUI Function<? super R, ? extends V> after);
+  static <T> Function<T, T> identity();
+}

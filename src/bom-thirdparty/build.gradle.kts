@@ -119,6 +119,7 @@ dependencies {
         api("org.bouncycastle:bcpkix-jdk15on:1.70")
         api("org.bouncycastle:bcprov-jdk15on:1.70")
         api("org.brotli:dec:0.1.2")
+        api("org.checkerframework:checker-qual:3.33.0")
         api("org.exparity:hamcrest-date:2.0.8")
         api("org.freemarker:freemarker:2.3.32")
         api("org.jdom:jdom:1.1.3")

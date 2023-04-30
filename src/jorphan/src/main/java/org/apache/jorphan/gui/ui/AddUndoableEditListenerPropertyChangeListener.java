@@ -17,19 +17,28 @@
 
 package org.apache.jorphan.gui.ui;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.SafeType;
+import org.checkerframework.checker.guieffect.qual.UI;
+import org.checkerframework.checker.guieffect.qual.UIEffect;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 import javax.swing.undo.UndoManager;
 
+@UI
 class AddUndoableEditListenerPropertyChangeListener implements PropertyChangeListener {
     private final UndoManager manager;
 
+    @SafeEffect
     public AddUndoableEditListenerPropertyChangeListener(UndoManager manager) {
         this.manager = manager;
     }
 
+    @SafeEffect
     public final UndoManager getUndoManager() {
         return manager;
     }

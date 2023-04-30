@@ -17,6 +17,8 @@
 
 package org.apache.jorphan.gui.layout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -212,6 +214,7 @@ public class VerticalLayout implements LayoutManager, Serializable {
     }
 
     @Override
+    @SafeEffect
     public String toString() {
         return getClass().getName() + "[vgap=" + vgap + " align=" + alignment + " anchor=" + anchor + "]";
     }

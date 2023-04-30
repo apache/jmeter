@@ -15,13 +15,7 @@
  * limitations under the License.
  */
 
-plugins {
-    // test-fixtures enable to share code across test modules
-    // See https://docs.gradle.org/5.6/userguide/java_testing.html#sec:java_test_fixtures
-    `java-test-fixtures`
-    id("build-logic.jvm-library")
-}
+@UIPackage
+package org.apache.jorphan.gui;
 
-dependencies {
-    api("org.checkerframework:checker-qual")
-}
+import org.checkerframework.checker.guieffect.qual.UIPackage;

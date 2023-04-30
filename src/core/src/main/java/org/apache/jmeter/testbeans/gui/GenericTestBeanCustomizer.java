@@ -43,6 +43,8 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,6 +97,7 @@ import org.slf4j.LoggerFactory;
  * available (where <b><i>group</i></b> is the group name).
  * </dl>
  */
+@UIType
 public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer {
     private static final long serialVersionUID = 241L;
 
@@ -486,6 +489,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      */
     @SuppressWarnings("unchecked")
     @Override
+    @SafeEffect
     public void setObject(Object map) {
         propertyMap = (Map<String, Object>) map;
 
@@ -637,6 +641,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @param descriptor
      * @return the group String.
      */
+    @SafeEffect
     private static String group(PropertyDescriptor descriptor) {
         String group = (String) descriptor.getValue(GROUP);
         if (group == null){

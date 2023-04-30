@@ -17,6 +17,8 @@
 
 package org.apache.jorphan.gui;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -512,19 +514,6 @@ public class MenuScroller {
             menu.removeMouseWheelListener(mouseWheelListener);
             menu = null;
         }
-    }
-
-    /**
-     * Ensures that the <code>dispose</code> method of this MenuScroller is
-     * called when there are no more references to it.
-     *
-     * @see MenuScroller#dispose()
-     */
-    @Override
-    @SuppressWarnings("deprecation")
-    public void finalize() throws Throwable {
-        dispose();
-        super.finalize();
     }
 
     private void refreshMenu() {
