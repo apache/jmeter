@@ -19,6 +19,7 @@ package org.apache.jmeter.config;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -92,7 +93,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      */
     public Argument(String name, String value, String metadata, String description) {
         if(name != null) {
-            setProperty(new StringProperty(ARG_NAME, name));
+            setProperty(new StringProperty(ARG_NAME, StringUtils.strip(name)));
         }
         if(value != null) {
             setProperty(new StringProperty(VALUE, value));
@@ -113,7 +114,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      */
     @Override
     public void setName(String newName) {
-        setProperty(new StringProperty(ARG_NAME, newName));
+        setProperty(new StringProperty(ARG_NAME, StringUtils.strip(newName)));
     }
 
     /**
