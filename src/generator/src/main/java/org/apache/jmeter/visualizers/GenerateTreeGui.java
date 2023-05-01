@@ -80,11 +80,6 @@ public class GenerateTreeGui extends AbstractConfigGui
     }
 
     @Override
-    public String getDocAnchor() {
-        return super.getDocAnchor();
-    }
-
-    @Override
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }

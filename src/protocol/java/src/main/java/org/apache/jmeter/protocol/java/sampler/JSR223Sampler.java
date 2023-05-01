@@ -95,6 +95,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }

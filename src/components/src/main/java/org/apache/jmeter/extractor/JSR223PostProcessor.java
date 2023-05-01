@@ -49,6 +49,7 @@ public class JSR223PostProcessor extends JSR223TestElement implements Cloneable,
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }

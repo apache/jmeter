@@ -73,6 +73,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }

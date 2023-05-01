@@ -46,7 +46,8 @@ if (buildParameters.enableErrorprone) {
             options.errorprone {
                 disableWarningsInGeneratedCode.set(true)
                 enable(
-                    "PackageLocation"
+                    "PackageLocation",
+                    "RedundantOverride"
                 )
                 disable(
                     "ComplexBooleanConstant",

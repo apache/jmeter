@@ -58,6 +58,7 @@ public class JSR223Assertion extends JSR223TestElement implements Cloneable, Ass
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }

@@ -78,6 +78,7 @@ public class JSR223Listener extends JSR223TestElement
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }

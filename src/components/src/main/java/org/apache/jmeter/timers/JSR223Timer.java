@@ -53,6 +53,7 @@ public class JSR223Timer extends JSR223TestElement implements Cloneable, Timer, 
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }
