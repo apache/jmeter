@@ -464,6 +464,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private boolean idleTime = IDLE_TIME;
 
     // Does not appear to be used (yet)
+    // it is
+    @SuppressWarnings("FieldCanBeStatic")
     private final int assertionsResultsToSave = ASSERTIONS_RESULT_TO_SAVE;
 
     // Don't save this, as it is derived from the time format

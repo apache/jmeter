@@ -206,9 +206,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private boolean saveGraphToFile = false;
 
-    private final int defaultWidth = 400;
+    private static final int defaultWidth = 400;
 
-    private final int defaultHeight = 300;
+    private static final int defaultHeight = 300;
 
     private final JComboBox<String> columnsList = new JComboBox<>(getLabels(GRAPH_COLUMNS, getGraphColumnsMsgParameters()));
 
@@ -253,7 +253,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     // Default checked
     private final JCheckBox valueLabelsVertical = new JCheckBox(JMeterUtils.getResString("aggregate_graph_value_labels_vertical"), true); // $NON-NLS-1$
 
-    private final Color colorBarGraph = Color.YELLOW;
+    private final static Color colorBarGraph = Color.YELLOW;
 
     private Color colorForeGraph = Color.BLACK;
 

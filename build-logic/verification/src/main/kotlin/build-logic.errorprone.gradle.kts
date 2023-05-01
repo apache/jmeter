@@ -56,6 +56,7 @@ if (buildParameters.enableErrorprone) {
                 )
                 warn(
                     "FieldCanBeFinal",
+                    "FieldCanBeStatic",
                     "ForEachIterable",
                     "MethodCanBeStatic",
                 )
