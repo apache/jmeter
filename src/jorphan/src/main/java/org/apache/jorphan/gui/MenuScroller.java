@@ -514,19 +514,6 @@ public class MenuScroller {
         }
     }
 
-    /**
-     * Ensures that the <code>dispose</code> method of this MenuScroller is
-     * called when there are no more references to it.
-     *
-     * @see MenuScroller#dispose()
-     */
-    @Override
-    @SuppressWarnings("deprecation")
-    public void finalize() throws Throwable {
-        dispose();
-        super.finalize();
-    }
-
     private void refreshMenu() {
         if (menuItems != null && menuItems.length > 0 && scrollCount <= menuItems.length) {
             firstIndex = Math.max(topFixedCount, firstIndex);

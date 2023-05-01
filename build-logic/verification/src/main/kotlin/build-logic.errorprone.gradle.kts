@@ -58,7 +58,6 @@ if (buildParameters.enableErrorprone) {
                 disable(
                     "BigDecimalEquals",
                     "EmptyBlockTag",
-                    "Finalize",
                     "MissingSummary",
                     "StringSplitter",
                     "BanJNDI",
