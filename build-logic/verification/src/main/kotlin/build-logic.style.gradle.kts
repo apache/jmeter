@@ -42,7 +42,7 @@ plugins.withId("java-base") {
     if (buildParameters.enableCheckerframework) {
         apply(plugin = "build-logic.checkerframework")
     }
-    if (!buildParameters.enableErrorprone) {
+    if (buildParameters.enableErrorprone) {
         apply(plugin = "build-logic.errorprone")
     }
     if (buildParameters.spotbugs) {

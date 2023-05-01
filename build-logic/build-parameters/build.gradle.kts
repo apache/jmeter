@@ -66,7 +66,8 @@ buildParameters {
         description.set("Skip forbidden-apis verifications")
     }
     bool("enableErrorprone") {
-        defaultValue.set(true)
+        // By default, disable errorProne in CI so we don't perform the same checks in several jobs
+        defaultValue.set(System.getenv("CI") != "true")
         description.set("Enable ErrorProne verifications")
     }
     bool("skipJavadoc") {
