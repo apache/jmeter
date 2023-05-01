@@ -38,6 +38,10 @@ if (buildParameters.enableErrorprone) {
             // Ignore warnings in test code
             options.errorprone.isEnabled.set(false)
         } else {
+            // Errorprone requires Java 11+
+            options.errorprone.isEnabled.set(
+                javaCompiler.map { it.metadata.languageVersion.canCompileOrRun(11) }
+            )
             options.compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
             options.errorprone {
                 disableWarningsInGeneratedCode.set(true)
