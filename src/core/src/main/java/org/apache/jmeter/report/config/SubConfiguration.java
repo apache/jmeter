@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class SubConfiguration {
 
-    private HashMap<String, String> properties = new HashMap<>();
+    private final HashMap<String, String> properties = new HashMap<>();
 
     /**
      * Gets the properties of the item.

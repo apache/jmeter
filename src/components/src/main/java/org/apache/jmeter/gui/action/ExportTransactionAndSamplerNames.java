@@ -80,7 +80,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
      * Visitor to collect nodes matching the name
      */
     private static class SamplerAndTransactionNameVisitor implements HashTreeTraverser {
-        private Set<String> listOfTransactions = new TreeSet<>();
+        private final Set<String> listOfTransactions = new TreeSet<>();
         public SamplerAndTransactionNameVisitor() {
             super();
         }

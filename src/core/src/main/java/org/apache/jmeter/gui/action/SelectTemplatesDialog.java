@@ -96,9 +96,9 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     private final JButton validateButton = new JButton();
 
-    private Map<String, JLabeledTextField> parametersTextFields = new LinkedHashMap<>();
+    private final Map<String, JLabeledTextField> parametersTextFields = new LinkedHashMap<>();
 
-    private JPanel actionBtnBar = new JPanel(new FlowLayout());
+    private final JPanel actionBtnBar = new JPanel(new FlowLayout());
 
     public SelectTemplatesDialog() {
         super((JFrame) null, JMeterUtils.getResString("template_title"), true); //$NON-NLS-1$

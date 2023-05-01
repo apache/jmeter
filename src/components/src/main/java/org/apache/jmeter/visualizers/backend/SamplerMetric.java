@@ -42,27 +42,27 @@ public class SamplerMetric {
     /**
      * Response times for OK samples
      */
-    private DescriptiveStatistics okResponsesStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
+    private final DescriptiveStatistics okResponsesStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
     /**
      * Response times for KO samples
      */
-    private DescriptiveStatistics koResponsesStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
+    private final DescriptiveStatistics koResponsesStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
     /**
      * Response times for All samples
      */
-    private DescriptiveStatistics allResponsesStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
+    private final DescriptiveStatistics allResponsesStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
     /**
      *  OK, KO, ALL stats
      */
-    private List<DescriptiveStatistics> windowedStats = initWindowedStats();
+    private final List<DescriptiveStatistics> windowedStats = initWindowedStats();
     /**
      * Timeboxed percentiles don't makes sense
      */
-    private DescriptiveStatistics pctResponseStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    private final DescriptiveStatistics pctResponseStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(SLIDING_WINDOW_SIZE);
     private int successes;
     private int failures;
     private int hits;
-    private Map<ErrorMetric, Integer> errors = new HashMap<>();
+    private final Map<ErrorMetric, Integer> errors = new HashMap<>();
     private long sentBytes;
     private long receivedBytes;
 

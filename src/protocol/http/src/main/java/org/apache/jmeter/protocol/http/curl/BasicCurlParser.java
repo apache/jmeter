@@ -126,7 +126,7 @@ public class BasicCurlParser {
     public static final class Request {
         private boolean compressed;
         private String url;
-        private List<Pair<String, String>> headers = new ArrayList<>();
+        private final List<Pair<String, String>> headers = new ArrayList<>();
         private String method = "GET";
         private String postData;
         private String interfaceName;
@@ -134,17 +134,17 @@ public class BasicCurlParser {
         private String cookies = "";
         private String cookieInHeaders = "";
         private String filepathCookie="";
-        private Authorization authorization = new Authorization();
+        private final Authorization authorization = new Authorization();
         private String caCert = "";
-        private List<Pair<String, ArgumentHolder>> formData = new ArrayList<>();
-        private List<Pair<String, String>> formStringData = new ArrayList<>();
-        private Set<String> dnsServers = new HashSet<>();
+        private final List<Pair<String, ArgumentHolder>> formData = new ArrayList<>();
+        private final List<Pair<String, String>> formStringData = new ArrayList<>();
+        private final Set<String> dnsServers = new HashSet<>();
         private boolean isKeepAlive = true;
         private double maxTime = -1;
-        private List<String> optionsIgnored = new ArrayList<>();
-        private List<String> optionsNoSupport = new ArrayList<>();
-        private List<String> optionsInProperties = new ArrayList<>();
-        private Map<String, String> proxyServer = new LinkedHashMap<>();
+        private final List<String> optionsIgnored = new ArrayList<>();
+        private final List<String> optionsNoSupport = new ArrayList<>();
+        private final List<String> optionsInProperties = new ArrayList<>();
+        private final Map<String, String> proxyServer = new LinkedHashMap<>();
         private String dnsResolver;
         private int limitRate = 0;
         private String noproxy;

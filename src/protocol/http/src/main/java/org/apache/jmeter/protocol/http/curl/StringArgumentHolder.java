@@ -45,8 +45,8 @@ public class StringArgumentHolder implements ArgumentHolder {
         return Objects.equals(metadata, other.metadata) && Objects.equals(name, other.name);
     }
 
-    private String name;
-    private Map<String, String> metadata;
+    private final String name;
+    private final Map<String, String> metadata;
 
     private StringArgumentHolder(String name, Map<String, String> metadata) {
         this.name = name;

@@ -54,7 +54,7 @@ public class RemoteStart extends AbstractAction {
         commands.add(ActionNames.REMOTE_EXIT_ALL);
     }
 
-    private DistributedRunner distributedRunner = new DistributedRunner();
+    private final DistributedRunner distributedRunner = new DistributedRunner();
 
     public RemoteStart() {
     }

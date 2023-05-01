@@ -51,7 +51,7 @@ public class JMeterContext {
     private AbstractThreadGroup threadGroup;
     private int threadNum;
     private TestLogicalAction testLogicalAction = TestLogicalAction.CONTINUE;
-    private ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<>(5);
+    private final ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<>(5);
     private boolean recording;
 
     JMeterContext() {

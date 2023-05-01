@@ -36,7 +36,7 @@ import javax.swing.JPasswordField;
  */
 public class PasswordEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
 
-    private JPasswordField textField;
+    private final JPasswordField textField;
 
     /**
      * Value on which we started the editing. Used to avoid firing

@@ -91,9 +91,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private final BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
 
-    private ThreadPoolExecutor pool;
+    private final ThreadPoolExecutor pool;
 
-    private volatile int nbProcessors;
+    private final int nbProcessors;
 
     private boolean parallelize;
 

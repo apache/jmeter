@@ -78,19 +78,19 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private JMenuItem runStart;
     private JMenuItem runStartNoTimers;
     private JMenu remoteStart;
-    private Collection<JMenuItem> remoteEngineStart;
+    private final Collection<JMenuItem> remoteEngineStart;
     private JMenuItem runStop;
     private JMenuItem runShut;
     private JMenu remoteStop;
     private JMenu remoteShut;
-    private Collection<JMenuItem> remoteEngineStop;
-    private Collection<JMenuItem> remoteEngineShut;
+    private final Collection<JMenuItem> remoteEngineStop;
+    private final Collection<JMenuItem> remoteEngineShut;
     private JMenu optionsMenu;
     private JMenu helpMenu;
     private JMenu toolsMenu;
     private String[] remoteHosts;
     private JMenu remoteExit;
-    private Collection<JMenuItem> remoteEngineExit;
+    private final Collection<JMenuItem> remoteEngineExit;
     private JMenu searchMenu;
     private List<MenuCreator> menuCreators;
 

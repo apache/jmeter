@@ -61,10 +61,10 @@ public class LagartoBasedHtmlParser extends HTMLParser {
 
     private static final class JMeterTagVisitor extends EmptyTagVisitor {
         private HtmlCCommentExpressionMatcher htmlCCommentExpressionMatcher;
-        private URLCollection urls;
-        private URLPointer baseUrl;
-        private Float ieVersion;
-        private Deque<Boolean> enabled = new ArrayDeque<>();
+        private final URLCollection urls;
+        private final URLPointer baseUrl;
+        private final Float ieVersion;
+        private final Deque<Boolean> enabled = new ArrayDeque<>();
 
         /**
          * @param baseUrl base url to add possibly missing information to urls found in <code>urls</code>

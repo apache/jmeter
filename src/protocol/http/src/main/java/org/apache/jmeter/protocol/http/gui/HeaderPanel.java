@@ -313,7 +313,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
     private static class InnerTableModel extends AbstractTableModel {
         private static final long serialVersionUID = 240L;
 
-        private HeaderManager manager;
+        private final HeaderManager manager;
 
         public InnerTableModel(HeaderManager man) {
             manager = man;

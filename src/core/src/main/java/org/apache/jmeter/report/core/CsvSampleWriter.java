@@ -38,13 +38,13 @@ import org.apache.jmeter.save.CSVSaveService;
 public class CsvSampleWriter extends AbstractSampleWriter {
 
     /** The number of columns for each row */
-    private int columnCount;
+    private final int columnCount;
 
     /** The separator to be used in between data on each row */
     private char separator;
 
     /** Description of the columns */
-    private SampleMetadata metadata;
+    private final SampleMetadata metadata;
 
     /** Number of samples written */
     private long sampleCount;

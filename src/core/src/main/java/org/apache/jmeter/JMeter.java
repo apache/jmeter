@@ -1167,13 +1167,13 @@ public class JMeter implements JMeterPlugin {
 
         private AtomicInteger startedRemoteEngines = new AtomicInteger(0);
 
-        private ConcurrentLinkedQueue<JMeterEngine> remoteEngines = new ConcurrentLinkedQueue<>();
+        private final ConcurrentLinkedQueue<JMeterEngine> remoteEngines = new ConcurrentLinkedQueue<>();
 
         private final ReportGenerator reportGenerator;
 
-        private RunMode runMode;
+        private final RunMode runMode;
 
-        private boolean remoteStop;
+        private final boolean remoteStop;
 
         /**
          * Listener for remote test

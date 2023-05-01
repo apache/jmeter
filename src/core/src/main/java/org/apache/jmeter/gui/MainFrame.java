@@ -187,12 +187,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /** LogTarget that receives ERROR or FATAL */
     private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
 
-    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000,
+    private final javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000,
             this::computeTestDuration);
 
-    private AtomicInteger errorOrFatal = new AtomicInteger(0);
+    private final AtomicInteger errorOrFatal = new AtomicInteger(0);
 
-    private javax.swing.Timer refreshErrorsTimer = new javax.swing.Timer(1000,
+    private final javax.swing.Timer refreshErrorsTimer = new javax.swing.Timer(1000,
             this::refreshErrors);
 
     /**

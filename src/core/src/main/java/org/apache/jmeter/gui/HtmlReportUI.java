@@ -52,7 +52,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HtmlReportUI implements ActionListener {
-    private static Set<String> commands = new HashSet<>();
+    private static final Set<String> commands = new HashSet<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportUI.class);
 
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
@@ -166,7 +166,7 @@ public class HtmlReportUI implements ActionListener {
     }
 
     private class ReportGenerationWorker extends SwingWorker<List<String>, String> {
-        private JButton reportLaunchButton;
+        private final JButton reportLaunchButton;
 
         public ReportGenerationWorker(JButton reportLaunchButton) {
             this.reportLaunchButton = reportLaunchButton;

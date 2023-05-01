@@ -51,7 +51,7 @@ public final class JSyntaxSearchToolBar implements ActionListener {
     /**
      * The component where we Search
      */
-    private JSyntaxTextArea dataField;
+    private final JSyntaxTextArea dataField;
 
     /**
      * @param dataField {@link JSyntaxTextArea} to use for searching

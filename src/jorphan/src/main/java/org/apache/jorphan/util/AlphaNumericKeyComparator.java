@@ -29,7 +29,7 @@ import java.util.Map;
 public class AlphaNumericKeyComparator implements Comparator<Map.Entry<Object, Object>> {
 
     public static final AlphaNumericKeyComparator INSTANCE = new AlphaNumericKeyComparator();
-    private AlphaNumericComparator<Map.Entry<Object, Object>> comparator;
+    private final AlphaNumericComparator<Map.Entry<Object, Object>> comparator;
 
     private AlphaNumericKeyComparator() {
         // don't instantiate this class on your own.

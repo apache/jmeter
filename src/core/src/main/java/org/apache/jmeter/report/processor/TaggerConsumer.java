@@ -38,7 +38,7 @@ public class TaggerConsumer<TIndex> extends AbstractSampleConsumer {
     public static final String DEFAULT_TAG_LABEL = "Tag";
 
     // Collection of sample builders for channels
-    private ArrayList<SampleBuilder> builders = new ArrayList<>();
+    private final ArrayList<SampleBuilder> builders = new ArrayList<>();
     private SampleIndexer<TIndex> sampleIndexer;
     private String tagLabel = DEFAULT_TAG_LABEL;
 

@@ -79,14 +79,14 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
     private final JCheckBox useGroupName = new JCheckBox(
             JMeterUtils.getResString("aggregate_graph_use_group_name")); //$NON-NLS-1$
 
-    private transient ObjectTableModel model;
+    private final transient ObjectTableModel model;
 
     /** Lock used to protect tableRows update + model update */
     private final transient Object lock = new Object();
 
     private final Map<String, SamplingStatCalculator> tableRows = new ConcurrentHashMap<>();
 
-    private Deque<SamplingStatCalculator> newRows = new ConcurrentLinkedDeque<>();
+    private final Deque<SamplingStatCalculator> newRows = new ConcurrentLinkedDeque<>();
 
     private volatile boolean dataChanged;
 

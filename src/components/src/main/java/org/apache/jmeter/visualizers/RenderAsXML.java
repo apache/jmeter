@@ -111,8 +111,8 @@ public class RenderAsXML extends SamplerResultTab
     private static class ExpandPopupMenu extends JPopupMenu implements ActionListener {
 
         private static final long serialVersionUID = 1L;
-        private JMenuItem expand;
-        private JMenuItem collapse;
+        private final JMenuItem expand;
+        private final JMenuItem collapse;
         private JTree tree;
 
         ExpandPopupMenu() {

@@ -60,7 +60,7 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
      * index of sample metadata consumed by this consumer. Indexed by channel
      * numbers
      */
-    private Map<Integer, SampleMetadata> consumedMetadata = new TreeMap<>();
+    private final Map<Integer, SampleMetadata> consumedMetadata = new TreeMap<>();
 
     /**
      * Gets the data identified by the specified key from the current sample

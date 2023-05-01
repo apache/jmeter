@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class MapResultData implements ResultData {
 
-    private Map<String, ResultData> map = new HashMap<>();
+    private final Map<String, ResultData> map = new HashMap<>();
 
     /*
      * (non-Javadoc)

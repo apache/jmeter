@@ -58,21 +58,21 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 
     private static final long serialVersionUID = 240L;
 
-    private JTextField rootdn = new JTextField(20);
+    private final JTextField rootdn = new JTextField(20);
 
-    private JTextField searchbase = new JTextField(20);
+    private final JTextField searchbase = new JTextField(20);
 
-    private JTextField searchfilter = new JTextField(20);
+    private final JTextField searchfilter = new JTextField(20);
 
-    private JTextField delete = new JTextField(20);
+    private final JTextField delete = new JTextField(20);
 
-    private JTextField add = new JTextField(20);
+    private final JTextField add = new JTextField(20);
 
-    private JTextField modify = new JTextField(20);
+    private final JTextField modify = new JTextField(20);
 
-    private JTextField servername = new JTextField(20);
+    private final JTextField servername = new JTextField(20);
 
-    private JTextField port = new JTextField(20);
+    private final JTextField port = new JTextField(20);
 
     /*
      * N.B. These entry indexes MUST agree with the SearchControls SCOPE_LEVELS, i.e.
@@ -102,65 +102,65 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     private static final String CARDS_SEARCH = "Search"; // $NON-NLS-1$
     private static final String CARDS_MODIFY = "Modify"; // $NON-NLS-1$
 
-    private JLabeledChoice scope =
+    private final JLabeledChoice scope =
         new JLabeledChoice(JMeterUtils.getResString("scope"), // $NON-NLS-1$
         SCOPE_STRINGS);
 
-    private JTextField countlim = new JTextField(20);
+    private final JTextField countlim = new JTextField(20);
 
-    private JTextField timelim = new JTextField(20);
+    private final JTextField timelim = new JTextField(20);
 
-    private JTextField attribs = new JTextField(20);
+    private final JTextField attribs = new JTextField(20);
 
-    private JCheckBox retobj = new JCheckBox(JMeterUtils.getResString("retobj")); // $NON-NLS-1$
+    private final JCheckBox retobj = new JCheckBox(JMeterUtils.getResString("retobj")); // $NON-NLS-1$
 
-    private JCheckBox deref = new JCheckBox(JMeterUtils.getResString("deref")); // $NON-NLS-1$
+    private final JCheckBox deref = new JCheckBox(JMeterUtils.getResString("deref")); // $NON-NLS-1$
 
-    private JTextField userdn = new JTextField(20);
+    private final JTextField userdn = new JTextField(20);
 
-    private JTextField userpw = new JPasswordField(20);
+    private final JTextField userpw = new JPasswordField(20);
 
-    private JTextField comparedn = new JTextField(20);
+    private final JTextField comparedn = new JTextField(20);
 
-    private JTextField comparefilt = new JTextField(20);
+    private final JTextField comparefilt = new JTextField(20);
 
-    private JTextField modddn = new JTextField(20);
+    private final JTextField modddn = new JTextField(20);
 
-    private JTextField newdn = new JTextField(20);
+    private final JTextField newdn = new JTextField(20);
 
-    private JTextField connto = new JTextField(20);
+    private final JTextField connto = new JTextField(20);
 
-    private JCheckBox parseflag = new JCheckBox(JMeterUtils.getResString("ldap_parse_results")); // $NON-NLS-1$
+    private final JCheckBox parseflag = new JCheckBox(JMeterUtils.getResString("ldap_parse_results")); // $NON-NLS-1$
 
-    private JCheckBox secure = new JCheckBox(JMeterUtils.getResString("ldap_secure")); // $NON-NLS-1$
+    private final JCheckBox secure = new JCheckBox(JMeterUtils.getResString("ldap_secure")); // $NON-NLS-1$
 
-    private JCheckBox trustAll = new JCheckBox(JMeterUtils.getResString("ldap_trust_all")); // $NON-NLS-1$
+    private final JCheckBox trustAll = new JCheckBox(JMeterUtils.getResString("ldap_trust_all")); // $NON-NLS-1$
 
-    private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("addtest")); // $NON-NLS-1$
+    private final JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("addtest")); // $NON-NLS-1$
 
-    private JRadioButton modifyTest = new JRadioButton(JMeterUtils.getResString("modtest")); // $NON-NLS-1$
+    private final JRadioButton modifyTest = new JRadioButton(JMeterUtils.getResString("modtest")); // $NON-NLS-1$
 
-    private JRadioButton deleteTest = new JRadioButton(JMeterUtils.getResString("deltest")); // $NON-NLS-1$
+    private final JRadioButton deleteTest = new JRadioButton(JMeterUtils.getResString("deltest")); // $NON-NLS-1$
 
-    private JRadioButton searchTest = new JRadioButton(JMeterUtils.getResString("searchtest")); // $NON-NLS-1$
+    private final JRadioButton searchTest = new JRadioButton(JMeterUtils.getResString("searchtest")); // $NON-NLS-1$
 
-    private JRadioButton bind = new JRadioButton(JMeterUtils.getResString("bind")); // $NON-NLS-1$
+    private final JRadioButton bind = new JRadioButton(JMeterUtils.getResString("bind")); // $NON-NLS-1$
 
-    private JRadioButton rename = new JRadioButton(JMeterUtils.getResString("rename")); // $NON-NLS-1$
+    private final JRadioButton rename = new JRadioButton(JMeterUtils.getResString("rename")); // $NON-NLS-1$
 
-    private JRadioButton unbind = new JRadioButton(JMeterUtils.getResString("unbind")); // $NON-NLS-1$
+    private final JRadioButton unbind = new JRadioButton(JMeterUtils.getResString("unbind")); // $NON-NLS-1$
 
-    private JRadioButton sbind = new JRadioButton(JMeterUtils.getResString("sbind")); // $NON-NLS-1$
+    private final JRadioButton sbind = new JRadioButton(JMeterUtils.getResString("sbind")); // $NON-NLS-1$
 
-    private JRadioButton compare = new JRadioButton(JMeterUtils.getResString("compare")); // $NON-NLS-1$
+    private final JRadioButton compare = new JRadioButton(JMeterUtils.getResString("compare")); // $NON-NLS-1$
 
-    private ButtonGroup bGroup = new ButtonGroup();
+    private final ButtonGroup bGroup = new ButtonGroup();
 
     private boolean displayName = true;
 
-    private ArgumentsPanel tableAddPanel = new ArgumentsPanel(JMeterUtils.getResString("addtest")); // $NON-NLS-1$
+    private final ArgumentsPanel tableAddPanel = new ArgumentsPanel(JMeterUtils.getResString("addtest")); // $NON-NLS-1$
 
-    private LDAPArgumentsPanel tableModifyPanel = new LDAPArgumentsPanel(JMeterUtils.getResString("modtest")); // $NON-NLS-1$
+    private final LDAPArgumentsPanel tableModifyPanel = new LDAPArgumentsPanel(JMeterUtils.getResString("modtest")); // $NON-NLS-1$
 
     private JPanel cards;
 

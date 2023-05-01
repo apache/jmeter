@@ -55,15 +55,15 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     private static final String LABEL_LIBRARY = "library"; // $NON-NLS-1$
 
-    private JButton browse = new JButton(JMeterUtils.getResString(ACTION_BROWSE));
+    private final JButton browse = new JButton(JMeterUtils.getResString(ACTION_BROWSE));
 
-    private JButton clear = new JButton(JMeterUtils.getResString("clear")); // $NON-NLS-1$
+    private final JButton clear = new JButton(JMeterUtils.getResString("clear")); // $NON-NLS-1$
 
-    private JButton delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
+    private final JButton delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 
-    private List<ChangeListener> listeners = new ArrayList<>();
+    private final List<ChangeListener> listeners = new ArrayList<>();
 
-    private String title;
+    private final String title;
 
     private String filetype;
 

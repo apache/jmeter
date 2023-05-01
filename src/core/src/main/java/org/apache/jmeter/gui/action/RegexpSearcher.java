@@ -28,8 +28,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class RegexpSearcher implements Searcher {
 
-    private boolean caseSensitive;
-    private String regexp;
+    private final boolean caseSensitive;
+    private final String regexp;
     /**
      * Constructor
      * @param caseSensitive is search case sensitive

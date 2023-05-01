@@ -51,7 +51,7 @@ public abstract class AbstractSampleWriter extends SampleWriter {
 
     private static final String CHARSET = SaveService.getFileEncoding(StandardCharsets.UTF_8.displayName());
 
-    private static Logger log = LoggerFactory.getLogger(AbstractSampleWriter.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractSampleWriter.class);
 
     /** output writer to write samples to */
     protected PrintWriter writer;

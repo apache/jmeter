@@ -53,7 +53,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
     /** temporary storage area for the body header. */
     private String header;
 
-    private static Tika tika = createTika();
+    private static final Tika tika = createTika();
 
     /**
      * Constructor for an empty HTTPFileArg object

@@ -102,19 +102,19 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * to their corresponding GUI components.
      * <p>This enables to associate {@link UnsharedComponent} UIs with their {@link TestElement}.</p>
      */
-    private Map<TestElement, JMeterGUIComponent> nodesToGui = new HashMap<>();
+    private final Map<TestElement, JMeterGUIComponent> nodesToGui = new HashMap<>();
 
     /**
      * Map from Class to JMeterGUIComponent, mapping the Class of a GUI
      * component to an instance of that component.
      */
-    private Map<Class<?>, JMeterGUIComponent> guis = new HashMap<>();
+    private final Map<Class<?>, JMeterGUIComponent> guis = new HashMap<>();
 
     /**
      * Map from Class to TestBeanGUI, mapping the Class of a TestBean to an
      * instance of TestBeanGUI to be used to edit such components.
      */
-    private Map<Class<?>, JMeterGUIComponent> testBeanGUIs = new HashMap<>();
+    private final Map<Class<?>, JMeterGUIComponent> testBeanGUIs = new HashMap<>();
 
     /**
      * Tracks the number of times Look and Feel was changed.
@@ -149,13 +149,13 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     private LoggerPanel loggerPanel;
 
     /** History for tree states */
-    private UndoHistory undoHistory = new UndoHistory();
+    private final UndoHistory undoHistory = new UndoHistory();
 
     /** GUI Logging Event Bus. */
-    private GuiLogEventBus logEventBus = new GuiLogEventBus();
+    private final GuiLogEventBus logEventBus = new GuiLogEventBus();
 
     /** Listeners for events on test plan */
-    private List<TestPlanListener> testPlanListeners = Collections.synchronizedList(new ArrayList<>());
+    private final List<TestPlanListener> testPlanListeners = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Private constructor to permit instantiation only from within this class.

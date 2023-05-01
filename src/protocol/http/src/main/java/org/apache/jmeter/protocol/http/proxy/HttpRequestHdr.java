@@ -81,11 +81,11 @@ public class HttpRequestHdr {
 
     private String firstLine; // saved copy of first line for error reports
 
-    private String prefix;
+    private final String prefix;
 
-    private int httpSampleNameMode;
+    private final int httpSampleNameMode;
 
-    private String httpSampleNameFormat;
+    private final String httpSampleNameFormat;
 
     private boolean detectGraphQLRequest;
 

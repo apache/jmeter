@@ -123,7 +123,7 @@ public class IfController extends GenericController implements Serializable, Thr
         }
     }
 
-    private static JsEvaluator JAVASCRIPT_EVALUATOR = USE_RHINO_ENGINE ? new RhinoJsEngine() : new NashornJsEngine();
+    private static final JsEvaluator JAVASCRIPT_EVALUATOR = USE_RHINO_ENGINE ? new RhinoJsEngine() : new NashornJsEngine();
 
     /**
      * Initialization On Demand Holder pattern

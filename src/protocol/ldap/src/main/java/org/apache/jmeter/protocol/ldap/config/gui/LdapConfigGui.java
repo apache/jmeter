@@ -54,39 +54,39 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 
     private static final long serialVersionUID = 241L;
 
-    private JTextField rootdn = new JTextField(20);
+    private final JTextField rootdn = new JTextField(20);
 
-    private JTextField searchbase = new JTextField(20);
+    private final JTextField searchbase = new JTextField(20);
 
-    private JTextField searchfilter = new JTextField(20);
+    private final JTextField searchfilter = new JTextField(20);
 
-    private JTextField delete = new JTextField(20);
+    private final JTextField delete = new JTextField(20);
 
-    private JTextField add = new JTextField(20);
+    private final JTextField add = new JTextField(20);
 
-    private JTextField modify = new JTextField(20);
+    private final JTextField modify = new JTextField(20);
 
-    private JTextField servername = new JTextField(20);
+    private final JTextField servername = new JTextField(20);
 
-    private JTextField port = new JTextField(20);
+    private final JTextField port = new JTextField(20);
 
-    private JCheckBox userDefined = new JCheckBox(JMeterUtils.getResString("user_defined_test")); // $NON-NLS-1$
+    private final JCheckBox userDefined = new JCheckBox(JMeterUtils.getResString("user_defined_test")); // $NON-NLS-1$
 
-    private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("add_test")); // $NON-NLS-1$
+    private final JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("add_test")); // $NON-NLS-1$
 
-    private JRadioButton modifyTest = new JRadioButton(JMeterUtils.getResString("modify_test")); // $NON-NLS-1$
+    private final JRadioButton modifyTest = new JRadioButton(JMeterUtils.getResString("modify_test")); // $NON-NLS-1$
 
-    private JRadioButton deleteTest = new JRadioButton(JMeterUtils.getResString("delete_test")); // $NON-NLS-1$
+    private final JRadioButton deleteTest = new JRadioButton(JMeterUtils.getResString("delete_test")); // $NON-NLS-1$
 
-    private JRadioButton searchTest = new JRadioButton(JMeterUtils.getResString("search_test")); // $NON-NLS-1$
+    private final JRadioButton searchTest = new JRadioButton(JMeterUtils.getResString("search_test")); // $NON-NLS-1$
 
-    private ButtonGroup bGroup = new ButtonGroup();
+    private final ButtonGroup bGroup = new ButtonGroup();
 
     private boolean displayName = true;
 
-    private ArgumentsPanel tableAddPanel = new ArgumentsPanel(JMeterUtils.getResString("add_test")); // $NON-NLS-1$
+    private final ArgumentsPanel tableAddPanel = new ArgumentsPanel(JMeterUtils.getResString("add_test")); // $NON-NLS-1$
 
-    private ArgumentsPanel tableModifyPanel = new ArgumentsPanel(JMeterUtils.getResString("modify_test")); // $NON-NLS-1$
+    private final ArgumentsPanel tableModifyPanel = new ArgumentsPanel(JMeterUtils.getResString("modify_test")); // $NON-NLS-1$
 
     private JPanel cards;
 

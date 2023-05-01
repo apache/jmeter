@@ -71,7 +71,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
     private PowerTableModel tableModel;
 
-    private int numUserColumns = 1;
+    private final int numUserColumns = 1;
 
     private JButton addParameterButton;
     private JButton addUserButton;

@@ -135,7 +135,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         }
     }
 
-    private KerberosManager kerberosManager = new KerberosManager();
+    private final KerberosManager kerberosManager = new KerberosManager();
 
     /**
      * Default Constructor.

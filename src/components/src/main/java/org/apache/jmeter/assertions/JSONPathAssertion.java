@@ -56,7 +56,7 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
     private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
             "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
-    private static ThreadLocal<DecimalFormat> decimalFormatter =
+    private static final ThreadLocal<DecimalFormat> decimalFormatter =
             ThreadLocal.withInitial(JSONPathAssertion::createDecimalFormat);
 
     private static DecimalFormat createDecimalFormat() {

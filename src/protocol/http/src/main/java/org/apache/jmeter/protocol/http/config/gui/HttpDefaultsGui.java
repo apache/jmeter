@@ -66,13 +66,13 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     private JTextField embeddedAllowRE; // regular expression used to match against embedded resource URLs to allow
     private JTextField embeddedExcludeRE; // regular expression used to match against embedded resource URLs to discard
     private JTextField sourceIpAddr; // does not apply to Java implementation
-    private JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
+    private final JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
     private JTextField proxyScheme;
     private JTextField proxyHost;
     private JTextField proxyPort;
     private JTextField proxyUser;
     private JPasswordField proxyPass;
-    private JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
+    private final JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
     private JTextField connectTimeOut;
     private JTextField responseTimeOut;
 

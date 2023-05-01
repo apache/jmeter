@@ -32,10 +32,10 @@ public class AggregateConsumer extends AbstractSampleConsumer {
     private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
     /** The aggregator. */
-    private Aggregator aggregator;
+    private final Aggregator aggregator;
 
     /** The selector. */
-    private SampleSelector<Double> selector;
+    private final SampleSelector<Double> selector;
 
     /**
      * Gets the aggregator.

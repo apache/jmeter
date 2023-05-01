@@ -123,7 +123,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     private final JCheckBox useGroupName =
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
 
-    private transient ObjectTableModel model;
+    private final transient ObjectTableModel model;
 
     /**
      * Lock used to protect tableRows update + model update

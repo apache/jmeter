@@ -72,7 +72,7 @@ public class HC4CookieHandler implements CookieHandler {
 
     private static final PublicSuffixMatcher publicSuffixMatcher = PublicSuffixMatcherLoader.getDefault();
     @SuppressWarnings("deprecation")
-    private static Registry<CookieSpecProvider> registry  =
+    private static final Registry<CookieSpecProvider> registry  =
             RegistryBuilder.<CookieSpecProvider>create()
             // case is ignored bug registry as it converts to lowerCase(Locale.US)
             .register(CookieSpecs.BEST_MATCH, new DefaultCookieSpecProvider(publicSuffixMatcher))

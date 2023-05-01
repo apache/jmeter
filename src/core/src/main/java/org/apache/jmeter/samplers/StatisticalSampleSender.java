@@ -51,7 +51,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
             DEFAULT_TIME_THRESHOLD);
 
     // should the samples be aggregated on thread name or thread group (default) ?
-    private static boolean KEY_ON_THREADNAME = JMeterUtils.getPropDefault("key_on_threadname", false);
+    private static final boolean KEY_ON_THREADNAME = JMeterUtils.getPropDefault("key_on_threadname", false);
 
     // Instance fields are constructed by the client when the instance is create in the test plan
     // and the field values are then transferred to the server copy by RMI serialisation/deserialisation

@@ -124,8 +124,8 @@ public class TemplateManager {
     }
 
     public static final class LoggingErrorHandler implements ErrorHandler {
-        private Logger logger;
-        private File file;
+        private final Logger logger;
+        private final File file;
 
         public LoggingErrorHandler(Logger logger, File file) {
             this.logger = logger;

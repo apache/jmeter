@@ -42,7 +42,7 @@ public class SampleMetadata {
     List<String> columns;
 
     /** Index to map column names to their corresponding indexes */
-    private TreeMap<String, Integer> index = new TreeMap<>();
+    private final TreeMap<String, Integer> index = new TreeMap<>();
 
     /** character separator used for separating columns */
     private char separator;

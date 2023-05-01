@@ -34,7 +34,7 @@ import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class HtmlReportAction extends AbstractAction implements MenuCreator {
-    private static Set<String> commands = new HashSet<>();
+    private static final Set<String> commands = new HashSet<>();
     private HtmlReportUI htmlReportPanel;
 
     static {

@@ -75,13 +75,13 @@ public class RandomDate extends AbstractFunction {
 
     // Ensure that these are set, even if no parameters are provided
     private Locale locale = JMeterUtils.getLocale(); // $NON-NLS-1$
-    private ZoneId systemDefaultZoneID = ZoneId.systemDefault(); // $NON-NLS-1$
+    private final ZoneId systemDefaultZoneID = ZoneId.systemDefault(); // $NON-NLS-1$
     private CompoundVariable[] values;
 
     private static final class LocaleFormatObject {
 
-        private String format;
-        private Locale locale;
+        private final String format;
+        private final Locale locale;
 
         public LocaleFormatObject(String format, Locale locale) {
             this.format = format;

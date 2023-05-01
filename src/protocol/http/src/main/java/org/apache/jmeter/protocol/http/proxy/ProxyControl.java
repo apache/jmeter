@@ -271,7 +271,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private volatile boolean regexMatch = false;
 
-    private Set<Class<?>> addableInterfaces = new HashSet<>(
+    private final Set<Class<?>> addableInterfaces = new HashSet<>(
             Arrays.asList(Visualizer.class, ConfigElement.class,
                     Assertion.class, Timer.class, PreProcessor.class,
                     PostProcessor.class, SampleListener.class));
@@ -288,7 +288,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
 
     private JMeterTreeModel nonGuiTreeModel;
 
-    private ArrayDeque<SamplerInfo> sampleQueue = new ArrayDeque<>();
+    private final ArrayDeque<SamplerInfo> sampleQueue = new ArrayDeque<>();
 
     // accessed from Swing-Thread, only
     private String oldPrefix = null;
@@ -1721,12 +1721,12 @@ public class ProxyControl extends GenericController implements NonTestElement {
      */
     private static class SamplerInfo implements Serializable {
         private static final long serialVersionUID = 1L;
-        private HTTPSamplerBase sampler;
-        private transient TestElement[] testElements;
-        private JMeterTreeNode target;
-        private String prefix;
-        private int groupingMode;
-        private long recordedAt;
+        private final HTTPSamplerBase sampler;
+        private final transient TestElement[] testElements;
+        private final JMeterTreeNode target;
+        private final String prefix;
+        private final int groupingMode;
+        private final long recordedAt;
 
         public SamplerInfo(HTTPSamplerBase sampler, TestElement[] testElements, JMeterTreeNode target, String prefix, int groupingMode) {
             this.sampler = sampler;

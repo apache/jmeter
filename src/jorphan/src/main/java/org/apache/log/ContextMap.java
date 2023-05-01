@@ -53,7 +53,7 @@ public final class ContextMap
     private final ContextMap m_parent;
 
     ///Container to hold map of elements
-    private Hashtable m_map = new Hashtable();
+    private final Hashtable m_map = new Hashtable();
 
     ///Flag indicating whether this map should be readonly
     private transient boolean m_readOnly;

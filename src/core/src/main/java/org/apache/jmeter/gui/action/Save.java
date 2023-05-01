@@ -463,7 +463,7 @@ public class Save extends AbstractAction {
 
     private static class PrivatePatternFileFilter implements IOFileFilter {
 
-        private Pattern pattern;
+        private final Pattern pattern;
 
         public PrivatePatternFileFilter(Pattern pattern) {
             if(pattern == null) {

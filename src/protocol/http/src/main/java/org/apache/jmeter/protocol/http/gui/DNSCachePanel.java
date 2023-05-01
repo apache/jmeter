@@ -103,7 +103,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     private JButton addHostButton;
     private JButton deleteHostButton;
 
-    private ButtonGroup providerDNSradioGroup = new ButtonGroup();
+    private final ButtonGroup providerDNSradioGroup = new ButtonGroup();
 
     private static final String[] COLUMN_RESOURCE_NAMES = {
         JMeterUtils.getResString("dns_hostname_or_ip"), //$NON-NLS-1$

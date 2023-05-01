@@ -209,9 +209,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final InputStreamFactory BROTLI = BrotliInputStream::new;
 
     private static final class ManagedCredentialsProvider implements CredentialsProvider {
-        private AuthManager authManager;
-        private Credentials proxyCredentials;
-        private AuthScope proxyAuthScope;
+        private final AuthManager authManager;
+        private final Credentials proxyCredentials;
+        private final AuthScope proxyAuthScope;
 
         public ManagedCredentialsProvider(AuthManager authManager, AuthScope proxyAuthScope, Credentials proxyCredentials) {
             this.authManager = authManager;

@@ -64,7 +64,7 @@ public final class JmeterKeyStore {
     private final int endIndex;
 
     /** name of the default alias */
-    private String clientCertAliasVarName;
+    private final String clientCertAliasVarName;
 
     private String[] names = new String[0];
     private Map<String, PrivateKey> privateKeyByAlias = new HashMap<>();

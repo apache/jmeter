@@ -25,8 +25,8 @@ import org.apache.commons.lang3.StringUtils;
  * Searcher implementation that searches text as is
  */
 public class RawTextSearcher implements Searcher {
-    private boolean caseSensitive;
-    private String textToSearch;
+    private final boolean caseSensitive;
+    private final String textToSearch;
 
 
     /**

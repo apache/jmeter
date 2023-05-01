@@ -42,9 +42,9 @@ public class IterationCounter extends AbstractFunction implements ThreadListener
 
     private Object[] variables;
 
-    private AtomicInteger globalCounter = new AtomicInteger();
+    private final AtomicInteger globalCounter = new AtomicInteger();
 
-    private ThreadLocal<AtomicInteger> perThreadInt = ThreadLocal.withInitial(AtomicInteger::new);
+    private final ThreadLocal<AtomicInteger> perThreadInt = ThreadLocal.withInitial(AtomicInteger::new);
 
     static {
         desc.add(JMeterUtils.getResString("iteration_counter_arg_1")); //$NON-NLS-1$

@@ -78,7 +78,7 @@ public final class CLArgsParser {
     // variables used while parsing options.
     private char ch;
 
-    private String[] args;
+    private final String[] args;
 
     private boolean isLong;
 

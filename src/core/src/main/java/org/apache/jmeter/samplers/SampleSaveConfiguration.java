@@ -464,7 +464,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private boolean idleTime = IDLE_TIME;
 
     // Does not appear to be used (yet)
-    private int assertionsResultsToSave = ASSERTIONS_RESULT_TO_SAVE;
+    private final int assertionsResultsToSave = ASSERTIONS_RESULT_TO_SAVE;
 
     // Don't save this, as it is derived from the time format
     private boolean printMilliseconds = PRINT_MILLISECONDS;

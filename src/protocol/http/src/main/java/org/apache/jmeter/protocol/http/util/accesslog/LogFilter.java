@@ -100,9 +100,9 @@ public class LogFilter implements Filter, Serializable {
 
     protected boolean PTRNFILTER = false;
 
-    private List<String> excludePatternStrings = new ArrayList<>();
+    private final List<String> excludePatternStrings = new ArrayList<>();
 
-    private  List<String> includePatternStrings = new ArrayList<>();
+    private final List<String> includePatternStrings = new ArrayList<>();
 
     protected ArrayList<Pattern> EXCPATTERNS = new ArrayList<>();
 

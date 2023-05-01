@@ -61,19 +61,19 @@ public class CsvSampleReader implements Closeable{
                             SampleSaveConfiguration.DEFAULT_DELIMITER))
                     .charAt(0);
 
-    private File file;
+    private final File file;
     private InputStream fis;
     private Reader isr;
     private BufferedReader reader;
-    private char separator;
+    private final char separator;
     private long row;
-    private SampleMetadata metadata;
-    private int columnCount;
+    private final SampleMetadata metadata;
+    private final int columnCount;
     private Sample lastSampleRead;
     /**
      * Number of sample_variables if csv file has no header
      */
-    private int numberOfSampleVariablesInCsv;
+    private final int numberOfSampleVariablesInCsv;
 
     /**
      * Instantiates a new csv sample reader.

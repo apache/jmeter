@@ -51,29 +51,29 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 240L;
 
-    private JLabeledTextField queueConnectionFactory = new JLabeledTextField(
+    private final JLabeledTextField queueConnectionFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_queue_connection_factory")); //$NON-NLS-1$
 
-    private JLabeledTextField sendQueue = new JLabeledTextField(JMeterUtils.getResString("jms_send_queue")); //$NON-NLS-1$
+    private final JLabeledTextField sendQueue = new JLabeledTextField(JMeterUtils.getResString("jms_send_queue")); //$NON-NLS-1$
 
-    private JLabeledTextField receiveQueue = new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue")); //$NON-NLS-1$
+    private final JLabeledTextField receiveQueue = new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue")); //$NON-NLS-1$
 
-    private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout"), 10); //$NON-NLS-1$
+    private final JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout"), 10); //$NON-NLS-1$
 
-    private JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"), 10); //$NON-NLS-1$
+    private final JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"), 10); //$NON-NLS-1$
 
-    private JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"), 1); //$NON-NLS-1$
+    private final JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"), 1); //$NON-NLS-1$
 
-    private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
+    private final JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
 
-    private JLabeledTextField numberOfSamplesToAggregate = new JLabeledTextField("Number of samples to aggregate"); //$NON-NLS-1$
+    private final JLabeledTextField numberOfSamplesToAggregate = new JLabeledTextField("Number of samples to aggregate"); //$NON-NLS-1$
 
-    private JSyntaxTextArea messageContent = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
+    private final JSyntaxTextArea messageContent = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
 
-    private JLabeledTextField initialContextFactory = new JLabeledTextField(
+    private final JLabeledTextField initialContextFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
 
-    private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
+    private final JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
 
     private static final String[] JMS_COMMUNICATION_STYLE_LABELS = new String[] {
             "request_only", // $NON-NLS-1$
@@ -83,7 +83,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
             "clear" // $NON-NLS-1$
     };
 
-    private JLabeledChoice jmsCommunicationStyle = new JLabeledChoice(
+    private final JLabeledChoice jmsCommunicationStyle = new JLabeledChoice(
             JMeterUtils.getResString("jms_communication_style"), // $NON-NLS-1$
             JMS_COMMUNICATION_STYLE_LABELS);
 

@@ -62,7 +62,7 @@ public class GenerateTreeGui extends AbstractConfigGui
 
     private static final long serialVersionUID = 1L;
 
-    private JButton generateButton = new JButton("Generate");
+    private final JButton generateButton = new JButton("Generate");
 
     public GenerateTreeGui() {
         super();

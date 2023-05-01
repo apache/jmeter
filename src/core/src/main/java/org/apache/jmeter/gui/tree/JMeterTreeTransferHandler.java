@@ -43,7 +43,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
     private static final Logger log = LoggerFactory.getLogger(JMeterTreeTransferHandler.class);
 
     private DataFlavor nodeFlavor;
-    private DataFlavor[] jMeterTreeNodeDataFlavors = new DataFlavor[1];
+    private final DataFlavor[] jMeterTreeNodeDataFlavors = new DataFlavor[1];
 
     // hold the nodes that should be removed on drop
     private List<JMeterTreeNode> nodesForRemoval = null;
@@ -278,7 +278,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
     }
 
     private class NodesTransferable implements Transferable {
-        JMeterTreeNode[] nodes;
+        private final JMeterTreeNode[] nodes;
 
         public NodesTransferable(JMeterTreeNode[] nodes) {
             this.nodes = nodes;

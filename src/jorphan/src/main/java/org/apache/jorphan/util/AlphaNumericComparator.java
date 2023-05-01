@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  */
 public class AlphaNumericComparator<T> implements Comparator<T> {
 
-    private Function<T, String> converter;
+    private final Function<T, String> converter;
 
     /**
      * Constructs a comparator with a converter function

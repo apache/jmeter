@@ -87,7 +87,7 @@ public class LDAPSampler extends AbstractSampler {
 
     // For In build test case using this counter
     // create the new entry in the server
-    private static AtomicInteger COUNTER = new AtomicInteger(0);
+    private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
     private boolean searchFoundEntries;// TODO turn into parameter?
 

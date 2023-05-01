@@ -55,8 +55,8 @@ public class MenuScroller {
 
     private JPopupMenu menu;
     private Component[] menuItems;
-    private MenuScrollItem upItem;
-    private MenuScrollItem downItem;
+    private final MenuScrollItem upItem;
+    private final MenuScrollItem downItem;
     private final MenuScrollListener menuListener = new MenuScrollListener();
     private final MouseWheelListener mouseWheelListener = new MouseScrollListener();
     private int scrollCount;

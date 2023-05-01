@@ -29,7 +29,7 @@ import org.w3c.dom.Node;
  * jmeter property xpath.namespace.config
  */
 public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefault {
-    private Map<String, String> namespaceMap = new HashMap<>();
+    private final Map<String, String> namespaceMap = new HashMap<>();
 
     /**
      * @param xpathExpressionContext Node

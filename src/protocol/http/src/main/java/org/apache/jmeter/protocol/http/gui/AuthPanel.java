@@ -76,7 +76,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 
     private static final String CONTROLLED_BY_THREADGROUP = "Controlled_By_ThreadGroup"; //$NON-NLS-1$
 
-    private InnerTableModel tableModel;
+    private final InnerTableModel tableModel;
 
     private JCheckBox clearEachIteration;
 
@@ -449,7 +449,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 
     private static class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
         private static final long serialVersionUID = 5169856333827579927L;
-        private Border myBorder;
+        private final Border myBorder;
 
         public PasswordCellRenderer() {
             super();

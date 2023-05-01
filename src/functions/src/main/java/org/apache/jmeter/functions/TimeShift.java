@@ -80,13 +80,13 @@ public class TimeShift extends AbstractFunction {
     private CompoundVariable amountToShiftCompound; // $NON-NLS-1$
     private Locale locale = JMeterUtils.getLocale(); // $NON-NLS-1$
     private String variableName = ""; //$NON-NLS-1$
-    private ZoneId systemDefaultZoneID = ZoneId.systemDefault();
+    private final ZoneId systemDefaultZoneID = ZoneId.systemDefault();
 
 
     private static final class LocaleFormatObject {
 
-        private String format;
-        private Locale locale;
+        private final String format;
+        private final Locale locale;
 
         public LocaleFormatObject(String format, Locale locale) {
             this.format = format;

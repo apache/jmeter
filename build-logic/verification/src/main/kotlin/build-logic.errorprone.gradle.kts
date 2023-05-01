@@ -55,6 +55,7 @@ if (buildParameters.enableErrorprone) {
                     "UnnecessaryDefaultInEnumSwitch",
                 )
                 warn(
+                    "FieldCanBeFinal",
                     "ForEachIterable",
                     "MethodCanBeStatic",
                 )

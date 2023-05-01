@@ -66,7 +66,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private static final long serialVersionUID = 241L;
 
     /** The title label for this component. */
-    private JLabel tableLabel;
+    private final JLabel tableLabel;
 
     /** The table containing the list of arguments. */
     private transient JTable table;
@@ -85,7 +85,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /**
      * Added background support for reporting tool
      */
-    private Color background;
+    private final Color background;
 
     /**
      * Boolean indicating whether this component is a standalone component or it

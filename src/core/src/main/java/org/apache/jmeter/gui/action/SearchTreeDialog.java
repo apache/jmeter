@@ -105,7 +105,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
 
     private transient Triple<String, Boolean, Boolean> lastSearchConditions = null;
 
-    private List<JMeterTreeNode> lastSearchResult = new ArrayList<>();
+    private final List<JMeterTreeNode> lastSearchResult = new ArrayList<>();
     private int currentSearchIndex;
 
     @VisibleForTesting

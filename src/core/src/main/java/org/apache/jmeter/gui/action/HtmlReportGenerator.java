@@ -43,9 +43,9 @@ public class HtmlReportGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
     private static final long COMMAND_TIMEOUT = JMeterUtils.getPropDefault("generate_report_ui.generation_timeout", 300_000L);
 
-    private String csvFilePath;
-    private String userPropertiesFilePath;
-    private String outputDirectoryPath;
+    private final String csvFilePath;
+    private final String userPropertiesFilePath;
+    private final String outputDirectoryPath;
 
     public HtmlReportGenerator(String csvFilePath, String userPropertiesFilePath, String outputDirectoryPath) {
         this.csvFilePath = csvFilePath;

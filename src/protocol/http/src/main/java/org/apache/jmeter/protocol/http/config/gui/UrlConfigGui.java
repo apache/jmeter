@@ -107,8 +107,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     // Tabbed pane that contains parameters and raw body
     private AbstractValidationTabbedPane postContentTabbedPane;
 
-    private boolean showRawBodyPane;
-    private boolean showFileUploadPane;
+    private final boolean showRawBodyPane;
+    private final boolean showFileUploadPane;
 
     /**
      * Constructor which is setup to show HTTP implementation, raw body pane and

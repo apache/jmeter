@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(InfluxdbBackendListenerClient.class);
-    private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
     // Name of the measurement
     private static final String EVENTS_FOR_ANNOTATION = "events";
 
