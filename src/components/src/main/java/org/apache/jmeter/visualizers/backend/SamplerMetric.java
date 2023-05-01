@@ -127,14 +127,14 @@ public class SamplerMetric {
             errors.put(error, errors.getOrDefault(error, 0) + result.getErrorCount() );
         }
         long time = result.getTime();
-        allResponsesStats.addValue(time);
-        pctResponseStats.addValue(time);
+        allResponsesStats.addValue((double) time);
+        pctResponseStats.addValue((double) time);
         if(result.isSuccessful()) {
             // Should we also compute KO , all response time ?
             // only take successful requests for time computing
-            okResponsesStats.addValue(time);
+            okResponsesStats.addValue((double) time);
         }else {
-            koResponsesStats.addValue(time);
+            koResponsesStats.addValue((double) time);
         }
         addHits(result, isCumulated);
         addNetworkData(result, isCumulated);

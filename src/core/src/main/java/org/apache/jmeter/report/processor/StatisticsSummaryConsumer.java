@@ -81,11 +81,11 @@ public class StatisticsSummaryConsumer extends
         }
 
         long elapsedTime = sample.getElapsedTime();
-        data.getPercentile1().addValue(elapsedTime);
-        data.getPercentile2().addValue(elapsedTime);
-        data.getPercentile3().addValue(elapsedTime);
-        data.getMean().addValue(elapsedTime);
-        data.getMedian().addValue(elapsedTime);
+        data.getPercentile1().addValue((double) elapsedTime);
+        data.getPercentile2().addValue((double) elapsedTime);
+        data.getPercentile3().addValue((double) elapsedTime);
+        data.getMean().addValue((double) elapsedTime);
+        data.getMedian().addValue((double) elapsedTime);
         data.setMin(elapsedTime);
         data.setMax(elapsedTime);
 
