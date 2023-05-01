@@ -175,8 +175,6 @@ public class LogFunction extends AbstractFunction {
                 case TRACE:
                     logger.trace("{} {} {}", threadName, separator, stringToLog, throwable);
                     break;
-                default:
-                    throw new IllegalStateException("Invalid log level");
             }
         }
     }

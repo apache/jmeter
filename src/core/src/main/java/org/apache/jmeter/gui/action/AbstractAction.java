@@ -102,7 +102,6 @@ public abstract class AbstractAction implements Command {
                             return false;
                         }
                     case ASK:
-                    default:
                         String[] option = new String[]{JMeterUtils.getResString("concat_result"),
                                 JMeterUtils.getResString("dont_start"), JMeterUtils.getResString("replace_file")};
                         String question = MessageFormat.format(

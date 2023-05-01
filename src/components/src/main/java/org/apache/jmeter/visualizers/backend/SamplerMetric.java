@@ -187,8 +187,6 @@ public class SamplerMetric {
                 stat.clear();
             }
             break;
-        default:
-            // This cannot happen
         }
         errors.clear();
         successes = 0;

@@ -90,8 +90,6 @@ public class ChangeCase extends AbstractFunction {
             case CAPITALIZE:
                 targetString = StringUtils.capitalize(originalString);
                 break;
-            default:
-                // default not doing nothing to string
             }
         } else {
             LOGGER.error("Unknown mode {}, returning {} unchanged", mode, targetString);

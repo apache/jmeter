@@ -109,7 +109,6 @@
       <property name="classes" value="java.lang.Boolean"/>
     </module>
     <module name="IllegalThrows"/>
-    <module name="MissingSwitchDefault"/>
     <module name="ModifiedControlVariable"/>
     <module name="MultipleVariableDeclarations"/>
     <module name="NestedForDepth"/>

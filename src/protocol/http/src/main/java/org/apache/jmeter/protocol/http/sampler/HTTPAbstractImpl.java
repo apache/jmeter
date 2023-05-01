@@ -246,7 +246,6 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
                 ipClass = Inet6Address.class;
                 break;
             case HOSTNAME:
-            default:
                 return InetAddress.getByName(ipSource);
             }
 
@@ -596,10 +595,8 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
                 res.setResponseMessage(RETURN_CUSTOM_STATUS_MESSAGE);
                 res.setSuccessful(true);
                 return res;
-            default:
-                // Cannot happen
-                throw new IllegalStateException("Unknown CACHED_RESOURCE_MODE");
         }
+        throw new IllegalStateException("Unknown CACHED_RESOURCE_MODE: " + CACHED_RESOURCE_MODE);
     }
 
     protected final void configureSampleLabel(SampleResult res, URL url) {

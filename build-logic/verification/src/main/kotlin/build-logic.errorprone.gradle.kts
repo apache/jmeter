@@ -46,8 +46,12 @@ if (buildParameters.enableErrorprone) {
             options.errorprone {
                 disableWarningsInGeneratedCode.set(true)
                 enable(
+                    "MissingDefault",
                     "PackageLocation",
-                    "RedundantOverride"
+                    "RedundantOverride",
+                    "StronglyTypeTime",
+                    "UnescapedEntity",
+                    "UnnecessaryDefaultInEnumSwitch"
                 )
                 disable(
                     "ComplexBooleanConstant",

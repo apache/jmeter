@@ -1075,8 +1075,6 @@ public final class CSVSaveService {
                                     + baos.toString() + "]");
                 }
                 break;
-            default:
-                throw new IllegalStateException("Unexpected state " + state);
             } // switch(state)
             if (push) {
                 if (ch == '\r') {// Remove following \n if present

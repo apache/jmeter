@@ -1532,8 +1532,6 @@ public class ProxyControl extends GenericController implements NonTestElement {
             break;
         case NONE:
             throw new IOException("Cannot find keytool application and no keystore was provided");
-        default:
-            throw new IllegalStateException("Impossible case: " + KEYSTORE_MODE);
         }
     }
 

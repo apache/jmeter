@@ -285,7 +285,6 @@ public class Start extends AbstractAction {
                 cloner = new TreeClonerNoTimer(false);
                 break;
             case AS_IS:
-            default:
                 cloner = new TreeCloner(false);
                 break;
         }
