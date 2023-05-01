@@ -51,7 +51,11 @@ if (buildParameters.enableErrorprone) {
                     "RedundantOverride",
                     "StronglyTypeTime",
                     "UnescapedEntity",
-                    "UnnecessaryDefaultInEnumSwitch"
+                    "UnnecessaryAnonymousClass",
+                    "UnnecessaryDefaultInEnumSwitch",
+                )
+                warn(
+                    "ForEachIterable",
                 )
                 disable(
                     "ComplexBooleanConstant",

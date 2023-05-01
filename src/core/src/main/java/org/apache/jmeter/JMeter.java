@@ -38,7 +38,6 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -971,13 +970,11 @@ public class JMeter implements JMeterPlugin {
             if (deleteResultFile) {
                 SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
                 clonedTree.traverse(resultListeners);
-                Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
-                while (irc.hasNext()) {
-                    ResultCollector rc = irc.next();
+                for (ResultCollector rc : resultListeners.getSearchResults()) {
                     File resultFile = new File(rc.getFilename());
                     if (resultFile.exists() && !resultFile.delete()) {
                         throw new IllegalStateException("Could not delete results file " + resultFile.getAbsolutePath()
-                            + "(canRead:"+resultFile.canRead()+", canWrite:"+resultFile.canWrite()+")");
+                                + "(canRead:" + resultFile.canRead() + ", canWrite:" + resultFile.canWrite() + ")");
                     }
                 }
             }
