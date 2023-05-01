@@ -148,7 +148,7 @@ public class SaveGraphicsService {
      * @param filename
      * @return output stream created from the filename
      */
-    private FileOutputStream createFile(File filename) {
+    private static FileOutputStream createFile(File filename) {
         try {
             return new FileOutputStream(filename);
         } catch (FileNotFoundException e) {

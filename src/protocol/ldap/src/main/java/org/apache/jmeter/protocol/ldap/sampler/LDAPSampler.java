@@ -299,7 +299,7 @@ public class LDAPSampler extends AbstractSampler {
      *
      * @return the BasicAttributes
      */
-    private ModificationItem[] getModificationItem() {
+    private static ModificationItem[] getModificationItem() {
         ModificationItem[] mods = new ModificationItem[2];
         // replace (update) attribute
         Attribute mod0 = new BasicAttribute("userpassword", "secret"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -345,7 +345,7 @@ public class LDAPSampler extends AbstractSampler {
      *
      * @return the BasicAttribute
      */
-    private BasicAttribute getBasicAttribute(String name, String value) {
+    private static BasicAttribute getBasicAttribute(String name, String value) {
         BasicAttribute attr = new BasicAttribute(name, value);
         return attr;
     }

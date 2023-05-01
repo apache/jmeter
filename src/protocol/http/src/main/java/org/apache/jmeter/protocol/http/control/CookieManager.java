@@ -257,7 +257,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
         }
     }
 
-    private String cookieToString(Cookie c){
+    private static String cookieToString(Cookie c){
         StringBuilder sb=new StringBuilder(80);
         sb.append(c.getDomain());
         //flag - if all machines within a given domain can access the variable.
@@ -369,7 +369,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
      * @param b
      * @return true if cookies match
      */
-    private boolean match(Cookie a, Cookie b){
+    private static boolean match(Cookie a, Cookie b){
         return
         a.getName().equals(b.getName())
         &&

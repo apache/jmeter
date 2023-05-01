@@ -487,7 +487,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
      *            field to show and attach the label
      * @return newly constructed panel
      */
-    private JPanel createLabelPanel(String key, JTextField field) {
+    private static JPanel createLabelPanel(String key, JTextField field) {
         JPanel panel = new JPanel(new BorderLayout(5, 0));
         JLabel label = new JLabel(JMeterUtils.getResString(key)); // $NON-NLS-1$
         label.setLabelFor(field);

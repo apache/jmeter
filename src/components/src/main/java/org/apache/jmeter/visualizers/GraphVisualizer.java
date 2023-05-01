@@ -297,7 +297,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
      * @return a panel containing both the dynamic and static parts of a Y axis
      *         label
      */
-    private JPanel createYAxisPanel(String labelResourceName, JTextField field) {
+    private static JPanel createYAxisPanel(String labelResourceName, JTextField field) {
         JPanel panel = new JPanel(new FlowLayout());
         JLabel label = new JLabel(JMeterUtils.getResString(labelResourceName));
 
@@ -437,7 +437,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
      * @param field
      *            the field this label is being created for.
      */
-    private JLabel createInfoLabel(String labelResourceName, JTextField field) {
+    private static JLabel createInfoLabel(String labelResourceName, JTextField field) {
         JLabel label = new JLabel(JMeterUtils.getResString(labelResourceName));
         label.setForeground(field.getForeground());
         label.setLabelFor(field);
@@ -469,7 +469,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
      *            parameter is null, this section of the panel will be left
      *            blank.
      */
-    private Box createInfoColumn(JLabel label1, JTextField field1, JLabel label2, JTextField field2) {
+    private static Box createInfoColumn(JLabel label1, JTextField field1, JLabel label2, JTextField field2) {
         // This column actually consists of a row with two sub-columns
         // The first column contains the labels, and the second
         // column contains the fields.

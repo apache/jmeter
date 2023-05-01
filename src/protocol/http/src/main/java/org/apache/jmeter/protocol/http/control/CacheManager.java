@@ -197,7 +197,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         }
     }
 
-    private boolean anyNotBlank(String... values) {
+    private static boolean anyNotBlank(String... values) {
         for (String value: values) {
             if (StringUtils.isNotBlank(value)) {
                 return true;
@@ -206,7 +206,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return false;
     }
 
-    private Pair<String, String> getVaryHeader(String headerName, Header[] reqHeaders) {
+    private static Pair<String, String> getVaryHeader(String headerName, Header[] reqHeaders) {
         if (headerName == null) {
             return null;
         }
@@ -292,7 +292,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         }
     }
 
-    private Date extractExpiresDateFromExpires(String expires) {
+    private static Date extractExpiresDateFromExpires(String expires) {
         Date expiresDate;
         try {
             expiresDate = org.apache.http.client.utils.DateUtils
@@ -308,7 +308,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     @SuppressWarnings("JavaUtilDate")
-    private Date extractExpiresDateFromCacheControl(String lastModified,
+    private static Date extractExpiresDateFromCacheControl(String lastModified,
             String cacheControl, String expires, String etag, String url,
             String date, final String maxAge, Date defaultExpiresDate) {
         // the max-age directive overrides the Expires header,
@@ -328,7 +328,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     @SuppressWarnings("JavaUtilDate")
-    private Date calcExpiresDate(String lastModified, String cacheControl,
+    private static Date calcExpiresDate(String lastModified, String cacheControl,
             String expires, String etag, String url, String date) {
         if(!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(date)) {
             try {
@@ -360,7 +360,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     // Apache HttpClient
-    private String getHeader(HttpResponse method, String name) {
+    private static String getHeader(HttpResponse method, String name) {
         org.apache.http.Header hdr = method.getLastHeader(name);
         return hdr != null ? hdr.getValue() : null;
     }
@@ -369,7 +369,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * Is the sample result OK to cache?
      * i.e is it in the 2xx range or equal to 304, and is it a cacheable method?
      */
-    private boolean isCacheable(HTTPSampleResult res, String varyHeader){
+    private static boolean isCacheable(HTTPSampleResult res, String varyHeader){
         if ("*".equals(varyHeader)) {
             return false;
         }
@@ -380,7 +380,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                     || "304".equals(responseCode));  // $NON-NLS-1$
     }
 
-    private boolean isCacheableMethod(HTTPSampleResult res) {
+    private static boolean isCacheableMethod(HTTPSampleResult res) {
         final String resMethod = res.getHTTPMethod();
         for(String method : CACHEABLE_METHODS) {
             if (method.equalsIgnoreCase(resMethod)) {
@@ -471,7 +471,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return entryStillValid(url, getEntry(url.toString(), asHeaders(allHeaders)));
     }
 
-    private Header[] asHeaders(
+    private static Header[] asHeaders(
             org.apache.jmeter.protocol.http.control.Header[] allHeaders) {
         final List<Header> result = new ArrayList<>(allHeaders.length);
         for (org.apache.jmeter.protocol.http.control.Header header: allHeaders) {
@@ -480,7 +480,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return result.toArray(new Header[result.size()]);
     }
 
-    private Header[] asHeaders(String allHeaders) {
+    private static Header[] asHeaders(String allHeaders) {
         List<Header> result = new ArrayList<>();
         for (String line: allHeaders.split("\\n")) {
             String[] splitted = line.split(": ", 2);
@@ -517,7 +517,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     @SuppressWarnings("JavaUtilDate")
-    private boolean entryStillValid(URL url, CacheEntry entry) {
+    private static boolean entryStillValid(URL url, CacheEntry entry) {
         log.debug("Check if entry {} is still valid for url {}", entry, url);
         if (entry != null && entry.getVaryHeader() == null) {
             final Date expiresDate = entry.getExpires();
@@ -562,7 +562,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return null;
     }
 
-    private String varyUrl(String url, String headerName, String headerValue) {
+    private static String varyUrl(String url, String headerName, String headerValue) {
         return "vary-" + headerName + "-" + headerValue + "-" + url;
     }
 

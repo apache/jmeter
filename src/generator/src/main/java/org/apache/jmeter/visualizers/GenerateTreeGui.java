@@ -104,7 +104,7 @@ public class GenerateTreeGui extends AbstractConfigGui
         addElements(MenuFactory.LISTENERS,       "Listeners",       guiPackage, treeModel, myTarget);
     }
 
-    private void addElements(
+    private static void addElements(
             String menuKey, String title, GuiPackage guiPackage,
             JMeterTreeModel treeModel, JMeterTreeNode myTarget) {
 
@@ -172,7 +172,7 @@ public class GenerateTreeGui extends AbstractConfigGui
      * @param name  A name for the Controller
      * @return the new node
      */
-    private JMeterTreeNode addSimpleController(JMeterTreeModel model, JMeterTreeNode node, String name) {
+    private static JMeterTreeNode addSimpleController(JMeterTreeModel model, JMeterTreeNode node, String name) {
         final TestElement sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setProperty(TestElement.NAME, name); // Use old style
@@ -202,7 +202,7 @@ public class GenerateTreeGui extends AbstractConfigGui
         }
     }
 
-    private JMeterTreeNode addToTree(final JMeterTreeModel model,
+    private static JMeterTreeNode addToTree(final JMeterTreeModel model,
             final JMeterTreeNode node, final TestElement sc) {
         RunGUI runnable = new RunGUI(model, node, sc);
         if(SwingUtilities.isEventDispatchThread()) {
@@ -227,7 +227,7 @@ public class GenerateTreeGui extends AbstractConfigGui
      * @return the first node of the given type in the test component tree, or
      * <code>null</code> if none was found.
      */
-    private JMeterTreeNode findFirstNodeOfType(Class<?> type, JMeterTreeModel treeModel) {
+    private static JMeterTreeNode findFirstNodeOfType(Class<?> type, JMeterTreeModel treeModel) {
         return treeModel.getNodesOfType(type).stream()
                 .filter(JMeterTreeNode::isEnabled)
                 .findFirst()

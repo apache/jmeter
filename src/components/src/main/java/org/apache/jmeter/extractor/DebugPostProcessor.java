@@ -97,7 +97,7 @@ public class DebugPostProcessor extends AbstractTestElement implements PostProce
         threadContext.getPreviousResult().addSubResult(sr);
     }
 
-    private void formatPropertyIterator(StringBuilder sb, PropertyIterator iter) {
+    private static void formatPropertyIterator(StringBuilder sb, PropertyIterator iter) {
         Map<String, String> map = new HashMap<>();
         while (iter.hasNext()) {
             JMeterProperty item = iter.next();
@@ -106,7 +106,7 @@ public class DebugPostProcessor extends AbstractTestElement implements PostProce
         formatSet(sb, map.entrySet());
     }
 
-    private void formatSet(StringBuilder sb, @SuppressWarnings("rawtypes") Set s) {
+    private static void formatSet(StringBuilder sb, @SuppressWarnings("rawtypes") Set s) {
         @SuppressWarnings("unchecked")
         List<Map.Entry<Object, Object>> al = new ArrayList<>(s);
         al.sort(AlphaNumericKeyComparator.INSTANCE);

@@ -210,7 +210,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         runningTest.get(duration.toMillis(), TimeUnit.MILLISECONDS);
     }
 
-    private String formatLikeDate(Instant instant) {
+    private static String formatLikeDate(Instant instant) {
         return DateTimeFormatter
                 .ofLocalizedDateTime(FormatStyle.LONG)
                 .withLocale(Locale.ROOT)
@@ -218,7 +218,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 .format(instant);
     }
 
-    private void removeThreadGroups(List<?> elements) {
+    private static void removeThreadGroups(List<?> elements) {
         Iterator<?> iter = elements.iterator();
         while (iter.hasNext()) { // Can't use for loop here because we remove elements
             Object item = iter.next();
@@ -607,7 +607,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    private void pause(long ms){
+    private static void pause(long ms){
         try {
             TimeUnit.MILLISECONDS.sleep(ms);
         } catch (InterruptedException e) {

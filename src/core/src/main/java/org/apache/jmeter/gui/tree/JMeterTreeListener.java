@@ -236,7 +236,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
     public void keyTyped(KeyEvent e) {
     }
 
-    private boolean isRightClick(MouseEvent e) {
+    private static boolean isRightClick(MouseEvent e) {
         return e.isPopupTrigger() ||
                 (InputEvent.BUTTON2_DOWN_MASK & e.getModifiersEx()) > 0 ||
                 (InputEvent.BUTTON3_DOWN_MASK == e.getModifiersEx());

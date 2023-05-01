@@ -78,7 +78,7 @@ public class ChangeParent extends AbstractAction {
         return commands;
     }
 
-    private void changeParent(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+    private static void changeParent(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
 
         // keep the old name if it was not the default one
         Controller currentController = (Controller) currentNode.getUserObject();

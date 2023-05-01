@@ -172,7 +172,7 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
-    private void trackIterationListeners(LinkedList<TestElement> pStack) {
+    private static void trackIterationListeners(LinkedList<TestElement> pStack) {
         TestElement child = pStack.getLast();
         if (child instanceof LoopIterationListener) {
             ListIterator<TestElement> iter = pStack.listIterator(pStack.size());
@@ -271,7 +271,7 @@ public class TestCompiler implements HashTreeTraverser {
      * @param controllers
      * @param maybeController
      */
-    private void addDirectParentControllers(List<Controller> controllers, TestElement maybeController) {
+    private static void addDirectParentControllers(List<Controller> controllers, TestElement maybeController) {
         if (maybeController instanceof Controller) {
             log.debug("adding controller: {} to sampler config", maybeController);
             controllers.add((Controller) maybeController);
@@ -304,7 +304,7 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
-    private void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
+    private static void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
         sam.clearTestElementChildren();
         for (ConfigTestElement config  : configs) {
             if (!(config instanceof NoConfigMerge))

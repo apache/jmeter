@@ -315,7 +315,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         }
     }
 
-    private void putIntoVar(final JMeterVariables jmvars, final String name,
+    private static void putIntoVar(final JMeterVariables jmvars, final String name,
             final Clob clob) throws SQLException {
         try {
             if (clob.length() > MAX_RETAIN_SIZE) {
@@ -418,7 +418,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         return outputs;
     }
 
-    private void setArgument(PreparedStatement pstmt, String argument, int targetSqlType, int index) throws SQLException {
+    private static void setArgument(PreparedStatement pstmt, String argument, int targetSqlType, int index) throws SQLException {
         switch (targetSqlType) {
         case Types.INTEGER:
             pstmt.setInt(index, Integer.parseInt(argument));
@@ -582,7 +582,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         return sb.toString();
     }
 
-    private int processRow(ResultSet rs, ResultSetMetaData meta, StringBuilder sb, int numColumns,
+    private static int processRow(ResultSet rs, ResultSetMetaData meta, StringBuilder sb, int numColumns,
             JMeterVariables jmvars, String[] varNames, List<Map<String, Object>> results, int currentIterationIndex)
             throws SQLException, UnsupportedEncodingException {
         Map<String, Object> row = null;

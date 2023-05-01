@@ -126,7 +126,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         }
     }
 
-    private void markContentFailure(CompareAssertionResult result, String prevContent, SampleResult prevResult,
+    private static void markContentFailure(CompareAssertionResult result, String prevContent, SampleResult prevResult,
             SampleResult currentResult, String currentContent) {
         result.setFailure(true);
         StringBuilder sb = new StringBuilder();
@@ -140,7 +140,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         result.setFailureMessage(JMeterUtils.getResString("comparison_differ_content")); //$NON-NLS-1$
     }
 
-    private void appendResultDetails(StringBuilder buf, SampleResult result) {
+    private static void appendResultDetails(StringBuilder buf, SampleResult result) {
         final String samplerData = result.getSamplerData();
         if (samplerData != null) {
             buf.append(samplerData.trim());

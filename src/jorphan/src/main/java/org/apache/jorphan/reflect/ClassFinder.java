@@ -94,7 +94,7 @@ public final class ClassFinder {
          * @param contextClassLoader the classloader to use
          * @return true if the class is a non-abstract, non-interface instance of at least one of the parent classes
          */
-        private boolean isChildOf(
+        private static boolean isChildOf(
                 Class<?>[] parentClasses, String strClassName, ClassLoader contextClassLoader) {
             try {
                 Class<?> targetClass = Class.forName(strClassName, false, contextClassLoader);
@@ -143,7 +143,7 @@ public final class ClassFinder {
             return false;
         }
 
-        private boolean hasAnnotationOnMethod(
+        private static boolean hasAnnotationOnMethod(
                 Class<? extends Annotation>[] annotations,
                 String classInQuestion,
                 ClassLoader contextClassLoader) {

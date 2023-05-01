@@ -260,7 +260,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * @param element
      * @param name
      */
-    private void setPropertyInElement(TestElement element, String name, Object value) {
+    private static void setPropertyInElement(TestElement element, String name, Object value) {
         JMeterProperty jprop = AbstractProperty.createProperty(value);
         jprop.setName(name);
         element.setProperty(jprop);

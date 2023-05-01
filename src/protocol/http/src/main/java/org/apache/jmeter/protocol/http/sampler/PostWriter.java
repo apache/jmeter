@@ -373,7 +373,7 @@ public class PostWriter {
      *
      * @return the bytes used to end the multipart request
      */
-    private byte[] getMultipartEndDivider(){
+    private static byte[] getMultipartEndDivider(){
         byte[] ending = DASH_DASH_BYTES;
         byte[] completeEnding = new byte[ending.length + CRLF.length];
         System.arraycopy(ending, 0, completeEnding, 0, ending.length);
@@ -385,7 +385,7 @@ public class PostWriter {
      * Write the start of a file multipart, up to the point where the
      * actual file content should be written
      */
-    private void writeStartFileMultipart(OutputStream out, String filename,
+    private static void writeStartFileMultipart(OutputStream out, String filename,
             String nameField, String mimetype)
             throws IOException {
         write(out, "Content-Disposition: form-data; name=\""); // $NON-NLS-1$
@@ -437,14 +437,14 @@ public class PostWriter {
         out.write(getMultipartDivider());
     }
 
-    private void write(OutputStream out, String value)
+    private static void write(OutputStream out, String value)
     throws UnsupportedEncodingException, IOException
     {
         out.write(value.getBytes(ENCODING));
     }
 
 
-    private void writeln(OutputStream out, String value)
+    private static void writeln(OutputStream out, String value)
     throws UnsupportedEncodingException, IOException
     {
         out.write(value.getBytes(ENCODING));

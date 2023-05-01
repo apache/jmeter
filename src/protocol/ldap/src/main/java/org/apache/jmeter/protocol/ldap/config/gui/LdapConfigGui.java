@@ -342,7 +342,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
      *            text field to display
      * @return newly created panel
      */
-    private JPanel createLabelPanel(String key, JTextField field) {
+    private static JPanel createLabelPanel(String key, JTextField field) {
         JPanel addInnerPanel = new JPanel(new BorderLayout(5, 0));
         JLabel label = new JLabel(JMeterUtils.getResString(key)); // $NON-NLS-1$
         label.setLabelFor(field);

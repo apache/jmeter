@@ -319,7 +319,7 @@ public class Summariser extends AbstractTestElement
         }
     }
 
-    private void formatAndWriteToLog(String name, SummariserRunningSample summariserRunningSample, String type) {
+    private static void formatAndWriteToLog(String name, SummariserRunningSample summariserRunningSample, String type) {
         if (TOOUT || (TOLOG && log.isInfoEnabled())) {
             String formattedMessage = format(name, summariserRunningSample, type);
             if (TOLOG) {

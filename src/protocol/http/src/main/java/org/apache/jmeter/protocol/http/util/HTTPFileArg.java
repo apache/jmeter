@@ -103,7 +103,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
         }
     }
 
-    private String detectMimeType(String path, String mimetype) {
+    private static String detectMimeType(String path, String mimetype) {
         if (StringUtils.isNotBlank(mimetype)) {
             return mimetype;
         }

@@ -80,7 +80,7 @@ public class ApplyNamingConvention extends AbstractAction {
      * @param currentNode Parent node of elements on which we apply naming policy
      */
     @SuppressWarnings("JdkObsolete")
-    private void applyNamingPolicyToCurrentNode(GuiPackage guiPackage,
+    private static void applyNamingPolicyToCurrentNode(GuiPackage guiPackage,
             JMeterTreeNode currentNode) {
         TreeNodeNamingPolicy namingPolicy = guiPackage.getNamingPolicy();
         guiPackage.updateCurrentNode();

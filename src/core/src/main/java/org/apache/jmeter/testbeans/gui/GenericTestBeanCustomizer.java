@@ -380,7 +380,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @param descriptor
      * @return the wrapper editor
      */
-    private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
+    private static WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
         String[] editorTags = typeEditor.getTags();
         String[] additionalTags = (String[]) descriptor.getValue(TAGS);
         String[] tags;
@@ -720,7 +720,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
          * @param d
          * @return the property's order attribute (zero by default)
          */
-        private Integer propertyOrder(PropertyDescriptor d) {
+        private static Integer propertyOrder(PropertyDescriptor d) {
             Integer order = (Integer) d.getValue(ORDER);
             if (order == null) {
                 order = 0;

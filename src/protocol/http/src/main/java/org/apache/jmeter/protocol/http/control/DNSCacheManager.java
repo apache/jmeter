@@ -163,7 +163,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         }
     }
 
-    private void logCache(String hitOrMiss, String host, InetAddress[] addresses) {
+    private static void logCache(String hitOrMiss, String host, InetAddress[] addresses) {
         if (log.isDebugEnabled()) {
             log.debug("Cache {} thread#{}: {} => {}", hitOrMiss, JMeterContextService.getContext().getThreadNum(), host,
                     Arrays.toString(addresses));
@@ -226,7 +226,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         return new InetAddress[0];
     }
 
-    private void addAsLiteralAddress(List<InetAddress> addresses, String address) {
+    private static void addAsLiteralAddress(List<InetAddress> addresses, String address) {
         try {
             addresses.add(InetAddress.getByName(address));
         } catch (UnknownHostException e) {

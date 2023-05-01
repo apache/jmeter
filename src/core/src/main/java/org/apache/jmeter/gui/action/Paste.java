@@ -76,7 +76,7 @@ public class Paste extends AbstractAction {
         GuiPackage.getInstance().getMainFrame().repaint();
     }
 
-    private void addNode(JMeterTreeNode parent, JMeterTreeNode node) {
+    private static void addNode(JMeterTreeNode parent, JMeterTreeNode node) {
         try {
             // Add this node
             JMeterTreeNode newNode = GuiPackage.getInstance().getTreeModel().addComponent(node.getTestElement(), parent);

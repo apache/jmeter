@@ -234,7 +234,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return oldSelectedElement;
     }
 
-    private TreePath checkExpandedOrSelected(List<TreeNode> path,
+    private static TreePath checkExpandedOrSelected(List<TreeNode> path,
             Object item, Object oldSelectedObject,
             Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths,
             TreePath defaultPath) {
@@ -248,7 +248,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return result;
     }
 
-    private TreePath checkExpandedOrSelected(List<TreeNode> path,
+    private static TreePath checkExpandedOrSelected(List<TreeNode> path,
             Object item, Object oldSelectedObject,
             Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths,
             TreePath defaultPath, DefaultMutableTreeNode extensionNode) {
@@ -262,7 +262,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return result;
     }
 
-    private Set<Object> extractExpandedObjects(final Enumeration<TreePath> expandedElements) {
+    private static Set<Object> extractExpandedObjects(final Enumeration<TreePath> expandedElements) {
         if (expandedElements != null) {
             final List<TreePath> list = EnumerationUtils.toList(expandedElements);
             log.debug("Expanded: {}", list);
@@ -310,11 +310,11 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return result;
     }
 
-    private TreePath toTreePath(List<TreeNode> newPath) {
+    private static TreePath toTreePath(List<TreeNode> newPath) {
         return new TreePath(newPath.toArray(new TreeNode[newPath.size()]));
     }
 
-    private TreePath toTreePath(List<TreeNode> path,
+    private static TreePath toTreePath(List<TreeNode> path,
             DefaultMutableTreeNode extensionNode) {
         TreeNode[] result = path.toArray(new TreeNode[path.size() + 1]);
         result[result.length - 1] = extensionNode;
@@ -490,7 +490,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         if (VIEWERS_ORDER.length() > 0) {
             Arrays.stream(VIEWERS_ORDER.split(","))
-                    .map(this::expandToClassname)
+                    .map(ViewResultsFullVisualizer::expandToClassname)
                     .forEach(key -> {
                         ResultRenderer renderer = map.remove(key);
                         if (renderer != null) {
@@ -509,7 +509,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return selectRenderPanel;
     }
 
-    private String expandToClassname(String name) {
+    private static String expandToClassname(String name) {
         if (name.startsWith(".")) {
             return "org.apache.jmeter.visualizers" + name; // $NON-NLS-1$
         }

@@ -59,7 +59,7 @@ public class EnableComponent extends AbstractAction {
         }
     }
 
-    private void enableComponents(JMeterTreeNode[] nodes, boolean enable) {
+    private static void enableComponents(JMeterTreeNode[] nodes, boolean enable) {
         GuiPackage pack = GuiPackage.getInstance();
         for (JMeterTreeNode node : nodes) {
             node.setEnabled(enable);
@@ -67,7 +67,7 @@ public class EnableComponent extends AbstractAction {
         }
     }
 
-    private void toggleComponents(JMeterTreeNode[] nodes) {
+    private static void toggleComponents(JMeterTreeNode[] nodes) {
         GuiPackage pack = GuiPackage.getInstance();
         for (JMeterTreeNode node : nodes) {
             boolean enable = !node.isEnabled();

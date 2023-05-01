@@ -143,7 +143,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     }
 
 
-    private String getDocumentNamespaces(String textToParse) {
+    private static String getDocumentNamespaces(String textToParse) {
         StringBuilder result = new StringBuilder();
         try {
             List<String[]> namespaces = XPathUtil.getNamespaces(textToParse);
@@ -280,7 +280,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
         return panel;
     }
 
-    private void initConstraints(GridBagConstraints gbc) {
+    private static void initConstraints(GridBagConstraints gbc) {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridheight = 1;
         gbc.gridwidth = 1;

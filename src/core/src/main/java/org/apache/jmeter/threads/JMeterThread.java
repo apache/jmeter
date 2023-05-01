@@ -446,7 +446,7 @@ public class JMeterThread implements Runnable, Interruptible {
      * the following method will try to find the sampler that really generate an error
      * @return {@link Sampler}
      */
-    private Sampler findRealSampler(Sampler sampler) {
+    private static Sampler findRealSampler(Sampler sampler) {
         Sampler realSampler = sampler;
         while (realSampler instanceof TransactionSampler) {
             realSampler = ((TransactionSampler) realSampler).getSubSampler();
@@ -685,7 +685,7 @@ public class JMeterThread implements Runnable, Interruptible {
      * @param transactionSampler
      * @return the listeners who should receive the sample result
      */
-    private List<SampleListener> getSampleListeners(SamplePackage samplePack, SamplePackage transactionPack, TransactionSampler transactionSampler) {
+    private static List<SampleListener> getSampleListeners(SamplePackage samplePack, SamplePackage transactionPack, TransactionSampler transactionSampler) {
         List<SampleListener> sampleListeners = samplePack.getSampleListeners();
         // Do not send subsamples to listeners which receive the transaction sample
         if(transactionSampler != null) {
@@ -713,7 +713,7 @@ public class JMeterThread implements Runnable, Interruptible {
     /**
      * Store {@link JMeterThread#LAST_SAMPLE_OK} in JMeter Variables context
      */
-    private void setLastSampleOk(JMeterVariables variables, boolean value) {
+    private static void setLastSampleOk(JMeterVariables variables, boolean value) {
         variables.put(LAST_SAMPLE_OK, Boolean.toString(value));
     }
 
@@ -894,7 +894,7 @@ public class JMeterThread implements Runnable, Interruptible {
         log.info("Stop Thread detected by thread: {}", threadName);
     }
 
-    private void checkAssertions(List<Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
+    private static void checkAssertions(List<Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
         for (Assertion assertion : assertions) {
             TestBeanHelper.prepare((TestElement) assertion);
             if (assertion instanceof AbstractScopedAssertion) {
@@ -916,7 +916,7 @@ public class JMeterThread implements Runnable, Interruptible {
         setLastSampleOk(threadContext.getVariables(), parent.isSuccessful());
     }
 
-    private void recurseAssertionChecks(SampleResult parent, Assertion assertion, int level) {
+    private static void recurseAssertionChecks(SampleResult parent, Assertion assertion, int level) {
         if (level < 0) {
             return;
         }
@@ -938,7 +938,7 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
-    private void processAssertion(SampleResult result, Assertion assertion) {
+    private static void processAssertion(SampleResult result, Assertion assertion) {
         AssertionResult assertionResult;
         try {
             assertionResult = assertion.getResult(result);
@@ -962,14 +962,14 @@ public class JMeterThread implements Runnable, Interruptible {
         result.addAssertionResult(assertionResult);
     }
 
-    private void runPostProcessors(List<PostProcessor> extractors) {
+    private static void runPostProcessors(List<PostProcessor> extractors) {
         for (PostProcessor ex : extractors) {
             TestBeanHelper.prepare((TestElement) ex);
             ex.process();
         }
     }
 
-    private void runPreProcessors(List<PreProcessor> preProcessors) {
+    private static void runPreProcessors(List<PreProcessor> preProcessors) {
         for (PreProcessor ex : preProcessors) {
             if (log.isDebugEnabled()) {
                 log.debug("Running preprocessor: {}", ((AbstractTestElement) ex).getName());

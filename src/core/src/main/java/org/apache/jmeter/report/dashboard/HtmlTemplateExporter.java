@@ -96,7 +96,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
      * @param value Value
      * @param context {@link DataContext}
      */
-    private void addToContext(String key, Object value, DataContext context) {
+    private static void addToContext(String key, Object value, DataContext context) {
         if (value instanceof String) {
             value = '"' + (String) value + '"';
         }
@@ -275,7 +275,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         }
     }
 
-    private boolean htmlReportFileFilter(File file) {
+    private static boolean htmlReportFileFilter(File file) {
         String fileName = file.getName();
         boolean isIndexHtmlFile = file.isFile() && fileName.equals("index.html");
         boolean isContentOrAdmin = fileName.equals("content") || fileName.startsWith("sbadmin2-");
@@ -324,7 +324,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             outputDir = new File(globallyDefinedOutputDir);
         }
 
-        JOrphanUtils.canSafelyWriteToFolder(outputDir, this::htmlReportFileFilter);
+        JOrphanUtils.canSafelyWriteToFolder(outputDir, HtmlTemplateExporter::htmlReportFileFilter);
 
         if (log.isInfoEnabled()) {
             log.info("Will generate dashboard in folder: {}", outputDir.getAbsolutePath());
@@ -463,13 +463,13 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         log.debug("End of template processing");
     }
 
-    private <T> void addResultToContext(
+    private static <T> void addResultToContext(
             String resultKey, Map<String, Object> storage,
             DataContext dataContext, ResultDataVisitor<T> visitor) {
         addResultToContext(resultKey, storage, dataContext, visitor, null, null);
     }
 
-    private <T> void addResultToContext(
+    private static <T> void addResultToContext(
             String resultKey, Map<String, Object> storage, DataContext dataContext,
             ResultDataVisitor<T> visitor, ResultCustomizer customizer, ResultChecker checker) {
         Object data = storage.get(resultKey);
@@ -485,7 +485,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         }
     }
 
-    private long formatTimestamp(String key, DataContext context) {
+    private static long formatTimestamp(String key, DataContext context) {
         // FIXME Why convert to double then long (rounding ?)
         double result = Double.parseDouble((String) context.get(key));
         long timestamp = (long) result;

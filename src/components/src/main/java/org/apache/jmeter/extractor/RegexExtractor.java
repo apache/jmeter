@@ -312,7 +312,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         return Collections.unmodifiableList(matches);
     }
 
-    private int matchStrings(int matchNumber, Perl5Matcher matcher,
+    private static int matchStrings(int matchNumber, Perl5Matcher matcher,
             Pattern pattern, List<MatchResult> matches, int found,
             String inputString) {
         PatternMatcherInput input = new PatternMatcherInput(inputString);
@@ -328,9 +328,9 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         return found;
     }
 
-    private int matchStrings(int matchNumber, java.util.regex.Pattern pattern,
-                             List<java.util.regex.MatchResult> matches, int found,
-                             String inputString) {
+    private static int matchStrings(int matchNumber, java.util.regex.Pattern pattern,
+            List<java.util.regex.MatchResult> matches, int found,
+            String inputString) {
         Matcher matcher = pattern.matcher(inputString);
         while (matchNumber <=0 || found != matchNumber) {
             if (matcher.find()) {
@@ -349,7 +349,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * basename_gn, where n=0...# of groups<br/>
      * basename_g = number of groups (apart from g0)
      */
-    private void saveGroups(JMeterVariables vars, String basename, MatchResult match) {
+    private static void saveGroups(JMeterVariables vars, String basename, MatchResult match) {
         StringBuilder buf = new StringBuilder();
         buf.append(basename);
         buf.append("_g"); // $NON-NLS-1$
@@ -378,7 +378,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         }
     }
 
-    private void saveGroups(JMeterVariables vars, String basename, java.util.regex.MatchResult match) {
+    private static void saveGroups(JMeterVariables vars, String basename, java.util.regex.MatchResult match) {
         StringBuilder buf = new StringBuilder();
         buf.append(basename);
         buf.append("_g"); // $NON-NLS-1$
@@ -412,7 +412,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * basename_gn, where n=0...# of groups<br/>
      * basename_g = number of groups (apart from g0)
      */
-    private void removeGroups(JMeterVariables vars, String basename) {
+    private static void removeGroups(JMeterVariables vars, String basename) {
         StringBuilder buf = new StringBuilder();
         buf.append(basename);
         buf.append("_g"); // $NON-NLS-1$
@@ -513,7 +513,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *            the entry number in the list
      * @return MatchResult
      */
-    private MatchResult getCorrectMatch(List<MatchResult> matches, int entry) {
+    private static MatchResult getCorrectMatch(List<MatchResult> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){
@@ -528,7 +528,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         return matches.get(entry - 1);
     }
 
-    private java.util.regex.MatchResult getCorrectMatchJavaRegex(List<java.util.regex.MatchResult> matches, int entry) {
+    private static java.util.regex.MatchResult getCorrectMatchJavaRegex(List<java.util.regex.MatchResult> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){

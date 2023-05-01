@@ -166,7 +166,7 @@ public class SmtpSampler extends AbstractSampler {
         return result;
     }
 
-    private boolean executeMessage(SampleResult result, SendMailCommand sendMailCmd, Message message) {
+    private static boolean executeMessage(SampleResult result, SendMailCommand sendMailCmd, Message message) {
         boolean didSampleSucceed = false;
         try {
             sendMailCmd.execute(message);
@@ -199,7 +199,7 @@ public class SmtpSampler extends AbstractSampler {
         }
     }
 
-    private byte[] processSampler(Message message) throws IOException, MessagingException {
+    private static byte[] processSampler(Message message) throws IOException, MessagingException {
         // process the sampler result
         try (InputStream is = message.getInputStream()) {
             return IOUtils.toByteArray(is);
@@ -210,11 +210,11 @@ public class SmtpSampler extends AbstractSampler {
         final String[] attachments = getPropertyAsString(ATTACH_FILE).split(FILENAME_SEPARATOR);
         return Arrays.stream(attachments) // NOSONAR No need to close
                 .filter(s -> !s.isEmpty())
-                .map(this::attachmentToFile)
+                .map(SmtpSampler::attachmentToFile)
                 .collect(Collectors.toList());
     }
 
-    private File attachmentToFile(String attachment) { // NOSONAR False positive saying not used
+    private static File attachmentToFile(String attachment) { // NOSONAR False positive saying not used
         File file = new File(attachment);
         if (!file.isAbsolute() && !file.exists()) {
             if(log.isDebugEnabled()) {
@@ -293,7 +293,7 @@ public class SmtpSampler extends AbstractSampler {
         return sendMailCmd;
     }
 
-    private String getRequestHeaders(Message message) throws MessagingException {
+    private static String getRequestHeaders(Message message) throws MessagingException {
         StringBuilder sb = new StringBuilder();
         @SuppressWarnings("unchecked") // getAllHeaders() is not yet genericised
         Enumeration<Header> headers = message.getAllHeaders(); // throws ME
@@ -301,7 +301,7 @@ public class SmtpSampler extends AbstractSampler {
         return sb.toString();
     }
 
-    private String getSamplerData(Message message) throws MessagingException, IOException {
+    private static String getSamplerData(Message message) throws MessagingException, IOException {
         StringBuilder sb = new StringBuilder();
         Object content = message.getContent(); // throws ME
         if (content instanceof Multipart) {
@@ -333,7 +333,7 @@ public class SmtpSampler extends AbstractSampler {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private void writeHeaders(Enumeration<Header> headers, StringBuilder sb) {
+    private static void writeHeaders(Enumeration<Header> headers, StringBuilder sb) {
         while (headers.hasMoreElements()) {
             Header header = headers.nextElement();
             sb.append(header.getName());
@@ -343,7 +343,7 @@ public class SmtpSampler extends AbstractSampler {
         }
     }
 
-    private void writeBodyPart(StringBuilder sb, BodyPart bodyPart)
+    private static void writeBodyPart(StringBuilder sb, BodyPart bodyPart)
             throws MessagingException, IOException {
         @SuppressWarnings("unchecked") // API not yet generic
         Enumeration<Header> allHeaders = bodyPart.getAllHeaders(); // throws ME
@@ -379,7 +379,7 @@ public class SmtpSampler extends AbstractSampler {
         }
     }
 
-    private String encodeAddress(String address) {
+    private static String encodeAddress(String address) {
         String trimmedAddress = address.trim();
         if (!StringUtils.isAsciiPrintable(trimmedAddress)) {
             try {

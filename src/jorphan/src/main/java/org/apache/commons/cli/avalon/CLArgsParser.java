@@ -193,7 +193,7 @@ public final class CLArgsParser {
      *            the Option Descriptor
      * @return the state
      */
-    private int getStateFor(final CLOptionDescriptor descriptor) {
+    private static int getStateFor(final CLOptionDescriptor descriptor) {
         final int flags = descriptor.getFlags();
         if ((flags & CLOptionDescriptor.ARGUMENTS_REQUIRED_2) == CLOptionDescriptor.ARGUMENTS_REQUIRED_2) {
             return STATE_REQUIRE_2ARGS;
@@ -341,7 +341,7 @@ public final class CLArgsParser {
      *            the cut-point in element of array
      * @return the result array
      */
-    private String[] subArray(final String[] array, final int index, final int charIndex) {
+    private static String[] subArray(final String[] array, final int index, final int charIndex) {
         final int remaining = array.length - index;
         final String[] result = new String[remaining];
 
@@ -487,7 +487,7 @@ public final class CLArgsParser {
         return new Token(TOKEN_STRING, sb.toString());
     }
 
-    private boolean isSeparator(final char ch, final char[] separators) {
+    private static boolean isSeparator(final char ch, final char[] separators) {
         for (char separator : separators) {
             if (ch == separator) {
                 return true;

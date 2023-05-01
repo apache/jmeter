@@ -364,7 +364,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         }
     }
 
-    private void enableTable(boolean custEnabled, boolean sysEnabled, JTable table, PowerTableModel model,
+    private static void enableTable(boolean custEnabled, boolean sysEnabled, JTable table, PowerTableModel model,
             JButton addButton, JButton deleteButton) {
         table.setEnabled(custEnabled);
         Color greyColor = new Color(240, 240, 240);
@@ -379,7 +379,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         }
     }
 
-    private void addTableRow(JTable table, PowerTableModel model, JButton button) {
+    private static void addTableRow(JTable table, PowerTableModel model, JButton button) {
         // If a table cell is being edited, we should accept the current
         // value and stop the editing before adding a new row.
         GuiUtils.stopTableEditing(table);
@@ -396,7 +396,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         table.setRowSelectionInterval(rowToSelect, rowToSelect);
     }
 
-    private void deleteTableRow(JTable table, PowerTableModel model, JButton button) {
+    private static void deleteTableRow(JTable table, PowerTableModel model, JButton button) {
         if (model.getRowCount() > 0) {
             // If a table cell is being edited, we must cancel the editing
             // before deleting the row.

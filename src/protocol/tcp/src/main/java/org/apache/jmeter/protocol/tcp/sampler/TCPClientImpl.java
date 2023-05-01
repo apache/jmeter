@@ -134,7 +134,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         }
     }
 
-    private String showEOL(final String input) {
+    private static String showEOL(final String input) {
         StringBuilder sb = new StringBuilder(input.length()*2);
         for(int i=0; i < input.length(); i++) {
             char ch = input.charAt(i);

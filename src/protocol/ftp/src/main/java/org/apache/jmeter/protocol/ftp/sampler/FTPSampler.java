@@ -305,7 +305,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         return res;
     }
 
-    private void saveResponse(SampleResult res, boolean binaryTransfer, ByteArrayOutputStream baos) {
+    private static void saveResponse(SampleResult res, boolean binaryTransfer, ByteArrayOutputStream baos) {
         res.setResponseData(baos.toByteArray());
         if (!binaryTransfer) {
             res.setDataType(SampleResult.TEXT);

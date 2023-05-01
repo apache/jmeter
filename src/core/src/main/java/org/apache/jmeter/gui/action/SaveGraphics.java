@@ -90,7 +90,7 @@ public class SaveGraphics extends AbstractAction {
         }
     }
 
-    private void saveImage(JComponent comp) {
+    private static void saveImage(JComponent comp) {
 
         String filename;
         JFileChooser chooser = FileDialoger.promptToSaveFile(

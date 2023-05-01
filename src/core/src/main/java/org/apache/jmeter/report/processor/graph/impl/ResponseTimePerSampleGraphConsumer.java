@@ -72,7 +72,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
      * @param defaultValue the default value
      * @return the group info
      */
-    private GroupInfo createGroupInfo(String propertyKey, int defaultValue) {
+    private static GroupInfo createGroupInfo(String propertyKey, int defaultValue) {
         int property = JMeterUtils.getPropDefault(propertyKey, defaultValue);
         PercentileAggregatorFactory factory = new PercentileAggregatorFactory();
         factory.setPercentileIndex(property);

@@ -151,7 +151,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
     /**
      * @param searchableTreeNode
      */
-    private void doResetSearch(SearchableTreeNode searchableTreeNode) {
+    private static void doResetSearch(SearchableTreeNode searchableTreeNode) {
         searchableTreeNode.reset();
         searchableTreeNode.updateState();
         for (int i = 0; i < searchableTreeNode.getChildCount(); i++) {
@@ -178,7 +178,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
      * @param searcher
      * @param node
      */
-    private boolean searchInNode(Searcher searcher, SearchableTreeNode node) {
+    private static boolean searchInNode(Searcher searcher, SearchableTreeNode node) {
         node.reset();
         Object userObject = node.getUserObject();
 

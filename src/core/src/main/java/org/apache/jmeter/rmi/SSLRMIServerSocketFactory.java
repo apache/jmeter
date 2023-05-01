@@ -142,7 +142,7 @@ public class SSLRMIServerSocketFactory implements RMIServerSocketFactory, Serial
         return socket;
     }
 
-    private KeyStore loadStore(String location, char[] passphrase, String type)
+    private static KeyStore loadStore(String location, char[] passphrase, String type)
             throws IOException {
         try (FileInputStream fileInputStream = new FileInputStream(location)){
             KeyStore store = KeyStore.getInstance(type);

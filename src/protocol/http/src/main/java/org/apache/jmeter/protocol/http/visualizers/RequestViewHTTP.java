@@ -255,7 +255,7 @@ public class RequestViewHTTP implements RequestView {
      * @param contentType the content type header
      * @return  the boundary string
      */
-    private String extractBoundary(String contentType) {
+    private static String extractBoundary(String contentType) {
         // Get the boundary string for the multiparts from the content type
         String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());
         //TODO check in the RFC if other char can be used as separator
@@ -271,7 +271,7 @@ public class RequestViewHTTP implements RequestView {
      * @param headers the http request headers
      * @return true if the request is multipart
      */
-    private boolean isMultipart(LinkedHashMap<String, String> headers) {
+    private static boolean isMultipart(LinkedHashMap<String, String> headers) {
         String contentType = headers.get(HTTPConstants.HEADER_CONTENT_TYPE);
         return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
@@ -406,7 +406,7 @@ public class RequestViewHTTP implements RequestView {
         return panel;
     }
 
-    private void setFirstColumnPreferredAndMaxWidth(JTable table) {
+    private static void setFirstColumnPreferredAndMaxWidth(JTable table) {
         TableColumn column = table.getColumnModel().getColumn(0);
         column.setMaxWidth(300);
         column.setPreferredWidth(160);

@@ -336,7 +336,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            the <code>CookieManager</code> containing all the cookies
      *            for this <code>UrlConfig</code>
      */
-    private String setConnectionCookie(HttpURLConnection conn, URL u, CookieManager cookieManager) {
+    private static String setConnectionCookie(HttpURLConnection conn, URL u, CookieManager cookieManager) {
         String cookieHeader = null;
         if (cookieManager != null) {
             cookieHeader = cookieManager.getCookieHeaderForURL(u);
@@ -361,7 +361,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            for this <code>UrlConfig</code>
      * @param cacheManager the CacheManager (may be null)
      */
-    private void setConnectionHeaders(HttpURLConnection conn, URL u,
+    private static void setConnectionHeaders(HttpURLConnection conn, URL u,
             HeaderManager headerManager, CacheManager cacheManager) {
         // Add all the headers from the HeaderManager
         Header[] arrayOfHeaders = null;
@@ -393,7 +393,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param securityHeaders Map of security Header
      * @return the headers as a string
      */
-    private String getOnlyCookieFromHeaders(HttpURLConnection conn, Map<String, String> securityHeaders) {
+    private static String getOnlyCookieFromHeaders(HttpURLConnection conn, Map<String, String> securityHeaders) {
         String cookieHeader= getFromConnectionHeaders(conn, securityHeaders, ONLY_COOKIE, false).trim();
         if(!cookieHeader.isEmpty()) {
             return cookieHeader.substring(HTTPConstants.HEADER_COOKIE_IN_REQUEST.length()).trim();
@@ -410,7 +410,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param securityHeaders Map of security Header
      * @return the headers as a string
      */
-    private String getAllHeadersExceptCookie(HttpURLConnection conn, Map<String, String> securityHeaders) {
+    private static String getAllHeadersExceptCookie(HttpURLConnection conn, Map<String, String> securityHeaders) {
         return getFromConnectionHeaders(conn, securityHeaders, ALL_EXCEPT_COOKIE, true);
     }
 
@@ -424,7 +424,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param predicate {@link Predicate}
      * @return the headers as a string
      */
-    private String getFromConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders,
+    private static String getFromConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders,
             Predicate<String> predicate, boolean addSecurityHeaders) {
         // Get all the request properties, which are the headers set on the connection
         StringBuilder hdrs = new StringBuilder(100);
@@ -465,7 +465,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            this <code>UrlConfig</code>
      * @return String Authorization header value or null if not set
      */
-    private Map<String, String> setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager) {
+    private static Map<String, String> setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager) {
         if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
@@ -662,7 +662,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
     }
 
-    private Header[] getHeaders(HeaderManager headerManager) {
+    private static Header[] getHeaders(HeaderManager headerManager) {
         if (headerManager != null) {
             final CollectionProperty headers = headerManager.getHeaders();
             if (headers != null) {
@@ -700,7 +700,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            the <code>CookieManager</code> containing all the cookies
      *            for this <code>UrlConfig</code>
      */
-    private void saveConnectionCookies(HttpURLConnection conn, URL u, CookieManager cookieManager) {
+    private static void saveConnectionCookies(HttpURLConnection conn, URL u, CookieManager cookieManager) {
         if (cookieManager != null) {
             for (int i = 1; conn.getHeaderFieldKey(i) != null; i++) {
                 if (conn.getHeaderFieldKey(i).equalsIgnoreCase(HTTPConstants.HEADER_SET_COOKIE)) {

@@ -97,7 +97,7 @@ public class RemoteStart extends AbstractAction {
         }
     }
 
-    private List<String> getRemoteHosts() {
+    private static List<String> getRemoteHosts() {
         String remoteHostsString = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
         StringTokenizer st = new StringTokenizer(remoteHostsString, REMOTE_HOSTS_SEPARATOR);
         List<String> list = new ArrayList<>();
@@ -112,7 +112,7 @@ public class RemoteStart extends AbstractAction {
         return commands;
     }
 
-    private HashTree getTestTree() {
+    private static HashTree getTestTree() {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         HashTree tree = JMeter.convertSubTree(testTree, true);

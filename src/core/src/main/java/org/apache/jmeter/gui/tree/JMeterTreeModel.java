@@ -135,7 +135,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
     }
 
     @SuppressWarnings("deprecation")
-    private boolean isWorkbench(TestElement item) {
+    private static boolean isWorkbench(TestElement item) {
         return item instanceof org.apache.jmeter.testelement.WorkBench;
     }
 
@@ -185,7 +185,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private void traverseAndFind(Class<?> type, JMeterTreeNode node, List<JMeterTreeNode> nodeList) {
+    private static void traverseAndFind(Class<?> type, JMeterTreeNode node, List<JMeterTreeNode> nodeList) {
         if (type.isInstance(node.getUserObject())) {
             nodeList.add(node);
         }
@@ -197,7 +197,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private JMeterTreeNode traverseAndFind(TestElement userObject, JMeterTreeNode node) {
+    private static JMeterTreeNode traverseAndFind(TestElement userObject, JMeterTreeNode node) {
         if (userObject == node.getUserObject()) {
             return node;
         }
@@ -324,7 +324,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
      * </ul>
      * @param node
      */
-    private boolean isNonTestElement(Object node) {
+    private static boolean isNonTestElement(Object node) {
         JMeterTreeNode treeNode = new JMeterTreeNode((TestElement) node, null);
         Collection<String> categories = treeNode.getMenuCategories();
         if (categories != null) {

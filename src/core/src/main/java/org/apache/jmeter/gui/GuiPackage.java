@@ -904,7 +904,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @param el {@link TestElement}
      * @return int checksum
      */
-    private int getTestElementCheckSum(TestElement el) {
+    private static int getTestElementCheckSum(TestElement el) {
         int ret = el.getClass().hashCode();
         PropertyIterator it = el.propertyIterator();
         while (it.hasNext()) {

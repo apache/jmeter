@@ -107,7 +107,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         }
     }
 
-    private void stripContent(SampleResult result, int level) {
+    private static void stripContent(SampleResult result, int level) {
         if (level < 0) {
             return;
         }
@@ -123,7 +123,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
      * Strip response but fill in bytes field.
      * @param result {@link SampleResult}
      */
-    private void stripResponse(SampleResult result) {
+    private static void stripResponse(SampleResult result) {
         result.setBytes(result.getBytesAsLong());
         result.setResponseData(EMPTY_BA);
     }

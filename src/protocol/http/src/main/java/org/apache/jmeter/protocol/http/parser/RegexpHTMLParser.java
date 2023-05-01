@@ -136,15 +136,15 @@ class RegexpHTMLParser extends HTMLParser {
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl,
-                                                 URLCollection urls, String encoding) throws HTMLParseException {
+            URLCollection urls, String encoding) throws HTMLParseException {
         if (USE_JAVA_REGEX) {
             return getEmbeddedResourceURLsWithJavaRegex(html, baseUrl, urls, encoding);
         }
         return getEmbeddedResourceURLsWithOroRegex(html, baseUrl, urls, encoding);
     }
 
-    private Iterator<URL> getEmbeddedResourceURLsWithJavaRegex(byte[] html, URL baseUrl, URLCollection urls,
-                                                               String encoding) throws HTMLParseException {
+    private static Iterator<URL> getEmbeddedResourceURLsWithJavaRegex(byte[] html, URL baseUrl, URLCollection urls,
+            String encoding) throws HTMLParseException {
         try {
 
             // TODO: find a way to avoid the cost of creating a String here --
@@ -190,8 +190,8 @@ class RegexpHTMLParser extends HTMLParser {
         }
     }
 
-    private Iterator<URL> getEmbeddedResourceURLsWithOroRegex(byte[] html, URL baseUrl, URLCollection urls,
-                                                              String encoding) throws HTMLParseException {
+    private static Iterator<URL> getEmbeddedResourceURLsWithOroRegex(byte[] html, URL baseUrl, URLCollection urls,
+            String encoding) throws HTMLParseException {
         Pattern pattern= null;
         Perl5Matcher matcher = null;
         try {

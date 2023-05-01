@@ -278,7 +278,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         init();
     }
 
-    private String[] keys(Map<String, ?> map) {
+    private static String[] keys(Map<String, ?> map) {
         return map.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 

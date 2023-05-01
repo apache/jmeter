@@ -419,7 +419,7 @@ public class FileServer {
         }
     }
 
-    private BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
+    private static BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
         if (!fileEntry.file.canRead() || !fileEntry.file.isFile()) {
             throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
         }
@@ -455,7 +455,7 @@ public class FileServer {
         }
     }
 
-    private BufferedWriter createBufferedWriter(FileEntry fileEntry) throws IOException {
+    private static BufferedWriter createBufferedWriter(FileEntry fileEntry) throws IOException {
         OutputStream fos = Files.newOutputStream(fileEntry.file.toPath());
         OutputStreamWriter osw;
         // If file encoding is specified, write using that encoding, otherwise use default platform encoding
@@ -486,7 +486,7 @@ public class FileServer {
         closeFile(name, fileEntry);
     }
 
-    private void closeFile(String name, FileEntry fileEntry) throws IOException {
+    private static void closeFile(String name, FileEntry fileEntry) throws IOException {
         if (fileEntry != null && fileEntry.inputOutputObject != null) {
             log.info("Close: {}", name);
             fileEntry.inputOutputObject.close();

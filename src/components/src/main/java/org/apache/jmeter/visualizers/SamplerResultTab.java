@@ -646,7 +646,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         this.backGround = backGround;
     }
 
-    private void setFirstColumnPreferredSize(JTable table) {
+    private static void setFirstColumnPreferredSize(JTable table) {
         TableColumn column = table.getColumnModel().getColumn(0);
         column.setMaxWidth(300);
         column.setPreferredWidth(180);

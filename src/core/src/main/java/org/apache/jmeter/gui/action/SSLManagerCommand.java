@@ -67,7 +67,7 @@ public class SSLManagerCommand extends AbstractAction {
     @Override
     public void doAction(ActionEvent e) {
         if (e.getActionCommand().equals(ActionNames.SSL_MANAGER)) {
-            this.sslManager();
+            SSLManagerCommand.sslManager();
         }
     }
 
@@ -83,7 +83,7 @@ public class SSLManagerCommand extends AbstractAction {
      * Called by sslManager button. Raises sslManager dialog.
      * I.e. a FileChooser for PCSI12 (.p12|.P12) or JKS files.
      */
-    private void sslManager() {
+    private static void sslManager() {
         SSLManager.reset();
 
         JFileChooser keyStoreChooser = new JFileChooser(System.getProperty("user.dir")); //$NON-NLS-1$

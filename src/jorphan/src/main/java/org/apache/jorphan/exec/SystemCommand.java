@@ -223,7 +223,7 @@ public class SystemCommand {
      * @return proc exit value
      * @throws TimeoutException when timeout is reached while execution
      */
-    private int waitForEndWithTimeout(Process proc, long timeoutInMillis) throws InterruptedException, TimeoutException {
+    private static int waitForEndWithTimeout(Process proc, long timeoutInMillis) throws InterruptedException, TimeoutException {
         if (timeoutInMillis <= 0L) {
             return proc.waitFor();
         }

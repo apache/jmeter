@@ -146,7 +146,7 @@ public class TimeShift extends AbstractFunction {
         if (!StringUtils.isEmpty(format)) {
             try {
                 LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
-                formatter = dateTimeFormatterCache.get(lfo, this::createFormatter);
+                formatter = dateTimeFormatterCache.get(lfo, TimeShift::createFormatter);
             } catch (IllegalArgumentException ex) {
                 log.error("Format date pattern '{}' is invalid "
                         + "(see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
@@ -198,7 +198,7 @@ public class TimeShift extends AbstractFunction {
     }
 
     @SuppressWarnings("JavaTimeDefaultTimeZone")
-    private DateTimeFormatter createFormatter(LocaleFormatObject format) {
+    private static DateTimeFormatter createFormatter(LocaleFormatObject format) {
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
         return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
                 .parseDefaulting(ChronoField.NANO_OF_SECOND, 0)

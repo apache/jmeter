@@ -88,7 +88,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
         return res;
     }
 
-    private void formatSet(StringBuilder sb, @SuppressWarnings("rawtypes") Set s) {
+    private static void formatSet(StringBuilder sb, @SuppressWarnings("rawtypes") Set s) {
         @SuppressWarnings("unchecked")
         List<Map.Entry<Object, Object>> al = new ArrayList<>(s);
         al.sort(AlphaNumericKeyComparator.INSTANCE);

@@ -157,7 +157,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
      * @param event {@link ActionEvent}
      * @param result String
      */
-    private final void showResult(ActionEvent event, String result) {
+    private static void showResult(ActionEvent event, String result) {
         EscapeDialog messageDialog = new EscapeDialog(getParentFrame(event),
                 JMeterUtils.getResString("export_transactions_title"), false); //$NON-NLS-1$
         Container contentPane = messageDialog.getContentPane();

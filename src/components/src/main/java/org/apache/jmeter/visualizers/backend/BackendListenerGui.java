@@ -192,7 +192,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     }
 
 
-    private Arguments copyDefaultArguments(Map<String, String> currArgsMap, Arguments defaultArgs) {
+    private static Arguments copyDefaultArguments(Map<String, String> currArgsMap, Arguments defaultArgs) {
         Arguments newArgs = new Arguments();
         if (defaultArgs != null) {
             for (JMeterProperty jMeterProperty : defaultArgs.getArguments()) {
@@ -217,7 +217,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     }
 
 
-    private Arguments extractDefaultArguments(BackendListenerClient client, Map<String, String> userArgMap,
+    private static Arguments extractDefaultArguments(BackendListenerClient client, Map<String, String> userArgMap,
             Arguments currentUserArguments) {
         Arguments defaultArgs = null;
         try {
@@ -234,7 +234,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     }
 
 
-    private BackendListenerClient createBackendListenerClient(String newClassName)
+    private static BackendListenerClient createBackendListenerClient(String newClassName)
             throws ReflectiveOperationException {
         return Class.forName(newClassName, true,
                 Thread.currentThread().getContextClassLoader())

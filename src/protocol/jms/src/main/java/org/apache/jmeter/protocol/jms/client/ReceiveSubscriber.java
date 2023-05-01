@@ -269,7 +269,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @return the message consumer
      * @throws JMSException
      */
-    private MessageConsumer createSubscriber(Session session,
+    private static MessageConsumer createSubscriber(Session session,
             Destination destination, String durableSubscriptionId,
             String jmsSelector) throws JMSException {
         if (isEmpty(durableSubscriptionId)) {
@@ -377,7 +377,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @param s1
      * @return True if input is null, an empty string, or a white space-only string
      */
-    private boolean isEmpty(String s1) {
+    private static boolean isEmpty(String s1) {
         return s1 == null || s1.trim().isEmpty();
     }
 }

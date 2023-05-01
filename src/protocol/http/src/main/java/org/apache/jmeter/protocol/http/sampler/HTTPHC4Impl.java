@@ -273,7 +273,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return null;
         }
 
-        private int getPort(URL url) {
+        private static int getPort(URL url) {
             if (url.getPort() == -1) {
                 return url.getProtocol().equals("https") ? 443 : 80;
             }
@@ -356,7 +356,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
          * @param authCache
          * @param authScope
          */
-        private void fillAuthCache(HttpHost targetHost, Authorization authorization, AuthCache authCache,
+        private static void fillAuthCache(HttpHost targetHost, Authorization authorization, AuthCache authCache,
                 AuthScope authScope) {
             @SuppressWarnings("deprecation")
             Mechanism basicDigest = Mechanism.BASIC_DIGEST;
@@ -771,7 +771,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param triple {@link MutableTriple}
      * @param localContext {@link HttpContext}
      */
-    private void saveProxyAuth(
+    private static void saveProxyAuth(
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
             HttpContext localContext) {
         triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
@@ -782,8 +782,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param triple {@link MutableTriple} May be null if first request
      * @param localContext {@link HttpContext}
      */
-    private void setupProxyAuthState(MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
-                                HttpContext localContext) {
+    private static void setupProxyAuthState(MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
+            HttpContext localContext) {
         if (triple != null) {
             AuthState proxyAuthState = triple.getMiddle();
             localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxyAuthState);
@@ -837,7 +837,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param jMeterVariables {@link JMeterVariables}
      * @param localContext {@link HttpContext}
      */
-    private void extractClientContextAfterSample(JMeterVariables jMeterVariables, HttpContext localContext) {
+    private static void extractClientContextAfterSample(JMeterVariables jMeterVariables, HttpContext localContext) {
         Object userToken = localContext.getAttribute(HttpClientContext.USER_TOKEN);
         if(userToken != null) {
             log.debug("Extracted from HttpContext user token:{} storing it as JMeter variable:{}", userToken, JMETER_VARIABLE_USER_TOKEN);
@@ -854,7 +854,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param jMeterVariables {@link JMeterVariables}
      * @param localContext {@link HttpContext}
      */
-    private void setupClientContextBeforeSample(JMeterVariables jMeterVariables, HttpContext localContext) {
+    private static void setupClientContextBeforeSample(JMeterVariables jMeterVariables, HttpContext localContext) {
         Object userToken = null;
         // During recording JMeterContextService.getContext().getVariables() is null
         if(jMeterVariables != null) {
@@ -993,7 +993,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         // Allow for null strings
-        private int getHash(String s) {
+        private static int getHash(String s) {
             return s == null ? 0 : s.hashCode();
         }
 
@@ -1223,7 +1223,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param clientContext {@link HttpClientContext}
      * @param mapHttpClientPerHttpClientKey Map of {@link MutableTriple} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
      */
-    private void resetStateIfNeeded(
+    private static void resetStateIfNeeded(
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
             JMeterVariables jMeterVariables,
             HttpClientContext clientContext,
@@ -1244,7 +1244,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * @param mapHttpClientPerHttpClientKey
      */
-    private void closeCurrentConnections(
+    private static void closeCurrentConnections(
             Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
         for (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple :
                 mapHttpClientPerHttpClientKey.values()) {
@@ -1334,7 +1334,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param response containing the headers
      * @return string containing the headers, one per line
      */
-    private String getResponseHeaders(HttpResponse response) {
+    private static String getResponseHeaders(HttpResponse response) {
         Header[] rh = response.getAllHeaders();
 
         StringBuilder headerBuf = new StringBuilder(40 * (rh.length+1));
@@ -1352,7 +1352,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param headerBuffer {@link StringBuilder}
      * @param header {@link Header}
      */
-    private void writeHeader(StringBuilder headerBuffer, Header header) {
+    private static void writeHeader(StringBuilder headerBuffer, Header header) {
         if(header instanceof BufferedHeader) {
             CharArrayBuffer buffer = ((BufferedHeader)header).getBuffer();
             headerBuffer.append(buffer.buffer(), 0, buffer.length()).append('\n'); // $NON-NLS-1$
@@ -1396,7 +1396,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      *                      for this <code>UrlConfig</code>
      * @param cacheManager  the CacheManager (may be null)
      */
-    protected void setConnectionHeaders(HttpRequestBase request, URL url, HeaderManager headerManager, CacheManager cacheManager) {
+    protected static void setConnectionHeaders(HttpRequestBase request, URL url, HeaderManager headerManager, CacheManager cacheManager) {
         if (headerManager != null) {
             CollectionProperty headers = headerManager.getHeaders();
             if (headers != null) {
@@ -1441,7 +1441,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      *                        hostHeaderValue
      * @return integer representing the port for the host header
      */
-    private int getPortFromHostHeader(String hostHeaderValue, int defaultValue) {
+    private static int getPortFromHostHeader(String hostHeaderValue, int defaultValue) {
         String[] hostParts = hostHeaderValue.split(":");
         if (hostParts.length > 1) {
             String portString = hostParts[hostParts.length - 1];
@@ -1458,7 +1458,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param method <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
-    private String getAllHeadersExceptCookie(HttpRequest method) {
+    private static String getAllHeadersExceptCookie(HttpRequest method) {
         return getFromHeadersMatchingPredicate(method, ALL_EXCEPT_COOKIE);
     }
 
@@ -1468,7 +1468,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param method <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
-    private String getOnlyCookieFromHeaders(HttpRequest method) {
+    private static String getOnlyCookieFromHeaders(HttpRequest method) {
         String cookieHeader= getFromHeadersMatchingPredicate(method, ONLY_COOKIE).trim();
         if(!cookieHeader.isEmpty()) {
             return cookieHeader.substring(HTTPConstants.HEADER_COOKIE_IN_REQUEST.length()).trim();
@@ -1483,7 +1483,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param method <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
-    private String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<String> predicate) {
+    private static String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<String> predicate) {
         if(method != null) {
             // Get all the request headers
             StringBuilder hdrs = new StringBuilder(150);
@@ -1681,7 +1681,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @throws IOException
      * @throws UnsupportedEncodingException
      */
-    private void writeEntityToSB(final StringBuilder postedBody, final HttpEntity entity,
+    private static void writeEntityToSB(final StringBuilder postedBody, final HttpEntity entity,
             final ViewableFileBody[] fileBodies, final String contentEncoding)
                     throws IOException {
         if (entity.isRepeatable()){
@@ -1845,7 +1845,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private void saveConnectionCookies(HttpResponse method, URL u, CookieManager cookieManager) {
+    private static void saveConnectionCookies(HttpResponse method, URL u, CookieManager cookieManager) {
         if (cookieManager != null) {
             Header[] hdrs = method.getHeaders(HTTPConstants.HEADER_SET_COOKIE);
             for (Header hdr : hdrs) {
@@ -1878,7 +1878,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         closeThreadLocalConnections();
     }
 
-    private void closeThreadLocalConnections() {
+    private static void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
         Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>
             mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();

@@ -100,7 +100,7 @@ public class Move extends AbstractAction {
         GuiPackage.getInstance().getMainFrame().repaint();
     }
 
-    private JMeterTreeNode getParentNode(JMeterTreeNode currentNode) {
+    private static JMeterTreeNode getParentNode(JMeterTreeNode currentNode) {
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         TestElement te = currentNode.getTestElement();
         if (te instanceof TestPlan) {

@@ -75,7 +75,7 @@ public class CssParser implements LinkExtractorParser {
         }
     }
 
-    private URLCollection orDefault(URLCollection urlCollection,
+    private static URLCollection orDefault(URLCollection urlCollection,
             URLCollection defaultValue) {
         if (urlCollection == null) {
             return Validate.notNull(defaultValue);

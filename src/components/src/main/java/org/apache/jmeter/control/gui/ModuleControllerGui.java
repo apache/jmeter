@@ -203,7 +203,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         reinitialize();
     }
 
-    private String renderPath(Collection<?> path) {
+    private static String renderPath(Collection<?> path) {
         Iterator<?> iter = path.iterator();
         StringBuilder buf = new StringBuilder();
         boolean first = true;
@@ -316,7 +316,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
      *
      * @return path of a found element
      */
-    private TreeNode[] findPathInTreeModel(
+    private static TreeNode[] findPathInTreeModel(
             int level, TreeNode[] testPlanPath, DefaultMutableTreeNode parent)
     {
         if (level >= testPlanPath.length) {
@@ -356,7 +356,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) moduleToRunTreeNodes.getModel().getRoot();
         //treepath of test plan tree and module to run tree cannot be compared directly - moduleToRunTreeModel.getPathToRoot()
         //custom method for finding an JMeterTreeNode element in DefaultMutableTreeNode have to be used
-        TreeNode[] dmtnPath = this.findPathInTreeModel(1, filteredPath, root);
+        TreeNode[] dmtnPath = ModuleControllerGui.findPathInTreeModel(1, filteredPath, root);
         if (dmtnPath.length > 0) {
             TreePath treePath = new TreePath(dmtnPath);
             moduleToRunTreeNodes.setSelectionPath(treePath);

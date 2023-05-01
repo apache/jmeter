@@ -78,7 +78,7 @@ public class JSoupExtractor implements Extractor {
      * @param element Element
      * @return String value
      */
-    private String extractValue(String attribute, Element element) {
+    private static String extractValue(String attribute, Element element) {
         if (!JOrphanUtils.isBlank(attribute)) {
             return element.attr(attribute);
         } else {

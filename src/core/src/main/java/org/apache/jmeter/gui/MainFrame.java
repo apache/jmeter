@@ -627,7 +627,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      *
      * @return the main scroll pane
      */
-    private JScrollPane createMainPanel() {
+    private static JScrollPane createMainPanel() {
         return new JScrollPane();
     }
 
@@ -635,7 +635,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * Create at the down of the left a Console for Log events
      * @return {@link LoggerPanel}
      */
-    private LoggerPanel createLoggerPanel() {
+    private static LoggerPanel createLoggerPanel() {
         LoggerPanel loggerPanel = new LoggerPanel();
         loggerPanel.setMinimumSize(new Dimension(0, 100));
         loggerPanel.setPreferredSize(new Dimension(0, 150));
@@ -703,7 +703,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         return treevar;
     }
 
-    private void addQuickComponentHotkeys(JTree treevar) {
+    private static void addQuickComponentHotkeys(JTree treevar) {
         Action quickComponent = new QuickComponent("Quick Component");
 
         InputMap inputMap = treevar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -722,7 +722,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      *
      * @return a renderer to draw the test tree nodes
      */
-    private TreeCellRenderer getCellRenderer() {
+    private static TreeCellRenderer getCellRenderer() {
         return new JMeterCellRenderer();
     }
 
@@ -767,7 +767,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
          * Bug 62336: On Windows CTRL+6 doesn't give us an actionCommand, so
          * we have to try harder and read the KeyEvent from the EventQueue
          */
-        private String getCurrentKey(ActionEvent actionEvent) {
+        private static String getCurrentKey(ActionEvent actionEvent) {
             String actionCommand = actionEvent.getActionCommand();
             if (actionCommand != null) {
                 return actionCommand;
@@ -904,7 +904,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /**
      * Define AWT window title (WM_CLASS string) (useful on Gnome 3 / Linux)
      */
-    private void setWindowTitle() {
+    private static void setWindowTitle() {
         Class<?> xtoolkit = Toolkit.getDefaultToolkit().getClass();
         if (xtoolkit.getName().equals("sun.awt.X11.XToolkit")) { // NOSONAR (we don't want to depend on native LAF) $NON-NLS-1$
             try {

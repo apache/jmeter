@@ -226,7 +226,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @throws Error
      *             always throws an error.
      */
-    private void shouldNeverHappen(String msg) {
+    private static void shouldNeverHappen(String msg) {
         throw new Error(msg); // Programming error: bail out.
     }
 
@@ -238,7 +238,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @throws Error
      *             always throws one.
      */
-    private void shouldNeverHappen(Exception e) {
+    private static void shouldNeverHappen(Exception e) {
         throw new Error(e.toString()); // Programming error: bail out.
     }
 
@@ -249,7 +249,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * containing "${" as a valid expression.
      * TODO: improve, but keep returning true for "${}".
      */
-    private boolean isExpression(String text) {
+    private static boolean isExpression(String text) {
         return text.contains("${");//$NON-NLS-1$
     }
 
@@ -259,7 +259,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @param text
      * @return true if text is a String and isExpression(text).
      */
-    private boolean isExpression(Object text) {
+    private static boolean isExpression(Object text) {
         return text instanceof String && isExpression((String) text);
     }
 
@@ -354,7 +354,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * Fix bug in JVMs that return true/false rather than True/False
      * from the type editor getAsText() method
      */
-    private String fixGetAsTextBug(String asText) {
+    private static String fixGetAsTextBug(String asText) {
         if (asText == null){
             return null;
         }

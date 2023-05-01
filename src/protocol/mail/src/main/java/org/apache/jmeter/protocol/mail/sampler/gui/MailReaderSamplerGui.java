@@ -253,7 +253,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         add(settings, BorderLayout.CENTER);
     }
 
-    private void addField(JPanel panel, JLabel label, JComponent field, GridBagConstraints gbc) {
+    private static void addField(JPanel panel, JLabel label, JComponent field, GridBagConstraints gbc) {
         gbc.fill=GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.LINE_END;
         panel.add(label, gbc);
@@ -265,17 +265,17 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         nextLine(gbc);
     }
 
-    private void addField(JPanel panel, String text, JComponent field, GridBagConstraints gbc) {
+    private static void addField(JPanel panel, String text, JComponent field, GridBagConstraints gbc) {
         addField(panel, new JLabel(text), field, gbc);
     }
 
-    private void nextLine(GridBagConstraints gbc) {
+    private static void nextLine(GridBagConstraints gbc) {
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.weightx = 0;
     }
 
-    private GridBagConstraints getConstraints() {
+    private static GridBagConstraints getConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridheight = 1;
         gbc.gridwidth = 1;

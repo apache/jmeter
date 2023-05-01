@@ -141,7 +141,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         log.debug("Created {}", this); //$NON-NLS-1$
     }
 
-    private String getError() {
+    private static String getError() {
         Map<String, Object> cp = tp.get();
         return (String) cp.get(ERRKEY);
     }
@@ -311,7 +311,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return "tcp://" + this.getServer() + ":" + this.getPort();//$NON-NLS-1$ $NON-NLS-2$
     }
 
-    private Class<?> getClass(String className) {
+    private static Class<?> getClass(String className) {
         Class<?> c = null;
         try {
             c = Class.forName(className, false, Thread.currentThread().getContextClassLoader());
@@ -429,7 +429,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      * @param protocolHandler {@link TCPClient}
      * @return boolean if sample is considered as successful
      */
-    private boolean setupSampleResult(SampleResult sampleResult,
+    private static boolean setupSampleResult(SampleResult sampleResult,
             String readResponse,
             Exception exception,
             TCPClient protocolHandler) {
@@ -470,7 +470,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      * @param rc response code
      * @return whether this represents success or not
      */
-    private boolean checkResponseCode(String rc) {
+    private static boolean checkResponseCode(String rc) {
         int responseCode = Integer.parseInt(rc);
         return responseCode >= 400 && responseCode <= 599;
     }
@@ -524,7 +524,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     /**
      * Closes all connections, clears Map and remove thread local Map
      */
-    private void tearDown() {
+    private static void tearDown() {
         Map<String, Object> cp = tp.get();
         cp.forEach((k, v) -> {
             if(k.startsWith(TCPKEY)) {

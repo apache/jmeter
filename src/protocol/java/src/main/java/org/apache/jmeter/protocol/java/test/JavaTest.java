@@ -334,7 +334,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
      * @param context
      *            the context which contains the initialization parameters.
      */
-    private void listParameters(JavaSamplerContext context) {
+    private static void listParameters(JavaSamplerContext context) {
         Iterator<String> argsIt = context.getParameterNamesIterator();
         while (argsIt.hasNext()) {
             String name = argsIt.next();

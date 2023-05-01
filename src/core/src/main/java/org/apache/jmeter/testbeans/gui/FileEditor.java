@@ -120,7 +120,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
         setValue(toUnix(chooser.getSelectedFile()));
     }
 
-    private String toUnix(final File selectedFile) {
+    private static String toUnix(final File selectedFile) {
         if (File.separatorChar == '\\') {
             return FilenameUtils.separatorsToUnix(selectedFile.getPath());
         }

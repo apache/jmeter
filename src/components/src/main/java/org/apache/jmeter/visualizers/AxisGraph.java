@@ -320,7 +320,7 @@ public class AxisGraph extends JPanel {
         }
     }
 
-    private double findMax(double[][] _data) {
+    private static double findMax(double[][] _data) {
         double max = _data[0][0];
         for (double[] dArray : _data) {
             for (double d : dArray) {
@@ -332,7 +332,7 @@ public class AxisGraph extends JPanel {
         return max;
     }
 
-    private String squeeze(String input, int _maxLength) {
+    private static String squeeze(String input, int _maxLength) {
         if (input.length() > _maxLength) {
             return input.substring(0,_maxLength-ELLIPSIS_LEN)+ELLIPSIS;
         }

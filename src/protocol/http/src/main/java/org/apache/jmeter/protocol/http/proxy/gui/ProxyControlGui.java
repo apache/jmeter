@@ -363,7 +363,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         element.setExcludeList(excludeList);
     }
 
-    private List<String> getDataList(PowerTableModel pModel, String colName) {
+    private static List<String> getDataList(PowerTableModel pModel, String colName) {
         String[] dataArray = pModel.getData().getColumn(colName);
         List<String> list = new ArrayList<>();
         Collections.addAll(list, dataArray);
@@ -417,7 +417,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         repaint();
     }
 
-    private void populateTable(PowerTableModel pModel, PropertyIterator iter) {
+    private static void populateTable(PowerTableModel pModel, PropertyIterator iter) {
         pModel.clearData();
         while (iter.hasNext()) {
             pModel.addRow(new Object[] { iter.next().getStringValue() });
@@ -1037,7 +1037,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         destPanel.add(targetNodes, "growx, span");
     }
 
-    private JScrollPane findScrollPane(JPopupMenu popup) {
+    private static JScrollPane findScrollPane(JPopupMenu popup) {
         Component[] components = popup.getComponents();
         for (Component component : components) {
             if(component instanceof JScrollPane) {

@@ -90,7 +90,7 @@ public class OpenLinkAction extends AbstractAction {
         return commands;
     }
 
-    private void showBrowserWarning(String url) {
+    private static void showBrowserWarning(String url) {
         String problemSolver;
         if (url.startsWith(LINK_MAP.get(ActionNames.LINK_COMP_REF))
                 || url.startsWith(LINK_MAP.get(ActionNames.LINK_FUNC_REF))) {

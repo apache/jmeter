@@ -133,7 +133,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
      * @param value given by user
      * @return regex surrounded by boundary character matches, if value is not included in parens
      */
-    private String constructPattern(String value) {
+    private static String constructPattern(String value) {
         if (value.startsWith("(") && value.endsWith(")")) {
             return value;
         }

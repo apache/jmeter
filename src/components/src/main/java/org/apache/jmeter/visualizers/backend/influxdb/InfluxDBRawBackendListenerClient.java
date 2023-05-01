@@ -116,7 +116,7 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
         influxDBMetricsManager.addMetric(measurement, tags, fields, timestamp);
     }
 
-    private String createTags(SampleResult sampleResult) {
+    private static String createTags(SampleResult sampleResult) {
         boolean isError = sampleResult.getErrorCount() != 0;
         String status = isError ? TAG_KO : TAG_OK;
         // remove surrounding quotes and spaces from sample label
@@ -128,7 +128,7 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
                 + ",threadName=" + threadName;
     }
 
-    private String createFields(SampleResult sampleResult) {
+    private static String createFields(SampleResult sampleResult) {
         long duration = sampleResult.getTime();
         long latency = sampleResult.getLatency();
         long connectTime = sampleResult.getConnectTime();

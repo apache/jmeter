@@ -157,7 +157,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
      * @return Document
      *
      */
-    private Document parseResponse(String unicodeData, XPathExtractor extractor)
+    private static Document parseResponse(String unicodeData, XPathExtractor extractor)
       throws IOException, ParserConfigurationException,SAXException,TidyException
     {
       //TODO: validate contentType for reasonable types?

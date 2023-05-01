@@ -913,7 +913,7 @@ public class BasicCurlParser {
     * @param mechanism     the mechanism of authorization
     * @param authorization the object of authorization
     */
-   private void setAuthMechanism(String mechanism, Authorization authorization) {
+   private static void setAuthMechanism(String mechanism, Authorization authorization) {
        switch (mechanism.toLowerCase()) {
        case "basic":
            authorization.setMechanism(Mechanism.BASIC);
@@ -932,7 +932,7 @@ public class BasicCurlParser {
     * @param request                       http request
     * @param originalProxyServerParameters the parameters of proxy server
     */
-   private void setProxyServer(Request request, String originalProxyServerParameters) {
+   private static void setProxyServer(Request request, String originalProxyServerParameters) {
        String proxyServerParameters = originalProxyServerParameters;
        if (!proxyServerParameters.contains("://")) {
            proxyServerParameters = "http://" + proxyServerParameters;
@@ -960,7 +960,7 @@ public class BasicCurlParser {
     * @param request               http request
     * @param authentication        the username and password of proxy server
     */
-   private void setProxyServerUserInfo(Request request, String authentication) {
+   private static void setProxyServerUserInfo(Request request, String authentication) {
        if (authentication.contains(":")) {
            String[] userInfo = authentication.split(":", 2);
            request.setProxyServer("username", userInfo[0]);

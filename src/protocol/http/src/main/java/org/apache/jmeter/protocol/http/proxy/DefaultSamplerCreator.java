@@ -136,7 +136,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         }
     }
 
-    private void detectAndModifySamplerOnGraphQLRequest(final HTTPSamplerBase sampler, final HttpRequestHdr request) {
+    private static void detectAndModifySamplerOnGraphQLRequest(final HTTPSamplerBase sampler, final HttpRequestHdr request) {
         final String method = request.getMethod();
         final Header header = request.getHeaderManager().getFirstHeaderNamed("Content-Type");
         final boolean graphQLContentType = header != null
@@ -354,7 +354,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * @param sampler {@link HTTPSamplerBase}
      * @param request {@link HttpRequestHdr}
      */
-    protected void computeSamplerName(HTTPSamplerBase sampler,
+    protected static void computeSamplerName(HTTPSamplerBase sampler,
             HttpRequestHdr request) {
         String prefix = StringUtils.defaultString(request.getPrefix(), "");
         int httpSampleNameMode = request.getHttpSampleNameMode();
@@ -366,7 +366,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         }
     }
 
-    private String getFormat(int httpSampleNameMode, String format) {
+    private static String getFormat(int httpSampleNameMode, String format) {
         if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_FORMATTER) {
             return format.replaceAll("#\\{name([,}])", "{0$1")
                     .replaceAll("#\\{path([,}])", "{1$1")
@@ -387,7 +387,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         return "{1}";
     }
 
-    private String getNumberedFormat(int httpSampleNameMode) {
+    private static String getNumberedFormat(int httpSampleNameMode) {
         if (httpSampleNameMode == SAMPLER_NAME_NAMING_MODE_PREFIX) {
             return "{0}{1}-{2}";
         }

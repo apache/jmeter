@@ -56,6 +56,7 @@ if (buildParameters.enableErrorprone) {
                 )
                 warn(
                     "ForEachIterable",
+                    "MethodCanBeStatic",
                 )
                 disable(
                     "ComplexBooleanConstant",

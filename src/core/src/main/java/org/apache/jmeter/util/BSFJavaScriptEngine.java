@@ -157,7 +157,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
      * @param t {@link Throwable}
      * @throws BSFException
      */
-    private void handleError(Throwable t) throws BSFException {
+    private static void handleError(Throwable t) throws BSFException {
         Throwable target = t;
         if (t instanceof WrappedException) {
             target = ((WrappedException) t).getWrappedException();

@@ -115,12 +115,12 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         }
     }
 
-    private void handleSingleResult(JMeterVariables vars, String refName, int matchNumber, List<String> resultList) {
+    private static void handleSingleResult(JMeterVariables vars, String refName, int matchNumber, List<String> resultList) {
         String suffix = (matchNumber < 0) ? "_1" : "";
         placeObjectIntoVars(vars, refName + suffix, resultList, 0);
     }
 
-    private void handleListResult(JMeterVariables vars, String refName, String defaultValue, int matchNumber,
+    private static void handleListResult(JMeterVariables vars, String refName, String defaultValue, int matchNumber,
             List<String> resultList) {
         if (matchNumber < 0) {
             // Extract all
@@ -149,7 +149,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         }
     }
 
-    private void handleNullResult(JMeterVariables vars, String refName, String defaultValue, int matchNumber) {
+    private static void handleNullResult(JMeterVariables vars, String refName, String defaultValue, int matchNumber) {
         vars.put(refName, defaultValue);
         vars.put(refName + REF_MATCH_NR, "0"); //$NON-NLS-1$
         if (matchNumber < 0) {
@@ -214,7 +214,7 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         }
     }
 
-    private void placeObjectIntoVars(JMeterVariables vars, String refName, List<String> extractedValues, int matchNr) {
+    private static void placeObjectIntoVars(JMeterVariables vars, String refName, List<String> extractedValues, int matchNr) {
         vars.put(refName, extractedValues.get(matchNr));
     }
 

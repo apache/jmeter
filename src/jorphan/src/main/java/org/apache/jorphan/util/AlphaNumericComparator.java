@@ -84,7 +84,7 @@ public class AlphaNumericComparator<T> implements Comparator<T> {
         return 1;
     }
 
-    private int compareOneEmptyPart(String numberPart1, String numberPart2) {
+    private static int compareOneEmptyPart(String numberPart1, String numberPart2) {
         if (numberPart1.isEmpty()) {
             if (numberPart2.isEmpty()) {
                 return 0;
@@ -96,7 +96,7 @@ public class AlphaNumericComparator<T> implements Comparator<T> {
         throw new IllegalArgumentException("At least one of the parameters have to be empty");
     }
 
-    private String trimLeadingZeroes(String numberPart) {
+    private static String trimLeadingZeroes(String numberPart) {
         int length = numberPart.length();
         for (int i = 0; i < length; i++) {
             if (numberPart.charAt(i) != '0') {

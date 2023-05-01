@@ -258,7 +258,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      *
      * @return a new LDAPArgument object
      */
-    private LDAPArgument makeNewLDAPArgument() {
+    private static LDAPArgument makeNewLDAPArgument() {
         return new LDAPArgument("", "", "");
     }
 

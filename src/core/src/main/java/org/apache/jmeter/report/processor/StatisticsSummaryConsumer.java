@@ -68,7 +68,7 @@ public class StatisticsSummaryConsumer extends
      * @param data {@link StatisticsSummaryData}
      * @param isOverall boolean indicating if aggregation concerns the Overall results in which case we ignore Transaction Controller's SampleResult
      */
-    private void aggregateSample(Sample sample, StatisticsSummaryData data, boolean isOverall) {
+    private static void aggregateSample(Sample sample, StatisticsSummaryData data, boolean isOverall) {
         if(isOverall && sample.isController()) {
             return;
         }
@@ -201,7 +201,7 @@ public class StatisticsSummaryConsumer extends
         return titles;
     }
 
-    private String formatPercentile(String percentileLabel) {
+    private static String formatPercentile(String percentileLabel) {
         return String.format(JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
                 percentileLabel);
     }

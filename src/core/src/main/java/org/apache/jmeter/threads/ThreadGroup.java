@@ -330,7 +330,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param jvmThread {@link Thread}
      * @param interrupt Interrupt thread or not
      */
-    private void stopThread(JMeterThread jmeterThread, Thread jvmThread, boolean interrupt) {
+    private static void stopThread(JMeterThread jmeterThread, Thread jvmThread, boolean interrupt) {
         jmeterThread.stop();
         jmeterThread.interrupt(); // interrupt sampler if possible
         if (interrupt && jvmThread != null) { // Bug 49734
@@ -434,7 +434,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param thread Thread
      * @return boolean
      */
-    private boolean verifyThreadStopped(Thread thread) {
+    private static boolean verifyThreadStopped(Thread thread) {
         boolean stopped = true;
         if (thread != null && thread.isAlive()) {
             try {
@@ -465,7 +465,7 @@ public class ThreadGroup extends AbstractThreadGroup {
          * we have to check if allThreads is really empty before stopping
          */
         while (!allThreads.isEmpty()) {
-            allThreads.values().forEach(this::waitThreadStopped);
+            allThreads.values().forEach(ThreadGroup::waitThreadStopped);
         }
 
     }
@@ -474,7 +474,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      * Wait for thread to stop
      * @param thread Thread
      */
-    private void waitThreadStopped(Thread thread) {
+    private static void waitThreadStopped(Thread thread) {
         if (thread == null) {
             return;
         }

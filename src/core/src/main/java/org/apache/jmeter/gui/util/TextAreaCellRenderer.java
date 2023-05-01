@@ -50,7 +50,7 @@ public class TextAreaCellRenderer implements TableCellRenderer {
      * @param value initial value
      * @return {@link JSyntaxTextArea}
      */
-    private JSyntaxTextArea createRenderer(String value) {
+    private static JSyntaxTextArea createRenderer(String value) {
         JSyntaxTextArea textArea = JSyntaxTextArea.getInstance(2, 50);
         textArea.setLanguage("text"); //$NON-NLS-1$
         textArea.setInitialText(value);

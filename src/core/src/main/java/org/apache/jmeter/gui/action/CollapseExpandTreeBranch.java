@@ -79,7 +79,7 @@ public class CollapseExpandTreeBranch extends AbstractAction {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private void expandCollapseNode(JTree jTree, TreePath parent, boolean collapse) {
+    private static void expandCollapseNode(JTree jTree, TreePath parent, boolean collapse) {
         TreeNode node = (TreeNode) parent.getLastPathComponent();
         if (node.isLeaf()) {
             return;

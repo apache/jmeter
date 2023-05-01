@@ -75,11 +75,11 @@ public class XPath2Extractor
     private static final String MATCH_NUMBER    = "XPathExtractor2.matchNumber"; // $NON-NLS-1$
     //- JMX file attributes
 
-    private String concat(String s1,String s2){
+    private static String concat(String s1, String s2){
         return s1 + "_" + s2; // $NON-NLS-1$
     }
 
-    private String concat(String s1, int i){
+    private static String concat(String s1, int i){
         return s1 + "_" + i; // $NON-NLS-1$
     }
 

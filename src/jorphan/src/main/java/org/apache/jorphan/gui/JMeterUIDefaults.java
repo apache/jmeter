@@ -164,7 +164,7 @@ public class JMeterUIDefaults {
         return output;
     }
 
-    private void scaleIntProperties(UIDefaults defaults, float scale) {
+    private static void scaleIntProperties(UIDefaults defaults, float scale) {
         // Below are both standard and custom properties in a sorted order
         scaleIntProperty(defaults, "ArrowButton.size", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "ComboBox:\"ComboBox.arrowButton\".size", scale); // $NON-NLS-1$
@@ -173,7 +173,7 @@ public class JMeterUIDefaults {
         scaleIntProperty(defaults, "Spinner:\"Spinner.nextButton\".size", scale); // $NON-NLS-1$
     }
 
-    private void configureRowHeight(UIDefaults defaults, float scale, String rowHeight, String font) {
+    private static void configureRowHeight(UIDefaults defaults, float scale, String rowHeight, String font) {
         if (defaults.getInt(rowHeight) == 0) {
             return;
         }
@@ -196,14 +196,14 @@ public class JMeterUIDefaults {
     }
 
 
-    private void scaleControlsProperties(UIDefaults defaults, float scale) {
+    private static void scaleControlsProperties(UIDefaults defaults, float scale) {
         scaleIntProperty(defaults, "ScrollBar.thumbHeight", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "ScrollBar.width", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "ScrollBar:\"ScrollBar.button\".size", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "SplitPane.size", scale); // $NON-NLS-1$
     }
 
-    private void scaleIntProperty(UIDefaults defaults, String key, float scale) {
+    private static void scaleIntProperty(UIDefaults defaults, String key, float scale) {
         int value = defaults.getInt(key);
         if (value != 0) {
             defaults.put(key, Math.round(value * scale));

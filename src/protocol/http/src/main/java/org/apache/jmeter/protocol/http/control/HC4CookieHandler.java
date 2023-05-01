@@ -241,7 +241,7 @@ public class HC4CookieHandler implements CookieHandler {
      * Create an HttpClient cookie from a JMeter cookie
      */
     @SuppressWarnings("JavaUtilDate")
-    private org.apache.http.cookie.Cookie makeCookie(Cookie jmc) {
+    private static org.apache.http.cookie.Cookie makeCookie(Cookie jmc) {
         long exp = jmc.getExpiresMillis();
         BasicClientCookie ret = new BasicClientCookie(jmc.getName(),
                 jmc.getValue());

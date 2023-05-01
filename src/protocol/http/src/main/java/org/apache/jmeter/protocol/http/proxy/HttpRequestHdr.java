@@ -298,11 +298,11 @@ public class HttpRequestHdr {
         return null;
     }
 
-    private boolean isMultipart(String contentType) {
+    private static boolean isMultipart(String contentType) {
         return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
 
-    public MultipartUrlConfig getMultipartConfig(String contentType) {
+    public static MultipartUrlConfig getMultipartConfig(String contentType) {
         if(isMultipart(contentType)) {
             // Get the boundary string for the multiparts from the content type
             String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());
@@ -416,7 +416,7 @@ public class HttpRequestHdr {
      *            String that is partially tokenized.
      * @return The remainder
      */
-    private String getToken(StringTokenizer tk) {
+    private static String getToken(StringTokenizer tk) {
         if (tk.hasMoreTokens()) {
             return tk.nextToken();
         }

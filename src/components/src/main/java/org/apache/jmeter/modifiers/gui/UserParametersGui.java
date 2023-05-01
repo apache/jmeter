@@ -182,7 +182,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         perIterationCheck.setSelected(false);
     }
 
-    private String getUserColName(int user){
+    private static String getUserColName(int user){
         return USER_COL_RESOURCE+UNDERSCORE+user;
     }
 

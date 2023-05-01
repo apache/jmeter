@@ -216,13 +216,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     protected abstract Map<String, GroupInfo> createGroupInfos();
 
-    private void setMinResult(MapResultData result, String name, Double value) {
+    private static void setMinResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
         valueResult.setValue(Math.min((Double) valueResult.getValue(),
                 value));
     }
 
-    private void setMaxResult(MapResultData result, String name, Double value) {
+    private static void setMaxResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
         valueResult.setValue(Math.max((Double) valueResult.getValue(),
                 value));
@@ -375,8 +375,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /**
      * Aggregate a value to the aggregator defined by the specified parameters.
      */
-    private void aggregateValue(AggregatorFactory factory, SeriesData data,
-                                Double key, double value) {
+    private static void aggregateValue(AggregatorFactory factory, SeriesData data,
+                                       Double key, double value) {
         Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
 
         // Get or create aggregator

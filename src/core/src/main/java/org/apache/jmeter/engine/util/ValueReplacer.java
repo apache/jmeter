@@ -81,7 +81,7 @@ public class ValueReplacer {
         setProperties(el, newProps);
     }
 
-    private void setProperties(TestElement el, Collection<JMeterProperty> newProps) {
+    private static void setProperties(TestElement el, Collection<JMeterProperty> newProps) {
         el.clear();
         for (JMeterProperty jmp : newProps) {
             el.setProperty(jmp);
@@ -155,7 +155,7 @@ public class ValueReplacer {
      * @return a new {@link Collection} with all the transformed {@link JMeterProperty}s
      * @throws InvalidVariableException when <code>transform</code> throws an {@link InvalidVariableException} while transforming a value
      */
-    private Collection<JMeterProperty> replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
+    private static Collection<JMeterProperty> replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
         List<JMeterProperty> props = new ArrayList<>();
         while (iter.hasNext()) {
             JMeterProperty val = iter.next();

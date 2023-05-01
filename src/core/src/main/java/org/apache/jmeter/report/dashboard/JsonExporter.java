@@ -115,7 +115,7 @@ public class JsonExporter extends AbstractDataExporter {
         return outputDir;
     }
 
-    private void createStatistic(Map<String, SamplingStatistic> statistics, MapResultData resultData) {
+    private static void createStatistic(Map<String, SamplingStatistic> statistics, MapResultData resultData) {
         LOGGER.debug("Creating statistics for result data:{}", resultData);
         SamplingStatistic statistic = new SamplingStatistic();
         ListResultData listResultData = (ListResultData) resultData.getResult("data");

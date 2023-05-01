@@ -355,7 +355,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private void extractContent(StringBuilder buffer, StringBuilder propBuffer, Message msg) {
+    private static void extractContent(StringBuilder buffer, StringBuilder propBuffer, Message msg) {
         if (msg != null) {
             try {
                 if (msg instanceof TextMessage) {
@@ -733,7 +733,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private void printEnvironment(Context context) throws NamingException {
+    private static void printEnvironment(Context context) throws NamingException {
         try {
             Hashtable<?, ?> env = context.getEnvironment();
             if (env != null) {

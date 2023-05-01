@@ -404,7 +404,7 @@ public class Proxy extends Thread {
      * @return the keystore entry or {@code null} if no match found
      * @throws KeyStoreException
      */
-    private String getDomainMatch(KeyStore keyStore, String host) throws KeyStoreException {
+    private static String getDomainMatch(KeyStore keyStore, String host) throws KeyStoreException {
         if (keyStore.containsAlias(host)) {
             return host;
         }
@@ -479,7 +479,7 @@ public class Proxy extends Thread {
         }
     }
 
-    private SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e) {
+    private static SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e) {
         return generateErrorResult(result, request, e, "");
     }
 
@@ -537,7 +537,7 @@ public class Proxy extends Thread {
      *
      * @return updated headers to be sent to client
      */
-    private String messageResponseHeaders(SampleResult res) {
+    private static String messageResponseHeaders(SampleResult res) {
         String headers = res.getResponseHeaders();
         String[] headerLines = headers.split(NEW_LINE, 0); // drop empty trailing content
         int contentLengthIndex = -1;
@@ -647,7 +647,7 @@ public class Proxy extends Thread {
         }
     }
 
-    private boolean isNotHtmlType(String contentType) {
+    private static boolean isNotHtmlType(String contentType) {
         for (String mimeType: NOT_HTML_TEXT_TYPES) {
             if (contentType.startsWith(mimeType)) {
                 return true;
@@ -656,7 +656,7 @@ public class Proxy extends Thread {
         return false;
     }
 
-    private String getUrlWithoutQuery(URL url) {
+    private static String getUrlWithoutQuery(URL url) {
         String fullUrl = url.toString();
         String urlWithoutQuery = fullUrl;
         String query = url.getQuery();

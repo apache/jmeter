@@ -369,7 +369,7 @@ public class RespTimeGraphChart extends JPanel {
         }
     }
 
-    private int getTopValue(double value, RoundingMode roundingMode) {
+    private static int getTopValue(double value, RoundingMode roundingMode) {
         String maxStr = String.valueOf(Math.round(value));
         StringBuilder divValueStr = new StringBuilder(maxStr.length()+1);
         divValueStr.append("1");
@@ -399,7 +399,7 @@ public class RespTimeGraphChart extends JPanel {
      * @param datas array of positive or NaN doubles
      * @return double
      */
-    private double findMax(double[][] datas) {
+    private static double findMax(double[][] datas) {
         double max = 0;
         for (double[] data : datas) {
             for (final double value : data) {

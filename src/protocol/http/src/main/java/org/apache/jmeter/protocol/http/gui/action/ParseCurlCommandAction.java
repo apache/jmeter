@@ -192,12 +192,12 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @return the first node of the given type in the test component tree, or
      *         <code>null</code> if none was found.
      */
-    private JMeterTreeNode findFirstNodeOfType(Class<?> type) {
+    private static JMeterTreeNode findFirstNodeOfType(Class<?> type) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         return treeModel.getNodesOfType(type).stream().filter(JMeterTreeNode::isEnabled).findFirst().orElse(null);
     }
 
-    private DNSCacheManager findNodeOfTypeDnsCacheManagerByType(boolean isCustom) {
+    private static DNSCacheManager findNodeOfTypeDnsCacheManagerByType(boolean isCustom) {
         JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
         List<JMeterTreeNode> res = treeModel.getNodesOfType(DNSCacheManager.class);
         for (JMeterTreeNode jm : res) {
@@ -336,7 +336,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         return httpSampler;
     }
 
-    private void configureTimeout(Request request, HTTPSamplerProxy httpSampler) {
+    private static void configureTimeout(Request request, HTTPSamplerProxy httpSampler) {
         double connectTimeout = request.getConnectTimeout();
         double maxTime = request.getMaxTime();
         if (connectTimeout >= 0) {
@@ -355,7 +355,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @param request {@link Request}
      * @return {@link HeaderManager} element
      */
-    private HeaderManager createHeaderManager(Request request) {
+    private static HeaderManager createHeaderManager(Request request) {
         HeaderManager headerManager = new HeaderManager();
         headerManager.setProperty(TestElement.GUI_CLASS, HeaderPanel.class.getName());
         headerManager.setProperty(TestElement.NAME, "HTTP HeaderManager");
@@ -409,7 +409,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
     }
 
-    private KeystoreConfig createKeystoreConfiguration() {
+    private static KeystoreConfig createKeystoreConfiguration() {
         KeystoreConfig keystoreConfig = new KeystoreConfig();
         keystoreConfig.setProperty(TestElement.GUI_CLASS, TestBeanGUI.class.getName());
         keystoreConfig.setProperty(TestElement.NAME, "Keystore Configuration");
@@ -422,7 +422,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      *
      * @param request {@link Request}
      */
-    private void createAuthManager(Request request, AuthManager authManager) {
+    private static void createAuthManager(Request request, AuthManager authManager) {
         Authorization auth = request.getAuthorization();
         authManager.setProperty(TestElement.GUI_CLASS, AuthPanel.class.getName());
         authManager.setProperty(TestElement.NAME, "HTTP AuthorizationManager");
@@ -437,7 +437,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @param authManager {@link AuthManager} element
      * @return whether to update Authorization Manager in http request
      */
-    private boolean canAddAuthManagerInHttpRequest(Request request, AuthManager authManager) {
+    private static boolean canAddAuthManagerInHttpRequest(Request request, AuthManager authManager) {
         Authorization auth = request.getAuthorization();
         for (int i = 0; i < authManager.getAuthObjects().size(); i++) {
             if (!authManager.getAuthObjectAt(i).getUser().equals(auth.getUser())
@@ -456,7 +456,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @param authManager {@link AuthManager} element
      * @return whether to update Authorization Manager in Thread Group
      */
-    private boolean canUpdateAuthManagerInThreadGroup(Request request, AuthManager authManager) {
+    private static boolean canUpdateAuthManagerInThreadGroup(Request request, AuthManager authManager) {
         Authorization auth = request.getAuthorization();
         for (int i = 0; i < authManager.getAuthObjects().size(); i++) {
             if (auth.getURL().equals(authManager.getAuthObjectAt(i).getURL())) {
@@ -466,7 +466,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         return true;
     }
 
-    private void createDnsServer(Request request, DNSCacheManager dnsCacheManager) {
+    private static void createDnsServer(Request request, DNSCacheManager dnsCacheManager) {
         Set<String> dnsServers = request.getDnsServers();
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
@@ -477,7 +477,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
     }
 
-    private boolean canAddDnsServerInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {
+    private static boolean canAddDnsServerInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {
         Set<String> currentDnsServers =new HashSet<>();
         Set<String> newDnsServers = request.getDnsServers();
         for (int i = 0; i < dnsCacheManager.getServers().size(); i++) {
@@ -486,7 +486,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         return !(newDnsServers.size() == currentDnsServers.size() && newDnsServers.containsAll(currentDnsServers));
     }
 
-    private void createDnsResolver(Request request, DNSCacheManager dnsCacheManager) {
+    private static void createDnsResolver(Request request, DNSCacheManager dnsCacheManager) {
         dnsCacheManager.setProperty(TestElement.GUI_CLASS, DNSCachePanel.class.getName());
         dnsCacheManager.setProperty(TestElement.NAME, "DNS Cache Manager");
         dnsCacheManager.setCustomResolver(true);
@@ -510,7 +510,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         return "Created from cURL on " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    private boolean canAddDnsResolverInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {
+    private static boolean canAddDnsResolverInHttpRequest(Request request, DNSCacheManager dnsCacheManager) {
         if (dnsCacheManager.getHosts().size() != 1) {
             return true;
         } else {
@@ -573,7 +573,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         }
     }
 
-    private void createProxyServer(Request request, HTTPSamplerProxy httpSampler) {
+    private static void createProxyServer(Request request, HTTPSamplerProxy httpSampler) {
         Map<String, String> proxyServer = request.getProxyServer();
         for (Map.Entry<String, String> proxyPara : proxyServer.entrySet()) {
             String key = proxyPara.getKey();

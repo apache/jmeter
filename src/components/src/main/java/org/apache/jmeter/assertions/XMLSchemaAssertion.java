@@ -80,7 +80,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         return getPropertyAsString(XSD_FILENAME_KEY);
     }
 
-    private void setSchemaResult(AssertionResult result, String xmlStr, String xsdFileName) {
+    private static void setSchemaResult(AssertionResult result, String xmlStr, String xsdFileName) {
         try {
             DocumentBuilderFactory parserFactory = DocumentBuilderFactory.newInstance();
             parserFactory.setValidating(true);

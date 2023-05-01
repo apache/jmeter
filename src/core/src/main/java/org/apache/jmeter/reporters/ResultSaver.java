@@ -223,7 +223,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
      * Create path hierarchy to parentFile
      * @param parentFile
      */
-    private void createFoldersIfNeeded(File parentFile) {
+    private static void createFoldersIfNeeded(File parentFile) {
         if(parentFile == null) {
             return;
         }

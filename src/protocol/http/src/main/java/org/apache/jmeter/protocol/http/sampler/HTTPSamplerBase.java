@@ -442,7 +442,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getDoMultipart() || (files.length>0 && hasNoMissingFile(files) && !getSendFileAsPostBody());
     }
 
-    private boolean hasNoMissingFile(HTTPFileArg[] files) {
+    private static boolean hasNoMissingFile(HTTPFileArg[] files) {
         for (HTTPFileArg httpFileArg : files) {
             if(StringUtils.isEmpty(httpFileArg.getPath())) {
                 log.warn("File {} is invalid as no path is defined", httpFileArg);
@@ -1476,7 +1476,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return res;
     }
 
-    private Predicate<URL> generateMatcherPredicate(String regex, String explanation, boolean defaultAnswer) {
+    private static Predicate<URL> generateMatcherPredicate(String regex, String explanation, boolean defaultAnswer) {
         if (StringUtils.isEmpty(regex)) {
             return s -> defaultAnswer;
         }
@@ -1511,7 +1511,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return {@link LinkExtractorParser}
      * @throws LinkExtractorParseException
      */
-    private LinkExtractorParser getParser(HTTPSampleResult res)
+    private static LinkExtractorParser getParser(HTTPSampleResult res)
             throws LinkExtractorParseException {
         String parserClassName =
                 PARSERS_FOR_CONTENT_TYPE.get(res.getMediaType());
@@ -1525,7 +1525,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param url URL to escape
      * @return escaped url
      */
-    private URL escapeIllegalURLCharacters(java.net.URL url) {
+    private static URL escapeIllegalURLCharacters(java.net.URL url) {
         if (url == null || "file".equals(url.getProtocol())) {
             return url;
         }
@@ -1542,7 +1542,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param sampleResult HTTPSampleResult
      * @return User Agent part
      */
-    private String getUserAgent(HTTPSampleResult sampleResult) {
+    private static String getUserAgent(HTTPSampleResult sampleResult) {
         String res = sampleResult.getRequestHeaders();
         int index = res.indexOf(USER_AGENT);
         if (index >= 0) {
@@ -1569,7 +1569,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param res {@link HTTPSampleResult}
      * @param initialValue boolean
      */
-    private void setParentSampleSuccess(HTTPSampleResult res, boolean initialValue) {
+    private static void setParentSampleSuccess(HTTPSampleResult res, boolean initialValue) {
         if (!IGNORE_FAILED_EMBEDDED_RESOURCES) {
             res.setSuccessful(initialValue);
             if (!initialValue) {
@@ -1733,7 +1733,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param initialMethod the initial HTTP Method
      * @return the new HTTP Method as per RFC
      */
-    private String computeMethodForRedirect(String initialMethod) {
+    private static String computeMethodForRedirect(String initialMethod) {
         if (!HTTPConstants.HEAD.equalsIgnoreCase(initialMethod)) {
             return HTTPConstants.GET;
         }
@@ -1996,7 +1996,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param w {@link OutputStream}
      * @return byte array
      */
-    private byte[] toByteArray(OutputStream w) {
+    private static byte[] toByteArray(OutputStream w) {
         if(w instanceof DirectAccessByteArrayOutputStream) {
             return ((DirectAccessByteArrayOutputStream) w).toByteArray();
         }

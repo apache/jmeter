@@ -157,7 +157,7 @@ public class Start extends AbstractAction {
      * @param currentNodes jmeter tree nodes
      * @return the thread groups
      */
-    private AbstractThreadGroup[] keepOnlyThreadGroups(JMeterTreeNode[] currentNodes) {
+    private static AbstractThreadGroup[] keepOnlyThreadGroups(JMeterTreeNode[] currentNodes) {
         List<AbstractThreadGroup> nodes = new ArrayList<>();
         for (JMeterTreeNode jMeterTreeNode : currentNodes) {
             if(jMeterTreeNode.getTestElement() instanceof AbstractThreadGroup) {
@@ -229,7 +229,7 @@ public class Start extends AbstractAction {
      * @param testTree {@link HashTree}
      * @param threadGroupsToKeep Array of {@link AbstractThreadGroup} to keep
      */
-    private void keepOnlySelectedThreadGroupsInHashTree(HashTree testTree, AbstractThreadGroup[] threadGroupsToKeep) {
+    private static void keepOnlySelectedThreadGroupsInHashTree(HashTree testTree, AbstractThreadGroup[] threadGroupsToKeep) {
         for (Object o : new ArrayList<>(testTree.list())) {
             TestElement item = (TestElement) o;
             if (o instanceof AbstractThreadGroup) {
@@ -259,7 +259,7 @@ public class Start extends AbstractAction {
      * @param threadGroups Array of {@link AbstractThreadGroup}
      * @return true if item is in threadGroups array
      */
-    private boolean isInThreadGroups(TestElement item, AbstractThreadGroup[] threadGroups) {
+    private static boolean isInThreadGroups(TestElement item, AbstractThreadGroup[] threadGroups) {
         for (AbstractThreadGroup abstractThreadGroup : threadGroups) {
             if(item == abstractThreadGroup) {
                 return true;
@@ -275,7 +275,7 @@ public class Start extends AbstractAction {
      * @param runMode {@link RunMode} how plan will be run
      * @return {@link TreeCloner}
      */
-    private ListedHashTree cloneTree(HashTree testTree, RunMode runMode) {
+    private static ListedHashTree cloneTree(HashTree testTree, RunMode runMode) {
         TreeCloner cloner = null;
         switch (runMode) {
             case VALIDATION:

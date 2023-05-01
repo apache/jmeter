@@ -145,7 +145,7 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
         return events.get(events.position() - 1);
     }
 
-    private boolean valuesAreEqualWithPrecision(double throughput, double lastThroughput) {
+    private static boolean valuesAreEqualWithPrecision(double throughput, double lastThroughput) {
         return Math.abs(throughput - lastThroughput) < PRECISION;
     }
 }

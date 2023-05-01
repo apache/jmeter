@@ -169,14 +169,14 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         // quick hack anyway, so who cares.
     }
 
-    private Function<String, String> generateExtractor(String regex) {
+    private static Function<String, String> generateExtractor(String regex) {
         if (USE_JAVA_REGEX) {
             return generateExtractorWithJavaRegex(regex);
         }
         return generateExtractorWithOroRegex(regex);
     }
 
-    private Function<String, String> generateExtractorWithJavaRegex(String regex) {
+    private static Function<String, String> generateExtractorWithJavaRegex(String regex) {
         java.util.regex.Pattern pattern = JMeterUtils.compilePattern(
                 regex,
                 java.util.regex.Pattern.MULTILINE);
@@ -189,7 +189,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         };
     }
 
-    private Function<String, String> generateExtractorWithOroRegex(String regex) {
+    private static Function<String, String> generateExtractorWithOroRegex(String regex) {
         Pattern pattern = JMeterUtils.getPatternCache().getPattern(
                 regex,
                 Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
@@ -203,14 +203,14 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         };
     }
 
-    private Function<String, String> generateFirstMatchExtractor(String regex) {
+    private static Function<String, String> generateFirstMatchExtractor(String regex) {
         if (USE_JAVA_REGEX) {
             return generateFirstMatchExtractorWithJavaRegex(regex);
         }
         return generateFirstMatchExtractorWithOroRegex(regex);
     }
 
-    private Function<String, String> generateFirstMatchExtractorWithJavaRegex(String regex) {
+    private static Function<String, String> generateFirstMatchExtractorWithJavaRegex(String regex) {
         java.util.regex.Pattern pattern = JMeterUtils.compilePattern(
                 regex,
                 java.util.regex.Pattern.MULTILINE);
@@ -228,7 +228,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
         };
     }
 
-    private Function<String, String> generateFirstMatchExtractorWithOroRegex(String regex) {
+    private static Function<String, String> generateFirstMatchExtractorWithOroRegex(String regex) {
         Pattern pattern = JMeterUtils.getPatternCache().getPattern(
                 regex,
                 Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);

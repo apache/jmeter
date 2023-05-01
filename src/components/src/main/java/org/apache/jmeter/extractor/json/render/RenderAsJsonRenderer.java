@@ -70,7 +70,7 @@ public class RenderAsJsonRenderer extends AbstractRenderAsJsonRenderer {
         }
     }
 
-    private List<Object> extractWithTechnology(String textToParse, String expression) throws Exception {
+    private static List<Object> extractWithTechnology(String textToParse, String expression) throws Exception {
         JSONManager jsonManager = new JSONManager();
         return jsonManager.extractWithJsonPath(textToParse, expression);
     }

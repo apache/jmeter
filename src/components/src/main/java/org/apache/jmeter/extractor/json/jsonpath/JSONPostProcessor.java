@@ -108,7 +108,7 @@ public class JSONPostProcessor
         }
     }
 
-    private List<Object> extractValues(List<String> jsonResponses, String currentJsonPath) throws ParseException {
+    private static List<Object> extractValues(List<String> jsonResponses, String currentJsonPath) throws ParseException {
         List<Object> extractedValues = new ArrayList<>();
         for (String jsonResponse: jsonResponses) {
             extractedValues.addAll(localMatcher.get().extractWithJsonPath(jsonResponse, currentJsonPath));
@@ -130,7 +130,7 @@ public class JSONPostProcessor
         }
     }
 
-    private void validateSameLengthOfArguments(String[] refNames, String[] jsonPathExpressions,
+    private static void validateSameLengthOfArguments(String[] refNames, String[] jsonPathExpressions,
             String[] defaultValues) {
         if (refNames.length != jsonPathExpressions.length ||
                 refNames.length != defaultValues.length) {
@@ -236,20 +236,20 @@ public class JSONPostProcessor
         return Collections.emptyList();
     }
 
-    private void clearOldRefVars(JMeterVariables vars, String refName) {
+    private static void clearOldRefVars(JMeterVariables vars, String refName) {
         vars.remove(refName + REF_MATCH_NR);
         for (int i=1; vars.get(refName + "_" + i) != null; i++) {
             vars.remove(refName + "_" + i);
         }
     }
 
-    private void placeObjectIntoVars(JMeterVariables vars, String currentRefName,
+    private static void placeObjectIntoVars(JMeterVariables vars, String currentRefName,
             List<Object> extractedValues, int matchNr, String defaultValue) {
         vars.put(currentRefName,
                 StringUtils.defaultString(stringify(extractedValues.get(matchNr)), defaultValue));
     }
 
-    private String stringify(Object obj) {
+    private static String stringify(Object obj) {
         return obj == null ? null : obj.toString();
     }
 

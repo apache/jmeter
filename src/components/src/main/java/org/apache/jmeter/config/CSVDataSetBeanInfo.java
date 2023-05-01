@@ -131,7 +131,7 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
      * list from https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html
      * @return a String[] with the list of file encoding
      */
-    private String[] getListFileEncoding() {
+    private static String[] getListFileEncoding() {
         return JOrphanUtils.split(JMeterUtils.getPropDefault("csvdataset.file.encoding_list", ""), "|"); //$NON-NLS-1$
     }
 }

@@ -322,7 +322,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         return embeddedRsrcPanel;
     }
 
-    private JTextField addTextFieldWithLabel(JPanel panel, String labelText) {
+    private static JTextField addTextFieldWithLabel(JPanel panel, String labelText) {
         JLabel label = new JLabel(labelText); // $NON-NLS-1$
         JTextField field = new JTextField(100);
         label.setLabelFor(field);

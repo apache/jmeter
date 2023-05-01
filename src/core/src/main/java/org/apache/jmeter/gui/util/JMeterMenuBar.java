@@ -217,7 +217,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         this.add(helpMenu);
     }
 
-    private List<MenuCreator> findMenuCreators() {
+    private static List<MenuCreator> findMenuCreators() {
         List<MenuCreator> creators = new ArrayList<>();
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
@@ -342,7 +342,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         addPluginsMenuItems(optionsMenu, menuCreators, MENU_LOCATION.OPTIONS);
     }
 
-    private JMenu createLaFMenu() {
+    private static JMenu createLaFMenu() {
         JMenu lafMenu = makeMenuRes("appearance", 'L');
         ButtonGroup lafGroup = new ButtonGroup();
         String currentLafCommand = LookAndFeelCommand.getPreferredLafCommand();
@@ -590,7 +590,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
      * @param menuCreators
      * @param location
      */
-    private void addPluginsMenuItems(JMenu menu, List<MenuCreator> menuCreators, MENU_LOCATION location) {
+    private static void addPluginsMenuItems(JMenu menu, List<MenuCreator> menuCreators, MENU_LOCATION location) {
         for (MenuCreator menuCreator : menuCreators) {
             JMenuItem[] menuItems = menuCreator.getMenuItemsAtLocation(location);
             if (menuItems.length != 0) {

@@ -122,7 +122,7 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         return message.toString();
     }
 
-    private void addNegation(boolean invert, StringBuilder message) {
+    private static void addNegation(boolean invert, StringBuilder message) {
         if (invert) {
             message.append(" not");
         }

@@ -75,7 +75,7 @@ class JTidyHTMLParser extends HTMLParser {
      *
      * @return new base URL
      */
-    private URL scanNodes(Node node, URLCollection urls, URL baseUrl) throws HTMLParseException {
+    private static URL scanNodes(Node node, URLCollection urls, URL baseUrl) throws HTMLParseException {
         if (node == null) {
             return baseUrl;
         }
@@ -201,7 +201,7 @@ class JTidyHTMLParser extends HTMLParser {
      * Helper method to get an attribute value, if it exists @param attrs list
      * of attributes @param attname attribute name @return
      */
-    private String getValue(NamedNodeMap attrs, String attname) {
+    private static String getValue(NamedNodeMap attrs, String attname) {
         String v = null;
         Node n = attrs.getNamedItem(attname);
         if (n != null) {

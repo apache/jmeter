@@ -162,7 +162,7 @@ public class HtmlReportGenerator {
      * @param fileToCheck the directory to check
      * @return the error message or null if the file is ok
      */
-    private String checkFile(File fileToCheck) {
+    private static String checkFile(File fileToCheck) {
         if (fileToCheck.exists() && fileToCheck.canRead() && fileToCheck.isFile()) {
             return null;
         } else {
@@ -176,7 +176,7 @@ public class HtmlReportGenerator {
      * @param directoryToCheck the directory to check
      * @return the error message or an empty string if the directory is fine
      */
-    private String checkDirectory(File directoryToCheck) {
+    private static String checkDirectory(File directoryToCheck) {
         if (directoryToCheck.exists()) {
             String[] files = directoryToCheck.list();
             if (files != null && files.length > 0) {

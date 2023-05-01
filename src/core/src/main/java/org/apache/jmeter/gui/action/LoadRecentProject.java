@@ -74,7 +74,7 @@ public class LoadRecentProject extends Load {
     /**
      * Get the recent file for the menu item
      */
-    private File getRecentFile(ActionEvent e) {
+    private static File getRecentFile(ActionEvent e) {
         JMenuItem menuItem = (JMenuItem)e.getSource();
         // Get the preference for the recent files
         return new File(getRecentFile(Integer.parseInt(menuItem.getName())));

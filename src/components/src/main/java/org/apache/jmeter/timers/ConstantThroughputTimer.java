@@ -217,7 +217,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         return delay;
     }
 
-    private long calculateSharedDelay(ThroughputInfo info, long milliSecPerRequest) {
+    private static long calculateSharedDelay(ThroughputInfo info, long milliSecPerRequest) {
         final long now = System.currentTimeMillis();
         final long calculatedDelay;
 

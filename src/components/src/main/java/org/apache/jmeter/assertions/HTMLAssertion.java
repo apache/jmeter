@@ -264,7 +264,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         setProperty(new BooleanProperty(ERRORS_ONLY_KEY, inErrorsOnly));
     }
 
-    private long capToZero(long value) {
+    private static long capToZero(long value) {
         if (value == Long.MAX_VALUE) {
             return 0;
         }

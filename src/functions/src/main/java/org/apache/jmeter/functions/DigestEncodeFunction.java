@@ -97,7 +97,7 @@ public class DigestEncodeFunction extends AbstractFunction {
      * @param index
      * @return
      */
-    private String uppercase(String encodedString, CompoundVariable[] values, int index) {
+    private static String uppercase(String encodedString, CompoundVariable[] values, int index) {
         String shouldUpperCase = values.length > index ? values[index].execute() : null;
         if (Boolean.parseBoolean(shouldUpperCase)) {
             return encodedString.toUpperCase();

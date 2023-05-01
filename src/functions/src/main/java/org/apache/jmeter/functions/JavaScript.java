@@ -118,7 +118,7 @@ public class JavaScript extends AbstractFunction {
      * @return result as String
      * @throws InvalidVariableException
      */
-    private String executeWithNashorn(SampleResult previousResult,
+    private static String executeWithNashorn(SampleResult previousResult,
             Sampler currentSampler, JMeterContext jmctx, JMeterVariables vars,
             String script, String varName)
             throws InvalidVariableException {
@@ -160,7 +160,7 @@ public class JavaScript extends AbstractFunction {
      * @return result as String
      * @throws InvalidVariableException
      */
-    private String executeWithRhino(SampleResult previousResult,
+    private static String executeWithRhino(SampleResult previousResult,
             Sampler currentSampler, JMeterContext jmctx, JMeterVariables vars,
             String script, String varName)
             throws InvalidVariableException {

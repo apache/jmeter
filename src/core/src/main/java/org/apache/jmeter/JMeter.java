@@ -508,7 +508,7 @@ public class JMeter implements JMeterPlugin {
      * @param deleteReportFolder true means delete report folder
      * @throws IllegalArgumentException
      */
-    private void extractAndSetReportOutputFolder(CLArgsParser parser, boolean deleteReportFolder) {
+    private static void extractAndSetReportOutputFolder(CLArgsParser parser, boolean deleteReportFolder) {
         CLOption reportOutputFolderOpt = parser
                 .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
         if(reportOutputFolderOpt != null) {
@@ -525,7 +525,7 @@ public class JMeter implements JMeterPlugin {
     /**
      * Displays as ASCII Art Apache JMeter version + Copyright notice
      */
-    private void displayAsciiArt() {
+    private static void displayAsciiArt() {
         try (InputStream inputStream = JMeter.class.getResourceAsStream("jmeter_as_ascii_art.txt")) {
             if(inputStream != null) {
                 String text = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
@@ -538,13 +538,13 @@ public class JMeter implements JMeterPlugin {
     }
 
     // Update classloader if necessary
-    private void updateClassLoader() throws MalformedURLException {
+    private static void updateClassLoader() throws MalformedURLException {
         updatePath("search_paths",";", true); //$NON-NLS-1$//$NON-NLS-2$
         updatePath("user.classpath",File.pathSeparator, true);//$NON-NLS-1$
         updatePath("plugin_dependency_paths",";", false);//$NON-NLS-1$
     }
 
-    private void updatePath(String property, String sep, boolean cp) throws MalformedURLException {
+    private static void updatePath(String property, String sep, boolean cp) throws MalformedURLException {
         String userpath= JMeterUtils.getPropDefault(property,"");// $NON-NLS-1$
         if (userpath.length() <= 0) {
             return;
@@ -571,7 +571,7 @@ public class JMeter implements JMeterPlugin {
     /**
      *
      */
-    private void startOptionalServers() {
+    private static void startOptionalServers() {
         int bshport = JMeterUtils.getPropDefault("beanshell.server.port", 0);// $NON-NLS-1$
         String bshfile = JMeterUtils.getPropDefault("beanshell.server.file", "");// $NON-NLS-1$ $NON-NLS-2$
         if (bshport > 0) {
@@ -600,7 +600,7 @@ public class JMeter implements JMeterPlugin {
     /**
      * Runs user configured init scripts
      */
-    void runInitScripts() {
+    static void runInitScripts() {
         // Should we run a beanshell script on startup?
         String bshinit = JMeterUtils.getProperty("beanshell.init.file");// $NON-NLS-1$
         if (bshinit != null){
@@ -650,7 +650,7 @@ public class JMeter implements JMeterPlugin {
     }
 
 
-    private Map<String, List<String>> getEnginesAndExtensions(ScriptEngineManager scriptEngineManager) {
+    private static Map<String, List<String>> getEnginesAndExtensions(ScriptEngineManager scriptEngineManager) {
         return scriptEngineManager.getEngineFactories().stream()
                 .collect(Collectors.toMap(
                         f -> f.getLanguageName() + " (" + f.getLanguageVersion() + ")",
@@ -661,7 +661,7 @@ public class JMeter implements JMeterPlugin {
      * Sets a proxy server for the JVM if the command line arguments are
      * specified.
      */
-    private void setProxy(CLArgsParser parser) throws IllegalUserActionException {
+    private static void setProxy(CLArgsParser parser) throws IllegalUserActionException {
         if (parser.getArgumentById(PROXY_USERNAME) != null) {
             Properties jmeterProps = JMeterUtils.getJMeterProperties();
             if (parser.getArgumentById(PROXY_PASSWORD) != null) {
@@ -879,7 +879,7 @@ public class JMeter implements JMeterPlugin {
      * Checks for LAST or LASTsuffix.
      * Returns the LAST name with .JMX replaced by suffix.
      */
-    private String processLAST(final String jmlogfile, final String suffix) {
+    private static String processLAST(final String jmlogfile, final String suffix) {
         if (USE_LAST_JMX.equals(jmlogfile) || USE_LAST_JMX.concat(suffix).equals(jmlogfile)){
             String last = LoadRecentProject.getRecentFile(0);// most recent
             if (last.toUpperCase(Locale.ENGLISH).endsWith(JMX_SUFFIX)){
@@ -1273,7 +1273,7 @@ public class JMeter implements JMeterPlugin {
          * Runs daemon thread which waits a short while;
          * if JVM does not exit, lists remaining non-daemon threads on stdout.
          */
-        private void checkForRemainingThreads() {
+        private static void checkForRemainingThreads() {
             // This cannot be a JMeter class variable, because properties
             // are not initialised until later.
             final int pauseToCheckForRemainingThreads =

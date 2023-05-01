@@ -203,7 +203,7 @@ public class RandomDate extends AbstractFunction {
     }
 
     @SuppressWarnings("JavaTimeDefaultTimeZone")
-    private DateTimeFormatter createFormatter(LocaleFormatObject format) {
+    private static DateTimeFormatter createFormatter(LocaleFormatObject format) {
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
         return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
                 // TODO: what if year changes? (e.g. the year changes as the test executes)

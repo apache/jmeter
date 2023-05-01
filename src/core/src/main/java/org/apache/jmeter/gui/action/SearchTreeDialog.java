@@ -226,7 +226,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
         ComponentUtil.centerComponentInWindow(this);
     }
 
-    private JButton createButton(String messageKey) {
+    private static JButton createButton(String messageKey) {
         return new JButton(JMeterUtils.getResString(messageKey));
     }
 
@@ -387,7 +387,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
      * @param expand true if we want to expand
      * @param nodes Set of {@link JMeterTreeNode} to mark
      */
-    private void markConcernedNodes(boolean expand, Set<JMeterTreeNode> nodes) {
+    private static void markConcernedNodes(boolean expand, Set<JMeterTreeNode> nodes) {
         GuiPackage guiInstance = GuiPackage.getInstance();
         JTree jTree = guiInstance.getMainFrame().getTree();
         for (JMeterTreeNode jMeterTreeNode : nodes) {
@@ -451,7 +451,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
      * @param caseSensitiveReplacement boolean if search is case sensitive
      * @return null if no replacement occurred or Pair of (number of replacement, current tree node)
      */
-    private Pair<Integer, JMeterTreeNode> doReplacementInCurrentNode(JMeterTreeNode jMeterTreeNode,
+    private static Pair<Integer, JMeterTreeNode> doReplacementInCurrentNode(JMeterTreeNode jMeterTreeNode,
             String regex, String replaceBy, boolean caseSensitiveReplacement) {
         try {
             if (jMeterTreeNode.getUserObject() instanceof Replaceable) {

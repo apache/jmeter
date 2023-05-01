@@ -117,7 +117,7 @@ public class SSLRMIClientSocketFactory
         return factory.createSocket(host, port);
     }
 
-    private KeyStore loadStore(String location, char[] passphrase, String type)
+    private static KeyStore loadStore(String location, char[] passphrase, String type)
             throws IOException {
         try {
             KeyStore store = KeyStore.getInstance(type);

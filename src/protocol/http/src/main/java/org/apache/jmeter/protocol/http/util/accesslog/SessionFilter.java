@@ -91,14 +91,14 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return false;
     }
 
-    protected String getIpAddress(String logLine) {
+    protected static String getIpAddress(String logLine) {
         if (USE_JAVA_REGEX) {
             return getIpAddressWithJavaRegex(logLine);
         }
         return getIpAddressWithOroRegex(logLine);
     }
 
-    private String getIpAddressWithJavaRegex(String logLine) {
+    private static String getIpAddressWithJavaRegex(String logLine) {
         Matcher matcher = IP_PATTERN.matcher(logLine);
         if (matcher.find()) {
             return matcher.group(0);
@@ -106,7 +106,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         return "";
     }
 
-    private String getIpAddressWithOroRegex(String logLine) {
+    private static String getIpAddressWithOroRegex(String logLine) {
         Pattern incIp = JMeterUtils.getPatternCache().getPattern("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
                 Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
         Perl5Matcher matcher = JMeterUtils.getMatcher();

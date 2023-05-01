@@ -172,7 +172,7 @@ public class IncludeController extends GenericController implements ReplaceableC
      * @param tree HashTree included Test Plan
      * @return HashTree Subset within Test Fragment or Empty HashTree
      */
-    private HashTree getProperBranch(HashTree tree) {
+    private static HashTree getProperBranch(HashTree tree) {
         for (Object o : new ArrayList<>(tree.list())) {
             TestElement item = (TestElement) o;
 
@@ -192,7 +192,7 @@ public class IncludeController extends GenericController implements ReplaceableC
     }
 
 
-    private void removeDisabledItems(HashTree tree) {
+    private static void removeDisabledItems(HashTree tree) {
         for (Object o : new ArrayList<>(tree.list())) {
             TestElement item = (TestElement) o;
             if (!item.isEnabled()) {

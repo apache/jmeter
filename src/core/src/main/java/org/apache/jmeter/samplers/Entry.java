@@ -84,7 +84,7 @@ public class Entry {
         }
     }
 
-    private ConfigElement cloneIfNecessary(ConfigElement config) {
+    private static ConfigElement cloneIfNecessary(ConfigElement config) {
         if (config.expectsModification()) {
             return config;
         }

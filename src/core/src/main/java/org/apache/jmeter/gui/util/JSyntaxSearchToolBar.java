@@ -114,7 +114,7 @@ public final class JSyntaxSearchToolBar implements ActionListener {
         }
     }
 
-    private SearchContext createSearchContext(String text, boolean forward, boolean matchCase,
+    private static SearchContext createSearchContext(String text, boolean forward, boolean matchCase,
             boolean isRegex) {
         SearchContext context = new SearchContext();
         context.setSearchFor(text);

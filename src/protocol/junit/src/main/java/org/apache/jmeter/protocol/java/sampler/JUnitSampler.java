@@ -552,7 +552,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
      * @return the method or null if an error occurred
      * (or either parameter is null)
      */
-    private Method getMethod(Object clazz, String method){
+    private static Method getMethod(Object clazz, String method){
         if (clazz != null && method != null){
             try {
                 return clazz.getClass().getMethod(method,new Class[0]);
@@ -563,7 +563,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         return null;
     }
 
-    private Method getMethodWithAnnotation(Object clazz, Class<? extends Annotation> annotation) {
+    private static Method getMethodWithAnnotation(Object clazz, Class<? extends Annotation> annotation) {
         if(null != clazz && null != annotation) {
             for(Method m : clazz.getClass().getMethods()) {
                 if(m.isAnnotationPresent(annotation)) {

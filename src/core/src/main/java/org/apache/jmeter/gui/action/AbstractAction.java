@@ -144,7 +144,7 @@ public abstract class AbstractAction implements Command {
      * @param event {@link ActionEvent}
      * @return parent Window
      */
-    protected final JFrame getParentFrame(ActionEvent event) {
+    protected static JFrame getParentFrame(ActionEvent event) {
         JFrame parent = null;
         Object source = event.getSource();
         if (source instanceof JMenuItem) {

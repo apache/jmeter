@@ -54,7 +54,7 @@ public class SearchTreeCommand extends AbstractAction {
      * @return A freshly created search dialog with the parent frame that could be
      *         found, or no parent otherwise.
      */
-    private SearchTreeDialog createSearchDialog(ActionEvent event) {
+    private static SearchTreeDialog createSearchDialog(ActionEvent event) {
         JFrame parent = getParentFrame(event);
         return new SearchTreeDialog(parent);
     }

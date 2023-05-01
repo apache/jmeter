@@ -176,7 +176,7 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         return paramPanel;
     }
 
-    private HTTPArgument createHTTPArgument(final String name, final String value, final boolean alwaysEncoded) {
+    private static HTTPArgument createHTTPArgument(final String name, final String value, final boolean alwaysEncoded) {
         final HTTPArgument arg = new HTTPArgument(name, value);
         arg.setUseEquals(true);
         arg.setEnabled(true);
