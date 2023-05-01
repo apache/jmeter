@@ -30,14 +30,14 @@ import org.junit.jupiter.params.provider.CsvSource;
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
  */
-public class TestArgumentsPanel {
+class TestArgumentsPanel {
 
     /**
      * Test that adding an argument to the table results in an appropriate
      * TestElement being created.
      */
     @Test
-    public void testArgumentCreation() throws Exception {
+    void testArgumentCreation() throws Exception {
         ArgumentsPanel gui = new ArgumentsPanel();
         gui.tableModel.addRow(new Argument());
         gui.tableModel.setValueAt("howdy", 0, 0);
@@ -56,7 +56,7 @@ public class TestArgumentsPanel {
             "WITH_SUFFIX_SPACE ,WITH_SUFFIX_SPACE",
             " WITH_PREFIX_SPACE,WITH_PREFIX_SPACE"
     }, ignoreLeadingAndTrailingWhitespace = false)
-    public void testArgumentNames(String name, String expectedName) throws Exception {
+    void testArgumentNames(String name, String expectedName) throws Exception {
         ArgumentsPanel gui = new ArgumentsPanel();
         gui.tableModel.addRow(new Argument());
         gui.tableModel.setValueAt(name, 0, 0);

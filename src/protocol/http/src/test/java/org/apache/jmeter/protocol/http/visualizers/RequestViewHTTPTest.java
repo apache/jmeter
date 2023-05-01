@@ -33,10 +33,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class RequestViewHTTPTest {
+class RequestViewHTTPTest {
 
     @Test
-    public void testGetQueryMapValueContainingAmpersand() {
+    void testGetQueryMapValueContainingAmpersand() {
         // see https://bz.apache.org/bugzilla/show_bug.cgi?id=58413
         String query = "login=toto1&pwd=Welcome%261";
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
@@ -57,7 +57,7 @@ public class RequestViewHTTPTest {
 
     //http://www.foo.com/test/json/getXXXX.jsp?postalCode=59115&qrcode=
     @Test
-    public void testGetQueryMapWithEmptyValue() {
+    void testGetQueryMapWithEmptyValue() {
         String query = "postalCode=59115&qrcode=";
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
 
@@ -76,7 +76,7 @@ public class RequestViewHTTPTest {
     }
 
     @Test
-    public void testGetQueryMapMultipleValues() {
+    void testGetQueryMapMultipleValues() {
         String query = "param2=15&param1=12&param2=baulpismuth";
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
 
@@ -96,7 +96,7 @@ public class RequestViewHTTPTest {
     }
 
     @Test
-    public void testGetQueryMapAmpInValue() {
+    void testGetQueryMapAmpInValue() {
         String query = "param2=15&param1=12&param3=baul%26Pismuth";
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
 
@@ -120,7 +120,7 @@ public class RequestViewHTTPTest {
     }
 
     @Test
-    public void testGetQueryMapBug54055() {
+    void testGetQueryMapBug54055() {
         String query = "param2=15&param1=12&param3=bu4m1KzFvsozCnR4lra0%2Be69YzpnRcF09nDjc3VJvl8%3D";
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
 
@@ -144,7 +144,7 @@ public class RequestViewHTTPTest {
     }
 
     @Test
-    public void testGetQueryMapBug52491() {
+    void testGetQueryMapBug52491() {
         String query = "<envelope><header><context><conversationId>119</conversationId></context></header>"
                 + "<body><call component=\"OrderTransfer\" method=\"getSourceManifestID\" id=\"2\">\n"
                 + "<params></params><refs></refs></call></body></envelope>";
@@ -161,7 +161,7 @@ public class RequestViewHTTPTest {
     }
 
     @Test
-    public void testGetQueryMapSoapHack() {
+    void testGetQueryMapSoapHack() {
         String query = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
                 "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\"\n" +
@@ -229,7 +229,7 @@ public class RequestViewHTTPTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testGetQueryMapWithEmptyKeyAndValue(String query, Map<String, List<String>> expected) {
+    void testGetQueryMapWithEmptyKeyAndValue(String query, Map<String, List<String>> expected) {
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
         Assertions.assertNotNull(params);
         Assertions.assertEquals(expected.size(), params.size());
