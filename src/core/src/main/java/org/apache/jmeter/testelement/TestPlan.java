@@ -97,7 +97,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
             String propFunctionalModeProperty = JMeterUtils.getProperty(PROP_FUNCTIONAL_MODE);
             if (propFunctionalModeProperty != null) {
                 functionalModeReturn = JMeterUtils.getPropDefault(PROP_FUNCTIONAL_MODE, functionalModeDefault);
-                log.info("Change with property " + PROP_FUNCTIONAL_MODE + ", value=" + functionalModeReturn);
+                log.info("Overriding the value of \"Functional Test Mode\" with property " + PROP_FUNCTIONAL_MODE + " value=" + functionalModeReturn);
             }
         }
         functionalMode = functionalModeReturn;
@@ -181,7 +181,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
             String tearDownOnShutdownProperty = JMeterUtils.getProperty(PROP_TEARDOWN_ON_SHUTDOWN);
             if (tearDownOnShutdownProperty != null) {
                 tearDownOnShutdownReturn = JMeterUtils.getPropDefault(PROP_TEARDOWN_ON_SHUTDOWN, tearDownOnShutdown);
-                log.info("Change with property " + PROP_TEARDOWN_ON_SHUTDOWN + ", value=" + tearDownOnShutdownReturn);
+                log.info("Overriding the value of \"Run tearDown Thread Groups after shutdown of main threads\" with property " + PROP_TEARDOWN_ON_SHUTDOWN + " value=" + tearDownOnShutdownReturn);
             }
         }
         return tearDownOnShutdownReturn;
@@ -243,7 +243,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
             String serializedThreadGroupProperty = JMeterUtils.getProperty(PROP_SERIALIZE_THREADGROUPS);
             if (serializedThreadGroupProperty != null) {
                 serializedThreadGroupReturn = JMeterUtils.getPropDefault(PROP_SERIALIZE_THREADGROUPS, serializedThreadGroupDefault);
-                log.info("Change with property " + PROP_SERIALIZE_THREADGROUPS + ", value=" + serializedThreadGroupReturn);
+                log.info("Overriding the value of \"Run Thread Groups consecutively (serialize thread groups)\" with property "  + PROP_SERIALIZE_THREADGROUPS + " value=" + serializedThreadGroupReturn);
             }
         }
         return serializedThreadGroupReturn;
