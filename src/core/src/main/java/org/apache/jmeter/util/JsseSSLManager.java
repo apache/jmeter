@@ -366,7 +366,7 @@ public class JsseSSLManager extends SSLManager {
          *
          * TODO? - does not actually allow the user to choose an alias at present
          *
-         * @param keyType the key algorithm type name(s), ordered with the most-preferred key type first.
+         * @param keyTypes the key algorithm type name(s), ordered with the most-preferred key type first.
          * @param issuers the list of acceptable CA issuer subject names or null if it does not matter which issuers are used.
          * @param socket the socket to be used for this connection.
          *     This parameter can be null, which indicates that implementations are free to select an alias applicable to any socket.
@@ -374,11 +374,11 @@ public class JsseSSLManager extends SSLManager {
          * @see javax.net.ssl.X509KeyManager#chooseClientAlias(String[], Principal[], Socket)
          */
         @Override
-        public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
+        public String chooseClientAlias(String[] keyTypes, Principal[] issuers, Socket socket) {
             if(log.isDebugEnabled()) {
-                log.debug("keyType: {}", keyType[0]);
+                log.debug("keyType: {}", keyTypes[0]);
             }
-            String alias = this.store.getAlias();
+            String alias = this.store.getAlias(keyTypes);
             if(log.isDebugEnabled()) {
                 log.debug("Client alias: '{}'", alias);
             }

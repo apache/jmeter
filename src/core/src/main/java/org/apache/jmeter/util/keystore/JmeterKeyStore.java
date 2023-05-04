@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Hex;
@@ -64,13 +65,15 @@ public final class JmeterKeyStore {
     private final int endIndex;
 
     /** name of the default alias */
-    private String clientCertAliasVarName;
+    private final String clientCertAliasVarName;
 
-    private String[] names = new String[0];
+    private int aliasCount;
+
     private Map<String, PrivateKey> privateKeyByAlias = new HashMap<>();
     private Map<String, X509Certificate[]> certsByAlias = new HashMap<>();
-
-    private int lastAliasIndex;
+    private Map<String, String[]> aliasesByKeyType = new HashMap<>();
+    private Map<String, String> keyTypeByAlias = new HashMap<>();
+    private Map<String, AtomicInteger> aliasIndexByKeyType = new HashMap<>();
 
     /**
      * @param type                   type of the {@link KeyStore}
@@ -113,9 +116,11 @@ public final class JmeterKeyStore {
         char[] pw = toCharArrayOrNull(pword);
         store.load(is, pw);
 
-        List<String> aliasesList = new ArrayList<>();
         this.privateKeyByAlias = new HashMap<>();
         this.certsByAlias = new HashMap<>();
+        this.aliasesByKeyType = new HashMap<>();
+        this.keyTypeByAlias = new HashMap<>();
+        this.aliasIndexByKeyType = new HashMap<>();
 
         PrivateKey privateKey = null;
         if (log.isDebugEnabled()) {
@@ -123,6 +128,11 @@ public final class JmeterKeyStore {
         }
         int index = 0;
         Enumeration<String> aliases = store.aliases();
+
+        Map<String, Collection<String>> aliasesByKeyType = new HashMap<>();
+
+        int count = 0;
+
         while (aliases.hasMoreElements()) {
             String alias = aliases.nextElement();
             if (!store.isKeyEntry(alias)) {
@@ -135,12 +145,26 @@ public final class JmeterKeyStore {
                 Certificate[] chain = Objects.requireNonNull(
                         store.getCertificateChain(alias),
                         "No certificate chain found for alias" + alias);
-                aliasesList.add(alias);
                 privateKeyByAlias.put(alias, privateKey);
                 certsByAlias.put(alias, toX509Certificates(chain));
+                String keyType = privateKey.getAlgorithm();
+                aliasesByKeyType.compute(keyType, (k,v)->{
+                    if (v == null) { v = new ArrayList<>(); }
+                    v.add(alias);
+                    return v;
+                });
+                keyTypeByAlias.put(alias, keyType);
+                count++;
             }
             index++;
         }
+
+        aliasCount = count;
+
+        aliasesByKeyType.forEach((k,v)-> {
+            this.aliasesByKeyType.put(k, v.toArray(new String[0]));
+            aliasIndexByKeyType.put(k, new AtomicInteger());
+        });
 
         if (is != null) { // only check for keys, if we were given a file as inputstream
             Objects.requireNonNull(privateKey, "No key(s) found");
@@ -150,10 +174,6 @@ public final class JmeterKeyStore {
             }
         }
 
-        /*
-         * Note: if is == null and no pkcs11 store is configured, the arrays will be empty
-         */
-        this.names = aliasesList.toArray(new String[aliasesList.size()]);
     }
 
     private static final Map<String, String> EXTENDED_KEY_USAGES = new HashMap<>();
@@ -303,36 +323,60 @@ public final class JmeterKeyStore {
      * @throws IllegalArgumentException if {@link #clientCertAliasVarName}
      *                                  is not empty and no key for this alias could be found
      */
-    public String getAlias() {
+    public String getAlias(String [] keyTypes) {
+
+        for (String keyType : keyTypes) {
+
+            String alias = getAlias(keyType);
+            if (alias != null) { return alias; }
+
+        }
+
+        return null;
+
+    }
+
+    /**
+     * Get the next, only or null alias for the specified key type.
+     *
+     * @param keyType key type that the key under the alias must have
+     * @return the next, only, or null alias
+     */
+    public String getAlias(String keyType) {
+
         if (StringUtils.isNotEmpty(clientCertAliasVarName)) {
             String aliasName = JMeterContextService.getContext().getVariables().get(clientCertAliasVarName);
             if (StringUtils.isEmpty(aliasName)) {
                 log.error("No var called '{}' found", clientCertAliasVarName);
                 throw new IllegalArgumentException("No var called '" + clientCertAliasVarName + "' found");
             }
-            return aliasName;
+            if (Objects.equals(keyTypeByAlias.get(aliasName), keyType)) {
+                return aliasName;
+            }
+            // NOTE: the getAlias() call will likely get repeated with a "right" key type eventually.
+            log.debug("Key for alias '{}' is not of type '{}', returning null", aliasName, keyType);
+            return null;
         }
-        int length = this.names.length;
+
+        // TODO if we do have keys of multiple types, we won't iterate
+        // through all of them, only through the preferred ones.
+
+        String [] aliases = aliasesByKeyType.get(keyType);
+        if (aliases == null) { return null; }
+
+        int length = aliases.length;
         if (length == 0) { // i.e. is == null
             return null;
         }
-        return this.names[getIndexAndIncrement(length)];
+        return aliases[getIndexAndIncrement(keyType, length)];
+
     }
 
     public int getAliasCount() {
-        return this.names.length;
+        return aliasCount;
     }
 
-    public String getAlias(int index) {
-        int length = this.names.length;
-        if (length == 0 && index == 0) { // i.e. is == null
-            return null;
-        }
-        if (index >= length || index < 0) {
-            throw new ArrayIndexOutOfBoundsException(index);
-        }
-        return this.names[index];
-    }
+    // NOTE: getAlias(int) has been removed as it's unused, and has unclear semantics.
 
     /**
      * Return the private Key for a specific alias
@@ -382,19 +426,21 @@ public final class JmeterKeyStore {
      *
      * @param length Number of keys to roll
      */
-    private int getIndexAndIncrement(int length) {
-        synchronized (this) {
-            int result = lastAliasIndex++;
-            if (lastAliasIndex >= length) {
-                lastAliasIndex = 0;
+    private int getIndexAndIncrement(String keyType, int length) {
+
+        AtomicInteger index = aliasIndexByKeyType.get(keyType);
+        return index.getAndUpdate(i->{
+            if (++i >= length) {
+                return 0;
             }
-            return result;
-        }
+            return i;
+        });
+
     }
 
     /**
      * Compiles the list of all client aliases with a private key.
-     * TODO Currently, keyType and issuers are both ignored.
+     * TODO Currently, issuers are ignored.
      *
      * @param keyType the key algorithm type name (RSA, DSA, etc.)
      * @param issuers the CA certificates we are narrowing our selection on.
@@ -402,11 +448,13 @@ public final class JmeterKeyStore {
      * @see javax.net.ssl.X509KeyManager#getClientAliases
      */
     public String[] getClientAliases(String keyType, Principal[] issuers) {
-        int count = this.names.length;
+        String [] aliases = aliasesByKeyType.get(keyType);
+        if (aliases == null) { return null; }
+        int count = aliases.length;
         if (count == 0) {
             return null;
         }
-        return Arrays.copyOf(this.names, count);
+        return Arrays.copyOf(aliases, count);
     }
 
 }
