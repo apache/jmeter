@@ -40,6 +40,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.protocol.http.control.HttpMirrorControl;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,11 +103,13 @@ public class HttpMirrorControlGui extends LogicControllerGui
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "httpmirror_title"; // $NON-NLS-1$
     }
 
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }

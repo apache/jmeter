@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import org.checkerframework.checker.guieffect.qual.UI;
+import org.checkerframework.checker.guieffect.qual.UIType;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,7 +38,8 @@ import javax.swing.JTextField;
  * The provided GUI is a simple text field.
  *
  */
-class FieldStringEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
+@UIType
+@UI class FieldStringEditor extends @UI PropertyEditorSupport implements ActionListener, FocusListener {
 
     /**
      * This will hold the text editing component, either a plain JTextField (in

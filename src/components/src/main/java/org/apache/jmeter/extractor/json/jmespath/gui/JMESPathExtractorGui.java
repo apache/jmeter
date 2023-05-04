@@ -33,6 +33,7 @@ import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GUI for {@link JMESPathExtractor}
@@ -55,6 +56,7 @@ public class JMESPathExtractorGui extends AbstractPostProcessorGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "jmes_extractor_title";//$NON-NLS-1$
     }

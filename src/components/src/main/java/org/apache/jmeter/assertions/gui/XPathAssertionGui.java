@@ -27,6 +27,7 @@ import org.apache.jmeter.assertions.XPathAssertion;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "xpath_assertion_title")
 public class XPathAssertionGui extends AbstractAssertionGui {
@@ -46,6 +47,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
      * Returns the label to be shown within the JTree-Component.
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "xpath_assertion_title"; //$NON-NLS-1$
     }

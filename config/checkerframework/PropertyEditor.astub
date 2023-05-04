@@ -1,0 +1,46 @@
+package java.beans;
+
+import org.checkerframework.checker.guieffect.qual.UI;
+import org.checkerframework.checker.guieffect.qual.PolyUI;
+import org.checkerframework.checker.guieffect.qual.PolyUIType;
+import org.checkerframework.checker.guieffect.qual.PolyUIEffect;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
+@PolyUIType
+public interface PropertyEditor {
+    @PolyUIEffect
+    void setValue(Object value);
+
+    @PolyUIEffect
+    Object getValue();
+
+    @SafeEffect
+    boolean isPaintable();
+
+    @PolyUIEffect
+    void paintValue(java.awt.Graphics gfx, java.awt.Rectangle box);
+
+    @SafeEffect
+    String getJavaInitializationString();
+
+    @PolyUIEffect
+    String getAsText(@PolyUI PropertyEditor this);
+
+    @PolyUIEffect
+    void setAsText(@PolyUI PropertyEditor this, String text) throws java.lang.IllegalArgumentException;
+
+    @SafeEffect
+    String[] getTags();
+
+    @PolyUIEffect
+    java.awt.Component getCustomEditor(@PolyUI PropertyEditor this);
+
+    @SafeEffect
+    boolean supportsCustomEditor();
+
+    @SafeEffect
+    void addPropertyChangeListener(@PolyUI PropertyChangeListener listener);
+
+    @SafeEffect
+    void removePropertyChangeListener(@PolyUI PropertyChangeListener listener);
+}

@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,7 +37,7 @@ import javax.swing.JPasswordField;
  * The provided GUI is a simple password field.
  *
  */
-public class PasswordEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
+public @UI class PasswordEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
 
     private JPasswordField textField;
 
@@ -86,6 +89,7 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
     }
 
     @Override
+    @SafeEffect
     public boolean supportsCustomEditor() {
         return true;
     }

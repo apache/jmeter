@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 @GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+1)
 @TestElementMetadata(labelResource = "throughput_control_title")
 public class ThroughputControllerGui extends AbstractControllerGui {
@@ -119,6 +121,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "throughput_control_title"; // $NON-NLS-1$
     }

@@ -21,6 +21,7 @@ import org.apache.jmeter.assertions.XMLAssertion;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "xml_assertion_title")
 public class XMLAssertionGui extends AbstractAssertionGui {
@@ -37,6 +38,7 @@ public class XMLAssertionGui extends AbstractAssertionGui {
      * Returns the label to be shown within the JTree-Component.
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "xml_assertion_title"; // $NON-NLS-1$
     }

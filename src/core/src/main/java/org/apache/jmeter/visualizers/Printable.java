@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.visualizers;
 
+import org.checkerframework.checker.guieffect.qual.UIEffect;
+
 import javax.swing.JComponent;
 
 /**
@@ -25,5 +27,6 @@ import javax.swing.JComponent;
  * JComponent to save.
  */
 public interface Printable {
+    @UIEffect
     JComponent getPrintableComponent();
 }

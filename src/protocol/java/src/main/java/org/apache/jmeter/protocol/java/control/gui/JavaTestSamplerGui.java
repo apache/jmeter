@@ -25,6 +25,7 @@ import org.apache.jmeter.protocol.java.config.gui.JavaConfigGui;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * The <code>JavaTestSamplerGui</code> class provides the user interface for
@@ -47,6 +48,7 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "java_request"; // $NON-NLS-1$
     }

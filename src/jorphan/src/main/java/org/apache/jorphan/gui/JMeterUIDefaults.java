@@ -35,6 +35,8 @@ import javax.swing.text.StyleContext;
 import org.apache.jorphan.gui.ui.TextAreaUIWithUndo;
 import org.apache.jorphan.gui.ui.TextFieldUIWithUndo;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.checkerframework.checker.guieffect.qual.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,11 +91,13 @@ public class JMeterUIDefaults {
     private float scale = 1.0f;
 
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
+    @SafeEffect
     public float getScale() {
         return scale;
     }
 
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
+    @SafeEffect
     public void setScale(float scale) {
         this.scale = scale;
     }

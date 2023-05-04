@@ -48,6 +48,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,6 +105,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "cookie_manager_title"; //$NON-NLS-1$
     }

@@ -44,6 +44,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -144,6 +145,7 @@ implements ChangeListener, ActionListener, ItemListener
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource()
     {
         return "junit_request"; //$NON-NLS-1$

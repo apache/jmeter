@@ -42,7 +42,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
+@UIType
 public class FileListPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 1L;

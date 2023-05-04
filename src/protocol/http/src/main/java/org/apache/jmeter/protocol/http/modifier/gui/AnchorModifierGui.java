@@ -23,6 +23,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "anchor_modifier_title")
 public class AnchorModifierGui extends AbstractPreProcessorGui {
@@ -33,6 +34,7 @@ public class AnchorModifierGui extends AbstractPreProcessorGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "anchor_modifier_title"; //$NON-NLS-1$
     }

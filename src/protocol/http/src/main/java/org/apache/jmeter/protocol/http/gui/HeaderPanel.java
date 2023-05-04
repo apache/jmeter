@@ -45,6 +45,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,6 +119,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "header_manager_title"; // $NON-NLS-1$
     }

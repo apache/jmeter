@@ -28,7 +28,9 @@ import javax.swing.JDialog;
 import javax.swing.JRootPane;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
+@UIType
 public class EscapeDialog extends JDialog {
 
     private static final long serialVersionUID = 1319421816741139938L;

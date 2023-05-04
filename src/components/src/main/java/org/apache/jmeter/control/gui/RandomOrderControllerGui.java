@@ -20,6 +20,7 @@ package org.apache.jmeter.control.gui;
 import org.apache.jmeter.control.RandomOrderController;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GUI for RandomOrderController.
@@ -31,6 +32,7 @@ public class RandomOrderControllerGui extends LogicControllerGui {
     private static final long serialVersionUID = 240L;
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "random_order_control_title"; // $NON-NLS-1$
     }

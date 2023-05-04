@@ -27,8 +27,10 @@ import java.beans.PropertyEditorSupport;
 
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
 
-public class TextAreaEditor extends PropertyEditorSupport implements FocusListener, PropertyChangeListener {
+public @UI class TextAreaEditor extends PropertyEditorSupport implements FocusListener, PropertyChangeListener {
 
     private final JSyntaxTextArea textUI;
 
@@ -124,6 +126,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public boolean supportsCustomEditor() {
         return true;
     }

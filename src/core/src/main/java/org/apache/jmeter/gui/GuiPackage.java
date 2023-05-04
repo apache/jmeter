@@ -62,6 +62,8 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.JFactory;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeType;
+import org.checkerframework.checker.guieffect.qual.UIEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,6 +76,7 @@ import org.slf4j.LoggerFactory;
  * parts of the GUI.
  *
  */
+@SafeType
 public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     private static final Logger log = LoggerFactory.getLogger(GuiPackage.class);
@@ -293,6 +296,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *
      * @return the GUI component associated with the currently selected node
      */
+    @UIEffect
     public JMeterGUIComponent getCurrentGui() {
         try {
             updateCurrentNode();
@@ -335,6 +339,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *            this GUI component.
      * @return the test element corresponding to the specified GUI class.
      */
+    @UIEffect
     public TestElement createTestElement(Class<?> guiClass, Class<?> testClass) {
         try {
             JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
@@ -359,6 +364,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *            TestBean subclass for which a TestBeanGUI is wanted.
      * @return the test element corresponding to the specified GUI class.
      */
+    @UIEffect
     public TestElement createTestElement(String objClass) {
         JMeterGUIComponent comp;
         Class<?> c;
@@ -409,6 +415,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *             called
      * @throws ReflectiveOperationException when construction of guiClass fails
      */
+    @UIEffect
     private JMeterGUIComponent getGuiFromCache(Class<?> guiClass, Class<?> testClass) throws ReflectiveOperationException {
         JMeterGUIComponent comp;
         if (guiClass == TestBeanGUI.class) {
@@ -430,6 +437,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         return comp;
     }
 
+    @UIEffect
     private void updateUi(JMeterGUIComponent comp) {
         if (!(comp instanceof JComponent)) {
             return;
@@ -457,6 +465,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * This method does not update the current node from GUI at the
      * difference of {@link GuiPackage#updateCurrentGui()}
      */
+    @UIEffect
     public void refreshCurrentGui() {
         currentNode = treeListener.getCurrentNode();
         TestElement element = currentNode.getTestElement();

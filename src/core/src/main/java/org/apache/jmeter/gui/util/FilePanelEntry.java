@@ -31,7 +31,9 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
+@UIType
 public class FilePanelEntry extends HorizontalPanel implements ActionListener {
     private static final long serialVersionUID = 280L;
 

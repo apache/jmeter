@@ -31,6 +31,8 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.FileEditor;
 import org.apache.jmeter.testbeans.gui.TextAreaEditor;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
 
 /**
  * Parent class to define common GUI parameters for BSF and JSR223 test elements
@@ -123,7 +125,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
     }
 
-    public static class JSR223ScriptCacheCheckboxEditor extends PropertyEditorSupport implements ActionListener, ClearGui {
+    public static @UI class JSR223ScriptCacheCheckboxEditor extends PropertyEditorSupport implements ActionListener, ClearGui {
 
         private final JCheckBox checkbox;
 
@@ -204,6 +206,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         }
 
         @Override
+        @SafeEffect
         public boolean supportsCustomEditor() {
             return true;
         }

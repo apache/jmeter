@@ -39,6 +39,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.gui.GuiUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Default config gui for Configuration Element.
@@ -103,6 +104,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "simple_config_element"; // $NON-NLS-1$
     }

@@ -46,6 +46,8 @@ import org.apache.jorphan.gui.JFactory;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * HTTP Sampler GUI
  */
@@ -160,6 +162,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "web_testing_title"; // $NON-NLS-1$
     }

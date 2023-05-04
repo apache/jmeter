@@ -25,6 +25,7 @@ import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "interleave_control_title")
 public class InterleaveControlGui extends AbstractControllerGui {
@@ -86,6 +87,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "interleave_control_title"; // $NON-NLS-1$
     }

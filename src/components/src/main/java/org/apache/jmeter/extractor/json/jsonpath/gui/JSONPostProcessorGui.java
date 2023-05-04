@@ -35,6 +35,7 @@ import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GUI for {@link JSONPostProcessor}
@@ -59,6 +60,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
 
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "json_post_processor_title";//$NON-NLS-1$
     }

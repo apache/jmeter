@@ -27,12 +27,15 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Class implementing a file open dialogue
  */
+@UIType
 public final class FileDialoger {
     /**
      * The last directory visited by the user while choosing Files.
@@ -289,6 +292,7 @@ public final class FileDialoger {
      *
      * @return The last directory visited by the user while choosing Files
      */
+    @SafeEffect
     public static String getLastJFCDirectory() {
         return lastJFCDirectory;
     }
@@ -297,6 +301,7 @@ public final class FileDialoger {
      *
      * @param lastJFCDirectory The last directory visited by the user while choosing Files
      */
+    @SafeEffect
     public static void setLastJFCDirectory(String lastJFCDirectory) {
         FileDialoger.lastJFCDirectory = lastJFCDirectory;
     }

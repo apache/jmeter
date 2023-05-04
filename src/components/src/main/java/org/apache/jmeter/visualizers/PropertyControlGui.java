@@ -49,6 +49,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "property_visualiser_title", actionGroups = MenuFactory.NON_TEST_ELEMENTS)
 public class PropertyControlGui extends AbstractConfigGui implements
@@ -82,11 +83,13 @@ public class PropertyControlGui extends AbstractConfigGui implements
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "property_visualiser_title"; // $NON-NLS-1$
     }
 
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }

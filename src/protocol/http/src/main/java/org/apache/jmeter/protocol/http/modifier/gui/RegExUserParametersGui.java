@@ -32,6 +32,7 @@ import org.apache.jmeter.protocol.http.modifier.RegExUserParameters;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GUI for {@link RegExUserParameters}
@@ -56,6 +57,7 @@ public class RegExUserParametersGui extends AbstractPreProcessorGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "regex_params_title"; //$NON-NLS-1$
     }

@@ -28,6 +28,7 @@ import javax.swing.JToolBar;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 
@@ -35,6 +36,7 @@ import org.fife.ui.rtextarea.SearchEngine;
  * Search toolbar associated to {@link JSyntaxTextArea}
  * @since 5.0
  */
+@UIType
 public final class JSyntaxSearchToolBar implements ActionListener {
     public static final Color LIGHT_RED = new Color(0xFF, 0x80, 0x80);
 

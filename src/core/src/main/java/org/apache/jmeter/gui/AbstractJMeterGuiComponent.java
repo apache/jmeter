@@ -42,6 +42,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.gui.JFactory;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -343,6 +344,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     }
 
     @Override
+    @SafeEffect
     public String getStaticLabel() {
         return JMeterUtils.getResString(getLabelResource());
     }
@@ -352,6 +354,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * @return String anchor
      */
     @Override
+    @SafeEffect
     public String getDocAnchor() {
         // Ensure we use default bundle
         String label =  JMeterUtils.getResString(getLabelResource(), new Locale("",""));

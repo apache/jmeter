@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import org.checkerframework.checker.guieffect.qual.PolyUI;
+import org.checkerframework.checker.guieffect.qual.PolyUIType;
+
 import java.beans.Customizer;
 
 /**
@@ -27,5 +30,6 @@ import java.beans.Customizer;
  * setElement can be called multiple times to change the element it works on.
  *
  */
+@PolyUIType
 public interface SharedCustomizer extends Customizer {
 }

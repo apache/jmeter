@@ -35,6 +35,8 @@ import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * GUI for XPathExtractor class.
  */
@@ -62,6 +64,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
     private final XMLConfPanel xml = new XMLConfPanel();
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "xpath_extractor_title"; //$NON-NLS-1$
     }

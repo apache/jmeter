@@ -91,6 +91,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -372,12 +373,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "proxy_title"; // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }

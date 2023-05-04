@@ -26,6 +26,7 @@ import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "random_control_title")
 public class RandomControlGui extends AbstractControllerGui {
@@ -79,6 +80,7 @@ public class RandomControlGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "random_control_title"; // $NON-NLS-1$
     }

@@ -33,6 +33,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "smime_assertion_title")
  public class SMIMEAssertionGui extends AbstractAssertionGui {
@@ -71,6 +72,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "smime_assertion_title";
     }

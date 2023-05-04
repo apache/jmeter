@@ -30,6 +30,7 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * A GUI component allowing the user to enter a username and password for a
@@ -76,6 +77,7 @@ public class LoginConfigGui extends AbstractConfigGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "login_config_element"; // $NON-NLS-1$
     }

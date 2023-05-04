@@ -23,6 +23,7 @@ import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
 
 import org.apache.jmeter.gui.GUIFactory;
+import org.checkerframework.checker.guieffect.qual.UIEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,7 @@ public final class PluginManager {
         }
     }
 
+    @UIEffect
     private void installPlugin(JMeterPlugin plugin) {
         String[][] icons = plugin.getIconMappings();
         ClassLoader classloader = plugin.getClass().getClassLoader();

@@ -29,6 +29,7 @@ import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "tcp_sample_title")
 public class TCPSamplerGui extends AbstractSamplerGui {
@@ -81,6 +82,7 @@ public class TCPSamplerGui extends AbstractSamplerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "tcp_sample_title"; // $NON-NLS-1$
     }

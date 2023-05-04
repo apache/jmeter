@@ -37,6 +37,8 @@ import javax.swing.JPanel;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
 
 /**
  * A property editor for File properties.
@@ -46,7 +48,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * FileProperty).
  *
  */
-public class FileEditor implements PropertyEditor, ActionListener {
+public @UI class FileEditor implements PropertyEditor, ActionListener {
 
     /**
      * The editor's panel.
@@ -56,7 +58,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
     /**
      * The editor handling the text field inside:
      */
-    private final PropertyEditor editor;
+    private final @UI PropertyEditor editor;
 
     /**
      * @throws IntrospectionException
@@ -93,7 +95,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
         boolean notExpression = GenericTestBeanCustomizer.notExpression(descriptor);
         boolean notOther = GenericTestBeanCustomizer.notOther(descriptor);
         Object defaultValue = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
-        FieldStringEditor cse = new FieldStringEditor();
+        @UI FieldStringEditor cse = new FieldStringEditor();
         editor = new WrapperEditor(this, new PropertyEditorSupport(), cse,
                 !notNull, // acceptsNull
                 !notExpression, // acceptsExpressions
@@ -131,7 +133,8 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * {@inheritDoc}
      */
     @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
+    @SafeEffect
+    public void addPropertyChangeListener(@UI PropertyChangeListener listener) {
         editor.addPropertyChangeListener(listener);
     }
 
@@ -147,6 +150,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * @return custom editor panel
      */
     @Override
+    @SafeEffect
     public Component getCustomEditor() {
         return panel;
     }
@@ -155,6 +159,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * @return the Java initialisation string
      */
     @Override
+    @SafeEffect
     public String getJavaInitializationString() {
         return editor.getJavaInitializationString();
     }
@@ -163,6 +168,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * @return the editor tags
      */
     @Override
+    @SafeEffect
     public String[] getTags() {
         return editor.getTags();
     }
@@ -179,6 +185,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * @return true if the editor is paintable
      */
     @Override
+    @SafeEffect
     public boolean isPaintable() {
         return editor.isPaintable();
     }
@@ -195,7 +202,8 @@ public class FileEditor implements PropertyEditor, ActionListener {
      * {@inheritDoc}
      */
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
+    @SafeEffect
+    public void removePropertyChangeListener(@UI PropertyChangeListener listener) {
         editor.removePropertyChangeListener(listener);
     }
 

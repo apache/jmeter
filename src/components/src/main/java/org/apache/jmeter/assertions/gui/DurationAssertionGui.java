@@ -29,6 +29,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GUI for {@link DurationAssertion}
@@ -45,6 +46,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "duration_assertion_title"; // $NON-NLS-1$
     }

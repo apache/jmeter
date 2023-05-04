@@ -46,6 +46,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,6 +90,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "backend_listener"; // $NON-NLS-1$
     }

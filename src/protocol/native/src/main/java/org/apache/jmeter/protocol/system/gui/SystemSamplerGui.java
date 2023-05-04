@@ -41,6 +41,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,11 +77,13 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "system_sampler_title"; // $NON-NLS-1$
     }
 
     @Override
+    @SafeEffect
     public String getStaticLabel() {
         return JMeterUtils.getResString(getLabelResource());
     }

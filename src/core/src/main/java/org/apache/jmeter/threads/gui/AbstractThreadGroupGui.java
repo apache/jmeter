@@ -42,6 +42,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
 
@@ -59,6 +61,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
     }
 
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.THREADS);
     }

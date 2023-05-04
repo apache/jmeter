@@ -48,6 +48,7 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * This class implements a statistical analyser that calculates both the average
@@ -165,6 +166,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "graph_results_title"; // $NON-NLS-1$
     }

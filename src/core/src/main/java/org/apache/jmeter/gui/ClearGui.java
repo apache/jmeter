@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.gui;
 
+import org.checkerframework.checker.guieffect.qual.UIEffect;
+
 public interface ClearGui {
 
     /**
@@ -25,6 +27,7 @@ public interface ClearGui {
      * multiple test element objects and thus they need to be cleared between
      * uses.
      */
+    @UIEffect
     void clearGui();
     // N.B. originally called clear()
     // @see also Clearable

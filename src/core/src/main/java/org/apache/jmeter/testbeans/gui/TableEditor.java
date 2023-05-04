@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyDescriptor;
+import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -50,6 +51,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +63,7 @@ import org.slf4j.LoggerFactory;
  * <li>property type Collection of {@link String}s, where there is a single header entry</li>
  * </ul>
  */
-public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener, ClearGui {
+public @UI class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener, ClearGui {
     private static final Logger log = LoggerFactory.getLogger(TableEditor.class);
 
     /**
@@ -189,6 +192,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     }
 
     @Override
+    @SafeEffect
     public boolean supportsCustomEditor() {
         return true;
     }

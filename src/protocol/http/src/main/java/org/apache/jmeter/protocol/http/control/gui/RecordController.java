@@ -33,6 +33,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,7 @@ public class RecordController extends LogicControllerGui implements ActionListen
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "record_controller_title"; // $NON-NLS-1$
     }

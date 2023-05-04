@@ -27,6 +27,7 @@ import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.reporters.ResultAction;
 import org.apache.jmeter.testelement.OnErrorTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Create a Result Action Test Element
@@ -47,6 +48,7 @@ public class ResultActionGui extends AbstractPostProcessorGui {
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "resultaction_title"; //$NON-NLS-1$
     }

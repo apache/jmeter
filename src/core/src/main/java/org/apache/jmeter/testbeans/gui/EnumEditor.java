@@ -26,6 +26,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
 import org.apache.jmeter.gui.ClearGui;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
 
 /**
  * This class implements a property editor for String properties based on an enum
@@ -35,7 +37,7 @@ import org.apache.jmeter.gui.ClearGui;
  * The provided GUI is a combo box with an option for each value in the enum.
  * <p>
  */
-class EnumEditor extends PropertyEditorSupport implements ClearGui {
+@UI class EnumEditor extends PropertyEditorSupport implements ClearGui {
 
     private final JComboBox<String> combo;
 
@@ -60,6 +62,7 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
     }
 
     @Override
+    @SafeEffect
     public boolean supportsCustomEditor() {
         return true;
     }

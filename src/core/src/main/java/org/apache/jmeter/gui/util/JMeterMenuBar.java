@@ -57,9 +57,11 @@ import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.logging.log4j.Level;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@UIType
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private static final long serialVersionUID = 241L;
 
@@ -359,6 +361,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         return lafMenu;
     }
 
+    @UIType
     private static class LangMenuHelper{
         final ActionRouter actionRouter = ActionRouter.getInstance();
         final JMenu languageMenu;

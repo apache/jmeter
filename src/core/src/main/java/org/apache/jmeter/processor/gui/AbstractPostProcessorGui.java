@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import org.apache.jmeter.gui.AbstractScopedJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * This is the base class for JMeter GUI components which manage PostProcessors.
@@ -37,6 +38,7 @@ public abstract class AbstractPostProcessorGui extends AbstractScopedJMeterGuiCo
     private static final long serialVersionUID = 240L;
 
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.POST_PROCESSORS);
     }

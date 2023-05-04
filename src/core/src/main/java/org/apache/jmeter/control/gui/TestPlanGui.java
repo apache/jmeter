@@ -38,6 +38,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * JMeter GUI component representing the test plan which will be executed when
@@ -133,6 +134,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "test_plan"; // $NON-NLS-1$
     }
@@ -146,6 +148,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
      *         constants defined in MenuFactory
      */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return null;
     }

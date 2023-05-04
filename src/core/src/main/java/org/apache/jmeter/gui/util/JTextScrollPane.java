@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.gui.util;
 
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
@@ -25,6 +26,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  * It's not currently possible to instantiate the RTextScrollPane class when running headless.
  * So we use getInstance methods to create the class and allow for headless testing.
  */
+@UIType
 public class JTextScrollPane extends RTextScrollPane {
 
     private static final long serialVersionUID = 210L;

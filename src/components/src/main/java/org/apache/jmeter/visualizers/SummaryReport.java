@@ -62,6 +62,7 @@ import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
@@ -215,6 +216,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "summary_report";  //$NON-NLS-1$
     }

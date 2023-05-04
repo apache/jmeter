@@ -26,6 +26,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "include_controller")
 public class IncludeControllerGui extends AbstractControllerGui
@@ -44,6 +45,7 @@ public class IncludeControllerGui extends AbstractControllerGui
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "include_controller";//$NON-NLS-1$
     }

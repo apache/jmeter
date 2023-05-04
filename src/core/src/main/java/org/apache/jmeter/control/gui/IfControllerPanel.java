@@ -43,6 +43,8 @@ import org.apache.jorphan.gui.JMeterUIDefaults;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * The user interface for a controller which specifies that its subcomponents
  * should be executed while a condition holds. This component can be used
@@ -161,6 +163,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "if_controller_title"; // $NON-NLS-1$
     }

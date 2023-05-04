@@ -54,6 +54,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GUI interface for a {@link ResponseAssertion}.
@@ -140,6 +141,7 @@ public class AssertionGui extends AbstractAssertionGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "assertion_title"; // $NON-NLS-1$
     }

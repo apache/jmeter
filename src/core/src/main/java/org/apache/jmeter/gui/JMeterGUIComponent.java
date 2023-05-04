@@ -22,6 +22,7 @@ import java.util.Collection;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.testelement.TestElement;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Implementing this interface indicates that the class is a JMeter GUI
@@ -75,6 +76,7 @@ public interface JMeterGUIComponent extends ClearGui {
      * @see #getLabelResource()
      * @return GUI label for the component.
      */
+    @SafeEffect
     String getStaticLabel();
 
     /**
@@ -88,6 +90,7 @@ public interface JMeterGUIComponent extends ClearGui {
      *
      * @return the resource name
      */
+    @SafeEffect
     String getLabelResource();
 
     /**
@@ -96,6 +99,7 @@ public interface JMeterGUIComponent extends ClearGui {
      *
      * @return Document anchor (#ref) for the component.
      */
+    @SafeEffect
     String getDocAnchor();
 
     /**
@@ -218,12 +222,14 @@ public interface JMeterGUIComponent extends ClearGui {
      *
      * @see org.apache.jmeter.gui.util.MenuFactory
      */
+    @SafeEffect
     Collection<String> getMenuCategories();
 
     /**
      * Returns whether a component of this type can be added to the test plan.
      * @return true if the component can be added, false otherwise.
      */
+    @SafeEffect
     default boolean canBeAdded() {
         return true;
     }

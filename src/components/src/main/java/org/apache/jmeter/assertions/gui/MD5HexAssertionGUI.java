@@ -29,6 +29,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GUI class supporting the MD5Hex assertion functionality.
@@ -76,6 +77,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "md5hex_assertion_title"; // $NON-NLS-1$
     }

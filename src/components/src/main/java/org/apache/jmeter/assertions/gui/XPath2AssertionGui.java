@@ -28,6 +28,7 @@ import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @GUIMenuSortOrder(50)
 @TestElementMetadata(labelResource = "xpath2_assertion_title")
@@ -46,6 +47,7 @@ public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
      * Returns the label to be shown within the JTree-Component.
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "xpath2_assertion_title"; //$NON-NLS-1$
     }

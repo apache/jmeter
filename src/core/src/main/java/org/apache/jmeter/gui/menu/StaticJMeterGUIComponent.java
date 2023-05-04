@@ -49,6 +49,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Internal class to speedup the startup time.
@@ -110,11 +111,13 @@ public class StaticJMeterGUIComponent implements JMeterGUIComponent {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return labelResource;
     }
 
     @Override
+    @SafeEffect
     public String getStaticLabel() {
         String labelResource = getLabelResource();
         if (resourceBundle == null) {
@@ -124,6 +127,7 @@ public class StaticJMeterGUIComponent implements JMeterGUIComponent {
     }
 
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return groups;
     }
@@ -141,6 +145,7 @@ public class StaticJMeterGUIComponent implements JMeterGUIComponent {
     }
 
     @Override
+    @SafeEffect
     public String getDocAnchor() {
         throw new UnsupportedOperationException();
     }

@@ -23,6 +23,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.config.gui.GraphQLUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GraphQL HTTP Sampler GUI which extends {@link HttpTestSampleGui} in order to provide more convenient UI elements for
@@ -39,11 +40,13 @@ public class GraphQLHTTPSamplerGui extends HttpTestSampleGui {
 
     // Use this instead of getLabelResource() otherwise getDocAnchor() below does not work
     @Override
+    @SafeEffect
     public String getStaticLabel() {
         return JMeterUtils.getResString("graphql_http_sampler_title"); // $NON-NLS-1$
     }
 
     @Override
+    @SafeEffect
     public String getDocAnchor() {// reuse documentation
         return super.getStaticLabel().replace(' ', '_'); //$NON-NLS-1$ //$NON-NLS-2$
     }

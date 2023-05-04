@@ -24,6 +24,7 @@ import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * This is the base class for JMeter GUI components which provide configuration
@@ -59,6 +60,7 @@ public abstract class AbstractConfigGui extends AbstractJMeterGuiComponent {
      *         constants defined in MenuFactory
      */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.CONFIG_ELEMENTS);
     }

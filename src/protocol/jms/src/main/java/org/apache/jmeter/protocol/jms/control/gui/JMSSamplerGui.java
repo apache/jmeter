@@ -41,6 +41,7 @@ import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 
 /**
@@ -318,6 +319,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "jms_point_to_point"; //$NON-NLS-1$
     }

@@ -28,6 +28,7 @@ import org.apache.jmeter.examples.sampler.ExampleSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Example Sampler (non-Bean version)
@@ -52,6 +53,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "example_title"; // $NON-NLS-1$
     }

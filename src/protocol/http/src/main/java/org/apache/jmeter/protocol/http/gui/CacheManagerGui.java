@@ -33,6 +33,7 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * The GUI for the HTTP Cache Manager {@link CacheManager}
@@ -54,6 +55,7 @@ public class CacheManagerGui extends AbstractConfigGui implements ActionListener
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "cache_manager_title"; // $NON-NLS-1$
     }

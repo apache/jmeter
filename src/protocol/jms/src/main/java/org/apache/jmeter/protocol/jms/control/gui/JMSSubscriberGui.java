@@ -37,6 +37,8 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * This is the GUI for JMS Subscriber <br>
  *
@@ -115,6 +117,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "jms_subscriber_title"; // $NON-NLS-1$
     }

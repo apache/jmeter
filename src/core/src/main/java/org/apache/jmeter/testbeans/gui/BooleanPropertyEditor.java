@@ -17,12 +17,15 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
+
 import java.beans.PropertyEditorSupport;
 
 /**
  * Property Editor which handles Boolean properties.
  */
-public class BooleanPropertyEditor extends PropertyEditorSupport {
+public @UI class BooleanPropertyEditor extends PropertyEditorSupport {
 
     // These are the mixed-case values as returned by the RI JVM boolean property editor
     // However, they are different from the lower-case values returned by e.g. Boolean.FALSE.toString()
@@ -59,6 +62,7 @@ public class BooleanPropertyEditor extends PropertyEditorSupport {
     }
 
     @Override
+    @SafeEffect
     public String[] getTags() {
         return TAGS;
     }

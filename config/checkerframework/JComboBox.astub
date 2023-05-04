@@ -1,0 +1,8 @@
+package javax.swing;
+
+import org.checkerframework.checker.guieffect.qual.UI;
+
+class JComboBox<E> {
+   public void addItemListener(@UI ItemListener aListener);
+   public void removeItemListener(@UI ItemListener aListener);
+}

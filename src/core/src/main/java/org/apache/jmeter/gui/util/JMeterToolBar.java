@@ -39,6 +39,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,7 @@ import com.github.weisj.darklaf.ui.button.DarkButtonUI;
  * The JMeter main toolbar class
  *
  */
+@UIType
 public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
 
     /**

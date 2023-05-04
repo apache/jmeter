@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * A generic controller component.
@@ -53,6 +54,7 @@ public class LogicControllerGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "logic_controller_title"; // $NON-NLS-1$
     }

@@ -39,6 +39,7 @@ import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Boundary Extractor Post-Processor GUI
@@ -85,6 +86,7 @@ public class BoundaryExtractorGui extends AbstractPostProcessorGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "boundaryextractor_title"; //$NON-NLS-1$
     }

@@ -21,6 +21,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.timers.PoissonRandomTimer;
 import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Implementation of a Poisson random timer.
@@ -39,6 +40,7 @@ public class PoissonRandomTimerGui extends AbstractRandomTimerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "poisson_timer_title";//$NON-NLS-1$
     }

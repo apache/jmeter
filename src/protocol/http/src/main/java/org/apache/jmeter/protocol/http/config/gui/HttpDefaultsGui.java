@@ -49,6 +49,8 @@ import org.apache.jorphan.gui.JFactory;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * GUI for Http Request defaults
  */
@@ -82,6 +84,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "url_config_title"; // $NON-NLS-1$
     }

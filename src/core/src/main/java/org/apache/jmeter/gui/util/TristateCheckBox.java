@@ -46,10 +46,12 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
 /**
  * derived from: http://www.javaspecialists.eu/archive/Issue145.html
  */
+@UIType
 public final class TristateCheckBox extends JCheckBox {
     private static final long serialVersionUID = 1L;
     // Listener on model changes to maintain correct focusability

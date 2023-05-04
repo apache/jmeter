@@ -52,6 +52,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,6 +91,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "user_parameters_title"; // $NON-NLS-1$
     }

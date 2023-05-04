@@ -31,6 +31,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 public class NamePanel extends JPanel implements JMeterGUIComponent {
     private static final long serialVersionUID = 240L;
@@ -120,18 +121,21 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public String getStaticLabel() {
         return JMeterUtils.getResString(getLabelResource());
     }
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return LABEL_RESOURCE;
     }
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return null;
     }
@@ -159,6 +163,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public String getDocAnchor() {
         return null;
     }

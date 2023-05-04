@@ -41,6 +41,7 @@ import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * CSS/JQuery Expression Extractor Post-Processor GUI
@@ -70,6 +71,7 @@ public class HtmlExtractorGui extends AbstractPostProcessorGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "html_extractor_title"; //$NON-NLS-1$
     }

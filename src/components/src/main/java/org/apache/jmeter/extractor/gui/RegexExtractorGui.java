@@ -38,6 +38,7 @@ import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Regular Expression Extractor Post-Processor GUI
@@ -69,6 +70,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "regex_extractor_title"; //$NON-NLS-1$
     }

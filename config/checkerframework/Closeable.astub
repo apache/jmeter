@@ -1,11 +1,11 @@
 package java.io;
 
+import org.checkerframework.checker.guieffect.qual.PolyUI;
 import org.checkerframework.checker.guieffect.qual.PolyUIType;
 import org.checkerframework.checker.guieffect.qual.PolyUIEffect;
 
 @PolyUIType
-interface Closeable extends AutoCloseable {
-
+public interface Closeable {
   @PolyUIEffect
   public void close() throws IOException;
 }

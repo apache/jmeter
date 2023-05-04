@@ -35,6 +35,7 @@ import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @GUIMenuSortOrder(Integer.MAX_VALUE)
 @TestElementMetadata(labelResource = "bsh_assertion_title")
@@ -87,6 +88,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "bsh_assertion_title"; // $NON-NLS-1$
     }

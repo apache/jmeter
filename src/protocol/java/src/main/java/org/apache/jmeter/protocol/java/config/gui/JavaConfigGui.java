@@ -48,6 +48,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,6 +108,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "java_request_defaults"; // $NON-NLS-1$
     }

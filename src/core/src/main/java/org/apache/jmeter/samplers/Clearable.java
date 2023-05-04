@@ -17,16 +17,21 @@
 
 package org.apache.jmeter.samplers;
 
+import org.checkerframework.checker.guieffect.qual.PolyUIEffect;
+import org.checkerframework.checker.guieffect.qual.PolyUIType;
+
 /**
  * Identifies an object which supports the clearing of run-time data
  * using the clearData() method.
  *
  * Intended for implementation by Listeners.
  */
+@PolyUIType
 public interface Clearable {
 
     /**
      * Clears the current data of the object.
      */
+    @PolyUIEffect
     void clearData();
 }

@@ -30,6 +30,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * This defines a simple Test Fragment GUI that can be used instead of a Thread Group
@@ -65,6 +66,7 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "test_fragment_title"; // $NON-NLS-1$
     }
@@ -82,6 +84,7 @@ public class TestFragmentControllerGui extends AbstractControllerGui {
      * Over-ride this so that we add ourselves to the Test Fragment Category instead.
      */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.FRAGMENTS);
     }

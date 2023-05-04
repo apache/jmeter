@@ -33,9 +33,11 @@ import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@UIType
 public class JMeterTreeTransferHandler extends TransferHandler {
 
     private static final long serialVersionUID = 1L;

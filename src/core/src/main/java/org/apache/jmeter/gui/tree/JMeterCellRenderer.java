@@ -28,10 +28,12 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
 /**
  * Class to render the test tree - sets the enabled/disabled versions of the icons
  */
+@UIType
 public class JMeterCellRenderer extends DefaultTreeCellRenderer {
     private static final long serialVersionUID = 241L;
 

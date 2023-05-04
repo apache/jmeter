@@ -2,9 +2,22 @@ package java.awt;
 
 import java.beans.PropertyChangeListener;
 import org.checkerframework.checker.guieffect.qual.UI;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 class Component {
   public void addPropertyChangeListener(
     String propertyName,
     @UI PropertyChangeListener listener);
+
+  @SafeEffect
+  public void addFocusListener(@UI FocusListener l);
+
+  @SafeEffect
+  public synchronized void removeFocusListener(@UI FocusListener l);
+
+  @SafeEffect
+  public synchronized @UI FocusListener[] getFocusListeners();
+
+  @SafeEffect
+  public void toString();
 }

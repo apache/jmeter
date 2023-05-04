@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.gui.util;
 
+import org.checkerframework.checker.guieffect.qual.UIType;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,6 +27,7 @@ import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+@UIType
 public class HorizontalPanel extends JPanel {
     private static final long serialVersionUID = 240L;
 
