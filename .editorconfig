@@ -6,6 +6,7 @@ insert_final_newline = true
 charset = utf-8
 indent_style = space
 max_line_length = 120
+ij_any_align_multiline_parameters = false
 
 [{*.sh,gradlew}]
 end_of_line = lf
