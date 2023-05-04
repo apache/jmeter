@@ -1,0 +1,8 @@
+package javax.swing;
+
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
+class SwingUtilities {
+  @SafeEffect
+  public boolean isEventDispatchThread();
+}

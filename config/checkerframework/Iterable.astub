@@ -1,0 +1,11 @@
+package java.lang;
+
+import org.checkerframework.checker.guieffect.qual.PolyUI;
+import org.checkerframework.checker.guieffect.qual.PolyUIType;
+import org.checkerframework.checker.guieffect.qual.PolyUIEffect;
+
+@PolyUIType
+interface Iterable<E> {
+  @PolyUIEffect
+  void forEach(@PolyUI Consumer<? super T> action);
+}

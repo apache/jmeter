@@ -55,6 +55,7 @@ import org.checkerframework.checker.guieffect.qual.UIType;
 public final class TristateCheckBox extends JCheckBox {
     private static final long serialVersionUID = 1L;
     // Listener on model changes to maintain correct focusability
+    @UIType
     private final class TSCBChangeListener implements ChangeListener, Serializable {
         /**
          *

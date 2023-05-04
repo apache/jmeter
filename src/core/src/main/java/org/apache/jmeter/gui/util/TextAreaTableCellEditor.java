@@ -211,6 +211,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
     /**
      * The protected <code>EditorDelegate</code> class.
      */
+    @UIType
     protected class EditorDelegate implements FocusListener, Serializable {
         private static final long serialVersionUID = 240L;
 

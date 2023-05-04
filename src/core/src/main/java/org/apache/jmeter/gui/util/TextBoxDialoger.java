@@ -178,6 +178,7 @@ public class TextBoxDialoger implements ActionListener {
      * when double click on a table's cell
      *
      */
+    @UIType
     public static class TextBoxDoubleClick extends MouseAdapter {
 
         private JTable table = null;
@@ -202,6 +203,7 @@ public class TextBoxDialoger implements ActionListener {
      * when double (pressed) click on a table's cell which is editable
      *
      */
+    @UIType
     public static class TextBoxDoubleClickPressed extends MouseAdapter {
 
         private JTable table = null;

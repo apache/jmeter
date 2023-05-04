@@ -1274,6 +1274,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param table the {@link JTable} which should be adapted for HiDPI mode
      */
     @API(since = "5.3", status = API.Status.DEPRECATED)
+    @UIEffect
     public static void applyHiDPI(JTable table) {
         JFactory.singleLineRowHeight(table);
     }
@@ -1319,6 +1320,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Refresh UI after LAF change or resizing
      */
+    @UIEffect
     public static void refreshUI() {
         GuiPackage.getInstance().updateUIForHiddenComponents();
         JFactory.refreshUI();

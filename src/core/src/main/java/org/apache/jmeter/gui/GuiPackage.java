@@ -262,6 +262,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *
      * @return the GUI component corresponding to the specified test element
      */
+    @UIEffect
     public JMeterGUIComponent getGui(TestElement node, Class<?> guiClass, Class<?> testClass) {
         try {
             JMeterGUIComponent comp = nodesToGui.get(node);

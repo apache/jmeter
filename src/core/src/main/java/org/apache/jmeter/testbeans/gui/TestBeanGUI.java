@@ -67,6 +67,7 @@ import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,7 +111,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * needs to be limited, though, to avoid memory issues when editing very
      * large test plans.
      */
-    private final Map<TestElement, Customizer> customizers = new LRUMap<>(20);
+    private final Map<TestElement, @UI Customizer> customizers = new LRUMap<>(20);
 
     /** Index of the customizer in the JPanel's child component list: */
     private int customizerIndexInPanel;
