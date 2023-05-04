@@ -31,12 +31,15 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.function.Function;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.Timer;
@@ -76,6 +79,12 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
     private static final String SAVE_HEADERS   = "saveHeaders"; //$NON-NLS-1$
+
+    public static final String SAMPLE_SCOPE_PARENT = "sample_scope_parent"; //$NON-NLS-1$
+
+    public static final String SAMPLE_SCOPE_CHILDREN = "sample_scope_children"; //$NON-NLS-1$
+
+    public static final String SAMPLE_SCOPE_ALL = "sample_scope_all"; //$NON-NLS-1$
 
     private static final String[] COLUMNS = {
             "sampler_label",               //$NON-NLS-1$
@@ -122,6 +131,15 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     private final JCheckBox useGroupName =
         new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
+
+    private final JRadioButton sampleScopeParent =
+            new JRadioButton(JMeterUtils.getResString(SAMPLE_SCOPE_PARENT), true);            //$NON-NLS-1$
+
+    private final JRadioButton sampleScopeChildren =
+            new JRadioButton(JMeterUtils.getResString(SAMPLE_SCOPE_CHILDREN));            //$NON-NLS-1$
+
+    private final JRadioButton sampleScopeAll =
+            new JRadioButton(JMeterUtils.getResString(SAMPLE_SCOPE_ALL));            //$NON-NLS-1$
 
     private transient ObjectTableModel model;
 
@@ -221,22 +239,35 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     @Override
     public void add(final SampleResult res) {
-        Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()), label -> {
+        if (sampleScopeAll.isSelected() || sampleScopeParent.isSelected() ||
+                res.getSubResults() == null || res.getSubResults().length == 0) {
+            Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()),
+                    getCalculatorFunctionForLabel());
+            /*
+             * Synch is needed because multiple threads can update the counts.
+             */
+            synchronized (row) {
+                row.addSample(res);
+            }
+            Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
+            synchronized (lock) {
+                tot.addSample(res);
+            }
+        }
+        if ((sampleScopeAll.isSelected() || sampleScopeChildren.isSelected()) && res.getSubResults() != null) {
+            for (SampleResult subResult : res.getSubResults()) {
+                add(subResult);
+            }
+        }
+        dataChanged = true;
+    }
+
+    protected Function<String, Calculator> getCalculatorFunctionForLabel() {
+        return label -> {
             Calculator newRow = new Calculator(label);
             newRows.add(newRow);
             return newRow;
-        });
-        /*
-         * Synch is needed because multiple threads can update the counts.
-         */
-        synchronized (row) {
-            row.addSample(res);
-        }
-        Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
-        synchronized (lock) {
-            tot.addSample(res);
-        }
-        dataChanged = true;
+        };
     }
 
     /**
@@ -281,9 +312,16 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         this.add(myScrollPane, BorderLayout.CENTER);
         saveTable.addActionListener(this);
         JPanel opts = new JPanel();
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(sampleScopeAll);
+        buttonGroup.add(sampleScopeChildren);
+        buttonGroup.add(sampleScopeParent);
         opts.add(useGroupName, BorderLayout.WEST);
         opts.add(saveTable, BorderLayout.CENTER);
         opts.add(saveHeaders, BorderLayout.EAST);
+        opts.add(sampleScopeParent, BorderLayout.EAST);
+        opts.add(sampleScopeChildren, BorderLayout.EAST);
+        opts.add(sampleScopeAll, BorderLayout.EAST);
         this.add(opts,BorderLayout.SOUTH);
     }
 
@@ -292,6 +330,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         super.modifyTestElement(c);
         c.setProperty(USE_GROUP_NAME, useGroupName.isSelected(), false);
         c.setProperty(SAVE_HEADERS, saveHeaders.isSelected(), true);
+        c.setProperty(SAMPLE_SCOPE_PARENT, sampleScopeParent.isSelected(), false);
+        c.setProperty(SAMPLE_SCOPE_CHILDREN, sampleScopeChildren.isSelected(), false);
+        c.setProperty(SAMPLE_SCOPE_ALL, sampleScopeAll.isSelected(), true);
     }
 
     @Override
@@ -299,6 +340,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         super.configure(el);
         useGroupName.setSelected(el.getPropertyAsBoolean(USE_GROUP_NAME, false));
         saveHeaders.setSelected(el.getPropertyAsBoolean(SAVE_HEADERS, true));
+        sampleScopeParent.setSelected(el.getPropertyAsBoolean(SAMPLE_SCOPE_PARENT, false));
+        sampleScopeChildren.setSelected(el.getPropertyAsBoolean(SAMPLE_SCOPE_CHILDREN, false));
+        sampleScopeAll.setSelected(el.getPropertyAsBoolean(SAMPLE_SCOPE_ALL, true));
     }
 
     @Override
