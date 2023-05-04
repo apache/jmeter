@@ -28,6 +28,8 @@ import javax.swing.JOptionPane;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +56,7 @@ import org.slf4j.LoggerFactory;
  * they make valid property values).
  *
  */
-class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListener {
+@UI class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListener {
     private static final Logger log = LoggerFactory.getLogger(WrapperEditor.class);
 
     /** The type's property editor. */
@@ -85,7 +87,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * Constructor for use when a PropertyEditor is delegating to us.
      */
     WrapperEditor(
-            Object source, PropertyEditor typeEditor, PropertyEditor guiEditor,
+            @UI Object source, PropertyEditor typeEditor, @UI PropertyEditor guiEditor,
             boolean acceptsNull, boolean acceptsExpressions,
             boolean acceptsOther, Object defaultValue) {
         super();
@@ -146,6 +148,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     }
 
     @Override
+    @SafeEffect
     public boolean supportsCustomEditor() {
         return true;
     }
@@ -156,6 +159,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     }
 
     @Override
+    @SafeEffect
     public String[] getTags() {
         return guiEditor.getTags();
     }

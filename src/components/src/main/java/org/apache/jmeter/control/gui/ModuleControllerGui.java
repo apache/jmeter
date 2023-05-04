@@ -57,6 +57,7 @@ import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * ModuleControllerGui provides UI for configuring ModuleController element.
@@ -180,6 +181,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
 
     /** {@inheritDoc}} */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "module_controller_title"; // $NON-NLS-1$
     }

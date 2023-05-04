@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.gui.util;
 
+import org.checkerframework.checker.guieffect.qual.UIType;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -34,6 +36,7 @@ import javax.swing.JTree;
 import javax.swing.table.TableCellEditor;
 import javax.swing.tree.TreeCellEditor;
 
+@UIType
 public class TextAreaTableCellEditor extends AbstractCellEditor implements TableCellEditor, TreeCellEditor {
     private static final long serialVersionUID = 240L;
 
@@ -208,6 +211,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
     /**
      * The protected <code>EditorDelegate</code> class.
      */
+    @UIType
     protected class EditorDelegate implements FocusListener, Serializable {
         private static final long serialVersionUID = 240L;
 

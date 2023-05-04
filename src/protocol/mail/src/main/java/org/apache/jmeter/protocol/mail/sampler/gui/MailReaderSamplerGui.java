@@ -43,6 +43,7 @@ import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "mail_reader_title")
 public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionListener, FocusListener {
@@ -110,6 +111,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "mail_reader_title"; // $NON-NLS-1$
     }

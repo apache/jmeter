@@ -34,6 +34,7 @@ import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * The user interface for a controller which specifies that its subcomponents
@@ -181,6 +182,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "loop_controller_title"; // $NON-NLS-1$
     }

@@ -30,12 +30,14 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
 /**
  * Scope panel so users can choose whether
  * to apply the test element to the parent sample, the child samples or both.
  *
  */
+@UIType
 public class ScopePanel extends JPanel implements ActionListener, FocusListener {
 
     private static final long serialVersionUID = 240L;

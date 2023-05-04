@@ -1,0 +1,16 @@
+package javax.swing;
+
+import org.checkerframework.checker.guieffect.qual.UI;
+
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
+class JTextField {
+  @SafeEffect
+  public void addActionListener(@UI ActionListener l);
+
+  @SafeEffect
+  public void removeActionListener(@UI ActionListener l);
+
+  @SafeEffect
+  public @UI ActionListener[] getActionListeners();
+}

@@ -50,6 +50,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JMeterUIDefaults;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -298,6 +299,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "mailer_visualizer_title"; //$NON-NLS-1$
     }

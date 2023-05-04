@@ -35,6 +35,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @GUIMenuSortOrder(1)
 @TestElementMetadata(labelResource = "test_action_title")
@@ -97,6 +98,7 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "test_action_title"; // $NON-NLS-1$
     }

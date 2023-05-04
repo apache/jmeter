@@ -76,6 +76,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.util.StringWrap;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -334,6 +335,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "view_results_tree_title"; // $NON-NLS-1$
     }

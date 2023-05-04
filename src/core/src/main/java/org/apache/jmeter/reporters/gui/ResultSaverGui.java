@@ -36,6 +36,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Create a ResultSaver test element, which saves the sample information in set
@@ -74,6 +75,7 @@ public class ResultSaverGui extends AbstractListenerGui implements Clearable { /
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "resultsaver_title"; // $NON-NLS-1$
     }

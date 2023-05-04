@@ -24,6 +24,7 @@ import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * This is the base class for JMeter GUI components which manage samplers.
@@ -58,6 +59,7 @@ public abstract class AbstractSamplerGui extends AbstractJMeterGuiComponent {
      *         constants defined in MenuFactory
      */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.SAMPLERS);
     }

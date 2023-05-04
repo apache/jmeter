@@ -53,6 +53,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These
@@ -269,6 +270,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      *         constants defined in MenuFactory
      */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         if (standalone) {
             return super.getMenuCategories();
@@ -277,6 +279,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "user_defined_variables"; // $NON-NLS-1$
     }

@@ -17,12 +17,16 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import org.checkerframework.checker.guieffect.qual.AlwaysSafe;
+import org.checkerframework.checker.guieffect.qual.SafeType;
+
 import java.beans.PropertyEditorSupport;
 
 /**
  * Property Editor which handles Integer properties.
  * Uses {@link Integer#decode(String)} so supports hex and octal input.
  */
+@SafeType
 public class IntegerPropertyEditor extends PropertyEditorSupport {
 
     @Override

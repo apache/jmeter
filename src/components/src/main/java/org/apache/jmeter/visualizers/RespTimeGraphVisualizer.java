@@ -68,6 +68,7 @@ import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.math.StatCalculatorLong;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -439,6 +440,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "graph_resp_time_title"; // $NON-NLS-1$
     }

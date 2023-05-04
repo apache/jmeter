@@ -41,6 +41,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * This class LdapConfigGui is user interface gui for getting all the
@@ -108,6 +109,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "ldap_sample_title"; // $NON-NLS-1$
     }

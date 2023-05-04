@@ -28,6 +28,7 @@ import org.apache.jmeter.control.CriticalSectionController;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * The user interface for a controller which specifies that its subcomponents
@@ -129,6 +130,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "critical_section_controller_title"; // $NON-NLS-1$
     }

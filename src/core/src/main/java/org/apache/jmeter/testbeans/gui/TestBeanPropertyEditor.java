@@ -17,10 +17,12 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import org.checkerframework.checker.guieffect.qual.PolyUI;
+
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 
-public interface TestBeanPropertyEditor extends PropertyEditor {
+public @PolyUI interface TestBeanPropertyEditor extends @PolyUI PropertyEditor {
 
     void setDescriptor(PropertyDescriptor descriptor);
 

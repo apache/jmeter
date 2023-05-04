@@ -29,6 +29,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.MenuInfo;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @GUIMenuSortOrder(MenuInfo.SORT_ORDER_DEFAULT+2)
 @TestElementMetadata(labelResource = "switch_controller_title")
@@ -77,6 +78,7 @@ public class SwitchControllerGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "switch_controller_title"; // $NON-NLS-1$
     }

@@ -35,6 +35,7 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "bsh_sampler_title")
 public class BeanShellSamplerGui extends AbstractSamplerGui {
@@ -99,6 +100,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "bsh_sampler_title"; // $NON-NLS-1$
     }

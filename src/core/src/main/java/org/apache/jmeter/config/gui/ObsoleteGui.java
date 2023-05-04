@@ -28,6 +28,7 @@ import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Default config gui for Configuration Element.
@@ -51,6 +52,7 @@ public class ObsoleteGui extends AbstractJMeterGuiComponent {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "obsolete_test_element"; // $NON-NLS-1$
     }
@@ -70,6 +72,7 @@ public class ObsoleteGui extends AbstractJMeterGuiComponent {
     }
 
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return null;
     }

@@ -29,6 +29,7 @@ import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * The GUI for SampleTimeout.
@@ -65,6 +66,7 @@ public class SampleTimeoutGui extends AbstractPreProcessorGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "sample_timeout_title"; // $NON-NLS-1$
     }

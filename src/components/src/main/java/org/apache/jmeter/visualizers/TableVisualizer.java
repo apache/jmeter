@@ -55,6 +55,7 @@ import org.apache.jorphan.gui.RightAlignRenderer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.jorphan.util.AlphaNumericComparator;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * This class implements a statistical analyser that calculates both the average
@@ -163,6 +164,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "view_results_in_table"; // $NON-NLS-1$
     }

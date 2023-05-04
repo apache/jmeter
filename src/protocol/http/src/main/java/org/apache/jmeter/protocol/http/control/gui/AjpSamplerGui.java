@@ -21,6 +21,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.sampler.AjpSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "ajp_sampler_title")
 public class AjpSamplerGui extends HttpTestSampleGui {
@@ -40,11 +41,13 @@ public class AjpSamplerGui extends HttpTestSampleGui {
 
     // Use this instead of getLabelResource() otherwise getDocAnchor() below does not work
     @Override
+    @SafeEffect
     public String getStaticLabel() {
         return JMeterUtils.getResString("ajp_sampler_title"); // $NON-NLS-1$
     }
 
     @Override
+    @SafeEffect
     public String getDocAnchor() {// reuse documentation
         return super.getStaticLabel().replace(' ', '_'); //$NON-NLS-1$ //$NON-NLS-2$
     }

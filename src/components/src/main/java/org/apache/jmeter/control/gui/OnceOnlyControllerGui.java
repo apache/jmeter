@@ -21,6 +21,7 @@ import org.apache.jmeter.control.OnceOnlyController;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "once_only_controller_title")
 public class OnceOnlyControllerGui extends AbstractControllerGui {
@@ -48,6 +49,7 @@ public class OnceOnlyControllerGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "once_only_controller_title"; // $NON-NLS-1$
     }

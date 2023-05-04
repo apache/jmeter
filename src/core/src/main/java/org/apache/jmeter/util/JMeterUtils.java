@@ -68,6 +68,8 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UIEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -955,6 +957,7 @@ public class JMeterUtils implements UnitTestManager {
         });
     }
 
+    @UIEffect
     private static JScrollPane formatMessage(String errorMsg) {
         JTextArea ta = new JTextArea(10, 50);
         ta.setText(errorMsg);
@@ -971,6 +974,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param resourceId resource ID to be used for retrieving label text
      * @return JLabel instance
      */
+    @UIEffect
     public static JLabel labelFor(Component component, String resourceId) {
         JLabel label = new JLabel(getResString(resourceId));
         label.setName(resourceId);
@@ -985,6 +989,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param name JLabel name
      * @return JLabel instance
      */
+    @UIEffect
     public static JLabel labelFor(Component component, String labelValue, String name) {
         JLabel label = new JLabel(labelValue);
         label.setName(name);
@@ -1269,6 +1274,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param table the {@link JTable} which should be adapted for HiDPI mode
      */
     @API(since = "5.3", status = API.Status.DEPRECATED)
+    @UIEffect
     public static void applyHiDPI(JTable table) {
         JFactory.singleLineRowHeight(table);
     }
@@ -1314,6 +1320,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Refresh UI after LAF change or resizing
      */
+    @UIEffect
     public static void refreshUI() {
         GuiPackage.getInstance().updateUIForHiddenComponents();
         JFactory.refreshUI();

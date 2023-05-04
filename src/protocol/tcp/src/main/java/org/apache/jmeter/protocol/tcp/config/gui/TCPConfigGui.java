@@ -41,6 +41,7 @@ import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "tcp_config_title")
 public class TCPConfigGui extends AbstractConfigGui {
@@ -75,6 +76,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "tcp_config_title"; // $NON-NLS-1$
     }

@@ -31,6 +31,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * Abstract Random timer GUI.
  *
@@ -148,6 +150,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public abstract String getLabelResource();
 
     /**

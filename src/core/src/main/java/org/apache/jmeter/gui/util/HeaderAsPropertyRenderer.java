@@ -26,10 +26,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
 /**
  * Renders items in a JTable by converting from resource names.
  */
+@UIType
 public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = 241L;

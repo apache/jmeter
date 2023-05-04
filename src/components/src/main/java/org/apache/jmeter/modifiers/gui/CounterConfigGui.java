@@ -33,6 +33,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 @TestElementMetadata(labelResource = "counter_config_title")
 public class CounterConfigGui extends AbstractConfigGui implements ActionListener {
     private static final long serialVersionUID = 240L;
@@ -51,6 +53,7 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "counter_config_title";//$NON-NLS-1$
     }

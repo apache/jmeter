@@ -22,6 +22,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.timers.UniformRandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Implementation of a uniform random timer.
@@ -40,6 +41,7 @@ public class UniformRandomTimerGui extends AbstractRandomTimerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "uniform_timer_title";//$NON-NLS-1$
     }

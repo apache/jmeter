@@ -34,6 +34,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * GUI for {@link SizeAssertion}
@@ -78,6 +79,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "size_assertion_title"; //$NON-NLS-1$
     }

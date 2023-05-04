@@ -31,6 +31,7 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +59,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
      * Returns the label to be shown within the JTree-Component.
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "xmlschema_assertion_title"; //$NON-NLS-1$
     }

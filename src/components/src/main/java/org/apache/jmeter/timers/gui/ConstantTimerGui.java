@@ -29,6 +29,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.ConstantTimer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * The GUI for ConstantTimer.
@@ -58,6 +59,7 @@ public class ConstantTimerGui extends AbstractTimerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "constant_timer_title"; // $NON-NLS-1$
     }

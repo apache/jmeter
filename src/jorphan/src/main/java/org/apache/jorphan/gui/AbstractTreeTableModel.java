@@ -27,7 +27,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreeNode;
 
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.SafeType;
 
+@SafeType
 public abstract class AbstractTreeTableModel extends DefaultTableModel implements TreeTableModel {
 
     private static final long serialVersionUID = 240L;

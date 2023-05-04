@@ -1,0 +1,10 @@
+package javax.swing;
+
+import org.checkerframework.checker.guieffect.qual.SafeType;
+
+@SafeType
+public abstract class RowSorter<M> {
+  @SafeType
+  public static class SortKey{
+  }
+}

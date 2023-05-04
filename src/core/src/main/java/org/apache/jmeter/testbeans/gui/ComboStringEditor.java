@@ -33,6 +33,9 @@ import javax.swing.text.JTextComponent;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.SafeType;
+import org.checkerframework.checker.guieffect.qual.UI;
 
 /**
  * This class implements a property editor for possibly null String properties
@@ -49,7 +52,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * </ul>
  *
  */
-class ComboStringEditor extends PropertyEditorSupport implements ItemListener, ClearGui {
+@UI class ComboStringEditor extends PropertyEditorSupport implements ItemListener, ClearGui {
 
     /**
      * The list of options to be offered by this editor.
@@ -148,6 +151,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public boolean supportsCustomEditor() {
         return true;
     }
@@ -258,6 +262,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public String[] getTags() {
         return tags.clone();
     }
@@ -275,6 +280,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      * actually amounts to making that string 'reserved'. I preferred to avoid
      * this by using a different type having a controlled .toString().
      */
+    @SafeType
     private static class UniqueObject {
         private final String propKey;
         private final String propValue;

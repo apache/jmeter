@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import org.checkerframework.checker.guieffect.qual.UI;
+
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 
@@ -26,35 +28,35 @@ import java.beans.PropertyEditor;
 public enum TypeEditor {
     FileEditor { // NOSONAR Keep naming for compatibility
         @Override
-        PropertyEditor getInstance(PropertyDescriptor descriptor) {
+        @UI PropertyEditor getInstance(PropertyDescriptor descriptor) {
             return new FileEditor(descriptor);
         }
     },
     PasswordEditor { // NOSONAR Keep naming for compatibility
         @Override
-        PropertyEditor getInstance(PropertyDescriptor descriptor) {
+        @UI PropertyEditor getInstance(PropertyDescriptor descriptor) {
             return new PasswordEditor();
         }
     },
     TableEditor { // NOSONAR Keep naming for compatibility
         @Override
-        PropertyEditor getInstance(PropertyDescriptor descriptor) {
+        @UI PropertyEditor getInstance(PropertyDescriptor descriptor) {
             return new TableEditor();
         }
     },
     TextAreaEditor { // NOSONAR Keep naming for compatibility
         @Override
-        PropertyEditor getInstance(PropertyDescriptor descriptor) {
+        @UI PropertyEditor getInstance(PropertyDescriptor descriptor) {
             return new TextAreaEditor(descriptor);
         }
     },
     ComboStringEditor { // NOSONAR Keep naming for compatibility
         @Override
-        PropertyEditor getInstance(PropertyDescriptor descriptor) {
+        @UI PropertyEditor getInstance(PropertyDescriptor descriptor) {
             return new ComboStringEditor(descriptor);
         }
     };
 
     // Some editors may need the descriptor
-    abstract PropertyEditor getInstance(PropertyDescriptor descriptor);
+    abstract @UI PropertyEditor getInstance(PropertyDescriptor descriptor);
 }

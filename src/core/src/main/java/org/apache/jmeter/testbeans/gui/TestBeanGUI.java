@@ -66,6 +66,8 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +111,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * needs to be limited, though, to avoid memory issues when editing very
      * large test plans.
      */
-    private final Map<TestElement, Customizer> customizers = new LRUMap<>(20);
+    private final Map<TestElement, @UI Customizer> customizers = new LRUMap<>(20);
 
     /** Index of the customizer in the JPanel's child component list: */
     private int customizerIndexInPanel;
@@ -187,6 +189,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public String getStaticLabel() {
         if (beanInfo == null){
             return "null";// $NON-NLS-1$
@@ -336,6 +339,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 
     /** {@inheritDoc} */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         BeanDescriptor bd = beanInfo.getBeanDescriptor();
 
@@ -436,6 +440,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         // @see getStaticLabel
         return null;
@@ -482,6 +487,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#getDocAnchor()
      */
     @Override
+    @SafeEffect
     public String getDocAnchor() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle(
                 testBeanClass.getName() + "Resources",  // $NON-NLS-1$
@@ -492,6 +498,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     }
 
     @Override
+    @SafeEffect
     public String toString() {
         return "TestBeanGUI:" + (testBeanClass == null ? "" : testBeanClass.getName());
     }

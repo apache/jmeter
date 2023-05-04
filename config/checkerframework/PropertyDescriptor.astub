@@ -1,0 +1,7 @@
+package java.beans;
+
+import org.checkerframework.checker.guieffect.qual.UI;
+
+public class PropertyDescriptor {
+  public void setPropertyEditorClass(Class<? extends @UI Object> propertyEditorClass);
+}

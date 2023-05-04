@@ -21,7 +21,9 @@ import javax.swing.BorderFactory;
 import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
+@UIType
 public class FilePanel extends FilePanelEntry {
     private static final long serialVersionUID = 240L;
 

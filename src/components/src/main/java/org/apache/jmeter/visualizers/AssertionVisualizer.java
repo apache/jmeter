@@ -34,6 +34,7 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "assertion_visualizer_title")
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable {
@@ -48,6 +49,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "assertion_visualizer_title"; // $NON-NLS-1$
     }

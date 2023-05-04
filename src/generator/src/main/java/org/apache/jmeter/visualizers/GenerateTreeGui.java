@@ -46,6 +46,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Workbench test element to create a test plan containing samples of each test element
@@ -70,21 +71,25 @@ public class GenerateTreeGui extends AbstractConfigGui
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "test_plan"; // $NON-NLS-1$
     }
 
     @Override
+    @SafeEffect
     public String getStaticLabel() {
         return "Test Generator"; // $NON-NLS-1$
     }
 
     @Override
+    @SafeEffect
     public String getDocAnchor() {
         return super.getDocAnchor();
     }
 
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }

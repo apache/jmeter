@@ -26,6 +26,7 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Class to build superstructure-gui for SMTP-panel, sets/gets value for a JMeter's testElement-object (i.e. also for save/load-purposes).
@@ -53,6 +54,7 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
      * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "smtp_sampler_title";
     }

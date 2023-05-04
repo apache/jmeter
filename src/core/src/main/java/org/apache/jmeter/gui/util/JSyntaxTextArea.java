@@ -34,6 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.gui.ui.TextComponentUI;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -48,6 +49,7 @@ import com.github.weisj.darklaf.extensions.rsyntaxarea.DarklafRSyntaxTheme;
  * It's not currently possible to instantiate the RSyntaxTextArea class when running headless.
  * So we use getInstance methods to create the class and allow for headless testing.
  */
+@UIType
 public class JSyntaxTextArea extends RSyntaxTextArea {
 
     private static final long serialVersionUID = 211L;

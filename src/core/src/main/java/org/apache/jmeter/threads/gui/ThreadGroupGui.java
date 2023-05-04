@@ -40,6 +40,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 @TestElementMetadata(labelResource = "threadgroup")
 public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListener {
     private static final long serialVersionUID = 240L;
@@ -156,6 +158,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "threadgroup"; // $NON-NLS-1$
     }

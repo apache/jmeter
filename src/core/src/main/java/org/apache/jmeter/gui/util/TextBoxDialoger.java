@@ -41,11 +41,13 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.checkerframework.checker.guieffect.qual.UIType;
 
 /**
  * Dialog text box to display some text in a box
  *
  */
+@UIType
 public class TextBoxDialoger implements ActionListener {
 
     private static final String CANCEL_COMMAND = "cancel_dialog"; // $NON-NLS-1$
@@ -176,6 +178,7 @@ public class TextBoxDialoger implements ActionListener {
      * when double click on a table's cell
      *
      */
+    @UIType
     public static class TextBoxDoubleClick extends MouseAdapter {
 
         private JTable table = null;
@@ -200,6 +203,7 @@ public class TextBoxDialoger implements ActionListener {
      * when double (pressed) click on a table's cell which is editable
      *
      */
+    @UIType
     public static class TextBoxDoubleClickPressed extends MouseAdapter {
 
         private JTable table = null;

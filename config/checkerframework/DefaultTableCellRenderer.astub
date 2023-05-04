@@ -1,0 +1,7 @@
+package javax.swing.table;
+
+import org.checkerframework.checker.guieffect.qual.UIType;
+
+@UIType
+class DefaultTableCellRenderer {
+}

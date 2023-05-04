@@ -35,6 +35,7 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.ftp.sampler.FTPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "ftp_sample_title")
 public class FtpConfigGui extends AbstractConfigGui {
@@ -71,6 +72,7 @@ public class FtpConfigGui extends AbstractConfigGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "ftp_sample_title"; // $NON-NLS-1$
     }

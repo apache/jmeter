@@ -31,6 +31,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * JMeter GUI component representing a work bench where users can make
@@ -61,6 +62,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
      *         constants defined in MenuFactory
      */
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return null;
     }
@@ -140,6 +142,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "workbench_title"; // $NON-NLS-1$
     }

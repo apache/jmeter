@@ -88,6 +88,7 @@ import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -465,6 +466,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "aggregate_graph_title";                        //$NON-NLS-1$
     }

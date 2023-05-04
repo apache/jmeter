@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 @GUIMenuSortOrder(4)
 @TestElementMetadata(labelResource = "while_controller_title")
 public class WhileControllerGui extends AbstractControllerGui {
@@ -105,6 +107,7 @@ public class WhileControllerGui extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "while_controller_title"; // $NON-NLS-1$
     }

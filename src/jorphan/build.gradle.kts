@@ -21,6 +21,7 @@ plugins {
 
 dependencies {
     api("org.apiguardian:apiguardian-api")
+    api("org.checkerframework:checker-qual")
     api("org.slf4j:slf4j-api")
 
     implementation("commons-io:commons-io")

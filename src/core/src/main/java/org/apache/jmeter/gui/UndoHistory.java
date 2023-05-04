@@ -33,6 +33,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +102,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
      * @param treeModel JMeterTreeModel
      * @param comment   String
      */
+    @SafeEffect
     public void add(JMeterTreeModel treeModel, String comment) {
         if(!isEnabled()) {
             log.debug("undo.history.size is set to 0, undo/redo feature is disabled");
@@ -262,6 +264,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * @return true if history is enabled
      */
+    @SafeEffect
     public static boolean isEnabled() {
         return HISTORY_SIZE > 0;
     }
@@ -270,6 +273,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
      * Register HistoryListener
      * @param listener to add to our listeners
      */
+    @SafeEffect
     public void registerHistoryListener(HistoryListener listener) {
         listeners.add(listener);
     }

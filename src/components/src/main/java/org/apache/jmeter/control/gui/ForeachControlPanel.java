@@ -30,6 +30,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * The user interface for a foreach controller which specifies that its
  * sub-components should be executed some number of times in a loop. This
@@ -155,6 +157,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "foreach_controller_title"; // $NON-NLS-1$
     }

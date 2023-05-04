@@ -16,9 +16,12 @@
  */
 
 plugins {
+    // test-fixtures enable to share code across test modules
+    // See https://docs.gradle.org/5.6/userguide/java_testing.html#sec:java_test_fixtures
     `java-test-fixtures`
     id("build-logic.jvm-library")
 }
 
-// test-fixtures enable to share code across test modules
-// See https://docs.gradle.org/5.6/userguide/java_testing.html#sec:java_test_fixtures
+dependencies {
+    api("org.checkerframework:checker-qual")
+}

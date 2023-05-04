@@ -38,9 +38,11 @@ import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@UIType
 public class JMeterTreeListener implements TreeSelectionListener, MouseListener, KeyListener {
     private static final Logger log = LoggerFactory.getLogger(JMeterTreeListener.class);
 

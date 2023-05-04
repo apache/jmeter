@@ -43,6 +43,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,6 +125,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "dns_cache_manager_title";
     }

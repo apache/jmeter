@@ -33,10 +33,12 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.UI;
 
 /**
  * By default, Swing does not provide a way to augment components when
@@ -60,7 +62,7 @@ public class DynamicStyle {
      * @return input component (e.g. for fluent APIs)
      */
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
-    public <T extends JComponent> T withDynamic(T component, Consumer<T> onUpdateUi) {
+    public <T extends JComponent> T withDynamic(T component, @UI Consumer<T> onUpdateUi) {
         // Explicit component update is required since the component already exists
         // and we can't want to wait for the next LaF change
         onUpdateUi.accept(component);
@@ -99,14 +101,14 @@ public class DynamicStyle {
      * @return a handle that can be used to un-register the listener
      */
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
-    public static Closeable onLaFChange(Runnable action) {
+    public static @UI Closeable onLaFChange(@UI Runnable action) {
         // Explicit component update is required since the component already exists
         // and we can't want to wait for the next LaF change
         action.run();
 
         PropertyChangeListener listener = evt -> {
             if ("lookAndFeel".equals(evt.getPropertyName())) { // $NON-NLS-1$
-                action.run();
+                SwingUtilities.invokeLater(action);
             }
         };
         UIManager.addPropertyChangeListener(listener);

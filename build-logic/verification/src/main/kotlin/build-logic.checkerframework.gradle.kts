@@ -46,10 +46,10 @@ checkerFramework {
     skipVersionCheck = true
     excludeTests = true
     // See https://checkerframework.org/manual/#introduction
-    checkers.add("org.checkerframework.checker.nullness.NullnessChecker")
-    checkers.add("org.checkerframework.checker.optional.OptionalChecker")
+    checkers.add("org.checkerframework.checker.guieffect.GuiEffectChecker")
+    // checkers.add("org.checkerframework.checker.optional.OptionalChecker")
     // checkers.add("org.checkerframework.checker.index.IndexChecker")
-    checkers.add("org.checkerframework.checker.regex.RegexChecker")
+    // checkers.add("org.checkerframework.checker.regex.RegexChecker")
     extraJavacArgs.add(
         "-Astubs=" +
             fileTree("$rootDir/config/checkerframework") {

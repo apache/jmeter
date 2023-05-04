@@ -22,6 +22,7 @@ import java.awt.event.ItemListener;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.SetupThreadGroup;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "setup_thread_group_title")
 public class SetupThreadGroupGui extends ThreadGroupGui implements ItemListener {
@@ -32,9 +33,9 @@ public class SetupThreadGroupGui extends ThreadGroupGui implements ItemListener 
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "setup_thread_group_title"; // $NON-NLS-1$
-
     }
 
     @Override

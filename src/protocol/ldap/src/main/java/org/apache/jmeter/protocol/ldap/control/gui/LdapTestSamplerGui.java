@@ -29,6 +29,7 @@ import org.apache.jmeter.protocol.ldap.sampler.LDAPSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "ldap_testing_title")
 public class LdapTestSamplerGui extends AbstractSamplerGui {
@@ -90,6 +91,7 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "ldap_testing_title"; // $NON-NLS-1$
     }

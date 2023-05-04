@@ -52,6 +52,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -153,6 +154,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "auth_manager_title"; //$NON-NLS-1$
     }

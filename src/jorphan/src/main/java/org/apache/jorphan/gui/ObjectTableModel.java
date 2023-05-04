@@ -25,6 +25,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.jorphan.reflect.Functor;
+import org.checkerframework.checker.guieffect.qual.SafeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
  * The ObjectTableModel is a TableModel whose rows are objects;
  * columns are defined as Functors on the object.
  */
+@SafeType
 public class ObjectTableModel extends DefaultTableModel {
     private static final Logger log = LoggerFactory.getLogger(ObjectTableModel.class);
 

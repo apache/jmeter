@@ -54,6 +54,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RendererUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Aggregate Table-Based Reporting Visualizer for JMeter.
@@ -108,6 +109,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "aggregate_report";  //$NON-NLS-1$
     }

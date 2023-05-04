@@ -26,6 +26,7 @@ import org.apache.jmeter.protocol.ldap.config.gui.LdapExtConfigGui;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /*******************************************************************************
  *
@@ -94,6 +95,7 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "ldapext_testing_title"; // $NON-NLS-1$
     }

@@ -41,6 +41,7 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "comparison_visualizer_title")
 public class ComparisonVisualizer extends AbstractVisualizer implements Clearable {
@@ -72,6 +73,7 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "comparison_visualizer_title"; //$NON-NLS-1$
     }

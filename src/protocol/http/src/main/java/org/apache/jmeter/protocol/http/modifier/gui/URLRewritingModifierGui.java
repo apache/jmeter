@@ -28,6 +28,7 @@ import org.apache.jmeter.protocol.http.modifier.URLRewritingModifier;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 @TestElementMetadata(labelResource = "http_url_rewriting_modifier_title")
 public class URLRewritingModifierGui extends AbstractPreProcessorGui {
@@ -46,6 +47,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     private JCheckBox encode;
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "http_url_rewriting_modifier_title"; // $NON-NLS-1$
     }

@@ -32,6 +32,11 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
 import org.apiguardian.api.API;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.SafeType;
+import org.checkerframework.checker.guieffect.qual.UI;
+import org.checkerframework.checker.guieffect.qual.UIEffect;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +45,7 @@ import org.slf4j.LoggerFactory;
  * texts.
  */
 @API(since = "5.5", status = API.Status.INTERNAL)
+@SafeType
 public class KerningOptimizer {
     private final static Logger log = LoggerFactory.getLogger(KerningOptimizer.class);
 
@@ -81,10 +87,12 @@ public class KerningOptimizer {
      *
      * @param length maximum document length for rendering with kerning enabled
      */
+    @SafeEffect
     public void setMaxTextLengthWithKerning(int length) {
         maxLengthWithKerning = length;
     }
 
+    @SafeEffect
     public int getMaxTextLengthWithKerning() {
         return maxLengthWithKerning;
     }
@@ -96,6 +104,7 @@ public class KerningOptimizer {
      * @param component      text component for kerning configuration
      * @param documentLength expected document length
      */
+    @UIEffect
     public void configureKerning(JComponent component, int documentLength) {
         Boolean kerning = FontKerningCache.kerningOf(component);
         if (kerning == null) {
@@ -117,6 +126,7 @@ public class KerningOptimizer {
      *
      * @param textComponent text component for kerning configuration
      */
+    @UIEffect
     public void installKerningListener(JTextComponent textComponent) {
         log.debug("Installing KerningOptimizer {} to {}", this, textComponent);
         textComponent.addPropertyChangeListener("document", new DisableKerningForLargeTexts(textComponent));
@@ -127,6 +137,7 @@ public class KerningOptimizer {
      *
      * @param textComponent text component for kerning configuration
      */
+    @UIEffect
     public void uninstallKerningListener(JTextComponent textComponent) {
         DisableKerningForLargeTexts kerningListener = null;
         for (PropertyChangeListener listener : textComponent.getPropertyChangeListeners("document")) {
@@ -145,6 +156,7 @@ public class KerningOptimizer {
         textComponent.removePropertyChangeListener("document", kerningListener);
     }
 
+    @SafeType
     static class DisableKerningForLargeTexts implements PropertyChangeListener, DocumentListener {
         final JTextComponent component;
 
@@ -155,14 +167,18 @@ public class KerningOptimizer {
         private void configureKerning(Document e) {
             // RSyntaxTextArea and other implementations do not expect setFont called from document change listeners
             // It looks like invokeLater fixes that
-            Boolean kerning = FontKerningCache.kerningOf(component);
-            if (kerning == null) {
-                return;
-            }
-            boolean desiredKerning = e.getLength() <= INSTANCE.getMaxTextLengthWithKerning();
-            if (kerning != desiredKerning) {
-                SwingUtilities.invokeLater(() -> INSTANCE.configureKerning(component, e.getLength()));
-            }
+            SwingUtilities.invokeLater(
+                    () -> {
+                        Boolean kerning = FontKerningCache.kerningOf(component);
+                        if (kerning == null) {
+                            return;
+                        }
+                        boolean desiredKerning = e.getLength() <= INSTANCE.getMaxTextLengthWithKerning();
+                        if (kerning != desiredKerning) {
+                            SwingUtilities.invokeLater(() -> INSTANCE.configureKerning(component, e.getLength()));
+                        }
+                    }
+            );
         }
 
         @Override

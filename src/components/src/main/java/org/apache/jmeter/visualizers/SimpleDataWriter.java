@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * This listener can record results to a file but not to the UI. It is meant to
@@ -40,6 +41,7 @@ public class SimpleDataWriter extends AbstractVisualizer {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "simple_data_writer_title"; // $NON-NLS-1$
     }

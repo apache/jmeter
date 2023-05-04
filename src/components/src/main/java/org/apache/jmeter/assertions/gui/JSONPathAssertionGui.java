@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * Java class representing GUI for the {@link JSONPathAssertion} component in JMeter
  * @since 4.0
@@ -123,6 +125,7 @@ public class JSONPathAssertionGui extends AbstractAssertionGui implements Change
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return JSON_ASSERTION_TITLE;
     }

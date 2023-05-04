@@ -43,6 +43,9 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.UI;
+import org.checkerframework.checker.guieffect.qual.UIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,6 +98,7 @@ import org.slf4j.LoggerFactory;
  * available (where <b><i>group</i></b> is the group name).
  * </dl>
  */
+@UIType
 public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer {
     private static final long serialVersionUID = 241L;
 
@@ -177,7 +181,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Property editors -- or null if the property can't be edited. Unused if
      * customizerClass==null.
      */
-    private transient PropertyEditor[] editors;
+    private transient @UI PropertyEditor[] editors;
 
     /**
      * Message format for property field labels:
@@ -637,6 +641,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @param descriptor
      * @return the group String.
      */
+    @SafeEffect
     private static String group(PropertyDescriptor descriptor) {
         String group = (String) descriptor.getValue(GROUP);
         if (group == null){
@@ -734,7 +739,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      */
     void saveGuiFields() {
         for (int i = 0; i < editors.length; i++) {
-            PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
+            @UI PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
             if (propertyEditor != null) {
                 Object value = propertyEditor.getValue();
                 String name = descriptors[i].getName();
@@ -751,7 +756,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
     void clearGuiFields() {
         for (int i = 0; i < editors.length; i++) {
-            PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
+            @UI PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
             if (propertyEditor != null) {
                 try {
                 if (propertyEditor instanceof ClearGui) {

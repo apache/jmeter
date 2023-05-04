@@ -17,12 +17,15 @@
 
 package org.apache.jmeter.gui.util;
 
+import org.checkerframework.checker.guieffect.qual.UIType;
+
 import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
+@UIType
 public class TextAreaCellRenderer implements TableCellRenderer {
 
     private JSyntaxTextArea rend = createRenderer(""); //$NON-NLS-1$

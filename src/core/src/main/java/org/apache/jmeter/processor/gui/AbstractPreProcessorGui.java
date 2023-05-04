@@ -24,6 +24,7 @@ import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent {
 
@@ -35,6 +36,7 @@ public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent
     }
 
     @Override
+    @SafeEffect
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.PRE_PROCESSORS);
     }

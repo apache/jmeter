@@ -36,6 +36,7 @@ import java.util.regex.Matcher;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.RandomStringGenerator;
+import org.checkerframework.checker.guieffect.qual.AlwaysSafe;
 
 /**
  * This class contains frequently-used static utility methods.
@@ -718,7 +719,7 @@ public final class JOrphanUtils {
      * @param setter        that gets called with the replaced value
      * @return number of matches that were replaced
      */
-    public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<String> setter) {
+    public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, @AlwaysSafe Consumer<String> setter) {
         if (StringUtils.isBlank(value)) {
             return 0;
         }

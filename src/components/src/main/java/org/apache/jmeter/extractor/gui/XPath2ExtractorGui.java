@@ -34,6 +34,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+
 /**
  * GUI for XPath2Extractor class.
  * @since 5.0
@@ -57,6 +59,7 @@ public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ign
     private JSyntaxTextArea namespacesTA;
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "xpath2_extractor_title"; //$NON-NLS-1$
     }

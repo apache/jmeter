@@ -1,0 +1,16 @@
+package javax.swing;
+
+import org.checkerframework.checker.guieffect.qual.UI;
+import org.checkerframework.checker.guieffect.qual.PolyUI;
+import org.checkerframework.checker.guieffect.qual.PolyUIType;
+import org.checkerframework.checker.guieffect.qual.PolyUIEffect;
+
+class UIDefaults extends Hashtable<Object, @UI Object> {
+  Object put(Object key, @UI Object value);
+
+  @PolyUIType
+  public interface LazyValue {
+    @PolyUIEffect
+    Object createValue(UIDefaults table);
+  }
+}

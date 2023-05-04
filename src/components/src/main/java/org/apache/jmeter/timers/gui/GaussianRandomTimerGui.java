@@ -21,6 +21,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.timers.GaussianRandomTimer;
 import org.apache.jmeter.timers.RandomTimer;
 import org.apache.jmeter.util.JMeterUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Implementation of a gaussian random timer.
@@ -46,6 +47,7 @@ public class GaussianRandomTimerGui extends AbstractRandomTimerGui {
      * {@inheritDoc}
      */
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "gaussian_timer_title";//$NON-NLS-1$
     }

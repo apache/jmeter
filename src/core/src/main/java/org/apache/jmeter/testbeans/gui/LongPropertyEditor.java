@@ -17,12 +17,15 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import org.checkerframework.checker.guieffect.qual.SafeType;
+
 import java.beans.PropertyEditorSupport;
 
 /**
  * Property Editor which handles Long properties.
  * Uses {@link Long#decode(String)} so supports hex and octal input.
  */
+@SafeType
 public class LongPropertyEditor extends PropertyEditorSupport {
 
     @Override

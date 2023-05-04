@@ -104,6 +104,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
+import org.checkerframework.checker.guieffect.qual.SafeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -419,6 +421,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         });
     }
 
+    @SafeEffect
     public void updateCounts() {
         SwingUtilities.invokeLater(() ->
                 activeAndTotalThreads.setText(
@@ -865,6 +868,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /**
      * ErrorsAndFatalsCounterLogTarget.
      */
+    @SafeType
     public final class ErrorsAndFatalsCounterLogTarget implements GuiLogEventListener, Clearable {
 
         @Override

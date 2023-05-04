@@ -23,6 +23,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 
 /**
  * Create a summariser test element GUI.
@@ -39,6 +40,7 @@ public class SummariserGui extends AbstractListenerGui {
     }
 
     @Override
+    @SafeEffect
     public String getLabelResource() {
         return "summariser_title"; //$NON-NLS-1$
     }

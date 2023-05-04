@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -36,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.gui.GuiPackage;
@@ -206,23 +208,32 @@ public abstract class SSLManager {
         if (null == password) {
             final GuiPackage guiInstance = GuiPackage.getInstance();
             if (guiInstance != null) {
-                JPanel panel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill, grow]"));
-                JLabel passwordLabel = new JLabel("Password: ");
-                JPasswordField pwf = new JPasswordField(64);
-                pwf.setEchoChar('*');
-                passwordLabel.setLabelFor(pwf);
-                panel.add(passwordLabel);
-                panel.add(pwf);
-                int choice = JOptionPane.showConfirmDialog(guiInstance.getMainFrame(), panel,
-                        JMeterUtils.getResString("ssl_pass_prompt"), JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE);
-                if (choice == JOptionPane.OK_OPTION) {
-                    char[] pwchars = pwf.getPassword();
-                    this.defaultpw = new String(pwchars);
-                    Arrays.fill(pwchars, '*');
+                try {
+                    SwingUtilities.invokeAndWait(() -> {
+                        JPanel panel = new JPanel(new MigLayout("fillx, wrap 2", "[][fill, grow]"));
+                        JLabel passwordLabel = new JLabel("Password: ");
+                        JPasswordField pwf = new JPasswordField(64);
+                        pwf.setEchoChar('*');
+                        passwordLabel.setLabelFor(pwf);
+                        panel.add(passwordLabel);
+                        panel.add(pwf);
+                        int choice = JOptionPane.showConfirmDialog(guiInstance.getMainFrame(), panel,
+                                JMeterUtils.getResString("ssl_pass_prompt"), JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE);
+                        if (choice == JOptionPane.OK_OPTION) {
+                            char[] pwchars = pwf.getPassword();
+                            this.defaultpw = new String(pwchars);
+                            Arrays.fill(pwchars, '*');
+                        }
+                    });
+                    password = this.defaultpw;
+                } catch (InterruptedException e) {
+                    log.info("Interrupted while retrieving SSL password via GUI", e);
+                    Thread.currentThread().interrupt();
+                } catch (InvocationTargetException e) {
+                    throw new IllegalStateException("Unable to retrieve SSL password via GUI", e.getCause());
                 }
                 System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
-                password = this.defaultpw;
             }
         } else {
             log.warn("No password provided, and no GUI present so cannot prompt");
