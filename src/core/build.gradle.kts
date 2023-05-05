@@ -53,6 +53,12 @@ dependencies {
     api("xalan:xalan") {
         because("PropertiesBasedPrefixResolver extends PrefixResolverDefault")
     }
+    api("xalan:serializer") {
+        because("Xalan 2.7.3 misses xalan:serializer dependency in pom.xml, see https://issues.apache.org/jira/browse/XALANJ-2649")
+    }
+    api("xml-apis:xml-apis") {
+        because("Xalan 2.7.3 misses xml-apis:xml-apis dependency in pom.xml, see https://issues.apache.org/jira/browse/XALANJ-2649")
+    }
     // Note: Saxon should go AFTER xalan so xalan XSLT is used
     // org.apache.jmeter.util.XPathUtilTest.testFormatXmlSimple assumes xalan transformer
     api("net.sf.saxon:Saxon-HE") {

@@ -166,6 +166,13 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SimpleLicense("Java HTML Tidy License", uri("http://jtidy.svn.sourceforge.net/viewvc/jtidy/trunk/jtidy/LICENSE.txt?revision=95"))
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }
+    // Xalan 2.7.3 misses license, see https://issues.apache.org/jira/browse/XALANJ-2650
+    overrideLicense("xalan:xalan") {
+        effectiveLicense = SpdxLicense.Apache_2_0
+    }
+    overrideLicense("xalan:serializer") {
+        effectiveLicense = SpdxLicense.Apache_2_0
+    }
 }
 
 val renderLicenseForSource by tasks.registering(Apache2LicenseRenderer::class) {
