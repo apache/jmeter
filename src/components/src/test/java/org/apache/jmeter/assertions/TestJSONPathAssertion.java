@@ -99,68 +99,31 @@ class TestJSONPathAssertion {
         assertFalse(result.isFailure());
     }
 
-    @Test
-    void testGetResult_positive_regexp_for_floating_point() {
+    @ParameterizedTest
+    @CsvSource({
+            "123.45,'^\\d+\\.\\d+$',false,false",
+            "123.45,'^\\d+\\.\\d+$',true,true",
+            "123.45,'^\\d+,\\d+$',false,true",
+            "123.45,'^\\d+,\\d+$',true,false",
+            "123,'(123|456)',false,false",
+            "123,'(123|456)',true,true",
+            "456,'(123|456)',false,false",
+            "456,'(123|456)',true,true",
+            "some string,some.+,false,false",
+            "some string,some.+,true,true",
+    })
+    void testGetResult_regexp(String value, String regex, boolean inverted, boolean expectedFailure) {
         SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123.45}".getBytes(Charset.defaultCharset()));
-
+        samplerResult.setResponseData(("{\"myval\": " + value + '}').getBytes(Charset.defaultCharset()));
         JSONPathAssertion instance = new JSONPathAssertion();
         instance.setJsonPath("$.myval");
         instance.setJsonValidationBool(true);
-        instance.setExpectedValue("^\\d+\\.\\d+$");
+        instance.setExpectedValue(regex);
+        instance.setInvert(inverted);
         AssertionResult expResult = new AssertionResult("");
         AssertionResult result = instance.getResult(samplerResult);
         assertEquals(expResult.getName(), result.getName());
-        assertFalse(result.isFailure());
-    }
-
-    @Test
-    void testGetResult_positive_wrong_regexp_for_floating_point() {
-        SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123.45}".getBytes(Charset.defaultCharset()));
-
-        JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.myval");
-        instance.setJsonValidationBool(true);
-        instance.setExpectedValue("^\\d+,\\d+$");
-        AssertionResult expResult = new AssertionResult("");
-        AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(expResult.getName(), result.getName());
-        assertTrue(result.isFailure());
-    }
-    @Test
-    void testGetResult_positive_regexp() {
-        SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123}".getBytes(Charset.defaultCharset()));
-
-        JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.myval");
-        instance.setJsonValidationBool(true);
-        instance.setExpectedValue("(123|456)");
-        AssertionResult expResult = new AssertionResult("");
-        AssertionResult result = instance.getResult(samplerResult);
-        assertEquals(expResult.getName(), result.getName());
-        assertFalse(result.isFailure());
-
-        samplerResult.setResponseData("{\"myval\": 456}".getBytes(Charset.defaultCharset()));
-        AssertionResult result2 = instance.getResult(samplerResult);
-        assertFalse(result2.isFailure());
-    }
-
-    @Test
-    void testGetResult_positive_invert() {
-        SampleResult samplerResult = new SampleResult();
-        samplerResult.setResponseData("{\"myval\": 123}".getBytes(Charset.defaultCharset()));
-
-        JSONPathAssertion instance = new JSONPathAssertion();
-        instance.setJsonPath("$.myval");
-        instance.setJsonValidationBool(true);
-        instance.setExpectedValue("123");
-        instance.setInvert(true);
-        AssertionResult expResult = new AssertionResult("");
-        AssertionResult result = instance.getResult(samplerResult);
-        assertTrue(result.isFailure());
-        assertEquals(expResult.getName(), result.getName());
+        assertEquals(expectedFailure, result.isFailure());
     }
 
     @Test
@@ -172,9 +135,6 @@ class TestJSONPathAssertion {
         instance.setJsonPath("$.myval");
         instance.setJsonValidationBool(true);
         instance.setExpectedValue("some.+");
-        AssertionResult result = instance.getResult(samplerResult);
-        assertFalse(result.isFailure());
-
         instance.setIsRegex(false);
         AssertionResult result2 = instance.getResult(samplerResult);
         assertTrue(result2.isFailure());
