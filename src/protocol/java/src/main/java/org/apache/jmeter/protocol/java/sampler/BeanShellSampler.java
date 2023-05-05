@@ -102,14 +102,6 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
             return res;
         }
         try {
-            String request = getScript();
-            String fileName = getFilename();
-            if (fileName.length() == 0) {
-                res.setSamplerData(request);
-            } else {
-                res.setSamplerData(fileName);
-            }
-
             bshInterpreter.set("SampleResult", res); //$NON-NLS-1$
 
             // Set default values
@@ -120,7 +112,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
             res.setDataType(SampleResult.TEXT); // assume text output - script can override if necessary
 
             savedBsh = bshInterpreter;
-            Object bshOut = processFileOrScript(bshInterpreter);
+            Object bshOut = processFileOrScript(bshInterpreter, res);
             savedBsh = null;
 
             if (bshOut != null) {// Set response data
