@@ -19,6 +19,7 @@ package org.apache.jmeter.util;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
@@ -130,12 +131,31 @@ public abstract class BeanShellTestElement extends AbstractTestElement
      * <li>Parameters</li>
      * <li>bsh.args</li>
      * </ul>
-     * @param bsh the interpreter, not {@code null}
-     * @return the result of the script, may be {@code null}
      *
+     * @param bsh          the interpreter, not {@code null}
+     * @return the result of the script, may be {@code null}
      * @throws JMeterException when working with the bsh fails
      */
-    protected Object processFileOrScript(BeanShellInterpreter bsh) throws JMeterException{
+    protected Object processFileOrScript(BeanShellInterpreter bsh) throws JMeterException {
+        return processFileOrScript(bsh, null);
+    }
+
+    /**
+     * Process the file or script from the test element.
+     * <p>
+     * Sets the following script variables:
+     * <ul>
+     * <li>FileName</li>
+     * <li>Parameters</li>
+     * <li>bsh.args</li>
+     * </ul>
+     *
+     * @param bsh          the interpreter, not {@code null}
+     * @param sampleResult sampler result to set {@code setSamplerData} or {@code null}
+     * @return the result of the script, may be {@code null}
+     * @throws JMeterException when working with the bsh fails
+     */
+    protected Object processFileOrScript(BeanShellInterpreter bsh, SampleResult sampleResult) throws JMeterException {
         String fileName = getFilename();
         String params = getParameters();
 
@@ -147,7 +167,14 @@ public abstract class BeanShellTestElement extends AbstractTestElement
                 JOrphanUtils.split(params, " "));//$NON-NLS-1$
 
         if (fileName.length() == 0) {
-            return bsh.eval(getScript());
+            String bshScript = getScript();
+            if (sampleResult != null) {
+                sampleResult.setSamplerData(bshScript);
+            }
+            return bsh.eval(bshScript);
+        }
+        if (sampleResult != null) {
+            sampleResult.setSamplerData(fileName);
         }
         return bsh.source(fileName);
     }

@@ -182,13 +182,14 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             bindings = scriptEngine.createBindings();
         }
         populateBindings(bindings);
-        File scriptFile = new File(getFilename());
+        String filename = getFilename();
+        File scriptFile = new File(filename);
         // Hack: bsh-2.0b5.jar BshScriptEngine implements Compilable but throws
         // "java.lang.Error: unimplemented"
         boolean supportsCompilable = scriptEngine instanceof Compilable
                 && !"bsh.engine.BshScriptEngine".equals(scriptEngine.getClass().getName()); // NOSONAR // $NON-NLS-1$
         try {
-            if (!StringUtils.isEmpty(getFilename())) {
+            if (!StringUtils.isEmpty(filename)) {
                 if (!scriptFile.isFile()) {
                     throw new ScriptException("Script file '" + scriptFile.getAbsolutePath()
                             + "' is not a file for element: " + getName());
@@ -213,20 +214,22 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                     }
                 });
                 return compiledScript.eval(bindings);
-            } else if (!StringUtils.isEmpty(getScript())) {
+            }
+            String script = getScript();
+            if (!StringUtils.isEmpty(script)) {
                 if (supportsCompilable &&
                         !ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheKey)) {
-                    computeScriptMD5();
+                    computeScriptMD5(script);
                     CompiledScript compiledScript = getCompiledScript(scriptMd5, key -> {
                         try {
-                            return ((Compilable) scriptEngine).compile(getScript());
+                            return ((Compilable) scriptEngine).compile(script);
                         } catch (ScriptException e) {
                             throw new ScriptCompilationInvocationTargetException(e);
                         }
                     });
                     return compiledScript.eval(bindings);
                 } else {
-                    return scriptEngine.eval(getScript(), bindings);
+                    return scriptEngine.eval(script, bindings);
                 }
             } else {
                 throw new ScriptException("Both script file and script text are empty for element:" + getName());
@@ -304,10 +307,10 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     /**
      * compute MD5 if it is null
      */
-    private void computeScriptMD5() {
+    private void computeScriptMD5(String script) {
         // compute the md5 of the script if needed
         if(scriptMd5 == null) {
-            scriptMd5 = ScriptCacheKey.ofString(DigestUtils.md5Hex(getScript()));
+            scriptMd5 = ScriptCacheKey.ofString(DigestUtils.md5Hex(script));
         }
     }
 
@@ -355,7 +358,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     @Override
     public void testEnded(String host) {
         COMPILED_SCRIPT_CACHE.invalidateAll();
-        this.scriptMd5 = null;
+        scriptMd5 = null;
     }
 
     public String getScriptLanguage() {
