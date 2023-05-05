@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.threads;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -26,20 +29,15 @@ import org.apache.jmeter.util.JMeterUtils;
 public final class JMeterContextService {
     private static final ThreadLocal<JMeterContext> threadContext = ThreadLocal.withInitial(JMeterContext::new);
 
-    //@GuardedBy(JMeterContextService.class)
-    private static long testStart = 0;
+    private static final AtomicLong testStart = new AtomicLong();
 
-    //@GuardedBy(JMeterContextService.class)
-    private static int numberOfActiveThreads = 0;
+    private static final AtomicInteger NUMBER_OF_ACTIVE_THREADS = new AtomicInteger();
 
-    //@GuardedBy(JMeterContextService.class)
-    private static int numberOfThreadsStarted = 0;
+    private static final AtomicInteger NUMBER_OF_THREADS_STARTED = new AtomicInteger();
 
-    //@GuardedBy(JMeterContextService.class)
-    private static int numberOfThreadsFinished = 0;
+    private static final AtomicInteger NUMBER_OF_THREADS_FINISHED = new AtomicInteger();
 
-    //@GuardedBy(JMeterContextService.class)
-    private static int totalThreads = 0;
+    private static final AtomicInteger TOTAL_THREADS = new AtomicInteger();
 
     private static UnmodifiableJMeterVariables variables;
 
@@ -84,40 +82,40 @@ public final class JMeterContextService {
      * Saves current time in a field and in the JMeter property "TESTSTART.MS"
      */
     public static synchronized void startTest() {
-        if (testStart == 0) {
-            numberOfActiveThreads = 0;
-            testStart = System.currentTimeMillis();
-            JMeterUtils.setProperty("TESTSTART.MS",Long.toString(testStart));// $NON-NLS-1$
+        if (testStart.get() == 0) {
+            NUMBER_OF_ACTIVE_THREADS.set(0);
+            testStart.set(System.currentTimeMillis());
+            JMeterUtils.setProperty("TESTSTART.MS", Long.toString(testStart.get()));// $NON-NLS-1$
         }
     }
 
     /**
      * Increment number of active threads.
      */
-    static synchronized void incrNumberOfThreads() {
-        numberOfActiveThreads++;
-        numberOfThreadsStarted++;
+    static void incrNumberOfThreads() {
+        NUMBER_OF_ACTIVE_THREADS.incrementAndGet();
+        NUMBER_OF_THREADS_STARTED.incrementAndGet();
     }
 
     /**
      * Decrement number of active threads.
      */
-    static synchronized void decrNumberOfThreads() {
-        numberOfActiveThreads--;
-        numberOfThreadsFinished++;
+    static void decrNumberOfThreads() {
+        NUMBER_OF_ACTIVE_THREADS.decrementAndGet();
+        NUMBER_OF_THREADS_FINISHED.incrementAndGet();
     }
 
     /**
      * Get the number of currently active threads
      * @return active thread count
      */
-    public static synchronized int getNumberOfThreads() {
-        return numberOfActiveThreads;
+    public static int getNumberOfThreads() {
+        return NUMBER_OF_ACTIVE_THREADS.get();
     }
 
     // return all the associated counts together
-    public static synchronized ThreadCounts getThreadCounts() {
-        return new ThreadCounts(numberOfActiveThreads, numberOfThreadsStarted, numberOfThreadsFinished);
+    public static ThreadCounts getThreadCounts() {
+        return new ThreadCounts(NUMBER_OF_ACTIVE_THREADS.get(), NUMBER_OF_THREADS_STARTED.get(), NUMBER_OF_THREADS_FINISHED.get());
     }
 
     /**
@@ -125,37 +123,37 @@ public final class JMeterContextService {
      * Clears start time field.
      */
     public static synchronized void endTest() {
-        testStart = 0;
+        testStart.set(0);
         resetClientSideVariables();
     }
 
-    public static synchronized long getTestStartTime() {
-        return testStart;
+    public static long getTestStartTime() {
+        return testStart.get();
     }
 
     /**
      * Get the total number of threads (&gt;= active)
      * @return total thread count
      */
-    public static synchronized int getTotalThreads() {
-        return totalThreads;
+    public static int getTotalThreads() {
+        return TOTAL_THREADS.get();
     }
 
     /**
      * Update the total number of threads
      * @param thisGroup number of threads in this thread group
      */
-    public static synchronized void addTotalThreads(int thisGroup) {
-        totalThreads += thisGroup;
+    public static void addTotalThreads(int thisGroup) {
+        TOTAL_THREADS.addAndGet(thisGroup);
     }
 
     /**
      * Set total threads to zero; also clears started and finished counts
      */
-    public static synchronized void clearTotalThreads() {
-        totalThreads = 0;
-        numberOfThreadsStarted = 0;
-        numberOfThreadsFinished = 0;
+    public static void clearTotalThreads() {
+        TOTAL_THREADS.set(0);
+        NUMBER_OF_THREADS_STARTED.set(0);
+        NUMBER_OF_THREADS_FINISHED.set(0);
     }
 
     /**

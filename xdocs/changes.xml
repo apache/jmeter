@@ -110,6 +110,7 @@ Summary
     The previous behavior can be temporary restored with <code>function.cache.per.iteration</code> property.
   </li>
   <li><pr>5920</pr>Improve HTTP HeaderManager performance when it contains many headers: skip reinitialization on each iteration</li>
+  <li><pr>5920</pr>Use AtomicInteger and AtomicLong instead of synchronized primitives for JMeterContextService#numberOfThreads</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
