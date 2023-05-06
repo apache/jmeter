@@ -124,6 +124,8 @@ public final class MenuFactory {
     private static void initializeMenus(
             Map<String, List<MenuInfo>> menus, Set<String> elementsToSkip) {
         try {
+            // TODO: migrate to ServiceLoader or something else
+            @SuppressWarnings("deprecation")
             List<String> guiClasses = ClassFinder
                     .findClassesThatExtend(
                             JMeterUtils.getSearchPaths(),

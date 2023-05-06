@@ -321,8 +321,10 @@ public final class AllTests {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private static List<String> findJMeterJUnitTests(String searchPathString) throws IOException {
         final String[] searchPaths = JOrphanUtils.split(searchPathString, ",");
+        // TODO: do we really need class searching here?
         return ClassFinder.findClasses(searchPaths, new JunitTestFilter());
     }
 

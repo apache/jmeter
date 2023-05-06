@@ -26,10 +26,13 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.services.FileServer;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Returns Test Plan name
  * @since 2.6
  */
+@AutoService(Function.class)
 public class TestPlanName extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();

@@ -25,6 +25,7 @@ plugins {
     id("build-logic.test-base")
     id("com.github.autostyle")
     kotlin("jvm")
+    kotlin("kapt") apply false
 }
 
 dependencies {

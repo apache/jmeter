@@ -30,9 +30,12 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Processes the collapse and expand of a tree branch
  */
+@AutoService(Command.class)
 public class CollapseExpandTreeBranch extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 

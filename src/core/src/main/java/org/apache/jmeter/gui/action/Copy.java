@@ -37,9 +37,12 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements the Copy menu command
  */
+@AutoService(Command.class)
 public class Copy extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(Copy.class);
 

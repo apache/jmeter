@@ -29,10 +29,13 @@ import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements log level setting menu item.
  * @since 3.2
  */
+@AutoService(Command.class)
 public class LogLevelCommand extends AbstractAction {
 
     private static final Logger log = LoggerFactory.getLogger(LogLevelCommand.class);

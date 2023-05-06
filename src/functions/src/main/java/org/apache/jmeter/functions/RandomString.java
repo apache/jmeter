@@ -31,11 +31,14 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Provides a RandomString function which returns a random String of length (first argument)
  * using characters (second argument)
  * @since 2.6
  */
+@AutoService(Function.class)
 public class RandomString extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(RandomString.class);
 

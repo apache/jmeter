@@ -26,6 +26,9 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(Command.class)
 public class ExitCommand extends AbstractActionWithNoRunningTest {
 
     private static final Set<String> commands = new HashSet<>();

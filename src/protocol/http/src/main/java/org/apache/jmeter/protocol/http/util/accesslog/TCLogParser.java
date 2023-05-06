@@ -36,6 +36,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Description:<br>
  * <br>
@@ -72,6 +74,7 @@ import org.slf4j.LoggerFactory;
  */
 
 @SuppressWarnings("InconsistentCapitalization")
+@AutoService(LogParser.class)
 public class TCLogParser implements LogParser {
     protected static final Logger log = LoggerFactory.getLogger(TCLogParser.class);
 

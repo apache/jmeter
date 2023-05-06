@@ -309,6 +309,7 @@ public final class ActionRouter implements ActionListener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private static List<String> findClassesThatExtend(String className, String excluding, String[] searchPath) throws IOException, ClassNotFoundException {
 
         return ClassFinder.findClassesThatExtend(

@@ -28,9 +28,12 @@ import org.apache.jmeter.testelement.TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements the Add Parent menu command
  */
+@AutoService(Command.class)
 public class AddParent extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(AddParent.class);
 

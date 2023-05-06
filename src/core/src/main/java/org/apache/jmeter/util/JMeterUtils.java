@@ -27,19 +27,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -59,6 +65,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.ServiceLoadExceptionHandler;
 import org.apache.jorphan.test.UnitTestManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -317,6 +324,71 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
+     * Loads services implementing a given interface and scans JMeter search path for the implementations.
+     * This is a transition replacement for {@link ClassFinder}, and JMeter would migrate to {@link ServiceLoader}-only
+     * lookup in the future.
+     * <p>Note: it is not always safe to cache the result as {@code search_paths} property might change over time</p>
+     *
+     * @param service interface that services should extend.
+     * @param serviceLoader ServiceLoader to fetch services.
+     * @param classLoader classLoader to use when searching for classes on the search path.
+     * @param exceptionHandler exception handler to use for services that fail to load.
+     * @return collection of services that load successfully
+     * @param <S> type of service (class or interface)
+     */
+    @API(status = API.Status.DEPRECATED, since = "5.6")
+    public static <S> Collection<S> loadServicesAndScanJars(
+            @SuppressWarnings("BoundedWildcard") Class<S> service,
+            ServiceLoader<S> serviceLoader,
+            ClassLoader classLoader,
+            ServiceLoadExceptionHandler<? super S> exceptionHandler
+    ) {
+        Collection<S> services = ClassFinder.loadServices(service, serviceLoader, exceptionHandler);
+
+        List<String> classesFromJars;
+        try (ClassFinder.Closeable ignored = ClassFinder.skipJarsWithJmeterSkipClassScanningAttribute()) {
+            classesFromJars = findClassesThatExtend(service);
+        } catch (IOException e) {
+            log.warn("Unable to lookup {} with ClassFinder.findClassesThatExtend. " +
+                    "Will use only results from ServiceLoader ({} items found)", service, services.size(), e);
+            return services;
+        }
+
+        if (classesFromJars.isEmpty()) {
+            return services;
+        }
+
+        Set<String> loadedClasses = new HashSet<>((int) (services.size() / 0.75f) + 1);
+        for (S s : services) {
+            loadedClasses.add(s.getClass().getName());
+        }
+
+        List<S> result = new ArrayList<>(services.size() + classesFromJars.size());
+        result.addAll(services);
+        for (String className : classesFromJars) {
+            // Ignore classes that we loaded previously (e.g. with a ServiceLoader)
+            if (!loadedClasses.add(className)) {
+                continue;
+            }
+            try {
+                Class<? extends S> klass = Class.forName(className, false, classLoader)
+                        .asSubclass(service);
+                if (!Modifier.isAbstract(klass.getModifiers())) {
+                    continue;
+                }
+                result.add(klass.getDeclaredConstructor().newInstance());
+            } catch (Throwable e) {
+                if (e instanceof InvocationTargetException) {
+                    //noinspection AssignmentToCatchBlockParameter
+                    e = e.getCause();
+                }
+                exceptionHandler.handle(service, className, e);
+            }
+        }
+        return result;
+    }
+
+    /**
      * Convenience method for
      * {@link ClassFinder#findClassesThatExtend(String[], Class[], boolean)}
      * with the option to include inner classes in the search set to false
@@ -325,7 +397,10 @@ public class JMeterUtils implements UnitTestManager {
      * @param superClass - single class to search for
      * @return List of Strings containing discovered class names.
      * @throws IOException when the used {@link ClassFinder} throws one while searching for the class
+     * @deprecated use {@link #loadServicesAndScanJars(Class, ServiceLoader, ClassLoader, ServiceLoadExceptionHandler)} instead
      */
+    @API(status = API.Status.DEPRECATED, since = "5.6")
+    @Deprecated
     public static List<String> findClassesThatExtend(Class<?> superClass)
         throws IOException {
         return ClassFinder.findClassesThatExtend(getSearchPaths(), new Class[]{superClass}, false);

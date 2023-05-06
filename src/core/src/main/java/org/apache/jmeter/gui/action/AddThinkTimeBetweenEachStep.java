@@ -33,10 +33,13 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Add ThinkTime (TestAction + UniformRandomTimer)
  * @since 3.2
  */
+@AutoService(Command.class)
 public class AddThinkTimeBetweenEachStep extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(AddThinkTimeBetweenEachStep.class);
 

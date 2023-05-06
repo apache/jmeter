@@ -45,6 +45,8 @@ import org.apache.jorphan.collections.ListedHashTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Set of Actions to:
  * <ul>
@@ -57,6 +59,7 @@ import org.slf4j.LoggerFactory;
  *      <li>Validate a set of Thread Groups with/without sleeping on the timers depending on jmeter properties</li>
  * </ul>
  */
+@AutoService(Command.class)
 public class Start extends AbstractAction {
 
     private static final Logger log = LoggerFactory.getLogger(Start.class);

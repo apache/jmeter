@@ -26,18 +26,24 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class finds classes that extend one of a set of parent classes
+ * This class finds classes that extend one of a set of parent classes.
  */
 public final class ClassFinder {
     private static final Logger log = LoggerFactory.getLogger(ClassFinder.class);
@@ -46,8 +52,97 @@ public final class ClassFinder {
     private static final String DOT_CLASS = ".class"; // $NON-NLS-1$
     private static final int DOT_CLASS_LEN = DOT_CLASS.length();
 
+    private static final ThreadLocal<Boolean> SKIP_JARS_WITH_JMETER_SKIP_ATTRIBUTE = new ThreadLocal<>();
+
+    public static final String JMETER_SKIP_CLASS_SCANNING_ATTRIBUTE = "JMeter-Skip-Class-Scanning";
+
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6")
+    public interface Closeable extends AutoCloseable {
+        @Override
+        void close();
+    }
+
     // static only
     private ClassFinder() {
+    }
+
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6")
+    public static boolean getSkipJarsWithJmeterSkipClassScanningAttribute() {
+        return Objects.equals(SKIP_JARS_WITH_JMETER_SKIP_ATTRIBUTE.get(), Boolean.TRUE);
+    }
+
+    /**
+     * Configures if {@link ClassFinder} should skip jar files that have {@code JMeter-Skip-Class-Scanning: true}
+     * manifest attribute.
+     * JMeter will skip such jars when it uses both {@link java.util.ServiceLoader} and {@link ClassFinder}.
+     * However, {@link ClassFinder} was public, so it was possible that custom plugins could use it, and they should
+     * be able to find the implementations even if they are in jars with {@code JMeter-Skip-Class-Scanning: true}.
+     * <p>
+     * Sample usage:
+     * <pre>
+     * List&lt;String&gt; classNames;
+     * try (ClassFinder.Closeable ignored = ClassFinder.skipJarsWithJmeterSkipClassScanningAttribute()) {
+     *   // findClassesThatExtend will not skip jars with JMeter-Skip-Class-Scanning: true manifest attribute
+     *   classNames = ClassFinder.findClassesThatExtend(...);
+     * </pre>
+     *
+     * @return closeable that will reset "skip jar files with manifest entry" flag when closed. Use it in try-with-resources
+     */
+    @API(status = API.Status.INTERNAL, since = "5.6")
+    public static Closeable skipJarsWithJmeterSkipClassScanningAttribute() {
+        SKIP_JARS_WITH_JMETER_SKIP_ATTRIBUTE.set(true);
+        return SKIP_JARS_WITH_JMETER_SKIP_ATTRIBUTE::remove;
+    }
+
+    /**
+     * Loads services implementing a given interface.
+     * This is an intended replacement for {@code findClassesThatExtend}.
+     *
+     * @param service interface that services should extend.
+     * @param serviceLoader ServiceLoader to fetch services.
+     * @param exceptionHandler exception handler to use for services that fail to load.
+     * @return collection of services that load successfully
+     * @param <S> type of service (class or interface)
+     */
+    public static <S> Collection<S> loadServices(
+            @SuppressWarnings("BoundedWildcard") Class<S> service,
+            ServiceLoader<S> serviceLoader,
+            ServiceLoadExceptionHandler<? super S> exceptionHandler
+    ) {
+        List<S> result = new ArrayList<>();
+        @SuppressWarnings("ForEachIterable")
+        Iterator<S> it = serviceLoader.iterator();
+        while (it.hasNext()) {
+            try {
+                // This can't be for-each loop because we need to catch exceptions from next()
+                result.add(it.next());
+            } catch (ServiceConfigurationError e) {
+                // Java does not expose class name of the problematic class in question, so we extract it
+                // from the message
+                String message = e.getMessage();
+                String className = "";
+                if (message.startsWith(service.getName())) {
+                    if (message.endsWith(" Unable to get public no-arg constructor")) {
+                        className = message.substring(
+                                service.getName().length() + ": ".length(),
+                                message.length() - " Unable to get public no-arg constructor".length()
+                        );
+                    } else if (message.endsWith(" not a subtype")) {
+                        className = message.substring(
+                                service.getName().length() + ": ".length(),
+                                message.length() - " not a subtype".length()
+                        );
+                    } else if (message.endsWith(" could not be instantiated")) {
+                        className = message.substring(
+                                service.getName().length() + ": ".length() + "Provider ".length(),
+                                message.length() - " could not be instantiated".length()
+                        );
+                    }
+                }
+                exceptionHandler.handle(service, className, e);
+            }
+        }
+        return Collections.unmodifiableCollection(result);
     }
 
     /**
@@ -176,7 +271,9 @@ public final class ClassFinder {
      * @param superClasses required parent class(es)
      * @return List of Strings containing discovered class names.
      * @throws IOException when scanning the classes fails
+     * @deprecated use {@link #loadServices(Class, ServiceLoader, ServiceLoadExceptionHandler)} or {@code JMeterUtils#loadServicesAndScanJars}
      */
+    @Deprecated
     public static List<String> findClassesThatExtend(String[] paths, Class<?>[] superClasses)
             throws IOException {
         return findClassesThatExtend(paths, superClasses, false);
@@ -206,7 +303,9 @@ public final class ClassFinder {
      * @param innerClasses   should we include inner classes?
      * @return List containing discovered classes
      * @throws IOException when scanning for classes fails
+     * @deprecated use {@link #loadServices(Class, ServiceLoader, ServiceLoadExceptionHandler)} or {@code JMeterUtils#loadServicesAndScanJars}
      */
+    @Deprecated
     public static List<String> findClassesThatExtend(String[] strPathsOrJars,
             final Class<?>[] superClasses, final boolean innerClasses)
             throws IOException  {
@@ -223,7 +322,10 @@ public final class ClassFinder {
      * @param notContains    classname should not contain this string
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
+     * @deprecated use {@link #loadServices(Class, ServiceLoader, ServiceLoadExceptionHandler)} or {@code JMeterUtils#loadServicesAndScanJars}
      */
+    @API(status = API.Status.DEPRECATED, since = "5.6")
+    @Deprecated
     public static List<String> findClassesThatExtend(String[] strPathsOrJars,
             final Class<?>[] superClasses, final boolean innerClasses,
             String contains, String notContains)
@@ -239,7 +341,10 @@ public final class ClassFinder {
      * @param innerClasses   should we include inner classes?
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
+     * @deprecated use {@link #loadServices(Class, ServiceLoader, ServiceLoadExceptionHandler)} or {@code JMeterUtils#loadServicesAndScanJars}
      */
+    @API(status = API.Status.DEPRECATED, since = "5.6")
+    @Deprecated
     public static List<String> findAnnotatedClasses(String[] strPathsOrJars,
             final Class<? extends Annotation>[] annotations, final boolean innerClasses)
             throws IOException  {
@@ -254,7 +359,10 @@ public final class ClassFinder {
      * @param annotations    required annotations
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
+     * @deprecated use {@link #loadServices(Class, ServiceLoader, ServiceLoadExceptionHandler)} or {@code JMeterUtils#loadServicesAndScanJars}
      */
+    @API(status = API.Status.DEPRECATED, since = "5.6")
+    @Deprecated
     public static List<String> findAnnotatedClasses(String[] strPathsOrJars,
             final Class<? extends Annotation>[] annotations)
             throws IOException  {
@@ -272,7 +380,10 @@ public final class ClassFinder {
      * @param annotations       true if classnames are annotations
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
+     * @deprecated use {@link #loadServices(Class, ServiceLoader, ServiceLoadExceptionHandler)} or {@code JMeterUtils#loadServicesAndScanJars}
      */
+    @API(status = API.Status.DEPRECATED, since = "5.6")
+    @Deprecated
     public static List<String> findClassesThatExtend(String[] searchPathsOrJars,
                 final Class<?>[] classNames, final boolean innerClasses,
                 String contains, String notContains, boolean annotations)
@@ -307,7 +418,10 @@ public final class ClassFinder {
      *                          conform to
      * @return list of all classes in the jars, that conform to {@code filter}
      * @throws IOException when reading the jar files fails
+     * @deprecated use {@link #loadServices(Class, ServiceLoader, ServiceLoadExceptionHandler)} or {@code JMeterUtils#loadServicesAndScanJars}
      */
+    @API(status = API.Status.DEPRECATED, since = "5.6")
+    @Deprecated
     public static List<String> findClasses(String[] searchPathsOrJars, ClassFilter filter) throws IOException {
         if (log.isDebugEnabled()) {
             log.debug("findClasses with searchPathsOrJars : {} and classFilter : {}",
@@ -352,10 +466,22 @@ public final class ClassFinder {
     }
 
 
-    private static void findClassesInOnePath(File file, Set<String> listClasses, ClassFilter filter) throws IOException {
+    private static void findClassesInOnePath(File file, Set<String> listClasses, ClassFilter filter) {
         if (file.isDirectory()) {
             findClassesInPathsDir(file.getAbsolutePath(), file, listClasses, filter);
         } else if (file.exists()) {
+            if (getSkipJarsWithJmeterSkipClassScanningAttribute() && file.getName().endsWith(DOT_JAR)) {
+                // Ignore jars with JMeter-Skip-Class-Scanning attribute
+                try (JarFile jar = new JarFile(file)) {
+                    String value = jar.getManifest().getMainAttributes().getValue(JMETER_SKIP_CLASS_SCANNING_ATTRIBUTE);
+                    if (Boolean.parseBoolean(value)) {
+                        log.info("Jar {} is skipped for scanning since it has {}={} attribute", file, JMETER_SKIP_CLASS_SCANNING_ATTRIBUTE, value);
+                        return;
+                    }
+                } catch (IOException e) {
+                    log.warn("Can not open the jar {}, message: {}", file.getAbsolutePath(), e.getLocalizedMessage(), e);
+                }
+            }
             try (ZipFile zipFile = new ZipFile(file);
                  Stream<? extends ZipEntry> entries = zipFile.stream()) {
                 entries.filter(entry -> entry.getName().endsWith(DOT_CLASS))
@@ -371,7 +497,7 @@ public final class ClassFinder {
     }
 
 
-    private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) throws IOException {
+    private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) {
         File[] list = dir.listFiles();
         if (list == null) {
             log.warn("{} is not a folder", dir.getAbsolutePath());

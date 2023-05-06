@@ -27,10 +27,13 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Function to return the name of the current sampler.
  * @since 2.5
  */
+@AutoService(Function.class)
 public class SamplerName extends AbstractFunction {
 
     private static final String KEY = "__samplerName"; //$NON-NLS-1$

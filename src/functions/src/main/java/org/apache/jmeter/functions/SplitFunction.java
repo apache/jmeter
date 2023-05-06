@@ -31,6 +31,8 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 // @see org.apache.jmeter.functions.PackageTest for unit tests
 
 /**
@@ -53,6 +55,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * @since 2.0.2
  */
+@AutoService(Function.class)
 public class SplitFunction extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(SplitFunction.class);
 

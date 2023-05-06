@@ -35,12 +35,15 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 // See org.apache.jmeter.functions.TestTimeFunction for unit tests
 
 /**
  * __time() function - returns the current time in milliseconds
  * @since 2.2
  */
+@AutoService(Function.class)
 public class TimeFunction extends AbstractFunction {
 
     private static final String KEY = "__time"; // $NON-NLS-1$

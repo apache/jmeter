@@ -30,11 +30,14 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Function to decode a application/x-www-form-urlencoded string.
  *
  * @since 2.10
  */
+@AutoService(Function.class)
 public class UrlDecode extends AbstractFunction {
 
     private static final String CHARSET_ENCODING = StandardCharsets.UTF_8.name();

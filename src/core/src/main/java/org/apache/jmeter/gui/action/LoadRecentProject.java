@@ -34,10 +34,13 @@ import java.util.stream.IntStream;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Handles the loading of recent files, and also the content and
  * visibility of menu items for loading the recent files
  */
+@AutoService(Command.class)
 public class LoadRecentProject extends Load {
     /** Prefix for the user preference key */
     private static final String USER_PREFS_KEY = "recent_file_"; //$NON-NLS-1$

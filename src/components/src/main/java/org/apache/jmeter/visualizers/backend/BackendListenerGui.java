@@ -20,11 +20,10 @@ package org.apache.jmeter.visualizers.backend;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 import javax.swing.ComboBoxModel;
@@ -33,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -45,7 +43,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
-import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +74,6 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
     /** The current className of the Backend listener **/
     private String className;
-
 
     /**
      * Create a new BackendListenerGui as a standalone component.
@@ -117,25 +114,18 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      * @return a panel containing the relevant components
      */
     private JPanel createClassnamePanel() {
-        List<String> possibleClasses = new ArrayList<>();
-
-        try {
-            // Find all the classes which implement the BackendListenerClient
-            // interface.
-            possibleClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-                    new Class[] { BackendListenerClient.class });
-
-            // Remove the BackendListener class from the list since it only
-            // implements the interface for error conditions.
-
-            possibleClasses.remove(BackendListener.class.getName() + "$ErrorBackendListenerClient");
-        } catch (Exception e) {
-            log.debug("Exception getting interfaces.", e);
-        }
-
         JLabel label = new JLabel(JMeterUtils.getResString("backend_listener_classname")); // $NON-NLS-1$
 
-        classnameCombo = new JComboBox<>(possibleClasses.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+        String[] listenerClasses = JMeterUtils.loadServicesAndScanJars(
+                        BackendListenerClient.class,
+                        ServiceLoader.load(BackendListenerClient.class),
+                        Thread.currentThread().getContextClassLoader(),
+                        new LogAndIgnoreServiceLoadExceptionHandler(log)
+                ).stream()
+                .map(s -> s.getClass().getName())
+                .sorted()
+                .toArray(String[]::new);
+        classnameCombo = new JComboBox<>(listenerClasses);
         classnameCombo.addActionListener(this);
         classnameCombo.setEditable(false);
         label.setLabelFor(classnameCombo);

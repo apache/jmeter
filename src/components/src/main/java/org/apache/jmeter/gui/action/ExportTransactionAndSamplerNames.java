@@ -53,10 +53,16 @@ import org.apache.jorphan.gui.ComponentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Export transactions names for web report
  * @since 3.3
  */
+@AutoService({
+        Command.class,
+        MenuCreator.class
+})
 public class ExportTransactionAndSamplerNames extends AbstractAction implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(ExportTransactionAndSamplerNames.class);
 

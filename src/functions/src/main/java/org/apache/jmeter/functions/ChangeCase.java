@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Change Case Function
  *
@@ -45,6 +47,7 @@ import org.slf4j.LoggerFactory;
  * @since 4.0
  *
  */
+@AutoService(Function.class)
 public class ChangeCase extends AbstractFunction {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeCase.class);
     private static final List<String> DESC = new ArrayList<>();

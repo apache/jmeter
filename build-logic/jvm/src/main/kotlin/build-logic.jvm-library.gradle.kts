@@ -16,8 +16,7 @@
  */
 
 plugins {
-    id("build-logic.java")
-    id("java-library")
+    id("build-logic.java-library")
 }
 
 if (file("src/main/groovy").isDirectory || file("src/test/groovy").isDirectory) {

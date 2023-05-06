@@ -171,10 +171,14 @@ implements ChangeListener, ActionListener, ItemListener
             if(initialize) {
                 synchronized (IS_INITILIAZED) {
                     if(IS_INITILIAZED.compareAndSet(false, true)) {
-                        annotatedTestClasses = ClassFinder.findAnnotatedClasses(SPATHS,
-                            new Class[] {Test.class}, false);
-                        junitTestClasses = ClassFinder.findClassesThatExtend(SPATHS,
-                             new Class[] { TestCase.class });
+                        @SuppressWarnings("deprecation")
+                        List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(SPATHS,
+                                new Class[]{Test.class}, false);
+                        annotatedTestClasses = annotatedClasses;
+                        @SuppressWarnings("deprecation")
+                        List<String> junitClasses = ClassFinder.findClassesThatExtend(SPATHS,
+                                new Class[]{TestCase.class});
+                        junitTestClasses = junitClasses;
                     }
                     if (junit4.isSelected()){
                         classList = annotatedTestClasses;

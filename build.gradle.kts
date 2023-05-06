@@ -61,6 +61,7 @@ val notPublishedProjects by extra {
         projects.src.release,
         projects.src.testkit,
         projects.src.testkitWiremock,
+        projects.src.testServices,
     ).mapTo(mutableSetOf()) { it.dependencyProject }
 }
 
@@ -86,7 +87,7 @@ publishedProjects.forEach {project ->
             throw IllegalStateException(
                 "Project ${project.path} is listed in publishedProjects, however it misses maven-publish plugin. " +
                     "Please add maven-publish plugin (e.g. replace build-logic.jvm-library with build-logic.jvm-published-library) or " +
-                    "move the project to the list of published ones"
+                    "move the project to the list of notPublishedProjects"
             )
         }
     }

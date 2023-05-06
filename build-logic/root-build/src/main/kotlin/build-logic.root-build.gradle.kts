@@ -26,6 +26,7 @@ plugins {
     id("com.github.vlsi.ide")
     id("org.nosphere.apache.rat")
     id("org.jetbrains.gradle.plugin.idea-ext")
+    kotlin("jvm") apply false
 }
 
 ide {

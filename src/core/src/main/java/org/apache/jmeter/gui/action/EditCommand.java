@@ -25,9 +25,12 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jorphan.gui.ui.TextComponentUI;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements the Edit menu item.
  */
+@AutoService(Command.class)
 public class EditCommand extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 

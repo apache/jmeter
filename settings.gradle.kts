@@ -76,6 +76,7 @@ include(
     "src:release",
     "src:testkit",
     "src:testkit-wiremock",
+    "src:test-services",
     "src:dist",
     "src:dist-check"
 )

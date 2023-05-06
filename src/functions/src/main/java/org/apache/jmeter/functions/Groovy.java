@@ -41,11 +41,14 @@ import org.apache.jmeter.util.JSR223TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * __groovy function
  * Provides a Groovy interpreter
  * @since 3.1
  */
+@AutoService(Function.class)
 public class Groovy extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(Groovy.class);
 

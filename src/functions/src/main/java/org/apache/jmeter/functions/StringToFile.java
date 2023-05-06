@@ -41,6 +41,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * StringToFile Function to write a String to a file
  *
@@ -55,6 +57,7 @@ import org.slf4j.LoggerFactory;
  *
  * @since 5.2
  */
+@AutoService(Function.class)
 public class StringToFile extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(StringToFile.class);
     private static final List<String> desc = new ArrayList<>();

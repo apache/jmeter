@@ -48,6 +48,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArray() throws IOException {
+        @SuppressWarnings("deprecation")
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Exception.class });
@@ -56,6 +57,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayTrue() throws Exception {
+        @SuppressWarnings("deprecation")
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Object.class },
@@ -66,6 +68,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayFalse() throws Exception {
+        @SuppressWarnings("deprecation")
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Exception.class },
@@ -77,6 +80,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayBooleanStringString() throws Exception {
+        @SuppressWarnings("deprecation")
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Exception.class },
@@ -90,6 +94,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayBooleanStringStringTrue() throws Exception {
+        @SuppressWarnings("deprecation")
         List<String> annotatedClasses = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { java.beans.Transient.class },
@@ -102,7 +107,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindAnnotatedClasses() throws Exception {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"deprecation", "unchecked"})
         List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(
                 libDirs,
                 new Class[] { java.beans.Transient.class});
@@ -111,7 +116,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindAnnotatedInnerClasses() throws Exception {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"deprecation", "unchecked"})
         List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(libDirs,
                 new Class[] { java.lang.Deprecated.class}, true);
         Assert.assertTrue(annotatedClasses.stream().anyMatch(s->s.contains("$")));
@@ -119,12 +124,16 @@ public class TestClassFinder {
 
     @Test
     public void testFindClasses() throws IOException {
-        Assert.assertFalse(ClassFinder.findClasses(libDirs, className -> true).isEmpty());
+        @SuppressWarnings("deprecation")
+        List<String> classes = ClassFinder.findClasses(libDirs, className -> true);
+        Assert.assertFalse(classes.isEmpty());
     }
 
     @Test
     public void testFindClassesNone() throws IOException {
-        Assert.assertTrue(ClassFinder.findClasses(libDirs, className -> false).isEmpty());
+        @SuppressWarnings("deprecation")
+        List<String> classes = ClassFinder.findClasses(libDirs, className -> false);
+        Assert.assertTrue(classes.isEmpty());
     }
 
 }

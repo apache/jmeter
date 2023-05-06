@@ -19,6 +19,9 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 import org.apache.jmeter.testelement.TestElement;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(LogParser.class)
 public class OrderPreservingLogParser extends SharedTCLogParser {
 
     public OrderPreservingLogParser() {

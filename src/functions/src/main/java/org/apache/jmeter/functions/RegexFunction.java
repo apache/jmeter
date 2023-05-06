@@ -39,6 +39,8 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 /**
  * Implements regular expression parsing of sample results and variables
  * @since 1.X
@@ -46,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 // @see TestRegexFunction for unit tests
 
+@AutoService(Function.class)
 public class RegexFunction extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(RegexFunction.class);
 

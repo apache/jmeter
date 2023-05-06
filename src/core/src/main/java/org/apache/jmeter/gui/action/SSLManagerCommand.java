@@ -32,6 +32,8 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 
+import com.google.auto.service.AutoService;
+
 //
 /**
  * SSL Manager Command. The SSL Manager provides a mechanism to change your
@@ -52,6 +54,7 @@ import org.apache.jmeter.util.SSLManager;
  * already defined via the property.
  *
  */
+@AutoService(Command.class)
 public class SSLManagerCommand extends AbstractAction {
     private static final Set<String> commandSet;
     static {

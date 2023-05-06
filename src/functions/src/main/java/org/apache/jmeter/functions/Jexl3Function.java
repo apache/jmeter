@@ -37,11 +37,14 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * A function which understands Commons JEXL3
  * @since 3.0
  */
 // For unit tests, see TestJexlFunction
+@AutoService(Function.class)
 public class Jexl3Function extends AbstractFunction implements ThreadListener {
 
     private static final Logger log = LoggerFactory.getLogger(Jexl3Function.class);

@@ -26,11 +26,14 @@ import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Returns Thread Group Name
  *
  * @since 5.0
  */
+@AutoService(Function.class)
 public class ThreadGroupName extends AbstractFunctionByKey {
     private static final String KEY = "__threadGroupName"; //$NON-NLS-1$
 
