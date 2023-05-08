@@ -52,7 +52,7 @@ dependencies {
         api("com.github.weisj:darklaf-theme:2.7.3")
         api("com.github.weisj:darklaf-property-loader:2.7.3")
         api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.3.4")
-        api("com.helger.commons:ph-commons:10.2.3")
+        api("com.helger.commons:ph-commons:10.2.4")
         api("com.helger:ph-css:6.5.0")
         api("com.jayway.jsonpath:json-path:2.8.0")
         api("com.miglayout:miglayout-core:5.3")
