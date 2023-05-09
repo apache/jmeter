@@ -18,7 +18,6 @@
 package org.apache.jmeter.junit;
 
 import java.awt.Component;
-import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -28,7 +27,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,8 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
 import javax.xml.parsers.DocumentBuilder;
@@ -134,7 +132,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
     /*
      * Use a suite to allow the tests to be generated at run-time
      */
-    public static Test suite() throws Exception {
+    public static Test suite() throws Throwable {
         TestSuite suite = new TestSuite("JMeterTest");
 
         // The Locale used to instantiate the GUI objects
@@ -231,41 +229,31 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
-
-    public static int scanprintMap(Map<String, Boolean> m, String t) {
-        Set<String> s = m.keySet();
-        if (s.isEmpty()) {
-            return 0;
-        }
-
-        int unseen = 0;
-        for (Map.Entry<String, Boolean> entry : m.entrySet()) {
-            if (!entry.getValue().equals(Boolean.TRUE)) {
-                if (unseen == 0)// first time
-                {
-                    System.out.println("\nNames remaining in " + t + " Map:");
-                }
-                unseen++;
-                System.out.println(entry.getKey());
-            }
-        }
-        return unseen;
+    public static<T> List<T> keysWithFalseValues(Map<? extends T, Boolean> map) {
+        return map.entrySet().stream()
+                .filter(e -> !e.getValue().equals(Boolean.TRUE))
+                .map(Map.Entry::getKey)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    public void checkGuiSet() throws Exception {
+    public void checkGuiSet() {
         guiTitles.remove("Example Sampler");// We don't mind if this is left over
         guiTitles.remove("Sample_Result_Save_Configuration");// Ditto, not a sampler
         assertEquals(
-                "Should not have any names left over, check name of components in EN (default) Locale, "
-                + "which must match name attribute of component, check java.awt.HeadlessException errors before, we are running with '-Djava.awt.headless="
-                + System.getProperty("java.awt.headless")+"'",
-                0, scanprintMap(guiTitles, "GUI"));
+                "Should not have any names left over in guiTitles map, check name of components in EN (default) Locale, "
+                        + "which must match name attribute of component, check java.awt.HeadlessException errors before,"
+                        + " we are running with '-Djava.awt.headless="
+                        + System.getProperty("java.awt.headless") + "'",
+                "[]",
+                keysWithFalseValues(guiTitles).toString()
+        );
     }
 
     /*
      * Test GUI elements - create the suite of tests
      */
-    private static Test suiteGUIComponents() throws Exception {
+    private static Test suiteGUIComponents() throws Throwable {
         TestSuite suite = new TestSuite("GuiComponents");
         for (Object o : getObjects(JMeterGUIComponent.class)) {
             JMeterGUIComponent item = (JMeterGUIComponent) o;
@@ -293,7 +281,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
     /*
      * Test GUI elements - create the suite of tests
      */
-    private static Test suiteBeanComponents() throws Exception {
+    private static Test suiteBeanComponents() throws Throwable {
         TestSuite suite = new TestSuite("BeanComponents");
         for (Object o : getObjects(TestBean.class)) {
             Class<?> c = o.getClass();
@@ -401,7 +389,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
     /*
      * Test serializable elements - create the suite of tests
      */
-    private static Test suiteSerializableElements() throws Exception {
+    private static Test suiteSerializableElements() throws Throwable {
         TestSuite suite = new TestSuite("SerializableElements");
         for (Object o : getObjects(Serializable.class)) {
             Serializable serObj = (Serializable) o;
@@ -450,47 +438,44 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
-    public static Collection<Object> getObjects(Class<?> extendsClass) throws Exception {
+    public static Collection<Object> getObjects(Class<?> extendsClass) throws Throwable {
         String exName = extendsClass.getName();
-        Object myThis = "";
         Iterator<String> classes = ClassFinder
                 .findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { extendsClass }).iterator();
         List<Object> objects = new ArrayList<>();
-        String className = "";
-        boolean caughtError = true;
-        final AtomicReference<Throwable> exceptionCatcher = new AtomicReference<>();
-        final AtomicReference<Exception> unexpectedExceptionCatcher = new AtomicReference<>();
-        try {
-            while (classes.hasNext()) {
-                className = classes.next();
-                // TODO - improve this check
-                if (className.endsWith("RemoteJMeterEngineImpl")) {
-                    continue; // Don't try to instantiate remote server
-                }
-                if (className.endsWith("RemoteSampleListenerImpl")) {
-                    // TODO: Cannot start. travis-job-e984b3d5-f93f-4b0f-b6c0-50988a5ece9d is a loopback address.
-                    continue;
-                }
-                String currentClassName = className;
+        while (classes.hasNext()) {
+            String className = classes.next();
+            // TODO - improve this check
+            if (className.equals("org.apache.jmeter.gui.menu.StaticJMeterGUIComponent")) {
+                continue;
+            }
+            if (className.endsWith("RemoteJMeterEngineImpl")) {
+                continue; // Don't try to instantiate remote server
+            }
+            if (className.endsWith("RemoteSampleListenerImpl")) {
+                // TODO: Cannot start. travis-job-e984b3d5-f93f-4b0f-b6c0-50988a5ece9d is a loopback address.
+                continue;
+            }
+            try {
                 // Construct classes in the AWT thread, as we may have found classes, that
                 // assume to be constructed in the AWT thread.
                 SwingUtilities.invokeAndWait(() -> {
-                    try {
-                        instantiateClass(exName, myThis, objects, currentClassName, exceptionCatcher);
-                    } catch (Exception e) {
-                        unexpectedExceptionCatcher.set(e);
+                    Object object = instantiateClass(className);
+                    if (object != null) {
+                        objects.add(object);
                     }
                 });
-                if (unexpectedExceptionCatcher.get() != null) {
-                    throw unexpectedExceptionCatcher.get();
+            } catch (InvocationTargetException e) {
+                Throwable cause = e.getCause();
+                if (cause instanceof IllegalStateException && cause.getMessage().startsWith("Unable to instantiate ")) {
+                    cause = cause.getCause();
                 }
-            }
-            caughtError = false;
-        } finally {
-            if (caughtError) {
-                System.out.println("Last class=" + className);
-                System.out.println("objects.size=" + objects.size());
-                System.out.println("Last error=" + exceptionCatcher.get());
+                if (extendsClass.equals(Serializable.class)) {
+                    // TODO: ignore only well-known classes
+                    System.err.println("Unable to instantiate " + className + " for service " + extendsClass + ", " + cause.toString());
+                } else {
+                    throw new IllegalStateException("Unable to instantiate " + className + " for service " + extendsClass, cause);
+                }
             }
         }
 
@@ -514,48 +499,18 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         return objects;
     }
 
-    private static void instantiateClass(final String extendsClassName, final Object myThis,
-            final List<Object> objects, final String className, final AtomicReference<Throwable> exceptionCatcher) throws Exception {
+    private static Object instantiateClass(String className) {
         try {
-            Class<?> currentClass = Class.forName(className);
-            try {
-                // Try with a parameter-less constructor first
-                objects.add(currentClass.getDeclaredConstructor().newInstance());
-            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException |
-                    InvocationTargetException e) {
-                exceptionCatcher.set(e);
-                try {
-                    // Events often have this constructor
-                    objects.add(currentClass.getConstructor(new Class[] { Object.class }).newInstance(
-                            new Object[] { myThis }));
-                } catch (NoSuchMethodException f) {
-                    // no luck. Ignore this class
-                    if (!Enum.class.isAssignableFrom(currentClass)) { // ignore enums
-                        System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": NoSuchMethodException  " +
-                            className + ", missing empty Constructor or Constructor with Object parameter");
-                    }
-                }
+            Class<?> aClass = Class.forName(className);
+            if (aClass.isEnum() || Modifier.isAbstract(aClass.getModifiers()) || aClass.isInterface()) {
+                return null;
             }
-        } catch (NoClassDefFoundError e) {
-            // no luck. Ignore this class
-            System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": NoClassDefFoundError " + className + ":" + e.getMessage());
-            e.printStackTrace(System.out);
-        } catch (IllegalAccessException e) {
-            exceptionCatcher.set(e);
-            System.out.println("o.a.j.junit.JMeterTest WARN: " + extendsClassName + ": IllegalAccessException " + className + ":" + e.getMessage());
-            e.printStackTrace(System.out);
-            // We won't test restricted-access classes.
-        } catch (HeadlessException | ExceptionInInitializerError e) {// EIIE can be caused by Headless
-            exceptionCatcher.set(e);
-            System.out.println("o.a.j.junit.JMeterTest Error creating " + className + " " + e.toString());
-        } catch (Exception e) {
-            exceptionCatcher.set(e);
-            if (e instanceof RemoteException) { // not thrown, so need to check here
-                System.out.println("o.a.j.junit.JMeterTest WARN: " + "Error creating " + className + " " + e.toString());
-            } else {
-                throw new Exception("Error creating " + className, e);
-            }
+            return aClass
+                    .getDeclaredConstructor()
+                    .newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 ClassNotFoundException e) {
+            throw new IllegalStateException("Unable to instantiate " + className, e instanceof InvocationTargetException ? e.getCause() : e);
         }
     }
-
 }

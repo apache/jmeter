@@ -70,7 +70,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implemen
     /*
      * Test Functions - create the suite of tests
      */
-    private static Test suiteFunctions() throws Exception {
+    private static Test suiteFunctions() throws Throwable {
         TestSuite suite = new TestSuite("Functions");
         for (Object item : JMeterTest.getObjects(Function.class)) {
             if (item.getClass().equals(CompoundVariable.class)) {
@@ -122,7 +122,11 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implemen
     }
 
     public void checkFunctionSet() throws Exception {
-        assertEquals("Should not have any names left over", 0, JMeterTest.scanprintMap(funcTitles, "Function"));
+        assertEquals(
+                "Should not have any names left over in funcTitles",
+                "[]",
+                JMeterTest.keysWithFalseValues(funcTitles).toString()
+        );
     }
 
     /*
@@ -160,7 +164,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implemen
     /*
      * Use a suite to allow the tests to be generated at run-time
      */
-    public static Test suite() throws Exception {
+    public static Test suite() throws Throwable {
         TestSuite suite = new TestSuite("ComponentReferenceFunctionTest");
         suite.addTest(new ComponentReferenceFunctionTest("createFunctionSet"));
         suite.addTest(suiteFunctions());

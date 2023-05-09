@@ -49,7 +49,7 @@ public class TestElementTest extends JMeterTestCaseJUnit implements Describable 
     /*
      * Test TestElements - create the suite
      */
-    public static Test suite() throws Exception {
+    public static Test suite() throws Throwable {
         TestSuite suite = new TestSuite("TestElements");
         for (Object o : JMeterTest.getObjects(TestElement.class)) {
             TestElement item = (TestElement) o;
