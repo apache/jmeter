@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -502,6 +503,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void recoverRunningVersion() {
+        if (this instanceof NoThreadClone) {
+            // The element is shared between threads, so there's nothing to recover
+            // See https://github.com/apache/jmeter/issues/5875
+            return;
+        }
         Iterator<Map.Entry<String, JMeterProperty>>  iter = propMap.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<String, JMeterProperty> entry = iter.next();
