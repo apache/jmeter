@@ -107,6 +107,7 @@ Summary
 <ul>
   <li><pr>725</pr>Add Chinese Simplified Translation for Open Model Thread Group</li>
   <li><pr>5710</pr>Add GitHub Issue templates</li>
+  <li><pr>5910</pr>Use Caffeine for caching customizers in TestBeanGUI instead of commons-collections4 LRUMap</li>
   <li><pr>5713</pr>Update Spock to 2.2-groovy-3.0 (from 2.1-groovy-3.0)</li>
   <li><issue>5718</issue>Update Apache commons-text to 1.10.0 (from 1.9)</li>
   <li><pr>5731</pr>Update docs for <code>changeCase</code> function. <code>UPPER</code> is the default.

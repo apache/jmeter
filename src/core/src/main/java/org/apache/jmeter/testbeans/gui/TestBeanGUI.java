@@ -37,7 +37,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPopupMenu;
 
-import org.apache.commons.collections4.map.LRUMap;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.gui.AbstractAssertionGui;
 import org.apache.jmeter.config.ConfigElement;
@@ -68,6 +67,9 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * JMeter GUI element editing for TestBean elements.
@@ -109,7 +111,10 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * needs to be limited, though, to avoid memory issues when editing very
      * large test plans.
      */
-    private final Map<TestElement, Customizer> customizers = new LRUMap<>(20);
+    private final Cache<TestElement, Customizer> customizers =
+            Caffeine.newBuilder() // TOOD: should this be made static?
+                    .maximumSize(20)
+                    .build();
 
     /** Index of the customizer in the JPanel's child component list: */
     private int customizerIndexInPanel;
@@ -325,7 +330,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             if (initialized){
                 remove(customizerIndexInPanel);
             }
-            Customizer c = customizers.computeIfAbsent(element, e -> {
+            Customizer c = customizers.get(element, e -> {
                 Customizer result = createCustomizer();
                 result.setObject(propertyMap);
                 return result;
