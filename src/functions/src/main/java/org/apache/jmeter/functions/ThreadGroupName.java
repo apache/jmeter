@@ -40,10 +40,10 @@ public class ThreadGroupName extends AbstractFunctionByKey {
         super(KEY, 0); //$NON-NLS-1$
     }
 
-    @Override
     /**
      * Get current thread group using sampler's context
      */
+    @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         JMeterContext context;
         if (currentSampler != null) {

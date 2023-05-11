@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
@@ -127,7 +128,7 @@ public class SSLManagerCommand extends AbstractAction {
          */
         @Override
         public boolean accept(File testFile) {
-            String lowerCaseName = testFile.getName().toLowerCase();
+            String lowerCaseName = testFile.getName().toLowerCase(Locale.ROOT);
             return testFile.isDirectory()
             || lowerCaseName.endsWith(".p12")  //$NON-NLS-1$
             || lowerCaseName.endsWith(".jks")

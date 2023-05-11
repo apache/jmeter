@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -78,7 +79,7 @@ public class ChangeCase extends AbstractFunction {
     protected String changeCase(String originalString, String mode) {
         String targetString = originalString;
         // mode is case insensitive, allow upper for example
-        ChangeCaseMode changeCaseMode = ChangeCaseMode.typeOf(mode.toUpperCase());
+        ChangeCaseMode changeCaseMode = ChangeCaseMode.typeOf(mode.toUpperCase(Locale.ROOT));
         if (changeCaseMode != null) {
             switch (changeCaseMode) {
             case UPPER:

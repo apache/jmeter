@@ -1174,14 +1174,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         deleteButton.addActionListener(this);
         buttonPanel.add(deleteButton);
 
-        /** A button for adding new excludes/includes to the table from the clipboard. */
+        // A button for adding new excludes/includes to the table from the clipboard.
         JButton addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
         addFromClipboard.setActionCommand(copyFromClipboard);
         addFromClipboard.addActionListener(this);
         buttonPanel.add(addFromClipboard);
 
         if(addSuggestedExcludes != null) {
-            /** A button for adding suggested excludes. */
+            // A button for adding suggested excludes.
             JButton addFromSuggestedExcludes = new JButton(JMeterUtils.getResString("add_from_suggested_excludes")); // $NON-NLS-1$
             addFromSuggestedExcludes.setActionCommand(addSuggestedExcludes);
             addFromSuggestedExcludes.addActionListener(this);

@@ -44,6 +44,7 @@
     <trusted-key id='e77417ac194160a3fabd04969a259c7ee636c5ed' group='com.google.googlejavaformat' />
     <trusted-key id='694621a7227d8d5289699830abe9f3126bb741c1' group='com.google.guava' />
     <trusted-key id='bdb5fa4fe719d787fb3d3197f6d4a1d411e9d1ae' group='com.google.guava' />
+    <trusted-key id='d5f46bc0b86af5dc56df58f05e975cb00c643dbf' group='com.google.inject' />
     <trusted-key id='b801e2f8ef035068ec1139cc29579f18fa8fd93b' group='com.google.j2objc' />
     <trusted-key id='d75e25b78ebb19e47c0a99bca7764f502a938c99' group='com.google.protobuf' />
     <trusted-key id='f1a51e051f527e0c8e24d54d4b1e11d5a4b91e89' group='com.google.protobuf' />
@@ -205,6 +206,9 @@
   <dependencies>
     <dependency group='antlr' module='antlr' version='2.7.7'>
       <sha512>311C3115F9F6651D1711C52D1739E25A70F25456CACB9A2CDDE7627498C30B13D721133CC75B39462AD18812A82472EF1B3B9D64FAB5ABB0377C12BF82043A74</sha512>
+    </dependency>
+    <dependency group='aopalliance' module='aopalliance' version='1.0'>
+      <sha512>3F44A932D8C00CFEEE2EB057BCD7C301A2D029063E0A916E1E20B3AEC4877D19D67A2FD8AAF58FA2D5A00133D1602128A7F50912FFB6CABC7B0FDC7FBDA3F8A1</sha512>
     </dependency>
     <dependency group='bsf' module='bsf' version='2.4.0'>
       <sha512>CF2FF6EA53CD13EA842CAD398F1BE24539BEC68A5CBBD088492ADAB50BC782CDE6D9F4C0B6A24DEAEEE537809C90631C43F9A680FF2826C28CCF1B39380954E3</sha512>

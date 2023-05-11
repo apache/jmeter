@@ -20,6 +20,7 @@ package org.apache.jmeter.functions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -141,7 +142,7 @@ public class LogFunction extends AbstractFunction {
      */
     static synchronized void logDetails(Logger logger, String stringToLog, String priorityString, Throwable throwable,
             String comment) {
-        String prio = priorityString.trim().toUpperCase();
+        String prio = priorityString.trim().toUpperCase(Locale.ROOT);
 
         if ("OUT".equals(prio)) {//$NON-NLS-1
             printDetails(System.out, stringToLog, throwable, comment);

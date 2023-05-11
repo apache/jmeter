@@ -399,7 +399,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterUtils.reportErrorToUser("Error occurred compiling the tree: - see log file", e);
             return; // no point continuing
         }
-        /**
+        /*
          * Notification of test listeners needs to happen after function
          * replacement, but before setting RunningVersion to true.
          */

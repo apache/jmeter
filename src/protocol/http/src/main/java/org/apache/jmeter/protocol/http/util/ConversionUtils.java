@@ -182,10 +182,7 @@ public class ConversionUtils {
             return url;
         }
 
-        /**
-         * http://auth@host:port/path1/path2/path3/?query#anchor
-         */
-
+        // http://auth@host:port/path1/path2/path3/?query#anchor
         // get to 'path' part of the URL, preserving schema, auth, host if
         // present
 

@@ -26,6 +26,7 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -82,7 +83,7 @@ public class StringToFile extends AbstractFunction {
         String content = ((CompoundVariable) values[1]).execute();
         boolean append = true;
         if (values.length >= 3) {
-            String appendString = ((CompoundVariable) values[2]).execute().toLowerCase().trim();
+            String appendString = ((CompoundVariable) values[2]).execute().toLowerCase(Locale.ROOT).trim();
             if (!appendString.isEmpty()) {
                 append = Boolean.parseBoolean(appendString);
             }

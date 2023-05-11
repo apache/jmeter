@@ -18,7 +18,6 @@
 package org.apache.jmeter.gui.action;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -54,10 +53,7 @@ public class RegexpSearcher implements Searcher {
         }
         return textTokens.stream()
                 .filter(token -> !StringUtils.isEmpty(token))
-                .map(token -> caseSensitive ?
-                        pattern.matcher(token) :
-                        pattern.matcher(token.toLowerCase()))
-                .anyMatch(Matcher::find);
+                .anyMatch(token -> pattern.matcher(token).find());
     }
 
     @Override

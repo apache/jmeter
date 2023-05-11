@@ -28,20 +28,14 @@ public class RawTextSearcher implements Searcher {
     private final boolean caseSensitive;
     private final String textToSearch;
 
-
     /**
      * Constructor
-     * @param caseSensitive is search case sensitive
+     * @param caseSensitive is search case-sensitive
      * @param textToSearch Text to search
      */
     public RawTextSearcher(boolean caseSensitive, String textToSearch) {
-        super();
         this.caseSensitive = caseSensitive;
-        if (caseSensitive) {
-            this.textToSearch = textToSearch;
-        } else {
-            this.textToSearch = textToSearch.toLowerCase();
-        }
+        this.textToSearch = textToSearch;
     }
 
     /**
@@ -50,9 +44,8 @@ public class RawTextSearcher implements Searcher {
     @Override
     public boolean search(List<String> textTokens) {
         return textTokens.stream()
-                .filter(token -> !StringUtils.isEmpty(token))
-                .map(token -> caseSensitive ? token : token.toLowerCase())
-                .anyMatch(token -> token.contains(textToSearch));
+                .filter(StringUtils::isNotEmpty)
+                .anyMatch(token -> caseSensitive ? token.contains(textToSearch) : StringUtils.containsAnyIgnoreCase(token, textToSearch));
     }
 
     @Override

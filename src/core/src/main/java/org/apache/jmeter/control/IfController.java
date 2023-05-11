@@ -96,7 +96,6 @@ public class IfController extends GenericController implements Serializable, Thr
             try {
                 Scriptable scope = cx.initStandardObjects(null);
                 Object cxResultObject = cx.evaluateString(scope, condition
-                /** * conditionString ** */
                 , "<cmd>", 1, null);
                 result = computeResultFromString(condition, Context.toString(cxResultObject));
             } catch (Exception e) {
