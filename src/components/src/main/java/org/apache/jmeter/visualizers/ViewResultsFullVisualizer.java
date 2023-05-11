@@ -61,7 +61,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
@@ -264,7 +263,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private static Set<Object> extractExpandedObjects(final Enumeration<TreePath> expandedElements) {
         if (expandedElements != null) {
-            final List<TreePath> list = EnumerationUtils.toList(expandedElements);
+            final List<TreePath> list = Collections.list(expandedElements);
             log.debug("Expanded: {}", list);
             Set<Object> result = list.stream()
                     .map(TreePath::getLastPathComponent)
