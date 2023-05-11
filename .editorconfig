@@ -7,6 +7,10 @@ charset = utf-8
 indent_style = space
 max_line_length = 120
 ij_any_align_multiline_parameters = false
+ij_any_do_while_brace_force = always
+ij_any_for_brace_force = always
+ij_any_if_brace_force = always
+ij_any_while_brace_force = always
 
 [{*.sh,gradlew}]
 end_of_line = lf
