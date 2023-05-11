@@ -84,7 +84,7 @@ dependencies {
             because("ApacheJMeter_junit depends on junit4")
         }
         api("org.jetbrains:annotations:24.0.1")
-        api("org.jetbrains.lets-plot:lets-plot-batik:3.1.0")
+        api("org.jetbrains.lets-plot:lets-plot-batik:3.2.0")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.3.0")
         api("net.minidev:accessors-smart:2.4.9")
         api("net.minidev:json-smart:2.4.10")
