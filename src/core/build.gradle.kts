@@ -92,14 +92,8 @@ dependencies {
     runtimeOnly("commons-collections:commons-collections") {
         because("Compatibility for old plugins")
     }
-    implementation("org.jetbrains.lets-plot:lets-plot-batik") {
-        // See https://github.com/JetBrains/lets-plot/issues/471
-        exclude("org.jetbrains.kotlin", "kotlin-reflect")
-    }
-    implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm") {
-        // See https://github.com/JetBrains/lets-plot/issues/471
-        exclude("org.jetbrains.kotlin", "kotlin-reflect")
-    }
+    implementation("org.jetbrains.lets-plot:lets-plot-batik")
+    implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm")
     implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
