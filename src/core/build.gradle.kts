@@ -89,7 +89,7 @@ dependencies {
     implementation("commons-codec:commons-codec") {
         because("DigestUtils")
     }
-    implementation("commons-collections:commons-collections") {
+    runtimeOnly("commons-collections:commons-collections") {
         because("Compatibility for old plugins")
     }
     implementation("org.jetbrains.lets-plot:lets-plot-batik") {
