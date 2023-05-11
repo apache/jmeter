@@ -87,7 +87,7 @@ public class LoopController extends GenericController implements Serializable, I
                 ) {
             try {
                 JMeterProperty prop = getProperty(LOOPS);
-                nbLoops = Integer.valueOf(prop.getStringValue());
+                nbLoops = prop.getIntValue();
             } catch (NumberFormatException e) {
                 nbLoops = 0;
             }
