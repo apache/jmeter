@@ -79,6 +79,7 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
+  <li><pr>5909</pr> Use Caffeine for caching compiled scripts in JSR223 samplers instead of commons-collections4 LRUMap</li>
 </ul>
 
 <h3>Controllers</h3>
