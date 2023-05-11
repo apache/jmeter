@@ -74,6 +74,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+  <li><pr>5911</pr> Use Caffeine for caching HTTP headers instead of commons-collections4 LRUMap</li>
 </ul>
 
 <h3>Other samplers</h3>

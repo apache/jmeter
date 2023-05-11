@@ -25,9 +25,10 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.collections4.IteratorUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
@@ -74,10 +75,12 @@ public class TestCssParser extends JMeterTestCase {
 
     private List<URL> extractUrls(CssParser parser, String css)
             throws LinkExtractorParseException, MalformedURLException {
-        List<URL> result = IteratorUtils.toList(parser.getEmbeddedResourceURLs(
+        List<URL> result = new ArrayList<>();
+        Iterator<URL> urlIterator = parser.getEmbeddedResourceURLs(
                 "Mozilla", css.getBytes(StandardCharsets.UTF_8), new URL(
                         "http://example.org/"), StandardCharsets.UTF_8
-                        .displayName()));
+                        .displayName());
+        urlIterator.forEachRemaining(result::add);
         return result;
     }
 }
