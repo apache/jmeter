@@ -30,10 +30,11 @@ import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -91,11 +92,19 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     /** Whether to call System.exit(0) unconditionally at end of non-GUI test */
     private static final boolean SYSTEM_EXIT_FORCED = JMeterUtils.getPropDefault("jmeterengine.force.system.exit", false);
 
+    private static final AtomicInteger THREAD_COUNTER = new AtomicInteger(0);
+
     /**
      * Executor service to execute management tasks like "start test", "stop test".
      * The use of {@link ExecutorService} allows propagating the exception from the threads.
+     * Thread keepalive time is set to 1 second, so threads are released early,
+     * so the application can shut down faster.
      */
-    private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+    private static final ExecutorService EXECUTOR_SERVICE =
+            new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                    1L, TimeUnit.SECONDS,
+                    new java.util.concurrent.SynchronousQueue<>(),
+                    (runnable) -> new Thread(runnable, "StandardJMeterEngine-" + THREAD_COUNTER.incrementAndGet()));
 
     private volatile Future<?> runningTest;
 
