@@ -32,10 +32,13 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Allows to apply naming convention on nodes
  * @since 3.2
  */
+@AutoService(Command.class)
 public class ApplyNamingConvention extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(ApplyNamingConvention.class);
 

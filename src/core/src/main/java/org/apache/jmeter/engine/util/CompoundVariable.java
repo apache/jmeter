@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.functions.InvalidVariableException;
@@ -30,7 +31,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,15 +70,15 @@ public class CompoundVariable implements Function {
                 log.info("Note: Function class names must not contain the string: '{}'", notContain);
             }
 
-            List<String> classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-                    new Class[] { Function.class }, true, contain, notContain);
-            for (String clazzName : classes) {
-                Function tempFunc = Class.forName(clazzName)
-                        .asSubclass(Function.class)
-                        .getDeclaredConstructor().newInstance();
-                String referenceKey = tempFunc.getReferenceKey();
+            for (Function function : JMeterUtils.loadServicesAndScanJars(
+                    Function.class,
+                    ServiceLoader.load(Function.class),
+                    Thread.currentThread().getContextClassLoader(),
+                    new LogAndIgnoreServiceLoadExceptionHandler(log)
+            )) {
+                String referenceKey = function.getReferenceKey();
                 if (referenceKey.length() > 0) { // ignore self
-                    functions.put(referenceKey, tempFunc.getClass());
+                    functions.put(referenceKey, function.getClass());
                 }
             }
 

@@ -29,9 +29,12 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements the Remove menu item.
  */
+@AutoService(Command.class)
 public class Remove extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();

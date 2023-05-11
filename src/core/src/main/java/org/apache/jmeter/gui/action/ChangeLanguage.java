@@ -28,9 +28,12 @@ import org.apache.jorphan.util.JMeterError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Change language
  */
+@AutoService(Command.class)
 public class ChangeLanguage extends AbstractActionWithNoRunningTest {
     private static final Set<String> commands = new HashSet<>();
 

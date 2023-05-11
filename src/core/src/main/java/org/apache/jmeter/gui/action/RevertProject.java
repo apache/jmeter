@@ -27,10 +27,13 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Handles the Revert Project command.
  *
  */
+@AutoService(Command.class)
 public class RevertProject extends AbstractActionWithNoRunningTest {
     private static final Set<String> commands = new HashSet<>();
 

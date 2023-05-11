@@ -440,6 +440,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
 
     public static Collection<Object> getObjects(Class<?> extendsClass) throws Throwable {
         String exName = extendsClass.getName();
+        @SuppressWarnings("deprecation")
         Iterator<String> classes = ClassFinder
                 .findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { extendsClass }).iterator();
         List<Object> objects = new ArrayList<>();

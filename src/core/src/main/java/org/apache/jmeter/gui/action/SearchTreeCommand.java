@@ -23,10 +23,13 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Search nodes for a text
  * TODO Enhance search dialog to select kind of nodes ....
  */
+@AutoService(Command.class)
 public class SearchTreeCommand extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();

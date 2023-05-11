@@ -56,9 +56,12 @@ import org.apache.jorphan.reflect.Functor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Specializer panel to view a HTTP request parsed
  */
+@AutoService(RequestView.class)
 public class RequestViewHTTP implements RequestView {
 
     private static final Logger log = LoggerFactory.getLogger(RequestViewHTTP.class);

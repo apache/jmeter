@@ -27,6 +27,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * <p>Function which escapes the characters in a <code>String</code> using HTML entities.</p>
  *
@@ -46,6 +48,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @see StringEscapeUtils#escapeHtml4(String) (Commons Lang)
  * @since 2.3.3
  */
+@AutoService(Function.class)
 public class EscapeHtml extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();

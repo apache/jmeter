@@ -19,12 +19,15 @@ package org.apache.jmeter.visualizers;
 
 import javax.swing.JPanel;
 
+import org.apache.jorphan.reflect.JMeterService;
+
 /**
  * Interface for request panel in View Results Tree
  * All classes which implements this interface is display
  * on bottom tab in request panel
  *
  */
+@JMeterService
 public interface RequestView {
 
     /**

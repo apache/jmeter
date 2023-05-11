@@ -103,6 +103,7 @@ Summary
   <li><pr>5792</pr>Add KeyStroke for start_no_timers (Start no pauses: CRTL+SHIFT+n)</li>
   <li><pr>5899</pr>Speed up CPU-bound tests by skipping <code>recoverRunningVersion</code> for elements that are shared between threads (the ones that implement <code>NoThreadClone</code>)</li>
   <li><pr>5914</pr>Use <code>Locale.ROOT</code> instead of default locale for <code>toUpperCase</code>, and <code>toLowerCase</code> to avoid surprises with dotless I in <code>tr_TR</code> locale</li>
+  <li><pr>5885</pr>Use Java's <code>ServiceLoader</code> for loading plugins instead of classpath scanning. It enables faster startup</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

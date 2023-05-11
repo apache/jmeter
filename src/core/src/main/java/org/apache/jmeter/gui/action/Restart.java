@@ -39,11 +39,17 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Restart JMeter
  * Based on https://dzone.com/articles/programmatically-restart-java
  * @since 5.0
  */
+@AutoService({
+        Command.class,
+        MenuCreator.class
+})
 public class Restart extends AbstractActionWithNoRunningTest implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(Restart.class);
 

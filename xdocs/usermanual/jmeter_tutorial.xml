@@ -168,7 +168,49 @@ write.
 
 </subsection>
 
-<subsection name="&sect-num;.2 JMeter Gui – TestElement Contract" anchor="testelement-contract">
+  <subsection name="&sect-num;.2 JMeter Gui – Service lookup" anchor="service-lookup">
+    <p>
+      JMeter uses classpath scanning to detect plugins (e.g. functions, components, views). However, classpath scanning
+      is expensive,
+      so JMeter also provides a service lookup mechanism to allow plugins to be found without scanning the classpath.
+      That is if a plugin registers a Java service with <code>META-INF/services</code>, then JMeter won't need to scan
+      the classpath to find it.
+    </p>
+
+    <p>
+      Some of the existing features already use the new service lookup mechanism, but it is not yet used for all
+      features.
+      The interfaces that are supported for service loading are marked with
+      <code>org.apache.jorphan.reflect.JMeterService</code>
+      annotation.
+    </p>
+
+    <p>
+      Implementing a service the same as regular interface implementation, except you need to register the service
+      in a <code>META-INF/services/fully.qualified.interface.name</code>.
+      For instance you could use <code>@AutoService</code> to generate the file automatically at the build time.
+      Here's how <code>__counter</code> function is declared in JMeter itself:
+<source>
+import com.google.auto.service.AutoService;
+
+@AutoService(Function.class)
+public class IterationCounter extends AbstractFunction implements ThreadListener {
+</source>
+    </p>
+
+    <p>
+      For backward compatibility reasons, JMeter would still try searching the implementations with classpath scanning,
+      so you don't have to use <code>META-INF/services</code> for registering services. However, service lookup is much
+      faster, so exposing services would improve startup time, especially when there are many plugins.
+    </p>
+
+    <p>
+      As you add <code>META-INF/services</code> to your plugins, you can add <code>JMeter-Skip-Class-Scanning: true</code>
+      manifest attribute so JMeter knows there's no need to scan the jar as it provides all the plugins via services.
+    </p>
+  </subsection>
+
+<subsection name="&sect-num;.3 JMeter Gui – TestElement Contract" anchor="testelement-contract">
 
 <p>
 When writing any JMeter component, there are certain contracts you must be aware of – ways a
@@ -327,7 +369,7 @@ Writing Visualizers is somewhat of a special case, however.
 
 </subsection>
 
-<subsection name="&sect-num;.3 Writing a Visualizer" anchor="visualizer">
+<subsection name="&sect-num;.4 Writing a Visualizer" anchor="visualizer">
 <note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
 a look at more up to date components like:
 <ul>
@@ -537,7 +579,7 @@ added so that users can save a screen capture of any given visualizer.
 
 </subsection>
 
-<subsection name="&sect-num;.4 GraphListener" anchor="graphlistener">
+<subsection name="&sect-num;.5 GraphListener" anchor="graphlistener">
 <note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
 a look at more up to date components like:
 <ul>
@@ -571,7 +613,7 @@ implement the interface, please look at <code>GraphVisualizer</code>.
 
 </subsection>
 
-<subsection name="&sect-num;.5 Writing Custom Graphs" anchor="custom-graphs">
+<subsection name="&sect-num;.6 Writing Custom Graphs" anchor="custom-graphs">
 <note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
 a look at more up to date components like:
 <ul>
@@ -715,7 +757,7 @@ and predictable.
 
 </subsection>
 
-<subsection name="&sect-num;.6 Making a TestBean Plugin For JMeter" anchor="testbean">
+<subsection name="&sect-num;.7 Making a TestBean Plugin For JMeter" anchor="testbean">
 
 <p>
 In this part, we will go through the process of creating a simple component for JMeter that uses
@@ -860,7 +902,7 @@ p.setPropertyEditorClass(FileEditor.class);
 
 </subsection>
 
-<subsection name="&sect-num;.6 Building JMeter" anchor="building">
+<subsection name="&sect-num;.8 Building JMeter" anchor="building">
 
 <p>
 JMeter uses Gradle to compile and build the distribution. JMeter has

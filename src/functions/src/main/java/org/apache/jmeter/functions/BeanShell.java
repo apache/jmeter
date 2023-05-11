@@ -32,10 +32,13 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * A function which understands BeanShell
  * @since 1.X
  */
+@AutoService(Function.class)
 public class BeanShell extends AbstractFunction {
 
     private static final Logger log = LoggerFactory.getLogger(BeanShell.class);

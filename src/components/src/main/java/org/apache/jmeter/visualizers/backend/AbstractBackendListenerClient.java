@@ -24,6 +24,8 @@ import org.apache.jmeter.config.Arguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * An abstract implementation of the BackendListenerClient interface. This
  * implementation provides default implementations of most of the methods in the
@@ -49,6 +51,7 @@ import org.slf4j.LoggerFactory;
  * @see BackendListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
  * @since 2.13
  */
+@AutoService(BackendListenerClient.class)
 public abstract class AbstractBackendListenerClient implements BackendListenerClient {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractBackendListenerClient.class);

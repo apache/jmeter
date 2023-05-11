@@ -53,6 +53,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(ResultRenderer.class)
 public class RenderAsXML extends SamplerResultTab
     implements ResultRenderer {
 

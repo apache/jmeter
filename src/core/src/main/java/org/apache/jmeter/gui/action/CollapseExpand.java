@@ -25,10 +25,13 @@ import javax.swing.JTree;
 
 import org.apache.jmeter.gui.GuiPackage;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Processes the Collapse All and Expand All options.
  *
  */
+@AutoService(Command.class)
 public class CollapseExpand extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();

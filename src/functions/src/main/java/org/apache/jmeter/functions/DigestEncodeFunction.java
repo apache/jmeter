@@ -34,6 +34,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Digest Encode Function that provides computing of different SHA-XXX, can
  * uppercase the result and store it in a variable.
@@ -44,6 +46,7 @@ import org.slf4j.LoggerFactory;
  *
  * @since 4.0
  */
+@AutoService(Function.class)
 public class DigestEncodeFunction extends AbstractFunction {
 
     private static final Logger log = LoggerFactory.getLogger(DigestEncodeFunction.class);

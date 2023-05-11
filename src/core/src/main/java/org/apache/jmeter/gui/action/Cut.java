@@ -24,9 +24,12 @@ import java.util.Set;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements the Cut menu item command
  */
+@AutoService(Command.class)
 public class Cut extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 

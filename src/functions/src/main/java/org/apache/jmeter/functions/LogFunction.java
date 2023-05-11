@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
+import com.google.auto.service.AutoService;
+
 /**
  * <p>
  * Function to log a message.
@@ -46,6 +48,7 @@ import org.slf4j.event.Level;
  * Returns: - the input string
  * @since 2.2
  */
+@AutoService(Function.class)
 public class LogFunction extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(LogFunction.class);
 

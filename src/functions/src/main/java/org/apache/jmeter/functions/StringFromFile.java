@@ -37,6 +37,8 @@ import org.apache.jorphan.util.JMeterStopThreadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * <p>StringFromFile Function to read a String from a text file.</p>
  *
@@ -70,6 +72,7 @@ import org.slf4j.LoggerFactory;
  * Because function instances are shared, it does not make sense to use the thread number as part of the file name.
  * @since 1.9
  */
+@AutoService(Function.class)
 public class StringFromFile extends AbstractFunction implements TestStateListener {
     private static final Logger log = LoggerFactory.getLogger(StringFromFile.class);
 

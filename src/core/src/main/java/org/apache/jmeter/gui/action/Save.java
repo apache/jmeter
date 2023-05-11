@@ -56,12 +56,15 @@ import org.apache.jorphan.collections.ListedHashTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Save the current test plan; implements:
  * Save
  * Save TestPlan As
  * Save (Selection) As
  */
+@AutoService(Command.class)
 public class Save extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(Save.class);
 

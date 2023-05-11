@@ -29,6 +29,9 @@ import net.minidev.json.JSONStyle;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(ResultRenderer.class)
 public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
     private static final String TAB_SEPARATOR = "    "; //$NON-NLS-1$
 

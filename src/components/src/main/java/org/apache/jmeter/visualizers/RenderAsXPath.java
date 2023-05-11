@@ -59,10 +59,13 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.google.auto.service.AutoService;
+
 
 /**
  * Implement ResultsRender for XPath tester
  */
+@AutoService(ResultRenderer.class)
 public class RenderAsXPath implements ResultRenderer, ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(RenderAsXPath.class);

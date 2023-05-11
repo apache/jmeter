@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.reflect.JMeterService;
 
 /**
  * This interface defines the interactions between the JavaSampler and external
@@ -59,6 +60,7 @@ import org.apache.jmeter.samplers.SampleResult;
  * how to implement this interface.
  *
  */
+@JMeterService
 public interface JavaSamplerClient {
     /**
      * Do any initialization required by this client. It is generally

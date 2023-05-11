@@ -48,9 +48,12 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implement ResultsRender for XPath tester
  */
+@AutoService(ResultRenderer.class)
 public class RenderAsXPath2 implements ResultRenderer, ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(RenderAsXPath2.class);

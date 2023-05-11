@@ -57,10 +57,12 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.auto.service.AutoService;
 
 /**
  * Default implementation that handles classical HTTP textual + Multipart requests
  */
+@AutoService(SamplerCreator.class)
 public class DefaultSamplerCreator extends AbstractSamplerCreator {
     private static final Logger log = LoggerFactory.getLogger(DefaultSamplerCreator.class);
 

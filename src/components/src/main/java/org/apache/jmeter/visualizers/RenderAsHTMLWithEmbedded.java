@@ -20,6 +20,9 @@ package org.apache.jmeter.visualizers;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(ResultRenderer.class)
 public class RenderAsHTMLWithEmbedded extends RenderAsHTML
     implements ResultRenderer {
 

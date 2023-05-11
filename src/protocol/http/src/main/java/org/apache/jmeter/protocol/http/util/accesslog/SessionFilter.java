@@ -37,9 +37,12 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Provides Session Filtering for the AccessLog Sampler.
  */
+@AutoService(Filter.class)
 public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
     private static final java.util.regex.Pattern IP_PATTERN = java.util.regex.Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
     private static final long serialVersionUID = 233L;

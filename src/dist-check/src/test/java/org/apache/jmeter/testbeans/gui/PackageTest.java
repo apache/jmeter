@@ -171,6 +171,7 @@ public final class PackageTest extends JMeterTestCaseJUnit implements Describabl
     public static Test suite() throws Exception {
         TestSuite suite = new TestSuite("Bean Resource Test Suite");
 
+        @SuppressWarnings("deprecation")
         List<String> testBeanClassNames = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class });
 
         boolean errorDetected = false;

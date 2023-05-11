@@ -23,6 +23,9 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestCloneable;
 import org.apache.jmeter.testelement.TestElement;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(LogParser.class)
 public class SharedTCLogParser extends TCLogParser implements TestCloneable {
 
     public SharedTCLogParser() {

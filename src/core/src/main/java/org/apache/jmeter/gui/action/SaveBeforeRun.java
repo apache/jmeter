@@ -23,11 +23,14 @@ import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Save Before Run Action To save test plan before GUI execution
  *
  * @since 4.0
  */
+@AutoService(Command.class)
 public class SaveBeforeRun extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 

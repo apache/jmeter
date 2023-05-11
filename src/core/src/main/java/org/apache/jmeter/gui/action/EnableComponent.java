@@ -26,9 +26,12 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements the Enable menu item.
  */
+@AutoService(Command.class)
 public class EnableComponent extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(EnableComponent.class);
 

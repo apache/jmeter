@@ -63,6 +63,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.AbstractAction;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -110,12 +111,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Opens a popup where user can enter a cURL command line and create a test plan
  * from it
  *
  * @since 5.1
  */
+@AutoService({
+        Command.class,
+        MenuCreator.class
+})
 public class ParseCurlCommandAction extends AbstractAction implements MenuCreator, ActionListener { // NOSONAR
     private static final Logger LOGGER = LoggerFactory.getLogger(ParseCurlCommandAction.class);
     private static final String ACCEPT_ENCODING = "Accept-Encoding";

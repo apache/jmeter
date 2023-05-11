@@ -26,6 +26,8 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Function to create a UUID
  *
@@ -36,6 +38,7 @@ import org.apache.jmeter.samplers.Sampler;
  * - A pseudo random UUID 4
  * @since 2.9
  */
+@AutoService(Function.class)
 public class Uuid extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();

@@ -42,6 +42,8 @@ dependencies {
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
+        api("com.google.auto.service:auto-service:1.0.1")
+        api("com.google.auto.service:auto-service-annotations:1.0.1")
         api("com.fasterxml.jackson.core:jackson-annotations:2.13.4")
         api("com.fasterxml.jackson.core:jackson-core:2.13.4")
         api("com.fasterxml.jackson.core:jackson-databind:2.13.4.2")

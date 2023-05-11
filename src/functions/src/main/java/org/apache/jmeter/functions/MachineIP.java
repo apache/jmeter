@@ -19,10 +19,13 @@ package org.apache.jmeter.functions;
 
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Return Machine IP
  * @since 2.6
  */
+@AutoService(Function.class)
 public class MachineIP extends AbstractHostIPName {
 
     private static final String KEY = "__machineIP"; //$NON-NLS-1$
