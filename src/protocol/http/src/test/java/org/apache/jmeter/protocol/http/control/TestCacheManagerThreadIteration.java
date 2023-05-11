@@ -31,7 +31,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -52,6 +51,8 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.github.benmanes.caffeine.cache.Cache;
 
 /**
  * Test {@link CacheManager} that uses HTTPHC4Impl
@@ -292,17 +293,17 @@ public class TestCacheManagerThreadIteration {
         this.cacheManager.setHeaders(this.url, this.httpMethod);
     }
 
-    private Map<String, CacheManager.CacheEntry> getThreadCache() throws Exception {
+    private Cache<String, CacheManager.CacheEntry> getThreadCache() throws Exception {
         Field threadLocalfield = CacheManager.class.getDeclaredField("threadCache");
         threadLocalfield.setAccessible(true);
         @SuppressWarnings("unchecked")
-        ThreadLocal<Map<String, CacheManager.CacheEntry>> threadLocal = (ThreadLocal<Map<String, CacheManager.CacheEntry>>) threadLocalfield
+        ThreadLocal<Cache<String, CacheManager.CacheEntry>> threadLocal = (ThreadLocal<Cache<String, CacheManager.CacheEntry>>) threadLocalfield
                 .get(this.cacheManager);
         return threadLocal.get();
     }
 
     protected CacheManager.CacheEntry getThreadCacheEntry(String url) throws Exception {
-        return getThreadCache().get(url);
+        return getThreadCache().getIfPresent(url);
     }
     @Test
     public void testCacheControlCleared() throws Exception {

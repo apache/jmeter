@@ -29,7 +29,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.control.CacheManager.CacheEntry;
@@ -38,6 +37,8 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import com.github.benmanes.caffeine.cache.Cache;
 
 @Execution(ExecutionMode.CONCURRENT)
 public abstract class TestCacheManagerBase extends JMeterTestCase {
@@ -386,7 +387,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     @Test
     public void testSaveDetailsWithEmptySampleResultGivesNoCacheEntry() throws Exception {
         cacheResultWithGivenCode("");
-        assertTrue(getThreadCache().isEmpty(), "Saving details with empty SampleResult should not make cache entry.");
+        assertTrue(getThreadCache().asMap().isEmpty(), "Saving details with empty SampleResult should not make cache entry.");
     }
 
     @Test
@@ -423,13 +424,13 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
 
     @Test
     public void testClearCache() throws Exception {
-        assertTrue(getThreadCache().isEmpty(), "ThreadCache should be empty initially.");
+        assertTrue(getThreadCache().asMap().isEmpty(), "ThreadCache should be empty initially.");
         cacheResultWithGivenCode("200");
         assertFalse(
-                getThreadCache().isEmpty(),
+                getThreadCache().asMap().isEmpty(),
                 "ThreadCache should be populated after saving details for HttpMethod with SampleResult with response code 200.");
         this.cacheManager.clear();
-        assertTrue(getThreadCache().isEmpty(), "ThreadCache should be emptied by call to clear.");
+        assertTrue(getThreadCache().asMap().isEmpty(), "ThreadCache should be emptied by call to clear.");
     }
 
     protected HTTPSampleResult getSampleResultWithSpecifiedResponseCode(String code) {
@@ -440,17 +441,17 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         return sampleResult;
     }
 
-    private Map<String, CacheManager.CacheEntry> getThreadCache() throws Exception {
+    private Cache<String, CacheManager.CacheEntry> getThreadCache() throws Exception {
         Field threadLocalfield = CacheManager.class.getDeclaredField("threadCache");
         threadLocalfield.setAccessible(true);
         @SuppressWarnings("unchecked")
-        ThreadLocal<Map<String, CacheManager.CacheEntry>> threadLocal = (ThreadLocal<Map<String, CacheManager.CacheEntry>>) threadLocalfield
+        ThreadLocal<Cache<String, CacheManager.CacheEntry>> threadLocal = (ThreadLocal<Cache<String, CacheManager.CacheEntry>>) threadLocalfield
                 .get(this.cacheManager);
         return threadLocal.get();
     }
 
     protected CacheManager.CacheEntry getThreadCacheEntry(String url) throws Exception {
-        return getThreadCache().get(url);
+        return getThreadCache().getIfPresent(url);
     }
 
 
