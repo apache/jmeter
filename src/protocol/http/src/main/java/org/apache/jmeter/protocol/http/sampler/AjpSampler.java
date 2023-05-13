@@ -201,6 +201,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     }
 
     private int getHeaderSize(String method, URL url) {
+        @SuppressWarnings("deprecation")
         HeaderManager headers = getHeaderManager();
         CookieManager cookies = getCookieManager();
         AuthManager auth = getAuthManager();
@@ -231,6 +232,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
 
     private String setConnectionHeaders(URL url, String host, String method)
     throws IOException {
+        @SuppressWarnings("deprecation")
         HeaderManager headers = getHeaderManager();
         AuthManager auth = getAuthManager();
         StringBuilder hbuf = new StringBuilder();

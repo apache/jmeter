@@ -241,7 +241,7 @@ public class Proxy extends Thread {
              * captured and sent to the server
              */
             headers = request.getHeaderManager();
-            sampler.setHeaderManager(headers);
+            setHeaderManager(headers, sampler);
 
             sampler.threadStarted(); // Needed for HTTPSampler2
             if (isDebug) {
@@ -315,6 +315,11 @@ public class Proxy extends Thread {
             }
             JMeterContextService.getContext().setRecording(false);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void setHeaderManager(HeaderManager headers, HTTPSamplerBase sampler) {
+        sampler.setHeaderManager(headers);
     }
 
     /**

@@ -74,7 +74,7 @@ public class TestDecompression {
                 hm.add(new Header("Accept-Encoding", "gzip"));
             }
             hm.add(new Header("Content-Encoding", "utf-8"));
-            http.setHeaderManager(hm);
+            setHeaderManager(http, hm);
             MappingBuilder mappingBuilder = WireMock.get("/gzip");
             if (clientGzip == ClientGzip.REQUESTED) {
                 mappingBuilder = mappingBuilder.withHeader("Accept-Encoding", WireMock.equalTo("gzip"));
@@ -106,6 +106,11 @@ public class TestDecompression {
         } finally {
             server.stop();
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void setHeaderManager(HTTPSamplerBase http, HeaderManager hm) {
+        http.setHeaderManager(hm);
     }
 
     private WireMockServer createServer(Consumer<WireMockConfiguration> config) {

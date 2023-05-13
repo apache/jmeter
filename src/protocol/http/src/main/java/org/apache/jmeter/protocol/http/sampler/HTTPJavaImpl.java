@@ -191,7 +191,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         conn.setRequestMethod(method);
-        setConnectionHeaders(conn, u, getHeaderManager(), getCacheManager());
+        @SuppressWarnings("deprecation")
+        HeaderManager headerManager = getHeaderManager();
+        setConnectionHeaders(conn, u, headerManager, getCacheManager());
         String cookies = setConnectionCookie(conn, u, getCookieManager());
 
         Map<String, String> securityHeaders = setConnectionAuthorization(conn, u, getAuthManager());
@@ -518,7 +520,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // Check cache for an entry with an Expires header in the future
         final CacheManager cacheManager = getCacheManager();
         if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method)) {
-           if (cacheManager.inCache(url, getHeaders(getHeaderManager()))) {
+            @SuppressWarnings("deprecation")
+            HeaderManager headerManager = getHeaderManager();
+            if (cacheManager.inCache(url, getHeaders(headerManager))) {
                return updateSampleResultForResourceInCache(res);
            }
         }

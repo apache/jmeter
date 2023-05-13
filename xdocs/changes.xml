@@ -75,6 +75,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><pr>5911</pr> Use Caffeine for caching HTTP headers instead of commons-collections4 LRUMap</li>
+  <li><pr>5917</pr><pr>727</pr> Deprecate <code>HTTPSamplerBase#getHeaderManager</code> and <code>HTTPSamplerBase#setHeaderManager</code> so HTTP Header Managers could be shared in the future</li>
 </ul>
 
 <h3>Other samplers</h3>

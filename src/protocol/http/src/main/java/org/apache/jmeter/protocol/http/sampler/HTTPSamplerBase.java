@@ -928,7 +928,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return (AuthManager) getProperty(AUTH_MANAGER).getObjectValue();
     }
 
+    /**
+     * Sets HTTP Header Manager for this sampler.
+     * @deprecated since 5.6 as it prevents sharing a common Header Manager across samplers
+     * @param value header manager
+     */
+    @Deprecated
     public void setHeaderManager(final HeaderManager value) {
+        @SuppressWarnings("deprecation")
         HeaderManager mgr = getHeaderManager();
         HeaderManager lValue = value;
         if (mgr != null) {
@@ -943,6 +950,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         setProperty(new TestElementProperty(HEADER_MANAGER, lValue));
     }
 
+    /**
+     * Retrieves HTTP Header Manager for this sampler.
+     * @deprecated since 5.6 as it prevents sharing a common Header Manager across samplers
+     */
+    @Deprecated
     public HeaderManager getHeaderManager() {
         return (HeaderManager) getProperty(HEADER_MANAGER).getObjectValue();
     }
