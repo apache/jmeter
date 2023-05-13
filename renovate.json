@@ -52,6 +52,10 @@
       "groupName": "org.checkerframework"
     },
     {
+      "matchPackagePrefixes": ["org.jetbrains.lets-plot"],
+      "groupName": "org.jetbrains.lets-plot"
+    },
+    {
       "matchPackagePrefixes": ["org.jodd"],
       "groupName": "org.jodd"
     },
