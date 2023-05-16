@@ -26,6 +26,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.Searchable;
@@ -41,8 +44,10 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.PropertyIteratorImpl;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,12 +58,50 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     private static final Logger log = LoggerFactory.getLogger(AbstractTestElement.class);
 
+    /**
+     * Protects access to {@link #propMap} and {@link #temporaryProperties} when the element is shared across threads.
+     * The assumption is that the properties are not changed during a test run, so read locks are used
+     * to allow concurrent reads.
+     * Note: acquiring locks (read or write) allocates memory, and accesses {@link ThreadLocal}, so it can be expensive
+     * in both CPU and allocation terms.
+     */
+    private transient final ReadWriteLock lock =
+            this instanceof NoThreadClone
+                    || this instanceof AbstractThreadGroup
+                    ? new ReentrantReadWriteLock()
+                    : null;
+
+    /**
+     * When the element is shared between threads, then {@link #lock} protects the access,
+     * however, when element in not shared, then adds overhead as every lock and unlock allocates memory.
+     * So in case of cloned-per-thread elements, we use {@link Collections#synchronizedMap(Map)} instead.
+     */
+    @GuardedBy("lock")
     private final Map<String, JMeterProperty> propMap =
-        Collections.synchronizedMap(new LinkedHashMap<String, JMeterProperty>());
+            lock != null
+                    ? new LinkedHashMap<>()
+                    : Collections.synchronizedMap(new LinkedHashMap<>());
+
+    /**
+     * Every shared element has a concurrent map with properties, so that we can read values without acquiring locks.
+     * The contents of the map must exactly match {@link #propMap}, so if {@link #propMap} is modified, then
+     * this map should be updated as well.
+     * Note: test plan serialization needs to have a consistent element order on load and save,
+     * so we can't use {@link ConcurrentHashMap} for {@link #propMap} in case a test element is shared between threads.
+     * <p>The purpose of this map is to avoid synchronization and acquiring logs on read-only operations.
+     * For instance, every {@link org.apache.jmeter.samplers.SampleEvent} calls {@link ThreadGroup#getName()},
+     * which calls {@link #getProperty(String)}, so it is important to keep the read path as fast as possible.</p>
+     */
+    private final transient Map<String, JMeterProperty> propMapConcurrent =
+            lock != null
+                    ? new ConcurrentHashMap<>()
+                    : null;
+
 
     /**
      * Holds properties added when isRunningVersion is true
      */
+    @GuardedBy("lock")
     private transient Set<JMeterProperty> temporaryProperties;
 
     private transient boolean runningVersion = false;
@@ -89,7 +132,40 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void clear() {
-        propMap.clear();
+        writeLock();
+        try {
+            propMap.clear();
+            Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+            if (propMapConcurrent != null) {
+                propMapConcurrent.clear();
+            }
+        } finally {
+            writeUnlock();
+        }
+    }
+
+    private void writeLock() {
+        if (lock != null) {
+            lock.writeLock().lock();
+        }
+    }
+
+    private void writeUnlock() {
+        if (lock != null) {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private void readLock() {
+        if (lock != null) {
+            lock.readLock().lock();
+        }
+    }
+
+    private void readUnlock() {
+        if (lock != null) {
+            lock.readLock().unlock();
+        }
     }
 
     /**
@@ -107,7 +183,16 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void removeProperty(String key) {
-        propMap.remove(key);
+        writeLock();
+        try {
+            propMap.remove(key);
+            Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+            if (propMapConcurrent != null) {
+                propMapConcurrent.remove(key);
+            }
+        } finally {
+            writeUnlock();
+        }
     }
 
     /**
@@ -116,7 +201,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public boolean equals(Object o) {
         if (o instanceof AbstractTestElement) {
-            return ((AbstractTestElement) o).propMap.equals(propMap);
+            readLock();
+            try {
+                return ((AbstractTestElement) o).propMap.equals(propMap);
+            } finally {
+                readUnlock();
+            }
         } else {
             return false;
         }
@@ -179,7 +269,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public JMeterProperty getProperty(String key) {
-        JMeterProperty prop = propMap.get(key);
+        JMeterProperty prop = getRawProperty(key);
         if (prop == null) {
             prop = new NullProperty(key);
         }
@@ -193,17 +283,27 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @since 3.1
      */
     private JMeterProperty getRawProperty(String key) {
+        Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+        if (propMapConcurrent != null) {
+            return propMapConcurrent.get(key);
+        }
+
         return propMap.get(key);
     }
 
     @Override
     public void traverse(TestElementTraverser traverser) {
-        PropertyIterator iter = propertyIterator();
-        traverser.startTestElement(this);
-        while (iter.hasNext()) {
-            traverseProperty(traverser, iter.next());
+        readLock();
+        try {
+            PropertyIterator iter = propertyIterator();
+            traverser.startTestElement(this);
+            while (iter.hasNext()) {
+                traverseProperty(traverser, iter.next());
+            }
+            traverser.endTestElement(this);
+        } finally {
+            readUnlock();
         }
-        traverser.endTestElement(this);
     }
 
     protected void traverseProperty(TestElementTraverser traverser, JMeterProperty value) {
@@ -303,7 +403,16 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         JMeterProperty prop = getProperty(property.getName());
 
         if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().isEmpty())) {
-            propMap.put(property.getName(), propertyToPut);
+            writeLock();
+            try {
+                propMap.put(property.getName(), propertyToPut);
+                Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+                if (propMapConcurrent != null) {
+                    propMapConcurrent.put(property.getName(), propertyToPut);
+                }
+            } finally {
+                writeUnlock();
+            }
         } else {
             prop.mergeIn(propertyToPut);
         }
@@ -322,8 +431,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param property {@link JMeterProperty}
      */
     protected void clearTemporary(JMeterProperty property) {
-        if (temporaryProperties != null) {
-            temporaryProperties.remove(property);
+        writeLock();
+        try {
+            if (temporaryProperties != null) {
+                temporaryProperties.remove(property);
+            }
+        } finally {
+            writeUnlock();
         }
     }
 
@@ -352,7 +466,16 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                 getProperty(property.getName()).setObjectValue(property.getObjectValue());
             }
         } else {
-            propMap.put(property.getName(), property);
+            writeLock();
+            try {
+                propMap.put(property.getName(), property);
+                Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+                if (propMapConcurrent != null) {
+                    propMapConcurrent.put(property.getName(), property);
+                }
+            } finally {
+                writeUnlock();
+            }
         }
     }
 
@@ -458,6 +581,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public PropertyIterator propertyIterator() {
+        Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+        if (propMapConcurrent != null) {
+            return new PropertyIteratorImpl(propMapConcurrent.values());
+        }
+
+        // TODO: copy the contents of the iterator to avoid ConcurrentModificationException?
         return new PropertyIteratorImpl(propMap.values());
     }
 
@@ -466,10 +595,15 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param element {@link TestElement}
      */
     protected void mergeIn(TestElement element) {
-        PropertyIterator iter = element.propertyIterator();
-        while (iter.hasNext()) {
-            JMeterProperty prop = iter.next();
-            addProperty(prop, false);
+        writeLock();
+        try {
+            PropertyIterator iter = element.propertyIterator();
+            while (iter.hasNext()) {
+                JMeterProperty prop = iter.next();
+                addProperty(prop, false);
+            }
+        } finally {
+            writeUnlock();
         }
     }
 
@@ -489,10 +623,20 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void setRunningVersion(boolean runningVersion) {
-        this.runningVersion = runningVersion;
-        PropertyIterator iter = propertyIterator();
-        while (iter.hasNext()) {
-            iter.next().setRunningVersion(runningVersion);
+        writeLock();
+        try {
+            this.runningVersion = runningVersion;
+            PropertyIterator iter = propertyIterator();
+            Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+            while (iter.hasNext()) {
+                JMeterProperty property = iter.next();
+                property.setRunningVersion(runningVersion);
+                if (propMapConcurrent != null) {
+                    propMapConcurrent.put(property.getName(), property);
+                }
+            }
+        } finally {
+            writeUnlock();
         }
     }
 
@@ -501,12 +645,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void recoverRunningVersion() {
-        if (this instanceof NoThreadClone) {
+        if (lock != null) {
             // The element is shared between threads, so there's nothing to recover
             // See https://github.com/apache/jmeter/issues/5875
             return;
         }
-        Iterator<Map.Entry<String, JMeterProperty>>  iter = propMap.entrySet().iterator();
+        Iterator<Map.Entry<String, JMeterProperty>> iter = propMap.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<String, JMeterProperty> entry = iter.next();
             JMeterProperty prop = entry.getValue();
@@ -524,8 +668,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * Clears temporaryProperties
      */
     protected void emptyTemporary() {
-        if (temporaryProperties != null) {
-            temporaryProperties.clear();
+        writeLock();
+        try {
+            if (temporaryProperties != null) {
+                temporaryProperties.clear();
+            }
+        } finally {
+            writeUnlock();
         }
     }
 
@@ -534,10 +683,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public boolean isTemporary(JMeterProperty property) {
-        if (temporaryProperties == null) {
-            return false;
-        } else {
-            return temporaryProperties.contains(property);
+        readLock();
+        try {
+            return temporaryProperties != null && temporaryProperties.contains(property);
+        } finally {
+            readUnlock();
         }
     }
 
@@ -546,14 +696,20 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void setTemporary(JMeterProperty property) {
-        if (temporaryProperties == null) {
-            temporaryProperties = new LinkedHashSet<>();
-        }
-        temporaryProperties.add(property);
-        if (isMergingEnclosedProperties(property)) {
-            for (JMeterProperty jMeterProperty : (MultiProperty) property) {
-                setTemporary(jMeterProperty);
+        writeLock();
+        try {
+            if (temporaryProperties == null) {
+                LinkedHashSet<JMeterProperty> set = new LinkedHashSet<>();
+                temporaryProperties = lock != null ? set : Collections.synchronizedSet(set) ;
             }
+            temporaryProperties.add(property);
+            if (isMergingEnclosedProperties(property)) {
+                for (JMeterProperty jMeterProperty : (MultiProperty) property) {
+                    setTemporary(jMeterProperty);
+                }
+            }
+        } finally {
+            writeUnlock();
         }
     }
 
@@ -646,11 +802,16 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public List<String> getSearchableTokens() {
         List<String> result = new ArrayList<>(25);
-        PropertyIterator iterator = propertyIterator();
-        while(iterator.hasNext()) {
-            JMeterProperty jMeterProperty = iterator.next();
-            result.add(jMeterProperty.getName());
-            result.add(jMeterProperty.getStringValue());
+        readLock();
+        try {
+            PropertyIterator iterator = propertyIterator();
+            while(iterator.hasNext()) {
+                JMeterProperty jMeterProperty = iterator.next();
+                result.add(jMeterProperty.getName());
+                result.add(jMeterProperty.getStringValue());
+            }
+        } finally {
+            readUnlock();
         }
         return result;
     }
@@ -661,12 +822,17 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param propertyNames Set of names of properties to extract
      */
     protected final void addPropertiesValues(List<? super String> result, Set<String> propertyNames) {
-        PropertyIterator iterator = propertyIterator();
-        while(iterator.hasNext()) {
-            JMeterProperty jMeterProperty = iterator.next();
-            if(propertyNames.contains(jMeterProperty.getName())) {
-                result.add(jMeterProperty.getStringValue());
+        readLock();
+        try {
+            PropertyIterator iterator = propertyIterator();
+            while (iterator.hasNext()) {
+                JMeterProperty jMeterProperty = iterator.next();
+                if (propertyNames.contains(jMeterProperty.getName())) {
+                    result.add(jMeterProperty.getStringValue());
+                }
             }
+        } finally {
+            readUnlock();
         }
     }
 }
