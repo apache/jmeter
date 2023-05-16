@@ -27,10 +27,10 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
-import com.google.auto.service.AutoService;
-
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+
+import com.google.auto.service.AutoService;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
