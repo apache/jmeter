@@ -134,9 +134,12 @@ public final class ClassFinder {
                         );
                     } else if (message.endsWith(" could not be instantiated")) {
                         className = message.substring(
-                                service.getName().length() + ": ".length() + "Provider ".length(),
+                                service.getName().length() + ": ".length(),
                                 message.length() - " could not be instantiated".length()
                         );
+                    }
+                    if (className.startsWith("Provider ")) {
+                        className = className.substring("Provider ".length());
                     }
                 }
                 exceptionHandler.handle(service, className, e);
