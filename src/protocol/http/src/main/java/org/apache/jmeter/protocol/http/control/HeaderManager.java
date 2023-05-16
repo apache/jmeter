@@ -57,6 +57,11 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
         setProperty(new CollectionProperty(HEADERS, new ArrayList<>()));
     }
 
+    @Override
+    public void recoverRunningVersion() {
+        // The component does not modify fields during the run
+    }
+
     /** {@inheritDoc} */
     @Override
     public void clear() {
