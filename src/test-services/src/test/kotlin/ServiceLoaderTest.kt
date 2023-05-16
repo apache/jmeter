@@ -31,7 +31,7 @@ class ServiceLoaderTest {
     fun `service without public constructor`() {
         assertServiceLoad<ServiceWithPrivateConstructorInterface>(
             "[]",
-            "[service: org.apache.jmeter.util.services.ServiceWithPrivateConstructorInterface, className: org.apache.jmeter.util.services.ServiceWithPrivateConstructor, exceptionClass: java.util.ServiceConfigurationError, causeClass: java.lang.NoSuchMethodException]"
+            "[service: org.apache.jmeter.util.services.ServiceWithPrivateConstructorInterface, implementationClass: org.apache.jmeter.util.services.ServiceWithPrivateConstructor]"
         )
     }
 
@@ -39,7 +39,7 @@ class ServiceLoaderTest {
     fun `service not implementing interface`() {
         assertServiceLoad<NotImplementedInterface>(
             "[]",
-            "[service: org.apache.jmeter.util.services.NotImplementedInterface, className: org.apache.jmeter.util.services.ServiceNotImplementingInterface, exceptionClass: java.util.ServiceConfigurationError, causeClass: null]"
+            "[service: org.apache.jmeter.util.services.NotImplementedInterface, implementationClass: org.apache.jmeter.util.services.ServiceNotImplementingInterface]"
         )
     }
 
@@ -47,7 +47,7 @@ class ServiceLoaderTest {
     fun `service failing in constructor`() {
         assertServiceLoad<ServiceThrowingExceptionInterface>(
             "[]",
-            "[service: org.apache.jmeter.util.services.ServiceThrowingExceptionInterface, className: org.apache.jmeter.util.services.ServiceThrowingException, exceptionClass: java.util.ServiceConfigurationError, causeClass: org.apache.jmeter.util.services.ServiceFailureException]"
+            "[service: org.apache.jmeter.util.services.ServiceThrowingExceptionInterface, implementationClass: org.apache.jmeter.util.services.ServiceThrowingException]"
         )
     }
 
@@ -55,7 +55,7 @@ class ServiceLoaderTest {
     fun `abstract service`() {
         assertServiceLoad<AbstractServiceInterface>(
             "[]",
-            "[service: org.apache.jmeter.util.services.AbstractServiceInterface, className: org.apache.jmeter.util.services.AbstractService, exceptionClass: java.util.ServiceConfigurationError, causeClass: java.lang.InstantiationException]"
+            "[service: org.apache.jmeter.util.services.AbstractServiceInterface, implementationClass: org.apache.jmeter.util.services.AbstractService]"
         )
     }
 
@@ -81,16 +81,24 @@ class ServiceLoaderTest {
                 }
             },
             {
-                assertEquals(
-                    failureMessage,
-                    allFailures.map {
-                        "service: ${it.service.name}, " +
-                            "className: ${it.className}, " +
-                            "exceptionClass: ${it.throwable::class.java.name}, " +
-                            "causeClass: ${it.throwable.cause?.let { it::class.java.name }}"
-                    }.toString(),
-                ) {
-                    "All failures when loading service ${S::class.java.name} are $allFailures"
+                try {
+                    assertEquals(
+                        failureMessage,
+                        allFailures.map {
+                            // it.throwable is not included here as it is not stable across different JVM implementations
+                            "service: ${it.service.name}, " +
+                                "implementationClass: ${it.className}"
+                        }.toString(),
+                    ) {
+                        "All failures when loading service ${S::class.java.name} are $allFailures"
+                    }
+                } catch (e: Throwable) {
+                    // Attach load failure exceptions to the assertion failure, so
+                    // the failure message includes the instantiation failure reason
+                    allFailures.forEach { loadFailure ->
+                        loadFailure.throwable?.let { e.addSuppressed(it) }
+                    }
+                    throw e
                 }
             }
         )
