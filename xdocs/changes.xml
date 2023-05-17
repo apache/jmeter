@@ -190,6 +190,7 @@ Summary
 <ul>
   <li><bug>66157</bug><pr>719</pr>Correct theme for darklaf on rsyntaxtextarea</li>
   <li><issue>5872</issue><pr>5874</pr>Trim name in Argument objects.</li>
+  <li><issue>5770</issue><pr>5805</pr>Escape control characters in CSV log file when using <code>CSVSaveService</code></li>
 </ul>
 
  <!--  =================== Thanks =================== -->

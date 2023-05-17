@@ -127,7 +127,6 @@ public final class CSVSaveService {
 
     private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
             "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
-
     /**
      * Private constructor to prevent instantiation.
      */
@@ -786,7 +785,13 @@ public final class CSVSaveService {
         // quotes:
         public void append(String s) {
             addDelim();
-            sb.append(quoteDelimiters(s, specials));
+            sb.append(escapeControlChars(quoteDelimiters(s, specials)));
+        }
+
+        private static String escapeControlChars(String value) {
+            return value
+                    .replace("\n", "\\n")
+                    .replace("\r", "\\r");
         }
 
         public void append(Object obj) {
@@ -1084,8 +1089,7 @@ public final class CSVSaveService {
                                         // back
                     }
                 }
-                String s = baos.toString();
-                list.add(s);
+                list.add(unescapeControlChars(baos.toString()));
                 baos.reset();
             }
             if ((ch == '\n' || ch == '\r') && state != ParserState.QUOTED) {
@@ -1102,10 +1106,16 @@ public final class CSVSaveService {
                     || push // we've started a field
                     || state == ParserState.EMBEDDEDQUOTE // Just seen ""
             ) {
-                list.add(baos.toString());
+                list.add(unescapeControlChars(baos.toString()));
             }
         }
         return list.toArray(new String[list.size()]);
+    }
+
+    private static String unescapeControlChars(String s) {
+        return s
+                .replace("\\n", "\n")
+                .replace("\\r", "\r");
     }
 
     private static boolean isDelimOrEOL(char delim, int ch) {
