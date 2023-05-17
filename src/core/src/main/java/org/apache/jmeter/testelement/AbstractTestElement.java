@@ -503,7 +503,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void recoverRunningVersion() {
-        if (this instanceof NoThreadClone) {
+        if (this instanceof NoThreadClone && ((NoThreadClone) this).isShareable()) {
             // The element is shared between threads, so there's nothing to recover
             // See https://github.com/apache/jmeter/issues/5875
             return;

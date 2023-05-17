@@ -108,6 +108,7 @@ Summary
     Previously it cached the values based on iteration number only which triggered wrong results on concurrent executions.
     The previous behavior can be temporary restored with <code>function.cache.per.iteration</code> property.
   </li>
+  <li><pr></pr> Add <code>NoThreadClone#isShareable</code> method so the elements can dynamically decide if they need cloning or not</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
