@@ -112,6 +112,7 @@ Summary
   <li><pr>5920</pr>Improve HTTP HeaderManager performance when it contains many headers: skip reinitialization on each iteration</li>
   <li><pr>5920</pr>Use AtomicInteger and AtomicLong instead of synchronized primitives for JMeterContextService#numberOfThreads</li>
   <li><pr>5920</pr>Cache bean properties in <code>TestBeanHelper</code> and avoid synchronization, so test plans with <code>TestBean</code>-based elements is faster</li>
+  <li><pr>5920</pr>Improve computation when many threads actively produce samplers by using <code>LongAdder</code> and similar concurrency classes to avoid synchronization in <code>Calculator</code></li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
