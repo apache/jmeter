@@ -423,6 +423,9 @@ public class FileServer {
         if (!fileEntry.file.canRead() || !fileEntry.file.isFile()) {
             throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
         }
+        // TODO: figure out the proper way to use BOMInputStream.builder()
+        //   See https://issues.apache.org/jira/browse/IO-792
+        @SuppressWarnings("deprecation")
         BOMInputStream fis = new BOMInputStream(Files.newInputStream(fileEntry.file.toPath())); //NOSONAR
         InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding
