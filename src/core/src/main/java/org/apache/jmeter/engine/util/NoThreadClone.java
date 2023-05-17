@@ -24,4 +24,13 @@ package org.apache.jmeter.engine.util;
  *
  */
 public interface NoThreadClone {
+    /**
+     * Allows element to indicate whether it can be shared between threads.
+     * By default, elements that implement {@code NoThreadClone} are shareable.
+     *
+     * @return true if the element is shareable between threads, so it won't be cloned
+     */
+    default boolean isShareable() {
+        return true;
+    }
 }
