@@ -28,10 +28,6 @@ plugins {
     kotlin("kapt") apply false
 }
 
-dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-}
-
 val String.v: String get() = rootProject.extra["$this.version"] as String
 
 kotlin {

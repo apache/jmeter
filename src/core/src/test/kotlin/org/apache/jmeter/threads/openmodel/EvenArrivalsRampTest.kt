@@ -17,12 +17,12 @@
 
 package org.apache.jmeter.threads.openmodel
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
-import kotlin.test.assertEquals
 
 class EvenArrivalsRampTest {
     class Case(val beginRate: Double, val endRate: Double, val duration: Double, val expected: String) {
