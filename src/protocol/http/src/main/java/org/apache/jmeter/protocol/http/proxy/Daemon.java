@@ -116,8 +116,8 @@ public class Daemon extends Thread implements Stoppable {
         log.info("Test Script Recorder up and running!");
 
         // Maps to contain page and form encodings
-        Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<String, String>());
-        Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<String, String>());
+        Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<>());
+        Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<>());
         pageEncodings.put(AbstractSamplerCreator.DEFAULT_ENCODING_KEY, target.getDefaultEncoding());
 
         try {

@@ -243,7 +243,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                         }));
         for (int i=0; i<model.getColumnCount(); i++) {
             if (model.getColumnClass(i).equals(String.class)) {
-                rowSorter.setValueComparator(i, new AlphaNumericComparator<Object>(o -> o.toString()));
+                rowSorter.setValueComparator(i, AlphaNumericComparator.TO_STRING_COMPARATOR);
             }
         }
         table.setRowSorter(rowSorter);

@@ -214,7 +214,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         final Set<String> names = new HashSet<>(Arrays.asList(headerName.split(",\\s*")));
         final Map<String, List<String>> values = new HashMap<>();
         for (final String name: names) {
-            values.put(name, new ArrayList<String>());
+            values.put(name, new ArrayList<>());
         }
         for (Header header: reqHeaders) {
             if (names.contains(header.getName())) {

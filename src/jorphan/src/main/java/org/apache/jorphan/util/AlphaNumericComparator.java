@@ -30,14 +30,15 @@ import java.util.regex.Pattern;
  * Heavily influenced by https://codereview.stackexchange.com/questions/37192/number-aware-string-sorting-with-comparator
  */
 public class AlphaNumericComparator<T> implements Comparator<T> {
+    public static final Comparator<?> TO_STRING_COMPARATOR = new AlphaNumericComparator<>(Object::toString);
 
-    private final Function<T, String> converter;
+    private final Function<? super T, String> converter;
 
     /**
      * Constructs a comparator with a converter function
      * @param converter that generates a String value from the arguments given to {@link Comparator#compare(Object, Object)}
      */
-    public AlphaNumericComparator(Function<T, String> converter) {
+    public AlphaNumericComparator(Function<? super T, String> converter) {
         this.converter = converter;
     }
 

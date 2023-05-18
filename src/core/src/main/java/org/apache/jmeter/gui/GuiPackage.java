@@ -714,7 +714,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     private String testPlanFile;
 
-    private final List<Stoppable> stoppables = Collections.synchronizedList(new ArrayList<Stoppable>());
+    private final List<Stoppable> stoppables = Collections.synchronizedList(new ArrayList<>());
 
     private TreeNodeNamingPolicy namingPolicy;
 
