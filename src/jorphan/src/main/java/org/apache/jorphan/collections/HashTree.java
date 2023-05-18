@@ -93,7 +93,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            the object to be used as the key for the root node (may be
      *            <code>null</code>, in which case no root node will be created)
      */
-    private HashTree(Map<Object, HashTree> _map, Object key) {
+    private HashTree(Map<Object, ? extends HashTree> _map, Object key) {
         if(_map != null) {
             if (_map instanceof IdentityHashMap) {
                 data = (IdentityHashMap<Object, HashTree>) _map;

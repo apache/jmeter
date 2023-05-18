@@ -112,7 +112,7 @@ public class RandomFromMultipleVars extends AbstractFunction {
      * @param results {@link List} where results are stored
      */
     private static void extractVariableValuesToList(String variableName,
-            JMeterVariables vars, List<String> results) {
+            JMeterVariables vars, List<? super String> results) {
         String matchNumberAsStr = vars.get(variableName+"_matchNr");
         int matchNumber = 0;
         if(!StringUtils.isEmpty(matchNumberAsStr)) {

@@ -425,7 +425,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @return the headers as a string
      */
     private static String getFromConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders,
-            Predicate<String> predicate, boolean addSecurityHeaders) {
+            Predicate<? super String> predicate, boolean addSecurityHeaders) {
         // Get all the request properties, which are the headers set on the connection
         StringBuilder hdrs = new StringBuilder(100);
         Map<String, List<String>> requestHeaders = conn.getRequestProperties();

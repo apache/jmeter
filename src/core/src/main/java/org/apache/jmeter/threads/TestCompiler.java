@@ -270,7 +270,7 @@ public class TestCompiler implements HashTreeTraverser {
      * @param controllers
      * @param maybeController
      */
-    private static void addDirectParentControllers(List<Controller> controllers, TestElement maybeController) {
+    private static void addDirectParentControllers(List<? super Controller> controllers, TestElement maybeController) {
         if (maybeController instanceof Controller) {
             log.debug("adding controller: {} to sampler config", maybeController);
             controllers.add((Controller) maybeController);
@@ -303,7 +303,7 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
-    private static void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
+    private static void configureWithConfigElements(Sampler sam, List<? extends ConfigTestElement> configs) {
         sam.clearTestElementChildren();
         for (ConfigTestElement config  : configs) {
             if (!(config instanceof NoConfigMerge))

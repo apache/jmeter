@@ -39,7 +39,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     private List<MetricTuple> metrics = new ArrayList<>();
 
     private SocketConnectionInfos socketConnectionInfos;
-    private GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
+    private GenericKeyedObjectPool<? super SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool;
     private String prefix;
 
     TextGraphiteMetricsSender() {
@@ -63,7 +63,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
 
     /** Setup used for testing, or if explicit customisation is required. */
     public void setup(SocketConnectionInfos socketConnectionInfos,
-                      GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool,
+                      GenericKeyedObjectPool<? super SocketConnectionInfos, SocketOutputStream> socketOutputStreamPool,
                       String prefix) {
         this.socketConnectionInfos = socketConnectionInfos;
         this.socketOutputStreamPool = socketOutputStreamPool;

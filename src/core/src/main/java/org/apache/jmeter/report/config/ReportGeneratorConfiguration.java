@@ -483,7 +483,7 @@ public class ReportGeneratorConfiguration {
      *             thrown when the property cannot be cast to the specified type
      */
     private static <TProperty> TProperty getProperty(Props props, String key,
-            TProperty defaultValue, Class<TProperty> clazz)
+            TProperty defaultValue, @SuppressWarnings("BoundedWildcard") Class<TProperty> clazz)
             throws ConfigurationException {
         String value = props.getValue(key);
         if (value == null) {

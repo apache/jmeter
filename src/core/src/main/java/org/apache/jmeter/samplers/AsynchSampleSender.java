@@ -129,11 +129,11 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
 
     private static class Worker extends Thread {
 
-        private final BlockingQueue<SampleEvent> queue;
+        private final BlockingQueue<? extends SampleEvent> queue;
 
         private final RemoteSampleListener listener;
 
-        private Worker(BlockingQueue<SampleEvent> q, RemoteSampleListener l){
+        private Worker(BlockingQueue<? extends SampleEvent> q, RemoteSampleListener l){
             queue = q;
             listener = l;
         }

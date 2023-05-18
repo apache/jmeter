@@ -188,7 +188,7 @@ public class TemplateManager {
      * @param templates Map of {@link Template} referenced by name
      * @param templateNode {@link Node} the xml template node
      */
-    static void parseTemplateNode(Map<String, Template> templates, Node templateNode) {
+    static void parseTemplateNode(Map<? super String, ? super Template> templates, Node templateNode) {
         if (templateNode.getNodeType() == Node.ELEMENT_NODE) {
             Template template = new Template();
             Element element =  (Element) templateNode;

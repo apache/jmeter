@@ -313,7 +313,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     }
 
     private static int matchStrings(int matchNumber, Perl5Matcher matcher,
-            Pattern pattern, List<MatchResult> matches, int found,
+            Pattern pattern, List<? super MatchResult> matches, int found,
             String inputString) {
         PatternMatcherInput input = new PatternMatcherInput(inputString);
         while (matchNumber <=0 || found != matchNumber) {
@@ -329,7 +329,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     }
 
     private static int matchStrings(int matchNumber, java.util.regex.Pattern pattern,
-            List<java.util.regex.MatchResult> matches, int found,
+            List<? super java.util.regex.MatchResult> matches, int found,
             String inputString) {
         Matcher matcher = pattern.matcher(inputString);
         while (matchNumber <=0 || found != matchNumber) {
@@ -513,7 +513,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *            the entry number in the list
      * @return MatchResult
      */
-    private static MatchResult getCorrectMatch(List<MatchResult> matches, int entry) {
+    private static MatchResult getCorrectMatch(List<? extends MatchResult> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){
@@ -528,7 +528,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         return matches.get(entry - 1);
     }
 
-    private static java.util.regex.MatchResult getCorrectMatchJavaRegex(List<java.util.regex.MatchResult> matches, int entry) {
+    private static java.util.regex.MatchResult getCorrectMatchJavaRegex(List<? extends java.util.regex.MatchResult> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){

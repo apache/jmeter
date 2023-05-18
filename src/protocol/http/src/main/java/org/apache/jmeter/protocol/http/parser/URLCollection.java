@@ -105,9 +105,9 @@ public class URLCollection implements Iterable<URL> {
      * Private iterator used to unwrap the URL from the URLString class
      */
     private static class UrlIterator implements Iterator<URL> {
-        private final Iterator<URLString> iter;
+        private final Iterator<? extends URLString> iter;
 
-        UrlIterator(Iterator<URLString> i) {
+        UrlIterator(Iterator<? extends URLString> i) {
             iter = i;
         }
 

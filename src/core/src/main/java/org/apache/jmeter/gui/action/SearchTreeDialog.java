@@ -387,7 +387,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
      * @param expand true if we want to expand
      * @param nodes Set of {@link JMeterTreeNode} to mark
      */
-    private static void markConcernedNodes(boolean expand, Set<JMeterTreeNode> nodes) {
+    private static void markConcernedNodes(boolean expand, Set<? extends JMeterTreeNode> nodes) {
         GuiPackage guiInstance = GuiPackage.getInstance();
         JTree jTree = guiInstance.getMainFrame().getTree();
         for (JMeterTreeNode jMeterTreeNode : nodes) {

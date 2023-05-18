@@ -660,7 +660,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param result List of values of propertyNames
      * @param propertyNames Set of names of properties to extract
      */
-    protected final void addPropertiesValues(List<String> result, Set<String> propertyNames) {
+    protected final void addPropertiesValues(List<? super String> result, Set<String> propertyNames) {
         PropertyIterator iterator = propertyIterator();
         while(iterator.hasNext()) {
             JMeterProperty jMeterProperty = iterator.next();

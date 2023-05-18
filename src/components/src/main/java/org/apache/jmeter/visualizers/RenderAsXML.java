@@ -152,7 +152,7 @@ public class RenderAsXML extends SamplerResultTab
         }
 
         @SuppressWarnings("JdkObsolete")
-        private static void applyToChildren(TreePath parent, Consumer<TreePath> method) {
+        private static void applyToChildren(TreePath parent, Consumer<? super TreePath> method) {
             TreeNode node = (TreeNode) parent.getLastPathComponent();
             Enumeration<?> e = node.children();
             while (e.hasMoreElements()) {

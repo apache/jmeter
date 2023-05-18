@@ -48,7 +48,7 @@ public class FormCharSetFinder {
      * @param pageEncoding the encoding used for the whole page
      * @throws HTMLParseException when parsing the <code>html</code> fails
      */
-    public void addFormActionsAndCharSet(String html, Map<String, String> formEncodings, String pageEncoding)
+    public void addFormActionsAndCharSet(String html, Map<? super String, ? super String> formEncodings, String pageEncoding)
             throws HTMLParseException {
         log.debug("Parsing html of: {}", html);
 

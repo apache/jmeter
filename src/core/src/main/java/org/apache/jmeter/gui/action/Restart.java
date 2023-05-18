@@ -177,7 +177,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
      * @param processArgs arguments to be given to ProcessBuilder
      * @param mainCommand original command line split at spaces
      */
-    private static void processRemainingArgs(List<String> processArgs, String[] mainCommand) {
+    private static void processRemainingArgs(List<? super String> processArgs, String[] mainCommand) {
         boolean paramValue = false;
         StringBuilder partialParamValue = new StringBuilder();
         for (int i = 1; i < mainCommand.length; i++) {

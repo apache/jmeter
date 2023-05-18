@@ -880,7 +880,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      * unless the number of results exceeds {@link #MAX_SORTED_RESULTS} in which case just stream
      * the results out without sorting.
      */
-    private void writeSearchResults(final XMLBuffer xmlb, final NamingEnumeration<SearchResult> srch)
+    private void writeSearchResults(final XMLBuffer xmlb, final NamingEnumeration<? extends SearchResult> srch)
             throws NamingException
     {
 
@@ -955,7 +955,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    private static void sortAttributes(final List<Attribute> sortedAttrs) {
+    private static void sortAttributes(final List<? extends Attribute> sortedAttrs) {
         sortedAttrs.sort((o1, o2) -> {
             String nm1 = o1.getID();
             String nm2 = o2.getID();
@@ -964,7 +964,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         });
     }
 
-    private static void sortResults(final List<SearchResult> sortedResults) {
+    private static void sortResults(final List<? extends SearchResult> sortedResults) {
         sortedResults.sort(new Comparator<SearchResult>() {
             private int compareToReverse(final String s1, final String s2) {
                 int len1 = s1.length();

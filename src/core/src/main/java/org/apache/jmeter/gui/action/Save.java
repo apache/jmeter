@@ -400,7 +400,7 @@ public class Save extends AbstractAction {
      * @param backupFiles
      *            {@link List} of {@link File}
      */
-    private static int getHighestVersionNumber(Pattern backupPattern, List<File> backupFiles) {
+    private static int getHighestVersionNumber(Pattern backupPattern, List<? extends File> backupFiles) {
         return backupFiles.stream().map(backupFile -> backupPattern.matcher(backupFile.getName()))
                 .filter(matcher -> matcher.find() && matcher.groupCount() > 0)
                 .mapToInt(matcher -> Integer.parseInt(matcher.group(1))).max().orElse(0);
@@ -414,7 +414,7 @@ public class Save extends AbstractAction {
      * @return list of files to be deleted based upon properties described
      *         {@link #createBackupFile(File)}
      */
-    private static List<File> backupFilesToDelete(List<File> backupFiles) {
+    private static List<File> backupFilesToDelete(List<? extends File> backupFiles) {
         List<File> filesToDelete = new ArrayList<>();
         if (BACKUP_MAX_HOURS > 0) {
             filesToDelete.addAll(expiredBackupFiles(backupFiles));
@@ -434,7 +434,7 @@ public class Save extends AbstractAction {
      * @param backupFiles {@link List} of {@link File} to filter
      * @return {@link List} of {@link File} that are expired
      */
-    private static List<File> expiredBackupFiles(List<File> backupFiles) {
+    private static List<File> expiredBackupFiles(List<? extends File> backupFiles) {
         if (BACKUP_MAX_HOURS > 0) {
             final long expiryMillis = System.currentTimeMillis() - (1L * BACKUP_MAX_HOURS * MS_PER_HOUR);
             return backupFiles.stream().filter(file -> file.lastModified() < expiryMillis).collect(Collectors.toList());

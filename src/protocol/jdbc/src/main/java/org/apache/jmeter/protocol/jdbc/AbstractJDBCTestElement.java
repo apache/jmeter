@@ -583,7 +583,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     }
 
     private static int processRow(ResultSet rs, ResultSetMetaData meta, StringBuilder sb, int numColumns,
-            JMeterVariables jmvars, String[] varNames, List<Map<String, Object>> results, int currentIterationIndex)
+            JMeterVariables jmvars, String[] varNames, List<? super Map<String, Object>> results, int currentIterationIndex)
             throws SQLException, UnsupportedEncodingException {
         Map<String, Object> row = null;
         currentIterationIndex++;

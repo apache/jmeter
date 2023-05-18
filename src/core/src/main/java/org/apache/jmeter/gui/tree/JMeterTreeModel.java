@@ -185,7 +185,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private static void traverseAndFind(Class<?> type, JMeterTreeNode node, List<JMeterTreeNode> nodeList) {
+    private static void traverseAndFind(Class<?> type, JMeterTreeNode node, List<? super JMeterTreeNode> nodeList) {
         if (type.isInstance(node.getUserObject())) {
             nodeList.add(node);
         }

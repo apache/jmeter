@@ -353,7 +353,7 @@ public class JMeterThread implements Runnable, Interruptible {
      * @param consumer Consumer that will process the tree of elements up to root node
      */
     private void triggerLoopLogicalActionOnParentControllers(Sampler sampler, JMeterContext threadContext,
-            Consumer<FindTestElementsUpToRootTraverser> consumer) {
+            Consumer<? super FindTestElementsUpToRootTraverser> consumer) {
         TransactionSampler transactionSampler = null;
         if (sampler instanceof TransactionSampler) {
             transactionSampler = (TransactionSampler) sampler;
@@ -894,7 +894,7 @@ public class JMeterThread implements Runnable, Interruptible {
         log.info("Stop Thread detected by thread: {}", threadName);
     }
 
-    private static void checkAssertions(List<Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
+    private static void checkAssertions(List<? extends Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
         for (Assertion assertion : assertions) {
             TestBeanHelper.prepare((TestElement) assertion);
             if (assertion instanceof AbstractScopedAssertion) {
@@ -962,14 +962,14 @@ public class JMeterThread implements Runnable, Interruptible {
         result.addAssertionResult(assertionResult);
     }
 
-    private static void runPostProcessors(List<PostProcessor> extractors) {
+    private static void runPostProcessors(List<? extends PostProcessor> extractors) {
         for (PostProcessor ex : extractors) {
             TestBeanHelper.prepare((TestElement) ex);
             ex.process();
         }
     }
 
-    private static void runPreProcessors(List<PreProcessor> preProcessors) {
+    private static void runPreProcessors(List<? extends PreProcessor> preProcessors) {
         for (PreProcessor ex : preProcessors) {
             if (log.isDebugEnabled()) {
                 log.debug("Running preprocessor: {}", ((AbstractTestElement) ex).getName());
@@ -988,7 +988,7 @@ public class JMeterThread implements Runnable, Interruptible {
      *
      * @param timers to be used for calculating the delay
      */
-    private void delay(List<Timer> timers) {
+    private void delay(List<? extends Timer> timers) {
         long totalDelay = 0;
         for (Timer timer : timers) {
             TestBeanHelper.prepare((TestElement) timer);

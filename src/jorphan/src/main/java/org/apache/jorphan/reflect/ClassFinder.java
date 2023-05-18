@@ -469,7 +469,7 @@ public final class ClassFinder {
     }
 
 
-    private static void findClassesInOnePath(File file, Set<String> listClasses, ClassFilter filter) {
+    private static void findClassesInOnePath(File file, Set<? super String> listClasses, ClassFilter filter) {
         if (file.isDirectory()) {
             findClassesInPathsDir(file.getAbsolutePath(), file, listClasses, filter);
         } else if (file.exists()) {
@@ -500,7 +500,7 @@ public final class ClassFinder {
     }
 
 
-    private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) {
+    private static void findClassesInPathsDir(String strPathElement, File dir, Set<? super String> listClasses, ClassFilter filter) {
         File[] list = dir.listFiles();
         if (list == null) {
             log.warn("{} is not a folder", dir.getAbsolutePath());
@@ -528,7 +528,7 @@ public final class ClassFinder {
      * @param filter {@link ClassFilter}
      * @param className Full class name
      */
-    private static void applyFiltering(Set<String> classesSet, ClassFilter filter, String className) {
+    private static void applyFiltering(Set<? super String> classesSet, ClassFilter filter, String className) {
         try {
             if (filter.accept(className)) {
                 classesSet.add(className);

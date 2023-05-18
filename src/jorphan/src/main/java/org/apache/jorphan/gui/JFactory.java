@@ -172,7 +172,7 @@ public class JFactory {
      * @return input component (e.g. for fluent APIs)
      */
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
-    public static <T extends JComponent> T withDynamic(T component, Consumer<T> onUpdateUi) {
+    public static <T extends JComponent> T withDynamic(T component, Consumer<? super T> onUpdateUi) {
         return STYLE.withDynamic(component, onUpdateUi);
     }
 

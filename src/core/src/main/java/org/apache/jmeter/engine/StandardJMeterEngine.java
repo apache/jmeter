@@ -237,7 +237,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    private void notifyTestListenersOfStart(SearchByClass<TestStateListener> testListeners) {
+    private void notifyTestListenersOfStart(SearchByClass<? extends TestStateListener> testListeners) {
         for (TestStateListener tl : testListeners.getSearchResults()) {
             if (tl instanceof TestBean) {
                 TestBeanHelper.prepare((TestElement) tl);
@@ -250,7 +250,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    private void notifyTestListenersOfEnd(SearchByClass<TestStateListener> testListeners) {
+    private void notifyTestListenersOfEnd(SearchByClass<? extends TestStateListener> testListeners) {
         log.info("Notifying test listeners of end of test");
         for (TestStateListener tl : testListeners.getSearchResults()) {
             try {

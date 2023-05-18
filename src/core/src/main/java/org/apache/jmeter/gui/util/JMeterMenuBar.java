@@ -563,7 +563,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
      * @param menuCreators
      * @param location
      */
-    private static void addPluginsMenuItems(JMenu menu, Collection<MenuCreator> menuCreators, MENU_LOCATION location) {
+    private static void addPluginsMenuItems(JMenu menu, Collection<? extends MenuCreator> menuCreators, MENU_LOCATION location) {
         for (MenuCreator menuCreator : menuCreators) {
             JMenuItem[] menuItems = menuCreator.getMenuItemsAtLocation(location);
             if (menuItems.length != 0) {

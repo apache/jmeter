@@ -225,14 +225,14 @@ public final class MenuFactory {
         return item;
     }
 
-    private static void sortMenus(Collection<List<MenuInfo>> menus) {
+    private static void sortMenus(Collection<? extends List<MenuInfo>> menus) {
         for (List<MenuInfo> menu : menus) {
             menu.sort(Comparator.comparing(MenuInfo::getLabel));
             menu.sort(Comparator.comparingInt(MenuInfo::getSortOrder));
         }
     }
 
-    private static void separateItemsWithExplicitOrder(Collection<List<MenuInfo>> menus) {
+    private static void separateItemsWithExplicitOrder(Collection<? extends List<MenuInfo>> menus) {
         for (List<MenuInfo> menu : menus) {
             Optional<MenuInfo> firstDefaultSortItem = menu.stream()
                     .filter(info -> info.getSortOrder() == MenuInfo.SORT_ORDER_DEFAULT)
@@ -468,7 +468,7 @@ public final class MenuFactory {
      * @return the menu
      */
     private static JMenu makeMenu(
-            Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
+            Collection<? extends MenuInfo> menuInfo, String actionCommand, String menuName) {
 
         JMenu menu = new JMenu(menuName);
         menuInfo.stream()
