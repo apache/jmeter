@@ -772,7 +772,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param localContext {@link HttpContext}
      */
     private static void saveProxyAuth(
-            MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
+            MutableTriple<CloseableHttpClient, ? super AuthState, PoolingHttpClientConnectionManager> triple,
             HttpContext localContext) {
         triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
     }
@@ -782,7 +782,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param triple {@link MutableTriple} May be null if first request
      * @param localContext {@link HttpContext}
      */
-    private static void setupProxyAuthState(MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
+    private static void setupProxyAuthState(MutableTriple<CloseableHttpClient, ? extends AuthState, PoolingHttpClientConnectionManager> triple,
             HttpContext localContext) {
         if (triple != null) {
             AuthState proxyAuthState = triple.getMiddle();
@@ -1227,7 +1227,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
             JMeterVariables jMeterVariables,
             HttpClientContext clientContext,
-            Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+            Map<HttpClientKey, ? extends MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
         if (resetStateOnThreadGroupIteration.get()) {
             closeCurrentConnections(mapHttpClientPerHttpClientKey);
             clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
@@ -1245,7 +1245,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param mapHttpClientPerHttpClientKey
      */
     private static void closeCurrentConnections(
-            Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+            Map<HttpClientKey, ? extends MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
         for (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple :
                 mapHttpClientPerHttpClientKey.values()) {
             PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = triple.getRight();
@@ -1483,7 +1483,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param method <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
-    private static String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<String> predicate) {
+    private static String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<? super String> predicate) {
         if(method != null) {
             // Get all the request headers
             StringBuilder hdrs = new StringBuilder(150);

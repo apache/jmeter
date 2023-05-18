@@ -1324,7 +1324,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @param sampler        Sampler to remove values from.
      * @param configurations ConfigTestElements in descending priority.
      */
-    private static void removeValuesFromSampler(HTTPSamplerBase sampler, Collection<ConfigTestElement> configurations) {
+    private static void removeValuesFromSampler(HTTPSamplerBase sampler, Collection<? extends ConfigTestElement> configurations) {
         PropertyIterator props = sampler.propertyIterator();
         while (props.hasNext()) {
             JMeterProperty prop = props.next();
@@ -1414,7 +1414,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @param variables Collection of Arguments to use to do the replacement, ordered
      *                  by ascending priority.
      */
-    private void replaceValues(TestElement sampler, TestElement[] configs, Collection<Arguments> variables) {
+    private void replaceValues(TestElement sampler, TestElement[] configs, Collection<? extends Arguments> variables) {
         // Build the replacer from all the variables in the collection:
         ValueReplacer replacer = new ValueReplacer();
         for (Arguments variable : variables) {

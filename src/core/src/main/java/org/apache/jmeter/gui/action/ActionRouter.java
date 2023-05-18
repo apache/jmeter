@@ -221,7 +221,7 @@ public final class ActionRouter implements ActionListener {
      * @param listener {@link ActionListener}
      * @param actionListeners {@link Set} of {@link ActionListener}
      */
-    private static void removeActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
+    private static void removeActionListener(Class<?> action, ActionListener listener, Map<? super String, Set<ActionListener>> actionListeners) {
         if (action != null) {
             Set<ActionListener> set = actionListeners.get(action.getName());
             if (set != null) {
@@ -251,7 +251,7 @@ public final class ActionRouter implements ActionListener {
      * @param listener {@link ActionListener}
      * @param actionListeners {@link Set}
      */
-    private static void addActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
+    private static void addActionListener(Class<?> action, ActionListener listener, Map<? super String, Set<ActionListener>> actionListeners) {
         if (action != null) {
             Set<ActionListener> set = actionListeners.get(action.getName());
             if (set == null) {
@@ -297,7 +297,7 @@ public final class ActionRouter implements ActionListener {
      * @param e {@link ActionEvent}
      * @param actionListeners {@link Set}
      */
-    private static void actionPerformed(Class<? extends Command> action, ActionEvent e, Map<String, Set<ActionListener>> actionListeners) {
+    private static void actionPerformed(Class<? extends Command> action, ActionEvent e, Map<String, ? extends Set<ActionListener>> actionListeners) {
         if (action != null) {
             Set<ActionListener> listenerSet = actionListeners.get(action.getName());
             if (listenerSet != null && !listenerSet.isEmpty()) {

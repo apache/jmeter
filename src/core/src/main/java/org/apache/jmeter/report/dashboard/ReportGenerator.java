@@ -325,7 +325,7 @@ public class ReportGenerator {
 
     private static void addGraphConsumer(FilterConsumer nameFilter,
             FilterConsumer excludeControllerFilter,
-            Map.Entry<String, GraphConfiguration> entryGraphCfg)
+            Map.Entry<String, ? extends GraphConfiguration> entryGraphCfg)
             throws GenerationException {
         String graphName = entryGraphCfg.getKey();
         GraphConfiguration graphConfiguration = entryGraphCfg.getValue();

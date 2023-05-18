@@ -333,7 +333,7 @@ public class SmtpSampler extends AbstractSampler {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private static void writeHeaders(Enumeration<Header> headers, StringBuilder sb) {
+    private static void writeHeaders(Enumeration<? extends Header> headers, StringBuilder sb) {
         while (headers.hasMoreElements()) {
             Header header = headers.nextElement();
             sb.append(header.getName());

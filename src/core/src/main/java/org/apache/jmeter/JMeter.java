@@ -1187,7 +1187,7 @@ public class JMeter implements JMeterPlugin {
             this.reportGenerator = reportGenerator;
         }
 
-        public void setStartedRemoteEngines(List<JMeterEngine> engines) {
+        public void setStartedRemoteEngines(List<? extends JMeterEngine> engines) {
             if (runMode != RunMode.REMOTE) {
                 throw new IllegalArgumentException("This method should only be called in RunMode.REMOTE");
             }
@@ -1355,7 +1355,7 @@ public class JMeter implements JMeterPlugin {
         return "true".equals(System.getProperty(JMeter.JMETER_NON_GUI)); //$NON-NLS-1$
     }
 
-    private static void startUdpDdaemon(final List<JMeterEngine> engines) {
+    private static void startUdpDdaemon(final List<? extends JMeterEngine> engines) {
         int port = JMeterUtils.getPropDefault("jmeterengine.nongui.port", UDP_PORT_DEFAULT); // $NON-NLS-1$
         int maxPort = JMeterUtils.getPropDefault("jmeterengine.nongui.maxport", 4455); // $NON-NLS-1$
         if (port > 1000){
@@ -1375,7 +1375,7 @@ public class JMeter implements JMeterPlugin {
         }
     }
 
-    private static void waitForSignals(final List<JMeterEngine> engines, DatagramSocket socket) {
+    private static void waitForSignals(final List<? extends JMeterEngine> engines, DatagramSocket socket) {
         byte[] buf = new byte[80];
         System.out.println("Waiting for possible Shutdown/StopTestNow/HeapDump/ThreadDump message on port "+socket.getLocalPort());//NOSONAR
         DatagramPacket request = new DatagramPacket(buf, buf.length);

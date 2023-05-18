@@ -81,7 +81,7 @@ public class ValueReplacer {
         setProperties(el, newProps);
     }
 
-    private static void setProperties(TestElement el, Collection<JMeterProperty> newProps) {
+    private static void setProperties(TestElement el, Collection<? extends JMeterProperty> newProps) {
         el.clear();
         for (JMeterProperty jmp : newProps) {
             el.setProperty(jmp);

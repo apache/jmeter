@@ -162,12 +162,12 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
         return sampleList;
     }
 
-    private static void recurseResults(List<SampleResult> resultList, SampleResult sampleResult) {
+    private static void recurseResults(List<? super SampleResult> resultList, SampleResult sampleResult) {
         Collections.addAll(resultList, sampleResult.getSubResults());
         recurseResults(resultList, sampleResult.getSubResults(), 3);
     }
 
-    private static void recurseResults(List<SampleResult> resultList, SampleResult[] sampleResult, int level) {
+    private static void recurseResults(List<? super SampleResult> resultList, SampleResult[] sampleResult, int level) {
         if (level < 0) {
             return;
         }

@@ -236,7 +236,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private static TreePath checkExpandedOrSelected(List<TreeNode> path,
             Object item, Object oldSelectedObject,
-            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths,
+            Set<Object> oldExpandedObjects, Set<? super TreePath> newExpandedPaths,
             TreePath defaultPath) {
         TreePath result = defaultPath;
         if (oldSelectedObject == item) {
@@ -250,7 +250,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private static TreePath checkExpandedOrSelected(List<TreeNode> path,
             Object item, Object oldSelectedObject,
-            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths,
+            Set<Object> oldExpandedObjects, Set<? super TreePath> newExpandedPaths,
             TreePath defaultPath, DefaultMutableTreeNode extensionNode) {
         TreePath result = defaultPath;
         if (oldSelectedObject == item) {
@@ -279,7 +279,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private TreePath addSubResults(DefaultMutableTreeNode currNode,
             SampleResult res, List<TreeNode> path, Object selectedObject,
-            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths) {
+            Set<Object> oldExpandedObjects, Set<? super TreePath> newExpandedPaths) {
         SampleResult[] subResults = res.getSubResults();
 
         int leafIndex = 0;

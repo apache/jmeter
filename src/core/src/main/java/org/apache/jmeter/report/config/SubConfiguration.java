@@ -54,7 +54,7 @@ public class SubConfiguration {
      *             if cannot convert property
      */
     public final <TProperty> TProperty getProperty(String key,
-            TProperty defaultValue, Class<TProperty> clazz)
+            TProperty defaultValue, @SuppressWarnings("BoundedWildcard") Class<TProperty> clazz)
                     throws ConfigurationException {
         String value = properties.get(key);
         TProperty result;
