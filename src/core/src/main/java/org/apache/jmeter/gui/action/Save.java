@@ -49,7 +49,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -451,7 +451,7 @@ public class Save extends AbstractAction {
      */
     private static boolean checkAcceptableForTestFragment(JMeterTreeNode[] nodes) {
         return Arrays.stream(nodes).map(DefaultMutableTreeNode::getUserObject)
-                .noneMatch(o -> o instanceof ThreadGroup || o instanceof TestPlan);
+                .noneMatch(o -> o instanceof AbstractThreadGroup || o instanceof TestPlan);
     }
 
     // package protected to allow access from test code

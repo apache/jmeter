@@ -28,7 +28,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,7 @@ public class AddThinkTimeBetweenEachStep extends AbstractAction {
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
         if (!
                 (currentNode.getUserObject() instanceof Controller ||
-                        currentNode.getUserObject() instanceof ThreadGroup)
+                        currentNode.getUserObject() instanceof AbstractThreadGroup)
                 ) {
             Toolkit.getDefaultToolkit().beep();
             return;
