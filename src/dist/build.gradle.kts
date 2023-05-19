@@ -173,6 +173,13 @@ val verifyReleaseDependencies by tasks.registering {
     inputs.file(expectedLibs)
     val actualLibs = File(buildDir, "dist/expected_release_jars.csv")
     outputs.file(actualLibs)
+    val ignoreJarsMismatch = version.toString().endsWith("-SNAPSHOT")
+    if (ignoreJarsMismatch || updateExpectedJars) {
+        // The task does not fail in case of -SNAPSHOT version, so we make the task never UP-TO-DATE
+        // in that case. Otherwise, the task never executes on the second request, even if the user runs with
+        // -PupdateExpectedJars
+        outputs.upToDateWhen { false }
+    }
     doLast {
         val caseInsensitive: Comparator<String> = compareBy(String.CASE_INSENSITIVE_ORDER, { it })
 
@@ -237,7 +244,7 @@ val verifyReleaseDependencies by tasks.registering {
         if (updateExpectedJars) {
             println("Updating ${expectedLibs.relativeTo(rootDir)}")
             actualLibs.copyTo(expectedLibs, overwrite = true)
-        } else if (version.toString().endsWith("-SNAPSHOT")) {
+        } else if (ignoreJarsMismatch) {
             // Renovate requires self-hosted runner for executing postUpgradeTasks,
             // so we can't make Renovate to update expected_release_jars.csv at the moment
             logger.lifecycle(sb.toString())
