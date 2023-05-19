@@ -65,7 +65,9 @@ class BoltSamplerSpec extends Specification {
             str.endsWith("Records: Skipped")
             response.getSampleCount() == 1
             response.getErrorCount() == 0
-            response.getTime() > 0
+            //  The sampler was executed, so start and end times should be set
+            response.getStartTime() > 0
+            response.getEndTime() > 0
     }
 
     def "should not display results by default"() {
@@ -99,7 +101,9 @@ class BoltSamplerSpec extends Specification {
             str.endsWith("Mock for type 'Record'")
             response.getSampleCount() == 1
             response.getErrorCount() == 0
-            response.getTime() > 0
+            //  The sampler was executed, so start and end times should be set
+            response.getStartTime() > 0
+            response.getEndTime() > 0
     }
 
     def "should return error on failed query"() {
@@ -116,7 +120,9 @@ class BoltSamplerSpec extends Specification {
             str.contains("a message")
             response.getSampleCount() == 1
             response.getErrorCount() == 1
-            response.getTime() > 0
+            //  The sampler was executed, so start and end times should be set
+            response.getStartTime() > 0
+            response.getEndTime() > 0
     }
 
     def "should return error on invalid parameters"() {
@@ -133,6 +139,9 @@ class BoltSamplerSpec extends Specification {
             str.contains("Unexpected character")
             response.getSampleCount() == 1
             response.getErrorCount() == 1
+            // The sampler fails at parameter preparation, so no time is recorded
+            response.getStartTime() == 0
+            response.getEndTime() == 0
             response.getTime() == 0
     }
 
