@@ -11,6 +11,11 @@
       "groupName": "com.fasterxml.jackson.core"
     },
     {
+      "matchPackagePrefixes": ["com.github.ben-manes.caffeine"],
+      "description": "TODO: Caffeine 3.0 requires Java 11",
+      "allowedVersions": "< 3.0"
+    },
+    {
       "matchPackagePrefixes": ["com.github.vlsi"],
       "groupName": "com.github.vlsi"
     },
@@ -23,12 +28,23 @@
       "groupName": "com.helger"
     },
     {
+      "matchPackagePrefixes": ["net.minidev:accessors-smart", "net.minidev:json-smart"],
+      "groupName": "net.minidev json-smart"
+    },
+    {
       "matchPackagePrefixes": ["com.miglayout"],
       "groupName": "com.miglayout"
     },
     {
+      "matchPackagePrefixes": ["org.ajoberstar.grgit"],
+      "groupName": "org.ajoberstar.grgit",
+      "description": "TODO: grgit 5.0 requires Java 11",
+      "allowedVersions": "< 5.0"
+    },
+    {
       "matchPackagePrefixes": ["org.apache.activemq"],
       "groupName": "org.apache.activemq",
+      "description": "TODO: activemq 5.17.0 requires Java 11",
       "allowedVersions": "< 5.17.0"
     },
     {
@@ -52,6 +68,12 @@
       "groupName": "org.checkerframework"
     },
     {
+      "matchPackagePrefixes": ["org.eclipse.jgit"],
+      "groupName": "org.eclipse.jgit",
+      "description": "TODO: jgit 6.0 requires Java 11",
+      "allowedVersions": "< 6.0"
+    },
+    {
       "matchPackagePrefixes": ["org.jetbrains.lets-plot"],
       "groupName": "org.jetbrains.lets-plot"
     },
@@ -63,6 +85,12 @@
       "matchPackagePrefixes": ["org.slf4j"],
       "groupName": "org.slf4j",
       "allowedVersions": "< 2.0.0"
+    },
+    {
+      "matchPackagePrefixes": ["org.spockframework"],
+      "groupName": "org.spockframework",
+      "description": "TODO: change when we upgrade to Groovy 4.0",
+      "allowedVersions": "/.*-groovy-3.0/"
     },
     {
       "matchPackagePatterns": ["^src:protocol"],
