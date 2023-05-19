@@ -42,8 +42,6 @@ dependencies {
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
-        api("com.google.auto.service:auto-service:1.0.1")
-        api("com.google.auto.service:auto-service-annotations:1.0.1")
         api("com.fasterxml.jackson.core:jackson-annotations:2.15.1")
         api("com.fasterxml.jackson.core:jackson-core:2.15.1")
         api("com.fasterxml.jackson.core:jackson-databind:2.15.1")
@@ -51,9 +49,12 @@ dependencies {
         api("com.formdev:svgSalamander:1.1.4")
         api("com.github.ben-manes.caffeine:caffeine:2.9.3")
         api("com.github.weisj:darklaf-core:2.7.3")
-        api("com.github.weisj:darklaf-theme:2.7.3")
-        api("com.github.weisj:darklaf-property-loader:2.7.3")
         api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.3.4")
+        api("com.github.weisj:darklaf-property-loader:2.7.3")
+        api("com.github.weisj:darklaf-theme:2.7.3")
+        api("com.google.auto.service:auto-service-annotations:1.0.1")
+        api("com.google.auto.service:auto-service:1.0.1")
+        api("com.google.errorprone:error_prone_annotations:2.19.1")
         api("com.helger.commons:ph-commons:10.2.4")
         api("com.helger:ph-css:6.5.0")
         api("com.jayway.jsonpath:json-path:2.8.0")
@@ -76,6 +77,7 @@ dependencies {
         api("junit:junit:4.13.2") {
             because("ApacheJMeter_junit depends on junit4")
         }
+        api("org.checkerframework:checker-qual:3.34.0")
         api("org.hamcrest:hamcrest-core:2.2") {
             because("ApacheJMeter_junit depends on junit4")
         }
@@ -85,9 +87,6 @@ dependencies {
         api("org.hamcrest:hamcrest:2.2") {
             because("ApacheJMeter_junit depends on junit4")
         }
-        api("org.jetbrains:annotations:24.0.1")
-        api("org.jetbrains.lets-plot:lets-plot-batik:3.2.0")
-        api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.4.1")
         api("net.minidev:accessors-smart:2.4.11")
         api("net.minidev:json-smart:2.4.11")
         api("net.sf.jtidy:jtidy:r938")
@@ -102,6 +101,7 @@ dependencies {
         api("org.apache.commons:commons-pool2:2.11.1")
         api("org.apache.commons:commons-text:1.10.0")
         api("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1")
+        api("org.apache.httpcomponents.client5:httpclient5:5.2.1")
         api("org.apache.httpcomponents:httpasyncclient:4.1.5")
         api("org.apache.httpcomponents:httpclient:4.5.14")
         api("org.apache.httpcomponents:httpcore-nio:4.4.16")
@@ -124,6 +124,9 @@ dependencies {
         api("org.exparity:hamcrest-date:2.0.8")
         api("org.freemarker:freemarker:2.3.32")
         api("org.jdom:jdom:1.1.3")
+        api("org.jetbrains.lets-plot:lets-plot-batik:3.2.0")
+        api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.4.1")
+        api("org.jetbrains:annotations:24.0.1")
         api("org.jodd:jodd-core:5.0.13")
         api("org.jodd:jodd-lagarto:5.0.13")
         api("org.jodd:jodd-log:5.0.13")

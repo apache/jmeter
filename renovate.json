@@ -24,6 +24,10 @@
       "groupName": "com.github.weisj"
     },
     {
+      "matchPackagePrefixes": ["com.google.errorprone", "net.ltgt.errorprone"],
+      "groupName": "com.google.errorprone"
+    },
+    {
       "matchPackagePrefixes": ["com.helger"],
       "groupName": "com.helger"
     },
@@ -52,8 +56,12 @@
       "groupName": "org.apache.ftpserver"
     },
     {
-      "matchPackagePrefixes": ["org.apache.httpcomponents"],
-      "groupName": "org.apache.httpcomponents"
+      "matchPackagePrefixes": ["org.apache.httpcomponents:"],
+      "groupName": "org.apache.httpcomponents4"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.httpcomponents.client5:"],
+      "groupName": "org.apache.httpcomponents5"
     },
     {
       "matchPackagePrefixes": ["org.apache.logging.log4j"],
