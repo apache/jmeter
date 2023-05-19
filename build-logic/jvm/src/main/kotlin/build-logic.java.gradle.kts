@@ -26,7 +26,6 @@ plugins {
     id("idea")
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.gradle-extensions")
-    id("build-logic.testing")
     id("build-logic.test-base")
     id("build-logic.build-params")
     id("build-logic.style")
