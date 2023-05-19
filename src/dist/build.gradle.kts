@@ -171,6 +171,7 @@ val verifyReleaseDependencies by tasks.registering {
     dependsOn(configurations.runtimeClasspath)
     val expectedLibs = file("src/dist/expected_release_jars.csv")
     inputs.file(expectedLibs)
+    inputs.property("updateExpectedJars", updateExpectedJars)
     val actualLibs = File(buildDir, "dist/expected_release_jars.csv")
     outputs.file(actualLibs)
     val ignoreJarsMismatch = version.toString().endsWith("-SNAPSHOT")

@@ -214,7 +214,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    @API(status = API.Status.EXPERIMENTAL, since = "5.5.1")
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public void awaitTermination(Duration duration) throws ExecutionException, InterruptedException, TimeoutException {
         runningTest.get(duration.toMillis(), TimeUnit.MILLISECONDS);
     }
