@@ -457,18 +457,21 @@ public class FileServer {
     }
 
     private static BufferedWriter createBufferedWriter(FileEntry fileEntry) throws IOException {
-        OutputStream fos = Files.newOutputStream(fileEntry.file.toPath());
-        OutputStreamWriter osw;
-        // If file encoding is specified, write using that encoding, otherwise use default platform encoding
-        String charsetName = fileEntry.charSetEncoding;
-        if(!JOrphanUtils.isBlank(charsetName)) {
-            osw = new OutputStreamWriter(fos, charsetName);
-        } else {
-            @SuppressWarnings("DefaultCharset")
-            final OutputStreamWriter withPlatformEncoding = new OutputStreamWriter(fos);
-            osw = withPlatformEncoding;
+        try (OutputStream fos = Files.newOutputStream(fileEntry.file.toPath())) {
+            OutputStreamWriter osw;
+            // If file encoding is specified, write using that encoding, otherwise use default platform encoding
+            String charsetName = fileEntry.charSetEncoding;
+            if (!JOrphanUtils.isBlank(charsetName)) {
+                osw = new OutputStreamWriter(fos, charsetName);
+            } else {
+                @SuppressWarnings("DefaultCharset") final OutputStreamWriter withPlatformEncoding = new OutputStreamWriter(fos);
+                osw = withPlatformEncoding;
+            }
+
+            return new BufferedWriter(osw);
+        } catch (Exception e) {
+            return null;
         }
-        return new BufferedWriter(osw);
     }
 
     public synchronized void closeFiles() throws IOException {
