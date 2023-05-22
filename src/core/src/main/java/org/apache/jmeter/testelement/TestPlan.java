@@ -85,7 +85,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     }
 
     /**
-     * Fetches the functional mode property<br>
+     * Fetches the functional mode property.
      * Could be change for no-GUI test with jmeter property: {@code PROP_FUNCTIONAL_MODE}
      * @return functional mode
      */
@@ -170,7 +170,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
         setProperty(TEARDOWN_ON_SHUTDOWN, tearDown, false);
     }
 
-    /** Fetches the Tear Down On Shutdown property<br>
+    /** Fetches the Tear Down On Shutdown property.
      * Could be change for no-GUI test with jmeter property:  {@code PROP_TEARDOWN_ON_SHUTDOWN}
      * @return  TearDownOnShutdown setting
      */
@@ -233,7 +233,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     }
 
     /**
-     * Fetch the serialize threadgroups property<br>
+     * Fetch the serialize threadgroups property (Run Thread Groups consecutively).
      * Could be change for no-GUI test with jmeter property: {@code PROP_SERIALIZE_THREADGROUPS}
      * @return serialized setting
      */
