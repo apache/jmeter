@@ -132,7 +132,7 @@ dependencies {
         api("org.jodd:jodd-log:5.0.13")
         api("org.jodd:jodd-props:5.0.13")
         api("org.jsoup:jsoup:1.16.1")
-        api("org.mongodb:mongo-java-driver:2.11.3")
+        api("org.mongodb:mongo-java-driver:2.14.3")
         api("org.mozilla:rhino:1.7.14")
         api("org.neo4j.driver:neo4j-java-driver:4.4.11")
         api("org.slf4j:jcl-over-slf4j:1.7.36")
