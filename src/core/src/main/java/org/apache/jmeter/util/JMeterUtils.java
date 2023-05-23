@@ -373,9 +373,6 @@ public class JMeterUtils implements UnitTestManager {
             try {
                 Class<? extends S> klass = Class.forName(className, false, classLoader)
                         .asSubclass(service);
-                if (!Modifier.isAbstract(klass.getModifiers())) {
-                    continue;
-                }
                 result.add(klass.getDeclaredConstructor().newInstance());
             } catch (Throwable e) {
                 if (e instanceof InvocationTargetException) {
