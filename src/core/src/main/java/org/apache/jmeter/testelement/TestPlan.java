@@ -98,7 +98,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
             if (propFunctionalModeProperty != null) {
                 functionalModeReturn = JMeterUtils.getPropDefault(PROP_FUNCTIONAL_MODE, functionalModeDefault);
                 log.info("Overriding the value of \"Functional Test Mode\" with property " +
-                        PROP_FUNCTIONAL_MODE + " value=" + functionalModeReturn);
+                        PROP_FUNCTIONAL_MODE + "=" + functionalModeReturn);
             }
         }
         functionalMode = functionalModeReturn;
@@ -183,7 +183,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
             if (tearDownOnShutdownProperty != null) {
                 tearDownOnShutdownReturn = JMeterUtils.getPropDefault(PROP_TEARDOWN_ON_SHUTDOWN, tearDownOnShutdown);
                 log.info("Overriding the value of \"Run tearDown Thread Groups after shutdown of main threads\" with property " +
-                        PROP_TEARDOWN_ON_SHUTDOWN + " value=" + tearDownOnShutdownReturn);
+                        PROP_TEARDOWN_ON_SHUTDOWN + "=" + tearDownOnShutdownReturn);
             }
         }
         return tearDownOnShutdownReturn;
@@ -246,7 +246,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
             if (serializedThreadGroupProperty != null) {
                 serializedThreadGroupReturn = JMeterUtils.getPropDefault(PROP_SERIALIZE_THREADGROUPS, serializedThreadGroupDefault);
                 log.info("Overriding the value of \"Run Thread Groups consecutively (serialize thread groups)\" with property "  +
-                        PROP_SERIALIZE_THREADGROUPS + " value=" + serializedThreadGroupReturn);
+                        PROP_SERIALIZE_THREADGROUPS + "=" + serializedThreadGroupReturn);
             }
         }
         return serializedThreadGroupReturn;
