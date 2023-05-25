@@ -24,6 +24,10 @@
       "groupName": "com.github.weisj"
     },
     {
+      "matchPackagePrefixes": ["com.google.auto.service"],
+      "groupName": "com.google.auto.service"
+    },
+    {
       "matchPackagePrefixes": ["com.google.errorprone", "net.ltgt.errorprone"],
       "groupName": "com.google.errorprone"
     },

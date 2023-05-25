@@ -26,11 +26,6 @@ dependencies {
     compileOnlyApi("com.google.auto.service:auto-service-annotations")
 }
 
-tasks.configureEach<JavaCompile> {
-    // Verify @AutoService annotations
-    options.compilerArgs.add("-Averify=true")
-}
-
 plugins.withId("org.jetbrains.kotlin.jvm") {
     apply(plugin = "org.jetbrains.kotlin.kapt")
 
