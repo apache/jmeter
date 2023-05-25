@@ -85,36 +85,34 @@ public object JMeterGuiLauncher {
     private suspend fun startGuiInternal(testFile: String?) {
         setupLaF()
         val splash = SplashScreen()
+        splash.showScreen()
+        yield()
         suspend fun setProgress(progress: Int) {
             splash.setProgress(progress)
             // Allow UI updates
             yield()
         }
-        splash.showScreen()
-        setProgress(10)
+        setProgress(1)
         JMeterUtils.applyHiDPIOnFonts()
-        setProgress(20)
-        log.debug("Configure PluginManager")
-        setProgress(30)
         log.debug("Setup tree")
+        setProgress(5)
         val treeModel = JMeterTreeModel()
         val treeLis = JMeterTreeListener(treeModel)
         val instance = ActionRouter.getInstance()
-        setProgress(40)
+        setProgress(10)
         withContext(Dispatchers.Default) {
             log.debug("populate command map")
             instance.populateCommandMap()
         }
-        setProgress(60)
+        setProgress(20)
         treeLis.setActionHandler(instance)
         log.debug("init instance")
-        setProgress(70)
         GuiPackage.initInstance(treeLis, treeModel)
-        setProgress(80)
         log.debug("constructing main frame")
         val main = MainFrame(treeModel, treeLis)
-        setProgress(90)
+        setProgress(56)
         ComponentUtil.centerComponentInWindow(main, 80)
+        setProgress(82)
         main.setLocationRelativeTo(splash)
         main.isVisible = true
         main.toFront()
@@ -127,7 +125,7 @@ public object JMeterGuiLauncher {
             jTree.selectionPath = path
             FocusRequester.requestFocus(jTree)
         }
-        setProgress(100)
+        setProgress(93)
         splash.close()
     }
 
