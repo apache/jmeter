@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+import com.github.vlsi.gradle.dsl.configureEach
+import org.jetbrains.kotlin.gradle.tasks.Kapt
+
 plugins {
     id("build-logic.jvm-library")
 }
@@ -22,4 +25,12 @@ plugins {
 dependencies {
     implementation(projects.src.jorphan)
     implementation(projects.src.core)
+}
+
+tasks.configureEach<Kapt> {
+    // ServiceNotImplementingInterface does not implement the service interface for testing purposes,
+    // so we disable AutoService verifications
+    annotationProcessorOptionProviders.add(
+        listOf(CommandLineArgumentProvider { listOf("-Averify=false") })
+    )
 }
