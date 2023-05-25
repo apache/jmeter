@@ -67,6 +67,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     private transient final ReadWriteLock lock =
             this instanceof NoThreadClone
+                    // Note: thread groups are cloned for every thread, however, JMeterContext contains a reference
+                    // to a non-cloned ThreadGroup instance.
+                    // That causes jmeterContext.getThreadGroup().getName() to access the same ThreadGroup instance
+                    // even though each thread has its own copy, so we use read-write lock approach for ThreadGroups
                     || this instanceof AbstractThreadGroup
                     ? new ReentrantReadWriteLock()
                     : null;
@@ -645,7 +649,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void recoverRunningVersion() {
-        if (lock != null) {
+        if (this instanceof NoThreadClone) {
             // The element is shared between threads, so there's nothing to recover
             // See https://github.com/apache/jmeter/issues/5875
             return;
