@@ -478,9 +478,10 @@ public final class ClassFinder {
                 try (JarFile jar = new JarFile(file)) {
                     String value = jar.getManifest().getMainAttributes().getValue(JMETER_SKIP_CLASS_SCANNING_ATTRIBUTE);
                     if (Boolean.parseBoolean(value)) {
-                        log.info("Jar {} is skipped for scanning since it has {}={} attribute", file, JMETER_SKIP_CLASS_SCANNING_ATTRIBUTE, value);
+                        log.debug("Will skip scanning jar {} with filter {} since the jar has {}={} attribute", file, filter, JMETER_SKIP_CLASS_SCANNING_ATTRIBUTE, value);
                         return;
                     }
+                    log.info("Will scan jar {} with filter {}. Consider exposing JMeter plugins via META-INF/services, and add {}=true manifest attribute so JMeter can skip classfile scanning", file, filter, JMETER_SKIP_CLASS_SCANNING_ATTRIBUTE);
                 } catch (IOException e) {
                     log.warn("Can not open the jar {}, message: {}", file.getAbsolutePath(), e.getLocalizedMessage(), e);
                 }
