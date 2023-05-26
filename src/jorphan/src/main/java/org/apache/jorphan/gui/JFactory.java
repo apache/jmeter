@@ -107,6 +107,12 @@ public class JFactory {
         return STYLE.withFont(component, JMeterUIDefaults.CHECKBOX_SMALL_FONT);
     }
 
+    @API(since = "5.6", status = API.Status.EXPERIMENTAL)
+    public static JEditableCheckBox small(JEditableCheckBox component) {
+        component.makeSmall();
+        return component;
+    }
+
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
     public static JLabel big(JLabel component) {
         return STYLE.withFont(component, JMeterUIDefaults.LABEL_BIG_FONT);
