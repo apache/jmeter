@@ -257,6 +257,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 JMeterUtils.refreshUI();
             }
         });
+        addPropertyChangeListener("graphicsConfiguration", evt -> {
+            // Update UI when JMeter window moves to a different monitor as it might have different scaling settings
+            JMeterUtils.refreshUI();
+        });
     }
 
     /**

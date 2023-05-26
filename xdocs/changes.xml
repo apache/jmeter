@@ -200,6 +200,7 @@ Summary
   <li><bug>66157</bug><pr>719</pr>Correct theme for darklaf on rsyntaxtextarea</li>
   <li><issue>5872</issue><pr>5874</pr>Trim name in Argument objects.</li>
   <li><pr>693</pr>Avoid wrong results when <code>Object.hashCode()</code> happen to collide. Use <code>IdentityHashMap</code> instead of <code>HashMap</code> when key is <code>TestElement</code></li>
+  <li>Refresh UI when dragging JMeter window from one monitor to another, so rich syntax text areas are properly editable after window movement</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
