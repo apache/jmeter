@@ -167,7 +167,8 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                     if (relAttribute != null &&
                             (CharSequenceUtil.equalsIgnoreCase(STYLESHEET,relAttribute)
                                     || CharSequenceUtil.equalsIgnoreCase(ICON, relAttribute)
-                                    || CharSequenceUtil.equalsIgnoreCase(SHORTCUT_ICON, relAttribute))) {
+                                    || CharSequenceUtil.equalsIgnoreCase(SHORTCUT_ICON, relAttribute)
+                                    || CharSequenceUtil.equalsIgnoreCase(PRELOAD, relAttribute))) {
                         extractAttribute(tag, ATT_HREF);
                     }
                 } else {

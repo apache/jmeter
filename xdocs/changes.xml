@@ -76,6 +76,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><pr>5911</pr> Use Caffeine for caching HTTP headers instead of commons-collections4 LRUMap</li>
+  <li><pr>5947</pr> Fetch resources referenced in <code>&lt;link "rel"="preload"...&gt;</code> elements</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -218,6 +219,7 @@ Summary
   <li>Victor Peralta (vperaltac at github)</li>
   <li>Mohamed Ibrahim (rollno748 at github)</li>
   <li>Alex Schwartz (alexsch01 at github)</li>
+  <li>Matt Tansley (matthewt-assurity at github)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
