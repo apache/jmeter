@@ -148,7 +148,8 @@ class JTidyHTMLParser extends HTMLParser {
             if (TAG_LINK.equalsIgnoreCase(name) &&
                     (STYLESHEET.equalsIgnoreCase(getValue(attrs, ATT_REL))
                             || SHORTCUT_ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
-                            || ICON.equalsIgnoreCase(getValue(attrs, ATT_REL)))) {
+                            || ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
+                            || PRELOAD.equalsIgnoreCase(getValue(attrs, ATT_REL)))) {
                 urls.addURL(getValue(attrs, ATT_HREF), baseUrl);
                 break;
             }

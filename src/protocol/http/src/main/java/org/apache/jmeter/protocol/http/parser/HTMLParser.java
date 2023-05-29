@@ -63,6 +63,7 @@ public abstract class HTMLParser extends BaseParser {
 
     protected static final String SHORTCUT_ICON     = "shortcut icon";
     protected static final String ICON              = "icon";
+    protected static final String PRELOAD           = "preload";
 
     protected static final String IE_UA             = "MSIE ([0-9]+.[0-9]+)";// $NON-NLS-1$
     protected static final Pattern IE_UA_PATTERN    = Pattern.compile(IE_UA);
