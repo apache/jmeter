@@ -15,32 +15,17 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.engine.util;
+package org.apache.jmeter.engine.util
 
-import java.util.Map;
+import org.apache.jmeter.testelement.property.JMeterProperty
+import org.apiguardian.api.API
 
-@SuppressWarnings("deprecation")
-abstract class AbstractTransformer implements ValueTransformer {
-
-    private CompoundVariable masterFunction;
-
-    private Map<String, String> variables;
-
-    @Override
-    public void setMasterFunction(CompoundVariable variable) {
-        masterFunction = variable;
-    }
-
-    protected CompoundVariable getMasterFunction() {
-        return masterFunction;
-    }
-
-    public Map<String, String> getVariables() {
-        return variables;
-    }
-
-    @Override
-    public void setVariables(Map<String, String> map) {
-        variables = map;
-    }
+/**
+ * Transform [JMeterProperty] into a different [JMeterProperty].
+ * The transformer should not modify the source property.
+ * @since 5.6
+ */
+@API(status = API.Status.EXPERIMENTAL, since = "5.6")
+public fun interface PropertyTransformer {
+    public fun transform(input: JMeterProperty): JMeterProperty
 }
