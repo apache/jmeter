@@ -85,6 +85,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
@@ -165,7 +166,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String PATH = "HTTPSampler.path"; // $NON-NLS-1$
 
-    public static final String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects"; // $NON-NLS-1$
+    public static final String FOLLOW_REDIRECTS = HTTPSamplerBaseSchema.INSTANCE.getFollowRedirects().getName();
 
     public static final String AUTO_REDIRECTS = "HTTPSampler.auto_redirects"; // $NON-NLS-1$
 
@@ -184,11 +185,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String IP_SOURCE_TYPE = "HTTPSampler.ipSourceType"; // $NON-NLS-1$
 
-    public static final String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
+    public static final String USE_KEEPALIVE = HTTPSamplerBaseSchema.INSTANCE.getUseKeepalive().getName();
 
-    public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
+    public static final String DO_MULTIPART_POST = HTTPSamplerBaseSchema.INSTANCE.getUseMultipartPost().getName();
 
-    public static final String BROWSER_COMPATIBLE_MULTIPART  = "HTTPSampler.BROWSER_COMPATIBLE_MULTIPART"; // $NON-NLS-1$
+    public static final String BROWSER_COMPATIBLE_MULTIPART =
+            HTTPSamplerBaseSchema.INSTANCE.getUseBrowserCompatibleMultipart().getName();
 
     public static final String CONCURRENT_DWN = "HTTPSampler.concurrentDwn"; // $NON-NLS-1$
 
@@ -353,6 +355,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         setArguments(new Arguments());
     }
 
+    @Override
+    public HTTPSamplerBaseSchema getSchema() {
+        return HTTPSamplerBaseSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends HTTPSamplerBase, ? extends HTTPSamplerBaseSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
+
     public enum SourceType {
         HOSTNAME("web_testing_source_ip_hostname"), //$NON-NLS-1$
         DEVICE("web_testing_source_ip_device"), //$NON-NLS-1$
@@ -515,11 +527,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setFollowRedirects(boolean value) {
-        setProperty(new BooleanProperty(FOLLOW_REDIRECTS, value));
+        set(getSchema().getFollowRedirects(), value);
     }
 
     public boolean getFollowRedirects() {
-        return getPropertyAsBoolean(FOLLOW_REDIRECTS);
+        return get(getSchema().getFollowRedirects());
     }
 
     public void setAutoRedirects(boolean value) {
@@ -556,11 +568,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setUseKeepAlive(boolean value) {
-        setProperty(new BooleanProperty(USE_KEEPALIVE, value));
+        set(getSchema().getUseKeepalive(), value);
     }
 
     public boolean getUseKeepAlive() {
-        return getPropertyAsBoolean(USE_KEEPALIVE);
+        return get(getSchema().getUseKeepalive());
     }
 
     /**
@@ -582,19 +594,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setDoMultipart(boolean value) {
-        setProperty(new BooleanProperty(DO_MULTIPART_POST, value));
+        set(getSchema().getUseMultipartPost(), value);
     }
 
     public boolean getDoMultipart() {
-        return getPropertyAsBoolean(DO_MULTIPART_POST, false);
+        return get(getSchema().getUseMultipartPost());
     }
 
     public void setDoBrowserCompatibleMultipart(boolean value) {
-        setProperty(BROWSER_COMPATIBLE_MULTIPART, value, BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT);
+        set(getSchema().getUseBrowserCompatibleMultipart(), value);
     }
 
     public boolean getDoBrowserCompatibleMultipart() {
-        return getPropertyAsBoolean(BROWSER_COMPATIBLE_MULTIPART, BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT);
+        return get(getSchema().getUseBrowserCompatibleMultipart());
     }
 
     public void setMonitor(String value) {
