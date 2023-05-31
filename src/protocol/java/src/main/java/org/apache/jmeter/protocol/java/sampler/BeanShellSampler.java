@@ -29,6 +29,7 @@ import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.util.JMeterException;
@@ -49,41 +50,71 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
 
     private static final long serialVersionUID = 4;
 
-    public static final String FILENAME = "BeanShellSampler.filename"; //$NON-NLS-1$
+    /**
+     * @deprecated use {@link BeanShellSamplerSchema#getFilename()} instead
+     */
+    @Deprecated
+    public static final String FILENAME = BeanShellSamplerSchema.INSTANCE.getFilename().getName();
 
-    public static final String SCRIPT = "BeanShellSampler.query"; //$NON-NLS-1$
+    /**
+     * @deprecated use {@link BeanShellSamplerSchema#getFilename()} instead
+     */
+    @Deprecated
+    public static final String SCRIPT = BeanShellSamplerSchema.INSTANCE.getScript().getName();
 
-    public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
+    /**
+     * @deprecated use {@link BeanShellSamplerSchema#getParameters()} instead
+     */
+    @Deprecated
+    public static final String PARAMETERS = BeanShellSamplerSchema.INSTANCE.getParameters().getName();
 
-    public static final String INIT_FILE = "beanshell.sampler.init"; //$NON-NLS-1$
+    /**
+     * @deprecated use {@link BeanShellSamplerSchema#getInitFile()} instead
+     */
+    @Deprecated
+    public static final String INIT_FILE = BeanShellSamplerSchema.INSTANCE.getInitFile().getName();
 
-    public static final String RESET_INTERPRETER = "BeanShellSampler.resetInterpreter"; //$NON-NLS-1$
+    /**
+     * @deprecated use {@link BeanShellSamplerSchema#getResetInterpreter()} instead
+     */
+    @Deprecated
+    public static final String RESET_INTERPRETER = BeanShellSamplerSchema.INSTANCE.getResetInterpreter().getName();
 
     private transient volatile BeanShellInterpreter savedBsh = null;
 
     @Override
+    public BeanShellSamplerSchema getSchema() {
+        return BeanShellSamplerSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends BeanShellSampler, ? extends BeanShellSamplerSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
+
+    @Override
     protected String getInitFileProperty() {
-        return INIT_FILE;
+        return BeanShellSamplerSchema.INSTANCE.getInitFile().getName();
     }
 
     @Override
     public String getScript() {
-        return this.getPropertyAsString(SCRIPT);
+        return get(getSchema().getScript());
     }
 
     @Override
     public String getFilename() {
-        return getPropertyAsString(FILENAME);
+        return get(getSchema().getFilename());
     }
 
     @Override
     public String getParameters() {
-        return getPropertyAsString(PARAMETERS);
+        return get(getSchema().getParameters());
     }
 
     @Override
     public boolean isResetInterpreter() {
-        return getPropertyAsBoolean(RESET_INTERPRETER);
+        return get(getSchema().getResetInterpreter());
     }
 
     @Override

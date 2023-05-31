@@ -17,33 +17,21 @@
 
 package org.apache.jmeter.protocol.java.sampler
 
-import org.apache.jmeter.engine.util.CompoundVariable
-import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.property.FunctionProperty
+import org.apache.jmeter.engine.util.TestElementPropertyTransformer
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class BeanShellSamplerTest {
-    // TODO: move to TestElement itself?
-    private fun TestElement.setFunctionProperty(name: String, expression: String) {
-        setProperty(
-            FunctionProperty(
-                name,
-                CompoundVariable(expression).function
-            )
-        )
-    }
-
     @Test
     fun `getScript executes only once`() {
         val sampler = BeanShellSampler().apply {
             name = "BeanShell Sampler"
-            setFunctionProperty(
-                BeanShellSampler.SCRIPT,
-                """ResponseMessage="COUNTER=${"$"}{__counter(FALSE)}""""
-            )
-            setProperty(BeanShellSampler.FILENAME, "")
-            setProperty(BeanShellSampler.PARAMETERS, "")
+            props {
+                it[script] = """ResponseMessage="COUNTER=${"$"}{__counter(FALSE)}""""
+                it[filename] = ""
+                it[parameters] = ""
+            }
+            TestElementPropertyTransformer.USE_FUNCTIONS.visit(this)
             isRunningVersion = true
         }
         val result = sampler.sample(null)
