@@ -23,12 +23,9 @@ import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.modifiers.CounterConfig
 import org.apache.jmeter.sampler.DebugSampler
 import org.apache.jmeter.testelement.TestPlan
-import org.apache.jmeter.testelement.property.TestElementProperty
-import org.apache.jmeter.threads.AbstractThreadGroup
 import org.apache.jorphan.collections.ListedHashTree
 import org.apache.jorphan.test.JMeterSerialTest
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 import java.time.Duration
 
@@ -37,7 +34,8 @@ class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest
      * Create Test Plan with Open Model Thread Group and Counter Config.
      */
     @Test
-    @Ignore("Sometimes the listener gets no results for unknown reason")
+    // Un-comment if you want try running the test multiple times locally:
+    // @RepeatedTest(value = 10)
     fun `ensure thread group initializes counter only once for each thread`() {
         val listener = TestTransactionController.TestSampleListener()
 
@@ -45,12 +43,9 @@ class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest
             add(TestPlan()).apply {
                 val threadGroup = OpenModelThreadGroup().apply {
                     name = "Thread Group"
-                    scheduleString = "rate(5 / sec) random_arrivals(1 sec)"
-                    setProperty(
-                        TestElementProperty(
-                            AbstractThreadGroup.MAIN_CONTROLLER, OpenModelThreadGroupController()
-                        )
-                    )
+                    // 5 samples within 100ms
+                    // Then 2 sec pause to let all the threads to finish, especially the ones that start at 99ms
+                    scheduleString = "rate(50 / sec) random_arrivals(100 ms) pause(2 s)"
                 }
                 add(threadGroup).apply {
                     add(listener)
@@ -78,7 +73,7 @@ class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest
             awaitTermination(Duration.ofSeconds(10))
         }
 
-        // There's no guarantee that thread execute exactly in order, so we sort
+        // There's no guarantee that threads execute exactly in order, so we sort
         // the labels to avoid test failure in case the thread execute out of order.
         val actual = listener.events.map { it.result.sampleLabel }.sorted()
 

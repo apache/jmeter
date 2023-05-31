@@ -31,11 +31,14 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
+import org.apache.jmeter.gui.JBooleanPropertyEditor;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroupSchema;
 import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.ThreadGroupSchema;
 import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
@@ -56,7 +59,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
     private final boolean showDelayedStart;
 
-    private JCheckBox delayedStart;
+    private JBooleanPropertyEditor delayedStart;
 
     private final JCheckBox scheduler = new JCheckBox(JMeterUtils.getResString("scheduler"));
 
@@ -66,8 +69,10 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private final JTextField delay = new JTextField(); // Relative start-up time
     private final JLabel delayLabel = labelFor(delay, "delay");
 
-    private final JCheckBox sameUserBox =
-            new JCheckBox(JMeterUtils.getResString("threadgroup_same_user"));
+    private final JBooleanPropertyEditor sameUserBox =
+            new JBooleanPropertyEditor(
+                    AbstractThreadGroupSchema.INSTANCE.getSameUserOnNextIteration(),
+                    JMeterUtils.getResString("threadgroup_same_user"));
 
     public ThreadGroupGui() {
         this(true);
@@ -98,26 +103,25 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         if (tg instanceof AbstractThreadGroup) {
             ((AbstractThreadGroup) tg).setSamplerController((LoopController) loopPanel.createTestElement());
         }
-
-        tg.setProperty(AbstractThreadGroup.NUM_THREADS, threadInput.getText());
+        tg.set(AbstractThreadGroupSchema.INSTANCE.getNumThreads(), threadInput.getText());
         tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
         if (showDelayedStart) {
-            tg.setProperty(ThreadGroup.DELAYED_START, delayedStart.isSelected(), false);
+            delayedStart.updateElement(tg);
         }
         tg.setProperty(new BooleanProperty(ThreadGroup.SCHEDULER, scheduler.isSelected()));
         tg.setProperty(ThreadGroup.DURATION, duration.getText());
         tg.setProperty(ThreadGroup.DELAY, delay.getText());
-        tg.setProperty(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION,sameUserBox.isSelected());
+        sameUserBox.updateElement(tg);
     }
 
     @Override
     public void configure(TestElement tg) {
         super.configure(tg);
-        threadInput.setText(tg.getPropertyAsString(AbstractThreadGroup.NUM_THREADS));
+        threadInput.setText(tg.getString(AbstractThreadGroupSchema.INSTANCE.getNumThreads()));
         rampInput.setText(tg.getPropertyAsString(ThreadGroup.RAMP_TIME));
         loopPanel.configure((TestElement) tg.getProperty(AbstractThreadGroup.MAIN_CONTROLLER).getObjectValue());
         if (showDelayedStart) {
-            delayedStart.setSelected(tg.getPropertyAsBoolean(ThreadGroup.DELAYED_START));
+            delayedStart.updateUi(tg);
         }
         scheduler.setSelected(tg.getPropertyAsBoolean(ThreadGroup.SCHEDULER));
 
@@ -125,8 +129,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
         duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
         delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
-        final boolean isSameUser = tg.getPropertyAsBoolean(AbstractThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, true);
-        sameUserBox.setSelected(isSameUser);
+        sameUserBox.updateUi(tg);
     }
 
     @Override
@@ -172,12 +175,12 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         rampInput.setText("1"); // $NON-NLS-1$
         loopPanel.clearGui();
         if (showDelayedStart) {
-            delayedStart.setSelected(false);
+            delayedStart.reset();
         }
         scheduler.setSelected(false);
         delay.setText(""); // $NON-NLS-1$
         duration.setText(""); // $NON-NLS-1$
-        sameUserBox.setSelected(true);
+        sameUserBox.reset();
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -203,7 +206,9 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         threadPropsPanel.add(loopController.getLoops());
         threadPropsPanel.add(sameUserBox, "span 2");
         if (showDelayedStart) {
-            delayedStart = new JCheckBox(JMeterUtils.getResString("delayed_start")); // $NON-NLS-1$
+            delayedStart = new JBooleanPropertyEditor(
+                    ThreadGroupSchema.INSTANCE.getDelayedStart(),
+                    JMeterUtils.getResString("delayed_start")); // $NON-NLS-1$
             threadPropsPanel.add(delayedStart, "span 2");
         }
         scheduler.addItemListener(this);

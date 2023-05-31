@@ -97,6 +97,7 @@ import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroupSchema;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.util.JMeterUtils;
@@ -225,7 +226,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ThreadGroup threadGroup = new ThreadGroup();
         threadGroup.setProperty(TestElement.GUI_CLASS, ThreadGroupGui.class.getName());
         threadGroup.setProperty(TestElement.NAME, "Thread Group");
-        threadGroup.setProperty(AbstractThreadGroup.NUM_THREADS, "${__P(threads,10)}");
+        threadGroup.set(AbstractThreadGroupSchema.INSTANCE.getNumThreads(), "${__P(threads,10)}");
         threadGroup.setProperty(ThreadGroup.RAMP_TIME,"${__P(rampup,30)}");
         threadGroup.setScheduler(true);
         threadGroup.setProperty(ThreadGroup.DURATION,"${__P(duration,3600)}");

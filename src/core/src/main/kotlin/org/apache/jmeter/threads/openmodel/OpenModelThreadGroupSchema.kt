@@ -17,32 +17,23 @@
 
 package org.apache.jmeter.threads.openmodel
 
-import org.apache.jmeter.control.GenericController
-import org.apache.jmeter.control.IteratingController
-import org.apache.jmeter.engine.event.LoopIterationEvent
-import org.apache.jmeter.samplers.Sampler
+import org.apache.jmeter.testelement.schema.LongPropertyDescriptor
+import org.apache.jmeter.testelement.schema.StringPropertyDescriptor
+import org.apache.jmeter.threads.AbstractThreadGroupSchema
 import org.apiguardian.api.API
 
-@API(status = API.Status.EXPERIMENTAL, since = "5.5")
-public class OpenModelThreadGroupController : GenericController(), IteratingController {
-    private companion object {
-        private const val serialVersionUID: Long = 1L
-    }
+/**
+ * Lists properties of a [OpenModelThreadGroup].
+ * @see OpenModelThreadGroup
+ * @since 5.6
+ */
+@API(status = API.Status.EXPERIMENTAL, since = "5.6")
+public open class OpenModelThreadGroupSchema protected constructor() : AbstractThreadGroupSchema() {
+    public companion object INSTANCE : OpenModelThreadGroupSchema()
 
-    override fun next(): Sampler? =
-        super.next().also {
-            if (iterCount >= 1) {
-                // For now, every thread performs just one iteration
-                isDone = true
-            }
-        }
+    public val schedule: StringPropertyDescriptor<OpenModelThreadGroupSchema> =
+        string("OpenModelThreadGroup.schedule")
 
-    override fun iterationStart(iterEvent: LoopIterationEvent?) {
-    }
-
-    override fun startNextLoop() {
-    }
-
-    override fun breakLoop() {
-    }
+    public val randomSeed: LongPropertyDescriptor<OpenModelThreadGroupSchema> =
+        long("OpenModelThreadGroup.random_seed")
 }

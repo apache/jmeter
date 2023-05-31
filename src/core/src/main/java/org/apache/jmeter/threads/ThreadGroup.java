@@ -28,9 +28,11 @@ import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.util.JMeterStopTestException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,19 +57,20 @@ public class ThreadGroup extends AbstractThreadGroup {
     //+ JMX entries - do not change the string values
 
     /** Ramp-up time */
-    public static final String RAMP_TIME = "ThreadGroup.ramp_time";
+    public static final String RAMP_TIME = ThreadGroupSchema.INSTANCE.getRampTime().getName();
 
     /** Whether thread startup is delayed until required */
-    public static final String DELAYED_START = "ThreadGroup.delayedStart";
+    @Deprecated
+    public static final String DELAYED_START = ThreadGroupSchema.INSTANCE.getDelayedStart().getName();
 
     /** Whether scheduler is being used */
-    public static final String SCHEDULER = "ThreadGroup.scheduler";
+    public static final String SCHEDULER = ThreadGroupSchema.INSTANCE.getUseScheduler().getName();
 
     /** Scheduler duration, overrides end time */
-    public static final String DURATION = "ThreadGroup.duration";
+    public static final String DURATION = ThreadGroupSchema.INSTANCE.getDuration().getName();
 
     /** Scheduler start delay, overrides start time */
-    public static final String DELAY = "ThreadGroup.delay";
+    public static final String DELAY = ThreadGroupSchema.INSTANCE.getDelay().getName();
     //- JMX entries
 
     private transient Thread threadStarter;
@@ -97,6 +100,16 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     public ThreadGroup() {
         super();
+    }
+
+    @Override
+    public ThreadGroupSchema getSchema() {
+        return ThreadGroupSchema.INSTANCE;
+    }
+
+    @Override
+    public @NotNull PropertiesAccessor<? extends ThreadGroup, ? extends ThreadGroupSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     /**
@@ -175,7 +188,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     private boolean isDelayedStartup() {
-        return getPropertyAsBoolean(DELAYED_START);
+        return get(getSchema().getDelayedStart());
     }
 
     /**

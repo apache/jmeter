@@ -20,6 +20,7 @@ package org.apache.jmeter.threads.openmodel
 import org.apache.jmeter.control.Controller
 import org.apache.jmeter.engine.StandardJMeterEngine
 import org.apache.jmeter.gui.GUIMenuSortOrder
+import org.apache.jmeter.testelement.schema.PropertiesAccessor
 import org.apache.jmeter.threads.AbstractThreadGroup
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterThread
@@ -57,10 +58,26 @@ public class OpenModelThreadGroup :
         private val log = LoggerFactory.getLogger(OpenModelThreadGroup::class.java)
 
         /** Thread group schedule. See [ThreadSchedule]. */
-        public const val SCHEDULE: String = "OpenModelThreadGroup.schedule"
+        @Deprecated(
+            message = "Use OpenModelThreadGroupSchema instead",
+            replaceWith = ReplaceWith(
+                "OpenModelThreadGroupSchema.getSchedule",
+                imports = ["org.apache.jmeter.threads.openmodel.OpenModelThreadGroupSchema"]
+            ),
+            DeprecationLevel.WARNING
+        )
+        public val SCHEDULE: String = OpenModelThreadGroupSchema.schedule.name
 
         /** The seed for reproducible workloads. 0 means no seed, so the schedule would be new on every execution */
-        public const val RANDOM_SEED: String = "OpenModelThreadGroup.random_seed"
+        @Deprecated(
+            message = "Use OpenModelThreadGroupSchema instead",
+            replaceWith = ReplaceWith(
+                "OpenModelThreadGroupSchema.randomSeed",
+                imports = ["org.apache.jmeter.threads.openmodel.OpenModelThreadGroupSchema"]
+            ),
+            DeprecationLevel.WARNING
+        )
+        public val RANDOM_SEED: String = OpenModelThreadGroupSchema.randomSeed.name
 
         /**
          * A thread pool for "thread starter thread".
@@ -79,25 +96,27 @@ public class OpenModelThreadGroup :
     private val threadStarterFuture = AtomicReference<Future<*>?>()
     private val activeThreads = ConcurrentHashMap<JMeterThread, Future<*>>()
 
+    override val schema: OpenModelThreadGroupSchema
+        get() = OpenModelThreadGroupSchema
+
+    override val props: PropertiesAccessor<@JvmWildcard OpenModelThreadGroup, @JvmWildcard OpenModelThreadGroupSchema>
+        get() = PropertiesAccessor(this, schema)
+
     /**
      * Schedule expression (see [ThreadSchedule]).
      */
-    public var scheduleString: String
-        get() = getPropertyAsString(SCHEDULE)
-        set(value) {
-            setProperty(SCHEDULE, value)
-        }
+    public var scheduleString: String by OpenModelThreadGroupSchema.schedule
 
-    public val randomSeed: Long get() = getPropertyAsLong(RANDOM_SEED)
+    public val randomSeed: Long by OpenModelThreadGroupSchema.randomSeed
 
     /**
      * Random seed for building reproducible schedules. 0 means random seed.
      */
-    public var randomSeedString: String
-        get() = getPropertyAsString(RANDOM_SEED)
-        set(value) {
-            setProperty(RANDOM_SEED, value)
-        }
+    public var randomSeedString: String by OpenModelThreadGroupSchema.randomSeed.asString
+
+    init {
+        this[OpenModelThreadGroupSchema.mainController] = OpenModelThreadGroupController()
+    }
 
     private class ThreadsStarter(
         private val testStartTime: Long,
@@ -163,6 +182,10 @@ public class OpenModelThreadGroup :
             executorService.shutdownNow()
             log.info("Thread starting done")
         }
+    }
+
+    override fun recoverRunningVersion() {
+        // There's no state in OpenModelThreadGroup, so we can skip recoverRunningVersion
     }
 
     override fun start(

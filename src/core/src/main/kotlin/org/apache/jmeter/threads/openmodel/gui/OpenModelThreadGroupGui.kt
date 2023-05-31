@@ -21,12 +21,9 @@ import net.miginfocom.swing.MigLayout
 import org.apache.jmeter.engine.util.CompoundVariable
 import org.apache.jmeter.gui.TestElementMetadata
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.property.TestElementProperty
-import org.apache.jmeter.threads.AbstractThreadGroup
 import org.apache.jmeter.threads.gui.AbstractThreadGroupGui
 import org.apache.jmeter.threads.openmodel.DefaultThreadSchedule
 import org.apache.jmeter.threads.openmodel.OpenModelThreadGroup
-import org.apache.jmeter.threads.openmodel.OpenModelThreadGroupController
 import org.apache.jmeter.threads.openmodel.ThreadSchedule
 import org.apache.jmeter.threads.openmodel.ThreadScheduleStep
 import org.apache.jmeter.threads.openmodel.asSeconds
@@ -136,7 +133,6 @@ public class OpenModelThreadGroupGui : AbstractThreadGroupGui() {
 
     override fun createTestElement(): TestElement =
         OpenModelThreadGroup().also {
-            it.setProperty(TestElementProperty(AbstractThreadGroup.MAIN_CONTROLLER, OpenModelThreadGroupController()))
             modifyTestElement(it)
         }
 
