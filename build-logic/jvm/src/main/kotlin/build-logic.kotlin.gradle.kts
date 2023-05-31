@@ -43,6 +43,7 @@ tasks.configureEach<KotlinCompile> {
         if (!name.startsWith("compileTest")) {
             apiVersion = "kotlin.api".v
         }
+        freeCompilerArgs += "-Xjvm-default=all"
         jvmTarget = java.targetCompatibility.toString()
     }
 }
