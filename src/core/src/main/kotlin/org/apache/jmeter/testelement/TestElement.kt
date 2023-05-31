@@ -15,289 +15,230 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.testelement;
+package org.apache.jmeter.testelement
 
-import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.NullProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.testelement.property.JMeterProperty
+import org.apache.jmeter.testelement.property.NullProperty
+import org.apache.jmeter.testelement.property.PropertyIterator
+import org.apache.jmeter.threads.JMeterContext
 
-public interface TestElement extends Cloneable {
-    String NAME = "TestElement.name"; //$NON-NLS-1$
+public interface TestElement : Cloneable {
+    public companion object {
+        public const val NAME: String = "TestElement.name" // $NON-NLS-1$
+        public const val GUI_CLASS: String = "TestElement.gui_class" // $NON-NLS-1$
+        public const val ENABLED: String = "TestElement.enabled" // $NON-NLS-1$
+        public const val TEST_CLASS: String = "TestElement.test_class" // $NON-NLS-1$
 
-    String GUI_CLASS = "TestElement.gui_class"; //$NON-NLS-1$
+        // Needed by AbstractTestElement.
+        // Also TestElementConverter and TestElementPropertyConverter for handling empty comments
+        public const val COMMENTS: String = "TestPlan.comments" // $NON-NLS-1$
+    }
 
-    String ENABLED = "TestElement.enabled"; //$NON-NLS-1$
-
-    String TEST_CLASS = "TestElement.test_class"; //$NON-NLS-1$
-
-    // Needed by AbstractTestElement.
-    // Also TestElementConverter and TestElementPropertyConverter for handling empty comments
-    String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
-    // N.B. Comments originally only applied to Test Plans, hence the name - which can now not be easily changed
-
-    void addTestElement(TestElement child);
+    public fun addTestElement(child: TestElement)
 
     /**
      * This method should clear any test element properties that are merged
-     * by {@link #addTestElement(TestElement)}.
+     * by [.addTestElement].
      */
-    void clearTestElementChildren();
-
-    void setProperty(String key, String value);
-
-    void setProperty(String key, String value, String dflt);
-
-    void setProperty(String key, boolean value);
-
-    void setProperty(String key, boolean value, boolean dflt);
-
-    void setProperty(String key, int value);
-
-    void setProperty(String key, int value, int dflt);
-
-    void setProperty(String name, long value);
-
-    void setProperty(String name, long value, long dflt);
+    public fun clearTestElementChildren()
+    public fun setProperty(key: String, value: String)
+    public fun setProperty(key: String, value: String, dflt: String)
+    public fun setProperty(key: String, value: Boolean)
+    public fun setProperty(key: String, value: Boolean, dflt: Boolean)
+    public fun setProperty(key: String, value: Int)
+    public fun setProperty(key: String, value: Int, dflt: Int)
+    public fun setProperty(name: String, value: Long)
+    public fun setProperty(name: String, value: Long, dflt: Long)
 
     /**
-     * Check if ENABLED property is present and true ; defaults to true
-     *
-     * @return true if element is enabled
+     * Configures if the current test element should be enabled or not.
      */
-    boolean isEnabled();
-
-    /**
-     * Set the enabled status of the test element
-     * @param enabled the status to set
-     */
-    void setEnabled(boolean enabled);
-
-    /**
-     * Returns true or false whether the element is the running version.
-     *
-     * @return <code>true</code> if the element is the running version
-     */
-    boolean isRunningVersion();
-
-    /**
-     * Test whether a given property is only a temporary resident of the
-     * TestElement
-     *
-     * @param property
-     *            the property to be tested
-     * @return <code>true</code> if property is temporary
-     */
-    boolean isTemporary(JMeterProperty property);
-
-    /**
-     * Indicate that the given property should be only a temporary property in
-     * the TestElement
-     *
-     * @param property
-     *            void
-     */
-    void setTemporary(JMeterProperty property);
-
-    /**
-     * Return a property as a boolean value.
-     *
-     * @param key
-     *            the name of the property to get
-     * @return the value of the property
-     */
-    boolean getPropertyAsBoolean(String key);
-
-    /**
-     * Return a property as a boolean value or a default value if no property
-     * could be found.
-     *
-     * @param key
-     *            the name of the property to get
-     * @param defaultValue
-     *            the default value to use
-     * @return the value of the property, or <code>defaultValue</code> if no
-     *         property could be found
-     */
-    boolean getPropertyAsBoolean(String key, boolean defaultValue);
-
-    /**
-     * Return a property as a long value.
-     *
-     * @param key
-     *            the name of the property to get
-     * @return the value of the property
-     */
-    long getPropertyAsLong(String key);
-
-    /**
-     * Return a property as a long value or a default value if no property
-     * could be found.
-     *
-     * @param key
-     *            the name of the property to get
-     * @param defaultValue
-     *            the default value to use
-     * @return the value of the property, or <code>defaultValue</code> if no
-     *         property could be found
-     */
-    long getPropertyAsLong(String key, long defaultValue);
-
-    /**
-     * Return a property as an int value.
-     *
-     * @param key
-     *            the name of the property to get
-     * @return the value of the property
-     */
-    int getPropertyAsInt(String key);
-
-    /**
-     * Return a property as an int value or a default value if no property
-     * could be found.
-     *
-     * @param key
-     *            the name of the property to get
-     * @param defaultValue
-     *            the default value to use
-     * @return the value of the property, or <code>defaultValue</code> if no
-     *         property could be found
-     */
-    int getPropertyAsInt(String key, int defaultValue);
-
-    /**
-     * Return a property as a float value.
-     *
-     * @param key
-     *            the name of the property to get
-     * @return the value of the property
-     */
-    float getPropertyAsFloat(String key);
-
-    /**
-     * Return a property as a double value.
-     *
-     * @param key
-     *            the name of the property to get
-     * @return the value of the property
-     */
-    double getPropertyAsDouble(String key);
+    public var isEnabled: Boolean
 
     /**
      * Make the test element the running version, or make it no longer the
      * running version. This tells the test element that it's current state must
      * be retrievable by a call to recoverRunningVersion(). It is kind of like
-     * making the TestElement Read- Only, but not as strict. Changes can be made
+     * making the TestElement Read-Only, but not as strict. Changes can be made
      * and the element can be modified, but the state of the element at the time
      * of the call to setRunningVersion() must be recoverable.
      *
-     * @param run
-     *            flag whether this element should be the running version
+     * flag whether this element should be the running version
      */
-    void setRunningVersion(boolean run);
+    public var isRunningVersion: Boolean
+
+    /**
+     * Test whether a given property is only a temporary resident of the
+     * TestElement
+     *
+     * @param property the property to be tested
+     * @return `true` if property is temporary
+     */
+    public fun isTemporary(property: JMeterProperty): Boolean
+
+    /**
+     * Indicate that the given property should be only a temporary property in
+     * the TestElement.
+     *
+     * @param property property to set as temporary one
+     */
+    public fun setTemporary(property: JMeterProperty)
+
+    /**
+     * Return a property as a boolean value.
+     *
+     * @param key the name of the property to get
+     * @return the value of the property
+     */
+    public fun getPropertyAsBoolean(key: String): Boolean
+
+    /**
+     * Return a property as a boolean value or a default value if no property
+     * could be found.
+     *
+     * @param key the name of the property to get
+     * @param defaultValue the default value to use
+     * @return the value of the property, or `defaultValue` if no property could be found
+     */
+    public fun getPropertyAsBoolean(key: String, defaultValue: Boolean): Boolean
+
+    /**
+     * Return a property as a long value.
+     *
+     * @param key the name of the property to get
+     * @return the value of the property
+     */
+    public fun getPropertyAsLong(key: String): Long
+
+    /**
+     * Return a property as a long value or a default value if no property
+     * could be found.
+     *
+     * @param key the name of the property to get
+     * @param defaultValue the default value to use
+     * @return the value of the property, or `defaultValue` if no property could be found
+     */
+    public fun getPropertyAsLong(key: String, defaultValue: Long): Long
+
+    /**
+     * Return a property as an int value.
+     *
+     * @param key
+     * the name of the property to get
+     * @return the value of the property
+     */
+    public fun getPropertyAsInt(key: String): Int
+
+    /**
+     * Return a property as an int value or a default value if no property
+     * could be found.
+     *
+     * @param key the name of the property to get
+     * @param defaultValue the default value to use
+     * @return the value of the property, or `defaultValue` if no property could be found
+     */
+    public fun getPropertyAsInt(key: String, defaultValue: Int): Int
+
+    /**
+     * Return a property as a float value.
+     *
+     * @param key
+     * the name of the property to get
+     * @return the value of the property
+     */
+    public fun getPropertyAsFloat(key: String): Float
+
+    /**
+     * Return a property as a double value.
+     *
+     * @param key
+     * the name of the property to get
+     * @return the value of the property
+     */
+    public fun getPropertyAsDouble(key: String): Double
 
     /**
      * Tells the test element to return to the state it was in when
      * setRunningVersion(true) was called.
      */
-    void recoverRunningVersion();
+    public fun recoverRunningVersion()
 
     /**
      * Clear the TestElement of all data.
      */
-    void clear();
+    public fun clear()
 
     /**
      * Return a property as a string value.
      *
-     * @param key
-     *            the name of the property to get
+     * @param key the name of the property to get
      * @return the value of the property
      */
-    String getPropertyAsString(String key);
+    public fun getPropertyAsString(key: String): String
 
     /**
      * Return a property as an string value or a default value if no property
      * could be found.
      *
      * @param key
-     *            the name of the property to get
+     * the name of the property to get
      * @param defaultValue
-     *            the default value to use
-     * @return the value of the property, or <code>defaultValue</code> if no
-     *         property could be found
+     * the default value to use
+     * @return the value of the property, or `defaultValue` if no
+     * property could be found
      */
-    String getPropertyAsString(String key, String defaultValue);
+    public fun getPropertyAsString(key: String, defaultValue: String): String
 
     /**
      * Sets and overwrites a property in the TestElement. This call will be
      * ignored if the TestElement is currently a "running version".
      *
-     * @param property
-     *            the property to be set
+     * @param property the property to be set
      */
-    void setProperty(JMeterProperty property);
+    public fun setProperty(property: JMeterProperty)
 
     /**
      * Given the name of the property, returns the appropriate property from
-     * JMeter. If it is null, a NullProperty object will be returned.
+     * JMeter. If it is null, a [NullProperty] object will be returned.
      *
-     * @param propName
-     *            the name of the property to get
-     * @return {@link JMeterProperty} stored under the name, or
-     *         {@link NullProperty} if no property can be found
+     * @param propName the name of the property to get
+     * @return [JMeterProperty] stored under the name, or [NullProperty] if no property can be found
      */
-    JMeterProperty getProperty(String propName);
+    public fun getProperty(propName: String): JMeterProperty
 
     /**
      * Get a Property Iterator for the TestElements properties.
      *
      * @return PropertyIterator
      */
-    PropertyIterator propertyIterator();
+    public fun propertyIterator(): PropertyIterator
 
     /**
-     * Remove property stored under the <code>key</code>
+     * Remove property stored under the `key`
      *
-     * @param key
-     *            name of the property to be removed
+     * @param key name of the property to be removed
      */
-    void removeProperty(String key);
+    public fun removeProperty(key: String)
 
     // lifecycle methods
-
-    Object clone();
+    public override fun clone(): Any
 
     /**
      * Convenient way to traverse a test element.
      *
-     * @param traverser
-     *            The traverser that is notified of the contained elements
+     * @param traverser The traverser that is notified of the contained elements
      */
-    void traverse(TestElementTraverser traverser);
+    public fun traverse(traverser: TestElementTraverser)
 
     /**
-     * @return Returns the threadContext.
+     * Associates a thread context with this element.
      */
-    JMeterContext getThreadContext();
+    public var threadContext: JMeterContext
 
     /**
-     * @param threadContext
-     *            The threadContext to set.
+     * Associates a thread name with this element.
      */
-    void setThreadContext(JMeterContext threadContext);
-
-    /**
-     * Returns the threadName.
-     * @return the threadName.
-     */
-    String getThreadName();
-
-    /**
-     * Configures thread name.
-     * @param threadName the threadName to set.
-     */
-    void setThreadName(String threadName);
+    public var threadName: String
 
     /**
      * Called by Remove to determine if it is safe to remove the element. The
@@ -306,40 +247,23 @@ public interface TestElement extends Cloneable {
      *
      * @return true if safe to remove the element
      */
-    boolean canRemove();
-
-    /**
-     * Get the name of this test element
-     * @return name of this element
-     */
-    String getName();
+    public fun canRemove(): Boolean
 
     /**
      * Associates a name with this element.
-     * @param name
-     *            to be associated
      */
-    void setName(String name);
+    public var name: String?
 
     /**
-     * Returns comment associated with this element.
-     * @return comment associated with this element
+     * Associates a comment with this element.
      */
-    String getComment();
-
-    /**
-     * Associates a comment with this element
-     *
-     * @param comment
-     *            to be associated
-     */
-    void setComment(String comment);
+    public var comment: String?
 
     /**
      * Called when the test element is removed from the test plan.
      * Must not throw any exception
      */
-    default void removed() {
+    public fun removed() {
         // NOOP
     }
 }
