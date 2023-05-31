@@ -26,3 +26,7 @@ if (file("src/main/groovy").isDirectory || file("src/test/groovy").isDirectory) 
 if (file("src/main/kotlin").isDirectory || file("src/test/kotlin").isDirectory) {
     apply(plugin = "build-logic.kotlin")
 }
+
+if (file("src/jmh").isDirectory) {
+    apply(plugin = "build-logic.jmh")
+}

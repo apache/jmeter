@@ -116,6 +116,7 @@
     <trusted-key id='1aa8cf92d409a73393d0b736bff2ee42c8282e76' group='org.apache.activemq' />
     <trusted-key id='8da70c00df7af1b0d2f9dc74ddbcc1270a29d081' group='org.apache.ant' />
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='org.apache.bcel' />
+    <trusted-key id='12d16069219c90212a974d119ae296fd02e9f65b' group='org.apache.commons' />
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='org.apache.commons' />
     <trusted-key id='3692c12c7e3d336a452beb254e066e0459cd109b' group='org.apache.commons' />
     <trusted-key id='41a1a08c62fca78b79d3081164a16faaec16a4be' group='org.apache.commons' />
@@ -180,6 +181,7 @@
     <trusted-key id='e9af5293c334c7c0b583227d2f45f85cdf082e68' group='org.mozilla' />
     <trusted-key id='07a4fa67a8222f1b39f9edaef8052e4e1bd0db31' group='org.neo4j.driver' />
     <trusted-key id='e85aed155021af8a6c6b7a4a7c7d8456294423ba' group='org.objenesis' />
+    <trusted-key id='019082bc00e0324e2aef4cf00d3b328562a119a7' group='org.openjdk.jmh' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.opentest4j' />
     <trusted-key id='a5bd02b93e7a40482eb1d66a5f69ad087600b22c' group='org.ow2.asm' />
     <trusted-key id='908366594e746bf3c449f5622be5d98f751f4136' group='org.pcollections' />
@@ -258,6 +260,9 @@
     <dependency group='javax.inject' module='javax.inject' version='1'>
       <sha512>E126B7CCF3E42FD1984A0BEEF1004A7269A337C202E59E04E8E2AF714280D2F2D8D2BA5E6F59481B8DCD34AAF35C966A688D0B48EC7E96F102C274DC0D3B381E</sha512>
     </dependency>
+    <dependency group='me.champeau.jmh' module='jmh-gradle-plugin' version='0.7.1'>
+      <sha512>D0B6A85CA7261FCEF0B2796F8FAD16C1044822AFE5ECD896B1103D7015FF690E806EC969B01150E9CA3FF96607AB53B6468ED2D5F3260C019CAE953B2291E7A4</sha512>
+    </dependency>
     <dependency group='net.jcip' module='jcip-annotations' version='1.0'>
       <sha512>CB312B3F571D91EF183C119D878F50464FFD97F853B7311CBA386463F295E8B7B3A5A89ED4269A045CACD5AA7CB4C803D4882854A0FDDEFA9BBC28C72AA6C786</sha512>
     </dependency>
@@ -306,11 +311,17 @@
     <dependency group='org.jetbrains.kotlinx' module='atomicfu' version='0.17.3'>
       <sha512>A3E69E3B8416E71842921D439A45BCE30BD00043E17923B5071A298C79F4914B1CB1FAA8DAA779CBC234B576AA54A3DE4D816C2BD7E4C2712A119C357027C2B9</sha512>
     </dependency>
+    <dependency group='org.jetbrains.kotlinx' module='atomicfu' version='0.20.2'>
+      <sha512>8B31FEED38FCEE2CBD0705587D0E960DA508ED59F2EC51EB1C4789F3093937F5B0CF87C21B13967AB22E718E7FBFF7BD3CA4B4D0CA872EB408448583E3F45C8F</sha512>
+    </dependency>
     <dependency group='org.jetbrains.kotlinx' module='kotlinx-coroutines-core' version='1.6.1'>
       <sha512>44A5D6F34DB9A4BAE1C11CA10563F3A25F1C6A8F681ABD31C530C7D36C9B001AB6F345F0AB5E2AFD94AD5AB436C06D12D7B1AD9EB7F12DB3EF9487D692107921</sha512>
     </dependency>
     <dependency group='org.jetbrains.kotlinx' module='kotlinx-coroutines-core' version='1.6.4'>
       <sha512>626213318BD0605586FC693969765FAE3BB15D2BCBBACB597C6E32AA1BDEF6430980480B6732556FCD93DE1E6BA99F9E050141AD59259AAE386D8D05A3C44C27</sha512>
+    </dependency>
+    <dependency group='org.jetbrains.kotlinx' module='kotlinx-coroutines-core' version='1.7.1'>
+      <sha512>89CA3D64D42938DCB50AC58CD53D1DAEAF6EA0BF69CC01DEFE7467D2D1F23BE7932D005861A6E08C2C81980EE1F8EFB9A944B939FE02AF99518753704383C086</sha512>
     </dependency>
     <dependency group='org.nosphere.apache' module='creadur-rat-gradle' version='0.8.0'>
       <sha512>F9C0C770036768965D955BF849933DFA1B5805959D0C93C2C70DA31D67C200140CAC7B9B93CF28B3F86AA3A5993DD25D566E37B0C451264CB0F6F2B5CD88F760</sha512>

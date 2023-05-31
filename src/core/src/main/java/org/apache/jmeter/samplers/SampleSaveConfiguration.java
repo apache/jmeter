@@ -283,6 +283,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // Read in the properties having to do with saving from a properties file.
     static {
         Properties props = JMeterUtils.getJMeterProperties();
+        if (props == null) {
+            // If properties are not initialized, proceed with defaults
+            props = new Properties();
+        }
 
         SUB_RESULTS      = TRUE.equalsIgnoreCase(props.getProperty(SUBRESULTS_PROP, TRUE));
         ASSERTIONS      = TRUE.equalsIgnoreCase(props.getProperty(ASSERTIONS_PROP, TRUE));
