@@ -22,6 +22,7 @@ plugins {
 dependencies {
     api(projects.buildParameters)
     api(projects.verification)
+    api("me.champeau.jmh:me.champeau.jmh.gradle.plugin:0.7.1")
     api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.88")
     api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.88")
     api("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.8.21")
