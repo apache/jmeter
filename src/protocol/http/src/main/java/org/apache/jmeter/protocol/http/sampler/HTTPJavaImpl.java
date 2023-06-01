@@ -46,6 +46,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -616,8 +617,13 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
 
             // record headers size to allow HTTPSampleResult.getBytes() with different options
-            res.setHeadersSize(responseHeaders.replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
-                    .length() + 2); // add 2 for a '\r\n' at end of headers (before data)
+            // It used to be responseHeaders.replaceAll("\n", "\r\n").length(),
+            // however we don't need the resulting string, just the length
+            // So we add the number of \n in the string to account for \n
+            res.setHeadersSize(
+                    responseHeaders.length()
+                            + StringUtilities.count(responseHeaders, '\n')
+                            + 2); // add 2 for a '\r\n' at end of headers (before data)
             if (log.isDebugEnabled()) {
                 log.debug("Response headersSize={}, bodySize={}, Total={}",
                         res.getHeadersSize(),  res.getBodySizeAsLong(),
