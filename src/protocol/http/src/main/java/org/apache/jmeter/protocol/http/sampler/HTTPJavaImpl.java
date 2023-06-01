@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -228,7 +227,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *                if an I/O exception occurs
      */
     protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
-        BufferedInputStream in;
+        InputStream in;
 
         final long contentLength = conn.getContentLength();
         if ((contentLength == 0)
@@ -245,9 +244,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         try {
             instream = new CountingInputStream(conn.getInputStream());
             if (gzipped) {
-                in = new BufferedInputStream(new GZIPInputStream(instream));
+                in = new GZIPInputStream(instream);
             } else {
-                in = new BufferedInputStream(instream);
+                in = instream;
             }
         } catch (IOException e) {
             if (! (e.getCause() instanceof FileNotFoundException))
@@ -277,9 +276,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
 
             if (gzipped) {
-                in = new BufferedInputStream(new GZIPInputStream(errorStream));
+                in = new GZIPInputStream(errorStream);
             } else {
-                in = new BufferedInputStream(errorStream);
+                in = errorStream;
             }
         } catch (Exception e) {
             log.error("readResponse: {}", e.toString());
@@ -290,7 +289,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                     throw (Error)cause;
                 }
             }
-            in = new BufferedInputStream(conn.getErrorStream());
+            in = conn.getErrorStream();
         }
         // N.B. this closes 'in'
         byte[] responseData = readResponse(res, in, contentLength);

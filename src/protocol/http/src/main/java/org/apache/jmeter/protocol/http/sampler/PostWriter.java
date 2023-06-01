@@ -17,16 +17,16 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -412,7 +412,7 @@ public class PostWriter {
         // uploads were being done. Could be fixed by increasing the evacuation
         // ratio in bin/jmeter[.bat], but this is better.
         int read;
-        try (InputStream in = new BufferedInputStream(new FileInputStream(filename))) {
+        try (InputStream in = Files.newInputStream(Paths.get(filename))) {
             while ((read = in.read(buf)) > 0) {
                 out.write(buf, 0, read);
             }
