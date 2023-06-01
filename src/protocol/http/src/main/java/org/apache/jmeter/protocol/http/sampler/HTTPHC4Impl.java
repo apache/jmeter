@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -945,7 +946,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private static final class HttpClientKey {
 
-        private final String target; // protocol://[user:pass@]host:[port]
+        private final String protocol;
+        private final String authority;
         private final boolean hasProxy;
         private final String proxyScheme;
         private final String proxyHost;
@@ -968,7 +970,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 int proxyPort, String proxyUser, String proxyPass) {
             // N.B. need to separate protocol from authority otherwise http://server would match https://erver (<= sic, not typo error)
             // could use separate fields, but simpler to combine them
-            this.target = url.getProtocol()+"://"+url.getAuthority();
+            this.protocol = url.getProtocol();
+            this.authority = url.getAuthority();
             this.hasProxy = hasProxy;
             this.proxyScheme = proxyScheme;
             this.proxyHost = proxyHost;
@@ -988,7 +991,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 hash = hash*31 + getHash(proxyUser);
                 hash = hash*31 + getHash(proxyPass);
             }
-            hash = hash*31 + target.hashCode();
+            hash = hash*31 + getHash(protocol);
+            hash = hash*31 + getHash(authority);
             return hash;
         }
 
@@ -1006,26 +1010,21 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 return false;
             }
             HttpClientKey other = (HttpClientKey) obj;
-            if (this.hasProxy) { // otherwise proxy String fields may be null
-                if (proxyScheme == null) {
-                    if (other.proxyScheme != null) {
-                        return false;
-                    }
-                } else if (!proxyScheme.equals(other.proxyScheme)) {
-                    return false;
-                }
-                return
-                this.hasProxy == other.hasProxy &&
+            if (!Objects.equals(authority, other.authority) ||
+                    !Objects.equals(protocol, other.protocol) ||
+                    hasProxy != other.hasProxy) {
+                return false;
+            }
+            if (!hasProxy) {
+                // No proxy, so don't check proxy fields
+                return true;
+            }
+            return
                 this.proxyPort == other.proxyPort &&
+                Objects.equals(proxyScheme, other.proxyScheme) &&
                 this.proxyHost.equals(other.proxyHost) &&
                 this.proxyUser.equals(other.proxyUser) &&
-                this.proxyPass.equals(other.proxyPass) &&
-                this.target.equals(other.target);
-            }
-            // No proxy, so don't check proxy fields
-            return
-                this.hasProxy == other.hasProxy &&
-                this.target.equals(other.target);
+                this.proxyPass.equals(other.proxyPass);
         }
 
         @Override
@@ -1037,7 +1036,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
-            sb.append(target);
+            sb.append(protocol);
+            sb.append("://");
+            sb.append(authority);
             if (hasProxy) {
                 sb.append(" via ");
                 sb.append(proxyUser);
