@@ -20,7 +20,6 @@ package org.apache.jmeter.testelement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -654,18 +653,29 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             // See https://github.com/apache/jmeter/issues/5875
             return;
         }
-        Iterator<Map.Entry<String, JMeterProperty>> iter = propMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<String, JMeterProperty> entry = iter.next();
-            JMeterProperty prop = entry.getValue();
-            if (isTemporary(prop)) {
-                iter.remove();
-                clearTemporary(prop);
-            } else {
+        writeLock();
+        try {
+            Set<JMeterProperty> tempProperties = temporaryProperties;
+            // Remove temporary properties first
+            if (tempProperties != null) {
+                for (JMeterProperty prop : tempProperties) {
+                    removeProperty(prop.getName());
+                }
+            }
+            // Recover non-temporary properties
+            for (JMeterProperty prop : propMap.values()) {
                 prop.recoverRunningVersion(this);
             }
+            // Clearing the temporary properties must happen after we recover all the other properties
+            // The reason is that some of the properties might be MultiProperty which uses
+            // testElement.temporaryProperties storage instead of tracking the temps on its own
+            // TODO: move temp tracking to MultiProperty
+            if (tempProperties != null) {
+                tempProperties.clear();
+            }
+        } finally {
+            writeUnlock();
         }
-        emptyTemporary();
     }
 
     /**
