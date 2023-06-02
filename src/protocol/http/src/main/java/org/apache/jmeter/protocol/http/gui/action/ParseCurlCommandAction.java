@@ -282,7 +282,9 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     private HTTPSamplerProxy createHttpRequest(Request request, HashTree parentHT, String commentText) throws MalformedURLException {
         HTTPSamplerProxy httpSampler = createSampler(request,commentText);
         HashTree samplerHT = parentHT.add(httpSampler);
-        samplerHT.add(httpSampler.getHeaderManager());
+        @SuppressWarnings("deprecation")
+        HeaderManager headerManager = httpSampler.getHeaderManager();
+        samplerHT.add(headerManager);
         if (CERT.equals(request.getCaCert())) {
             samplerHT.add(httpSampler.getKeystoreConfig());
         }
@@ -763,6 +765,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
                         createCookieManager(cookieManager, request);
                     }
                 }
+                @SuppressWarnings("deprecation")
                 HeaderManager headerManager = sampler.getHeaderManager();
                 KeystoreConfig keystoreConfig = sampler.getKeystoreConfig();
                 final JMeterTreeNode newNode = treeModel.addComponent(sampler, currentNode);

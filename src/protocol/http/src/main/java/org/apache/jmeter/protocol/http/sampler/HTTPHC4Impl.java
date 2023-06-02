@@ -1305,7 +1305,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
         }
 
-        setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
+        @SuppressWarnings("deprecation")
+        HeaderManager headerManager = getHeaderManager();
+        setConnectionHeaders(httpRequest, url, headerManager, getCacheManager());
 
         String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
 

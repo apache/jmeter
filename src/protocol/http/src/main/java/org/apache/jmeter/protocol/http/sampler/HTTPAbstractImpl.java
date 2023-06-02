@@ -193,7 +193,9 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * Invokes {@link HTTPSamplerBase#getHeaderManager()}
      *
      * @return the {@link HeaderManager} of the associated test element
+     * @deprecated since 5.6 as it prevents sharing a common Header Manager across samplers
      */
+    @Deprecated
     protected HeaderManager getHeaderManager() {
         return testElement.getHeaderManager();
     }
