@@ -587,7 +587,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     public PropertyIterator propertyIterator() {
         Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
         if (propMapConcurrent != null) {
-            return new PropertyIteratorImpl(propMapConcurrent.values());
+            return new PropertyIteratorImpl(this, propMapConcurrent.values());
         }
 
         // TODO: copy the contents of the iterator to avoid ConcurrentModificationException?
