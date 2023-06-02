@@ -47,3 +47,8 @@ tasks.configureEach<KotlinCompile> {
         jvmTarget = java.targetCompatibility.toString()
     }
 }
+
+if (file("src/main/kotlin").isDirectory) {
+    // When main code contains Kotlin, use Dokka instead of Javadoc
+    apply(plugin = "build-logic.dokka-javadoc")
+}
