@@ -26,16 +26,22 @@ class SearchByClassTest {
     @Test
     fun `search finds all matching elements`() {
         val tree = ListedHashTree()
-        val count = 100000
-        for (i in 0 until count) {
-            tree.add(ThreadGroup())
+        val hashes = mutableSetOf<Int>()
+        for (i in 0 until 100000) {
+            val tg = ThreadGroup()
+            tree.add(tg)
+            if (!hashes.add(tg.hashCode())) {
+                // We already have a duplicate hashcode, so there's no need to continue
+                break
+            }
         }
         val searcher = SearchByClass(
             AbstractThreadGroup::class.java
         )
         tree.traverse(searcher)
-        Assertions.assertEquals(count, searcher.searchResults.size) {
-            "Test plan included $count ThreadGroup elements, so SearchByClass should find all of them"
+        val expectedCount = hashes.size + 1
+        Assertions.assertEquals(expectedCount, searcher.searchResults.size) {
+            "Test plan included $expectedCount ThreadGroup elements, so SearchByClass should find all of them"
         }
     }
 }
