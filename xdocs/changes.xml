@@ -119,6 +119,7 @@ Summary
   <li><pr>5934</pr>Added caching for date formatters for <code>__time</code> function</li>
   <li><pr>710</pr><issue>5666</issue>Added Shortcut key event for Reset search: <code>ctrl + alt + F</code>, <code>cmd + alt + F</code></li>
   <li><pr>5959</pr><code>TestElement</code> has been migrated to Kotlin, so nullable types are annotated better</li>
+  <li><pr>5944</pr>Add PI for declaring <code>TestElement</code> schemas so element properties are easier to access in code (see <code>TestElementSchema</code>, <code>TestElement#getSchema()</code>, <code>TestElement#getProps()</code>)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

@@ -47,6 +47,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apiguardian.api.API;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -273,7 +274,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public JMeterProperty getProperty(String key) {
-        JMeterProperty prop = getRawProperty(key);
+        JMeterProperty prop = getPropertyOrNull(key);
         if (prop == null) {
             prop = new NullProperty(key);
         }
@@ -281,12 +282,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     }
 
     /**
-     * Null property are wrapped in a {@link NullProperty}
-     * This method avoids this wrapping
-     * for internal use only
-     * @since 3.1
+     * {@inheritDoc}
+     * @since 5.6
      */
-    private JMeterProperty getRawProperty(String key) {
+    @Override
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6")
+    public JMeterProperty getPropertyOrNull(String key) {
         Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
         if (propMapConcurrent != null) {
             return propMapConcurrent.get(key);
@@ -342,7 +343,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public int getPropertyAsInt(String key, int defaultValue) {
-        JMeterProperty jmp = getRawProperty(key);
+        JMeterProperty jmp = getPropertyOrNull(key);
         return jmp == null || jmp instanceof NullProperty ? defaultValue : jmp.getIntValue();
     }
 
@@ -353,7 +354,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public boolean getPropertyAsBoolean(String key, boolean defaultVal) {
-        JMeterProperty jmp = getRawProperty(key);
+        JMeterProperty jmp = getPropertyOrNull(key);
         return jmp == null || jmp instanceof NullProperty ? defaultVal : jmp.getBooleanValue();
     }
 
@@ -369,7 +370,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public long getPropertyAsLong(String key, long defaultValue) {
-        JMeterProperty jmp = getRawProperty(key);
+        JMeterProperty jmp = getPropertyOrNull(key);
         return jmp == null || jmp instanceof NullProperty ? defaultValue : jmp.getLongValue();
     }
 
@@ -385,7 +386,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public String getPropertyAsString(String key, String defaultValue) {
-        JMeterProperty jmp = getRawProperty(key);
+        JMeterProperty jmp = getPropertyOrNull(key);
         return jmp == null || jmp instanceof NullProperty ? defaultValue : jmp.getStringValue();
     }
 
@@ -585,13 +586,14 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public PropertyIterator propertyIterator() {
-        Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
-        if (propMapConcurrent != null) {
-            return new PropertyIteratorImpl(this, propMapConcurrent.values());
+        // Note: can't use ConcurrentMap here as it would return elements in unpredictable order
+        readLock();
+        try {
+            // TODO: copy the contents of the iterator to avoid ConcurrentModificationException?
+            return new PropertyIteratorImpl(this, propMap.values());
+        } finally {
+            readUnlock();
         }
-
-        // TODO: copy the contents of the iterator to avoid ConcurrentModificationException?
-        return new PropertyIteratorImpl(propMap.values());
     }
 
     /**
