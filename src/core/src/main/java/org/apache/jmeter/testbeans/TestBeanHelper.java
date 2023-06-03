@@ -122,7 +122,6 @@ public class TestBeanHelper {
     /**
      * Prepare the bean for work by populating the bean's properties from the
      * property value map.
-     * <p>
      *
      * @param el the TestElement to be prepared
      */

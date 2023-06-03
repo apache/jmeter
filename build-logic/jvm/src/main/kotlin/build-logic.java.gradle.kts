@@ -108,12 +108,14 @@ tasks.configureEach<Javadoc> {
         windowTitle = "Apache JMeter ${project.name} API"
         header = "<b>Apache JMeter</b>"
         addStringOption("source", "8")
+        addStringOption("Xmaxwarns", "10")
+        addBooleanOption("Xdoclint:all,-missing", true)
         val lastEditYear: String by rootProject.extra
         bottom =
             "Copyright &copy; 1998-$lastEditYear Apache Software Foundation. All Rights Reserved."
         if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {
             addBooleanOption("html5", true)
-            links("https://docs.oracle.com/javase/11/docs/api/")
+            links("https://docs.oracle.com/en/java/javase/11/docs/api/")
         } else {
             links("https://docs.oracle.com/javase/8/docs/api/")
         }
