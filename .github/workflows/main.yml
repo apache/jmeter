@@ -70,6 +70,7 @@ jobs:
           testDisableCaching=${{ matrix.testDisableCaching }}
       env:
         _JAVA_OPTIONS: ${{ matrix.extraJvmArgs }}
+        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GE_ACCESS_TOKEN }}
 
   errorprone:
     name: 'Error Prone (JDK 11)'
@@ -87,3 +88,5 @@ jobs:
         job-id: errprone
         multi-cache-enabled: false
         arguments: --scan --no-parallel --no-daemon -PenableErrorprone classes
+      env:
+        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GE_ACCESS_TOKEN }}
