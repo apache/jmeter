@@ -654,18 +654,23 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             // See https://github.com/apache/jmeter/issues/5875
             return;
         }
-        Iterator<Map.Entry<String, JMeterProperty>> iter = propMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<String, JMeterProperty> entry = iter.next();
-            JMeterProperty prop = entry.getValue();
-            if (isTemporary(prop)) {
-                iter.remove();
-                clearTemporary(prop);
-            } else {
-                prop.recoverRunningVersion(this);
+        writeLock();
+        try {
+            Iterator<Map.Entry<String, JMeterProperty>> iter = propMap.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<String, JMeterProperty> entry = iter.next();
+                JMeterProperty prop = entry.getValue();
+                if (isTemporary(prop)) {
+                    iter.remove();
+                    clearTemporary(prop);
+                } else {
+                    prop.recoverRunningVersion(this);
+                }
             }
+            emptyTemporary();
+        } finally {
+            writeUnlock();
         }
-        emptyTemporary();
     }
 
     /**

@@ -25,6 +25,16 @@ java {
     withJavadocJar()
 }
 
+tasks.named<Jar>("javadocJar") {
+    // Set a custom classifier, so we can distinguish it from Dokka-generated javadoc
+    archiveClassifier.set("javadoc_java")
+}
+
+tasks.dokkaJavadoc {
+    moduleName.set("Apache JMeter ${project.name}")
+    mustRunAfter("kaptKotlin")
+}
+
 val dokkaJar by tasks.registering(Jar::class) {
     group = LifecycleBasePlugin.BUILD_GROUP
     description = "Assembles a jar archive containing javadoc"
@@ -32,4 +42,9 @@ val dokkaJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
 }
 
-configurations[JavaPlugin.JAVADOC_ELEMENTS_CONFIGURATION_NAME].outgoing.artifact(dokkaJar)
+configurations[JavaPlugin.JAVADOC_ELEMENTS_CONFIGURATION_NAME].outgoing {
+    // Avoid publishing Java-generated javadoc
+    artifacts.clear()
+    // Publish Dokka-generated javadoc instead
+    artifact(dokkaJar)
+}
