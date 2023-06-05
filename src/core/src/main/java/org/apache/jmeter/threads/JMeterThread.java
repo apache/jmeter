@@ -634,7 +634,7 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     private SampleResult doSampling(JMeterContext threadContext, Sampler sampler) {
         sampler.setThreadContext(threadContext);
-        sampler.setThreadName(threadName);
+        setSamplerThreadName(sampler);
         TestBeanHelper.prepare(sampler);
 
         // Perform the actual sample
@@ -657,6 +657,11 @@ public class JMeterThread implements Runnable, Interruptible {
             }
             currentSamplerForInterruption = null;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setSamplerThreadName(Sampler sampler) {
+        sampler.setThreadName(threadName);
     }
 
     private SampleResult doEndTransactionSampler(

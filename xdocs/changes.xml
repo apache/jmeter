@@ -142,6 +142,7 @@ Summary
   <li>Update lets-plot-batik to 3.1.0 (from 2.1.1)</li>
   <li>Added randomized test GitHub Actions matrix for better coverage of locales and time zones</li>
   <li><pr>5960</pr>Add OpenJDK JMH for creating microbenchmarks in JMeter code</li>
+  <li><issue>5961</issue>Deprecate TestElement.threadName as it is not related to TestElement</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

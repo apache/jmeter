@@ -763,6 +763,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @return Returns the threadName.
      */
     @Override
+    @SuppressWarnings("deprecation")
     public String getThreadName() {
         return threadName;
     }
@@ -772,6 +773,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      *            The threadName to set.
      */
     @Override
+    @SuppressWarnings("deprecation")
     public void setThreadName(String inthreadName) {
         if (threadName != null) {
             if (!threadName.equals(inthreadName)) {

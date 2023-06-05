@@ -21,6 +21,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apache.jmeter.testelement.property.NullProperty
 import org.apache.jmeter.testelement.property.PropertyIterator
 import org.apache.jmeter.threads.JMeterContext
+import org.apiguardian.api.API
 
 public interface TestElement : Cloneable {
     public companion object {
@@ -237,7 +238,17 @@ public interface TestElement : Cloneable {
 
     /**
      * Associates a thread name with this element.
+     * @deprecated Use `JMeterContextService.getContext().thread.threadName` instead
      */
+    @Deprecated(
+        message = "Use JMeterContextService.getContext().thread.threadName instead",
+        replaceWith = ReplaceWith(
+            "JMeterContextService.getContext().thread.threadName",
+            imports = ["org.apache.jmeter.threads.JMeterContextService"]
+        )
+    )
+    @get:API(status = API.Status.DEPRECATED, since = "5.6")
+    @set:API(status = API.Status.DEPRECATED, since = "5.6")
     public var threadName: String
 
     /**
