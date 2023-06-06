@@ -23,10 +23,10 @@ import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.modifiers.CounterConfig
 import org.apache.jmeter.sampler.DebugSampler
 import org.apache.jmeter.testelement.TestPlan
-import org.apache.jorphan.collections.ListedHashTree
+import org.apache.jmeter.treebuilder.dsl.testTree
 import org.apache.jorphan.test.JMeterSerialTest
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import java.time.Duration
 
 class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest {
@@ -39,34 +39,27 @@ class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest
     fun `ensure thread group initializes counter only once for each thread`() {
         val listener = TestTransactionController.TestSampleListener()
 
-        val tree = ListedHashTree().apply {
-            add(TestPlan()).apply {
-                val threadGroup = OpenModelThreadGroup().apply {
+        val tree = testTree {
+            TestPlan::class {
+                OpenModelThreadGroup::class {
                     name = "Thread Group"
                     // 5 samples within 100ms
                     // Then 2 sec pause to let all the threads to finish, especially the ones that start at 99ms
                     scheduleString = "rate(50 / sec) random_arrivals(100 ms) pause(2 s)"
-                }
-                add(threadGroup).apply {
-                    add(listener)
-                    add(
-                        CounterConfig().apply {
-                            varName = "counter"
-                            increment = 1
-                        }
-                    )
-                    add(
-                        DebugSampler().apply {
-                            name = "\${counter}"
-                            isDisplayJMeterProperties = false
-                            isDisplayJMeterVariables = false
-                            isDisplaySystemProperties = false
-                        }
-                    )
+                    listener()
+                    CounterConfig::class {
+                        varName = "counter"
+                        increment = 1
+                    }
+                    DebugSampler::class {
+                        name = "\${counter}"
+                        isDisplayJMeterProperties = false
+                        isDisplayJMeterVariables = false
+                        isDisplaySystemProperties = false
+                    }
                 }
             }
         }
-
         StandardJMeterEngine().apply {
             configure(tree)
             runTest()
@@ -78,10 +71,10 @@ class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest
         val actual = listener.events.map { it.result.sampleLabel }.sorted()
 
         // Use toString for better error message
-        Assert.assertEquals(
-            "Counter values should be consequent",
+        Assertions.assertEquals(
             "0\n1\n2\n3\n4",
-            actual.joinToString("\n")
+            actual.joinToString("\n"),
+            "Test should produce 5 iterations, so \${counter} should yield 0..4"
         )
     }
 }

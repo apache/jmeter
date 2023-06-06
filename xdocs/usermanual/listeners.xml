@@ -25,7 +25,7 @@
 <!ENTITY vellip   "&#x022EE;" >
 ]>
 
-<document prev="build-jms-topic-test-plan.html" next="remote-test.html" id="$Id$">
+<document prev="build-programmatic-test-plan.html" next="remote-test.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Listeners</title>

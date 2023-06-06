@@ -76,6 +76,11 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
         return newTree;
     }
 
+    @Override
+    public ListedHashTree getTree(Object key) {
+        return (ListedHashTree) super.getTree(key);
+    }
+
     /** {@inheritDoc} */
     @Override
     public void set(Object key, Object value) {
@@ -138,27 +143,27 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
-    public HashTree createNewTree() {
+    public ListedHashTree createNewTree() {
         return new ListedHashTree();
     }
 
     /** {@inheritDoc} */
     @Override
-    public HashTree createNewTree(Object key) {
+    public ListedHashTree createNewTree(Object key) {
         return new ListedHashTree(key);
     }
 
     /** {@inheritDoc} */
     @Override
-    public HashTree createNewTree(Collection<?> values) {
+    public ListedHashTree createNewTree(Collection<?> values) {
         return new ListedHashTree(values);
     }
 
     /** {@inheritDoc} */
     @Override
-    public HashTree add(Object key) {
+    public ListedHashTree add(Object key) {
         if (!data.containsKey(key)) {
-            HashTree newTree = createNewTree();
+            ListedHashTree newTree = createNewTree();
             data.put(key, newTree);
             order.add(key);
             return newTree;

@@ -498,6 +498,9 @@ val previewSite by tasks.registering(Sync::class) {
         gitattributes(gitProps)
         siteLayout()
     }
+    doLast {
+        println("Site preview synchronized to $previewSiteDir/index.html")
+    }
 }
 
 val distributionGroup = "distribution"
