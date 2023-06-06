@@ -23,6 +23,8 @@ import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.modifiers.CounterConfig
 import org.apache.jmeter.sampler.DebugSampler
 import org.apache.jmeter.testelement.TestPlan
+import org.apache.jmeter.treebuilder.TreeBuilder
+import org.apache.jmeter.treebuilder.dsl.treeBuilder
 import org.apache.jorphan.collections.ListedHashTree
 import org.apache.jorphan.test.JMeterSerialTest
 import org.junit.Assert
@@ -39,34 +41,27 @@ class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest
     fun `ensure thread group initializes counter only once for each thread`() {
         val listener = TestTransactionController.TestSampleListener()
 
-        val tree = ListedHashTree().apply {
-            add(TestPlan()).apply {
-                val threadGroup = OpenModelThreadGroup().apply {
+        val tree = treeBuilder {
+            TestPlan::class {
+                OpenModelThreadGroup::class {
                     name = "Thread Group"
                     // 5 samples within 100ms
                     // Then 2 sec pause to let all the threads to finish, especially the ones that start at 99ms
                     scheduleString = "rate(50 / sec) random_arrivals(100 ms) pause(2 s)"
-                }
-                add(threadGroup).apply {
-                    add(listener)
-                    add(
-                        CounterConfig().apply {
-                            varName = "counter"
-                            increment = 1
-                        }
-                    )
-                    add(
-                        DebugSampler().apply {
-                            name = "\${counter}"
-                            isDisplayJMeterProperties = false
-                            isDisplayJMeterVariables = false
-                            isDisplaySystemProperties = false
-                        }
-                    )
+                    listener()
+                    CounterConfig::class {
+                        varName = "counter"
+                        increment = 1
+                    }
+                    DebugSampler::class {
+                        name = "\${counter}"
+                        isDisplayJMeterProperties = false
+                        isDisplayJMeterVariables = false
+                        isDisplaySystemProperties = false
+                    }
                 }
             }
         }
-
         StandardJMeterEngine().apply {
             configure(tree)
             runTest()
