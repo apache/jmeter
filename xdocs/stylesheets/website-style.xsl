@@ -568,14 +568,14 @@
 
   <xsl:template match="pr">
     <a href="https://github.com/apache/jmeter/pull/{./text()}">
-      Pull request #<xsl:value-of select="./text()" />
+      PR#<xsl:value-of select="./text()" />
     </a>
     <xsl:call-template name="issue_separator"/>
   </xsl:template>
 
   <xsl:template match="issue">
     <a href="https://github.com/apache/jmeter/issues/{./text()}">
-      Issue #<xsl:value-of select="./text()" />
+      Issue#<xsl:value-of select="./text()" />
     </a>
     <xsl:call-template name="issue_separator"/>
   </xsl:template>
