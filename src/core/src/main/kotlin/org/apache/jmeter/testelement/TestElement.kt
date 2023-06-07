@@ -356,7 +356,7 @@ public interface TestElement : Cloneable {
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: LongPropertyDescriptor<*>, value: Long) {
-        removeOrSet(property.defaultValue != value, property.name) {
+        removeOrSet(property.defaultValue == value, property.name) {
             LongProperty(it, value)
         }
     }
@@ -377,7 +377,7 @@ public interface TestElement : Cloneable {
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: FloatPropertyDescriptor<*>, value: Float) {
-        removeOrSet(property.defaultValue != value, property.name) {
+        removeOrSet(property.defaultValue == value, property.name) {
             FloatProperty(it, value)
         }
     }
@@ -398,7 +398,7 @@ public interface TestElement : Cloneable {
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: DoublePropertyDescriptor<*>, value: Double) {
-        removeOrSet(property.defaultValue != value, property.name) {
+        removeOrSet(property.defaultValue == value, property.name) {
             DoubleProperty(it, value)
         }
     }
@@ -433,7 +433,7 @@ public interface TestElement : Cloneable {
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun <ValueClass : Any> set(property: ClassPropertyDescriptor<*, ValueClass>, value: Class<out ValueClass>?) {
-        removeOrSet(value == null || property.defaultValue != value, property.name) {
+        removeOrSet(property.defaultValue == value, property.name) {
             StringProperty(it, value!!.name)
         }
     }
