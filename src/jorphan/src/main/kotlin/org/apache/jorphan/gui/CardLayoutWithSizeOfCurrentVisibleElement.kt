@@ -47,4 +47,34 @@ public class CardLayoutWithSizeOfCurrentVisibleElement : CardLayout() {
         size.width + insets.left + insets.right + hgap * 2,
         size.height + insets.top + insets.bottom + vgap * 2
     )
+
+    override fun next(parent: Container) {
+        super.next(parent)
+        // Force re-layout since the newly visible element might have different dimensions
+        parent.revalidate()
+    }
+
+    override fun previous(parent: Container) {
+        super.previous(parent)
+        // Force re-layout since the newly visible element might have different dimensions
+        parent.revalidate()
+    }
+
+    override fun first(parent: Container) {
+        super.first(parent)
+        // Force re-layout since the newly visible element might have different dimensions
+        parent.revalidate()
+    }
+
+    override fun last(parent: Container) {
+        super.last(parent)
+        // Force re-layout since the newly visible element might have different dimensions
+        parent.revalidate()
+    }
+
+    override fun show(parent: Container, name: String) {
+        super.show(parent, name)
+        // Force re-layout since the newly visible element might have different dimensions
+        parent.revalidate()
+    }
 }
