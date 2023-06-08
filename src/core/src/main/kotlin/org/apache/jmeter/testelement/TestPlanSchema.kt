@@ -32,18 +32,18 @@ import org.apiguardian.api.API
 public open class TestPlanSchema protected constructor() : TestElementSchema() {
     public companion object INSTANCE : TestPlanSchema()
 
-    public val functionalMode: BooleanPropertyDescriptor<TestPlanSchema> =
-        boolean("TestPlan.functional_mode")
+    public val functionalMode: BooleanPropertyDescriptor<TestPlanSchema>
+        by boolean("TestPlan.functional_mode")
 
-    public val serializeThreadgroups: BooleanPropertyDescriptor<TestPlanSchema> =
-        boolean("TestPlan.serialize_threadgroups")
+    public val serializeThreadgroups: BooleanPropertyDescriptor<TestPlanSchema>
+        by boolean("TestPlan.serialize_threadgroups")
 
-    public val tearDownOnShutdown: BooleanPropertyDescriptor<TestPlanSchema> =
-        boolean("TestPlan.tearDown_on_shutdown", false)
+    public val tearDownOnShutdown: BooleanPropertyDescriptor<TestPlanSchema>
+        by boolean("TestPlan.tearDown_on_shutdown", false)
 
-    public val userDefinedVariables: TestElementPropertyDescriptor<TestPlanSchema, Arguments> =
-        testElement("TestPlan.user_defined_variables")
+    public val userDefinedVariables: TestElementPropertyDescriptor<TestPlanSchema, Arguments>
+        by testElement("TestPlan.user_defined_variables")
 
-    public val testPlanClasspath: StringPropertyDescriptor<TestPlanSchema> =
-        string("TestPlan.user_define_classpath")
+    public val testPlanClasspath: StringPropertyDescriptor<TestPlanSchema>
+        by string("TestPlan.user_define_classpath")
 }

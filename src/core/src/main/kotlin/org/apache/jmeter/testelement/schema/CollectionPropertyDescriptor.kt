@@ -18,7 +18,6 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.property.CollectionProperty
 import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apiguardian.api.API
@@ -26,20 +25,19 @@ import kotlin.reflect.KProperty
 
 /**
  * Describes a [CollectionProperty]: name, default value, and provides accessors for properties.
- * Use [EmptyTestElementSchema.collection] for building the property descriptors.
+ * Use [BaseTestElementSchema.collection] or [BaseTestElementSchema.collectionDescriptor] for building the property descriptors.
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public class CollectionPropertyDescriptor<in Schema : TestElementSchema>(
-    public override val name: String,
+public data class CollectionPropertyDescriptor<in Schema : BaseTestElementSchema>(
+    override val shortName: String,
+    override val name: String,
 ) : PropertyDescriptor<Schema, Collection<JMeterProperty>> {
     private companion object {
         private const val serialVersionUID: Long = 1
     }
 
-    public override val defaultValue: Collection<JMeterProperty>? = null
-
-    override fun toString(): String = "CollectionPropertyDescriptor(name='$name')"
+    override val defaultValue: Collection<JMeterProperty>? = null
 
     /**
      * Retrieve [Collection] property value, or throw [NoSuchElementException] in case the property is unset.

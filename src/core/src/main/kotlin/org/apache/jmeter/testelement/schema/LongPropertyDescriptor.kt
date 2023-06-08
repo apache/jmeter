@@ -18,27 +18,24 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.property.LongProperty
 import org.apiguardian.api.API
 import kotlin.reflect.KProperty
 
 /**
  * Describes a [LongProperty] that contains class reference: name, default value, and provides accessors for properties.
- * Use [EmptyTestElementSchema.long] for building the property descriptors.
+ * Use [BaseTestElementSchema.long] for building the property descriptors.
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public class LongPropertyDescriptor<in Schema : TestElementSchema>(
-    public override val name: String,
-    /** Default value, null means there's no default */
-    public override val defaultValue: Long?
+public data class LongPropertyDescriptor<in Schema : BaseTestElementSchema>(
+    override val shortName: String,
+    override val name: String,
+    override val defaultValue: Long?,
 ) : PropertyDescriptor<Schema, Long> {
     private companion object {
         private const val serialVersionUID: Long = 1
     }
-
-    override fun toString(): String = "LongPropertyDescriptor(name='$name', defaultValue='$defaultValue')"
 
     public operator fun get(target: TestElement): Long =
         target[this]

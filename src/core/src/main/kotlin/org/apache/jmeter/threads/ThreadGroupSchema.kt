@@ -32,22 +32,22 @@ public open class ThreadGroupSchema : AbstractThreadGroupSchema() {
     public companion object INSTANCE : ThreadGroupSchema()
 
     /** Whether thread startup is delayed until required */
-    public val delayedStart: BooleanPropertyDescriptor<ThreadGroupSchema> =
-        boolean("ThreadGroup.delayedStart", default = false)
+    public val delayedStart: BooleanPropertyDescriptor<ThreadGroupSchema>
+        by boolean("ThreadGroup.delayedStart", default = false)
 
     /** Ramp-up time */
-    public val rampTime: IntegerPropertyDescriptor<ThreadGroupSchema> =
-        integer("ThreadGroup.ramp_time")
+    public val rampTime: IntegerPropertyDescriptor<ThreadGroupSchema>
+        by int("ThreadGroup.ramp_time")
 
     /** Whether scheduler is being used */
-    public val useScheduler: BooleanPropertyDescriptor<ThreadGroupSchema> =
-        boolean("ThreadGroup.scheduler")
+    public val useScheduler: BooleanPropertyDescriptor<ThreadGroupSchema>
+        by boolean("ThreadGroup.scheduler")
 
     /** Scheduler start delay, overrides start time */
-    public val delay: LongPropertyDescriptor<ThreadGroupSchema> =
-        long("ThreadGroup.delay")
+    public val delay: LongPropertyDescriptor<ThreadGroupSchema>
+        by long("ThreadGroup.delay")
 
     /** Scheduler duration, overrides end time */
-    public val duration: LongPropertyDescriptor<ThreadGroupSchema> =
-        long("ThreadGroup.duration")
+    public val duration: LongPropertyDescriptor<ThreadGroupSchema>
+        by long("ThreadGroup.duration")
 }

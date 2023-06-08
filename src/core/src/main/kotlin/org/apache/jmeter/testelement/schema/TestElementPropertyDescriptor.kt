@@ -18,29 +18,32 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.property.TestElementProperty
 import org.apiguardian.api.API
 import kotlin.reflect.KProperty
 
 /**
  * Describes a [TestElementProperty] that contains class reference: name, default value, and provides accessors for properties.
- * Use [EmptyTestElementSchema.testElement] for building the property descriptors.
+ * Use [BaseTestElementSchema.testElementDescriptor] for building the property descriptors.
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public class TestElementPropertyDescriptor<in Schema : TestElementSchema, TestElementClass : TestElement>(
+public data class TestElementPropertyDescriptor<in Schema : BaseTestElementSchema, TestElementClass : TestElement>(
+    override val shortName: String,
     public val klass: Class<TestElementClass>,
-    public override val name: String,
+    override val name: String,
 ) : PropertyDescriptor<Schema, Class<TestElementClass>> {
     private companion object {
         private const val serialVersionUID: Long = 1
     }
 
-    /** Test Elements have no default values */
-    public override val defaultValue: Class<TestElementClass>? = null
+    public class Builder<in Schema : BaseTestElementSchema, TestElementClass : TestElement>(
+        public val klass: Class<TestElementClass>,
+        name: String,
+    ) : PropertyDescriptor.Builder<Schema, Class<TestElementClass>>(name, null)
 
-    override fun toString(): String = "TestElementPropertyDescriptor(name='$name', klass='$klass')"
+    /** Test Elements have no default values */
+    override val defaultValue: Class<TestElementClass>? = null
 
     /**
      * Retrieve [TestElement] property value, or throw [NoSuchElementException] in case the property is unset.

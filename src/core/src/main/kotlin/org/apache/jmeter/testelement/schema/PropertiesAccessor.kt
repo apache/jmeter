@@ -18,7 +18,6 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apiguardian.api.API
 import kotlin.experimental.ExperimentalTypeInference
@@ -46,7 +45,7 @@ import kotlin.reflect.KClass
  *    });
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public class PropertiesAccessor<out TestElementClass : TestElement, out Schema : TestElementSchema>(
+public class PropertiesAccessor<out TestElementClass : TestElement, out Schema : BaseTestElementSchema>(
     public val target: TestElementClass,
     public val schema: Schema
 ) {
@@ -55,7 +54,7 @@ public class PropertiesAccessor<out TestElementClass : TestElement, out Schema :
      * ` -> Unit` functions require to return `Unit.INSTANCE` from Java,
      * so we add an interface
      */
-    public fun interface InstanceConfigurator<in TestElementClass : TestElement, in Schema : TestElementSchema> {
+    public fun interface InstanceConfigurator<in TestElementClass : TestElement, in Schema : BaseTestElementSchema> {
         public fun configure(testElement: PropertiesAccessor<TestElementClass, Schema>, klass: Schema)
     }
 

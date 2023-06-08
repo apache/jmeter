@@ -31,9 +31,9 @@ import org.apiguardian.api.API
 public open class OpenModelThreadGroupSchema protected constructor() : AbstractThreadGroupSchema() {
     public companion object INSTANCE : OpenModelThreadGroupSchema()
 
-    public val schedule: StringPropertyDescriptor<OpenModelThreadGroupSchema> =
-        string("OpenModelThreadGroup.schedule")
+    public val schedule: StringPropertyDescriptor<OpenModelThreadGroupSchema>
+        by string("OpenModelThreadGroup.schedule")
 
-    public val randomSeed: LongPropertyDescriptor<OpenModelThreadGroupSchema> =
-        long("OpenModelThreadGroup.random_seed")
+    public val randomSeed: LongPropertyDescriptor<OpenModelThreadGroupSchema>
+        by long("OpenModelThreadGroup.random_seed")
 }

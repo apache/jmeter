@@ -18,9 +18,9 @@
 package org.apache.jmeter.testelement
 
 import org.apache.jmeter.gui.JMeterGUIComponent
+import org.apache.jmeter.testelement.schema.BaseTestElementSchema
 import org.apache.jmeter.testelement.schema.BooleanPropertyDescriptor
 import org.apache.jmeter.testelement.schema.ClassPropertyDescriptor
-import org.apache.jmeter.testelement.schema.EmptyTestElementSchema
 import org.apache.jmeter.testelement.schema.StringPropertyDescriptor
 import org.apiguardian.api.API
 
@@ -30,17 +30,17 @@ import org.apiguardian.api.API
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public open class TestElementSchema protected constructor() : EmptyTestElementSchema() {
+public open class TestElementSchema protected constructor() : BaseTestElementSchema() {
     public companion object INSTANCE : TestElementSchema()
 
-    public val name: StringPropertyDescriptor<TestElementSchema> =
-        string("TestElement.name")
-    public val comments: StringPropertyDescriptor<TestElementSchema> =
-        string("TestElement.comments")
-    public open val guiClass: ClassPropertyDescriptor<TestElementSchema, JMeterGUIComponent> =
-        classProperty(JMeterGUIComponent::class, "TestElement.gui_class")
-    public val testClass: ClassPropertyDescriptor<TestElementSchema, Any> =
-        classProperty(Any::class, "TestElement.testClass")
-    public val enabled: BooleanPropertyDescriptor<TestElementSchema> =
-        boolean("TestElement.enabled", default = true)
+    public val name: StringPropertyDescriptor<TestElementSchema>
+        by string("TestElement.name")
+    public val comments: StringPropertyDescriptor<TestElementSchema>
+        by string("TestPlan.comments")
+    public val guiClass: ClassPropertyDescriptor<TestElementSchema, JMeterGUIComponent>
+        by classProperty(JMeterGUIComponent::class, "TestElement.gui_class")
+    public val testClass: ClassPropertyDescriptor<TestElementSchema, Any>
+        by classProperty(Any::class, "TestElement.test_class")
+    public val enabled: BooleanPropertyDescriptor<TestElementSchema>
+        by boolean("TestElement.enabled", default = true)
 }

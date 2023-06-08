@@ -18,27 +18,24 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.property.FloatProperty
 import org.apiguardian.api.API
 import kotlin.reflect.KProperty
 
 /**
  * Describes a [FloatProperty] that contains class reference: name, default value, and provides accessors for properties.
- * Use [EmptyTestElementSchema.float] for building the property descriptors.
+ * Use [BaseTestElementSchema.float] for building the property descriptors.
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public class FloatPropertyDescriptor<in Schema : TestElementSchema>(
-    public override val name: String,
-    /** Default value, null means there's no default */
-    public override val defaultValue: Float?
+public data class FloatPropertyDescriptor<in Schema : BaseTestElementSchema>(
+    override val shortName: String,
+    override val name: String,
+    override val defaultValue: Float?,
 ) : PropertyDescriptor<Schema, Float> {
     private companion object {
         private const val serialVersionUID: Long = 1
     }
-
-    override fun toString(): String = "FloatPropertyDescriptor(name='$name', defaultValue='$defaultValue')"
 
     public operator fun get(target: TestElement): Float =
         target[this]

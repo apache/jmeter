@@ -31,18 +31,18 @@ import org.apiguardian.api.API
 public open class BeanShellSamplerSchema : TestElementSchema() {
     public companion object INSTANCE : BeanShellSamplerSchema()
 
-    public val resetInterpreter: BooleanPropertyDescriptor<BeanShellSamplerSchema> =
-        boolean("BeanShellSampler.resetInterpreter", default = false)
+    public val resetInterpreter: BooleanPropertyDescriptor<BeanShellSamplerSchema>
+        by boolean("BeanShellSampler.resetInterpreter", default = false)
 
-    public val script: StringPropertyDescriptor<BeanShellSamplerSchema> =
-        string("BeanShellSampler.query")
+    public val script: StringPropertyDescriptor<BeanShellSamplerSchema>
+        by string("BeanShellSampler.query")
 
-    public val parameters: StringPropertyDescriptor<BeanShellSamplerSchema> =
-        string("BeanShellSampler.parameters")
+    public val parameters: StringPropertyDescriptor<BeanShellSamplerSchema>
+        by string("BeanShellSampler.parameters")
 
-    public val initFile: StringPropertyDescriptor<BeanShellSamplerSchema> =
-        string("beanshell.sampler.init")
+    public val initFile: StringPropertyDescriptor<BeanShellSamplerSchema>
+        by string("beanshell.sampler.init")
 
-    public val filename: StringPropertyDescriptor<BeanShellSamplerSchema> =
-        string("BeanShellSampler.filename")
+    public val filename: StringPropertyDescriptor<BeanShellSamplerSchema>
+        by string("BeanShellSampler.filename")
 }

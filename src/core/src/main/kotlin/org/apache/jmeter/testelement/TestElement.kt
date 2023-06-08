@@ -72,8 +72,8 @@ public interface TestElement : Cloneable {
      * by [.addTestElement].
      */
     public fun clearTestElementChildren()
-    public fun setProperty(key: String, value: String)
-    public fun setProperty(key: String, value: String, dflt: String)
+    public fun setProperty(key: String, value: String?)
+    public fun setProperty(key: String, value: String?, dflt: String)
     public fun setProperty(key: String, value: Boolean)
     public fun setProperty(key: String, value: Boolean, dflt: Boolean)
     public fun setProperty(key: String, value: Int)
@@ -292,8 +292,8 @@ public interface TestElement : Cloneable {
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-    public operator fun set(property: PropertyDescriptor<*, *>, value: String) {
-        removeOrSet(property.defaultValueAsString == value, property.name) {
+    public operator fun set(property: PropertyDescriptor<*, *>, value: String?) {
+        removeOrSet(value.isNullOrEmpty() || property.defaultValueAsString == value, property.name) {
             StringProperty(it, value)
         }
     }

@@ -34,7 +34,7 @@ class ThreadSleep : AbstractSampler() {
     open class Schema : TestElementSchema() {
         companion object INSTANCE : Schema()
 
-        val duration = long<Schema>("ThreadSleep.duration")
+        val duration by long("ThreadSleep.duration")
     }
 
     var duration: Duration

@@ -30,15 +30,15 @@ import org.apiguardian.api.API
 public open class HTTPSamplerBaseSchema : TestElementSchema() {
     public companion object INSTANCE : HTTPSamplerBaseSchema()
 
-    public val followRedirects: BooleanPropertyDescriptor<HTTPSamplerBaseSchema> =
-        boolean("HTTPSampler.follow_redirects")
+    public val followRedirects: BooleanPropertyDescriptor<HTTPSamplerBaseSchema>
+        by boolean("HTTPSampler.follow_redirects")
 
-    public val useKeepalive: BooleanPropertyDescriptor<HTTPSamplerBaseSchema> =
-        boolean("HTTPSampler.use_keepalive")
+    public val useKeepalive: BooleanPropertyDescriptor<HTTPSamplerBaseSchema>
+        by boolean("HTTPSampler.use_keepalive")
 
-    public val useMultipartPost: BooleanPropertyDescriptor<HTTPSamplerBaseSchema> =
-        boolean("HTTPSampler.DO_MULTIPART_POST")
+    public val useMultipartPost: BooleanPropertyDescriptor<HTTPSamplerBaseSchema>
+        by boolean("HTTPSampler.DO_MULTIPART_POST")
 
-    public val useBrowserCompatibleMultipart: BooleanPropertyDescriptor<HTTPSamplerBaseSchema> =
-        boolean("HTTPSampler.BROWSER_COMPATIBLE_MULTIPART", default = false)
+    public val useBrowserCompatibleMultipart: BooleanPropertyDescriptor<HTTPSamplerBaseSchema>
+        by boolean("HTTPSampler.BROWSER_COMPATIBLE_MULTIPART", default = false)
 }

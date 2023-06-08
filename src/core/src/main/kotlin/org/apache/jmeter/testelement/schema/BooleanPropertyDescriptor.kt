@@ -18,27 +18,24 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.property.BooleanProperty
 import org.apiguardian.api.API
 import kotlin.reflect.KProperty
 
 /**
  * Describes a [BooleanProperty]: name, default value, and provides accessors for properties.
- * Use [EmptyTestElementSchema.boolean] for building the property descriptors.
+ * Use [BaseTestElementSchema.boolean] or [BaseTestElementSchema.booleanDescriptor] for building the property descriptors.
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public class BooleanPropertyDescriptor<in Schema : TestElementSchema>(
-    public override val name: String,
-    /** Default value, null means there's no default */
-    public override val defaultValue: Boolean?
+public data class BooleanPropertyDescriptor<in Schema : BaseTestElementSchema>(
+    override val shortName: String,
+    override val name: String,
+    override val defaultValue: Boolean?,
 ) : PropertyDescriptor<Schema, Boolean> {
     private companion object {
         private const val serialVersionUID: Long = 1
     }
-
-    override fun toString(): String = "BooleanPropertyDescriptor(name='$name', defaultValue='$defaultValue')"
 
     public operator fun get(target: TestElement): Boolean =
         target[this]

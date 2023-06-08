@@ -22,7 +22,9 @@ import org.apache.jmeter.testelement.AbstractTestElement
 import org.apache.jmeter.testelement.TestElement
 import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.schema.PropertiesAccessor
+import org.apache.jmeter.threads.ThreadGroupSchema
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
@@ -30,7 +32,7 @@ class JMeterElementSchemaTest {
     open class WarpDriveElementSchema : TestElementSchema() {
         companion object INSTANCE : WarpDriveElementSchema()
 
-        val warpFactor = integer<WarpDriveElementSchema>("WarpDriveElement.warpFactor", default = 7)
+        val warpFactor by int("WarpDriveElement.warpFactor", default = 7)
     }
 
     open class WarpDriveElement : AbstractTestElement() {
@@ -73,6 +75,17 @@ class JMeterElementSchemaTest {
         }
 
         assertGetWarpFactor(8, warpDrive, "value was modified with props { it[warpFactor] = 8 }")
+    }
+
+    @Test
+    fun `property descriptor equals`() {
+        assertEquals(TestElementSchema.name, ThreadGroupSchema.name) {
+            "TestElementSchema.name and ThreadGroupSchema.name should be equal"
+        }
+
+        assertNotEquals(TestElementSchema.name, TestElementSchema.comments) {
+            "TestElementSchema.name and TestElementSchema.comments should NOT be equal"
+        }
     }
 
     @Test

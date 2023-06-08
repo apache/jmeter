@@ -18,27 +18,24 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.property.StringProperty
 import org.apiguardian.api.API
 import kotlin.reflect.KProperty
 
 /**
  * Describes a [StringProperty] that contains class reference: name, default value, and provides accessors for properties.
- * Use [EmptyTestElementSchema.string] for building the property descriptors.
+ * Use [BaseTestElementSchema.string] for building the property descriptors.
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public class StringPropertyDescriptor<in Schema : TestElementSchema>(
-    public override val name: String,
-    /** Default value, null means there's no default */
-    public override val defaultValue: String?
+public data class StringPropertyDescriptor<in Schema : BaseTestElementSchema>(
+    override val shortName: String,
+    override val name: String,
+    override val defaultValue: String?,
 ) : PropertyDescriptor<Schema, String> {
     private companion object {
         private const val serialVersionUID: Long = 1
     }
-
-    override fun toString(): String = "StringPropertyDescriptor(name='$name', defaultValue='$defaultValue')"
 
     public operator fun get(target: TestElement): String =
         target[this]
@@ -51,7 +48,7 @@ public class StringPropertyDescriptor<in Schema : TestElementSchema>(
 
     @JvmSynthetic
     @Suppress("NOTHING_TO_INLINE")
-    public inline operator fun setValue(testElement: TestElement, property: KProperty<*>, value: String) {
+    public inline operator fun setValue(testElement: TestElement, property: KProperty<*>, value: String?) {
         testElement[this] = value
     }
 }

@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test
  * Verifies [TestElementPropertyTransformer.USE_FUNCTIONS].
  */
 class UseFunctionsTest {
-
     @Test
     fun `property replaces with function`() {
         val input = TestPlan().apply {
@@ -48,7 +47,7 @@ class UseFunctionsTest {
 
     @Test
     fun `nested collection property replaces with function`() {
-        val sampleProp = CollectionPropertyDescriptor<TestElementSchema>("test.prop")
+        val sampleProp = CollectionPropertyDescriptor<TestElementSchema>("sampleProp", "test.prop")
 
         val input = TestPlan().apply {
             props {

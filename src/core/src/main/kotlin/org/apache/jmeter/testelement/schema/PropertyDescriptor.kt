@@ -19,7 +19,6 @@ package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.JMeterPropertySchemaUnchecked
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apiguardian.api.API
 import java.io.Serializable
 
@@ -28,7 +27,13 @@ import java.io.Serializable
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public interface PropertyDescriptor<in Schema : TestElementSchema, Value> : Serializable {
+public interface PropertyDescriptor<in Schema : BaseTestElementSchema, Value> : Serializable {
+    public open class Builder<in Schema : BaseTestElementSchema, DefaultType : Any>(
+        public val name: String,
+        public val default: DefaultType?
+    )
+
+    public val shortName: String
     public val name: String
     public val defaultValue: Value?
 
@@ -40,7 +45,7 @@ public interface PropertyDescriptor<in Schema : TestElementSchema, Value> : Seri
         target.removeProperty(name)
     }
 
-    public operator fun set(target: TestElement, value: String) {
+    public operator fun set(target: TestElement, value: String?) {
         target[this] = value
     }
 
@@ -48,5 +53,5 @@ public interface PropertyDescriptor<in Schema : TestElementSchema, Value> : Seri
         target.getString(this)
 
     public val asString: StringPropertyDescriptor<Schema>
-        get() = if (this is StringPropertyDescriptor) this else StringPropertyDescriptor(name, defaultValueAsString)
+        get() = if (this is StringPropertyDescriptor) this else StringPropertyDescriptor(shortName, name, defaultValueAsString)
 }

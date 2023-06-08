@@ -33,12 +33,12 @@ import org.apiguardian.api.API
 public open class AbstractThreadGroupSchema protected constructor() : TestElementSchema() {
     public companion object INSTANCE : AbstractThreadGroupSchema()
 
-    public val numThreads: IntegerPropertyDescriptor<AbstractThreadGroupSchema> =
-        integer("ThreadGroup.num_threads")
+    public val numThreads: IntegerPropertyDescriptor<AbstractThreadGroupSchema>
+        by int("ThreadGroup.num_threads")
 
-    public val mainController: TestElementPropertyDescriptor<AbstractThreadGroupSchema, Controller> =
-        testElement("ThreadGroup.main_controller")
+    public val mainController: TestElementPropertyDescriptor<AbstractThreadGroupSchema, Controller>
+        by testElement("ThreadGroup.main_controller")
 
-    public val sameUserOnNextIteration: BooleanPropertyDescriptor<AbstractThreadGroupSchema> =
-        boolean("ThreadGroup.same_user_on_next_iteration", default = true)
+    public val sameUserOnNextIteration: BooleanPropertyDescriptor<AbstractThreadGroupSchema>
+        by boolean("ThreadGroup.same_user_on_next_iteration", default = true)
 }

@@ -18,7 +18,6 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apiguardian.api.API
 import kotlin.reflect.KClass
@@ -26,24 +25,28 @@ import kotlin.reflect.KProperty
 
 /**
  * Describes a [JMeterProperty] that contains class reference: name, default value, and provides accessors for properties.
- * Use [EmptyTestElementSchema.classProperty] for building the property descriptors.
+ * Use [BaseTestElementSchema.classProperty] or [BaseTestElementSchema.classPropertyDescriptor] for building the property descriptors.
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public class ClassPropertyDescriptor<in Schema : TestElementSchema, ValueClass : Any>(
+public data class ClassPropertyDescriptor<in Schema : BaseTestElementSchema, ValueClass : Any>(
+    override val shortName: String,
     public val klass: Class<ValueClass>,
-    public override val name: String,
+    override val name: String,
     /** Default value, null means there's no default */
-    public override val defaultValue: Class<ValueClass>? = null
-) : PropertyDescriptor<Schema, Class<ValueClass>> {
+    override val defaultValue: Class<out ValueClass>? = null
+) : PropertyDescriptor<Schema, Class<out ValueClass>> {
     private companion object {
         private const val serialVersionUID: Long = 1
     }
 
+    public class Builder<in Schema : BaseTestElementSchema, ValueClass : Any>(
+        public val klass: Class<ValueClass>,
+        name: String
+    ) : PropertyDescriptor.Builder<Schema, Class<ValueClass>>(name, null)
+
     override val defaultValueAsString: String?
         get() = defaultValue?.name
-
-    override fun toString(): String = "ClassPropertyDescriptor(name='$name', klass='$klass', defaultValue='$defaultValue')"
 
     public operator fun get(target: TestElement): Class<out ValueClass> =
         target[this]
