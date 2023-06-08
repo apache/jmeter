@@ -65,6 +65,10 @@ buildParameters {
         defaultValue.set(true)
         description.set("Skip forbidden-apis verifications")
     }
+    bool("suppressPomMetadataWarnings") {
+        defaultValue.set(true)
+        description.set("Skip suppressPomMetadataWarningsFor warnings triggered by inability to map test fixtures dependences to Maven pom.xml")
+    }
     bool("enableErrorprone") {
         // By default, disable errorProne in CI so we don't perform the same checks in several jobs
         defaultValue.set(System.getenv("CI") != "true")

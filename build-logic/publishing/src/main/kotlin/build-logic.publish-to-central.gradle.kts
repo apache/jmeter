@@ -17,6 +17,7 @@
 
 plugins {
     id("maven-publish")
+    id("build-logic.build-params")
     id("build-logic.publish-to-tmp-maven-repo")
 }
 
@@ -24,6 +25,10 @@ val repoUrl = "https://github.com/apache/jmeter"
 
 publishing {
     publications.withType<MavenPublication>().configureEach {
+        if (buildParameters.suppressPomMetadataWarnings) {
+            suppressPomMetadataWarningsFor("testFixturesApiElements")
+            suppressPomMetadataWarningsFor("testFixturesRuntimeElements")
+        }
         // Use the resolved versions in pom.xml
         // Gradle might have different resolution rules, so we set the versions
         // that were used in Gradle build/test.

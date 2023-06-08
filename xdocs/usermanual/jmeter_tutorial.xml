@@ -97,6 +97,7 @@ The folders inside of <code>apache-jmeter</code>
   <dt><code>lib/ext</code></dt><dd>contains the core jar files for JMeter and the protocols</dd>
   <dt><code>src</code></dt><dd>contains subdirectory for each protocol and component</dd>
   <dt><code>src/*/test</code></dt><dd>unit test related directory</dd>
+  <dt><code>src/testFixtures</code></dt><dd>Directory that contains test-related code that might be reused in other modules</dd>
   <dt><code>xdocs</code></dt><dd>XML files for documentation. JMeter generates its documentation from XML.</dd>
 </dl>
 

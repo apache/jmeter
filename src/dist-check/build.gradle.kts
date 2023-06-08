@@ -21,6 +21,7 @@ import org.apache.jmeter.buildtools.batchtest.BatchTestServer
 import java.time.Duration
 
 plugins {
+    id("java-test-fixtures")
     id("build-logic.batchtest")
     id("com.github.vlsi.gradle-extensions")
     id("build-logic.jvm-library")
@@ -31,7 +32,8 @@ val loggingClasspath by configurations.creating
 
 dependencies {
     api(projects.src.dist)
-    testImplementation(project(":src:dist", "allTestClasses"))
+
+    testImplementation(testFixtures(projects.src.core))
     testImplementation("org.apache.commons:commons-lang3") {
         because("StringUtils")
     }

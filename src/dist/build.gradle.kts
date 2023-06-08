@@ -80,17 +80,11 @@ val srcLicense by configurations.creating {
     isCanBeConsumed = false
 }
 
-val allTestClasses by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
-
 // Note: you can inspect final classpath (list of jars in the binary distribution)  via
 // gw dependencies --configuration runtimeClasspath
 dependencies {
     for (p in jars) {
         api(project(p))
-        allTestClasses(project(p, "testClasses"))
     }
 
     binLicense(project(":src:licenses", "binLicense"))

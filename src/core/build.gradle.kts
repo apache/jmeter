@@ -19,13 +19,14 @@ import com.github.autostyle.gradle.AutostyleTask
 import com.github.vlsi.gradle.ide.IdeExtension
 
 plugins {
+    id("java-test-fixtures")
     id("build-logic.jvm-published-library")
 }
 
 dependencies {
     api(projects.src.launcher)
     api(projects.src.jorphan)
-    testImplementation(project(":src:jorphan", "testClasses"))
+    testImplementation(testFixtures(projects.src.jorphan))
 
     api("bsf:bsf") {
         because("protected BSFManager BSFTestElement#getManager()")
@@ -120,6 +121,12 @@ dependencies {
 
     testImplementation("commons-net:commons-net")
     testRuntimeOnly("org.spockframework:spock-core")
+
+    testFixturesApi(testFixtures(projects.src.jorphan))
+    testFixturesImplementation("junit:junit")
+    testFixturesImplementation("org.spockframework:spock-core")
+    testFixturesImplementation(projects.src.testkit)
+    testFixturesImplementation("org.junit.jupiter:junit-jupiter")
 }
 
 val generatedVersionDir = File(buildDir, "generated/sources/version")

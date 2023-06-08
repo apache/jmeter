@@ -27,5 +27,5 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
 
-    testImplementation(project(":src:core", "testClasses"))
+    testImplementation(testFixtures(projects.src.core))
 }

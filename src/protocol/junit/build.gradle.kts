@@ -31,5 +31,5 @@ dependencies {
     }
     implementation("com.miglayout:miglayout-swing")
 
-    testImplementation(project(":src:core", "testClasses"))
+    testImplementation(testFixtures(projects.src.core))
 }

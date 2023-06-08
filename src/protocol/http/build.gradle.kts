@@ -25,7 +25,6 @@ dependencies {
     api(projects.src.components) {
         because("we need SearchTextExtension")
     }
-    testImplementation(project(":src:components", "testClasses"))
 
     api("com.thoughtworks.xstream:xstream") {
         because("HTTPResultConverter uses XStream in public API")
@@ -77,6 +76,7 @@ dependencies {
     implementation("com.miglayout:miglayout-swing")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
+    testImplementation(testFixtures(projects.src.core))
     testImplementation(testFixtures(projects.src.testkitWiremock))
     testImplementation("com.github.tomakehurst:wiremock-jre8")
     // For some reason JMeter bundles just tika-core and tika-parsers without transitive
@@ -87,6 +87,4 @@ dependencies {
     runtimeOnly("org.apache.tika:tika-parsers") {
         isTransitive = false
     }
-
-    testImplementation(project(":src:core", "testClasses"))
 }

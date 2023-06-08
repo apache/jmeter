@@ -55,6 +55,9 @@ dependencies {
     }
     findProject(":src:bom-testing")?.let{
         testImplementation(platform(it))
+        plugins.withId("java-test-fixtures") {
+            "testFixturesImplementation"(platform(it))
+        }
     }
     findProject(":src:bom-thirdparty")?.let{
         api(platform(it))
@@ -149,22 +152,3 @@ tasks.configureEach<Jar> {
         attributes["Implementation-Version"] = rootProject.version
     }
 }
-
-// <editor-fold defaultstate="collapsed" desc="TODO: remove dependencies between testClasses of the different projects">
-val testClasses by configurations.creating {
-}
-
-if (file("src/test").isDirectory) {
-    // Do not generate test jars when src/test folder is missing (e.g. "config.jar")
-    val testJar by tasks.registering(Jar::class) {
-        val sourceSets: SourceSetContainer by project
-        archiveClassifier.set("test")
-        from(sourceSets["test"].output)
-    }
-
-    // Parenthesis needed to use Project#getArtifacts
-    (artifacts) {
-        testClasses(testJar)
-    }
-}
-// </editor-fold>

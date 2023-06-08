@@ -21,7 +21,7 @@ plugins {
 
 dependencies {
     api(projects.src.core)
-    testImplementation(project(":src:core", "testClasses"))
+    testImplementation(testFixtures(projects.src.core))
 
     api("org.apache-extras.beanshell:bsh") {
         because(
