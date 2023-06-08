@@ -38,6 +38,7 @@ var jars = arrayOf(
     // ":src:examples",
     ":src:functions",
     ":src:jorphan",
+    ":src:har-reader",
     ":src:protocol:bolt",
     ":src:protocol:ftp",
     ":src:protocol:http",

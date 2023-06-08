@@ -77,6 +77,7 @@
     <trusted-key id='0cc641c3a62453ab390066c4a41f13c999945293' group='commons-logging' />
     <trusted-key id='b920d295bf0e61cb4cf0896c33cd6733af5ec452' group='commons-logging' />
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='commons-net' />
+    <trusted-key id='ffcd6605daa43db4290eca4898e2d057e0d58dc6' group='de.sstoehr' />
     <trusted-key id='0186f8b24c5bc02c94a0e0e486f75e83e1ee085f' group='de.thetaphi' />
     <trusted-key id='1fa37fbe4453c1073e7ef61d6449005f96bc97a3' group='de.undercouch' />
     <trusted-key id='3e1ac64f4e34e290503c90323449ec3ac2efe8aa' group='dnsjava' />

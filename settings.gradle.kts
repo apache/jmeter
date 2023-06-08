@@ -58,6 +58,7 @@ include(
     "src:examples",
     "src:functions",
     "src:generator",
+    "src:har-reader",
     "src:jorphan",
     "src:licenses",
     "src:protocol:bolt",
