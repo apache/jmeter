@@ -71,6 +71,7 @@ Summary
 <ul>
 <li><issue>5682</issue><pr>717</pr> Open Model Thread Group: avoid skipping rows from CSV Data Set Config</li>
   <li>Support custom thread group implementations in "Add think time" and "Save as test fragment" actions</li>
+  <li>Open Model Thread Group: interrupt pending HTTP requests and other <code>Interruptible</code> test elements on test stop</li>
 </ul>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>

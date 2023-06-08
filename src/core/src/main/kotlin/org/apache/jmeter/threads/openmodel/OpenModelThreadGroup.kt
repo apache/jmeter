@@ -175,6 +175,7 @@ public class OpenModelThreadGroup :
                     log.info("Terminating thread {}", thread)
                     // Safe stop the thread
                     thread.stop()
+                    thread.interrupt()
                     // Interrupt it
                     future.cancel(true)
                 }
@@ -261,6 +262,12 @@ public class OpenModelThreadGroup :
         // Graceful stop
         stop()
         log.info("Interrupting the threads")
+        activeThreads.forEach { (thread, future) ->
+            log.info("Interrupting thread {}", thread)
+            // Interrupting the thread
+            thread.interrupt()
+            future.cancel(true)
+        }
         // Interrupting all the threads
         // shutdownNow will interrupt the threads
         executorService?.shutdownNow()?.forEach {
