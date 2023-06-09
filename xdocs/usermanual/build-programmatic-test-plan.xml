@@ -59,6 +59,97 @@ threadGroupSubtree.add(debugSampler);</source>
       </p>
     </section>
 
+    <section name="Generating code from UI" anchor="generating_code">
+      <p>To aid with creating code, JMeter implements <code>Copy Code</code> context action, so you could
+      generate code for any element in the plan. It would generate code for the element and its children.</p>
+
+      <figure width="380" height="258" image="copy_code/http_sampler_copy_code.png">Copy Code context action</figure>
+
+      <p>Here's the generated code (Kotlin DSL):
+      <source>
+org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
+    props {
+        it[arguments] = org.apache.jmeter.config.Arguments().apply {
+            props {
+                it[arguments] = listOf(
+                    org.apache.jmeter.protocol.http.util.HTTPArgument().apply {
+                        props {
+                            it[value] = "World"
+                            it[metadata] = "="
+                            it[useEquals] = true
+                            it[argumentName] = "user"
+                        }
+                    },
+                    org.apache.jmeter.protocol.http.util.HTTPArgument().apply {
+                        props {
+                            it[alwaysEncode] = true
+                            it[value] = "test_value"
+                            it[metadata] = "="
+                            it[useEquals] = true
+                            it[argumentName] = "test"
+                        }
+                    },
+                )
+                it[name] = "User Defined Variables"
+                it[guiClass] = "org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel"
+                it[testClass] = "org.apache.jmeter.config.Arguments"
+            }
+        }
+        it[domain] = "example.com"
+        it[path] = "/api/v1/login"
+        it[method] = "GET"
+        it[followRedirects] = true
+        it[useKeepalive] = true
+        it[proxy.scheme] = "https"
+        it[proxy.host] = "localhost"
+        it[proxy.port] = "8080"
+        it[proxy.username] = "secret"
+        it[proxy.password] = "password1"
+        it[name] = "/login"
+        it[guiClass] = "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui"
+    }
+
+    org.apache.jmeter.extractor.RegexExtractor::class {
+        props {
+            it[guiClass] = "org.apache.jmeter.extractor.gui.RegexExtractorGui"
+            it[name] = "extract user id"
+            it[referenceName] = "regexVar"
+            it[regularExpression] = "hello\\s+?world"
+            it[template] = "\$1\$"
+        }
+    }
+
+    org.apache.jmeter.protocol.http.control.HeaderManager::class {
+        props {
+            it[headers] = listOf(
+                org.apache.jmeter.protocol.http.control.Header().apply {
+                    props {
+                        it[headerName] = "Accept"
+                        it[value] = "text/plain"
+                    }
+                },
+                org.apache.jmeter.protocol.http.control.Header().apply {
+                    props {
+                        it[headerName] = "User-Agent"
+                        it[value] = "JMeter"
+                    }
+                },
+                org.apache.jmeter.protocol.http.control.Header().apply {
+                    props {
+                        it[headerName] = "X-JMeter-Thread"
+                        it[value] = "Thread \${__threadNum}"
+                    }
+                },
+            )
+            it[guiClass] = "org.apache.jmeter.protocol.http.gui.HeaderPanel"
+            it[name] = "HTTP Header Manager"
+        }
+    }
+}
+</source>
+      </p>
+    </section>
+
     <section name="Creating a plan with Kotlin DSL" anchor="treebuilder_kotlin_dsl">
       <p>JMeter 5.6 introduces Kotlin DSL which might make it easier to create and maintain test plans as the structure of the code
         would resemble the structure of the generated test plan tree</p>
@@ -144,7 +235,7 @@ import org.apache.jmeter.testelement.TestPlan
 import org.apache.jmeter.threads.ThreadGroup
 import static org.apache.jmeter.treebuilder.dsl.TreeBuilders.testTree
 
-ListedHashTree root = treeBuilder(b -> { // (1)
+ListedHashTree root = testTree(b -> { // (1)
   b.add(TestPlan.class, tp -> { // (2)
     b.add(ThreadGroup.class, tg -> {
        tg.setName("Search Order Thread Group");

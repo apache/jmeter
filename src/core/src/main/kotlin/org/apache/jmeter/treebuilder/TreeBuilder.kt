@@ -18,6 +18,7 @@
 package org.apache.jmeter.treebuilder
 
 import org.apache.jmeter.testelement.TestElement
+import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jorphan.collections.ListedHashTree
 import org.apiguardian.api.API
 import kotlin.reflect.KClass
@@ -27,7 +28,7 @@ import kotlin.reflect.KClass
  *
  * Sample Kotlin:
  *
- *     treeBuilder {
+ *     testTree {
  *         TestPlan::class {
  *             OpenModelThreadGroup::class {
  *                 name = "Thread Group"
@@ -39,7 +40,7 @@ import kotlin.reflect.KClass
  *
  * Sample Java:
  *
- *     treeBuilder(b -> {
+ *     testTree(b -> {
  *         b.add(TestPlan.class, tp -> {
  *             b.add(OpenModelThreadGroup.class, tg ->{
  *                 name = "Thread Group"
@@ -150,6 +151,9 @@ public class TreeBuilder {
     }
 
     private fun runConfigurations(testElement: TestElement) {
+        if (testElement.getPropertyOrNull(TestElementSchema.testClass) == null) {
+            testElement[TestElementSchema.testClass] = testElement::class.java
+        }
         for (actions in actionsStack) {
             actions?.forEach { it(testElement) }
         }

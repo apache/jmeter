@@ -291,6 +291,9 @@ public final class MenuFactory {
                     ActionNames.SAVE_AS_TEST_FRAGMENT));
         }
         addSeparator(menu);
+        JMenuItem saveKotlinDsl = makeMenuItemRes("copy_code", // $NON-NLS-1$
+                ActionNames.COPY_CODE);
+        menu.add(saveKotlinDsl);
         JMenuItem savePicture = makeMenuItemRes("save_as_image",// $NON-NLS-1$
                 ActionNames.SAVE_GRAPHICS,
                 KeyStrokes.SAVE_GRAPHICS);
