@@ -259,22 +259,22 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public void setName(String name) {
-        setProperty(TestElement.NAME, name);
+        set(getSchema().getName(), name);
     }
 
     @Override
     public String getName() {
-        return getPropertyAsString(TestElement.NAME);
+        return get(getSchema().getName());
     }
 
     @Override
     public void setComment(String comment){
-        setProperty(new StringProperty(TestElement.COMMENTS, comment));
+        set(getSchema().getComments(), comment);
     }
 
     @Override
     public String getComment(){
-        return getProperty(TestElement.COMMENTS).getStringValue();
+        return get(getSchema().getComments());
     }
 
     /**
@@ -813,12 +813,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     // Moved from JMeter class
     @Override
     public boolean isEnabled() {
-        return getProperty(TestElement.ENABLED) instanceof NullProperty || getPropertyAsBoolean(TestElement.ENABLED);
+        return get(getSchema().getEnabled());
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
+        set(getSchema().getEnabled(), enabled);
     }
 
     /**

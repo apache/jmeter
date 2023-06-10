@@ -44,14 +44,19 @@ import org.apiguardian.api.API
 
 public interface TestElement : Cloneable {
     public companion object {
-        public const val NAME: String = "TestElement.name" // $NON-NLS-1$
-        public const val GUI_CLASS: String = "TestElement.gui_class" // $NON-NLS-1$
-        public const val ENABLED: String = "TestElement.enabled" // $NON-NLS-1$
-        public const val TEST_CLASS: String = "TestElement.test_class" // $NON-NLS-1$
+        @JvmField
+        public val NAME: String = TestElementSchema.name.name
+        @JvmField
+        public val GUI_CLASS: String = TestElementSchema.guiClass.name
+        @JvmField
+        public val ENABLED: String = TestElementSchema.enabled.name
+        @JvmField
+        public val TEST_CLASS: String = TestElementSchema.testClass.name
 
         // Needed by AbstractTestElement.
         // Also TestElementConverter and TestElementPropertyConverter for handling empty comments
-        public const val COMMENTS: String = "TestPlan.comments" // $NON-NLS-1$
+        @JvmField
+        public val COMMENTS: String = TestElementSchema.comments.name
     }
 
     public val schema: TestElementSchema
