@@ -297,7 +297,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
                     HashTree tree = new HashTree();
                     tree.add(node);
                     tree.add(node, subtree);
-                    ((TestElement) node).setProperty(TestElement.ENABLED, false);
+                    ((TestElement) node).setEnabled(false);
                     addSubTree(tree, current);
                 }
             }
@@ -306,9 +306,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
         if (!workbenchTree.isEmpty()) {
             HashTree testFragmentTree = new HashTree();
             TestFragmentController testFragmentController = new TestFragmentController();
-            testFragmentController.setProperty(TestElement.NAME, "WorkBench Test Fragment");
+            testFragmentController.setName("WorkBench Test Fragment");
             testFragmentController.setProperty(TestElement.GUI_CLASS, TestFragmentControllerGui.class.getName());
-            testFragmentController.setProperty(TestElement.ENABLED, false);
+            testFragmentController.setEnabled(false);
             testFragmentTree.add(testFragmentController);
             testFragmentTree.add(testFragmentController, workbenchTree);
             addSubTree(testFragmentTree, current);
