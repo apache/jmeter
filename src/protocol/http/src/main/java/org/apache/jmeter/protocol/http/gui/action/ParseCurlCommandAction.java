@@ -232,7 +232,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         threadGroup.setProperty(ThreadGroup.DURATION,"${__P(duration,3600)}");
         threadGroup.setDelay(5);
         LoopController loopCtrl = new LoopController();
-        loopCtrl.setProperty(LoopController.LOOPS,"${__P(iterations,-1)}");
+        loopCtrl.setLoops("${__P(iterations,-1)}");
         loopCtrl.setContinueForever(false);
         threadGroup.setSamplerController(loopCtrl);
         TestPlan testPlan = new TestPlan();

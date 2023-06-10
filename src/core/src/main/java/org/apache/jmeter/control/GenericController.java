@@ -30,6 +30,7 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.TestCompilerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,6 +89,16 @@ public class GenericController extends AbstractTestElement implements Controller
      * Creates a Generic Controller
      */
     public GenericController() {
+    }
+
+    @Override
+    public GenericControllerSchema getSchema() {
+        return GenericControllerSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends GenericController, ? extends GenericControllerSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     @Override
