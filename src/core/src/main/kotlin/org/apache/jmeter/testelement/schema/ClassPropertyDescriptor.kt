@@ -48,6 +48,12 @@ public class ClassPropertyDescriptor<in Schema : TestElementSchema, ValueClass :
     public operator fun get(target: TestElement): Class<out ValueClass> =
         target[this]
 
+    /**
+     * Retrieve [Class] property value, or return `null` in case the property is unset.
+     */
+    public fun getOrNull(target: TestElement): Class<out ValueClass>? =
+        target.getOrNull(this)
+
     public operator fun set(target: TestElement, klass: Class<out ValueClass>?) {
         target[this] = klass
     }

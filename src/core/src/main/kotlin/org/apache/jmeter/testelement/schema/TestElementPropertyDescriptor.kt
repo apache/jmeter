@@ -50,6 +50,12 @@ public class TestElementPropertyDescriptor<in Schema : TestElementSchema, TestEl
         target[this]
 
     /**
+     * Retrieve [TestElement] property value, or return `null` in case the property is unset.
+     */
+    public fun getOrNull(target: TestElement): TestElementClass? =
+        target.getOrNull(this)
+
+    /**
      * Retrieve [TestElement] property value, or create one and set it the property is unset.
      * @since 5.6
      */

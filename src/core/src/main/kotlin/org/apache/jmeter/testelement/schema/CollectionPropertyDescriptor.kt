@@ -49,6 +49,12 @@ public class CollectionPropertyDescriptor<in Schema : TestElementSchema>(
         target[this]
 
     /**
+     * Retrieve [Collection] property value, or return `null` in case the property is unset.
+     */
+    public fun getOrNull(target: TestElement): Collection<JMeterProperty>? =
+        target.getOrNull(this)
+
+    /**
      * Retrieve [Collection] property value, or create one and set it the property is unset.
      */
     public fun getOrCreate(target: TestElement, ifMissing: () -> Collection<JMeterProperty>): Collection<JMeterProperty> =

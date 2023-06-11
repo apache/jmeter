@@ -411,11 +411,19 @@ public interface TestElement : Cloneable {
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun <ValueClass : Any> get(property: ClassPropertyDescriptor<*, ValueClass>): Class<out ValueClass> =
+        getOrNull(property) ?: throw NoSuchElementException("Property ${property.name} is unset for element $this")
+
+    /**
+     * Retrieve [Class] property value, or return `null` in case the property is unset.
+     * @since 5.6
+     */
+    @JMeterPropertySchemaUnchecked
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6")
+    public fun <ValueClass : Any> getOrNull(property: ClassPropertyDescriptor<*, ValueClass>): Class<out ValueClass>? =
         getPropertyOrNull(property)?.objectValue?.let {
             Class.forName(getString(property), false, Thread.currentThread().contextClassLoader)
                 .asSubclass(property.klass)
         } ?: property.defaultValue
-            ?: throw NoSuchElementException("Property ${property.name} is unset for element $this")
 
     /**
      * Set property as [Class], or remove it if the given value matches the default one for the property.
@@ -431,6 +439,17 @@ public interface TestElement : Cloneable {
     }
 
     /**
+     * Retrieve [TestElement] property value, or return null in case the property is unset.
+     * @since 5.6
+     */
+    @JMeterPropertySchemaUnchecked
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6")
+    public fun <TestElementClass : TestElement> getOrNull(
+        property: TestElementPropertyDescriptor<*, TestElementClass>
+    ): TestElementClass? =
+        getPropertyOrNull(property)?.objectValue?.let { property.klass.cast(it) }
+
+    /**
      * Retrieve [TestElement] property value, or throw [NoSuchElementException] in case the property is unset.
      * @throws NoSuchElementException if the property is unset
      * @since 5.6
@@ -440,8 +459,7 @@ public interface TestElement : Cloneable {
     public operator fun <TestElementClass : TestElement> get(
         property: TestElementPropertyDescriptor<*, TestElementClass>
     ): TestElementClass =
-        getPropertyOrNull(property)?.objectValue?.let { property.klass.cast(it) }
-            ?: throw NoSuchElementException("Property ${property.name} is unset for element $this")
+        getOrNull(property) ?: throw NoSuchElementException("Property ${property.name} is unset for element $this")
 
     /**
      * Retrieve [TestElement] property value, or create one and set it the property is unset.
@@ -477,10 +495,19 @@ public interface TestElement : Cloneable {
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun get(property: CollectionPropertyDescriptor<*>): Collection<JMeterProperty> =
+        getOrNull(property) ?: throw NoSuchElementException("Property ${property.name} is unset for element $this")
+
+    /**
+     * Retrieve [Collection] property value, or return `null` in case the property is unset.
+     * @since 5.6
+     */
+    @JMeterPropertySchemaUnchecked
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6")
+    public fun getOrNull(property: CollectionPropertyDescriptor<*>): Collection<JMeterProperty>? =
         getPropertyOrNull(property)?.let {
             @Suppress("UNCHECKED_CAST")
             (it as CollectionProperty).objectValue as Collection<JMeterProperty>
-        } ?: throw NoSuchElementException("Property ${property.name} is unset for element $this")
+        }
 
     /**
      * Retrieve [Collection] property value, or create one and set it the property is unset.
@@ -492,10 +519,7 @@ public interface TestElement : Cloneable {
         property: CollectionPropertyDescriptor<*>,
         ifMissing: () -> Collection<JMeterProperty>
     ): Collection<JMeterProperty> =
-        getPropertyOrNull(property)?.let {
-            @Suppress("UNCHECKED_CAST")
-            (it as CollectionProperty).objectValue as Collection<JMeterProperty>
-        } ?: ifMissing().also { set(property, it) }
+        getOrNull(property) ?: ifMissing().also { set(property, it) }
 
     /**
      * Set property as [Collection], or remove it if the given [Collection] is `null`.
@@ -522,6 +546,17 @@ public interface TestElement : Cloneable {
      * @param key name of the property to be removed
      */
     public fun removeProperty(key: String)
+
+    /**
+     * Remove property stored under the `key`
+     *
+     * @param key name of the property to be removed
+     * @since 5.6
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6")
+    public fun removeProperty(property: PropertyDescriptor<*, *>) {
+        removeProperty(property.name)
+    }
 
     // lifecycle methods
     public override fun clone(): Any
