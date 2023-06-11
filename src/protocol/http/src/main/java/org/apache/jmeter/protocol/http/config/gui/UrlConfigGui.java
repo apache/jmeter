@@ -42,9 +42,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledChoice;
@@ -215,17 +213,18 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         if(showFileUploadPane) {
             filesPanel.modifyTestElement(element);
         }
-        element.setProperty(HTTPSamplerBase.POST_BODY_RAW, useRaw, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
-        element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
-        element.setProperty(HTTPSamplerBase.DOMAIN, domain.getText());
-        element.setProperty(HTTPSamplerBase.PORT, port.getText());
-        element.setProperty(HTTPSamplerBase.PROTOCOL, protocol.getText());
-        element.setProperty(HTTPSamplerBase.CONTENT_ENCODING, contentEncoding.getText());
-        element.setProperty(HTTPSamplerBase.PATH, path.getText());
+        HTTPSamplerBaseSchema.INSTANCE httpSchema = HTTPSamplerBaseSchema.INSTANCE;
+        element.set(httpSchema.getPostBodyRaw(), useRaw);
+        element.set(httpSchema.getArguments(), args);
+        element.set(httpSchema.getDomain(), domain.getText());
+        element.set(httpSchema.getPort(), port.getText());
+        element.set(httpSchema.getProtocol(), protocol.getText());
+        element.set(httpSchema.getContentEncoding(), contentEncoding.getText());
+        element.set(httpSchema.getPath(), path.getText());
         if (notConfigOnly){
-            element.setProperty(HTTPSamplerBase.METHOD, method.getText());
-            element.setProperty(new BooleanProperty(HTTPSamplerBase.FOLLOW_REDIRECTS, followRedirects.isSelected()));
-            element.setProperty(new BooleanProperty(HTTPSamplerBase.AUTO_REDIRECTS, autoRedirects.isSelected()));
+            element.set(httpSchema.getMethod(), method.getText());
+            element.set(httpSchema.getFollowRedirects(), followRedirects.isSelected());
+            element.set(httpSchema.getAutoRedirects(), autoRedirects.isSelected());
             useKeepAlive.updateElement(element);
             useMultipart.updateElement(element);
             useBrowserCompatibleMultipartMode.updateElement(element);
@@ -269,10 +268,11 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      */
     public void configure(TestElement el) {
         setName(el.getName());
-        Arguments arguments = (Arguments) el.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue();
+        HTTPSamplerBaseSchema.INSTANCE httpSchema = HTTPSamplerBaseSchema.INSTANCE;
+        Arguments arguments = el.get(httpSchema.getArguments());
 
         if (showRawBodyPane) {
-            boolean useRaw = el.getPropertyAsBoolean(HTTPSamplerBase.POST_BODY_RAW, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
+            boolean useRaw = el.get(httpSchema.getPostBodyRaw());
             if(useRaw) {
                 String postBody = computePostBody(arguments, true); // Convert CRLF to CR, see modifyTestElement
                 postBodyContent.setInitialText(postBody);
@@ -290,9 +290,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             filesPanel.configure(el);
         }
 
-        domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
+        domain.setText(el.getString(httpSchema.getDomain()));
 
-        String portString = el.getPropertyAsString(HTTPSamplerBase.PORT);
+        String portString = el.getString(httpSchema.getPort());
 
         // Only display the port number if it is meaningfully specified
         if (portString.equals(HTTPSamplerBase.UNSPECIFIED_PORT_AS_STRING)) {
@@ -300,13 +300,13 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         } else {
             port.setText(portString);
         }
-        protocol.setText(el.getPropertyAsString(HTTPSamplerBase.PROTOCOL));
-        contentEncoding.setText(el.getPropertyAsString(HTTPSamplerBase.CONTENT_ENCODING));
-        path.setText(el.getPropertyAsString(HTTPSamplerBase.PATH));
+        protocol.setText(el.getString(httpSchema.getProtocol()));
+        contentEncoding.setText(el.getString(httpSchema.getContentEncoding()));
+        path.setText(el.getString(httpSchema.getPath()));
         if (notConfigOnly){
-            method.setText(el.getPropertyAsString(HTTPSamplerBase.METHOD));
-            followRedirects.setSelected(el.getPropertyAsBoolean(HTTPSamplerBase.FOLLOW_REDIRECTS));
-            autoRedirects.setSelected(el.getPropertyAsBoolean(HTTPSamplerBase.AUTO_REDIRECTS));
+            method.setText(el.getString(httpSchema.getMethod()));
+            followRedirects.setSelected(el.get(httpSchema.getFollowRedirects()));
+            autoRedirects.setSelected(el.get(httpSchema.getAutoRedirects()));
             useKeepAlive.updateUi(el);
             useMultipart.updateUi(el);
             useBrowserCompatibleMultipartMode.updateUi(el);

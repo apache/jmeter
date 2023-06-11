@@ -38,12 +38,10 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.IntegerProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 
@@ -108,62 +106,35 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         cfg.clear();
         cfg.addConfigElement(el);
         super.configureTestElement(config);
-        if (retrieveEmbeddedResources.isSelected()) {
-            config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER, true));
-        } else {
-            config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
-        }
+        HTTPSamplerBaseSchema.INSTANCE httpSchema = HTTPSamplerBaseSchema.INSTANCE;
+        config.set(httpSchema.getRetrieveEmbeddedResources(), retrieveEmbeddedResources.isSelected());
         enableConcurrentDwn(retrieveEmbeddedResources.isSelected());
-        if (concurrentDwn.isSelected()) {
-            config.setProperty(new BooleanProperty(HTTPSamplerBase.CONCURRENT_DWN, true));
+        config.set(httpSchema.getConcurrentDownload(), retrieveEmbeddedResources.isSelected());
+        if (!StringUtils.isEmpty(concurrentPool.getText())) {
+            config.set(httpSchema.getConcurrentDownloadPoolSize(), concurrentPool.getText());
         } else {
-            // The default is false, so we can remove the property to simplify JMX files
-            // This also allows HTTPDefaults to work for this checkbox
-            config.removeProperty(HTTPSamplerBase.CONCURRENT_DWN);
+            config.removeProperty(httpSchema.getConcurrentDownloadPoolSize());
         }
-        if(!StringUtils.isEmpty(concurrentPool.getText())) {
-            config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
-                    concurrentPool.getText()));
-        } else {
-            config.setProperty(new StringProperty(HTTPSamplerBase.CONCURRENT_POOL,
-                    String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE)));
-        }
-        if(useMD5.isSelected()) {
-            config.setProperty(new BooleanProperty(HTTPSamplerBase.MD5, true));
-        } else {
-            config.removeProperty(HTTPSamplerBase.MD5);
-        }
-        if (!StringUtils.isEmpty(embeddedAllowRE.getText())) {
-            config.setProperty(new StringProperty(HTTPSamplerBase.EMBEDDED_URL_RE,
-                    embeddedAllowRE.getText()));
-        } else {
-            config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_RE);
-        }
-        if (!StringUtils.isEmpty(embeddedExcludeRE.getText())) {
-            config.setProperty(new StringProperty(HTTPSamplerBase.EMBEDDED_URL_EXCLUDE_RE,
-                    embeddedExcludeRE.getText()));
-        } else {
-            config.removeProperty(HTTPSamplerBase.EMBEDDED_URL_EXCLUDE_RE);
-        }
+        config.set(httpSchema.getStoreAsMD5(), useMD5.isSelected());
+        config.set(httpSchema.getEmbeddedUrlAllowRegex(), embeddedAllowRE.getText());
+        config.set(httpSchema.getEmbeddedUrlExcludeRegex(), embeddedExcludeRE.getText());
 
         if(!StringUtils.isEmpty(sourceIpAddr.getText())) {
-            config.setProperty(new StringProperty(HTTPSamplerBase.IP_SOURCE,
-                    sourceIpAddr.getText()));
-            config.setProperty(new IntegerProperty(HTTPSamplerBase.IP_SOURCE_TYPE,
-                    sourceIpType.getSelectedIndex()));
+            config.set(httpSchema.getIpSource(), sourceIpAddr.getText());
+            config.set(httpSchema.getIpSourceType(), sourceIpType.getSelectedIndex());
         } else {
-            config.removeProperty(HTTPSamplerBase.IP_SOURCE);
-            config.removeProperty(HTTPSamplerBase.IP_SOURCE_TYPE);
+            config.removeProperty(httpSchema.getIpSource());
+            config.removeProperty(httpSchema.getIpSourceType());
         }
 
-        config.setProperty(HTTPSamplerBase.PROXYSCHEME, proxyScheme.getText(),"");
-        config.setProperty(HTTPSamplerBase.PROXYHOST, proxyHost.getText(),"");
-        config.setProperty(HTTPSamplerBase.PROXYPORT, proxyPort.getText(),"");
-        config.setProperty(HTTPSamplerBase.PROXYUSER, proxyUser.getText(),"");
-        config.setProperty(HTTPSamplerBase.PROXYPASS, String.valueOf(proxyPass.getPassword()),"");
-        config.setProperty(HTTPSamplerBase.IMPLEMENTATION, httpImplementation.getSelectedItem().toString(),"");
-        config.setProperty(HTTPSamplerBase.CONNECT_TIMEOUT, connectTimeOut.getText());
-        config.setProperty(HTTPSamplerBase.RESPONSE_TIMEOUT, responseTimeOut.getText());
+        config.set(httpSchema.getProxy().getScheme(), proxyScheme.getText());
+        config.set(httpSchema.getProxy().getHost(), proxyHost.getText());
+        config.set(httpSchema.getProxy().getPort(), proxyPort.getText());
+        config.set(httpSchema.getProxy().getUsername(), proxyUser.getText());
+        config.set(httpSchema.getProxy().getPassword(), String.valueOf(proxyPass.getPassword()));
+        config.set(httpSchema.getImplementation(), String.valueOf(httpImplementation.getSelectedItem()));
+        config.set(httpSchema.getConnectTimeout(), connectTimeOut.getText());
+        config.set(httpSchema.getResponseTimeout(), responseTimeOut.getText());
     }
 
     /**
@@ -197,25 +168,24 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         super.configure(el);
         AbstractTestElement samplerBase = (AbstractTestElement) el;
         urlConfigGui.configure(el);
-        retrieveEmbeddedResources.setSelected(samplerBase.getPropertyAsBoolean(HTTPSamplerBase.IMAGE_PARSER));
-        concurrentDwn.setSelected(samplerBase.getPropertyAsBoolean(HTTPSamplerBase.CONCURRENT_DWN));
-        concurrentPool.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.CONCURRENT_POOL));
-        useMD5.setSelected(samplerBase.getPropertyAsBoolean(HTTPSamplerBase.MD5, false));
-        embeddedAllowRE.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.EMBEDDED_URL_RE, ""));//$NON-NLS-1$
-        embeddedExcludeRE.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.EMBEDDED_URL_EXCLUDE_RE, ""));//$NON-NLS-1$
-        sourceIpAddr.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.IP_SOURCE)); //$NON-NLS-1$
-        sourceIpType.setSelectedIndex(
-                samplerBase.getPropertyAsInt(HTTPSamplerBase.IP_SOURCE_TYPE,
-                        HTTPSamplerBase.SOURCE_TYPE_DEFAULT));
+        HTTPSamplerBaseSchema httpSchema = HTTPSamplerBaseSchema.INSTANCE;
+        retrieveEmbeddedResources.setSelected(samplerBase.get(httpSchema.getRetrieveEmbeddedResources()));
+        concurrentDwn.setSelected(samplerBase.get(httpSchema.getConcurrentDownload()));
+        concurrentPool.setText(samplerBase.getString(httpSchema.getConcurrentDownloadPoolSize()));
+        useMD5.setSelected(samplerBase.get(httpSchema.getStoreAsMD5()));
+        embeddedAllowRE.setText(samplerBase.get(httpSchema.getEmbeddedUrlAllowRegex()));
+        embeddedExcludeRE.setText(samplerBase.get(httpSchema.getEmbeddedUrlExcludeRegex()));
+        sourceIpAddr.setText(samplerBase.get(httpSchema.getIpSource()));
+        sourceIpType.setSelectedIndex(samplerBase.get(httpSchema.getIpSourceType()));
 
-        proxyScheme.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYSCHEME));
-        proxyHost.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYHOST));
-        proxyPort.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYPORT));
-        proxyUser.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYUSER));
-        proxyPass.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYPASS));
-        httpImplementation.setSelectedItem(samplerBase.getPropertyAsString(HTTPSamplerBase.IMPLEMENTATION));
-        connectTimeOut.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.CONNECT_TIMEOUT));
-        responseTimeOut.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.RESPONSE_TIMEOUT));
+        proxyScheme.setText(samplerBase.getString(httpSchema.getProxy().getScheme()));
+        proxyHost.setText(samplerBase.getString(httpSchema.getProxy().getHost()));
+        proxyPort.setText(samplerBase.getString(httpSchema.getProxy().getPort()));
+        proxyUser.setText(samplerBase.getString(httpSchema.getProxy().getUsername()));
+        proxyPass.setText(samplerBase.getString(httpSchema.getProxy().getPassword()));
+        httpImplementation.setSelectedItem(samplerBase.getString(httpSchema.getImplementation()));
+        connectTimeOut.setText(samplerBase.getString(httpSchema.getConnectTimeout()));
+        responseTimeOut.setText(samplerBase.getString(httpSchema.getResponseTimeout()));
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)

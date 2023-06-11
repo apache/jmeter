@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -78,14 +79,12 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
+import org.apache.jmeter.testelement.schema.PropertyDescriptor;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
@@ -122,83 +121,83 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     "org.apache.jmeter.testbeans.gui.TestBeanGUI"
             ));
 
+    private static final HTTPSamplerBaseSchema SCHEMA = HTTPSamplerBaseSchema.INSTANCE;
+
     //+ JMX names - do not change
-    public static final String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
+    public static final String ARGUMENTS = SCHEMA.getArguments().getName();
 
-    public static final String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
+    public static final String AUTH_MANAGER = SCHEMA.getAuthManager().getName();
 
-    public static final String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
+    public static final String COOKIE_MANAGER = SCHEMA.getCookieManager().getName();
 
-    public static final String KEYSTORE_CONFIG = "HTTPSampler.keystore_configuration"; // $NON-NLS-1$
+    public static final String KEYSTORE_CONFIG = SCHEMA.getCookieManager().getName();
 
     public static final String SAMPLE_TIMEOUT = "HTTPSampler.sample_timeout"; // $NON-NLS-1$
 
-    public static final String CACHE_MANAGER = "HTTPSampler.cache_manager"; // $NON-NLS-1$
+    public static final String CACHE_MANAGER = SCHEMA.getCacheManager().getName();
 
-    public static final String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
+    public static final String HEADER_MANAGER = SCHEMA.getHeaderManager().getName();
 
-    public static final String DNS_CACHE_MANAGER = "HTTPSampler.dns_cache_manager"; // $NON-NLS-1$
+    public static final String DNS_CACHE_MANAGER = SCHEMA.getDnsCacheManager().getName();
 
-    public static final String DOMAIN = "HTTPSampler.domain"; // $NON-NLS-1$
+    public static final String DOMAIN = SCHEMA.getDomain().getName();
 
-    public static final String PORT = "HTTPSampler.port"; // $NON-NLS-1$
+    public static final String PORT = SCHEMA.getPort().getName();
 
-    public static final String PROXYSCHEME = "HTTPSampler.proxyScheme"; // $NON-NLS-1$
+    public static final String PROXYSCHEME = SCHEMA.getProxy().getScheme().getName();
 
-    public static final String PROXYHOST = "HTTPSampler.proxyHost"; // $NON-NLS-1$
+    public static final String PROXYHOST = SCHEMA.getProxy().getHost().getName();
 
-    public static final String PROXYPORT = "HTTPSampler.proxyPort"; // $NON-NLS-1$
+    public static final String PROXYPORT = SCHEMA.getProxy().getPort().getName();
 
-    public static final String PROXYUSER = "HTTPSampler.proxyUser"; // $NON-NLS-1$
+    public static final String PROXYUSER = SCHEMA.getProxy().getUsername().getName();
 
-    public static final String PROXYPASS = "HTTPSampler.proxyPass"; // $NON-NLS-1$
+    public static final String PROXYPASS = SCHEMA.getProxy().getPassword().getName();
 
-    public static final String CONNECT_TIMEOUT = "HTTPSampler.connect_timeout"; // $NON-NLS-1$
+    public static final String CONNECT_TIMEOUT = SCHEMA.getConnectTimeout().getName();
 
-    public static final String RESPONSE_TIMEOUT = "HTTPSampler.response_timeout"; // $NON-NLS-1$
+    public static final String RESPONSE_TIMEOUT = SCHEMA.getResponseTimeout().getName();
 
-    public static final String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
+    public static final String METHOD = SCHEMA.getMethod().getName();
 
     /** This is the encoding used for the content, i.e. the charset name, not the header "Content-Encoding" */
-    public static final String CONTENT_ENCODING = "HTTPSampler.contentEncoding"; // $NON-NLS-1$
+    public static final String CONTENT_ENCODING = SCHEMA.getContentEncoding().getName();
 
-    public static final String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
+    public static final String IMPLEMENTATION = SCHEMA.getImplementation().getName();
 
-    public static final String PATH = "HTTPSampler.path"; // $NON-NLS-1$
+    public static final String PATH = SCHEMA.getPath().getName();
 
-    public static final String FOLLOW_REDIRECTS = HTTPSamplerBaseSchema.INSTANCE.getFollowRedirects().getName();
+    public static final String FOLLOW_REDIRECTS = SCHEMA.getFollowRedirects().getName();
 
-    public static final String AUTO_REDIRECTS = "HTTPSampler.auto_redirects"; // $NON-NLS-1$
+    public static final String AUTO_REDIRECTS = SCHEMA.getAutoRedirects().getName();
 
-    public static final String PROTOCOL = "HTTPSampler.protocol"; // $NON-NLS-1$
+    public static final String PROTOCOL = SCHEMA.getProtocol().getName();
 
     static final String PROTOCOL_FILE = "file"; // $NON-NLS-1$
-
-    private static final String DEFAULT_PROTOCOL = HTTPConstants.PROTOCOL_HTTP;
 
     public static final String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
     /**
      * IP source to use - does not apply to Java HTTP implementation currently
      */
-    public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$
+    public static final String IP_SOURCE = SCHEMA.getIpSource().getName();
 
-    public static final String IP_SOURCE_TYPE = "HTTPSampler.ipSourceType"; // $NON-NLS-1$
+    public static final String IP_SOURCE_TYPE = SCHEMA.getIpSourceType().getName();
 
-    public static final String USE_KEEPALIVE = HTTPSamplerBaseSchema.INSTANCE.getUseKeepalive().getName();
+    public static final String USE_KEEPALIVE = SCHEMA.getUseKeepalive().getName();
 
-    public static final String DO_MULTIPART_POST = HTTPSamplerBaseSchema.INSTANCE.getUseMultipartPost().getName();
+    public static final String DO_MULTIPART_POST = SCHEMA.getUseMultipartPost().getName();
 
     public static final String BROWSER_COMPATIBLE_MULTIPART =
-            HTTPSamplerBaseSchema.INSTANCE.getUseBrowserCompatibleMultipart().getName();
+            SCHEMA.getUseBrowserCompatibleMultipart().getName();
 
-    public static final String CONCURRENT_DWN = "HTTPSampler.concurrentDwn"; // $NON-NLS-1$
+    public static final String CONCURRENT_DWN = SCHEMA.getConcurrentDownload().getName();
 
-    public static final String CONCURRENT_POOL = "HTTPSampler.concurrentPool"; // $NON-NLS-1$
+    public static final String CONCURRENT_POOL = SCHEMA.getConcurrentDownloadPoolSize().getName();
 
-    public static final int CONCURRENT_POOL_SIZE = 6; // Default concurrent pool size for download embedded resources
-
-    private static final String CONCURRENT_POOL_DEFAULT = Integer.toString(CONCURRENT_POOL_SIZE); // default for concurrent pool
+    // Default concurrent pool size for download embedded resources
+    @SuppressWarnings("DataFlowIssue")
+    public static final int CONCURRENT_POOL_SIZE = SCHEMA.getConcurrentDownloadPoolSize().getDefaultValue();
 
     private static final String USER_AGENT = "User-Agent"; // $NON-NLS-1$
 
@@ -266,18 +265,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE"; // $NON-NLS-1$
 
     // IMAGE_PARSER now really means EMBEDDED_PARSER
-    public static final String IMAGE_PARSER = "HTTPSampler.image_parser"; // $NON-NLS-1$
+    public static final String IMAGE_PARSER = SCHEMA.getRetrieveEmbeddedResources().getName();
 
     // Embedded URLs must match this RE (if provided)
-    public static final String EMBEDDED_URL_RE = "HTTPSampler.embedded_url_re"; // $NON-NLS-1$
+    public static final String EMBEDDED_URL_RE = SCHEMA.getEmbeddedUrlAllowRegex().getName();
 
     // Embedded URLs must not match this RE (if provided)
-    public static final String EMBEDDED_URL_EXCLUDE_RE = "HTTPSampler.embedded_url_exclude_re"; // $NON-NLS-1$
+    public static final String EMBEDDED_URL_EXCLUDE_RE = SCHEMA.getEmbeddedUrlExcludeRegex().getName();
 
     public static final String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
 
     // Store MD5 hash instead of storing response
-    public static final String MD5 = "HTTPSampler.md5"; // $NON-NLS-1$
+    public static final String MD5 = SCHEMA.getStoreAsMD5().getName();
 
     /** A number to indicate that the port has not been set. */
     public static final int UNSPECIFIED_PORT = 0;
@@ -291,9 +290,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     protected static final String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
 
-    public static final String POST_BODY_RAW = "HTTPSampler.postBodyRaw";
+    public static final String POST_BODY_RAW = SCHEMA.getPostBodyRaw().getName();
 
-    public static final boolean POST_BODY_RAW_DEFAULT = false;
+    @SuppressWarnings("DataFlowIssue")
+    public static final boolean POST_BODY_RAW_DEFAULT = SCHEMA.getPostBodyRaw().getDefaultValue();
 
     private static final String ARG_VAL_SEP = "="; // $NON-NLS-1$
 
@@ -465,7 +465,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setProtocol(String value) {
-        setProperty(PROTOCOL, value.toLowerCase(java.util.Locale.ENGLISH));
+        set(getSchema().getProtocol(), value.toLowerCase(java.util.Locale.ENGLISH));
     }
 
     /**
@@ -474,9 +474,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the protocol
      */
     public String getProtocol() {
-        String protocol = getPropertyAsString(PROTOCOL);
+        String protocol = getString(getSchema().getProtocol());
         if (protocol == null || protocol.isEmpty()) {
-            return DEFAULT_PROTOCOL;
+            return HTTPConstants.PROTOCOL_HTTP;
         }
         return protocol;
     }
@@ -510,19 +510,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if (!fullUrl && getOrDelete) {
             int index = path.indexOf(QRY_PFX);
             if (index > -1) {
-                setProperty(PATH, path.substring(0, index));
+
+                set(getSchema().getPath(), path.substring(0, index));
                 // Parse the arguments in querystring, assuming specified encoding for values
                 parseArguments(path.substring(index + 1), contentEncoding);
             } else {
-                setProperty(PATH, path);
+                set(getSchema().getPath(), path);
             }
         } else {
-            setProperty(PATH, path);
+            set(getSchema().getPath(), path);
         }
     }
 
     public String getPath() {
-        String p = getPropertyAsString(PATH);
+        String p = get(getSchema().getPath());
         return encodeSpaces(p);
     }
 
@@ -535,19 +536,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setAutoRedirects(boolean value) {
-        setProperty(new BooleanProperty(AUTO_REDIRECTS, value));
+        set(getSchema().getAutoRedirects(), value);
     }
 
     public boolean getAutoRedirects() {
-        return getPropertyAsBoolean(AUTO_REDIRECTS);
+        return get(getSchema().getAutoRedirects());
     }
 
     public void setMethod(String value) {
-        setProperty(METHOD, value);
+        set(getSchema().getMethod(), value);
     }
 
     public String getMethod() {
-        return getPropertyAsString(METHOD);
+        return get(getSchema().getMethod());
     }
 
     /**
@@ -556,7 +557,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param charsetName the name of the encoding to be used
      */
     public void setContentEncoding(String charsetName) {
-        setProperty(CONTENT_ENCODING, charsetName);
+        set(getSchema().getContentEncoding(), charsetName);
     }
 
     /**
@@ -564,7 +565,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the encoding of the content, i.e. its charset name
      */
     public String getContentEncoding() {
-        return getPropertyAsString(CONTENT_ENCODING);
+        return get(getSchema().getContentEncoding());
     }
 
     public void setUseKeepAlive(boolean value) {
@@ -636,19 +637,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setImplementation(String value) {
-        this.setProperty(IMPLEMENTATION, value);
+        set(getSchema().getImplementation(), value);
     }
 
     public String getImplementation() {
-        return this.getPropertyAsString(IMPLEMENTATION);
+        return get(getSchema().getImplementation());
     }
 
     public boolean useMD5() {
-        return this.getPropertyAsBoolean(MD5, false);
+        return get(getSchema().getStoreAsMD5());
     }
 
-    public void setMD5(boolean truth) {
-        this.setProperty(MD5, truth, false);
+    public void setMD5(boolean value) {
+        set(getSchema().getStoreAsMD5(), value);
     }
 
     /**
@@ -756,11 +757,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     @Override
     public void clearTestElementChildren() {
-        removeProperty(HEADER_MANAGER);
+        removeProperty(getSchema().getHeaderManager());
     }
 
     public void setPort(int value) {
-        setProperty(new IntegerProperty(PORT, value));
+        set(getSchema().getPort(), value);
     }
 
     /**
@@ -787,7 +788,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return port number or UNSPECIFIED_PORT (== 0)
      */
     public int getPortIfSpecified() {
-        String portAsString = getPropertyAsString(PORT);
+        String portAsString = getString(getSchema().getPort());
         if(portAsString == null || portAsString.isEmpty()) {
             return UNSPECIFIED_PORT;
         }
@@ -840,27 +841,27 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setDomain(String value) {
-        setProperty(DOMAIN, value);
+        set(getSchema().getDomain(), value);
     }
 
     public String getDomain() {
-        return getPropertyAsString(DOMAIN);
+        return getString(getSchema().getDomain());
     }
 
     public void setConnectTimeout(String value) {
-        setProperty(CONNECT_TIMEOUT, value, "");
+        set(getSchema().getConnectTimeout(), value);
     }
 
     public int getConnectTimeout() {
-        return getPropertyAsInt(CONNECT_TIMEOUT, 0);
+        return get(getSchema().getConnectTimeout());
     }
 
     public void setResponseTimeout(String value) {
-        setProperty(RESPONSE_TIMEOUT, value, "");
+        set(getSchema().getResponseTimeout(), value);
     }
 
     public int getResponseTimeout() {
-        return getPropertyAsInt(RESPONSE_TIMEOUT, 0);
+        return get(getSchema().getResponseTimeout());
     }
 
     public String getProxyScheme() {
@@ -868,62 +869,62 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public void setProxyScheme(String schema) {
-        setProperty(PROXYSCHEME, schema);
+        set(getSchema().getProxy().getScheme(), schema);
     }
 
     public String getProxyHost() {
-        return getPropertyAsString(PROXYHOST);
+        return get(getSchema().getProxy().getHost());
     }
 
     public void setProxyHost(String host) {
-        setProperty(PROXYHOST, host);
+        set(getSchema().getProxy().getHost(), host);
     }
 
     public int getProxyPortInt() {
-        return getPropertyAsInt(PROXYPORT, 0);
+        return get(getSchema().getProxy().getPort());
     }
 
     public void setProxyPortInt(String port) {
-        setProperty(PROXYPORT, port);
+        set(getSchema().getProxy().getPort(), port);
     }
 
     public String getProxyUser() {
-        return getPropertyAsString(PROXYUSER);
+        return get(getSchema().getProxy().getUsername());
     }
 
     public void setProxyUser(String user) {
-        setProperty(PROXYUSER, user);
+        set(getSchema().getProxy().getUsername(), user);
     }
 
     public String getProxyPass() {
-        return getPropertyAsString(PROXYPASS);
+        return get(getSchema().getProxy().getPassword());
     }
 
     public void setProxyPass(String pass) {
-        setProperty(PROXYPASS, pass);
+        set(getSchema().getProxy().getPassword(), pass);
     }
 
     // gets called from ctor, so has to be final
     public final void setArguments(Arguments value) {
-        setProperty(new TestElementProperty(ARGUMENTS, value));
+        set(getSchema().getArguments(), value);
     }
 
     public Arguments getArguments() {
-        return (Arguments) getProperty(ARGUMENTS).getObjectValue();
+        return getOrNull(getSchema().getArguments());
     }
 
     /**
      * @param value Boolean that indicates body will be sent as is
      */
     public void setPostBodyRaw(boolean value) {
-        setProperty(POST_BODY_RAW, value, POST_BODY_RAW_DEFAULT);
+        set(getSchema().getPostBodyRaw(), value);
     }
 
     /**
      * @return boolean that indicates body will be sent as is
      */
     public boolean getPostBodyRaw() {
-        return getPropertyAsBoolean(POST_BODY_RAW, POST_BODY_RAW_DEFAULT);
+        return get(getSchema().getPostBodyRaw());
     }
 
     public void setAuthManager(AuthManager value) {
@@ -933,11 +934,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 log.warn("Existing AuthManager {} superseded by {}", mgr.getName(), value.getName());
             }
         }
-        setProperty(new TestElementProperty(AUTH_MANAGER, value));
+        set(getSchema().getAuthManager(), value);
     }
 
     public AuthManager getAuthManager() {
-        return (AuthManager) getProperty(AUTH_MANAGER).getObjectValue();
+        return getOrNull(getSchema().getAuthManager());
     }
 
     public void setHeaderManager(final HeaderManager value) {
@@ -952,16 +953,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 }
             }
         }
-        setProperty(new TestElementProperty(HEADER_MANAGER, lValue));
+        set(getSchema().getHeaderManager(), lValue);
     }
 
     public HeaderManager getHeaderManager() {
-        return (HeaderManager) getProperty(HEADER_MANAGER).getObjectValue();
+        return getOrNull(getSchema().getHeaderManager());
     }
 
     // private method to allow AsyncSample to reset the value without performing checks
     private void setCookieManagerProperty(CookieManager value) {
-        setProperty(new TestElementProperty(COOKIE_MANAGER, value));
+        set(getSchema().getCookieManager(), value);;
     }
 
     public void setCookieManager(CookieManager value) {
@@ -975,15 +976,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public CookieManager getCookieManager() {
-        return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
+        return getOrNull(getSchema().getCookieManager());
     }
 
     // private method to allow AsyncSample to reset the value without performing checks
     private void setCacheManagerProperty(CacheManager value) {
-        setProperty(new TestElementProperty(CACHE_MANAGER, value));
+        set(getSchema().getCacheManager(), value);
     }
     private void setKeystoreConfigProperty(KeystoreConfig value) {
-        setProperty(new TestElementProperty(KEYSTORE_CONFIG, value));
+        set(getSchema().getKeystoreConfig(), value);
     }
 
     public void setKeystoreConfig(KeystoreConfig value) {
@@ -995,7 +996,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public KeystoreConfig getKeystoreConfig() {
-        return (KeystoreConfig) getProperty(KEYSTORE_CONFIG).getObjectValue();
+        return getOrNull(getSchema().getKeystoreConfig());
     }
 
     public void setCacheManager(CacheManager value) {
@@ -1009,11 +1010,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public CacheManager getCacheManager() {
-        return (CacheManager) getProperty(CACHE_MANAGER).getObjectValue();
+        return getOrNull(getSchema().getCacheManager());
     }
 
     public DNSCacheManager getDNSResolver() {
-        return (DNSCacheManager) getProperty(DNS_CACHE_MANAGER).getObjectValue();
+        return getOrNull(getSchema().getDnsCacheManager());
     }
 
     public void setDNSResolver(DNSCacheManager cacheManager) {
@@ -1023,15 +1024,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 log.warn("Existing DNSCacheManager {} superseded by {}", mgr.getName(), cacheManager.getName());
             }
         }
-        setProperty(new TestElementProperty(DNS_CACHE_MANAGER, cacheManager));
+        set(getSchema().getDnsCacheManager(), cacheManager);
     }
 
     public boolean isImageParser() {
-        return getPropertyAsBoolean(IMAGE_PARSER, false);
+        return get(getSchema().getRetrieveEmbeddedResources());
     }
 
     public void setImageParser(boolean parseImages) {
-        setProperty(IMAGE_PARSER, parseImages, false);
+        set(getSchema().getRetrieveEmbeddedResources(), parseImages);
     }
 
     /**
@@ -1040,22 +1041,22 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return regular expression (or empty) string
      */
     public String getEmbeddedUrlRE() {
-        return getPropertyAsString(EMBEDDED_URL_RE, "");
+        return get(getSchema().getEmbeddedUrlAllowRegex());
     }
 
     public void setEmbeddedUrlRE(String regex) {
-        setProperty(new StringProperty(EMBEDDED_URL_RE, regex));
+        set(getSchema().getEmbeddedUrlAllowRegex(), regex);
     }
 
     /**
      * @return the regular (as String) expression that embedded URLs must not match
      */
     public String getEmbededUrlExcludeRE() {
-        return getPropertyAsString(EMBEDDED_URL_EXCLUDE_RE, "");
+        return get(getSchema().getEmbeddedUrlExcludeRegex());
     }
 
     public void setEmbeddedUrlExcludeRE(String regex) {
-        setProperty(EMBEDDED_URL_EXCLUDE_RE, regex, "");
+        set(getSchema().getEmbeddedUrlExcludeRegex(), regex);
     }
 
     /**
@@ -2079,7 +2080,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param value IP source to use
      */
     public void setIpSource(String value) {
-        setProperty(IP_SOURCE, value, "");
+        set(getSchema().getIpSource(), value);
     }
 
     /**
@@ -2088,7 +2089,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return IP source to use
      */
     public String getIpSource() {
-        return getPropertyAsString(IP_SOURCE, "");
+        return get(getSchema().getIpSource());
     }
 
     /**
@@ -2097,7 +2098,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param value type of the IP/address source
      */
     public void setIpSourceType(int value) {
-        setProperty(IP_SOURCE_TYPE, value, SOURCE_TYPE_DEFAULT);
+        set(getSchema().getIpSourceType(), value);
     }
 
     /**
@@ -2106,7 +2107,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return address source type
      */
     public int getIpSourceType() {
-        return getPropertyAsInt(IP_SOURCE_TYPE, SOURCE_TYPE_DEFAULT);
+        return get(getSchema().getIpSourceType());
     }
 
     /**
@@ -2115,11 +2116,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return true if used
      */
     public boolean isConcurrentDwn() {
-        return getPropertyAsBoolean(CONCURRENT_DWN, false);
+        return get(getSchema().getConcurrentDownload());
     }
 
     public void setConcurrentDwn(boolean concurrentDwn) {
-        setProperty(CONCURRENT_DWN, concurrentDwn, false);
+        set(getSchema().getConcurrentDownload(), concurrentDwn);
     }
 
     /**
@@ -2128,11 +2129,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the pool size
      */
     public String getConcurrentPool() {
-        return getPropertyAsString(CONCURRENT_POOL, CONCURRENT_POOL_DEFAULT);
+        return getString(getSchema().getConcurrentDownloadPoolSize());
     }
 
     public void setConcurrentPool(String poolSize) {
-        setProperty(CONCURRENT_POOL, poolSize, CONCURRENT_POOL_DEFAULT);
+        set(getSchema().getConcurrentDownloadPoolSize(), poolSize);
     }
 
 
@@ -2204,8 +2205,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
         totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getPath(), this::setPath);
         totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getDomain(), this::setDomain);
-        for (String key: Arrays.asList(PORT, PROTOCOL)) {
-            totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getPropertyAsString(key), s -> setProperty(key, s));
+        for (PropertyDescriptor<HTTPSamplerBaseSchema, ? extends Serializable> key : Arrays.asList(getSchema().getPort(), getSchema().getProtocol())) {
+            totalReplaced += JOrphanUtils.replaceValue(regex, replaceBy, caseSensitive, getString(key), s -> set(key, s));
         }
 
         return totalReplaced;

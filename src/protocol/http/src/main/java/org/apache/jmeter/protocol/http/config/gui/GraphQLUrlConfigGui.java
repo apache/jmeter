@@ -30,11 +30,11 @@ import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.http.util.GraphQLRequestParamUtils;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
@@ -128,7 +128,7 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
             args.addArgument(createHTTPArgument("", GraphQLRequestParamUtils.toPostBodyString(params), false));
         }
 
-        element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
+        element.set(HTTPSamplerBaseSchema.INSTANCE.getArguments(), args);
     }
 
     @Override

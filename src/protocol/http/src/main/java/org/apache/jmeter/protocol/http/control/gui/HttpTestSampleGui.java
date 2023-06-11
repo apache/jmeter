@@ -37,6 +37,7 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -93,6 +94,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     public void configure(TestElement element) {
         super.configure(element);
         final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
+        HTTPSamplerBaseSchema httpSchema = HTTPSamplerBaseSchema.INSTANCE;
         urlConfigGui.configure(element);
         retrieveEmbeddedResources.setSelected(samplerBase.isImageParser());
         concurrentDwn.setSelected(samplerBase.isConcurrentDwn());
@@ -103,14 +105,15 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         if (!isAJP) {
             sourceIpAddr.setText(samplerBase.getIpSource());
             sourceIpType.setSelectedIndex(samplerBase.getIpSourceType());
-            proxyScheme.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYSCHEME));
-            proxyHost.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYHOST));
-            proxyPort.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYPORT));
-            proxyUser.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYUSER));
-            proxyPass.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYPASS));
-            httpImplementation.setSelectedItem(samplerBase.getPropertyAsString(HTTPSamplerBase.IMPLEMENTATION));
-            connectTimeOut.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.CONNECT_TIMEOUT));
-            responseTimeOut.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.RESPONSE_TIMEOUT));
+
+            proxyScheme.setText(samplerBase.getString(httpSchema.getProxy().getScheme()));
+            proxyHost.setText(samplerBase.getString(httpSchema.getProxy().getHost()));
+            proxyPort.setText(samplerBase.getString(httpSchema.getProxy().getPort()));
+            proxyUser.setText(samplerBase.getString(httpSchema.getProxy().getUsername()));
+            proxyPass.setText(samplerBase.getString(httpSchema.getProxy().getPassword()));
+            httpImplementation.setSelectedItem(samplerBase.getString(httpSchema.getImplementation()));
+            connectTimeOut.setText(samplerBase.getString(httpSchema.getConnectTimeout()));
+            responseTimeOut.setText(samplerBase.getString(httpSchema.getResponseTimeout()));
         }
     }
 
@@ -134,6 +137,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         sampler.clear();
         urlConfigGui.modifyTestElement(sampler);
         final HTTPSamplerBase samplerBase = (HTTPSamplerBase) sampler;
+        HTTPSamplerBaseSchema httpSchema = samplerBase.getSchema();
         samplerBase.setImageParser(retrieveEmbeddedResources.isSelected());
         enableConcurrentDwn(retrieveEmbeddedResources.isSelected());
         samplerBase.setConcurrentDwn(concurrentDwn.isSelected());
@@ -144,14 +148,15 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         if (!isAJP) {
             samplerBase.setIpSource(sourceIpAddr.getText());
             samplerBase.setIpSourceType(sourceIpType.getSelectedIndex());
-            samplerBase.setProperty(HTTPSamplerBase.PROXYSCHEME, proxyScheme.getText(),"");
-            samplerBase.setProperty(HTTPSamplerBase.PROXYHOST, proxyHost.getText(),"");
-            samplerBase.setProperty(HTTPSamplerBase.PROXYPORT, proxyPort.getText(),"");
-            samplerBase.setProperty(HTTPSamplerBase.PROXYUSER, proxyUser.getText(),"");
-            samplerBase.setProperty(HTTPSamplerBase.PROXYPASS, String.valueOf(proxyPass.getPassword()),"");
-            samplerBase.setProperty(HTTPSamplerBase.IMPLEMENTATION, httpImplementation.getSelectedItem().toString(),"");
-            samplerBase.setProperty(HTTPSamplerBase.CONNECT_TIMEOUT, connectTimeOut.getText());
-            samplerBase.setProperty(HTTPSamplerBase.RESPONSE_TIMEOUT, responseTimeOut.getText());
+
+            samplerBase.set(httpSchema.getProxy().getScheme(), proxyScheme.getText());
+            samplerBase.set(httpSchema.getProxy().getHost(), proxyHost.getText());
+            samplerBase.set(httpSchema.getProxy().getPort(), proxyPort.getText());
+            samplerBase.set(httpSchema.getProxy().getUsername(), proxyUser.getText());
+            samplerBase.set(httpSchema.getProxy().getPassword(), String.valueOf(proxyPass.getPassword()));
+            samplerBase.set(httpSchema.getImplementation(), String.valueOf(httpImplementation.getSelectedItem()));
+            samplerBase.set(httpSchema.getConnectTimeout(), connectTimeOut.getText());
+            samplerBase.set(httpSchema.getResponseTimeout(), responseTimeOut.getText());
         }
         super.configureTestElement(sampler);
     }
