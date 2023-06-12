@@ -40,7 +40,19 @@ import kotlin.reflect.KProperty
 public abstract class BaseTestElementSchema {
     private val propertyDescriptors: MutableMap<String, PropertyDescriptor<*, *>> = mutableMapOf()
 
+    /**
+     * Associates JMeter property name (e.g. `TestPlan.enabled`) with the corresponding [PropertyDescriptor]
+     */
     public val properties: Map<String, PropertyDescriptor<*, *>> = propertyDescriptors
+
+    private val groupDescriptors: MutableMap<String, BasePropertyGroupSchema<*>> = mutableMapOf()
+
+    /**
+     * Associates subgroup name with the corresponding group schema.
+     */
+    public val groups: Map<String, BasePropertyGroupSchema<*>> = groupDescriptors
+
+    private val propertyGroups = mutableMapOf<PropertyDescriptor<*, *>, BasePropertyGroupSchema<*>>()
 
     private fun <Property : PropertyDescriptor<*, *>> Property.register(): Property {
         propertyDescriptors[name] = this
@@ -52,6 +64,74 @@ public abstract class BaseTestElementSchema {
         that: Schema,
         property: KProperty<*>
     ): Property =
+        this
+
+    /**
+     * It enables configuring a group of properties inside [TestElement.props] block:
+     *
+     *     httpSampler.props { // this: HttpSamplerBaseSchema, it: PropertiesAccessor<HttpSamplerBase, HttpSamplerBaseSchema>
+     *         proxy { // <-- this is Group.invoke
+     *           it[proxyPort] = 8080
+     *         }
+     *     }
+     */
+    public operator fun <Group : BasePropertyGroupSchema<*>> Group.invoke(body: Group.() -> Unit): Unit = run(body)
+
+    protected fun <Schema : BaseTestElementSchema, Group : BasePropertyGroupSchema<Schema>> addSubgroup(name: String, group: Group): Group {
+        group.parent = ParentSchemaReference(this, name)
+        groupDescriptors[name] = group
+        group.properties.values.forEach {
+            it.register()
+            // If the property is not declared in th the subgroup, assume it is declared in the group itself
+            propertyGroups[it] = group.getSubgroup(it) ?: group
+        }
+        return group
+    }
+
+    public fun <Schema : BaseTestElementSchema> getSubgroup(property: PropertyDescriptor<Schema, *>): BasePropertyGroupSchema<Schema>? {
+        @Suppress("UNCHECKED_CAST")
+        return propertyGroups[property] as BasePropertyGroupSchema<Schema>?
+    }
+
+    /**
+     * Returns a list of group names that are required to access the property by its short name.
+     * If the property is declared in the current schema, the list is empty.
+     */
+    public fun getGroupPath(property: PropertyDescriptor<*, *>): List<String> {
+        var group: ParentSchemaReference? = getSubgroup(property)?.parent ?: return listOf()
+        val res = mutableListOf<String>()
+        while (group != null && group.schema.groups[group.groupName] != this) {
+            res += group.groupName
+            group = (group.schema as? BasePropertyGroupSchema<*>)?.parent
+        }
+        res.reverse()
+        return res
+    }
+
+    /**
+     * It enables attach a group of properties to the current schema.
+     */
+    public operator fun <Schema : BaseTestElementSchema, Group : BasePropertyGroupSchema<Schema>> Group.provideDelegate(
+        that: Schema,
+        property: KProperty<*>,
+    ): Group {
+        return that.addSubgroup(property.name, this@provideDelegate)
+    }
+
+    /**
+     * It enables attach a group of properties to the current group of properties
+     */
+    public operator fun <Schema : BaseTestElementSchema, Group : BasePropertyGroupSchema<Schema>> Group.provideDelegate(
+        that: BasePropertyGroupSchema<Schema>,
+        property: KProperty<*>,
+    ): Group {
+        return that.addSubgroup(property.name, this@provideDelegate)
+    }
+
+    public operator fun <Schema : BaseTestElementSchema, Group : BasePropertyGroupSchema<Schema>> Group.getValue(
+        that: Schema,
+        prop: KProperty<*>
+    ): Group =
         this
 
     // String

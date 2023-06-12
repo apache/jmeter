@@ -102,7 +102,7 @@ public class DslPrinterTraverser(
         val emptyTe = te::class.java.getDeclaredConstructor().newInstance()
 
         val schema = te.schema
-        val schemaProps = mutableMapOf<String, JMeterProperty>()
+        val schemaProps = mutableMapOf<PropertyDescriptor<*, *>, JMeterProperty>()
         val otherProps = mutableListOf<JMeterProperty>()
         for (property in te.propertyIterator()) {
             if (emptyTe.getPropertyOrNull(property.name) == property && detailLevel != DetailLevel.ALL) {
@@ -127,13 +127,17 @@ public class DslPrinterTraverser(
                 continue
             }
 
-            schemaProps[prop.shortName] = property
+            schemaProps[prop] = property
         }
         if (schemaProps.isNotEmpty()) {
             indent().append("props {\n")
             level += 1
-            for ((name, value) in schemaProps) {
-                indent().append("it[").append(name).append("] = ")
+            for ((prop, value) in schemaProps) {
+                indent().append("it[")
+                for (item in schema.getGroupPath(prop)) {
+                    append(item).append('.')
+                }
+                append(prop.shortName).append("] = ")
                 appendPropertyValue(value)
                 append('\n')
             }
