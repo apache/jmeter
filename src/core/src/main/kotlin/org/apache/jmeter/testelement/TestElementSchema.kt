@@ -30,7 +30,7 @@ import org.apiguardian.api.API
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public open class TestElementSchema protected constructor() : BaseTestElementSchema() {
+public abstract class TestElementSchema : BaseTestElementSchema() {
     public companion object INSTANCE : TestElementSchema()
 
     public val name: StringPropertyDescriptor<TestElementSchema>

@@ -29,6 +29,8 @@ import kotlin.reflect.KProperty
  * * avoid using "is" prefixes. The properties are declare [PropertyDescriptor] rather than property itself,
  *   so "is" is not needed
  * * declare default value when declaring a property. It would help users.
+ * * declare schemas as abstract classes or make constructor protected. Users might need extending the schema,
+ *   however, there's no much sense in creating several instances, so instances should be shared as singletones.
  *
  * TODO: decide if boolean, int, long, etc values must always have a default
  *

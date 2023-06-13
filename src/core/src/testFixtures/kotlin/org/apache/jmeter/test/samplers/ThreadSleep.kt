@@ -31,7 +31,7 @@ import kotlin.time.toDuration
  * the end of the test, so we can't use timers to reliably verify interrupt behovoir.
  */
 class ThreadSleep : AbstractSampler() {
-    open class Schema : TestElementSchema() {
+    abstract class Schema : TestElementSchema() {
         companion object INSTANCE : Schema()
 
         val duration by long("ThreadSleep.duration")

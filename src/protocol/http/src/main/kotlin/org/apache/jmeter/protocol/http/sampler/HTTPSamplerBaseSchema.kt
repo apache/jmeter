@@ -27,7 +27,7 @@ import org.apiguardian.api.API
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public open class HTTPSamplerBaseSchema : TestElementSchema() {
+public abstract class HTTPSamplerBaseSchema : TestElementSchema() {
     public companion object INSTANCE : HTTPSamplerBaseSchema()
 
     public val followRedirects: BooleanPropertyDescriptor<HTTPSamplerBaseSchema>

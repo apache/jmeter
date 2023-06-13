@@ -28,7 +28,7 @@ import org.apiguardian.api.API
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public open class BeanShellSamplerSchema : TestElementSchema() {
+public abstract class BeanShellSamplerSchema : TestElementSchema() {
     public companion object INSTANCE : BeanShellSamplerSchema()
 
     public val resetInterpreter: BooleanPropertyDescriptor<BeanShellSamplerSchema>

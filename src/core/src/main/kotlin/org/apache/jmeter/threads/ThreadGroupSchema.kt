@@ -28,7 +28,7 @@ import org.apiguardian.api.API
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public open class ThreadGroupSchema : AbstractThreadGroupSchema() {
+public abstract class ThreadGroupSchema : AbstractThreadGroupSchema() {
     public companion object INSTANCE : ThreadGroupSchema()
 
     /** Whether thread startup is delayed until required */

@@ -28,7 +28,7 @@ import org.apiguardian.api.API
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public open class OpenModelThreadGroupSchema protected constructor() : AbstractThreadGroupSchema() {
+public abstract class OpenModelThreadGroupSchema : AbstractThreadGroupSchema() {
     public companion object INSTANCE : OpenModelThreadGroupSchema()
 
     public val schedule: StringPropertyDescriptor<OpenModelThreadGroupSchema>

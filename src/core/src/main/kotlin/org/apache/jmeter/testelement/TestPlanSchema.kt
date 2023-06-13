@@ -29,7 +29,7 @@ import org.apiguardian.api.API
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public open class TestPlanSchema protected constructor() : TestElementSchema() {
+public abstract class TestPlanSchema : TestElementSchema() {
     public companion object INSTANCE : TestPlanSchema()
 
     public val functionalMode: BooleanPropertyDescriptor<TestPlanSchema>

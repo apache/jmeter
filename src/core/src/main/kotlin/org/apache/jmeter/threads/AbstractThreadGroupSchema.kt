@@ -30,7 +30,7 @@ import org.apiguardian.api.API
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public open class AbstractThreadGroupSchema protected constructor() : TestElementSchema() {
+public abstract class AbstractThreadGroupSchema : TestElementSchema() {
     public companion object INSTANCE : AbstractThreadGroupSchema()
 
     public val numThreads: IntegerPropertyDescriptor<AbstractThreadGroupSchema>

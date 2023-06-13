@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class JMeterElementSchemaTest {
-    open class WarpDriveElementSchema : TestElementSchema() {
+    abstract class WarpDriveElementSchema : TestElementSchema() {
         companion object INSTANCE : WarpDriveElementSchema()
 
         val warpFactor by int("WarpDriveElement.warpFactor", default = 7)
