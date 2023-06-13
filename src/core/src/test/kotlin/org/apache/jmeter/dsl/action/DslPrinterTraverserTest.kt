@@ -68,7 +68,9 @@ class DslPrinterTraverserTest {
                 +org.apache.jmeter.reporters.Summariser::class
 
                 org.apache.jmeter.control.WhileController::class {
-                    setProperty("WhileController.condition", "while \"condition\" \${'$'} ")
+                    props {
+                        it[condition] = "while \"condition\" \$ "
+                    }
 
                     org.apache.jmeter.control.IfController::class {
                         setProperty("IfController.condition", "\${'$'}{__P(abc, def)}")

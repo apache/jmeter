@@ -22,7 +22,7 @@ import java.io.Serializable;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -36,12 +36,20 @@ public class WhileController extends GenericController implements Serializable, 
 
     private static final long serialVersionUID = 233L;
 
-    private static final String CONDITION = "WhileController.condition"; // $NON-NLS-1$
-
     private boolean breakLoop;
 
     public WhileController() {
         super();
+    }
+
+    @Override
+    public WhileControllerSchema getSchema() {
+        return WhileControllerSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends WhileController, ? extends WhileControllerSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     /**
@@ -130,14 +138,14 @@ public class WhileController extends GenericController implements Serializable, 
      */
     public void setCondition(String string) {
         log.debug("setCondition({})", string);
-        setProperty(new StringProperty(CONDITION, string));
+        set(getSchema().getCondition(), string);
     }
 
     /**
      * @return the condition
      */
     public String getCondition() {
-        JMeterProperty prop=getProperty(CONDITION);
+        JMeterProperty prop=getProperty(getSchema().getCondition().getName());
         prop.recoverRunningVersion(this);
         return prop.getStringValue();
     }
