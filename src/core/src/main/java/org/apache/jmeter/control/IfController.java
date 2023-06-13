@@ -26,7 +26,7 @@ import javax.script.SimpleScriptContext;
 
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.ThreadListener;
-import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
@@ -66,12 +66,6 @@ public class IfController extends GenericController implements Serializable, Thr
     private static final long serialVersionUID = 242L;
 
     private static final String NASHORN_ENGINE_NAME = "nashorn"; //$NON-NLS-1$
-
-    private static final String CONDITION = "IfController.condition"; //$NON-NLS-1$
-
-    private static final String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$
-
-    private static final String USE_EXPRESSION = "IfController.useExpression"; //$NON-NLS-1$
 
     private static final String USE_RHINO_ENGINE_PROPERTY = "javascript.use_rhino"; //$NON-NLS-1$
 
@@ -153,12 +147,22 @@ public class IfController extends GenericController implements Serializable, Thr
         this.setCondition(condition);
     }
 
+    @Override
+    public IfControllerSchema getSchema() {
+        return IfControllerSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends IfController, ? extends IfControllerSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
+
     /**
      * Condition Accessor - this is gonna be like <code>${count} &lt; 10</code>
      * @param condition The condition for this controller
      */
     public void setCondition(String condition) {
-        setProperty(new StringProperty(CONDITION, condition));
+        set(getSchema().getCondition(), condition);
     }
 
     /**
@@ -166,7 +170,7 @@ public class IfController extends GenericController implements Serializable, Thr
      * @return the condition associated with this controller
      */
     public String getCondition() {
-        return getPropertyAsString(CONDITION).trim();
+        return get(getSchema().getCondition()).trim();
     }
 
     /**
@@ -254,19 +258,19 @@ public class IfController extends GenericController implements Serializable, Thr
     }
 
     public boolean isEvaluateAll() {
-        return getPropertyAsBoolean(EVALUATE_ALL,false);
+        return get(getSchema().getEvaluateAll());
     }
 
     public void setEvaluateAll(boolean b) {
-        setProperty(EVALUATE_ALL,b);
+        set(getSchema().getEvaluateAll(), b);
     }
 
     public boolean isUseExpression() {
-        return getPropertyAsBoolean(USE_EXPRESSION, false);
+        return get(getSchema().getUseExpression());
     }
 
     public void setUseExpression(boolean selected) {
-        setProperty(USE_EXPRESSION, selected, false);
+        set(getSchema().getUseExpression(), selected);
     }
 
     @Override

@@ -73,7 +73,9 @@ class DslPrinterTraverserTest {
                     }
 
                     org.apache.jmeter.control.IfController::class {
-                        setProperty("IfController.condition", "\${'$'}{__P(abc, def)}")
+                        props {
+                            it[condition] = "\${'$'}{__P(abc, def)}"
+                        }
 
                         org.apache.jmeter.test.samplers.ThreadSleep::class {
                             props {
