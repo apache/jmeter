@@ -21,6 +21,7 @@ import org.apache.jmeter.control.Controller
 import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.schema.BooleanPropertyDescriptor
 import org.apache.jmeter.testelement.schema.IntegerPropertyDescriptor
+import org.apache.jmeter.testelement.schema.StringPropertyDescriptor
 import org.apache.jmeter.testelement.schema.TestElementPropertyDescriptor
 import org.apiguardian.api.API
 
@@ -41,4 +42,9 @@ public abstract class AbstractThreadGroupSchema : TestElementSchema() {
 
     public val sameUserOnNextIteration: BooleanPropertyDescriptor<AbstractThreadGroupSchema>
         by boolean("ThreadGroup.same_user_on_next_iteration", default = true)
+
+    // TODO: implement EnumPropertyDescriptor or TransformedPropertyDescriptor, so that we can use enum values
+    //  in get and set
+    public val onSampleError: StringPropertyDescriptor<AbstractThreadGroupSchema>
+        by string("ThreadGroup.on_sample_error", default = AbstractThreadGroup.ON_SAMPLE_ERROR_CONTINUE)
 }

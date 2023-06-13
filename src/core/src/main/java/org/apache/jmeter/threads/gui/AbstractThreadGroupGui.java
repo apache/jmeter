@@ -36,8 +36,8 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroupSchema;
 import org.apache.jmeter.util.JMeterUtils;
 
 import net.miginfocom.swing.MigLayout;
@@ -212,7 +212,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
    @Override
     protected void configureTestElement(TestElement tg) {
         super.configureTestElement(tg);
-        tg.setProperty(new StringProperty(AbstractThreadGroup.ON_SAMPLE_ERROR, onSampleError()));
+        tg.set(AbstractThreadGroupSchema.INSTANCE.getOnSampleError(), onSampleError());
     }
 
 }

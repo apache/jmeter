@@ -58,7 +58,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
                     JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000L));
 
     /** Action to be taken when a Sampler error occurs */
-    public static final String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
+    public static final String ON_SAMPLE_ERROR = AbstractThreadGroupSchema.INSTANCE.getOnSampleError().getName();
 
     /** Continue, i.e. ignore sampler errors */
     public static final String ON_SAMPLE_ERROR_CONTINUE = "continue";
@@ -238,13 +238,17 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
         return get(getSchema().getNumThreads());
     }
 
+    private String getOnSampleError() {
+        return get(getSchema().getOnSampleError());
+    }
+
     /**
      * Check if a sampler error should cause thread to start next loop.
      *
      * @return true if thread should start next loop
      */
     public boolean getOnErrorStartNextLoop() {
-        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_START_NEXT_LOOP);
+        return getOnSampleError().equalsIgnoreCase(ON_SAMPLE_ERROR_START_NEXT_LOOP);
     }
 
     /**
@@ -253,7 +257,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return true if thread should stop
      */
     public boolean getOnErrorStopThread() {
-        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
+        return getOnSampleError().equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
     }
 
     /**
@@ -262,7 +266,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return true if test (all threads) should stop
      */
     public boolean getOnErrorStopTest() {
-        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
+        return getOnSampleError().equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
     }
 
     /**
@@ -271,7 +275,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return true if test (all threads) should stop immediately
      */
     public boolean getOnErrorStopTestNow() {
-        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
+        return getOnSampleError().equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
     }
 
     /**
