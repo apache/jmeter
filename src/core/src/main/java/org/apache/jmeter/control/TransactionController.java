@@ -23,7 +23,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
@@ -51,13 +51,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     private static final String TRUE = Boolean.toString(true); // i.e. "true"
 
-    private static final String GENERATE_PARENT_SAMPLE = "TransactionController.parent";// $NON-NLS-1$
-
-    private static final String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
-
     private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
-
-    private static final boolean DEFAULT_VALUE_FOR_INCLUDE_TIMERS = true; // default true for compatibility
 
     /**
      * Only used in parent Mode
@@ -104,6 +98,16 @@ public class TransactionController extends GenericController implements SampleLi
     }
 
     @Override
+    public TransactionControllerSchema getSchema() {
+        return TransactionControllerSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends TransactionController, ? extends TransactionControllerSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
+
+    @Override
     protected Object readResolve(){
         super.readResolve();
         lnf = new ListenerNotifier();
@@ -114,14 +118,14 @@ public class TransactionController extends GenericController implements SampleLi
      * @param generateParent flag whether a parent sample should be generated.
      */
     public void setGenerateParentSample(boolean generateParent) {
-        setProperty(new BooleanProperty(GENERATE_PARENT_SAMPLE, generateParent));
+        set(getSchema().getGenearteParentSample(), generateParent);
     }
 
     /**
      * @return {@code true} if a parent sample will be generated
      */
     public boolean isGenerateParentSample() {
-        return getPropertyAsBoolean(GENERATE_PARENT_SAMPLE);
+        return get(getSchema().getGenearteParentSample());
     }
 
     /**
@@ -335,7 +339,7 @@ public class TransactionController extends GenericController implements SampleLi
      * @param includeTimers Flag whether timers and pre/post processor should be included in overall sample
      */
     public void setIncludeTimers(boolean includeTimers) {
-        setProperty(INCLUDE_TIMERS, includeTimers, DEFAULT_VALUE_FOR_INCLUDE_TIMERS);
+        set(getSchema().getIncludeTimers(), includeTimers);
     }
 
     /**
@@ -344,6 +348,6 @@ public class TransactionController extends GenericController implements SampleLi
      * @return boolean (defaults to true for backwards compatibility)
      */
     public boolean isIncludeTimers() {
-        return getPropertyAsBoolean(INCLUDE_TIMERS, DEFAULT_VALUE_FOR_INCLUDE_TIMERS);
+        return get(getSchema().getIncludeTimers());
     }
 }
