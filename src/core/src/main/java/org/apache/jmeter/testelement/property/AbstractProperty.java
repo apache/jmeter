@@ -77,6 +77,9 @@ public abstract class AbstractProperty implements JMeterProperty {
     }
 
     protected PropertyIterator getIterator(Collection<JMeterProperty> values) {
+        if (values.isEmpty()) {
+            return PropertyIteratorImpl.EMPTY_ITERATOR;
+        }
         return new PropertyIteratorImpl(values);
     }
 

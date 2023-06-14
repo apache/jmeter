@@ -18,11 +18,13 @@
 package org.apache.jmeter.testelement.property;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.jmeter.testelement.TestElement;
 
 public class PropertyIteratorImpl implements PropertyIterator {
+    public static final PropertyIterator EMPTY_ITERATOR = new PropertyIteratorImpl(Collections.emptyList());
 
     private final TestElement owner;
     private final Iterator<? extends JMeterProperty> iter;
