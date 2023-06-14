@@ -121,6 +121,15 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         try {
             TestElement clonedElement = this.getClass().getDeclaredConstructor().newInstance();
 
+            // Default constructor might be configuring non-default properties, and we want
+            // the clone to be identical to the source, so we remove properties before copying.
+            // For example, LoopController in JMeter 5.5
+            // Note: clonedElement.clear(); might set unwanted options as well.
+            PropertyIterator clonedProps = clonedElement.propertyIterator();
+            while (clonedProps.hasNext()) {
+                clonedProps.next();
+                clonedProps.remove();
+            }
             PropertyIterator iter = propertyIterator();
             while (iter.hasNext()) {
                 clonedElement.setProperty(iter.next().clone());
