@@ -589,6 +589,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         // Note: can't use ConcurrentMap here as it would return elements in unpredictable order
         readLock();
         try {
+            if (propMap.isEmpty()) {
+                return PropertyIteratorImpl.EMPTY_ITERATOR;
+            }
             // TODO: copy the contents of the iterator to avoid ConcurrentModificationException?
             return new PropertyIteratorImpl(this, propMap.values());
         } finally {
