@@ -17,6 +17,16 @@
 
 package org.apache.jmeter.treebuilder
 
+import java.util.function.Consumer
+
+/**
+ * Performs an action on a receiver.
+ *
+ * It enables to write DSL that works great in Java and Kotlin at the same time.
+ * The issue with [Consumer] is that it does not declare type variance.
+ * Kotlin's `T.() -> Unit` (function that returns `Unit`) is problematic to use from
+ * Java since it requires explicit `return Unit.INSTANCE`.
+ */
 public fun interface Action<in T> : (T) -> Unit {
     public fun T.execute()
 
