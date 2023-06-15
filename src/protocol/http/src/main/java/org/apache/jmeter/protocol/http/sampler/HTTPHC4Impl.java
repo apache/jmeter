@@ -1503,6 +1503,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     // Helper class so we can generate request data without dumping entire file contents
     private static class ViewableFileBody extends FileBody {
+        private static final byte[] CONTENTS_OMITTED =
+                "<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8);
         private boolean hideFileData;
 
         public ViewableFileBody(File file, ContentType contentType) {
@@ -1513,7 +1515,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public void writeTo(final OutputStream out) throws IOException {
             if (hideFileData) {
-                out.write("<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8));
+                out.write(CONTENTS_OMITTED);
             } else {
                 super.writeTo(out);
             }
