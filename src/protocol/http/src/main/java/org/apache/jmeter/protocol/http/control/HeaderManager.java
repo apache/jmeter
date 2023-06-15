@@ -45,7 +45,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
 
     private static final long serialVersionUID = 240L;
 
-    public static final String HEADERS = HeaderManagerSchema.INSTANCE.getHeaders().getName();
+    public static final String HEADERS = "HeaderManager.headers";// $NON-NLS-1$
 
     private static final String[] COLUMN_RESOURCE_NAMES = {
           "name",             // $NON-NLS-1$

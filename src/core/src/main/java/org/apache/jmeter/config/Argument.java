@@ -33,16 +33,16 @@ public class Argument extends AbstractTestElement implements Serializable {
     private static final long serialVersionUID = 240L;
 
     /** Name used to store the argument's name. */
-    public static final String ARG_NAME = ArgumentSchema.INSTANCE.getArgumentName().getName();
+    public static final String ARG_NAME = "Argument.name"; // $NON-NLS-1$
 
     /** Name used to store the argument's value. */
-    public static final String VALUE = ArgumentSchema.INSTANCE.getValue().getName();
+    public static final String VALUE = "Argument.value"; // $NON-NLS-1$
 
     /** Name used to store the argument's description. */
-    public static final String DESCRIPTION = ArgumentSchema.INSTANCE.getDescription().getName();
+    public static final String DESCRIPTION = "Argument.desc"; // $NON-NLS-1$
 
     /** Name used to store the argument's metadata. */
-    public static final String METADATA = ArgumentSchema.INSTANCE.getMetadata().getName();
+    public static final String METADATA = "Argument.metadata"; // $NON-NLS-1$
 
     /**
      * Create a new Argument without a name, value, or metadata.

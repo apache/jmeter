@@ -33,7 +33,7 @@ public class LoopController extends GenericController implements Serializable, I
 
     public static final int INFINITE_LOOP_COUNT = -1; // $NON-NLS-1$
 
-    public static final String LOOPS = LoopControllerSchema.INSTANCE.getLoops().getName();
+    public static final String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
     private static final long serialVersionUID = 7833960784370272300L;
     private static final Logger LOGGER = LoggerFactory.getLogger(LoopController.class);
