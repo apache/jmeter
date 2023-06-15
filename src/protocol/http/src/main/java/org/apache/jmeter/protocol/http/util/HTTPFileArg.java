@@ -24,7 +24,8 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
+import org.apache.jmeter.testelement.schema.PropertyDescriptor;
 import org.apache.tika.Tika;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
@@ -40,15 +41,6 @@ import org.xml.sax.SAXException;
 public class HTTPFileArg extends AbstractTestElement implements Serializable {
 
     private static final long serialVersionUID = 240L;
-
-    /** Name used to store the file's path. */
-    private static final String FILEPATH = "File.path";
-
-    /** Name used to store the file's paramname. */
-    private static final String PARAMNAME = "File.paramname";
-
-    /** Name used to store the file's mimetype. */
-    private static final String MIMETYPE = "File.mimetype";
 
     /** temporary storage area for the body header. */
     private String header;
@@ -139,14 +131,24 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
         if (path == null || paramname == null || mimetype == null){
             throw new IllegalArgumentException("Parameters must not be null");
         }
-        setProperty(FILEPATH, path);
-        setProperty(MIMETYPE, mimetype);
-        setProperty(PARAMNAME, paramname);
+        setProperty(getSchema().getPath(), path);
+        setProperty(getSchema().getMimeType(), mimetype);
+        setProperty(getSchema().getParameterName(), paramname);
     }
 
-    private void setProperty(String name, JMeterProperty prop) {
+    @Override
+    public HTTPFileArgSchema getSchema() {
+        return HTTPFileArgSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends HTTPFileArg, ? extends HTTPFileArgSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
+
+    private void setProperty(PropertyDescriptor<?, ?> descriptor, JMeterProperty prop) {
         JMeterProperty jmp = prop.clone();
-        jmp.setName(name);
+        jmp.setName(descriptor.getName());
         setProperty(jmp);
     }
 
@@ -170,7 +172,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      * the new http parameter name
      */
     public void setParamName(String newParamName) {
-        setProperty(new StringProperty(PARAMNAME, newParamName));
+        set(getSchema().getParameterName(), newParamName);
     }
 
     /**
@@ -179,7 +181,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      * @return the http parameter name
      */
     public String getParamName() {
-        return getPropertyAsString(PARAMNAME);
+        return get(getSchema().getParameterName());
     }
 
     /**
@@ -189,7 +191,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      * the new mimetype
      */
     public void setMimeType(String newMimeType) {
-        setProperty(new StringProperty(MIMETYPE, newMimeType));
+        set(getSchema().getMimeType(), newMimeType);
     }
 
     /**
@@ -198,7 +200,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      * @return the http parameter mimetype
      */
     public String getMimeType() {
-        return getPropertyAsString(MIMETYPE);
+        return get(getSchema().getMimeType());
     }
 
     /**
@@ -209,7 +211,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      */
     public void setPath(String newPath) {
         setMimeType(detectMimeType(newPath, getMimeType()));
-        setProperty(new StringProperty(FILEPATH, newPath));
+        set(getSchema().getPath(), newPath);
     }
 
     /**
@@ -218,7 +220,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      * @return the file's path
      */
     public String getPath() {
-        return getPropertyAsString(FILEPATH);
+        return get(getSchema().getPath());
     }
 
    /**

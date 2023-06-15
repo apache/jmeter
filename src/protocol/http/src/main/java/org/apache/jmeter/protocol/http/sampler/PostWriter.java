@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
@@ -391,7 +392,7 @@ public class PostWriter {
         write(out, "Content-Disposition: form-data; name=\""); // $NON-NLS-1$
         write(out, nameField);
         write(out, "\"; filename=\"");// $NON-NLS-1$
-        write(out, new File(filename).getName());
+        write(out, ConversionUtils.percentEncode(new File(filename).getName()));
         writeln(out, "\""); // $NON-NLS-1$
         writeln(out, "Content-Type: " + mimetype); // $NON-NLS-1$
         writeln(out, "Content-Transfer-Encoding: binary"); // $NON-NLS-1$

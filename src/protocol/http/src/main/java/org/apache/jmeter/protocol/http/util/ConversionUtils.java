@@ -32,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apiguardian.api.API;
 
 // @see TestHTTPUtils for unit tests
 
@@ -93,6 +94,23 @@ public class ConversionUtils {
             }
         }
         return charSet;
+    }
+
+    /**
+     * Encodes the string according to RFC7578 and RFC3986.
+     * The string is UTF-8 encoded, and non-ASCII bytes are represented as {@code %XX}.
+     * It is close to UrlEncode, however, {@code percentEncode} does not replace space with +.
+     * @param value input value to convert
+     * @return converted value
+     * @since 5.6
+     */
+    @API(status = API.Status.MAINTAINED, since = "5.6")
+    public static String percentEncode(String value) {
+        try {
+            return new URI(null, null, value, null).toASCIIString();
+        } catch (URISyntaxException e) {
+            throw new IllegalStateException("Can't encode value " + value, e);
+        }
     }
 
     /**

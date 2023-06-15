@@ -82,7 +82,6 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.testelement.schema.PropertyDescriptor;
 import org.apache.jmeter.threads.JMeterContext;
@@ -92,6 +91,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -248,7 +248,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     // @see mergeFileProperties
     // Must be private, as the file list needs special handling
-    private static final String FILE_ARGS = "HTTPsampler.Files"; // $NON-NLS-1$
     // MIMETYPE is kept for backward compatibility with old test plans
     private static final String MIMETYPE = "HTTPSampler.mimetype"; // $NON-NLS-1$
     // FILE_NAME is kept for backward compatibility with old test plans
@@ -1829,18 +1828,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *   HTTPFileArgs object that stores file list to be uploaded.
      */
     private void setHTTPFileArgs(HTTPFileArgs value) {
-        if (value.getHTTPFileArgCount() > 0) {
-            setProperty(new TestElementProperty(FILE_ARGS, value));
-        } else {
-            removeProperty(FILE_ARGS); // no point saving an empty list
-        }
+        set(getSchema().getFileArguments(), value.getHTTPFileArgCount() == 0 ? null : value);
     }
 
     /*
      * Method to get files list to be uploaded.
      */
-    private HTTPFileArgs getHTTPFileArgs() {
-        return (HTTPFileArgs) getProperty(FILE_ARGS).getObjectValue();
+    private @Nullable HTTPFileArgs getHTTPFileArgs() {
+        return getOrNull(getSchema().getFileArguments());
     }
 
     /**

@@ -150,6 +150,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.hc.LaxDeflateInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LaxGZIPInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -1508,7 +1509,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         private boolean hideFileData;
 
         public ViewableFileBody(File file, ContentType contentType) {
-            super(file, contentType);
+            // Note: HttpClient4 does not support encoding the file name, so we explicitly encode it here
+            // See https://issues.apache.org/jira/browse/HTTPCLIENT-293
+            super(file, contentType, ConversionUtils.percentEncode(file.getName()));
             hideFileData = false;
         }
 

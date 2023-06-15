@@ -25,6 +25,7 @@ import org.apache.jmeter.protocol.http.control.CookieManager
 import org.apache.jmeter.protocol.http.control.DNSCacheManager
 import org.apache.jmeter.protocol.http.control.HeaderManager
 import org.apache.jmeter.protocol.http.util.HTTPConstants
+import org.apache.jmeter.protocol.http.util.HTTPFileArgs
 import org.apache.jmeter.testelement.TestElementSchema
 import org.apache.jmeter.testelement.schema.BooleanPropertyDescriptor
 import org.apache.jmeter.testelement.schema.IntegerPropertyDescriptor
@@ -132,4 +133,7 @@ public abstract class HTTPSamplerBaseSchema : TestElementSchema() {
 
     public val ipSourceType: IntegerPropertyDescriptor<HTTPSamplerBaseSchema>
         by int("HTTPSampler.ipSourceType", default = HTTPSamplerBase.SourceType.HOSTNAME.ordinal)
+
+    public val fileArguments: TestElementPropertyDescriptor<HTTPSamplerBaseSchema, HTTPFileArgs>
+        by testElement("HTTPsampler.Files")
 }

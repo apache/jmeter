@@ -179,6 +179,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><pr>5901</pr>Fix NumberFormatException when counter is empty or not a digit on Proxy Settings panel</li>
+  <li><pr>5987</pr><issue>4546</issue>Encode unicode characters in filenames when sending files in HTTP Sampler</li>
 </ul>
 
 <h3>Other Samplers</h3>
