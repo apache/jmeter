@@ -30,12 +30,16 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.AbstractFunction;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.util.JMeterUtils;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /*
- * Common setup for JUnit4 test cases
+ * Common setup for JUnit4 test cases.
+ * It initializes JMeterProperties, so it is unsafe to execute several such tests concurrently, so it is marked with
+ * {@code @Isolated}.
  */
+@Isolated
 public abstract class JMeterTestCase {
     // Used by findTestFile
     private static final String filePrefix;
