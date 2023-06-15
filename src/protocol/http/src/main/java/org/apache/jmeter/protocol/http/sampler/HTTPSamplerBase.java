@@ -121,57 +121,55 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     "org.apache.jmeter.testbeans.gui.TestBeanGUI"
             ));
 
-    private static final HTTPSamplerBaseSchema SCHEMA = HTTPSamplerBaseSchema.INSTANCE;
-
     //+ JMX names - do not change
-    public static final String ARGUMENTS = SCHEMA.getArguments().getName();
+    public static final String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
 
-    public static final String AUTH_MANAGER = SCHEMA.getAuthManager().getName();
+    public static final String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
 
-    public static final String COOKIE_MANAGER = SCHEMA.getCookieManager().getName();
+    public static final String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
 
-    public static final String KEYSTORE_CONFIG = SCHEMA.getCookieManager().getName();
+    public static final String KEYSTORE_CONFIG = "HTTPSampler.keystore_configuration"; // $NON-NLS-1$
 
     public static final String SAMPLE_TIMEOUT = "HTTPSampler.sample_timeout"; // $NON-NLS-1$
 
-    public static final String CACHE_MANAGER = SCHEMA.getCacheManager().getName();
+    public static final String CACHE_MANAGER = "HTTPSampler.cache_manager"; // $NON-NLS-1$
 
-    public static final String HEADER_MANAGER = SCHEMA.getHeaderManager().getName();
+    public static final String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
 
-    public static final String DNS_CACHE_MANAGER = SCHEMA.getDnsCacheManager().getName();
+    public static final String DNS_CACHE_MANAGER = "HTTPSampler.dns_cache_manager"; // $NON-NLS-1$
 
-    public static final String DOMAIN = SCHEMA.getDomain().getName();
+    public static final String DOMAIN = "HTTPSampler.domain"; // $NON-NLS-1$
 
-    public static final String PORT = SCHEMA.getPort().getName();
+    public static final String PORT = "HTTPSampler.port"; // $NON-NLS-1$
 
-    public static final String PROXYSCHEME = SCHEMA.getProxy().getScheme().getName();
+    public static final String PROXYSCHEME = "HTTPSampler.proxyScheme"; // $NON-NLS-1$
 
-    public static final String PROXYHOST = SCHEMA.getProxy().getHost().getName();
+    public static final String PROXYHOST = "HTTPSampler.proxyHost"; // $NON-NLS-1$
 
-    public static final String PROXYPORT = SCHEMA.getProxy().getPort().getName();
+    public static final String PROXYPORT = "HTTPSampler.proxyPort"; // $NON-NLS-1$
 
-    public static final String PROXYUSER = SCHEMA.getProxy().getUsername().getName();
+    public static final String PROXYUSER = "HTTPSampler.proxyUser"; // $NON-NLS-1$
 
-    public static final String PROXYPASS = SCHEMA.getProxy().getPassword().getName();
+    public static final String PROXYPASS = "HTTPSampler.proxyPass"; // $NON-NLS-1$
 
-    public static final String CONNECT_TIMEOUT = SCHEMA.getConnectTimeout().getName();
+    public static final String CONNECT_TIMEOUT = "HTTPSampler.connect_timeout"; // $NON-NLS-1$
 
-    public static final String RESPONSE_TIMEOUT = SCHEMA.getResponseTimeout().getName();
+    public static final String RESPONSE_TIMEOUT = "HTTPSampler.response_timeout"; // $NON-NLS-1$
 
-    public static final String METHOD = SCHEMA.getMethod().getName();
+    public static final String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
 
     /** This is the encoding used for the content, i.e. the charset name, not the header "Content-Encoding" */
-    public static final String CONTENT_ENCODING = SCHEMA.getContentEncoding().getName();
+    public static final String CONTENT_ENCODING = "HTTPSampler.contentEncoding"; // $NON-NLS-1$
 
-    public static final String IMPLEMENTATION = SCHEMA.getImplementation().getName();
+    public static final String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
 
-    public static final String PATH = SCHEMA.getPath().getName();
+    public static final String PATH = "HTTPSampler.path"; // $NON-NLS-1$
 
-    public static final String FOLLOW_REDIRECTS = SCHEMA.getFollowRedirects().getName();
+    public static final String FOLLOW_REDIRECTS = HTTPSamplerBaseSchema.INSTANCE.getFollowRedirects().getName();
 
-    public static final String AUTO_REDIRECTS = SCHEMA.getAutoRedirects().getName();
+    public static final String AUTO_REDIRECTS = "HTTPSampler.auto_redirects"; // $NON-NLS-1$
 
-    public static final String PROTOCOL = SCHEMA.getProtocol().getName();
+    public static final String PROTOCOL = "HTTPSampler.protocol"; // $NON-NLS-1$
 
     static final String PROTOCOL_FILE = "file"; // $NON-NLS-1$
 
@@ -180,24 +178,21 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     /**
      * IP source to use - does not apply to Java HTTP implementation currently
      */
-    public static final String IP_SOURCE = SCHEMA.getIpSource().getName();
+    public static final String IP_SOURCE = "HTTPSampler.ipSource"; // $NON-NLS-1$
 
-    public static final String IP_SOURCE_TYPE = SCHEMA.getIpSourceType().getName();
+    public static final String IP_SOURCE_TYPE = "HTTPSampler.ipSourceType"; // $NON-NLS-1$
 
-    public static final String USE_KEEPALIVE = SCHEMA.getUseKeepalive().getName();
+    public static final String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
 
-    public static final String DO_MULTIPART_POST = SCHEMA.getUseMultipartPost().getName();
+    public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
 
-    public static final String BROWSER_COMPATIBLE_MULTIPART =
-            SCHEMA.getUseBrowserCompatibleMultipart().getName();
+    public static final String BROWSER_COMPATIBLE_MULTIPART  = "HTTPSampler.BROWSER_COMPATIBLE_MULTIPART"; // $NON-NLS-1$
 
-    public static final String CONCURRENT_DWN = SCHEMA.getConcurrentDownload().getName();
+    public static final String CONCURRENT_DWN = "HTTPSampler.concurrentDwn"; // $NON-NLS-1$
 
-    public static final String CONCURRENT_POOL = SCHEMA.getConcurrentDownloadPoolSize().getName();
+    public static final String CONCURRENT_POOL = "HTTPSampler.concurrentPool"; // $NON-NLS-1$
 
-    // Default concurrent pool size for download embedded resources
-    @SuppressWarnings("DataFlowIssue")
-    public static final int CONCURRENT_POOL_SIZE = SCHEMA.getConcurrentDownloadPoolSize().getDefaultValue();
+    public static final int CONCURRENT_POOL_SIZE = 6; // Default concurrent pool size for download embedded resources
 
     private static final String USER_AGENT = "User-Agent"; // $NON-NLS-1$
 
@@ -265,18 +260,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE"; // $NON-NLS-1$
 
     // IMAGE_PARSER now really means EMBEDDED_PARSER
-    public static final String IMAGE_PARSER = SCHEMA.getRetrieveEmbeddedResources().getName();
+    public static final String IMAGE_PARSER = "HTTPSampler.image_parser"; // $NON-NLS-1$
 
     // Embedded URLs must match this RE (if provided)
-    public static final String EMBEDDED_URL_RE = SCHEMA.getEmbeddedUrlAllowRegex().getName();
+    public static final String EMBEDDED_URL_RE = "HTTPSampler.embedded_url_re"; // $NON-NLS-1$
 
     // Embedded URLs must not match this RE (if provided)
-    public static final String EMBEDDED_URL_EXCLUDE_RE = SCHEMA.getEmbeddedUrlExcludeRegex().getName();
+    public static final String EMBEDDED_URL_EXCLUDE_RE = "HTTPSampler.embedded_url_exclude_re"; // $NON-NLS-1$
 
     public static final String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
 
     // Store MD5 hash instead of storing response
-    public static final String MD5 = SCHEMA.getStoreAsMD5().getName();
+    public static final String MD5 = "HTTPSampler.md5"; // $NON-NLS-1$
 
     /** A number to indicate that the port has not been set. */
     public static final int UNSPECIFIED_PORT = 0;
@@ -290,10 +285,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     protected static final String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
 
-    public static final String POST_BODY_RAW = SCHEMA.getPostBodyRaw().getName();
+    public static final String POST_BODY_RAW = "HTTPSampler.postBodyRaw";
 
-    @SuppressWarnings("DataFlowIssue")
-    public static final boolean POST_BODY_RAW_DEFAULT = SCHEMA.getPostBodyRaw().getDefaultValue();
+    public static final boolean POST_BODY_RAW_DEFAULT = false;
 
     private static final String ARG_VAL_SEP = "="; // $NON-NLS-1$
 

@@ -58,7 +58,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
                     JMeterUtils.getPropDefault("jmeterengine.threadstop.wait", 5 * 1000L));
 
     /** Action to be taken when a Sampler error occurs */
-    public static final String ON_SAMPLE_ERROR = AbstractThreadGroupSchema.INSTANCE.getOnSampleError().getName();
+    public static final String ON_SAMPLE_ERROR = "ThreadGroup.on_sample_error"; // int
 
     /** Continue, i.e. ignore sampler errors */
     public static final String ON_SAMPLE_ERROR_CONTINUE = "continue";
@@ -76,17 +76,12 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     public static final String ON_SAMPLE_ERROR_STOPTEST_NOW = "stoptestnow";
 
     /** Number of threads in the thread group */
-    @Deprecated
-    public static final String NUM_THREADS =
-            AbstractThreadGroupSchema.INSTANCE.getNumThreads().getName();
+    public static final String NUM_THREADS = "ThreadGroup.num_threads";
 
-    public static final String MAIN_CONTROLLER =
-            AbstractThreadGroupSchema.INSTANCE.getMainController().getName();
+    public static final String MAIN_CONTROLLER = "ThreadGroup.main_controller";
 
     /** The same user or different users */
-    @Deprecated
-    public static final String IS_SAME_USER_ON_NEXT_ITERATION =
-            AbstractThreadGroupSchema.INSTANCE.getSameUserOnNextIteration().getName();
+    public static final String IS_SAME_USER_ON_NEXT_ITERATION = "ThreadGroup.same_user_on_next_iteration";
 
 
     private final AtomicInteger numberOfThreads = new AtomicInteger(0); // Number of active threads in this group

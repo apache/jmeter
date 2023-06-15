@@ -57,20 +57,19 @@ public class ThreadGroup extends AbstractThreadGroup {
     //+ JMX entries - do not change the string values
 
     /** Ramp-up time */
-    public static final String RAMP_TIME = ThreadGroupSchema.INSTANCE.getRampTime().getName();
+    public static final String RAMP_TIME = "ThreadGroup.ramp_time";
 
     /** Whether thread startup is delayed until required */
-    @Deprecated
-    public static final String DELAYED_START = ThreadGroupSchema.INSTANCE.getDelayedStart().getName();
+    public static final String DELAYED_START = "ThreadGroup.delayedStart";
 
     /** Whether scheduler is being used */
-    public static final String SCHEDULER = ThreadGroupSchema.INSTANCE.getUseScheduler().getName();
+    public static final String SCHEDULER = "ThreadGroup.scheduler";
 
     /** Scheduler duration, overrides end time */
-    public static final String DURATION = ThreadGroupSchema.INSTANCE.getDuration().getName();
+    public static final String DURATION = "ThreadGroup.duration";
 
     /** Scheduler start delay, overrides start time */
-    public static final String DELAY = ThreadGroupSchema.INSTANCE.getDelay().getName();
+    public static final String DELAY = "ThreadGroup.delay";
     //- JMX entries
 
     private transient Thread threadStarter;

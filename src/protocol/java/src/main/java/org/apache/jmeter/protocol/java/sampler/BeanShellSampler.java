@@ -50,35 +50,15 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
 
     private static final long serialVersionUID = 4;
 
-    /**
-     * @deprecated use {@link BeanShellSamplerSchema#getFilename()} instead
-     */
-    @Deprecated
-    public static final String FILENAME = BeanShellSamplerSchema.INSTANCE.getFilename().getName();
+    public static final String FILENAME = "BeanShellSampler.filename"; //$NON-NLS-1$
 
-    /**
-     * @deprecated use {@link BeanShellSamplerSchema#getFilename()} instead
-     */
-    @Deprecated
-    public static final String SCRIPT = BeanShellSamplerSchema.INSTANCE.getScript().getName();
+    public static final String SCRIPT = "BeanShellSampler.query"; //$NON-NLS-1$
 
-    /**
-     * @deprecated use {@link BeanShellSamplerSchema#getParameters()} instead
-     */
-    @Deprecated
-    public static final String PARAMETERS = BeanShellSamplerSchema.INSTANCE.getParameters().getName();
+    public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
 
-    /**
-     * @deprecated use {@link BeanShellSamplerSchema#getInitFile()} instead
-     */
-    @Deprecated
-    public static final String INIT_FILE = BeanShellSamplerSchema.INSTANCE.getInitFile().getName();
+    public static final String INIT_FILE = "beanshell.sampler.init"; //$NON-NLS-1$
 
-    /**
-     * @deprecated use {@link BeanShellSamplerSchema#getResetInterpreter()} instead
-     */
-    @Deprecated
-    public static final String RESET_INTERPRETER = BeanShellSamplerSchema.INSTANCE.getResetInterpreter().getName();
+    public static final String RESET_INTERPRETER = "BeanShellSampler.resetInterpreter"; //$NON-NLS-1$
 
     private transient volatile BeanShellInterpreter savedBsh = null;
 
