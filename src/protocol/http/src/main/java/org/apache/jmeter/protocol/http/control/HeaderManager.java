@@ -86,7 +86,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      * @return the header collection property
      */
     public CollectionProperty getHeaders() {
-        return (CollectionProperty) getPropertyOrNull(getSchema().getHeaders());
+        return getOrNull(getSchema().getHeaders());
     }
 
     public int getColumnCount() {

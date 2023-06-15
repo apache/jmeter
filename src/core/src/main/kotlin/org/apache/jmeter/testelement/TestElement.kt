@@ -488,29 +488,28 @@ public interface TestElement : Cloneable {
     }
 
     /**
-     * Retrieve [Collection] property value, or throw [NoSuchElementException] in case the property is unset.
+     * Retrieve [CollectionProperty] property value, or throw [NoSuchElementException] in case the property is unset.
      * @throws NoSuchElementException if the property is unset
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-    public operator fun get(property: CollectionPropertyDescriptor<*>): Collection<JMeterProperty> =
+    public operator fun get(property: CollectionPropertyDescriptor<*>): CollectionProperty =
         getOrNull(property) ?: throw NoSuchElementException("Property ${property.name} is unset for element $this")
 
     /**
-     * Retrieve [Collection] property value, or return `null` in case the property is unset.
+     * Retrieve [CollectionProperty] property value, or return `null` in case the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-    public fun getOrNull(property: CollectionPropertyDescriptor<*>): Collection<JMeterProperty>? =
+    public fun getOrNull(property: CollectionPropertyDescriptor<*>): CollectionProperty? =
         getPropertyOrNull(property)?.let {
-            @Suppress("UNCHECKED_CAST")
-            (it as CollectionProperty).objectValue as Collection<JMeterProperty>
+            it as CollectionProperty
         }
 
     /**
-     * Retrieve [Collection] property value, or create one and set it the property is unset.
+     * Retrieve [CollectionProperty] property value, or create one and set it the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
@@ -518,8 +517,8 @@ public interface TestElement : Cloneable {
     public fun getOrCreate(
         property: CollectionPropertyDescriptor<*>,
         ifMissing: () -> Collection<JMeterProperty>
-    ): Collection<JMeterProperty> =
-        getOrNull(property) ?: ifMissing().also { set(property, it) }
+    ): CollectionProperty =
+        getOrNull(property) ?: CollectionProperty(property.name, ifMissing()).also { setProperty(it) }
 
     /**
      * Set property as [Collection], or remove it if the given [Collection] is `null`.

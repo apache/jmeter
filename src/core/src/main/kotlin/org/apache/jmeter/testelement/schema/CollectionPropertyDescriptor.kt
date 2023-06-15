@@ -40,22 +40,22 @@ public data class CollectionPropertyDescriptor<in Schema : BaseTestElementSchema
     override val defaultValue: Collection<JMeterProperty>? = null
 
     /**
-     * Retrieve [Collection] property value, or throw [NoSuchElementException] in case the property is unset.
+     * Retrieve [CollectionProperty] property value, or throw [NoSuchElementException] in case the property is unset.
      * @throws NoSuchElementException if the property is unset
      */
-    public operator fun get(target: TestElement): Collection<JMeterProperty> =
+    public operator fun get(target: TestElement): CollectionProperty =
         target[this]
 
     /**
-     * Retrieve [Collection] property value, or return `null` in case the property is unset.
+     * Retrieve [CollectionProperty] property value, or return `null` in case the property is unset.
      */
-    public fun getOrNull(target: TestElement): Collection<JMeterProperty>? =
+    public fun getOrNull(target: TestElement): CollectionProperty? =
         target.getOrNull(this)
 
     /**
-     * Retrieve [Collection] property value, or create one and set it the property is unset.
+     * Retrieve [CollectionProperty] property value, or create one and set it the property is unset.
      */
-    public fun getOrCreate(target: TestElement, ifMissing: () -> Collection<JMeterProperty>): Collection<JMeterProperty> =
+    public fun getOrCreate(target: TestElement, ifMissing: () -> Collection<JMeterProperty>): CollectionProperty =
         target.getOrCreate(this, ifMissing)
 
     public operator fun set(target: TestElement, value: Collection<*>?) {
@@ -64,7 +64,7 @@ public data class CollectionPropertyDescriptor<in Schema : BaseTestElementSchema
 
     @JvmSynthetic
     @Suppress("NOTHING_TO_INLINE")
-    public inline operator fun getValue(testElement: TestElement, property: KProperty<*>): Collection<JMeterProperty> {
+    public inline operator fun getValue(testElement: TestElement, property: KProperty<*>): CollectionProperty {
         return testElement[this]
     }
 

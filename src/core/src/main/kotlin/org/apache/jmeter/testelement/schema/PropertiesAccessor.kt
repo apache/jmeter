@@ -18,6 +18,7 @@
 package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.TestElement
+import org.apache.jmeter.testelement.property.CollectionProperty
 import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apiguardian.api.API
 import kotlin.experimental.ExperimentalTypeInference
@@ -136,13 +137,21 @@ public class PropertiesAccessor<out TestElementClass : TestElement, out Schema :
         propertySelector(schema).getString(target)
 
     // Class properties
-    public operator fun <ValueClass : Any> get(property: ClassPropertyDescriptor<Schema, ValueClass>): Class<out ValueClass>? =
+    public operator fun <ValueClass : Any> get(property: ClassPropertyDescriptor<Schema, ValueClass>): Class<out ValueClass> =
         target[property]
+
+    public fun <ValueClass : Any> getOrNull(property: ClassPropertyDescriptor<Schema, ValueClass>): Class<out ValueClass>? =
+        target.getOrNull(property)
 
     @OptIn(ExperimentalTypeInference::class)
     @OverloadResolutionByLambdaReturnType
-    public operator fun <ValueClass : Any> get(propertySelector: Schema.() -> ClassPropertyDescriptor<Schema, ValueClass>): Class<out ValueClass>? =
+    public operator fun <ValueClass : Any> get(propertySelector: Schema.() -> ClassPropertyDescriptor<Schema, ValueClass>): Class<out ValueClass> =
         get(propertySelector(schema))
+
+    @OptIn(ExperimentalTypeInference::class)
+    @OverloadResolutionByLambdaReturnType
+    public fun <ValueClass : Any> getOrNull(propertySelector: Schema.() -> ClassPropertyDescriptor<Schema, ValueClass>): Class<out ValueClass>? =
+        getOrNull(propertySelector(schema))
 
     public operator fun <ValueClass : Any> set(
         property: ClassPropertyDescriptor<Schema, ValueClass>,
@@ -153,21 +162,21 @@ public class PropertiesAccessor<out TestElementClass : TestElement, out Schema :
 
     public inline operator fun <ValueClass : Any> set(
         propertySelector: Schema.() -> ClassPropertyDescriptor<Schema, ValueClass>,
-        value: KClass<ValueClass>
+        value: KClass<ValueClass>?
     ) {
-        set(propertySelector, value.java)
+        set(propertySelector, value?.java)
     }
 
     public operator fun <ValueClass : Any> set(
         property: ClassPropertyDescriptor<Schema, ValueClass>,
-        value: Class<out ValueClass>
+        value: Class<out ValueClass>?
     ) {
         target[property] = value
     }
 
     public inline operator fun <ValueClass : Any> set(
         propertySelector: Schema.() -> ClassPropertyDescriptor<Schema, ValueClass>,
-        value: Class<ValueClass>
+        value: Class<ValueClass>?
     ) {
         target[propertySelector(schema)] = value
     }
@@ -253,44 +262,60 @@ public class PropertiesAccessor<out TestElementClass : TestElement, out Schema :
     }
 
     // TestElement properties
-    public operator fun <ValueClass : TestElement> get(property: TestElementPropertyDescriptor<Schema, ValueClass>): ValueClass? =
+    public operator fun <ValueClass : TestElement> get(property: TestElementPropertyDescriptor<Schema, ValueClass>): ValueClass =
         target[property]
+
+    public fun <ValueClass : TestElement> getOrNull(property: TestElementPropertyDescriptor<Schema, ValueClass>): ValueClass? =
+        target.getOrNull(property)
 
     @OptIn(ExperimentalTypeInference::class)
     @OverloadResolutionByLambdaReturnType
-    public inline operator fun <ValueClass : TestElement> get(propertySelector: Schema.() -> TestElementPropertyDescriptor<Schema, ValueClass>): ValueClass? =
+    public inline operator fun <ValueClass : TestElement> get(propertySelector: Schema.() -> TestElementPropertyDescriptor<Schema, ValueClass>): ValueClass =
         target[propertySelector(schema)]
+
+    @OptIn(ExperimentalTypeInference::class)
+    @OverloadResolutionByLambdaReturnType
+    public inline fun <ValueClass : TestElement> getOrNull(propertySelector: Schema.() -> TestElementPropertyDescriptor<Schema, ValueClass>): ValueClass? =
+        target.getOrNull(propertySelector(schema))
 
     public operator fun <ValueClass : TestElement> set(
         property: TestElementPropertyDescriptor<Schema, ValueClass>,
-        value: ValueClass
+        value: ValueClass?
     ) {
         target[property] = value
     }
 
     public inline operator fun <ValueClass : TestElement> set(
         propertySelector: Schema.() -> TestElementPropertyDescriptor<Schema, ValueClass>,
-        value: ValueClass
+        value: ValueClass?
     ) {
         target[propertySelector(schema)] = value
     }
 
     // Collection properties
-    public operator fun get(property: CollectionPropertyDescriptor<Schema>): Collection<JMeterProperty> =
+    public operator fun get(property: CollectionPropertyDescriptor<Schema>): CollectionProperty =
         target[property]
+
+    public fun getOrNull(property: CollectionPropertyDescriptor<Schema>): CollectionProperty? =
+        target.getOrNull(property)
 
     @OptIn(ExperimentalTypeInference::class)
     @OverloadResolutionByLambdaReturnType
-    public inline operator fun get(propertySelector: Schema.() -> CollectionPropertyDescriptor<Schema>): Collection<JMeterProperty> =
+    public inline operator fun get(propertySelector: Schema.() -> CollectionPropertyDescriptor<Schema>): CollectionProperty =
         target[propertySelector(schema)]
 
-    public operator fun set(property: CollectionPropertyDescriptor<Schema>, value: Collection<*>) {
+    @OptIn(ExperimentalTypeInference::class)
+    @OverloadResolutionByLambdaReturnType
+    public inline fun getOrNull(propertySelector: Schema.() -> CollectionPropertyDescriptor<Schema>): CollectionProperty? =
+        target.getOrNull(propertySelector(schema))
+
+    public operator fun set(property: CollectionPropertyDescriptor<Schema>, value: Collection<*>?) {
         target[property] = value
     }
 
     public inline operator fun set(
         propertySelector: Schema.() -> CollectionPropertyDescriptor<Schema>,
-        value: Collection<*>
+        value: Collection<*>?
     ) {
         target[propertySelector(schema)] = value
     }

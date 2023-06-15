@@ -61,7 +61,7 @@ class UseFunctionsTest {
 
         // These assertions verify CollectionProperty behavior rather than USE_FUNCTIONS behavior
         // However, we can't extract deeply-nested item right away
-        assertEquals(1, output.size) {
+        assertEquals(1, output.size()) {
             "size of first level collection should be 1, actual: $output"
         }
         val nested = output.first()

@@ -62,7 +62,7 @@ public class Arguments extends ConfigTestElement implements Serializable, Iterab
      * @return the arguments
      */
     public CollectionProperty getArguments() {
-        return (CollectionProperty) getPropertyOrNull(getSchema().getArguments());
+        return getOrNull(getSchema().getArguments());
     }
 
     /**
