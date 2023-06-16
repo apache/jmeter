@@ -31,9 +31,11 @@ import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.protocol.http.util.HTTPFileArg
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
 import org.apache.jmeter.threads.ThreadGroup
+import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import java.nio.file.InvalidPathException
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.writeText
@@ -57,7 +59,14 @@ class HttpSamplerTest : JMeterTestCase() {
 
         // Quote is invalid character for a filename in Windows, so we do not test it here
         // See ConversionUtilsTest for escaping quotes.
-        val testFile = dir.resolve("testfile привет %.txt")
+        val testFile = try {
+            dir.resolve("testfile привет %.txt")
+        } catch (e: InvalidPathException) {
+            assumeTrue(false) {
+                "Skipping the test as the filesystem does not suppport unicode filenames"
+            }
+            TODO("This is never reached as the assumption above throws error")
+        }
         testFile.writeText("hello, привет")
 
         executePlanAndCollectEvents(10.seconds) {
