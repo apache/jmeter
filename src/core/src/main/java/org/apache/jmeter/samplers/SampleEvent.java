@@ -224,4 +224,27 @@ public class SampleEvent implements Serializable {
         return isTransactionSampleEvent;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SampleEvent{");
+        sb.append("hostname='").append(hostname).append('\'');
+        sb.append(", threadGroup='").append(threadGroup).append('\'');
+        sb.append(", isTransactionSampleEvent=").append(isTransactionSampleEvent);
+        if (values != null && values.length > 0) {
+            sb.append("values=[");
+            for (int i = 0; i < variableNames.length; i++) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
+                sb.append('\'').append(variableNames[i]).append("', '").append(values[i]).append('\'');
+            }
+            sb.append(']');
+        }
+        if (result != null) {
+            sb.append(", result=").append(result.toDebugString());
+        }
+        sb.append('}');
+        return sb.toString();
+    }
 }

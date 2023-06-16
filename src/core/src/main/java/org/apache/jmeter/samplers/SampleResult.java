@@ -936,6 +936,62 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         return getSampleLabel();
     }
 
+    public String toDebugString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName()).append('{');
+        appendDebugParameters(sb);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    protected void appendDebugParameters(StringBuilder sb) {
+        sb.append("label='").append(label).append('\'');
+        sb.append(", success=").append(success);
+        sb.append(", saveConfig=").append(saveConfig);
+        if (parent != null) {
+            sb.append(", parent=").append(parent.toDebugString());
+        }
+        sb.append(", responseCode='").append(responseCode).append('\'');
+        sb.append(", resultFileName='").append(resultFileName).append('\'');
+        sb.append(", samplerData='").append(samplerData).append('\'');
+        sb.append(", threadName='").append(threadName).append('\'');
+        sb.append(", responseMessage='").append(responseMessage).append('\'');
+        sb.append(", responseHeaders='").append(responseHeaders).append('\'');
+        sb.append(", requestHeaders='").append(requestHeaders).append('\'');
+        sb.append(", timeStamp=").append(timeStamp);
+        sb.append(", startTime=").append(startTime);
+        sb.append(", endTime=").append(endTime);
+        sb.append(", idleTime=").append(idleTime);
+        sb.append(", pauseTime=").append(pauseTime);
+        sb.append(", assertionResults=").append(assertionResults);
+        sb.append(", subResults=").append(subResults);
+        sb.append(", dataType='").append(dataType).append('\'');
+        sb.append(", files=").append(files);
+        sb.append(", dataEncoding='").append(dataEncoding).append('\'');
+        sb.append(", contentType='").append(contentType).append('\'');
+        sb.append(", elapsedTime=").append(elapsedTime);
+        sb.append(", latency=").append(latency);
+        sb.append(", connectTime=").append(connectTime);
+        sb.append(", testLogicalAction=").append(testLogicalAction);
+        sb.append(", stopThread=").append(stopThread);
+        sb.append(", stopTest=").append(stopTest);
+        sb.append(", stopTestNow=").append(stopTestNow);
+        sb.append(", sampleCount=").append(sampleCount);
+        sb.append(", bytes=").append(bytes);
+        sb.append(", headersSize=").append(headersSize);
+        sb.append(", bodySize=").append(bodySize);
+        sb.append(", groupThreads=").append(groupThreads);
+        sb.append(", allThreads=").append(allThreads);
+        sb.append(", nanoTimeOffset=").append(nanoTimeOffset);
+        sb.append(", useNanoTime=").append(useNanoTime);
+        sb.append(", nanoThreadSleep=").append(nanoThreadSleep);
+        sb.append(", sentBytes=").append(sentBytes);
+        sb.append(", location=").append(location);
+        sb.append(", ignore=").append(ignore);
+        sb.append(", subResultIndex=").append(subResultIndex);
+        sb.append(", responseDataAsString='").append(getResponseDataAsString()).append('\'');
+    }
+
     /**
      * Returns the dataEncoding or the default if no dataEncoding was provided.
      *
