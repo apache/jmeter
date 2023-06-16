@@ -22,35 +22,39 @@ import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import org.apache.jmeter.junit.JMeterTestCase
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy
-import org.apache.jmeter.samplers.SampleEvent
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
 import org.apache.jmeter.threads.openmodel.OpenModelThreadGroup
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
+import org.junit.jupiter.api.fail
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @WireMockTest
 class HttpRequestInterruptTest : JMeterTestCase() {
-    @Test
-    @Timeout(5, unit = TimeUnit.SECONDS)
-    fun `httpClient4 interrupts`(server: WireMockRuntimeInfo) {
+    @ParameterizedTest
+    @Timeout(10, unit = TimeUnit.SECONDS)
+    @ValueSource(strings = [HTTPSamplerFactory.IMPL_HTTP_CLIENT4, HTTPSamplerFactory.HTTP_SAMPLER_JAVA])
+    fun `http request interrupts`(httpImplementation: String, server: WireMockRuntimeInfo) {
         server.wireMock.register(
             get("/delayed")
                 .willReturn(
                     aResponse()
-                        .withStatus(200)
                         .withFixedDelay(1.minutes.inWholeMilliseconds.toInt())
+                        .withStatus(200)
                 )
         )
 
-        val events = executePlanAndCollectEvents(50.seconds) {
+        val events = executePlanAndCollectEvents(5.seconds) {
             OpenModelThreadGroup::class {
                 scheduleString = "rate(50 / sec) random_arrivals(100 ms) pause(1 s)"
                 HTTPSamplerProxy::class {
+                    implementation = httpImplementation
                     method = "GET"
                     protocol = "http"
                     domain = "localhost"
@@ -60,10 +64,12 @@ class HttpRequestInterruptTest : JMeterTestCase() {
             }
         }
 
-        assertEquals(
-            listOf<SampleEvent>(),
-            events,
-            "No samples expected as all the threads should be interrupted before the request completes"
-        )
+        assertEquals(5, events.size) { "5 events expected, got $events" }
+        if (events.any { it.result.isSuccessful || it.result.isResponseCodeOK || it.result.time < 500 }) {
+            fail(
+                "All events should be failing, and they should take more than 500ms since the requests " +
+                    "should have been cancelled after 1sec. Results are: $events"
+            )
+        }
     }
 }

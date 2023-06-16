@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.test.samplers
 
+import org.apache.jmeter.engine.util.NoThreadClone
 import org.apache.jmeter.reporters.AbstractListenerElement
 import org.apache.jmeter.samplers.SampleEvent
 import org.apache.jmeter.samplers.SampleListener
@@ -25,7 +26,7 @@ import java.util.Collections
 /**
  * Collects [SampleEvent] to a list.
  */
-class CollectSamplesListener : AbstractListenerElement(), SampleListener {
+class CollectSamplesListener : AbstractListenerElement(), SampleListener, NoThreadClone {
     private val mutableEvents: MutableList<SampleEvent> = Collections.synchronizedList(mutableListOf<SampleEvent>())
 
     // Copy the events to prevent late arrivals after the test has finished

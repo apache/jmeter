@@ -32,9 +32,9 @@ import kotlin.time.Duration.Companion.seconds
 
 class ThreadsInterruptAtFinishTest : JMeterTestCase() {
     @Test
-    @Timeout(5, unit = TimeUnit.SECONDS)
+    @Timeout(10, unit = TimeUnit.SECONDS)
     fun `openmodel interrupts sleep`() {
-        executePlanAndCollectEvents(10.seconds) {
+        assertInterruptionsPresent {
             OpenModelThreadGroup::class {
                 scheduleString = "rate(50 / sec) random_arrivals(100 ms) pause(1 s)"
                 ThreadSleep::class {
