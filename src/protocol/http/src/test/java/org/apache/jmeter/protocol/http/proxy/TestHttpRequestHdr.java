@@ -646,8 +646,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         }
         req.parse(bis);
         bis.close();
-        Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<String, String>());
-        Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<String, String>());
+        Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<>());
+        Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<>());
         if(url != null && contentEncoding != null) {
             pageEncodings.put(url, contentEncoding);
         }

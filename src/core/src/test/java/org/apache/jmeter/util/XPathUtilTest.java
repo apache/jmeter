@@ -80,7 +80,7 @@ public class XPathUtilTest {
     @Test
     public void testputValuesForXPathInListUsingSaxon() throws SaxonApiException, FactoryConfigurationError{
         String xPathQuery="//Employees/Employee/role";
-        ArrayList<String> matchStrings = new ArrayList<String>();
+        ArrayList<String> matchStrings = new ArrayList<>();
         boolean fragment = false;
         String namespaces = "age=http://www.w3.org/2003/01/geo/wgs84_pos#";
         int matchNumber = 3;

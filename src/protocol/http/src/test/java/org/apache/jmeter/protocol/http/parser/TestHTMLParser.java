@@ -368,7 +368,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
     public void testParserList() throws Exception {
         HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
         filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseUrl, TESTS[testNumber].expectedList,
-                new Vector<URLString>(), true, TESTS[testNumber].userAgent);
+                new Vector<>(), true, TESTS[testNumber].userAgent);
     }
 
     public void testSpecificParserList() throws Exception {
@@ -376,7 +376,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         filetest(p, SPECIFIC_PARSER_TESTS[testNumber].fileName,
                 SPECIFIC_PARSER_TESTS[testNumber].baseUrl,
                 SPECIFIC_PARSER_TESTS[testNumber].expectedList,
-                new ArrayList<URLString>(), true,
+                new ArrayList<>(), true,
                 SPECIFIC_PARSER_TESTS[testNumber].userAgent);
     }
 
