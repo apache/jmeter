@@ -69,7 +69,7 @@ public class AbstractPropertyTest {
     public void testNormalizeListWithEmptyList() {
         Collection<JMeterProperty> emptyCollection = Collections.emptyList();
         Collection<JMeterProperty> newCollection = dummyProperty.normalizeList(emptyCollection);
-        assertThat(newCollection, CoreMatchers.nullValue());
+        assertThat(newCollection, CoreMatchers.equalTo(emptyCollection));
     }
 
     @Test
