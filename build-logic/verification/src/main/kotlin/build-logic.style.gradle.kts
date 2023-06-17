@@ -28,7 +28,7 @@ if (!buildParameters.skipAutostyle) {
 
 val skipCheckstyle = buildParameters.skipCheckstyle || run {
     logger.info("Checkstyle requires Java 11+")
-    !JavaVersion.current().isJava11Compatible
+    buildParameters.buildJdkVersion < 11
 }
 
 if (!skipCheckstyle) {

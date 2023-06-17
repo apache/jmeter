@@ -102,6 +102,7 @@ Summary
 <ch_section>Non-functional changes</ch_section>
 <ul>
   <li><pr>6000</pr>Add release-drafter for populating GitHub releases info based on the merged PRs</li>
+  <li><pr>5989</pr>Use Gradle toolchains for JDK provisioning, enable building and testing with different JDKs, start testing with Java 21</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

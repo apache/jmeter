@@ -29,9 +29,38 @@ buildParameters {
         defaultValue.set(true)
         description.set("Add mavenLocal() to repositories")
     }
+    bool("enableJavaFx") {
+        defaultValue.set(false)
+        description.set("Build and include classes that depend on JavaFX. Disabled by default since JavaFX is not included in the default Java distributions")
+    }
     bool("coverage") {
         defaultValue.set(false)
         description.set("Collect test coverage")
+    }
+    integer("targetJavaVersion") {
+        defaultValue.set(8)
+        mandatory.set(true)
+        description.set("Java version for source and target compatibility")
+    }
+    integer("jdkBuildVersion") {
+        defaultValue.set(17)
+        mandatory.set(true)
+        description.set("JDK version to use for building JMeter. If the value is 0, then the current Java is used. (see https://docs.gradle.org/8.0/userguide/toolchains.html#sec:consuming)")
+    }
+    string("jdkBuildVendor") {
+        description.set("JDK vendor to use building JMeter (see https://docs.gradle.org/8.0/userguide/toolchains.html#sec:vendors)")
+    }
+    string("jdkBuildImplementation") {
+        description.set("Vendor-specific virtual machine implementation to use building JMeter (see https://docs.gradle.org/8.0/userguide/toolchains.html#selecting_toolchains_by_virtual_machine_implementation)")
+    }
+    integer("jdkTestVersion") {
+        description.set("JDK version to use for testing JMeter. If the value is 0, then the current Java is used. (see https://docs.gradle.org/8.0/userguide/toolchains.html#sec:consuming)")
+    }
+    string("jdkTestVendor") {
+        description.set("JDK vendor to use testing JMeter (see https://docs.gradle.org/8.0/userguide/toolchains.html#sec:vendors)")
+    }
+    string("jdkTestImplementation") {
+        description.set("Vendor-specific virtual machine implementation to use testing JMeter (see https://docs.gradle.org/8.0/userguide/toolchains.html#selecting_toolchains_by_virtual_machine_implementation)")
     }
     bool("spotbugs") {
         defaultValue.set(false)

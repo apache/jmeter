@@ -16,6 +16,7 @@
  */
 
 plugins {
+    id("build-logic.build-params")
     id("build-logic.jvm-published-library")
 }
 
@@ -88,25 +89,7 @@ dependencies {
     testImplementation(testFixtures(projects.src.testkitWiremock))
 }
 
-fun String?.toBool(nullAs: Boolean, blankAs: Boolean, default: Boolean) =
-    when {
-        this == null -> nullAs
-        isBlank() -> blankAs
-        default -> !equals("false", ignoreCase = true)
-        else -> equals("true", ignoreCase = true)
-    }
-
-fun classExists(name: String) =
-    try {
-        Class.forName(name)
-        true
-    } catch (e: Throwable) {
-        false
-    }
-
-if (!(project.findProperty("enableJavaFx") as? String)
-    .toBool(nullAs = classExists("javafx.application.Platform"), blankAs = true, default = false)
-) {
+if (!buildParameters.enableJavaFx) {
     // JavaFX is not present in Maven Central, so exclude the file unless explicitly asked by
     // -PenableJavaFx
     logger.lifecycle("RenderInBrowser is excluded from compilation. If you want to compile it, add -PenableJavaFx")

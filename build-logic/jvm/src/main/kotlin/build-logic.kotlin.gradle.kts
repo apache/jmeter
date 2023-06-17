@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java-library")
+    id("build-logic.build-params")
     id("build-logic.java")
     id("build-logic.test-base")
     id("com.github.autostyle")
@@ -36,6 +37,9 @@ kotlin {
     if (props.bool("kotlin.explicitApi", default = true)) {
         explicitApi()
     }
+    jvmToolchain {
+        configureToolchain(buildParameters.buildJdk)
+    }
 }
 
 tasks.configureEach<KotlinCompile> {
@@ -44,7 +48,19 @@ tasks.configureEach<KotlinCompile> {
             apiVersion = "kotlin.api".v
         }
         freeCompilerArgs += "-Xjvm-default=all"
-        jvmTarget = java.targetCompatibility.toString()
+        val jdkRelease = buildParameters.targetJavaVersion.let {
+            when {
+                it < 9 -> "1.8"
+                else -> it.toString()
+            }
+        }
+        // jdk-release requires Java 9+
+        buildParameters.buildJdkVersion
+            .takeIf { it > 8 }
+            ?.let {
+                freeCompilerArgs += "-Xjdk-release=$jdkRelease"
+            }
+        kotlinOptions.jvmTarget = jdkRelease
     }
 }
 

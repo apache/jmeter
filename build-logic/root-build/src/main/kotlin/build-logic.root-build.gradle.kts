@@ -66,3 +66,9 @@ if (buildParameters.coverage) {
         }
     }
 }
+
+tasks.register("parameters") {
+    group = HelpTasksPlugin.HELP_GROUP
+    description = "Displays the supported build parameters."
+    dependsOn(gradle.includedBuild("build-logic").task(":build-parameters:parameters"))
+}

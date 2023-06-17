@@ -17,13 +17,12 @@
 
 import com.github.vlsi.gradle.dsl.configureEach
 import com.github.vlsi.gradle.properties.dsl.props
-import org.gradle.api.JavaVersion
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.kotlin.dsl.project
 
 plugins {
     id("java-library")
+    id("build-logic.build-params")
 }
 
 dependencies {
@@ -36,6 +35,9 @@ tasks.configureEach<Test> {
     testLogging {
         exceptionFormat = TestExceptionFormat.FULL
         showStandardStreams = true
+    }
+    buildParameters.testJdk?.let {
+        javaLauncher.convention(javaToolchains.launcherFor(it))
     }
     // Pass the property to tests
     fun passProperty(name: String, default: String? = null) {
@@ -57,9 +59,22 @@ tasks.configureEach<Test> {
     }
     passProperty("java.awt.headless")
     passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
-    // Spock tests use cglib proxies that access ClassLoader.defineClass reflectively
+    // Enable testing ByteBuddy with EA Java versions
+    passProperty("net.bytebuddy.experimental", "true")
+    // Spock tests use cglib proxies that access ClassLoader.defineClass reflectively,
+    // So we pass --add-opens
     // See https://github.com/apache/jmeter/pull/5763
-    if (JavaVersion.current().isJava9Compatible) {
-        jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
-    }
+    jvmArgumentProviders += AddOpensArgumentsProvider(javaLauncher.map { it.metadata.languageVersion })
+}
+
+class AddOpensArgumentsProvider(
+    @Input val javaLanguageVersion: Provider<JavaLanguageVersion>
+): CommandLineArgumentProvider {
+    override fun asArguments(): Iterable<String> =
+        if (javaLanguageVersion.get().asInt() <= 8) {
+            // Jave 1.8 does not need add-opens, so we omit it
+            listOf()
+        } else {
+            listOf("--add-opens=java.base/java.lang=ALL-UNNAMED")
+        }
 }

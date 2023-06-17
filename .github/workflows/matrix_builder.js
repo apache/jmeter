@@ -18,7 +18,7 @@ class Axis {
     }
     if (Array.isArray(filter)) {
       // e.g. row={os: 'windows'}; filter=[{os: 'linux'}, {os: 'linux'}]
-      return filter.find(v => Axis.matches(row, v));
+      return filter.some(v => Axis.matches(row, v));
     }
     if (typeof filter === 'object') {
       // e.g. row={jdk: {name: 'openjdk', version: 8}}; filter={jdk: {version: 8}}
@@ -68,6 +68,7 @@ class MatrixBuilder {
     this.duplicates = {};
     this.excludes = [];
     this.includes = [];
+    this.implications = [];
     this.failOnUnsatisfiableFilters = false;
   }
 
@@ -80,11 +81,21 @@ class MatrixBuilder {
   }
 
   /**
-   * Specifies exclude filter (e.g. exclude a forbidden combination)
+   * Specifies exclude filter (e.g. exclude a forbidden combination).
    * @param filter
    */
   exclude(filter) {
     this.excludes.push(filter);
+  }
+
+  /**
+   * Adds implication like `antecedent -> consequent`.
+   * In other words, if `antecedent` holds, then `consequent` must also hold.
+   * @param antecedent
+   * @param consequent
+   */
+  imply(antecedent, consequent) {
+    this.implications.push({antecedent: antecedent, consequent: consequent});
   }
 
   addAxis({name, title, values}) {
@@ -104,8 +115,10 @@ class MatrixBuilder {
    * @returns {boolean}
    */
   matches(row) {
-    return (this.excludes.length === 0 || !this.excludes.find(f => Axis.matches(row, f))) &&
-           (this.includes.length === 0 || this.includes.find(f => Axis.matches(row, f)));
+    return (this.excludes.length === 0 || !this.excludes.some(f => Axis.matches(row, f))) &&
+           (this.includes.length === 0 || this.includes.some(f => Axis.matches(row, f))) &&
+           (this.implications.length === 0 || (
+               this.implications.every(i => !Axis.matches(row, i.antecedent) || Axis.matches(row, i.consequent))));
   }
 
   failOnUnsatisfiableFilters(value) {
@@ -125,7 +138,7 @@ class MatrixBuilder {
     let res;
     if (filter) {
       // If matching row already exists, no need to generate more
-      res = this.rows.find(v => Axis.matches(v, filter));
+      res = this.rows.some(v => Axis.matches(v, filter));
       if (res) {
         return res;
       }
