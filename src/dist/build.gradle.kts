@@ -632,6 +632,9 @@ val runGui by tasks.registering(JavaExec::class) {
     group = "Development"
     description = "Builds and starts JMeter GUI"
     dependsOn(createDist)
+    buildParameters.testJdk?.let {
+        javaLauncher.set(javaToolchains.launcherFor(it))
+    }
 
     workingDir = File(project.rootDir, "bin")
     mainClass.set("org.apache.jmeter.NewDriver")

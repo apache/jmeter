@@ -24,7 +24,7 @@ Useful commands (`gw` comes from https://github.com/dougborg/gdub, otherwise `./
 ## List available build parameters
 
       # List all build parameters
-      gw :build-logic:build-parameters:parameters
+      gw parameters
 
 ## Cleaning build directories
 

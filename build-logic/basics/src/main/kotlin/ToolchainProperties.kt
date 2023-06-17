@@ -15,20 +15,23 @@
  * limitations under the License.
  */
 
-import com.github.vlsi.gradle.dsl.configureEach
+import buildparameters.BuildParametersExtension
+import org.gradle.api.JavaVersion
 
-plugins {
-    id("java")
-    id("groovy")
-    id("build-logic.test-spock")
-    id("com.github.vlsi.gradle-extensions")
-    id("build-logic.build-params")
-}
+class ToolchainProperties(
+    val version: Int,
+    val vendor: String?,
+    val implementation: String?,
+)
 
-tasks.configureEach<GroovyCompile> {
-    buildParameters.testJdk?.let {
-        javaLauncher.convention(javaToolchains.launcherFor(it))
-    }
-    // Support jdk-release to configure the target Java release when compiling the bytecode
-    // See https://issues.apache.org/jira/browse/GROOVY-11105
-}
+val BuildParametersExtension.buildJdk: ToolchainProperties?
+    get() = jdkBuildVersion.takeIf { it != 0 }
+        ?.let { ToolchainProperties(it, jdkBuildVendor.orNull, jdkBuildImplementation.orNull) }
+
+val BuildParametersExtension.buildJdkVersion: Int
+    get() = buildJdk?.version ?: JavaVersion.current().majorVersion.toInt()
+
+val BuildParametersExtension.testJdk: ToolchainProperties?
+    get() = jdkTestVersion.orNull?.takeIf { it != 0 }
+        ?.let { ToolchainProperties(it, jdkTestVendor.orNull, jdkTestImplementation.orNull) }
+        ?: buildJdk

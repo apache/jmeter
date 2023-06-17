@@ -8,15 +8,17 @@ const matrix = new MatrixBuilder();
 matrix.addAxis({
   name: 'java_distribution',
   values: [
-    {value: 'corretto', weight: 1},
-    {value: 'liberica', weight: 1},
-    {value: 'microsoft', weight: 1},
-    {value: 'oracle', weight: 1},
-    {value: 'semeru', weight: 4},
-    {value: 'temurin', weight: 1},
-    {value: 'zulu', weight: 1},
+    {value: 'corretto', vendor: 'amazon', weight: 1},
+    {value: 'liberica', vendor: 'bellsoft', weight: 1},
+    {value: 'microsoft', vendor: 'microsoft', weight: 1},
+    {value: 'oracle', vendor: 'oracle', weight: 1},
+    {value: 'semeru', vendor: 'ibm', weight: 4},
+    {value: 'temurin', vendor: 'eclipse', weight: 1},
+    {value: 'zulu', vendor: 'azul', weight: 1},
   ]
 });
+
+const eaJava = '21';
 
 matrix.addAxis({
   name: 'java_version',
@@ -25,6 +27,7 @@ matrix.addAxis({
     '8',
     '11',
     '17',
+    eaJava,
   ]
 });
 
@@ -74,10 +77,13 @@ matrix.setNamePattern(['java_version', 'java_distribution', 'hash', 'os', 'tz', 
 
 // Semeru uses OpenJ9 jit which has no option for making hash codes the same
 matrix.exclude({java_distribution: {value: 'semeru'}, hash: {value: 'same'}});
+// Semeru 8 fails when Semeru 17 is on the PATH (we use 17 for build)
+matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '8'});
 // Microsoft Java has no distribution for 8
 matrix.exclude({java_distribution: {value: 'microsoft'}, java_version: '8'});
 // Oracle JDK is only supported for JDK 17 and later
 matrix.exclude({java_distribution: {value: 'oracle'}, java_version: ['8', '11']});
+matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
 // Ensure at least one job with "same" hashcode exists
 matrix.generateRow({hash: {value: 'same'}});
 // Ensure at least one Windows and at least one Linux job is present (macOS is almost the same as Linux)
@@ -90,6 +96,8 @@ matrix.generateRow({java_version: "8"});
 matrix.generateRow({java_version: "11"});
 // Ensure there will be at least one job with Java 17
 matrix.generateRow({java_version: "17"});
+// Ensure there will be at least one job with Java EA
+matrix.generateRow({java_version: eaJava});
 const include = matrix.generateRows(process.env.MATRIX_JOBS || 5);
 if (include.length === 0) {
   throw new Error('Matrix list is empty');
@@ -124,9 +132,14 @@ include.forEach(v => {
   jvmArgs.push(`-Duser.country=${v.locale.country}`);
   jvmArgs.push(`-Duser.language=${v.locale.language}`);
   v.java_distribution = v.java_distribution.value;
+  v.java_vendor = v.java_distribution.vendor;
+  if (v.java_distribution === 'oracle') {
+      v.oracle_java_website = v.java_version === eaJava ? 'jdk.java.net' : 'oracle.com';
+  }
+  v.non_ea_java_version = v.java_version === eaJava ? '' : v.java_version;
   if (v.java_distribution !== 'semeru' && Math.random() > 0.5) {
     // The following options randomize instruction selection in JIT compiler
-    // so it might reveal missing synchronization in TestNG code
+    // so it might reveal missing synchronization
     v.name += ', stress JIT';
     v.testDisableCaching = 'JIT randomization should not be cached';
     jvmArgs.push('-XX:+UnlockDiagnosticVMOptions');

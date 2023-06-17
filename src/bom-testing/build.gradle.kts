@@ -39,6 +39,7 @@ dependencies {
         // to make runtime classpath consistent with the compile one.
         api("com.github.tomakehurst:wiremock-jre8:2.35.0")
         api("junit:junit:4.13.2")
+        api("net.bytebuddy:byte-buddy:1.14.5")
         api("nl.jqno.equalsverifier:equalsverifier:3.14.1")
         // activemq-all should not be used as it provides secondary slf4j binding
         api("org.apache.activemq:activemq-broker:5.16.6")
