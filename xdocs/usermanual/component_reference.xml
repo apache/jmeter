@@ -2307,6 +2307,9 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
     Should condition be evaluated for all children?
     If not checked, then the condition is only evaluated on entry.
     </property>
+    <property name="Invert the condition" required="Yes">
+    Invert the result of condition.
+    </property>
 </properties>
     <example title="Examples (JavaScript)" anchor="example_if_javascript">
         <ul>

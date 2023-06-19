@@ -37,4 +37,7 @@ public abstract class IfControllerSchema : GenericControllerSchema() {
 
     public val useExpression: BooleanPropertyDescriptor<IfControllerSchema>
         by boolean("IfController.useExpression", default = false)
+
+    public val negate: BooleanPropertyDescriptor<IfControllerSchema>
+        by boolean("IfController.negate", default = false)
 }

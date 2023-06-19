@@ -34,8 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
- *
  * This is a Conditional Controller; it will execute the set of statements
  * (samplers/controllers, etc) while the 'condition' is true.
  * <p>
@@ -71,7 +69,7 @@ public class IfController extends GenericController implements Serializable, Thr
 
     private static final boolean USE_RHINO_ENGINE =
             JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) ||
-            getInstance().getEngineByName(NASHORN_ENGINE_NAME) == null;
+                    getInstance().getEngineByName(NASHORN_ENGINE_NAME) == null;
 
 
     private static final ThreadLocal<ScriptEngine> NASHORN_ENGINE = ThreadLocal
@@ -90,7 +88,7 @@ public class IfController extends GenericController implements Serializable, Thr
             try {
                 Scriptable scope = cx.initStandardObjects(null);
                 Object cxResultObject = cx.evaluateString(scope, condition
-                , "<cmd>", 1, null);
+                        , "<cmd>", 1, null);
                 result = computeResultFromString(condition, Context.toString(cxResultObject));
             } catch (Exception e) {
                 log.error("{}: error while processing [{}]", testElementName, condition, e);
@@ -129,8 +127,9 @@ public class IfController extends GenericController implements Serializable, Thr
      * @return ScriptEngineManager singleton
      */
     private static ScriptEngineManager getInstance() {
-            return LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     }
+
     /**
      * constructor
      */
@@ -140,6 +139,7 @@ public class IfController extends GenericController implements Serializable, Thr
 
     /**
      * constructor
+     *
      * @param condition The condition for this controller
      */
     public IfController(String condition) {
@@ -159,6 +159,7 @@ public class IfController extends GenericController implements Serializable, Thr
 
     /**
      * Condition Accessor - this is gonna be like <code>${count} &lt; 10</code>
+     *
      * @param condition The condition for this controller
      */
     public void setCondition(String condition) {
@@ -167,6 +168,7 @@ public class IfController extends GenericController implements Serializable, Thr
 
     /**
      * Condition Accessor - this is gonna be like <code>${count} &lt; 10</code>
+     *
      * @return the condition associated with this controller
      */
     public String getCondition() {
@@ -190,7 +192,7 @@ public class IfController extends GenericController implements Serializable, Thr
     private static boolean computeResultFromString(
             String condition, String resultStr) throws Exception {
         boolean result;
-        switch(resultStr) {
+        switch (resultStr) {
             case "false":
                 result = false;
                 break;
@@ -229,13 +231,14 @@ public class IfController extends GenericController implements Serializable, Thr
         // For subsequent calls, we are inside the IfControllerGroup,
         // so then we just pass the control to the next item inside the if control
         boolean result = true;
-        if(isEvaluateAll() || isFirst()) {
+        if (isEvaluateAll() || isFirst()) {
             result = isUseExpression() ?
                     evaluateExpression(getCondition())
                     :
                     evaluateCondition(getCondition());
         }
 
+        result = isNegate() ? !result : result;
         if (result) {
             return super.next();
         }
@@ -269,15 +272,24 @@ public class IfController extends GenericController implements Serializable, Thr
         return get(getSchema().getUseExpression());
     }
 
+    public boolean isNegate() {
+        return get(getSchema().getNegate());
+    }
+
     public void setUseExpression(boolean selected) {
         set(getSchema().getUseExpression(), selected);
     }
 
+    public void setNegate(boolean selected) {
+        set(getSchema().getNegate(), selected);
+    }
+
     @Override
-    public void threadStarted() {}
+    public void threadStarted() {
+    }
 
     @Override
     public void threadFinished() {
-       NASHORN_ENGINE.remove();
+        NASHORN_ENGINE.remove();
     }
 }

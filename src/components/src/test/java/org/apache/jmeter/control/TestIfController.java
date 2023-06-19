@@ -158,7 +158,7 @@ class TestIfController extends JMeterTestCase {
         ifCont.addTestElement(sample3);
         controller.addTestElement(ifCont);
 
-        String[] order = new String[] { "Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3" };
+        String[] order = new String[]{"Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3"};
         int counter = 0;
         controller.initialize();
         controller.setRunningVersion(true);
@@ -186,7 +186,7 @@ class TestIfController extends JMeterTestCase {
         ifCont.addTestElement(sample3);
         controller.addTestElement(ifCont);
 
-        String[] order = new String[] { "Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3" };
+        String[] order = new String[]{"Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3"};
         int counter = 0;
         controller.initialize();
         controller.setRunningVersion(true);
@@ -220,7 +220,7 @@ class TestIfController extends JMeterTestCase {
         TestSampler sample4 = new TestSampler("Sample4");
         ifCont.addTestElement(sample4);
 
-        String[] order = new String[] { "Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3" };
+        String[] order = new String[]{"Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3"};
         int counter = 0;
         controller.initialize();
         controller.setRunningVersion(true);
@@ -258,7 +258,7 @@ class TestIfController extends JMeterTestCase {
         genericCont.addTestElement(sample4);
         ifCont.addTestElement(genericCont);
 
-        String[] order = new String[] { "Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3" };
+        String[] order = new String[]{"Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3"};
         int counter = 0;
         controller.initialize();
         controller.setRunningVersion(true);
@@ -284,6 +284,63 @@ class TestIfController extends JMeterTestCase {
         IfController ifCont = new IfController("true\n");
         ifCont.setUseExpression(true);
         ifCont.setEvaluateAll(false);
+
+        ifCont.addTestElement(new TestSampler("sample1"));
+        controller.addTestElement(ifCont);
+
+        controller.initialize();
+        controller.setRunningVersion(true);
+        ifCont.setRunningVersion(true);
+
+        Sampler sampler = controller.next();
+        Assertions.assertNotNull(sampler);
+    }
+
+    @Test
+    void testNegateDefault() {
+        GenericController controller = new GenericController();
+        //Default negate to false
+        IfController ifCont = new IfController("true");
+        ifCont.setUseExpression(true);
+        ifCont.setEvaluateAll(false);
+
+        ifCont.addTestElement(new TestSampler("sample1"));
+        controller.addTestElement(ifCont);
+
+        controller.initialize();
+        controller.setRunningVersion(true);
+        ifCont.setRunningVersion(true);
+
+        Sampler sampler = controller.next();
+        Assertions.assertNotNull(sampler);
+    }
+    @Test
+    void testNegateTrue() {
+        GenericController controller = new GenericController();
+        //Default negate to false
+        IfController ifCont = new IfController("true");
+        ifCont.setUseExpression(true);
+        ifCont.setEvaluateAll(false);
+        ifCont.setNegate(true);
+
+        ifCont.addTestElement(new TestSampler("sample1"));
+        controller.addTestElement(ifCont);
+
+        controller.initialize();
+        controller.setRunningVersion(true);
+        ifCont.setRunningVersion(true);
+
+        Sampler sampler = controller.next();
+        Assertions.assertNull(sampler);
+    }
+    @Test
+    void testNegateFalse() {
+        GenericController controller = new GenericController();
+        //Default negate to false
+        IfController ifCont = new IfController("false");
+        ifCont.setUseExpression(true);
+        ifCont.setEvaluateAll(false);
+        ifCont.setNegate(true);
 
         ifCont.addTestElement(new TestSampler("sample1"));
         controller.addTestElement(ifCont);

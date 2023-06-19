@@ -73,6 +73,8 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
 
     private JCheckBox evaluateAll;
 
+    private JCheckBox negate;
+
     /**
      * Boolean indicating whether or not this component should display its name.
      * If true, this is a standalone component. If false, this component is
@@ -121,6 +123,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
             theCondition.setText(ifController.getCondition());
             evaluateAll.setSelected(ifController.isEvaluateAll());
             useExpression.setSelected(ifController.isUseExpression());
+            negate.setSelected(ifController.isNegate());
         }
 
     }
@@ -146,6 +149,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
             ifController.setCondition(theCondition.getText());
             ifController.setEvaluateAll(evaluateAll.isSelected());
             ifController.setUseExpression(useExpression.isSelected());
+            ifController.setNegate(negate.isSelected());
         }
     }
 
@@ -158,6 +162,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
         useExpression.setSelected(true);
         theCondition.setText(""); // $NON-NLS-1$
         evaluateAll.setSelected(false);
+        negate.setSelected(false);
     }
 
     @Override
@@ -221,6 +226,9 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
         evaluateAll = new JCheckBox(JMeterUtils.getResString("if_controller_evaluate_all")); // $NON-NLS-1$
         conditionPanel.add(evaluateAll, "span 2"); // $NON-NLS-1$
 
+        // Negate All checkbox
+        negate = new JCheckBox(JMeterUtils.getResString("if_controller_negate")); // $NON-NLS-1$
+        conditionPanel.add(negate, "span 2"); // $NON-NLS-1$
         return conditionPanel;
     }
 
