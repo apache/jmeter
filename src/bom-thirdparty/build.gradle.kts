@@ -55,7 +55,7 @@ dependencies {
         api("com.google.auto.service:auto-service-annotations:1.1.0")
         api("com.google.auto.service:auto-service:1.1.0")
         api("com.google.errorprone:error_prone_annotations:2.19.1")
-        api("com.helger.commons:ph-commons:10.2.4")
+        api("com.helger.commons:ph-commons:10.2.5")
         api("com.helger:ph-css:6.5.0")
         api("com.jayway.jsonpath:json-path:2.8.0")
         api("com.miglayout:miglayout-core:5.3")
