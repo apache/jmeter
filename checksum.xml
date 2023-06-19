@@ -46,6 +46,7 @@
     <trusted-key id='bdb5fa4fe719d787fb3d3197f6d4a1d411e9d1ae' group='com.google.guava' />
     <trusted-key id='d5f46bc0b86af5dc56df58f05e975cb00c643dbf' group='com.google.inject' />
     <trusted-key id='b801e2f8ef035068ec1139cc29579f18fa8fd93b' group='com.google.j2objc' />
+    <trusted-key id='eb1b3de71713c9ec2e87cc26ee92349ad86de446' group='com.google.j2objc' />
     <trusted-key id='d75e25b78ebb19e47c0a99bca7764f502a938c99' group='com.google.protobuf' />
     <trusted-key id='f1a51e051f527e0c8e24d54d4b1e11d5a4b91e89' group='com.google.protobuf' />
     <trusted-key id='a9789342f598ad5b1175ef357eb97d110dfadd60' group='com.googlecode.concurrent-trees' />
