@@ -321,6 +321,13 @@
         <revision>5.5 final</revision>
       </Version>
     </release>
+    <release>
+      <Version>
+        <name>Apache JMeter</name>
+        <created>2023-06-23</created>
+        <revision>5.6 final</revision>
+      </Version>
+    </release>
     <repository>
       <GitRepository>
         <location rdf:resource="https://gitbox.apache.org/repos/asf/jmeter.git"/>
