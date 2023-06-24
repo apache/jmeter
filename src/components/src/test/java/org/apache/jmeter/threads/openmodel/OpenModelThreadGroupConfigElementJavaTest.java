@@ -25,12 +25,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
-import org.apache.jmeter.control.TestTransactionController;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.modifiers.CounterConfig;
 import org.apache.jmeter.sampler.DebugSampler;
+import org.apache.jmeter.test.samplers.CollectSamplesListener;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.test.JMeterSerialTest;
@@ -46,7 +46,7 @@ class OpenModelThreadGroupConfigElementJavaTest extends JMeterTestCase implement
     // @RepeatedTest(value = 10)
     void ensure_thread_group_initializes_counter_only_once_for_each_thread()
             throws JMeterEngineException, ExecutionException, InterruptedException, TimeoutException {
-        TestTransactionController.TestSampleListener listener = new TestTransactionController.TestSampleListener();
+        CollectSamplesListener listener = new CollectSamplesListener();
 
         HashTree tree = testTree(b -> {
             b.add(TestPlan.class, tp -> {
@@ -76,7 +76,7 @@ class OpenModelThreadGroupConfigElementJavaTest extends JMeterTestCase implement
 
         // There's no guarantee that threads execute exactly in order, so we sort
         // the labels to avoid test failure in case the thread execute out of order.
-        List<String> actual = listener.events.stream()
+        List<String> actual = listener.getEvents().stream()
                 .map(e -> e.getResult().getSampleLabel())
                 .sorted()
                 .collect(Collectors.toList());

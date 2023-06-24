@@ -17,11 +17,11 @@
 
 package org.apache.jmeter.threads.openmodel
 
-import org.apache.jmeter.control.TestTransactionController
 import org.apache.jmeter.engine.StandardJMeterEngine
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.modifiers.CounterConfig
 import org.apache.jmeter.sampler.DebugSampler
+import org.apache.jmeter.test.samplers.CollectSamplesListener
 import org.apache.jmeter.testelement.TestPlan
 import org.apache.jmeter.treebuilder.dsl.testTree
 import org.apache.jorphan.test.JMeterSerialTest
@@ -37,7 +37,7 @@ class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest
     // Un-comment if you want try running the test multiple times locally:
     // @RepeatedTest(value = 10)
     fun `ensure thread group initializes counter only once for each thread`() {
-        val listener = TestTransactionController.TestSampleListener()
+        val listener = CollectSamplesListener()
 
         val tree = testTree {
             TestPlan::class {
