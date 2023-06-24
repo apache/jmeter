@@ -1,6 +1,6 @@
 # See https://github.com/release-drafter/release-drafter#configuration-options
 name-template: 'v$RESOLVED_VERSION'
-tag-template: 'v$RESOLVED_VERSION'
+tag-template: 'rel/v$RESOLVED_VERSION'
 # Filter previous releases to consider only those with the target matching the current branch
 filter-by-commitish: true
 tag-prefix: REL
