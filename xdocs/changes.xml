@@ -46,9 +46,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 5.6 =================== -->
+<!--  =================== 5.6.1 =================== -->
 
-<h1>Version 5.6</h1>
+<h1>Version 5.6.1</h1>
 <p>
 Summary
 </p>
@@ -69,21 +69,14 @@ Summary
 
 <h3>Thread Groups</h3>
 <ul>
-<li><issue>5682</issue><pr>717</pr> Open Model Thread Group: avoid skipping rows from CSV Data Set Config</li>
-  <li>Support custom thread group implementations in "Add think time" and "Save as test fragment" actions</li>
-  <li>Open Model Thread Group: interrupt pending HTTP requests and other <code>Interruptible</code> test elements on test stop</li>
 </ul>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-  <li><pr>5911</pr> Use Caffeine for caching HTTP headers instead of commons-collections4 LRUMap</li>
-  <li><pr>5947</pr> Fetch resources referenced in <code>&lt;link "rel"="preload"...&gt;</code> elements</li>
-  <li><pr>5869</pr> Allow more templates to format sampler names in the recorder: <code>#{url}</code>, <code>#{method}</code>, <code>#{scheme}</code>, <code>#{host}</code>, <code>#{port}</code></li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-  <li><pr>5909</pr> Use Caffeine for caching compiled scripts in JSR223 samplers instead of commons-collections4 LRUMap</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -104,72 +97,10 @@ Summary
 
 <h3>General</h3>
 <ul>
-  <li><pr>5792</pr>Add KeyStroke for start_no_timers (Start no pauses: CRTL+SHIFT+n)</li>
-  <li><pr>5899</pr>Speed up CPU-bound tests by skipping <code>recoverRunningVersion</code> for elements that are shared between threads (the ones that implement <code>NoThreadClone</code>)</li>
-  <li><pr>5914</pr>Use <code>Locale.ROOT</code> instead of default locale for <code>toUpperCase</code>, and <code>toLowerCase</code> to avoid surprises with dotless I in <code>tr_TR</code> locale</li>
-  <li><pr>5885</pr>Use Java's <code>ServiceLoader</code> for loading plugins instead of classpath scanning. It enables faster startup</li>
-  <li><pr>5788</pr><code>FunctionProperty</code> no longer caches the value.
-    Previously it cached the values based on iteration number only which triggered wrong results on concurrent executions.
-    The previous behavior can be temporary restored with <code>function.cache.per.iteration</code> property.
-  </li>
-  <li><pr>5920</pr>Improve HTTP HeaderManager performance when it contains many headers: skip reinitialization on each iteration</li>
-  <li><pr>5920</pr>Use AtomicInteger and AtomicLong instead of synchronized primitives for JMeterContextService#numberOfThreads</li>
-  <li><pr>5920</pr>Cache bean properties in <code>TestBeanHelper</code> and avoid synchronization, so test plans with <code>TestBean</code>-based elements is faster</li>
-  <li><pr>5920</pr>Improve computation when many threads actively produce samplers by using <code>LongAdder</code> and similar concurrency classes to avoid synchronization in <code>Calculator</code></li>
-  <li><pr>5920</pr>Reduce synchronization contention on <code>AbstractTestElement</code> that are shared between threads (the ones that implement <code>NoThreadClone</code>)</li>
-  <li><pr>5934</pr>Added caching for date formatters for <code>__time</code> function</li>
-  <li><pr>710</pr><issue>5666</issue>Added Shortcut key event for Reset search: <code>ctrl + alt + F</code>, <code>cmd + alt + F</code></li>
-  <li><pr>5959</pr><code>TestElement</code> has been migrated to Kotlin, so nullable types are annotated better</li>
-  <li><pr>5944</pr>Add PI for declaring <code>TestElement</code> schemas so element properties are easier to access in code (see <code>TestElementSchema</code>, <code>TestElement#getSchema()</code>, <code>TestElement#getProps()</code>)</li>
-  <li><pr>5944</pr>Enable usage of <code>${...}</code> expressions for checkbox controls (see context menus for checkboxes, however, the individual components should be adapted individually)</li>
-  <li><pr>678</pr>Experimental Kotlin and Java DSL for programmatic test plan generation (see <a href="usermanual/build-programmatic-test-plan.html#treebuilder_kotlin_dsl">Creating a plan with Kotlin DSL</a>)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-  <li><pr>725</pr>Add Chinese Simplified Translation for Open Model Thread Group</li>
-  <li><pr>5710</pr>Add GitHub Issue templates</li>
-  <li><pr>5910</pr>Use Caffeine for caching customizers in TestBeanGUI instead of commons-collections4 LRUMap</li>
-  <li><pr>5713</pr><pr>5931</pr>Update Spock to 2.3-groovy-3.0 (from 2.1-groovy-3.0)</li>
-  <li><issue>5718</issue>Update Apache commons-text to 1.10.0 (from 1.9)</li>
-  <li><pr>5731</pr>Update docs for <code>changeCase</code> function. <code>UPPER</code> is the default</li>
-  <li><pr>5924</pr>Update Apache commons-io to 2.12.0 (from 2.11.0)</li>
-  <li><pr>5921</pr>Update Jackson Core to 2.15.1 (from 2.13.3)</li>
-  <li><pr>5921</pr>Update Jackson Databind to 2.15.1 (from 2.13.3)</li>
-  <li><pr>5725</pr>Update Tika Parser to 1.28.5 (from 1.28.3)</li>
-  <li><pr>5725</pr>Update JSoup to 1.16.1 (from 1.15.1)</li>
-  <li><pr>5725</pr>Update Apache commons-net to 3.9.0 (from 3.8.0)</li>
-  <li><pr>5725</pr>Update XStream to 1.4.20 (from 1.4.19)</li>
-  <li><pr>5763</pr><pr>5814</pr>Updated Gradle to 8.1.1 (from 7.2)</li>
-  <li><pr>5854</pr>Added Apache Httpclient5 5.1.3</li>
-  <li><pr>5833</pr>Update Apache Freemarker to 2.3.32 (from 2.3.31)</li>
-  <li><pr>5830</pr>Update Apache Groovy to 3.0.17 (from 3.0.11)</li>
-  <li><pr>5862</pr>Update Apache Httpclient to 4.5.14 (from 4.5.13)</li>
-  <li><pr>5880</pr>Update Apache Xalan to 2.7.3 (from 2.7.2)</li>
-  <li><pr>5854</pr>Update Saxon-HE to 11.5 (from 11.5)</li>
-  <li><pr>5840</pr><pr>5930</pr>Update accessors-smart to 2.4.11 (from 2.4.8)</li>
-  <li><pr>5837</pr>Update asm to 9.5 (from 9.3)</li>
-  <li><pr>5840</pr><pr>5930</pr>Update json-smart to 2.4.11 (from 2.4.8)</li>
-  <li><pr>5814</pr>Update kotlin-stdlib to 1.8.21 (from 1.6.21)</li>
-  <li><pr>5889</pr><pr>5918</pr><pr>5814</pr>Update kotlinx-coroutines-core to 1.8.21 (from 1.6.21)</li>
-  <li><pr>5889</pr><pr>5918</pr><pr>5814</pr>Update kotlinx-coroutines-swing to 1.8.21 (from 1.6.21)</li>
-  <li><pr>5907</pr>Update lets-plot-batik to 3.2.0 (from 2.1.1)</li>
-  <li><pr>5907</pr>Update lets-plot-jvm to 4.3.0 (from 3.1.1)</li>
-  <li><pr>5859</pr>Update log4j-1.2-api to 2.20.0 (from 2.17.2)</li>
-  <li><pr>5859</pr>Update log4j-api to 2.20.0 (from 2.17.2)</li>
-  <li><pr>5859</pr>Update log4j-core to 2.20.0 (from 2.17.2)</li>
-  <li><pr>5859</pr>Update log4j-slf4j-impl to 2.20.0 (from 2.17.2)</li>
-  <li><pr>5861</pr>Update neo4j-java-driver to 4.4.11 (from 4.4.6)</li>
-  <li><pr>5853</pr>Update org.jetbrains:annotations to 24.0.1 (from 23.0.0)</li>
-  <li><pr>5868</pr><pr>5886</pr>Update ph-commons to 10.2.4 (from 10.1.6)</li>
-  <li><pr>5861</pr>Update reactive-streams to 1.0.4 (from 1.0.3)</li>
-  <li><pr>5847</pr>Update rsyntaxtextarea to 3.3.3 (from 3.2.0)</li>
-  <li><pr>5839</pr>Update svgSalamander to 1.1.4 (from 1.1.2.4)</li>
-  <li><pr>5852</pr>Update xmlgraphics-commons to 2.8 (from 2.7)</li>
-  <li><pr>5854</pr>Update xmlresolver to 4.6.4 (from 4.2.0)</li>
-  <li><pr>693</pr>Added randomized test GitHub Actions matrix for better coverage of locales and time zones</li>
-  <li><pr>5960</pr>Add OpenJDK JMH for creating microbenchmarks in JMeter code</li>
-  <li><issue>5961</issue>Deprecate TestElement.threadName as it is not related to TestElement</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -178,13 +109,10 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-  <li><pr>5901</pr>Fix NumberFormatException when counter is empty or not a digit on Proxy Settings panel</li>
-  <li><pr>5987</pr><issue>4546</issue>Encode unicode characters in filenames when sending files in HTTP Sampler</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
-  <li><pr>5736</pr><issue>5733</issue>Allow <code>SampleResult#setEndTime</code> be set in <code>JSR223Sampler</code></li>
 </ul>
 
 <h3>Controllers</h3>
@@ -193,17 +121,10 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
-  <li><issue>5740</issue><pr>5741</pr>Fix Aggregated Graph component to cope with empty names of samplers</li>
-  <li><issue>5807</issue>Fix an <code>ArrayIndexOutOfBoundsException</code> on HTTP parameters line on special case when key and value are empty,
-    i.e.: "<code>k1=v1&amp;&#61;&amp;k2=v2</code>"</li>
-  <li><issue>5654</issue><pr>5785</pr> Fix <code>InfluxDBRawBackendListenerClient</code> missing data. Allow InfluxDB to insert multiple entries with the
-    same <code>timestamp</code> but with different <code>threadName</code>. Contributed by Victor Peralta (vperaltac at github)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-  <li><pr>5717</pr>Add jsonpath string to JSON Path Assertion error message so the error is easier to understand</li>
-  <li><pr>723</pr>Use correct number format on JSON Path Assertion. Contributed by andreaslind01 (andreaslind01 at gmail.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -216,24 +137,14 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
-  <li><bug>66140</bug>Guess the delimiter of the CSV source, when configured one seems wrong.
-    This is in line with the behaviour of CSVSaveService.</li>
 </ul>
 
 <h3>Documentation</h3>
 <ul>
-  <li><issue>5694</issue>Document changed formatter for <funclink name="__time()"/>. A warning will be logged,
-  if the code <code>u</code> is found in the format string, as the meaning for that code has changed from <em>day-of-week</em>
-  to <em>year</em>.</li>
 </ul>
 
 <h3>General</h3>
 <ul>
-  <li><bug>66157</bug><pr>719</pr>Correct theme for darklaf on rsyntaxtextarea</li>
-  <li><issue>5872</issue><pr>5874</pr>Trim name in Argument objects.</li>
-  <li><pr>693</pr>Avoid wrong results when <code>Object.hashCode()</code> happen to collide. Use <code>IdentityHashMap</code> instead of <code>HashMap</code> when key is <code>TestElement</code></li>
-  <li>Refresh UI when dragging JMeter window from one monitor to another, so rich syntax text areas are properly editable after window movement</li>
-  <li><pr>5984</pr><code>AbstractTestElement#clone</code> might produce non-identical clones if element constructor adds a non-default property value</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -242,21 +153,6 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-  <li>Alex Schwartz, <a href="https://github.com/alexsch01">@alexsch01</a></li>
-  <li>Andreas Lind, <a href="https://github.com/andreaslind01">@andreaslind01</a></li>
-  <li>Arnout Engelen, <a href="https://github.com/raboof">@raboof</a></li>
-  <li>Clay Johnson, <a href="https://github.com/clayburn">@clayburn</a></li>
-  <li>David Getzlaff, <a href="https://github.com/dgetzlaf">@dgetzlaf</a></li>
-  <li>Kai Lehmann, <a href="https://github.com/lehmannk">@lehmannk</a></li>
-  <li>kaola89, <a href="https://github.com/kaola89">@kaola89</a></li>
-  <li>Matt Tansley, <a href="https://github.com/matthewt-assurity">@matthewt-assurity</a></li>
-  <li>Mohamed Ibrahim, <a href="https://github.com/rollno748">@rollno748</a></li>
-  <li>Ori Marko, <a href="https://github.com/orimarko">@orimarko</a></li>
-  <li>PJ Fanning, <a href="https://github.com/pjfanning">@pjfanning</a></li>
-  <li>Sandra Thieme, <a href="https://github.com/sandra-thieme">@sandra-thieme</a></li>
-  <li>Stefan Seide, <a href="https://github.com/sseide">@sseide</a></li>
-  <li>Victor Peralta, <a href="https://github.com/vperaltac">@vperaltac</a></li>
-  <li>Vincent DABURON, <a href="https://github.com/vdaburon">@vdaburon</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
