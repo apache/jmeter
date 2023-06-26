@@ -32,6 +32,7 @@ import org.apache.jmeter.testelement.schema.IntegerPropertyDescriptor
 import org.apache.jmeter.testelement.schema.StringPropertyDescriptor
 import org.apache.jmeter.testelement.schema.TestElementPropertyDescriptor
 import org.apiguardian.api.API
+import java.nio.charset.StandardCharsets
 
 /**
  * Lists properties of a [HTTPSamplerBase].
@@ -81,7 +82,7 @@ public abstract class HTTPSamplerBaseSchema : TestElementSchema() {
     public val proxy: HTTPSamplerProxyParamsSchema<HTTPSamplerBaseSchema> by HTTPSamplerProxyParamsSchema()
 
     public val contentEncoding: StringPropertyDescriptor<HTTPSamplerBaseSchema>
-        by string("HTTPSampler.contentEncoding")
+        by string("HTTPSampler.contentEncoding", default = StandardCharsets.UTF_8.name())
 
     public val implementation: StringPropertyDescriptor<HTTPSamplerBaseSchema>
         by string("HTTPSampler.implementation")

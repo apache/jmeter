@@ -73,6 +73,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+  <li><pr>6010</pr>Use UTF-8 as a default encoding in HTTP sampler. It enables sending parameter names, and filenames with unicode characters</li>
 </ul>
 
 <h3>Other samplers</h3>

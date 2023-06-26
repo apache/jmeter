@@ -21,16 +21,19 @@ import com.github.tomakehurst.wiremock.client.WireMock.aMultipart
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.containing
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
+import com.github.tomakehurst.wiremock.client.WireMock.matching
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
 import org.apache.jmeter.control.LoopController
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.protocol.http.util.HTTPFileArg
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
 import org.apache.jmeter.threads.ThreadGroup
+import org.apache.jmeter.treebuilder.TreeBuilder
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
@@ -45,6 +48,30 @@ import kotlin.time.Duration.Companion.seconds
 class HttpSamplerTest : JMeterTestCase() {
     @TempDir
     lateinit var dir: Path
+
+    fun TreeBuilder.oneRequest(body: ThreadGroup.() -> Unit) {
+        ThreadGroup::class {
+            numThreads = 1
+            rampUp = 0
+            setSamplerController(
+                LoopController().apply {
+                    loops = 1
+                }
+            )
+            body()
+        }
+    }
+
+    fun TreeBuilder.httpPost(body: HTTPSamplerProxy.() -> Unit) {
+        org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
+            name = "Upload file"
+            method = "POST"
+            domain = "localhost"
+            path = "/upload"
+            doMultipart = true
+            body()
+        }
+    }
 
     @ParameterizedTest
     @ValueSource(strings = ["Java", "HttpClient4"])
@@ -63,28 +90,17 @@ class HttpSamplerTest : JMeterTestCase() {
             dir.resolve("testfile привет %.txt")
         } catch (e: InvalidPathException) {
             assumeTrue(false) {
-                "Skipping the test as the filesystem does not suppport unicode filenames"
+                "Skipping the test as the filesystem does not support unicode filenames"
             }
             TODO("This is never reached as the assumption above throws error")
         }
         testFile.writeText("hello, привет")
 
         executePlanAndCollectEvents(10.seconds) {
-            ThreadGroup::class {
-                numThreads = 1
-                rampUp = 0
-                setSamplerController(
-                    LoopController().apply {
-                        loops = 1
-                    }
-                )
-                org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
-                    name = "Upload file"
+            oneRequest {
+                httpPost {
                     implementation = httpImplementation
-                    method = "POST"
-                    domain = "localhost"
                     port = server.httpPort
-                    path = "/upload"
                     httpFiles = arrayOf(
                         HTTPFileArg(testFile.absolutePathString(), "file_parameter", "application/octet-stream")
                     )
@@ -99,9 +115,252 @@ class HttpSamplerTest : JMeterTestCase() {
                     aMultipart("file_parameter")
                         .withHeader(
                             "Content-Disposition",
-                            containing("filename=\"testfile%20%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%25.txt\"")
+                            // Only CR, LF, and % should be percent-encoded
+                            containing("filename=\"testfile привет %.txt\"")
                         )
                         .withBody(equalTo("hello, привет"))
+                )
+        )
+    }
+
+    fun RequestPatternBuilder.withRequestBody(
+        httpImplementation: String,
+        body: String
+    ) = apply {
+        // normalize line endings to CRLF
+        val normalizedBody = body.replace("\r\n", "\n").replace("\n", "\r\n")
+        withRequestBody(
+            if (httpImplementation == "Java") {
+                equalTo(normalizedBody)
+            } else {
+                matching(
+                    normalizedBody
+                        .replace(PostWriter.BOUNDARY, "[^ \\n\\r]{1,69}?")
+                )
+            }
+        )
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["Java", "HttpClient4"])
+    fun `one parameter`(httpImplementation: String, server: WireMockRuntimeInfo) {
+        server.wireMock.register(
+            post("/upload").willReturn(aResponse().withStatus(200))
+        )
+
+        executePlanAndCollectEvents(10.seconds) {
+            oneRequest {
+                httpPost {
+                    implementation = httpImplementation
+                    port = server.httpPort
+                    addArgument("hello", "world")
+                }
+            }
+        }
+
+        server.wireMock.verifyThat(
+            1,
+            postRequestedFor(urlEqualTo("/upload"))
+                .withRequestBodyPart(
+                    aMultipart("hello")
+                        .withBody(equalTo("world"))
+                        .build()
+                )
+                .withRequestBody(
+                    httpImplementation,
+                    """
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="hello"
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+
+                    world
+                    -----------------------------7d159c1302d0y0--
+
+                    """.trimIndent()
+                )
+        )
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["Java", "HttpClient4"])
+    fun `two parameters`(httpImplementation: String, server: WireMockRuntimeInfo) {
+        server.wireMock.register(
+            post("/upload").willReturn(aResponse().withStatus(200))
+        )
+
+        executePlanAndCollectEvents(10.seconds) {
+            oneRequest {
+                httpPost {
+                    implementation = httpImplementation
+                    port = server.httpPort
+                    addArgument("hello", "world")
+                    addArgument("name", "Tim")
+                }
+            }
+        }
+
+        server.wireMock.verifyThat(
+            1,
+            postRequestedFor(urlEqualTo("/upload"))
+                .withRequestBodyPart(
+                    aMultipart("hello").withBody(equalTo("world")).build()
+                )
+                .withRequestBodyPart(
+                    aMultipart("name").withBody(equalTo("Tim")).build()
+                )
+                .withRequestBody(
+                    httpImplementation,
+                    """
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="hello"
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+
+                    world
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="name"
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+
+                    Tim
+                    -----------------------------7d159c1302d0y0--
+
+                    """.trimIndent()
+                )
+        )
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["Java", "HttpClient4"])
+    fun `two parameters and file`(httpImplementation: String, server: WireMockRuntimeInfo) {
+        server.wireMock.register(
+            post("/upload").willReturn(aResponse().withStatus(200))
+        )
+
+        val testFile = dir.resolve("testfile.txt").apply {
+            writeText("file contents")
+        }
+
+        executePlanAndCollectEvents(10.seconds) {
+            oneRequest {
+                httpPost {
+                    implementation = httpImplementation
+                    port = server.httpPort
+                    addArgument("hello", "world")
+                    addArgument("name", "Tim")
+                    httpFiles = arrayOf(
+                        HTTPFileArg(testFile.absolutePathString(), "file_parameter", "application/octet-stream")
+                    )
+                }
+            }
+        }
+
+        server.wireMock.verifyThat(
+            1,
+            postRequestedFor(urlEqualTo("/upload"))
+                .withRequestBodyPart(
+                    aMultipart("hello").withBody(equalTo("world")).build()
+                )
+                .withRequestBodyPart(
+                    aMultipart("name").withBody(equalTo("Tim")).build()
+                )
+                .withRequestBody(
+                    httpImplementation,
+                    """
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="hello"
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+
+                    world
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="name"
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+
+                    Tim
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="file_parameter"; filename="testfile.txt"
+                    Content-Type: application/octet-stream
+                    Content-Transfer-Encoding: binary
+
+                    file contents
+                    -----------------------------7d159c1302d0y0--
+
+                    """.trimIndent()
+                )
+        )
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["Java", "HttpClient4"])
+    fun `two parameters and two files`(httpImplementation: String, server: WireMockRuntimeInfo) {
+        server.wireMock.register(
+            post("/upload").willReturn(aResponse().withStatus(200))
+        )
+
+        val testFile1 = dir.resolve("testfile1.txt").apply {
+            writeText("file contents1")
+        }
+        val testFile2 = dir.resolve("testfile2.txt").apply {
+            writeText("file contents2")
+        }
+
+        executePlanAndCollectEvents(10.seconds) {
+            oneRequest {
+                httpPost {
+                    implementation = httpImplementation
+                    port = server.httpPort
+                    addArgument("hello", "world")
+                    addArgument("name", "Tim")
+                    httpFiles = arrayOf(
+                        HTTPFileArg(testFile1.absolutePathString(), "file_parameter", "application/octet-stream"),
+                        HTTPFileArg(testFile2.absolutePathString(), "file_parameter", "application/octet-stream"),
+                    )
+                }
+            }
+        }
+
+        server.wireMock.verifyThat(
+            1,
+            postRequestedFor(urlEqualTo("/upload"))
+                .withRequestBodyPart(
+                    aMultipart("hello").withBody(equalTo("world")).build()
+                )
+                .withRequestBodyPart(
+                    aMultipart("name").withBody(equalTo("Tim")).build()
+                )
+                .withRequestBody(
+                    httpImplementation,
+                    """
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="hello"
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+
+                    world
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="name"
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+
+                    Tim
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="file_parameter"; filename="testfile1.txt"
+                    Content-Type: application/octet-stream
+                    Content-Transfer-Encoding: binary
+
+                    file contents1
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="file_parameter"; filename="testfile2.txt"
+                    Content-Type: application/octet-stream
+                    Content-Transfer-Encoding: binary
+
+                    file contents2
+                    -----------------------------7d159c1302d0y0--
+
+                    """.trimIndent()
                 )
         )
     }

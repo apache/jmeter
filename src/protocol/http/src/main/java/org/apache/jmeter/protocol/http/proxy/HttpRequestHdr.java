@@ -165,7 +165,7 @@ public class HttpRequestHdr {
                     inHeaders = false;
                     firstLine = false; // cannot be first line either
                 }
-                final String reqLine = line.toString(StandardCharsets.ISO_8859_1.name());
+                final String reqLine = line.toString(StandardCharsets.UTF_8.name());
                 if (firstLine) {
                     parseFirstLine(reqLine);
                     firstLine = false;

@@ -56,7 +56,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * The default encoding to be used if not overridden.
      * The value is ISO-8859-1.
      */
-    public static final String DEFAULT_HTTP_ENCODING = StandardCharsets.ISO_8859_1.name();
+    public static final String DEFAULT_HTTP_ENCODING = StandardCharsets.UTF_8.name();
 
     private static final String OK_CODE = Integer.toString(HttpURLConnection.HTTP_OK);
     private static final String OK_MSG = "OK"; // $NON-NLS-1$

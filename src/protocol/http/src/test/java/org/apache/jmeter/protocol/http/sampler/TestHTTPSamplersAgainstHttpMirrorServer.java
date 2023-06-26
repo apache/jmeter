@@ -70,6 +70,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private static final String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
     private static final String US_ASCII = "US-ASCII"; // $NON-NLS-1$
 
+    private static final String DEFAULT_HTTP_CONTENT_ENCODING = StandardCharsets.UTF_8.name();
+
     private static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
 
     private static final byte[] CRLF = {0x0d, 0x0A};
@@ -151,21 +153,21 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     public void testPostRequest_FormMultipart_0() throws Exception {
-        testPostRequest_FormMultipart(HTTP_SAMPLER, ISO_8859_1);
+        testPostRequest_FormMultipart(HTTP_SAMPLER);
     }
 
     public void testPostRequest_FormMultipart3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
-        testPostRequest_FormMultipart(HTTP_SAMPLER3, US_ASCII);
+        testPostRequest_FormMultipart(HTTP_SAMPLER3);
     }
 
     public void testPostRequest_FileUpload() throws Exception {
-        testPostRequest_FileUpload(HTTP_SAMPLER, ISO_8859_1);
+        testPostRequest_FileUpload(HTTP_SAMPLER);
     }
 
     public void testPostRequest_FileUpload3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
-        testPostRequest_FileUpload(HTTP_SAMPLER3, US_ASCII);
+        testPostRequest_FileUpload(HTTP_SAMPLER3);
     }
 
     public void testPostRequest_BodyFromParameterValues() throws Exception {
@@ -352,7 +354,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         }
     }
 
-    private void testPostRequest_FormMultipart(int samplerType, String samplerDefaultEncoding) throws Exception {
+    private void testPostRequest_FormMultipart(int samplerType) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -365,7 +367,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         HTTPSampleResult res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -376,7 +378,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -389,7 +391,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -403,7 +405,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -418,7 +420,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         res = executeSampler(sampler);
         String expectedTitleValue = "mytitle/=";
         String expectedDescriptionValue = "mydescription   /\\";
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, expectedTitleValue,
                 descriptionField, expectedDescriptionValue);
 
@@ -431,7 +433,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -459,12 +461,12 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         res = executeSampler(sampler);
         expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
         expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, expectedTitleValue,
                 descriptionField, expectedDescriptionValue);
     }
 
-    private void testPostRequest_FileUpload(int samplerType, String samplerDefaultEncoding) throws Exception {
+    private void testPostRequest_FileUpload(int samplerType) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -480,7 +482,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 descriptionField, descriptionValue, fileField, temporaryFile,
                 fileMimeType);
         HTTPSampleResult res = executeSampler(sampler);
-        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFileUpload(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue, fileField, temporaryFile, fileMimeType,
                 TEST_FILE_CONTENT);
@@ -493,7 +495,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 descriptionField, descriptionValue, fileField, temporaryFile,
                 fileMimeType);
         res = executeSampler(sampler);
-        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFileUpload(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue, fileField, temporaryFile, fileMimeType,
                 TEST_FILE_CONTENT);
@@ -508,7 +510,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 descriptionField, descriptionValue, fileField, temporaryFile,
                 fileMimeType);
         res = executeSampler(sampler);
-        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFileUpload(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue, fileField, temporaryFile, fileMimeType,
                 TEST_FILE_CONTENT);
@@ -868,14 +870,13 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private void checkPostRequestFormMultipart(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
-            String samplerDefaultEncoding,
             String contentEncoding,
             String titleField,
             String titleValue,
             String descriptionField,
             String descriptionValue) throws IOException {
         if (contentEncoding == null || contentEncoding.isEmpty()) {
-            contentEncoding = samplerDefaultEncoding;
+            contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
@@ -913,7 +914,6 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private void checkPostRequestFileUpload(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
-            String samplerDefaultEncoding,
             String contentEncoding,
             String titleField,
             String titleValue,
@@ -924,7 +924,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             String fileMimeType,
             byte[] fileContent) throws IOException {
         if (contentEncoding == null || contentEncoding.isEmpty()) {
-            contentEncoding = samplerDefaultEncoding;
+            contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());

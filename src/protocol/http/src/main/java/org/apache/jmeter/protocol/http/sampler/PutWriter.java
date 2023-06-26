@@ -44,9 +44,6 @@ public class PutWriter extends PostWriter {
     public void setHeaders(URLConnection connection, HTTPSamplerBase sampler) throws IOException {
         // Get the encoding to use for the request
         String contentEncoding = sampler.getContentEncoding();
-        if(contentEncoding == null || contentEncoding.length() == 0) {
-            contentEncoding = ENCODING;
-        }
         long contentLength = 0L;
         boolean hasPutBody = false;
 

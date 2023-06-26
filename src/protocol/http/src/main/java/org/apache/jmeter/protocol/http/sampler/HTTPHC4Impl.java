@@ -103,7 +103,7 @@ import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.FormBodyPartBuilder;
-import org.apache.http.entity.mime.MIME;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -151,7 +151,6 @@ import org.apache.jmeter.protocol.http.sampler.hc.LaxDeflateInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LaxGZIPInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
@@ -1508,11 +1507,16 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 "<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8);
         private boolean hideFileData;
 
-        public ViewableFileBody(File file, ContentType contentType) {
-            // Note: HttpClient4 does not support encoding the file name, so we explicitly encode it here
+        public ViewableFileBody(File file, ContentType contentType, Charset charset) {
+            // Note: HttpClient4 does not support encoding the file name, and it always encodes names in IS88
             // See https://issues.apache.org/jira/browse/HTTPCLIENT-293
-            super(file, contentType, ConversionUtils.percentEncode(file.getName()));
+            super(file, contentType, encodeFilename(file.getName(), charset));
             hideFileData = false;
+        }
+
+        private static String encodeFilename(String fileName, Charset charset) {
+            return ConversionUtils.percentEncode(
+                    ConversionUtils.encodeWithEntities(fileName, charset));
         }
 
         @Override
@@ -1535,8 +1539,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         StringBuilder postedBody = new StringBuilder(1000);
         HTTPFileArg[] files = getHTTPFiles();
 
-        final String contentEncoding = getContentEncodingOrNull();
-        final boolean haveContentEncoding = contentEncoding != null;
+        final String contentEncoding = getContentEncoding();
+        Charset charset = Charset.forName(contentEncoding);
+        final boolean haveContentEncoding = true;
 
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
@@ -1547,25 +1552,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         Arrays.asList(entityEnclosingRequest.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE)));
                 entityEnclosingRequest.removeHeaders(HTTPConstants.HEADER_CONTENT_TYPE);
             }
-            // If a content encoding is specified, we use that as the
-            // encoding of any parameter values
-            Charset charset;
-            if(haveContentEncoding) {
-                charset = Charset.forName(contentEncoding);
-            } else {
-                charset = MIME.DEFAULT_CHARSET;
-            }
 
+            // doBrowserCompatibleMultipart means "use charset for encoding MIME headers",
+            // while RFC6532 means "use UTF-8 for encoding MIME headers"
+            boolean doBrowserCompatibleMultipart = getDoBrowserCompatibleMultipart();
             if(log.isDebugEnabled()) {
                 log.debug("Building multipart with:getDoBrowserCompatibleMultipart(): {}, with charset:{}, haveContentEncoding:{}",
-                        getDoBrowserCompatibleMultipart(), charset, haveContentEncoding);
+                        doBrowserCompatibleMultipart, charset, haveContentEncoding);
             }
             // Write the request to our own stream
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-            if(getDoBrowserCompatibleMultipart()) {
+            multipartEntityBuilder.setCharset(charset);
+            if (doBrowserCompatibleMultipart) {
                 multipartEntityBuilder.setLaxMode();
             } else {
-                multipartEntityBuilder.setStrictMode();
+                // Use UTF-8 for encoding header names and values
+                multipartEntityBuilder.setMode(HttpMultipartMode.RFC6532);
             }
             // Create the parts
             // Add any parameters
@@ -1596,7 +1598,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HTTPFileArg file = files[i];
 
                 File reservedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
-                fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.parse(file.getMimeType()));
+                Charset filenameCharset = doBrowserCompatibleMultipart ? charset : StandardCharsets.UTF_8;
+                fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.parse(file.getMimeType()), filenameCharset);
                 multipartEntityBuilder.addPart(file.getParamName(), fileBodies[i] );
             }
 
@@ -1652,12 +1655,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     StringBuilder postBody = new StringBuilder();
                     for (JMeterProperty jMeterProperty : getArguments()) {
                         HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-                        // Note: if "Encoded?" is not selected, arg.getEncodedValue is equivalent to arg.getValue
-                        if (haveContentEncoding) {
-                            postBody.append(arg.getEncodedValue(contentEncoding));
-                        } else {
-                            postBody.append(arg.getEncodedValue());
-                        }
+                        postBody.append(arg.getEncodedValue(contentEncoding));
                     }
                     // Let StringEntity perform the encoding
                     StringEntity requestEntity = new StringEntity(postBody.toString(), contentEncoding);
@@ -1669,8 +1667,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     if(!hasContentTypeHeader && ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
                         entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
-                    String urlContentEncoding = contentEncoding;
-                    UrlEncodedFormEntity entity = createUrlEncodedFormEntity(urlContentEncoding);
+                    UrlEncodedFormEntity entity = createUrlEncodedFormEntity(contentEncoding);
                     entityEnclosingRequest.setEntity(entity);
                     writeEntityToSB(postedBody, entity, EMPTY_FILE_BODIES, contentEncoding);
                 }
@@ -1742,7 +1739,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // Check for local contentEncoding (charset) override; fall back to default for content body
         // we do this here rather so we can use the same charset to retrieve the data
-        final String charset = getContentEncoding(HTTP.DEF_CONTENT_CHARSET.name());
+        final String charset = getContentEncoding();
 
         // Only create this if we are overriding whatever default there may be
         // If there are no arguments, we can send a file as the body of the request
@@ -1775,7 +1772,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             entity.setEntity(requestEntity);
         } else if (hasArguments()) {
             hasEntityBody = true;
-            entity.setEntity(createUrlEncodedFormEntity(getContentEncodingOrNull()));
+            entity.setEntity(createUrlEncodedFormEntity(getContentEncoding()));
         }
         // Check if we have any content to send for body
         if(hasEntityBody) {
@@ -1792,20 +1789,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Create UrlEncodedFormEntity from parameters
-     * @param contentEncoding Content encoding may be null or empty
+     * @param urlContentEncoding Content encoding may be null or empty
      * @return {@link UrlEncodedFormEntity}
      * @throws UnsupportedEncodingException
      */
-    private UrlEncodedFormEntity createUrlEncodedFormEntity(final String contentEncoding) throws UnsupportedEncodingException {
+    private UrlEncodedFormEntity createUrlEncodedFormEntity(final String urlContentEncoding) throws UnsupportedEncodingException {
         // It is a normal request, with parameter names and values
         // Add the parameters
         PropertyIterator args = getArguments().iterator();
         List<NameValuePair> nvps = new ArrayList<>();
-        String urlContentEncoding = contentEncoding;
-        if (urlContentEncoding == null || urlContentEncoding.length() == 0) {
-            // Use the default encoding for urls
-            urlContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
-        }
         while (args.hasNext()) {
             HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
             // The HTTPClient always urlencodes both name and value,
@@ -1828,27 +1820,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             nvps.add(new BasicNameValuePair(parameterName, parameterValue));
         }
         return new UrlEncodedFormEntity(nvps, urlContentEncoding);
-    }
-
-
-    /**
-     * @return the value of {@link #getContentEncoding()}; forced to null if empty
-     */
-    private String getContentEncodingOrNull() {
-        return getContentEncoding(null);
-    }
-
-    /**
-     * @param dflt the default to be used
-     * @return the value of {@link #getContentEncoding()}; default if null or empty
-     */
-    private String getContentEncoding(String dflt) {
-        String ce = getContentEncoding();
-        if (isNullOrEmptyTrimmed(ce)) {
-            return dflt;
-        } else {
-            return ce;
-        }
     }
 
     private static void saveConnectionCookies(HttpResponse method, URL u, CookieManager cookieManager) {

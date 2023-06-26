@@ -558,7 +558,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the encoding of the content, i.e. its charset name
      */
     public String getContentEncoding() {
-        return get(getSchema().getContentEncoding());
+        String encoding = get(getSchema().getContentEncoding());
+        if (encoding.isEmpty()) {
+            return getSchema().getContentEncoding().getDefaultValue();
+        }
+        return encoding;
     }
 
     public void setUseKeepAlive(boolean value) {

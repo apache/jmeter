@@ -114,8 +114,8 @@ public class PostWriterTest {
 
         checkContentTypeMultipart(connection, PostWriter.BOUNDARY);
         byte[] expectedFormBody = createExpectedOutput(PostWriter.BOUNDARY, null, titleValue, descriptionValue, TEST_FILE_CONTENT);
-        checkContentLength(connection, expectedFormBody.length);
         checkArraysHaveSameContent(expectedFormBody, connection.getOutputStreamContent());
+        checkContentLength(connection, expectedFormBody.length);
         connection.disconnect();
 
         // Test sending data as ISO-8859-1
@@ -545,14 +545,14 @@ public class PostWriterTest {
 
         checkNoContentType(connection);
         StringBuilder sb = new StringBuilder();
-        expectedUrl = sb.append("title=").append(titleValue.replaceAll("%20", "+").replaceAll("%C3%85", "%C5"))
-                .append("&description=").append(descriptionValue.replaceAll("%C3%85", "%C5")).toString().getBytes("US-ASCII");
-        checkContentLength(connection, expectedUrl.length);
+        expectedUrl = sb.append("title=").append(titleValue.replaceAll("%20", "+"))
+                .append("&description=").append(descriptionValue).toString().getBytes(StandardCharsets.UTF_8);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
+        checkContentLength(connection, expectedUrl.length);
         assertEquals(
-                // HTTPSampler uses ISO-8859-1 as default encoding
-                URLDecoder.decode(new String(expectedUrl, "US-ASCII"), "ISO-8859-1"),
-                URLDecoder.decode(new String(connection.getOutputStreamContent(), "US-ASCII"), "ISO-8859-1"));
+                // HTTPSampler uses UTF-8 as default encoding
+                URLDecoder.decode(new String(expectedUrl, StandardCharsets.UTF_8), "UTF-8"),
+                URLDecoder.decode(new String(connection.getOutputStreamContent(), StandardCharsets.UTF_8), "UTF-8"));
         connection.disconnect();
 
         // Test sending data as ISO-8859-1

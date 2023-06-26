@@ -43,7 +43,6 @@ import org.apache.jmeter.protocol.http.control.gui.GraphQLHTTPSamplerGui;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
-import org.apache.jmeter.protocol.http.sampler.PostWriter;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.GraphQLRequestParamUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -218,24 +217,10 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             final String contentType = request.getContentType();
             MultipartUrlConfig urlConfig = request.getMultipartConfig(contentType);
             String contentEncoding = sampler.getContentEncoding();
+            log.debug("Using encoding {} for request body", contentEncoding);
+
             // Get the post data using the content encoding of the request
-            String postData = null;
-            if (log.isDebugEnabled()) {
-                if(!StringUtils.isEmpty(contentEncoding)) {
-                    log.debug("Using encoding {} for request body", contentEncoding);
-                }
-                else {
-                    log.debug("No encoding found, using JRE default encoding for request body");
-                }
-            }
-
-
-            if (!StringUtils.isEmpty(contentEncoding)) {
-                postData = new String(request.getRawPostData(), contentEncoding);
-            } else {
-                // Use default encoding
-                postData = new String(request.getRawPostData(), PostWriter.ENCODING);
-            }
+            String postData = new String(request.getRawPostData(), contentEncoding);
 
             if (urlConfig != null) {
                 urlConfig.parseArguments(postData);
@@ -436,16 +421,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * @param request {@link HttpRequestHdr}
      */
     protected void computePath(HTTPSamplerBase sampler, HttpRequestHdr request) {
-        if(sampler.getContentEncoding() != null) {
-            sampler.setPath(request.getPath(), sampler.getContentEncoding());
-        }
-        else {
-            // Although the spec says UTF-8 should be used for encoding URL parameters,
-            // most browser use ISO-8859-1 for default if encoding is not known.
-            // We use null for contentEncoding, then the url parameters will be added
-            // with the value in the URL, and the "encode?" flag set to false
-            sampler.setPath(request.getPath(), null);
-        }
+        sampler.setPath(request.getPath(), sampler.getContentEncoding());
         if (log.isDebugEnabled()) {
             log.debug("Proxy: finished setting path: {}", sampler.getPath());
         }
