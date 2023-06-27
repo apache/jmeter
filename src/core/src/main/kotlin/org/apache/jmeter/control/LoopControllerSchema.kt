@@ -45,5 +45,5 @@ public abstract class LoopControllerSchema : GenericControllerSchema() {
      * However, it's not clear that a Thread Group could ever be repeated.
      */
     public val continueForever: BooleanPropertyDescriptor<LoopControllerSchema>
-        by boolean("LoopController.continue_forever")
+        by boolean("LoopController.continue_forever", default = true /* previous releases initialized value in constructor */)
 }
