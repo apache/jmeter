@@ -156,9 +156,12 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+  <li>Alex Schwartz, <a href="https://github.com/alexsch01">@alexsch01</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
+  <li>David Getzlaff, <a href="https://github.com/dgetzlaf">@dgetzlaf</a></li>
+  <li>LeeBaul, <a href="https://github.com/libaolu">@libaolu</a></li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
