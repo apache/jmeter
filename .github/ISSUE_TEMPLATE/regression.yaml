@@ -42,7 +42,7 @@ body:
       description: |
         What JMeter version and edition did you use?
         Note: While you can obviously continue using older versions of JMeter, it may well be that your bug is already fixed. If you're using an older version, please also try to reproduce the bug in the latest version of JMeter before reporting it.
-      placeholder: ex. 5.5
+      placeholder: ex. 5.6
     validations:
       required: true
   - type: input
