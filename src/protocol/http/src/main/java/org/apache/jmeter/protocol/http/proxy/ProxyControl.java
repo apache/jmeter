@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.prefs.Preferences;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -398,11 +399,19 @@ public class ProxyControl extends GenericController implements NonTestElement {
     }
 
     public void setIncludeList(Collection<String> list) {
-        setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet<>(list)));
+        if (list.size() >= 2) {
+            // Deduplicate if there is more than one element in the list
+            list = list.stream().distinct().collect(Collectors.toList());
+        }
+        setProperty(new CollectionProperty(INCLUDE_LIST, list));
     }
 
     public void setExcludeList(Collection<String> list) {
-        setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet<>(list)));
+        if (list.size() >= 2) {
+            // Deduplicate if there is more than one element in the list
+            list = list.stream().distinct().collect(Collectors.toList());
+        }
+        setProperty(new CollectionProperty(EXCLUDE_LIST, list));
     }
 
     public void setRegexMatch(boolean b) {

@@ -173,7 +173,7 @@ public class DslPrinterTraverser(
             is DoubleProperty -> append(property.stringValue)
             is FloatProperty -> append(property.stringValue).append('f')
             is LongProperty -> append(property.stringValue).append('d')
-            is StringProperty -> appendLiteral(property.stringValue)
+            is StringProperty -> property.stringValue?.let { appendLiteral(it) } ?: run { append("null") }
 
             is TestElementProperty -> {
                 val element = property.element

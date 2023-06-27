@@ -482,10 +482,16 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         } else {
             writeLock();
             try {
-                propMap.put(property.getName(), property);
-                Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
-                if (propMapConcurrent != null) {
-                    propMapConcurrent.put(property.getName(), property);
+                if (property instanceof StringProperty && property.getStringValue() == null) {
+                    // Avoid storing properties with null values since they will be skipped anyway when saving
+                    // the test plan
+                    removeProperty(property.getName());
+                } else {
+                    propMap.put(property.getName(), property);
+                    Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+                    if (propMapConcurrent != null) {
+                        propMapConcurrent.put(property.getName(), property);
+                    }
                 }
             } finally {
                 writeUnlock();
