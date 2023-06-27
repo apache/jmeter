@@ -238,6 +238,8 @@ Apologies if we have omitted anyone else.
 <ul>
   <li><pr>5987</pr>HTTP sampler sends filenames with percent-encoded UTF-8, however it is not aligned with the browsers. The workaround is to refrain non-ASCII filenames</li>
 
+  <li><issue>6004</issue>Java Request sampler cannot be enabled again after disabling in UI (fixed in 5.6.1, <pr>6012</pr>)</li>
+
 <li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</li>
 
