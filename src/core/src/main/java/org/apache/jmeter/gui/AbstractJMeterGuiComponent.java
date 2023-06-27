@@ -69,7 +69,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     /** Logging */
     private static final Logger log = LoggerFactory.getLogger(AbstractJMeterGuiComponent.class);
 
-    /** Flag indicating whether or not this component is enabled. */
+    /** Flag indicating whether this component is enabled. */
     private boolean enabled = true;
 
     /**
