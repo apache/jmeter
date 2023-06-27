@@ -41,7 +41,7 @@ body:
     attributes:
       label: JMeter Version
       description: What JMeter version and edition did you use?
-      placeholder: ex. 5.5
+      placeholder: ex. 5.6
     validations:
       required: true
   - type: input
