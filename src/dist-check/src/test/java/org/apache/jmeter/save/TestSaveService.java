@@ -117,7 +117,7 @@ public class TestSaveService extends JMeterTestCase {
         final FileStats origStats = getFileStats(testFile);
         final FileStats savedStats = getFileStats(savedFile);
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
+        ByteArrayOutputStream out = new ByteArrayOutputStream(Math.toIntExact(testFile.length()));
         try {
             HashTree tree = SaveService.loadTree(testFile);
             SaveService.saveTree(tree, out);

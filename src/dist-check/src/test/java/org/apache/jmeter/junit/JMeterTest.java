@@ -28,6 +28,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -45,6 +47,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.gui.ObsoleteGui;
+import org.apache.jmeter.dsl.DslPrinterTraverser;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -52,6 +55,8 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -270,6 +275,8 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
                 System.out.println("o.a.j.junit.JMeterTest INFO: JMeterGUIComponent: skipping some tests " + item.getClass().getName());
             } else {
                 ts.addTest(new JMeterTest("GUIComponents2", item));
+                ts.addTest(new JMeterTest("saveLoadShouldKeepElementIntact", item));
+                ts.addTest(new JMeterTest("propertiesShouldNotBeInitializedToNullValues", item));
                 ts.addTest(new JMeterTest("runGUITitle", item));
             }
             suite.addTest(ts);
@@ -289,6 +296,8 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
                 JMeterGUIComponent item = new TestBeanGUI(c);
                 TestSuite ts = new TestSuite(item.getClass().getName());
                 ts.addTest(new JMeterTest("GUIComponents2", item));
+                ts.addTest(new JMeterTest("saveLoadShouldKeepElementIntact", item));
+                ts.addTest(new JMeterTest("propertiesShouldNotBeInitializedToNullValues", item));
                 ts.addTest(new JMeterTest("runGUITitle", item));
                 suite.addTest(ts);
             } catch (IllegalArgumentException e) {
@@ -384,6 +393,75 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         assertEquals("CONFIGURE-TEST: Failed on " + name, el.getName(), guiItem.getName());
         guiItem.modifyTestElement(el2);
         assertEquals("Modify Test: Failed on " + name, "hey, new name!:", el2.getName());
+    }
+
+    public void propertiesShouldNotBeInitializedToNullValues() {
+        TestElement el = guiItem.createTestElement();
+        PropertyIterator it = el.propertyIterator();
+        while (it.hasNext()) {
+            JMeterProperty property = it.next();
+            if (property.getObjectValue() == null) {
+                fail(
+                        "Property " + property.getName() + " is initialized with NULL OBJECT value in " +
+                                " test element " + el + " created with " + guiItem + ".createTestElement() " +
+                                "Please refrain from that since null properties consume memory, and they will be " +
+                                "removed when saving and loading the plan anyway"
+                );
+            }
+            if (property.getStringValue() == null) {
+                fail(
+                        "Property " + property.getName() + " is initialized with NULL STRING value in " +
+                                " test element " + el + " created with " + guiItem + ".createTestElement() " +
+                                "Please refrain from that since null properties consume memory, and they will be " +
+                                "removed when saving and loading the plan anyway"
+                );
+            }
+        }
+    }
+
+    public void saveLoadShouldKeepElementIntact() throws IOException {
+        TestElement expected = guiItem.createTestElement();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        SaveService.saveElement(expected, bos);
+        byte[] serializedBytes = bos.toByteArray();
+        TestElement actual = (TestElement) SaveService.loadElement(new ByteArrayInputStream(serializedBytes));
+        compareAllProperties(expected, actual, serializedBytes);
+    }
+
+    private static void compareAllProperties(TestElement expected, TestElement actual, byte[] serializedBytes) {
+        // JMeter restores "enabled" as StringProperty, see
+        // org.apache.jmeter.save.converters.ConversionHelp.restoreSpecialProperties
+        // So we normalize it back to BooleanProperty
+        JMeterProperty expEnabled = expected.getPropertyOrNull(expected.getSchema().getEnabled());
+        if (expEnabled != null && (expEnabled.getStringValue().equals("true") || expEnabled.getStringValue().equals("false"))) {
+            JMeterProperty actEnabled = actual.getPropertyOrNull(actual.getSchema().getEnabled());
+            if (actEnabled != null && actEnabled.getStringValue().equals(expEnabled.getStringValue())) {
+                actual.setProperty(expEnabled);
+            }
+        }
+
+        String expectedStr = new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(expected).toString();
+        if (!Objects.equals(expected, actual)) {
+            boolean abc = Objects.equals(expected, actual);
+            assertEquals(
+                    "TestElement after 'save+load' should match the one created in GUI\n" +
+                            "JMX is " + new String(serializedBytes, StandardCharsets.UTF_8),
+                    expectedStr,
+                    new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(actual).toString()
+            );
+            fail("TestElement after 'save+load' should match the one created in GUI. " +
+                    "DSL representation is the same, however TestElement#equals says the elements are different. " +
+                    "DSL is " + expectedStr + "\n" +
+                    "JMX is " + new String(serializedBytes, StandardCharsets.UTF_8));
+        }
+        assertEquals(
+                "TestElement.hashCode after 'save+load' should match the one created in GUI. " +
+                "DSL representation is the same, however TestElement#hashCode says the elements are different. " +
+                "DSL is " + expectedStr + "\n" +
+                "JMX is " + new String(serializedBytes, StandardCharsets.UTF_8),
+                expected.hashCode(),
+                actual.hashCode()
+        );
     }
 
     /*
