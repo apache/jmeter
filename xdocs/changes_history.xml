@@ -236,6 +236,8 @@ Apologies if we have omitted anyone else.
 
 <ch_section>Known problems and workarounds</ch_section>
 <ul>
+  <li><issue>6008</issue> ThreadGroups are running endlessly in non-gui mode (fixed in 5.6.1, see <pr>6011</pr>)</li>
+
   <li><pr>5987</pr>HTTP sampler sends filenames with percent-encoded UTF-8, however it is not aligned with the browsers. The workaround is to refrain non-ASCII filenames</li>
 
   <li><issue>6004</issue>Java Request sampler cannot be enabled again after disabling in UI (fixed in 5.6.1, <pr>6012</pr>)</li>

@@ -48,10 +48,6 @@ public class LoopController extends GenericController implements Serializable, I
 
     private boolean breakLoop;
 
-    public LoopController() {
-        set(getSchema().getContinueForever(), true);
-    }
-
     @Override
     public LoopControllerSchema getSchema() {
         return LoopControllerSchema.INSTANCE;

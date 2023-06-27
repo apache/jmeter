@@ -109,6 +109,12 @@ Summary
 
 <ch_section>Bug fixes</ch_section>
 
+<h3>Thread Groups</h3>
+<ul>
+  <li><pr>6011</pr>Regression since 5.6: ThreadGroups are running endlessly in non-gui mode: use default value
+    for LoopController.continue_forever rather than initializing it in the constructor</li>
+</ul>
+
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
 </ul>
