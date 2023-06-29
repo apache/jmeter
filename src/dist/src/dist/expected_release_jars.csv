@@ -24,7 +24,7 @@
 113369,bsf-2.4.0.jar
 389033,bsh-2.0b6.jar
 912143,caffeine-2.9.3.jar
-224447,checker-qual-3.34.0.jar
+224450,checker-qual-3.35.0.jar
 353793,commons-codec-1.15.jar
 588337,commons-collections-3.2.2.jar
 751914,commons-collections4-4.4.jar
@@ -49,7 +49,7 @@
 217795,darklaf-windows-2.7.3.jar
 98115,dec-0.1.2.jar
 320748,dnsjava-2.1.9.jar
-16477,error_prone_annotations-2.19.1.jar
+16826,error_prone_annotations-2.20.0.jar
 1736381,freemarker-2.3.32.jar
 32359,geronimo-jms_1.1_spec-1.1.1.jar
 8038657,groovy-3.0.17.jar
@@ -72,9 +72,9 @@
 852871,httpcore5-5.2.jar
 236827,httpcore5-h2-5.2.jar
 41727,httpmime-4.5.14.jar
-75564,jackson-annotations-2.15.1.jar
-546100,jackson-core-2.15.1.jar
-1620059,jackson-databind-2.15.1.jar
+75567,jackson-annotations-2.15.2.jar
+549207,jackson-core-2.15.2.jar
+1620088,jackson-databind-2.15.2.jar
 78030,javax.activation-1.2.0.jar
 142391,jcharts-0.7.5.jar
 16555,jcl-over-slf4j-1.7.36.jar
@@ -90,10 +90,10 @@
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar
 32033,kotlin-logging-jvm-2.0.5.jar
-1670468,kotlin-stdlib-1.8.21.jar
-221490,kotlin-stdlib-common-1.8.21.jar
-963,kotlin-stdlib-jdk7-1.8.21.jar
-968,kotlin-stdlib-jdk8-1.8.21.jar
+1670469,kotlin-stdlib-1.8.22.jar
+221491,kotlin-stdlib-common-1.8.22.jar
+963,kotlin-stdlib-jdk7-1.8.22.jar
+969,kotlin-stdlib-jdk8-1.8.22.jar
 1548432,kotlinx-coroutines-core-jvm-1.7.1.jar
 9964,kotlinx-coroutines-swing-1.7.1.jar
 792176,kotlinx-html-jvm-0.7.3.jar
@@ -110,7 +110,7 @@
 29680,mxparser-1.2.2.jar
 5052937,neo4j-java-driver-4.4.11.jar
 65261,oro-2.0.8.jar
-1314577,ph-commons-10.2.4.jar
+1314621,ph-commons-10.2.5.jar
 530791,ph-css-6.5.0.jar
 1256127,plot-api-jvm-4.4.1.jar
 1169629,plot-base-portable-jvm-3.2.0.jar
