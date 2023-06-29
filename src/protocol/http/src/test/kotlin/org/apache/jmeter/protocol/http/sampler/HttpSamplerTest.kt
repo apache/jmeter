@@ -30,6 +30,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
 import org.apache.jmeter.control.LoopController
 import org.apache.jmeter.junit.JMeterTestCase
+import org.apache.jmeter.protocol.http.control.Header
 import org.apache.jmeter.protocol.http.util.HTTPFileArg
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
 import org.apache.jmeter.threads.ThreadGroup
@@ -38,6 +39,7 @@ import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import java.nio.charset.Charset
 import java.nio.file.InvalidPathException
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
@@ -104,6 +106,18 @@ class HttpSamplerTest : JMeterTestCase() {
                     httpFiles = arrayOf(
                         HTTPFileArg(testFile.absolutePathString(), "file_parameter", "application/octet-stream")
                     )
+                    if (!Charset.defaultCharset().name().equals("UTF-8")) {
+                        // Content-Encoding: UTF-8 header is not really required, however Wiremock uses commons-fileupload
+                        // to parse Content-Disposition, and we need Content-Encoding to workaround
+                        // https://issues.apache.org/jira/browse/FILEUPLOAD-206
+                        org.apache.jmeter.protocol.http.control.HeaderManager::class {
+                            add(Header("Content-Encoding", "UTF-8"))
+                            props {
+                                // guiClass is needed for org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.applies
+                                it[guiClass] = "org.apache.jmeter.protocol.http.gui.HeaderPanel"
+                            }
+                        }
+                    }
                 }
             }
         }
