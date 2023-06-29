@@ -75,12 +75,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void addMetric(long timestamp, String contextName, String metricName, String metricValue) {
-        String name = new StringBuilder(50)
-                .append(prefix)
-                .append(contextName)
-                .append(".")
-                .append(metricName)
-                .toString();
+        String name = prefix + contextName + "." + metricName;
         synchronized (lock) {
             metrics.add(new MetricTuple(name, timestamp, metricValue));
         }

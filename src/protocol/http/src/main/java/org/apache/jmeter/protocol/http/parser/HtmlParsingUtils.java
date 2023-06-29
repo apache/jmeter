@@ -355,7 +355,7 @@ public final class HtmlParsingUtils {
     }
 
     // N.B. Since the tags are extracted from an HTML Form, any values must already have been encoded
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings({"JdkObsolete", "NonApiType"})
     private static boolean recurseForm(Node tempNode, LinkedList<HTTPSamplerBase> urlConfigs, URL context, String selectName,
             boolean inForm) {
         NamedNodeMap nodeAtts = tempNode.getAttributes();

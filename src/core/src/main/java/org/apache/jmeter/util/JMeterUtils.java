@@ -1243,6 +1243,7 @@ public class JMeterUtils implements UnitTestManager {
      *            multi-line string headers
      * @return a map name/value for each header
      */
+    @SuppressWarnings("NonApiType")
     public static LinkedHashMap<String, String> parseHeaders(String headers) {
         LinkedHashMap<String, String> linkedHeaders = new LinkedHashMap<>();
         String[] list = headers.split("\n"); // $NON-NLS-1$

@@ -37,6 +37,7 @@
     <trusted-key id='7616eb882daf57a11477aaf559a252fb1199d873' group='com.google.code.findbugs' />
     <trusted-key id='afcc4c7594d09e2182c60e0f7a01b0f236e5430f' group='com.google.code.gson' />
     <trusted-key id='c7be5bcc9fec15518cfda882b0f3710fa64900e7' group='com.google.code.gson' />
+    <trusted-key id='187366a3ffe6bf8f94b9136a9987b20c8f6a3064' group='com.google.errorprone' />
     <trusted-key id='7615ad56144df2376f49d98b1669c4bb543e0445' group='com.google.errorprone' />
     <trusted-key id='e77417ac194160a3fabd04969a259c7ee636c5ed' group='com.google.errorprone' />
     <trusted-key id='ee0ca873074092f806f59b65d364abaa39a47320' group='com.google.errorprone' />
@@ -47,6 +48,7 @@
     <trusted-key id='d5f46bc0b86af5dc56df58f05e975cb00c643dbf' group='com.google.inject' />
     <trusted-key id='b801e2f8ef035068ec1139cc29579f18fa8fd93b' group='com.google.j2objc' />
     <trusted-key id='eb1b3de71713c9ec2e87cc26ee92349ad86de446' group='com.google.j2objc' />
+    <trusted-key id='187366a3ffe6bf8f94b9136a9987b20c8f6a3064' group='com.google.protobuf' />
     <trusted-key id='d75e25b78ebb19e47c0a99bca7764f502a938c99' group='com.google.protobuf' />
     <trusted-key id='f1a51e051f527e0c8e24d54d4b1e11d5a4b91e89' group='com.google.protobuf' />
     <trusted-key id='a9789342f598ad5b1175ef357eb97d110dfadd60' group='com.googlecode.concurrent-trees' />
@@ -85,6 +87,7 @@
     <trusted-key id='aa417737bd805456db3cbdde6601e5c08dccbb96' group='info.picocli' />
     <trusted-key id='c62c0ce2e5c346b2d9bf2d8bb2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='1ab9bdf40ed49debb5caaded5b30d3b10694f057' group='io.codearte.gradle.nexus' />
+    <trusted-key id='7186bbf993566d8c2f4f7ed7d945e643368fef62' group='io.github.eisop' />
     <trusted-key id='d477d51812e692011db11e66a6ea2e2bf22e0543' group='io.github.java-diff-utils' />
     <trusted-key id='e52567d2589415bd74eb4c2867631bc0568801c3' group='io.github.microutils' />
     <trusted-key id='050a37a2e0577f4baa095b52602ec18d20c4661c' group='io.github.x-stream' />

@@ -171,6 +171,7 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
+    @SuppressWarnings("NonApiType")
     private static void trackIterationListeners(LinkedList<TestElement> pStack) {
         TestElement child = pStack.getLast();
         if (child instanceof LoopIterationListener) {
