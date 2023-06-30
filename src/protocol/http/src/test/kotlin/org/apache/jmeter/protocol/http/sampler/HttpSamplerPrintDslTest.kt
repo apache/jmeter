@@ -21,6 +21,8 @@ import org.apache.jmeter.dsl.DslPrinterTraverser
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui
 import org.apache.jmeter.testelement.TestElement
+import org.apache.jmeter.testelement.TestElementTraverser
+import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apache.jmeter.treebuilder.dsl.testTree
 import org.apache.jmeter.util.JMeterUtils
 import org.junit.jupiter.api.AfterAll
@@ -47,6 +49,38 @@ class HttpSamplerPrintDslTest : JMeterTestCase() {
         @AfterAll
         fun tearDown() {
             JMeterUtils.setLocale(locale)
+        }
+    }
+
+    object RemoveDefaultValues : TestElementTraverser {
+        private val elements = mutableListOf<TestElement>()
+        private val defaultProps = mutableListOf<MutableList<String>>()
+
+        override fun startTestElement(el: TestElement) {
+            elements += el
+            defaultProps += mutableListOf<String>()
+        }
+
+        override fun endTestElement(el: TestElement) {
+            val element = elements.removeLast()
+            for (propertyName in defaultProps.removeLast()) {
+                element.removeProperty(propertyName)
+            }
+        }
+
+        override fun startProperty(key: JMeterProperty) {
+            val element = elements.last()
+            val defaultProp = defaultProps.last()
+            element.schema.properties[key.name]?.let {
+                if (key.stringValue == it.defaultValueAsString) {
+                    // We can't remove property here as it would break ongoing iterator
+                    // So we remove properties in endTestElement instead
+                    defaultProp += key.name
+                }
+            }
+        }
+
+        override fun endProperty(key: JMeterProperty) {
         }
     }
 
@@ -106,10 +140,13 @@ class HttpSamplerPrintDslTest : JMeterTestCase() {
             }
         }.keys.first() as TestElement
 
+        createdWithUi.traverse(RemoveDefaultValues)
+
         // We compare elements manually, and call assertEquals(toString, toString) so
         // the test output looks better (diff in IDE) in case of the failure
         // If we use just assertEquals(createdWithUi, createdWithDsl), then there will be no "diff in IDE"
         if (createdWithUi != createdWithDsl) {
+            val abc = createdWithDsl.equals(createdWithDsl)
             assertEquals(
                 DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(createdWithUi).toString(),
                 DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(createdWithDsl).toString()

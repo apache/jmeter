@@ -40,7 +40,7 @@ public data class BooleanPropertyDescriptor<in Schema : BaseTestElementSchema>(
     public operator fun get(target: TestElement): Boolean =
         target[this]
 
-    public operator fun set(target: TestElement, value: Boolean) {
+    public operator fun set(target: TestElement, value: Boolean?) {
         target[this] = value
     }
 
@@ -52,7 +52,7 @@ public data class BooleanPropertyDescriptor<in Schema : BaseTestElementSchema>(
 
     @JvmSynthetic
     @Suppress("NOTHING_TO_INLINE")
-    public inline operator fun setValue(testElement: TestElement, property: KProperty<*>, value: Boolean) {
+    public inline operator fun setValue(testElement: TestElement, property: KProperty<*>, value: Boolean?) {
         testElement[this] = value
     }
 }

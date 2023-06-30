@@ -95,6 +95,13 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     }
 
     /**
+     * Treat unset checkbox as empty, so "unset" checkboxes do not override values in HTTP Request Samplers.
+     */
+    private static Boolean nullIfUnset(JCheckBox checkBox) {
+        return checkBox.isSelected() ? true : null;
+    }
+
+    /**
      * Modifies a given TestElement to mirror the data in the gui components.
      *
      * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
@@ -107,15 +114,16 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         cfg.addConfigElement(el);
         super.configureTestElement(config);
         HTTPSamplerBaseSchema.INSTANCE httpSchema = HTTPSamplerBaseSchema.INSTANCE;
-        config.set(httpSchema.getRetrieveEmbeddedResources(), retrieveEmbeddedResources.isSelected());
+        config.set(httpSchema.getRetrieveEmbeddedResources(), nullIfUnset(retrieveEmbeddedResources));
         enableConcurrentDwn(retrieveEmbeddedResources.isSelected());
-        config.set(httpSchema.getConcurrentDownload(), retrieveEmbeddedResources.isSelected());
-        if (!StringUtils.isEmpty(concurrentPool.getText())) {
+        if (concurrentDwn.isSelected()) {
+            config.set(httpSchema.getConcurrentDownload(), true);
             config.set(httpSchema.getConcurrentDownloadPoolSize(), concurrentPool.getText());
         } else {
+            config.removeProperty(httpSchema.getConcurrentDownload());
             config.removeProperty(httpSchema.getConcurrentDownloadPoolSize());
         }
-        config.set(httpSchema.getStoreAsMD5(), useMD5.isSelected());
+        config.set(httpSchema.getStoreAsMD5(), nullIfUnset(useMD5));
         config.set(httpSchema.getEmbeddedUrlAllowRegex(), embeddedAllowRE.getText());
         config.set(httpSchema.getEmbeddedUrlExcludeRegex(), embeddedExcludeRE.getText());
 
@@ -171,7 +179,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         HTTPSamplerBaseSchema httpSchema = HTTPSamplerBaseSchema.INSTANCE;
         retrieveEmbeddedResources.setSelected(samplerBase.get(httpSchema.getRetrieveEmbeddedResources()));
         concurrentDwn.setSelected(samplerBase.get(httpSchema.getConcurrentDownload()));
-        concurrentPool.setText(samplerBase.getString(httpSchema.getConcurrentDownloadPoolSize()));
+        concurrentPool.setText(samplerBase.getPropertyAsString(httpSchema.getConcurrentDownloadPoolSize().getName(), ""));
         useMD5.setSelected(samplerBase.get(httpSchema.getStoreAsMD5()));
         embeddedAllowRE.setText(samplerBase.get(httpSchema.getEmbeddedUrlAllowRegex()));
         embeddedExcludeRE.setText(samplerBase.get(httpSchema.getEmbeddedUrlExcludeRegex()));

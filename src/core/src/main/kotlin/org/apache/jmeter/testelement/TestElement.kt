@@ -21,9 +21,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty
 import org.apache.jmeter.testelement.property.CollectionProperty
 import org.apache.jmeter.testelement.property.DoubleProperty
 import org.apache.jmeter.testelement.property.FloatProperty
-import org.apache.jmeter.testelement.property.IntegerProperty
 import org.apache.jmeter.testelement.property.JMeterProperty
-import org.apache.jmeter.testelement.property.LongProperty
 import org.apache.jmeter.testelement.property.NullProperty
 import org.apache.jmeter.testelement.property.PropertyIterator
 import org.apache.jmeter.testelement.property.StringProperty
@@ -269,7 +267,7 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property.name)
 
     /**
-     * Retrieve property name as string.
+     * Retrieve property as string, or default value, or empty string if the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
@@ -278,7 +276,7 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property)?.stringValue ?: property.defaultValue ?: ""
 
     /**
-     * Read property value as string, and return default value if the property is unset.
+     * Read property value as string, or default value, or empty string if the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
@@ -287,19 +285,19 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property)?.stringValue ?: property.defaultValueAsString ?: ""
 
     /**
-     * Set property as string, or remove it if the given value matches the default one for the property.
+     * Set property as string, or remove it if the given value is `null` or empty.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: PropertyDescriptor<*, *>, value: String?) {
-        removeOrSet(value.isNullOrEmpty() || property.defaultValueAsString == value, property.name) {
+        removeOrSet(value.isNullOrEmpty(), property.name) {
             StringProperty(it, value)
         }
     }
 
     /**
-     * Retrieve boolean property value.
+     * Retrieve boolean property value, or default value, or `false` if the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
@@ -308,14 +306,14 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property)?.booleanValue ?: property.defaultValue ?: false
 
     /**
-     * Set property as boolean, or remove it if the given value matches the default one for the property.
+     * Set property as boolean, or remove it if the given value is null.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-    public operator fun set(property: BooleanPropertyDescriptor<*>, value: Boolean) {
-        removeOrSet(property.defaultValue == value, property.name) {
-            BooleanProperty(it, value)
+    public operator fun set(property: BooleanPropertyDescriptor<*>, value: Boolean?) {
+        removeOrSet(value == null, property.name) {
+            BooleanProperty(it, value!!)
         }
     }
 
@@ -329,19 +327,17 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property)?.intValue ?: property.defaultValue ?: 0
 
     /**
-     * Set property as integer, or remove it if the given value matches the default one for the property.
+     * Set property as integer.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: IntegerPropertyDescriptor<*>, value: Int) {
-        removeOrSet(property.defaultValue == value, property.name) {
-            IntegerProperty(it, value)
-        }
+        setProperty(property.name, value)
     }
 
     /**
-     * Retrieve long property value.
+     * Retrieve long property value, or default value, or `0` if the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
@@ -350,19 +346,17 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property)?.longValue ?: property.defaultValue ?: 0
 
     /**
-     * Set property as long, or remove it if the given value matches the default one for the property.
+     * Set property as long.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: LongPropertyDescriptor<*>, value: Long) {
-        removeOrSet(property.defaultValue == value, property.name) {
-            LongProperty(it, value)
-        }
+        setProperty(property.name, value)
     }
 
     /**
-     * Retrieve float property value.
+     * Retrieve float property value, or default value, or `0.0f` if the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
@@ -371,19 +365,17 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property)?.floatValue ?: property.defaultValue ?: 0.0f
 
     /**
-     * Set property as float, or remove it if the given value matches the default one for the property.
+     * Set property as float.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: FloatPropertyDescriptor<*>, value: Float) {
-        removeOrSet(property.defaultValue == value, property.name) {
-            FloatProperty(it, value)
-        }
+        setProperty(FloatProperty(property.name, value))
     }
 
     /**
-     * Retrieve double property value.
+     * Retrieve double property value, or default value, or `0.0` if the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
@@ -392,19 +384,17 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property)?.doubleValue ?: property.defaultValue ?: 0.0
 
     /**
-     * Set property as double, or remove it if the given value matches the default one for the property.
+     * Set property as double.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: DoublePropertyDescriptor<*>, value: Double) {
-        removeOrSet(property.defaultValue == value, property.name) {
-            DoubleProperty(it, value)
-        }
+        setProperty(DoubleProperty(property.name, value))
     }
 
     /**
-     * Retrieve [Class] property value, or throw [NoSuchElementException] in case the property is unset.
+     * Retrieve [Class] property value, or default value, or throw [NoSuchElementException] in case the property is unset.
      * @throws NoSuchElementException if the property is unset
      * @since 5.6
      */
@@ -414,7 +404,7 @@ public interface TestElement : Cloneable {
         getOrNull(property) ?: throw NoSuchElementException("Property ${property.name} is unset for element $this")
 
     /**
-     * Retrieve [Class] property value, or return `null` in case the property is unset.
+     * Retrieve [Class] property value, or default value, or `null` in case the property is unset.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
@@ -426,14 +416,14 @@ public interface TestElement : Cloneable {
         } ?: property.defaultValue
 
     /**
-     * Set property as [Class], or remove it if the given value matches the default one for the property.
+     * Set property as [Class], or remove it if the given value is `null`.
      * The value is set as [StringProperty] with the name of the given class.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun <ValueClass : Any> set(property: ClassPropertyDescriptor<*, ValueClass>, value: Class<out ValueClass>?) {
-        removeOrSet(property.defaultValue == value, property.name) {
+        removeOrSet(value == null, property.name) {
             StringProperty(it, value!!.name)
         }
     }
@@ -583,7 +573,6 @@ public interface TestElement : Cloneable {
             imports = ["org.apache.jmeter.threads.JMeterContextService"]
         )
     )
-    @get:API(status = API.Status.DEPRECATED, since = "5.6")
     @set:API(status = API.Status.DEPRECATED, since = "5.6")
     public var threadName: String
 
