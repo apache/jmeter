@@ -214,7 +214,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             filesPanel.modifyTestElement(element);
         }
         HTTPSamplerBaseSchema.INSTANCE httpSchema = HTTPSamplerBaseSchema.INSTANCE;
-        element.set(httpSchema.getPostBodyRaw(), useRaw);
+        // Treat "unset" checkbox as "property removal" for HTTP Request Defaults component
+        // Regular sampler should save both true and false values
+        element.set(httpSchema.getPostBodyRaw(), useRaw ? Boolean.TRUE : (notConfigOnly ? false : null));
         element.set(httpSchema.getArguments(), args);
         element.set(httpSchema.getDomain(), domain.getText());
         element.set(httpSchema.getPort(), port.getText());
@@ -300,8 +302,11 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         } else {
             port.setText(portString);
         }
-        protocol.setText(el.getString(httpSchema.getProtocol()));
-        contentEncoding.setText(el.getString(httpSchema.getContentEncoding()));
+        // We explicitly
+        String protocol = el.getPropertyAsString(httpSchema.getProtocol().getName(), "");
+        this.protocol.setText(protocol);
+        String encoding = el.getPropertyAsString(httpSchema.getContentEncoding().getName(), "");
+        contentEncoding.setText(encoding);
         path.setText(el.getString(httpSchema.getPath()));
         if (notConfigOnly){
             method.setText(el.getString(httpSchema.getMethod()));

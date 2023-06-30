@@ -51,6 +51,7 @@ import org.apache.jmeter.dsl.DslPrinterTraverser;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.loadsave.IsEnabledNormalizer;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -429,16 +430,8 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
     }
 
     private static void compareAllProperties(TestElement expected, TestElement actual, byte[] serializedBytes) {
-        // JMeter restores "enabled" as StringProperty, see
-        // org.apache.jmeter.save.converters.ConversionHelp.restoreSpecialProperties
-        // So we normalize it back to BooleanProperty
-        JMeterProperty expEnabled = expected.getPropertyOrNull(expected.getSchema().getEnabled());
-        if (expEnabled != null && (expEnabled.getStringValue().equals("true") || expEnabled.getStringValue().equals("false"))) {
-            JMeterProperty actEnabled = actual.getPropertyOrNull(actual.getSchema().getEnabled());
-            if (actEnabled != null && actEnabled.getStringValue().equals(expEnabled.getStringValue())) {
-                actual.setProperty(expEnabled);
-            }
-        }
+        expected.traverse(IsEnabledNormalizer.INSTANCE);
+        actual.traverse(IsEnabledNormalizer.INSTANCE);
 
         String expectedStr = new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(expected).toString();
         if (!Objects.equals(expected, actual)) {

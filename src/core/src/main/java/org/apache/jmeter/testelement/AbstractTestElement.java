@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.jmeter.engine.util.NoThreadClone;
@@ -66,7 +65,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * Note: acquiring locks (read or write) allocates memory, and accesses {@link ThreadLocal}, so it can be expensive
      * in both CPU and allocation terms.
      */
-    private transient final ReadWriteLock lock =
+    private transient final ReentrantReadWriteLock lock =
             this instanceof NoThreadClone
                     // Note: thread groups are cloned for every thread, however, JMeterContext contains a reference
                     // to a non-cloned ThreadGroup instance.
@@ -75,6 +74,39 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                     || this instanceof AbstractThreadGroup
                     ? new ReentrantReadWriteLock()
                     : null;
+
+    private transient final ResourceLock readUnlock = lock == null ? null : lock.readLock()::unlock;
+
+    /**
+     * Downgrades input lock from write to read on close.
+     * It enables using {@link #writeLock()} in try-with-resources to upgrade the lock.
+     */
+    interface ResourceLock extends AutoCloseable {
+        @Override
+        void close();
+
+        ResourceLock NO_LOCK = () -> { };
+
+        /**
+         * Upgrades lock to write if needed, and returns a callback for releasing the write lock and restoring read locks.
+         * @see <a href="https://www.javaspecialists.eu/archive/Issue279-Upgrading-ReadWriteLock.html>Issue279-Upgrading-ReadWriteLock</a>
+         */
+        static ResourceLock releaseWrite(ReentrantReadWriteLock lock) {
+            int readHoldCount = lock.getWriteHoldCount() == 0 ? lock.getReadHoldCount() : 0;
+            // We need to unlock read locks since ReentrantReadWriteLock does not support lock upgrade
+            for (int i = 0; i < readHoldCount; i++) {
+                lock.readLock().unlock();
+            }
+            lock.writeLock().lock();
+            // Restore locks on close
+            return () -> {
+                for (int i = 0; i < readHoldCount; i++) {
+                    lock.readLock().lock();
+                }
+                lock.writeLock().unlock();
+            };
+        }
+    }
 
     /**
      * When the element is shared between threads, then {@link #lock} protects the access,
@@ -146,40 +178,33 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void clear() {
-        writeLock();
-        try {
+        try (ResourceLock ignored = writeLock()) {
             propMap.clear();
             Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
             if (propMapConcurrent != null) {
                 propMapConcurrent.clear();
             }
-        } finally {
-            writeUnlock();
         }
     }
 
-    private void writeLock() {
-        if (lock != null) {
-            lock.writeLock().lock();
+    /**
+     * Acquires write lock, and upgrades the current read lock to write lock if needed.
+     * Note: this should be used in try-with-resources for automatic cleanup.
+     * @return ResourceLock to close when the write lock is no longer needed
+     */
+    private ResourceLock writeLock() {
+        if (lock == null) {
+            return ResourceLock.NO_LOCK;
         }
+        return ResourceLock.releaseWrite(lock);
     }
 
-    private void writeUnlock() {
-        if (lock != null) {
-            lock.writeLock().unlock();
+    private ResourceLock readLock() {
+        if (lock == null) {
+            return ResourceLock.NO_LOCK;
         }
-    }
-
-    private void readLock() {
-        if (lock != null) {
-            lock.readLock().lock();
-        }
-    }
-
-    private void readUnlock() {
-        if (lock != null) {
-            lock.readLock().unlock();
-        }
+        lock.readLock().lock();
+        return readUnlock;
     }
 
     /**
@@ -197,15 +222,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void removeProperty(String key) {
-        writeLock();
-        try {
+        try (ResourceLock ignored = writeLock()) {
             propMap.remove(key);
             Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
             if (propMapConcurrent != null) {
                 propMapConcurrent.remove(key);
             }
-        } finally {
-            writeUnlock();
         }
     }
 
@@ -215,11 +237,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public boolean equals(Object o) {
         if (o instanceof AbstractTestElement) {
-            readLock();
-            try {
+            try (ResourceLock ignored = readLock()) {
                 return ((AbstractTestElement) o).propMap.equals(propMap);
-            } finally {
-                readUnlock();
             }
         } else {
             return false;
@@ -307,16 +326,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public void traverse(TestElementTraverser traverser) {
-        readLock();
-        try {
+        try (ResourceLock ignored = readLock()) {
             PropertyIterator iter = propertyIterator();
             traverser.startTestElement(this);
             while (iter.hasNext()) {
                 traverseProperty(traverser, iter.next());
             }
             traverser.endTestElement(this);
-        } finally {
-            readUnlock();
         }
     }
 
@@ -417,15 +433,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         JMeterProperty prop = getProperty(property.getName());
 
         if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().isEmpty())) {
-            writeLock();
-            try {
+            try (ResourceLock ignored = writeLock()) {
                 propMap.put(property.getName(), propertyToPut);
                 Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
                 if (propMapConcurrent != null) {
                     propMapConcurrent.put(property.getName(), propertyToPut);
                 }
-            } finally {
-                writeUnlock();
             }
         } else {
             prop.mergeIn(propertyToPut);
@@ -445,13 +458,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param property {@link JMeterProperty}
      */
     protected void clearTemporary(JMeterProperty property) {
-        writeLock();
-        try {
+        try (ResourceLock ignored = writeLock()) {
             if (temporaryProperties != null) {
                 temporaryProperties.remove(property);
             }
-        } finally {
-            writeUnlock();
         }
     }
 
@@ -480,8 +490,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                 getProperty(property.getName()).setObjectValue(property.getObjectValue());
             }
         } else {
-            writeLock();
-            try {
+            try (ResourceLock ignored = writeLock()) {
                 if (property instanceof StringProperty && property.getStringValue() == null) {
                     // Avoid storing properties with null values since they will be skipped anyway when saving
                     // the test plan
@@ -493,8 +502,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                         propMapConcurrent.put(property.getName(), property);
                     }
                 }
-            } finally {
-                writeUnlock();
             }
         }
     }
@@ -602,15 +609,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public PropertyIterator propertyIterator() {
         // Note: can't use ConcurrentMap here as it would return elements in unpredictable order
-        readLock();
-        try {
+        try (ResourceLock ignored = readLock()) {
             if (propMap.isEmpty()) {
                 return PropertyIteratorImpl.EMPTY_ITERATOR;
             }
             // TODO: copy the contents of the iterator to avoid ConcurrentModificationException?
             return new PropertyIteratorImpl(this, propMap.values());
-        } finally {
-            readUnlock();
         }
     }
 
@@ -619,15 +623,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param element {@link TestElement}
      */
     protected void mergeIn(TestElement element) {
-        writeLock();
-        try {
+        try (ResourceLock ignored = writeLock()) {
             PropertyIterator iter = element.propertyIterator();
             while (iter.hasNext()) {
                 JMeterProperty prop = iter.next();
                 addProperty(prop, false);
             }
-        } finally {
-            writeUnlock();
         }
     }
 
@@ -647,8 +648,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void setRunningVersion(boolean runningVersion) {
-        writeLock();
-        try {
+        try (ResourceLock ignored = writeLock()) {
             this.runningVersion = runningVersion;
             PropertyIterator iter = propertyIterator();
             Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
@@ -659,8 +659,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                     propMapConcurrent.put(property.getName(), property);
                 }
             }
-        } finally {
-            writeUnlock();
         }
     }
 
@@ -674,8 +672,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             // See https://github.com/apache/jmeter/issues/5875
             return;
         }
-        writeLock();
-        try {
+        try (ResourceLock ignored = writeLock()) {
             Iterator<Map.Entry<String, JMeterProperty>> iter = propMap.entrySet().iterator();
             while (iter.hasNext()) {
                 Map.Entry<String, JMeterProperty> entry = iter.next();
@@ -688,8 +685,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                 }
             }
             emptyTemporary();
-        } finally {
-            writeUnlock();
         }
     }
 
@@ -697,13 +692,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * Clears temporaryProperties
      */
     protected void emptyTemporary() {
-        writeLock();
-        try {
+        try (ResourceLock ignored = writeLock()) {
             if (temporaryProperties != null) {
                 temporaryProperties.clear();
             }
-        } finally {
-            writeUnlock();
         }
     }
 
@@ -712,11 +704,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public boolean isTemporary(JMeterProperty property) {
-        readLock();
-        try {
+        try (ResourceLock ignored = readLock()) {
             return temporaryProperties != null && temporaryProperties.contains(property);
-        } finally {
-            readUnlock();
         }
     }
 
@@ -725,8 +714,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void setTemporary(JMeterProperty property) {
-        writeLock();
-        try {
+        try (ResourceLock ignored = writeLock()) {
             if (temporaryProperties == null) {
                 LinkedHashSet<JMeterProperty> set = new LinkedHashSet<>();
                 temporaryProperties = lock != null ? set : Collections.synchronizedSet(set) ;
@@ -737,8 +725,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                     setTemporary(jMeterProperty);
                 }
             }
-        } finally {
-            writeUnlock();
         }
     }
 
@@ -833,16 +819,13 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public List<String> getSearchableTokens() {
         List<String> result = new ArrayList<>(25);
-        readLock();
-        try {
+        try (ResourceLock ignored = readLock()) {
             PropertyIterator iterator = propertyIterator();
             while(iterator.hasNext()) {
                 JMeterProperty jMeterProperty = iterator.next();
                 result.add(jMeterProperty.getName());
                 result.add(jMeterProperty.getStringValue());
             }
-        } finally {
-            readUnlock();
         }
         return result;
     }
@@ -853,8 +836,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * @param propertyNames Set of names of properties to extract
      */
     protected final void addPropertiesValues(List<? super String> result, Set<String> propertyNames) {
-        readLock();
-        try {
+        try (ResourceLock ignored = readLock()) {
             PropertyIterator iterator = propertyIterator();
             while (iterator.hasNext()) {
                 JMeterProperty jMeterProperty = iterator.next();
@@ -862,8 +844,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
                     result.add(jMeterProperty.getStringValue());
                 }
             }
-        } finally {
-            readUnlock();
         }
     }
 }
