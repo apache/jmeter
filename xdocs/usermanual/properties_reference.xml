@@ -1399,7 +1399,7 @@ JMETER-SERVER</source>
 </property>
 <property name="sampleresult.default.encoding">
     The encoding to be used if none is provided.<br/>
-    Defaults to: <code>ISO-8859-1</code>
+    Defaults to: <code>UTF-8</code> (since 5.6.1)
 </property>
 <property name="CookieManager.delete_null_cookies">
     CookieManager behaviour - should cookies with null/empty values be deleted?<br/>

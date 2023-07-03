@@ -84,6 +84,11 @@ Summary
   <li><pr>6023</pr>Update checker-qual to 3.35.0 (from 3.34.0)</li>
 </ul>
 
+<h3>Other Samplers</h3>
+<ul>
+  <li><pr>6028</pr> Change default value for <code>sampleresult.default.encoding</code> to UTF-8 (it inherits default HTTP encoding which was modified in <pr>6010</pr>)</li>
+</ul>
+
  <!-- =================== Bug fixes =================== -->
 
 <ch_section>Bug fixes</ch_section>
