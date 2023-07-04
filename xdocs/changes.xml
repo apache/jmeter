@@ -45,6 +45,12 @@ h3 { color: #960000; }
 Earlier changes are detailed in the <a href="changes_history.html">History of Previous Changes</a>.
 </note>
 
+<br></br>
+<note>
+JMeter 5.6.1 requires Java 8 or later for execution (Java 17 or later recommended).
+<br></br>
+<b>The next major release would require Java 11 or later.</b>
+</note>
 
 <!--  =================== 5.6.1 =================== -->
 
