@@ -1824,6 +1824,11 @@ JMETER-SERVER</source>
     Date format of report using by start_date and end_date properties.<br/>
     Defaults to: <code>yyyyMMddHHmmss</code>
 </property>
+<property name="jmeter.reportgenerator.outputdir">
+    Sets the destination directory for generated html pages.<br/>
+    This will be overridden by the command line option <code>-o</code>.<br/>
+    Defaults to empty value (current folder).
+</property>
 <property name="jmeter.reportgenerator.start_date">
     Start date of report using date_format property.<br/>
     Defaults to: nothing
