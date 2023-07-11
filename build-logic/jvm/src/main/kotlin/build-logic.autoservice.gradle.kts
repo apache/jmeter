@@ -23,7 +23,9 @@ plugins {
 
 dependencies {
     annotationProcessor("com.google.auto.service:auto-service")
-    compileOnlyApi("com.google.auto.service:auto-service-annotations")
+    // Technically speaking, the version is already declared with bom-thirdparty,
+    // however we have to duplicate it here to workaround https://github.com/gradle/gradle/issues/25712
+    compileOnlyApi("com.google.auto.service:auto-service-annotations:1.1.1")
 }
 
 plugins.withId("org.jetbrains.kotlin.jvm") {

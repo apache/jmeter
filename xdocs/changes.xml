@@ -47,67 +47,28 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 
 <br></br>
 <note>
-JMeter 5.6.1 requires Java 8 or later for execution (Java 17 or later recommended).
+JMeter 5.6.x requires Java 8 or later for execution (Java 17 or later recommended).
 <br></br>
 <b>The next major release would require Java 11 or later.</b>
 </note>
 
-<!--  =================== 5.6.1 =================== -->
+<!--  =================== 5.6.2 =================== -->
 
-<h1>Version 5.6.1</h1>
+<h1>Version 5.6.2 </h1>
 <p>
 Summary
 </p>
 <ul>
-<li><a href="#New and Noteworthy">New and Noteworthy</a></li>
-<li><a href="#Incompatible changes">Incompatible changes</a></li>
 <li><a href="#Bug fixes">Bug fixes</a></li>
-<li><a href="#Improvements">Improvements</a></li>
-<li><a href="#Non-functional changes">Non-functional changes</a></li>
-<li><a href="#Known problems and workarounds">Known problems and workarounds</a></li>
-<li><a href="#Thanks">Thanks</a></li>
-
-</ul>
-
-<ch_section>New and Noteworthy</ch_section>
-
-<ch_section>Improvements</ch_section>
-
-<h3>HTTP Samplers and Test Script Recorder</h3>
-<ul>
-  <li><pr>6010</pr>Use UTF-8 as a default encoding in HTTP sampler. It enables sending parameter names, and filenames with unicode characters</li>
-  <li><pr>6010</pr>Test Recorder will use UTF-8 encoding by default, so it will infer human-readable arguments rather than percent-encoded ones</li>
-</ul>
-
-<ch_section>Non-functional changes</ch_section>
-<ul>
-  <li><pr>6000</pr>Add release-drafter for populating GitHub releases info based on the merged PRs</li>
-  <li><pr>5989</pr>Use Gradle toolchains for JDK provisioning, enable building and testing with different JDKs, start testing with Java 21</li>
-  <li><pr>5991</pr>Update jackson-core, jackson-databind, jackson-annotations to 2.15.2 (from 2.15.1)</li>
-  <li><pr>5993</pr>Update ph-commons to 10.2.5 (from 10.2.4)</li>
-  <li><pr>6017</pr>Update kotlin-stdlib to 1.8.22 (from 1.8.21)</li>
-  <li><pr>6020</pr>Update error_prone_annotations to 2.20.0 (from 2.19.1)</li>
-  <li><pr>6023</pr>Update checker-qual to 3.35.0 (from 3.34.0)</li>
-</ul>
-
-<h3>Other Samplers</h3>
-<ul>
-  <li><pr>6028</pr> Change default value for <code>sampleresult.default.encoding</code> to UTF-8 (it inherits default HTTP encoding which was modified in <pr>6010</pr>)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
 
 <ch_section>Bug fixes</ch_section>
 
-<h3>Thread Groups</h3>
+<h3>General</h3>
 <ul>
-  <li><pr>6011</pr>Regression since 5.6: ThreadGroups are running endlessly in non-gui mode: use default value
-    for LoopController.continue_forever rather than initializing it in the constructor</li>
-</ul>
-
-<h3>Other Samplers</h3>
-<ul>
-  <li><pr>6012</pr> Java Request sampler cannot be enabled again after disabling in UI (regression since 5.6)</li>
+  <li><pr></pr><issue>6041</issue>Fix compatibility with Maven's pom.xml parser by adding explicit versions for <code>com.google.auto.service:auto-service-annotations</code> (regression since 5.6.1)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -116,12 +77,9 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-  <li>Alex Schwartz, <a href="https://github.com/alexsch01">@alexsch01</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
-  <li>David Getzlaff, <a href="https://github.com/dgetzlaf">@dgetzlaf</a></li>
-  <li>LeeBaul, <a href="https://github.com/libaolu">@libaolu</a></li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

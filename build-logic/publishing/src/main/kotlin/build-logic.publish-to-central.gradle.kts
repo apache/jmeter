@@ -1,5 +1,6 @@
 import groovy.util.Node
 import groovy.util.NodeList
+import java.lang.IllegalStateException
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -63,9 +64,13 @@ publishing {
                     dependenciesNode as Node
                     for (dependency in (dependenciesNode["dependency"] as NodeList)) {
                         dependency as Node
-                        if ((dependency["optional"] as? NodeList)?.firstOrNull()?.let { it as? Node }
+                        if ((dependency["optional"] as NodeList).firstOrNull()?.let { it as? Node }
                                 ?.text() == "true") {
                             dependenciesNode.remove(dependency)
+                            continue
+                        }
+                        if ((dependency["version"] as NodeList).isEmpty()) {
+                            throw IllegalStateException("Generated pom.xml contains a dependency without <version> for dependency ${dependency}. It will cause issues with Maven resolution, see https://github.com/apache/jmeter/issues/6041")
                         }
                     }
                 }

@@ -77,6 +77,7 @@ dependencies {
     findProject(":src:bom-thirdparty")?.let{
         api(platform(it))
         annotationProcessor(platform(it))
+        compileOnlyApi(platform(it))
     }
 }
 
