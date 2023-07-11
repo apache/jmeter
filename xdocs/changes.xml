@@ -68,7 +68,8 @@ Summary
 
 <h3>General</h3>
 <ul>
-  <li><pr></pr><issue>6041</issue>Fix compatibility with Maven's pom.xml parser by adding explicit versions for <code>com.google.auto.service:auto-service-annotations</code> (regression since 5.6.1)</li>
+  <li><pr>6042</pr><issue>6041</issue>Fix compatibility with Maven's pom.xml parser by adding explicit versions for
+    <code>com.google.auto.service:auto-service-annotations</code> (regression since 5.6)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
