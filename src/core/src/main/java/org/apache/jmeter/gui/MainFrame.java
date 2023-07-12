@@ -409,7 +409,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         stoppingMessage = new EscapeDialog(this, JMeterUtils.getResString("stopping_test_title"), true); //$NON-NLS-1$
         String label = JMeterUtils.getResString("stopping_test"); //$NON-NLS-1
         if (!StringUtils.isEmpty(host)) {
-            label = label + JMeterUtils.getResString("stopping_test_host")+ ": " + host;
+            label = label + " " + JMeterUtils.getResString("stopping_test_host") + ": " + host;
         }
         JLabel stopLabel = new JLabel(label); //$NON-NLS-1$$NON-NLS-2$
         stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
