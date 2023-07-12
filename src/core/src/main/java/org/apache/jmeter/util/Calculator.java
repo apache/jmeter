@@ -53,7 +53,7 @@ public class Calculator {
 
     private final String label;
 
-    private final AtomicLong startTime = new AtomicLong(Long.MAX_VALUE);
+    private final AtomicLong startTime = new AtomicLong();
 
     private final LongAccumulator elapsedTime = new LongAccumulator(Math::max, Long.MIN_VALUE);
 
@@ -63,6 +63,7 @@ public class Calculator {
 
     public Calculator(String label) {
         this.label = label;
+        clear();
     }
 
     public void clear() {

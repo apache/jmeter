@@ -52,9 +52,9 @@ JMeter 5.6.x requires Java 8 or later for execution (Java 17 or later recommende
 <b>The next major release would require Java 11 or later.</b>
 </note>
 
-<!--  =================== 5.6.2 =================== -->
+<!--  =================== 5.6.3 =================== -->
 
-<h1>Version 5.6.2 </h1>
+<h1>Version 5.6.3 </h1>
 <p>
 Summary
 </p>
@@ -68,8 +68,7 @@ Summary
 
 <h3>General</h3>
 <ul>
-  <li><pr>6042</pr><issue>6041</issue>Fix compatibility with Maven's pom.xml parser by adding explicit versions for
-    <code>com.google.auto.service:auto-service-annotations</code> (regression since 5.6)</li>
+  <li><pr></pr><issue>6043</issue>Fix computation of <code>min</code> in <code>Summary report</code> (regression since 5.6.0)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

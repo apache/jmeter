@@ -42,6 +42,137 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <p><b>Changes sections are chronologically ordered from top (most recent) to bottom
 (least recent)</b></p>
 
+<!--  =================== 5.6.2 =================== -->
+
+<h1>Version 5.6.2 </h1>
+<p>
+Summary
+</p>
+<ul>
+<li><a href="#Bug fixes">Bug fixes</a></li>
+</ul>
+
+ <!-- =================== Bug fixes =================== -->
+
+<ch_section>Bug fixes</ch_section>
+
+<h3>General</h3>
+<ul>
+  <li><pr>6042</pr><issue>6041</issue>Fix compatibility with Maven's pom.xml parser by adding explicit versions for
+    <code>com.google.auto.service:auto-service-annotations</code> (regression since 5.6)</li>
+</ul>
+
+ <!--  =================== Thanks =================== -->
+
+<ch_section>Thanks</ch_section>
+<p>We thank all contributors mentioned in bug and improvement sections above:
+</p>
+<ul>
+</ul>
+<p>We also thank bug reporters who helped us improve JMeter.</p>
+<ul>
+</ul>
+<p>
+Apologies if we have omitted anyone else.
+</p>
+ <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
+
+<ch_section>Known problems and workarounds</ch_section>
+<ul>
+  <li><issue>6043</issue> <code>Min</code> is always <code>0</code> in <code>Summary Report</code> (fixed in 5.6.3)</li>
+
+<li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</li>
+
+<li>
+The numbers that appear to the left of the green box are the number of active threads / total number of threads,
+the total number of threads only applies to a locally run test, otherwise it will show <code>0</code> (see <bugzilla>55510</bugzilla>).
+</li>
+
+<li>
+Note that under some windows systems you may have this WARNING:
+<source>
+java.util.prefs.WindowsPreferences
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
+x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
+</source>
+The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
+</li>
+
+<li>
+You may encounter the following error:
+<source>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</source>
+ if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
+ algorithm using MD2 (like <code>md2WithRSAEncryption</code>) or with a SSL certificate with a size lower than 1024 bits.
+This error is related to increased security in Java 8+.
+<br></br>
+To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
+the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.
+<br></br>
+This property is in this file:
+<source>JAVA_HOME/jre/lib/security/java.security</source>
+See  <bugzilla>56357</bugzilla> for details.
+</li>
+
+<li>
+Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
+This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a>
+The fix is to use JDK8_u45 or later.
+</li>
+
+<li>
+View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
+This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
+See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
+The fix is to use JDK9 b65 or later.
+</li>
+
+<li>
+JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down</keysym></keycombo>) is totally unusable with Java 7 on Mac OSX.
+This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a>
+The fix is to use JDK 8 b132 or later.
+</li>
+
+<li>
+Since Java 11 the JavaScript implementation <a href="https://openjdk.java.net/jeps/335">Nashorn has been deprecated</a>.
+Java will emit the following deprecation warnings, if you are using JavaScript based on Nashorn.
+<source>
+Warning: Nashorn engine is planned to be removed from a future JDK release
+</source>
+To silence these warnings, add <code>-Dnashorn.args=--no-deprecation-warning</code> to your Java arguments.
+That can be achieved by setting the enviroment variable <code>JVM_ARGS</code>
+<source>
+export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
+</source>
+</li>
+
+<li>
+With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jeps/372">Nashorn has been removed</a>. To add back a JSR-223 compatible JavaScript engine you have two options:
+  <dl>
+    <dt>Use Mozilla Rhino</dt>
+    <dd>Copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_14_Release/rhino-engine-1.7.14.jar">rhino-engine-1.7.14.jar</a> into <code>$JMETER_HOME/lib/ext</code>.</dd>
+    <dt>Use OpenJDK Nashorn</dt>
+    <dd>
+      The OpenJDK Nashorn implementation comes as a module. To use it, you will have to download it and add it to the module path. A hacky way to download the version 15.0 (or later) and its dependencies and set the module path is outlined below:
+      <source>
+mkdir lib/modules
+pushd lib/modules
+wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.3/nashorn-core-15.3.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.5/asm-9.5.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.5/asm-commons-9.5.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.5/asm-util-9.5.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.5/asm-analysis-9.5.jar
+popd
+export JVM_ARGS="--module-path $PWD/lib/modules"
+./bin/jmeter
+      </source>
+    </dd>
+  </dl>
+</li>
+
+</ul>
+
 <!--  =================== 5.6.1 =================== -->
 
 <h1>Version 5.6.1</h1>
@@ -121,6 +252,8 @@ Apologies if we have omitted anyone else.
 <ch_section>Known problems and workarounds</ch_section>
 <ul>
   <li><code>pom.xml</code> misses <code>&lt;version&gt;</code> tags for <code>auto-service-annotations</code>, so Maven can't infer transitive dependencies. The issue is resolved in 5.6.2</li>
+
+  <li><issue>6043</issue> <code>Min</code> is always <code>0</code> in <code>Summary Report</code> (fixed in 5.6.3)</li>
 
 <li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</li>
@@ -409,6 +542,8 @@ Apologies if we have omitted anyone else.
 <ch_section>Known problems and workarounds</ch_section>
 <ul>
   <li><issue>6008</issue> ThreadGroups are running endlessly in non-gui mode (fixed in 5.6.1, see <pr>6011</pr>)</li>
+
+  <li><issue>6043</issue> <code>Min</code> is always <code>0</code> in <code>Summary Report</code> (fixed in 5.6.3)</li>
 
   <li><pr>5987</pr>HTTP sampler sends filenames with percent-encoded UTF-8, however it is not aligned with the browsers. The workaround is to refrain non-ASCII filenames</li>
 
