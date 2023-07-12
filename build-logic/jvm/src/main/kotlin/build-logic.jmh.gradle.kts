@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-import net.ltgt.gradle.errorprone.ErrorProneOptions
 import net.ltgt.gradle.errorprone.errorprone
 
 plugins {

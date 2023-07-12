@@ -37,7 +37,7 @@ java {
         configureToolchain(buildParameters.buildJdk)
     }
     consistentResolution {
-        useCompileClasspathVersions()
+        useRuntimeClasspathVersions()
     }
 }
 

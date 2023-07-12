@@ -44,17 +44,13 @@ publishing {
         plugins.withId("java") {
             versionMapping {
                 usage(Usage.JAVA_API) {
-                    fromResolutionOf("runtimeClasspath")
+                    fromResolutionResult()
                 }
             }
         }
         pom {
             withXml {
                 val pom = asNode()
-                // Maven does not support dependencyManagement, so remove it anyway
-                for (dependencyManagement in (pom["dependencyManagement"] as NodeList)) {
-                    pom.remove(dependencyManagement as Node)
-                }
                 // Gradle maps test fixtures to optional=true, so we remove those elements form the POM to avoid
                 // confusion
                 // See https://github.com/gradle/gradle/issues/14936
@@ -70,7 +66,9 @@ publishing {
                             continue
                         }
                         if ((dependency["version"] as NodeList).isEmpty()) {
-                            throw IllegalStateException("Generated pom.xml contains a dependency without <version> for dependency ${dependency}. It will cause issues with Maven resolution, see https://github.com/apache/jmeter/issues/6041")
+                            throw IllegalStateException(
+                                "Generated pom.xml contains a dependency without <version> for dependency ${dependency}. " +
+                                "Technically speaking, the version is not mandatory, however, having explicit versions would make it easier to review the dependencies in pom")
                         }
                     }
                 }
