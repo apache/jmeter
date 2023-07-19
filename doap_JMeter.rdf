@@ -29,7 +29,7 @@
     <asfext:pmc rdf:resource="http://jmeter.apache.org/" />
     <shortdesc>Pure Java application for load and functional testing</shortdesc>
     <description>Apache JMeter may be used to test performance both on static and dynamic resources (files, Servlets, Perl scripts, Java Objects, Data Bases and Queries, FTP Servers and more). It can be used to simulate a heavy load on a server, network or object to test its strength or to analyze overall performance under different load types. You can use it to make a graphical analysis of performance or to test your server/script/object behavior under heavy concurrent load. </description>
-    <bug-database rdf:resource="https://bz.apache.org/bugzilla/" />
+    <bug-database rdf:resource="https://github.com/apache/jmeter/issues" />
     <mailing-list rdf:resource="http://jmeter.apache.org/mail2.html" />
     <download-page rdf:resource="http://jmeter.apache.org/download_jmeter.cgi" />
     <programming-language>Java</programming-language>
