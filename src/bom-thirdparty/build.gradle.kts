@@ -27,7 +27,7 @@ javaPlatform {
 
 dependencies {
     api(platform("org.codehaus.groovy:groovy-bom:3.0.17"))
-    api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.1"))
+    api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
