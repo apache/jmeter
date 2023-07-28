@@ -41,6 +41,7 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleMonitor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -340,6 +341,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 threadFinished(iterationListener);
                 monitor.threadFinished(this); // Tell the monitor we are done
                 JMeterContextService.removeContext(); // Remove the ThreadLocal entry
+                FileServer.getFileServer().closeFiles(threadName); // Close files
             } finally {
                 interruptLock.unlock(); // Allow any pending interrupt to complete (OK because currentSampler == null)
             }
@@ -363,7 +365,7 @@ public class JMeterThread implements Runnable, Interruptible {
         if (realSampler == null) {
             throw new IllegalStateException(
                     "Got null subSampler calling findRealSampler for:" +
-                    (sampler != null ? sampler.getName() : "null") + ", sampler:" + sampler);
+                            (sampler != null ? sampler.getName() : "null") + ", sampler:" + sampler);
         }
         // Find parent controllers of current sampler
         FindTestElementsUpToRootTraverser pathToRootTraverser = new FindTestElementsUpToRootTraverser(realSampler);

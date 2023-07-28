@@ -221,11 +221,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
      */
     @Override
     public void testEnded() {
-        try {
-            FileServer.getFileServer().closeFiles();
-        } catch (IOException e) {
-            log.error("Problem closing files at end of test", e);
-        }
+
     }
 
     /**

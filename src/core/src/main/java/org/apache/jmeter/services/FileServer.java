@@ -31,12 +31,15 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.io.input.BOMInputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.save.CSVSaveService;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -68,8 +71,8 @@ public class FileServer {
     private static final String BASE_PREFIX_DEFAULT = "~/"; // $NON-NLS-1$
 
     private static final String BASE_PREFIX =
-        JMeterUtils.getPropDefault("jmeter.save.saveservice.base_prefix", // $NON-NLS-1$
-                BASE_PREFIX_DEFAULT);
+            JMeterUtils.getPropDefault("jmeter.save.saveservice.base_prefix", // $NON-NLS-1$
+                    BASE_PREFIX_DEFAULT);
 
     private File base;
 
@@ -258,6 +261,10 @@ public class FileServer {
         if (alias == null){
             throw new IllegalArgumentException("Alias must not be null");
         }
+        String threadName = JMeterContextService.getContext().getThread().getThreadName();
+        if (!StringUtils.contains(alias, threadName)) {
+            alias = StringUtils.join(threadName, alias);
+        }
         FileEntry fileEntry = files.get(alias);
         if (fileEntry == null) {
             fileEntry = new FileEntry(resolveFileFromPath(filename), null, charsetName);
@@ -309,7 +316,7 @@ public class FileServer {
      * @throws IOException when reading of the file fails, or the file was not reserved properly
      */
     public String readLine(String filename) throws IOException {
-      return readLine(filename, true);
+        return readLine(filename, true);
     }
 
     /**
@@ -323,7 +330,7 @@ public class FileServer {
     public String readLine(String filename, boolean recycle) throws IOException {
         return readLine(filename, recycle, false);
     }
-   /**
+    /**
      * Get the next line of the named file
      *
      * @param filename the filename or alias that was used to reserve the file
@@ -334,6 +341,10 @@ public class FileServer {
      */
     public synchronized String readLine(String filename, boolean recycle,
             boolean ignoreFirstLine) throws IOException {
+        String threadName = JMeterContextService.getContext().getThread().getThreadName();
+        if (!StringUtils.contains(filename, threadName)) {
+            filename = StringUtils.join(threadName, filename);
+        }
         FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
@@ -383,6 +394,10 @@ public class FileServer {
      * @return {@link BufferedReader}
      */
     private BufferedReader getReader(String alias, boolean recycle, boolean ignoreFirstLine) throws IOException {
+        String threadName = JMeterContextService.getContext().getThread().getThreadName();
+        if (!StringUtils.contains(alias, threadName)) {
+            alias = StringUtils.join(threadName, alias);
+        }
         FileEntry fileEntry = files.get(alias);
         if (fileEntry != null) {
             BufferedReader reader;
@@ -441,6 +456,10 @@ public class FileServer {
     }
 
     public synchronized void write(String filename, String value) throws IOException {
+        String threadName = JMeterContextService.getContext().getThread().getThreadName();
+        if (!StringUtils.contains(filename, threadName)) {
+            filename = StringUtils.join(threadName, filename);
+        }
         FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
@@ -478,11 +497,29 @@ public class FileServer {
         files.clear();
     }
 
+    public synchronized void closeFiles(String threadName) {
+        try {
+            for (Iterator<Map.Entry<String, FileEntry>> it = files.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<String, FileEntry> entry = it.next();
+                if (entry.getKey().startsWith(threadName)) {
+                    closeFile(entry.getKey(), entry.getValue());
+                    it.remove();
+                }
+            }
+        } catch (Exception e) {
+            log.error("close files exception", e);
+        }
+    }
+
     /**
      * @param name the name or alias of the file to be closed
      * @throws IOException when closing of the aliased file fails
      */
     public synchronized void closeFile(String name) throws IOException {
+        String threadName = JMeterContextService.getContext().getThread().getThreadName();
+        if (!StringUtils.contains(name, threadName)) {
+            name = StringUtils.join(threadName, name);
+        }
         FileEntry fileEntry = files.get(name);
         closeFile(name, fileEntry);
     }
