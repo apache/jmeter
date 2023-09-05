@@ -24,9 +24,12 @@ plugins {
 }
 
 checkstyle {
+    // TOOD: move to /config
+    val configDir = File(rootDir, "config/checkstyle")
+
     toolVersion = "10.12.1"
     configProperties = mapOf(
-        "cache_file" to buildDir.resolve("checkstyle/cacheFile")
+        "cache_file" to buildDir.resolve("checkstyle/cacheFile").relativeTo(configDir)
     )
 
     providers.gradleProperty("checkstyle.version")
@@ -34,8 +37,7 @@ checkstyle {
         ?.let { toolVersion = it.get() }
 
     isShowViolations = true
-    // TOOD: move to /config
-    val configDir = File(rootDir, "config/checkstyle")
+
     configDirectory.set(configDir)
     configFile = configDir.resolve("checkstyle.xml")
 }

@@ -22,7 +22,7 @@
 
 <module name="Checker">
 
-  <property name="cacheFile" value="${cache_file}"/>
+  <property name="cacheFile" value="${config_loc}/${cache_file}"/>
 
   <property name="localeLanguage" value="en"/>
   <property name="charset" value="UTF-8"/>
