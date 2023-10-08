@@ -57,6 +57,7 @@
     <trusted-key id='670be7d076a0c89f5f07625ae57428da9e879e7d' group='com.helger.commons' />
     <trusted-key id='41d266db4427983a1a4afb0c3684155e9365c30e' group='com.jayway.jsonpath' />
     <trusted-key id='34d6ff19930adf43ac127792a50569c7ca7fa1f0' group='com.jcraft' />
+    <trusted-key id='764be739ddae10f4473fecf0aef385ed6ca815ae' group='com.miglayout' />
     <trusted-key id='817ea1255546d6070a23aa00db45d3a62a183ce2' group='com.miglayout' />
     <trusted-key id='adbc987d1a7b91db6b0aaa81995efbf4a3d20beb' group='com.pinterest' />
     <trusted-key id='adbc987d1a7b91db6b0aaa81995efbf4a3d20beb' group='com.pinterest.ktlint' />
