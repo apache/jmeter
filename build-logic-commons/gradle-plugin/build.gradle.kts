@@ -39,7 +39,7 @@ dependencies {
 val currentJava = JavaVersion.current()
 if (currentJava > JavaVersion.VERSION_1_8) {
     // We want an LTS Java release for build script compilation
-    val latestSupportedLts = listOf("25", "21", "17", "11")
+    val latestSupportedLts = listOf("17", "11")
         .intersect(JvmTarget.values().mapTo(mutableSetOf()) { it.target })
         .first { JavaVersion.toVersion(it) <= currentJava }
 
