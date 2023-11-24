@@ -165,6 +165,15 @@ plugins.withId("org.jetbrains.kotlin.jvm") {
         dependsOn(versionClass)
     }
 }
+plugins.withId("org.jetbrains.kotlin.kapt") {
+    // kapt adds kaptGenerateStubsKotlin in afterEvaluate, so we can't use just tasks.named here
+    // This workaround is needed for Kotlin Gradle Plugin 1.9
+    afterEvaluate {
+        tasks.named("kaptGenerateStubsKotlin") {
+            dependsOn(versionClass)
+        }
+    }
+}
 
 tasks.withType<Checkstyle>().matching { it.name == "checkstyleMain" }
     .configureEach {
