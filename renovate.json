@@ -36,6 +36,10 @@
       "groupName": "com.helger"
     },
     {
+      "matchPackagePrefixes": ["io.burt"],
+      "groupName": "io.burt"
+    },
+    {
       "matchPackagePrefixes": ["net.minidev:accessors-smart", "net.minidev:json-smart"],
       "groupName": "net.minidev json-smart"
     },
