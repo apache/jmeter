@@ -62,7 +62,7 @@ jobs:
         distribution: ${{ matrix.java_distribution }}
         architecture: x64
     - name: Steps to reproduce
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           console.log('The following command might help reproducing CI results, use Java ${{ matrix.java_version }}')
