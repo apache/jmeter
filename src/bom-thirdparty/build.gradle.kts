@@ -115,7 +115,7 @@ dependencies {
         api("org.apache.tika:tika-core:1.28.5")
         api("org.apache.tika:tika-parsers:1.28.5")
         api("org.apache.velocity:velocity:1.7")
-        api("org.apache.xmlgraphics:xmlgraphics-commons:2.8")
+        api("org.apache.xmlgraphics:xmlgraphics-commons:2.9")
         api("org.apiguardian:apiguardian-api:1.1.2")
         api("org.bouncycastle:bcmail-jdk15on:1.70")
         api("org.bouncycastle:bcpkix-jdk15on:1.70")
