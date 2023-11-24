@@ -31,8 +31,6 @@ dependencies {
     // to make it work.
     // See https://github.com/gradle/gradle/issues/17016 regarding expectedKotlinDslPluginsVersion
     implementation("org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:$expectedKotlinDslPluginsVersion")
-    // It seems to be the best way to make KotlinCompile available for use in build-logic.kotlin-dsl-gradle-plugin.gradle.kts
-    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:$embeddedKotlinVersion")
 }
 
 // We need to figure out a version that is supported by the current JVM, and by the Kotlin Gradle plugin
