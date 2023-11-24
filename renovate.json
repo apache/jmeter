@@ -94,6 +94,10 @@
       "groupName": "org.jodd"
     },
     {
+      "matchPackagePrefixes": ["org.openjdk.jmh"],
+      "groupName": "org.openjdk.jmh"
+    },
+    {
       "matchPackagePrefixes": ["org.slf4j"],
       "groupName": "org.slf4j",
       "allowedVersions": "< 2.0.0"
