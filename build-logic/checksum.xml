@@ -40,8 +40,8 @@
     <trusted-key id='a1885c07a3204611fb184ef7098a31f381819057' group='net.sourceforge.nekohtml' />
     <trusted-key id='124dac8350968ec2a8260584ee8ecbbbc188fd5d' group='org.ajoberstar.grgit' />
     <trusted-key id='8da70c00df7af1b0d2f9dc74ddbcc1270a29d081' group='org.apache.ant' />
-    <trusted-key id='41a1a08c62fca78b79d3081164a16faaec16a4be' group='org.apache.commons' />
     <trusted-key id='12d16069219c90212a974d119ae296fd02e9f65b' group='org.apache.commons' />
+    <trusted-key id='41a1a08c62fca78b79d3081164a16faaec16a4be' group='org.apache.commons' />
     <trusted-key id='0785b3eff60b1b1bea94e0bb7c25280eae63ebe5' group='org.apache.httpcomponents' />
     <trusted-key id='08f0aab4d0c1a4bdde340765b341ddb020fcb6ab' group='org.bouncycastle' />
     <trusted-key id='19beab2d799c020f17c69126b16698a4adf4d638' group='org.checkerframework' />
@@ -76,6 +76,9 @@
     </dependency>
     <dependency group='de.marcphilipp.gradle' module='nexus-publish-plugin' version='0.4.0'>
       <sha512>37EC6DFBDDD0458A2A341E371D038B3B0A25AB2F9006B295EBCF3BDE873A8D02C8CDAA6C69D875500F67593C618E8EF62C0269FB2F7F527A1367A7D6B8EA3CBE</sha512>
+    </dependency>
+    <dependency group='de.thetaphi' module='forbiddenapis' version='3.6'>
+      <sha512>B9D779B085611E8122FB1F30952E1DD1EE1456AF11EAED24F7182B73EFF1E648862912849F1CE53CD8CDA8313F7CDB2E88BA959C3868418359BB98E59CD2E5D7</sha512>
     </dependency>
     <dependency group='gradle.plugin.org.jetbrains.gradle.plugin.idea-ext' module='gradle-idea-ext' version='1.1.7'>
       <sha512>B7B121AC6385206A03717E03A61C9514478934CF7E8BBDCD87BD2E8ECFC2DEB37B9B834DA34EAA14C16CA6F61DB6A4DCD1C89FEDEE22EEBDEF6EAE5423847CE1</sha512>
