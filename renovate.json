@@ -45,7 +45,8 @@
     },
     {
       "matchPackagePrefixes": ["com.miglayout"],
-      "groupName": "com.miglayout"
+      "groupName": "com.miglayout",
+      "allowedVersions": "< 11.0"
     },
     {
       "matchPackagePrefixes": ["org.ajoberstar.grgit"],
