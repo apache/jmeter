@@ -101,7 +101,7 @@ dependencies {
         api("org.apache.commons:commons-pool2:2.11.1")
         api("org.apache.commons:commons-text:1.10.0")
         api("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1")
-        api("org.apache.httpcomponents.client5:httpclient5:5.2.1")
+        api("org.apache.httpcomponents.client5:httpclient5:5.2.2")
         api("org.apache.httpcomponents:httpasyncclient:4.1.5")
         api("org.apache.httpcomponents:httpclient:4.5.14")
         api("org.apache.httpcomponents:httpcore-nio:4.4.16")
