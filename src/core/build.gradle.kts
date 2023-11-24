@@ -129,7 +129,7 @@ dependencies {
     testFixturesImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-val generatedVersionDir = File(buildDir, "generated/sources/version")
+val generatedVersionDir = layout.buildDirectory.dir( "generated/sources/version")
 
 val versionClass by tasks.registering(Sync::class) {
     val lastEditYear: String by rootProject.extra
@@ -152,7 +152,7 @@ val versionClass by tasks.registering(Sync::class) {
 // Caused by: java.lang.IllegalStateException: couldn't find inline method
 // Lorg/gradle/kotlin/dsl/Accessorslkzxmv806rumtqvft7195qyhKt;.getIde(Lorg/gradle/api/Project;)Lcom/github/vlsi/gradle/ide/IdeExtension;
 configure<IdeExtension> {
-    generatedJavaSources(versionClass.get(), generatedVersionDir)
+    generatedJavaSources(versionClass.get(), generatedVersionDir.get().asFile)
 }
 
 // <editor-fold defaultstate="collapsed" desc="Gradle can't infer task dependencies, however it sees they use the same directories. So we add the dependencies">

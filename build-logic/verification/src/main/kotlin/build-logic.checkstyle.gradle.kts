@@ -29,7 +29,7 @@ checkstyle {
 
     toolVersion = "10.12.5"
     configProperties = mapOf(
-        "cache_file" to buildDir.resolve("checkstyle/cacheFile").relativeTo(configDir)
+        "cache_file" to layout.buildDirectory.dir("checkstyle/cacheFile").get().asFile.relativeTo(configDir)
     )
 
     providers.gradleProperty("checkstyle.version")

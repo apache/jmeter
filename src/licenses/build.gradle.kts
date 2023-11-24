@@ -211,20 +211,20 @@ val binLicenseSpec = licensesCopySpec(renderLicenseForBinary)
 val srcLicenseSpec = licensesCopySpec(renderLicenseForSource)
 
 val binLicenseDir by tasks.registering(Sync::class) {
-    into("$buildDir/$name")
+    into(layout.buildDirectory.dir(name))
     dependencyLicenses(binLicenseSpec)
 }
 
 val srcLicenseDir by tasks.registering(Sync::class) {
-    into("$buildDir/$name")
+    into(layout.buildDirectory.dir(name))
     dependencyLicenses(srcLicenseSpec)
 }
 
 artifacts {
-    add(binLicense.name, buildDir.resolve(binLicenseDir.name)) {
+    add(binLicense.name, layout.buildDirectory.dir(binLicenseDir.name)) {
         builtBy(binLicenseDir)
     }
-    add(srcLicense.name, buildDir.resolve(srcLicenseDir.name)) {
+    add(srcLicense.name, layout.buildDirectory.dir(srcLicenseDir.name)) {
         builtBy(srcLicenseDir)
     }
 }
