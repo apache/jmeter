@@ -11,6 +11,7 @@
     <trusted-key id='8a10792983023d5d14c93b488d7f1bec1e2ecae7' group='com.fasterxml.woodstox' />
     <trusted-key id='d112630c899f508198c09018105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='253e8e4c6fb28d11748115c1249dee8e2c07a0a2' group='com.github.javaparser' />
+    <trusted-key id='9857c388d7d1d9d031274cd0a5def5a76f94a471' group='com.github.spotbugs.snom' />
     <trusted-key id='d112630c899f508198c09018105cb91cac2aee0e' group='com.github.vlsi.gradle' />
     <trusted-key id='7616eb882daf57a11477aaf559a252fb1199d873' group='com.google.code.findbugs' />
     <trusted-key id='afcc4c7594d09e2182c60e0f7a01b0f236e5430f' group='com.google.code.gson' />
