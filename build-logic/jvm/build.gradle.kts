@@ -25,7 +25,7 @@ dependencies {
     api("me.champeau.jmh:me.champeau.jmh.gradle.plugin:0.7.1")
     api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.90")
     api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.90")
-    api("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.8.22")
-    api("org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin:1.8.22")
+    api("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.9.21")
+    api("org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin:1.9.21")
     api("org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin:1.8.20")
 }
