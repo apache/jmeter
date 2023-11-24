@@ -92,7 +92,8 @@ tasks.configureEach<JavaCompile> {
     inputs.property("java.vm.version", System.getProperty("java.vm.version"))
     options.apply {
         encoding = "UTF-8"
-        compilerArgs.add("-Xlint:deprecation")
+        // Suppress "Java 8 is obsolete and will be removed in a future release"
+        compilerArgs.add("-Xlint:deprecation,-options")
         if (buildParameters.werror) {
             compilerArgs.add("-Werror")
         }
