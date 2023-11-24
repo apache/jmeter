@@ -16,8 +16,6 @@
  */
 
 import org.gradle.kotlin.dsl.support.expectedKotlinDslPluginsVersion
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
@@ -34,20 +32,13 @@ dependencies {
 }
 
 // We need to figure out a version that is supported by the current JVM, and by the Kotlin Gradle plugin
-val currentJava = JavaVersion.current()
-if (currentJava > JavaVersion.VERSION_1_8) {
-    // We want an LTS Java release for build script compilation
-    val latestSupportedLts = listOf("17", "11")
-        .intersect(JvmTarget.values().mapTo(mutableSetOf()) { it.target })
-        .first { JavaVersion.toVersion(it) <= currentJava }
-
-    tasks.withType<JavaCompile>().configureEach {
-        options.release.set(JavaVersion.toVersion(latestSupportedLts).majorVersion.toInt())
-    }
-
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = latestSupportedLts
+// So we settle on 17 or 11 if the current JVM supports it
+listOf(17, 11)
+    .firstOrNull { JavaVersion.toVersion(it) <= JavaVersion.current() }
+    ?.let { buildScriptJvmTarget ->
+        java {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(buildScriptJvmTarget))
+            }
         }
     }
-}
