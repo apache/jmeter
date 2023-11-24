@@ -83,7 +83,9 @@ matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '8'});
 matrix.exclude({java_distribution: {value: 'microsoft'}, java_version: '8'});
 // Oracle JDK is only supported for JDK 17 and later
 matrix.exclude({java_distribution: {value: 'oracle'}, java_version: ['8', '11']});
-matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
+// matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
+// TODO: Semeru does not ship Java 21 builds yet
+matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'})
 // Ensure at least one job with "same" hashcode exists
 matrix.generateRow({hash: {value: 'same'}});
 // Ensure at least one Windows and at least one Linux job is present (macOS is almost the same as Linux)
