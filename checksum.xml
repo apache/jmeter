@@ -125,6 +125,7 @@
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='org.apache.commons' />
     <trusted-key id='3692c12c7e3d336a452beb254e066e0459cd109b' group='org.apache.commons' />
     <trusted-key id='41a1a08c62fca78b79d3081164a16faaec16a4be' group='org.apache.commons' />
+    <trusted-key id='b6e73d84ea4fcc47166087253faad2cd5ecbb314' group='org.apache.commons' />
     <trusted-key id='ce8075a251547bee249bc151a2115ae15f6b8b72' group='org.apache.commons' />
     <trusted-key id='d6f1bc78607808ec8e9f69437a8860944fad5f62' group='org.apache.commons' />
     <trusted-key id='4d2db2916149baa9d0c92f3731474e5e7c6b7034' group='org.apache.ftpserver' />
@@ -133,10 +134,12 @@
     <trusted-key id='0785b3eff60b1b1bea94e0bb7c25280eae63ebe5' group='org.apache.httpcomponents.client5' />
     <trusted-key id='0785b3eff60b1b1bea94e0bb7c25280eae63ebe5' group='org.apache.httpcomponents.core5' />
     <trusted-key id='53c935821aa6a755bd337db53595395eb3d8e1ba' group='org.apache.logging.log4j' />
+    <trusted-key id='fa77dcfef2ee6eb2debedd2c012579464d01c06a' group='org.apache.maven.doxia' />
     <trusted-key id='4d2db2916149baa9d0c92f3731474e5e7c6b7034' group='org.apache.mina' />
     <trusted-key id='6bfab2e3c6490b421b25c76c9c8c892f91f8e6d1' group='org.apache.rat' />
     <trusted-key id='184454fad8697760f3e00d2e4a51a45b944ffd51' group='org.apache.tika' />
     <trusted-key id='7b9751fc3f01f134f476464cd0eb627d4885ced1' group='org.apache.velocity' />
+    <trusted-key id='223d3a74b068eca354dc385ce126833f9cf64915' group='org.apache.xbean' />
     <trusted-key id='82d8419ba697f0e7fb85916ee91287822fdb81b1' group='org.apache.xbean' />
     <trusted-key id='c758f9cc982ac877e7b295dd6e97418b04b11dcb' group='org.apache.xbean' />
     <trusted-key id='5c9a30ff22b2c02f30261c305b93f1df7cdb6dea' group='org.apache.xmlgraphics' />
@@ -148,6 +151,8 @@
     <trusted-key id='7faa0f2206de228f0db01ad741321490758aad6f' group='org.codehaus.groovy' />
     <trusted-key id='82f833963889d7ed06f1e4dc6525fd70cc303655' group='org.codehaus.mojo' />
     <trusted-key id='f254b35617dc255d9344bcfa873a8e86b4372146' group='org.codehaus.mojo' />
+    <trusted-key id='b02137d875d833d9b23392ecae5a7fb608a0221c' group='org.codehaus.plexus' />
+    <trusted-key id='fa77dcfef2ee6eb2debedd2c012579464d01c06a' group='org.codehaus.plexus' />
     <trusted-key id='6214760097dc5cfad0175ac2c9fbaa83a8753994' group='org.codehaus.woodstox' />
     <trusted-key id='8f9a3c6d105b9f57844a721d79e193516be7998f' group='org.dom4j' />
     <trusted-key id='2e92113263fc31c74ccbaab20e91c2de43b72bb1' group='org.ec4j.core' />
@@ -237,6 +242,9 @@
     </dependency>
     <dependency group='com.github.vlsi.gradle' module='stage-vote-release-plugin' version='1.85'>
       <sha512>2F70DA03A8F8ECF0F92C7B8B219321DFE9C8926DC55BF343662B043F277C7F63090B1B7E06F963606D9D9228E3FA4245393E2D3773DFD3D059136EB65D2E7998</sha512>
+    </dependency>
+    <dependency group='com.google.collections' module='google-collections' version='1.0'>
+      <sha512>5741BCDF5C2D54DAA53A60972D61D0FB3ACB68A31AB4A913832DE71C47B4ABD59B85E760A335D7EFDE55D4E309824839B09F9224A43C124BD54C634A87A9B7F7</sha512>
     </dependency>
     <dependency group='commons-logging' module='commons-logging' version='1.0.4'>
       <sha512>C8D2D39A60ADCC49091D393DAF30473D1776E4B6B09BB86639171F660833A17AFBDC9F3E85843093535DA16FA664CD7CD4CA38F54E141018DD1B78DE681AD668</sha512>
