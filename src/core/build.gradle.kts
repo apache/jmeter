@@ -129,7 +129,7 @@ dependencies {
     testFixturesImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-val generatedVersionDir = layout.buildDirectory.dir( "generated/sources/version")
+val generatedVersionDir = layout.buildDirectory.dir("generated/sources/version")
 
 val versionClass by tasks.registering(Sync::class) {
     val lastEditYear: String by rootProject.extra
