@@ -27,7 +27,7 @@ pluginManagement {
 plugins {
     id("com.gradle.enterprise") version "3.13.4"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "1.11"
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
 }
 
 dependencyResolutionManagement {
@@ -167,8 +167,8 @@ val expectedSha512 = mapOf(
         to "okhttp-4.1.0.jar",
     "93E7A41BE44CC17FB500EA5CD84D515204C180AEC934491D11FC6A71DAEA761FB0EECEF865D6FD5C3D88AAF55DCE3C2C424BE5BA5D43BEBF48D05F1FA63FA8A7"
         to "okio-2.2.2.jar",
-    "B9F87DECE28EABCCEDA58C77C3B602AEAE7A8AEF3D30DA838F4924A620B18C05D9DF86C5876BDE8AB5597C8C0CE808AD083CAF89C3A5AAC60C1E980C6C144A17"
-        to "foojay-resolver-0.5.0.jar",
+    "A7E32B1E638C47049683ED945BBCD2678F9FC2AEE1E329C61C05DF8FF426DF5FAE21C81446F4361ABBDB18E5B3B7B7DD01AA1074EDCB3A6D5D148C2B3DEB3FC9"
+        to "foojay-resolver-0.7.0.jar",
     "10BF91C79AB151B684834E3CA8BA7D7E19742A3EEB580BDE690FBA433F9FFFE3ABBD79ED3FE3F97986C3A2BADC4D14E28835A8EF89167B4B9CC6014242338769"
         to "gson-2.9.1.jar",
     settings.extra["com.github.vlsi.checksum-dependency.sha512"].toString()
