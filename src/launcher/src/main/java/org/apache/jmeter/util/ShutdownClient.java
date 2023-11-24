@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Simple utility to send a shutdown message to a non-GUI instance of JMeter
@@ -38,7 +39,7 @@ public class ShutdownClient {
         String command = args[0];
         System.out.println("Sending "+command+" request to port "+port);
         try (DatagramSocket socket = new DatagramSocket()) {
-            byte[] buf = command.getBytes("ASCII");
+            byte[] buf = command.getBytes(StandardCharsets.US_ASCII);
             InetAddress address = InetAddress.getByName("localhost");
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address,
                     port);
