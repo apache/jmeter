@@ -44,7 +44,7 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
         config.setMaxTotalPerKey(-1);
         config.setMaxTotal(-1);
         config.setMaxIdlePerKey(-1);
-        config.setMinEvictableIdleTime(Duration.ofMinutes(3));
+        config.setMinEvictableIdleDuration(Duration.ofMinutes(3));
         config.setTimeBetweenEvictionRuns(Duration.ofMinutes(3));
 
         return new GenericKeyedObjectPool<>(

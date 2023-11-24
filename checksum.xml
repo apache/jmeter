@@ -127,6 +127,7 @@
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='org.apache.commons' />
     <trusted-key id='3692c12c7e3d336a452beb254e066e0459cd109b' group='org.apache.commons' />
     <trusted-key id='41a1a08c62fca78b79d3081164a16faaec16a4be' group='org.apache.commons' />
+    <trusted-key id='4e2ddd47e19863bb87211544cd3038fef07d567e' group='org.apache.commons' />
     <trusted-key id='b6e73d84ea4fcc47166087253faad2cd5ecbb314' group='org.apache.commons' />
     <trusted-key id='ce8075a251547bee249bc151a2115ae15f6b8b72' group='org.apache.commons' />
     <trusted-key id='d6f1bc78607808ec8e9f69437a8860944fad5f62' group='org.apache.commons' />
