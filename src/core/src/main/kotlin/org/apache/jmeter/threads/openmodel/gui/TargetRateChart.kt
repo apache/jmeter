@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.threads.openmodel.gui
 
-import jetbrains.datalore.base.registration.Disposable
-import jetbrains.datalore.plot.MonolithicCommon
+import org.jetbrains.letsPlot.commons.registration.Disposable
+import org.jetbrains.letsPlot.core.util.MonolithicCommon
 import jetbrains.datalore.vis.swing.batik.DefaultPlotPanelBatik
 import org.apache.jmeter.threads.openmodel.ThreadSchedule
 import org.apache.jmeter.threads.openmodel.ThreadScheduleStep
