@@ -16,6 +16,8 @@
  */
 
 import org.gradle.kotlin.dsl.support.expectedKotlinDslPluginsVersion
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
@@ -29,4 +31,25 @@ dependencies {
     // to make it work.
     // See https://github.com/gradle/gradle/issues/17016 regarding expectedKotlinDslPluginsVersion
     implementation("org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:$expectedKotlinDslPluginsVersion")
+    // It seems to be the best way to make KotlinCompile available for use in build-logic.kotlin-dsl-gradle-plugin.gradle.kts
+    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:$embeddedKotlinVersion")
+}
+
+// We need to figure out a version that is supported by the current JVM, and by the Kotlin Gradle plugin
+val currentJava = JavaVersion.current()
+if (currentJava > JavaVersion.VERSION_1_8) {
+    // We want an LTS Java release for build script compilation
+    val latestSupportedLts = listOf("25", "21", "17", "11")
+        .intersect(JvmTarget.values().mapTo(mutableSetOf()) { it.target })
+        .first { JavaVersion.toVersion(it) <= currentJava }
+
+    tasks.withType<JavaCompile>().configureEach {
+        options.release.set(JavaVersion.toVersion(latestSupportedLts).majorVersion.toInt())
+    }
+
+    tasks.withType<KotlinCompile>().configureEach {
+        kotlinOptions {
+            jvmTarget = latestSupportedLts
+        }
+    }
 }

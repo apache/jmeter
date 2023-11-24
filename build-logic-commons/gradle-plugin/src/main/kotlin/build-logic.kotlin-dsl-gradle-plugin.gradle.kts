@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("java-library")
     id("org.gradle.kotlin.kotlin-dsl") // this is 'kotlin-dsl' without version
@@ -23,4 +26,22 @@ plugins {
 tasks.validatePlugins {
     failOnWarning.set(true)
     enableStricterValidation.set(true)
+}
+
+val currentJava = JavaVersion.current()
+if (currentJava > JavaVersion.VERSION_1_8) {
+    // We want an LTS Java release for build script compilation
+    val latestSupportedLts = listOf("25", "21", "17", "11")
+        .intersect(JvmTarget.values().mapTo(mutableSetOf()) { it.target })
+        .first { JavaVersion.toVersion(it) <= currentJava }
+
+    tasks.withType<JavaCompile>().configureEach {
+        options.release.set(JavaVersion.toVersion(latestSupportedLts).majorVersion.toInt())
+    }
+
+    tasks.withType<KotlinCompile>().configureEach {
+        kotlinOptions {
+            jvmTarget = latestSupportedLts
+        }
+    }
 }
