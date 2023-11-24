@@ -27,5 +27,5 @@ dependencies {
     api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.90")
     api("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.9.21")
     api("org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin:1.9.21")
-    api("org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin:1.8.20")
+    api("org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin:1.9.10")
 }
