@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -78,8 +79,6 @@ import org.slf4j.LoggerFactory;
  * @since 3.0
  */
 public class ExternalSampleSorter extends AbstractSampleConsumer {
-
-    private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
     private static final Logger LOG = LoggerFactory.getLogger(ExternalSampleSorter.class);
 
@@ -219,7 +218,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      */
     public void sort(SampleMetadata sampleMetadata, File inputFile,
             File outputFile, boolean writeHeader) {
-        Validate.notNull(sampleMetadata, MUST_NOT_BE_NULL, "sampleMetadata");
+        Objects.requireNonNull(sampleMetadata, "sampleMetadata must not be null");
 
         if (!inputFile.isFile()) {
             throw new SampleException(
@@ -250,7 +249,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      */
     private void sort(CsvSampleReader csvReader, File output,
             boolean writeHeader) {
-        Validate.notNull(output, MUST_NOT_BE_NULL, "output");
+        Objects.requireNonNull(output, "output must not be null");
 
         SampleMetadata readSampleMetadata = csvReader.getMetadata();
         SampleWriterConsumer writerConsumer = new SampleWriterConsumer();

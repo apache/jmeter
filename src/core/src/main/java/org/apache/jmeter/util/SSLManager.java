@@ -31,13 +31,13 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.slf4j.Logger;
@@ -179,7 +179,7 @@ public abstract class SSLManager {
         for (int i = 0; i < 3; i++) {
             String password = getPassword();
             if (!allowEmptyPassword) {
-                Validate.notNull(password, "Password for keystore must not be null");
+                Objects.requireNonNull(password, "Password for keystore must not be null");
             }
             try {
                 if (initStore == null) {

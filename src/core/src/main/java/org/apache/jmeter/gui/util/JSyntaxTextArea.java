@@ -23,12 +23,12 @@ import java.awt.HeadlessException;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
@@ -302,7 +302,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      */
     public void setInitialText(String string) {
         try {
-            setText(StringUtils.defaultString(string, ""));
+            setText(Objects.toString(string, ""));
         } catch (Exception e) {
             log.error("Dubious problem while setting text to {}", string, e);
         }

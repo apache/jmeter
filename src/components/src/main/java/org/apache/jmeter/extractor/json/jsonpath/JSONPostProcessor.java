@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -161,7 +162,7 @@ public class JSONPostProcessor
                             ? extractedValues.size() * 20
                             : 1);
             for (Object extractedObject : extractedValues) {
-                String extractedString = StringUtils.defaultString(stringify(extractedObject), defaultValue);
+                String extractedString = Objects.toString(extractedObject, defaultValue);
                 vars.put(currentRefName + "_" + index,
                         extractedString); //$NON-NLS-1$
                 if (getComputeConcatenation()) {
@@ -246,11 +247,7 @@ public class JSONPostProcessor
     private static void placeObjectIntoVars(JMeterVariables vars, String currentRefName,
             List<Object> extractedValues, int matchNr, String defaultValue) {
         vars.put(currentRefName,
-                StringUtils.defaultString(stringify(extractedValues.get(matchNr)), defaultValue));
-    }
-
-    private static String stringify(Object obj) {
-        return obj == null ? null : obj.toString();
+                Objects.toString(extractedValues.get(matchNr), defaultValue));
     }
 
     public String getJsonPathExpressions() {

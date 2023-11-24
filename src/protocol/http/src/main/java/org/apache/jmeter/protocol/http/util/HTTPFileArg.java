@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -99,7 +100,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
         if (StringUtils.isNotBlank(mimetype)) {
             return mimetype;
         }
-        mimetype = StringUtils.defaultString(mimetype, "");
+        mimetype = Objects.toString(mimetype, "");
         if (StringUtils.isBlank(path)) {
             return mimetype;
         }

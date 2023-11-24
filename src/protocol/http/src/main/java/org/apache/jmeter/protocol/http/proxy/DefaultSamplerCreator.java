@@ -26,6 +26,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
@@ -345,7 +346,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      */
     protected static void computeSamplerName(HTTPSamplerBase sampler,
             HttpRequestHdr request) {
-        String prefix = StringUtils.defaultString(request.getPrefix(), "");
+        String prefix = Objects.toString(request.getPrefix(), "");
         int httpSampleNameMode = request.getHttpSampleNameMode();
         String format = getFormat(httpSampleNameMode, request.getHttpSampleNameFormat());
         String url;

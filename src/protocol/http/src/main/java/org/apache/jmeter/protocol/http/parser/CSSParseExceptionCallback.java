@@ -18,8 +18,8 @@
 package org.apache.jmeter.protocol.http.parser;
 
 import java.net.URL;
+import java.util.Objects;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class CSSParseExceptionCallback implements ICSSParseExceptionCallback {
     private final URL baseUrl;
 
     public CSSParseExceptionCallback(URL baseUrl) {
-        this.baseUrl = Validate.notNull(baseUrl);
+        this.baseUrl = Objects.requireNonNull(baseUrl, "baseUrl must not be null");
     }
 
     /**

@@ -42,6 +42,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.prefs.Preferences;
 import java.util.regex.PatternSyntaxException;
@@ -49,7 +50,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.ResponseAssertion;
@@ -1265,7 +1265,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             prefixChanged = true;
         }
         if (deltaT > sampleGap || prefixChanged) {
-            String controllerName = StringUtils.defaultString(getPrefixHTTPSampleName(), sampler.getName());
+            String controllerName = Objects.toString(getPrefixHTTPSampleName(), sampler.getName());
             if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
                 addDivider(treeModel, myTarget);
             }

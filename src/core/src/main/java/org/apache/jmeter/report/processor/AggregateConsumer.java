@@ -17,7 +17,8 @@
 
 package org.apache.jmeter.report.processor;
 
-import org.apache.commons.lang3.Validate;
+import java.util.Objects;
+
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleSelector;
 
@@ -28,8 +29,6 @@ import org.apache.jmeter.report.core.SampleSelector;
  * @since 3.0
  */
 public class AggregateConsumer extends AbstractSampleConsumer {
-
-    private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
     /** The aggregator. */
     private final Aggregator aggregator;
@@ -65,8 +64,8 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     public AggregateConsumer(Aggregator aggregator,
             SampleSelector<Double> selector) {
-        Validate.notNull(aggregator, MUST_NOT_BE_NULL, "aggregator");
-        Validate.notNull(selector, MUST_NOT_BE_NULL, "selector");
+        Objects.requireNonNull(aggregator, "aggregator must not be null");
+        Objects.requireNonNull(selector, "selector must not be null");
 
         this.aggregator = aggregator;
         this.selector = selector;

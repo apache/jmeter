@@ -22,13 +22,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.report.config.ExporterConfiguration;
@@ -60,9 +60,6 @@ import freemarker.template.TemplateExceptionHandler;
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
     private static final String CUSTOM_GRAPH_PREFIX = "custom_";
-
-    /** Format used for non null check of parameters. */
-    private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
     private static final Logger log = LoggerFactory.getLogger(HtmlTemplateExporter.class);
 
@@ -289,9 +286,9 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     @Override
     public void export(SampleContext context, File file,
             ReportGeneratorConfiguration configuration) throws ExportException {
-        Validate.notNull(context, MUST_NOT_BE_NULL, "context");
-        Validate.notNull(file, MUST_NOT_BE_NULL, "file");
-        Validate.notNull(configuration, MUST_NOT_BE_NULL, "configuration");
+        Objects.requireNonNull(context, "context must not be null");
+        Objects.requireNonNull(file, "file must not be null");
+        Objects.requireNonNull(configuration, "configuration must not be null");
 
         log.debug("Start template processing");
 

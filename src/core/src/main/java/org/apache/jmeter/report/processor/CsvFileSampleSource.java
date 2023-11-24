@@ -20,6 +20,7 @@ package org.apache.jmeter.report.processor;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -247,7 +248,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
          *                  {@code null})
          */
         public void setSampleConsumers(List<SampleConsumer> consumers) {
-            Validate.notNull(consumers, "consumers must not be null");
+            Objects.requireNonNull(consumers, "consumers must not be null");
 
             this.sampleConsumers = consumers;
         }
