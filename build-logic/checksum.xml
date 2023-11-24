@@ -40,6 +40,7 @@
     <trusted-key id='a1885c07a3204611fb184ef7098a31f381819057' group='net.sourceforge.nekohtml' />
     <trusted-key id='124dac8350968ec2a8260584ee8ecbbbc188fd5d' group='org.ajoberstar.grgit' />
     <trusted-key id='8da70c00df7af1b0d2f9dc74ddbcc1270a29d081' group='org.apache.ant' />
+    <trusted-key id='41a1a08c62fca78b79d3081164a16faaec16a4be' group='org.apache.commons' />
     <trusted-key id='12d16069219c90212a974d119ae296fd02e9f65b' group='org.apache.commons' />
     <trusted-key id='0785b3eff60b1b1bea94e0bb7c25280eae63ebe5' group='org.apache.httpcomponents' />
     <trusted-key id='08f0aab4d0c1a4bdde340765b341ddb020fcb6ab' group='org.bouncycastle' />
@@ -82,8 +83,8 @@
     <dependency group='io.freefair.gradle' module='lombok-plugin' version='5.3.3.3'>
       <sha512>750C97C7BE33EEF83B43A94E4342F978F5FDB0E4A523ABB408CC1E2111CE214CEC3A6177265618A8429FFB6C09A0E47070C68F2F046F3A6CCC0F5DD77D2E2ED0</sha512>
     </dependency>
-    <dependency group='me.champeau.jmh' module='jmh-gradle-plugin' version='0.7.1'>
-      <sha512>D0B6A85CA7261FCEF0B2796F8FAD16C1044822AFE5ECD896B1103D7015FF690E806EC969B01150E9CA3FF96607AB53B6468ED2D5F3260C019CAE953B2291E7A4</sha512>
+    <dependency group='me.champeau.jmh' module='jmh-gradle-plugin' version='0.7.2'>
+      <sha512>E433E221C9167BB937EC0DF7626B5BBBE99E08C566A6D54BA7D2E04252DD452B4CA957B57E687F85F958DF0CE12678E17D0BCB527E1077770C8B7390CE58F56C</sha512>
     </dependency>
     <dependency group='net.ltgt.gradle' module='gradle-errorprone-plugin' version='3.1.0'>
       <sha512>3D4753C1818615A894B33EB51E16A1D9F820D997EB1C3F2FFD0AC2345A0F587D53044C0BE1D9D6B776C1994D9AE3D7036064D4A801EF88D478D3D219F1964D1D</sha512>
