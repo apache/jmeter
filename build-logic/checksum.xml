@@ -52,6 +52,7 @@
     <trusted-key id='6214760097dc5cfad0175ac2c9fbaa83a8753994' group='org.codehaus.woodstox' />
     <trusted-key id='2e92113263fc31c74ccbaab20e91c2de43b72bb1' group='org.ec4j.core' />
     <trusted-key id='7c669810892cbd3148fa92995b05ccde140c2876' group='org.eclipse.jgit' />
+    <trusted-key id='1bd97a6a154e7810ee0bc832e2f38302c8075e3d' group='org.gradle.kotlin' />
     <trusted-key id='66d7cbff956830fe9f5a723afe6c7d77a1ce15a6' group='org.gradlex' />
     <trusted-key id='4db1a49729b053caf015cee9a6adfc93ef34893e' group='org.hamcrest' />
     <trusted-key id='2e3a1affe42b5f53af19f780bcf4173966770193' group='org.jetbrains' />
