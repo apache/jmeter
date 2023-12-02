@@ -88,7 +88,10 @@ matrix.exclude({java_distribution: {value: 'oracle'}, java_version: ['8', '11']}
 matrix.exclude({java_version: eaJava})
 matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
 // TODO: Semeru does not ship Java 21 builds yet
-matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'})
+matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'});
+// Semeru 11 and 17 has issues with tr_TR locale: https://github.com/gradle/gradle/issues/27261
+// It is not clear what is the source of the issues, however, we can exclude the combination
+matrix.exclude({java_distribution: {value: 'semeru'}, locale: {language: 'tr', country: 'TR'}});
 // Ensure at least one job with "same" hashcode exists
 matrix.generateRow({hash: {value: 'same'}});
 // Ensure at least one Windows and at least one Linux job is present (macOS is almost the same as Linux)
