@@ -68,7 +68,9 @@ Summary
 
 <h3>General</h3>
 <ul>
-  <li><pr></pr><issue>6043</issue>Fix computation of <code>min</code> in <code>Summary report</code> (regression since 5.6.0)</li>
+  <li>Restored binary API compatibility with pre-5.6.2: restore public methods to non-static as they were before 5.6.2 <code>JavaSamplerContext.getJMeterVariables</code>,
+    <code>JavaSamplerContext.getJMeterProperties</code>, <code>BoundaryExtractor.extractAll</code>,
+    <code>AuthManager.setupCredentials</code>, <code>HttpRequestHdr.getMultipartConfig</code>, (regression since 5.6.2)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

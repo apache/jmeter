@@ -302,7 +302,7 @@ public class HttpRequestHdr {
         return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
 
-    public static MultipartUrlConfig getMultipartConfig(String contentType) {
+    public MultipartUrlConfig getMultipartConfig(String contentType) {
         if(isMultipart(contentType)) {
             // Get the boundary string for the multiparts from the content type
             String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());
