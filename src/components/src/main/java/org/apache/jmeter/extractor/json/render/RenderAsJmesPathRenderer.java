@@ -24,8 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.auto.service.AutoService;
 
@@ -36,7 +38,10 @@ import com.google.auto.service.AutoService;
 @AutoService(ResultRenderer.class)
 public class RenderAsJmesPathRenderer extends AbstractRenderAsJsonRenderer {
     private static final Logger log = LoggerFactory.getLogger(RenderAsJmesPathRenderer.class);
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
+            // See https://github.com/FasterXML/jackson-core/issues/991
+            .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
+            .build();
 
     @Override
     protected String getTabLabel() {

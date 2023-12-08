@@ -39,8 +39,9 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 /**
  * Implementation of {@link DataExporter} that exports statistics to JSON
@@ -52,7 +53,11 @@ public class JsonExporter extends AbstractDataExporter {
     public static final String OUTPUT_FILENAME = "statistics.json";
     private static final FileFilter JSON_FILE_FILTER =
             file -> file.isFile() && file.getName().equals(OUTPUT_FILENAME);
-    private final static ObjectWriter OBJECT_WRITER = new ObjectMapper().writerWithDefaultPrettyPrinter();
+    private final static ObjectWriter OBJECT_WRITER = JsonMapper.builder()
+            // See https://github.com/FasterXML/jackson-core/issues/991
+            .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
+            .build()
+            .writerWithDefaultPrettyPrinter();
 
 
     public JsonExporter() {

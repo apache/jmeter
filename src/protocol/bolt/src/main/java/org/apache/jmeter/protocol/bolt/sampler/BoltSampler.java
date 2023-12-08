@@ -45,9 +45,10 @@ import org.neo4j.driver.TransactionConfig;
 import org.neo4j.driver.exceptions.Neo4jException;
 import org.neo4j.driver.summary.ResultSummary;
 
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 @TestElementMetadata(labelResource = "displayName")
 public class BoltSampler extends AbstractBoltTestElement implements Sampler, TestBean, ConfigMergabilityIndicator {
@@ -57,7 +58,12 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
 
     // Enables to initialize object mapper on demand
     private static class Holder {
-        private static final ObjectReader OBJECT_READER = new ObjectMapper().readerFor(new TypeReference<HashMap<String, Object>>() {});
+        private static final ObjectReader OBJECT_READER = JsonMapper.builder()
+                // See https://github.com/FasterXML/jackson-core/issues/991
+                .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
+                .build()
+                .readerFor(new TypeReference<HashMap<String, Object>>() {
+                });
     }
 
     @Override

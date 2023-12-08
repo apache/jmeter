@@ -36,8 +36,10 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -55,6 +57,11 @@ public final class GraphQLRequestParamUtils {
     private static final Pattern WHITESPACES_PATTERN = Pattern.compile("\\p{Space}+");
 
     private static final JsonFactory jsonFactory = new JsonFactory();
+
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
+            // See https://github.com/FasterXML/jackson-core/issues/991
+            .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
+            .build();
 
     private GraphQLRequestParamUtils() {
     }
@@ -133,11 +140,10 @@ public final class GraphQLRequestParamUtils {
         final String encoding = StringUtils.isNotEmpty(contentEncoding) ? contentEncoding
                 : EncoderCache.URL_ARGUMENT_ENCODING;
 
-        final ObjectMapper mapper = new ObjectMapper();
         ObjectNode data;
 
         try (InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(postData), encoding)) {
-            data = mapper.readValue(reader, ObjectNode.class);
+            data = OBJECT_MAPPER.readValue(reader, ObjectNode.class);
         } catch (IOException e) {
             throw new IllegalArgumentException("Invalid json data: " + e.getLocalizedMessage(), e);
         }
@@ -166,7 +172,7 @@ public final class GraphQLRequestParamUtils {
             final JsonNodeType nodeType = variablesNode.getNodeType();
             if (nodeType != JsonNodeType.NULL) {
                 if (nodeType == JsonNodeType.OBJECT) {
-                    variables = mapper.writeValueAsString(variablesNode);
+                    variables = OBJECT_MAPPER.writeValueAsString(variablesNode);
                 } else {
                     throw new IllegalArgumentException("Not a valid object node for GraphQL variables.");
                 }
