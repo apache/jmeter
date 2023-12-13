@@ -38,6 +38,10 @@ dependencyResolutionManagement {
     }
 }
 
+if (JavaVersion.current() < JavaVersion.VERSION_17) {
+    throw UnsupportedOperationException("Please use Java 17 or 21 for launching Gradle when building JMeter, the current Java is ${JavaVersion.current().majorVersion}")
+}
+
 // This is the name of a current project
 // Note: it cannot be inferred from the directory name as developer might clone JMeter to jmeter_tmp folder
 rootProject.name = "jmeter"
