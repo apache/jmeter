@@ -62,16 +62,95 @@ Summary
 <li><a href="#Bug fixes">Bug fixes</a></li>
 </ul>
 
+  <ch_section>Improvements</ch_section>
+  <h3>General</h3>
+  <ul>
+    <li><pr>6199</pr>Enable use of <code>${...}</code> expressions for <code>TransactionController</code> "generate parent sample", and "include timers" checkboxes</li>
+    <li><pr>6199</pr>Enable use of <code>${...}</code> expressions for <code>ThreadGroupGui</code> "scheduler" checkbox</li>
+    <li><pr>6199</pr>Enable use of <code>${...}</code> expressions for <code>HTTP Request</code> "retrieve embedded resources", "download resources concurrently", and "store as MD5" checkboxes</li>
+  </ul>
+
  <!-- =================== Bug fixes =================== -->
 
 <ch_section>Bug fixes</ch_section>
 
 <h3>General</h3>
 <ul>
+  <li><issue>6043</issue><pr>6044</pr>JMeter 5.6 shows 0 as a min response time in summary report</li>
   <li>Restored binary API compatibility with pre-5.6.2: restore public methods to non-static as they were before 5.6.2 <code>JavaSamplerContext.getJMeterVariables</code>,
     <code>JavaSamplerContext.getJMeterProperties</code>, <code>BoundaryExtractor.extractAll</code>,
     <code>AuthManager.setupCredentials</code>, <code>HttpRequestHdr.getMultipartConfig</code>, (regression since 5.6.2)</li>
+  <li><issue>6165</issue><pr>6192</pr>The Constant Throughput Timer is throwing a NullPointerException when using variables (vars.get) in "Target Throughput"-field</li>
+  <li><issue>6162</issue>The Constant Timer is throwing a NullPointerException when using variables (vars.get) in "delay"-field</li>
+  <li><pr>6193</pr>Log errors happening while JMeter starts the test (previously, errors from TestStateListener.testStarted were not logged)</li>
 </ul>
+
+<ch_section>Non-functional changes</ch_section>
+<ul>
+  <li><pr>6166</pr>Use Gradle to 8.5 for building JMeter</li>
+  <li>Require Java 17 for building JMeter </li>
+  <li><pr>6199</pr>Improved API for programmatic test plan creation, see default implementations of <code>createTestElement</code>, <code>modifyTestElement</code>,
+    and new <code>makeTestElement</code> and <code>assignDefaultValues</code> methods in <code>JMeterGUIComponent</code>.
+    <code>AbstractJMeterGuiComponent.configureTestElement</code> is now discouraged</li>
+  <li><pr>6212</pr>Refactor: migrate existing Groovy tests to Kotlin, remove Groovy compiler from the build pipeline</li>
+  <li><pr>6214</pr>Refactor JUnit 3 and JUnit 4 tests to JUnit 5, remove JUnit 4 test dependency</li>
+</ul>
+
+  <ch_section>Dependency upgrades</ch_section>
+  <ul>
+    <li>Update com.fasterxml.jackson.core:jackson-annotations to 2.16.1 (was 2.15.2)</li>
+    <li>Update com.fasterxml.jackson.core:jackson-core to 2.16.1 (was 2.15.2)</li>
+    <li>Update com.fasterxml.jackson.core:jackson-databind to 2.16.1 (was 2.15.2)</li>
+    <li>Update com.fifesoft:rsyntaxtextarea to 3.3.4 (was 3.3.3)</li>
+    <li>Update com.google.errorprone:error_prone_annotations to 2.24.0 (was 2.20.0)</li>
+    <li>Update commons-codec:commons-codec to 1.16.0 (was 1.15)</li>
+    <li>Update commons-io:commons-io to 2.15.1 (was 2.12.0)</li>
+    <li>Update commons-logging:commons-logging to 1.3.0 (was 1.2)</li>
+    <li>Update commons-net:commons-net to 3.9.0 (was 3.10.0)</li>
+    <li>Update io.burt:jmespath-core to 0.6.0 (was 0.5.1)</li>
+    <li>Update io.burt:jmespath-jackson to 0.6.0 (was 0.5.1)</li>
+    <li>Update net.minidev:accessors-smart to 2.5.0 (was 2.4.11)</li>
+    <li>Update net.minidev:json-smart to 2.5.0 (was 2.4.11)</li>
+    <li>Update net.sf.saxon:Saxon-HE to 11.6 (was 11.5)</li>
+    <li>Update org.apache.commons:commons-lang3 to 3.14.0 (was 3.12.0)</li>
+    <li>Update org.apache.commons:commons-pool2 to 2.12.0 (was 2.11.1)</li>
+    <li>Update org.apache.commons:commons-text to 1.11.0 (was 1.10.0)</li>
+    <li>Update org.apache.httpcomponents.client5:httpclient5 to 5.3 (was 5.2.1)</li>
+    <li>Update org.apache.httpcomponents.core5:httpcore5-h2 to 5.2.4 (was 5.2)</li>
+    <li>Update org.apache.httpcomponents.core5:httpcore5 to 5.2.4 (was 5.2)</li>
+    <li>Update org.apache.logging.log4j:log4j-1.2-api to 2.22.1 (was 2.20.0)</li>
+    <li>Update org.apache.logging.log4j:log4j-api to 2.22.1 (was 2.20.0)</li>
+    <li>Update org.apache.logging.log4j:log4j-core to 2.22.1 (was 2.20.0)</li>
+    <li>Update org.apache.logging.log4j:log4j-slf4j-impl to 2.22.1 (was 2.20.0)</li>
+    <li>Update org.apache.xmlgraphics:xmlgraphics-commons to 2.9 (was 2.8)</li>
+    <li>Update org.checkerframework:checker-qual to 3.42.0 (was 3.35.0)</li>
+    <li>Update org.codehaus.groovy:groovy-datetime to 3.0.20 (was 3.0.17)</li>
+    <li>Update org.codehaus.groovy:groovy-dateutil to 3.0.20 (was 3.0.17)</li>
+    <li>Update org.codehaus.groovy:groovy-jmx to 3.0.20 (was 3.0.17)</li>
+    <li>Update org.codehaus.groovy:groovy-json to 3.0.20 (was 3.0.17)</li>
+    <li>Update org.codehaus.groovy:groovy-jsr223 to 3.0.20 (was 3.0.17)</li>
+    <li>Update org.codehaus.groovy:groovy-sql to 3.0.20 (was 3.0.17)</li>
+    <li>Update org.codehaus.groovy:groovy-templates to 3.0.20 (was 3.0.17)</li>
+    <li>Update org.codehaus.groovy:groovy-xml to 3.0.20 (was 3.0.17)</li>
+    <li>Update org.codehaus.groovy:groovy to 3.0.20 (was 3.0.17)</li>
+    <li>Remove org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22</li>
+    <li>Update org.jetbrains.kotlin:kotlin-stdlib-jdk7 to 1.9.10 (was 1.8.22)</li>
+    <li>Update org.jetbrains.kotlin:kotlin-stdlib-jdk8 to 1.9.10 (was 1.8.22)</li>
+    <li>Update org.jetbrains.kotlin:kotlin-stdlib to 1.9.22 (was 1.8.22)</li>
+    <li>Update org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm to 1.7.3 (was 1.7.1)</li>
+    <li>Update org.jetbrains.kotlinx:kotlinx-coroutines-swing to 1.7.3 (was 1.7.1)</li>
+    <li>Update org.jetbrains.lets-plot:base-portable-jvm to 4.1.0 (was 3.2.0)</li>
+    <li>Update org.jetbrains.lets-plot:lets-plot-common to 4.1.0 (was 3.2.0)</li>
+    <li>Update org.jetbrains.lets-plot:lets-plot-kotlin-jvm to 4.5.0 (was 4.4.1)</li>
+    <li>Update org.jetbrains.lets-plot:plot-common-portable-jvm to 4.1.0 (was 3.2.0)</li>
+    <li>Update org.jetbrains:annotations to 24.1.0 (was 24.0.1)</li>
+    <li>Update org.jsoup:jsoup to 1.17.1 (was 1.16.1)</li>
+    <li>Update org.mongodb:mongo-java-driver to 2.14.3 (was 2.11.3)</li>
+    <li>Update org.neo4j.driver:neo4j-java-driver to 4.4.13 (was 4.4.11)</li>
+    <li>Update org.ow2.asm:asm to 9.6 (was 9.5)</li>
+    <li>Update org.xmlresolver:xmlresolver to 5.2.1 (was 4.6.4)</li>
+    <li>Update org.xmlresolver:xmlresolver:data to 5.2.1 (was 4.6.4)</li>
+  </ul>
 
  <!--  =================== Thanks =================== -->
 
@@ -166,12 +245,12 @@ With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jep
       <source>
 mkdir lib/modules
 pushd lib/modules
-wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.3/nashorn-core-15.3.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.5/asm-9.5.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.5/asm-commons-9.5.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.5/asm-util-9.5.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.5/asm-analysis-9.5.jar
+wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.4/nashorn-core-15.4.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.6/asm-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.6/asm-commons-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.6/asm-util-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.6/asm-tree-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.6/asm-analysis-9.6.jar
 popd
 export JVM_ARGS="--module-path $PWD/lib/modules"
 ./bin/jmeter
