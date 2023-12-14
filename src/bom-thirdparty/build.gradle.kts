@@ -124,7 +124,7 @@ dependencies {
         api("org.exparity:hamcrest-date:2.0.8")
         api("org.freemarker:freemarker:2.3.32")
         api("org.jdom:jdom:1.1.3")
-        api("org.jetbrains.lets-plot:lets-plot-batik:3.2.0")
+        api("org.jetbrains.lets-plot:lets-plot-batik:4.1.0")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.5.0")
         api("org.jetbrains:annotations:24.1.0")
         api("org.jodd:jodd-core:5.0.13")
