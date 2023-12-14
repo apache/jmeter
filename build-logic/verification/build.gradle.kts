@@ -28,7 +28,7 @@ dependencies {
     api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.90")
     api("de.thetaphi.forbiddenapis:de.thetaphi.forbiddenapis.gradle.plugin:3.6")
     api("net.ltgt.errorprone:net.ltgt.errorprone.gradle.plugin:3.1.0")
-    api("org.checkerframework:org.checkerframework.gradle.plugin:0.6.35")
+    api("org.checkerframework:org.checkerframework.gradle.plugin:0.6.36")
     api("org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin:1.1.7")
     api("org.sonarqube:org.sonarqube.gradle.plugin:4.4.1.3373")
 }
