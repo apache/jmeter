@@ -53,7 +53,7 @@ jobs:
         website: ${{ matrix.oracle_java_website }}
         release: ${{ matrix.java_version }}
     - name: Set up Java 17 and ${{ matrix.non_ea_java_version }}, ${{ matrix.java_distribution }}
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         # The latest one will be the default, so we use Java 17 for launching Gradle
         java-version: |
@@ -92,7 +92,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: 'Set up JDK 17'
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: 17
         distribution: 'zulu'
