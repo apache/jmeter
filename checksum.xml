@@ -80,6 +80,7 @@
     <trusted-key id='636de9055c4c75c7bd9830771241bc872c5e4ec0' group='commons-lang' />
     <trusted-key id='d196a5e3e70732eeb2e5007f1861c322c56014b2' group='commons-lang' />
     <trusted-key id='0cc641c3a62453ab390066c4a41f13c999945293' group='commons-logging' />
+    <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='commons-logging' />
     <trusted-key id='b920d295bf0e61cb4cf0896c33cd6733af5ec452' group='commons-logging' />
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='commons-net' />
     <trusted-key id='0186f8b24c5bc02c94a0e0e486f75e83e1ee085f' group='de.thetaphi' />
