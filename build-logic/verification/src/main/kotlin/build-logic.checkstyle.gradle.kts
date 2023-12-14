@@ -23,11 +23,19 @@ plugins {
     id("checkstyle")
 }
 
+configurations.checkstyle {
+    // See https://github.com/gradle/gradle/issues/27035#issuecomment-1814997295
+    // TODO: remove the workaround as https://github.com/checkstyle/checkstyle/issues/14123 is resolved
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+        select("com.google.guava:guava:0")
+    }
+}
+
 checkstyle {
     // TOOD: move to /config
     val configDir = File(rootDir, "config/checkstyle")
 
-    toolVersion = "10.12.5"
+    toolVersion = "10.12.6"
     configProperties = mapOf(
         "cache_file" to layout.buildDirectory.dir("checkstyle/cacheFile").get().asFile.relativeTo(configDir)
     )
