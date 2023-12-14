@@ -77,7 +77,7 @@ dependencies {
         api("junit:junit:4.13.2") {
             because("ApacheJMeter_junit depends on junit4")
         }
-        api("org.checkerframework:checker-qual:3.40.0")
+        api("org.checkerframework:checker-qual:3.41.0")
         api("org.hamcrest:hamcrest-core:2.2") {
             because("ApacheJMeter_junit depends on junit4")
         }
