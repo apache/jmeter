@@ -32,6 +32,12 @@
       "groupName": "com.google.errorprone"
     },
     {
+      "matchPackageNames": ["com.google.guava:guava"],
+      "groupName": "guava",
+      "matchCurrentVersion": "0",
+      "enabled": false
+    },
+    {
       "matchPackagePrefixes": ["com.helger"],
       "groupName": "com.helger"
     },
