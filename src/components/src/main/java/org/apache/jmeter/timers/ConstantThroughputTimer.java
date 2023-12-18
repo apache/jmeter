@@ -23,13 +23,13 @@ import java.beans.Introspector;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.DoubleProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
  */
 @GUIMenuSortOrder(4)
 @TestElementMetadata(labelResource = "displayName")
-public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestStateListener, TestBean {
+public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestBean {
     private static final long serialVersionUID = 4;
 
     private static class ThroughputInfo{
@@ -60,6 +60,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         long lastScheduledTime = 0;
     }
     private static final Logger log = LoggerFactory.getLogger(ConstantThroughputTimer.class);
+    private static final AtomicLong PREV_TEST_STARTED = new AtomicLong(0L);
 
     private static final double MILLISEC_PER_MIN = 60000.0;
 
@@ -180,6 +181,13 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     // Calculate the delay based on the mode
     private long calculateDelay() {
+        long testStarted = JMeterContextService.getTestStartTime();
+        long prevStarted = PREV_TEST_STARTED.get();
+        if (prevStarted != testStarted && PREV_TEST_STARTED.compareAndSet(prevStarted, testStarted)) {
+            // Reset counters if we are calculating throughput for a new test, see https://github.com/apache/jmeter/issues/6165
+            reset();
+        }
+
         long delay;
         // N.B. we fetch the throughput each time, as it may vary during a test
         double msPerRequest = MILLISEC_PER_MIN / getThroughput();
@@ -253,18 +261,6 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     }
 
     /**
-     * Get the timer ready to compute delays for a new test.
-     * <p>
-     * {@inheritDoc}
-     */
-    @Override
-    public void testStarted()
-    {
-        log.debug("Test started - reset throughput calculation.");
-        reset();
-    }
-
-    /**
      * Override the setProperty method in order to convert
      * the original String calcMode property.
      * This used the locale-dependent display value, so caused
@@ -298,30 +294,6 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
             }
         }
         super.setProperty(property);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void testEnded() {
-        //NOOP
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void testStarted(String host) {
-        testStarted();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void testEnded(String host) {
-        //NOOP
     }
 
     // For access from test code
