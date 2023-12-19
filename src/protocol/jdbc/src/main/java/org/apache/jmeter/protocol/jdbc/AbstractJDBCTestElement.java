@@ -47,7 +47,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
@@ -57,7 +56,7 @@ import org.slf4j.LoggerFactory;
  * A base class for all JDBC test elements handling the basics of a SQL request.
  *
  */
-public abstract class AbstractJDBCTestElement extends AbstractTestElement implements TestStateListener{
+public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     private static final long serialVersionUID = 235L;
 
     private static final Logger log = LoggerFactory.getLogger(AbstractJDBCTestElement.class);
@@ -819,40 +818,4 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     public void setResultVariable(String resultVariable) {
         this.resultVariable = resultVariable;
     }
-
-
-    /**
-     * {@inheritDoc}
-     * @see org.apache.jmeter.testelement.TestStateListener#testStarted()
-     */
-    @Override
-    public void testStarted() {
-        testStarted("");
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see org.apache.jmeter.testelement.TestStateListener#testStarted(java.lang.String)
-     */
-    @Override
-    public void testStarted(String host) {
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see org.apache.jmeter.testelement.TestStateListener#testEnded()
-     */
-    @Override
-    public void testEnded() {
-        testEnded("");
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see org.apache.jmeter.testelement.TestStateListener#testEnded(java.lang.String)
-     */
-    @Override
-    public void testEnded(String host) {
-    }
-
 }
