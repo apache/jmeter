@@ -29,10 +29,14 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class JMeterElementSchemaTest {
+    val warpDrive = WarpDriveElement()
+
     abstract class WarpDriveElementSchema : TestElementSchema() {
         companion object INSTANCE : WarpDriveElementSchema()
 
         val warpFactor by int("WarpDriveElement.warpFactor", default = 7)
+        val turbo by boolean("WarpDriveElement.turbo")
+        val description by string("WarpDriveElement.description")
     }
 
     open class WarpDriveElement : AbstractTestElement() {
@@ -44,7 +48,16 @@ class JMeterElementSchemaTest {
 
     @Test
     fun `getPropertyOrNull returns null for unset props`() {
-        val warpDrive = WarpDriveElement()
+        assertGetWarpDescription(
+            null,
+            warpDrive,
+            "${WarpDriveElementSchema.warpFactor} should be null for newly created element"
+        )
+        assertGetWarpTurbo(
+            null,
+            warpDrive,
+            "${WarpDriveElementSchema.warpFactor} should be null for newly created element"
+        )
         assertNull(warpDrive.getPropertyOrNull(warpDrive.schema.warpFactor)) {
             "${WarpDriveElementSchema.warpFactor} should be null for newly created element, getPropertyOrNull(PropertyDescriptor)"
         }
@@ -54,27 +67,92 @@ class JMeterElementSchemaTest {
     }
 
     @Test
-    fun `get returns default value`() {
-        val warpDrive = WarpDriveElement()
+    fun `get int returns default value`() {
         assertGetWarpFactor(7, warpDrive, "element is empty, so default value expected")
     }
 
     @Test
-    fun `set modifies value`() {
-        val warpDrive = WarpDriveElement()
+    fun `set int modifies value`() {
         warpDrive[warpDrive.schema.warpFactor] = 8
 
         assertGetWarpFactor(8, warpDrive, "value was modified with [warpFactor] = 8")
     }
 
     @Test
-    fun `props set modifies value`() {
-        val warpDrive = WarpDriveElement()
+    fun `props set int modifies value`() {
         warpDrive.props {
             it[warpFactor] = 8
         }
 
         assertGetWarpFactor(8, warpDrive, "value was modified with props { it[warpFactor] = 8 }")
+    }
+
+    @Test
+    fun `set string modifies value`() {
+        var value = "new description"
+        warpDrive[warpDrive.schema.description] = value
+        assertGetWarpDescription(value, warpDrive, "value was modified with [description] = \"$value\"")
+
+        value = ""
+        warpDrive[warpDrive.schema.description] = value
+        assertGetWarpDescription(value, warpDrive, "value was modified with [description] = \"$value\"")
+
+        warpDrive[warpDrive.schema.description] = null
+        assertGetWarpDescription(null, warpDrive, "value should be removed after [description] = null")
+    }
+
+    @Test
+    fun `props set string modifies value`() {
+        var value = "new description"
+        warpDrive.props {
+            it[description] = value
+        }
+        assertGetWarpDescription(value, warpDrive, "value was modified with props { it[description] = \"$value\" }")
+
+        value = ""
+        warpDrive.props {
+            it[description] = value
+        }
+        assertGetWarpDescription(value, warpDrive, "value was modified with props { it[description] = \"$value\" }")
+
+        warpDrive.props {
+            it[description] = null
+        }
+        assertGetWarpDescription(null, warpDrive, "value should be removed after props { it[description] = null }")
+    }
+
+    @Test
+    fun `set boolean modifies value`() {
+        var value = true
+        warpDrive[warpDrive.schema.turbo] = value
+        assertGetWarpTurbo(value, warpDrive, "value was modified with [turbo] = \"$value\"")
+
+        value = false
+        warpDrive[warpDrive.schema.turbo] = value
+        assertGetWarpTurbo(value, warpDrive, "value was modified with [turbo] = \"$value\"")
+
+        warpDrive[warpDrive.schema.turbo] = null as Boolean?
+        assertGetWarpTurbo(null, warpDrive, "value should be removed after [turbo] = null")
+    }
+
+    @Test
+    fun `props set boolean modifies value`() {
+        var value = true
+        warpDrive.props {
+            it[turbo] = value
+        }
+        assertGetWarpTurbo(value, warpDrive, "value was modified with props { it[turbo] = \"$value\" }")
+
+        value = false
+        warpDrive.props {
+            it[turbo] = value
+        }
+        assertGetWarpTurbo(value, warpDrive, "value was modified with props { it[turbo] = \"$value\" }")
+
+        warpDrive.props {
+            it[turbo] = null as Boolean?
+        }
+        assertGetWarpTurbo(null, warpDrive, "value should be removed after props { it[turbo] = null }")
     }
 
     @Test
@@ -90,7 +168,6 @@ class JMeterElementSchemaTest {
 
     @Test
     fun `test string setter`() {
-        val warpDrive = WarpDriveElement()
         warpDrive.props {
             it[warpFactor] = "\${hello}"
         }
@@ -103,11 +180,57 @@ class JMeterElementSchemaTest {
         assertEquals(expected, warpDrive[warpDrive.schema.warpFactor]) {
             "get(warpFactor): ${WarpDriveElementSchema.warpFactor}, $message"
         }
-        assertEquals(expected, warpDrive.props[ { warpDrive.schema.warpFactor }]) {
+        assertEquals(expected, warpDrive.props[ { warpFactor }]) {
             "props.get[{warpFactor}]: ${WarpDriveElementSchema.warpFactor}, $message"
         }
         assertEquals(expected.toString(), warpDrive.getString(warpDrive.schema.warpFactor)) {
             "getString(warpFactor): ${WarpDriveElementSchema.warpFactor}, $message"
+        }
+    }
+
+    private fun assertGetWarpDescription(expected: String?, warpDrive: WarpDriveElement, message: String) {
+        assertEquals(expected ?: "", warpDrive[warpDrive.schema.description]) {
+            "get(description): ${WarpDriveElementSchema.description}, $message"
+        }
+        assertEquals(expected ?: "", warpDrive.props[ { description }]) {
+            "props.get[{description}]: ${WarpDriveElementSchema.description}, $message"
+        }
+        assertEquals(expected ?: "", warpDrive.getString(warpDrive.schema.description)) {
+            "getString(description): ${WarpDriveElementSchema.description}, $message"
+        }
+        assertEquals(expected ?: "", warpDrive.getPropertyAsString(warpDrive.schema.description.name)) {
+            "getPropertyAsString(description): ${WarpDriveElementSchema.description}, $message"
+        }
+        if (expected == null) {
+            assertNull(warpDrive.getPropertyOrNull(warpDrive.schema.description)) {
+                "getPropertyOrNull(description) should return null for absent property, ${WarpDriveElementSchema.description}, $message"
+            }
+            assertNull(warpDrive.getPropertyOrNull(warpDrive.schema.description.name)) {
+                "getPropertyOrNull(description.name) should return null for absent property, ${WarpDriveElementSchema.description}, $message"
+            }
+        }
+    }
+
+    private fun assertGetWarpTurbo(expected: Boolean?, warpDrive: WarpDriveElement, message: String) {
+        assertEquals(expected ?: false, warpDrive[warpDrive.schema.turbo]) {
+            "get(turbo): ${WarpDriveElementSchema.turbo}, $message"
+        }
+        assertEquals(expected ?: false, warpDrive.props[ { turbo }]) {
+            "props.get[{turbo}]: ${WarpDriveElementSchema.turbo}, $message"
+        }
+        assertEquals((expected ?: false).toString(), warpDrive.getString(warpDrive.schema.turbo)) {
+            "getString(turbo): ${WarpDriveElementSchema.turbo}, $message"
+        }
+        assertEquals(expected?.toString() ?: "", warpDrive.getPropertyAsString(warpDrive.schema.turbo.name)) {
+            "getPropertyAsString(turbo): ${WarpDriveElementSchema.turbo}, $message"
+        }
+        if (expected == null) {
+            assertNull(warpDrive.getPropertyOrNull(warpDrive.schema.turbo)) {
+                "getPropertyOrNull(turbo) should return null for absent property, ${WarpDriveElementSchema.turbo}, $message"
+            }
+            assertNull(warpDrive.getPropertyOrNull(warpDrive.schema.turbo.name)) {
+                "getPropertyOrNull(turbo.name) should return null for absent property, ${WarpDriveElementSchema.turbo}, $message"
+            }
         }
     }
 

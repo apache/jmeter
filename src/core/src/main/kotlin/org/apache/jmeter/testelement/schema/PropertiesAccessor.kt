@@ -84,7 +84,7 @@ public class PropertiesAccessor<out TestElementClass : TestElement, out Schema :
     }
 
     // All properties can be set as strings
-    public operator fun set(property: PropertyDescriptor<Schema, *>, value: String) {
+    public operator fun set(property: PropertyDescriptor<Schema, *>, value: String?) {
         target[property] = value
     }
 
@@ -116,13 +116,13 @@ public class PropertiesAccessor<out TestElementClass : TestElement, out Schema :
     public inline operator fun get(propertySelector: Schema.() -> BooleanPropertyDescriptor<Schema>): Boolean =
         target[propertySelector(schema)]
 
-    public operator fun set(property: BooleanPropertyDescriptor<Schema>, value: Boolean) {
+    public operator fun set(property: BooleanPropertyDescriptor<Schema>, value: Boolean?) {
         target[property] = value
     }
 
     public inline operator fun set(
         propertySelector: Schema.() -> BooleanPropertyDescriptor<Schema>,
-        value: Boolean
+        value: Boolean?
     ) {
         target[propertySelector(schema)] = value
     }

@@ -285,13 +285,13 @@ public interface TestElement : Cloneable {
         getPropertyOrNull(property)?.stringValue ?: property.defaultValueAsString ?: ""
 
     /**
-     * Set property as string, or remove it if the given value is `null` or empty.
+     * Set property as string, or remove it if the given value is `null`.
      * @since 5.6
      */
     @JMeterPropertySchemaUnchecked
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public operator fun set(property: PropertyDescriptor<*, *>, value: String?) {
-        removeOrSet(value.isNullOrEmpty(), property.name) {
+        removeOrSet(value == null, property.name) {
             StringProperty(it, value)
         }
     }
