@@ -19,8 +19,6 @@ package org.apache.jmeter.timers;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.util.JMeterUtils;
 

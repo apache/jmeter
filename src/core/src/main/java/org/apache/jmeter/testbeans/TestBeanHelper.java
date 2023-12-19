@@ -134,9 +134,25 @@ public class TestBeanHelper {
         try {
             for (CachedPropertyDescriptor desc : GOOD_PROPS.get(el.getClass())) {
                 // Obtain a value of the appropriate type for this property.
-                JMeterProperty jprop = el.getProperty(desc.descriptor.getName());
                 Class<?> type = desc.propertyType;
-                Object value = unwrapProperty(desc.descriptor, jprop, type);
+
+                JMeterProperty jprop;
+                Object value;
+                try {
+                    jprop = el.getProperty(desc.descriptor.getName());
+                    value = unwrapProperty(desc.descriptor, jprop, type);
+                } catch (OutOfMemoryError | StackOverflowError e) {
+                    throw e;
+                } catch (Throwable e) {
+                    String elementName;
+                    try {
+                        elementName = el.getName();
+                    } catch(Throwable ignore) {
+                        elementName = el.getClass().getName();
+                    }
+                    throw new IllegalStateException(
+                            "Can't retrieve property '" + desc.descriptor.getName() + "' of element " + elementName, e);
+                }
 
                 if (log.isDebugEnabled()) {
                     log.debug("Setting {}={}", jprop.getName(), value);

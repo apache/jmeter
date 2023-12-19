@@ -71,9 +71,14 @@ public class TimeFunction extends AbstractFunction implements TestStateListener 
                             long div = Long.parseLong(fmt.substring(1)); // should never case NFE
                             return () -> Long.toString(System.currentTimeMillis() / div);
                         }
-                        DateTimeFormatter df = DateTimeFormatter
-                                .ofPattern(fmt)
-                                .withZone(ZoneId.systemDefault());
+                        DateTimeFormatter df;
+                        try {
+                            df = DateTimeFormatter
+                                    .ofPattern(fmt)
+                                    .withZone(ZoneId.systemDefault());
+                        } catch (IllegalArgumentException e) {
+                            throw new IllegalArgumentException("Unable to parse date format " + fmt, e);
+                        }
                         if (isPossibleUsageOfUInFormat(df, fmt)) {
                             log.warn(
                                     MessageFormat.format(

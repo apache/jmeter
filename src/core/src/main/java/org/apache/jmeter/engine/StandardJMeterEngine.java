@@ -239,13 +239,21 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
     private void notifyTestListenersOfStart(SearchByClass<? extends TestStateListener> testListeners) {
         for (TestStateListener tl : testListeners.getSearchResults()) {
-            if (tl instanceof TestBean) {
-                TestBeanHelper.prepare((TestElement) tl);
-            }
-            if (host == null) {
-                tl.testStarted();
-            } else {
-                tl.testStarted(host);
+            try {
+                if (tl instanceof TestBean) {
+                    TestBeanHelper.prepare((TestElement) tl);
+                }
+                if (host == null) {
+                    tl.testStarted();
+                } else {
+                    tl.testStarted(host);
+                }
+            } catch (Throwable e) {
+                // TODO: we should not be logging the exceptions multiple times, however, currently GUI does not
+                //   monitor if the running test fails, so we log the exception for the users to see in the logs
+                log.error("Unable to execute testStarted({}) for test element {}", host, tl, e);
+                throw new IllegalStateException(
+                        "Unable to execute testStarted(" + host + ") for test element " + tl, e);
             }
         }
     }
