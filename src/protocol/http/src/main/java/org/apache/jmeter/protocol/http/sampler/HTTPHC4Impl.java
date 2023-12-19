@@ -176,6 +176,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
+    private static final String MULTIPART_PREFIX = "multipart/";
     private static final String CONTEXT_ATTRIBUTE_AUTH_MANAGER = "__jmeter.A_M__";
 
     private static final String JMETER_VARIABLE_USER_TOKEN = "__jmeter.U_T__"; //$NON-NLS-1$
@@ -1546,10 +1547,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(getUseMultipart()) {
-            if (entityEnclosingRequest.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE).length > 0) {
-                log.info(
-                        "Content-Header is set already on the request! Will be replaced by a Multipart-Header. Old headers: {}",
-                        Arrays.asList(entityEnclosingRequest.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE)));
+            String userDefinedMimeSubType = null;
+            final Header[] contentTypeHeaders = entityEnclosingRequest.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE);
+            if (contentTypeHeaders.length > 0) {
+                if (StringUtils.isNotBlank(contentTypeHeaders[0].getValue()) && contentTypeHeaders[0].getValue().startsWith(MULTIPART_PREFIX)) {
+                    final String mimeSubType = contentTypeHeaders[0].getValue().substring(MULTIPART_PREFIX.length());
+                    if (StringUtils.isNotBlank(mimeSubType)) {
+                        userDefinedMimeSubType = mimeSubType;
+                        log.info("Content-Header subtype manually overriden! Will be set to: {}{}",
+                                MULTIPART_PREFIX, userDefinedMimeSubType);
+                    }
+                } else {
+                    log.info(
+                            "Content-Header is set already on the request! Will be replaced by a Multipart-Header. "
+                                    + "Old headers: {}",
+                            Arrays.asList(contentTypeHeaders));
+                }
                 entityEnclosingRequest.removeHeaders(HTTPConstants.HEADER_CONTENT_TYPE);
             }
 
@@ -1562,6 +1575,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             // Write the request to our own stream
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            if (userDefinedMimeSubType != null) {
+                multipartEntityBuilder.setMimeSubtype(userDefinedMimeSubType);
+            }
             multipartEntityBuilder.setCharset(charset);
             if (doBrowserCompatibleMultipart) {
                 multipartEntityBuilder.setLaxMode();
