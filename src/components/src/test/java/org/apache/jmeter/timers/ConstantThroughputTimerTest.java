@@ -127,7 +127,6 @@ class ConstantThroughputTimerTest {
         UniformRandomTimer timer = new UniformRandomTimer();
         timer.setDelay("1000");
         timer.setRange(100d);
-        timer.iterationStart(null);
         long delay = timer.delay();
         assertBetween(1000, 1100, delay);
     }
@@ -142,7 +141,6 @@ class ConstantThroughputTimerTest {
     void testConstantTimer() throws Exception {
         ConstantTimer timer = new ConstantTimer();
         timer.setDelay("1000");
-        timer.iterationStart(null);
         Assertions.assertEquals(1000, timer.delay());
     }
 
@@ -151,7 +149,6 @@ class ConstantThroughputTimerTest {
         PoissonRandomTimer timer = new PoissonRandomTimer();
         timer.setDelay("300");
         timer.setRange(100d);
-        timer.iterationStart(null);
         long delay = timer.delay();
         assertBetween(356, 457, delay);
     }
@@ -161,7 +158,6 @@ class ConstantThroughputTimerTest {
         PoissonRandomTimer timer = new PoissonRandomTimer();
         timer.setDelay("300");
         timer.setRange(30d);
-        timer.iterationStart(null);
         long delay = timer.delay();
         assertBetween(305, 362, delay);
     }

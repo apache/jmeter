@@ -25,8 +25,6 @@ class UniformRandomTimerSpec extends Specification {
     def sut = new UniformRandomTimer()
 
     def "default delay is 0"() {
-        given:
-            sut.iterationStart(null)
         when:
             def computedDelay = sut.delay()
         then:
@@ -34,8 +32,6 @@ class UniformRandomTimerSpec extends Specification {
     }
 
     def "default range is 0"() {
-        given:
-            sut.iterationStart(null)
         when:
             def actualRange = sut.range
         then:
@@ -45,7 +41,6 @@ class UniformRandomTimerSpec extends Specification {
     def "delay can be set via a String"() {
         given:
             sut.setDelay("1")
-            sut.iterationStart(null)
         when:
             def computedDelay = sut.delay()
         then:
@@ -57,7 +52,6 @@ class UniformRandomTimerSpec extends Specification {
         given:
             sut.setDelay(delay)
             sut.setRange(range)
-            sut.iterationStart(null)
         when:
             def computedDelay = sut.delay()
         then:
