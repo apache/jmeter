@@ -37,6 +37,8 @@ import java.util.regex.Matcher;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.HttpMirrorServerExtension;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -136,6 +138,32 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     public void testPostRequest_FileUpload3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
         testPostRequest_FileUpload(HTTP_SAMPLER3);
+    }
+
+    @Test
+    public void testPostRequest_FileUploadWithSubtypeOverride() throws Exception {
+        String titleField = "title";
+        String titleValue = "mytitle";
+        String descriptionField = "description";
+        String descriptionValue = "mydescription";
+        String fileField = "file1";
+        String fileMimeType = CONTENT_TYPE_TEXT_PLAIN;
+
+        // Override Content-type subtype
+        HTTPSamplerBase sampler = createHttpSampler(HTTP_SAMPLER3);
+        String contentEncoding = "";
+        setupUrl(sampler, contentEncoding);
+        setupFileUploadData(sampler, false, titleField, titleValue,
+                descriptionField, descriptionValue, fileField, temporaryFile,
+                fileMimeType);
+        HeaderManager headerManager = new HeaderManager();
+        headerManager.add(new Header(HTTPConstants.HEADER_CONTENT_TYPE, "multipart/related"));
+        sampler.setHeaderManager(headerManager);
+        HTTPSampleResult res = executeSampler(sampler);
+        checkPostRequestFileUpload(sampler, res,
+                contentEncoding, titleField, titleValue, descriptionField,
+                descriptionValue, fileField, temporaryFile, fileMimeType,
+                TEST_FILE_CONTENT, "multipart/related");
     }
 
     @Test
@@ -900,6 +928,22 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             File fileValue,
             String fileMimeType,
             byte[] fileContent) throws IOException {
+        checkPostRequestFileUpload(sampler, res, contentEncoding, titleField, titleValue, descriptionField,
+                descriptionValue, fileField, fileValue, fileMimeType, fileContent, "multipart/form-data");
+    }
+    private void checkPostRequestFileUpload(
+            HTTPSamplerBase sampler,
+            HTTPSampleResult res,
+            String contentEncoding,
+            String titleField,
+            String titleValue,
+            String descriptionField,
+            String descriptionValue,
+            String fileField,
+            File fileValue,
+            String fileMimeType,
+            byte[] fileContent,
+            String contentType) throws IOException {
         if (contentEncoding == null || contentEncoding.isEmpty()) {
             contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
@@ -912,7 +956,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 descriptionField, descriptionValue, fileField, fileValue,
                 fileMimeType, fileContent);
         // Check request headers
-        checkHeaderContentType(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString);
+        checkHeaderContentType(res.getRequestHeaders(), contentType + "; boundary=" + boundaryString);
         // We cannot check post body from the result query string, since that will not contain
         // the actual file content, but placeholder text for file content
         //checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding));
@@ -923,7 +967,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             fail("No header and body section found");
         }
         // Check response headers
-        checkHeaderContentType(headersSent, "multipart/form-data" + "; boundary=" + boundaryString);
+        checkHeaderContentType(headersSent, contentType + "; boundary=" + boundaryString);
         byte[] bodySent = getBodySent(res.getResponseData());
         assertNotNull(bodySent, "Sent body should not be null");
         // Check post body which was sent to the mirror server, and
@@ -1261,7 +1305,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     }
 
     private String getBoundaryStringFromContentTypeWithJavaRegex(String requestHeaders) {
-        String regularExpression = "^" + HTTPConstants.HEADER_CONTENT_TYPE + ": multipart/form-data; boundary=(.+)$";
+        String regularExpression = "^" + HTTPConstants.HEADER_CONTENT_TYPE + ": multipart/.*; boundary=(.+)$";
         java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
                 java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
         Matcher localMatcher = pattern.matcher(requestHeaders);
@@ -1281,7 +1325,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
 
     private String getBoundaryStringFromContentTypeWithOroRegex(String requestHeaders) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
-        String regularExpression = "^" + HTTPConstants.HEADER_CONTENT_TYPE + ": multipart/form-data; boundary=(.+)$";
+        String regularExpression = "^" + HTTPConstants.HEADER_CONTENT_TYPE + ": multipart/.*; boundary=(.+)$";
         Pattern pattern = JMeterUtils.getPattern(regularExpression,
                 Perl5Compiler.READ_ONLY_MASK
                         | Perl5Compiler.CASE_INSENSITIVE_MASK

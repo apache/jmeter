@@ -64,6 +64,21 @@ public class TestHTTPHC4Impl {
     }
 
     @Test
+    void testParameterWithMultipartAndOverridenSubtype() throws Exception {
+        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+        sampler.setThreadContext(jmctx);
+        sampler.setDoMultipart(true);
+        sampler.setDoBrowserCompatibleMultipart(true);
+        HttpEntityEnclosingRequestBase post = new HttpPost();
+        post.addHeader(HTTPConstants.HEADER_CONTENT_TYPE, "multipart/related");
+        sampler.setHTTPFiles(new HTTPFileArg[] {new HTTPFileArg("filename", "file", "application/octect; charset=utf-8")});
+        HTTPHC4Impl hc = new HTTPHC4Impl(sampler);
+        String requestData = hc.setupHttpEntityEnclosingRequestData(post);
+        assertEquals(0, post.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE).length);
+        Assertions.assertTrue(post.getEntity().getContentType().getValue().startsWith("multipart/related"));
+        Assertions.assertTrue(requestData.contains("charset=utf-8"));
+    }
+    @Test
     void testParameterWithMultipartAndExplicitHeader() throws Exception {
         HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
         sampler.setThreadContext(jmctx);
