@@ -18,6 +18,7 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.JComponent;
@@ -50,7 +51,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
 
     /**
-     * A checkbox allowing the user to specify whether or not JMeter should do
+     * A checkbox allowing the user to specify whether JMeter should do
      * functional testing.
      */
     private final JBooleanPropertyEditor functionalMode =
@@ -80,6 +81,13 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         browseJar = new FileListPanel(JMeterUtils.getResString("test_plan_classpath_browse"), ".jar"); // $NON-NLS-1$ $NON-NLS-2$
         argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
         init();
+        bindingGroup.addAll(
+                Arrays.asList(
+                        functionalMode,
+                        serializedMode,
+                        tearDownOnShutdown
+                )
+        );
     }
 
     /**
@@ -117,26 +125,33 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         return pop;
     }
 
-    /* Implements JMeterGUIComponent.createTestElement() */
     @Override
-    public TestElement createTestElement() {
-        TestPlan tp = new TestPlan();
-        modifyTestElement(tp);
-        return tp;
+    public TestElement makeTestElement() {
+        return new TestPlan();
+    }
+
+    @Override
+    public void assignDefaultValues(TestElement element) {
+        super.assignDefaultValues(element);
+        TestPlan tp = (TestPlan) element;
+        tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
     }
 
     /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
     @Override
     public void modifyTestElement(TestElement plan) {
-        super.configureTestElement(plan);
+        super.modifyTestElement(plan);
         if (plan instanceof TestPlan) {
             TestPlan tp = (TestPlan) plan;
-            functionalMode.updateElement(tp);
-            tearDownOnShutdown.updateElement(tp);
-            serializedMode.updateElement(tp);
             // TODO: set expression to TestPlan somehow
             tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
-            tp.setTestPlanClasspathArray(browseJar.getFiles());
+            String[] files = browseJar.getFiles();
+            if (files.length == 0) {
+                // Remove property if it is empty
+                tp.setTestPlanClasspath(null);
+            } else {
+                tp.setTestPlanClasspathArray(files);
+            }
         }
     }
 
@@ -172,9 +187,6 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         super.configure(el);
         if (el instanceof TestPlan) {
             TestPlan tp = (TestPlan) el;
-            functionalMode.updateUi(tp);
-            serializedMode.updateUi(tp);
-            tearDownOnShutdown.updateUi(tp);
             final JMeterProperty udv = tp.getUserDefinedVariablesAsProperty();
             if (udv != null) {
                 argsPanel.configure((Arguments) udv.getObjectValue());
@@ -208,9 +220,6 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     @Override
     public void clearGui() {
         super.clearGui();
-        functionalMode.reset();
-        serializedMode.reset();
-        tearDownOnShutdown.reset();
         argsPanel.clear();
         browseJar.clearFiles();
     }
