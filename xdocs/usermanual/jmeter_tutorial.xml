@@ -259,6 +259,10 @@ component. The resource will have to be entered into JMeters <code>messages.prop
 (and possibly translations as well).</li>
     </ol>
   </li>
+  <li>Override <code>org.apache.jmeter.gui.JMeterGUIComponent.makeTestElement</code> method so it returns
+  the appropriate <code>TestElement</code>. JMeter will use <code>makeTestElement</code> when user creates the element
+  from the UI. In most cases it should be just creating the test element like
+  <code>return new SetupThreadGroup()</code>.</li>
   <li>Create your GUI. Whatever style you like, layout your GUI. Your class ultimately extends
     <code>JPanel</code>, so your layout must be in your class's own <code>ContentPane</code>.
     Do not hook up GUI elements to your <code>TestElement</code> class via actions and events.
@@ -287,10 +291,15 @@ private void init() {
       </li>
     </ol>
   </li>
-  <li>Implement <code>public void configure(TestElement el)</code>
+  <li>Then you need to wire UI elements with the properties of the new <code>TestElement</code>. If you create
+  <code>TestElementSchema</code> for your test element (see <code>ThreadGroupSchema</code>), then you could use
+  automatic wiring with <code>PropertyEditorCollection</code></li>
+  <li>If you do not use schema for wiring properties to UI control, or if you have non-trivial controls,
+    you might customize <code>TestElement</code> properties to UI control mapping by overriding <code>public void configure(TestElement el)</code>
     <ol>
       <li>Be sure to call <code>super.configure(e)</code>. This will populate some of the data for you, like
-         the name of the element.</li>
+      the name of the element. Note: JMeter reuses UI elements when user changes the active element in test tree,
+      so you need to set all the text fields in <code>configure</code> method to avoid displaying stale contents.</li>
       <li>Use this method to set data into your GUI elements. Example:
 <source>
 public void configure(TestElement el) {
@@ -312,16 +321,18 @@ public void configure(TestElement el) {
 }
 </source>
       </li>
-      <li>Implement <code>public void modifyTestElement(TestElement e)</code>. This is where you
-         move the data from your GUI elements to the <code>TestElement</code>. It is the logical reverse of the
-         previous method.
+      <li>If you do not use schema for wiring UI controls to <code>TestElement</code> properties,
+         or if you want customized behavior, you might override <code>public void modifyTestElement(TestElement e)</code>.
+         It is the logical reverse of <code>configure</code> method.
          <ol>
-           <li>Call <code>super.configureTestElement(e)</code>. This will take care of some default data for
+           <li>Call <code>super.modifyTestElement(e)</code>. This will take care of some default data for
              you.</li>
+           <li>Note: in most cases, you want to treat "empty field" as "absent property", so make sure to
+           remove the property if the input field is empty.</li>
            <li>Example:
 <source>
 public void modifyTestElement(TestElement e) {
-    super.configureTestElement(e);
+    super.modifyTestElement(e);
     e.setProperty(new BooleanProperty(
             RegexExtractor.USEHEADERS,
             useHeaders.isSelected()));
@@ -339,16 +350,9 @@ public void modifyTestElement(TestElement e) {
            </li>
          </ol>
        </li>
-       <li>Implement <code>public TestElement createTestElement()</code>. This method should create a
-         new instance of your <code>TestElement</code> class, and then pass it to the <code>modifyTestElement(TestElement)</code>
-         method you made above
-<source>
-public TestElement createTestElement() {
-    RegexExtractor extractor = new RegexExtractor();
-    modifyTestElement(extractor);
-    return extractor;
-}
-</source>
+       <li>If your UI includes controls that do not map to <code>TestElement</code> properties (sliders, tabs),
+         then you might want to reset them when user switches the controls. You can do that by overriding
+         <code>clearGui()</code> method and resetting the controls there.
        </li>
     </ol>
   </li>

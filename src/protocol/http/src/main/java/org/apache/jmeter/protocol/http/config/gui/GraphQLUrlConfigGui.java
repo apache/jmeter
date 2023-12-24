@@ -58,12 +58,6 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
     private static final UrlConfigDefaults URL_CONFIG_DEFAULTS = new UrlConfigDefaults();
     static {
         URL_CONFIG_DEFAULTS.setValidMethods(new String[] { HTTPConstants.POST, HTTPConstants.GET });
-        URL_CONFIG_DEFAULTS.setDefaultMethod(HTTPConstants.POST);
-        URL_CONFIG_DEFAULTS.setAutoRedirects(false);
-        URL_CONFIG_DEFAULTS.setFollowRedirects(false);
-        URL_CONFIG_DEFAULTS.setUseBrowserCompatibleMultipartMode(false);
-        URL_CONFIG_DEFAULTS.setUseKeepAlive(true);
-        URL_CONFIG_DEFAULTS.setUseMultipart(false);
         URL_CONFIG_DEFAULTS.setUseMultipartVisible(false);
     }
 

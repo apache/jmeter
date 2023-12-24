@@ -115,11 +115,9 @@ public class DslPrinterTraverser(
                 if (prop == TestElementSchema.testClass && stringValue == te::class.java.name && canSkipTestClass) {
                     continue
                 }
-                if ((property is StringProperty && stringValue.isNullOrEmpty()) ||
-                    stringValue == prop?.defaultValueAsString
-                ) {
-                    continue
-                }
+                // It might be tempting to skip printing the property if its value matches the default value,
+                // However, it would be wrong because "unset" values might be overriden by "... Request Defaults",
+                // so we do not want accidental overrides if the user explicitly set some of the properties
             }
 
             if (prop == null) {

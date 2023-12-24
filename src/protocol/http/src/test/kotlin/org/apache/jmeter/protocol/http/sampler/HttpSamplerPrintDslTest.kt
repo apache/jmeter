@@ -92,6 +92,8 @@ class HttpSamplerPrintDslTest : JMeterTestCase() {
             +element
         }
 
+        // "arguments" property is assigned in HTTPSamplerBase constructor, so it comes before
+        // name and guiClass common properties
         assertEquals(
             """
             org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
@@ -103,17 +105,19 @@ class HttpSamplerPrintDslTest : JMeterTestCase() {
                             it[testClass] = "org.apache.jmeter.config.Arguments"
                         }
                     }
+                    it[name] = "HTTP Request"
+                    it[guiClass] = "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui"
                     it[method] = "GET"
                     it[followRedirects] = true
                     it[useKeepalive] = true
-                    it[implementation] = "HttpClient4"
-                    it[name] = "HTTP Request"
-                    it[guiClass] = "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui"
                 }
             }
 
             """.trimIndent().replace("\r\n", "\n"),
-            DslPrinterTraverser().also { tree.traverse(it) }.toString().replace("\r\n", "\n")
+            DslPrinterTraverser().also { tree.traverse(it) }.toString().replace("\r\n", "\n"),
+            "HTTP request created with HttpTestSampleGui.createTestElement() should have expected output shape. " +
+                "DslPrinterTraverser does not print the values which are automatically assigned in constructor, " +
+                "so the expected output does not have it[testClass] = HTTPSamplerProxy, and empty list in arguments"
         )
     }
 
@@ -130,17 +134,14 @@ class HttpSamplerPrintDslTest : JMeterTestCase() {
                             it[testClass] = "org.apache.jmeter.config.Arguments"
                         }
                     }
+                    it[name] = "HTTP Request"
+                    it[guiClass] = "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui"
                     it[method] = "GET"
                     it[followRedirects] = true
                     it[useKeepalive] = true
-                    it[implementation] = "HttpClient4"
-                    it[name] = "HTTP Request"
-                    it[guiClass] = "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui"
                 }
             }
         }.keys.first() as TestElement
-
-        createdWithUi.traverse(RemoveDefaultValues)
 
         // We compare elements manually, and call assertEquals(toString, toString) so
         // the test output looks better (diff in IDE) in case of the failure

@@ -315,11 +315,12 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (StringUtils.isNotEmpty(url.getQuery())) {
             path += "?" + url.getQuery();
         }
+        // setMethod must be before setPath as setPath uses method to determine if parameters should be parsed or not
+        httpSampler.setMethod(request.getMethod());
         httpSampler.setPath(path);
         httpSampler.setDomain(url.getHost());
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
-        httpSampler.setMethod(request.getMethod());
         HeaderManager headerManager = createHeaderManager(request);
         httpSampler.addTestElement(headerManager);
         configureTimeout(request, httpSampler);

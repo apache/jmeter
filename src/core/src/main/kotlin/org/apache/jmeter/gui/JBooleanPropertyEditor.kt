@@ -32,7 +32,7 @@ import org.apiguardian.api.API
 public class JBooleanPropertyEditor(
     private val propertyDescriptor: BooleanPropertyDescriptor<*>,
     label: String,
-) : JEditableCheckBox(label, DEFAULT_CONFIGURATION) {
+) : JEditableCheckBox(label, DEFAULT_CONFIGURATION), Binding {
     private companion object {
         @JvmField
         val DEFAULT_CONFIGURATION: Configuration = Configuration(
@@ -50,26 +50,18 @@ public class JBooleanPropertyEditor(
         value = Value.of(propertyDescriptor.defaultValue ?: false)
     }
 
-    /**
-     * Update [TestElement] based on the state of the UI.
-     * TODO: we might better use PropertiesAccessor<TestElement, ElementSchema>
-     *     However, it would require callers to pass element.getProps() which might allocate.
-     * @param testElement element to update
-     */
-    public fun updateElement(testElement: TestElement) {
+    public override fun updateElement(testElement: TestElement) {
         when (val value = value) {
-            is Value.Boolean -> testElement[propertyDescriptor] = value.value
+            // For now, UI does not distinguish between "false" and "absent" values,
+            // so we treat "false" as "absent".
+            is Value.Boolean ->
+                testElement[propertyDescriptor] =
+                    value.value.takeIf { it || propertyDescriptor.defaultValue == true }
             is Value.Text -> testElement[propertyDescriptor] = value.value
         }
     }
 
-    /**
-     * Update UI based on the state of the given [TestElement].
-     * TODO: we might better use PropertiesAccessor<TestElement, ElementSchema>
-     *     However, it would require callers to pass element.getProps() which might allocate.
-     * @param testElement element to get the state from
-     */
-    public fun updateUi(testElement: TestElement) {
+    public override fun updateUi(testElement: TestElement) {
         value = when (val value = testElement.getPropertyOrNull(propertyDescriptor)) {
             is BooleanProperty, null -> Value.of(value?.booleanValue ?: propertyDescriptor.defaultValue ?: false)
             // TODO: should we rather fail in case we detect an unknown property?

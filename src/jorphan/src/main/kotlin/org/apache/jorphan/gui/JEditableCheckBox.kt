@@ -20,6 +20,8 @@ package org.apache.jorphan.gui
 import org.apiguardian.api.API
 import java.awt.Container
 import java.awt.FlowLayout
+import java.awt.event.ActionEvent
+import javax.swing.AbstractAction
 import javax.swing.Box
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
@@ -41,6 +43,7 @@ public open class JEditableCheckBox(
     public companion object {
         public const val CHECKBOX_CARD: String = "checkbox"
         public const val EDITABLE_CARD: String = "editable"
+        public const val VALUE_PROPERTY: String = "value"
     }
 
     /**
@@ -92,14 +95,21 @@ public open class JEditableCheckBox(
 
     private val cards = CardLayoutWithSizeOfCurrentVisibleElement()
 
+    private val useExpressionAction = object : AbstractAction(configuration.startEditing) {
+        override fun actionPerformed(e: ActionEvent?) {
+            cards.next(this@JEditableCheckBox)
+            comboBox.requestFocusInWindow()
+            fireValueChanged()
+        }
+    }
+
     private val checkbox: JCheckBox = JCheckBox(label).apply {
+        val cb = this
         componentPopupMenu = JPopupMenu().apply {
-            add(configuration.startEditing).apply {
-                addActionListener {
-                    cards.next(this@JEditableCheckBox)
-                    comboBox.requestFocusInWindow()
-                }
-            }
+            add(useExpressionAction)
+        }
+        addItemListener {
+            fireValueChanged()
         }
     }
 
@@ -114,6 +124,7 @@ public open class JEditableCheckBox(
             val jComboBox = it.source as JComboBox<*>
             SwingUtilities.invokeLater {
                 if (jComboBox.isPopupVisible) {
+                    fireValueChanged()
                     return@invokeLater
                 }
                 when (val value = jComboBox.selectedItem as String) {
@@ -121,10 +132,12 @@ public open class JEditableCheckBox(
                         checkbox.isSelected = value == configuration.trueValue
                         cards.show(this@JEditableCheckBox, CHECKBOX_CARD)
                         checkbox.requestFocusInWindow()
+                        fireValueChanged()
                     }
                 }
             }
         }
+        // TODO: trigger value changed when the text is changed
     }
 
     private val textFieldLabel = JLabel(label).apply {
@@ -157,6 +170,23 @@ public open class JEditableCheckBox(
         )
     }
 
+    private var oldValue = value
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        checkbox.isEnabled = enabled
+        comboBox.isEnabled = enabled
+        useExpressionAction.isEnabled = enabled
+    }
+
+    private fun fireValueChanged() {
+        val newValue = value
+        if (value != oldValue) {
+            firePropertyChange(VALUE_PROPERTY, oldValue, newValue)
+            oldValue = newValue
+        }
+    }
+
     public var value: Value
         get() = when (components.indexOfFirst { it.isVisible }) {
             0 -> if (checkbox.isSelected) Value.Boolean.TRUE else Value.Boolean.FALSE
@@ -176,6 +206,7 @@ public open class JEditableCheckBox(
                     cards.show(this, EDITABLE_CARD)
                 }
             }
+            fireValueChanged()
         }
 
     @get:JvmSynthetic

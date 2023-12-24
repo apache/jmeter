@@ -65,7 +65,7 @@ public abstract class HTTPSamplerBaseSchema : TestElementSchema() {
         by testElement("HTTPSampler.dns_cache_manager")
 
     public val method: StringPropertyDescriptor<HTTPSamplerBaseSchema>
-        by string("HTTPSampler.method")
+        by string("HTTPSampler.method", default = HTTPSamplerBase.DEFAULT_METHOD)
 
     public val protocol: StringPropertyDescriptor<HTTPSamplerBaseSchema>
         by string("HTTPSampler.protocol", default = HTTPConstants.PROTOCOL_HTTP)
