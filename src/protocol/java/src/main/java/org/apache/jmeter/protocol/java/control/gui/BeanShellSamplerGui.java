@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.java.control.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
 
 import javax.swing.Box;
 import javax.swing.JLabel;
@@ -25,7 +26,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.jmeter.gui.FilePanelEntryBinding;
 import org.apache.jmeter.gui.JBooleanPropertyEditor;
+import org.apache.jmeter.gui.JSyntaxTextAreaBinding;
+import org.apache.jmeter.gui.JTextComponentBinding;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FilePanelEntry;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -55,51 +59,19 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 
     public BeanShellSamplerGui() {
         init();
+        bindingGroup.addAll(
+                Arrays.asList(
+                        new JSyntaxTextAreaBinding(scriptField, BeanShellSamplerSchema.INSTANCE.getScript()),
+                        new FilePanelEntryBinding(filename, BeanShellSamplerSchema.INSTANCE.getFilename()),
+                        new JTextComponentBinding(parameters, BeanShellSamplerSchema.INSTANCE.getParameters()),
+                        resetInterpreter
+                )
+        );
     }
 
     @Override
-    public void configure(TestElement element) {
-        scriptField.setInitialText(element.get(BeanShellSamplerSchema.INSTANCE.getScript()));
-        scriptField.setCaretPosition(0);
-        filename.setFilename(element.get(BeanShellSamplerSchema.INSTANCE.getFilename()));
-        parameters.setText(element.get(BeanShellSamplerSchema.INSTANCE.getParameters()));
-        resetInterpreter.updateUi(element);
-        super.configure(element);
-    }
-
-    @Override
-    public TestElement createTestElement() {
-        BeanShellSampler sampler = new BeanShellSampler();
-        modifyTestElement(sampler);
-        return sampler;
-    }
-
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    @Override
-    public void modifyTestElement(TestElement te) {
-        te.clear();
-        super.configureTestElement(te);
-        te.set(BeanShellSamplerSchema.INSTANCE.getScript(), scriptField.getText());
-        te.set(BeanShellSamplerSchema.INSTANCE.getFilename(), filename.getFilename());
-        te.set(BeanShellSamplerSchema.INSTANCE.getParameters(), parameters.getText());
-        resetInterpreter.updateElement(te);
-    }
-
-    /**
-     * Implements JMeterGUIComponent.clearGui
-     */
-    @Override
-    public void clearGui() {
-        super.clearGui();
-
-        filename.setFilename(""); //$NON-NLS-1$
-        parameters.setText(""); //$NON-NLS-1$
-        scriptField.setInitialText(""); //$NON-NLS-1$
-        resetInterpreter.reset();
+    public TestElement makeTestElement() {
+        return new BeanShellSampler();
     }
 
     @Override
