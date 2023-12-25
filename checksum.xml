@@ -122,6 +122,7 @@
     <trusted-key id='b01128c8fd304fe48e6eed2c347cd0eaed975c5f' group='org.antlr' />
     <trusted-key id='dddee87612e9fb95f5c8d91e411063a3a0ffd119' group='org.apache-extras.beanshell' />
     <trusted-key id='1aa8cf92d409a73393d0b736bff2ee42c8282e76' group='org.apache.activemq' />
+    <trusted-key id='0a123c1ed3f13a6a0140e166c71fb765cd9de313' group='org.apache.ant' />
     <trusted-key id='8da70c00df7af1b0d2f9dc74ddbcc1270a29d081' group='org.apache.ant' />
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='org.apache.bcel' />
     <trusted-key id='12d16069219c90212a974d119ae296fd02e9f65b' group='org.apache.commons' />
