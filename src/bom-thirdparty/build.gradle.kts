@@ -134,7 +134,7 @@ dependencies {
         api("org.jsoup:jsoup:1.17.1")
         api("org.mongodb:mongo-java-driver:2.14.3")
         api("org.mozilla:rhino:1.7.14")
-        api("org.neo4j.driver:neo4j-java-driver:4.4.12")
+        api("org.neo4j.driver:neo4j-java-driver:4.4.13")
         api("org.slf4j:jcl-over-slf4j:1.7.36")
         api("org.slf4j:slf4j-api:1.7.36")
         api("oro:oro:2.0.8")
