@@ -175,7 +175,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             } else {
                 samplerBase.removeProperty(httpSchema.getIpSourceType());
             }
-            samplerBase.set(httpSchema.getImplementation(), String.valueOf(httpImplementation.getSelectedItem()));
+            String selectedImplementation = String.valueOf(httpImplementation.getSelectedItem());
+            samplerBase.set(httpSchema.getImplementation(), StringUtils.defaultIfBlank(selectedImplementation, null));
         }
     }
 

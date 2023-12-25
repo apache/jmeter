@@ -41,8 +41,20 @@ public class GraphQLHTTPSamplerGui extends HttpTestSampleGui {
         super.assignDefaultValues(element);
         HTTPSamplerBaseSchema schema = HTTPSamplerBaseSchema.INSTANCE;
         element.set(schema.getMethod(), HTTPConstants.POST);
-        element.set(schema.getUseBrowserCompatibleMultipart(), false);
-        element.set(schema.getUseMultipartPost(), false);
+        element.set(schema.getPostBodyRaw(), true);
+        disableMultipart(element);
+    }
+
+    @Override
+    public void modifyTestElement(TestElement sampler) {
+        super.modifyTestElement(sampler);
+        disableMultipart(sampler);
+    }
+
+    private static void disableMultipart(TestElement sampler) {
+        HTTPSamplerBaseSchema schema = HTTPSamplerBaseSchema.INSTANCE;
+        sampler.set(schema.getUseBrowserCompatibleMultipart(), false);
+        sampler.set(schema.getUseMultipartPost(), false);
     }
 
     public GraphQLHTTPSamplerGui() {

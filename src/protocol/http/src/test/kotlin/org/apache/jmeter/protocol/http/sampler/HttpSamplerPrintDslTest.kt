@@ -110,6 +110,7 @@ class HttpSamplerPrintDslTest : JMeterTestCase() {
                     it[method] = "GET"
                     it[followRedirects] = true
                     it[useKeepalive] = true
+                    it[postBodyRaw] = false
                 }
             }
 
@@ -139,6 +140,7 @@ class HttpSamplerPrintDslTest : JMeterTestCase() {
                     it[method] = "GET"
                     it[followRedirects] = true
                     it[useKeepalive] = true
+                    it[postBodyRaw] = false
                 }
             }
         }.keys.first() as TestElement

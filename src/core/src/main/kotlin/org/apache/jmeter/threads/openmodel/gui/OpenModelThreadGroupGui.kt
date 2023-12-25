@@ -24,6 +24,7 @@ import org.apache.jmeter.gui.TestElementMetadata
 import org.apache.jmeter.testelement.TestElement
 import org.apache.jmeter.threads.gui.AbstractThreadGroupGui
 import org.apache.jmeter.threads.openmodel.OpenModelThreadGroup
+import org.apache.jmeter.threads.openmodel.OpenModelThreadGroupController
 import org.apache.jmeter.threads.openmodel.OpenModelThreadGroupSchema
 import org.apache.jmeter.threads.openmodel.ThreadSchedule
 import org.apache.jmeter.threads.openmodel.ThreadScheduleStep
@@ -140,4 +141,9 @@ public class OpenModelThreadGroupGui : AbstractThreadGroupGui() {
     private fun evaluate(input: String): String = CompoundVariable(input).execute()
 
     override fun makeTestElement(): TestElement = OpenModelThreadGroup()
+
+    override fun modifyTestElement(element: TestElement) {
+        super.modifyTestElement(element)
+        element[OpenModelThreadGroupSchema.mainController] = OpenModelThreadGroupController()
+    }
 }

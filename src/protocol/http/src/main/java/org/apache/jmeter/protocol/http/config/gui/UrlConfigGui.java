@@ -238,7 +238,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     }
 
     public void assignDefaultValues(TestElement element) {
-        ((HTTPSamplerBase) element).setArguments(argsPanel.createTestElement());
+        HTTPSamplerBase httpSampler = (HTTPSamplerBase) element;
+        httpSampler.setPostBodyRaw(false);
+        httpSampler.setArguments(argsPanel.createTestElement());
     }
 
     // Just append all the parameter values, and use that as the post body

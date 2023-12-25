@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -174,9 +176,9 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
         if (params != null) {
             sampler.setProperty(TestElement.GUI_CLASS, GraphQLHTTPSamplerGui.class.getName());
-            sampler.setProperty(GraphQLUrlConfigGui.OPERATION_NAME, params.getOperationName());
-            sampler.setProperty(GraphQLUrlConfigGui.QUERY, params.getQuery());
-            sampler.setProperty(GraphQLUrlConfigGui.VARIABLES, params.getVariables());
+            sampler.setProperty(GraphQLUrlConfigGui.OPERATION_NAME, defaultIfEmpty(params.getOperationName(), null));
+            sampler.setProperty(GraphQLUrlConfigGui.QUERY, defaultIfEmpty(params.getQuery(), null));
+            sampler.setProperty(GraphQLUrlConfigGui.VARIABLES, defaultIfEmpty(params.getVariables(), null));
         }
     }
 

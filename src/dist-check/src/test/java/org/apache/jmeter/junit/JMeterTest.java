@@ -53,6 +53,8 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.loadsave.IsEnabledNormalizer;
+import org.apache.jmeter.protocol.http.control.gui.GraphQLHTTPSamplerGui;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -279,6 +281,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
                 ts.addTest(new JMeterTest("GUIComponents2", item));
                 ts.addTest(new JMeterTest("saveLoadShouldKeepElementIntact", item));
                 ts.addTest(new JMeterTest("propertiesShouldNotBeInitializedToNullValues", item));
+                ts.addTest(new JMeterTest("elementShouldNotBeModifiedWithConfigureModify", item));
                 ts.addTest(new JMeterTest("runGUITitle", item));
             }
             suite.addTest(ts);
@@ -300,6 +303,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
                 ts.addTest(new JMeterTest("GUIComponents2", item));
                 ts.addTest(new JMeterTest("saveLoadShouldKeepElementIntact", item));
                 ts.addTest(new JMeterTest("propertiesShouldNotBeInitializedToNullValues", item));
+                ts.addTest(new JMeterTest("elementShouldNotBeModifiedWithConfigureModify", item));
                 ts.addTest(new JMeterTest("runGUITitle", item));
                 suite.addTest(ts);
             } catch (IllegalArgumentException e) {
@@ -427,6 +431,39 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
+    public void elementShouldNotBeModifiedWithConfigureModify() {
+        TestElement expected = guiItem.createTestElement();
+        TestElement actual = guiItem.createTestElement();
+        guiItem.configure(actual);
+        if (!Objects.equals(expected, actual)) {
+            boolean breakpointForDebugging = Objects.equals(expected, actual);
+            String expectedStr = new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(expected).toString();
+            String actualStr = new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(actual).toString();
+            assertEquals(
+                    "TestElement should not be modified by " + guiItem.getClass().getName() + ".configure(element)",
+                    expectedStr,
+                    actualStr
+            );
+        }
+        guiItem.modifyTestElement(actual);
+        if (guiItem.getClass() == GraphQLHTTPSamplerGui.class) {
+            // GraphQL sampler computes its arguments, so we don't compare them
+            // See org.apache.jmeter.protocol.http.config.gui.GraphQLUrlConfigGui.modifyTestElement
+            expected.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getArguments());
+            actual.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getArguments());
+        }
+        if (!Objects.equals(expected, actual)) {
+            boolean breakpointForDebugging = Objects.equals(expected, actual);
+            String expectedStr = new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(expected).toString();
+            String actualStr = new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(actual).toString();
+            assertEquals(
+                    "TestElement should not be modified by " + guiItem.getClass().getName() + ".configure(element); gui.modifyTestElement(element)",
+                    expectedStr,
+                    actualStr
+            );
+        }
+    }
+
     public void saveLoadShouldKeepElementIntact() throws IOException {
         TestElement expected = guiItem.createTestElement();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -442,7 +479,7 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
 
         String expectedStr = new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(expected).toString();
         if (!Objects.equals(expected, actual)) {
-            boolean abc = Objects.equals(expected, actual);
+            boolean breakpointForDebugging = Objects.equals(expected, actual);
             assertEquals(
                     "TestElement after 'save+load' should match the one created in GUI\n" +
                             "JMX is " + new String(serializedBytes, StandardCharsets.UTF_8),

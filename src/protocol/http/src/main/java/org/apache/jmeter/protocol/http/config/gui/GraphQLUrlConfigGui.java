@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.protocol.http.config.gui;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
+
 import java.awt.Component;
 
 import javax.swing.BorderFactory;
@@ -93,9 +95,9 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         final GraphQLRequestParams params = new GraphQLRequestParams(operationNameText.getText(),
                 queryContent.getText(), variablesContent.getText());
 
-        element.setProperty(OPERATION_NAME, params.getOperationName());
-        element.setProperty(QUERY, params.getQuery());
-        element.setProperty(VARIABLES, params.getVariables());
+        element.setProperty(OPERATION_NAME, defaultIfEmpty(params.getOperationName(), null));
+        element.setProperty(QUERY, defaultIfEmpty(params.getQuery(), null));
+        element.setProperty(VARIABLES, defaultIfEmpty(params.getVariables(), null));
         element.setProperty(HTTPSamplerBase.POST_BODY_RAW, !HTTPConstants.GET.equals(method));
 
         final Arguments args;
