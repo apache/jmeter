@@ -206,7 +206,7 @@ public final class TristateCheckBox extends JCheckBox {
 
         public TristateButtonModel(TristateState initial,
                 TristateCheckBox tristateCheckBox, boolean original) {
-            setState(TristateState.DESELECTED);
+            setState(initial);
             this.tristateCheckBox = tristateCheckBox;
             icon = new TristateCheckBoxIcon();
             this.original = original;
