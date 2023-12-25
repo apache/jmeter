@@ -23,7 +23,7 @@ dependencies {
     api(projects.basics)
     api(projects.buildParameters)
     api("com.github.autostyle:com.github.autostyle.gradle.plugin:3.2")
-    api("com.github.spotbugs:com.github.spotbugs.gradle.plugin:6.0.2")
+    api("com.github.spotbugs:com.github.spotbugs.gradle.plugin:6.0.4")
     api("com.github.vlsi.ide:com.github.vlsi.ide.gradle.plugin:1.90")
     api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.90")
     api("de.thetaphi.forbiddenapis:de.thetaphi.forbiddenapis.gradle.plugin:3.6")
