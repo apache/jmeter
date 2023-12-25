@@ -17,12 +17,12 @@
 
 package org.apache.jmeter.threads.openmodel.gui
 
-import jetbrains.datalore.vis.swing.batik.DefaultPlotPanelBatik
 import org.apache.jmeter.threads.openmodel.ThreadSchedule
 import org.apache.jmeter.threads.openmodel.ThreadScheduleStep
 import org.apache.jmeter.threads.openmodel.asSeconds
 import org.apache.jmeter.threads.openmodel.rateUnitFor
 import org.apiguardian.api.API
+import org.jetbrains.letsPlot.batik.plot.component.DefaultPlotPanelBatik
 import org.jetbrains.letsPlot.commons.registration.Disposable
 import org.jetbrains.letsPlot.core.util.MonolithicCommon
 import org.jetbrains.letsPlot.geom.geomLine
