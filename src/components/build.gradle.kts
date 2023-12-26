@@ -16,6 +16,7 @@
  */
 
 plugins {
+    id("java-test-fixtures")
     id("build-logic.build-params")
     id("build-logic.jvm-published-library")
 }
@@ -87,6 +88,9 @@ dependencies {
     testRuntimeOnly("org.bouncycastle:bcprov-jdk15on")
     testImplementation("nl.jqno.equalsverifier:equalsverifier")
     testImplementation(testFixtures(projects.src.testkitWiremock))
+    testFixturesImplementation(testFixtures(projects.src.core))
+    testFixturesImplementation("junit:junit")
+    testFixturesImplementation("org.spockframework:spock-core")
 }
 
 if (!buildParameters.enableJavaFx) {

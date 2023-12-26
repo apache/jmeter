@@ -34,6 +34,7 @@ dependencies {
     api(projects.src.dist)
 
     testImplementation(testFixtures(projects.src.core))
+    testImplementation(testFixtures(projects.src.components))
     testImplementation("org.apache.commons:commons-lang3") {
         because("StringUtils")
     }

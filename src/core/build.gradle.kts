@@ -121,11 +121,9 @@ dependencies {
 
     testImplementation("commons-net:commons-net")
     testImplementation("io.mockk:mockk")
-    testRuntimeOnly("org.spockframework:spock-core")
 
     testFixturesApi(testFixtures(projects.src.jorphan))
     testFixturesImplementation("junit:junit")
-    testFixturesImplementation("org.spockframework:spock-core")
     testFixturesImplementation(projects.src.testkit)
     testFixturesImplementation("org.junit.jupiter:junit-jupiter")
 }
