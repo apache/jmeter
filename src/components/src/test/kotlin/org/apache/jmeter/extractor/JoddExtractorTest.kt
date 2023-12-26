@@ -17,35 +17,56 @@
 
 package org.apache.jmeter.extractor
 
-import spock.lang.Specification
-import spock.lang.Unroll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@Unroll
-class JoddExtractorSpec extends Specification {
+class JoddExtractorTest {
+    data class ExtractCase(
+        val expression: String,
+        val attribute: String,
+        val matchNumber: Int,
+        val expectedList: List<String>,
+        val found: Int,
+        val expected: Int,
+        val cacheKey: String
+    )
 
-    def "extract #expression and #attribute"() {
-        given:
-            def resultList = []
-            def input = """
-<html>
-  <head><title>Test</title></head>
-  <body>
-    <h1 class="title">TestTitle</h1>
-    <p>Some text</p>
-    <h1>AnotherTitle</h1>
-  </body>
-</html>
-"""
-        when:
-            def foundCount = new JoddExtractor().extract(expression, attribute, matchNumber, input, resultList, found, cacheKey)
-        then:
-            foundCount == expected
-            resultList == expectedList
-        where:
-            expression        | attribute | matchNumber | expectedList                  | found | expected | cacheKey
-            "p"               | ""        | 1           | ["Some text"]                 | -1    | 0        | "key"
-            "h1[class=title]" | "class"   | 1           | ["title"]                     | -1    | 0        | "key"
-            "h1"              | ""        | 0           | ["TestTitle", "AnotherTitle"] | -1    | 1        | "key"
-            "notthere"        | ""        | 0           | []                            | -1    | -1       | "key"
+    companion object {
+        @JvmStatic
+        fun extractCases() = listOf(
+            ExtractCase("p", "", 1, listOf("Some text"), -1, 0, "key"),
+            ExtractCase("h1[class=title]", "class", 1, listOf("title"), -1, 0, "key"),
+            ExtractCase("h1", "", 0, listOf("TestTitle", "AnotherTitle"), -1, 1, "key"),
+            ExtractCase("notthere", "", 0, listOf(), -1, -1, "key"),
+        )
+    }
+
+    @ParameterizedTest
+    @MethodSource("extractCases")
+    fun extract(case: ExtractCase) {
+        val resultList = mutableListOf<String>()
+        val input = /* language=xml */
+            """
+            <html>
+              <head><title>Test</title></head>
+              <body>
+                <h1 class="title">TestTitle</h1>
+                <p>Some text</p>
+                <h1>AnotherTitle</h1>
+              </body>
+            </html>
+            """.trimIndent()
+        val foundCount = JoddExtractor().extract(
+            case.expression,
+            case.attribute,
+            case.matchNumber,
+            input,
+            resultList,
+            case.found,
+            case.cacheKey
+        )
+        assertEquals(case.expectedList, resultList, "resultList")
+        assertEquals(case.expected, foundCount, "foundCount")
     }
 }

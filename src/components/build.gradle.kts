@@ -90,6 +90,7 @@ dependencies {
     testImplementation(testFixtures(projects.src.testkitWiremock))
     testFixturesImplementation(testFixtures(projects.src.core))
     testFixturesImplementation("junit:junit")
+    testImplementation("io.mockk:mockk")
     testFixturesImplementation("org.spockframework:spock-core")
 }
 

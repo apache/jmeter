@@ -17,60 +17,65 @@
 
 package org.apache.jmeter.assertions
 
-import java.nio.charset.StandardCharsets
-
-import org.apache.commons.lang3.StringUtils
 import org.apache.jmeter.samplers.SampleResult
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-import spock.lang.Specification
-import spock.lang.Unroll
+class CompareAssertionTest {
+    val sut = CompareAssertion()
 
-@Unroll
-class CompareAssertionSpec extends Specification {
+    data class AssertCase(
+        val compareContent: Boolean,
+        val compareTime: Long,
+        val content: String,
+        val elapsed: Long,
+        val skip: String?,
+        val isFailure: Boolean
+    )
 
-    def sut = new CompareAssertion()
-
-    def "Result is simple assertionResult when only one response is given"() {
-        given:
-            sut.setName("myName")
-            sut.iterationStart(null)
-        when:
-            def assertionResult = sut.getResult(null)
-        then:
-            assertionResult.getName() == "myName"
-    }
-
-    def "content '#content' with compareContent==#compareContent, skip=#skip, elapsed=#elapsed and compareTime==#compareTime"() {
-        given:
-            sut.setName("myName")
-            def firstResponse = simpleResult("OK", 100)
-            sut.iterationStart(null)
-            sut.getResult(firstResponse)
-            sut.setCompareContent(compareContent)
-            sut.setCompareTime(compareTime)
-            if (skip != null) {
-                def subst = new SubstitutionElement()
-                subst.setRegex(skip)
-                sut.setStringsToSkip(Arrays.asList(subst))
+    companion object {
+        fun simpleResult(data: String, elapsed: Long) =
+            SampleResult(0, elapsed).apply {
+                setResponseData(data, Charsets.UTF_8.name())
+                sampleEnd()
             }
-        when:
-            def assertionResult = sut.getResult(simpleResult(content, elapsed))
-        then:
-            assertionResult.isFailure() == isFailure
-        where:
-            compareContent | compareTime | content        | elapsed | skip        | isFailure
-            true           | -1          | "OK"           | 100     | null        | false
-            true           | -1          | "different"    | 100     | null        | true
-            false          | -1          | "different"    | 100     | null        | false
-            false          | -1          | "different OK" | 100     | "d\\w+\\s"  | false
-            true           | 10          | "OK"           | 120     | null        | true
-            true           | 10          | "OK"           | 110     | null        | false
+
+        @JvmStatic
+        fun assertCases() = listOf(
+            AssertCase(true, -1, "OK", 100, null, false),
+            AssertCase(true, -1, "different", 100, null, true),
+            AssertCase(false, -1, "different", 100, null, false),
+            AssertCase(false, -1, "different OK", 100, "d\\w+\\s", false),
+            AssertCase(true, 10, "OK", 120, null, true),
+            AssertCase(true, 10, "OK", 110, null, false),
+        )
     }
 
-    private SampleResult simpleResult(String data, long elapsed) {
-        def result = new SampleResult(0L, elapsed)
-        result.setResponseData(data, StandardCharsets.UTF_8.name())
-        result.sampleEnd()
-        return result
+    @Test
+    fun `Result is simple assertionResult when only one response is given`() {
+        sut.name = "myName"
+        sut.iterationStart(null)
+        val assertionResult = sut.getResult(null)
+        assertEquals("myName", assertionResult.name)
+    }
+
+    @ParameterizedTest
+    @MethodSource("assertCases")
+    fun isFailure(case: AssertCase) {
+        sut.name = "myName"
+        val firstResponse = simpleResult("OK", 100)
+        sut.iterationStart(null)
+        sut.getResult(firstResponse)
+        sut.isCompareContent = case.compareContent
+        sut.compareTime = case.compareTime
+        case.skip?.let {
+            val subst = SubstitutionElement()
+            subst.regex = it
+            sut.stringsToSkip = listOf(subst)
+        }
+        val assertionResult = sut.getResult(simpleResult(case.content, case.elapsed))
+        assertEquals(case.isFailure, assertionResult.isFailure)
     }
 }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +69,11 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         this.socketConnectionInfos = socketConnectionInfos;
         this.socketOutputStreamPool = socketOutputStreamPool;
         this.prefix = prefix;
+    }
+
+    @VisibleForTesting
+    List<MetricTuple> getMetrics() {
+        return metrics;
     }
 
     /* (non-Javadoc)

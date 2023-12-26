@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,6 +85,11 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         this.socketConnectionInfos = socketConnectionInfos;
         this.socketOutputStreamPool = socketOutputStreamPool;
         this.prefix = prefix;
+    }
+
+    @VisibleForTesting
+    List<MetricTuple> getMetrics() {
+        return metrics;
     }
 
     /*
@@ -160,7 +166,8 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     }
 
     /** See: https://graphite.readthedocs.io/en/1.0.0/feeding-carbon.html */
-    private static String convertMetricsToPickleFormat(List<MetricTuple> metrics) {
+    @VisibleForTesting
+    static String convertMetricsToPickleFormat(List<MetricTuple> metrics) {
         StringBuilder pickled = new StringBuilder(metrics.size() * 75);
         pickled.append(MARK).append(LIST);
 

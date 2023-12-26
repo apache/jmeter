@@ -17,80 +17,80 @@
 
 package org.apache.jmeter.control
 
+import io.mockk.mockk
 import org.apache.jmeter.junit.stubs.TestSampler
 import org.apache.jmeter.testelement.TestElement
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
-import spock.lang.Specification
+class RandomOrderControllerTest {
+    val sut = RandomOrderController()
 
-class RandomOrderControllerSpec extends Specification {
-
-    def sut = new RandomOrderController()
-
-    def "next() on an empty controller returns null"() {
-        given:
-            sut.initialize()
-        when:
-            def nextSampler = sut.next()
-        then:
-            nextSampler == null
+    @Test
+    fun `next() on an empty controller returns null`() {
+        sut.initialize()
+        val nextSampler = sut.next()
+        assertNull(nextSampler)
     }
 
-    def "next() returns only provided sampler"() {
-        given:
-            def sampler = new TestSampler("the one and only")
-            sut.addTestElement(sampler)
-            sut.initialize()
-        when:
-            def nextSampler = sut.next()
-            def nextSamplerAfterEnd = sut.next()
-        then:
-            nextSampler == sampler
-            nextSamplerAfterEnd == null
+    @Test
+    fun `next() returns only provided sampler`() {
+        val sampler = TestSampler("the one and only")
+        sut.addTestElement(sampler)
+        sut.initialize()
+
+        val nextSampler = sut.next()
+        val nextSamplerAfterEnd = sut.next()
+
+        assertEquals(sampler, nextSampler, "there's only one sampler, so it should be returned from .next()")
+        assertNull(nextSamplerAfterEnd, "nextSamplerAfterEnd")
     }
 
-    def "next() returns exactly all added elements in random order"() {
-        given:
-            def samplerNames = (1..50).collect { it.toString() }
-            samplerNames.each {
-                sut.addTestElement(new TestSampler(it))
-            }
-            sut.initialize()
-        when:
-            def elements = getAllTestElements(sut)
-        then: "the same elements are returned but in a different order"
-            def elementNames = elements.collect { it.getName() }
-            elementNames.toSet() == samplerNames.toSet() // same elements
-            elementNames != samplerNames                 // not the same order
+    @Test
+    fun `next() returns exactly all added elements in random order`() {
+        val samplerNames = (1..50).map { it.toString() }
+        samplerNames.forEach {
+            sut.addTestElement(TestSampler(it))
+        }
+        sut.initialize()
 
+        val elements = sut.getAllTestElements()
+
+        // then: "the same elements are returned but in a different order"
+        // val
+        val elementNames = elements.map { it.name }
+        assertEquals(samplerNames.toSet(), elementNames.toSet(), "controller should return the same elements")
+        assertNotEquals(samplerNames, elementNames, "The order of elements should be randomized")
     }
 
-    def "next() is null if isDone() is true"() {
-        given:
-            sut.addTestElement(Mock(TestElement))
-            sut.initialize()
-            sut.setDone(true)
-        when:
-            def nextSampler = sut.next()
-        then:
-            sut.isDone()
-            nextSampler == null
+    @Test
+    fun `next() is null if isDone() is true`() {
+        sut.addTestElement(mockk<TestElement>())
+        sut.initialize()
+        sut.isDone = true
+
+        val nextSampler = sut.next()
+        assertTrue(sut.isDone, ".isDone()")
+        assertNull(nextSampler, "nextSampler")
     }
 
     /**
      * Builds and returns a list by 'iterating' through the
-     * {@link GenericController}, using {@link GenericController#next()},
-     * placing each item in a list until <code>null</code> is encountered.
+     * [GenericController], using [GenericController.next()],
+     * placing each item in a list until `null` is encountered.
      *
-     * @param controller the {@link GenericController} to 'iterate' though
+     * @param controller the [GenericController] to 'iterate' though
      * @return a list of all items (in order) returned from next()
      * method, excluding null
      */
-    def getAllTestElements(GenericController controller) {
-        def sample
-        def samplers = []
-        while ((sample = controller.next()) != null) {
-            samplers.add(sample)
+    fun GenericController.getAllTestElements() =
+        buildList {
+            while (true) {
+                val sampler = next() ?: break
+                add(sampler)
+            }
         }
-        return samplers
-    }
 }

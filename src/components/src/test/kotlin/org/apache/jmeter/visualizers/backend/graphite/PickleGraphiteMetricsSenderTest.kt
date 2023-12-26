@@ -17,106 +17,109 @@
 
 package org.apache.jmeter.visualizers.backend.graphite
 
+import io.mockk.mockk
+import io.mockk.verify
+import org.apache.commons.pool2.impl.GenericKeyedObjectPool
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import java.time.Instant
 
-import org.apache.commons.pool2.impl.GenericKeyedObjectPool
+class PickleGraphiteMetricsSenderTest {
 
-import spock.lang.Specification
+    private val sut = PickleGraphiteMetricsSender()
 
-class PickleGraphiteMetricsSenderSpec extends Specification {
-
-    def sut = new PickleGraphiteMetricsSender()
-
-    def "new sender has no metrics"() {
-        expect:
-            sut.metrics.isEmpty()
+    private fun assertMetricsIsEmpty() {
+        assertTrue(sut.metrics.isEmpty(), ".metrics.isEmpty()")
     }
 
-    def "adding metric to sender creates correct MetricTuple"() {
-        given:
-            def expectedName = "prefix-contextName.metricName"
-            def expectedTS = 1000000
-            def expectedVal = "value"
-
-            sut.setup("host", 1024, "prefix-")
-        when:
-            sut.addMetric(expectedTS, "contextName", "metricName", expectedVal)
-        then:
-            def actualMetrics = sut.metrics
-            actualMetrics.size() == 1
-            def actualMetric = actualMetrics.get(0)
-            actualMetric.name == expectedName
-            actualMetric.timestamp == expectedTS
-            actualMetric.value == expectedVal
+    @Test
+    fun `new sender has no metrics`() {
+        assertMetricsIsEmpty()
     }
 
-    def "writeAndSendMetrics does not attempt connection if there's nothing to send"() {
-        given:
-            sut.setup("non-existant-host", 1024, "prefix-")
-        when:
-            sut.writeAndSendMetrics()
-        then:
-            sut.metrics.isEmpty()
-            noExceptionThrown()
+    @Test
+    fun `adding metric to sender creates correct MetricTuple`() {
+        val expectedTS = 1000000L
+        val expectedVal = "value"
+
+        sut.setup("host", 1024, "prefix-")
+
+        sut.addMetric(expectedTS, "contextName", "metricName", expectedVal)
+
+        assertEquals(
+            "MetricTuple(name=prefix-contextName.metricName, timestamp=1000000, value=value)",
+            sut.metrics.joinToString { "MetricTuple(name=${it.name}, timestamp=${it.timestamp}, value=${it.value})" },
+            ".metrics"
+        )
     }
 
-    def "writeAndSendMetrics connects and sends if there's something to send, dropping metrics on connection failure, without throwing exceptions"() {
-        given:
-            SocketConnectionInfos socketConnInfoMock = Mock()
-            GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> objectPoolStub = Mock()
-            sut.setup(socketConnInfoMock, objectPoolStub, "prefix-")
-            sut.addMetric(1, "contextName", "metricName", "val")
-        when:
-            sut.writeAndSendMetrics()
-        then:
-            1 * objectPoolStub.borrowObject(socketConnInfoMock)
-            sut.metrics.isEmpty()
-            noExceptionThrown()
+    @Test
+    fun `writeAndSendMetrics does not attempt connection if there's nothing to send`() {
+        sut.setup("non-existant-host", 1024, "prefix-")
+        sut.writeAndSendMetrics()
+        assertMetricsIsEmpty()
     }
 
-    def "destroy closes outputStreamPool"() {
-        given:
-            GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream> objectPoolStub = Mock()
-            sut.setup(Mock(SocketConnectionInfos), objectPoolStub, "prefix-")
-            sut.addMetric(1, "contextName", "metricName", "val")
-        when:
-            sut.destroy()
-        then:
-            1 * objectPoolStub.close()
-            // TODO: should destroy also set metrics to null or are we relying on the original reference to be removed after destroy is called?
-            sut.metrics.size() == 1
-            noExceptionThrown()
+    @Test
+    fun `writeAndSendMetrics connects and sends if there's something to send, dropping metrics on connection failure, without throwing exceptions`() {
+        val socketConnInfoMock = mockk<SocketConnectionInfos>()
+        val objectPoolStub = mockk<GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream>>()
+        sut.setup(socketConnInfoMock, objectPoolStub, "prefix-")
+        sut.addMetric(1, "contextName", "metricName", "val")
+
+        sut.writeAndSendMetrics()
+        verify(exactly = 1) { objectPoolStub.borrowObject(socketConnInfoMock) }
+        assertMetricsIsEmpty()
     }
 
-    def static newMetric(String name, long timestamp, String value) {
-        return new GraphiteMetricsSender.MetricTuple(name, timestamp, value)
+    @Test
+    fun `destroy closes outputStreamPool`() {
+        val objectPoolStub = mockk<GenericKeyedObjectPool<SocketConnectionInfos, SocketOutputStream>>(relaxed = true)
+        sut.setup(mockk<SocketConnectionInfos>(), objectPoolStub, "prefix-")
+        sut.addMetric(1, "contextName", "metricName", "val")
+
+        sut.destroy()
+
+        verify(exactly = 1) { objectPoolStub.close() }
+        // TODO: should destroy also set metrics to null or are we relying on the original reference to be removed after destroy is called?
+        assertEquals(1, sut.metrics.size, ".metrics.size")
     }
 
-    def "convertMetricsToPickleFormat produces expected result for one metric"() {
-        given:
-            def name = "name"
-            def timeStamp = Instant.now().getEpochSecond()
-            def value = "value-1.23"
-            def metric = newMetric(name, timeStamp, value)
-            def metrics = Collections.singletonList(metric)
-        when:
-            def result = sut.convertMetricsToPickleFormat(metrics)
-        then:
-            result == "(l(S'${name}'\n(L${timeStamp}L\nS'${value}'\ntta."
+    private fun newMetric(name: String, timestamp: Long, value: String) =
+        GraphiteMetricsSender.MetricTuple(name, timestamp, value)
+
+    @Test
+    fun `convertMetricsToPickleFormat produces expected result for one metric`() {
+        val name = "name"
+        val timeStamp = Instant.now().getEpochSecond()
+        val value = "value-1.23"
+        val metric = newMetric(name, timeStamp, value)
+        val metrics = listOf(metric)
+
+        val result = PickleGraphiteMetricsSender.convertMetricsToPickleFormat(metrics)
+
+        assertEquals(
+            "(l(S'$name'\n(L${timeStamp}L\nS'$value'\ntta.",
+            result,
+        )
     }
 
-    def "convertMetricsToPickleFormat produces expected result for multiple metrics"() {
-        given:
-            def name = "name"
-            def timeStamp = Instant.now().getEpochSecond()
-            def value = "value-1.23"
-            def metric = newMetric(name, timeStamp, value)
-            def metrics = Arrays.asList(metric, metric)
-        when:
-            def result = sut.convertMetricsToPickleFormat(metrics)
-        then:
-            result == "(l" +
-                    "(S'${name}'\n(L${timeStamp}L\nS'${value}'\ntta" +
-                    "(S'${name}'\n(L${timeStamp}L\nS'${value}'\ntta."
+    @Test
+    fun `convertMetricsToPickleFormat produces expected result for multiple metrics`() {
+        val name = "name"
+        val timeStamp = Instant.now().getEpochSecond()
+        val value = "value-1.23"
+        val metric = newMetric(name, timeStamp, value)
+        val metrics = listOf(metric, metric)
+
+        val result = PickleGraphiteMetricsSender.convertMetricsToPickleFormat(metrics)
+
+        assertEquals(
+            "(l" +
+                "(S'$name'\n(L${timeStamp}L\nS'$value'\ntta" +
+                "(S'$name'\n(L${timeStamp}L\nS'$value'\ntta.",
+            result,
+        )
     }
 }

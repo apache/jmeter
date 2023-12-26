@@ -18,32 +18,40 @@
 package org.apache.jmeter.visualizers.backend.influxdb
 
 import org.apache.jmeter.visualizers.backend.BackendListenerContext
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-import spock.lang.Specification
+class InfluxdbBackendListenerClientTest {
 
-class InfluxdbBackendListenerClientSpec extends Specification {
+    val sut = InfluxdbBackendListenerClient()
+    private val defaultContext = BackendListenerContext(sut.getDefaultParameters())
 
-    def sut = new InfluxdbBackendListenerClient()
-    def defaultContext = new BackendListenerContext(sut.getDefaultParameters())
-
-    def "setupTest with default config does not raise an exception"() {
-        when:
-            sut.setupTest(defaultContext)
-        then:
-            noExceptionThrown()
+    @Test
+    fun `setupTest with default config does not raise an exception`() {
+        sut.setupTest(defaultContext)
     }
 
-    def "Sending metrics when empty does not raise an exception"() {
-        given:
-            sut.setupTest(defaultContext)
-        when:
-            sut.run()
-        then:
-            noExceptionThrown()
+    @Test
+    fun `Sending metrics when empty does not raise an exception`() {
+        sut.setupTest(defaultContext)
+        sut.run()
     }
 
-    def "Default parameters are equal to default args"() {
-        expect:
-            sut.getDefaultParameters().getArgumentsAsMap() == InfluxdbBackendListenerClient.DEFAULT_ARGS
+    @Test
+    fun `Default parameters are equal to default args`() {
+        assertEquals(
+            mapOf(
+                "influxdbMetricsSender" to "org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender",
+                "influxdbUrl" to "http://host_to_change:8086/write?db=jmeter",
+                "application" to "application name",
+                "measurement" to "jmeter",
+                "summaryOnly" to "false",
+                "samplersRegex" to ".*",
+                "percentiles" to "99;95;90",
+                "testTitle" to "Test name",
+                "eventTags" to ""
+            ),
+            sut.getDefaultParameters().getArgumentsAsMap()
+        )
     }
 }

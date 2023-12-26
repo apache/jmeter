@@ -26,6 +26,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.backend.BackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +77,16 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
         influxDBMetricsManager = sender;
     }
 
+    @VisibleForTesting
+    String getMeasurement() {
+        return measurement;
+    }
+
+    @VisibleForTesting
+    InfluxdbMetricsSender getInfluxDBMetricsManager() {
+        return influxDBMetricsManager;
+    }
+
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
         initInfluxDBMetricsManager(context);
@@ -119,7 +130,8 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
         influxDBMetricsManager.addMetric(measurement, tags, fields, timestamp);
     }
 
-    private static String createTags(SampleResult sampleResult) {
+    @VisibleForTesting
+    static String createTags(SampleResult sampleResult) {
         boolean isError = sampleResult.getErrorCount() != 0;
         String status = isError ? TAG_KO : TAG_OK;
         // remove surrounding quotes and spaces from sample label
@@ -131,7 +143,8 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
                 + ",threadName=" + threadName;
     }
 
-    private static String createFields(SampleResult sampleResult) {
+    @VisibleForTesting
+    static String createFields(SampleResult sampleResult) {
         long duration = sampleResult.getTime();
         long latency = sampleResult.getLatency();
         long connectTime = sampleResult.getConnectTime();

@@ -34,6 +34,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.Document;
 import org.apache.jmeter.util.JMeterUtils;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -236,7 +237,8 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         return result.getResponseDataAsString(); // Bug 36898
     }
 
-    private static List<String> extract(
+    @VisibleForTesting
+    static List<String> extract(
             String leftBoundary, String rightBoundary, int matchNumber, Stream<String> previousResults) {
         boolean allItems = matchNumber <= 0;
         return previousResults
@@ -257,7 +259,8 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
      * @param inputString   text in which to look for the fragments
      * @return list where the found text fragments will be placed
      */
-    private static List<String> extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString) {
+    @VisibleForTesting
+    static List<String> extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString) {
         if (StringUtils.isBlank(inputString)) {
             return Collections.emptyList();
         }

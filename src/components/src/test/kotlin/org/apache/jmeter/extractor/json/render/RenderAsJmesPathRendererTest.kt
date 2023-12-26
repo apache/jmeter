@@ -17,119 +17,134 @@
 
 package org.apache.jmeter.extractor.json.render
 
+import org.apache.jmeter.junit.JMeterTestCase
+import org.apache.jmeter.samplers.SampleResult
+import org.apache.jmeter.test.gui.DisabledIfHeadless
+import org.apache.jmeter.util.JMeterUtils
+import org.intellij.lang.annotations.Language
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import java.nio.charset.StandardCharsets
 import javax.swing.JTabbedPane
 
-import org.apache.jmeter.extractor.json.render.RenderAsJmesPathRenderer
-import org.apache.jmeter.junit.categories.NeedGuiTests
-import org.apache.jmeter.junit.spock.JMeterSpec
-import org.apache.jmeter.samplers.SampleResult
-import org.apache.jmeter.util.JMeterUtils
-import org.junit.experimental.categories.Category
+class RenderAsJmesPathRendererTest : JMeterTestCase() {
+    val sut = RenderAsJmesPathRenderer()
 
-import spock.lang.IgnoreIf
+    data class RenderCase(
+        @param:Language("json") val input: String,
+        @param:Language("json") val output: String
+    )
 
-class RenderAsJmesPathRendererSpec extends JMeterSpec {
-    def sut = new RenderAsJmesPathRenderer()
+    data class ExecuteCase(
+        @param:Language("json") val input: String,
+        val expression: String,
+        val output: String
+    )
 
-    def "init of component doesn't fail"() {
-        when:
-            sut.init()
-        then:
-            noExceptionThrown()
-            sut.jsonWithExtractorPanel != null;
+    companion object {
+        @JvmStatic
+        fun renderCases() = listOf(
+            RenderCase("This is not json", "This is not json"),
+            RenderCase(
+                """{name:"Ludwig",age: 23,city: "Bonn"}""",
+                """
+                {
+                    "city": "Bonn",
+                    "name": "Ludwig",
+                    "age": 23
+                }
+                """.trimIndent()
+            ),
+        )
+
+        @JvmStatic
+        fun executeCases() = listOf(
+            ExecuteCase("{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}", "name", "Result[0]=Ludwig\n"),
+            ExecuteCase("{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}", "age", "Result[0]=23\n"),
+            ExecuteCase("{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}", "name1", "NO MATCH"),
+        )
     }
 
-    @IgnoreIf({ JMeterSpec.isHeadless() })
-    def "render image"() {
-        given:
-            sut.init()
-            def sampleResult = new SampleResult();
-        when:
-            sut.renderImage(sampleResult)
-        then:
-            sut.jsonDataField.getText() == JMeterUtils.getResString("render_no_text")
+    @Test
+    fun `init of component doesn't fail`() {
+        sut.init()
+        assertNotNull(sut.jsonWithExtractorPanel, ".jsonWithExtractorPanel")
     }
 
-    def "render null Response"() {
-        given:
-            sut.init()
-            def sampleResult = new SampleResult();
-        when:
-            sut.renderResult(sampleResult)
-        then:
-            sut.jsonDataField.getText() == ""
+    @Test
+    @DisabledIfHeadless
+    fun `render image`() {
+        sut.init()
+        val sampleResult = SampleResult()
+        sut.renderImage(sampleResult)
+        sut.assertJsonDataFieldEquals(JMeterUtils.getResString("render_no_text"))
     }
 
-    @IgnoreIf({ JMeterSpec.isHeadless() })
-    def "render '#input' as JSON Response to '#output'"() {
-        given:
-            sut.init();
-            def sampleResult = new SampleResult();
-        when:
-            sampleResult.setResponseData(input);
-            sut.renderResult(sampleResult)
-        then:
-            output == sut.jsonDataField.getText()
-        where:
-            input               |   output
-            "This is not json"  |   "This is not json"
-            "{name:\"Ludwig\",age: 23,city: \"Bonn\"}" | '''{
-    "city": "Bonn",
-    "name": "Ludwig",
-    "age": 23
-}'''
+    @Test
+    fun `render null Response`() {
+        sut.init()
+        val sampleResult = SampleResult()
+        sut.renderResult(sampleResult)
+        sut.assertJsonDataFieldEquals("")
     }
 
-    def "execute '#expression' on '#input' results into '#output'"() {
-        given:
-            sut.init();
-            sut.expressionField.setText(expression);
-            def sampleResult = new SampleResult();
-        when:
-            sut.executeTester(input);
-        then:
-            output == sut.resultField.getText()
-        where:
-            input               | expression          | output
-            "{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}"   | "name"           | "Result[0]=Ludwig\n"
-            "{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}"   | "age"           | "Result[0]=23\n"
-            "{\"name\":\"Ludwig\",\"age\": 23,\"city\": \"Bonn\"}" | "name1" | "NO MATCH"
+    @DisabledIfHeadless
+    @ParameterizedTest
+    @MethodSource("renderCases")
+    fun `render JSON Response`(case: RenderCase) {
+        sut.init()
+        val sampleResult = SampleResult()
+        sampleResult.setResponseData(case.input, StandardCharsets.UTF_8.name())
+        sut.renderResult(sampleResult)
+
+        sut.assertJsonDataFieldEquals(case.output)
     }
 
-    def "clearData clears expected fields"() {
-        given:
-            sut.init()
-            sut.jsonDataField.setText("blabla")
-            sut.resultField.setText("blabla")
-        when:
-            sut.clearData()
-        then:
-            sut.jsonDataField.getText() == ""
-            sut.resultField.getText() == ""
+    @ParameterizedTest
+    @MethodSource("executeCases")
+    fun `execute expression`(case: ExecuteCase) {
+        sut.init()
+        sut.expressionField.text = case.expression
+        sut.executeTester(case.input)
+
+        assertEquals(case.output, sut.resultField.getText(), ".resultField.text")
     }
 
-    def "setupTabPane adds the tab to rightSide"() {
-        given:
-            sut.init()
-            def rightSideTabbedPane = new JTabbedPane();
-            sut.setRightSide(rightSideTabbedPane)
-        when:
-            sut.setupTabPane()
-        then:
-            sut.rightSide.getTabCount() == 1
-            // Investigate why it's failing
-            // sut.rightSide.getTabComponentAt(0) == sut.jsonWithExtractorPanel
+    @Test
+    fun `clearData clears expected fields`() {
+        sut.init()
+        sut.jsonDataField.setText("blabla")
+        sut.resultField.setText("blabla")
+
+        sut.clearData()
+
+        assertEquals("", sut.resultField.getText(), ".resultField.text")
+        sut.assertJsonDataFieldEquals("")
     }
 
-    def "setupTabPane called twice does not add twice the tab"() {
-        given:
-            sut.init()
-            def rightSideTabbedPane = new JTabbedPane();
-            sut.setRightSide(rightSideTabbedPane)
-            sut.setupTabPane()
-        when:
-            sut.setupTabPane()
-        then:
-            sut.rightSide.getTabCount() == 1
+    @Test
+    fun `setupTabPane adds the tab to rightSide`() {
+        sut.init()
+        val rightSideTabbedPane = JTabbedPane()
+        sut.rightSide = rightSideTabbedPane
+
+        sut.setupTabPane()
+        assertEquals(1, sut.rightSide.getTabCount(), ".rightSide.getTabCount()")
+
+        // Investigate why it's failing
+        // sut.rightSide.getTabComponentAt(0) == sut.jsonWithExtractorPanel
+    }
+
+    @Test
+    fun `setupTabPane called twice does not add twice the tab`() {
+        sut.init()
+        val rightSideTabbedPane = JTabbedPane()
+        sut.rightSide = rightSideTabbedPane
+        sut.setupTabPane()
+        sut.setupTabPane()
+        assertEquals(1, sut.rightSide.getTabCount(), ".rightSide.getTabCount()")
     }
 }

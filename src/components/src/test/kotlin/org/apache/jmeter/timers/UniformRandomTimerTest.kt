@@ -17,50 +17,52 @@
 
 package org.apache.jmeter.timers
 
-import spock.lang.Specification
-import spock.lang.Unroll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-class UniformRandomTimerSpec extends Specification {
+class UniformRandomTimerTest {
+    data class RangeCase(val delay: String, val range: Double, val min: Long, val max: Long)
 
-    def sut = new UniformRandomTimer()
+    val sut = UniformRandomTimer()
 
-    def "default delay is 0"() {
-        when:
-            def computedDelay = sut.delay()
-        then:
-            computedDelay == 0L
+    companion object {
+        @JvmStatic
+        fun rangeCases() = listOf(
+            RangeCase("1", 10.5, 1, 11),
+            RangeCase("1", 0.1, 1, 1),
+            RangeCase("0", -50.0, 0, 50),
+        )
     }
 
-    def "default range is 0"() {
-        when:
-            def actualRange = sut.range
-        then:
-            actualRange == 0L
+    @Test
+    fun `default delay is 0`() {
+        assertEquals(0L, sut.delay(), ".delay()")
     }
 
-    def "delay can be set via a String"() {
-        given:
-            sut.setDelay("1")
-        when:
-            def computedDelay = sut.delay()
-        then:
-            computedDelay == 1L
+    @Test
+    fun `default range is 0`() {
+        assertEquals(0.0, sut.range, ".range")
     }
 
-    @Unroll
-    def "#delay <= computedDelay <= trunc(#delay + abs(#range))"() {
-        given:
-            sut.setDelay(delay)
-            sut.setRange(range)
-        when:
-            def computedDelay = sut.delay()
-        then:
-            min <= computedDelay
-            computedDelay <= max
-        where:
-            delay | range | min | max
-            "1"   | 10.5  | 1   | 11
-            "1"   | 0.1   | 1   | 1
-            "0"   | -50.0 | 0   | 50
+    @Test
+    fun `delay can be set via a String`() {
+        sut.delay = "1"
+        assertEquals(1L, sut.delay(), ".delay()")
+    }
+
+    @ParameterizedTest
+    @MethodSource("rangeCases")
+    fun `computed delay should be within range`(case: RangeCase) {
+        sut.delay = case.delay
+        sut.range = case.range
+
+        val computedDelay = sut.delay()
+
+        if (computedDelay < case.min || computedDelay > case.max) {
+            fail("computed delay $computedDelay should be within [${case.min}..${case.max}]")
+        }
     }
 }

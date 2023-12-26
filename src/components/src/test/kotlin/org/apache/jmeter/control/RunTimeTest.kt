@@ -17,104 +17,117 @@
 
 package org.apache.jmeter.control
 
+import io.mockk.every
+import io.mockk.mockk
 import org.apache.jmeter.junit.stubs.TestSampler
 import org.apache.jmeter.samplers.Sampler
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import kotlin.math.ceil
+import kotlin.system.measureTimeMillis
 
-import spock.lang.Ignore
-import spock.lang.Specification
+class RunTimeTest {
+    val sut = RunTime()
 
-class RunTimeSpec extends Specification {
+    @Test
+    @Disabled("It fails too often due to timing issues")
+    fun `RunTime stops within a tolerance after specified runtime`() {
+        sut.runtime = 1
+        val runTimeMillis = 1000L
+        val expectedLoops = 5
+        val tolerance = ceil(0.1 * expectedLoops)
+        val samplerWaitTime: Long = runTimeMillis / expectedLoops
+        val samp1 = TestSampler("Sample 1", samplerWaitTime)
+        val samp2 = TestSampler("Sample 2", samplerWaitTime)
 
-    def sut = new RunTime()
+        val sampler1Loops = 2
+        val loop1 = LoopController().apply {
+            loops = sampler1Loops
+            setContinueForever(false)
+            addTestElement(samp1)
+        }
 
-    @Ignore("It fails too often due to timing issues")
-    def "RunTime stops within a tolerance after specified runtime"() {
-        given:
-            sut.setRuntime(1)
+        val loop2 = LoopController().apply {
+            loops = expectedLoops * 2
+            setContinueForever(false)
+            addTestElement(samp2)
+        }
 
-            def runTimeMillis = 1000
-            def expectedLoops = 5
-            def tolerance = Math.ceil(0.1f * expectedLoops)
-            int samplerWaitTime = runTimeMillis / expectedLoops
-            TestSampler samp1 = new TestSampler("Sample 1", samplerWaitTime)
-            TestSampler samp2 = new TestSampler("Sample 2", samplerWaitTime)
+        sut.addTestElement(loop1)
+        sut.addTestElement(loop2)
+        sut.isRunningVersion = true
+        loop1.isRunningVersion = true
+        loop2.isRunningVersion = true
+        sut.initialize()
 
-            def sampler1Loops = 2
-            LoopController loop1 = new LoopController()
-            loop1.setLoops(sampler1Loops)
-            loop1.setContinueForever(false)
-            loop1.addTestElement(samp1)
-
-            LoopController loop2 = new LoopController()
-            loop2.setLoops(expectedLoops * 2)
-            loop2.setContinueForever(false)
-            loop2.addTestElement(samp2)
-
-            sut.addTestElement(loop1)
-            sut.addTestElement(loop2)
-            sut.setRunningVersion(true)
-            loop1.setRunningVersion(true)
-            loop2.setRunningVersion(true)
-            sut.initialize()
-        when:
-            def sampler
-            int loopCount = 0
-            long now = System.currentTimeMillis()
-            while ((sampler = sut.next()) != null) {
+        // when:
+        var loopCount = 0
+        val elapsed = measureTimeMillis {
+            while (true) {
+                val sampler = sut.next() ?: break
                 loopCount++
                 sampler.sample(null)
             }
-            long elapsed = System.currentTimeMillis() - now
-        then:
-            sut.getIterCount() == 1
-            loopCount >= expectedLoops - tolerance
-            loopCount <= expectedLoops + tolerance
-            elapsed >= runTimeMillis - (tolerance * samplerWaitTime)
-            elapsed <= runTimeMillis + (tolerance * samplerWaitTime)
-            samp1.getSamples() == sampler1Loops
-            samp2.getSamples() >= expectedLoops - sampler1Loops - tolerance
-            samp2.getSamples() <= expectedLoops - sampler1Loops + tolerance
+        }
+        // then:
+        assertEquals(1, sut.iterCount, ".iterCount")
+        assertEquals(expectedLoops.toDouble(), loopCount.toDouble(), tolerance, "loopCount")
+        assertEquals(elapsed.toDouble(), runTimeMillis.toDouble(), tolerance * samplerWaitTime, "elapsedMillis")
+        assertEquals(sampler1Loops, samp1.samples, "samp1.samples")
+        assertEquals(
+            (expectedLoops - sampler1Loops).toDouble(),
+            samp2.samples.toDouble(),
+            tolerance,
+            "samp2.samples should be expectedLoops - sampler1Loops"
+        )
     }
 
-    def "Immediately returns null when runtime is set to 0"() {
-        given:
-            sut.setRuntime(0)
-            sut.addTestElement(Mock(Sampler))
-        when:
-            def sampler = sut.next()
-        then:
-            sampler == null
+    @Test
+    fun `Immediately returns null when runtime is set to 0`() {
+        sut.runtime = 0
+        sut.addTestElement(mockk<Sampler>())
+
+        assertNull(sut.next(), ".next()")
     }
 
-    def "Immediately returns null if only Controllers are present"() {
-        given:
-            sut.setRuntime(10)
-            sut.addTestElement(Mock(Controller))
-            sut.addTestElement(Mock(Controller))
-        when:
-            def sampler = sut.next()
-        then:
-            sampler == null
-    }
-    def "within time limit samplers are returned until empty"() {
-        given:
-            def mockSampler = Mock(Sampler)
-            sut.setRuntime(10)
-            sut.addTestElement(mockSampler)
-            sut.addTestElement(mockSampler)
-        when:
-            def samplers = [sut.next(), sut.next(), sut.next()]
-        then:
-            samplers == [mockSampler, mockSampler, null]
+    @Test
+    fun `Immediately returns null if only Controllers are present`() {
+        sut.runtime = 10
+        sut.addTestElement(
+            mockk<Controller> {
+                every { next() } returns null
+                every { isDone } returns true
+            }
+        )
+        sut.addTestElement(
+            mockk<Controller> {
+                every { next() } returns null
+                every { isDone } returns true
+            }
+        )
+
+        assertNull(sut.next(), ".next()")
     }
 
-    def "RunTime immediately returns null when there are no test elements"() {
-        given:
-            sut.setRuntime(10)
-        when:
-            def sampler = sut.next()
-        then:
-            sampler == null
+    @Test
+    fun `within time limit samplers are returned until empty`() {
+        val mockSampler = mockk<Sampler>()
+        sut.runtime = 10
+        sut.addTestElement(mockSampler)
+        sut.addTestElement(mockSampler)
+
+        assertEquals(
+            listOf(mockSampler, mockSampler, null),
+            listOf(sut.next(), sut.next(), sut.next()),
+            "there are two elements, so first two .next() should return them, then null"
+        )
     }
 
+    @Test
+    fun `RunTime immediately returns null when there are no test elements`() {
+        sut.runtime = 10
+        assertNull(sut.next(), ".next()")
+    }
 }

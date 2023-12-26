@@ -17,65 +17,64 @@
 
 package org.apache.jmeter.assertions
 
-import java.nio.charset.StandardCharsets
-
-import org.apache.commons.lang3.StringUtils
 import org.apache.jmeter.samplers.SampleResult
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-import spock.lang.Specification
-import spock.lang.Unroll
+class MD5HexAssertionTest {
+    val sut = MD5HexAssertion()
 
-@Unroll
-class MD5HexAssertionSpec extends Specification {
+    data class MD5HexAssertionCase(
+        val sampleData: String,
+        val allowedHex: String? = null,
+        val success: Boolean,
+    )
 
-    def sut = new MD5HexAssertion()
-
-    def "unset allowable hash with empty response fails"() {
-        when:
-            def result = sut.getResult(sampleResult(""))
-        then:
-            result.isFailure()
-            StringUtils.isNotBlank(result.getFailureMessage())
+    companion object {
+        @JvmStatic
+        fun md5Cases() = listOf(
+            // success
+            MD5HexAssertionCase("anything", "f0e166dc34d14d6c228ffac576c9a43c", true),
+            MD5HexAssertionCase("anything", "F0e166Dc34D14d6c228ffac576c9a43c", true),
+            // failure
+            MD5HexAssertionCase("", "", false),
+            MD5HexAssertionCase("anything", "anything", false),
+            MD5HexAssertionCase("anything", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", false),
+        )
     }
 
-    def "incorrect hash #allowedHex causes result failure"() {
-        given:
-            sut.setAllowedMD5Hex(allowedHex)
-        when:
-            def result = sut.getResult(sampleResult("anything"))
-        then:
-            result.isFailure()
-            StringUtils.isNotBlank(result.getFailureMessage())
-        where:
-            allowedHex << ["", "anything", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+    @ParameterizedTest
+    @MethodSource("md5Cases")
+    fun md5HexAssertion(case: MD5HexAssertionCase) {
+        sut.allowedMD5Hex = case.allowedHex
+        val result = sut.getResult(sampleResult(case.sampleData))
+
+        if (case.success) {
+            assertFalse(result.isFailure, ".isFailure()")
+            assertFalse(result.isError, ".isError()")
+            assertNull(result.failureMessage, "result.failureMessage")
+        } else {
+            assertTrue(result.isFailure, ".isFailure()")
+            assertTrue(result.failureMessage.isNotBlank(), "result.failureMessage should not be blank for failure case")
+        }
     }
 
-    def "example MD5s - '#sampleData' == '#hash'"() {
-        given:
-            sut.setAllowedMD5Hex(hash)
-        when:
-            def result = sut.getResult(sampleResult(sampleData))
-        then:
-            !result.isFailure()
-            !result.isError()
-            result.getFailureMessage() == null
-        where:
-            sampleData | hash
-            "anything" | "f0e166dc34d14d6c228ffac576c9a43c"
-            "anything" | "F0e166Dc34D14d6c228ffac576c9a43c"
-    }
-
-    def "empty array has MD5 hash of D41D8CD98F00B204E9800998ECF8427E"() {
-        given:
-            def emptyByteArray = [] as byte[]
-        expect:
-            MD5HexAssertion.md5Hex(emptyByteArray)
-                    .toUpperCase(Locale.ENGLISH) == "D41D8CD98F00B204E9800998ECF8427E"
-    }
-
-    def sampleResult(String data) {
-        SampleResult response = new SampleResult()
-        response.setResponseData(data.getBytes(StandardCharsets.UTF_8))
-        return response
+    @Test
+    fun `empty array has MD5 hash of D41D8CD98F00B204E9800998ECF8427E`() {
+        val emptyByteArray = byteArrayOf()
+        assertEquals(
+            "D41D8CD98F00B204E9800998ECF8427E",
+            MD5HexAssertion.md5Hex(emptyByteArray).uppercase()
+        )
     }
 }
+
+private fun sampleResult(data: String) =
+    SampleResult().apply {
+        responseData = data.toByteArray()
+    }

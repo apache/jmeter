@@ -18,95 +18,70 @@
 package org.apache.jmeter.control
 
 import org.apache.jmeter.junit.stubs.TestSampler
+import org.apache.jmeter.threads.TestCompiler
+import org.apache.jmeter.treebuilder.dsl.testTree
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import spock.lang.Specification
+class ThroughputControllerTest {
+    val sut = ThroughputController()
 
-class ThroughputControllerSpec extends Specification {
-
-    def sut = new ThroughputController()
-
-    def setup() {
-        sut.addTestElement(new TestSampler("one"))
-        sut.addTestElement(new TestSampler("two"))
+    @BeforeEach
+    fun setup() {
+        sut.addTestElement(TestSampler("one"))
+        sut.addTestElement(TestSampler("two"))
     }
 
-    def "new TC isDone is true"() {
-        given:
-            def newTC = new ThroughputController()
-        expect:
-            newTC.isDone()
+    @Test
+    fun `TC isDone is true`() {
+        val newTC = ThroughputController()
+        assertTrue(newTC.isDone, ".isDone")
     }
 
-    def "2 maxThroughput runs samplers inside the TC only twice"() {
-        given:
-            sut.setStyle(ThroughputController.BYNUMBER)
-            sut.setMaxThroughput(2)
+    @Test
+    fun `2 maxThroughput runs samplers inside the TC only twice`() {
+        sut.style = ThroughputController.BYNUMBER
+        sut.setMaxThroughput(2)
 
-            def expectedNames =
-                    ["zero", "one", "two", "three",
-                     "zero", "one", "two", "three",
-                     "zero", "three",
-                     "zero", "three",
-                     "zero", "three",]
+        val expectedNames =
+            listOf(
+                "zero", "one", "two", "three",
+                "zero", "one", "two", "three",
+                "zero", "three",
+                "zero", "three",
+                "zero", "three",
+            )
 
-            def loop = createLoopController(5)
-        when:
-            def actualNames = expectedNames.collect({
-                loop.next().getName()
-            })
-        then:
-            loop.next() == null
-            actualNames == expectedNames
-            sut.isDone()
-            sut.testEnded()
+        val loop = createLoopController(5)
+
+        val actualNames = expectedNames.map {
+            loop.next()?.name
+        }
+
+        assertEquals(expectedNames, actualNames, "actualNames")
+        assertNull(loop.next(), "loop.next()")
+        assertTrue(sut.isDone, ".isDone")
+        sut.testEnded()
     }
 
-    def "0 maxThroughput does not run any samplers inside the TC"() {
-        given:
-            sut.setStyle(ThroughputController.BYNUMBER)
-            sut.setMaxThroughput(0)
+    @Test
+    fun `0 maxThroughput does not run any samplers inside the TC`() {
+        sut.style = ThroughputController.BYNUMBER
+        sut.setMaxThroughput(0)
+        val loops = 3
+        val loop = createLoopController(loops)
+        val expectedNames = (1..loops).flatMap { listOf("zero", "three") }
 
-            def loops = 3
-            def loop = createLoopController(loops)
+        val actualNames = expectedNames.map {
+            loop.next().name
+        }
 
-            def expectedNames = ["zero", "three"] * loops
-        when:
-            def actualNames = expectedNames.collect({
-                loop.next().getName()
-            })
-        then:
-            loop.next() == null
-            actualNames == expectedNames
-            sut.testEnded()
-    }
-
-    /**
-     * <pre>
-     *   - innerLoop
-     *     - ThroughputController (sut)
-     *        - sampler one
-     *        - sampler two
-     * </pre>
-     */
-    def "0 maxThroughput does not run any sampler inside the TC and does not cause StackOverFlowError"() {
-        given:
-            sut.setStyle(ThroughputController.BYNUMBER)
-            sut.setMaxThroughput(0)
-
-            LoopController innerLoop = new LoopController()
-            innerLoop.setLoops(10000)
-            innerLoop.addTestElement(sut)
-            innerLoop.addIterationListener(sut)
-            innerLoop.initialize()
-            innerLoop.setRunningVersion(true)
-            sut.testStarted()
-            sut.setRunningVersion(true)
-
-        when:
-            innerLoop.next() == null
-            innerLoop.next() == null
-        then:
-            sut.testEnded()
+        assertEquals(expectedNames, actualNames, "actualNames")
+        assertNull(loop.next(), "loop.next()")
+        sut.testEnded()
     }
 
     /**
@@ -117,98 +92,121 @@ class ThroughputControllerSpec extends Specification {
      *        - sampler two
      * </pre>
      */
-    def "0.0 percentThroughput does not run any sampler inside the TC and does not cause StackOverFlowError"() {
-        given:
-            sut.setStyle(ThroughputController.BYPERCENT)
-            sut.setPercentThroughput("0.0")
+    @Test
+    fun `0 maxThroughput does not run any sampler inside the TC and does not cause StackOverFlowError`() {
+        sut.style = ThroughputController.BYNUMBER
+        sut.setMaxThroughput(0)
 
-            LoopController innerLoop = new LoopController()
-            innerLoop.setLoops(10000)
-            innerLoop.addTestElement(sut)
-            innerLoop.addIterationListener(sut)
-            innerLoop.initialize()
-            innerLoop.setRunningVersion(true)
-            sut.testStarted()
-            sut.setRunningVersion(true)
+        val innerLoop = LoopController().apply {
+            setLoops(10000)
+            addTestElement(sut)
+            addIterationListener(sut)
+            initialize()
+            isRunningVersion = true
+        }
+        sut.testStarted()
+        sut.isRunningVersion = true
 
-        when:
-            innerLoop.next() == null
-            innerLoop.next() == null
-        then:
-            sut.testEnded()
+        assertNull(innerLoop.next(), "innerLoop.next()")
+        assertNull(innerLoop.next(), "innerLoop.next(), second call")
+        sut.testEnded()
     }
 
-    def "33.33% will run all the samplers inside the TC every 3 iterations"() {
-        given:
-            sut.setStyle(ThroughputController.BYPERCENT)
-            sut.setPercentThroughput(33.33f)
+    /**
+     * <pre>
+     *   - innerLoop
+     *     - ThroughputController (sut)
+     *        - sampler one
+     *        - sampler two
+     * </pre>
+     */
+    @Test
+    fun `0 percentThroughput does not run any sampler inside the TC and does not cause StackOverFlowError`() {
+        sut.style = ThroughputController.BYPERCENT
+        sut.percentThroughput = "0.0"
 
-            def loop = createLoopController(9)
-            // Expected results established using the DDA algorithm - see:
-            // http://www.siggraph.org/education/materials/HyperGraph/scanline/outprims/drawline.htm
-            def expectedNames =
-                    ["zero", "three", // 0/1 vs. 1/1 -> 0 is closer to 33.33
-                     "zero", "one", "two", "three", // 0/2 vs. 1/2 -> 50.0 is closer to 33.33
-                     "zero", "three", // 1/3 vs. 2/3 -> 33.33 is closer to 33.33
-                     "zero", "three", // 1/4 vs. 2/4 -> 25.0 is closer to 33.33
-                     "zero", "one", "two", "three", // 1/5 vs. 2/5 -> 40.0 is closer to 33.33
-                     "zero", "three", // 2/6 vs. 3/6 -> 33.33 is closer to 33.33
-                     "zero", "three", // 2/7 vs. 3/7 -> 0.2857 is closer to 33.33
-                     "zero", "one", "two", "three", // 2/8 vs. 3/8 -> 0.375 is closer to 33.33
-                     "zero", "three", // ...
-                    ]
-        when:
-            def actualNames = expectedNames.collect({
-                loop.next().getName()
-            })
-        then:
-            loop.next() == null
-            actualNames == expectedNames
-            sut.testEnded()
+        val innerLoop = LoopController().apply {
+            loops = 10000
+            addTestElement(sut)
+            addIterationListener(sut)
+            initialize()
+            isRunningVersion = true
+        }
+        sut.testStarted()
+        sut.isRunningVersion = true
+
+        assertNull(innerLoop.next(), "innerLoop.next()")
+        assertNull(innerLoop.next(), "innerLoop.next(), second call")
+
+        sut.testEnded()
     }
 
-    def "0% does not run any samplers inside the TC"() {
-        given:
-            sut.setStyle(ThroughputController.BYPERCENT)
-            sut.setPercentThroughput(0.0f)
+    @Test
+    fun `33 percentThroughput will run all the samplers inside the TC every 3 iterations`() {
+        sut.style = ThroughputController.BYPERCENT
+        sut.setPercentThroughput(33.33f)
 
-            def loops = 3
-            def loop = createLoopController(loops)
-
-            def expectedNames = ["zero", "three",] * loops
-        when:
-            def actualNames = expectedNames.collect({
-                loop.next().getName()
-            })
-        then:
-            loop.next() == null
-            actualNames == expectedNames
-            sut.testEnded()
+        val loop = createLoopController(9)
+        // Expected results established using the DDA algorithm - see:
+        // http://www.siggraph.org/education/materials/HyperGraph/scanline/outprims/drawline.htm
+        val expectedNames = listOf(
+            "zero", "three", // 0/1 vs. 1/1 -> 0 is closer to 33.33
+            "zero", "one", "two", "three", // 0/2 vs. 1/2 -> 50.0 is closer to 33.33
+            "zero", "three", // 1/3 vs. 2/3 -> 33.33 is closer to 33.33
+            "zero", "three", // 1/4 vs. 2/4 -> 25.0 is closer to 33.33
+            "zero", "one", "two", "three", // 1/5 vs. 2/5 -> 40.0 is closer to 33.33
+            "zero", "three", // 2/6 vs. 3/6 -> 33.33 is closer to 33.33
+            "zero", "three", // 2/7 vs. 3/7 -> 0.2857 is closer to 33.33
+            "zero", "one", "two", "three", // 2/8 vs. 3/8 -> 0.375 is closer to 33.33
+            "zero", "three", // ...
+        )
+        val actualNames = expectedNames.map {
+            loop.next()?.name
+        }
+        assertEquals(expectedNames, actualNames, "actualNames")
+        assertNull(loop.next(), "loop.next()")
+        sut.testEnded()
     }
 
-    def "100% always runs all samplers inside the TC"() {
-        given:
-            sut.setStyle(ThroughputController.BYPERCENT)
-            sut.setPercentThroughput(100.0f)
+    @Test
+    fun `0 percentThroughput does not run any samplers inside the TC`() {
+        sut.style = ThroughputController.BYPERCENT
+        sut.setPercentThroughput(0.0f)
 
-            def loops = 3
-            def loop = createLoopController(loops)
+        val loops = 3
+        val loop = createLoopController(loops)
 
-            def expectedNames = ["zero", "one", "two", "three",] * loops
-        when:
-            def actualNames = expectedNames.collect({
-                loop.next().getName()
-            })
-        then:
-            loop.next() == null
-            actualNames == expectedNames
-            sut.testEnded()
+        val expectedNames = (1..loops).flatMap { listOf("zero", "three") }
+        val actualNames = expectedNames.map {
+            loop.next().name
+        }
+
+        assertEquals(expectedNames, actualNames, "actualNames")
+        assertNull(loop.next(), "loop.next()")
+        sut.testEnded()
+    }
+
+    @Test
+    fun `100 percentThroughput always runs all samplers inside the TC`() {
+        sut.style = ThroughputController.BYPERCENT
+        sut.setPercentThroughput(100.0f)
+
+        val loops = 3
+        val loop = createLoopController(loops)
+
+        val expectedNames = (1..loops).flatMap { listOf("zero", "one", "two", "three") }
+        val actualNames = expectedNames.map {
+            loop.next()?.name
+        }
+        assertEquals(expectedNames, actualNames, "actualNames")
+        assertNull(loop.next(), "loop.next()")
+        sut.testEnded()
     }
 
     /**
      * Create a LoopController, executed once, which contains an inner loop that
-     * runs {@code innerLoops} times, this inner loop contains a TestSampler ("zero")
-     * the {@link ThroughputController} which contains two test samplers
+     * runs [innerLoops] times, this inner loop contains a TestSampler ("zero")
+     * the [ThroughputController] which contains two test samplers
      * ("one" and "two") followed by a final TestSampler ("three"):
      *
      * <pre>
@@ -221,25 +219,31 @@ class ThroughputControllerSpec extends Specification {
      *     - sampler three
      * </pre>
      *
-     * @param innerLoops number of times to loop the {@link ThroughputController}
-     * @return the{@link LoopController}
+     * @param innerLoops number of times to loop the [ThroughputController]
+     * @return the [LoopController]
      */
-    def createLoopController(int innerLoops) {
-        LoopController innerLoop = new LoopController()
-        innerLoop.setLoops(innerLoops)
-        innerLoop.addTestElement(new TestSampler("zero"))
-        innerLoop.addTestElement(sut)
-        innerLoop.addIterationListener(sut)
-        innerLoop.addTestElement(new TestSampler("three"))
-
-        def outerLoop = new LoopController()
-        outerLoop.setLoops(1)
-        outerLoop.addTestElement(innerLoop)
+    private fun createLoopController(innerLoops: Int): LoopController {
         sut.testStarted()
-        outerLoop.setRunningVersion(true)
-        sut.setRunningVersion(true)
-        innerLoop.setRunningVersion(true)
+        val tree = testTree {
+            LoopController::class {
+                loops = 1
+                LoopController::class {
+                    loops = innerLoops
+                    +TestSampler("zero")
+                    +sut
+                    +TestSampler("three")
+                }
+            }
+        }
+        val compiler = TestCompiler(tree)
+        tree.traverse(compiler)
+
+        val outerLoop = tree.list().first() as LoopController
         outerLoop.initialize()
-        outerLoop
+
+        sut.isRunningVersion = true
+        sut.testStarted()
+
+        return outerLoop
     }
 }

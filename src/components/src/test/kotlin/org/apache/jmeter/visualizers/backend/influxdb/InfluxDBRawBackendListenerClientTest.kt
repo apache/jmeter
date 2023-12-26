@@ -17,83 +17,102 @@
 
 package org.apache.jmeter.visualizers.backend.influxdb
 
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.visualizers.backend.BackendListenerContext
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 
-import spock.lang.Specification
+class InfluxDBRawBackendListenerClientTest {
 
-class InfluxDBRawBackendListenerClientSpec extends Specification {
+    val sut = InfluxDBRawBackendListenerClient()
+    private val defaultContext = BackendListenerContext(sut.getDefaultParameters())
 
-    def sut = new InfluxDBRawBackendListenerClient()
-    def defaultContext = new BackendListenerContext(sut.getDefaultParameters())
-
-    def createOkSample() {
-        def t = 1600123456789
-        def okSample = SampleResult.createTestSample(t - 100, t)
-        okSample.setLatency(42)
-        okSample.setConnectTime(7)
-        okSample.setSampleLabel("myLabel")
-        okSample.setThreadName("myThread")
-        okSample.setResponseOK()
-        return okSample
+    private fun createOkSample(): SampleResult {
+        val t = 1600123456789
+        return SampleResult.createTestSample(t - 100, t).apply {
+            latency = 42
+            connectTime = 7
+            sampleLabel = "myLabel"
+            threadName = "myThread"
+            setResponseOK()
+        }
     }
 
-    def "Default parameters contain minimum required options"() {
-        expect:
-            sut.getDefaultParameters()
-                    .getArgumentsAsMap()
-                    .keySet()
-                    .containsAll([
-                            "influxdbMetricsSender", "influxdbUrl",
-                            "influxdbToken", "measurement"])
+    @Test
+    fun `Default parameters contain minimum required options`() {
+        val actualKeys = sut.getDefaultParameters()
+            .getArgumentsAsMap()
+            .keys
+        val expectedKeys = setOf(
+            "influxdbMetricsSender", "influxdbUrl",
+            "influxdbToken", "measurement"
+        )
+        if (!actualKeys.containsAll(expectedKeys)) {
+            fail("Default arguments $actualKeys should include all keys of $expectedKeys")
+        }
     }
 
-    def "Provided args are used during setup"() {
-        when:
-            sut.setupTest(defaultContext)
-        then:
-            sut.measurement == sut.DEFAULT_MEASUREMENT
-            sut.influxDBMetricsManager.class.isAssignableFrom(HttpMetricsSender.class)
+    @Test
+    fun `Provided args are used during setup`() {
+        sut.setupTest(defaultContext)
+        assertEquals("jmeter", sut.measurement, ".measurement")
+        assertEquals(
+            HttpMetricsSender::class.java,
+            sut.influxDBMetricsManager::class.java,
+            ".influxDBMetricsManager.class"
+        )
     }
 
-    def "OK sample data is mapped correctly to InfluxDB tags and fields"() {
-        given:
-            def okSample = createOkSample()
-        when:
-            def tags = sut.createTags(okSample)
-            def fields = sut.createFields(okSample)
-        then:
-            tags == "status=ok,transaction=myLabel,threadName=myThread"
-            fields == "duration=100,ttfb=42,connectTime=7"
+    @Test
+    fun `OK sample data is mapped correctly to InfluxDB tags and fields`() {
+        val okSample = createOkSample()
+        assertEquals(
+            "status=ok,transaction=myLabel,threadName=myThread",
+            InfluxDBRawBackendListenerClient.createTags(okSample),
+            "createTags($okSample)"
+        )
+        assertEquals(
+            "duration=100,ttfb=42,connectTime=7",
+            InfluxDBRawBackendListenerClient.createFields(okSample),
+            "createFields($okSample)"
+        )
     }
 
-    def "Failed sample data is mapped correctly to InfluxDB tags and fields"() {
-        given:
-            def koSample = new SampleResult()
-            koSample.setSampleLabel("myLabel")
-            koSample.setThreadName("myThread")
-        expect:
-            sut.createTags(koSample) == "status=ko,transaction=myLabel,threadName=myThread"
+    @Test
+    fun `Failed sample data is mapped correctly to InfluxDB tags and fields`() {
+        val koSample = SampleResult().apply {
+            sampleLabel = "myLabel"
+            threadName = "myThread"
+        }
+        assertEquals(
+            "status=ko,transaction=myLabel,threadName=myThread",
+            InfluxDBRawBackendListenerClient.createTags(koSample),
+            "createTags($koSample)"
+        )
     }
 
-    def "Upon handling sample result data is added to influxDBMetricsManager and written"() {
-        given:
-            def mockSender = Mock(InfluxdbMetricsSender)
-            def sut = new InfluxDBRawBackendListenerClient(mockSender)
-        when:
-            sut.handleSampleResults([createOkSample()], defaultContext)
-        then:
-            1 * mockSender.addMetric(_, _, _, _)
-            1 * mockSender.writeAndSendMetrics()
+    @Test
+    fun `Upon handling sample result data is added to influxDBMetricsManager and written`() {
+        val mockSender = mockk<InfluxdbMetricsSender>(relaxed = true)
+        val sut = InfluxDBRawBackendListenerClient(mockSender)
+        sut.handleSampleResults(listOf(createOkSample()), defaultContext)
+        verifyOrder {
+            mockSender.addMetric(any(), any(), any(), any())
+            mockSender.writeAndSendMetrics()
+        }
     }
 
-    def "teardownTest calls destroy on influxDBMetricsManager"() {
-        given:
-            def mockSender = Mock(InfluxdbMetricsSender)
-            def sut = new InfluxDBRawBackendListenerClient(mockSender)
-        when:
-            sut.teardownTest()
-        then:
-            1 * mockSender.destroy()
+    @Test
+    fun `teardownTest calls destroy on influxDBMetricsManager`() {
+        val mockSender = mockk<InfluxdbMetricsSender>(relaxed = true)
+        val sut = InfluxDBRawBackendListenerClient(mockSender)
+        sut.teardownTest(defaultContext)
+        verify(exactly = 1) {
+            mockSender.destroy()
+        }
     }
 }
