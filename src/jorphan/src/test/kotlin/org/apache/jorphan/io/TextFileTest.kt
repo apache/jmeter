@@ -17,89 +17,65 @@
 
 package org.apache.jorphan.io
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.ValueSource
+import java.io.File
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
-import org.apache.commons.io.FileUtils
-
-import spock.lang.Specification
-import spock.lang.Unroll
-
-@Unroll
-class TextFileSpec extends Specification {
-
-    def tmpFile = File.createTempFile("TextFile", ".unittest")
-    def tmpPath = tmpFile.getAbsolutePath()
-
-    def setup() {
-        tmpFile.deleteOnExit()
+class TextFileTest {
+    data class GetTextCase(val input: String, val charset: Charset?)
+    companion object {
+        @JvmStatic
+        fun getTextCases() = listOf(
+            GetTextCase("", Charsets.UTF_8),
+            GetTextCase("a\nb\nc", null),
+            GetTextCase("\"a\nb\nc\n", null),
+            GetTextCase("a\nb\nc", Charsets.UTF_8),
+            GetTextCase("\"a\nb\nc\n", Charsets.UTF_8),
+            GetTextCase("a\nb\nc", Charsets.UTF_16),
+            GetTextCase("\"a\nb\nc\n", Charsets.UTF_16),
+            GetTextCase("a\nb\nc", Charsets.ISO_8859_1),
+            GetTextCase("\"a\nb\nc\n", Charsets.ISO_8859_1),
+            GetTextCase("丈, 😃, and नि", Charsets.UTF_8),
+            GetTextCase("丈, 😃, and नि", Charsets.UTF_16),
+        )
     }
 
-    def "getText of empty file is empty string"() {
-        given:
-            def sut = new TextFile(tmpPath)
-        expect:
-            sut.getText() == ""
+    @TempDir
+    lateinit var tempDir: File
+
+    @ParameterizedTest
+    @MethodSource("getTextCases")
+    fun getText(case: GetTextCase) {
+        val tmpPath = tempDir.resolve("file.txt")
+        tmpPath.writeText(case.input, case.charset ?: Charsets.UTF_8)
+        assertEquals(case.input, TextFile(tmpPath, case.charset?.name()).text) {
+            "TextFile(tmpPath, encoding=${case.charset?.name()}).getText()"
+        }
     }
 
-    def "getText returns exact content of file"() {
-        given:
-            def sut = new TextFile(tmpPath)
-            FileUtils.write(tmpFile, content, Charset.defaultCharset())
-        expect:
-            sut.getText() == content
-        where:
-            content << ["a\nb\nc", "\"a\nb\nc\n"]
+    @ParameterizedTest
+    @MethodSource("getTextCases")
+    fun setText(case: GetTextCase) {
+        val tmpPath = tempDir.resolve("file.txt")
+        TextFile(tmpPath, case.charset?.name()).text = case.input
+        assertEquals(case.input, tmpPath.readText(case.charset ?: Charsets.UTF_8)) {
+            "contents of TextFile(tmpPath, encoding=${case.charset?.name()}).setText(${case.input})"
+        }
     }
 
-    def "getText returns exact content of file with specific charset"() {
-        given:
-            def sut = new TextFile(tmpPath, encoding)
-            FileUtils.write(tmpFile, content, charset)
-        expect:
-            sut.getText() == content
-        where:
-            content     | charset                     | encoding
-            "a\nb\nc"   | StandardCharsets.UTF_16     | "UTF_16"
-            "a\nb\nc\n" | StandardCharsets.UTF_16     | "UTF_16"
-            "a\nb\nc"   | StandardCharsets.ISO_8859_1 | "ISO_8859_1"
-            "a\nb\nc\n" | StandardCharsets.ISO_8859_1 | "ISO_8859_1"
-    }
-
-    def "setText sets exact content of file"() {
-        given:
-            def sut = new TextFile(tmpPath)
-        when:
-            sut.setText(content)
-        then:
-            sut.getText() == content
-        where:
-            content << ["a\nb\nc", "\"a\nb\nc\n"]
-    }
-
-    def "setText sets exact content of file other charset"() {
-        given:
-            def sut = new TextFile(tmpPath, encoding)
-        when:
-            sut.setText(content, encoding)
-        then:
-            sut.getText(encoding) == content
-        where:
-            content     | encoding
-            "a\nb\nc"   | "UTF_16"
-            "a\nb\nc\n" | "UTF_16"
-            "a\nb\nc"   | "ISO_8859_1"
-            "a\nb\nc\n" | "ISO_8859_1"
-    }
-
-    def "getText throws exception with invalid encoding"() {
-        given:
-            def sut = new TextFile(tmpPath, invalidEncoding)
-        when:
-            sut.getText()
-        then:
-            thrown(IllegalArgumentException)
-        where:
-            invalidEncoding << ["", "invalid", "invalid encoding"]
+    @ParameterizedTest
+    @ValueSource(strings = ["", "invalid", "invalid encoding"])
+    fun `getText throws exception with invalid encoding`(charset: String) {
+        val tmpFile = tempDir.resolve("file.txt")
+        tmpFile.writeBytes(byteArrayOf())
+        val file = TextFile(tmpFile, charset)
+        assertThrows<IllegalArgumentException> {
+            file.text
+        }
     }
 }
