@@ -17,7 +17,13 @@
 
 package org.apache.jmeter.testelement
 
+import io.mockk.mockk
+import io.mockk.spyk
+import org.apache.jmeter.testelement.property.CollectionProperty
+import org.apache.jmeter.testelement.property.TestElementProperty
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class AbstractTestElementTest {
@@ -48,6 +54,42 @@ class AbstractTestElementTest {
         assertEquals(source, cloned) {
             "The cloned element should be be equal the original element. " +
                 "Note that comments is added in constructor, however, we remove <<comments>> property before cloning"
+        }
+    }
+
+    @Test
+    fun `set outer properties as temporary when using a TestElementProperty`() {
+        val sut = spyk<AbstractTestElement>()
+        val outerElement = mockk<TestElement>(relaxed = true)
+        val innerElement = mockk<TestElement>(relaxed = true)
+        val outerProp = TestElementProperty("outerProp", outerElement)
+        val innerProp = TestElementProperty("innerProp", innerElement)
+        outerProp.addProperty(innerProp)
+
+        sut.setTemporary(outerProp)
+
+        assertTrue(sut.isTemporary(outerProp)) {
+            "isTemporary($outerProp)"
+        }
+        assertFalse(sut.isTemporary(innerProp)) {
+            "isTemporary($innerProp)"
+        }
+    }
+
+    @Test
+    fun `set all properties as temporary when using a MultiProperty`() {
+        val sut = spyk<AbstractTestElement>()
+        val outerProp = CollectionProperty()
+        val innerProp = CollectionProperty()
+
+        outerProp.addProperty(innerProp)
+        sut.setTemporary(outerProp)
+
+        assertTrue(sut.isTemporary(outerProp)) {
+            "isTemporary($outerProp)"
+        }
+        assertTrue(sut.isTemporary(innerProp)) {
+            "isTemporary($innerProp)"
         }
     }
 }

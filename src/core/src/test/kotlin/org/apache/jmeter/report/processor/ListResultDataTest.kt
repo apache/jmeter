@@ -17,27 +17,36 @@
 
 package org.apache.jmeter.report.processor
 
-import spock.lang.Specification
-import spock.lang.Unroll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@Unroll
-class ListResultDataSpec extends Specification {
-
-    def sut = new ListResultData()
-
-    def "a new ListResultData is empty"() {
-        expect:
-            new ListResultData().size() == 0
+class ListResultDataTest {
+    companion object {
+        @JvmStatic
+        fun addResultInputs() = listOf(
+            null,
+            ValueResultData(),
+            ListResultData(),
+        )
     }
 
-    def "addResult adds #object to list and returns true"() {
-        when:
-            def result = sut.addResult(object)
-        then:
-            result
-            sut.getSize() == 1
-            sut.get(0) == object
-        where:
-            object << [null, Mock(ResultData), new ListResultData()]
+    val sut = ListResultData()
+
+    @Test
+    fun `a new ListResultData is empty`() {
+        assertEquals(0, sut.size)
+        assertEquals(listOf<Any>(), sut.toList())
+    }
+
+    @ParameterizedTest
+    @MethodSource("addResultInputs")
+    fun addResult(input: ResultData?) {
+        assertTrue(sut.addResult(input), "addResult should return true")
+        assertEquals(listOf(input), sut.toList()) {
+            "ListResultData().add($input).toList()"
+        }
     }
 }

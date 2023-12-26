@@ -17,39 +17,37 @@
 
 package org.apache.jmeter.report.processor.graph.impl
 
-import java.util.stream.Collectors
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Test
 
-import org.apache.jmeter.junit.spock.JMeterSpec
+class ResponseTimePercentilesOverTimeGraphConsumerTest {
+    val sut = ResponseTimePercentilesOverTimeGraphConsumer()
 
-class ResponseTimePercentilesOverTimeGraphConsumerSpec extends JMeterSpec {
+    @Test
+    fun `GroupInfos have only the required keys`() {
+        val groupInfosMap = sut.createGroupInfos()
 
-    static def EXPECTED_KEYS =
-            ['aggregate_report_min',
-             'aggregate_report_max',
-             'aggregate_rpt_pct1',
-             'aggregate_rpt_pct2',
-             'aggregate_rpt_pct3',
-            'aggregate_report_median'] as Set
-
-    def sut = new ResponseTimePercentilesOverTimeGraphConsumer()
-
-    def "GroupInfos have only the required keys"() {
-        when:
-            def groupInfosMap = sut.createGroupInfos()
-        then:
-            groupInfosMap.keySet() == EXPECTED_KEYS
+        assertEquals(
+            setOf(
+                "aggregate_report_min",
+                "aggregate_report_max",
+                "aggregate_rpt_pct1",
+                "aggregate_rpt_pct2",
+                "aggregate_rpt_pct3",
+                "aggregate_report_median",
+            ),
+            groupInfosMap.keys,
+            "createGroupInfos().keys"
+        )
     }
 
-    def "GroupInfos have the expected settings"() {
-        when:
-            def groupInfos = sut.createGroupInfos()
-            def groupInfoValues = groupInfos
-                    .entrySet().stream()
-                    .map { it.value }
-                    .collect(Collectors.toList())
-        then:
-            groupInfoValues.every { !it.enablesAggregatedKeysSeries() }
-            groupInfoValues.every { !it.enablesOverallSeries() }
+    @Test
+    fun `GroupInfos have the expected settings`() {
+        val groupInfos = sut.createGroupInfos()
+        groupInfos.values.forEach {
+            assertFalse(it.enablesAggregatedKeysSeries(), "enablesAggregatedKeysSeries()")
+            assertFalse(it.enablesOverallSeries(), "enablesOverallSeries()")
+        }
     }
-
 }

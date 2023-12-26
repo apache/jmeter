@@ -17,46 +17,57 @@
 
 package org.apache.jmeter.report.core
 
-import spock.lang.Specification
-import spock.lang.Unroll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@Unroll
-class ConvertersSpec extends Specification {
+class ConvertersTest {
+    data class NumberCase(val input: String, val type: Class<*>?, val expected: Number, val precision: Number)
+    data class SimpleCase(val input: String, val type: Class<*>?, val expected: Any)
+    companion object {
+        @JvmStatic
+        fun numberCases() = listOf(
+            NumberCase(" 42", Int::class.javaObjectType, Integer.valueOf(42), 0),
+            NumberCase("-5", Int::class.javaPrimitiveType, Integer.valueOf(-5), 0),
+            NumberCase("5000000", Long::class.javaObjectType, java.lang.Long.valueOf(5_000_000), 0),
+            NumberCase("500 ", Long::class.javaPrimitiveType, java.lang.Long.valueOf(500), 0),
+            NumberCase("3.14", Double::class.javaObjectType, java.lang.Double.valueOf(3.14), 0.0001),
+            NumberCase(" 100 ", Double::class.javaPrimitiveType, java.lang.Double.valueOf(100.0), 0.0001),
+            NumberCase("+5", Float::class.javaObjectType, java.lang.Float.valueOf(5.0f), 0.0001),
+            NumberCase(" 1.2E16 ", Float::class.javaPrimitiveType, java.lang.Float.valueOf(1.2E16f), 0.0001),
+        )
 
-    def "Convert number-like (#input) to instance of (#conversionDestClass)"() {
-        given:
-            def converter = Converters.getConverter(conversionDestClass)
-        when:
-            def result = converter.convert(input)
-        then:
-            result.class == expectedResult.class
-            result == expectedResult || Math.abs(expectedResult - result) < precision
-        where:
-            input      | conversionDestClass | expectedResult          | precision
-            " 42"      | Integer.class       | Integer.valueOf(42)     | 0
-            "-5"       | int.class           | Integer.valueOf(-5)     | 0
-            "5000000"  | Long.class          | Long.valueOf(5_000_000) | 0
-            "500 "     | long.class          | Long.valueOf(500)       | 0
-            "3.14"     | Double.class        | Double.valueOf(3.14)    | 0.0001
-            " 100 "    | double.class        | Double.valueOf(100)     | 0.0001
-            "+5"       | Float.class         | Float.valueOf(5)        | 0.0001
-            " 1.2E16 " | float.class         | Float.valueOf(1.2E16)   | 0.0001
+        @JvmStatic
+        fun simpleCases() = listOf(
+            SimpleCase("FALSE", Boolean::class.javaObjectType, false),
+            SimpleCase("true", Boolean::class.javaPrimitiveType, true),
+            SimpleCase(" true", Boolean::class.javaPrimitiveType, false),
+            SimpleCase("fAlSe ", Boolean::class.javaPrimitiveType, false),
+            SimpleCase("a", Char::class.javaObjectType, 'a'),
+            SimpleCase("ä", Char::class.javaPrimitiveType, 'ä'),
+        )
     }
 
-    def "Convert (#input) to instance of (#conversionDestClass)"() {
-        given:
-            def converter = Converters.getConverter(conversionDestClass)
-        when:
-            def result = converter.convert(input)
-        then:
-            result == expectedResult
-        where:
-            input    | conversionDestClass | expectedResult
-            "FALSE"  | Boolean.class       | Boolean.FALSE
-            "true"   | boolean.class       | Boolean.TRUE
-            " true"  | boolean.class       | Boolean.FALSE
-            "fAlSe " | boolean.class       | Boolean.FALSE
-            "a"      | Character.class     | 'a'
-            "ä"      | char.class          | 'ä'
+    @ParameterizedTest
+    @MethodSource("numberCases")
+    fun convertNumbers(case: NumberCase) {
+        val result = Converters.getConverter(case.type).convert(case.input)
+        if (result != case.expected) {
+            assertEquals(case.expected.toDouble(), (result as Number).toDouble(), case.precision.toDouble()) {
+                "Converters.getConverter(${case.type}).convert(${case.input}) should be within ${case.precision} of ${case.expected}"
+            }
+        }
+        assertEquals(case.expected::class.java, result::class.java) {
+            "type of Converters.getConverter(${case.type}).convert(${case.input})"
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("simpleCases")
+    fun convertSimple(case: SimpleCase) {
+        val result = Converters.getConverter(case.type).convert(case.input)
+        assertEquals(case.expected, result) {
+            "Converters.getConverter(${case.type}).convert(${case.input})"
+        }
     }
 }

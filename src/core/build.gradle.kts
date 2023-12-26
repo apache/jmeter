@@ -120,6 +120,7 @@ dependencies {
     runtimeOnly("xml-apis:xml-apis")
 
     testImplementation("commons-net:commons-net")
+    testImplementation("io.mockk:mockk")
     testRuntimeOnly("org.spockframework:spock-core")
 
     testFixturesApi(testFixtures(projects.src.jorphan))

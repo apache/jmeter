@@ -17,42 +17,37 @@
 
 package org.apache.jmeter.report.core
 
-import spock.lang.Specification
-import spock.lang.Unroll
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@Unroll
-class SampleMetadataParserSpec extends Specification {
-
-    def "Parse headers (#headers) with separator (#separator) and get (#expectedColumns)"() {
-        given:
-            def sut = new SampleMetaDataParser(separator as char)
-        when:
-            def columns = sut.parse(headers).columns
-        then:
-            columns == expectedColumns
-        where:
-            separator | headers           | expectedColumns
-            ';'       | "a;b;c;d;e"       | ["a", "b", "c", "d", "e"]
-            '|'       | "a|b|c|d|e"       | ["a", "b", "c", "d", "e"]
-            '|'       | "aa|bb|cc|dd|eef" | ["aa", "bb", "cc", "dd", "eef"]
-            '&'       | "a&b&c&d&e"       | ["a", "b", "c", "d", "e"]
-            '\t'      | "a\tb c\td\te"    | ["a", "b c", "d", "e"]
-            ','       | "abcdef"          | ["abcdef"]
+class SampleMetadataParserTest {
+    data class ParseCase(val separator: Char, val headers: String, val expected: List<String>)
+    companion object {
+        @JvmStatic
+        fun headerCases() = listOf(
+            ParseCase(';', "a;b;c;d;e", listOf("a", "b", "c", "d", "e")),
+            ParseCase(',', "a|b|c|d|e", listOf("a", "b", "c", "d", "e")),
+            ParseCase(',', "aa|bb|cc|dd|eef", listOf("aa", "bb", "cc", "dd", "eef")),
+            ParseCase('&', "a&b&c&d&e", listOf("a", "b", "c", "d", "e")),
+            ParseCase('\t', "a\tb c\td\te", listOf("a", "b c", "d", "e")),
+            ParseCase(',', "abcdef", listOf("abcdef")),
+            // Wrong separator
+            ParseCase(',', "a;b;c;d;e", listOf("a", "b", "c", "d", "e")),
+            ParseCase(',', "a|b|c|d|e", listOf("a", "b", "c", "d", "e")),
+            ParseCase(',', "aa|bb|cc|dd|eef", listOf("aa", "bb", "cc", "dd", "eef")),
+            ParseCase(',', "a&b&c&d&e", listOf("a", "b", "c", "d", "e")),
+            ParseCase(',', "a\tb c\td\te", listOf("a", "b c", "d", "e")),
+            ParseCase(',', "abcdef", listOf("abcdef")),
+        )
     }
 
-    def "Parse headers (#headers) with wrong separator (#separator) and get (#expectedColumns)"() {
-        given:
-        def sut = new SampleMetaDataParser(separator as char)
-        when:
-        def columns = sut.parse(headers).columns
-        then:
-        columns == expectedColumns
-        where:
-        separator | headers           | expectedColumns
-        ','       | "a;b;c;d;e"       | ["a", "b", "c", "d", "e"]
-        ','       | "a|b|c|d|e"       | ["a", "b", "c", "d", "e"]
-        ','       | "aa|bb|cc|dd|eef" | ["aa", "bb", "cc", "dd", "eef"]
-        ','       | "a&b&c&d&e"       | ["a", "b", "c", "d", "e"]
-        ','       | "a\tb c\td\te"    | ["a", "b c", "d", "e"]
+    @ParameterizedTest
+    @MethodSource("headerCases")
+    fun parseHeaders(case: ParseCase) {
+        val result = SampleMetaDataParser(case.separator).parse(case.headers).columns
+        Assertions.assertEquals(case.expected, result) {
+            "SampleMetaDataParser(${case.separator}).parse(${case.headers})"
+        }
     }
 }

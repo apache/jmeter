@@ -17,46 +17,53 @@
 
 package org.apache.jmeter.engine.util
 
+import com.google.auto.service.AutoService
 import org.apache.jmeter.functions.Function
 import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.samplers.Sampler
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
-import spock.lang.Specification
-import spock.lang.Unroll
+class FunctionParserTest {
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "\${__func()}",
+            "\${ __func()}",
+            "\${__func() }",
+            "\${ __func() }",
+        ]
+    )
+    fun `simple function call`(input: String) {
+        val parser = FunctionParser()
+        val result = parser.compileString(input)
 
-@Unroll
-class FunctionParserSpec extends Specification {
-    def "function '#value' gets compiled"() {
-        given:
-            CompoundVariable.functions.put('__func', Func.class)
-            def parser = new FunctionParser()
-        when:
-            def result = parser.compileString(value)
-        then:
-            "$result" == "$expected"
-        where:
-            value           | expected
-            '${__func()}'   | [new Func()]
-            '${ __func()}'  | [new Func()]
-            '${__func() }'  | [new Func()]
-            '${ __func() }' | [new Func()]
+        Assertions.assertEquals(arrayListOf(Func()), result) {
+            "FunctionParser.compileString($input)"
+        }
     }
 
-    public static class Func implements Function {
-        void setParameters(Collection params) {
-            // do nothing
+    @AutoService(Function::class)
+    class Func : Function {
+        override fun execute(previousResult: SampleResult?, currentSampler: Sampler?): String {
+            TODO()
         }
-        String getReferenceKey() {
-            return "__func"
+
+        override fun setParameters(parameters: MutableCollection<CompoundVariable>) {
         }
-        List<String> getArgumentDesc() {
-            return Collections.emptyList()
+
+        override fun getReferenceKey(): String = "__func"
+
+        override fun getArgumentDesc(): List<String> = listOf()
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+            return true
         }
-        String execute(SampleResult result, Sampler sampler) {
-            return "done"
-        }
-        String toString() {
-            return "__func()"
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
         }
     }
 }

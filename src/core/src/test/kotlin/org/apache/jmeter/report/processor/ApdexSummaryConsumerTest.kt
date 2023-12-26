@@ -17,29 +17,32 @@
 
 package org.apache.jmeter.report.processor
 
-import spock.lang.Specification
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-class ApdexSummaryConsumerSpec extends Specification {
+class ApdexSummaryConsumerTest {
+    val sut = ApdexSummaryConsumer()
 
-    def sut = new ApdexSummaryConsumer()
+    @Test
+    fun `createDataResult contains apdex, satisfied, tolerated, key`() {
+        val info = ApdexThresholdsInfo()
+        info.satisfiedThreshold = 3L
+        info.toleratedThreshold = 12L
+        val data = ApdexSummaryData(info).apply {
+            satisfiedCount = 60L
+            toleratedCount = 30L
+            totalCount = 100L
+        }
+        val expectedApdex = 0.75
 
-    def "createDataResult contains apdex, satisfied, tolerated, key"() {
-        given:
-            def info = new ApdexThresholdsInfo()
-            info.setSatisfiedThreshold(3L)
-            info.setToleratedThreshold(12L)
-            def data = new ApdexSummaryData(info)
-            data.satisfiedCount = 60L
-            data.toleratedCount = 30L
-            data.totalCount = 100L
-            def expectedApdex = 0.75
-        when:
-            def result = sut.createDataResult("key", data)
-        then:
-            def resultValues = result.asList().collect {
-                ((ValueResultData) it).value
-            }
-            // [apdex, satisfied, tolerated, key]
-            resultValues == [expectedApdex, 3L, 12L, "key"]
+        val result = sut.createDataResult("key", data)
+
+        val resultValues = result.map { (it as ValueResultData).value }
+        assertEquals(
+            listOf(expectedApdex, 3L, 12L, "key"),
+            resultValues
+        ) {
+            "ApdexSummaryConsumer().createDataResult(\"key\", $data) should yield [apdex, satisfied, tolerated, key]"
+        }
     }
 }

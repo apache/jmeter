@@ -94,6 +94,7 @@
     <trusted-key id='d477d51812e692011db11e66a6ea2e2bf22e0543' group='io.github.java-diff-utils' />
     <trusted-key id='e52567d2589415bd74eb4c2867631bc0568801c3' group='io.github.microutils' />
     <trusted-key id='050a37a2e0577f4baa095b52602ec18d20c4661c' group='io.github.x-stream' />
+    <trusted-key id='59b06224fd8912e36603be79fefe78456eddc34a' group='io.mockk' />
     <trusted-key id='6dd3b8c64ef75253beb2c53ad908a43fb7ec07ac' group='jakarta.activation' />
     <trusted-key id='a1483f88ba771993ab609c43590c2310cee1c9be' group='jakarta.jms' />
     <trusted-key id='fc411cd3cb7dcb0abc9801058118b3bcdb1a5000' group='jakarta.xml.bind' />

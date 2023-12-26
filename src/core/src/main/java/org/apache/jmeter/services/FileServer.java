@@ -81,7 +81,7 @@ public class FileServer {
     private volatile String scriptName;
 
     // Cannot be instantiated
-    private FileServer() {
+    FileServer() {
         base = new File(DEFAULT_BASE);
         log.info("Default base='{}'", DEFAULT_BASE);
     }

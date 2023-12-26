@@ -17,221 +17,249 @@
 
 package org.apache.jmeter.services
 
-import org.apache.jmeter.junit.spock.JMeterSpec
+import org.apache.jmeter.junit.JMeterTestCase
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.fail
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import java.io.EOFException
+import java.io.File
+import java.io.IOException
 
-import spock.lang.Unroll
+class FileServerTest : JMeterTestCase() {
+    val sut = FileServer()
 
-@Unroll
-class FileServerSpec extends JMeterSpec {
+    val testFile = getResourceFilePath("testfiles/unit/FileServerSpec.csv")
+    val emptyFile = getResourceFilePath("testfiles/empty.csv")
+    val bomFile = getResourceFilePath("testfiles/bomData.csv")
 
-    def sut = new FileServer()
+    data class SetBaseForScriptCase(val file: File, val expectedBaseDirRelative: String)
 
-    def testFile = getResourceFilePath("testfiles/unit/FileServerSpec.csv")
-    def emptyFile = getResourceFilePath("testfiles/empty.csv")
-    def bomFile = getResourceFilePath("testfiles/bomData.csv")
+    companion object {
+        @JvmStatic
+        fun setBaseForScript(): List<SetBaseForScriptCase> {
+            val baseFile = File(FileServer.getDefaultBase())
+            return listOf(
+                SetBaseForScriptCase(baseFile, "."),
+                SetBaseForScriptCase(baseFile.getParentFile(), "."),
+                SetBaseForScriptCase(File(baseFile.getParentFile(), "abcd/defg.jmx"), "."),
+                SetBaseForScriptCase(File(baseFile, "abcd/defg.jmx"), "abcd"),
+            )
+        }
+    }
 
-    def setup() {
+    @BeforeEach
+    fun setup() {
         sut.resetBase()
     }
 
-    def tearDown() {
+    @AfterEach
+    fun tearDown() {
         sut.closeFiles()
     }
 
-    def "reading a non-existent file throws an exception"() {
-        when:
+    @Test
+    fun `reading a non-existent file throws an exception`() {
+        assertThrows<IOException> {
             sut.readLine("test")
-        then:
-            thrown(IOException)
+        }
     }
 
-    def "writing to a non-exisent file throws an exception"() {
-        when:
+    @Test
+    fun `writing to a non-exisent file throws an exception`() {
+        assertThrows<IOException> {
             sut.write("test", "")
-        then:
-            thrown(IOException)
+        }
     }
 
-    def "no files should be open following resetBase"() {
-        expect:
-            !sut.filesOpen()
+    @Test
+    fun `no files should be open following resetBase`() {
+        assertNoFilesOpen()
     }
 
-    def "closing unrecognised files are ignored"() {
-        when:
-            sut.closeFile("xxx")
-        then:
-            !sut.filesOpen()
-            noExceptionThrown()
+    @Test
+    fun `closing unrecognised files are ignored`() {
+        sut.closeFile("xxx")
+        assertNoFilesOpen()
     }
 
-    def "file is not opened until read from"() {
-        given:
-            sut.reserveFile(testFile) // Does not open file
-            assert !sut.filesOpen()
-        when:
-            def line = sut.readLine(testFile)
-        then:
-            line == "a1,b1,c1,d1"
-            sut.filesOpen()
+    @Test
+    fun `file is not opened until read from`() {
+        sut.reserveFile(testFile) // Does not open file
+        assertNoFilesOpen()
+        assertEquals("a1,b1,c1,d1", sut.readLine(testFile)) {
+            "readLine($testFile)"
+        }
+        assertFilesOpen()
     }
 
-    def "reading lines loops to start once last line is read"() {
-        given:
-            sut.reserveFile(testFile)
-        when:
-            def firstPass = [sut.readLine(testFile), sut.readLine(testFile), sut.readLine(testFile), sut.readLine(testFile)]
-            def secondPass = [sut.readLine(testFile), sut.readLine(testFile), sut.readLine(testFile), sut.readLine(testFile)]
-        then:
-            firstPass == secondPass
+    private fun assertNoFilesOpen() {
+        assertFalse(sut.filesOpen(), "filesOpen")
     }
 
-    def "cannot write to reserved file after reading"() {
-        given:
-            sut.reserveFile(testFile)
-            sut.readLine(testFile)
-        when:
+    private fun assertFilesOpen() {
+        assertTrue(sut.filesOpen(), "filesOpen")
+    }
+
+    @Test
+    fun `reading lines loops to start once last line is read`() {
+        sut.reserveFile(testFile)
+        val firstPass = Array(4) { sut.readLine(testFile) }
+        val secondPass = Array(4) { sut.readLine(testFile) }
+        assertArrayEquals(firstPass, secondPass)
+    }
+
+    @Test
+    fun `cannot write to reserved file after reading`() {
+        sut.reserveFile(testFile)
+        sut.readLine(testFile)
+        assertThrows<IOException> {
             sut.write(testFile, "")
-        then:
-            thrown(IOException)
+        }
     }
 
-    def "closing reserved file after reading resets"() {
-        given:
-            sut.reserveFile(testFile)
+    @Test
+    fun `closing reserved file after reading resets`() {
+        sut.reserveFile(testFile)
+        sut.readLine(testFile)
+        sut.closeFile(testFile) // does not remove the entry
+        assertNoFilesOpen()
+        assertEquals("a1,b1,c1,d1", sut.readLine(testFile), "re-read first line")
+        assertFilesOpen()
+    }
+
+    @Test
+    fun `closeFiles() prevents reading of reserved file`() {
+        sut.reserveFile(testFile)
+        sut.readLine(testFile)
+        sut.closeFiles() // removes all entries
+        assertThrows<IOException> {
             sut.readLine(testFile)
-        when:
-            sut.closeFile(testFile) // does not remove the entry
-        then:
-            !sut.filesOpen()
-            sut.readLine(testFile) == "a1,b1,c1,d1" // Re-read first line
-            sut.filesOpen()
+        }
+        assertNoFilesOpen()
     }
 
-    def "closeFiles() prevents reading of reserved file"() {
-        given:
-            sut.reserveFile(testFile)
-            sut.readLine(testFile)
-        when:
-            sut.closeFiles() // removes all entries
-            sut.readLine(testFile)
-        then:
-            !sut.filesOpen()
-            thrown(IOException)
+    @Test
+    fun `baseDir is the defaultBasedir`() {
+        assertEquals(FileServer.getDefaultBase(), sut.getBaseDir()) {
+            "getBaseDir should be FileServer.getDefaultBase()"
+        }
     }
 
-    def "baseDir is the defaultBasedir"() {
-        expect:
-            sut.getBaseDir() == FileServer.getDefaultBase()
-    }
+    @Test
+    fun `setBaseDir doesn't error when no files are open`() {
+        sut.setBasedir("testfiles/unit/FileServerSpec.csv")
 
-    def "setBaseDir doesn't error when no files are open"() {
-        when:
-            sut.setBasedir("testfiles/unit/FileServerSpec.csv")
-        then:
-            sut.getBaseDir().replaceAll("\\\\", "/").endsWith("testfiles/unit")
+        val result = sut.baseDir.replace("\\", "/")
+        if (!result.endsWith("testfiles/unit")) {
+            fail("baseDir should start with testfiles/unit, but was $result")
+        }
     }
 
     // TODO: what about throwing an exception in setBaseDir?
-    def "setBaseDir doesn't set base when passed a directory"() {
-        def dir = "does-not-exist"
-        given:
-            sut.setBasedir(dir)
-        when:
-            sut.getBaseDir().endsWith(dir)
-        then:
-            thrown(NullPointerException)
+    @Test
+    fun `setBaseDir doesn't set base when passed a directory`() {
+        val dir = "does-not-exist"
+        sut.setBasedir(dir)
+        assertThrows<NullPointerException> {
+            sut.baseDir.endsWith(dir)
+        }
     }
 
-    def "cannot set baseDir when files are open"() {
-        given:
-            sut.reserveFile(testFile)
-            sut.readLine(testFile) == "a1,b1,c1,d1"
-        when:
+    @Test
+    fun `cannot set baseDir when files are open`() {
+        sut.reserveFile(testFile)
+        assertEquals("a1,b1,c1,d1", sut.readLine(testFile), "sut.readLine($testFile)")
+        assertThrows<IllegalStateException> {
             sut.setBasedir("testfiles")
-        then:
-            thrown(IllegalStateException)
+        }
     }
 
-    static def baseFile = new File(FileServer.getDefaultBase())
-
-    def "setting base to #file gives getBaseDirRelative == #expectedBaseDirRelative"() {
-        when:
-            sut.setBaseForScript(file)
-        then:
-            sut.getBaseDirRelative().toString() == expectedBaseDirRelative
-        where:
-            file                                                | expectedBaseDirRelative
-            baseFile                                            | "."
-            baseFile.getParentFile()                            | "."
-            new File(baseFile.getParentFile(), "abcd/defg.jmx") | "."
-            new File(baseFile, "abcd/defg.jmx")                 | "abcd"
+    @ParameterizedTest
+    @MethodSource("setBaseForScript")
+    fun `setting base to #file gives getBaseDirRelative == #expectedBaseDirRelative`(case: SetBaseForScriptCase) {
+        sut.setBaseForScript(case.file)
+        assertEquals(case.expectedBaseDirRelative, sut.getBaseDirRelative().toString())
     }
 
-    def "non-existent filename to reserveFile will throw exception"() {
-        given:
-            def missing = "no-such-file"
-            def alias = "missing"
-            def charsetName = "UTF-8"
-            def hasHeader = true
-        when:
+    @Test
+    fun `non-existent filename to reserveFile will throw exception`() {
+        val missing = "no-such-file"
+        val alias = "missing"
+        val charsetName = "UTF-8"
+        val hasHeader = true
+        val ex = assertThrows<IllegalArgumentException> {
             sut.reserveFile(missing, charsetName, alias, hasHeader)
-        then:
-            def ex = thrown(IllegalArgumentException)
-            ex.getMessage() == "Could not read file header line for file $missing"
-            ex.getCause().getMessage() == "File $missing must exist and be readable"
+        }
+        assertEquals("Could not read file header line for file $missing", ex.message) {
+            "ex.message"
+        }
+        assertEquals("File $missing must exist and be readable", ex.cause?.message) {
+            "ex.cause?.message"
+        }
     }
 
-    def "reserving a file with no header will throw an exception if the header is expected"() {
-        given:
-            def alias = "empty"
-            def charsetName = "UTF-8"
-        when:
+    @Test
+    fun `reserving a file with no header will throw an exception if the header is expected`() {
+        val alias = "empty"
+        val charsetName = "UTF-8"
+        val e = assertThrows<IllegalArgumentException> {
             sut.reserveFile(emptyFile, charsetName, alias, true)
-        then:
-            def e = thrown(IllegalArgumentException)
-            e.getCause() instanceof EOFException
+        }
+        if (e.cause !is EOFException) {
+            fail("reserveFile(emptyFile) should throw IllegalArgumentException(cause=EOFException), got cause=${e.cause}")
+        }
     }
 
-    def "resolvedFile returns absolute and relative files"() {
-        given:
-            def testFile = new File(emptyFile)
-        expect:
-            // absolute
-            sut.getResolvedFile(testFile.getAbsolutePath())
-                    .getCanonicalFile() == testFile.getCanonicalFile()
-            // relative
-            sut.getResolvedFile(testFile.getParentFile().getPath() + "/../testfiles/empty.csv")
-                    .getCanonicalFile() == testFile.getCanonicalFile()
+    @Test
+    fun `resolvedFile returns absolute and relative files`() {
+        val testFile = File(emptyFile)
+        assertEquals(
+            testFile.getCanonicalFile(),
+            sut.getResolvedFile(testFile.absolutePath).getCanonicalFile(),
+            "sut.getResolvedFile(testFile.absolutePath)"
+        )
+        // relative
+        assertEquals(
+            testFile.getCanonicalFile(),
+            sut.getResolvedFile(testFile.getParentFile().path + "/../testfiles/empty.csv")
+                .getCanonicalFile(),
+            "sut.getResolvedFile(testFile.getParentFile().path + \"/../testfiles/empty.csv\")"
+        )
     }
 
-    def "resolvedFile returns relative files with BaseForScript set"() {
-        given:
-            def testFile = new File(emptyFile)
-        when:
-            sut.setBaseForScript(testFile)
-        then:
-            sut.getResolvedFile(testFile.getName())
-                    .getCanonicalFile() == testFile.getCanonicalFile()
+    @Test
+    fun `resolvedFile returns relative files with BaseForScript set`() {
+        val testFile = File(emptyFile)
+        sut.setBaseForScript(testFile)
+        assertEquals(
+            testFile.getCanonicalFile(),
+            sut.getResolvedFile(testFile.getName()).getCanonicalFile()
+        ) {
+            ".getResolvedFile(${testFile.name}).getCanonicalFile()"
+        }
     }
 
-    def "skip bom at start of file and set correct encoding"() {
-        given:
-            sut.reserveFile(bomFile)
-        when:
-            def header = sut.readLine(bomFile)
-        then:
-            header == '"äöü"'
+    @Test
+    fun `skip bom at start of file and set correct encoding`() {
+        sut.reserveFile(bomFile)
+        val header = sut.readLine(bomFile)
+        assertEquals("\"äöü\"", header)
     }
 
-    def "fail to read a line from a directory"() {
-        given:
-            def directory = new File(bomFile).parent
-            sut.reserveFile(directory)
-        when:
+    @Test
+    fun `fail to read a line from a directory`() {
+        val directory = File(bomFile).parent
+        sut.reserveFile(directory)
+        assertThrows<IllegalArgumentException> {
             sut.readLine(directory)
-        then:
-            thrown(IllegalArgumentException)
+        }
     }
-
 }

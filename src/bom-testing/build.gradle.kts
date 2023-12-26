@@ -38,6 +38,7 @@ dependencies {
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
         api("com.github.tomakehurst:wiremock-jre8:2.35.1")
+        api("io.mockk:mockk:1.13.7")
         api("junit:junit:4.13.2")
         api("net.bytebuddy:byte-buddy:1.14.11")
         api("nl.jqno.equalsverifier:equalsverifier:3.15.5")

@@ -17,24 +17,29 @@
 
 package org.apache.jmeter.util.keystore
 
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import java.security.KeyStore
 
-import spock.lang.Specification
-import spock.lang.Unroll
-
-@Unroll
-class JmeterKeyStoreSpec extends Specification {
-
-    def "IllegalArgumentException expected when (#startIndex, #endIndex) startIndex < 0, endIndex < -1, or endIndex < startIndex"() {
-        when:
-            JmeterKeyStore.getInstance(KeyStore.defaultType, startIndex, endIndex, "defaultName")
-        then:
-            thrown IllegalArgumentException
-        where:
-            startIndex | endIndex
-            -1         | 0
-            0          | -2 // -1 indicates to return the first alias only
-            1          | 0
+class JmeterKeyStoreTest {
+    data class Case(val startIndex: Int, val endIndex: Int, val message: String? = null)
+    companion object {
+        @JvmStatic
+        fun inputs() = listOf(
+            Case(-1, 0),
+            Case(0, -2, "-1 indicates to return the first alias only"),
+            Case(1, 0),
+        )
     }
 
+    @ParameterizedTest
+    @MethodSource("inputs")
+    fun `throws IllegalArgumentException`(case: Case) {
+        assertThrows<IllegalArgumentException> {
+            JmeterKeyStore.getInstance(
+                KeyStore.getDefaultType(), case.startIndex, case.endIndex, "defaultName"
+            )
+        }
+    }
 }

@@ -17,62 +17,74 @@
 
 package org.apache.jmeter.report.processor
 
-
+import io.mockk.every
+import io.mockk.mockk
 import org.apache.jmeter.report.core.Sample
 import org.apache.jmeter.report.utils.MetricUtils
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-import spock.lang.Specification
+class Top5ErrorsBySamplerConsumerTest {
+    val sut = Top5ErrorsBySamplerConsumer()
 
-class Top5ErrorsBySamplerConsumerSpec extends Specification {
+    @Test
+    fun `summary info data updated with non-controller passing sample`() {
+        val mockSummaryInfo = mockk<AbstractSummaryConsumer<Top5ErrorsSummaryData>.SummaryInfo> {
+            every { getData() } answers { callOriginal() }
+            every { setData(any()) } answers { callOriginal() }
+        }
+        val mockSample = mockk<Sample>(relaxed = true) {
+            every { success } returns true
+        }
+        sut.updateData(mockSummaryInfo, mockSample)
 
-    def sut = new Top5ErrorsBySamplerConsumer()
-
-    def "summary info data updated with non-controller passing sample"() {
-        given:
-            def mockSummaryInfo = Mock(AbstractSummaryConsumer.SummaryInfo)
-            def mockSample = Mock(Sample) {
-                getSuccess() >> true
-            }
-        when:
-            sut.updateData(mockSummaryInfo, mockSample)
-        then:
-            def data = (Top5ErrorsSummaryData) mockSummaryInfo.getData()
-            data.getTotal() == 1
+        val data = mockSummaryInfo.getData()
+        assertEquals(1, data.total, "data.total")
     }
 
-    def "summary info data updated with non-controller failing sample"() {
-        given:
-            def mockSummaryInfo = Mock(AbstractSummaryConsumer.SummaryInfo)
-            def mockSample = Mock(Sample) {
-                getResponseCode() >> "200"
-            }
-        when:
-            sut.updateData(mockSummaryInfo, mockSample)
-        then:
-            def data = (Top5ErrorsSummaryData) mockSummaryInfo.getData()
-            data.getTotal() == 1
-            data.getErrors() == 1
-            data.top5ErrorsMetrics[0][0] == MetricUtils.ASSERTION_FAILED
-            def overallData = (Top5ErrorsSummaryData) sut.getOverallInfo().getData()
-            overallData.getTotal() == 1
-            overallData.getErrors() == 1
-            overallData.top5ErrorsMetrics[0][0] == MetricUtils.ASSERTION_FAILED
+    @Test
+    fun `summary info data updated with non-controller failing sample`() {
+        val mockSummaryInfo = mockk<AbstractSummaryConsumer<Top5ErrorsSummaryData>.SummaryInfo> {
+            every { getData() } answers { callOriginal() }
+            every { setData(any()) } answers { callOriginal() }
+        }
+        val mockSample = mockk<Sample>(relaxed = true) {
+            every { responseCode } returns "200"
+        }
+        sut.updateData(mockSummaryInfo, mockSample)
+
+        val data = mockSummaryInfo.getData()
+        assertEquals(1, data.total, "data.total")
+        assertEquals(1, data.errors, "data.errors")
+        assertEquals(MetricUtils.ASSERTION_FAILED, data.top5ErrorsMetrics[0][0], "data.top5ErrorsMetrics[0][0]")
+
+        val overallData = sut.overallInfo.getData()
+        assertEquals(1, overallData.total, "data.total")
+        assertEquals(1, overallData.errors, "data.errors")
+        assertEquals(
+            MetricUtils.ASSERTION_FAILED,
+            overallData.top5ErrorsMetrics[0][0],
+            "overallData.top5ErrorsMetrics[0][0]"
+        )
     }
 
-    def "key from sample is name"() {
-        given:
-            def mockSample = Mock(Sample)
-        when:
-            def key = sut.getKeyFromSample(mockSample)
-        then:
-            1 * mockSample.getName() >> "name"
-            key == "name"
+    @Test
+    fun `key from sample is name`() {
+        val sample = mockk<Sample> {
+            every { name } returns "name"
+        }
+        assertEquals("name", sut.getKeyFromSample(sample)) {
+            "getKeyFromSample(sample) should return the name of the sample"
+        }
     }
 
-    def "there are 3 + 2n expected results title columns"() {
-        expect:
-            sut.createResultTitles().size ==
-                    3 + 2 * sut.MAX_NUMBER_OF_ERRORS_IN_TOP
+    @Test
+    fun `there are 3 + 2n expected results title columns`() {
+        assertEquals(
+            3 + 2 * Top5ErrorsBySamplerConsumer.MAX_NUMBER_OF_ERRORS_IN_TOP,
+            sut.createResultTitles().size
+        ) {
+            ".createResultTitles().size should be 3 + 2 * ${Top5ErrorsBySamplerConsumer.MAX_NUMBER_OF_ERRORS_IN_TOP}"
+        }
     }
-
 }

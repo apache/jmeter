@@ -19,45 +19,52 @@ package org.apache.jmeter.report.processor
 
 import org.apache.jmeter.report.core.Sample
 import org.apache.jmeter.report.core.SampleMetadata
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import kotlin.math.sign
 
-import spock.lang.Specification
+class FieldSampleComparatorTest {
+    companion object {
+        const val separator = ','
+    }
+    private val multiColSampleMeta = SampleMetadata(separator, "col1", "col2")
 
-class FieldSampleComparatorSpec extends Specification {
-
-    static char separator = ',' as char
-    def multiColSampleMeta = new SampleMetadata(separator, "col1", "col2")
-
-    def testCompare() {
-        given:
-            def sampleMetadata = new SampleMetadata(separator, "col1")
-            def firstRow = new Sample(0, sampleMetadata, "1")
-            def secondRow = new Sample(1, sampleMetadata, "2")
-            def sut = new FieldSampleComparator("col1")
-            sut.initialize(sampleMetadata)
-        expect:
-            sut.compare(firstRow, secondRow) < 0
-            sut.compare(secondRow, firstRow) > 0
-            sut.compare(firstRow, firstRow) == 0
-            sut.compare(secondRow, secondRow) == 0
+    fun assertCompare(comparator: FieldSampleComparator, a: Sample, b: Sample, expectedSign: Int) {
+        Assertions.assertEquals(expectedSign.sign, comparator.compare(a, b).sign) {
+            "$comparator.compare($a, $b)"
+        }
     }
 
-    def "initialize ensures correct column is compared"() {
-        given:
-            def sut = new FieldSampleComparator("col2")
-            def firstRow = new Sample(0, multiColSampleMeta, "1", "3")
-            def secondRow = new Sample(1, multiColSampleMeta, "2", "3")
-            sut.initialize(multiColSampleMeta)
-        expect:
-            sut.compare(firstRow, secondRow) == 0
+    @Test
+    fun testCompare() {
+        val sampleMetadata = SampleMetadata(separator, "col1")
+        val firstRow = Sample(0, sampleMetadata, "1")
+        val secondRow = Sample(1, sampleMetadata, "2")
+        val sut = FieldSampleComparator("col1")
+        sut.initialize(sampleMetadata)
+
+        assertCompare(sut, firstRow, secondRow, -1)
+        assertCompare(sut, secondRow, firstRow, 1)
+        assertCompare(sut, firstRow, firstRow, 0)
+        assertCompare(sut, secondRow, secondRow, 0)
     }
 
-    def "Incorrectly uses first column if initialize isn't called"() {
-        given:
-            def sut = new FieldSampleComparator("col2")
-            def firstRow = new Sample(0, multiColSampleMeta, "1", "3")
-            def secondRow = new Sample(1, multiColSampleMeta, "2", "3")
-        expect:
-            sut.compare(firstRow, secondRow) != 0
+    @Test
+    fun `initialize ensures correct column is compared`() {
+        val sut = FieldSampleComparator("col2")
+        val firstRow = Sample(0, multiColSampleMeta, "1", "3")
+        val secondRow = Sample(1, multiColSampleMeta, "2", "3")
+        sut.initialize(multiColSampleMeta)
+
+        assertCompare(sut, firstRow, secondRow, 0)
     }
 
+    @Test
+    fun `Incorrectly uses first column if initialize isn't called`() {
+        val sut = FieldSampleComparator("col2")
+        val firstRow = Sample(0, multiColSampleMeta, "1", "3")
+        val secondRow = Sample(1, multiColSampleMeta, "2", "3")
+
+        assertCompare(sut, firstRow, secondRow, -1)
+    }
 }
