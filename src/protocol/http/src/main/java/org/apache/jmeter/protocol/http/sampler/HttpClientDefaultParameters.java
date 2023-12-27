@@ -32,9 +32,7 @@ import org.slf4j.LoggerFactory;
  * Utility class to set up default HttpClient parameters from a file.
  *
  * Supports Apache HttpClient.
- * @deprecated since 5.0
  */
-@Deprecated
 public class HttpClientDefaultParameters {
 
     private static final Logger log = LoggerFactory.getLogger(HttpClientDefaultParameters.class);
@@ -45,7 +43,7 @@ public class HttpClientDefaultParameters {
 
     // Helper class (callback) for applying parameter definitions
     private static abstract class GenericHttpParams {
-        public abstract void setParameter(String name, Object value);
+        public abstract void setParameter(String name, String value);
         public abstract void setVersion(String name, String value) throws Exception;
     }
 
@@ -53,15 +51,15 @@ public class HttpClientDefaultParameters {
      * Loads a property file and converts parameters as necessary.
      *
      * @param file the file to load
-     * @param params Apache HttpClient parameter instance
+     * @param hcProps Apache HttpClient parameter instance
      */
     public static void load(String file,
-            final org.apache.http.params.HttpParams params){
+            final Properties hcProps){
         load(file,
                 new GenericHttpParams() {
                     @Override
-                    public void setParameter(String name, Object value) {
-                        params.setParameter(name, value);
+                    public void setParameter(String name, String value) {
+                        hcProps.setProperty(name, value);
                     }
 
                     @Override
@@ -70,9 +68,9 @@ public class HttpClientDefaultParameters {
                         if (parts.length != 2){
                             throw new IllegalArgumentException("Version must have form m.n");
                         }
-                        params.setParameter(name,
+                        hcProps.setProperty(name,
                                 new org.apache.http.HttpVersion(
-                                        Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+                                        Integer.parseInt(parts[0]), Integer.parseInt(parts[1])).toString());
                     }
                 }
             );
@@ -103,12 +101,8 @@ public class HttpClientDefaultParameters {
                         String type = key.substring(typeSep+1);// get past separator
                         String name=key.substring(0,typeSep);
                         log.info("Defining "+name+ " as "+value+" ("+type+")");
-                        if (type.equals("Integer")){
-                            params.setParameter(name, Integer.valueOf(value));
-                        } else if (type.equals("Long")){
-                            params.setParameter(name, Long.valueOf(value));
-                        } else if (type.equals("Boolean")){
-                            params.setParameter(name, Boolean.valueOf(value));
+                        if (type.equals("Integer") || type.equals("Long") || type.equals("Boolean")){
+                            params.setParameter(name, value);
                         } else if (type.equals("HttpVersion")){ // Commons HttpClient only
                             params.setVersion(name, value);
                         } else {

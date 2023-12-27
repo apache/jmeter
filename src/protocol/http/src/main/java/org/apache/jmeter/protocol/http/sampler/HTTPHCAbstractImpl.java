@@ -22,6 +22,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -80,8 +81,10 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected static final String HTTP_VERSION = JMeterUtils.getPropDefault("httpclient.version", "1.1");
 
-    // -1 means not defined
-    protected static final int SO_TIMEOUT = JMeterUtils.getPropDefault("httpclient.timeout", -1);
+    // 0 means not defined
+    protected static final int SO_TIMEOUT = JMeterUtils.getPropDefault("httpclient.timeout", 0);
+
+    protected static final Properties HTTPCLIENT_PARAMS = new Properties();
 
     /**
      * Reset HTTP State when starting a new Thread Group iteration
@@ -107,8 +110,13 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     static {
         if(!StringUtils.isEmpty(JMeterUtils.getProperty("httpclient.timeout"))) { //$NON-NLS-1$
             log.warn("You're using property 'httpclient.timeout' that will soon be deprecated for HttpClient3.1, you should either set "
-                    + "timeout in HTTP Request GUI, HTTP Request Defaults or set http.socket.timeout in httpclient.parameters");
+                    + "timeout in HTTP Request GUI, HTTP Request Defaults or set http.socket.timeout in hc.parameters");
         }
+
+        if(!StringUtils.isEmpty(JMeterUtils.getProperty("hc.parameters.file"))) { //$NON-NLS-1$
+            HttpClientDefaultParameters.load(JMeterUtils.getProperty("hc.parameters.file"), HTTPCLIENT_PARAMS);
+        }
+
         if (NONPROXY_HOSTS.length() > 0) {
             StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$
             while (s.hasMoreTokens()) {
@@ -185,5 +193,22 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      */
     protected static boolean isNullOrEmptyTrimmed(String value) {
         return JOrphanUtils.isBlank(value);
+    }
+
+    /**
+      * 
+      * Returns the socket timeout for responses in the following preference order:
+      *  1. Response timeout in HTTP Sampler/ HTTP Request Defaults
+      *  2. http.socket.timeout in hc.parameters
+      *  3. httpclient.timeout property
+      *
+      *  @return the socket timeout
+      */
+    protected int getResponseTimeout() {
+        int rto = super.getResponseTimeout();
+        if (rto > 0) {
+            return rto;
+        }
+        return Integer.valueOf(HTTPCLIENT_PARAMS.getProperty("http.socket.timeout", String.valueOf(SO_TIMEOUT)));
     }
 }

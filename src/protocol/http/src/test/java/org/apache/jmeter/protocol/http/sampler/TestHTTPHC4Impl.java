@@ -22,7 +22,13 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
+import java.util.Properties;
 
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpPost;
@@ -33,6 +39,7 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -118,5 +125,44 @@ public class TestHTTPHC4Impl {
         HTTPHC4Impl hc = new HTTPHC4Impl(sampler);
         hc.notifyFirstSampleAfterLoopRestart();
         assertTrue("Users are different, the state should be reset", HTTPHC4Impl.resetStateOnThreadGroupIteration.get());
+    }
+
+    //@Test
+    public void firstTestSocketTimeoutWithoutConfiguration() throws IOException {
+        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+        sampler.setThreadContext(jmctx);
+        HTTPHC4Impl hc = new HTTPHC4Impl(sampler);
+        assertEquals(0, hc.getResponseTimeout(), "HTTP socket timeout not found as expected");
+    }
+
+    //@Test
+    public void secondTestSocketTimeoutConfigurationFromJMeterProps() throws IOException {
+        Path props = Files.createTempFile("hcdummy1", ".properties");
+        JMeterUtils.loadJMeterProperties(props.toString());
+        JMeterUtils.getJMeterProperties().setProperty("httpclient.timeout", String.valueOf(100));
+
+        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+        sampler.setThreadContext(jmctx);
+        HTTPHC4Impl hc = new HTTPHC4Impl(sampler);
+        assertEquals(100, hc.getResponseTimeout(), "HTTP socket timeout not configured via httpclient.timeout as expected");
+    }
+
+    @Test
+    public void thirdTestSocketTimeoutConfigurationFromHCParams() throws IOException {
+        Path props = Files.createTempFile("hcdummy2", ".properties");
+
+        Properties hcParams = new Properties();
+        OutputStream outputStream = new FileOutputStream(props.toString());
+        hcParams.setProperty("http.socket.timeout$Integer", String.valueOf(120));
+        hcParams.store(outputStream, null);
+
+        JMeterUtils.loadJMeterProperties(props.toString());
+        JMeterUtils.getJMeterProperties().setProperty("httpclient.timeout", String.valueOf(100));
+        JMeterUtils.getJMeterProperties().setProperty("hc.parameters.file", props.toString());
+
+        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+        sampler.setThreadContext(jmctx);
+        HTTPHC4Impl hc = new HTTPHC4Impl(sampler);
+        assertEquals(120, hc.getResponseTimeout(), "HTTP socket timeout not configured via http.socket.timeout$Integer as expected");
     }
 }
