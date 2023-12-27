@@ -49,7 +49,7 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <note>
 JMeter 5.6.x requires Java 8 or later for execution (Java 17 or later recommended).
 <br></br>
-<b>The next major release would require Java 11 or later.</b>
+<b>The next major release would require Java 17 or later.</b>
 </note>
 
 <!--  =================== 5.6.3 =================== -->
