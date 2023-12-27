@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.resources;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +35,6 @@ import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ResourceKeyUsageTest {
@@ -52,7 +55,7 @@ class ResourceKeyUsageTest {
     void checkResourceReferences() throws Exception {
         String resourceName = "/org/apache/jmeter/resources/messages.properties";
         PropertyResourceBundle messagePRB = getRAS(resourceName);
-        Assertions.assertNotNull(resourceName, () -> "Resource bundle " + resourceName + " was not found");
+        assertNotNull(resourceName, () -> "Resource bundle " + resourceName + " was not found");
         List<String> failures = new ArrayList<>();
         final List<Exception> exceptions = new ArrayList<>();
 
@@ -91,10 +94,10 @@ class ResourceKeyUsageTest {
             }
             return file.isDirectory();
         });
-        Assertions.assertTrue(exceptions.isEmpty());
+        assertTrue(exceptions.isEmpty());
         if (failures.isEmpty()) {
             return;
         }
-        Assertions.fail(() -> String.join("\n", failures));
+        fail(String.join("\n", failures));
     }
 }

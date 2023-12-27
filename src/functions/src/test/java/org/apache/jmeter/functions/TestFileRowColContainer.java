@@ -17,10 +17,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
@@ -31,6 +29,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +59,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
     public void testrowNum() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/unit/TestFileRowColContainer.csv"));
         assertNotNull(f);
-        assertEquals("Expected 4 lines", 4, f.getSize());
+        assertEquals(4, f.getSize(), "Expected 4 lines");
 
         assertEquals(0, f.nextRow());
         assertEquals(1, f.nextRow());
@@ -73,7 +72,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
     public void testRowNumRelative() throws Exception {
         FileRowColContainer f = new FileRowColContainer("testfiles/unit/TestFileRowColContainer.csv");
         assertNotNull(f);
-        assertEquals("Expected 4 lines", 4, f.getSize());
+        assertEquals(4, f.getSize(), "Expected 4 lines");
 
         assertEquals(0, f.nextRow());
         assertEquals(1, f.nextRow());
@@ -86,7 +85,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
     public void testColumns() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/unit/TestFileRowColContainer.csv"));
         assertNotNull(f);
-        assertTrue("Not empty", f.getSize() > 0);
+        Assertions.assertTrue(f.getSize() > 0, "Not empty");
 
         int myRow = f.nextRow();
         assertEquals(0, myRow);
@@ -95,7 +94,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
 
         try {
             f.getColumn(myRow, 4);
-            fail("Expected out of bounds");
+            Assertions.fail("Expected out of bounds");
         } catch (IndexOutOfBoundsException e) {
         }
         myRow = f.nextRow();
@@ -108,7 +107,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
     public void testColumnsComma() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/unit/TestFileRowColContainer.csv"), ",");
         assertNotNull(f);
-        assertTrue("Not empty", f.getSize() > 0);
+        Assertions.assertTrue(f.getSize() > 0, "Not empty");
 
         int myRow = f.nextRow();
         assertEquals(0, myRow);
@@ -117,7 +116,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
 
         try {
             f.getColumn(myRow, 4);
-            fail("Expected out of bounds");
+            Assertions.fail("Expected out of bounds");
         } catch (IndexOutOfBoundsException e) {
         }
         myRow = f.nextRow();
@@ -130,7 +129,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
     public void testColumnsTab() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.tsv"), "\t");
         assertNotNull(f);
-        assertTrue("Not empty", f.getSize() > 0);
+        Assertions.assertTrue(f.getSize() > 0, "Not empty");
 
         int myRow = f.nextRow();
         assertEquals(0, myRow);
@@ -139,7 +138,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
 
         try {
             f.getColumn(myRow, 4);
-            fail("Expected out of bounds");
+            Assertions.fail("Expected out of bounds");
         } catch (IndexOutOfBoundsException e) {
         }
         myRow = f.nextRow();
@@ -152,7 +151,7 @@ public class TestFileRowColContainer extends JMeterTestCase implements JMeterSer
     public void testEmptyCols() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/testempty.csv"));
         assertNotNull(f);
-        assertEquals("Expected 4 lines", 4, f.getSize());
+        assertEquals(4, f.getSize(), "Expected 4 lines");
 
         int myRow = f.nextRow();
         assertEquals(0, myRow);

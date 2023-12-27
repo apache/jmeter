@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.visualizers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Method;
 
@@ -49,8 +49,7 @@ public class TestRenderAsJson {
         }
         json.append("\"");
 
-        assertEquals("{\n" + TAB + json.toString() + "\n}",
-                prettyJSON("{" + json.toString() + "}"));
+        assertEquals("{\n" + TAB + json.toString() + "\n}", prettyJSON("{" + json.toString() + "}"));
     }
 
     @Test
@@ -69,8 +68,7 @@ public class TestRenderAsJson {
 
     @Test
     public void testRenderArrayInObject() throws Exception {
-        assertEquals("{\n" + TAB + "\"foo\": [\n" + TAB + "]\n}",
-                prettyJSON("{\"foo\":[]}"));
+        assertEquals("{\n" + TAB + "\"foo\": [\n" + TAB + "]\n}", prettyJSON("{\"foo\":[]}"));
     }
 
     @Test
@@ -85,11 +83,9 @@ public class TestRenderAsJson {
 
     @Test
     public void testRenderResultSimpleStructure() throws Exception {
-        assertEquals(
-                "{\n" + TAB + "\"Hello\": \"World\",\n" + TAB + "\"more\": [\n"
-                        + TAB + TAB + "\"Something\",\n" + TAB
-                        + TAB + "\"else\"\n" + TAB + "]\n}",
-                prettyJSON("{\"Hello\": \"World\", \"more\": [\"Something\", \"else\", ]}"));
+        assertEquals("{\n" + TAB + "\"Hello\": \"World\",\n" + TAB + "\"more\": [\n"
+                + TAB + TAB + "\"Something\",\n" + TAB
+                + TAB + "\"else\"\n" + TAB + "]\n}", prettyJSON("{\"Hello\": \"World\", \"more\": [\"Something\", \"else\", ]}"));
     }
 
 }

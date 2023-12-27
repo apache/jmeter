@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.assertions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
@@ -64,8 +64,8 @@ public class XPath2AssertionTest {
         assertion.setXPathString(xPathQuery);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertFalse("When xpath2 conforms to xml, the result of assertion should be true ",res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertFalse(res.isFailure(), "When xpath2 conforms to xml, the result of assertion should be true ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
     }
     @Test
     public void testXPath2AssertionPath1Negated() throws FactoryConfigurationError {
@@ -76,8 +76,8 @@ public class XPath2AssertionTest {
         assertion.setNegated(true);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertTrue("When xpath2 conforms to xml, the result of assertion should be false ",res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertTrue(res.isFailure(), "When xpath2 conforms to xml, the result of assertion should be false ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
 
     }
     @Test
@@ -88,8 +88,8 @@ public class XPath2AssertionTest {
         assertion.setXPathString(xPathQuery);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertTrue("When xpath2 doesn't conform to xml, the result of assertion should be false ", res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertTrue(res.isFailure(), "When xpath2 doesn't conform to xml, the result of assertion should be false ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
     }
     @Test
     public void testXPath2AssertionPath2Negated() throws FactoryConfigurationError {
@@ -100,8 +100,8 @@ public class XPath2AssertionTest {
         assertion.setNegated(true);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertFalse("When xpath2 doesn't conform to xml, the result of assertion should be true ", res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertFalse(res.isFailure(), "When xpath2 doesn't conform to xml, the result of assertion should be true ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
     }
 
     @Test
@@ -112,8 +112,8 @@ public class XPath2AssertionTest {
         assertion.setXPathString(xPathQuery);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertFalse("When xpath2 conforms to xml, the result of assertion should be true ",res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertFalse(res.isFailure(), "When xpath2 conforms to xml, the result of assertion should be true ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
     }
     @Test
     public void testXPath2AssertionBool1Negated() throws FactoryConfigurationError {
@@ -124,8 +124,8 @@ public class XPath2AssertionTest {
         assertion.setNegated(true);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertTrue("When xpath2 conforms to xml, the result of assertion should be false ",res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertTrue(res.isFailure(), "When xpath2 conforms to xml, the result of assertion should be false ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
     }
     @Test
     public void testXPath2AssertionBool2() throws FactoryConfigurationError {
@@ -135,8 +135,8 @@ public class XPath2AssertionTest {
         assertion.setXPathString(xPathQuery);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertTrue("When xpath2 doesn't conforms to xml, the result of assertion should be false ",res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertTrue(res.isFailure(), "When xpath2 doesn't conforms to xml, the result of assertion should be false ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
     }
     @Test
     public void testXPath2AssertionBool2Negated() throws FactoryConfigurationError {
@@ -147,8 +147,8 @@ public class XPath2AssertionTest {
         assertion.setNegated(true);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertFalse("When xpath2 doesn't conforms to xml, the result of assertion should be true ",res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertFalse(res.isFailure(), "When xpath2 doesn't conforms to xml, the result of assertion should be true ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
     }
 
     @Test
@@ -162,8 +162,8 @@ public class XPath2AssertionTest {
         jmctx.setPreviousResult(result);
         assertion.setXPathString("/html/head/title");
         AssertionResult res = assertion.getResult(result);
-        assertFalse("When xpath conforms to xml, the result of assertion "
-                + "should be true ",res.isFailure());
+        assertFalse(res.isFailure(), "When xpath conforms to xml, the result of assertion "
+                + "should be true ");
         assertFalse(res.isError());
     }
     @Test
@@ -177,8 +177,8 @@ public class XPath2AssertionTest {
         jmctx.setPreviousResult(result);
         assertion.setXPathString("/html/head/tit");
         AssertionResult res = assertion.getResult(result);
-        assertTrue("When xpath doesn't conforms to xml, the result "
-                + "of assertion should be false ",res.isFailure());
+        assertTrue(res.isFailure(), "When xpath doesn't conforms to xml, the result "
+                + "of assertion should be false ");
         assertFalse(res.isError());
     }
     @Test
@@ -191,11 +191,10 @@ public class XPath2AssertionTest {
         jmctx.setPreviousResult(result);
         assertion.setXPathString("/html/head/tit");
         AssertionResult res = assertion.getResult(result);
-        assertTrue("When xpath doesn't conforms to xml, the result "
-                + "of assertion should be false ",res.isFailure());
+        assertTrue(res.isFailure(), "When xpath doesn't conforms to xml, the result "
+                + "of assertion should be false ");
         assertFalse(res.isError());
-        assertEquals("When the response data is empty, the result of assertion should be false",
-                "Response was null", res.getFailureMessage());
+        assertEquals("Response was null", res.getFailureMessage(), "When the response data is empty, the result of assertion should be false");
     }
     @Test
     public void testBadXpathFormat() throws FactoryConfigurationError {
@@ -205,7 +204,7 @@ public class XPath2AssertionTest {
         assertion.setXPathString(xPathQuery);
         response.setResponseData(xmlDoc, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertTrue("When format of xpath is wrong, the test should failed",res.isError());
+        assertTrue(res.isError(), "When format of xpath is wrong, the test should failed");
         assertTrue(res.getFailureMessage().contains("Exception occurred computing assertion with XPath"));
     }
 
@@ -219,8 +218,8 @@ public class XPath2AssertionTest {
         assertion.setXPathString(xPathQuery);
         response.setResponseData(data, "UTF-8");
         AssertionResult res = assertion.getResult(response);
-        assertFalse("When xpath2 conforms to xml, the result of assertion should be true ",res.isFailure());
-        assertFalse("When the format of xpath2 is right, assertion will run correctly ",res.isError());
+        assertFalse(res.isFailure(), "When xpath2 conforms to xml, the result of assertion should be true ");
+        assertFalse(res.isError(), "When the format of xpath2 is right, assertion will run correctly ");
     }
 
     @Test
@@ -230,10 +229,8 @@ public class XPath2AssertionTest {
         testDoc.appendChild(el);
         String namespaces = "a=http://www.w3.org/2003/01/geo/wgs84_pos# b=http://www.w3.org/2003/01/geo/wgs85_pos#";
         String xPathQuery = "//Employees/b:Employee[1]/a:ag";
-        assertTrue("When the user give namspaces, the result of validation should be true",
-                XPath2Panel.validXPath(xPathQuery, false, namespaces));
+        assertTrue(XPath2Panel.validXPath(xPathQuery, false, namespaces), "When the user give namspaces, the result of validation should be true");
         namespaces = "a=http://www.w3.org/2003/01/geo/wgs84_pos#";
-        assertFalse("When the user doesn't give namspaces, the result of validation should be false",
-                XPath2Panel.validXPath(xPathQuery, false, namespaces));
+        assertFalse(XPath2Panel.validXPath(xPathQuery, false, namespaces), "When the user doesn't give namspaces, the result of validation should be false");
     }
 }

@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.junit.categories.NeedGuiTests;

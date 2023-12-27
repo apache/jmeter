@@ -17,17 +17,18 @@
 
 package org.apache.jorphan.reflect;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.logging.log4j.LoggingException;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -62,8 +63,7 @@ public class TestClassFinder {
                 libDirs,
                 new Class<?>[] { Object.class },
                 true);
-        Assert.assertFalse(
-                findClassesThatExtend.stream().filter(s -> s.contains("$")).collect(Collectors.toList()).isEmpty());
+        assertFalse(findClassesThatExtend.stream().noneMatch(s -> s.contains("$")));
     }
 
     @Test
@@ -73,8 +73,7 @@ public class TestClassFinder {
                 libDirs,
                 new Class<?>[] { Exception.class },
                 false);
-        Assert.assertTrue(
-                findClassesThatExtend.stream().filter(s -> s.contains("$")).collect(Collectors.toList()).isEmpty());
+        assertTrue(findClassesThatExtend.stream().noneMatch(s -> s.contains("$")));
         MatcherAssert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
     }
 
@@ -87,9 +86,8 @@ public class TestClassFinder {
                 false,
                 "org.apache.log",
                 "core");
-        Assert.assertTrue(
-                findClassesThatExtend.stream().filter(s -> s.contains("core")).collect(Collectors.toList()).isEmpty());
-        Assert.assertFalse(findClassesThatExtend.isEmpty());
+        assertTrue(findClassesThatExtend.stream().noneMatch(s -> s.contains("core")));
+        assertFalse(findClassesThatExtend.isEmpty());
     }
 
     @Test
@@ -102,7 +100,7 @@ public class TestClassFinder {
                 null,
                 null,
                 true);
-        Assert.assertFalse(annotatedClasses.isEmpty());
+        assertFalse(annotatedClasses.isEmpty());
     }
 
     @Test
@@ -111,7 +109,7 @@ public class TestClassFinder {
         List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(
                 libDirs,
                 new Class[] { java.beans.Transient.class});
-        Assert.assertFalse(annotatedClasses.isEmpty());
+        assertFalse(annotatedClasses.isEmpty());
     }
 
     @Test
@@ -119,21 +117,21 @@ public class TestClassFinder {
         @SuppressWarnings({"deprecation", "unchecked"})
         List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(libDirs,
                 new Class[] { java.lang.Deprecated.class}, true);
-        Assert.assertTrue(annotatedClasses.stream().anyMatch(s->s.contains("$")));
+        assertTrue(annotatedClasses.stream().anyMatch(s->s.contains("$")));
     }
 
     @Test
     public void testFindClasses() throws IOException {
         @SuppressWarnings("deprecation")
         List<String> classes = ClassFinder.findClasses(libDirs, className -> true);
-        Assert.assertFalse(classes.isEmpty());
+        assertFalse(classes.isEmpty());
     }
 
     @Test
     public void testFindClassesNone() throws IOException {
         @SuppressWarnings("deprecation")
         List<String> classes = ClassFinder.findClasses(libDirs, className -> false);
-        Assert.assertTrue(classes.isEmpty());
+        assertTrue(classes.isEmpty());
     }
 
 }

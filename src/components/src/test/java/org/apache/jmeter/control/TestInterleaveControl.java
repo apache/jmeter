@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.control;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
@@ -126,7 +126,7 @@ public class TestInterleaveControl extends JMeterTestCase {
         while (counter < order.length) {
             TestElement sampler = null;
             while ((sampler = controller.next()) != null) {
-                assertEquals("failed on " + counter, order[counter], sampler.getName());
+                assertEquals(order[counter], sampler.getName(), "failed on " + counter);
                 counter++;
             }
         }
@@ -162,7 +162,7 @@ public class TestInterleaveControl extends JMeterTestCase {
         while (counter < order.length) {
             TestElement sampler = null;
             while ((sampler = controller.next()) != null) {
-                assertEquals("failed on" + counter, order[counter], sampler.getName());
+                assertEquals(order[counter], sampler.getName(), "failed on" + counter);
                 counter++;
             }
         }
@@ -193,7 +193,7 @@ public class TestInterleaveControl extends JMeterTestCase {
         while (counter < order.length) {
             TestElement sampler = null;
             while ((sampler = controller.next()) != null) {
-                assertEquals("failed on" + counter, order[counter], sampler.getName());
+                assertEquals(order[counter], sampler.getName(), "failed on" + counter);
                 counter++;
             }
         }
@@ -224,7 +224,7 @@ public class TestInterleaveControl extends JMeterTestCase {
         while (counter < order.length) {
             TestElement sampler = null;
             while ((sampler = controller.next()) != null) {
-                assertEquals("failed on" + counter, order[counter], sampler.getName());
+                assertEquals(order[counter], sampler.getName(), "failed on" + counter);
                 counter++;
             }
         }

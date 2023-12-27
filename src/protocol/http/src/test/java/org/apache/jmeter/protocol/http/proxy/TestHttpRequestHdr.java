@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -219,11 +219,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         String actualQueryString = s.getQueryString();
         String alternativeExpectedQueryString = queryString.replaceAll("%20", "+");
         if (!queryString.equals(actualQueryString) && !alternativeExpectedQueryString.equals(actualQueryString)) {
-            assertEquals(
-                    "%20 is the same as +, so expecting either " +
-                            queryString + " or " + alternativeExpectedQueryString,
-                    queryString,
-                    actualQueryString);
+            assertEquals(queryString, actualQueryString, "%20 is the same as +, so expecting either " +
+                    queryString + " or " + alternativeExpectedQueryString);
         }
         assertEquals("UTF-8", s.getContentEncoding());
 
@@ -269,11 +266,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(HTTPConstants.POST, s.getMethod());
         alternativeExpectedQueryString = expectedQueryString.replaceAll("%20", "+");
         if (!queryString.equals(actualQueryString) && !alternativeExpectedQueryString.equals(actualQueryString)) {
-            assertEquals(
-                    "%20 is the same as +, so expecting either " +
-                            queryString + " or " + alternativeExpectedQueryString,
-                    queryString,
-                    actualQueryString);
+            assertEquals(queryString, actualQueryString, "%20 is the same as +, so expecting either " +
+                    queryString + " or " + alternativeExpectedQueryString);
         }
         assertEquals("UTF-8", s.getContentEncoding());
         assertFalse(s.getDoMultipart());
@@ -334,7 +328,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testGetRequest, null);
         assertEquals(HTTPConstants.GET, s.getMethod());
-        assertEquals("Default content encoding is UTF-8", "UTF-8", s.getContentEncoding());
+        assertEquals("UTF-8", s.getContentEncoding(), "Default content encoding is UTF-8");
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(2, arguments.getArgumentCount());
@@ -400,7 +394,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testPostRequest, null);
         assertEquals(HTTPConstants.POST, s.getMethod());
-        assertEquals("Default content encoding is UTF-8", "UTF-8", s.getContentEncoding());
+        assertEquals("UTF-8", s.getContentEncoding(), "Default content encoding is UTF-8");
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(2, arguments.getArgumentCount());
@@ -549,8 +543,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         Header header;
         mgr.getHeaders();
         header = mgr.getHeader(0);
-        assertEquals("name",header.getName());
-        assertEquals("value",header.getValue());
+        assertEquals("name", header.getName());
+        assertEquals("value", header.getValue());
     }
 
 
@@ -564,8 +558,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         Header header;
         mgr.getHeaders();
         header = mgr.getHeader(0);
-        assertEquals("name",header.getName());
-        assertEquals("value",header.getValue());
+        assertEquals("name", header.getName());
+        assertEquals("value", header.getValue());
     }
 
     @Test

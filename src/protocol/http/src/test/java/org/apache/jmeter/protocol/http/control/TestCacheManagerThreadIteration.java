@@ -17,10 +17,10 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
@@ -309,19 +309,19 @@ public class TestCacheManagerThreadIteration {
     public void testCacheControlCleared() throws Exception {
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
-        assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertNull(getThreadCacheEntry(LOCAL_HOST), "Should not find entry");
         Header[] headers = new Header[1];
-        assertFalse("Should not find valid entry", this.cacheManager.inCache(url, headers));
+        assertFalse(this.cacheManager.inCache(url, headers), "Should not find valid entry");
         long start = System.currentTimeMillis();
         setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
-        assertNotNull("Before iternation, should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertTrue("Before iternation, should find valid entry", this.cacheManager.inCache(url, headers));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Before iternation, should find entry");
+        assertTrue(this.cacheManager.inCache(url, headers), "Before iternation, should find valid entry");
         this.cacheManager.setClearEachIteration(true);
         this.cacheManager.testIterationStart(null);
-        assertNull("After iterantion, should not find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("After iterantion, should not find valid entry", this.cacheManager.inCache(url, headers));
+        assertNull(getThreadCacheEntry(LOCAL_HOST), "After iterantion, should not find entry");
+        assertFalse(this.cacheManager.inCache(url, headers), "After iterantion, should not find valid entry");
     }
 
     @Test
@@ -333,7 +333,7 @@ public class TestCacheManagerThreadIteration {
         sampler.setCacheManager(cacheManager);
         sampler.setThreadContext(jmctx);
         boolean res = (boolean) cacheManager.getThreadContext().getVariables().getObject(SAME_USER);
-        assertTrue("When test different user on the different iternation, the cache should be cleared", res);
+        assertTrue(res, "When test different user on the different iternation, the cache should be cleared");
     }
 
     @Test
@@ -345,7 +345,7 @@ public class TestCacheManagerThreadIteration {
         sampler.setCacheManager(cacheManager);
         sampler.setThreadContext(jmctx);
         boolean res = (boolean) cacheManager.getThreadContext().getVariables().getObject(SAME_USER);
-        assertFalse("When test different user on the different iternation, the cache shouldn't be cleared", res);
+        assertFalse(res, "When test different user on the different iternation, the cache shouldn't be cleared");
     }
 
     @Test
@@ -355,20 +355,20 @@ public class TestCacheManagerThreadIteration {
         jmctx.setVariables(jmvars);
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
-        assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertNull(getThreadCacheEntry(LOCAL_HOST), "Should not find entry");
         Header[] headers = new Header[1];
-        assertFalse("Should not find valid entry", this.cacheManager.inCache(url, headers));
+        assertFalse(this.cacheManager.inCache(url, headers), "Should not find valid entry");
         long start = System.currentTimeMillis();
         setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         this.cacheManager.setThreadContext(jmctx);
         this.cacheManager.setControlledByThread(true);
-        assertNotNull("Before iternation, should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertTrue("Before iternation, should find valid entry", this.cacheManager.inCache(url, headers));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Before iternation, should find entry");
+        assertTrue(this.cacheManager.inCache(url, headers), "Before iternation, should find valid entry");
         this.cacheManager.testIterationStart(null);
-        assertNull("After iterantion, should not find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("After iterantion, should not find valid entry", this.cacheManager.inCache(url, headers));
+        assertNull(getThreadCacheEntry(LOCAL_HOST), "After iterantion, should not find entry");
+        assertFalse(this.cacheManager.inCache(url, headers), "After iterantion, should not find valid entry");
 
         //Controlled by cacheManager
         jmvars.putObject(SAME_USER, true);
@@ -378,13 +378,13 @@ public class TestCacheManagerThreadIteration {
         setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
-        assertNotNull("Before iternation, should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertTrue("Before iternation, should find valid entry", this.cacheManager.inCache(url, headers));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Before iternation, should find entry");
+        assertTrue(this.cacheManager.inCache(url, headers), "Before iternation, should find valid entry");
         this.cacheManager.setControlledByThread(false);
         this.cacheManager.setClearEachIteration(true);
         this.cacheManager.testIterationStart(null);
-        assertNull("After iterantion, should not find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("After iterantion, should not find valid entry", this.cacheManager.inCache(url, headers));
+        assertNull(getThreadCacheEntry(LOCAL_HOST), "After iterantion, should not find entry");
+        assertFalse(this.cacheManager.inCache(url, headers), "After iterantion, should not find valid entry");
     }
 
     @Test
@@ -394,20 +394,20 @@ public class TestCacheManagerThreadIteration {
         jmctx.setVariables(jmvars);
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
-        assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertNull(getThreadCacheEntry(LOCAL_HOST), "Should not find entry");
         Header[] headers = new Header[1];
-        assertFalse("Should not find valid entry", this.cacheManager.inCache(url, headers));
+        assertFalse(this.cacheManager.inCache(url, headers), "Should not find valid entry");
         long start = System.currentTimeMillis();
         setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
         this.cacheManager.setThreadContext(jmctx);
         this.cacheManager.setControlledByThread(true);
-        assertNotNull("Before iteration, should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertTrue("Before iteration, should find valid entry", this.cacheManager.inCache(url, headers));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Before iteration, should find entry");
+        assertTrue(this.cacheManager.inCache(url, headers), "Before iteration, should find valid entry");
         this.cacheManager.testIterationStart(null);
-        assertNotNull("After iteration, should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertTrue("After iteration, should find valid entry", this.cacheManager.inCache(url, headers));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "After iteration, should find entry");
+        assertTrue(this.cacheManager.inCache(url, headers), "After iteration, should find valid entry");
         // Controlled by cacheManager
         jmvars.putObject(SAME_USER, false);
         jmctx.setVariables(jmvars);
@@ -416,13 +416,13 @@ public class TestCacheManagerThreadIteration {
         setExpires(makeDate(Instant.ofEpochMilli(start)));
         setCacheControl("public, max-age=1");
         cacheResult(sampleResultOK);
-        assertNotNull("Before iteration, should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertTrue("Before iteration, should find valid entry", this.cacheManager.inCache(url, headers));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "Before iteration, should find entry");
+        assertTrue(this.cacheManager.inCache(url, headers), "Before iteration, should find valid entry");
         this.cacheManager.setControlledByThread(false);
         this.cacheManager.setClearEachIteration(false);
         this.cacheManager.testIterationStart(null);
-        assertNotNull("After iteration, should find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertTrue("After iteration, should find valid entry", this.cacheManager.inCache(url, headers));
+        assertNotNull(getThreadCacheEntry(LOCAL_HOST), "After iteration, should find entry");
+        assertTrue(this.cacheManager.inCache(url, headers), "After iteration, should find valid entry");
     }
 
 }

@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.protocol.http.config;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -66,7 +66,7 @@ public class UrlConfigTest extends JMeterTestCase {
     @Test
     public void testOverRide() {
         JMeterProperty jmp = partialConfig.getProperty(HTTPSamplerBase.DOMAIN);
-        assertTrue(jmp instanceof NullProperty);
+        assertInstanceOf(NullProperty.class, jmp);
         assertEquals(jmp, new NullProperty(HTTPSamplerBase.DOMAIN));
         partialConfig.addTestElement(defaultConfig);
         assertEquals(partialConfig.getPropertyAsString(HTTPSamplerBase.DOMAIN), "www.xerox.com");

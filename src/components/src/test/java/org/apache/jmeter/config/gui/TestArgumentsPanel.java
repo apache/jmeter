@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.config.gui;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;

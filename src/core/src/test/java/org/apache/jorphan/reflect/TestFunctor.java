@@ -17,7 +17,8 @@
 
 package org.apache.jorphan.reflect;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Map;
@@ -100,13 +101,13 @@ class TestFunctor extends JMeterTestCase {
         Test1 t1 = new Test1("t1");
         Test2 t2 = new Test2("t2");
         Test1a t1a = new Test1a("aa");
-        assertEquals("t1",f1.invoke(t1));
+        assertEquals("t1", f1.invoke(t1));
         assertThrows(JMeterError.class, () -> f1.invoke(t2));
-        assertEquals("t2",f2.invoke(t2));
-        assertEquals("1a:aa.",f1a.invoke(t1a));
+        assertEquals("t2", f2.invoke(t2));
+        assertEquals("1a:aa.", f1a.invoke(t1a));
         assertThrows(JMeterError.class, () -> f1a.invoke(t1));
         // OK (currently) to invoke using sub-class
-        assertEquals("1a:aa.",f1.invoke(t1a));
+        assertEquals("1a:aa.", f1.invoke(t1a));
     }
 
     @Test
@@ -114,9 +115,9 @@ class TestFunctor extends JMeterTestCase {
         Functor f = new Functor("getString",new Class[]{String.class});
         Functor f2 = new Functor("getString");// Args will be provided later
         Test1 t1 = new Test1("t1");
-        assertEquals("x1",f.invoke(t1,new String[]{"x1"}));
+        assertEquals("x1", f.invoke(t1,new String[]{"x1"}));
         assertThrows(JMeterError.class, () -> f.invoke(t1));
-        assertEquals("x2",f2.invoke(t1,new String[]{"x2"}));
+        assertEquals("x2", f2.invoke(t1,new String[]{"x2"}));
         assertThrows(JMeterError.class, () -> f2.invoke(t1));
     }
 
@@ -125,8 +126,8 @@ class TestFunctor extends JMeterTestCase {
         Test1 t1 = new Test1("t1");
         Test2 t2 = new Test2("t2");
         Functor f1 = new Functor(t1,"getName");
-        assertEquals("t1",f1.invoke(t1));
-        assertEquals("t1",f1.invoke(t2)); // should use original object
+        assertEquals("t1", f1.invoke(t1));
+        assertEquals("t1", f1.invoke(t2)); // should use original object
     }
 
     // Check how Class definition behaves
@@ -136,23 +137,23 @@ class TestFunctor extends JMeterTestCase {
         Test1 t1a = new Test1a("t1a");
         Test2 t2 = new Test2("t2");
         Functor f1 = new Functor(HasName.class,"getName");
-        assertEquals("t1",f1.invoke(t1));
-        assertEquals("1a:t1a.",f1.invoke(t1a));
-        assertEquals("t2",f1.invoke(t2));
+        assertEquals("t1", f1.invoke(t1));
+        assertEquals("1a:t1a.", f1.invoke(t1a));
+        assertEquals("t2", f1.invoke(t2));
         assertThrows(IllegalStateException.class, () -> f1.invoke());
         Functor f2 = new Functor(HasString.class,"getString");
-        assertEquals("xyz",f2.invoke(t2,new String[]{"xyz"}));
+        assertEquals("xyz", f2.invoke(t2,new String[]{"xyz"}));
         assertThrows(JMeterError.class, () -> f2.invoke(t1,new String[]{"xyz"}));
         Functor f3 = new Functor(t2,"getString");
-        assertEquals("xyz",f3.invoke(t2,new Object[]{"xyz"}));
+        assertEquals("xyz", f3.invoke(t2,new Object[]{"xyz"}));
 
         Properties p = new Properties();
         p.put("Name","Value");
         Functor fk = new Functor(Map.Entry.class,"getKey");
         Functor fv = new Functor(Map.Entry.class,"getValue");
         Object o = p.entrySet().iterator().next();
-        assertEquals("Name",fk.invoke(o));
-        assertEquals("Value",fv.invoke(o));
+        assertEquals("Name", fk.invoke(o));
+        assertEquals("Value", fv.invoke(o));
     }
 
     @Test

@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;

@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,16 +26,12 @@ public class TestBaseParser {
 
     @Test
     public void testReusableCache() throws Exception {
-        assertSame(
-                BaseParser.getParser(ReusableParser.class.getCanonicalName()),
-                BaseParser.getParser(ReusableParser.class.getCanonicalName()));
+        assertSame(BaseParser.getParser(ReusableParser.class.getCanonicalName()), BaseParser.getParser(ReusableParser.class.getCanonicalName()));
     }
 
     @Test
     public void testNotReusableCache() throws Exception {
-        assertNotSame(
-                BaseParser.getParser(NotReusableParser.class.getCanonicalName()),
-                BaseParser.getParser(NotReusableParser.class.getCanonicalName()));
+        assertNotSame(BaseParser.getParser(NotReusableParser.class.getCanonicalName()), BaseParser.getParser(NotReusableParser.class.getCanonicalName()));
     }
 
 }

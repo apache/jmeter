@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,21 +26,21 @@ public class TestHTTPFileArg {
     @Test
     public void testConstructors() throws Exception {
         HTTPFileArg file = new HTTPFileArg();
-        assertEquals("no parameter failure", "", file.getPath());
-        assertEquals("no parameter failure", "", file.getParamName());
-        assertEquals("no parameter failure", "", file.getMimeType());
+        assertEquals("", file.getPath(), "no parameter failure");
+        assertEquals("", file.getParamName(), "no parameter failure");
+        assertEquals("", file.getMimeType(), "no parameter failure");
         file = new HTTPFileArg("path");
-        assertEquals("single parameter failure", "path", file.getPath());
-        assertEquals("single parameter failure", "", file.getParamName());
-        assertEquals("single parameter failure", "application/octet-stream", file.getMimeType());
+        assertEquals("path", file.getPath(), "single parameter failure");
+        assertEquals("", file.getParamName(), "single parameter failure");
+        assertEquals("application/octet-stream", file.getMimeType(), "single parameter failure");
         file = new HTTPFileArg("path", "param", "mimetype");
-        assertEquals("three parameter failure", "path", file.getPath());
-        assertEquals("three parameter failure", "param", file.getParamName());
-        assertEquals("three parameter failure", "mimetype", file.getMimeType());
+        assertEquals("path", file.getPath(), "three parameter failure");
+        assertEquals("param", file.getParamName(), "three parameter failure");
+        assertEquals("mimetype", file.getMimeType(), "three parameter failure");
         HTTPFileArg file2 = new HTTPFileArg(file);
-        assertEquals("copy constructor failure", "path", file2.getPath());
-        assertEquals("copy constructor failure", "param", file2.getParamName());
-        assertEquals("copy constructor failure", "mimetype", file2.getMimeType());
+        assertEquals("path", file2.getPath(), "copy constructor failure");
+        assertEquals("param", file2.getParamName(), "copy constructor failure");
+        assertEquals("mimetype", file2.getMimeType(), "copy constructor failure");
     }
 
     @Test

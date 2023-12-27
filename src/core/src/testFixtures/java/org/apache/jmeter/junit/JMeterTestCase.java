@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.junit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
@@ -144,7 +145,7 @@ public abstract class JMeterTestCase {
     }
 
     public static void assertPrimitiveEquals(boolean expected, boolean actual) {
-        org.junit.Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     /**

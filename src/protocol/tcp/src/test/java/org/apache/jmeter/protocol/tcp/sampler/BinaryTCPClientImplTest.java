@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.protocol.tcp.sampler;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -42,12 +42,12 @@ public class BinaryTCPClientImplTest {
 
         ba = BinaryTCPClientImpl.hexStringToByteArray("0f107F8081ff");
         assertEquals(6, ba.length);
-        assertEquals(15,   ba[0]);
-        assertEquals(16,   ba[1]);
-        assertEquals(127,  ba[2]);
+        assertEquals(15, ba[0]);
+        assertEquals(16, ba[1]);
+        assertEquals(127, ba[2]);
         assertEquals(-128, ba[3]);
         assertEquals(-127, ba[4]);
-        assertEquals(-1,   ba[5]);
+        assertEquals(-1, ba[5]);
         try {
             ba = BinaryTCPClientImpl.hexStringToByteArray("0f107f8081ff1");// odd chars
             fail("Expected IllegalArgumentException");
@@ -80,8 +80,8 @@ public class BinaryTCPClientImplTest {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         bi.write(os, "3132333435"); // '12345'
         os.close();
-        assertEquals("12345",os.toString("ISO-8859-1"));
+        assertEquals("12345", os.toString("ISO-8859-1"));
         ByteArrayInputStream bis = new ByteArrayInputStream(os.toByteArray());
-        assertEquals("3132333435",bi.read(bis, new SampleResult()));
+        assertEquals("3132333435", bi.read(bis, new SampleResult()));
     }
 }

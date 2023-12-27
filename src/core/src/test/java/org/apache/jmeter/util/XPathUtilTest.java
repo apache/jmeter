@@ -18,8 +18,8 @@
 package org.apache.jmeter.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
@@ -74,7 +74,7 @@ public class XPathUtilTest {
         selector.setContextItem(p.newDocumentBuilder().build(new StreamSource(new StringReader(xmlDoc))));
         XdmValue nodes = selector.evaluate();
         XdmItem item = nodes.itemAt(0);
-        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",item.toString());
+        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>", item.toString());
     }
 
     @Test
@@ -86,41 +86,41 @@ public class XPathUtilTest {
         int matchNumber = 3;
 
         XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-        assertEquals("Manager",matchStrings.get(0));
+        assertEquals("Manager", matchStrings.get(0));
 
         matchNumber = 0;
         xPathQuery="//Employees/Employee[1]/age:ag";
         fragment = true;
         matchStrings.clear();
         XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",matchStrings.get(0));
-        assertEquals(1,matchStrings.size());
+        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>", matchStrings.get(0));
+        assertEquals(1, matchStrings.size());
 
         matchNumber = -1;
         xPathQuery="//Employees/Employee/age:ag";
         matchStrings.clear();
         XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>",matchStrings.get(0));
-        assertEquals(4,matchStrings.size());
+        assertEquals("<age:ag xmlns:age=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">29</age:ag>", matchStrings.get(0));
+        assertEquals(4, matchStrings.size());
 
         fragment = false;
         matchStrings.clear();
         XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-        assertEquals("29",matchStrings.get(0));
-        assertEquals(4,matchStrings.size());
+        assertEquals("29", matchStrings.get(0));
+        assertEquals(4, matchStrings.size());
 
         matchStrings.clear();
         xPathQuery="regtsgwsdfstgsdf";
         XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-        assertEquals(new ArrayList<String>(),matchStrings);
-        assertEquals(0,matchStrings.size());
+        assertEquals(new ArrayList<String>(), matchStrings);
+        assertEquals(0, matchStrings.size());
 
         matchStrings.clear();
         xPathQuery="//Employees/Employee[1]/age:ag";
         matchNumber = 555;
         XPathUtil.putValuesForXPathInListUsingSaxon(xmlDoc, xPathQuery, matchStrings, fragment, matchNumber, namespaces);
-        assertEquals(new ArrayList<String>(),matchStrings);
-        assertEquals(0,matchStrings.size());
+        assertEquals(new ArrayList<String>(), matchStrings);
+        assertEquals(0, matchStrings.size());
     }
 
     static Stream<Arguments> namespaceData() {
@@ -140,7 +140,7 @@ public class XPathUtilTest {
     @MethodSource("namespaceData")
     public void testnamespacesParse(String namespaces, String key, String value, int position) {
         List<String[]> test = XPathUtil.namespacesParse(namespaces);
-        assertEquals(key,test.get(position)[0]);
+        assertEquals(key, test.get(position)[0]);
         assertEquals(value, test.get(position)[1]);
     }
 
@@ -203,8 +203,8 @@ public class XPathUtilTest {
                 false, false, false, false, false);
         AssertionResult res = new AssertionResult("test");
         XPathUtil.computeAssertionResult(res, testDoc, xpathquery, isNegated);
-        assertEquals("test isError", isError, res.isError());
-        assertEquals("test isFailure", isFailure, res.isFailure());
+        assertEquals(isError, res.isError(), "test isError");
+        assertEquals(isFailure, res.isFailure(), "test isFailure");
     }
 
     @Test

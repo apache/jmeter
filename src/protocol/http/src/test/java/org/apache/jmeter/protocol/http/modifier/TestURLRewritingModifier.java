@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.protocol.http.modifier;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -274,8 +274,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             context.setPreviousResult(response);
             newMod.process();
             Arguments args = sampler.getArguments();
-            assertEquals("For case i=" + i, "myId",
-                    ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
+            assertEquals("myId", ((Argument) args.getArguments().get(0).getObjectValue()).getValue(), "For case i=" + i);
         }
     }
 
@@ -315,8 +314,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             context.setPreviousResult(response);
             newMod.process();
             Arguments args = sampler.getArguments();
-            assertEquals("For case i=" + i, "myId",
-                    ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
+            assertEquals("myId", ((Argument) args.getArguments().get(0).getObjectValue()).getValue(), "For case i=" + i);
         }
     }
 
@@ -339,8 +337,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             context.setPreviousResult(response);
             newMod.process();
             Arguments args = sampler.getArguments();
-            assertEquals("For case i=" + i, html[i * 2 + 1],
-                    ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
+            assertEquals(html[i * 2 + 1], ((Argument) args.getArguments().get(0).getObjectValue()).getValue(), "For case i=" + i);
         }
     }
 }

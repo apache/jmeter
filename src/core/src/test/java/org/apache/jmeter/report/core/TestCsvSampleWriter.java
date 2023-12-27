@@ -17,15 +17,15 @@
 
 package org.apache.jmeter.report.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.StringWriter;
 import java.io.Writer;
 
 import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +44,7 @@ public class TestCsvSampleWriter {
 
     @Test
     public void testCsvSampleWriterConstructorWithNull() throws Exception {
-        Assertions.assertThrows(
+        assertThrows(
                 NullPointerException.class,
                 () -> new CsvSampleWriter(null)
         );

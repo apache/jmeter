@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.assertions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -77,8 +77,8 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure " + res.getFailureMessage());
-        assertFalse("Should not be an error", res.isError());
-        assertFalse("Should not be a failure", res.isFailure());
+        assertFalse(res.isError(), "Should not be an error");
+        assertFalse(res.isFailure(), "Should not be a failure");
     }
 
     @Test

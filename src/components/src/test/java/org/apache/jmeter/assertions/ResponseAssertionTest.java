@@ -17,11 +17,12 @@
 
 package org.apache.jmeter.assertions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -115,14 +116,13 @@ public class ResponseAssertionTest {
         assertion.addTestString("[]");
         result = assertion.getResult(sample);
         assertNotNull(result.getFailureMessage());
-        assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
-        assertTrue("Not expecting error: "+result.getFailureMessage(),result.isError());
+        assertNotEquals("Response was null", result.getFailureMessage(), "Should not be: Response was null");
+        assertTrue(result.isError(), "Not expecting error: "+result.getFailureMessage());
 
         assertion.setCustomFailureMessage("Custom failure message");
         result = assertion.getResult(sample);
-        assertTrue("Did not get expected error: "+result.getFailureMessage(),result.isError());
-        assertFalse("Failure message must not be custom failure message for error",
-                "Custom failure message".equals(result.getFailureMessage()));
+        assertTrue(result.isError(), "Did not get expected error: "+result.getFailureMessage());
+        assertNotEquals("Custom failure message", result.getFailureMessage(), "Failure message must not be custom failure message for error");
 
     }
 
@@ -311,17 +311,17 @@ public class ResponseAssertionTest {
 //TODO - need a lot more tests
 
     private void assertPassed() throws Exception{
-        assertNull(result.getFailureMessage(),result.getFailureMessage());
-        assertFalse("Not expecting error: "+result.getFailureMessage(),result.isError());
-        assertFalse("Not expecting error",result.isError());
-        assertFalse("Not expecting failure",result.isFailure());
+        assertNull(result.getFailureMessage(), result.getFailureMessage());
+        assertFalse(result.isError(), "Not expecting error: "+result.getFailureMessage());
+        assertFalse(result.isError(), "Not expecting error");
+        assertFalse(result.isFailure(), "Not expecting failure");
     }
 
     private void assertFailed() throws Exception{
         assertNotNull(result.getFailureMessage());
-        assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
-        assertFalse("Not expecting error: "+result.getFailureMessage(),result.isError());
-        assertTrue("Expecting failure",result.isFailure());
+        assertNotEquals("Response was null", result.getFailureMessage(), "Should not be: Response was null");
+        assertFalse(result.isError(), "Not expecting error: "+result.getFailureMessage());
+        assertTrue(result.isFailure(), "Expecting failure");
 
     }
     private AtomicInteger failed;

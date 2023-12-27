@@ -17,9 +17,8 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,18 +28,19 @@ import java.nio.file.Files;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestAuthManager extends JMeterTestCase {
 
     @Test
     public void testHttp() throws Exception {
-        assertTrue(AuthManager.isSupportedProtocol(new URL("http:")));
+        Assertions.assertTrue(AuthManager.isSupportedProtocol(new URL("http:")));
     }
 
     @Test
     public void testHttps() throws Exception {
-        assertTrue(AuthManager.isSupportedProtocol(new URL("https:")));
+        Assertions.assertTrue(AuthManager.isSupportedProtocol(new URL("https:")));
     }
 
     @Test

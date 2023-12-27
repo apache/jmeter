@@ -17,9 +17,10 @@
 
 package org.apache.jmeter.save;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -86,8 +87,10 @@ public class TestSaveService extends JMeterTestCase {
     @Test
     public void testPROPVERSION() {
         assertEquals(
-                "Property Version mismatch, ensure you update SaveService#PROPVERSION field with _version property value from saveservice.properties",
-                SaveService.PROPVERSION, SaveService.getPropertyVersion());
+                SaveService.PROPVERSION,
+                SaveService.getPropertyVersion(),
+                "Property Version mismatch, ensure you update SaveService#PROPVERSION field with _version property value from saveservice.properties"
+        );
     }
 
     @Test

@@ -17,9 +17,12 @@
 
 package org.apache.jmeter.engine;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -53,10 +56,10 @@ public class TestTreeCloner extends JMeterTestCase {
         TreeCloner cloner = new TreeCloner();
         original.traverse(cloner);
         ListedHashTree newTree = cloner.getClonedTree();
-        assertTrue(original != newTree);
+        assertNotSame(original, newTree);
         assertEquals(original.size(), newTree.size());
         assertEquals(original.getTree(original.getArray()[0]).size(), newTree.getTree(newTree.getArray()[0]).size());
-        assertTrue(original.getArray()[0] != newTree.getArray()[0]);
+        assertNotSame(original.getArray()[0], newTree.getArray()[0]);
         assertEquals(((GenericController) original.getArray()[0]).getName(), ((GenericController) newTree
                 .getArray()[0]).getName());
         assertSame(original.getTree(original.getArray()[0]).getArray()[1], newTree.getTree(newTree.getArray()[0])
@@ -64,14 +67,14 @@ public class TestTreeCloner extends JMeterTestCase {
         TestPlan clonedTestPlan = (TestPlan) newTree.getArray()[1];
         clonedTestPlan.setRunningVersion(true);
         clonedTestPlan.recoverRunningVersion();
-        assertTrue(!plan.getUserDefinedVariablesAsProperty().isRunningVersion());
+        assertFalse(plan.getUserDefinedVariablesAsProperty().isRunningVersion());
         assertTrue(clonedTestPlan.getUserDefinedVariablesAsProperty().isRunningVersion());
         Arguments vars = (Arguments) plan.getUserDefinedVariablesAsProperty().getObjectValue();
         PropertyIterator iter = ((CollectionProperty) vars.getProperty(Arguments.ARGUMENTS)).iterator();
         while (iter.hasNext()) {
             JMeterProperty argProp = iter.next();
-            assertTrue(!argProp.isRunningVersion());
-            assertTrue(argProp.getObjectValue() instanceof Argument);
+            assertFalse(argProp.isRunningVersion());
+            assertInstanceOf(Argument.class, argProp.getObjectValue());
             Argument arg = (Argument) argProp.getObjectValue();
             arg.setValue("yahoo");
             assertEquals("yahoo", arg.getValue());

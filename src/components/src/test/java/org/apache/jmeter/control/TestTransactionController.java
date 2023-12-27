@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.sampler.DebugSampler;
@@ -28,7 +30,6 @@ import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
@@ -75,9 +76,9 @@ public class TestTransactionController extends JMeterTestCase {
         thread.setOnErrorStopThread(true);
         thread.run();
 
-        Assertions.assertEquals(1, listener.getEvents().size(),
+        assertEquals(1, listener.getEvents().size(),
                 "Must one transaction samples with parent debug sample");
-        Assertions.assertEquals("Number of samples in transaction : 1, number of failing samples : 1",
+        assertEquals("Number of samples in transaction : 1, number of failing samples : 1",
                 listener.getEvents().get(0).getResult().getResponseMessage());
     }
 }
