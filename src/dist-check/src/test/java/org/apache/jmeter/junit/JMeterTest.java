@@ -47,6 +47,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.gui.ObsoleteGui;
+import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.dsl.DslPrinterTraverser;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
@@ -374,8 +375,14 @@ public class JMeterTest extends JMeterTestCaseJUnit implements Describable {
         assertEquals("GUI-CLASS: Failed on " + name, name, el.getPropertyAsString(TestElement.GUI_CLASS));
 
         assertEquals("NAME: Failed on " + name, guiItem.getName(), el.getName());
+        if (StringUtils.isEmpty(el.getName())) {
+            fail("Name of the element must not be blank. Gui class " + name + ", element class " + el.getClass().getName());
+        }
         assertEquals("TEST-CLASS: Failed on " + name, el.getClass().getName(), el
                 .getPropertyAsString(TestElement.TEST_CLASS));
+        if (guiItem.getClass() != TestFragmentControllerGui.class) {
+            assertTrue("Should be enabled by default: " + name, el.isEnabled());
+        }
         TestElement el2 = guiItem.createTestElement();
         el.setName("hey, new name!:");
         el.setProperty("NOT", "Shouldn't be here");
