@@ -37,6 +37,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xbill.DNS.ARecord;
@@ -110,6 +111,11 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         DNSCacheManager clone = (DNSCacheManager) super.clone();
         clone.resolver = createResolver();
         return clone;
+    }
+
+    @VisibleForTesting
+    Resolver getResolver() {
+        return resolver;
     }
 
     private Resolver createResolver() {
