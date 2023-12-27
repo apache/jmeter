@@ -211,7 +211,6 @@
     <trusted-key id='60200ac4ae761f1614d6c46766d68daa073be985' group='org.slf4j' />
     <trusted-key id='2b1042677fd8190c7b9fc0dc2161d72e7dcd4258' group='org.sonarsource.scanner.api' />
     <trusted-key id='f1182e81c792928921dbcab4cfca4a29d26468de' group='org.sonarsource.scanner.api' />
-    <trusted-key id='76e94e8ff0ab5af3b6f8366972fefd1572eb75e1' group='org.spockframework' />
     <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='org.springframework' />
     <trusted-key id='e2acb037933cdeaab7bf77d49a2c7a98e457c53d' group='org.springframework' />
     <trusted-key id='7cd52b5a8295137c88fb5748dddafa7674e54418' group='org.testng' />

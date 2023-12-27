@@ -56,7 +56,6 @@ dependencies {
         api("org.objenesis:objenesis:3.3")
         api("org.openjdk.jmh:jmh-core:1.37")
         api("org.openjdk.jmh:jmh-generator-annprocess:1.37")
-        api("org.spockframework:spock-core:2.3-groovy-3.0")
         api("org.springframework:spring-beans:4.3.30.RELEASE")
         api("org.springframework:spring-context:4.3.30.RELEASE")
     }

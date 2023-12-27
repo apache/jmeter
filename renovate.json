@@ -114,12 +114,6 @@
       "allowedVersions": "< 2.0.0"
     },
     {
-      "matchPackagePrefixes": ["org.spockframework"],
-      "groupName": "org.spockframework",
-      "description": "TODO: change when we upgrade to Groovy 4.0",
-      "allowedVersions": "/.*-groovy-3.0/"
-    },
-    {
       "matchPackagePatterns": ["^src:protocol"],
       "enabled": false
     }

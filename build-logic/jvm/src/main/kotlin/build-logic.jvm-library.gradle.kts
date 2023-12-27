@@ -19,10 +19,6 @@ plugins {
     id("build-logic.java-library")
 }
 
-if (file("src/main/groovy").isDirectory || file("src/test/groovy").isDirectory) {
-    apply(plugin = "build-logic.groovy")
-}
-
 if (file("src/main/kotlin").isDirectory || file("src/test/kotlin").isDirectory) {
     apply(plugin = "build-logic.kotlin")
 }

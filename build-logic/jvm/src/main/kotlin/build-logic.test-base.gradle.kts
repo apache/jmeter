@@ -61,20 +61,4 @@ tasks.configureEach<Test> {
     passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
     // Enable testing ByteBuddy with EA Java versions
     passProperty("net.bytebuddy.experimental", "true")
-    // Spock tests use cglib proxies that access ClassLoader.defineClass reflectively,
-    // So we pass --add-opens
-    // See https://github.com/apache/jmeter/pull/5763
-    jvmArgumentProviders += AddOpensArgumentsProvider(javaLauncher.map { it.metadata.languageVersion })
-}
-
-class AddOpensArgumentsProvider(
-    @Input val javaLanguageVersion: Provider<JavaLanguageVersion>
-): CommandLineArgumentProvider {
-    override fun asArguments(): Iterable<String> =
-        if (javaLanguageVersion.get().asInt() <= 8) {
-            // Jave 1.8 does not need add-opens, so we omit it
-            listOf()
-        } else {
-            listOf("--add-opens=java.base/java.lang=ALL-UNNAMED")
-        }
 }

@@ -91,7 +91,6 @@ dependencies {
     testFixturesImplementation(testFixtures(projects.src.core))
     testFixturesImplementation("junit:junit")
     testImplementation("io.mockk:mockk")
-    testFixturesImplementation("org.spockframework:spock-core")
 }
 
 if (!buildParameters.enableJavaFx) {
