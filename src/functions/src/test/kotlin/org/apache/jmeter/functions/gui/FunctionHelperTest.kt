@@ -19,33 +19,41 @@ package org.apache.jmeter.functions.gui
 
 import org.apache.jmeter.config.Argument
 import org.apache.jmeter.config.Arguments
+import org.apache.jmeter.test.gui.DisabledIfHeadless
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-import spock.lang.IgnoreIf
-import spock.lang.Specification
-import spock.lang.Unroll
+class FunctionHelperTest {
+    data class BuildCallCase(val functionName: String, val parameters: List<String>, val combined: String)
 
-@Unroll
-class FunctionHelperSpec extends Specification {
+    companion object {
+        @JvmStatic
+        fun buildCallCases() = listOf(
+            BuildCallCase("fname", listOf(), "\${fname}"),
+            BuildCallCase("fname", listOf("a"), "\${fname(a)}"),
+            BuildCallCase("fname", listOf("a,b"), "\${fname(a\\,b)}"),
+            BuildCallCase("fname", listOf("a,b,c"), "\${fname(a\\,b\\,c)}"),
+            BuildCallCase("fname", listOf("a", "b"), "\${fname(a,b)}"),
+            BuildCallCase("fname", listOf("a,b", "c"), "\${fname(a\\,b,c)}"),
+            BuildCallCase("fname", listOf("\\\${f(a,b)}"), "\${fname(\\\${f(a\\,b)})}"),
+            BuildCallCase("fname", listOf("\${f(a,b)},c,\${g(d,e)}", "h"), "\${fname(\${f(a,b)}\\,c\\,\${g(d,e)},h)}"),
+            BuildCallCase("fname", listOf("a,\${f(b,\${g(c,d)},e)},f", "h"), "\${fname(a\\,\${f(b,\${g(c,d)},e)}\\,f,h)}"),
+        )
+    }
 
-    @IgnoreIf({ System.properties['java.awt.headless'] as boolean })
-    def "construct correct call string for parameters #parameters"() {
-        setup:
-            def functionHelper = new FunctionHelper()
-        when:
-            def args = new Arguments()
-            args.setArguments(parameters.collect { new Argument("dummy${it}", it) })
-        then:
-            functionHelper.buildFunctionCallString(functionName, args).toString() == combined
-        where:
-            functionName | parameters                         | combined
-            "fname"      | []                                 | "\${fname}"
-            "fname"      | ["a"]                              | "\${fname(a)}"
-            "fname"      | ["a,b"]                            | "\${fname(a\\,b)}"
-            "fname"      | ["a,b,c"]                          | "\${fname(a\\,b\\,c)}"
-            "fname"      | ["a", "b"]                         | "\${fname(a,b)}"
-            "fname"      | ["a,b", "c"]                       | "\${fname(a\\,b,c)}"
-            "fname"      | ["\\\${f(a,b)}"]                   | "\${fname(\\\${f(a\\,b)})}"
-            "fname"      | ["\${f(a,b)},c,\${g(d,e)}", "h"]   | "\${fname(\${f(a,b)}\\,c\\,\${g(d,e)},h)}"
-            "fname"      | ["a,\${f(b,\${g(c,d)},e)},f", "h"] | "\${fname(a\\,\${f(b,\${g(c,d)},e)}\\,f,h)}"
+    @DisabledIfHeadless
+    @ParameterizedTest
+    @MethodSource("buildCallCases")
+    fun `construct correct call string for parameters #parameters`(case: BuildCallCase) {
+        val args = Arguments()
+        args.setArguments(case.parameters.map { Argument("dummy$it", it) })
+
+        assertEquals(
+            case.combined,
+            FunctionHelper.buildFunctionCallString(case.functionName, args).toString()
+        ) {
+            "buildFunctionCallString(${case.functionName}, ${case.parameters})"
+        }
     }
 }

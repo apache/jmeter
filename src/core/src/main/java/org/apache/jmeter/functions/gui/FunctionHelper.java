@@ -272,7 +272,8 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         return sb.toString();
     }
 
-    private static String buildFunctionCallString(String functionName, Arguments args) {
+    @VisibleForTesting
+    static String buildFunctionCallString(String functionName, Arguments args) {
         StringBuilder functionCall = new StringBuilder("${");
         functionCall.append(functionName);
         if (args.getArguments().size() > 0) {

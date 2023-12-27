@@ -21,52 +21,59 @@ import org.apache.jmeter.engine.util.CompoundVariable
 import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assumptions.assumeTrue
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import java.util.Locale
 
-import spock.lang.IgnoreIf
-import spock.lang.Specification
-import spock.lang.Unroll
+class ChangeCaseTest {
+    data class ExecuteCase(val input: String, val mode: String, val output: String)
 
-@Unroll
-class ChangeCaseSpec extends Specification {
-
-    // See https://github.com/apache/jmeter/issues/5723
-    @IgnoreIf({ 'i'.toUpperCase() != 'I' || 'I'.toLowerCase() != 'i' })
-    def "convert '#input' using mode #mode to '#output'"() {
-        given:
-            def changeCase = new ChangeCase()
-            def jMCtx = JMeterContextService.getContext()
-            def result = new SampleResult()
-            result.setResponseData("dummy data", null)
-            jMCtx.setVariables(new JMeterVariables())
-            jMCtx.setPreviousResult(result)
-        when:
-            changeCase.setParameters([new CompoundVariable(input), new CompoundVariable(mode)])
-        then:
-            output == changeCase.execute(result, null)
-        where:
-            input               | mode               | output
-            "simple"            | "lower"            | "simple"
-            "simple"            | "upper"            | "SIMPLE"
-            "simple"            | "capitalize"       | "Simple"
-            "simple"            | ""                 | "SIMPLE"
-            " with space "      | "lower"            | " with space "
-            " with space "      | "upper"            | " WITH SPACE "
-            " with space "      | "capitalize"       | " with space "
-            "#_with-signs."     | "lower"            | "#_with-signs."
-            "#_with-signs."     | "upper"            | "#_WITH-SIGNS."
-            "#_with-signs."     | "capitalize"       | "#_with-signs."
-            "m4u file"          | "lower"            | "m4u file"
-            "m4u file"          | "upper"            | "M4U FILE"
-            "m4u file"          | "capitalize"       | "M4u file"
-            "WITH Ümläuts"      | "lower"            | "with ümläuts"
-            "WITH Ümläuts"      | "upper"            | "WITH ÜMLÄUTS"
-            "WITH Ümläuts"      | "capitalize"       | "WITH Ümläuts"
-            "+ - special space" | "lower"            | "+ - special space"
-            "+ - special space" | "upper"            | "+ - SPECIAL SPACE"
-            "+ - special space" | "capitalize"       | "+ - special space"
-            " "                 | "lower"            | " "
-            " "                 | "upper"            | " "
-            " "                 | "capitalize"       | " "
+    companion object {
+        @JvmStatic
+        fun executeCases() = listOf(
+            ExecuteCase("simple", "lower", "simple"),
+            ExecuteCase("simple", "upper", "SIMPLE"),
+            ExecuteCase("simple", "capitalize", "Simple"),
+            ExecuteCase("simple", "", "SIMPLE"),
+            ExecuteCase(" with space ", "lower", " with space "),
+            ExecuteCase(" with space ", "upper", " WITH SPACE "),
+            ExecuteCase(" with space ", "capitalize", " with space "),
+            ExecuteCase("#_with-signs.", "lower", "#_with-signs."),
+            ExecuteCase("#_with-signs.", "upper", "#_WITH-SIGNS."),
+            ExecuteCase("#_with-signs.", "capitalize", "#_with-signs."),
+            ExecuteCase("m4u file", "lower", "m4u file"),
+            ExecuteCase("m4u file", "upper", "M4U FILE"),
+            ExecuteCase("m4u file", "capitalize", "M4u file"),
+            ExecuteCase("WITH Ümläuts", "lower", "with ümläuts"),
+            ExecuteCase("WITH Ümläuts", "upper", "WITH ÜMLÄUTS"),
+            ExecuteCase("WITH Ümläuts", "capitalize", "WITH Ümläuts"),
+            ExecuteCase("+ - special space", "lower", "+ - special space"),
+            ExecuteCase("+ - special space", "upper", "+ - SPECIAL SPACE"),
+            ExecuteCase("+ - special space", "capitalize", "+ - special space"),
+            ExecuteCase(" ", "lower", " "),
+            ExecuteCase(" ", "upper", " "),
+            ExecuteCase(" ", "capitalize", " "),
+        ).also {
+            assumeTrue(
+                "i".uppercase(Locale.getDefault()) == "I" && "I".lowercase(Locale.getDefault()) == "i",
+                "ChangeCase does not behave well in tr_TR locale, see https://github.com/apache/jmeter/issues/5723"
+            )
+        }
     }
 
+    @ParameterizedTest
+    @MethodSource("executeCases")
+    fun changeCase(case: ExecuteCase) {
+        val changeCase = ChangeCase()
+        val jMCtx = JMeterContextService.getContext()
+        val result = SampleResult()
+        result.setResponseData("dummy data", null)
+        jMCtx.variables = JMeterVariables()
+        jMCtx.previousResult = result
+        changeCase.setParameters(listOf(CompoundVariable(case.input), CompoundVariable(case.mode)))
+
+        assertEquals(case.output, changeCase.execute(result, null))
+    }
 }

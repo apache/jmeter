@@ -15,51 +15,57 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.functions;
-
-import java.util.concurrent.CountDownLatch
+package org.apache.jmeter.functions
 
 import org.apache.jmeter.engine.util.CompoundVariable
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
+import kotlin.concurrent.thread
 
-import spock.lang.Specification
-import spock.lang.Unroll
+class IterationCounterTest {
 
-@Unroll
-class IterationCounterSpec extends Specification {
+    @Test
+    fun `Counter per thread counts for each thread`() {
+        val context = JMeterContextService.getContext()
+        context.variables = JMeterVariables()
+        val counter = IterationCounter()
+        counter.setParameters(listOf(CompoundVariable("true"), CompoundVariable("var")))
 
-    def "Counter per thread counts for each thread"() {
-        given:
-            def context = JMeterContextService.getContext()
-            context.setVariables(new JMeterVariables())
-            def counter = new IterationCounter()
-            counter.setParameters(Arrays.asList(new CompoundVariable("true"), new CompoundVariable("var")))
-        when:
-            Thread.start({ (1..10).each { counter.execute(null, null) } }).join()
-            (1..10).each { counter.execute(null, null) }
-        then:
-            context.getVariables().get("var") == "10"
+        thread(start = true) {
+            repeat(7) { counter.execute(null, null) }
+        }.join()
+
+        repeat(10) { counter.execute(null, null) }
+
+        Assertions.assertEquals("10", context.variables.get("var")) {
+            "Only 10 executions happended in the current thread, so expecting 10. " +
+                "Note there were 7 iterations in a different thread, however the counter should be per-thread"
+        }
     }
 
-    def "global Counter counts for all threads"() {
-        given:
-            def context = JMeterContextService.getContext()
-            context.setVariables(new JMeterVariables())
-            def counter = new IterationCounter()
-            counter.setParameters(Arrays.asList(new CompoundVariable("false"), new CompoundVariable("var")))
-            def nrOfThreads = 100
-            def latch = new CountDownLatch(nrOfThreads)
-        when:
-            (1..nrOfThreads).each {
-                Thread.start({
-                    (1..1000).each { counter.execute(null, null) }
-                    latch.countDown()
-                })
+    @Test
+    fun `global Counter counts for all threads`() {
+        val context = JMeterContextService.getContext()
+        context.variables = JMeterVariables()
+        val counter = IterationCounter()
+        counter.setParameters(listOf(CompoundVariable("false"), CompoundVariable("var")))
+        val nrOfThreads = 100
+        val latch = CountDownLatch(nrOfThreads)
+
+        repeat(nrOfThreads) {
+            thread(start = true) {
+                repeat(1000) { counter.execute(null, null) }
+                latch.countDown()
             }
-            latch.await()
-            counter.execute(null, null)
-        then:
-            context.getVariables().get("var") == "100001"
+        }
+        latch.await()
+        counter.execute(null, null)
+
+        Assertions.assertEquals("100001", context.variables.get("var")) {
+            "$nrOfThreads should have increased the var by 1000, plus one in main thread"
+        }
     }
 }
