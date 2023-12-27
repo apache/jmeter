@@ -28,4 +28,5 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind")
 
     testImplementation(testFixtures(projects.src.core))
+    testImplementation("io.mockk:mockk")
 }

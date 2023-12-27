@@ -17,10 +17,19 @@
 
 package org.apache.jmeter.protocol.bolt.sampler
 
+import io.mockk.every
+import io.mockk.justRun
+import io.mockk.mockk
 import org.apache.jmeter.protocol.bolt.config.BoltConnectionElement
 import org.apache.jmeter.samplers.Entry
+import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.neo4j.driver.Driver
 import org.neo4j.driver.Record
 import org.neo4j.driver.Result
@@ -29,166 +38,156 @@ import org.neo4j.driver.exceptions.ClientException
 import org.neo4j.driver.summary.ResultSummary
 import org.neo4j.driver.summary.SummaryCounters
 
-import spock.lang.Specification
+class BoltSamplerTest {
+    lateinit var sampler: BoltSampler
+    lateinit var entry: Entry
+    lateinit var session: Session
 
-class BoltSamplerSpec extends Specification {
-
-    BoltSampler sampler
-    Entry entry
-    Session session
-
-    def setup() {
-        sampler = new BoltSampler()
-        entry = new Entry()
-        def driver = Mock(Driver)
-        def boltConfig = new BoltConnectionElement()
-        def variables = new JMeterVariables()
+    @BeforeEach
+    fun setup() {
+        sampler = BoltSampler()
+        entry = Entry()
+        session = mockk<Session> {
+            justRun { close() }
+        }
+        val driver = mockk<Driver> {
+            every { session(any()) } returns session
+        }
+        val boltConfig = BoltConnectionElement()
+        val variables = JMeterVariables()
         // ugly but could not find a better way to pass the driver to the sampler...
         variables.putObject(BoltConnectionElement.BOLT_CONNECTION, driver)
-        JMeterContextService.getContext().setVariables(variables)
+        JMeterContextService.getContext().variables = variables
         entry.addConfigElement(boltConfig)
-        session = Mock(Session)
-        driver.session(_) >> session
     }
 
-    def "should execute return success on successful query"() {
-        given:
-            sampler.setCypher("MATCH x")
-            session.run("MATCH x", [:], _) >> getEmptyQueryResult()
-        when:
-            def response = sampler.sample(entry)
-        then:
-            response.isSuccessful()
-            response.isResponseCodeOK()
-            def str = response.getResponseDataAsString()
-            str.contains("Summary:")
-            str.endsWith("Records: Skipped")
-            response.getSampleCount() == 1
-            response.getErrorCount() == 0
-            //  The sampler was executed, so start and end times should be set
-            response.getStartTime() > 0
-            response.getEndTime() > 0
+    @Test
+    fun `should execute return success on successful query`() {
+        sampler.cypher = "MATCH x"
+        every {
+            session.run("MATCH x", mapOf(), any())
+        } returns getEmptyQueryResult()
+        val response = sampler.sample(entry)
+
+        assertSuccessResult(response, "Records: Skipped")
     }
 
-    def "should not display results by default"() {
-        given:
-            sampler.setCypher("MATCH x")
-            session.run("MATCH x", [:], _) >> getPopulatedQueryResult()
-        when:
-            def response = sampler.sample(entry)
-        then:
-            response.isSuccessful()
-            response.isResponseCodeOK()
-            def str = response.getResponseDataAsString()
-            str.contains("Summary:")
-            str.endsWith("Records: Skipped")
-            response.getSampleCount() == 1
-            response.getErrorCount() == 0
+    private fun assertSuccessResult(response: SampleResult, responseDataTail: String) {
+        val str = response.responseDataAsString
+        assertTrue(str.contains("Summary:"), "response contains 'Summary:', got '$str'")
+        assertTrue(str.endsWith(responseDataTail), "response ends with '$responseDataTail', got '$str'")
+        assertTrue(response.isSuccessful, ".isSuccessful()")
+        assertTrue(response.isResponseCodeOK, ".isResponseCodeOK()")
+        assertEquals(1, response.sampleCount, ".sampleCount")
+        assertEquals(0, response.errorCount, ".errorCount")
+        assertSamplerStarted(response)
     }
 
-    def "should display results if asked"() {
-        given:
-            sampler.setCypher("MATCH x")
-            sampler.setRecordQueryResults(true)
-            session.run("MATCH x", [:], _) >> getPopulatedQueryResult()
-        when:
-            def response = sampler.sample(entry)
-        then:
-            response.isSuccessful()
-            response.isResponseCodeOK()
-            def str = response.getResponseDataAsString()
-            str.contains("Summary:")
-            str.endsWith("Mock for type 'Record'")
-            response.getSampleCount() == 1
-            response.getErrorCount() == 0
-            //  The sampler was executed, so start and end times should be set
-            response.getStartTime() > 0
-            response.getEndTime() > 0
+    private fun assertSamplerStarted(response: SampleResult) {
+        assertTrue(response.startTime > 0, "The sampler was executed, so start and end times should be set")
+        assertTrue(response.endTime > 0, "The sampler was executed, so start and end times should be set")
     }
 
-    def "should return error on failed query"() {
-        given:
-            sampler.setCypher("MATCH x")
-            session.run("MATCH x", [:], _) >> { throw new RuntimeException("a message") }
-        when:
-            def response = sampler.sample(entry)
-        then:
-            !response.isSuccessful()
-            !response.isResponseCodeOK()
-            response.getResponseCode() == "500"
-            def str = response.getResponseDataAsString()
-            str.contains("a message")
-            response.getSampleCount() == 1
-            response.getErrorCount() == 1
-            //  The sampler was executed, so start and end times should be set
-            response.getStartTime() > 0
-            response.getEndTime() > 0
+    private fun assertFailureResult(
+        response: SampleResult,
+        responseCode: String,
+        message: String,
+        samplerStarted: Boolean
+    ) {
+        val str = response.responseDataAsString
+        assertFalse(str.contains("Summary:"), "response contains 'Summary:', got $str")
+        assertTrue(str.contains(message), "response contains '$message', got $str")
+        assertFalse(response.isSuccessful, ".isSuccessful()")
+        assertFalse(response.isResponseCodeOK, ".isResponseCodeOK()")
+        assertEquals(responseCode, response.responseCode, ".responseCode")
+        assertEquals(1, response.sampleCount, ".sampleCount")
+        assertEquals(1, response.errorCount, ".errorCount")
+        if (samplerStarted) {
+            assertSamplerStarted(response)
+        } else {
+            assertSamplerNotStarted(response)
+        }
     }
 
-    def "should return error on invalid parameters"() {
-        given:
-            sampler.setCypher("MATCH x")
-            sampler.setParams("{invalid}")
-        when:
-            def response = sampler.sample(entry)
-        then:
-            !response.isSuccessful()
-            !response.isResponseCodeOK()
-            response.getResponseCode() == "500"
-            def str = response.getResponseDataAsString()
-            str.contains("Unexpected character")
-            response.getSampleCount() == 1
-            response.getErrorCount() == 1
-            // The sampler fails at parameter preparation, so no time is recorded
-            response.getStartTime() == 0
-            response.getEndTime() == 0
-            response.getTime() == 0
+    private fun assertSamplerNotStarted(response: SampleResult) {
+        assertEquals(0, response.startTime, "The sampler fails at parameter preparation, so no time is recorded")
+        assertEquals(0, response.endTime, "The sampler fails at parameter preparation, so no time is recorded")
     }
 
-    def "should return db error code"() {
-        given:
-            sampler.setCypher("MATCH x")
-            session.run("MATCH x", [:], _) >> { throw new ClientException("a code", "a message") }
-        when:
-            def response = sampler.sample(entry)
-        then:
-            response.getResponseCode() == "a code"
+    @Test
+    fun `should not display results by default`() {
+        sampler.cypher = "MATCH x"
+        every {
+            session.run("MATCH x", mapOf(), any())
+        } returns getPopulatedQueryResult()
+        val response = sampler.sample(entry)
+
+        assertSuccessResult(response, "Records: Skipped")
     }
 
-    def "should ignore invalid timeout values"() {
-        given:
-            sampler.setCypher("MATCH x")
-            sampler.setTxTimeout(-1)
-            session.run("MATCH x", [:], _) >> getEmptyQueryResult()
-        when:
-            def response = sampler.sample(entry)
-        then:
-            response.isSuccessful()
-            response.isResponseCodeOK()
-            def str = response.getResponseDataAsString()
-            str.contains("Summary:")
-            str.endsWith("Records: Skipped")
-            response.getSampleCount() == 1
-            response.getErrorCount() == 0
+    @Test
+    fun `should display results if asked`() {
+        sampler.cypher = "MATCH x"
+        sampler.isRecordQueryResults = true
+        every {
+            session.run("MATCH x", mapOf(), any())
+        } returns getPopulatedQueryResult()
+        val response = sampler.sample(entry)
+        assertSuccessResult(response, "Mock for type 'Record'")
     }
 
-    def getEmptyQueryResult() {
-        def queryResult = Mock(Result)
-        def summary = Mock(ResultSummary)
-        queryResult.consume() >> summary
-        SummaryCounters counters = Mock(SummaryCounters)
-        summary.counters() >> counters
-        return queryResult
+    @Test
+    fun `should return error on failed query`() {
+        sampler.cypher = "MATCH x"
+        every { session.run("MATCH x", mapOf(), any()) } throws RuntimeException("a message")
+        val response = sampler.sample(entry)
+
+        assertFailureResult(response, "500", "a message", samplerStarted = true)
     }
 
-    def getPopulatedQueryResult() {
-        def queryResult = Mock(Result)
-        def summary = Mock(ResultSummary)
-        def list = [Mock(Record), Mock(Record), Mock(Record)]
-        queryResult.consume() >> summary
-        queryResult.list() >> list
-        SummaryCounters counters = Mock(SummaryCounters)
-        summary.counters() >> counters
-        return queryResult
+    @Test
+    fun `should return error on invalid parameters`() {
+        sampler.cypher = "MATCH x"
+        sampler.params = "{invalid}"
+        val response = sampler.sample(entry)
+
+        assertFailureResult(response, "500", "Unexpected character", samplerStarted = false)
     }
+
+    @Test
+    fun `should return db error code`() {
+        sampler.cypher = "MATCH x"
+        every { session.run("MATCH x", mapOf(), any()) } throws ClientException("a code", "a message")
+        val response = sampler.sample(entry)
+        assertEquals("a code", response.responseCode)
+    }
+
+    @Test
+    fun `should ignore invalid timeout values`() {
+        sampler.cypher = "MATCH x"
+        sampler.txTimeout = -1
+        every { session.run("MATCH x", mapOf(), any()) } returns getEmptyQueryResult()
+        val response = sampler.sample(entry)
+        assertSuccessResult(response, "Records: Skipped")
+    }
+
+    private fun getEmptyQueryResult() =
+        mockk<Result> {
+            every { consume() } returns mockk<ResultSummary> {
+                every { counters() } returns mockk<SummaryCounters>(relaxed = true)
+            }
+        }
+
+    @Suppress("LABEL_NAME_CLASH")
+    private fun getPopulatedQueryResult() =
+        mockk<Result> {
+            every { consume() } returns mockk<ResultSummary> {
+                every { counters() } returns mockk<SummaryCounters>(relaxed = true)
+            }
+            every { list() } returns listOf(
+                mockk<Record> { every { this@mockk.toString() } returns "Mock for type 'Record'" },
+                mockk<Record> { every { this@mockk.toString() } returns "Mock for type 'Record'" },
+                mockk<Record> { every { this@mockk.toString() } returns "Mock for type 'Record'" },
+            )
+        }
 }
