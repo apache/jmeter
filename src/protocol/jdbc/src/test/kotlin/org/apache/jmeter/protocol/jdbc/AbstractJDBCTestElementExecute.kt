@@ -15,21 +15,10 @@
  * limitations under the License.
  */
 
-plugins {
-    id("build-logic.jvm-published-library")
-}
+package org.apache.jmeter.protocol.jdbc
 
-dependencies {
-    api(projects.src.core)
+import org.apache.jmeter.samplers.SampleResult
+import java.sql.Connection
 
-    implementation("org.apache.commons:commons-dbcp2")
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils, ObjectUtils")
-    }
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
-
-    testImplementation(testFixtures(projects.src.core))
-    testImplementation("io.mockk:mockk")
-}
+fun AbstractJDBCTestElement.executeForTest(conn: Connection, sampleResult: SampleResult) =
+    execute(conn, sampleResult)
