@@ -18,121 +18,138 @@
 package org.apache.jmeter.engine.util
 
 import org.apache.jmeter.samplers.SampleResult
-import org.apache.jmeter.testelement.property.JMeterProperty
+import org.apache.jmeter.testelement.property.FunctionProperty
 import org.apache.jmeter.testelement.property.StringProperty
+import org.apache.jmeter.threads.JMeterContext
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
-
-import spock.lang.Specification
-import spock.lang.Unroll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 /**
  * To run this test stand-alone, ensure that ApacheJMeter_functions.jar is on the classpath,
  * as it is needed to resolve the functions.
  */
-class PackageSpec extends Specification {
+class PackageTest {
 
-    def transformer
-    def jmctx
+    lateinit var transformer: ReplaceStringWithFunctions
+    lateinit var jmctx: JMeterContext
 
-    def setup() {
-        def variables = ["my_regex": ".*",
-                         "server"  : "jakarta.apache.org"]
-        transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables)
-        jmctx = JMeterContextService.getContext()
-        jmctx.setVariables(new JMeterVariables())
-        jmctx.setSamplingStarted(true)
-        def result = new SampleResult()
-        result.setResponseData('<a>hello world</a> costs: $3.47,$5.67', null)
-        jmctx.setPreviousResult(result)
-        jmctx.getVariables().put("server", "jakarta.apache.org")
-        jmctx.getVariables().put("my_regex", ".*")
-    }
+    data class TransformCase(
+        val propertyValue: String,
+        val stringValue: String,
+        val type: Class<*> = StringProperty::class.java,
+    )
 
-    def testFunctionParse1() {
-        given:
-            StringProperty prop = new StringProperty("date",
-                    '${__javaScript((new Date().getDate() / 100).toString()' +
-                            '.substr(${__javaScript(1+1,d\\,ay)}\\,2),heute)}')
-        when:
-            JMeterProperty newProp = transformer.transformValue(prop)
-            newProp.setRunningVersion(true)
-        then:
-            newProp.getClass().getName() == "org.apache.jmeter.testelement.property.FunctionProperty"
-            newProp.recoverRunningVersion(null)
-            Integer.parseInt(newProp.getStringValue()) >= 0
-            jmctx.getVariables().getObject("d,ay") == "2"
-    }
-
-    @Unroll
-    def "test parsing StringProperty '#propertyValue' == '#stringValue'"() {
-        given:
-            StringProperty prop = new StringProperty("a", propertyValue)
-        when:
-            JMeterProperty newProp = transformer.transformValue(prop)
-            newProp.setRunningVersion(true)
-        then:
-            newProp.getClass().getName() == 'org.apache.jmeter.testelement.property.StringProperty'
-            newProp.getStringValue() == stringValue
-        where:
-            propertyValue    | stringValue
-            ""               | ""
-            "just some text" | "just some text"
-    }
-
-    @Unroll
-    def "test parsing FunctionProperty '#propertyValue' == '#stringValue'"() {
-        given:
-            StringProperty prop = new StringProperty("a", propertyValue)
-        when:
-            JMeterProperty newProp = transformer.transformValue(prop)
-            newProp.setRunningVersion(true)
-        then:
-            newProp.getClass().getName() == 'org.apache.jmeter.testelement.property.FunctionProperty'
-            newProp.getStringValue() == stringValue
-        where:
-            propertyValue                                                                | stringValue
-            '${__regexFunction(<a>(.*)</a>,$1$)}'                                        | "hello world"
-            'It should say:\\${${__regexFunction(<a>(.+o)(.*)</a>,$1$$2$)}}'             | 'It should say:${hello world}'
-            '${non - existing; function}'                                                | '${non - existing; function}'
-            '${server}'                                                                  | "jakarta.apache.org"
-            '${__regexFunction(<([a-z]*)>,$1$)}'                                         | "a"
-            '${__regexFunction((\\\\$\\d+\\.\\d+),$1$)}'                                 | '$3.47'
-            '${__regexFunction(([$]\\d+\\.\\d+),$1$)}'                                   | '$3.47'
-            '${__regexFunction((\\\\\\$\\d+\\.\\d+\\,\\\\$\\d+\\.\\d+),$1$)}'            | '$3.47,$5.67'
-
+    companion object {
+        @JvmStatic
+        fun transformCases() = listOf(
+            TransformCase("", ""),
+            TransformCase("just some text", "just some text"),
+            TransformCase("\${__regexFunction(<a>(.*)</a>,$1$)}", "hello world", type = FunctionProperty::class.java),
+            TransformCase(
+                "It should say:\\\${\${__regexFunction(<a>(.+o)(.*)</a>,$1$$2$)}}",
+                "It should say:\${hello world}",
+                type = FunctionProperty::class.java,
+            ),
+            TransformCase("\${non - existing; function}", "\${non - existing; function}", type = FunctionProperty::class.java),
+            TransformCase("\${server}", "jakarta.apache.org", type = FunctionProperty::class.java),
+            TransformCase("\${__regexFunction(<([a-z]*)>,$1$)}", "a", type = FunctionProperty::class.java),
+            TransformCase("\${__regexFunction((\\\\$\\d+\\.\\d+),$1$)}", "$3.47", type = FunctionProperty::class.java),
+            TransformCase("\${__regexFunction(([$]\\d+\\.\\d+),$1$)}", "$3.47", type = FunctionProperty::class.java),
+            TransformCase("\${__regexFunction((\\\\\\$\\d+\\.\\d+\\,\\\\$\\d+\\.\\d+),$1$)}", "$3.47,$5.67", type = FunctionProperty::class.java),
             // Nested examples
-            '${__regexFunction(<a>(${my_regex})</a>,$1$)}'                               | "hello world"
-            '${__regexFunction(<a>(${my_regex})</a>,$1$)}${__regexFunction(<a>(.),$1$)}' | "hello worldh"
-    }
-
-    @Unroll
-    def "Backslashes are removed before escaped dollar, comma and backslash with FunctionProperty"() {
-        // N.B. See Bug 46831 which wanted to changed the behaviour of \$
-        // It's too late now, as this would invalidate some existing test plans,
-        // so document the current behaviour with some more tests.
-        given:
-            StringProperty prop = new StringProperty("a", propertyValue)
-        when:
-            JMeterProperty newProp = transformer.transformValue(prop)
-            newProp.setRunningVersion(true)
-        then:
-            newProp.getClass().getName() == 'org.apache.jmeter.testelement.property.' + className
-            newProp.getStringValue() == stringValue
-
-        where:
-            propertyValue | className        | stringValue
+            TransformCase("\${__regexFunction(<a>(\${my_regex})</a>,$1$)}", "hello world", type = FunctionProperty::class.java),
+            TransformCase(
+                "\${__regexFunction(<a>(\${my_regex})</a>,$1$)}\${__regexFunction(<a>(.),$1$)}",
+                "hello worldh",
+                type = FunctionProperty::class.java,
+            ),
+            // N.B. See Bug 46831 which wanted to changed the behaviour of \$
+            // It's too late now, as this would invalidate some existing test plans,
+            // so document the current behaviour with some more tests.
             // With no variable reference
-            '\\$a'        | "StringProperty" | '\\$a'
-            '\\,'         | "StringProperty" | '\\,'
-            '\\\\'        | "StringProperty" | '\\\\'
-            '\\'          | "StringProperty" | '\\'
-            '\\x'         | "StringProperty" | '\\x'
-        and: // With variable reference
-            '\\$a \\, \\\\ \\ \\x ${server} \\$b\\,z'       | "FunctionProperty" | '$a , \\ \\ \\x jakarta.apache.org $b,z'
-            '\\$a \\, \\\\ \\ \\x ${__missing(a)} \\$b\\,z' | "FunctionProperty" | '$a , \\ \\ \\x ${__missing(a)} $b,z'
-            '\\$a \\, \\\\ \\ \\x ${missing}      \\$b\\,z' | "FunctionProperty" | '$a , \\ \\ \\x ${missing}      $b,z'
-            '\\$a \\, \\\\ ${ z'                            | "FunctionProperty" | '$a , \\  z'
+            TransformCase("\\\$a", "\\\$a"),
+            TransformCase("\\,", "\\,"),
+            TransformCase("\\\\", "\\\\"),
+            TransformCase("\\", "\\"),
+            TransformCase("\\x", "\\x"),
+            TransformCase(
+                "\\\$a \\, \\\\ \\ \\x \${server} \\\$b\\,z",
+                "\$a , \\ \\ \\x jakarta.apache.org \$b,z",
+                type = FunctionProperty::class.java
+            ),
+            TransformCase(
+                "\\\$a \\, \\\\ \\ \\x \${__missing(a)} \\\$b\\,z",
+                "\$a , \\ \\ \\x \${__missing(a)} \$b,z",
+                type = FunctionProperty::class.java
+            ),
+            TransformCase(
+                "\\\$a \\, \\\\ \\ \\x \${missing}      \\\$b\\,z",
+                "\$a , \\ \\ \\x \${missing}      \$b,z",
+                type = FunctionProperty::class.java
+            ),
+            TransformCase("\\\$a \\, \\\\ \${ z", "\$a , \\  z", type = FunctionProperty::class.java),
+        )
     }
 
+    @BeforeEach
+    fun setup() {
+        val variables = mapOf(
+            "my_regex" to ".*",
+            "server" to "jakarta.apache.org"
+        )
+        transformer = ReplaceStringWithFunctions(CompoundVariable(), variables)
+        jmctx = JMeterContextService.getContext()
+        jmctx.variables = JMeterVariables()
+        jmctx.isSamplingStarted = true
+        val result = SampleResult()
+        result.setResponseData("<a>hello world</a> costs: $3.47,$5.67", null)
+        jmctx.previousResult = result
+        jmctx.variables.put("server", "jakarta.apache.org")
+        jmctx.variables.put("my_regex", ".*")
+    }
+
+    @Test
+    fun testFunctionParse1() {
+        val prop = StringProperty(
+            "date",
+            "\${__javaScript((new Date().getDate() / 100).toString()" +
+                ".substr(\${__javaScript(1+1,d\\,ay)}\\,2),heute)}"
+        )
+        val newProp = transformer.transformValue(prop)
+        newProp.setRunningVersion(true)
+
+        assertEquals(FunctionProperty::class.java, newProp::class.java, "class of property $prop after transformation")
+        newProp.recoverRunningVersion(null)
+        newProp.getStringValue().let {
+            if (it?.toIntOrNull().let { it == null || it < 0 }) {
+                fail("Property value should be positive integer, but was: $it")
+            }
+        }
+        assertEquals("2", jmctx.variables.getObject("d,ay"), "Variable 'd,ay' value")
+    }
+
+    @ParameterizedTest
+    @MethodSource("transformCases")
+    fun transformValue(case: TransformCase) {
+        val prop = StringProperty("a", case.propertyValue)
+        val newProp = transformer.transformValue(prop)
+        newProp.setRunningVersion(true)
+
+        assertEquals(
+            case.stringValue,
+            newProp.getStringValue(),
+            "stringValue of property with input ${case.propertyValue} (should parse as ${case.type})"
+        )
+        assertEquals(
+            case.type,
+            newProp::class.java,
+            "class of property with input ${case.propertyValue} after transformation"
+        )
+    }
 }

@@ -17,18 +17,23 @@
 
 package org.apache.jmeter.gui.util
 
-import org.apache.jmeter.junit.spock.JMeterSpec
+import org.apache.jmeter.junit.JMeterTestCase
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Test
 
-class MenuFactorySpec extends JMeterSpec {
+class MenuFactoryTest : JMeterTestCase() {
 
-    def "ensure each menu has something in it"() {
-        expect:
-            MenuFactory.menuMap.size() == 12
-            MenuFactory.menuMap.every { !it.value.isEmpty() }
+    @Test
+    fun `ensure each menu has something in it`() {
+        assertEquals(12, MenuFactory.getMenuMap().size, "MenuFactory.getMenuMap().size")
+        MenuFactory.getMenuMap().forEach { (group, items) ->
+            assertNotEquals(0, items.size, "MenuFactory.getMenuMap()[$group].size")
+        }
     }
 
-    def "default add menu has expected item count"() {
-        expect:
-            MenuFactory.createDefaultAddMenu().itemCount == 6 + 3 // items + separators
+    @Test
+    fun `default add menu has expected item count`() {
+        assertEquals(6 + 3, MenuFactory.createDefaultAddMenu().itemCount, "items + separators")
     }
 }

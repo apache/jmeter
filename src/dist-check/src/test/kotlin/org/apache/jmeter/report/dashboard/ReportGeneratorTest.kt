@@ -17,17 +17,21 @@
 
 package org.apache.jmeter.report.dashboard
 
-import java.net.URL
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.jmeter.junit.JMeterTestCase
+import org.apache.jmeter.util.JMeterUtils
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.api.parallel.Isolated
+import java.io.File
 import java.nio.file.Paths
 
-import org.apache.commons.io.FileUtils
-import org.apache.jmeter.junit.spock.JMeterSpec
-import org.apache.jmeter.util.JMeterUtils
-
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-
-class ReportGeneratorSpec extends JMeterSpec{
+@Isolated("modifies shared properties")
+class ReportGeneratorTest : JMeterTestCase() {
+    @TempDir
+    lateinit var testDirectory: File
 
     /**
      * Combine the given path parts to one path with the correct path separator of the current platform.
@@ -36,72 +40,34 @@ class ReportGeneratorSpec extends JMeterSpec{
      * @param paths to be combined (should contain no path separators)
      * @return combined path as string
      */
-    def combine(String... paths) {
-       Paths.get(JMeterUtils.getJMeterBinDir(), paths).toString()
+    fun combine(vararg paths: String) =
+        Paths.get(JMeterUtils.getJMeterBinDir(), *paths).toString()
+
+    @Test
+    fun `check that report generation succeeds and statistics json are generated`() {
+        val mapper = ObjectMapper()
+        val expected = ReportGenerator::class.java.getResource("/org/apache/jmeter/gui/report/HTMLReportExpect.json")
+        val expectedRoot = mapper.readTree(expected)
+
+        JMeterUtils.setProperty("jmeter.reportgenerator.outputdir", testDirectory.absolutePath)
+        val reportGenerator = ReportGenerator(
+            combine("testfiles", "HTMLReportTestFile.csv"), null
+        )
+        reportGenerator.generate()
+        val statistics = File(testDirectory, "statistics.json")
+        val actualRoot = mapper.readTree(statistics)
+
+        assertEquals(expectedRoot, actualRoot, "test report json file")
     }
 
-    def "check that report generation succeeds and statistics.json are generated"(){
-        setup:
-            File testDirectory = new File(combine("testfiles", "testReport"))
-            if(testDirectory.exists()) {
-                if (testDirectory.list().length>0) {
-                    FileUtils.cleanDirectory(testDirectory)
-                }
-            } else {
-                testDirectory.mkdir()
-            }
-            ObjectMapper mapper = new ObjectMapper()
-            URL expected = ReportGenerator.class.getResource("/org/apache/jmeter/gui/report/HTMLReportExpect.json");
-            JsonNode expectedRoot = null;
-            expected.withReader { jsonFileReader ->
-                expectedRoot = mapper.readTree(jsonFileReader)
-            }
-        when:
-            JMeterUtils.setProperty("jmeter.reportgenerator.outputdir", testDirectory.getAbsolutePath())
-            ReportGenerator reportGenerator = new ReportGenerator(
-                    combine("testfiles", "HTMLReportTestFile.csv"),null)
+    @Test
+    fun `check that report generation fails when format does not match and error is reported`() {
+        assertThrows<GenerationException> {
+            val reportGenerator = ReportGenerator(
+                combine("testfiles", "HTMLReportFalseTestFile.csv"), null
+            )
             reportGenerator.generate()
-            File statistics = new File(combine("testfiles", "testReport", "statistics.json"))
-            JsonNode actualRoot = null;
-            if (statistics.exists()) {
-                statistics.withReader { jsonFileReader ->
-                    actualRoot = mapper.readTree(jsonFileReader)
-                }
-            }
-        then:
-            statistics.exists()
-            expectedRoot != null
-            expectedRoot == actualRoot
-        cleanup:
-            if(testDirectory.exists()) {
-                if (testDirectory.list().length>0) {
-                    FileUtils.cleanDirectory(testDirectory)
-                }
-            }
-    }
-
-    def "check that report generation fails when format does not match and error is reported"(){
-        setup:
-            File testDirectory = new File(combine("testfiles", "testReportThatShouldBeEmpty"))
-            if(testDirectory.exists()) {
-                if (testDirectory.list().length>0) {
-                    FileUtils.cleanDirectory(testDirectory)
-                }
-            } else {
-                testDirectory.mkdir()
-            }
-        when:
-            ReportGenerator reportGenerator = new ReportGenerator(
-                combine("testfiles", "HTMLReportFalseTestFile.csv"), null)
-            reportGenerator.generate()
-        then:
-            thrown(GenerationException)
-            testDirectory.list().length == 0
-        cleanup:
-            if(testDirectory.exists()) {
-                if (testDirectory.list().length>0) {
-                    FileUtils.cleanDirectory(testDirectory)
-                }
-            }
+        }
+        assertEquals("[]", testDirectory.list()?.contentDeepToString(), "testDirectory contents")
     }
 }

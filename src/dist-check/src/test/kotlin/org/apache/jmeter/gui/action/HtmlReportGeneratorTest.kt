@@ -17,121 +17,141 @@
 
 package org.apache.jmeter.gui.action
 
-import java.net.URL
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.jmeter.junit.JMeterTestCase
+import org.apache.jmeter.util.JMeterUtils
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import java.io.File
 import java.nio.file.Paths
 import java.text.MessageFormat
 
-import org.apache.commons.io.FileUtils
-import org.apache.jmeter.junit.spock.JMeterSpec
-import org.apache.jmeter.util.JMeterUtils
+class HtmlReportGeneratorTest : JMeterTestCase() {
+    @TempDir
+    lateinit var testDirectory: File
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
+    data class CheckArgumentsCase(val csvPath: String, val userPropertiesPath: String, val outputDirectoryPath: String, val expected: List<String>)
 
-class HtmlReportGeneratorSpec extends JMeterSpec {
+    companion object {
+        /**
+         * Combine the given path parts to one path with the correct path separator of the current platform.
+         * The current JMeter bin directory will be prepended to the path.
+         *
+         * @param paths to be combined (should contain no path separators)
+         * @return combined path as string
+         */
+        fun combine(vararg paths: String) =
+            Paths.get(JMeterUtils.getJMeterBinDir(), *paths).toString()
 
-    /**
-     * Combine the given path parts to one path with the correct path separator of the current platform.
-     * The current JMeter bin directory will be prepended to the path.
-     *
-     * @param paths to be combined (should contain no path separators)
-     * @return combined path as string
-     */
-    def combine(String... paths) {
-        Paths.get(JMeterUtils.getJMeterBinDir(), paths).toString()
-    }
-
-    def "check if generation from csv: '#csvPath' with properties: '#userPropertiesPath' in folder: '#outputDirectoryPath' contains the expected error"() {
-        when:
-            HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(csvPath, userPropertiesPath, outputDirectoryPath)
-            List<String> resultList = htmlReportGenerator.checkArguments()
-        then:
-            resultList.equals(expected)
-        where:
-            csvPath                                               | userPropertiesPath                  | outputDirectoryPath                     | expected
-            combine("testfiles", "HTMLReportTestFile.csv")        | combine("user.properties")          | combine("testfiles", "testReport")      | []
-            combine("testfiles", "HTMLReportTestFile.csv")        | combine("user.properties")          | combine("testfiles")                    | [
-                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NOT_EMPTY_DIRECTORY), outputDirectoryPath)
-            ]
-            combine("testfiles", "HTMLReportTestFileMissing.csv") | combine("user.properties")          | combine("testfiles", "testReport")      | [
-                JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath)
-            ]
-            ""                                                    | ""                                  | ""                                      | [
-                JMeterUtils.getResString("generate_report_ui.csv_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), csvPath),
-                JMeterUtils.getResString("generate_report_ui.user_properties_file") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), userPropertiesPath),
-                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
-            ]
-            combine("testfiles", "HTMLReportTestFile.csv")        | combine("user.properties")          | combine("testfiles", "testReport", "oneLevel", "twolevel") | [
-                JMeterUtils.getResString("generate_report_ui.output_directory") + MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), outputDirectoryPath)
-            ]
-    }
-
-    def "check that report generation succeeds and statistic are generated"(){
-        setup:
-            File testDirectory = new File(combine("testfiles", "testReport"))
-            if(testDirectory.exists()) {
-                if (testDirectory.list().length>0) {
-                    FileUtils.cleanDirectory(testDirectory)
-                }
-            } else {
-                testDirectory.mkdir()
-            }
-            ObjectMapper mapper = new ObjectMapper()
-            URL expected = HtmlReportGenerator.class.getResource("/org/apache/jmeter/gui/report/HTMLReportExpect.json");
-            JsonNode expectedRoot = null;
-            expected.withReader { jsonFileReader ->
-                expectedRoot = mapper.readTree(jsonFileReader)
-            }
-        when:
-            HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
+        @JvmStatic
+        fun checkArgumentsCases() = listOf(
+            CheckArgumentsCase(
+                combine("testfiles", "HTMLReportTestFile.csv"),
+                combine("user.properties"),
+                combine("testfiles", "testReport"),
+                listOf()
+            ),
+            combine("testfiles").let { outputDirectoryPath ->
+                CheckArgumentsCase(
                     combine("testfiles", "HTMLReportTestFile.csv"),
                     combine("user.properties"),
-                    testDirectory.toString())
-            List<String> resultList = htmlReportGenerator.run()
-            File statistics = new File(combine("testfiles", "testReport", "statistics.json"))
-            JsonNode actualRoot = null;
-            if (statistics.exists()) {
-                statistics.withReader { jsonFileReader ->
-                    actualRoot = mapper.readTree(jsonFileReader)
-                }
-            }
-        then:
-            resultList.isEmpty()
-            statistics.exists()
-            expectedRoot != null
-            expectedRoot == actualRoot
-        cleanup:
-            if(testDirectory.exists()) {
-                if (testDirectory.list().length>0) {
-                    FileUtils.cleanDirectory(testDirectory)
-                }
-            }
+                    outputDirectoryPath,
+                    listOf(
+                        JMeterUtils.getResString("generate_report_ui.output_directory") +
+                            MessageFormat.format(
+                                JMeterUtils.getResString(HtmlReportGenerator.NOT_EMPTY_DIRECTORY),
+                                outputDirectoryPath
+                            )
+                    )
+                )
+            },
+            combine("testfiles", "HTMLReportTestFileMissing.csv").let { csvPath ->
+                CheckArgumentsCase(
+                    csvPath,
+                    combine("user.properties"),
+                    combine("testfiles", "testReport"),
+                    listOf(
+                        JMeterUtils.getResString("generate_report_ui.csv_file") +
+                            MessageFormat.format(
+                                JMeterUtils.getResString(HtmlReportGenerator.NO_FILE),
+                                csvPath
+                            )
+                    )
+                )
+            },
+            CheckArgumentsCase(
+                "",
+                "",
+                "",
+                listOf(
+                    JMeterUtils.getResString("generate_report_ui.csv_file") +
+                        MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), ""),
+                    JMeterUtils.getResString("generate_report_ui.user_properties_file") +
+                        MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), ""),
+                    JMeterUtils.getResString("generate_report_ui.output_directory") +
+                        MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), "")
+                )
+            ),
+            combine("testfiles", "testReport", "oneLevel", "twolevel").let { outputDirectoryPath ->
+                CheckArgumentsCase(
+                    combine("testfiles", "HTMLReportTestFile.csv"),
+                    combine("user.properties"),
+                    outputDirectoryPath,
+                    listOf(
+                        JMeterUtils.getResString("generate_report_ui.output_directory") +
+                            MessageFormat.format(
+                                JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY),
+                                outputDirectoryPath
+                            )
+                    )
+                )
+            },
+        )
     }
 
-    def "report generation fails when format does not match and error is reported"() {
-        setup:
-            File testDirectory = new File(combine("testfiles", "testReportThatShouldBeEmpty"))
-            if(testDirectory.exists()) {
-                if (testDirectory.list().length>0) {
-                    FileUtils.cleanDirectory(testDirectory)
-                }
-            } else {
-                testDirectory.mkdir()
-            }
-        when:
-            HtmlReportGenerator htmlReportGenerator = new HtmlReportGenerator(
-                    combine("testfiles", "HTMLReportFalseTestFile.csv"),
-                    combine("user.properties"),
-                    testDirectory.toString())
-            List<String> resultList = htmlReportGenerator.run()
-        then:
-            testDirectory.list().length == 0
-            resultList.get(0).contains("An error occurred: Error while processing samples: Consumer failed with message")
-        cleanup:
-            if(testDirectory.exists()) {
-                if (testDirectory.list().length>0) {
-                    FileUtils.cleanDirectory(testDirectory)
-                }
-            }
+    @ParameterizedTest
+    @MethodSource("checkArgumentsCases")
+    fun checkArguments(case: CheckArgumentsCase) {
+        val htmlReportGenerator = HtmlReportGenerator(case.csvPath, case.userPropertiesPath, case.outputDirectoryPath)
+        val resultList = htmlReportGenerator.checkArguments()
+
+        assertEquals(case.expected, resultList, "resultList")
+    }
+
+    @Test
+    fun `check that report generation succeeds and statistic are generated`() {
+        val mapper = ObjectMapper()
+        val expected = HtmlReportGenerator::class.java.getResource("/org/apache/jmeter/gui/report/HTMLReportExpect.json")
+        val expectedRoot = mapper.readTree(expected)
+        val htmlReportGenerator = HtmlReportGenerator(
+            combine("testfiles", "HTMLReportTestFile.csv"),
+            combine("user.properties"),
+            testDirectory.toString()
+        )
+        val resultList = htmlReportGenerator.run()
+        val statistics = File(testDirectory, "statistics.json")
+        val actualRoot = mapper.readTree(statistics)
+
+        assertEquals(expectedRoot, actualRoot, "test report json file")
+    }
+
+    @Test
+    fun `report generation fails when format does not match and error is reported`() {
+        val htmlReportGenerator = HtmlReportGenerator(
+            combine("testfiles", "HTMLReportFalseTestFile.csv"),
+            combine("user.properties"),
+            testDirectory.toString()
+        )
+        val resultList = htmlReportGenerator.run()
+        assertEquals("[]", testDirectory.list()?.contentDeepToString(), "testDirectory contents")
+        val firstMessage = resultList.firstOrNull()
+        val expectedError = "An error occurred: Error while processing samples: Consumer failed with message"
+        if (firstMessage?.contains(expectedError) != true) {
+            fail("First result message should contain '$expectedError', but was '$firstMessage'")
+        }
     }
 }

@@ -61,6 +61,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,6 +114,11 @@ public final class MenuFactory {
         } catch (Exception ex) {
             log.error("Error initializing menus, check configuration if using 3rd party libraries", ex);
         }
+    }
+
+    @VisibleForTesting
+    static Map<String, List<MenuInfo>> getMenuMap() {
+        return menuMap;
     }
 
     private static Set<String> classesToSkip() {
@@ -378,7 +384,8 @@ public final class MenuFactory {
         return pop;
     }
 
-    private static JMenu createDefaultAddMenu() {
+    @VisibleForTesting
+    static JMenu createDefaultAddMenu() {
         String addAction = ActionNames.ADD;
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addDefaultAddMenuToMenu(addMenu, addAction);
