@@ -26,7 +26,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -42,7 +42,7 @@ class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTest {
     }
 
     @ParameterizedTest(name="Run {index}: implementation:{0}")
-    @Ignore(value = "Test produces: We should have at least one sample result, we had none too often")
+    @Disabled(value = "Test produces: We should have at least one sample result, we had none too often")
     @MethodSource("getImplementations")
     void testBug63364(String implementation) {
         TestPlan plan = new TestPlan();

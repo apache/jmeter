@@ -89,7 +89,6 @@ dependencies {
     testImplementation("nl.jqno.equalsverifier:equalsverifier")
     testImplementation(testFixtures(projects.src.testkitWiremock))
     testFixturesImplementation(testFixtures(projects.src.core))
-    testFixturesImplementation("junit:junit")
     testImplementation("io.mockk:mockk")
 }
 

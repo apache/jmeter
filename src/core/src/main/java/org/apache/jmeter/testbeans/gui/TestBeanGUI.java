@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javax.swing.JPopupMenu;
@@ -152,7 +153,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     }
 
     public TestBeanGUI(Class<?> testBeanClass) {
-        super();
+        Objects.requireNonNull(testBeanClass, "testBeanClass");
         log.debug("testing class: {}", testBeanClass);
         // A quick verification, just in case:
         if (!TestBean.class.isAssignableFrom(testBeanClass)) {

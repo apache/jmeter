@@ -123,7 +123,6 @@ dependencies {
     testImplementation("io.mockk:mockk")
 
     testFixturesApi(testFixtures(projects.src.jorphan))
-    testFixturesImplementation("junit:junit")
     testFixturesImplementation(projects.src.testkit)
     testFixturesImplementation("org.junit.jupiter:junit-jupiter")
 }

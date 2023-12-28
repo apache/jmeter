@@ -17,6 +17,11 @@
 
 package org.apache.jmeter.resources;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -25,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,12 +43,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.jmeter.gui.util.JMeterMenuBar;
-import org.junit.runner.Describable;
-import org.junit.runner.Description;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /*
  * Created on Nov 29, 2003
@@ -64,7 +68,7 @@ import junit.framework.TestSuite;
  * why the tests failed.
  */
 
-public class PackageTest extends TestCase implements Describable {
+public class PackageTest {
     // We assume the test starts in "src/core" directory (which is true for Gradle and IDEs)
     private static final File resourceFiledir = new File("src/main/resources");
 
@@ -85,7 +89,7 @@ public class PackageTest extends TestCase implements Describable {
             new Object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
     // Read resource file saving the keys
-    private void readRF(String res, List<String> l) throws Exception {
+    private void readRF(String res, String resourcePrefix, String lang, List<String> l) throws Exception {
         InputStream ras = this.getClass().getResourceAsStream(res);
         if (ras == null){
             if (MESSAGES.equals(resourcePrefix)|| lang.isEmpty()) {
@@ -137,7 +141,7 @@ public class PackageTest extends TestCase implements Describable {
     }
 
     // Helper method to construct resource name
-    private String getResName(String lang) {
+    private String getResName(String lang, String resourcePrefix) {
         if (lang.isEmpty()) {
             return resourcePrefix+".properties";
         } else {
@@ -145,18 +149,18 @@ public class PackageTest extends TestCase implements Describable {
         }
     }
 
-    private void check(String resname) throws Exception {
-        check(resname, true);// check that there aren't any extra entries
+    private void check(String resname, String resourcePrefix) throws Exception {
+        check(resname, resourcePrefix, true);// check that there aren't any extra entries
     }
 
     /*
      * perform the checks on the resources
      *
      */
-    private void check(String resname, boolean checkUnexpected) throws Exception {
+    private void check(String resname, String resourcePrefix, boolean checkUnexpected) throws Exception {
         ArrayList<String> alf = new ArrayList<>(500);// holds keys from file
-        String res = getResName(resname);
-        readRF(res, alf);
+        String res = getResName(resname, resourcePrefix);
+        readRF(res, resourcePrefix, resname, alf);
         Collections.sort(alf);
 
         // Look for duplicate keys in the file
@@ -241,7 +245,7 @@ public class PackageTest extends TestCase implements Describable {
     static void findFile(File file, Set<String> set,
             FilenameFilter filenameFilter) {
         File[] foundFiles = file.listFiles(filenameFilter);
-        assertNotNull("Not a directory: "+file, foundFiles);
+        assertNotNull(foundFiles, "Not a directory: "+file);
         for (File file2 : foundFiles) {
             if (file2.isDirectory()) {
                 findFile(file2, set, filenameFilter);
@@ -257,61 +261,35 @@ public class PackageTest extends TestCase implements Describable {
     /*
      * Use a suite to ensure that the default is done first
     */
-    public static Test suite() {
-        TestSuite ts = new TestSuite("Resources PackageTest");
+    public static Collection<Arguments> languagesAndPrefixes() {
+        Collection<Arguments> res = new ArrayList<>();
         String[] languages = JMeterMenuBar.getLanguages();
         for(String prefix : prefixList){
-            TestSuite pfx = new TestSuite(prefix) ;
-            pfx.addTest(new PackageTest("testLang","", prefix)); // load the default resource
+            res.add(arguments("", prefix)); // load the default resource
             for(String language : languages){
                 if (!"en".equals(language)){ // Don't try to check the default language
-                    pfx.addTest(new PackageTest("testLang", language, prefix));
+                    res.add(arguments(language, prefix));
                 }
             }
-            ts.addTest(pfx);
         }
-        ts.addTest(new PackageTest("checkI18n", "fr"));
-        // TODO Add these some day
-//        ts.addTest(new PackageTest("checkI18n", "es"));
-//        ts.addTest(new PackageTest("checkI18n", "pl"));
-//        ts.addTest(new PackageTest("checkI18n", "pt_BR"));
-//        ts.addTest(new PackageTest("checkI18n", "tr"));
-//        ts.addTest(new PackageTest("checkI18n", Locale.JAPANESE.toString()));
-//        ts.addTest(new PackageTest("checkI18n", Locale.SIMPLIFIED_CHINESE.toString()));
-//        ts.addTest(new PackageTest("checkI18n", Locale.TRADITIONAL_CHINESE.toString()));
-        return ts;
+        return res;
     }
 
     private List<String> failures = new ArrayList<>();
 
-    private final String lang;
-
-    private final String resourcePrefix; // e.g. "/org/apache/jmeter/resources/messages"
-
-    public PackageTest(String testName, String _lang) {
-        this(testName, _lang, MESSAGES);
-    }
-
-    public PackageTest(String testName, String _lang, String propName) {
-        super(testName);
-        lang=_lang;
-        resourcePrefix = propName;
-    }
-
-    @Override
-    public Description getDescription() {
-        return Description.createTestDescription(getClass(), getName() + " " + lang + ": " + resourcePrefix);
-    }
-
-    public void testLang() throws Exception{
-        check(lang);
+    @ParameterizedTest
+    @MethodSource("languagesAndPrefixes")
+    public void testLang(String lang, String resourcePrefix) throws Exception{
+        check(lang, resourcePrefix);
     }
 
     /**
      * Check all messages are available in one language
      * @throws Exception if something fails
      */
-    public void checkI18n() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"fr"})
+    public void checkI18n(String lang) throws Exception {
         Map<String, Map<String,String>> missingLabelsPerBundle = new HashMap<>();
         for (String prefix : prefixList) {
             Properties messages = new Properties();
@@ -319,7 +297,7 @@ public class PackageTest extends TestCase implements Describable {
             checkMessagesForLanguage( missingLabelsPerBundle , messages,prefix.substring(1), lang);
         }
 
-        assertEquals(missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle), 0, missingLabelsPerBundle.size());
+        assertEquals(0, missingLabelsPerBundle.size(), missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle));
     }
 
     private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle,

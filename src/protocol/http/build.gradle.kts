@@ -16,6 +16,7 @@
  */
 
 plugins {
+    id("java-test-fixtures")
     id("build-logic.jvm-published-library")
 }
 

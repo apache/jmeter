@@ -15,27 +15,21 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.threads;
+package org.apache.jmeter.gui
 
-import org.junit.rules.ExternalResource;
+import org.apache.jmeter.testbeans.gui.TestBeanGUI
 
-public class JMeterContextServiceHelper extends ExternalResource {
-
-    @Override
-    protected void after() {
-        JMeterContextService.removeContext();
-    }
-
-    private JMeterContext instance;
-    public JMeterContext get() {
-        if (instance == null) {
-            JMeterContext jMeterContext = new JMeterContext();
-            JMeterContextService.replaceContext(jMeterContext);
-            initContext(jMeterContext);
-            instance = jMeterContext;
+/**
+ * Wraps a [JMeterGUIComponent] to provide a better [toString] method.
+ * See https://github.com/junit-team/junit5/issues/1154
+ */
+class GuiComponentHolder(
+    val component: JMeterGUIComponent
+) {
+    override fun toString(): String =
+        if (component is TestBeanGUI) {
+            component.toString()
+        } else {
+            "${component::class.java} $component"
         }
-        return instance;
-    }
-
-    protected void initContext(JMeterContext jMeterContext) {}
 }

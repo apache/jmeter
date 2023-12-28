@@ -20,14 +20,11 @@ package org.apache.jmeter.protocol.http.sampler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.junit.categories.NeedGuiTests;
 import org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
-import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.Test;
 
-@Category(NeedGuiTests.class)
 public class PackageTest {
 
     @Test

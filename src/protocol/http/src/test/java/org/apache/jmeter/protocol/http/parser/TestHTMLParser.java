@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,21 +37,25 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.runner.Describable;
-import org.junit.runner.Description;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
-import junit.framework.TestSuite;
-
-public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
+@Isolated
+public class TestHTMLParser extends JMeterTestCase {
     private static final Logger log = LoggerFactory.getLogger(TestHTMLParser.class);
 
     private static final String DEFAULT_UA  = "Apache-HttpClient/4.2.6";
@@ -59,31 +67,6 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
             + "GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)";
     private static final String UA_IE9      = "Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))";
     private static final String UA_IE10     = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)";
-
-    public TestHTMLParser(String arg0) {
-        super(arg0);
-    }
-
-    private String parserName;
-
-    private int testNumber = 0;
-
-
-    public TestHTMLParser(String name, int test) {
-        super(name);
-        testNumber = test;
-    }
-
-    public TestHTMLParser(String name, String parser, int test) {
-        super(name);
-        testNumber = test;
-        parserName = parser;
-    }
-
-    @Override
-    public Description getDescription() {
-        return Description.createTestDescription(getClass(), getName() + " " + testNumber + " " + parserName);
-    }
 
     private static class StaticTestClass // Can't instantiate
     {
@@ -147,6 +130,10 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         DEFAULT_JMETER_PARSER,
         "org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser"
         };
+
+    static String[] getParsers() {
+        return PARSERS;
+    }
 
     private static final TestData[] TESTS = new TestData[] {
             new TestData("testfiles/HTMLParserTestCase.html",
@@ -260,38 +247,21 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
                 UA_IE6)
     };
 
-    public static junit.framework.Test suite() {
-        TestSuite suite = new TestSuite("TestHTMLParser");
-        suite.addTest(new TestHTMLParser("testDefaultParser"));
-        suite.addTest(new TestHTMLParser("testParserDefault"));
-        suite.addTest(new TestHTMLParser("testParserMissing"));
-        suite.addTest(new TestHTMLParser("testNotParser"));
-        suite.addTest(new TestHTMLParser("testNotCreatable"));
-        suite.addTest(new TestHTMLParser("testNotCreatableStatic"));
-        for (String parser : PARSERS) {
-            TestSuite ps = new TestSuite(parser);// Identify subtests
-            ps.addTest(new TestHTMLParser("testParserProperty", parser, 0));
-            for (int j = 0; j < TESTS.length; j++) {
-                TestSuite ts = new TestSuite(TESTS[j].fileName);
-                ts.addTest(new TestHTMLParser("testParserSet", parser, j));
-                ts.addTest(new TestHTMLParser("testParserList", parser, j));
-                ps.addTest(ts);
-            }
-            suite.addTest(ps);
-        }
+    static Stream<Arguments> parsersAndTestNumbers() {
+        return Stream.of(PARSERS)
+                .flatMap(parser -> IntStream.range(0, TESTS.length)
+                        .mapToObj(testNumber -> arguments(parser, testNumber)));
+    }
 
-        TestSuite ps = new TestSuite(DEFAULT_JMETER_PARSER+"_conditional_comments");// Identify subtests
-        for (int j = 0; j < SPECIFIC_PARSER_TESTS.length; j++) {
-            TestSuite ts = new TestSuite(SPECIFIC_PARSER_TESTS[j].fileName);
-            ts.addTest(new TestHTMLParser("testSpecificParserList", DEFAULT_JMETER_PARSER, j));
-            ps.addTest(ts);
-        }
-        suite.addTest(ps);
-        return suite;
+    static Stream<Arguments> specificParserTests() {
+        return IntStream.range(0, SPECIFIC_PARSER_TESTS.length)
+                        .mapToObj(testNumber -> arguments(DEFAULT_JMETER_PARSER, testNumber));
     }
 
     // Test if can instantiate parser using property name
-    public void testParserProperty() throws Exception {
+    @ParameterizedTest
+    @MethodSource("getParsers")
+    public void testParserProperty(String parserName) throws Exception {
         Properties p = JMeterUtils.getJMeterProperties();
         if (p == null) {
             p = JMeterUtils.getProperties("jmeter.properties");
@@ -300,14 +270,17 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         BaseParser.getParser(p.getProperty(HTMLParser.PARSER_CLASSNAME));
     }
 
+    @Test
     public void testDefaultParser() throws Exception {
         BaseParser.getParser(JMeterUtils.getPropDefault(HTMLParser.PARSER_CLASSNAME, HTMLParser.DEFAULT_PARSER));
     }
 
+    @Test
     public void testParserDefault() throws Exception {
         BaseParser.getParser(HTMLParser.DEFAULT_PARSER);
     }
 
+    @Test
     public void testParserMissing() throws Exception {
         try {
             BaseParser.getParser("no.such.parser");
@@ -319,6 +292,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
+    @Test
     public void testNotParser() throws Exception {
         try {
             HTMLParser.getParser("java.lang.String");
@@ -331,6 +305,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
+    @Test
     public void testNotCreatable() throws Exception {
         try {
             HTMLParser.getParser(TestClass.class.getName());
@@ -343,6 +318,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
+    @Test
     public void testNotCreatableStatic() throws Exception {
         try {
             HTMLParser.getParser(StaticTestClass.class.getName());
@@ -358,20 +334,26 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
         }
     }
 
-    public void testParserSet() throws Exception {
+    @ParameterizedTest
+    @MethodSource("parsersAndTestNumbers")
+    public void testParserSet(String parserName, int testNumber) throws Exception {
         HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
         filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseUrl, TESTS[testNumber].expectedSet, null,
                 false, TESTS[testNumber].userAgent);
     }
 
     @SuppressWarnings("JdkObsolete")
-    public void testParserList() throws Exception {
+    @ParameterizedTest
+    @MethodSource("parsersAndTestNumbers")
+    public void testParserList(String parserName, int testNumber) throws Exception {
         HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
         filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseUrl, TESTS[testNumber].expectedList,
                 new Vector<>(), true, TESTS[testNumber].userAgent);
     }
 
-    public void testSpecificParserList() throws Exception {
+    @ParameterizedTest
+    @MethodSource("specificParserTests")
+    public void testSpecificParserList(String parserName, int testNumber) throws Exception {
         HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
         filetest(p, SPECIFIC_PARSER_TESTS[testNumber].fileName,
                 SPECIFIC_PARSER_TESTS[testNumber].baseUrl,
@@ -407,7 +389,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit implements Describable {
             Collections.sort(actual);
         }
 
-        assertEquals("userAgent=" + userAgent + ", fname=" + fname + ", parserName=" + parserName, expected, actual);
+        assertEquals(expected, actual, "userAgent=" + userAgent + ", fname=" + fname + ", parserName=" + parserName);
     }
 
     // Get expected results as a List

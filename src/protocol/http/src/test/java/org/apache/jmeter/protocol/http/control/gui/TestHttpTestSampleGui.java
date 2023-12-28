@@ -17,16 +17,12 @@
 
 package org.apache.jmeter.protocol.http.control.gui;
 
-import org.apache.jmeter.junit.categories.NeedGuiTests;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@Category(NeedGuiTests.class)
 public class TestHttpTestSampleGui {
-
     private HttpTestSampleGui gui;
 
     @BeforeEach
