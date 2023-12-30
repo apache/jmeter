@@ -167,6 +167,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
         if (SELECT.equals(currentQueryType)) {
             try (Statement stmt = conn.createStatement()) {
                 setQueryTimeout(stmt, getIntegerQueryTimeout());
+                configureMaxRows(stmt);
                 ResultSet rs = null;
                 try {
                     rs = stmt.executeQuery(getQuery());
@@ -198,6 +199,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
         } else if (PREPARED_SELECT.equals(currentQueryType)) {
             try (PreparedStatement pstmt = getPreparedStatement(conn)) {
                 setArguments(pstmt);
+                configureMaxRows(pstmt);
                 ResultSet rs = null;
                 try {
                     rs = pstmt.executeQuery();
@@ -236,7 +238,15 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
         }
     }
 
+    private void configureMaxRows(Statement stmt) throws SQLException {
+        int maxRows = getIntegerResultSetMaxRows();
+        if (maxRows >= 0) {
+           stmt.setMaxRows(maxRows);
+        }
+    }
+
     private String resultSetsToString(PreparedStatement pstmt, boolean result, int[] out) throws SQLException, UnsupportedEncodingException {
+        configureMaxRows(pstmt);
         StringBuilder sb = new StringBuilder();
         int updateCount = 0;
         boolean currentResult = result;

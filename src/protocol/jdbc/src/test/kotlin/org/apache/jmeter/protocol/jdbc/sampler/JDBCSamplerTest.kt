@@ -80,6 +80,7 @@ class JDBCSamplerTest {
         val stmt = mockk<Statement> {
             every { executeQuery(any()) } returns rs
             justRun { queryTimeout = any() }
+            justRun { maxRows = any() }
             justRun { close() }
         }
         val conn = mockk<Connection> {
@@ -90,11 +91,13 @@ class JDBCSamplerTest {
         }
 
         sut.query = "SELECT"
+        sut.resultSetMaxRows = "10"
         val response = sut.executeForTest(conn, sample)
 
         verifyOrder {
             conn.createStatement()
             stmt.queryTimeout = 0
+            stmt.maxRows = 10
             stmt.executeQuery(any())
             sample.latencyEnd()
             // getStringFromResultSet

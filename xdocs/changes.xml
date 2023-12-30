@@ -83,6 +83,7 @@ Summary
   <li><issue>6165</issue><pr>6192</pr>The Constant Throughput Timer is throwing a NullPointerException when using variables (vars.get) in "Target Throughput"-field</li>
   <li><issue>6162</issue>The Constant Timer is throwing a NullPointerException when using variables (vars.get) in "delay"-field</li>
   <li><pr>6193</pr>Log errors happening while JMeter starts the test (previously, errors from TestStateListener.testStarted were not logged)</li>
+  <li><pr>6216</pr>Pass JDBCSampler.maxRows to Statement.setMaxRows so the driver does not fetch extra rows from the database</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
