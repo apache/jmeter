@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package org.apache.jorphan.test
+package org.apache.jorphan.test;
 
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
-import org.junit.jupiter.api.parallel.Isolated
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.parallel.Isolated;
 
 /**
  * Used to tag tests which need to be run on their own (in serial) because
@@ -27,4 +27,5 @@ import org.junit.jupiter.api.parallel.Isolated
  */
 @Isolated
 @Execution(ExecutionMode.SAME_THREAD)
-interface JMeterSerialTest
+public interface JMeterSerialTest {
+}
