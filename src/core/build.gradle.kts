@@ -188,10 +188,3 @@ tasks.jar {
         from("$rootDir/xdocs/images/logo.svg")
     }
 }
-
-afterEvaluate {
-    tasks.named("kaptTestFixturesKotlin") {
-        // Workaround for https://youtrack.jetbrains.com/issue/KT-45329/IDE-KAPT-Number-of-loaded-files-in-snapshots-differs-when-using-Run-with-Coverage-and-project-has-Java-and-Kotlin-targets-with
-        inputs.property("wa.to.trigger.full.recompilation", "1")
-    }
-}
