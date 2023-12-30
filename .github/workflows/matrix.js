@@ -20,7 +20,7 @@ matrix.addAxis({
   ]
 });
 
-const eaJava = '22';
+const eaJava = '23';
 
 matrix.addAxis({
   name: 'java_version',
@@ -86,8 +86,6 @@ matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '8'});
 matrix.exclude({java_distribution: {value: 'microsoft'}, java_version: '8'});
 // Oracle JDK is only supported for JDK 17 and later
 matrix.exclude({java_distribution: {value: 'oracle'}, java_version: ['8', '11']});
-// Ignore builds with JAVA EA for now, see https://github.com/apache/jmeter/issues/6114
-matrix.exclude({java_version: eaJava})
 matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
 // TODO: Semeru does not ship Java 21 builds yet
 matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'});
@@ -106,7 +104,7 @@ matrix.generateRow({java_version: "17"});
 // Ensure there will be at least one job with Java 21
 matrix.generateRow({java_version: "21"});
 // Ensure there will be at least one job with Java EA
-// matrix.generateRow({java_version: eaJava});
+matrix.generateRow({java_version: eaJava});
 const include = matrix.generateRows(process.env.MATRIX_JOBS || 5);
 if (include.length === 0) {
   throw new Error('Matrix list is empty');
