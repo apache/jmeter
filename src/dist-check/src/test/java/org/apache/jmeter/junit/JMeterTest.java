@@ -643,6 +643,11 @@ public class JMeterTest extends JMeterTestCase {
                 // TODO: Cannot start. travis-job-e984b3d5-f93f-4b0f-b6c0-50988a5ece9d is a loopback address.
                 continue;
             }
+            if (className.startsWith("org.apache.jmeter.testelement.schema.") &&
+                    className.endsWith("PropertyDescriptor")) {
+                // PropertyDescriptors do not have no-arg constructor
+                continue;
+            }
             try {
                 // Construct classes in the AWT thread, as we may have found classes, that
                 // assume to be constructed in the AWT thread.
