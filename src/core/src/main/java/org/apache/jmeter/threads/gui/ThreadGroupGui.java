@@ -108,19 +108,12 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     }
 
     @Override
-    public TestElement createTestElement() {
-        TestElement tg = makeTestElement();
-        // modifyTestElement is here for backward compatibility
-        modifyTestElement(tg);
-        assignDefaultValues(tg);
-        return tg;
-    }
-
-    @Override
     public void assignDefaultValues(TestElement element) {
         super.assignDefaultValues(element);
         element.set(ThreadGroupSchema.INSTANCE.getNumThreads(), 1);
         element.set(ThreadGroupSchema.INSTANCE.getRampTime(), 1);
+        element.set(AbstractThreadGroupSchema.INSTANCE.getSameUserOnNextIteration(), true);
+        ((AbstractThreadGroup) element).setSamplerController((LoopController) loopPanel.createTestElement());
     }
 
     /**
@@ -130,17 +123,17 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
      */
     @Override
     public void modifyTestElement(TestElement tg) {
-        super.configureTestElement(tg);
+        super.modifyTestElement(tg);
         if (tg instanceof AbstractThreadGroup) {
             ((AbstractThreadGroup) tg).setSamplerController((LoopController) loopPanel.createTestElement());
         }
-        toggleSchedulerFields();
     }
 
     @Override
     public void configure(TestElement tg) {
         super.configure(tg);
         loopPanel.configure((TestElement) tg.getProperty(AbstractThreadGroup.MAIN_CONTROLLER).getObjectValue());
+        toggleSchedulerFields();
     }
 
     @Override

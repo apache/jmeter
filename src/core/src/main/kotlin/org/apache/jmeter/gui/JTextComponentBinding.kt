@@ -18,6 +18,11 @@
 package org.apache.jmeter.gui
 
 import org.apache.jmeter.testelement.TestElement
+import org.apache.jmeter.testelement.schema.BooleanPropertyDescriptor
+import org.apache.jmeter.testelement.schema.DoublePropertyDescriptor
+import org.apache.jmeter.testelement.schema.FloatPropertyDescriptor
+import org.apache.jmeter.testelement.schema.IntegerPropertyDescriptor
+import org.apache.jmeter.testelement.schema.LongPropertyDescriptor
 import org.apache.jmeter.testelement.schema.PropertyDescriptor
 import org.apiguardian.api.API
 import javax.swing.JPasswordField
@@ -38,7 +43,42 @@ public class JTextComponentBinding(
             is JPasswordField -> String(component.password)
             else -> component.text
         }
-        testElement[propertyDescriptor] = text.takeIf { it.isNotEmpty() }
+        if (text.isEmpty()) {
+            testElement.removeProperty(propertyDescriptor)
+            return
+        }
+        when (propertyDescriptor) {
+            is IntegerPropertyDescriptor<*> ->
+                text.toIntOrNull()?.let {
+                    testElement[propertyDescriptor] = it
+                    return
+                }
+
+            is LongPropertyDescriptor<*> ->
+                text.toLongOrNull()?.let {
+                    testElement[propertyDescriptor] = it
+                    return
+                }
+
+            is FloatPropertyDescriptor<*> ->
+                text.toFloatOrNull()?.let {
+                    testElement[propertyDescriptor] = it
+                    return
+                }
+
+            is DoublePropertyDescriptor<*> ->
+                text.toDoubleOrNull()?.let {
+                    testElement[propertyDescriptor] = it
+                    return
+                }
+
+            is BooleanPropertyDescriptor<*> ->
+                text.toBooleanStrictOrNull()?.let {
+                    testElement[propertyDescriptor] = it
+                    return
+                }
+        }
+        testElement[propertyDescriptor] = text
     }
 
     override fun updateUi(testElement: TestElement) {

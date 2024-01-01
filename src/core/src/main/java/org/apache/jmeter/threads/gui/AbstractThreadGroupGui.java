@@ -39,6 +39,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.AbstractThreadGroupSchema;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apiguardian.api.API;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -203,16 +204,34 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         return AbstractThreadGroup.ON_SAMPLE_ERROR_CONTINUE;
     }
 
-   @Override
+    @Override
+    public void assignDefaultValues(TestElement element) {
+        super.assignDefaultValues(element);
+        element.set(AbstractThreadGroupSchema.INSTANCE.getOnSampleError(), AbstractThreadGroup.ON_SAMPLE_ERROR_CONTINUE);
+    }
+
+    @Override
     public void configure(TestElement tg) {
         super.configure(tg);
         setSampleErrorBoxes((AbstractThreadGroup) tg);
     }
 
+    @Override
+    public void modifyTestElement(TestElement element) {
+        super.modifyTestElement(element);
+        element.set(AbstractThreadGroupSchema.INSTANCE.getOnSampleError(), onSampleError());
+    }
+
+    /**
+     * {@inheritDoc}
+     * @deprecated Override {@link #modifyTestElement(TestElement)} instead
+     * @param tg the TestElement being configured.
+     */
    @Override
+   @Deprecated
+   @API(status = API.Status.DEPRECATED, since = "5.6.3")
     protected void configureTestElement(TestElement tg) {
         super.configureTestElement(tg);
         tg.set(AbstractThreadGroupSchema.INSTANCE.getOnSampleError(), onSampleError());
     }
-
 }

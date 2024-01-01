@@ -15,31 +15,19 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.protocol.java.sampler
+package org.apache.jmeter.control
 
-import org.apache.jmeter.testelement.TestElementSchema
-import org.apache.jmeter.testelement.schema.BooleanPropertyDescriptor
 import org.apache.jmeter.testelement.schema.StringPropertyDescriptor
 import org.apiguardian.api.API
 
 /**
- * Lists properties of a [BeanShellSampler].
- * @see BeanShellSampler
+ * Lists properties of a [IncludeController].
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
-public abstract class BeanShellSamplerSchema : TestElementSchema() {
-    public companion object INSTANCE : BeanShellSamplerSchema()
+public abstract class IncludeControllerSchema : GenericControllerSchema() {
+    public companion object INSTANCE : IncludeControllerSchema()
 
-    public val resetInterpreter: BooleanPropertyDescriptor<BeanShellSamplerSchema>
-        by boolean("BeanShellSampler.resetInterpreter", default = false)
-
-    public val script: StringPropertyDescriptor<BeanShellSamplerSchema>
-        by string("BeanShellSampler.query")
-
-    public val parameters: StringPropertyDescriptor<BeanShellSamplerSchema>
-        by string("BeanShellSampler.parameters")
-
-    public val filename: StringPropertyDescriptor<BeanShellSamplerSchema>
-        by string("BeanShellSampler.filename")
+    public val includePath: StringPropertyDescriptor<IncludeControllerSchema>
+        by string("IncludeController.includepath")
 }

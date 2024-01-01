@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.awt.Component;
 import java.io.ByteArrayInputStream;
@@ -38,12 +39,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,24 +58,39 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.gui.ObsoleteGui;
+import org.apache.jmeter.control.IfControllerSchema;
+import org.apache.jmeter.control.LoopControllerSchema;
 import org.apache.jmeter.control.gui.TestFragmentControllerGui;
 import org.apache.jmeter.dsl.DslPrinterTraverser;
+import org.apache.jmeter.extractor.RegexExtractorSchema;
 import org.apache.jmeter.gui.GuiComponentHolder;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.loadsave.IsEnabledNormalizer;
+import org.apache.jmeter.protocol.http.control.gui.AjpSamplerGui;
 import org.apache.jmeter.protocol.http.control.gui.GraphQLHTTPSamplerGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.java.config.gui.JavaConfigGui;
 import org.apache.jmeter.protocol.java.control.gui.JUnitTestSamplerGui;
 import org.apache.jmeter.protocol.java.control.gui.JavaTestSamplerGui;
+import org.apache.jmeter.protocol.jms.control.gui.JMSSamplerGui;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
+import org.apache.jmeter.testelement.AbstractScopedTestElementSchema;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestElementSchema;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.schema.CollectionPropertyDescriptor;
+import org.apache.jmeter.testelement.schema.PropertyDescriptor;
+import org.apache.jmeter.testelement.schema.TestElementPropertyDescriptor;
+import org.apache.jmeter.threads.ThreadGroupSchema;
+import org.apache.jmeter.threads.gui.PostThreadGroupGui;
+import org.apache.jmeter.threads.gui.SetupThreadGroupGui;
+import org.apache.jmeter.threads.openmodel.gui.OpenModelThreadGroupGui;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.BackendListenerGui;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -213,12 +232,8 @@ public class JMeterTest extends JMeterTestCase {
                         + System.getProperty("java.awt.headless") + "'");
     }
 
-    /*
-     * Test GUI elements - create the suite of tests
-     */
-    static Collection<GuiComponentHolder> guiComponents() throws Throwable {
+    static Collection<GuiComponentHolder> customGuiComponents() throws Throwable {
         List<GuiComponentHolder> components = new ArrayList<>();
-
         for (Object o : getObjects(JMeterGUIComponent.class)) {
             JMeterGUIComponent item = (JMeterGUIComponent) o;
             if (item.getClass() == TestBeanGUI.class) {
@@ -233,6 +248,14 @@ public class JMeterTest extends JMeterTestCase {
             }
             components.add(new GuiComponentHolder(item));
         }
+        return components;
+    }
+
+    /*
+     * Test GUI elements - create the suite of tests
+     */
+    static Collection<GuiComponentHolder> guiComponents() throws Throwable {
+        List<GuiComponentHolder> components = new ArrayList<>(customGuiComponents());
         for (Object o : getObjects(TestBean.class)) {
             Class<?> c = o.getClass();
             JMeterGUIComponent item = new TestBeanGUI(c);
@@ -342,6 +365,101 @@ public class JMeterTest extends JMeterTestCase {
         assertEquals("hey, new name!:", el2.getName(), () -> "Modify Test: Failed on " + name);
     }
 
+    private static final Set<PropertyDescriptor<?, ?>> IGNORED_PROPERTIES = new HashSet<>();
+
+    static {
+        IGNORED_PROPERTIES.add(TestElementSchema.INSTANCE.getGuiClass());
+        IGNORED_PROPERTIES.add(TestElementSchema.INSTANCE.getTestClass());
+        // TODO: support variables in TestElement.enabled property
+        IGNORED_PROPERTIES.add(TestElementSchema.INSTANCE.getEnabled());
+        IGNORED_PROPERTIES.add(AbstractScopedTestElementSchema.INSTANCE.getScope());
+        IGNORED_PROPERTIES.add(ThreadGroupSchema.INSTANCE.getOnSampleError());
+        // TODO: migrate to editable checkboxes
+        IGNORED_PROPERTIES.add(IfControllerSchema.INSTANCE.getEvaluateAll());
+        IGNORED_PROPERTIES.add(IfControllerSchema.INSTANCE.getUseExpression());
+        IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getPostBodyRaw());
+        // TODO: LoopControlPanel does not set continueForever properly
+        IGNORED_PROPERTIES.add(LoopControllerSchema.INSTANCE.getContinueForever());
+        IGNORED_PROPERTIES.add(RegexExtractorSchema.INSTANCE.getMatchTarget());
+        IGNORED_PROPERTIES.add(RegexExtractorSchema.INSTANCE.getDefaultIsEmpty());
+        // TODO: support expressions?
+        IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getIpSourceType());
+        IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getImplementation());
+        // TODO: support expressions in UrlConfigGui
+        IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getFollowRedirects());
+        IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getAutoRedirects());
+
+    }
+
+    /**
+     * Assign simple expression value to every property of the element, and verify if the property is get back correctly
+     * from the UI.
+     */
+    @ParameterizedTest
+    @MethodSource("customGuiComponents")
+    public void allPropertiesAreStoredInUI(GuiComponentHolder componentHolder) {
+        JMeterGUIComponent guiItem = componentHolder.getComponent();
+        assumeFalse(
+                improperlyUsesUiPlaceholders(guiItem.getClass()),
+                () -> "UI " + componentHolder + " does not use placeholders properly, so the test is skipped");
+        assumeFalse(guiItem.getClass() == JMSSamplerGui.class,
+                "JMSSamplerGui does not seem to use default values vs placeholders properly");
+        assumeFalse(guiItem.getClass() == AjpSamplerGui.class,
+                "AjpSamplerGui hides some fields from HTTP (e.g. proxy), so we skip testing AJP");
+        TestElement el = guiItem.createTestElement();
+        TestElementSchema schema = el.getSchema();
+        // UI might set properties in a different order which makes it harder to compare
+        Collection<PropertyDescriptor<?, ?>> properties = schema.getProperties().values();
+        for (PropertyDescriptor<?, ?> property : properties) {
+            if (IGNORED_PROPERTIES.contains(property)) {
+                continue;
+            }
+            if (property instanceof CollectionPropertyDescriptor || property instanceof TestElementPropertyDescriptor) {
+                continue;
+            }
+            if (guiItem.getClass() == NamePanel.class && property.equals(TestElementSchema.INSTANCE.getComments())) {
+                // NamePanel does not configure description
+                continue;
+            }
+            if ((guiItem.getClass() == SetupThreadGroupGui.class || guiItem.getClass() == PostThreadGroupGui.class) &&
+                    property.equals(ThreadGroupSchema.INSTANCE.getDelayedStart())) {
+                // Setup and Post thread groups do not show "delay thread creation" checkbox
+                continue;
+            }
+            if (guiItem.getClass() == OpenModelThreadGroupGui.class && (
+                    property.equals(ThreadGroupSchema.INSTANCE.getNumThreads()) ||
+                            property.equals(ThreadGroupSchema.INSTANCE.getSameUserOnNextIteration()))) {
+                continue;
+            }
+            el.set(property, "${test_" + property.getName() + "}");
+        }
+        // Configure UI with the modified properties
+        guiItem.configure(el);
+        // Assign the values from the UI to another element
+        TestElement el2 = guiItem.createTestElement();
+        guiItem.modifyTestElement(el2);
+
+        // Remove all ignored properties
+        for (PropertyDescriptor<?, ?> property : IGNORED_PROPERTIES) {
+            if (property.equals(TestElementSchema.INSTANCE.getGuiClass())) {
+                continue;
+            }
+            el.removeProperty(property);
+            el2.removeProperty(property);
+        }
+        if (guiItem.getClass() == GraphQLHTTPSamplerGui.class) {
+            el.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getArguments());
+            el2.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getArguments());
+            el.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getUseBrowserCompatibleMultipart());
+            el2.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getUseBrowserCompatibleMultipart());
+            el.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getUseMultipartPost());
+            el2.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getUseMultipartPost());
+        }
+
+        compareAllProperties(el, el2,
+                () -> "GUI element " + componentHolder + " be able to pass all the properties to a different TestElement");
+    }
+
     @ParameterizedTest
     @MethodSource("guiComponents")
     public void propertiesShouldNotBeInitializedToNullValues(GuiComponentHolder componentHolder) {
@@ -394,17 +512,7 @@ public class JMeterTest extends JMeterTestCase {
             actual.removeProperty(HTTPSamplerBaseSchema.INSTANCE.getArguments());
         }
         if (!Objects.equals(expected, actual)) {
-            if (guiItem.getClass() == JavaConfigGui.class || guiItem.getClass() == JavaTestSamplerGui.class) {
-                // TODO: JavaConfigGui modifies UI when classname combobox changes, and it causes inconsistency between the
-                //   element state and the UI state. We ignore the discrepancy for now
-                return;
-            }
-            if (guiItem.getClass() == JUnitTestSamplerGui.class) {
-                // TODO: fix org.apache.jmeter.protocol.java.control.gui.JUnitTestSamplerGui.configure to use placeholders
-                return;
-            }
-            if (guiItem.getClass() == BackendListenerGui.class) {
-                // TODO: fix handling of default arguments in org.apache.jmeter.visualizers.backend.BackendListenerGui.actionPerformed
+            if (improperlyUsesUiPlaceholders(guiItem.getClass())) {
                 return;
             }
             boolean breakpointForDebugging = Objects.equals(expected, actual);
@@ -418,6 +526,23 @@ public class JMeterTest extends JMeterTestCase {
         }
     }
 
+    private static boolean improperlyUsesUiPlaceholders(Class<? extends JMeterGUIComponent> klass) {
+        if (klass == JavaConfigGui.class || klass == JavaTestSamplerGui.class) {
+            // TODO: JavaConfigGui modifies UI when classname combobox changes, and it causes inconsistency between the
+            //   element state and the UI state. We ignore the discrepancy for now
+            return true;
+        }
+        if (klass == JUnitTestSamplerGui.class) {
+            // TODO: fix org.apache.jmeter.protocol.java.control.gui.JUnitTestSamplerGui.configure to use placeholders
+            return true;
+        }
+        if (klass == BackendListenerGui.class) {
+            // TODO: fix handling of default arguments in org.apache.jmeter.visualizers.backend.BackendListenerGui.actionPerformed
+            return true;
+        }
+        return false;
+    }
+
     @ParameterizedTest
     @MethodSource("guiComponents")
     public void saveLoadShouldKeepElementIntact(GuiComponentHolder componentHolder) throws IOException {
@@ -427,10 +552,13 @@ public class JMeterTest extends JMeterTestCase {
         SaveService.saveElement(expected, bos);
         byte[] serializedBytes = bos.toByteArray();
         TestElement actual = (TestElement) SaveService.loadElement(new ByteArrayInputStream(serializedBytes));
-        compareAllProperties(expected, actual, serializedBytes);
+        compareAllProperties(expected, actual,
+                () -> "TestElement after 'save+load' should match the one created in GUI\n" +
+                        "JMX is " + new String(serializedBytes, StandardCharsets.UTF_8));
     }
 
-    private static void compareAllProperties(TestElement expected, TestElement actual, byte[] serializedBytes) {
+    private static void compareAllProperties(TestElement expected, TestElement actual,
+            Supplier<String> message) {
         expected.traverse(IsEnabledNormalizer.INSTANCE);
         actual.traverse(IsEnabledNormalizer.INSTANCE);
 
@@ -440,17 +568,13 @@ public class JMeterTest extends JMeterTestCase {
             assertEquals(
                     expectedStr,
                     new DslPrinterTraverser(DslPrinterTraverser.DetailLevel.ALL).append(actual).toString(),
-                    "TestElement after 'save+load' should match the one created in GUI\n" +
-                    "JMX is " + new String(serializedBytes, StandardCharsets.UTF_8));
-            fail("TestElement after 'save+load' should match the one created in GUI. " +
-                    "DSL representation is the same, however TestElement#equals says the elements are different. " +
-                    "DSL is " + expectedStr + "\n" +
-                    "JMX is " + new String(serializedBytes, StandardCharsets.UTF_8));
+                    message.get());
+            fail("DSL representation is the same, however TestElement#equals says the elements are different. " + message.get());
         }
-        assertEquals(expected.hashCode(), actual.hashCode(), "TestElement.hashCode after 'save+load' should match the one created in GUI. " +
-        "DSL representation is the same, however TestElement#hashCode says the elements are different. " +
-        "DSL is " + expectedStr + "\n" +
-        "JMX is " + new String(serializedBytes, StandardCharsets.UTF_8));
+        assertEquals(expected.hashCode(), actual.hashCode(),
+                "TestElement.hashCode after 'save+load' should match the one created in GUI. " +
+                        "DSL representation is the same, however TestElement#hashCode says the elements are different. " +
+                        message.get());
     }
 
     static Stream<Serializable> serializableObjects() throws Throwable {

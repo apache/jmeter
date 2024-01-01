@@ -20,6 +20,8 @@ package org.apache.jmeter.control.gui;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.control.IncludeController;
+import org.apache.jmeter.control.IncludeControllerSchema;
+import org.apache.jmeter.gui.FilePanelEntryBinding;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
@@ -41,6 +43,7 @@ public class IncludeControllerGui extends AbstractControllerGui
      */
     public IncludeControllerGui() {
         init();
+        bindingGroup.add(new FilePanelEntryBinding(includePanel, IncludeControllerSchema.INSTANCE.getIncludePath()));
     }
 
     @Override
@@ -48,34 +51,9 @@ public class IncludeControllerGui extends AbstractControllerGui
         return "include_controller";//$NON-NLS-1$
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void configure(TestElement el) {
-        super.configure(el);
-        IncludeController controller = (IncludeController) el;
-        this.includePanel.setFilename(controller.getIncludePath());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TestElement createTestElement() {
-        IncludeController mc = new IncludeController();
-        configureTestElement(mc);
-        return mc;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void modifyTestElement(TestElement element) {
-        configureTestElement(element);
-        IncludeController controller = (IncludeController)element;
-        controller.setIncludePath(this.includePanel.getFilename());
+    public TestElement makeTestElement() {
+        return new IncludeController();
     }
 
     /**

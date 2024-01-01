@@ -74,7 +74,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
 
     @Override
     protected String getInitFileProperty() {
-        return BeanShellSamplerSchema.INSTANCE.getInitFile().getName();
+        return INIT_FILE;
     }
 
     @Override
