@@ -36,12 +36,9 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.control.HttpMirrorServer;
-import org.apache.jmeter.protocol.http.control.TestHTTPMirrorThread;
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.control.HttpMirrorServerExtension;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -143,6 +140,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         testPostRequest_FileUpload(HTTP_SAMPLER3);
     }
 
+    @Test
     public void testPostRequest_FileUploadWithSubtypeOverride() throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
@@ -168,6 +166,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 TEST_FILE_CONTENT, "multipart/related");
     }
 
+    @Test
     public void testPostRequest_BodyFromParameterValues() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER, ISO_8859_1);
     }

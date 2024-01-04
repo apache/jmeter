@@ -75,8 +75,8 @@ public class TestHTTPHC4Impl {
         HTTPHC4Impl hc = new HTTPHC4Impl(sampler);
         String requestData = hc.setupHttpEntityEnclosingRequestData(post);
         assertEquals(0, post.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE).length);
-        assertTrue(post.getEntity().getContentType().getValue().startsWith("multipart/related"));
-        assertTrue(requestData.contains("charset=utf-8"));
+        Assertions.assertTrue(post.getEntity().getContentType().getValue().startsWith("multipart/related"));
+        Assertions.assertTrue(requestData.contains("charset=utf-8"));
     }
     @Test
     void testParameterWithMultipartAndExplicitHeader() throws Exception {
