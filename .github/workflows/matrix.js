@@ -26,8 +26,6 @@ matrix.addAxis({
   name: 'java_version',
   // Strings allow versions like 18-ea
   values: [
-    '8',
-    '11',
     '17',
     '21',
     eaJava,
@@ -80,12 +78,6 @@ matrix.setNamePattern(['java_version', 'java_distribution', 'hash', 'os', 'tz', 
 
 // Semeru uses OpenJ9 jit which has no option for making hash codes the same
 matrix.exclude({java_distribution: {value: 'semeru'}, hash: {value: 'same'}});
-// Semeru 8 fails when Semeru 17 is on the PATH (we use 17 for build)
-matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '8'});
-// Microsoft Java has no distribution for 8
-matrix.exclude({java_distribution: {value: 'microsoft'}, java_version: '8'});
-// Oracle JDK is only supported for JDK 17 and later
-matrix.exclude({java_distribution: {value: 'oracle'}, java_version: ['8', '11']});
 // Ignore builds with JAVA EA for now, see https://github.com/apache/jmeter/issues/6114
 matrix.exclude({java_version: eaJava})
 matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
@@ -97,10 +89,6 @@ matrix.generateRow({hash: {value: 'same'}});
 matrix.generateRow({os: 'windows-latest'});
 // TODO: un-comment when xvfb will be possible
 // matrix.generateRow({os: 'ubuntu-latest'});
-// Ensure there will be at least one job with Java 8
-matrix.generateRow({java_version: "8"});
-// Ensure there will be at least one job with Java 11
-matrix.generateRow({java_version: "11"});
 // Ensure there will be at least one job with Java 17
 matrix.generateRow({java_version: "17"});
 // Ensure there will be at least one job with Java 21
@@ -119,15 +107,6 @@ include.forEach(v => {
     `-Duser.country=${v.locale.country}`,
     `-Duser.language=${v.locale.language}`,
   ];
-  if (v.hash.value === 'same' && v.java_version <= 8) {
-    // processSiteXslt fails with VerifyError when running with Java 8 and the same hashcode
-    // Skip the task in that case
-    //java.lang.VerifyError: (class: website_style, method: issue_separator signature: (Lcom/sun/org/apache/xala...)
-    // Illegal target of jump or branch
-    gradleArgs.push('-x :src:dist:processSiteXslt');
-    // javadoc tool seems take too much CPU when there are many hash collisions
-    gradleArgs.push('-x :src:dist:javadocAggregate');
-  }
   v.extraGradleArgs = gradleArgs.join(' ');
 });
 include.forEach(v => {

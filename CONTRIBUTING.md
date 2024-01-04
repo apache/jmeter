@@ -54,7 +54,7 @@ The steps to import the sources (based on Eclipse 2019-06) into Eclipse are as f
 
 1. Install `Eclipse IDE for Java Developers`
 1. Install `Kotlin for Eclipse` plugin (JMeter code uses Java and Kotlin)
-1. Make sure you have a Java 8 compatible JDK configured in your workspace
+1. Make sure you have a Java 17 compatible JDK configured in your workspace
 1. Open `File->Import...`
 1. Select `Existing Gradle Project` and click `Next`
 1. Read `How to experience the best Gradle integration` and click `Next`

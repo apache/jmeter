@@ -48,18 +48,8 @@ tasks.configureEach<KotlinCompile> {
             apiVersion = "kotlin.api".v
         }
         freeCompilerArgs += "-Xjvm-default=all"
-        val jdkRelease = buildParameters.targetJavaVersion.let {
-            when {
-                it < 9 -> "1.8"
-                else -> it.toString()
-            }
-        }
-        // jdk-release requires Java 9+
-        buildParameters.buildJdkVersion
-            .takeIf { it > 8 }
-            ?.let {
-                freeCompilerArgs += "-Xjdk-release=$jdkRelease"
-            }
+        val jdkRelease = buildParameters.targetJavaVersion.toString()
+        freeCompilerArgs += "-Xjdk-release=$jdkRelease"
         kotlinOptions.jvmTarget = jdkRelease
     }
 }
