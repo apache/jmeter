@@ -135,7 +135,7 @@ recipeList:
   - org.openrewrite.staticanalysis.RedundantFileCreation
   - org.openrewrite.staticanalysis.RemoveExtraSemicolons
   #  - org.openrewrite.staticanalysis.RemoveRedundantTypeCast
-  #  - org.openrewrite.java.RemoveUnusedImports
+  - org.openrewrite.java.RemoveUnusedImports
   #  - org.openrewrite.staticanalysis.RemoveUnusedLocalVariables
   #  - org.openrewrite.staticanalysis.RemoveUnusedPrivateMethods
   - org.openrewrite.staticanalysis.RenameLocalVariablesToCamelCase
