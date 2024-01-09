@@ -1,3 +1,5 @@
+import org.apache.jmeter.buildtools.openrewrite.OpenRewriteExtension
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,18 +17,10 @@
  * limitations under the License.
  */
 
-plugins {
-    id("build-logic.kotlin-dsl-gradle-plugin")
+val openrewrite by configurations.creating {
+    description = "OpenRewrite dependencies"
+    isCanBeConsumed = false
+    isCanBeResolved = false
 }
 
-dependencies {
-    api(projects.buildParameters)
-    api(projects.verification)
-    api(projects.openrewrite)
-    api("me.champeau.jmh:me.champeau.jmh.gradle.plugin:0.7.2")
-    api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.90")
-    api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.90")
-    api("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.9.22")
-    api("org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin:1.9.22")
-    api("org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin:1.9.10")
-}
+project.extensions.create<OpenRewriteExtension>(OpenRewriteExtension.NAME)

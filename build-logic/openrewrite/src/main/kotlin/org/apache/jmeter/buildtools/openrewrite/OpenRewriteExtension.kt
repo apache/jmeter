@@ -15,18 +15,23 @@
  * limitations under the License.
  */
 
-plugins {
-    id("build-logic.kotlin-dsl-gradle-plugin")
-}
+package org.apache.jmeter.buildtools.openrewrite
 
-dependencies {
-    api(projects.buildParameters)
-    api(projects.verification)
-    api(projects.openrewrite)
-    api("me.champeau.jmh:me.champeau.jmh.gradle.plugin:0.7.2")
-    api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.90")
-    api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.90")
-    api("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.9.22")
-    api("org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin:1.9.22")
-    api("org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin:1.9.10")
+import org.gradle.api.model.ObjectFactory
+import org.gradle.kotlin.dsl.property
+import org.gradle.kotlin.dsl.setProperty
+import javax.inject.Inject
+
+open class OpenRewriteExtension @Inject constructor(objectFactory: ObjectFactory) {
+    companion object {
+        const val NAME = "openrewrite"
+    }
+
+    val configFile = objectFactory.fileProperty()
+
+    val activeStyles = objectFactory.setProperty<String>()
+
+    val activeRecipes = objectFactory.setProperty<String>()
+
+    val failOnDryRunResults = objectFactory.property<Boolean>().convention(true)
 }
