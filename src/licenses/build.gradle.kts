@@ -104,7 +104,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     // That enables to have "version-independent" MIT license in licenses/slf4j-api, and
     // it would be copied provided the detected license for slf4j-api is MIT.
 
-    overrideLicense("dnsjava:dnsjava:2.1.9") {
+    overrideLicense("dnsjava:dnsjava:3.5.3") {
         expectedLicense = SpdxLicense.BSD_2_Clause
     }
 
