@@ -15,25 +15,16 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.buildtools.openrewrite
+package org.openrewrite.gradle.isolated
 
-import org.gradle.api.model.ObjectFactory
-import org.gradle.kotlin.dsl.property
-import org.gradle.kotlin.dsl.setProperty
-import javax.inject.Inject
+public val ResultsContainer.generated: List<org.openrewrite.Result>
+    get() = this.generated
 
-open class OpenRewriteExtension @Inject constructor(objects: ObjectFactory) {
-    companion object {
-        const val NAME = "openrewrite"
-    }
+public val ResultsContainer.deleted: List<org.openrewrite.Result>
+    get() = this.deleted
 
-    val configFile = objects.fileProperty()
+public val ResultsContainer.moved: List<org.openrewrite.Result>
+    get() = this.moved
 
-    val activeStyles = objects.setProperty<String>()
-
-    val activeRecipes = objects.setProperty<String>()
-
-    val failOnDryRunResults = objects.property<Boolean>().convention(true)
-
-    val resourceRecipes = objects.setProperty<String>()
-}
+public val ResultsContainer.refactoredInPlace: List<org.openrewrite.Result>
+    get() = this.refactoredInPlace

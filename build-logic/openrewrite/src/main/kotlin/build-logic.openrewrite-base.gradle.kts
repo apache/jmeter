@@ -1,4 +1,5 @@
 import org.apache.jmeter.buildtools.openrewrite.OpenRewriteExtension
+import org.apache.jmeter.buildtools.openrewrite.OpenRewriteProcessTask
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -23,4 +24,78 @@ val openrewrite by configurations.creating {
     isCanBeResolved = false
 }
 
-project.extensions.create<OpenRewriteExtension>(OpenRewriteExtension.NAME)
+val openrewriteClasspath by configurations.creating {
+    description = "OpenRewrite classpath"
+    isCanBeConsumed = false
+    isCanBeResolved = true
+    extendsFrom(openrewrite)
+    attributes {
+        // TODO: add toolchain and prefer the relevant JVM target variant
+        attribute(
+            Bundling.BUNDLING_ATTRIBUTE,
+            project.objects.named(Bundling::class.java, Bundling.EXTERNAL)
+        )
+        attribute(
+            TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE,
+            project.objects.named(TargetJvmEnvironment::class.java, TargetJvmEnvironment.STANDARD_JVM)
+        )
+    }
+}
+
+val openrewriteExtension = project.extensions.create<OpenRewriteExtension>(OpenRewriteExtension.NAME)
+
+val rewriteRun by tasks.registering(OpenRewriteProcessTask::class) {
+}
+
+val rewriteDryRun by tasks.registering {
+}
+
+plugins.withId("java") {
+    val java = project.the<JavaPluginExtension>()
+    java.sourceSets.whenObjectRemoved {
+        val removedName = name
+        rewriteRun.configure {
+            sourceSets.remove(sourceSets[removedName])
+        }
+    }
+    java.sourceSets.all {
+        val sourceSet = this
+        rewriteRun.configure {
+            sourceSets.create(sourceSet.name) {
+                compileClasspath.from(sourceSet.compileClasspath)
+                compileClasspath.from(sourceSet.output.classesDirs)
+                javaRelease.set(
+                    tasks.named<JavaCompile>(sourceSet.compileJavaTaskName)
+                        .flatMap { it.options.release }
+                )
+                srcDirSets.create("resources") {
+                    sourceDirectories.from(sourceSet.resources.sourceDirectories)
+                    filter = sourceSet.resources.filter
+                }
+                srcDirSets.create("java") {
+                    sourceDirectories.from(sourceSet.java.sourceDirectories)
+                    filter = sourceSet.java.filter
+                }
+            }
+        }
+    }
+}
+
+plugins.withId("org.jetbrains.kotlin.jvm") {
+    val java = project.the<JavaPluginExtension>()
+    java.sourceSets.all {
+        val sourceSet = this
+        val kotlin: SourceDirectorySet by (sourceSet as ExtensionAware).extensions
+        rewriteRun.configure {
+            sourceSets.named(sourceSet.name) {
+                srcDirSets.create("kotlin") {
+                    sourceDirectories.from(kotlin.sourceDirectories)
+                    filter = kotlin.filter
+                    // Kotlin source set includes java, however OpenRewrite does not need it for Kotlin.
+                    // OpenRewrite uses compiled classes instead to get Java types
+                    includes.add("**/*.kt")
+                }
+            }
+        }
+    }
+}

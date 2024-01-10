@@ -31,8 +31,7 @@ plugins {
 }
 
 dependencyResolutionManagement {
-    // TODO: un-comment when https://github.com/openrewrite/rewrite-gradle-tooling-model/issues/12 is resolved
-    // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         // TODO: support enableMavenLocal
         mavenCentral()

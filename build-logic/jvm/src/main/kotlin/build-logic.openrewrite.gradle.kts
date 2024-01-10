@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-import org.openrewrite.gradle.RewriteDryRunTask
-
 plugins {
     id("build-logic.openrewrite-base")
 }
@@ -29,30 +27,20 @@ dependencies {
 
 openrewrite {
     configFile = project.rootProject.file("config/openrewrite/rewrite.yml")
-    activeStyles += "org.apache.jmeter.style.Style"
+    failOnDryRunResults = false
+    activeStyles.add("org.apache.jmeter.style.Style")
+    // See config/openrewrite/rewrite.yml
+    activeRecipes.add("org.apache.jmeter.staticanalysis.CodeCleanup")
+    // See https://github.com/openrewrite/rewrite-static-analysis/blob/8c803a9c50b480841a4af031f60bac5ee443eb4e/src/main/resources/META-INF/rewrite/common-static-analysis.yml#L21
+    activeRecipes.add("org.apache.jmeter.staticanalysis.CommonStaticAnalysis")
+    plugins.withId("build-logic.test-junit5") {
+        // See https://github.com/openrewrite/rewrite-testing-frameworks/blob/47ccd370247f1171fa9df005da8a9a3342d19f3f/src/main/resources/META-INF/rewrite/junit5.yml#L18C7-L18C62
+        activeRecipes.add("org.openrewrite.java.testing.junit5.JUnit5BestPractices")
+        // See https://github.com/openrewrite/rewrite-testing-frameworks/blob/47ccd370247f1171fa9df005da8a9a3342d19f3f/src/main/resources/META-INF/rewrite/junit5.yml#L255C7-L255C60
+        activeRecipes.add("org.openrewrite.java.testing.junit5.CleanupAssertions")
+    }
 }
-//rewrite {
-//
-//}
-//rewrite {
-//    configFile = project.rootProject.file("config/openrewrite/rewrite.yml")
-//    // See RewriteDryRunTask workaround below
-//    failOnDryRunResults = false
-//
-//    activeStyle("org.apache.jmeter.style.Style")
-//
-//    // See config/openrewrite/rewrite.yml
-//    activeRecipe("org.apache.jmeter.staticanalysis.CodeCleanup")
-//    // See https://github.com/openrewrite/rewrite-static-analysis/blob/8c803a9c50b480841a4af031f60bac5ee443eb4e/src/main/resources/META-INF/rewrite/common-static-analysis.yml#L21
-//    activeRecipe("org.apache.jmeter.staticanalysis.CommonStaticAnalysis")
-//    plugins.withId("build-logic.test-junit5") {
-//        // See https://github.com/openrewrite/rewrite-testing-frameworks/blob/47ccd370247f1171fa9df005da8a9a3342d19f3f/src/main/resources/META-INF/rewrite/junit5.yml#L18C7-L18C62
-//        activeRecipe("org.openrewrite.java.testing.junit5.JUnit5BestPractices")
-//        // See https://github.com/openrewrite/rewrite-testing-frameworks/blob/47ccd370247f1171fa9df005da8a9a3342d19f3f/src/main/resources/META-INF/rewrite/junit5.yml#L255C7-L255C60
-//        activeRecipe("org.openrewrite.java.testing.junit5.CleanupAssertions")
-//    }
-//}
-//
+
 //// See https://github.com/openrewrite/rewrite-gradle-plugin/issues/255
 //tasks.withType<RewriteDryRunTask>().configureEach {
 //    doFirst {

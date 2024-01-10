@@ -90,6 +90,7 @@
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='commons-net' />
     <trusted-key id='0186f8b24c5bc02c94a0e0e486f75e83e1ee085f' group='de.thetaphi' />
     <trusted-key id='1fa37fbe4453c1073e7ef61d6449005f96bc97a3' group='de.undercouch' />
+    <trusted-key id='cde577234159e222bc56e50f9c61220417aaa02e' group='dev.failsafe' />
     <trusted-key id='3e1ac64f4e34e290503c90323449ec3ac2efe8aa' group='dnsjava' />
     <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='info.picocli' />
     <trusted-key id='aa417737bd805456db3cbdde6601e5c08dccbb96' group='info.picocli' />
