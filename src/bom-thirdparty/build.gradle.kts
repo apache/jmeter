@@ -49,7 +49,7 @@ dependencies {
         api("com.formdev:svgSalamander:1.1.4")
         api("com.github.ben-manes.caffeine:caffeine:2.9.3")
         api("com.github.weisj:darklaf-core:2.7.3")
-        api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.3.4")
+        api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.4.1")
         api("com.github.weisj:darklaf-property-loader:2.7.3")
         api("com.github.weisj:darklaf-theme:2.7.3")
         api("com.google.auto.service:auto-service-annotations:1.1.1")
