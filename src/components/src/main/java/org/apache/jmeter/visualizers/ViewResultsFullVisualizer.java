@@ -120,8 +120,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     //default scroll checkbox status
     private static final boolean SCROLL_CHECKBOX = JMeterUtils.getPropDefault("view.results.tree.autoscroll", false);
 
-    // default tree view width
-    private static final int VIEWERS_WIDTH = JMeterUtils.getPropDefault("view.results.tree.width", 250); // $NON-NLS-1$
+    // default tree scroll width
+    private static final int SCROLL_WIDTH = JMeterUtils.getPropDefault("view.results.tree.width", 250); // $NON-NLS-1$
 
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
@@ -437,7 +437,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         jTree.setRootVisible(false);
         jTree.setShowsRootHandles(true);
         JScrollPane treePane = new JScrollPane(jTree);
-        treePane.setPreferredSize(new Dimension(VIEWERS_WIDTH, 300));
+        treePane.setPreferredSize(new Dimension(SCROLL_WIDTH, 300));
 
         VerticalPanel leftPane = new VerticalPanel();
         leftPane.add(treePane, BorderLayout.CENTER);
