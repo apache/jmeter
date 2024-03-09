@@ -72,6 +72,8 @@ public object JMeterGuiLauncher {
     private fun setupLaF() {
         KerningOptimizer.INSTANCE.maxTextLengthWithKerning =
             JMeterUtils.getPropDefault("text.kerning.max_document_size", 10000)
+        JMeterUIDefaults.INSTANCE.scale =
+            JMeterUtils.getPropDefault("gui.initialZoomScale", 1f)
         JMeterUIDefaults.INSTANCE.install()
         val jMeterLaf = LookAndFeelCommand.getPreferredLafCommand()
         try {
