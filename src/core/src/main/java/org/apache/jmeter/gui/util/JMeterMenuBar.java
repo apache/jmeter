@@ -103,8 +103,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public static final String CROSS_PLATFORM_LAF = "CrossPlatform"; // $NON-NLS-1$
     public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
     public static final String DARKLAF_LAF = "Darklaf"; // $NON-NLS-1$
+    public static final String FLAT_LAF = "FlatLaf"; // $NON-NLS-1$
     public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
     public static final String DARKLAF_LAF_CLASS = "com.github.weisj.darklaf.DarkLaf"; // $NON-NLS-1$
+    public static final String FLATLAF_LAF_CLASS = "com.formdev.flatlaf.FlatLightLaf"; // $NON-NLS-1$
 
     public JMeterMenuBar() {
         // List for recent files menu items

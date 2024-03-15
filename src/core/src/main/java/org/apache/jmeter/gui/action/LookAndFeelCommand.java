@@ -29,8 +29,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
+import javax.swing.*;
+
+import com.formdev.flatlaf.FlatLaf;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
@@ -42,11 +43,15 @@ import com.github.weisj.darklaf.theme.DarculaTheme;
 import com.github.weisj.darklaf.theme.Theme;
 import com.google.auto.service.AutoService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implements the Look and Feel menu item.
  */
 @AutoService(Command.class)
 public class LookAndFeelCommand extends AbstractAction {
+    private static final Logger log = LoggerFactory.getLogger(LookAndFeelCommand.class);
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
     private static final Map<String, MenuItem> items = new LinkedHashMap<>();
@@ -107,6 +112,18 @@ public class LookAndFeelCommand extends AbstractAction {
             System.setProperty("darklaf.treeRowPopup", "false");
         }
         UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
+        String[] flatLafTypes = {"FlatLightLaf", "FlatDarkLaf", "FlatIntelliJLaf", "FlatDarculaLaf"};
+        for (String flatLaf : flatLafTypes) {
+            try {
+                UIManager.installLookAndFeel(flatLaf, "com.formdev.flatlaf." + flatLaf);
+                //Class<? extends FlatLaf> clazz = (Class<? extends FlatLaf>) Class.forName("com.formdev.flatlaf." + flatLaf);
+                //FlatLaf.installLafInfo(flatLaf, (Class<? extends LookAndFeel>) clazz.getConstructor().newInstance());
+                //(FlatLaf)(clazz.getConstructor().newInstance()).set;
+                //FlatLaf.installLafInfo(flatLaf, clazz.getConstructor().newInstance());
+            } catch( Exception ex ) {
+                log.warn("Failed to initialize LaF: {}", flatLaf);
+            }
+        }
 
         List<MenuItem> items = new ArrayList<>();
         for (UIManager.LookAndFeelInfo laf : JMeterMenuBar.getAllLAFs()) {
@@ -205,8 +222,12 @@ public class LookAndFeelCommand extends AbstractAction {
         return "Darklaf".equalsIgnoreCase(UIManager.getLookAndFeel().getID()); // $NON-NLS-1$
     }
 
+    public static boolean isFlatlafTheme() {
+        return UIManager.getLookAndFeel().getID().startsWith("Flat"); // $NON-NLS-1$
+    }
+
     public static boolean isDark() {
-        return isDarklafTheme() && Theme.isDark(LafManager.getTheme());
+        return (isDarklafTheme() && Theme.isDark(LafManager.getTheme())) || FlatLaf.isLafDark();
     }
 
     public static void activateLookAndFeel(String command) {

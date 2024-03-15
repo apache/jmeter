@@ -125,6 +125,8 @@ dependencies {
     testFixturesApi(testFixtures(projects.src.jorphan))
     testFixturesImplementation(projects.src.testkit)
     testFixturesImplementation("org.junit.jupiter:junit-jupiter")
+
+    implementation( "com.formdev:flatlaf" )
 }
 
 val generatedVersionDir = layout.buildDirectory.dir("generated/sources/version")
