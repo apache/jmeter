@@ -17,34 +17,27 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.prefs.Preferences;
 
 import javax.swing.*;
-
-import com.formdev.flatlaf.FlatLaf;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.intellijthemes.*;
 import com.github.weisj.darklaf.LafManager;
 import com.github.weisj.darklaf.theme.DarculaTheme;
 import com.github.weisj.darklaf.theme.Theme;
 import com.google.auto.service.AutoService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implements the Look and Feel menu item.
@@ -112,17 +105,24 @@ public class LookAndFeelCommand extends AbstractAction {
             System.setProperty("darklaf.treeRowPopup", "false");
         }
         UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
-        String[] flatLafTypes = {"FlatLightLaf", "FlatDarkLaf", "FlatIntelliJLaf", "FlatDarculaLaf"};
-        for (String flatLaf : flatLafTypes) {
+
+        //Add FlatLAF Themes
+        for (String flatLaf : new String[]{"FlatLightLaf", "FlatDarkLaf", "FlatIntelliJLaf", "FlatDarculaLaf"}) {
             try {
                 UIManager.installLookAndFeel(flatLaf, "com.formdev.flatlaf." + flatLaf);
-                //Class<? extends FlatLaf> clazz = (Class<? extends FlatLaf>) Class.forName("com.formdev.flatlaf." + flatLaf);
-                //FlatLaf.installLafInfo(flatLaf, (Class<? extends LookAndFeel>) clazz.getConstructor().newInstance());
-                //(FlatLaf)(clazz.getConstructor().newInstance()).set;
-                //FlatLaf.installLafInfo(flatLaf, clazz.getConstructor().newInstance());
             } catch( Exception ex ) {
-                log.warn("Failed to initialize LaF: {}", flatLaf);
+                log.warn("Failed to load FlatLAF theme: {}", flatLaf, ex);
             }
+        }
+        for (String flatLaf : new String[]{"FlatMacDarkLaf", "FlatMacLightLaf"}) {
+            try {
+                UIManager.installLookAndFeel(flatLaf, "com.formdev.flatlaf.themes" + flatLaf);
+            } catch( Exception ex ) {
+                log.warn("Failed to load FlatLAF theme: {}", flatLaf, ex);
+            }
+        }
+        for (UIManager.LookAndFeelInfo lafInfo : FlatAllIJThemes.INFOS) {
+            UIManager.installLookAndFeel(lafInfo.getName(), lafInfo.getClassName());
         }
 
         List<MenuItem> items = new ArrayList<>();
