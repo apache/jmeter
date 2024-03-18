@@ -34,6 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.gui.ui.TextComponentUI;
+import org.checkerframework.checker.guieffect.qual.UI;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -65,7 +66,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final int MAX_UNDOS = JMeterUtils.getPropDefault("jsyntaxtextarea.maxundos", 50);
     private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", null);
     private static final int USER_FONT_SIZE = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", -1);
-    private static final boolean HIGHLIGHT_OCCURRENCE = JMeterUtils.getPropDefault("jsyntaxtextarea.highlight", true);
+    private static final boolean HIGHLIGHT_OCCURRENCES = JMeterUtils.getPropDefault("jsyntaxtextarea.highlight", true);
 
     private static final HierarchyListener GUTTER_THEME_PATCHER = e -> {
         if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0
@@ -149,11 +150,11 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         final Theme theme = isDarklafTheme ? new DarklafRSyntaxTheme(jSyntaxTextArea) : (LookAndFeelCommand.isDark() ? DEFAULT_DARK_THEME : DEFAULT_THEME);
 
         if (isFlatlafTheme) {
-            jSyntaxTextArea.setBackground(UIManager.getColor("TextArea.background"));
             jSyntaxTextArea.setForeground(UIManager.getColor("TextArea.foreground"));
             jSyntaxTextArea.setCaretColor(UIManager.getColor("TextArea.caretForeground"));
             jSyntaxTextArea.setSelectionColor(UIManager.getColor("TextArea.selectionBackground"));
             jSyntaxTextArea.setSelectedTextColor(UIManager.getColor("TextArea.selectionForeground"));
+            jSyntaxTextArea.setHyperlinkForeground(UIManager.getColor("Hyperlink.linkColor"));
             //jSyntaxTextArea.setFont(UIManager.getFont("TextArea.font"));
         }
 
@@ -254,7 +255,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         super.setAntiAliasingEnabled(true);
         super.setLineWrap(LINE_WRAP);
         super.setWrapStyleWord(WRAP_STYLE_WORD);
-        super.setMarkOccurrences(HIGHLIGHT_OCCURRENCE);
+        super.setMarkOccurrences(HIGHLIGHT_OCCURRENCES);
         this.disableUndo = disableUndo;
         if (USER_FONT_FAMILY != null) {
             int fontSize = USER_FONT_SIZE > 0 ? USER_FONT_SIZE : getFont().getSize();
