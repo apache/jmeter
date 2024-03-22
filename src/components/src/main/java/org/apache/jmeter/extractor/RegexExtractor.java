@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -57,7 +58,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *  These are passed to the setUseField() method
      *
      *  Do not change these values!
-    */
+     */
     public static final String USE_HDRS = "true"; // $NON-NLS-1$
     public static final String USE_REQUEST_HDRS = "request_headers"; // $NON-NLS-1$
     public static final String USE_BODY = "false"; // $NON-NLS-1$
@@ -126,6 +127,9 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         try {
             pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
             List<MatchResult> matches = processMatches(pattern, regex, previousResult, matchNumber, vars);
+            if(matches.isEmpty() && isFailIfNotFound()){
+                failResult(previousResult);
+            }
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
             if (prevString != null) {
@@ -176,6 +180,14 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         } finally {
             JMeterUtils.clearMatcherMemory(matcher, pattern);
         }
+    }
+
+    private void failResult(SampleResult previousResult){
+        previousResult.setSuccessful(false);
+        AssertionResult res = new AssertionResult(getName());
+        res.setFailure(true);
+        res.setFailureMessage("Pattern not found: " + getRegex());
+        previousResult.addAssertionResult(res);
     }
 
     private void extractWithJavaRegex(SampleResult previousResult, JMeterVariables vars, String refName, int matchNumber) {
@@ -244,8 +256,8 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 : useBodyAsDocument() ? Document.getTextFromDocument(result.getResponseData())
                 : result.getResponseDataAsString() // Bug 36898
                 ;
-       log.debug("Input = '{}'", inputString);
-       return inputString;
+        log.debug("Input = '{}'", inputString);
+        return inputString;
     }
 
     private List<MatchResult> processMatches(Pattern pattern, String regex, SampleResult result, int matchNumber, JMeterVariables vars) {
@@ -472,7 +484,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
                 , Perl5Compiler.READ_ONLY_MASK
-                | Perl5Compiler.SINGLELINE_MASK);
+                        | Perl5Compiler.SINGLELINE_MASK);
         if (log.isDebugEnabled()) {
             log.debug("Pattern = '{}', template = '{}'", templatePattern.getPattern(), rawTemplate);
         }
@@ -688,4 +700,13 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public void setUseField(String actionCommand) {
         set(getSchema().getMatchTarget(), actionCommand);
     }
+
+    public void setFailIfNotFound(boolean isFailing) {
+        set(getSchema().getFailIfNotFound(), isFailing);
+    }
+
+    public boolean isFailIfNotFound() {
+        return get(getSchema().getFailIfNotFound());
+    }
+
 }
