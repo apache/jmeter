@@ -382,6 +382,7 @@ public class JMeterTest extends JMeterTestCase {
         IGNORED_PROPERTIES.add(LoopControllerSchema.INSTANCE.getContinueForever());
         IGNORED_PROPERTIES.add(RegexExtractorSchema.INSTANCE.getMatchTarget());
         IGNORED_PROPERTIES.add(RegexExtractorSchema.INSTANCE.getDefaultIsEmpty());
+        IGNORED_PROPERTIES.add(RegexExtractorSchema.INSTANCE.getFailIfNotFound());
         // TODO: support expressions?
         IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getIpSourceType());
         IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getImplementation());

@@ -72,8 +72,6 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
 
-    private static final String FAILIFNOTFOUND = "RegexExtractor.fail_if_not_found";
-
     private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
             "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
@@ -703,13 +701,12 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         set(getSchema().getMatchTarget(), actionCommand);
     }
 
-    public void setFailIfNotFound(Boolean isFailing){
-        log.warn("Setting fail as " + isFailing);
-        setProperty(FAILIFNOTFOUND,isFailing);
+    public void setFailIfNotFound(boolean isFailing) {
+        set(getSchema().getFailIfNotFound(), isFailing);
     }
 
-    public boolean isFailIfNotFound(){
-        return getPropertyAsBoolean(FAILIFNOTFOUND);
+    public boolean isFailIfNotFound() {
+        return get(getSchema().getFailIfNotFound());
     }
 
 }

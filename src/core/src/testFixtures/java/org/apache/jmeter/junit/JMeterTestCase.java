@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * {@code @Isolated}.
  */
 @Isolated
-public abstract class JMeterTestCase {
+public abstract class  JMeterTestCase {
     // Used by findTestFile
     private static final String filePrefix;
 
