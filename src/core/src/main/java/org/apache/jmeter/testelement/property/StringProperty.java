@@ -18,11 +18,16 @@
 package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+
+import java.util.Arrays;
 
 /**
  */
 public class StringProperty extends AbstractProperty {
     private static final long serialVersionUID = 233L;
+
+    private static final String MERGE_PROPERTY = JMeterUtils.getPropDefault("merge.property", "");
 
     private String value;
 
@@ -102,5 +107,20 @@ public class StringProperty extends AbstractProperty {
         if (savedValue != null) {
             value = savedValue;
         }
+    }
+
+    @Override
+    public void mergeIn(JMeterProperty prop) {
+        // NOOP
+        boolean hit = shouldMerge(prop);
+        if (hit){
+            setObjectValue(prop.getStringValue()+getStringValue());
+        }
+    }
+
+    private boolean shouldMerge(JMeterProperty prop){
+        String propName = prop.getName();
+        return !MERGE_PROPERTY.isEmpty()
+                && Arrays.stream(MERGE_PROPERTY.split(",")).anyMatch(item -> (item.equalsIgnoreCase(propName) && item.equalsIgnoreCase(getName())));
     }
 }

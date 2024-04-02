@@ -1577,6 +1577,11 @@ JMETER-SERVER</source>
     confirmation dialogue.<br/>
     Defaults to: <code>false</code>
 </property>
+  <property name="merge.property">
+    if you have multi ConfigTestElement, and some properties name is same in it ,you can config as below, then they can merge.Separate with commas.<br/>
+    eg,the full url is http://192.168.8.110:8088/local-xxx/xxx/mo/knowledge.json, other url have the same prefix:/local-xxx/xxx, we can config a globe ConfigTestElement with a property HTTPSampler.path=/local-xxx/xxx, then the HTTPSampler.path will merged with HttpSample .<br/>
+    Defaults to: <code>HTTPSampler.path</code>
+  </property>
 </properties>
 </section>
 <section name="&sect-num;.36 Classpath configuration" anchor="classpath">
