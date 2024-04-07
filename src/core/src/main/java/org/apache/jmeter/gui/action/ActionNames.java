@@ -36,7 +36,11 @@ public final class ActionNames {
     public static final String ANALYZE_FILE     = "Analyze File"; // $NON-NLS-1$
     public static final String APPLY_NAMING_CONVENTION    = "Apply Naming Convention"; // $NON-NLS-1$
     public static final String CHANGE_LANGUAGE  = "change_language"; // $NON-NLS-1$
-    public static final String CHANGE_PARENT    = "Change Parent"; // $NON-NLS-1$
+    public static final String CHANGE_CONFIG_ELEMENT = "change_config_element"; // $NON-NLS-1$
+    public static final String CHANGE_CONTROLLER = "change_controller"; // $NON-NLS-1$
+    public static final String CHANGE_LISTENER = "change_listener"; // $NON-NLS-1$
+    public static final String CHANGE_THREAD_GROUP = "change_thread_group";
+    public static final String CHANGE_TIMER = "change_timer";
     public static final String CHECK_DIRTY      = "check_dirty"; // $NON-NLS-1$
     public static final String CHECK_REMOVE     = "check_remove"; // $NON-NLS-1$
     public static final String CHECK_CUT        = "check_cut"; // $NON-NLS-1$

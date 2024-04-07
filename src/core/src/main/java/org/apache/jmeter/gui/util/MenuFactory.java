@@ -269,6 +269,12 @@ public final class MenuFactory {
         }
     }
 
+    public static void addThreadGroupMenu(JPopupMenu pop) {
+        pop.add(makeMenus(new String[]{THREADS},
+                JMeterUtils.getResString("change_thread_group"),// $NON-NLS-1$
+                ActionNames.CHANGE_THREAD_GROUP));
+    }
+
     public static void addPasteResetMenu(JPopupMenu menu) {
         addSeparator(menu);
         menu.add(makeMenuItemRes("paste", ActionNames.PASTE, KeyStrokes.PASTE)); //$NON-NLS-1$
@@ -373,8 +379,8 @@ public final class MenuFactory {
                 ActionNames.APPLY_NAMING_CONVENTION));
 
         pop.add(makeMenus(new String[]{CONTROLLERS},
-                JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
-                ActionNames.CHANGE_PARENT));
+                JMeterUtils.getResString("change_controller"),// $NON-NLS-1$
+                ActionNames.CHANGE_CONTROLLER));
 
         pop.add(makeMenus(new String[]{CONTROLLERS},
                 JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
@@ -417,19 +423,33 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultConfigElementMenu() {
-        return createDefaultPopupMenu();
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{CONFIG_ELEMENTS},
+                JMeterUtils.getResString("change_config_element"),// $NON-NLS-1$
+                ActionNames.CHANGE_CONFIG_ELEMENT));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
     }
 
     public static JPopupMenu getDefaultVisualizerMenu() {
         JPopupMenu pop = new JPopupMenu();
         pop.add(MenuFactory.makeMenuItemRes(
                 "clear", ActionNames.CLEAR)); //$NON-NLS-1$
+        pop.add(makeMenus(new String[]{LISTENERS},
+                JMeterUtils.getResString("change_listener"),// $NON-NLS-1$
+                ActionNames.CHANGE_LISTENER));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
     }
 
     public static JPopupMenu getDefaultTimerMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{TIMERS},
+                JMeterUtils.getResString("change_timer"),// $NON-NLS-1$
+                ActionNames.CHANGE_TIMER));
+
         return createDefaultPopupMenu();
     }
 

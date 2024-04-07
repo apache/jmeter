@@ -17,63 +17,63 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.JTree;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import com.google.auto.service.AutoService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.Visualizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.auto.service.AutoService;
+import javax.swing.*;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Allows to change Controller implementation
+ * Allows to change Listener implementation
  */
 @AutoService(Command.class)
-public class ChangeParent extends AbstractAction {
-    private static final Logger log = LoggerFactory.getLogger(ChangeParent.class);
+public class ChangeListener extends AbstractAction {
+    private static final Logger log = LoggerFactory.getLogger(ChangeListener.class);
 
     private static final Set<String> commands = new HashSet<>();
 
     static {
-        commands.add(ActionNames.CHANGE_PARENT);
+        commands.add(ActionNames.CHANGE_LISTENER);
     }
 
-    public ChangeParent() {
+    public ChangeListener() {
     }
 
     @Override
-    public void doAction(ActionEvent e) {
+    public void doAction(ActionEvent e) throws IllegalUserActionException {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof Controller)) {
+        if (!(currentNode.getUserObject() instanceof Visualizer)) {
             Toolkit.getDefaultToolkit().beep();
             return;
         }
         try {
             guiPackage.updateCurrentNode();
-            TestElement controller = guiPackage.createTestElement(name);
-            changeParent(controller, guiPackage, currentNode);
+            Visualizer listener = (Visualizer) guiPackage.createTestElement(name);
+            changeListener(listener, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
             log.error("Failed to change parent", err);
         }
-
     }
 
     @Override
@@ -81,19 +81,20 @@ public class ChangeParent extends AbstractAction {
         return commands;
     }
 
-    private static void changeParent(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
 
+    private static void changeListener(Visualizer newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         // keep the old name if it was not the default one
-        Controller currentController = (Controller) currentNode.getUserObject();
+        Visualizer currentController = (Visualizer) currentNode.getUserObject();
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentController.getName())
-                && !currentController.getName().equals(defaultName)){
-            newParent.setName(currentController.getName());
+        if(StringUtils.isNotBlank(currentController.getClass().getName())
+                && !currentController.getClass().getName().equals(defaultName)){
+           // newParent.setName(currentController.getClass().getName());
+            log.info("Setting the default names");
         }
 
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
+        JMeterTreeNode newNode = new JMeterTreeNode((TestElement) newParent, treeModel);
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         int index = parentNode.getIndex(currentNode);
         treeModel.insertNodeInto(newNode, parentNode, index);
