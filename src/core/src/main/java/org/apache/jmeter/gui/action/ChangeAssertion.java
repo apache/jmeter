@@ -17,18 +17,13 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.JTree;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import com.google.auto.service.AutoService;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.assertions.Assertion;
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
@@ -38,56 +33,61 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.auto.service.AutoService;
+import javax.swing.*;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Allows to change Controller implementation
+ * Allows to change Assertion implementation
  */
 @AutoService(Command.class)
-public class ChangeController extends AbstractAction {
-    private static final Logger log = LoggerFactory.getLogger(ChangeController.class);
-
+public class ChangeAssertion extends AbstractAction {
+    private static final Logger log = LoggerFactory.getLogger(ChangeAssertion.class);
     private static final Set<String> commands = new HashSet<>();
 
     static {
-        commands.add(ActionNames.CHANGE_CONTROLLER);
+        commands.add(ActionNames.CHANGE_ASSERTION);
     }
 
-    public ChangeController() {
+    public ChangeAssertion() {
+    }
+    @Override
+    public Set<String> getActionNames() {
+        return commands;
     }
 
     @Override
-    public void doAction(ActionEvent e) {
+    public void doAction(ActionEvent e) throws IllegalUserActionException {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof Controller)) {
+        if (!(currentNode.getUserObject() instanceof Assertion)) {
             Toolkit.getDefaultToolkit().beep();
             return;
         }
         try {
             guiPackage.updateCurrentNode();
-            TestElement controller = guiPackage.createTestElement(name);
-            changeController(controller, guiPackage, currentNode);
+            TestElement assertion = guiPackage.createTestElement(name);
+            changeAssertion(assertion, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
             log.error("Failed to change controller", err);
         }
     }
 
-    @Override
-    public Set<String> getActionNames() {
-        return commands;
-    }
-
-    private static void changeController(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+    private static void changeAssertion(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         // keep the old name if it was not the default one
-        Controller currentController = (Controller) currentNode.getUserObject();
+        Assertion currentAssertion = (Assertion) currentNode.getUserObject();
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentController.getName())
-                && !currentController.getName().equals(defaultName)){
-            newParent.setName(currentController.getName());
+        if(StringUtils.isNotBlank(currentAssertion.getClass().getSimpleName())
+                && !currentAssertion.getClass().getSimpleName().equals(defaultName)){
+            newParent.setName(currentAssertion.getClass().getSimpleName());
         }
 
         JMeterTreeModel treeModel = guiPackage.getTreeModel();

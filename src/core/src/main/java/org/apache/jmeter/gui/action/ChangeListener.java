@@ -20,7 +20,6 @@ package org.apache.jmeter.gui.action;
 import com.google.auto.service.AutoService;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
@@ -29,6 +28,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
+import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,11 +68,11 @@ public class ChangeListener extends AbstractAction {
         }
         try {
             guiPackage.updateCurrentNode();
-            Visualizer listener = (Visualizer) guiPackage.createTestElement(name);
+            TestElement listener = guiPackage.createTestElement(name);
             changeListener(listener, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
-            log.error("Failed to change parent", err);
+            log.error("Failed to change listener element", err);
         }
     }
 
@@ -82,15 +82,14 @@ public class ChangeListener extends AbstractAction {
     }
 
 
-    private static void changeListener(Visualizer newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+    private static void changeListener(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         // keep the old name if it was not the default one
-        Visualizer currentController = (Visualizer) currentNode.getUserObject();
+        AbstractVisualizer currentListener = (AbstractVisualizer) currentNode.getUserObject();
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentController.getClass().getName())
-                && !currentController.getClass().getName().equals(defaultName)){
-           // newParent.setName(currentController.getClass().getName());
-            log.info("Setting the default names");
+        if(StringUtils.isNotBlank(currentListener.getName())
+                && !currentListener.getName().equals(defaultName)){
+            newParent.setName(currentListener.getName());
         }
 
         JMeterTreeModel treeModel = guiPackage.getTreeModel();

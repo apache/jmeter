@@ -17,81 +17,68 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.JTree;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import com.google.auto.service.AutoService;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.auto.service.AutoService;
+import javax.swing.*;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Allows to change Controller implementation
  */
 @AutoService(Command.class)
-public class ChangeController extends AbstractAction {
-    private static final Logger log = LoggerFactory.getLogger(ChangeController.class);
+public class ChangeTimer extends AbstractAction {
+    private static final Logger log = LoggerFactory.getLogger(ChangeTimer.class);
 
     private static final Set<String> commands = new HashSet<>();
 
     static {
-        commands.add(ActionNames.CHANGE_CONTROLLER);
+        commands.add(ActionNames.CHANGE_TIMER);
     }
-
-    public ChangeController() {
-    }
-
-    @Override
-    public void doAction(ActionEvent e) {
-        String name = ((Component) e.getSource()).getName();
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof Controller)) {
-            Toolkit.getDefaultToolkit().beep();
-            return;
-        }
-        try {
-            guiPackage.updateCurrentNode();
-            TestElement controller = guiPackage.createTestElement(name);
-            changeController(controller, guiPackage, currentNode);
-        } catch (Exception err) {
-            Toolkit.getDefaultToolkit().beep();
-            log.error("Failed to change controller", err);
-        }
-    }
-
     @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
-    private static void changeController(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        // keep the old name if it was not the default one
-        Controller currentController = (Controller) currentNode.getUserObject();
-        JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
-        String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentController.getName())
-                && !currentController.getName().equals(defaultName)){
-            newParent.setName(currentController.getName());
+    @Override
+    public void doAction(ActionEvent e) throws IllegalUserActionException {
+        String name = ((Component) e.getSource()).getName();
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
+        if (!(currentNode.getUserObject() instanceof Timer)) {
+            Toolkit.getDefaultToolkit().beep();
+            return;
         }
+        try {
+            guiPackage.updateCurrentNode();
+            Timer timer = (Timer) guiPackage.createTestElement(name);
+            changeTimer(timer, guiPackage, currentNode);
+        } catch (Exception err) {
+            Toolkit.getDefaultToolkit().beep();
+            log.error("Failed to change timer", err);
+        }
+    }
 
+    private static void changeTimer(Timer timer, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
+        JMeterTreeNode newNode = new JMeterTreeNode((TestElement) timer, treeModel);
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         int index = parentNode.getIndex(currentNode);
         treeModel.insertNodeInto(newNode, parentNode, index);

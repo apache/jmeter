@@ -414,9 +414,9 @@ public final class MenuFactory {
     public static JPopupMenu getDefaultSamplerMenu() {
         JPopupMenu pop = new JPopupMenu();
         pop.add(createDefaultAddMenu());
-        pop.add(makeMenus(new String[]{CONTROLLERS},
-                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-                ActionNames.ADD_PARENT));
+        pop.add(makeMenus(new String[]{SAMPLERS},
+                JMeterUtils.getResString("change_sampler"),// $NON-NLS-1$
+                ActionNames.CHANGE_SAMPLER));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
@@ -449,12 +449,19 @@ public final class MenuFactory {
         pop.add(makeMenus(new String[]{TIMERS},
                 JMeterUtils.getResString("change_timer"),// $NON-NLS-1$
                 ActionNames.CHANGE_TIMER));
-
-        return createDefaultPopupMenu();
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
     }
 
     public static JPopupMenu getDefaultAssertionMenu() {
-        return createDefaultPopupMenu();
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{ASSERTIONS},
+                JMeterUtils.getResString("change_assertion"),// $NON-NLS-1$
+                ActionNames.CHANGE_ASSERTION));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
     }
 
     public static JPopupMenu getDefaultExtractorMenu() {

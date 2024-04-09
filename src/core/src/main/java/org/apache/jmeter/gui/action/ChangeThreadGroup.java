@@ -83,7 +83,6 @@ public class ChangeThreadGroup extends AbstractAction {
         ThreadGroup currentThreadGroup = (ThreadGroup) currentNode.getUserObject();
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         String defaultName = JMeterUtils.getResString(currentGui.getStaticLabel());
-
         if(StringUtils.isNotBlank(currentThreadGroup.getName())
                 && !currentThreadGroup.getName().equals(defaultName)){
             threadGroup.setName(currentThreadGroup.getName());
