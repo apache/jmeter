@@ -52,7 +52,7 @@ abstract class AbstractHostIPName extends AbstractFunction {
 
         String value = compute();
 
-        if (values.length < 1){// we have a variable name
+        if (values.length < 1) { // we have a variable name
             return value;
         }
         JMeterVariables vars = getVariables();
