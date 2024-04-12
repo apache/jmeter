@@ -92,6 +92,8 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     private static final String NL = "\n"; // $NON-NLS-1$
 
+    private static final String SPACE = " "; // $NON-NLS-1$
+
     public static final Color SERVER_ERROR_COLOR = Color.red;
 
     public static final Color CLIENT_ERROR_COLOR = Color.blue;
@@ -261,53 +263,53 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 StringBuilder statsBuff = new StringBuilder(200);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_thread_name")) //$NON-NLS-1$
+                                .getResString("view_results_thread_name")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getThreadName()).append(NL);
                 String startTime = dateFormat
                         .format(Instant.ofEpochMilli(sampleResult.getStartTime()));
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_sample_start")) //$NON-NLS-1$
+                                .getResString("view_results_sample_start")).append(SPACE) //$NON-NLS-1$
                         .append(startTime).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_load_time")) //$NON-NLS-1$
+                                .getResString("view_results_load_time")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getTime()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_connect_time")) //$NON-NLS-1$
+                                .getResString("view_results_connect_time")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getConnectTime()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_latency")) //$NON-NLS-1$
+                                .getResString("view_results_latency")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getLatency()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_size_in_bytes")) //$NON-NLS-1$
+                                .getResString("view_results_size_in_bytes")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getBytesAsLong()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_sent_bytes")) //$NON-NLS-1$
+                                .getResString("view_results_sent_bytes")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getSentBytes()).append(NL);
                 statsBuff
                         .append(JMeterUtils.getResString(
-                                "view_results_size_headers_in_bytes")) //$NON-NLS-1$
+                                "view_results_size_headers_in_bytes")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getHeadersSize()).append(NL);
                 statsBuff
                         .append(JMeterUtils.getResString(
-                                "view_results_size_body_in_bytes")) //$NON-NLS-1$
+                                "view_results_size_body_in_bytes")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getBodySizeAsLong()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_sample_count")) //$NON-NLS-1$
+                                .getResString("view_results_sample_count")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getSampleCount()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_error_count")) //$NON-NLS-1$
+                                .getResString("view_results_error_count")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getErrorCount()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_datatype")) //$NON-NLS-1$
+                                .getResString("view_results_datatype")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getDataType()).append(NL);
                 statsDoc.insertString(statsDoc.getLength(),
                         statsBuff.toString(), null);
