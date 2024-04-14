@@ -17,31 +17,22 @@
 
 package org.apache.jmeter.gui.action;
 
-import com.google.auto.service.AutoService;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.assertions.Assertion;
-import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.tree.JMeterTreeModel;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.gui.util.ChangeElement;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.swing.*;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.jmeter.assertions.Assertion;
+import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.ChangeElement;
+import org.apache.jmeter.testelement.TestElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 
 /**
  * Allows to change Assertion implementation
