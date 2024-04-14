@@ -20,24 +20,21 @@ package org.apache.jmeter.gui.action;
 import com.google.auto.service.AutoService;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
+import javax.swing.JTree;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
@@ -74,17 +71,13 @@ public class ChangeSampler extends AbstractAction {
             changeSampler(sampler, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
-            log.error("Failed to change controller", err);
+            log.error("Failed to change sampler", err);
         }
     }
 
     private static void changeSampler(Sampler newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        // keep the old name if it was not the default one
         Sampler currentSampler = (Sampler) currentNode.getUserObject();
-        JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
-        String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentSampler.getName())
-                && !currentSampler.getName().equals(defaultName)){
+        if(StringUtils.isNotBlank(currentSampler.getName())){
             newParent.setName(currentSampler.getName());
         }
 
@@ -96,7 +89,6 @@ public class ChangeSampler extends AbstractAction {
         treeModel.removeNodeFromParent(currentNode);
         int childCount = currentNode.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            // Using index 0 is voluntary as child is removed in next step and added to new parent
             JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
             treeModel.removeNodeFromParent(node);
             treeModel.insertNodeInto(node, newNode, newNode.getChildCount());
@@ -107,6 +99,4 @@ public class ChangeSampler extends AbstractAction {
         JTree tree = guiPackage.getTreeListener().getJTree();
         tree.setSelectionPath(new TreePath(nodes));
     }
-
-
 }

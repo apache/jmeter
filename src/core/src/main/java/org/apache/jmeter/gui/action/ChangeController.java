@@ -30,11 +30,9 @@ import javax.swing.tree.TreePath;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,12 +79,8 @@ public class ChangeController extends AbstractAction {
     }
 
     private static void changeController(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        // keep the old name if it was not the default one
         Controller currentController = (Controller) currentNode.getUserObject();
-        JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
-        String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentController.getName())
-                && !currentController.getName().equals(defaultName)){
+        if(StringUtils.isNotBlank(currentController.getName())){
             newParent.setName(currentController.getName());
         }
 
@@ -98,7 +92,6 @@ public class ChangeController extends AbstractAction {
         treeModel.removeNodeFromParent(currentNode);
         int childCount = currentNode.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            // Using index 0 is voluntary as child is removed in next step and added to new parent
             JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
             treeModel.removeNodeFromParent(node);
             treeModel.insertNodeInto(node, newNode, newNode.getChildCount());

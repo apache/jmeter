@@ -17,25 +17,22 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.JTree;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,12 +76,10 @@ public class ChangeConfigElement extends AbstractAction {
 
     private static void changeConfigElement(AbstractTestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         AbstractTestElement currentConfigElement = (AbstractTestElement) currentNode.getUserObject();
-        JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
-        String defaultName = JMeterUtils.getResString(currentGui.getStaticLabel());
-        if(StringUtils.isNotBlank(currentConfigElement.getName())
-                && !currentConfigElement.getName().equals(defaultName)){
+        if(StringUtils.isNotBlank(currentConfigElement.getName())){
             newParent.setName(currentConfigElement.getName());
         }
+
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
         JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();

@@ -17,31 +17,29 @@
 
 package org.apache.jmeter.gui.action;
 
-import com.google.auto.service.AutoService;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.tree.JMeterTreeModel;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.timers.Timer;
-import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.swing.*;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JTree;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.tree.JMeterTreeModel;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.testelement.AbstractTestElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
+
 /**
- * Allows to change Controller implementation
+ * Allows to change Timer implementation
  */
 @AutoService(Command.class)
 public class ChangeTimer extends AbstractAction {
@@ -62,13 +60,13 @@ public class ChangeTimer extends AbstractAction {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof Timer)) {
+        if (!(currentNode.getUserObject() instanceof AbstractTestElement)) {
             Toolkit.getDefaultToolkit().beep();
             return;
         }
         try {
             guiPackage.updateCurrentNode();
-            Timer timer = (Timer) guiPackage.createTestElement(name);
+            AbstractTestElement timer = (AbstractTestElement) guiPackage.createTestElement(name);
             changeTimer(timer, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
@@ -76,16 +74,19 @@ public class ChangeTimer extends AbstractAction {
         }
     }
 
-    private static void changeTimer(Timer timer, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+    private static void changeTimer(AbstractTestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+        AbstractTestElement currTimer = (AbstractTestElement) currentNode.getUserObject();
+        if(StringUtils.isNotBlank(currTimer.getName())){
+            newParent.setName(currTimer.getName());
+        }
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode newNode = new JMeterTreeNode((TestElement) timer, treeModel);
+        JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         int index = parentNode.getIndex(currentNode);
         treeModel.insertNodeInto(newNode, parentNode, index);
         treeModel.removeNodeFromParent(currentNode);
         int childCount = currentNode.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            // Using index 0 is voluntary as child is removed in next step and added to new parent
             JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
             treeModel.removeNodeFromParent(node);
             treeModel.insertNodeInto(node, newNode, newNode.getChildCount());

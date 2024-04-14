@@ -17,22 +17,21 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.JTree;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.threads.AbstractThreadGroup;
-import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,10 +78,7 @@ public class ChangeThreadGroup extends AbstractAction {
 
     private static void changeThreadGroup(AbstractThreadGroup threadGroup, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         AbstractThreadGroup currentThreadGroup = (AbstractThreadGroup) currentNode.getUserObject();
-        JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
-        String defaultName = JMeterUtils.getResString(currentGui.getStaticLabel());
-        if(StringUtils.isNotBlank(currentThreadGroup.getName())
-                && !currentThreadGroup.getName().equals(defaultName)){
+        if(StringUtils.isNotBlank(currentThreadGroup.getName())){
             threadGroup.setName(currentThreadGroup.getName());
         }
 
