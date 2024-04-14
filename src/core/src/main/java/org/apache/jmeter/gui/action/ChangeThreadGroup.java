@@ -31,9 +31,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,13 +59,13 @@ public class ChangeThreadGroup extends AbstractAction {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof ThreadGroup)) {
+        if (!(currentNode.getUserObject() instanceof AbstractThreadGroup)) {
             Toolkit.getDefaultToolkit().beep();
             return;
         }
         try {
             guiPackage.updateCurrentNode();
-            ThreadGroup threadGroup = (ThreadGroup) guiPackage.createTestElement(name);
+            AbstractThreadGroup threadGroup = (AbstractThreadGroup) guiPackage.createTestElement(name);
             changeThreadGroup(threadGroup, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
@@ -79,8 +77,8 @@ public class ChangeThreadGroup extends AbstractAction {
     @Override
     public Set<String> getActionNames() { return commands; }
 
-    private static void changeThreadGroup(ThreadGroup threadGroup, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        ThreadGroup currentThreadGroup = (ThreadGroup) currentNode.getUserObject();
+    private static void changeThreadGroup(AbstractThreadGroup threadGroup, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+        AbstractThreadGroup currentThreadGroup = (AbstractThreadGroup) currentNode.getUserObject();
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         String defaultName = JMeterUtils.getResString(currentGui.getStaticLabel());
         if(StringUtils.isNotBlank(currentThreadGroup.getName())

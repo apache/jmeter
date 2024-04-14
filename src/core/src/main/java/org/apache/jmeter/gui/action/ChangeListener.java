@@ -62,7 +62,7 @@ public class ChangeListener extends AbstractAction {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof Visualizer)) {
+        if (!(currentNode.getUserObject() instanceof TestElement)) {
             Toolkit.getDefaultToolkit().beep();
             return;
         }
@@ -83,17 +83,13 @@ public class ChangeListener extends AbstractAction {
 
 
     private static void changeListener(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        // keep the old name if it was not the default one
-        AbstractVisualizer currentListener = (AbstractVisualizer) currentNode.getUserObject();
-        JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
-        String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentListener.getName())
-                && !currentListener.getName().equals(defaultName)){
+        TestElement currentListener = (TestElement) currentNode.getUserObject();
+        if (StringUtils.isNotBlank(currentListener.getName())) {
             newParent.setName(currentListener.getName());
         }
 
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode newNode = new JMeterTreeNode((TestElement) newParent, treeModel);
+        JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         int index = parentNode.getIndex(currentNode);
         treeModel.insertNodeInto(newNode, parentNode, index);

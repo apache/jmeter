@@ -710,4 +710,5 @@ public final class MenuFactory {
                 .filter(userObj -> exceptions.stream().noneMatch(c -> c.isInstance(userObj)))
                 .anyMatch(userObj -> classes.stream().anyMatch(c -> c.isInstance(userObj)));
     }
+
 }

@@ -33,6 +33,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
@@ -57,19 +58,17 @@ public class ChangeConfigElement extends AbstractAction {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof ConfigElement)) {
+        if (!(currentNode.getUserObject() instanceof AbstractTestElement)) {
             Toolkit.getDefaultToolkit().beep();
             return;
         }
         try {
             guiPackage.updateCurrentNode();
-            log.info(";;;;;;;;;; " + guiPackage.getCurrentGui().getName());
-            TestElement configElement = guiPackage.createTestElement(name);
+            AbstractTestElement configElement = (AbstractTestElement) guiPackage.createTestElement(name);
             changeConfigElement(configElement, guiPackage, currentNode);
-
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
-            log.error("Failed to change parent", err);
+            log.error("Failed to change config element", err);
         }
     }
 
@@ -78,7 +77,14 @@ public class ChangeConfigElement extends AbstractAction {
         return commands;
     }
 
-    private static void changeConfigElement(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+    private static void changeConfigElement(AbstractTestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+        AbstractTestElement currentConfigElement = (AbstractTestElement) currentNode.getUserObject();
+        JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
+        String defaultName = JMeterUtils.getResString(currentGui.getStaticLabel());
+        if(StringUtils.isNotBlank(currentConfigElement.getName())
+                && !currentConfigElement.getName().equals(defaultName)){
+            newParent.setName(currentConfigElement.getName());
+        }
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
         JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
@@ -87,7 +93,6 @@ public class ChangeConfigElement extends AbstractAction {
         treeModel.removeNodeFromParent(currentNode);
         int childCount = currentNode.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            // Using index 0 is voluntary as child is removed in next step and added to new parent
             JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
             treeModel.removeNodeFromParent(node);
             treeModel.insertNodeInto(node, newNode, newNode.getChildCount());
