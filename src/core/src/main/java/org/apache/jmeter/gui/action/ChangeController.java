@@ -29,9 +29,12 @@ import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.ChangeElement;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,14 +62,14 @@ public class ChangeController extends AbstractAction {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof Controller)) {
+        if (!(currentNode.getUserObject() instanceof AbstractTestElement)) {
             Toolkit.getDefaultToolkit().beep();
             return;
         }
         try {
             guiPackage.updateCurrentNode();
-            TestElement controller = guiPackage.createTestElement(name);
-            changeController(controller, guiPackage, currentNode);
+            AbstractTestElement controller = (AbstractTestElement) guiPackage.createTestElement(name);
+            ChangeElement.controller(controller, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
             log.error("Failed to change controller", err);
@@ -76,30 +79,5 @@ public class ChangeController extends AbstractAction {
     @Override
     public Set<String> getActionNames() {
         return commands;
-    }
-
-    private static void changeController(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        Controller currentController = (Controller) currentNode.getUserObject();
-        if(StringUtils.isNotBlank(currentController.getName())){
-            newParent.setName(currentController.getName());
-        }
-
-        JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
-        JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
-        int index = parentNode.getIndex(currentNode);
-        treeModel.insertNodeInto(newNode, parentNode, index);
-        treeModel.removeNodeFromParent(currentNode);
-        int childCount = currentNode.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
-            treeModel.removeNodeFromParent(node);
-            treeModel.insertNodeInto(node, newNode, newNode.getChildCount());
-        }
-
-        // select the node
-        TreeNode[] nodes = treeModel.getPathToRoot(newNode);
-        JTree tree = guiPackage.getTreeListener().getJTree();
-        tree.setSelectionPath(new TreePath(nodes));
     }
 }

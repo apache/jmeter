@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.ChangeElement;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,7 @@ public class ChangeThreadGroup extends AbstractAction {
         try {
             guiPackage.updateCurrentNode();
             AbstractThreadGroup threadGroup = (AbstractThreadGroup) guiPackage.createTestElement(name);
-            changeThreadGroup(threadGroup, guiPackage, currentNode);
+            ChangeElement.threadGroup(threadGroup, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
             log.error("Failed to change thread group", err);
@@ -75,31 +76,4 @@ public class ChangeThreadGroup extends AbstractAction {
 
     @Override
     public Set<String> getActionNames() { return commands; }
-
-    private static void changeThreadGroup(AbstractThreadGroup threadGroup, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        AbstractThreadGroup currentThreadGroup = (AbstractThreadGroup) currentNode.getUserObject();
-        if(StringUtils.isNotBlank(currentThreadGroup.getName())){
-            threadGroup.setName(currentThreadGroup.getName());
-        }
-
-        JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode newNode = new JMeterTreeNode(threadGroup, treeModel);
-        JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
-        int index = parentNode.getIndex(currentNode);
-        treeModel.insertNodeInto(newNode, parentNode, index);
-        int childCount = currentNode.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
-            treeModel.removeNodeFromParent(node);
-            treeModel.insertNodeInto(node, newNode, newNode.getChildCount());
-        }
-        treeModel.removeNodeFromParent(currentNode);
-        treeModel.nodeStructureChanged(parentNode);
-        guiPackage.getTreeModel().reload();
-        guiPackage.updateCurrentGui();
-        // select the node
-        TreeNode[] nodes = treeModel.getPathToRoot(newNode);
-        JTree tree = guiPackage.getTreeListener().getJTree();
-        tree.setSelectionPath(new TreePath(nodes));
-    }
 }

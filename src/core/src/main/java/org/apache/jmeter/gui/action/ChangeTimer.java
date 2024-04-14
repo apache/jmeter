@@ -32,6 +32,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.ChangeElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,34 +68,10 @@ public class ChangeTimer extends AbstractAction {
         try {
             guiPackage.updateCurrentNode();
             AbstractTestElement timer = (AbstractTestElement) guiPackage.createTestElement(name);
-            changeTimer(timer, guiPackage, currentNode);
+            ChangeElement.timer(timer, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
             log.error("Failed to change timer", err);
         }
-    }
-
-    private static void changeTimer(AbstractTestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        AbstractTestElement currTimer = (AbstractTestElement) currentNode.getUserObject();
-        if(StringUtils.isNotBlank(currTimer.getName())){
-            newParent.setName(currTimer.getName());
-        }
-        JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
-        JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
-        int index = parentNode.getIndex(currentNode);
-        treeModel.insertNodeInto(newNode, parentNode, index);
-        treeModel.removeNodeFromParent(currentNode);
-        int childCount = currentNode.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
-            treeModel.removeNodeFromParent(node);
-            treeModel.insertNodeInto(node, newNode, newNode.getChildCount());
-        }
-
-        // select the node
-        TreeNode[] nodes = treeModel.getPathToRoot(newNode);
-        JTree tree = guiPackage.getTreeListener().getJTree();
-        tree.setSelectionPath(new TreePath(nodes));
     }
 }

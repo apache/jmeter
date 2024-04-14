@@ -32,6 +32,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.ChangeElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,7 @@ public class ChangeConfigElement extends AbstractAction {
         try {
             guiPackage.updateCurrentNode();
             AbstractTestElement configElement = (AbstractTestElement) guiPackage.createTestElement(name);
-            changeConfigElement(configElement, guiPackage, currentNode);
+            ChangeElement.configElement(configElement, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
             log.error("Failed to change config element", err);
@@ -72,30 +73,5 @@ public class ChangeConfigElement extends AbstractAction {
     @Override
     public Set<String> getActionNames() {
         return commands;
-    }
-
-    private static void changeConfigElement(AbstractTestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
-        AbstractTestElement currentConfigElement = (AbstractTestElement) currentNode.getUserObject();
-        if(StringUtils.isNotBlank(currentConfigElement.getName())){
-            newParent.setName(currentConfigElement.getName());
-        }
-
-        JMeterTreeModel treeModel = guiPackage.getTreeModel();
-        JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
-        JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
-        int index = parentNode.getIndex(currentNode);
-        treeModel.insertNodeInto(newNode, parentNode, index);
-        treeModel.removeNodeFromParent(currentNode);
-        int childCount = currentNode.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
-            treeModel.removeNodeFromParent(node);
-            treeModel.insertNodeInto(node, newNode, newNode.getChildCount());
-        }
-
-        // select the node
-        TreeNode[] nodes = treeModel.getPathToRoot(newNode);
-        JTree tree = guiPackage.getTreeListener().getJTree();
-        tree.setSelectionPath(new TreePath(nodes));
     }
 }
