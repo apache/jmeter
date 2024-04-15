@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.gui.util;
 
+import javax.swing.JTree;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
@@ -25,10 +29,6 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.AbstractThreadGroup;
-
-import javax.swing.JTree;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 
 public final class ChangeElement {
 
