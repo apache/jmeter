@@ -42,6 +42,7 @@
   <li><a href="#build-ws-test-plan">+</a>...<a href="build-ws-test-plan.html">9. Building a Webservice Test Plan</a></li>
   <li><a href="#build-jms-point-to-point-test-plan">+</a>...<a href="build-jms-point-to-point-test-plan.html">10. Building a JMS Point to point Test Plan</a></li>
   <li><a href="#build-jms-topic-test-plan">+</a>...<a href="build-jms-topic-test-plan.html">11. Building a JMS Topic Test Plan</a></li>
+  <li><a href="#build-programmatic-test-plan">+</a>...<a href="build-programmatic-test-plan.html">11. Building a Test Plan Programmatically</a></li>
   <li><a href="#listeners">+</a>...<a href="listeners.html">12. Listeners</a></li>
   <li><a href="#remote-test">+</a>...<a href="remote-test.html">13. Remote Testing</a></li>
   <li><a href="#generating-dashboard">+</a>...<a href="generating-dashboard.html">14. Dashboard Report</a></li>
@@ -187,6 +188,7 @@
  <li><a name="build-ws-test-plan"/><a href="build-ws-test-plan.html">9. Building a Webservice Test Plan</a></li>
  <li><a name="build-jms-point-to-point-test-plan"/><a href="build-jms-point-to-point-test-plan.html">10. Building a JMS Point to point Test Plan</a></li>
  <li><a name="build-jms-topic-test-plan"/><a href="build-jms-topic-test-plan.html">11. Building a JMS topic Test Plan</a></li>
+ <li><a name="build-programmatic-test-plan"/><a href="build-programmatic-test-plan.html">11. Building a Test Plan Programatically</a></li>
  <li><a name="listeners"/><a href="listeners.html">12. Introduction to Listeners</a></li>
  <li><a name="remote-test"/><a href="remote-test.html">13. Remote Testing</a></li>
  <li><a name="generating-dashboard"/><a href="generating-dashboard.html">14. Dashboard Report</a>

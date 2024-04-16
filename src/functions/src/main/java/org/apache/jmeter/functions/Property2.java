@@ -26,6 +26,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Function to get a JMeter property, or a default. Does not offer the option to
  * store the value, as it is just as easy to refetch it. This is a
@@ -46,6 +48,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * not present - "1" (suitable for use in ThreadGroup GUI)
  * @since 2.0
  */
+@AutoService(Function.class)
 public class Property2 extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();

@@ -17,16 +17,12 @@
 
 package org.apache.jmeter.control;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.sampler.DebugSampler;
-import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.test.samplers.CollectSamplesListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -34,7 +30,6 @@ import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
@@ -44,7 +39,7 @@ public class TestTransactionController extends JMeterTestCase {
     public void testIssue57958() throws Exception {
         JMeterContextService.getContext().setVariables(new JMeterVariables());
 
-        TestSampleListener listener = new TestSampleListener();
+        CollectSamplesListener listener = new CollectSamplesListener();
 
         TransactionController transactionController = new TransactionController();
         transactionController.setGenerateParentSample(true);
@@ -81,29 +76,9 @@ public class TestTransactionController extends JMeterTestCase {
         thread.setOnErrorStopThread(true);
         thread.run();
 
-        Assertions.assertEquals(1, listener.events.size(),
+        assertEquals(1, listener.getEvents().size(),
                 "Must one transaction samples with parent debug sample");
-        Assertions.assertEquals("Number of samples in transaction : 1, number of failing samples : 1",
-                listener.events.get(0).getResult().getResponseMessage());
-    }
-
-    public static class TestSampleListener extends ResultCollector implements SampleListener {
-        private static final long serialVersionUID = -1373192220822942714L;
-        public List<SampleEvent> events = Collections.synchronizedList(new ArrayList<>());
-
-        @Override
-        public void sampleOccurred(SampleEvent e) {
-            events.add(e);
-        }
-
-        @Override
-        public void sampleStarted(SampleEvent e) {
-            events.add(e);
-        }
-
-        @Override
-        public void sampleStopped(SampleEvent e) {
-            events.add(e);
-        }
+        assertEquals("Number of samples in transaction : 1, number of failing samples : 1",
+                listener.getEvents().get(0).getResult().getResponseMessage());
     }
 }

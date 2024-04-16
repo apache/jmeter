@@ -19,8 +19,7 @@ package org.apache.jmeter.threads;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.IdentityHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.control.Controller;
@@ -32,13 +31,12 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apiguardian.api.API;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * ThreadGroup holds the settings for a JMeter thread group.
@@ -51,7 +49,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     private static final long serialVersionUID = 240L;
 
     // Only create the map if it is required
-    private final transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
+    private final transient IdentityHashMap<TestElement, Object> children = new IdentityHashMap<>();
 
     private static final Object DUMMY = new Object();
 
@@ -88,6 +86,17 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
 
     private final AtomicInteger numberOfThreads = new AtomicInteger(0); // Number of active threads in this group
 
+    @Override
+    public AbstractThreadGroupSchema getSchema() {
+        return AbstractThreadGroupSchema.INSTANCE;
+    }
+
+    @NotNull
+    @Override
+    public PropertiesAccessor<? extends AbstractThreadGroup, ? extends AbstractThreadGroupSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
+
     /** {@inheritDoc} */
     @Override
     public boolean isDone() {
@@ -106,7 +115,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return the sampler controller.
      */
     public Controller getSamplerController() {
-        return (Controller) getProperty(MAIN_CONTROLLER).getObjectValue();
+        return get(getSchema().getMainController());
     }
 
     /**
@@ -117,7 +126,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      */
     public void setSamplerController(LoopController c) {
         c.setContinueForever(false);
-        setProperty(new TestElementProperty(MAIN_CONTROLLER, c));
+        set(getSchema().getMainController(), c);
     }
 
     /**
@@ -136,9 +145,11 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      */
     @Override
     public final boolean addTestElementOnce(TestElement child){
-        if (children.putIfAbsent(child, DUMMY) == null) {
-            addTestElement(child);
-            return true;
+        synchronized (children) {
+            if (children.putIfAbsent(child, DUMMY) == null) {
+                addTestElement(child);
+                return true;
+            }
         }
         return false;
     }
@@ -187,7 +198,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      *            the number of threads.
      */
     public void setNumThreads(int numThreads) {
-        setProperty(new IntegerProperty(NUM_THREADS, numThreads));
+        set(getSchema().getNumThreads(), numThreads);
     }
 
     /**
@@ -219,7 +230,11 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return the number of threads.
      */
     public int getNumThreads() {
-        return this.getPropertyAsInt(AbstractThreadGroup.NUM_THREADS);
+        return get(getSchema().getNumThreads());
+    }
+
+    private String getOnSampleError() {
+        return get(getSchema().getOnSampleError());
     }
 
     /**
@@ -228,7 +243,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return true if thread should start next loop
      */
     public boolean getOnErrorStartNextLoop() {
-        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_START_NEXT_LOOP);
+        return getOnSampleError().equalsIgnoreCase(ON_SAMPLE_ERROR_START_NEXT_LOOP);
     }
 
     /**
@@ -237,7 +252,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return true if thread should stop
      */
     public boolean getOnErrorStopThread() {
-        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
+        return getOnSampleError().equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTHREAD);
     }
 
     /**
@@ -246,7 +261,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return true if test (all threads) should stop
      */
     public boolean getOnErrorStopTest() {
-        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
+        return getOnSampleError().equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST);
     }
 
     /**
@@ -255,7 +270,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return true if test (all threads) should stop immediately
      */
     public boolean getOnErrorStopTestNow() {
-        return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
+        return getOnSampleError().equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
     }
 
     /**
@@ -321,7 +336,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      *            false is a different user on next iteration of loop
      */
     public void setIsSameUserOnNextIteration(boolean isSameUserOnNextIteration) {
-        setProperty(new BooleanProperty(IS_SAME_USER_ON_NEXT_ITERATION, isSameUserOnNextIteration));
+        set(getSchema().getSameUserOnNextIteration(), isSameUserOnNextIteration);
     }
 
     /**
@@ -333,7 +348,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return the kind of user.
      */
     public boolean isSameUserOnNextIteration() {
-        return getPropertyAsBoolean(ThreadGroup.IS_SAME_USER_ON_NEXT_ITERATION, true);
+        return get(getSchema().getSameUserOnNextIteration());
     }
 
     /**

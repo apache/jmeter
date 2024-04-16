@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.auto.service.AutoService;
 
 /**
  * RandomDate Function generates a date in a specific range
@@ -59,6 +60,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *
  * @since 3.3
  */
+@AutoService(Function.class)
 public class RandomDate extends AbstractFunction {
 
     private static final Logger log = LoggerFactory.getLogger(RandomDate.class);

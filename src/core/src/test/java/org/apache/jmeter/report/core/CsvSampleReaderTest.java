@@ -18,15 +18,17 @@
 package org.apache.jmeter.report.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +56,7 @@ public class CsvSampleReaderTest extends JMeterTestCase {
 
     @Test
     public void testConstructorWithInvalidFile() {
-        Assertions.assertThrows(
+        assertThrows(
                 IllegalArgumentException.class,
                 () -> new CsvSampleReader(new File("/not/available.csv"), metadata)
         );
@@ -97,11 +99,11 @@ public class CsvSampleReaderTest extends JMeterTestCase {
     public void testHasNextAndReadSample() {
         try (CsvSampleReader reader = new CsvSampleReader(tempCsv, metadata)) {
             for (long i = 0; i < NR_ROWS; i++) {
-                Assert.assertTrue(reader.hasNext());
+                assertTrue(reader.hasNext());
                 final Sample sample = reader.readSample();
-                Assert.assertEquals(i, sample.getSampleRow());
+                assertEquals(i, sample.getSampleRow());
             }
-            Assert.assertFalse(reader.hasNext());
+            assertFalse(reader.hasNext());
         }
     }
 

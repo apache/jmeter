@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.timers.poissonarrivals;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,12 +69,9 @@ public class PreciseThroughputTimerTest {
         }
 
         if (!ok) {
-            assertEquals(
-                    "Schedule does not match expectation, " +
-                            "throughput=" + throughput + ", duration=" + duration +
-                            "seed=" + seed + ", batchSize=" + batchSize,
-                    Arrays.toString(expected), Arrays.toString(actual)
-            );
+            assertEquals(Arrays.toString(expected), Arrays.toString(actual), "Schedule does not match expectation, " +
+                    "throughput=" + throughput + ", duration=" + duration +
+                    "seed=" + seed + ", batchSize=" + batchSize);
         }
     }
 
@@ -138,11 +135,9 @@ public class PreciseThroughputTimerTest {
                 for (int i = 0; i < samplesPerTest; i++) {
                     double next = gen.next();
                     if (prev > next) {
-                        fail(
-                                "Schedule should be monotonic, so each new event comes later. " +
-                                        "prev: " + prev + ", next: " + next +
-                                        ". Full schedule so far: " + delays
-                        );
+                        fail("Schedule should be monotonic, so each new event comes later. " +
+                                "prev: " + prev + ", next: " + next +
+                                ". Full schedule so far: " + delays);
                     }
                     prev = next;
                     delays.add(next);
@@ -151,12 +146,10 @@ public class PreciseThroughputTimerTest {
                         // OK
                         continue;
                     }
-                    fail(
-                            "Throughput violation at second #" + time + ". Event #" + delays.size() +
-                                    " is scheduled at " + next + ", however it should be " +
-                                    " between " + time * testDuration + " and " + (time + 1) * testDuration +
-                                    ". Full schedule so far: " + delays
-                    );
+                    fail("Throughput violation at second #" + time + ". Event #" + delays.size() +
+                            " is scheduled at " + next + ", however it should be " +
+                            " between " + time * testDuration + " and " + (time + 1) * testDuration +
+                            ". Full schedule so far: " + delays);
 
                 }
             }

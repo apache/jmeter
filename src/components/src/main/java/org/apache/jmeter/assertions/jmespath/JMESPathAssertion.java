@@ -32,8 +32,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import io.burt.jmespath.Expression;
@@ -56,7 +58,10 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
     private static final String EXPECT_NULL = "EXPECT_NULL";
     private static final String INVERT = "INVERT";
     private static final String ISREGEX = "ISREGEX";
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
+            // See https://github.com/FasterXML/jackson-core/issues/991
+            .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
+            .build();
 
     private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
             "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");

@@ -215,7 +215,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
      * @return a GUI panel containing the buttons
      */
     private JPanel createButtonPanel() {
-        /** A button for adding new parameters to the table. */
+        // A button for adding new parameters to the table.
         JButton add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
         add.setActionCommand(ADD);
         add.addActionListener(this);

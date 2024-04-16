@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -29,6 +30,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 
 /**
  * Change Case Function
@@ -44,6 +47,7 @@ import org.slf4j.LoggerFactory;
  * @since 4.0
  *
  */
+@AutoService(Function.class)
 public class ChangeCase extends AbstractFunction {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeCase.class);
     private static final List<String> DESC = new ArrayList<>();
@@ -78,7 +82,7 @@ public class ChangeCase extends AbstractFunction {
     protected String changeCase(String originalString, String mode) {
         String targetString = originalString;
         // mode is case insensitive, allow upper for example
-        ChangeCaseMode changeCaseMode = ChangeCaseMode.typeOf(mode.toUpperCase());
+        ChangeCaseMode changeCaseMode = ChangeCaseMode.typeOf(mode.toUpperCase(Locale.ROOT));
         if (changeCaseMode != null) {
             switch (changeCaseMode) {
             case UPPER:

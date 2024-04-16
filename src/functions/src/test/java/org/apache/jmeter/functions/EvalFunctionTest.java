@@ -18,7 +18,7 @@
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collection;
 
@@ -54,7 +54,7 @@ public class EvalFunctionTest extends JMeterTestCase {
         parms = makeParams("${query}",null,null);
         eval.setParameters(parms);
         s = eval.execute(null,null);
-        assertEquals("select name from customers",s);
+        assertEquals("select name from customers", s);
     }
 
     @Test
@@ -69,6 +69,6 @@ public class EvalFunctionTest extends JMeterTestCase {
         parms = makeParams("query",null,null);
         evalVar.setParameters(parms);
         s = evalVar.execute(null,null);
-        assertEquals("select name from customers",s);
+        assertEquals("select name from customers", s);
     }
 }

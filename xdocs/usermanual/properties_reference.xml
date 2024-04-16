@@ -1339,6 +1339,15 @@ JMETER-SERVER</source>
     ORO PatternCacheLRU size.<br/>
     Defaults to: <code>1000</code>
 </property>
+<property name="function.cache.per.iteration">
+    <p>Cache function execution during test execution.</p>
+    <p>By default, JMeter caches function properties during a test iteration, however,
+    it might cause unexpected results when a component is shared across threads and the expression depends on
+    the thread variables.</p>
+    <note>The property will likely be removed in an upcoming version, so if you need it consider raising
+     an issue with your use-case.</note>
+    Defaults to: <code>false</code>
+</property>
 <property name="propertyEditorSearchPath">
     TestBeanGui<br/>
     Defaults to: <code>null</code>
@@ -1390,7 +1399,7 @@ JMETER-SERVER</source>
 </property>
 <property name="sampleresult.default.encoding">
     The encoding to be used if none is provided.<br/>
-    Defaults to: <code>ISO-8859-1</code>
+    Defaults to: <code>UTF-8</code> (since 5.6.1)
 </property>
 <property name="CookieManager.delete_null_cookies">
     CookieManager behaviour - should cookies with null/empty values be deleted?<br/>

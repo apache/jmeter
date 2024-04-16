@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +118,6 @@ public class TestHTTPFileArgs {
         files.addHTTPFileArg("file3.jar");
         assertEquals("path:'file1'|param:''|mimetype:'application/octet-stream'\n"
                     +"path:'file2.jpg'|param:''|mimetype:'image/jpeg'\n"
-                    +"path:'file3.jar'|param:''|mimetype:'application/java-archive'",
-                    files.toString());
+                    +"path:'file3.jar'|param:''|mimetype:'application/java-archive'", files.toString());
     }
 }

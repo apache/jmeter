@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.reflect.JMeterService;
 
 /**
  * This interface defines the interactions between the {@link BackendListener}
@@ -63,6 +64,7 @@ import org.apache.jmeter.samplers.SampleResult;
  *
  * @since 2.13
  */
+@JMeterService
 public interface BackendListenerClient {
 
     /**

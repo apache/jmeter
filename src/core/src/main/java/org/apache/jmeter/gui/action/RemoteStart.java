@@ -33,6 +33,9 @@ import org.apache.jmeter.threads.RemoteThreadsListenerTestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(Command.class)
 public class RemoteStart extends AbstractAction {
 
     private static final String LOCAL_HOST = "127.0.0.1"; // NOSONAR $NON-NLS-1$

@@ -32,7 +32,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.runners.Parameterized.Parameters;
 
 class TestJMESPathExtractor {
     private static final String DEFAULT_VALUE = "NONE"; // $NON-NLS-1$
@@ -151,7 +150,6 @@ class TestJMESPathExtractor {
             + "    {\"missing\": \"different\"}\r\n" + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n"
             + "}";
 
-    @Parameters
     private static Stream<Arguments> dataMatchNumberMoreThanZero() {
         return Stream.of(
             Arguments.of(TEST_DATA, "people[:3].first", "1", "James", "3"),

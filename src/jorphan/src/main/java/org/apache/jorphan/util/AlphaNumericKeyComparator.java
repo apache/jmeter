@@ -33,7 +33,7 @@ public class AlphaNumericKeyComparator implements Comparator<Map.Entry<Object, O
 
     private AlphaNumericKeyComparator() {
         // don't instantiate this class on your own.
-        this.comparator = new AlphaNumericComparator<Map.Entry<Object, Object>>(e -> e.getKey().toString());
+        this.comparator = new AlphaNumericComparator<>(e -> e.getKey().toString());
     }
 
     @Override

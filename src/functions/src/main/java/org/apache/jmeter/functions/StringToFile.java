@@ -26,6 +26,7 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -39,6 +40,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 
 /**
  * StringToFile Function to write a String to a file
@@ -54,6 +57,7 @@ import org.slf4j.LoggerFactory;
  *
  * @since 5.2
  */
+@AutoService(Function.class)
 public class StringToFile extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(StringToFile.class);
     private static final List<String> desc = new ArrayList<>();
@@ -82,7 +86,7 @@ public class StringToFile extends AbstractFunction {
         String content = ((CompoundVariable) values[1]).execute();
         boolean append = true;
         if (values.length >= 3) {
-            String appendString = ((CompoundVariable) values[2]).execute().toLowerCase().trim();
+            String appendString = ((CompoundVariable) values[2]).execute().toLowerCase(Locale.ROOT).trim();
             if (!appendString.isEmpty()) {
                 append = Boolean.parseBoolean(appendString);
             }

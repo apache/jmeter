@@ -33,6 +33,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(ResultRenderer.class)
 public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
     private static final Logger log = LoggerFactory.getLogger(RenderAsHTML.class);
 

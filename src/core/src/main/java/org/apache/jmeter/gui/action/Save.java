@@ -49,12 +49,14 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 
 /**
  * Save the current test plan; implements:
@@ -62,6 +64,7 @@ import org.slf4j.LoggerFactory;
  * Save TestPlan As
  * Save (Selection) As
  */
+@AutoService(Command.class)
 public class Save extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(Save.class);
 
@@ -397,7 +400,7 @@ public class Save extends AbstractAction {
      * @param backupFiles
      *            {@link List} of {@link File}
      */
-    private static int getHighestVersionNumber(Pattern backupPattern, List<File> backupFiles) {
+    private static int getHighestVersionNumber(Pattern backupPattern, List<? extends File> backupFiles) {
         return backupFiles.stream().map(backupFile -> backupPattern.matcher(backupFile.getName()))
                 .filter(matcher -> matcher.find() && matcher.groupCount() > 0)
                 .mapToInt(matcher -> Integer.parseInt(matcher.group(1))).max().orElse(0);
@@ -411,7 +414,7 @@ public class Save extends AbstractAction {
      * @return list of files to be deleted based upon properties described
      *         {@link #createBackupFile(File)}
      */
-    private static List<File> backupFilesToDelete(List<File> backupFiles) {
+    private static List<File> backupFilesToDelete(List<? extends File> backupFiles) {
         List<File> filesToDelete = new ArrayList<>();
         if (BACKUP_MAX_HOURS > 0) {
             filesToDelete.addAll(expiredBackupFiles(backupFiles));
@@ -431,7 +434,7 @@ public class Save extends AbstractAction {
      * @param backupFiles {@link List} of {@link File} to filter
      * @return {@link List} of {@link File} that are expired
      */
-    private static List<File> expiredBackupFiles(List<File> backupFiles) {
+    private static List<File> expiredBackupFiles(List<? extends File> backupFiles) {
         if (BACKUP_MAX_HOURS > 0) {
             final long expiryMillis = System.currentTimeMillis() - (1L * BACKUP_MAX_HOURS * MS_PER_HOUR);
             return backupFiles.stream().filter(file -> file.lastModified() < expiryMillis).collect(Collectors.toList());
@@ -448,7 +451,7 @@ public class Save extends AbstractAction {
      */
     private static boolean checkAcceptableForTestFragment(JMeterTreeNode[] nodes) {
         return Arrays.stream(nodes).map(DefaultMutableTreeNode::getUserObject)
-                .noneMatch(o -> o instanceof ThreadGroup || o instanceof TestPlan);
+                .noneMatch(o -> o instanceof AbstractThreadGroup || o instanceof TestPlan);
     }
 
     // package protected to allow access from test code

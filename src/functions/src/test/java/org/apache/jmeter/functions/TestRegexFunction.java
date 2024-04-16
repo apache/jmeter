@@ -17,8 +17,9 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -30,7 +31,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -389,7 +389,7 @@ public class TestRegexFunction extends JMeterTestCase {
                 "",
                 "No Value Found");
         variable.setParameters(params);
-        Assertions.assertThrows(
+        assertThrows(
                 Exception.class,
                 () -> variable.execute(result, null));
     }

@@ -45,141 +45,26 @@ h3 { color: #960000; }
 Earlier changes are detailed in the <a href="changes_history.html">History of Previous Changes</a>.
 </note>
 
+<br></br>
+<note>
+JMeter 6.x requires Java 17 or later for execution (Java 21 is recommended).
+</note>
 
-<!--  =================== 5.5.1 =================== -->
+<!--  =================== 6.0.0 =================== -->
 
-<h1>Version 5.5.1</h1>
+<h1>Version 6.0.0 </h1>
 <p>
 Summary
 </p>
 <ul>
-<li><a href="#New and Noteworthy">New and Noteworthy</a></li>
-<li><a href="#Incompatible changes">Incompatible changes</a></li>
 <li><a href="#Bug fixes">Bug fixes</a></li>
-<li><a href="#Improvements">Improvements</a></li>
-<li><a href="#Non-functional changes">Non-functional changes</a></li>
-<li><a href="#Known problems and workarounds">Known problems and workarounds</a></li>
-<li><a href="#Thanks">Thanks</a></li>
-
 </ul>
 
-<ch_section>New and Noteworthy</ch_section>
-
-<ch_section>Improvements</ch_section>
-
-<h3>Thread Groups</h3>
-<ul>
-<li><issue>5682</issue><pr>717</pr> Open Model Thread Group: avoid skipping rows from CSV Data Set Config</li>
-</ul>
-
-<h3>HTTP Samplers and Test Script Recorder</h3>
-<ul>
-</ul>
-
-<h3>Other samplers</h3>
-<ul>
-</ul>
-
-<h3>Controllers</h3>
-<ul>
-</ul>
-
-<h3>Listeners</h3>
-<ul>
-</ul>
-
-<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<ul>
-</ul>
-
-<h3>Report / Dashboard</h3>
-<ul>
-</ul>
-
-<h3>General</h3>
-<ul>
-  <li><pr>5792</pr>Add KeyStroke for start_no_timers (Start no pauses: CRTL+SHIFT+n)</li>
-</ul>
-
-<ch_section>Non-functional changes</ch_section>
-<ul>
-  <li><pr>725</pr>Add Chinese Simplified Translation for Open Model Thread Group</li>
-  <li><pr>5710</pr>Add GitHub Issue templates</li>
-  <li><pr>5713</pr>Update Spock to 2.2-groovy-3.0 (from 2.1-groovy-3.0)</li>
-  <li><issue>5718</issue>Update Apache commons-text to 1.10.0 (from 1.9)</li>
-  <li><pr>5731</pr>Update docs for <code>changeCase</code> function. <code>UPPER</code> is the default.
-     Based on a patch by Ori Marko (orimarko at gmail.com)</li>
-  <li><pr>5718</pr>Update Apache commons-text to 1.10.0 (from 1.9)</li>
-  <li><pr>5725</pr>Update Jackson Core to 2.13.4 (from 2.13.2)</li>
-  <li><pr>5725</pr>Update Jackson Databind to 2.13.4.2 (from 2.13.2.2)</li>
-  <li><pr>5725</pr>Update Tika Parser to 1.28.5 (from 1.28.3)</li>
-  <li><pr>5725</pr>Update JSoup to 1.15.3 (from 1.15.1)</li>
-  <li><pr>5725</pr>Update Apache commons-net to 3.9.0 (from 3.8.0)</li>
-  <li><pr>5725</pr>Update XStream to 1.4.20 (from 1.4.19)</li>
-  <li><pr>5763</pr>Updated Gradle to 8.1.1 (from 7.2)</li>
-  <li><pr>5763</pr>Updated Gradle to 7.3 (from 7.2)</li>
-  <li>Update lets-plot-jvm to 4.3.0 (from 3.1.1)</li>
-  <li>Update lets-plot-batik to 3.1.0 (from 2.1.1)</li>
-</ul>
-
- <!-- =================== Bug fixes =================== -->
-
-<ch_section>Bug fixes</ch_section>
-
-<h3>HTTP Samplers and Test Script Recorder</h3>
-<ul>
-</ul>
-
-<h3>Other Samplers</h3>
-<ul>
-  <li><pr>5736</pr><issue>5733</issue>Allow <code>SampleResult#setEndTime</code> be set in <code>JSR223Sampler</code></li>
-</ul>
-
-<h3>Controllers</h3>
-<ul>
-</ul>
-
-<h3>Listeners</h3>
-<ul>
-  <li><issue>5740</issue><pr>5741</pr>Fix Aggregated Graph component to cope with empty names of samplers</li>
-  <li><issue>5807</issue>Fix an <code>ArrayIndexOutOfBoundsException</code> on HTTP parameters line on special case when key and value are empty,
-    i.e.: "<code>k1=v1&amp;&#61;&amp;k2=v2</code>"</li>
-  <li><issue>5654</issue><pr>5785</pr> Fix <code>InfluxDBRawBackendListenerClient</code> missing data. Allow InfluxDB to insert multiple entries with the
-    same <code>timestamp</code> but with different <code>threadName</code>. Contributed by Victor Peralta (vperaltac at github)</li>
-</ul>
-
-<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<ul>
-  <li><pr>5717</pr>Add jsonpath string to JSON Path Assertion error message so the error is easier to understand</li>
-  <li><pr>723</pr>Use correct number format on JSON Path Assertion. Contributed by andreaslind01 (andreaslind01 at gmail.com)</li>
-</ul>
-
-<h3>Functions</h3>
-<ul>
-</ul>
-
-<h3>I18N</h3>
-<ul>
-</ul>
-
-<h3>Report / Dashboard</h3>
-<ul>
-  <li><bug>66140</bug>Guess the delimiter of the CSV source, when configured one seems wrong.
-    This is in line with the behaviour of CSVSaveService.</li>
-</ul>
-
-<h3>Documentation</h3>
-<ul>
-  <li><issue>5694</issue>Document changed formatter for <funclink name="__time()"/>. A warning will be logged,
-  if the code <code>u</code> is found in the format string, as the meaning for that code has changed from <em>day-of-week</em>
-  to <em>year</em>.</li>
-</ul>
-
-<h3>General</h3>
-<ul>
-  <li><bug>66157</bug><pr>719</pr>Correct theme for darklaf on rsyntaxtextarea</li>
-  <li><issue>5872</issue><pr>5874</pr>Trim name in Argument objects.</li>
-</ul>
+  <ch_section>Changes</ch_section>
+  <h3>General</h3>
+  <ul>
+    <li><pr>6220</pr> Require Java 17 or later for running JMeter</li>
+  </ul>
 
  <!--  =================== Thanks =================== -->
 
@@ -187,11 +72,6 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-  <li>Kai Lehmann (klehmann at aservo.com)</li>
-  <li>Ori Marko (orimarko at gmail.com)</li>
-  <li>Stefan Seide (stefan at trilobyte-se.de)</li>
-  <li>andreaslind01 Lind (andreaslind01 at gmail.com)</li>
-  <li>Victor Peralta (vperaltac at github)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
@@ -237,25 +117,6 @@ See  <bugzilla>56357</bugzilla> for details.
 </li>
 
 <li>
-Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
-This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a>
-The fix is to use JDK8_u45 or later.
-</li>
-
-<li>
-View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
-This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
-See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
-The fix is to use JDK9 b65 or later.
-</li>
-
-<li>
-JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down</keysym></keycombo>) is totally unusable with Java 7 on Mac OSX.
-This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a>
-The fix is to use JDK 8 b132 or later.
-</li>
-
-<li>
 Since Java 11 the JavaScript implementation <a href="https://openjdk.java.net/jeps/335">Nashorn has been deprecated</a>.
 Java will emit the following deprecation warnings, if you are using JavaScript based on Nashorn.
 <source>
@@ -279,12 +140,12 @@ With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jep
       <source>
 mkdir lib/modules
 pushd lib/modules
-wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.3/nashorn-core-15.3.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.2/asm-9.2.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.2/asm-commons-9.2.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.2/asm-util-9.2.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.2/asm-tree-9.2.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.2/asm-analysis-9.2.jar
+wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.4/nashorn-core-15.4.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.6/asm-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.6/asm-commons-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.6/asm-util-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.6/asm-tree-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.6/asm-analysis-9.6.jar
 popd
 export JVM_ARGS="--module-path $PWD/lib/modules"
 ./bin/jmeter

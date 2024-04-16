@@ -140,7 +140,7 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("com.sun.mail:all:1.6.7") {
+    overrideLicense("com.sun.mail:all") {
         // Multiple licenses, specify explicitly
         expectedLicense = SimpleLicense("CDDL", uri("http://www.sun.com/cddl")) and SimpleLicense("GPLv2+CE", uri("https://glassfish.java.net/public/CDDL+GPL_1_1.html"))
         effectiveLicense = SpdxLicense.CDDL_1_0 and (SpdxLicense.GPL_2_0_or_later with SpdxLicenseException.Classpath_exception_2_0)
@@ -211,20 +211,20 @@ val binLicenseSpec = licensesCopySpec(renderLicenseForBinary)
 val srcLicenseSpec = licensesCopySpec(renderLicenseForSource)
 
 val binLicenseDir by tasks.registering(Sync::class) {
-    into("$buildDir/$name")
+    into(layout.buildDirectory.dir(name))
     dependencyLicenses(binLicenseSpec)
 }
 
 val srcLicenseDir by tasks.registering(Sync::class) {
-    into("$buildDir/$name")
+    into(layout.buildDirectory.dir(name))
     dependencyLicenses(srcLicenseSpec)
 }
 
 artifacts {
-    add(binLicense.name, buildDir.resolve(binLicenseDir.name)) {
+    add(binLicense.name, layout.buildDirectory.dir(binLicenseDir.name)) {
         builtBy(binLicenseDir)
     }
-    add(srcLicense.name, buildDir.resolve(srcLicenseDir.name)) {
+    add(srcLicense.name, layout.buildDirectory.dir(srcLicenseDir.name)) {
         builtBy(srcLicenseDir)
     }
 }

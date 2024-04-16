@@ -63,6 +63,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.control.gui.TreeNodeWrapper;
@@ -237,6 +238,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JButton start;
     private JButton restart;
 
+    private JTextField counterValue;
+
     private transient RecorderDialog recorderDialog;
 
     private JTextField httpSampleNameFormat;
@@ -264,6 +267,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String ADD_TO_EXCLUDE_FROM_CLIPBOARD = "exclude_clipboard"; // $NON-NLS-1$
 
     private static final String ADD_SUGGESTED_EXCLUDES = "exclude_suggested";
+
+    private static final String SET_COUNTERS = "set_counters";
 
     static final String HTTP_SAMPLER_NAMING_MODE = "proxy_http_sampler_naming_mode"; // $NON-NLS-1$
 
@@ -410,7 +415,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         httpSampleNameFormat.setText(model.getHttpSampleNameFormat());
 
         reinitializeTargetCombo();// Set up list of potential targets and
-                                    // enable listener
+        // enable listener
 
         populateTable(includeModel, model.getIncludePatterns().iterator());
         populateTable(excludeModel, model.getExcludePatterns().iterator());
@@ -499,6 +504,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             addSuggestedExcludes(excludeTable);
             excludeModel.fireTableDataChanged();
             enableRestart();
+        } else if (command.equals(SET_COUNTERS)) {
+            setSetCounters();
         }
     }
 
@@ -589,15 +596,15 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("proxy_daemon_error_read_args") // $NON-NLS-1$
-                    + "\n" + ioe.getLocalizedMessage(), JMeterUtils.getResString("error_title"),  // $NON-NLS-1$  $NON-NLS-2$
+                            + "\n" + ioe.getLocalizedMessage(), JMeterUtils.getResString("error_title"),  // $NON-NLS-1$  $NON-NLS-2$
                     JOptionPane.ERROR_MESSAGE);
         } catch (UnsupportedFlavorException ufe) {
             JOptionPane.showMessageDialog(this,
                     JMeterUtils.getResString("proxy_daemon_error_not_retrieve") + SPACE // $NON-NLS-1$
-                        + DataFlavor.stringFlavor.getHumanPresentableName() + SPACE
-                        + JMeterUtils.getResString("proxy_daemon_error_from_clipboard") // $NON-NLS-1$
-                        + ufe.getLocalizedMessage(), JMeterUtils.getResString("error_title"),  // $NON-NLS-1$
-                        JOptionPane.ERROR_MESSAGE);
+                            + DataFlavor.stringFlavor.getHumanPresentableName() + SPACE
+                            + JMeterUtils.getResString("proxy_daemon_error_from_clipboard") // $NON-NLS-1$
+                            + ufe.getLocalizedMessage(), JMeterUtils.getResString("error_title"),  // $NON-NLS-1$
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -633,11 +640,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                         .append("</b>&nbsp;").append(JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"));
                 sb.append("<br>").append(JMeterUtils.getResString("proxy_daemon_msg_install_as_in_doc")); // $NON-NLS-1$
                 sb.append("<br><b>").append(MessageFormat.format(
-                        JMeterUtils.getResString("proxy_daemon_msg_check_expiration"),
-                        ProxyControl.CERT_VALIDITY)) // $NON-NLS-1$
-                    .append("</b><br>");
+                                JMeterUtils.getResString("proxy_daemon_msg_check_expiration"),
+                                ProxyControl.CERT_VALIDITY)) // $NON-NLS-1$
+                        .append("</b><br>");
                 sb.append("<br>").append(JMeterUtils.getResString("proxy_daemon_msg_check_details"))
-                    .append("<ul>"); // $NON-NLS-1$
+                        .append("<ul>"); // $NON-NLS-1$
                 for(String detail : details) {
                     sb.append("<li>").append(detail).append("</li>");
                 }
@@ -656,10 +663,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 timer.start();
                 JOptionPane.showMessageDialog(this,
                         messageLabel,
-                    JMeterUtils.getResString("proxy_daemon_msg_rootca_cert") + SPACE // $NON-NLS-1$
-                    + KeyToolUtils.ROOT_CACERT_CRT_PFX + SPACE
-                    + JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"), // $NON-NLS-1$
-                    JOptionPane.INFORMATION_MESSAGE);
+                        JMeterUtils.getResString("proxy_daemon_msg_rootca_cert") + SPACE // $NON-NLS-1$
+                                + KeyToolUtils.ROOT_CACERT_CRT_PFX + SPACE
+                                + JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"), // $NON-NLS-1$
+                        JOptionPane.INFORMATION_MESSAGE);
             }
             return true;
         } catch (InvalidVariableException e) {
@@ -691,6 +698,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         }
     }
 
+    void setSetCounters() {
+        if ((counterValue.getText().length() > 0) && NumberUtils.isParsable(counterValue.getText())) {
+            Proxy.setCounter(Integer.parseInt(counterValue.getText()));
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    JMeterUtils.getResString("proxy_settings_counter_error_digits"), // $NON-NLS-1$
+                    JMeterUtils.getResString("proxy_settings_counter_error_invalid_data"), // $NON-NLS-1$
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
     /** {@inheritDoc} */
     @Override
     public void keyPressed(KeyEvent e) {
@@ -979,10 +996,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         httpSampleNameFormat.setToolTipText(JMeterUtils.getResString("sample_naming_format_help"));
 
         JLabel labelSetCounter = new JLabel(JMeterUtils.getResString("sample_creator_counter_value"));
-        JTextField counterValue = new JTextField(10);
+        counterValue = new JTextField(10);
         labelSetCounter.setLabelFor(counterValue);
         JButton buttonSetCounter = new JButton(JMeterUtils.getResString("sample_creator_set_counter"));
-        buttonSetCounter.addActionListener(e -> Proxy.setCounter(Integer.parseInt(counterValue.getText())));
+        buttonSetCounter.setActionCommand(SET_COUNTERS);
+        buttonSetCounter.addActionListener(this);
         panel.add(labelSetCounter);
         panel.add(counterValue);
         panel.add(buttonSetCounter);
@@ -1156,14 +1174,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         deleteButton.addActionListener(this);
         buttonPanel.add(deleteButton);
 
-        /** A button for adding new excludes/includes to the table from the clipboard. */
+        // A button for adding new excludes/includes to the table from the clipboard.
         JButton addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
         addFromClipboard.setActionCommand(copyFromClipboard);
         addFromClipboard.addActionListener(this);
         buttonPanel.add(addFromClipboard);
 
         if(addSuggestedExcludes != null) {
-            /** A button for adding suggested excludes. */
+            // A button for adding suggested excludes.
             JButton addFromSuggestedExcludes = new JButton(JMeterUtils.getResString("add_from_suggested_excludes")); // $NON-NLS-1$
             addFromSuggestedExcludes.setActionCommand(addSuggestedExcludes);
             addFromSuggestedExcludes.addActionListener(this);

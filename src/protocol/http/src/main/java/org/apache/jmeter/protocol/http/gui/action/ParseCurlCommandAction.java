@@ -63,6 +63,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.AbstractAction;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -96,6 +97,7 @@ import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.AbstractThreadGroupSchema;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.util.JMeterUtils;
@@ -110,12 +112,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Opens a popup where user can enter a cURL command line and create a test plan
  * from it
  *
  * @since 5.1
  */
+@AutoService({
+        Command.class,
+        MenuCreator.class
+})
 public class ParseCurlCommandAction extends AbstractAction implements MenuCreator, ActionListener { // NOSONAR
     private static final Logger LOGGER = LoggerFactory.getLogger(ParseCurlCommandAction.class);
     private static final String ACCEPT_ENCODING = "Accept-Encoding";
@@ -218,13 +226,13 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         ThreadGroup threadGroup = new ThreadGroup();
         threadGroup.setProperty(TestElement.GUI_CLASS, ThreadGroupGui.class.getName());
         threadGroup.setProperty(TestElement.NAME, "Thread Group");
-        threadGroup.setProperty(AbstractThreadGroup.NUM_THREADS, "${__P(threads,10)}");
+        threadGroup.set(AbstractThreadGroupSchema.INSTANCE.getNumThreads(), "${__P(threads,10)}");
         threadGroup.setProperty(ThreadGroup.RAMP_TIME,"${__P(rampup,30)}");
         threadGroup.setScheduler(true);
         threadGroup.setProperty(ThreadGroup.DURATION,"${__P(duration,3600)}");
         threadGroup.setDelay(5);
         LoopController loopCtrl = new LoopController();
-        loopCtrl.setProperty(LoopController.LOOPS,"${__P(iterations,-1)}");
+        loopCtrl.setLoops("${__P(iterations,-1)}");
         loopCtrl.setContinueForever(false);
         threadGroup.setSamplerController(loopCtrl);
         TestPlan testPlan = new TestPlan();
@@ -307,11 +315,12 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (StringUtils.isNotEmpty(url.getQuery())) {
             path += "?" + url.getQuery();
         }
+        // setMethod must be before setPath as setPath uses method to determine if parameters should be parsed or not
+        httpSampler.setMethod(request.getMethod());
         httpSampler.setPath(path);
         httpSampler.setDomain(url.getHost());
         httpSampler.setUseKeepAlive(request.isKeepAlive());
         httpSampler.setFollowRedirects(true);
-        httpSampler.setMethod(request.getMethod());
         HeaderManager headerManager = createHeaderManager(request);
         httpSampler.addTestElement(headerManager);
         configureTimeout(request, httpSampler);

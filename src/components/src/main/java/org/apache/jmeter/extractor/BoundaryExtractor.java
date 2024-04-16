@@ -34,6 +34,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.Document;
 import org.apache.jmeter.util.JMeterUtils;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -236,11 +237,12 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         return result.getResponseDataAsString(); // Bug 36898
     }
 
-    private static List<String> extract(
+    @VisibleForTesting
+    static List<String> extract(
             String leftBoundary, String rightBoundary, int matchNumber, Stream<String> previousResults) {
         boolean allItems = matchNumber <= 0;
         return previousResults
-                .flatMap(input -> extractAll(leftBoundary, rightBoundary, input).stream())
+                .flatMap(input -> extract(leftBoundary, rightBoundary, input).stream())
                 .skip(allItems ? 0L : matchNumber - 1)
                 .limit(allItems ? Long.MAX_VALUE : 1L)
                 .collect(Collectors.toList());
@@ -257,7 +259,8 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
      * @param inputString   text in which to look for the fragments
      * @return list where the found text fragments will be placed
      */
-    private static List<String> extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString) {
+    @VisibleForTesting
+    static List<String> extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString) {
         if (StringUtils.isBlank(inputString)) {
             return Collections.emptyList();
         }
@@ -302,7 +305,12 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         return Collections.unmodifiableList(matches);
     }
 
-    public static List<String> extractAll(
+    public List<String> extractAll(
+            String leftBoundary, String rightBoundary, String textToParse) {
+        return extract(leftBoundary, rightBoundary, textToParse);
+    }
+
+    private static List<String> extract(
             String leftBoundary, String rightBoundary, String textToParse) {
         return extract(leftBoundary, rightBoundary, -1, textToParse);
     }

@@ -26,6 +26,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * This class wraps the FileRowColContainer for use across multiple threads.
  * <p>
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
  * together with the current line number.
  *
  */
+//@AutoService(Function.class)
 public final class FileWrapper {
 
     private static final Logger log = LoggerFactory.getLogger(FileWrapper.class);

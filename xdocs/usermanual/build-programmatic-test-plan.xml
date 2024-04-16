@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!DOCTYPE document>
+<document prev="build-jms-topic-test-plan.html" next="listeners.html" id="$Id$">
+
+  <properties>
+    <title>User's Manual: Building a Test Plan Programmatically</title>
+  </properties>
+
+  <body>
+
+    <section name="Building a Test Plan Programmatically" anchor="building">
+      <note>
+        JMeter 5.6 brings experimental classes and methods to build test plans programmatically, so please feel free to provide your feedback.
+      </note>
+      <p>In this section, you will learn how to create a <a href="build-test-plan.html">Test Plan</a> with JMeter APIs.</p>
+
+      <p>The Test Plan is a collection of elements arranged in a tree-like manner. However, in JMeter APIs, the elements do not form a tree.
+        Parent-child relationships are stored in a separate structure: <code>ListedHashTree</code>.
+      </p>
+    </section>
+
+    <section name="Creating a plan with low-level APIs" anchor="low_level_api">
+      <p>Let us create <code>Test Plan =&gt; Thread Group =&gt; Debug Sampler</code> plan</p>
+
+      <p>
+        <source>
+ListedHashTree root = new ListedHashTree(); // (1)
+TestPlan testPlan = new TestPlan();
+ListedHashTree testPlanSubtree = root.add(testPlan); // (2)
+TestPlan threadGroup = new ThreadGroup();
+threadGroup.setName("Search Order Thread Group");
+ListedHashTree threadGroupSubtree = testPlanSubtree.add(threadGroup); // (3)
+DebugSampler debugSampler = new DebugSampler();
+threadGroupSubtree.add(debugSampler);</source>
+        <ul>
+          <li>Firstly, we create the tree at <code>(1)</code></li>
+          <li>Then we create elements, and add them to the tree in <code>(2)</code></li>
+          <li>Note how adding element returns the subtree, so we add <code>threadGroup</code> under <code>testPlan</code> in <code>(2)</code></li>
+        </ul>
+        <note>
+          Don't confuse <code>ListedHashTree</code> with <code>HashTree</code>. <code>HashTree</code> does not honour element order, so the generated elements might shuffle unexpectedly.
+        </note>
+      </p>
+    </section>
+
+    <section name="Generating code from UI" anchor="generating_code">
+      <p>To aid with creating code, JMeter implements <code>Copy Code</code> context action, so you could
+      generate code for any element in the plan. It would generate code for the element and its children.</p>
+
+      <figure width="380" height="258" image="copy_code/http_sampler_copy_code.png">Copy Code context action</figure>
+
+      <p>Here's the generated code (Kotlin DSL):
+      <source>
+org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
+    props {
+        it[arguments] = org.apache.jmeter.config.Arguments().apply {
+            props {
+                it[arguments] = listOf(
+                    org.apache.jmeter.protocol.http.util.HTTPArgument().apply {
+                        props {
+                            it[value] = "World"
+                            it[metadata] = "="
+                            it[useEquals] = true
+                            it[argumentName] = "user"
+                        }
+                    },
+                    org.apache.jmeter.protocol.http.util.HTTPArgument().apply {
+                        props {
+                            it[alwaysEncode] = true
+                            it[value] = "test_value"
+                            it[metadata] = "="
+                            it[useEquals] = true
+                            it[argumentName] = "test"
+                        }
+                    },
+                )
+                it[name] = "User Defined Variables"
+                it[guiClass] = "org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel"
+                it[testClass] = "org.apache.jmeter.config.Arguments"
+            }
+        }
+        it[domain] = "example.com"
+        it[path] = "/api/v1/login"
+        it[method] = "GET"
+        it[followRedirects] = true
+        it[useKeepalive] = true
+        it[proxy.scheme] = "https"
+        it[proxy.host] = "localhost"
+        it[proxy.port] = "8080"
+        it[proxy.username] = "secret"
+        it[proxy.password] = "password1"
+        it[name] = "/login"
+        it[guiClass] = "org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui"
+    }
+
+    org.apache.jmeter.extractor.RegexExtractor::class {
+        props {
+            it[guiClass] = "org.apache.jmeter.extractor.gui.RegexExtractorGui"
+            it[name] = "extract user id"
+            it[referenceName] = "regexVar"
+            it[regularExpression] = "hello\\s+?world"
+            it[template] = "\$1\$"
+        }
+    }
+
+    org.apache.jmeter.protocol.http.control.HeaderManager::class {
+        props {
+            it[headers] = listOf(
+                org.apache.jmeter.protocol.http.control.Header().apply {
+                    props {
+                        it[headerName] = "Accept"
+                        it[value] = "text/plain"
+                    }
+                },
+                org.apache.jmeter.protocol.http.control.Header().apply {
+                    props {
+                        it[headerName] = "User-Agent"
+                        it[value] = "JMeter"
+                    }
+                },
+                org.apache.jmeter.protocol.http.control.Header().apply {
+                    props {
+                        it[headerName] = "X-JMeter-Thread"
+                        it[value] = "Thread \${__threadNum}"
+                    }
+                },
+            )
+            it[guiClass] = "org.apache.jmeter.protocol.http.gui.HeaderPanel"
+            it[name] = "HTTP Header Manager"
+        }
+    }
+}
+</source>
+      </p>
+    </section>
+
+    <section name="Creating a plan with Kotlin DSL" anchor="treebuilder_kotlin_dsl">
+      <p>JMeter 5.6 introduces Kotlin DSL which might make it easier to create and maintain test plans as the structure of the code
+        would resemble the structure of the generated test plan tree</p>
+
+      <p>
+        <source>
+import org.apache.jmeter.sampler.DebugSampler
+import org.apache.jmeter.testelement.TestPlan
+import org.apache.jmeter.threads.ThreadGroup
+import org.apache.jmeter.treebuilder.dsl.testTree
+
+val root = testTree { // (1)
+  TestPlan::class { // (2)
+    ThreadGroup::class {
+       name = "Search Order Thread Group"
+       +DebugSampler::class // (3)
+       +DebugSampler() // (4)
+    }
+  }
+}</source>
+        <ul>
+          <li>Firstly, we create a <code>TreeBuilder</code> at <code>(1)</code></li>
+          <li>Then we add elements to the tree in <code>(2)</code>, and populate its children</li>
+          <li>Note how adding element returns the subtree, so we add <code>threadGroup</code> under <code>testPlan</code> in <code>(2)</code></li>
+          <li>If no children needed, the element can be appended to the tree with a unary plus operator as in <code>(3)</code></li>
+          <li>By default, JMeter uses no-argument constructors to create elements, however, you can add <code>TestElement</code> instances to the tree as well, see <code>(4)</code></li>
+        </ul>
+      </p>
+    </section>
+
+    <section name="Extending Kotlin DSL" anchor="extending_treebuilder_kotlin_dsl">
+      <p>As you use the DSL for test plan generation, you might want to factor out the common patterns.
+      For instance, imagine you want factor out <code>Thread Group</code> creation so it always has a <code>Summariser</code> element.</p>
+
+      <p>
+        <source>
+import kotlin.time.Duration.Companion.seconds
+import org.apache.jmeter.sampler.DebugSampler
+import org.apache.jmeter.testelement.TestPlan
+import org.apache.jmeter.threads.ThreadGroup
+import org.apache.jmeter.treebuilder.dsl.testTree
+
+fun TreeBuilder.threadGroup( // (1)
+    name: String,
+    numThreads: Int = 10,
+    rampUp: Duration = 3.seconds,
+    body: Action&lt;ThreadGroup&gt;
+) {
+    ThreadGroup::class { // (2)
+        this.name = name
+        this.numThreads = numThreads
+        this.rampUp = rampUp.inWholeSeconds.toInt()
+        +Summariser::class
+        body(this) // (3)
+    }
+}
+
+fun buildTree() {
+  val root = testTree {
+    TestPlan::class {
+      threadGroup(name = "Search Order Thread Group", rampUp = 1.seconds) { // (4)
+         +DebugSampler::class
+      }
+    }
+  }</source>
+        <ul>
+          <li>Firstly, you can factor test element creation logic as an extension function for <code>TreeBuilder</code> as in <code>(1)</code>.
+          It uses regular DSL to add an element (see <code>(2)</code>), and then it calls the lambda body in <code>(3)</code> to fill thread group children.</li>
+          <li>You can use the extension by calling it when you need it in the test plan, see <code>(4)</code></li>
+          <li>Note how named parameters, and default values keep the code readable</li>
+        </ul>
+      </p>
+    </section>
+
+    <section name="Creating a plan with Java DSL" anchor="treebuilder_java_dsl">
+      <p>JMeter 5.6 introduces Java DSL which might make it easier to create and maintain test plans as the structure of the code
+        would resemble the structure of the generated test plan tree</p>
+
+      <p>
+        <source>
+import org.apache.jmeter.sampler.DebugSampler
+import org.apache.jmeter.testelement.TestPlan
+import org.apache.jmeter.threads.ThreadGroup
+import static org.apache.jmeter.treebuilder.dsl.TreeBuilders.testTree
+
+ListedHashTree root = testTree(b -> { // (1)
+  b.add(TestPlan.class, tp -> { // (2)
+    b.add(ThreadGroup.class, tg -> {
+       tg.setName("Search Order Thread Group");
+       b.add(DebugSampler.class); // (3)
+       b.add(new DebugSampler()); // (4)
+    });
+  });
+});</source>
+        <ul>
+          <li>Firstly, we create a <code>TreeBuilder</code> at <code>(1)</code>.
+            Note how this builder reference should be used to append all the elements</li>
+          <li>Then we add elements to the tree in <code>(2)</code>, and populate its children.
+            The lambda parameters correspond to the added elements, so you can configure their properties</li>
+          <li>Note how adding element returns the subtree, so we add <code>threadGroup</code> under <code>testPlan</code> in <code>(2)</code></li>
+          <li>If no children needed, you could omit the lambda parameter as in <code>(3)</code></li>
+          <li>By default, JMeter uses no-argument constructors to create elements, however, you can add <code>TestElement</code> instances to the tree as well, see <code>(4)</code></li>
+        </ul>
+      </p>
+    </section>
+  </body>
+</document>

@@ -29,6 +29,8 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Description:<br>
  * <br>
@@ -69,6 +71,7 @@ import org.slf4j.LoggerFactory;
  * that should be replaced.
  */
 @SuppressWarnings("InconsistentCapitalization")
+@AutoService(Filter.class)
 public class LogFilter implements Filter, Serializable {
 
     private static final long serialVersionUID = 241L;

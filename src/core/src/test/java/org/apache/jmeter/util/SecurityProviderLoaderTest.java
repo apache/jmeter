@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.Provider;
@@ -24,7 +28,6 @@ import java.security.Security;
 import java.util.Arrays;
 import java.util.Properties;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,8 +40,8 @@ public class SecurityProviderLoaderTest {
     void removeAllDummyProviders() {
         Security.removeProvider(DummyProvider.PROVIDER_NAME);
         Security.removeProvider(DummyProviderWithConfig.PROVIDER_NAME);
-        Assert.assertNull(Security.getProvider(DummyProvider.PROVIDER_NAME));
-        Assert.assertNull(Security.getProvider(DummyProviderWithConfig.PROVIDER_NAME));
+        assertNull(Security.getProvider(DummyProvider.PROVIDER_NAME));
+        assertNull(Security.getProvider(DummyProviderWithConfig.PROVIDER_NAME));
     }
 
     @Test
@@ -48,7 +51,7 @@ public class SecurityProviderLoaderTest {
         try {
             privateConstructor.newInstance();
         } catch (InvocationTargetException e) {
-            Assert.assertEquals(IllegalStateException.class, e.getCause().getClass());
+            assertEquals(IllegalStateException.class, e.getCause().getClass());
         }
     }
 
@@ -63,10 +66,10 @@ public class SecurityProviderLoaderTest {
         Provider[] providersAfter = Security.getProviders();
         Provider provider = Security.getProvider(DummyProvider.PROVIDER_NAME);
         try {
-            Assert.assertEquals(providersCountBefore + 1, providersAfter.length);
-            Assert.assertNotNull("Provider not installed.", provider);
-            Assert.assertEquals(DummyProvider.class, provider.getClass());
-            Assert.assertEquals(provider, providersAfter[providersAfter.length - 1]);
+            assertEquals(providersCountBefore + 1, providersAfter.length);
+            assertNotNull(provider, "Provider not installed.");
+            assertEquals(DummyProvider.class, provider.getClass());
+            assertEquals(provider, providersAfter[providersAfter.length - 1]);
         } catch (AssertionError e){
             Arrays.stream(providers).forEach(pro -> System.err.println(pro.getName()));
             throw e;
@@ -83,10 +86,10 @@ public class SecurityProviderLoaderTest {
         Provider[] providersAfter = Security.getProviders();
         Provider provider = Security.getProvider(DummyProvider.PROVIDER_NAME);
 
-        Assert.assertEquals(providersCountBefore + 1, providersAfter.length);
-        Assert.assertNotNull("Provider not installed.", provider);
-        Assert.assertEquals(DummyProvider.class, provider.getClass());
-        Assert.assertEquals(provider, providersAfter[providersAfter.length - 1]);
+        assertEquals(providersCountBefore + 1, providersAfter.length);
+        assertNotNull(provider, "Provider not installed.");
+        assertEquals(DummyProvider.class, provider.getClass());
+        assertEquals(provider, providersAfter[providersAfter.length - 1]);
     }
 
     @ParameterizedTest
@@ -99,7 +102,7 @@ public class SecurityProviderLoaderTest {
 
         int providersCountAfter = Security.getProviders().length;
 
-        Assert.assertEquals(providersCountBefore, providersCountAfter);
+        assertEquals(providersCountBefore, providersCountAfter);
     }
 
     @ParameterizedTest
@@ -113,10 +116,10 @@ public class SecurityProviderLoaderTest {
         Provider[] providersAfter = Security.getProviders();
         Provider provider = Security.getProvider(DummyProvider.PROVIDER_NAME);
 
-        Assert.assertEquals(providersCountBefore + 1, providersAfter.length);
-        Assert.assertNotNull(provider);
-        Assert.assertEquals(DummyProvider.class, provider.getClass());
-        Assert.assertEquals(provider, providersAfter[expectedInsertPosition(position, providersAfter)]);
+        assertEquals(providersCountBefore + 1, providersAfter.length);
+        assertNotNull(provider);
+        assertEquals(DummyProvider.class, provider.getClass());
+        assertEquals(provider, providersAfter[expectedInsertPosition(position, providersAfter)]);
     }
 
     private int expectedInsertPosition(int position, Provider[] providersAfter) {
@@ -137,11 +140,11 @@ public class SecurityProviderLoaderTest {
         Provider[] providersAfter = Security.getProviders();
         Provider provider = Security.getProvider(DummyProviderWithConfig.PROVIDER_NAME);
 
-        Assert.assertNotNull("Provider not installed.", provider);
-        Assert.assertEquals(providersCountBefore + 1, providersAfter.length);
-        Assert.assertEquals(DummyProviderWithConfig.class, provider.getClass());
-        Assert.assertEquals(provider, providersAfter[expectedInsertPosition(position, providersAfter)]);
-        Assert.assertEquals(config.substring(config.lastIndexOf(":") + 1), ((DummyProviderWithConfig) provider).getConfig());
+        assertNotNull(provider, "Provider not installed.");
+        assertEquals(providersCountBefore + 1, providersAfter.length);
+        assertEquals(DummyProviderWithConfig.class, provider.getClass());
+        assertEquals(provider, providersAfter[expectedInsertPosition(position, providersAfter)]);
+        assertEquals(config.substring(config.lastIndexOf(":") + 1), ((DummyProviderWithConfig) provider).getConfig());
     }
 
     @Test
@@ -156,19 +159,19 @@ public class SecurityProviderLoaderTest {
         SecurityProviderLoader.addSecurityProvider(properties);
 
         Provider[] providersAfter = Security.getProviders();
-        Assert.assertEquals(providersCountBefore + 2, providersAfter.length);
+        assertEquals(providersCountBefore + 2, providersAfter.length);
 
         Provider provider = Security.getProvider(DummyProvider.PROVIDER_NAME);
         Provider providerWithConfig = Security.getProvider(DummyProviderWithConfig.PROVIDER_NAME);
 
-        Assert.assertNotNull("Provider not installed.", provider);
-        Assert.assertEquals(DummyProvider.class, provider.getClass());
-        Assert.assertEquals(provider, providersAfter[0]);
+        assertNotNull(provider, "Provider not installed.");
+        assertEquals(DummyProvider.class, provider.getClass());
+        assertEquals(provider, providersAfter[0]);
 
-        Assert.assertNotNull("Provider not installed.", providerWithConfig);
-        Assert.assertEquals(DummyProviderWithConfig.class, providerWithConfig.getClass());
-        Assert.assertEquals(providerWithConfig, providersAfter[1]);
-        Assert.assertEquals("CONFIG", ((DummyProviderWithConfig) providerWithConfig).getConfig());
+        assertNotNull(providerWithConfig, "Provider not installed.");
+        assertEquals(DummyProviderWithConfig.class, providerWithConfig.getClass());
+        assertEquals(providerWithConfig, providersAfter[1]);
+        assertEquals("CONFIG", ((DummyProviderWithConfig) providerWithConfig).getConfig());
     }
 
     static class DummyProvider extends Provider {

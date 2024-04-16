@@ -24,5 +24,5 @@ dependencies {
 
     api("junit:junit")
 
-    testImplementation(project(":src:core", "testClasses"))
+    testImplementation(testFixtures(projects.src.core))
 }

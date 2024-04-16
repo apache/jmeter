@@ -21,8 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class URLCollection implements Iterable<URL> {
      * @param c collection to start with (Must not be {@code null})
      */
     public URLCollection(Collection<URLString> c) {
-        coll = Validate.notNull(c);
+        coll = Objects.requireNonNull(c, "collection must not be null");
     }
 
     /**
@@ -105,9 +105,9 @@ public class URLCollection implements Iterable<URL> {
      * Private iterator used to unwrap the URL from the URLString class
      */
     private static class UrlIterator implements Iterator<URL> {
-        private final Iterator<URLString> iter;
+        private final Iterator<? extends URLString> iter;
 
-        UrlIterator(Iterator<URLString> i) {
+        UrlIterator(Iterator<? extends URLString> i) {
             iter = i;
         }
 

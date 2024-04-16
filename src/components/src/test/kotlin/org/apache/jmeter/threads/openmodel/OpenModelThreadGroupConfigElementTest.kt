@@ -17,19 +17,16 @@
 
 package org.apache.jmeter.threads.openmodel
 
-import org.apache.jmeter.control.TestTransactionController
 import org.apache.jmeter.engine.StandardJMeterEngine
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.modifiers.CounterConfig
 import org.apache.jmeter.sampler.DebugSampler
+import org.apache.jmeter.test.samplers.CollectSamplesListener
 import org.apache.jmeter.testelement.TestPlan
-import org.apache.jmeter.testelement.property.TestElementProperty
-import org.apache.jmeter.threads.AbstractThreadGroup
-import org.apache.jorphan.collections.ListedHashTree
+import org.apache.jmeter.treebuilder.dsl.testTree
 import org.apache.jorphan.test.JMeterSerialTest
-import org.junit.Assert
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import java.time.Duration
 
 class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest {
@@ -37,56 +34,47 @@ class OpenModelThreadGroupConfigElementTest : JMeterTestCase(), JMeterSerialTest
      * Create Test Plan with Open Model Thread Group and Counter Config.
      */
     @Test
-    @Ignore("Sometimes the listener gets no results for unknown reason")
+    // Un-comment if you want try running the test multiple times locally:
+    // @RepeatedTest(value = 10)
     fun `ensure thread group initializes counter only once for each thread`() {
-        val listener = TestTransactionController.TestSampleListener()
+        val listener = CollectSamplesListener()
 
-        val tree = ListedHashTree().apply {
-            add(TestPlan()).apply {
-                val threadGroup = OpenModelThreadGroup().apply {
+        val tree = testTree {
+            TestPlan::class {
+                OpenModelThreadGroup::class {
                     name = "Thread Group"
-                    scheduleString = "rate(5 / sec) random_arrivals(1 sec)"
-                    setProperty(
-                        TestElementProperty(
-                            AbstractThreadGroup.MAIN_CONTROLLER, OpenModelThreadGroupController()
-                        )
-                    )
-                }
-                add(threadGroup).apply {
-                    add(listener)
-                    add(
-                        CounterConfig().apply {
-                            varName = "counter"
-                            increment = 1
-                        }
-                    )
-                    add(
-                        DebugSampler().apply {
-                            name = "\${counter}"
-                            isDisplayJMeterProperties = false
-                            isDisplayJMeterVariables = false
-                            isDisplaySystemProperties = false
-                        }
-                    )
+                    // 5 samples within 100ms
+                    // Then 2 sec pause to let all the threads to finish, especially the ones that start at 99ms
+                    scheduleString = "rate(50 / sec) random_arrivals(100 ms) pause(2 s)"
+                    listener()
+                    CounterConfig::class {
+                        varName = "counter"
+                        increment = 1
+                    }
+                    DebugSampler::class {
+                        name = "\${counter}"
+                        isDisplayJMeterProperties = false
+                        isDisplayJMeterVariables = false
+                        isDisplaySystemProperties = false
+                    }
                 }
             }
         }
-
         StandardJMeterEngine().apply {
             configure(tree)
             runTest()
             awaitTermination(Duration.ofSeconds(10))
         }
 
-        // There's no guarantee that thread execute exactly in order, so we sort
+        // There's no guarantee that threads execute exactly in order, so we sort
         // the labels to avoid test failure in case the thread execute out of order.
         val actual = listener.events.map { it.result.sampleLabel }.sorted()
 
         // Use toString for better error message
-        Assert.assertEquals(
-            "Counter values should be consequent",
+        Assertions.assertEquals(
             "0\n1\n2\n3\n4",
-            actual.joinToString("\n")
+            actual.joinToString("\n"),
+            "Test should produce 5 iterations, so \${counter} should yield 0..4"
         )
     }
 }

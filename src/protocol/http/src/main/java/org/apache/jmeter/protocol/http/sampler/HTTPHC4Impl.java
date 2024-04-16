@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -102,7 +103,7 @@ import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.FormBodyPartBuilder;
-import org.apache.http.entity.mime.MIME;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -149,7 +150,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.hc.LaxDeflateInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LaxGZIPInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
-import org.apache.jmeter.protocol.http.util.EncoderCache;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
@@ -772,7 +773,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param localContext {@link HttpContext}
      */
     private static void saveProxyAuth(
-            MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
+            MutableTriple<CloseableHttpClient, ? super AuthState, PoolingHttpClientConnectionManager> triple,
             HttpContext localContext) {
         triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
     }
@@ -782,7 +783,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param triple {@link MutableTriple} May be null if first request
      * @param localContext {@link HttpContext}
      */
-    private static void setupProxyAuthState(MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
+    private static void setupProxyAuthState(MutableTriple<CloseableHttpClient, ? extends AuthState, PoolingHttpClientConnectionManager> triple,
             HttpContext localContext) {
         if (triple != null) {
             AuthState proxyAuthState = triple.getMiddle();
@@ -945,7 +946,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private static final class HttpClientKey {
 
-        private final String target; // protocol://[user:pass@]host:[port]
+        private final String protocol;
+        private final String authority;
         private final boolean hasProxy;
         private final String proxyScheme;
         private final String proxyHost;
@@ -968,7 +970,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 int proxyPort, String proxyUser, String proxyPass) {
             // N.B. need to separate protocol from authority otherwise http://server would match https://erver (<= sic, not typo error)
             // could use separate fields, but simpler to combine them
-            this.target = url.getProtocol()+"://"+url.getAuthority();
+            this.protocol = url.getProtocol();
+            this.authority = url.getAuthority();
             this.hasProxy = hasProxy;
             this.proxyScheme = proxyScheme;
             this.proxyHost = proxyHost;
@@ -988,7 +991,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 hash = hash*31 + getHash(proxyUser);
                 hash = hash*31 + getHash(proxyPass);
             }
-            hash = hash*31 + target.hashCode();
+            hash = hash*31 + getHash(protocol);
+            hash = hash*31 + getHash(authority);
             return hash;
         }
 
@@ -1006,26 +1010,21 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 return false;
             }
             HttpClientKey other = (HttpClientKey) obj;
-            if (this.hasProxy) { // otherwise proxy String fields may be null
-                if (proxyScheme == null) {
-                    if (other.proxyScheme != null) {
-                        return false;
-                    }
-                } else if (!proxyScheme.equals(other.proxyScheme)) {
-                    return false;
-                }
-                return
-                this.hasProxy == other.hasProxy &&
+            if (!Objects.equals(authority, other.authority) ||
+                    !Objects.equals(protocol, other.protocol) ||
+                    hasProxy != other.hasProxy) {
+                return false;
+            }
+            if (!hasProxy) {
+                // No proxy, so don't check proxy fields
+                return true;
+            }
+            return
                 this.proxyPort == other.proxyPort &&
+                Objects.equals(proxyScheme, other.proxyScheme) &&
                 this.proxyHost.equals(other.proxyHost) &&
                 this.proxyUser.equals(other.proxyUser) &&
-                this.proxyPass.equals(other.proxyPass) &&
-                this.target.equals(other.target);
-            }
-            // No proxy, so don't check proxy fields
-            return
-                this.hasProxy == other.hasProxy &&
-                this.target.equals(other.target);
+                this.proxyPass.equals(other.proxyPass);
         }
 
         @Override
@@ -1037,7 +1036,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
-            sb.append(target);
+            sb.append(protocol);
+            sb.append("://");
+            sb.append(authority);
             if (hasProxy) {
                 sb.append(" via ");
                 sb.append(proxyUser);
@@ -1227,7 +1228,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
             JMeterVariables jMeterVariables,
             HttpClientContext clientContext,
-            Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+            Map<HttpClientKey, ? extends MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
         if (resetStateOnThreadGroupIteration.get()) {
             closeCurrentConnections(mapHttpClientPerHttpClientKey);
             clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
@@ -1245,7 +1246,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param mapHttpClientPerHttpClientKey
      */
     private static void closeCurrentConnections(
-            Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+            Map<HttpClientKey, ? extends MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
         for (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple :
                 mapHttpClientPerHttpClientKey.values()) {
             PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = triple.getRight();
@@ -1483,7 +1484,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param method <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
-    private static String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<String> predicate) {
+    private static String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<? super String> predicate) {
         if(method != null) {
             // Get all the request headers
             StringBuilder hdrs = new StringBuilder(150);
@@ -1502,17 +1503,26 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     // Helper class so we can generate request data without dumping entire file contents
     private static class ViewableFileBody extends FileBody {
+        private static final byte[] CONTENTS_OMITTED =
+                "<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8);
         private boolean hideFileData;
 
-        public ViewableFileBody(File file, ContentType contentType) {
-            super(file, contentType);
+        public ViewableFileBody(File file, ContentType contentType, Charset charset) {
+            // Note: HttpClient4 does not support encoding the file name, and it always encodes names in IS88
+            // See https://issues.apache.org/jira/browse/HTTPCLIENT-293
+            super(file, contentType, encodeFilename(file.getName(), charset));
             hideFileData = false;
+        }
+
+        private static String encodeFilename(String fileName, Charset charset) {
+            return ConversionUtils.percentEncode(
+                    ConversionUtils.encodeWithEntities(fileName, charset));
         }
 
         @Override
         public void writeTo(final OutputStream out) throws IOException {
             if (hideFileData) {
-                out.write("<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8));
+                out.write(CONTENTS_OMITTED);
             } else {
                 super.writeTo(out);
             }
@@ -1529,8 +1539,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         StringBuilder postedBody = new StringBuilder(1000);
         HTTPFileArg[] files = getHTTPFiles();
 
-        final String contentEncoding = getContentEncodingOrNull();
-        final boolean haveContentEncoding = contentEncoding != null;
+        final String contentEncoding = getContentEncoding();
+        Charset charset = Charset.forName(contentEncoding);
+        final boolean haveContentEncoding = true;
 
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
@@ -1541,25 +1552,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         Arrays.asList(entityEnclosingRequest.getHeaders(HTTPConstants.HEADER_CONTENT_TYPE)));
                 entityEnclosingRequest.removeHeaders(HTTPConstants.HEADER_CONTENT_TYPE);
             }
-            // If a content encoding is specified, we use that as the
-            // encoding of any parameter values
-            Charset charset;
-            if(haveContentEncoding) {
-                charset = Charset.forName(contentEncoding);
-            } else {
-                charset = MIME.DEFAULT_CHARSET;
-            }
 
+            // doBrowserCompatibleMultipart means "use charset for encoding MIME headers",
+            // while RFC6532 means "use UTF-8 for encoding MIME headers"
+            boolean doBrowserCompatibleMultipart = getDoBrowserCompatibleMultipart();
             if(log.isDebugEnabled()) {
                 log.debug("Building multipart with:getDoBrowserCompatibleMultipart(): {}, with charset:{}, haveContentEncoding:{}",
-                        getDoBrowserCompatibleMultipart(), charset, haveContentEncoding);
+                        doBrowserCompatibleMultipart, charset, haveContentEncoding);
             }
             // Write the request to our own stream
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-            if(getDoBrowserCompatibleMultipart()) {
+            multipartEntityBuilder.setCharset(charset);
+            if (doBrowserCompatibleMultipart) {
                 multipartEntityBuilder.setLaxMode();
             } else {
-                multipartEntityBuilder.setStrictMode();
+                // Use UTF-8 for encoding header names and values
+                multipartEntityBuilder.setMode(HttpMultipartMode.RFC6532);
             }
             // Create the parts
             // Add any parameters
@@ -1590,7 +1598,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HTTPFileArg file = files[i];
 
                 File reservedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
-                fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.parse(file.getMimeType()));
+                Charset filenameCharset = doBrowserCompatibleMultipart ? charset : StandardCharsets.UTF_8;
+                fileBodies[i] = new ViewableFileBody(reservedFile, ContentType.parse(file.getMimeType()), filenameCharset);
                 multipartEntityBuilder.addPart(file.getParamName(), fileBodies[i] );
             }
 
@@ -1646,12 +1655,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     StringBuilder postBody = new StringBuilder();
                     for (JMeterProperty jMeterProperty : getArguments()) {
                         HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-                        // Note: if "Encoded?" is not selected, arg.getEncodedValue is equivalent to arg.getValue
-                        if (haveContentEncoding) {
-                            postBody.append(arg.getEncodedValue(contentEncoding));
-                        } else {
-                            postBody.append(arg.getEncodedValue());
-                        }
+                        postBody.append(arg.getEncodedValue(contentEncoding));
                     }
                     // Let StringEntity perform the encoding
                     StringEntity requestEntity = new StringEntity(postBody.toString(), contentEncoding);
@@ -1663,8 +1667,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     if(!hasContentTypeHeader && ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
                         entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
-                    String urlContentEncoding = contentEncoding;
-                    UrlEncodedFormEntity entity = createUrlEncodedFormEntity(urlContentEncoding);
+                    UrlEncodedFormEntity entity = createUrlEncodedFormEntity(contentEncoding);
                     entityEnclosingRequest.setEntity(entity);
                     writeEntityToSB(postedBody, entity, EMPTY_FILE_BODIES, contentEncoding);
                 }
@@ -1736,7 +1739,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         // Check for local contentEncoding (charset) override; fall back to default for content body
         // we do this here rather so we can use the same charset to retrieve the data
-        final String charset = getContentEncoding(HTTP.DEF_CONTENT_CHARSET.name());
+        final String charset = getContentEncoding();
 
         // Only create this if we are overriding whatever default there may be
         // If there are no arguments, we can send a file as the body of the request
@@ -1769,7 +1772,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             entity.setEntity(requestEntity);
         } else if (hasArguments()) {
             hasEntityBody = true;
-            entity.setEntity(createUrlEncodedFormEntity(getContentEncodingOrNull()));
+            entity.setEntity(createUrlEncodedFormEntity(getContentEncoding()));
         }
         // Check if we have any content to send for body
         if(hasEntityBody) {
@@ -1786,20 +1789,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Create UrlEncodedFormEntity from parameters
-     * @param contentEncoding Content encoding may be null or empty
+     * @param urlContentEncoding Content encoding may be null or empty
      * @return {@link UrlEncodedFormEntity}
      * @throws UnsupportedEncodingException
      */
-    private UrlEncodedFormEntity createUrlEncodedFormEntity(final String contentEncoding) throws UnsupportedEncodingException {
+    private UrlEncodedFormEntity createUrlEncodedFormEntity(final String urlContentEncoding) throws UnsupportedEncodingException {
         // It is a normal request, with parameter names and values
         // Add the parameters
         PropertyIterator args = getArguments().iterator();
         List<NameValuePair> nvps = new ArrayList<>();
-        String urlContentEncoding = contentEncoding;
-        if (urlContentEncoding == null || urlContentEncoding.length() == 0) {
-            // Use the default encoding for urls
-            urlContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
-        }
         while (args.hasNext()) {
             HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
             // The HTTPClient always urlencodes both name and value,
@@ -1822,27 +1820,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             nvps.add(new BasicNameValuePair(parameterName, parameterValue));
         }
         return new UrlEncodedFormEntity(nvps, urlContentEncoding);
-    }
-
-
-    /**
-     * @return the value of {@link #getContentEncoding()}; forced to null if empty
-     */
-    private String getContentEncodingOrNull() {
-        return getContentEncoding(null);
-    }
-
-    /**
-     * @param dflt the default to be used
-     * @return the value of {@link #getContentEncoding()}; default if null or empty
-     */
-    private String getContentEncoding(String dflt) {
-        String ce = getContentEncoding();
-        if (isNullOrEmptyTrimmed(ce)) {
-            return dflt;
-        } else {
-            return ce;
-        }
     }
 
     private static void saveConnectionCookies(HttpResponse method, URL u, CookieManager cookieManager) {

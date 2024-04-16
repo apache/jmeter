@@ -35,7 +35,7 @@ public class MapPropertyTest {
 
     @Test
     public void testGetPropertyTypeOfEmptyMap() {
-        MapProperty props = new MapProperty("foo", new HashMap<Object, Object>());
+        MapProperty props = new MapProperty("foo", new HashMap<>());
         assertThat(props.getPropertyType(), CoreMatchers.equalTo(NullProperty.class));
     }
 

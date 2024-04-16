@@ -16,13 +16,13 @@
  */
 
 import com.github.vlsi.gradle.dsl.configureEach
-import org.gradle.api.JavaVersion
+import com.github.vlsi.gradle.properties.dsl.props
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.kotlin.dsl.project
 
 plugins {
     id("java-library")
+    id("build-logic.build-params")
 }
 
 dependencies {
@@ -36,6 +36,9 @@ tasks.configureEach<Test> {
         exceptionFormat = TestExceptionFormat.FULL
         showStandardStreams = true
     }
+    buildParameters.testJdk?.let {
+        javaLauncher.convention(javaToolchains.launcherFor(it))
+    }
     // Pass the property to tests
     fun passProperty(name: String, default: String? = null) {
         val value = System.getProperty(name) ?: default
@@ -46,11 +49,16 @@ tasks.configureEach<Test> {
     }.forEach {
         systemProperty(it.key.toString().substring("jmeter.properties.".length), it.value)
     }
+    props.string("testExtraJvmArgs").trim().takeIf { it.isNotBlank() }?.let {
+        jvmArgs(it.split(" ::: "))
+    }
+    props.string("testDisableCaching").trim().takeIf { it.isNotBlank() }?.let {
+        outputs.doNotCacheIf(it) {
+            true
+        }
+    }
     passProperty("java.awt.headless")
     passProperty("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server")
-    // Spock tests use cglib proxies that access ClassLoader.defineClass reflectively
-    // See https://github.com/apache/jmeter/pull/5763
-    if (JavaVersion.current().isJava9Compatible) {
-        jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
-    }
+    // Enable testing ByteBuddy with EA Java versions
+    passProperty("net.bytebuddy.experimental", "true")
 }

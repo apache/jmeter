@@ -17,11 +17,16 @@
 
 package org.apache.jmeter.functions;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,9 +35,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTest;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit;
-import org.junit.runner.Describable;
-import org.junit.runner.Description;
+import org.apache.jmeter.junit.JMeterTestCase;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -41,47 +50,34 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implements Describable {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) // shares funcTitles between tests
+public class ComponentReferenceFunctionTest extends JMeterTestCase {
 
     private static final Logger log = LoggerFactory.getLogger(ComponentReferenceFunctionTest.class);
 
-    private static Map<String, Boolean> funcTitles;
+    private Map<String, Boolean> funcTitles;
 
-    // Constructor for Function tests
-    private Function funcItem;
+    static class Holder {
+        static final Collection<Function> FUNCTIONS;
 
-    public ComponentReferenceFunctionTest(String name) {
-        super(name);
-    }
-
-    public ComponentReferenceFunctionTest(String testName, Function fi) {
-        super(testName);// Save the method name
-        funcItem = fi;
-    }
-
-    @Override
-    public Description getDescription() {
-        return Description.createTestDescription(getClass(), getName() + (funcItem != null ? " " + funcItem.getClass() : null));
+        static {
+            try {
+                FUNCTIONS = JMeterTest.getObjects(Function.class)
+                        .stream()
+                        .filter(f -> f.getClass() != CompoundVariable.class)
+                        .map(Function.class::cast)
+                        .collect(Collectors.toList());
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /*
      * Test Functions - create the suite of tests
      */
-    private static Test suiteFunctions() throws Throwable {
-        TestSuite suite = new TestSuite("Functions");
-        for (Object item : JMeterTest.getObjects(Function.class)) {
-            if (item.getClass().equals(CompoundVariable.class)) {
-                continue;
-            }
-            TestSuite ts = new TestSuite(item.getClass().getName());
-            ts.addTest(new ComponentReferenceFunctionTest("runFunction", (Function) item));
-            ts.addTest(new ComponentReferenceFunctionTest("runFunction2", (Function) item));
-            suite.addTest(ts);
-        }
-        return suite;
+    static Collection<Function> functions() throws Throwable {
+        return Holder.FUNCTIONS;
     }
 
     private Element getBodyFromXMLDocument(InputStream stream)
@@ -99,6 +95,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implemen
     /*
      * Extract titles from functions.xml
      */
+    @BeforeAll
     public void createFunctionSet() throws Exception {
         funcTitles = new HashMap<>(20);
         String compref = "../xdocs/usermanual/functions.xml";
@@ -121,18 +118,17 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implemen
         }
     }
 
+    @AfterAll
     public void checkFunctionSet() throws Exception {
-        assertEquals(
-                "Should not have any names left over in funcTitles",
-                "[]",
-                JMeterTest.keysWithFalseValues(funcTitles).toString()
-        );
+        Assertions.assertEquals("[]", JMeterTest.keysWithFalseValues(funcTitles).toString(), "Should not have any names left over in funcTitles");
     }
 
     /*
      * run the function test
      */
-    public void runFunction() throws Exception {
+    @ParameterizedTest
+    @MethodSource("functions")
+    public void runFunction(Function funcItem) throws Exception {
         if (funcTitles.size() > 0) {
             String title = funcItem.getReferenceKey();
             boolean ct = funcTitles.containsKey(title);
@@ -146,7 +142,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implemen
                 if (!ct) {
                     log.warn(s); // Record in log as well
                 }
-                assertTrue(s, ct);
+                Assertions.assertTrue(ct, s);
             }
         }
     }
@@ -154,21 +150,12 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit implemen
     /*
      * Check that function descriptions are OK
      */
-    public void runFunction2() throws Exception {
-        for (Object o : funcItem.getArgumentDesc()) {
-            assertTrue("Description must be a String", o instanceof String);
-            assertFalse("Description must not start with [refkey", ((String) o).startsWith("[refkey"));
+    @ParameterizedTest
+    @MethodSource("functions")
+    public void runFunction2(Function funcItem) throws Exception {
+        for (String o : funcItem.getArgumentDesc()) {
+            assertInstanceOf(String.class, o, "Description must be a String");
+            assertFalse(o.startsWith("[refkey"), "Description must not start with [refkey");
         }
-    }
-
-    /*
-     * Use a suite to allow the tests to be generated at run-time
-     */
-    public static Test suite() throws Throwable {
-        TestSuite suite = new TestSuite("ComponentReferenceFunctionTest");
-        suite.addTest(new ComponentReferenceFunctionTest("createFunctionSet"));
-        suite.addTest(suiteFunctions());
-        suite.addTest(new ComponentReferenceFunctionTest("checkFunctionSet"));
-        return suite;
     }
 }

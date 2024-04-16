@@ -21,9 +21,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SampleMetadata;
@@ -132,7 +132,7 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
      *            for the samples (must not be {@code null})
      */
     public void setSampleConsumers(List<SampleConsumer> consumers) {
-        Validate.notNull(consumers, "consumers must not be null");
+        Objects.requireNonNull(consumers, "consumers must not be null");
 
         this.sampleConsumers = consumers;
     }

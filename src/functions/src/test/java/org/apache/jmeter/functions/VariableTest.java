@@ -18,7 +18,7 @@
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collection;
 
@@ -56,46 +56,46 @@ public class VariableTest extends JMeterTestCase {
         parms = makeParams("V",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("A",s);
+        assertEquals("A", s);
 
         parms = makeParams("V","DEFAULT",null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("A",s);
+        assertEquals("A", s);
 
         parms = makeParams("EMPTY","DEFAULT",null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("DEFAULT",s);
+        assertEquals("DEFAULT", s);
 
         parms = makeParams("X",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("X",s);
+        assertEquals("X", s);
 
         parms = makeParams("A${X}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("A${X}",s);
+        assertEquals("A${X}", s);
 
         parms = makeParams("A_1",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("a1",s);
+        assertEquals("a1", s);
 
         parms = makeParams("A_2",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("a2",s);
+        assertEquals("a2", s);
 
         parms = makeParams("A_${two}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("a2",s);
+        assertEquals("a2", s);
 
         parms = makeParams("${V}_${one}",null,null);
         r.setParameters(parms);
         s = r.execute(null,null);
-        assertEquals("a1",s);
+        assertEquals("a1", s);
     }
 }

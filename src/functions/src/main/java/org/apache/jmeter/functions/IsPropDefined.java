@@ -26,11 +26,14 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Test if a JMeter property is defined
  *
  * @since 4.0
  */
+@AutoService(Function.class)
 public class IsPropDefined extends AbstractFunction {
     private static final List<String> desc = new ArrayList<>();
     private static final String KEY = "__isPropDefined";

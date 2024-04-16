@@ -18,4 +18,5 @@
 plugins {
     id("build-logic.java")
     id("java-library")
+    id("build-logic.autoservice")
 }

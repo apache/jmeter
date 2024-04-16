@@ -35,6 +35,8 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  *
  * Debug class to show details of the currently selected object
@@ -43,6 +45,7 @@ import org.slf4j.LoggerFactory;
  * Also enables/disables debug for the test element.
  *
  */
+@AutoService(Command.class)
 public class What extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(What.class);
 

@@ -28,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.SystemCommand;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,7 +137,8 @@ public class HtmlReportGenerator {
      *
      * @return whether or not the files are correct
      */
-    private List<String> checkArguments() {
+    @VisibleForTesting
+    List<String> checkArguments() {
         List<String> errors = new ArrayList<>();
 
         String csvError = checkFile(new File(csvFilePath));

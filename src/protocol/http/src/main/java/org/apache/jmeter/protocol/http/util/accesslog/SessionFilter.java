@@ -19,7 +19,7 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,9 +37,12 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Provides Session Filtering for the AccessLog Sampler.
  */
+@AutoService(Filter.class)
 public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
     private static final java.util.regex.Pattern IP_PATTERN = java.util.regex.Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
     private static final long serialVersionUID = 233L;
@@ -66,7 +69,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
      * Creates a new SessionFilter and initializes its fields to new collections
      */
     public SessionFilter() {
-        this(new ConcurrentHashMap<>(), Collections.synchronizedSet(new HashSet<>()));
+        this(new ConcurrentHashMap<>(), Collections.synchronizedSet(Collections.newSetFromMap(new IdentityHashMap<>())));
     }
 
     /**

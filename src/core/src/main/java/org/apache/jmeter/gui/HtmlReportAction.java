@@ -30,9 +30,16 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.action.AbstractAction;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
+@AutoService({
+        Command.class,
+        MenuCreator.class
+})
 public class HtmlReportAction extends AbstractAction implements MenuCreator {
     private static final Set<String> commands = new HashSet<>();
     private HtmlReportUI htmlReportPanel;

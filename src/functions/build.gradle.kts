@@ -21,7 +21,7 @@ plugins {
 
 dependencies {
     api(projects.src.components)
-    testImplementation(project(":src:core", "testClasses"))
+    testImplementation(testFixtures(projects.src.core))
 
     implementation("org.mozilla:rhino")
     implementation("commons-codec:commons-codec")

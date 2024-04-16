@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -40,8 +40,6 @@ public class Argument extends AbstractTestElement implements Serializable {
 
     /** Name used to store the argument's description. */
     public static final String DESCRIPTION = "Argument.desc"; // $NON-NLS-1$
-
-    private static final String DFLT_DESCRIPTION = ""; // $NON-NLS-1$
 
     /** Name used to store the argument's metadata. */
     public static final String METADATA = "Argument.metadata"; // $NON-NLS-1$
@@ -92,18 +90,28 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the argument description
      */
     public Argument(String name, String value, String metadata, String description) {
-        if(name != null) {
-            setProperty(new StringProperty(ARG_NAME, StringUtils.strip(name)));
+        if (name != null) {
+            setName(name);
         }
-        if(value != null) {
-            setProperty(new StringProperty(VALUE, value));
+        if (value != null) {
+            setValue(value);
         }
-        if(metadata != null) {
-            setProperty(new StringProperty(METADATA, metadata));
+        if (metadata != null) {
+            setMetaData(metadata);
         }
         if(description != null) {
-            setProperty(DESCRIPTION, description, DFLT_DESCRIPTION);
+            setDescription(description);
         }
+    }
+
+    @Override
+    public ArgumentSchema getSchema() {
+        return ArgumentSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends Argument, ? extends ArgumentSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     /**
@@ -114,7 +122,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      */
     @Override
     public void setName(String newName) {
-        setProperty(new StringProperty(ARG_NAME, StringUtils.strip(newName)));
+        set(getSchema().getArgumentName(), StringUtils.strip(newName));
     }
 
     /**
@@ -124,7 +132,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      */
     @Override
     public String getName() {
-        return getPropertyAsString(ARG_NAME);
+        return get(getSchema().getArgumentName());
     }
 
     /**
@@ -134,7 +142,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the new value
      */
     public void setValue(String newValue) {
-        setProperty(new StringProperty(VALUE, newValue));
+        set(getSchema().getValue(), newValue);
     }
 
     /**
@@ -143,7 +151,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      * @return the attribute's value
      */
     public String getValue() {
-        return getPropertyAsString(VALUE);
+        return get(getSchema().getValue());
     }
 
     /**
@@ -153,7 +161,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the new description
      */
     public void setDescription(String description) {
-        setProperty(DESCRIPTION, description, DFLT_DESCRIPTION);
+        set(getSchema().getDescription(), description);
     }
 
     /**
@@ -162,7 +170,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      * @return the MetaData value
      */
     public String getDescription() {
-        return getPropertyAsString(DESCRIPTION, DFLT_DESCRIPTION);
+        return get(getSchema().getDescription());
     }
 
     /**
@@ -172,7 +180,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      *            the new metadata
      */
     public void setMetaData(String newMetaData) {
-        setProperty(new StringProperty(METADATA, newMetaData));
+        set(getSchema().getMetadata(), newMetaData);
     }
 
     /**
@@ -181,13 +189,13 @@ public class Argument extends AbstractTestElement implements Serializable {
      * @return the MetaData value
      */
     public String getMetaData() {
-        return getPropertyAsString(METADATA);
+        return get(getSchema().getMetadata());
     }
 
     @Override
     public String toString() {
         final String desc = getDescription();
-        if (DFLT_DESCRIPTION.equals(desc)) {
+        if (desc == null || desc.isEmpty()) {
             return getName() + getMetaData() + getValue();
         } else {
             return getName() + getMetaData() + getValue() + " //" + getDescription();

@@ -718,7 +718,7 @@ public final class JOrphanUtils {
      * @param setter        that gets called with the replaced value
      * @return number of matches that were replaced
      */
-    public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<String> setter) {
+    public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<? super String> setter) {
         if (StringUtils.isBlank(value)) {
             return 0;
         }

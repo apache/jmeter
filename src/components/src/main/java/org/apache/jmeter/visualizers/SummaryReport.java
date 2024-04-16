@@ -221,21 +221,25 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     @Override
     public void add(final SampleResult res) {
-        Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()), label -> {
-            Calculator newRow = new Calculator(label);
-            newRows.add(newRow);
-            return newRow;
-        });
-        /*
-         * Synch is needed because multiple threads can update the counts.
-         */
-        synchronized (row) {
-            row.addSample(res);
+        Map<String, Calculator> tableRows = this.tableRows;
+        String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
+
+        // There are two reasons to avoid calling computeIfAbsent:
+        // 1) Lambda in computeIfAbsent is capturing, so it allocates some memory
+        // 2) computeIfAbsent might synchronize in OpenJDK 1.8..17 even when the key is already present in the map.
+        //    Synchronization might happen when the key sits somewhere in the collision chain.
+        Calculator row = tableRows.get(sampleLabel);
+        if (row == null) {
+            row = tableRows.computeIfAbsent(sampleLabel, label -> {
+                Calculator newRow = new Calculator(label);
+                newRows.add(newRow);
+                return newRow;
+            });
         }
+        // Calculator is thread-safe
+        row.addSample(res);
         Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
-        synchronized (lock) {
-            tot.addSample(res);
-        }
+        tot.addSample(res);
         dataChanged = true;
     }
 

@@ -29,5 +29,11 @@ dependencies {
         because("IOUtils")
     }
 
-    testImplementation(project(":src:core", "testClasses"))
+    testImplementation(testFixtures(projects.src.core))
+    testImplementation(projects.src.functions) {
+        because("We need __counter function for tests")
+    }
+    testImplementation("org.apache-extras.beanshell:bsh") {
+        because("BeanShellTest needs BeanShell, and previously :protocol:java was not including a dependency on BeanShell")
+    }
 }

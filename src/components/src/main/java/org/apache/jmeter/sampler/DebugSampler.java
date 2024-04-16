@@ -32,6 +32,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.AlphaNumericKeyComparator;
@@ -51,6 +52,16 @@ public class DebugSampler extends AbstractSampler implements TestBean {
     private boolean displayJMeterVariables;
     private boolean displayJMeterProperties;
     private boolean displaySystemProperties;
+
+    @Override
+    public DebugSamplerSchema getSchema() {
+        return DebugSamplerSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends DebugSampler, ? extends DebugSamplerSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
 
     @Override
     public SampleResult sample(Entry e) {

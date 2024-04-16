@@ -23,7 +23,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -53,6 +51,9 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * Handles HTTP Caching.
@@ -81,7 +82,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     public static final String MAX_SIZE = "maxSize";  // $NON-NLS-1$
     //-
 
-    private transient InheritableThreadLocal<Map<String, CacheEntry>> threadCache;
+    private transient InheritableThreadLocal<Cache<String, CacheEntry>> threadCache;
 
     private transient boolean useExpires; // Cached value
 
@@ -89,7 +90,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * used to share the cache between 2 cache managers
      * @see CacheManager#createCacheManagerProxy()
      * @since 3.0 */
-    private transient Map<String, CacheEntry> localCache;
+    private transient Cache<String, CacheEntry> localCache;
 
     public CacheManager() {
         setProperty(new BooleanProperty(CLEAR, false));
@@ -98,7 +99,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         useExpires = false;
     }
 
-    CacheManager(Map<String, CacheEntry> localCache, boolean useExpires) {
+    CacheManager(Cache<String, CacheEntry> localCache, boolean useExpires) {
         this.localCache = localCache;
         this.useExpires = useExpires;
     }
@@ -213,7 +214,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         final Set<String> names = new HashSet<>(Arrays.asList(headerName.split(",\\s*")));
         final Map<String, List<String>> values = new HashMap<>();
         for (final String name: names) {
-            values.put(name, new ArrayList<String>());
+            values.put(name, new ArrayList<>());
         }
         for (Header header: reqHeaders) {
             if (names.contains(header.getName())) {
@@ -282,13 +283,16 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getLeft()));
             getCache().put(varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()), new CacheEntry(lastModified, expiresDate, etag, null));
         } else {
-            if (getCache().get(url) != null) {
-                log.debug("Entry for {} already in cache.", url);
-                return;
-            }
-            CacheEntry cacheEntry = new CacheEntry(lastModified, expiresDate, etag, null);
-            log.debug("Set entry {} into cache for url {}", url, cacheEntry);
-            getCache().put(url, cacheEntry);
+            // Makes expiresDate effectively-final
+            Date entryExpiresDate = expiresDate;
+            getCache().get(
+                    url,
+                    key -> {
+                        CacheEntry cacheEntry = new CacheEntry(lastModified, entryExpiresDate, etag, null);
+                        log.debug("Set entry {} into cache for url {}", url, cacheEntry);
+                        return cacheEntry;
+                    }
+            );
         }
     }
 
@@ -536,7 +540,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     private CacheEntry getEntry(String url, Header[] headers) {
-        CacheEntry entry = getCache().get(url);
+        CacheEntry entry = getCache().getIfPresent(url);
         log.debug("getEntry url:{} entry:{} header:{}", url, entry, headers);
         if (entry == null) {
             log.debug("No entry found for url {}", url);
@@ -566,7 +570,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return "vary-" + headerName + "-" + headerValue + "-" + url;
     }
 
-    private Map<String, CacheEntry> getCache() {
+    private Cache<String, CacheEntry> getCache() {
         return localCache != null ? localCache : threadCache.get();
     }
 
@@ -609,12 +613,13 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private void clearCache() {
         log.debug("Clear cache");
-        threadCache = new InheritableThreadLocal<Map<String, CacheEntry>>(){
+        // TODO: avoid re-creating the thread local every time, reset its contents instead
+        threadCache = new InheritableThreadLocal<Cache<String, CacheEntry>>(){
             @Override
-            protected Map<String, CacheEntry> initialValue(){
-                // Bug 51942 - this map may be used from multiple threads
-                Map<String, CacheEntry> map = new LRUMap<>(getMaxSize());
-                return Collections.synchronizedMap(map);
+            protected Cache<String, CacheEntry> initialValue() {
+                return Caffeine.newBuilder()
+                        .maximumSize(getMaxSize())
+                        .build();
             }
         };
     }

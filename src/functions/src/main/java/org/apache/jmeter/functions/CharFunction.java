@@ -28,10 +28,13 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Function to generate chars from a list of decimal or hex values
  * @since 2.3.3
  */
+@AutoService(Function.class)
 public class CharFunction extends AbstractFunction {
 
     private static final Logger log = LoggerFactory.getLogger(CharFunction.class);

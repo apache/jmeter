@@ -16,6 +16,7 @@
  */
 
 plugins {
+    id("java-test-fixtures")
     id("build-logic.jvm-published-library")
 }
 
@@ -25,7 +26,6 @@ dependencies {
     api(projects.src.components) {
         because("we need SearchTextExtension")
     }
-    testImplementation(project(":src:components", "testClasses"))
 
     api("com.thoughtworks.xstream:xstream") {
         because("HTTPResultConverter uses XStream in public API")
@@ -58,7 +58,9 @@ dependencies {
     }
     implementation("org.jsoup:jsoup")
     implementation("oro:oro")
-    implementation("org.apache.commons:commons-collections4")
+    runtimeOnly("org.apache.commons:commons-collections4") {
+        because("commons-collections4 was a dependency in previous JMeter versions, so we keep it for compatibility")
+    }
     implementation("commons-net:commons-net")
     implementation("com.helger.commons:ph-commons") {
         // We don't really need to use/distribute jsr305
@@ -75,6 +77,7 @@ dependencies {
     implementation("com.miglayout:miglayout-swing")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
+    testImplementation(testFixtures(projects.src.core))
     testImplementation(testFixtures(projects.src.testkitWiremock))
     testImplementation("com.github.tomakehurst:wiremock-jre8")
     // For some reason JMeter bundles just tika-core and tika-parsers without transitive
@@ -85,6 +88,4 @@ dependencies {
     runtimeOnly("org.apache.tika:tika-parsers") {
         isTransitive = false
     }
-
-    testImplementation(project(":src:core", "testClasses"))
 }

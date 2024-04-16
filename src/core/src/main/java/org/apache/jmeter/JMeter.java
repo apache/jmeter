@@ -84,6 +84,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestElementSchema;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.RemoteThreadsListenerTestElement;
 import org.apache.jmeter.util.BeanShellInterpreter;
@@ -425,6 +426,29 @@ public class JMeter implements JMeterPlugin {
             JMeterUtils.setProperty("START.MS",Long.toString(now.toEpochMilli()));// $NON-NLS-1$
             JMeterUtils.setProperty("START.YMD", getFormatter("yyyyMMdd").format(now));// $NON-NLS-1$ $NON-NLS-2$
             JMeterUtils.setProperty("START.HMS", getFormatter("HHmmss").format(now));// $NON-NLS-1$ $NON-NLS-2$
+
+            // For unknown reason, TestElementSchema might fail to initialize in remote execution mode
+            // It reproduces with Java 11.0.13, and the error is StackOverflowError with the following stacktrace
+            // The workaround is to initialize Kotlin reflection before deserializing the test plan.
+            //  at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:174) ~[?:?]
+            //  at java.net.URLClassLoader.defineClass(URLClassLoader.java:555) ~[?:?]
+            //  at java.net.URLClassLoader$1.run(URLClassLoader.java:458) ~[?:?]
+            //  at java.net.URLClassLoader$1.run(URLClassLoader.java:452) ~[?:?]
+            //  at java.security.AccessController.doPrivileged(Native Method) ~[?:?]
+            //  at java.net.URLClassLoader.findClass(URLClassLoader.java:451) ~[?:?]
+            //  at java.lang.ClassLoader.loadClass(ClassLoader.java:589) ~[?:?]
+            //  at org.apache.jmeter.DynamicClassLoader.loadClass(DynamicClassLoader.java:81) ~[ApacheJMeter.jar:5.5.1-SNAPSHOT]
+            //  at java.lang.ClassLoader.loadClass(ClassLoader.java:522) ~[?:?]
+            //  at kotlin.jvm.internal.ClassReference.<clinit>(ClassReference.kt:156) ~[kotlin-stdlib-1.8.21.jar:1.8.21-release-380(1.8.21)]
+            //  at kotlin.jvm.internal.ReflectionFactory.getOrCreateKotlinClass(ReflectionFactory.java:30) ~[kotlin-stdlib-1.8.21.jar)]
+            //  at kotlin.jvm.internal.Reflection.getOrCreateKotlinClass(Reflection.java:60) ~[kotlin-stdlib-1.8.21.jar:1.8.21-release-380(1.8.21)]
+            //  at org.apache.jmeter.testelement.TestElementSchema.<init>(TestElementSchema.kt:33) ~[ApacheJMeter_core.jar:5.5.1-SNAPSHOT]
+            //  at org.apache.jmeter.testelement.TestElementSchema$INSTANCE.<init>(TestElementSchema.kt:26) ~[ApacheJMeter_core.jar:5.5.1-SNAPSHOT]
+            //  at org.apache.jmeter.testelement.TestElementSchema$INSTANCE.<init>(TestElementSchema.kt) ~[ApacheJMeter_core.jar:5.5.1-SNAPSHOT]
+            //  at org.apache.jmeter.testelement.TestElementSchema.<clinit>(TestElementSchema.kt) ~[ApacheJMeter_core.jar:5.5.1-SNAPSHOT]
+            //  at org.apache.jmeter.protocol.java.sampler.BeanShellSampler.<clinit>(BeanShellSampler.java:53) ~[ApacheJMeter_java.jar:5.5.1-SNAPSHOT]
+            //  at jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method) ~[?:?]
+            TestElementSchema.INSTANCE.getGuiClass();
 
             if (parser.getArgumentById(VERSION_OPT) != null) {
                 displayAsciiArt();
@@ -1187,7 +1211,7 @@ public class JMeter implements JMeterPlugin {
             this.reportGenerator = reportGenerator;
         }
 
-        public void setStartedRemoteEngines(List<JMeterEngine> engines) {
+        public void setStartedRemoteEngines(List<? extends JMeterEngine> engines) {
             if (runMode != RunMode.REMOTE) {
                 throw new IllegalArgumentException("This method should only be called in RunMode.REMOTE");
             }
@@ -1355,7 +1379,7 @@ public class JMeter implements JMeterPlugin {
         return "true".equals(System.getProperty(JMeter.JMETER_NON_GUI)); //$NON-NLS-1$
     }
 
-    private static void startUdpDdaemon(final List<JMeterEngine> engines) {
+    private static void startUdpDdaemon(final List<? extends JMeterEngine> engines) {
         int port = JMeterUtils.getPropDefault("jmeterengine.nongui.port", UDP_PORT_DEFAULT); // $NON-NLS-1$
         int maxPort = JMeterUtils.getPropDefault("jmeterengine.nongui.maxport", 4455); // $NON-NLS-1$
         if (port > 1000){
@@ -1375,7 +1399,7 @@ public class JMeter implements JMeterPlugin {
         }
     }
 
-    private static void waitForSignals(final List<JMeterEngine> engines, DatagramSocket socket) {
+    private static void waitForSignals(final List<? extends JMeterEngine> engines, DatagramSocket socket) {
         byte[] buf = new byte[80];
         System.out.println("Waiting for possible Shutdown/StopTestNow/HeapDump/ThreadDump message on port "+socket.getLocalPort());//NOSONAR
         DatagramPacket request = new DatagramPacket(buf, buf.length);

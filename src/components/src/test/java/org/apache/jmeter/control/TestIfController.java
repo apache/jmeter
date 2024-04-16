@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
@@ -27,7 +30,6 @@ import org.apache.jmeter.testkit.BugId;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -62,7 +64,7 @@ class TestIfController extends JMeterTestCase {
                 sampler.sample(null);
                 counter++;
             }
-            Assertions.assertEquals(0, counter);
+            assertEquals(0, counter);
         } catch (StackOverflowError e) {
             throw new AssertionError("Stackoverflow occurred in testStackOverflow", e);
         }
@@ -122,10 +124,10 @@ class TestIfController extends JMeterTestCase {
 
             Sampler sampler = controller.next();
             sampler.sample(null);
-            Assertions.assertEquals("0", vars.get("VAR1"));
+            assertEquals("0", vars.get("VAR1"));
             sampler = controller.next();
             sampler.sample(null);
-            Assertions.assertEquals("0", vars.get("VAR1"));
+            assertEquals("0", vars.get("VAR1"));
 
         } catch (StackOverflowError e) {
             throw new AssertionError("Stackoverflow occurred in testStackOverflow", e);
@@ -167,10 +169,10 @@ class TestIfController extends JMeterTestCase {
         Sampler sampler = null;
         while ((sampler = controller.next()) != null) {
             sampler.sample(null);
-            Assertions.assertEquals(order[counter], sampler.getName());
+            assertEquals(order[counter], sampler.getName());
             counter++;
         }
-        Assertions.assertEquals(counter, 6);
+        assertEquals(counter, 6);
     }
 
     @Test
@@ -195,10 +197,10 @@ class TestIfController extends JMeterTestCase {
         Sampler sampler = null;
         while ((sampler = controller.next()) != null) {
             sampler.sample(null);
-            Assertions.assertEquals(order[counter], sampler.getName());
+            assertEquals(order[counter], sampler.getName());
             counter++;
         }
-        Assertions.assertEquals(counter, 6);
+        assertEquals(counter, 6);
     }
 
 
@@ -232,10 +234,10 @@ class TestIfController extends JMeterTestCase {
             if (sampler.getName().equals("Sample3")) {
                 ifCont.setCondition("true==false");
             }
-            Assertions.assertEquals(order[counter], sampler.getName());
+            assertEquals(order[counter], sampler.getName());
             counter++;
         }
-        Assertions.assertEquals(counter, 6);
+        assertEquals(counter, 6);
     }
 
     /**
@@ -271,10 +273,10 @@ class TestIfController extends JMeterTestCase {
             if (sampler.getName().equals("Sample3")) {
                 ifCont.setCondition("true==false");
             }
-            Assertions.assertEquals(order[counter], sampler.getName());
+            assertEquals(order[counter], sampler.getName());
             counter++;
         }
-        Assertions.assertEquals(counter, 6);
+        assertEquals(counter, 6);
     }
 
     @Test
@@ -293,6 +295,6 @@ class TestIfController extends JMeterTestCase {
         ifCont.setRunningVersion(true);
 
         Sampler sampler = controller.next();
-        Assertions.assertNotNull(sampler);
+        assertNotNull(sampler);
     }
 }

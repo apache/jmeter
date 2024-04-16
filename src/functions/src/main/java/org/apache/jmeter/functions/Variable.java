@@ -27,6 +27,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Function to get a JMeter Variable
  *
@@ -39,6 +41,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * - the default value if set, and if not the variable name itself
  * @since 2.3RC3
  */
+@AutoService(Function.class)
 public class Variable extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();

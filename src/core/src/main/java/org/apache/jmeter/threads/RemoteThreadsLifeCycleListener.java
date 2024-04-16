@@ -17,10 +17,13 @@
 
 package org.apache.jmeter.threads;
 
+import org.apache.jorphan.reflect.JMeterService;
+
 /**
  * Interface notified when number of active threads changes
  * @since 2.10
  */
+@JMeterService
 public interface RemoteThreadsLifeCycleListener {
 
     /**

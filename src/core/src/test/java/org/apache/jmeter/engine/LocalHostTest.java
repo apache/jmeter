@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.engine;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
@@ -28,7 +30,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.net.util.SubnetUtils;
 import org.apache.commons.net.util.SubnetUtils.SubnetInfo;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -52,9 +53,7 @@ public class LocalHostTest {
                 .filter(iface -> iface.getAddress().getAddress().length == 4) // hack to prevent checking IPv6
                 .map(this::toSubnetInfo)
                 .anyMatch(subnetInfo -> subnetInfo.isInRange(localHost));
-        Assert.assertTrue(
-                "localHost: " + localHost + " is bound to an interface",
-                localHostIsBound);
+        assertTrue(localHostIsBound, () -> "localHost: " + localHost + " is bound to an interface");
     }
 
     private String guessExternalIPv4Interface() throws SocketException {

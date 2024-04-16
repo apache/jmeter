@@ -19,6 +19,7 @@ package org.apache.jmeter.engine.util;
 
 import java.util.Map;
 
+@SuppressWarnings("deprecation")
 abstract class AbstractTransformer implements ValueTransformer {
 
     private CompoundVariable masterFunction;

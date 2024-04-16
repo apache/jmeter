@@ -21,10 +21,13 @@ import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Open Templates
  * @since 2.10
  */
+@AutoService(Command.class)
 public class TemplatesCommand extends AbstractActionWithNoRunningTest {
 
     private static final Set<String> commands = new HashSet<>();

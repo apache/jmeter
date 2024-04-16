@@ -29,7 +29,7 @@
 
 Before you can compile JMeter, you will need a few things:
 <ul>
-<li>a Java 8 compatible JDK (Java Development Kit)</li>
+<li>a Java 17 compatible JDK (Java Development Kit)</li>
 <li>Optional: <a href="https://gradle.org/">Gradle</a> installation</li>
 <li>the JMeter sources as shown in the next section</li>
 </ul>

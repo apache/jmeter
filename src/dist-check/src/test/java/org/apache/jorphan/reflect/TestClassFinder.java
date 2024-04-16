@@ -17,17 +17,18 @@
 
 package org.apache.jorphan.reflect;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.logging.log4j.LoggingException;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,6 +49,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArray() throws IOException {
+        @SuppressWarnings("deprecation")
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Exception.class });
@@ -56,40 +58,41 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayTrue() throws Exception {
+        @SuppressWarnings("deprecation")
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Object.class },
                 true);
-        Assert.assertFalse(
-                findClassesThatExtend.stream().filter(s -> s.contains("$")).collect(Collectors.toList()).isEmpty());
+        assertFalse(findClassesThatExtend.stream().noneMatch(s -> s.contains("$")));
     }
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayFalse() throws Exception {
+        @SuppressWarnings("deprecation")
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Exception.class },
                 false);
-        Assert.assertTrue(
-                findClassesThatExtend.stream().filter(s -> s.contains("$")).collect(Collectors.toList()).isEmpty());
+        assertTrue(findClassesThatExtend.stream().noneMatch(s -> s.contains("$")));
         MatcherAssert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
     }
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayBooleanStringString() throws Exception {
+        @SuppressWarnings("deprecation")
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Exception.class },
                 false,
                 "org.apache.log",
                 "core");
-        Assert.assertTrue(
-                findClassesThatExtend.stream().filter(s -> s.contains("core")).collect(Collectors.toList()).isEmpty());
-        Assert.assertFalse(findClassesThatExtend.isEmpty());
+        assertTrue(findClassesThatExtend.stream().noneMatch(s -> s.contains("core")));
+        assertFalse(findClassesThatExtend.isEmpty());
     }
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayBooleanStringStringTrue() throws Exception {
+        @SuppressWarnings("deprecation")
         List<String> annotatedClasses = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { java.beans.Transient.class },
@@ -97,34 +100,38 @@ public class TestClassFinder {
                 null,
                 null,
                 true);
-        Assert.assertFalse(annotatedClasses.isEmpty());
+        assertFalse(annotatedClasses.isEmpty());
     }
 
     @Test
     public void testFindAnnotatedClasses() throws Exception {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"deprecation", "unchecked"})
         List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(
                 libDirs,
                 new Class[] { java.beans.Transient.class});
-        Assert.assertFalse(annotatedClasses.isEmpty());
+        assertFalse(annotatedClasses.isEmpty());
     }
 
     @Test
     public void testFindAnnotatedInnerClasses() throws Exception {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"deprecation", "unchecked"})
         List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(libDirs,
                 new Class[] { java.lang.Deprecated.class}, true);
-        Assert.assertTrue(annotatedClasses.stream().anyMatch(s->s.contains("$")));
+        assertTrue(annotatedClasses.stream().anyMatch(s->s.contains("$")));
     }
 
     @Test
     public void testFindClasses() throws IOException {
-        Assert.assertFalse(ClassFinder.findClasses(libDirs, className -> true).isEmpty());
+        @SuppressWarnings("deprecation")
+        List<String> classes = ClassFinder.findClasses(libDirs, className -> true);
+        assertFalse(classes.isEmpty());
     }
 
     @Test
     public void testFindClassesNone() throws IOException {
-        Assert.assertTrue(ClassFinder.findClasses(libDirs, className -> false).isEmpty());
+        @SuppressWarnings("deprecation")
+        List<String> classes = ClassFinder.findClasses(libDirs, className -> false);
+        assertTrue(classes.isEmpty());
     }
 
 }

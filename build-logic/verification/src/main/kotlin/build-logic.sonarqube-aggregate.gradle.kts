@@ -40,6 +40,8 @@ sonar {
         property("sonar.links.ci", "https://builds.apache.org/job/JMeter-trunk/")
         property("sonar.links.scm", "https://jmeter.apache.org/svnindex.html")
         property("sonar.links.issue", "https://jmeter.apache.org/issues.html")
+        // Skip dependency of Sonar task on compilation tasks
+        property("sonar.gradle.skipCompile", "true")
     }
 }
 

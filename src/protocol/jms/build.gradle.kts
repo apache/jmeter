@@ -22,7 +22,6 @@ plugins {
 dependencies {
     api(projects.src.core)
 
-    testImplementation(project(":src:core", "testClasses"))
     api("com.github.ben-manes.caffeine:caffeine") {
         because("MessageRenderer#getValueFromFile(..., caffeine.cache.Cache)")
     }
@@ -37,5 +36,5 @@ dependencies {
     }
     implementation("com.miglayout:miglayout-swing")
 
-    testImplementation(project(":src:core", "testClasses"))
+    testImplementation(testFixtures(projects.src.core))
 }

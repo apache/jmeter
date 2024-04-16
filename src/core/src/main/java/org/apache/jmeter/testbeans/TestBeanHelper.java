@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testbeans.gui.TableEditor;
@@ -53,9 +54,74 @@ public class TestBeanHelper {
     protected static final Logger log = LoggerFactory.getLogger(TestBeanHelper.class);
 
     /**
+     * This class extracts information from {@link CachedPropertyDescriptor} in such a way so it
+     * does not need to synchronize.
+     */
+    static class CachedPropertyDescriptor {
+        final PropertyDescriptor descriptor;
+        /**
+         * Cached value for {@link PropertyDescriptor#getWriteMethod()}.
+         * {@code getWriteMethod} is {@code synchronized} in OpenJDK 17.
+         *
+         * @see PropertyDescriptor#getWriteMethod()
+         */
+        final Method writeMethod;
+        /**
+         * Cached value for {@link PropertyDescriptor#getPropertyType()}.
+         * {@code getPropertyType} is {@code synchronized} in OpenJDK 17.
+         *
+         * @see PropertyDescriptor#getPropertyType()
+         */
+        final Class<?> propertyType;
+
+        CachedPropertyDescriptor(PropertyDescriptor descriptor) {
+            this.descriptor = descriptor;
+            this.writeMethod = descriptor.getWriteMethod();
+            this.propertyType = descriptor.getPropertyType();
+        }
+    }
+
+    /**
+     * Cache property information, so preparing test elements does not need to perform reflective and
+     * synchronization again.
+     */
+    private static final ClassValue<List<CachedPropertyDescriptor>> GOOD_PROPS = new ClassValue<List<CachedPropertyDescriptor>>() {
+        @Override
+        protected List<CachedPropertyDescriptor> computeValue(Class type) {
+            PropertyDescriptor[] descs;
+            try {
+                BeanInfo beanInfo = Introspector.getBeanInfo(type);
+                descs = beanInfo.getPropertyDescriptors();
+            } catch (IntrospectionException e) {
+                log.error("Couldn't set properties for {}", type, e);
+                throw new IllegalArgumentException("Couldn't set properties for " + type, e);
+            }
+
+            if (log.isDebugEnabled()) {
+                log.debug("Preparing {}", type);
+            }
+
+            List<CachedPropertyDescriptor> descriptors = new ArrayList<>(descs.length);
+            for (PropertyDescriptor desc : descs) {
+                if (isDescriptorIgnored(desc)) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Ignoring property '{}' in {}", desc.getName(), type.getCanonicalName());
+                    }
+                    continue;
+                }
+                Method writeMethod = desc.getWriteMethod();
+                if (writeMethod == null) {
+                    continue;
+                }
+                descriptors.add(new CachedPropertyDescriptor(desc));
+            }
+            return descriptors;
+        }
+    };
+
+    /**
      * Prepare the bean for work by populating the bean's properties from the
      * property value map.
-     * <p>
      *
      * @param el the TestElement to be prepared
      */
@@ -63,42 +129,43 @@ public class TestBeanHelper {
         if (!(el instanceof TestBean)) {
             return;
         }
+        // Avoid allocating array for every method call
+        Object[] tmp = new Object[1];
         try {
-            BeanInfo beanInfo = Introspector.getBeanInfo(el.getClass());
-            PropertyDescriptor[] descs = beanInfo.getPropertyDescriptors();
-
-            if (log.isDebugEnabled()) {
-                log.debug("Preparing {}", el.getClass());
-            }
-
-            for (PropertyDescriptor desc : descs) {
-                if (isDescriptorIgnored(desc)) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Ignoring property '{}' in {}", desc.getName(), el.getClass().getCanonicalName());
-                    }
-                    continue;
-                }
+            for (CachedPropertyDescriptor desc : GOOD_PROPS.get(el.getClass())) {
                 // Obtain a value of the appropriate type for this property.
-                JMeterProperty jprop = el.getProperty(desc.getName());
-                Class<?> type = desc.getPropertyType();
-                Object value = unwrapProperty(desc, jprop, type);
+                Class<?> type = desc.propertyType;
+
+                JMeterProperty jprop;
+                Object value;
+                try {
+                    jprop = el.getProperty(desc.descriptor.getName());
+                    value = unwrapProperty(desc.descriptor, jprop, type);
+                } catch (OutOfMemoryError | StackOverflowError e) {
+                    throw e;
+                } catch (Throwable e) {
+                    String elementName;
+                    try {
+                        elementName = el.getName();
+                    } catch(Throwable ignore) {
+                        elementName = el.getClass().getName();
+                    }
+                    throw new IllegalStateException(
+                            "Can't retrieve property '" + desc.descriptor.getName() + "' of element " + elementName, e);
+                }
 
                 if (log.isDebugEnabled()) {
                     log.debug("Setting {}={}", jprop.getName(), value);
                 }
 
                 // Set the bean's property to the value we just obtained:
-                if (value != null || !type.isPrimitive())
                 // We can't assign null to primitive types.
-                {
-                    Method writeMethod = desc.getWriteMethod();
-                    if (writeMethod!=null) {
-                        invokeOrBailOut(el, writeMethod, new Object[] {value});
-                    }
+                if (value != null || !type.isPrimitive()) {
+                    Method writeMethod = desc.writeMethod;
+                    tmp[0] = value;
+                    invokeOrBailOut(el, writeMethod, tmp);
                 }
             }
-        } catch (IntrospectionException e) {
-            log.error("Couldn't set properties for {}", el.getClass(), e);
         } catch (UnsatisfiedLinkError ule) { // Can occur running headless on Jenkins
             log.error("Couldn't set properties for {}", el.getClass());
             throw ule;
@@ -164,8 +231,10 @@ public class TestBeanHelper {
     private static Object invokeOrBailOut(Object invokee, Method method, Object[] params) {
         try {
             return method.invoke(invokee, params);
-        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new Error(createMessage(invokee, method, params), e);
+        } catch (InvocationTargetException e) {
+            throw new Error(createMessage(invokee, method, params), e.getCause());
         }
     }
 

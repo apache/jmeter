@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.junit.JMeterTestCase;

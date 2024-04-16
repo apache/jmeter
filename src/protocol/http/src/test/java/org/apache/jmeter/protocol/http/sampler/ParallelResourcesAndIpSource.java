@@ -160,7 +160,10 @@ public class ParallelResourcesAndIpSource {
         http.setPath("/index.html");
         http.setFollowRedirects(true);
         http.setUseKeepAlive(true);
-        http.setProperty(new FunctionProperty(HTTPSampler.IP_SOURCE, new CompoundVariable("${IP_ADDR}")));
+        http.setProperty(
+                new FunctionProperty(
+                        HTTPSamplerBaseSchema.INSTANCE.getIpSource().getName(),
+                        new CompoundVariable("${IP_ADDR}")));
         http.setImageParser(true);
         http.setConcurrentDwn(true);
         http.setConcurrentPool("6");

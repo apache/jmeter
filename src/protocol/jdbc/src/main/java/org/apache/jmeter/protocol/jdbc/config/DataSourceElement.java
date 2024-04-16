@@ -121,7 +121,7 @@ public class DataSourceElement extends AbstractTestElement
             log.error("JDBC data source already defined for: {}", poolName);
         } else {
             String maxPool = getPoolMax();
-            perThreadPoolSet = Collections.synchronizedSet(new HashSet<BasicDataSource>());
+            perThreadPoolSet = Collections.synchronizedSet(new HashSet<>());
             if (maxPool.equals("0")){ // i.e. if we want per thread pooling
                 variables.putObject(poolName, new DataSourceComponentImpl()); // pool will be created later
             } else {

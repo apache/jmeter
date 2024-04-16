@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.listeners;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.reporters.ResultAction;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -24,7 +27,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +51,7 @@ public class TestResultAction extends JMeterTestCase {
         sampleResult.setSuccessful(true);
         resultAction.setErrorAction(ResultAction.ON_ERROR_STOPTEST);
         resultAction.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
-        Assert.assertFalse(sampleResult.isStopTest());
+        assertFalse(sampleResult.isStopTest());
     }
 
     @Test
@@ -58,10 +60,10 @@ public class TestResultAction extends JMeterTestCase {
         sampleResult.setSuccessful(false);
         resultAction.setErrorAction(ResultAction.ON_ERROR_STOPTEST);
         resultAction.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
-        Assert.assertTrue(sampleResult.isStopTest());
-        Assert.assertFalse(sampleResult.isStopTestNow());
-        Assert.assertFalse(sampleResult.isStopThread());
-        Assert.assertFalse(sampleResult.isStartNextThreadLoop());
+        assertTrue(sampleResult.isStopTest());
+        assertFalse(sampleResult.isStopTestNow());
+        assertFalse(sampleResult.isStopThread());
+        assertFalse(sampleResult.isStartNextThreadLoop());
     }
 
     @Test
@@ -70,10 +72,10 @@ public class TestResultAction extends JMeterTestCase {
         sampleResult.setSuccessful(false);
         resultAction.setErrorAction(ResultAction.ON_ERROR_STOPTEST_NOW);
         resultAction.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
-        Assert.assertFalse(sampleResult.isStopTest());
-        Assert.assertTrue(sampleResult.isStopTestNow());
-        Assert.assertFalse(sampleResult.isStopThread());
-        Assert.assertFalse(sampleResult.isStartNextThreadLoop());
+        assertFalse(sampleResult.isStopTest());
+        assertTrue(sampleResult.isStopTestNow());
+        assertFalse(sampleResult.isStopThread());
+        assertFalse(sampleResult.isStartNextThreadLoop());
     }
 
     @Test
@@ -82,10 +84,10 @@ public class TestResultAction extends JMeterTestCase {
         sampleResult.setSuccessful(false);
         resultAction.setErrorAction(ResultAction.ON_ERROR_STOPTHREAD);
         resultAction.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
-        Assert.assertFalse(sampleResult.isStopTest());
-        Assert.assertFalse(sampleResult.isStopTestNow());
-        Assert.assertTrue(sampleResult.isStopThread());
-        Assert.assertFalse(sampleResult.isStartNextThreadLoop());
+        assertFalse(sampleResult.isStopTest());
+        assertFalse(sampleResult.isStopTestNow());
+        assertTrue(sampleResult.isStopThread());
+        assertFalse(sampleResult.isStartNextThreadLoop());
     }
 
     @Test
@@ -94,9 +96,9 @@ public class TestResultAction extends JMeterTestCase {
         sampleResult.setSuccessful(false);
         resultAction.setErrorAction(ResultAction.ON_ERROR_START_NEXT_THREAD_LOOP);
         resultAction.sampleOccurred(new SampleEvent(sampleResult, "JUnit-TG"));
-        Assert.assertFalse(sampleResult.isStopTest());
-        Assert.assertFalse(sampleResult.isStopTestNow());
-        Assert.assertFalse(sampleResult.isStopThread());
-        Assert.assertTrue(sampleResult.isStartNextThreadLoop());
+        assertFalse(sampleResult.isStopTest());
+        assertFalse(sampleResult.isStopTestNow());
+        assertFalse(sampleResult.isStopThread());
+        assertTrue(sampleResult.isStartNextThreadLoop());
     }
 }

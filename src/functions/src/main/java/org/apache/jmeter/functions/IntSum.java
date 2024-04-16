@@ -27,12 +27,15 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Provides an intSum function that adds two or more integer values.
  *
  * @see LongSum
  * @since 1.8.1
  */
+@AutoService(Function.class)
 public class IntSum extends AbstractFunction {
     private static final List<String> desc = new ArrayList<>();
 

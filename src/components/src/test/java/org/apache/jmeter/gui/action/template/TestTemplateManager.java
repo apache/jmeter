@@ -17,11 +17,12 @@
 
 package org.apache.jmeter.gui.action.template;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,7 +35,6 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -100,7 +100,7 @@ public class TestTemplateManager extends JMeterTestCase {
     @Test
     public void testNonExistantXmlFileThrowsFileNotFoundException() throws Exception {
         File xmlTemplateFile = new File("missing.xml");
-        Assertions.assertThrows(
+        assertThrows(
                 FileNotFoundException.class,
                 () -> TemplateManager.getInstance().parseTemplateFile(xmlTemplateFile));
     }
@@ -111,8 +111,8 @@ public class TestTemplateManager extends JMeterTestCase {
             File templateFile = getFileFromResource("invalidTemplates.xml");
             TemplateManager.getInstance().parseTemplateFile(templateFile);
         } catch (SAXParseException ex) {
-            assertTrue("Exception did not contains expected message, got:" + ex.getMessage(),
-                    ex.getMessage().contains("Element type \"key\" must be declared."));
+            String message = ex.getMessage();
+            assertTrue(message.contains("Element type \"key\" must be declared."), "Exception did not contains expected message, got:" + message);
         }
     }
 

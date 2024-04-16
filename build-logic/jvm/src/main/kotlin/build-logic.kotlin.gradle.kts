@@ -21,14 +21,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java-library")
+    id("build-logic.build-params")
     id("build-logic.java")
     id("build-logic.test-base")
     id("com.github.autostyle")
     kotlin("jvm")
-}
-
-dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    kotlin("kapt") apply false
 }
 
 val String.v: String get() = rootProject.extra["$this.version"] as String
@@ -39,6 +37,9 @@ kotlin {
     if (props.bool("kotlin.explicitApi", default = true)) {
         explicitApi()
     }
+    jvmToolchain {
+        configureToolchain(buildParameters.buildJdk)
+    }
 }
 
 tasks.configureEach<KotlinCompile> {
@@ -46,6 +47,14 @@ tasks.configureEach<KotlinCompile> {
         if (!name.startsWith("compileTest")) {
             apiVersion = "kotlin.api".v
         }
-        jvmTarget = java.targetCompatibility.toString()
+        freeCompilerArgs += "-Xjvm-default=all"
+        val jdkRelease = buildParameters.targetJavaVersion.toString()
+        freeCompilerArgs += "-Xjdk-release=$jdkRelease"
+        kotlinOptions.jvmTarget = jdkRelease
     }
+}
+
+if (file("src/main/kotlin").isDirectory) {
+    // When main code contains Kotlin, use Dokka instead of Javadoc
+    apply(plugin = "build-logic.dokka-javadoc")
 }

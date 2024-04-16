@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +46,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -228,7 +228,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *                if an I/O exception occurs
      */
     protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
-        BufferedInputStream in;
+        InputStream in;
 
         final long contentLength = conn.getContentLength();
         if ((contentLength == 0)
@@ -245,9 +245,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         try {
             instream = new CountingInputStream(conn.getInputStream());
             if (gzipped) {
-                in = new BufferedInputStream(new GZIPInputStream(instream));
+                in = new GZIPInputStream(instream);
             } else {
-                in = new BufferedInputStream(instream);
+                in = instream;
             }
         } catch (IOException e) {
             if (! (e.getCause() instanceof FileNotFoundException))
@@ -277,9 +277,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
 
             if (gzipped) {
-                in = new BufferedInputStream(new GZIPInputStream(errorStream));
+                in = new GZIPInputStream(errorStream);
             } else {
-                in = new BufferedInputStream(errorStream);
+                in = errorStream;
             }
         } catch (Exception e) {
             log.error("readResponse: {}", e.toString());
@@ -290,7 +290,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                     throw (Error)cause;
                 }
             }
-            in = new BufferedInputStream(conn.getErrorStream());
+            in = conn.getErrorStream();
         }
         // N.B. this closes 'in'
         byte[] responseData = readResponse(res, in, contentLength);
@@ -425,7 +425,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @return the headers as a string
      */
     private static String getFromConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders,
-            Predicate<String> predicate, boolean addSecurityHeaders) {
+            Predicate<? super String> predicate, boolean addSecurityHeaders) {
         // Get all the request properties, which are the headers set on the connection
         StringBuilder hdrs = new StringBuilder(100);
         Map<String, List<String>> requestHeaders = conn.getRequestProperties();
@@ -617,8 +617,13 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
 
             // record headers size to allow HTTPSampleResult.getBytes() with different options
-            res.setHeadersSize(responseHeaders.replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
-                    .length() + 2); // add 2 for a '\r\n' at end of headers (before data)
+            // It used to be responseHeaders.replaceAll("\n", "\r\n").length(),
+            // however we don't need the resulting string, just the length
+            // So we add the number of \n in the string to account for \n
+            res.setHeadersSize(
+                    responseHeaders.length()
+                            + StringUtilities.count(responseHeaders, '\n')
+                            + 2); // add 2 for a '\r\n' at end of headers (before data)
             if (log.isDebugEnabled()) {
                 log.debug("Response headersSize={}, bodySize={}, Total={}",
                         res.getHeadersSize(),  res.getBodySizeAsLong(),

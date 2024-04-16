@@ -42,13 +42,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.prefs.Preferences;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.ResponseAssertion;
@@ -398,11 +399,19 @@ public class ProxyControl extends GenericController implements NonTestElement {
     }
 
     public void setIncludeList(Collection<String> list) {
-        setProperty(new CollectionProperty(INCLUDE_LIST, new HashSet<>(list)));
+        if (list.size() >= 2) {
+            // Deduplicate if there is more than one element in the list
+            list = list.stream().distinct().collect(Collectors.toList());
+        }
+        setProperty(new CollectionProperty(INCLUDE_LIST, list));
     }
 
     public void setExcludeList(Collection<String> list) {
-        setProperty(new CollectionProperty(EXCLUDE_LIST, new HashSet<>(list)));
+        if (list.size() >= 2) {
+            // Deduplicate if there is more than one element in the list
+            list = list.stream().distinct().collect(Collectors.toList());
+        }
+        setProperty(new CollectionProperty(EXCLUDE_LIST, list));
     }
 
     public void setRegexMatch(boolean b) {
@@ -1256,7 +1265,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             prefixChanged = true;
         }
         if (deltaT > sampleGap || prefixChanged) {
-            String controllerName = StringUtils.defaultString(getPrefixHTTPSampleName(), sampler.getName());
+            String controllerName = Objects.toString(getPrefixHTTPSampleName(), sampler.getName());
             if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
                 addDivider(treeModel, myTarget);
             }
@@ -1324,7 +1333,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @param sampler        Sampler to remove values from.
      * @param configurations ConfigTestElements in descending priority.
      */
-    private static void removeValuesFromSampler(HTTPSamplerBase sampler, Collection<ConfigTestElement> configurations) {
+    private static void removeValuesFromSampler(HTTPSamplerBase sampler, Collection<? extends ConfigTestElement> configurations) {
         PropertyIterator props = sampler.propertyIterator();
         while (props.hasNext()) {
             JMeterProperty prop = props.next();
@@ -1414,7 +1423,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @param variables Collection of Arguments to use to do the replacement, ordered
      *                  by ascending priority.
      */
-    private void replaceValues(TestElement sampler, TestElement[] configs, Collection<Arguments> variables) {
+    private void replaceValues(TestElement sampler, TestElement[] configs, Collection<? extends Arguments> variables) {
         // Build the replacer from all the variables in the collection:
         ValueReplacer replacer = new ValueReplacer();
         for (Arguments variable : variables) {

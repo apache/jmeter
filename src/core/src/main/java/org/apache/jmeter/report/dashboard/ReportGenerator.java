@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -181,7 +182,7 @@ public class ReportGenerator {
         Matcher matcher = POTENTIAL_CAMEL_CASE_PATTERN.matcher(propertyKey);
         StringBuffer buffer = new StringBuffer(); // NOSONAR Unfortunately Matcher does not support StringBuilder
         while (matcher.find()) {
-            matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
+            matcher.appendReplacement(buffer, matcher.group(1).toUpperCase(Locale.ROOT));
         }
         matcher.appendTail(buffer);
         return buffer.toString();
@@ -324,7 +325,7 @@ public class ReportGenerator {
 
     private static void addGraphConsumer(FilterConsumer nameFilter,
             FilterConsumer excludeControllerFilter,
-            Map.Entry<String, GraphConfiguration> entryGraphCfg)
+            Map.Entry<String, ? extends GraphConfiguration> entryGraphCfg)
             throws GenerationException {
         String graphName = entryGraphCfg.getKey();
         GraphConfiguration graphConfiguration = entryGraphCfg.getValue();

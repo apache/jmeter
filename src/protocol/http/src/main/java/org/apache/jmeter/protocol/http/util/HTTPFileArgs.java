@@ -25,6 +25,7 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 
 /**
  * A set of HTTPFileArg objects.
@@ -34,14 +35,21 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
 
     private static final long serialVersionUID = 240L;
 
-    /** The name of the property used to store the files. */
-    private static final String HTTP_FILE_ARGS = "HTTPFileArgs.files"; //$NON-NLS-1$
-
     /**
      * Create a new HTTPFileArgs object with no files.
      */
     public HTTPFileArgs() {
-        setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList<HTTPFileArg>()));
+        setHTTPFileArgs(new ArrayList<>());
+    }
+
+    @Override
+    public HTTPFileArgsSchema getSchema() {
+        return HTTPFileArgsSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends HTTPFileArgs, ? extends HTTPFileArgsSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     /**
@@ -50,7 +58,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
      * @return the files
      */
     public CollectionProperty getHTTPFileArgsCollection() {
-        return (CollectionProperty) getProperty(HTTP_FILE_ARGS);
+        return getOrNull(getSchema().getFileArguments());
     }
 
     /**
@@ -59,7 +67,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(HTTP_FILE_ARGS, new ArrayList<HTTPFileArg>()));
+        setHTTPFileArgs(new ArrayList<>());
     }
 
     /**
@@ -68,7 +76,7 @@ public class HTTPFileArgs extends ConfigTestElement implements Serializable {
      * @param files the new files
      */
     public void setHTTPFileArgs(List<HTTPFileArg> files) {
-        setProperty(new CollectionProperty(HTTP_FILE_ARGS, files));
+        set(getSchema().getFileArguments(), files);
     }
 
     /**

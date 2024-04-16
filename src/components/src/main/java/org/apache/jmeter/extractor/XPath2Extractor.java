@@ -222,7 +222,7 @@ public class XPath2Extractor
      * @throws SaxonApiException
      * @throws FactoryConfigurationError
      */
-    private void getValuesForXPath(String query, List<String> matchStrings, int matchNumber, String responseData)
+    private void getValuesForXPath(String query, List<? super String> matchStrings, int matchNumber, String responseData)
             throws SaxonApiException, FactoryConfigurationError {
         XPathUtil.putValuesForXPathInListUsingSaxon(responseData, query, matchStrings, getFragment(), matchNumber, getNamespaces());
     }

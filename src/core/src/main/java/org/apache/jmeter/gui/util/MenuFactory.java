@@ -61,6 +61,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,6 +116,11 @@ public final class MenuFactory {
         }
     }
 
+    @VisibleForTesting
+    static Map<String, List<MenuInfo>> getMenuMap() {
+        return menuMap;
+    }
+
     private static Set<String> classesToSkip() {
         return Arrays.stream(JMeterUtils.getPropDefault("not_in_menu", "").split(","))
                 .map(String::trim)
@@ -124,6 +130,8 @@ public final class MenuFactory {
     private static void initializeMenus(
             Map<String, List<MenuInfo>> menus, Set<String> elementsToSkip) {
         try {
+            // TODO: migrate to ServiceLoader or something else
+            @SuppressWarnings("deprecation")
             List<String> guiClasses = ClassFinder
                     .findClassesThatExtend(
                             JMeterUtils.getSearchPaths(),
@@ -223,14 +231,14 @@ public final class MenuFactory {
         return item;
     }
 
-    private static void sortMenus(Collection<List<MenuInfo>> menus) {
+    private static void sortMenus(Collection<? extends List<MenuInfo>> menus) {
         for (List<MenuInfo> menu : menus) {
             menu.sort(Comparator.comparing(MenuInfo::getLabel));
             menu.sort(Comparator.comparingInt(MenuInfo::getSortOrder));
         }
     }
 
-    private static void separateItemsWithExplicitOrder(Collection<List<MenuInfo>> menus) {
+    private static void separateItemsWithExplicitOrder(Collection<? extends List<MenuInfo>> menus) {
         for (List<MenuInfo> menu : menus) {
             Optional<MenuInfo> firstDefaultSortItem = menu.stream()
                     .filter(info -> info.getSortOrder() == MenuInfo.SORT_ORDER_DEFAULT)
@@ -289,6 +297,9 @@ public final class MenuFactory {
                     ActionNames.SAVE_AS_TEST_FRAGMENT));
         }
         addSeparator(menu);
+        JMenuItem saveKotlinDsl = makeMenuItemRes("copy_code", // $NON-NLS-1$
+                ActionNames.COPY_CODE);
+        menu.add(saveKotlinDsl);
         JMenuItem savePicture = makeMenuItemRes("save_as_image",// $NON-NLS-1$
                 ActionNames.SAVE_GRAPHICS,
                 KeyStrokes.SAVE_GRAPHICS);
@@ -373,7 +384,8 @@ public final class MenuFactory {
         return pop;
     }
 
-    private static JMenu createDefaultAddMenu() {
+    @VisibleForTesting
+    static JMenu createDefaultAddMenu() {
         String addAction = ActionNames.ADD;
         JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addDefaultAddMenuToMenu(addMenu, addAction);
@@ -466,7 +478,7 @@ public final class MenuFactory {
      * @return the menu
      */
     private static JMenu makeMenu(
-            Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
+            Collection<? extends MenuInfo> menuInfo, String actionCommand, String menuName) {
 
         JMenu menu = new JMenu(menuName);
         menuInfo.stream()

@@ -1,0 +1,27 @@
+name: Release Drafter
+
+on:
+  push:
+    # branches to consider in the event; optional, defaults to all
+    branches:
+      - master
+      - 'release/**'
+  # pull_request_target allows PR from forks to access secrets, so please NEVER add pull_request_target
+
+jobs:
+  update_release_draft:
+    # Skip release drafts in forks
+    if: github.repository_owner == 'apache'
+    name: Update Release Draft
+    runs-on: ubuntu-latest
+    steps:
+      # Drafts your next Release notes as Pull Requests are merged into "master"
+      - name: Update release body draft
+        uses: release-drafter/release-drafter@09c613e259eb8d4e7c81c2cb00618eb5fc4575a7 # v5
+        id: prepare_release
+        # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
+        with:
+        #   config-name: my-config.yml
+           disable-autolabeler: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

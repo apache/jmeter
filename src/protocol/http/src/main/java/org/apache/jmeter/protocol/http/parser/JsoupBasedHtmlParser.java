@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.parser;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
@@ -75,7 +76,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
                 return;
             }
             Element tag = (Element) node;
-            String tagName = tag.tagName().toLowerCase();
+            String tagName = tag.tagName().toLowerCase(Locale.ROOT);
             if (tagName.equals(TAG_BODY)) {
                 extractAttribute(tag, ATT_BACKGROUND);
             } else if (tagName.equals(TAG_SCRIPT)) {
@@ -126,8 +127,10 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             } else if (tagName.equals(TAG_LINK)) {
                 String relAttr = tag.attr(ATT_REL);
                 // Putting the string first means it works even if the attribute is null
-                if (STYLESHEET.equalsIgnoreCase(relAttr) || ICON.equalsIgnoreCase(relAttr)
-                        || SHORTCUT_ICON.equalsIgnoreCase(relAttr)) {
+                if (STYLESHEET.equalsIgnoreCase(relAttr)
+                        || ICON.equalsIgnoreCase(relAttr)
+                        || SHORTCUT_ICON.equalsIgnoreCase(relAttr)
+                        || PRELOAD.equalsIgnoreCase(relAttr)) {
                     extractAttribute(tag, ATT_HREF);
                 }
             } else {

@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.sampler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.control.CookieManager;
-import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
 import org.apache.jmeter.samplers.Entry;
@@ -265,7 +264,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      * @return Returns the port.
      */
     public String getPortString() {
-        return super.getPropertyAsString(HTTPSamplerBase.PORT);
+        return getString(getSchema().getPort());
     }
 
     /**
@@ -273,7 +272,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      *            The port to set.
      */
     public void setPortString(String port) {
-        super.setProperty(HTTPSamplerBase.PORT, port);
+        set(getSchema().getPort(), port);
     }
 
     /**
@@ -282,7 +281,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      */
     @Override
     public void setProtocol(String value) {
-        setProperty(PROTOCOL, value.toLowerCase(java.util.Locale.ENGLISH));
+        super.setProtocol(value);
     }
 
     /**
@@ -292,11 +291,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      */
     @Override
     public String getProtocol() {
-        String protocol = getPropertyAsString(PROTOCOL);
-        if (StringUtils.isEmpty(protocol)) {
-            return HTTPConstants.PROTOCOL_HTTP;
-        }
-        return protocol;
+        return super.getProtocol();
     }
 
     /**

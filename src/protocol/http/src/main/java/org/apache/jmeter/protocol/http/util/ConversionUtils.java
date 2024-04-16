@@ -22,7 +22,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apiguardian.api.API;
 
 // @see TestHTTPUtils for unit tests
 
@@ -93,6 +99,88 @@ public class ConversionUtils {
             }
         }
         return charSet;
+    }
+
+    /**
+     * Encodes strings for {@code multipart/form-data} names and values.
+     * The encoding is {@code "} as {@code %22}, {@code CR} as {@code %0D}, and {@code LF} as {@code %0A}.
+     * Note: {@code %} is not encoded, so it creates ambiguity which might be resolved in a later specification version.
+     * @see <a href="https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#multipart-form-data">Multipart form data specification</a>
+     * @see <a href="https://github.com/whatwg/html/issues/7575">Escaping % in multipart/form-data</a>
+     * @param value input value to convert
+     * @return converted value
+     * @since 5.6
+     */
+    @API(status = API.Status.MAINTAINED, since = "5.6")
+    public static String percentEncode(String value) {
+        if (value.indexOf('"') == -1 && value.indexOf('\r') == -1 && value.indexOf('\n') == -1) {
+            return value;
+        }
+        StringBuilder sb = new StringBuilder(value.length() + 2);
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            switch (c) {
+                case '"':
+                    sb.append("%22");
+                    break;
+                case 0x0A:
+                    sb.append("%0A");
+                    break;
+                case 0x0D:
+                    sb.append("%0D");
+                    break;
+                default:
+                    sb.append(c);
+                    break;
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Encodes non-encodable characters as HTML entities like e.g. &amp;#128514; for 😂.
+     * @param value value to encode
+     * @param charset charset that will be used for encoding, defaults to UTF-8 if null
+     * @return input value with non-encodable characters replaced with HTML entities
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6.1")
+    public static String encodeWithEntities(String value, Charset charset) {
+        // See the reason at
+        // https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/network/form_data_encoder.cc;
+        // l=162-191;drc=4cd749d0d82138ff31ed3a2bc5d925bb6d83fe16
+
+        if (charset == null) {
+            charset = StandardCharsets.UTF_8;
+        }
+        CharsetEncoder encoder = charset.newEncoder();
+        if (encoder.canEncode(value)) {
+            // When the strinc can be encoded, leave it intact
+            return value;
+        }
+        // Some of the characters can't be encoded, so replace them with HTML entities
+        StringBuilder sb = new StringBuilder(value.length() + 10);
+        encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+        CharBuffer input = CharBuffer.wrap(value);
+        ByteBuffer output = ByteBuffer.allocate(Math.min(1000, (int) (encoder.maxBytesPerChar() * value.length())));
+        int lastPos = 0;
+        while (input.position() < input.limit()) {
+            output.clear();
+            CoderResult cr = encoder.encode(input, output, true);
+
+            // Append successfully encoded chars
+            if (input.position() > lastPos) {
+                sb.append(value, lastPos, input.position());
+                lastPos = input.position();
+            }
+
+            if (cr.isUnmappable()) {
+                int codePoint = value.codePointAt(input.position());
+                sb.append("&#").append(codePoint);
+                input.position(input.position() + Character.charCount(codePoint));
+                lastPos = input.position();
+            }
+        }
+        return sb.toString();
     }
 
     /**
@@ -182,10 +270,7 @@ public class ConversionUtils {
             return url;
         }
 
-        /**
-         * http://auth@host:port/path1/path2/path3/?query#anchor
-         */
-
+        // http://auth@host:port/path1/path2/path3/?query#anchor
         // get to 'path' part of the URL, preserving schema, auth, host if
         // present
 

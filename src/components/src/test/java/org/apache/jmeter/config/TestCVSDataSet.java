@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.config;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 
@@ -62,9 +62,7 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
             csv.iterationStart(null);
             fail("Bad filename in CSVDataSet -> IllegalArgumentException: File No.such.filename must exist and be readable");
         } catch (IllegalArgumentException ignored) {
-            assertEquals("Bad filename in CSVDataSet -> exception",
-                    "File No.such.filename must exist and be readable",
-                    ignored.getMessage());
+            assertEquals("File No.such.filename must exist and be readable", ignored.getMessage(), "Bad filename in CSVDataSet -> exception");
         }
 
         csv = new CSVDataSet();
@@ -73,30 +71,30 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         csv.setDelimiter(",");
 
         csv.iterationStart(null);
-        assertEquals("",threadVars.get("a"));
-        assertEquals("b1",threadVars.get("b"));
-        assertEquals("c1",threadVars.get("c"));
+        assertEquals("", threadVars.get("a"));
+        assertEquals("b1", threadVars.get("b"));
+        assertEquals("c1", threadVars.get("c"));
 
         csv.iterationStart(null);
-        assertEquals("a2",threadVars.get("a"));
-        assertEquals("",threadVars.get("b"));
-        assertEquals("c2",threadVars.get("c"));
+        assertEquals("a2", threadVars.get("a"));
+        assertEquals("", threadVars.get("b"));
+        assertEquals("c2", threadVars.get("c"));
 
         csv.iterationStart(null);
-        assertEquals("a3",threadVars.get("a"));
-        assertEquals("b3",threadVars.get("b"));
-        assertEquals("",threadVars.get("c"));
+        assertEquals("a3", threadVars.get("a"));
+        assertEquals("b3", threadVars.get("b"));
+        assertEquals("", threadVars.get("c"));
 
 
         csv.iterationStart(null);
-        assertEquals("a4",threadVars.get("a"));
-        assertEquals("b4",threadVars.get("b"));
-        assertEquals("c4",threadVars.get("c"));
+        assertEquals("a4", threadVars.get("a"));
+        assertEquals("b4", threadVars.get("b"));
+        assertEquals("c4", threadVars.get("c"));
 
         csv.iterationStart(null); // Restart file
-        assertEquals("",threadVars.get("a"));
-        assertEquals("b1",threadVars.get("b"));
-        assertEquals("c1",threadVars.get("c"));
+        assertEquals("", threadVars.get("a"));
+        assertEquals("b1", threadVars.get("b"));
+        assertEquals("c1", threadVars.get("c"));
     }
 
     @Test
@@ -110,28 +108,28 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         csv.setFileEncoding( "UTF-8" );
 
         csv.iterationStart(null);
-        assertEquals("a1",threadVars.get("a"));
-        assertEquals("b1",threadVars.get("b"));
-        assertEquals("\u00e71",threadVars.get("c"));
-        assertEquals("d1",threadVars.get("d"));
+        assertEquals("a1", threadVars.get("a"));
+        assertEquals("b1", threadVars.get("b"));
+        assertEquals("\u00e71", threadVars.get("c"));
+        assertEquals("d1", threadVars.get("d"));
 
         csv.iterationStart(null);
-        assertEquals("a2",threadVars.get("a"));
-        assertEquals("b2",threadVars.get("b"));
-        assertEquals("\u00e72",threadVars.get("c"));
-        assertEquals("d2",threadVars.get("d"));
+        assertEquals("a2", threadVars.get("a"));
+        assertEquals("b2", threadVars.get("b"));
+        assertEquals("\u00e72", threadVars.get("c"));
+        assertEquals("d2", threadVars.get("d"));
 
         csv.iterationStart(null);
-        assertEquals("a3",threadVars.get("a"));
-        assertEquals("b3",threadVars.get("b"));
-        assertEquals("\u00e73",threadVars.get("c"));
-        assertEquals("d3",threadVars.get("d"));
+        assertEquals("a3", threadVars.get("a"));
+        assertEquals("b3", threadVars.get("b"));
+        assertEquals("\u00e73", threadVars.get("c"));
+        assertEquals("d3", threadVars.get("d"));
 
         csv.iterationStart(null);
-        assertEquals("a4",threadVars.get("a"));
-        assertEquals("b4",threadVars.get("b"));
-        assertEquals("\u00e74",threadVars.get("c"));
-        assertEquals("d4",threadVars.get("d"));
+        assertEquals("a4", threadVars.get("a"));
+        assertEquals("b4", threadVars.get("b"));
+        assertEquals("\u00e74", threadVars.get("c"));
+        assertEquals("d4", threadVars.get("d"));
     }
 
     // Test CSV file with a header line
@@ -143,16 +141,16 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         assertNull(csv.getVariableNames());
         csv.iterationStart(null);
         assertNull(threadVars.get("a"));
-        assertEquals("a1",threadVars.get("A"));
-        assertEquals("b1",threadVars.get("B"));
-        assertEquals("c1",threadVars.get("C"));
-        assertEquals("d1",threadVars.get("D|1"));
+        assertEquals("a1", threadVars.get("A"));
+        assertEquals("b1", threadVars.get("B"));
+        assertEquals("c1", threadVars.get("C"));
+        assertEquals("d1", threadVars.get("D|1"));
         csv.iterationStart(null);
         assertNull(threadVars.get("a"));
-        assertEquals("a2",threadVars.get("A"));
-        assertEquals("b2",threadVars.get("B"));
-        assertEquals("c2",threadVars.get("C"));
-        assertEquals("d2",threadVars.get("D|1"));
+        assertEquals("a2", threadVars.get("A"));
+        assertEquals("b2", threadVars.get("B"));
+        assertEquals("c2", threadVars.get("C"));
+        assertEquals("d2", threadVars.get("D|1"));
     }
 
     // Test CSV file with a header line and recycle is true
@@ -169,10 +167,10 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         csv.iterationStart(null); // line 4
         csv.iterationStart(null); // line 5
         csv.iterationStart(null); // return to 2nd line (first line is names)
-        assertEquals("a1",threadVars.get("A"));
-        assertEquals("b1",threadVars.get("B"));
-        assertEquals("c1",threadVars.get("C"));
-        assertEquals("d1",threadVars.get("D|1"));
+        assertEquals("a1", threadVars.get("A"));
+        assertEquals("b1", threadVars.get("B"));
+        assertEquals("c1", threadVars.get("C"));
+        assertEquals("d1", threadVars.get("D|1"));
     }
 
     // Test CSV file with a header line
@@ -187,22 +185,22 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         assertNull(csv.getVariableNames());
         csv.iterationStart(null);
         assertNull(threadVars.get("a"));
-        assertEquals("a1",threadVars.get("A"));
-        assertEquals("b1",threadVars.get("B"));
-        assertEquals("c1",threadVars.get("C"));
-        assertEquals("d1",threadVars.get("D|1"));
+        assertEquals("a1", threadVars.get("A"));
+        assertEquals("b1", threadVars.get("B"));
+        assertEquals("c1", threadVars.get("C"));
+        assertEquals("d1", threadVars.get("D|1"));
         csv.iterationStart(null);
         assertNull(threadVars.get("a"));
-        assertEquals("a2",threadVars.get("A"));
-        assertEquals("b2",threadVars.get("B"));
-        assertEquals("c2",threadVars.get("C"));
-        assertEquals("d2",threadVars.get("D|1"));
+        assertEquals("a2", threadVars.get("A"));
+        assertEquals("b2", threadVars.get("B"));
+        assertEquals("c2", threadVars.get("C"));
+        assertEquals("d2", threadVars.get("D|1"));
         csv.iterationStart(null);
         assertNull(threadVars.get("a"));
-        assertEquals("a3",threadVars.get("A"));
-        assertEquals("b3",threadVars.get("B"));
-        assertEquals("c3",threadVars.get("C"));
-        assertEquals("d3",threadVars.get("D|1"));
+        assertEquals("a3", threadVars.get("A"));
+        assertEquals("b3", threadVars.get("B"));
+        assertEquals("c3", threadVars.get("C"));
+        assertEquals("d3", threadVars.get("D|1"));
         try {
             csv.iterationStart(null);
             fail("Expected JMeterStopThreadException");
@@ -226,19 +224,19 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         CSVDataSet csv1 = initCSV();
         assertNull(csv1.getShareMode());
         csv1.setShareMode("abc");
-        assertEquals("abc",csv1.getShareMode());
+        assertEquals("abc", csv1.getShareMode());
         csv1.iterationStart(null);
-        assertEquals("a1",threadVars.get("a"));
+        assertEquals("a1", threadVars.get("a"));
         csv1.iterationStart(null);
-        assertEquals("a2",threadVars.get("a"));
+        assertEquals("a2", threadVars.get("a"));
         CSVDataSet csv2 = initCSV();
         csv2.setShareMode("abc");
-        assertEquals("abc",csv2.getShareMode());
+        assertEquals("abc", csv2.getShareMode());
         csv2.iterationStart(null);
-        assertEquals("a3",threadVars.get("a"));
+        assertEquals("a3", threadVars.get("a"));
         csv0.iterationStart(null);
-        assertEquals("a1",threadVars.get("a"));
+        assertEquals("a1", threadVars.get("a"));
         csv1.iterationStart(null);
-        assertEquals("a4",threadVars.get("a"));
+        assertEquals("a4", threadVars.get("a"));
     }
 }

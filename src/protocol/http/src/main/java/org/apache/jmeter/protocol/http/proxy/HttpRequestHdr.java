@@ -165,7 +165,7 @@ public class HttpRequestHdr {
                     inHeaders = false;
                     firstLine = false; // cannot be first line either
                 }
-                final String reqLine = line.toString(StandardCharsets.ISO_8859_1.name());
+                final String reqLine = line.toString(StandardCharsets.UTF_8.name());
                 if (firstLine) {
                     parseFirstLine(reqLine);
                     firstLine = false;
@@ -302,7 +302,7 @@ public class HttpRequestHdr {
         return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
 
-    public static MultipartUrlConfig getMultipartConfig(String contentType) {
+    public MultipartUrlConfig getMultipartConfig(String contentType) {
         if(isMultipart(contentType)) {
             // Get the boundary string for the multiparts from the content type
             String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());

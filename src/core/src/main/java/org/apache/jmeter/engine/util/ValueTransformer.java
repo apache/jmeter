@@ -21,8 +21,23 @@ import java.util.Map;
 
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apiguardian.api.API;
 
-interface ValueTransformer {
+/**
+ * @deprecated use {@link PropertyTransformer} instead
+ */
+@Deprecated
+@API(status = API.Status.DEPRECATED, since = "5.6")
+interface ValueTransformer extends PropertyTransformer {
+    @Override
+    default JMeterProperty transform(JMeterProperty input) {
+        try {
+            return transformValue(input);
+        } catch (InvalidVariableException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Transform the given property and return the new version.
      *

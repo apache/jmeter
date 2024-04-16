@@ -18,8 +18,9 @@
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -30,7 +31,6 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,9 +70,9 @@ public class RandomFunctionTest extends JMeterTestCase {
         Collection<CompoundVariable> parms = makeParams("10","abcdefghijklmnopqrstuvwxyz","VAR");
         r.setParameters(parms);
         String s = r.execute(null,null);
-        Assert.assertNotNull(s);
+        assertNotNull(s);
         assertEquals(10, s.length());
-        assertTrue("Random String contains unexpected character", stringOnlyContainsChars(s, "abcdefghijklmnopqrstuvwxyz"));
+        assertTrue(stringOnlyContainsChars(s, "abcdefghijklmnopqrstuvwxyz"), "Random String contains unexpected character");
 
         String varValue = JMeterContextService.getContext().getVariables().get("VAR");
         assertEquals(s, varValue);
@@ -80,7 +80,7 @@ public class RandomFunctionTest extends JMeterTestCase {
         parms = makeParams("5","", "VAR2");
         r.setParameters(parms);
         s = r.execute(null,null);
-        Assert.assertNotNull(s);
+        assertNotNull(s);
         assertEquals(5, s.length());
 
         varValue = JMeterContextService.getContext().getVariables().get("VAR2");

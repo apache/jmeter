@@ -50,9 +50,12 @@ import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implement ResultsRender for Regexp tester
  */
+@AutoService(ResultRenderer.class)
 public class RenderAsRegexp implements ResultRenderer, ActionListener {
 
     private static final String REGEXP_TESTER_COMMAND = "regexp_tester"; // $NON-NLS-1$

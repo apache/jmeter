@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,83 +31,25 @@ import java.net.URI;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit;
-
-import junit.extensions.TestSetup;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.apache.jmeter.junit.JMeterTestCase;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 /**
  * Class for testing the HTTPMirrorThread, which is handling the
  * incoming requests for the HTTPMirrorServer
  */
-public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
+public class TestHTTPMirrorThread extends JMeterTestCase {
     /** The encodings used for http headers and control information */
     private static final String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
     private static final String UTF_8 = "UTF-8"; // $NON-NLS-1$
 
     private static final byte[] CRLF = { 0x0d, 0x0a };
     private static final int HTTP_SERVER_PORT = 8181;
+    @RegisterExtension
+    private static final HttpMirrorServerExtension HTTP_MIRROR_SERVER = new HttpMirrorServerExtension(HTTP_SERVER_PORT);
 
-    public TestHTTPMirrorThread(String arg0) {
-        super(arg0);
-    }
-
-    // We need to use a suite in order to preserve the server across test cases
-    // With JUnit4 we could use before/after class annotations
-    public static Test suite(){
-        return new TestSetup(new TestSuite(TestHTTPMirrorThread.class)){
-            private HttpMirrorServer httpServer;
-
-            @Override
-            protected void setUp() throws Exception {
-                httpServer = startHttpMirror(HTTP_SERVER_PORT);
-            }
-
-            @Override
-            protected void tearDown() throws Exception {
-                // Shutdown the http server
-                httpServer.stopServer();
-                httpServer = null;
-            }
-        };
-    }
-
-    /**
-     * Utility method to handle starting the HttpMirrorServer for testing. Also
-     * used by TestHTTPSamplersAgainstHttpMirrorServer
-     *
-     * @param port
-     *            port on which the mirror should be started
-     * @return newly created http mirror server
-     * @throws Exception
-     *             if something fails
-     */
-    public static HttpMirrorServer startHttpMirror(int port) throws Exception {
-        HttpMirrorServer server;
-        server = new HttpMirrorServer(port);
-        server.start();
-        Exception e;
-        for (int i=0; i < 10; i++) {// Wait up to 1 second
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignored) {
-            }
-            e = server.getException();
-            if (e != null) {// Already failed
-                throw new Exception("Could not start mirror server on port: "+port+". "+e);
-            }
-            if (server.isAlive()) {
-                break; // succeeded
-            }
-        }
-
-        if (!server.isAlive()){
-            throw new Exception("Could not start mirror server on port: "+port);
-        }
-        return server;
-    }
-
+    @Test
     public void testGetRequest() throws Exception {
         // Connect to the http server, and do a simple http get
         Socket clientSocket = new Socket("localhost", HTTP_SERVER_PORT);
@@ -183,6 +129,7 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
         clientSocket.close();
     }
 
+    @Test
     public void testPostRequest() throws Exception {
         // Connect to the http server, and do a simple http post
         Socket clientSocket = new Socket("localhost", HTTP_SERVER_PORT);
@@ -337,6 +284,7 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
     }
 */
 
+    @Test
     public void testStatus() throws Exception {
         URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -346,6 +294,7 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
         assertEquals("Temporary Redirect", conn.getResponseMessage());
     }
 
+    @Test
     public void testQueryStatus() throws Exception {
         URL url = new URI("http",null,"localhost",HTTP_SERVER_PORT,"/path","status=303 See Other",null).toURL();
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -354,6 +303,7 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
         assertEquals("See Other", conn.getResponseMessage());
     }
 
+    @Test
     public void testQueryRedirect() throws Exception {
         URL url = new URI("http",null,"localhost",HTTP_SERVER_PORT,"/path","redirect=/a/b/c/d?q",null).toURL();
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -361,9 +311,10 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
         conn.connect();
         assertEquals(302, conn.getResponseCode());
         assertEquals("Temporary Redirect", conn.getResponseMessage());
-        assertEquals("/a/b/c/d?q",conn.getHeaderField("Location"));
+        assertEquals("/a/b/c/d?q", conn.getHeaderField("Location"));
     }
 
+    @Test
     public void testHeaders() throws Exception {
         URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -371,10 +322,11 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
         conn.connect();
         assertEquals(200, conn.getResponseCode());
         assertEquals("OK", conn.getResponseMessage());
-        assertEquals("/abcd",conn.getHeaderField("Location"));
-        assertEquals("none",conn.getHeaderField("X-Dummy"));
+        assertEquals("/abcd", conn.getHeaderField("Location"));
+        assertEquals("none", conn.getHeaderField("X-Dummy"));
     }
 
+    @Test
     public void testResponseLength() throws Exception {
         URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -385,14 +337,16 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
         inputStream.close();
     }
 
+    @Test
     public void testCookie() throws Exception {
         URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.addRequestProperty("X-SetCookie", "four=2*2");
         conn.connect();
-        assertEquals("four=2*2",conn.getHeaderField("Set-Cookie"));
+        assertEquals("four=2*2", conn.getHeaderField("Set-Cookie"));
     }
 
+    @Test
     public void testSleep() throws Exception {
         URL url = new URL("http", "localhost", HTTP_SERVER_PORT, "/");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -405,7 +359,7 @@ public class TestHTTPMirrorThread extends JMeterTestCaseJUnit {
         while(inputStream.read() != -1) {} // CHECKSTYLE IGNORE EmptyBlock
         inputStream.close();
         final long elapsed = (System.nanoTime() - now)/200000L;
-        assertTrue("Expected > 180 " + elapsed, elapsed >= 180);
+        assertTrue(elapsed >= 180, "Expected > 180 " + elapsed);
     }
 
     /**

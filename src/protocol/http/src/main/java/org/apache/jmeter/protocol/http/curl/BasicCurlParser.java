@@ -285,8 +285,8 @@ public class BasicCurlParser {
          * @param limitRate the maximum transfer rate
          */
         public void setLimitRate(String limitRate) {
-            String unit = limitRate.substring(limitRate.length() - 1, limitRate.length()).toLowerCase();
-            int value = Integer.parseInt(limitRate.substring(0, limitRate.length() - 1).toLowerCase());
+            String unit = limitRate.substring(limitRate.length() - 1, limitRate.length()).toLowerCase(Locale.ROOT);
+            int value = Integer.parseInt(limitRate.substring(0, limitRate.length() - 1).toLowerCase(Locale.ROOT));
             switch (unit) {
             case "k":
                 this.limitRate = value * ONE_KILOBYTE_IN_CPS;
@@ -914,7 +914,7 @@ public class BasicCurlParser {
     * @param authorization the object of authorization
     */
    private static void setAuthMechanism(String mechanism, Authorization authorization) {
-       switch (mechanism.toLowerCase()) {
+       switch (mechanism.toLowerCase(Locale.ROOT)) {
        case "basic":
            authorization.setMechanism(Mechanism.BASIC);
            break;

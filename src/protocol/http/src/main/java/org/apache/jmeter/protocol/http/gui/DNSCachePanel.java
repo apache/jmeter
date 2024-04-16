@@ -140,10 +140,14 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         configureTestElement(dnsRes);
         if (dnsRes instanceof DNSCacheManager) {
             DNSCacheManager dnsCacheManager = (DNSCacheManager) dnsRes;
+            // Init servers list
+            dnsCacheManager.getServers();
             for (int i = 0; i < dnsServersTableModel.getRowCount(); i++) {
                 String server = (String) dnsServersTableModel.getRowData(i)[0];
                 dnsCacheManager.addServer(server);
             }
+            // Init hosts list
+            dnsCacheManager.getHosts();
             for (int i = 0; i < dnsHostsTableModel.getRowCount(); i++) {
                 String host = (String) dnsHostsTableModel.getRowData(i)[0];
                 String addresses = (String) dnsHostsTableModel.getRowData(i)[1];
@@ -188,10 +192,19 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     }
 
     @Override
-    public TestElement createTestElement() {
-        DNSCacheManager dnsCacheManager = new DNSCacheManager();
-        modifyTestElement(dnsCacheManager);
-        return dnsCacheManager;
+    public TestElement makeTestElement() {
+        return new DNSCacheManager();
+    }
+
+    @Override
+    public void assignDefaultValues(TestElement element) {
+        super.assignDefaultValues(element);
+        DNSCacheManager manager = (DNSCacheManager) element;
+        // It sets empty list of servers and hosts
+        manager.getServers();
+        manager.getHosts();
+        manager.setClearEachIteration(true);
+        manager.setCustomResolver(false);
     }
 
     @Override

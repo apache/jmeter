@@ -17,8 +17,12 @@
 
 package org.apache.jmeter.testelement.property;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.slf4j.Logger;
@@ -77,6 +81,9 @@ public abstract class AbstractProperty implements JMeterProperty {
     }
 
     protected PropertyIterator getIterator(Collection<JMeterProperty> values) {
+        if (values.isEmpty()) {
+            return PropertyIteratorImpl.EMPTY_ITERATOR;
+        }
         return new PropertyIteratorImpl(values);
     }
 
@@ -293,13 +300,26 @@ public abstract class AbstractProperty implements JMeterProperty {
      */
     protected Collection<JMeterProperty> normalizeList(Collection<?> coll) {
         try {
-            @SuppressWarnings("unchecked") // empty collection
-            Collection<JMeterProperty> newColl = coll.getClass().getDeclaredConstructor().newInstance();
+            Collection<JMeterProperty> newColl;
+            try {
+                @SuppressWarnings("unchecked")
+                Collection<JMeterProperty> tmp = coll.getClass().getDeclaredConstructor().newInstance();
+                newColl = tmp;
+            } catch (Exception e) {
+                if (coll instanceof List) {
+                    newColl = new ArrayList<>(coll.size());
+                } else if (coll instanceof Set) {
+                    newColl = new LinkedHashSet<>();
+                } else {
+                    throw e;
+                }
+            }
             for (Object item : coll) {
                 newColl.add(convertObject(item));
             }
             return newColl;
         } catch (Exception e) {// should not happen
+            // TODO: replace with throwing an error, however it might break backward compatibility
             log.error("Cannot create copy of {}", coll.getClass(), e);
             return null;
         }

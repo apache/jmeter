@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.threads;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.time.Instant;
 
 import org.apache.jmeter.control.LoopController;
@@ -27,7 +31,6 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class TestJMeterThread {
@@ -117,7 +120,7 @@ class TestJMeterThread {
         hashTree.add("Test", new ThrowingThreadListener(true));
         JMeterThread.ThreadListenerTraverser traverser =
                 new JMeterThread.ThreadListenerTraverser(true);
-        Assertions.assertThrows(
+        assertThrows(
                 NoClassDefFoundError.class,
                 () -> hashTree.traverse(traverser));
     }
@@ -158,11 +161,11 @@ class TestJMeterThread {
         jMeterThread.run();
         long duration = Instant.now().toEpochMilli() - startTime.toEpochMilli();
 
-        Assertions.assertFalse(dummySampler.isCalled(), "Sampler should not be called");
+        assertFalse(dummySampler.isCalled(), "Sampler should not be called");
 
         // the duration of this test plan should currently be around zero seconds,
         // but it is allowed to take up to maxDuration amount of time
-        Assertions.assertTrue(duration <= maxDuration, "Test plan should not run for longer than duration");
+        assertTrue(duration <= maxDuration, "Test plan should not run for longer than duration");
     }
 
     private LoopController createLoopController() {

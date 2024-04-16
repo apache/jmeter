@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.protocol.http.config.gui;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
+
 import java.awt.Component;
 
 import javax.swing.BorderFactory;
@@ -30,11 +32,11 @@ import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.http.util.GraphQLRequestParamUtils;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
@@ -58,12 +60,6 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
     private static final UrlConfigDefaults URL_CONFIG_DEFAULTS = new UrlConfigDefaults();
     static {
         URL_CONFIG_DEFAULTS.setValidMethods(new String[] { HTTPConstants.POST, HTTPConstants.GET });
-        URL_CONFIG_DEFAULTS.setDefaultMethod(HTTPConstants.POST);
-        URL_CONFIG_DEFAULTS.setAutoRedirects(false);
-        URL_CONFIG_DEFAULTS.setFollowRedirects(false);
-        URL_CONFIG_DEFAULTS.setUseBrowserCompatibleMultipartMode(false);
-        URL_CONFIG_DEFAULTS.setUseKeepAlive(true);
-        URL_CONFIG_DEFAULTS.setUseMultipart(false);
         URL_CONFIG_DEFAULTS.setUseMultipartVisible(false);
     }
 
@@ -99,9 +95,9 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         final GraphQLRequestParams params = new GraphQLRequestParams(operationNameText.getText(),
                 queryContent.getText(), variablesContent.getText());
 
-        element.setProperty(OPERATION_NAME, params.getOperationName());
-        element.setProperty(QUERY, params.getQuery());
-        element.setProperty(VARIABLES, params.getVariables());
+        element.setProperty(OPERATION_NAME, defaultIfEmpty(params.getOperationName(), null));
+        element.setProperty(QUERY, defaultIfEmpty(params.getQuery(), null));
+        element.setProperty(VARIABLES, defaultIfEmpty(params.getVariables(), null));
         element.setProperty(HTTPSamplerBase.POST_BODY_RAW, !HTTPConstants.GET.equals(method));
 
         final Arguments args;
@@ -128,7 +124,7 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
             args.addArgument(createHTTPArgument("", GraphQLRequestParamUtils.toPostBodyString(params), false));
         }
 
-        element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
+        element.set(HTTPSamplerBaseSchema.INSTANCE.getArguments(), args);
     }
 
     @Override

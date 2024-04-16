@@ -18,8 +18,8 @@
 package org.apache.jorphan.gui;
 
 import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class TableModelEventBacker implements TableModelListener {
          * @return <code>this</code>
          */
         public EventAssertion addInt(String name, int expected, ToIntFunction<TableModelEvent> f) {
-            return add((e,i) -> assertEquals(format("%s[%d]", name, i), expected, f.applyAsInt(e)));
+            return add((e,i) -> assertEquals(expected, f.applyAsInt(e), () -> format("%s[%d]", name, i)));
         }
 
         /**
@@ -69,7 +69,7 @@ public class TableModelEventBacker implements TableModelListener {
          * @return <code>this</code>
          */
         public EventAssertion source(Object expected) {
-            return add((e,i) -> assertSame(format("source[%d]",i), expected, e.getSource()));
+            return add((e,i) -> assertSame(expected, e.getSource(), () -> format("source[%d]",i)));
         }
 
         /**
@@ -149,12 +149,12 @@ public class TableModelEventBacker implements TableModelListener {
      */
     public void assertEvents(EventAssertion... assertions) {
         try {
-            assertEquals("event count", assertions.length, events.size());
-
             int i = 0;
             for (TableModelEvent event : events) {
                 assertions[i].assertEvent(event, i++);
             }
+
+            assertEquals(assertions.length, events.size(), "event count");
         } finally {
             events.clear();
         }

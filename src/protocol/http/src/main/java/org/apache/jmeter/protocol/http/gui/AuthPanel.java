@@ -107,7 +107,8 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     public TestElement createTestElement() {
         AuthManager authMan = tableModel.manager;
         configureTestElement(authMan);
-        authMan.setClearEachIteration(clearEachIteration.isSelected());
+        authMan.setClearEachIteration(false);
+        authMan.setControlledByThread(false);
         return (TestElement) authMan.clone();
     }
 

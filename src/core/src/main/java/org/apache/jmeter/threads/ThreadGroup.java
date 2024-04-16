@@ -28,9 +28,11 @@ import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.util.JMeterStopTestException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +99,16 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     public ThreadGroup() {
         super();
+    }
+
+    @Override
+    public ThreadGroupSchema getSchema() {
+        return ThreadGroupSchema.INSTANCE;
+    }
+
+    @Override
+    public @NotNull PropertiesAccessor<? extends ThreadGroup, ? extends ThreadGroupSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     /**
@@ -175,7 +187,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     private boolean isDelayedStartup() {
-        return getPropertyAsBoolean(DELAYED_START);
+        return get(getSchema().getDelayedStart());
     }
 
     /**

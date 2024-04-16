@@ -36,8 +36,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 class TestGraphQLRequestParamUtils {
 
@@ -73,7 +75,10 @@ class TestGraphQLRequestParamUtils {
             + "\"query\":\"" + StringUtils.replace(QUERY.trim(), "\n", "\\n") + "\""
             + "}";
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
+            // See https://github.com/FasterXML/jackson-core/issues/991
+            .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
+            .build();;
 
     private GraphQLRequestParams params;
 
@@ -101,8 +106,8 @@ class TestGraphQLRequestParamUtils {
     }
 
     static Stream<org.junit.jupiter.params.provider.Arguments> postBodyFieldNameAndJsonNodes() throws Exception {
-        final JsonNode expectedPostBodyJson = objectMapper.readTree(EXPECTED_POST_BODY);
-        final JsonNode actualPostBodyJson = objectMapper.readTree(
+        final JsonNode expectedPostBodyJson = OBJECT_MAPPER.readTree(EXPECTED_POST_BODY);
+        final JsonNode actualPostBodyJson = OBJECT_MAPPER.readTree(
                 GraphQLRequestParamUtils.toPostBodyString(new GraphQLRequestParams(OPERATION_NAME, QUERY, VARIABLES)));
         return Stream.of(
                 arguments(GraphQLRequestParamUtils.OPERATION_NAME_FIELD, expectedPostBodyJson, actualPostBodyJson),
@@ -124,8 +129,8 @@ class TestGraphQLRequestParamUtils {
 
     @Test
     void testVariablesToGetParamValue() throws Exception {
-        assertEquals(objectMapper.readTree(EXPECTED_VARIABLES_GET_PARAM_VALUE),
-                objectMapper.readTree(GraphQLRequestParamUtils.variablesToGetParamValue(params.getVariables())));
+        assertEquals(OBJECT_MAPPER.readTree(EXPECTED_VARIABLES_GET_PARAM_VALUE),
+                OBJECT_MAPPER.readTree(GraphQLRequestParamUtils.variablesToGetParamValue(params.getVariables())));
     }
 
     @Test

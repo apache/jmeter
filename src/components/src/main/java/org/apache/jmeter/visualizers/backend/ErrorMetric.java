@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.visualizers.backend;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.SampleResult;
@@ -88,7 +90,10 @@ public class ErrorMetric {
 
     @Override
     public int hashCode() {
-        return getResponseCode().toLowerCase().hashCode() + getResponseMessage().toLowerCase().hashCode();
+        int hash = 1;
+        hash = 31 * hash + getResponseCode().toLowerCase(Locale.ROOT).hashCode();
+        hash = 31 * hash + getResponseMessage().toLowerCase(Locale.ROOT).hashCode();
+        return hash;
     }
 
 }

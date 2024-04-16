@@ -53,9 +53,8 @@ Optionally you can generate an Eclipse project by running
 The steps to import the sources (based on Eclipse 2019-06) into Eclipse are as follows:
 
 1. Install `Eclipse IDE for Java Developers`
-1. Install the Groovy Eclipse plugin and select Groovy Compiler 2.4 (some tests are written in Groovy)
-1. Install `Kotlin for Eclipse` plugin (builds scripts are written in Kotlin)
-1. Make sure you have a Java 8 compatible JDK configured in your workspace
+1. Install `Kotlin for Eclipse` plugin (JMeter code uses Java and Kotlin)
+1. Make sure you have a Java 17 compatible JDK configured in your workspace
 1. Open `File->Import...`
 1. Select `Existing Gradle Project` and click `Next`
 1. Read `How to experience the best Gradle integration` and click `Next`

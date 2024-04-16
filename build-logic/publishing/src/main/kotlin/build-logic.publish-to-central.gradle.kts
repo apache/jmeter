@@ -1,3 +1,7 @@
+import groovy.util.Node
+import groovy.util.NodeList
+import java.lang.IllegalStateException
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,6 +21,7 @@
 
 plugins {
     id("maven-publish")
+    id("build-logic.build-params")
     id("build-logic.publish-to-tmp-maven-repo")
 }
 
@@ -24,6 +29,10 @@ val repoUrl = "https://github.com/apache/jmeter"
 
 publishing {
     publications.withType<MavenPublication>().configureEach {
+        if (buildParameters.suppressPomMetadataWarnings) {
+            suppressPomMetadataWarningsFor("testFixturesApiElements")
+            suppressPomMetadataWarningsFor("testFixturesRuntimeElements")
+        }
         // Use the resolved versions in pom.xml
         // Gradle might have different resolution rules, so we set the versions
         // that were used in Gradle build/test.
@@ -35,11 +44,35 @@ publishing {
         plugins.withId("java") {
             versionMapping {
                 usage(Usage.JAVA_API) {
-                    fromResolutionOf("runtimeClasspath")
+                    fromResolutionResult()
                 }
             }
         }
         pom {
+            withXml {
+                val pom = asNode()
+                // Gradle maps test fixtures to optional=true, so we remove those elements form the POM to avoid
+                // confusion
+                // See https://github.com/gradle/gradle/issues/14936
+                // See https://github.com/apache/jmeter/issues/6030
+                val dependencies = pom["dependencies"] as NodeList
+                for (dependenciesNode in dependencies) {
+                    dependenciesNode as Node
+                    for (dependency in (dependenciesNode["dependency"] as NodeList)) {
+                        dependency as Node
+                        if ((dependency["optional"] as NodeList).firstOrNull()?.let { it as? Node }
+                                ?.text() == "true") {
+                            dependenciesNode.remove(dependency)
+                            continue
+                        }
+                        if ((dependency["version"] as NodeList).isEmpty()) {
+                            throw IllegalStateException(
+                                "Generated pom.xml contains a dependency without <version> for dependency ${dependency}. " +
+                                "Technically speaking, the version is not mandatory, however, having explicit versions would make it easier to review the dependencies in pom")
+                        }
+                    }
+                }
+            }
             name.set("Apache JMeter ${project.name.replaceFirstChar { it.titlecaseChar() }}")
             // This code might be executed before project-related build.gradle.kts is evaluated
             // So we delay access to project.description

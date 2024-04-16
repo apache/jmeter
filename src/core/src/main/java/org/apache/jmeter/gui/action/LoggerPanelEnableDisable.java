@@ -26,10 +26,13 @@ import javax.swing.UIManager;
 
 import org.apache.jmeter.gui.GuiPackage;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Hide / unhide LoggerPanel.
  *
  */
+@AutoService(Command.class)
 public class LoggerPanelEnableDisable extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();

@@ -184,7 +184,8 @@ public class ClientJMeterEngine implements JMeterEngine {
         }
     }
 
-    private static final HashMap<String, String> toHashMapOfString(Properties properties) {
+    @SuppressWarnings("NonApiType")
+    private static HashMap<String, String> toHashMapOfString(Properties properties) {
         return new HashMap<>(
                 properties.entrySet().stream().collect(Collectors.toMap(
                         e -> e.getKey().toString(),

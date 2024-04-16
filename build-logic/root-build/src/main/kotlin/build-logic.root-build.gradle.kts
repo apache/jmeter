@@ -26,6 +26,7 @@ plugins {
     id("com.github.vlsi.ide")
     id("org.nosphere.apache.rat")
     id("org.jetbrains.gradle.plugin.idea-ext")
+    kotlin("jvm") apply false
 }
 
 ide {
@@ -64,4 +65,10 @@ if (buildParameters.coverage) {
             }
         }
     }
+}
+
+tasks.register("parameters") {
+    group = HelpTasksPlugin.HELP_GROUP
+    description = "Displays the supported build parameters."
+    dependsOn(gradle.includedBuild("build-logic").task(":build-parameters:parameters"))
 }

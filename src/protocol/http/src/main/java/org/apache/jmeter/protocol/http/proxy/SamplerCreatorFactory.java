@@ -17,14 +17,12 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import java.io.IOException;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,41 +57,27 @@ public class SamplerCreatorFactory {
      * Initialize factory from classpath
      */
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        try {
-            List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    JMeterUtils.getSearchPaths(),
-                    new Class[] {SamplerCreator.class });
-            for (String strClassName : listClasses) {
-                try {
-                    if(log.isDebugEnabled()) {
-                        log.debug("Loading class: {}", strClassName);
+        for (SamplerCreator creator : JMeterUtils.loadServicesAndScanJars(
+                SamplerCreator.class,
+                ServiceLoader.load(SamplerCreator.class),
+                Thread.currentThread().getContextClassLoader(),
+                new LogAndIgnoreServiceLoadExceptionHandler(log)
+        )) {
+            try {
+                String[] contentTypes = creator.getManagedContentTypes();
+                for (String contentType : contentTypes) {
+                    log.debug("Registering samplerCreator {} for content type:{}",
+                            creator.getClass().getName(), contentType);
+                    SamplerCreator oldSamplerCreator = samplerCreatorMap.put(contentType, creator);
+                    if (oldSamplerCreator != null) {
+                        log.warn("A sampler creator was already registered for:{}, class:{}, it will be replaced",
+                                contentType, oldSamplerCreator.getClass());
                     }
-                    Class<?> commandClass = Class.forName(strClassName);
-                    if (!Modifier.isAbstract(commandClass.getModifiers())) {
-                        if(log.isDebugEnabled()) {
-                            log.debug("Instantiating: {}", commandClass.getName());
-                        }
-                        SamplerCreator creator = (SamplerCreator) commandClass.getDeclaredConstructor().newInstance();
-                        String[] contentTypes = creator.getManagedContentTypes();
-                        for (String contentType : contentTypes) {
-                            if(log.isDebugEnabled()) {
-                                log.debug("Registering samplerCreator {} for content type:{}",
-                                        commandClass.getName(), contentType);
-                            }
-                            SamplerCreator oldSamplerCreator = samplerCreatorMap.put(contentType, creator);
-                            if(oldSamplerCreator!=null) {
-                                log.warn("A sampler creator was already registered for:{}, class:{}, it will be replaced",
-                                        contentType, oldSamplerCreator.getClass());
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error("Exception registering {} with implementation:{}",
-                            SamplerCreator.class.getName(),strClassName, e);
                 }
+            } catch (Exception e) {
+                log.error("Exception registering {} with implementation:{}",
+                        SamplerCreator.class.getName(), creator.getClass(), e);
             }
-        } catch (IOException e) {
-            log.error("Exception finding implementations of {}", SamplerCreator.class, e);
         }
     }
 

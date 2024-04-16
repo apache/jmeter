@@ -280,4 +280,12 @@ public class HTTPSampleResult extends SampleResult {
         list.add(getUrlAsString());
         return list;
     }
+
+    @Override
+    protected void appendDebugParameters(StringBuilder sb) {
+        super.appendDebugParameters(sb);
+        sb.append(", method='").append(method).append('\'');
+        sb.append(", redirectLocation='").append(redirectLocation).append('\'');
+        sb.append(", queryString='").append(queryString).append('\'');
+    }
 }

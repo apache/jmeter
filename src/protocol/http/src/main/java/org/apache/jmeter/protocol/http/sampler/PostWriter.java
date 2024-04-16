@@ -17,21 +17,23 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 
 /**
@@ -48,7 +50,9 @@ public class PostWriter {
 
     private static final byte[] CRLF = { 0x0d, 0x0A };
 
-    public static final String ENCODING = StandardCharsets.ISO_8859_1.name();
+    private static final String CRLF_STRING = "\r\n";
+
+    public static final String ENCODING = StandardCharsets.UTF_8.name();
 
     /** The form data that is going to be sent as url encoded */
     protected byte[] formDataUrlEncoded;
@@ -56,6 +60,9 @@ public class PostWriter {
     protected byte[] formDataPostBody;
     /** The boundary string for multipart */
     private final String boundary;
+
+    private final String multipartDivider;
+    private final byte[] multipartDividerBytes;
 
     /**
      * Constructor for PostWriter.
@@ -73,6 +80,8 @@ public class PostWriter {
      */
     public PostWriter(String boundary) {
         this.boundary = boundary;
+        this.multipartDivider = DASH_DASH + boundary;
+        this.multipartDividerBytes = multipartDivider.getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -93,9 +102,6 @@ public class PostWriter {
         HTTPFileArg[] files = sampler.getHTTPFiles();
 
         String contentEncoding = sampler.getContentEncoding();
-        if(contentEncoding == null || contentEncoding.length() == 0) {
-            contentEncoding = ENCODING;
-        }
 
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
@@ -110,11 +116,16 @@ public class PostWriter {
             postedBody.append(new String(formDataPostBody, contentEncoding));
 
             // Add any files
-            for (int i=0; i < files.length; i++) {
-                HTTPFileArg file = files[i];
+            for (HTTPFileArg file : files) {
+                out.write(multipartDividerBytes);
+                out.write(CRLF);
+                postedBody.append(multipartDivider);
+                postedBody.append("\r\n");
+
                 // First write the start multipart file
                 final String headerValue = file.getHeader();
-                byte[] header = headerValue.getBytes(ENCODING);
+                // TODO: reuse the bytes prepared in org.apache.jmeter.protocol.http.sampler.PostWriter.setHeaders
+                byte[] header = headerValue.getBytes(contentEncoding);
                 out.write(header);
                 // Retrieve the formatted data using the same encoding used to create it
                 postedBody.append(headerValue);
@@ -122,22 +133,15 @@ public class PostWriter {
                 writeFileToStream(file.getPath(), out);
                 // We just add placeholder text for file content
                 postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
-                // Write the end of multipart file
-                byte[] fileMultipartEndDivider = getFileMultipartEndDivider();
-                out.write(fileMultipartEndDivider);
-                // Retrieve the formatted data using the same encoding used to create it
-                postedBody.append(new String(fileMultipartEndDivider, ENCODING));
-                if(i + 1 < files.length) {
-                    out.write(CRLF);
-                    postedBody.append(new String(CRLF, SampleResult.DEFAULT_HTTP_ENCODING));
-                }
+                out.write(CRLF);
+                postedBody.append(CRLF_STRING);
             }
-            // Write end of multipart
-            byte[] multipartEndDivider = getMultipartEndDivider();
-            out.write(multipartEndDivider);
-            postedBody.append(new String(multipartEndDivider, ENCODING));
-
-            out.flush();
+            // Write end of multipart: --, boundary, --, CRLF
+            out.write(multipartDividerBytes);
+            out.write(DASH_DASH_BYTES);
+            out.write(CRLF);
+            postedBody.append(multipartDivider);
+            postedBody.append("--\r\n");
             out.close();
         }
         else {
@@ -171,9 +175,6 @@ public class PostWriter {
     public void setHeaders(URLConnection connection, HTTPSamplerBase sampler) throws IOException {
         // Get the encoding to use for the request
         String contentEncoding = sampler.getContentEncoding();
-        if(contentEncoding == null || contentEncoding.length() == 0) {
-            contentEncoding = ENCODING;
-        }
         long contentLength = 0L;
         HTTPFileArg[] files = sampler.getHTTPFiles();
 
@@ -187,9 +188,7 @@ public class PostWriter {
 
             // Write the form section
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-            // First the multipart start divider
-            bos.write(getMultipartDivider());
+            OutputStreamWriter osw = new OutputStreamWriter(bos, contentEncoding);
             // Add any parameters
             for (JMeterProperty jMeterProperty : sampler.getArguments()) {
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
@@ -197,49 +196,40 @@ public class PostWriter {
                 if (arg.isSkippable(parameterName)) {
                     continue;
                 }
-                // End the previous multipart
-                bos.write(CRLF);
                 // Write multipart for parameter
-                writeFormMultipart(bos, parameterName, arg.getValue(), contentEncoding, sampler.getDoBrowserCompatibleMultipart());
+                writeFormMultipart(osw, contentEncoding, parameterName, arg.getValue(), sampler.getDoBrowserCompatibleMultipart());
             }
-            // If there are any files, we need to end the previous multipart
-            if(files.length > 0) {
-                // End the previous multipart
-                bos.write(CRLF);
-            }
-            bos.flush();
+            osw.flush();
             // Keep the content, will be sent later
             formDataPostBody = bos.toByteArray();
-            bos.close();
             contentLength = formDataPostBody.length;
 
             // Now we just construct any multipart for the files
             // We only construct the file multipart start, we do not write
             // the actual file content
-            for (int i=0; i < files.length; i++) {
+            for (int i = 0; i < files.length; i++) {
+                bos.reset();
+                contentLength += multipartDividerBytes.length + CRLF.length;
                 HTTPFileArg file = files[i];
                 // Write multipart for file
-                bos = new ByteArrayOutputStream();
-                writeStartFileMultipart(bos, file.getPath(), file.getParamName(), file.getMimeType());
-                bos.flush();
-                String header = bos.toString(contentEncoding);// TODO is this correct?
+                writeStartFileMultipart(osw, contentEncoding, file.getPath(), file.getParamName(), file.getMimeType());
+                osw.flush();
+                // Technically speaking, we should refrain from decoding the header to string
+                // since we will have to encode it again when sending the request
+                // However, HTTPFileArg#setHeaer(byte[]) does not exist yet
+                String header = bos.toString(contentEncoding);
                 // If this is not the first file we can't write its header now
                 // for simplicity we always save it, even if there is only one file
                 file.setHeader(header);
-                bos.close();
-                contentLength += header.length();
+                contentLength += bos.size();
                 // Add also the length of the file content
                 File uploadFile = new File(file.getPath());
                 contentLength += uploadFile.length();
-                // And the end of the file multipart
-                contentLength += getFileMultipartEndDivider().length;
-                if(i+1 < files.length) {
-                    contentLength += CRLF.length;
-                }
+                contentLength += CRLF.length;
             }
 
             // Add the end of multipart
-            contentLength += getMultipartEndDivider().length;
+            contentLength += multipartDividerBytes.length + DASH_DASH_BYTES.length + CRLF.length;
 
             // Set the content length
             connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
@@ -343,59 +333,32 @@ public class PostWriter {
     }
 
     /**
-     * Get the bytes used to separate multiparts
-     * Encoded using ENCODING
-     *
-     * @return the bytes used to separate multiparts
-     * @throws IOException
-     */
-    private byte[] getMultipartDivider() throws IOException {
-        return (DASH_DASH + getBoundary()).getBytes(ENCODING);
-    }
-
-    /**
-     * Get the bytes used to end a file multipart
-     * Encoded using ENCODING
-     *
-     * @return the bytes used to end a file multipart
-     * @throws IOException
-     */
-    private byte[] getFileMultipartEndDivider() throws IOException{
-        byte[] ending = getMultipartDivider();
-        byte[] completeEnding = new byte[ending.length + CRLF.length];
-        System.arraycopy(CRLF, 0, completeEnding, 0, CRLF.length);
-        System.arraycopy(ending, 0, completeEnding, CRLF.length, ending.length);
-        return completeEnding;
-    }
-
-    /**
-     * Get the bytes used to end the multipart request
-     *
-     * @return the bytes used to end the multipart request
-     */
-    private static byte[] getMultipartEndDivider(){
-        byte[] ending = DASH_DASH_BYTES;
-        byte[] completeEnding = new byte[ending.length + CRLF.length];
-        System.arraycopy(ending, 0, completeEnding, 0, ending.length);
-        System.arraycopy(CRLF, 0, completeEnding, ending.length, CRLF.length);
-        return completeEnding;
-    }
-
-    /**
      * Write the start of a file multipart, up to the point where the
      * actual file content should be written
      */
-    private static void writeStartFileMultipart(OutputStream out, String filename,
+    private static void writeStartFileMultipart(
+            Writer out,
+            String contentEncoding,
+            String filePath,
             String nameField, String mimetype)
             throws IOException {
         write(out, "Content-Disposition: form-data; name=\""); // $NON-NLS-1$
-        write(out, nameField);
+        // See quoting in (line is wrapped to avoid checkstyle warnings)
+        // https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/network/form_data_encoder.cc
+        // ;l=142;drc=4cd749d0d82138ff31ed3a2bc5d925bb6d83fe16
+        write(out, ConversionUtils.percentEncode(nameField));
         write(out, "\"; filename=\"");// $NON-NLS-1$
-        write(out, new File(filename).getName());
+        String filename = new File(filePath).getName();
+        // See quoting in
+        // https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/network/form_data_encoder.cc
+        // ;l=190;drc=4cd749d0d82138ff31ed3a2bc5d925bb6d83fe16
+        Charset charset = Charset.forName(contentEncoding);
+        write(out, ConversionUtils.percentEncode(ConversionUtils.encodeWithEntities(filename, charset)));
         writeln(out, "\""); // $NON-NLS-1$
-        writeln(out, "Content-Type: " + mimetype); // $NON-NLS-1$
+        write(out, "Content-Type: "); // $NON-NLS-1$
+        writeln(out, mimetype);
         writeln(out, "Content-Transfer-Encoding: binary"); // $NON-NLS-1$
-        out.write(CRLF);
+        out.write(CRLF_STRING);
     }
 
     /**
@@ -412,7 +375,7 @@ public class PostWriter {
         // uploads were being done. Could be fixed by increasing the evacuation
         // ratio in bin/jmeter[.bat], but this is better.
         int read;
-        try (InputStream in = new BufferedInputStream(new FileInputStream(filename))) {
+        try (InputStream in = Files.newInputStream(Paths.get(filename))) {
             while ((read = in.read(buf)) > 0) {
                 out.write(buf, 0, read);
             }
@@ -422,32 +385,33 @@ public class PostWriter {
     /**
      * Writes form data in multipart format.
      */
-    private void writeFormMultipart(OutputStream out, String name, String value, String charSet,
+    private void writeFormMultipart(
+            Writer out,
+            String contentEncoding,
+            String name, String value,
             boolean browserCompatibleMultipart)
         throws IOException {
-        writeln(out, "Content-Disposition: form-data; name=\"" + name + "\""); // $NON-NLS-1$ // $NON-NLS-2$
+        writeln(out, multipartDivider);
+        write(out, "Content-Disposition: form-data; name=\"");
+        write(out, ConversionUtils.percentEncode(name));
+        writeln(out, "\""); // $NON-NLS-1$ // $NON-NLS-2$
         if (!browserCompatibleMultipart){
-            writeln(out, "Content-Type: text/plain; charset=" + charSet); // $NON-NLS-1$
+            write(out, "Content-Type: text/plain; charset="); // $NON-NLS-1$
+            writeln(out, contentEncoding);
             writeln(out, "Content-Transfer-Encoding: 8bit"); // $NON-NLS-1$
         }
-        out.write(CRLF);
-        out.write(value.getBytes(charSet));
-        out.write(CRLF);
-        // Write boundary end marker
-        out.write(getMultipartDivider());
+        out.write(CRLF_STRING);
+        out.write(value);
+        out.write(CRLF_STRING);
     }
 
-    private static void write(OutputStream out, String value)
-    throws UnsupportedEncodingException, IOException
-    {
-        out.write(value.getBytes(ENCODING));
+    private static void write(Writer out, String value) throws IOException {
+        out.write(value);
     }
 
 
-    private static void writeln(OutputStream out, String value)
-    throws UnsupportedEncodingException, IOException
-    {
-        out.write(value.getBytes(ENCODING));
-        out.write(CRLF);
+    private static void writeln(Writer out, String value) throws IOException {
+        out.write(value);
+        out.write(CRLF_STRING);
     }
 }

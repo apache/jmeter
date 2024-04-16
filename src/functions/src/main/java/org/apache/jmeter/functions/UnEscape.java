@@ -28,6 +28,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Function to unescape any Java literals found in the String.
  * For example, it will turn a sequence of '\' and 'n' into a newline character,
@@ -36,6 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * @see StringEscapeUtils#unescapeJava(String)
  * @since 2.3.3
  */
+@AutoService(Function.class)
 public class UnEscape extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();

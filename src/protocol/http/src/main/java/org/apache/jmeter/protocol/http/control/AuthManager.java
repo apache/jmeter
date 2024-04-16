@@ -472,7 +472,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @param credentialsProvider provider which should be set up
      * @param localhost name of the workstation to be used for {@link NTCredentials}
      */
-    public static void setupCredentials(Authorization auth, URL url,
+    public void setupCredentials(Authorization auth, URL url,
             HttpClientContext localContext,
             CredentialsProvider credentialsProvider,
             String localhost) {

@@ -29,6 +29,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 // @see org.apache.jmeter.functions.PackageTest for unit tests
 
 /**
@@ -45,6 +47,7 @@ import org.slf4j.LoggerFactory;
  * is opened and used for all threads.
  * @since 2.0.3
  */
+@AutoService(Function.class)
 public class XPath extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(XPath.class);
 

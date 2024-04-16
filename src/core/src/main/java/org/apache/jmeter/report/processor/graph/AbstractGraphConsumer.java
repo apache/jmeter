@@ -105,6 +105,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      *
      * @return the group information
      */
+    @SuppressWarnings("NonApiType")
     protected final HashMap<String, GroupInfo> getGroupInfos() {
         return groupInfos;
     }

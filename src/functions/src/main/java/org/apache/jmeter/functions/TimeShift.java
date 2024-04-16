@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.auto.service.AutoService;
 
 /**
  * timeShifting Function permit to shift a date
@@ -65,6 +66,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *
  * @since 3.3
  */
+@AutoService(Function.class)
 public class TimeShift extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(TimeShift.class);
 

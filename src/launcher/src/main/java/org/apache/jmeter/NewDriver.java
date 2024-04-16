@@ -268,7 +268,7 @@ public final class NewDriver {
      * @param exceptionsInInit List of {@link Exception}
      * @return String
      */
-    private static String exceptionsToString(List<Exception> exceptionsInInit) {
+    private static String exceptionsToString(List<? extends Exception> exceptionsInInit) {
         StringBuilder builder = new StringBuilder();
         for (Exception exception : exceptionsInInit) {
             StringWriter stringWriter = new StringWriter();

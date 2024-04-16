@@ -17,7 +17,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +31,6 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -74,7 +74,7 @@ public class TestFileToString extends JMeterTestCase {
         params.add(new CompoundVariable(file.getAbsolutePath()));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assert.assertTrue(returnValue.indexOf("language=")>0);
+        assertTrue(returnValue.indexOf("language=")>0);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class TestFileToString extends JMeterTestCase {
         params.add(new CompoundVariable("UTF-8"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assert.assertTrue(returnValue.indexOf("language=")>0);
+        assertTrue(returnValue.indexOf("language=")>0);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class TestFileToString extends JMeterTestCase {
         params.add(new CompoundVariable("MY_FILE_AS_TEXT"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assert.assertTrue(returnValue.indexOf("language=")>0);
-        Assert.assertTrue(vars.get("MY_FILE_AS_TEXT").indexOf("language=")>0);
+        assertTrue(returnValue.indexOf("language=")>0);
+        assertTrue(vars.get("MY_FILE_AS_TEXT").indexOf("language=")>0);
     }
 }

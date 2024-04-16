@@ -22,6 +22,9 @@ import javax.swing.JPanel;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.config.gui.GraphQLUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -32,6 +35,27 @@ import org.apache.jmeter.util.JMeterUtils;
 public class GraphQLHTTPSamplerGui extends HttpTestSampleGui {
 
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public void assignDefaultValues(TestElement element) {
+        super.assignDefaultValues(element);
+        HTTPSamplerBaseSchema schema = HTTPSamplerBaseSchema.INSTANCE;
+        element.set(schema.getMethod(), HTTPConstants.POST);
+        element.set(schema.getPostBodyRaw(), true);
+        disableMultipart(element);
+    }
+
+    @Override
+    public void modifyTestElement(TestElement sampler) {
+        super.modifyTestElement(sampler);
+        disableMultipart(sampler);
+    }
+
+    private static void disableMultipart(TestElement sampler) {
+        HTTPSamplerBaseSchema schema = HTTPSamplerBaseSchema.INSTANCE;
+        sampler.set(schema.getUseBrowserCompatibleMultipart(), false);
+        sampler.set(schema.getUseMultipartPost(), false);
+    }
 
     public GraphQLHTTPSamplerGui() {
         super();

@@ -17,11 +17,11 @@
 
 package org.apache.jmeter.protocol.http.util.accesslog;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -66,7 +66,7 @@ public class TestSessionFilter {
     public void testIsFiltered() throws Exception {
         Map<String, CookieManager> cm = new ConcurrentHashMap<>();
         Set<CookieManager> inUse = Collections
-                .synchronizedSet(new HashSet<CookieManager>());
+                .synchronizedSet(Collections.newSetFromMap(new IdentityHashMap<>()));
         SessionFilter filter = new SessionFilter(cm, inUse);
         HTTPSampler sampler = new HTTPSampler();
         filter.isFiltered("1.2.3.4 ...", sampler);

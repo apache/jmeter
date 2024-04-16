@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 
 /**
  * <p>
@@ -51,6 +52,15 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
     private static final String SCOPE_VARIABLE_NAME = "Scope.variable"; // $NON-NLS-1$
     //- JMX
 
+    @Override
+    public AbstractScopedTestElementSchema getSchema() {
+        return AbstractScopedTestElementSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends AbstractScopedTestElement, ? extends AbstractScopedTestElementSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
 
     protected String getScopeName() {
         return SCOPE;
@@ -162,12 +172,12 @@ public abstract class AbstractScopedTestElement extends AbstractTestElement {
         return sampleList;
     }
 
-    private static void recurseResults(List<SampleResult> resultList, SampleResult sampleResult) {
+    private static void recurseResults(List<? super SampleResult> resultList, SampleResult sampleResult) {
         Collections.addAll(resultList, sampleResult.getSubResults());
         recurseResults(resultList, sampleResult.getSubResults(), 3);
     }
 
-    private static void recurseResults(List<SampleResult> resultList, SampleResult[] sampleResult, int level) {
+    private static void recurseResults(List<? super SampleResult> resultList, SampleResult[] sampleResult, int level) {
         if (level < 0) {
             return;
         }

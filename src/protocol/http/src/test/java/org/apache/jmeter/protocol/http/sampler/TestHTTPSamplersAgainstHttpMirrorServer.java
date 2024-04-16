@@ -17,23 +17,27 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Locale;
 import java.util.regex.Matcher;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit;
-import org.apache.jmeter.protocol.http.control.HttpMirrorServer;
-import org.apache.jmeter.protocol.http.control.TestHTTPMirrorThread;
+import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.protocol.http.control.HttpMirrorServerExtension;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -47,20 +51,19 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
-import org.junit.Assert;
-import org.junit.runner.Describable;
-import org.junit.runner.Description;
-
-import junit.extensions.TestSetup;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Class for performing actual samples for HTTPSampler and HTTPSampler2.
  * The samples are executed against the HttpMirrorServer, which is
  * started when the unit tests are executed.
  */
-public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit implements Describable {
+public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private static final java.util.regex.Pattern EMPTY_LINE_PATTERN = java.util.regex.Pattern.compile("^$",
             java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
     private static final int HTTP_SAMPLER = 0;
@@ -70,128 +73,104 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private static final String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
     private static final String US_ASCII = "US-ASCII"; // $NON-NLS-1$
 
+    private static final String DEFAULT_HTTP_CONTENT_ENCODING = StandardCharsets.UTF_8.name();
+
     private static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
 
     private static final byte[] CRLF = {0x0d, 0x0A};
     private static final int MIRROR_PORT = 8182; // Different from TestHTTPMirrorThread port and standard mirror server
+    @RegisterExtension
+    private static final HttpMirrorServerExtension HTTP_MIRROR_SERVER = new HttpMirrorServerExtension(MIRROR_PORT);
     private static byte[] TEST_FILE_CONTENT;
 
-    private static File temporaryFile;
+    @TempDir
+    private static File tempDirectory;
 
-    private final int item;
+    private static File temporaryFile;
 
     private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
             "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
-    public TestHTTPSamplersAgainstHttpMirrorServer(String arg0) {
-        super(arg0);
-        this.item = -1;
+
+    @BeforeAll
+    static void setup() throws IOException {
+        // Create the test file content
+        TEST_FILE_CONTENT = "some foo content &?=01234+56789-|\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85"
+                .getBytes(StandardCharsets.UTF_8);
+
+        // create a temporary file to make sure we always have a file to give to the PostWriter
+        // Wherever we are or whatever the current path is.
+        temporaryFile = new File(tempDirectory, "TestHTTPSamplersAgainstHttpMirrorServer.tmp");
+        Files.write(temporaryFile.toPath(), TEST_FILE_CONTENT);
     }
 
-    // additional ctor for processing tests which use int parameters
-    public TestHTTPSamplersAgainstHttpMirrorServer(String arg0, int item) {
-        super(arg0);
-        this.item = item;
-    }
-
-    @Override
-    public Description getDescription() {
-        return Description.createTestDescription(getClass(), getName() + " " + item);
-    }
-
-    // This is used to emulate @before class and @after class
-    public static Test suite() {
-        final TestSuite testSuite = new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class);
-        // Add parameterised tests. For simplicity we assume each has cases 0-10
-        for (int i = 0; i < 11; i++) {
-            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters", i));
-            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters3", i));
-
-            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testPostRequest_UrlEncoded", i));
-            testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testPostRequest_UrlEncoded3", i));
-        }
-
-        return new TestSetup(testSuite) {
-            private HttpMirrorServer httpServer;
-
-            @Override
-            protected void setUp() throws Exception {
-                httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
-                // Create the test file content
-                TEST_FILE_CONTENT = "some foo content &?=01234+56789-|\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85"
-                        .getBytes(StandardCharsets.UTF_8);
-
-                // create a temporary file to make sure we always have a file to give to the PostWriter
-                // Wherever we are or whatever the current path is.
-                temporaryFile = File.createTempFile("TestHTTPSamplersAgainstHttpMirrorServer", "tmp");
-                OutputStream output = new FileOutputStream(temporaryFile);
-                output.write(TEST_FILE_CONTENT);
-                output.flush();
-                output.close();
-            }
-
-            @Override
-            protected void tearDown() {
-                // Shutdown mirror server
-                httpServer.stopServer();
-                httpServer = null;
-                if (!temporaryFile.delete()) {
-                    Assert.fail("Could not delete file:" + temporaryFile.getAbsolutePath());
-                }
-            }
-        };
-    }
-
-    public void itemised_testPostRequest_UrlEncoded() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+    public void itemised_testPostRequest_UrlEncoded(int item) throws Exception {
         testPostRequest_UrlEncoded(HTTP_SAMPLER, ISO_8859_1, item);
     }
 
-    public void itemised_testPostRequest_UrlEncoded3() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+    public void itemised_testPostRequest_UrlEncoded3(int item) throws Exception {
         testPostRequest_UrlEncoded(HTTP_SAMPLER3, US_ASCII, item);
     }
 
+    @Test
     public void testPostRequest_FormMultipart_0() throws Exception {
-        testPostRequest_FormMultipart(HTTP_SAMPLER, ISO_8859_1);
+        testPostRequest_FormMultipart(HTTP_SAMPLER);
     }
 
+    @Test
     public void testPostRequest_FormMultipart3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
-        testPostRequest_FormMultipart(HTTP_SAMPLER3, US_ASCII);
+        testPostRequest_FormMultipart(HTTP_SAMPLER3);
     }
 
+    @Test
     public void testPostRequest_FileUpload() throws Exception {
-        testPostRequest_FileUpload(HTTP_SAMPLER, ISO_8859_1);
+        testPostRequest_FileUpload(HTTP_SAMPLER);
     }
 
+    @Test
     public void testPostRequest_FileUpload3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
-        testPostRequest_FileUpload(HTTP_SAMPLER3, US_ASCII);
+        testPostRequest_FileUpload(HTTP_SAMPLER3);
     }
 
+    @Test
     public void testPostRequest_BodyFromParameterValues() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER, ISO_8859_1);
     }
 
+    @Test
     public void testPostRequest_BodyFromParameterValues3() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
     }
 
+    @Test
     public void testGetRequest() throws Exception {
         testGetRequest(HTTP_SAMPLER);
     }
 
+    @Test
     public void testGetRequest3() throws Exception {
         testGetRequest(HTTP_SAMPLER3);
     }
 
-    public void itemised_testGetRequest_Parameters() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+    public void itemised_testGetRequest_Parameters(int item) throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER, item);
     }
 
-    public void itemised_testGetRequest_Parameters3() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+    public void itemised_testGetRequest_Parameters3(int item) throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER3, item);
     }
 
+    @Test
     public void testPutRequest_BodyFromParameterValues3() throws Exception {
         testPutRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
     }
@@ -352,7 +331,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         }
     }
 
-    private void testPostRequest_FormMultipart(int samplerType, String samplerDefaultEncoding) throws Exception {
+    private void testPostRequest_FormMultipart(int samplerType) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -365,7 +344,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         HTTPSampleResult res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -376,7 +355,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -389,7 +368,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -403,7 +382,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -418,7 +397,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         res = executeSampler(sampler);
         String expectedTitleValue = "mytitle/=";
         String expectedDescriptionValue = "mydescription   /\\";
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, expectedTitleValue,
                 descriptionField, expectedDescriptionValue);
 
@@ -431,7 +410,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         sampler.setDoMultipart(true);
         res = executeSampler(sampler);
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue);
 
@@ -459,12 +438,12 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         res = executeSampler(sampler);
         expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
         expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
-        checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFormMultipart(sampler, res,
                 contentEncoding, titleField, expectedTitleValue,
                 descriptionField, expectedDescriptionValue);
     }
 
-    private void testPostRequest_FileUpload(int samplerType, String samplerDefaultEncoding) throws Exception {
+    private void testPostRequest_FileUpload(int samplerType) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -480,7 +459,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 descriptionField, descriptionValue, fileField, temporaryFile,
                 fileMimeType);
         HTTPSampleResult res = executeSampler(sampler);
-        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFileUpload(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue, fileField, temporaryFile, fileMimeType,
                 TEST_FILE_CONTENT);
@@ -493,7 +472,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 descriptionField, descriptionValue, fileField, temporaryFile,
                 fileMimeType);
         res = executeSampler(sampler);
-        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFileUpload(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue, fileField, temporaryFile, fileMimeType,
                 TEST_FILE_CONTENT);
@@ -508,7 +487,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
                 descriptionField, descriptionValue, fileField, temporaryFile,
                 fileMimeType);
         res = executeSampler(sampler);
-        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding,
+        checkPostRequestFileUpload(sampler, res,
                 contentEncoding, titleField, titleValue, descriptionField,
                 descriptionValue, fileField, temporaryFile, fileMimeType,
                 TEST_FILE_CONTENT);
@@ -868,14 +847,13 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private void checkPostRequestFormMultipart(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
-            String samplerDefaultEncoding,
             String contentEncoding,
             String titleField,
             String titleValue,
             String descriptionField,
             String descriptionValue) throws IOException {
         if (contentEncoding == null || contentEncoding.isEmpty()) {
-            contentEncoding = samplerDefaultEncoding;
+            contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
@@ -913,7 +891,6 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private void checkPostRequestFileUpload(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
-            String samplerDefaultEncoding,
             String contentEncoding,
             String titleField,
             String titleValue,
@@ -924,7 +901,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             String fileMimeType,
             byte[] fileContent) throws IOException {
         if (contentEncoding == null || contentEncoding.isEmpty()) {
-            contentEncoding = samplerDefaultEncoding;
+            contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
@@ -948,7 +925,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         // Check response headers
         checkHeaderContentType(headersSent, "multipart/form-data" + "; boundary=" + boundaryString);
         byte[] bodySent = getBodySent(res.getResponseData());
-        assertNotNull("Sent body should not be null", bodySent);
+        assertNotNull(bodySent, "Sent body should not be null");
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody, bodySent, contentEncoding, res);
@@ -1177,10 +1154,10 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     private void checkHeaderContentType(String requestHeaders, String contentType) {
         if (contentType == null) {
             boolean isPresent = checkRegularExpression(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE + ": .*");
-            assertFalse("Expected no Content-Type in request headers:\n" + requestHeaders, isPresent);
+            assertFalse(isPresent, "Expected no Content-Type in request headers:\n" + requestHeaders);
         } else {
             boolean typeOK = isInRequestHeaders(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE, contentType);
-            assertTrue("Expected type:" + contentType + " in request headers:\n" + requestHeaders, typeOK);
+            assertTrue(typeOK, "Expected type:" + contentType + " in request headers:\n" + requestHeaders);
         }
     }
 

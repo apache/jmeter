@@ -18,32 +18,31 @@
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.FileNotFoundException;
 
-import org.apache.jmeter.junit.JMeterTestCaseJUnit;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * Test cases for Functions
  */
-public class PackageTest extends JMeterTestCaseJUnit {
+public class PackageTest extends JMeterTestCase {
 
     private static final Logger log = LoggerFactory.getLogger(PackageTest.class);
-
-    public PackageTest(String arg0) {
-        super(arg0);
-    }
 
     // Create the BeanShell function and set its parameters.
     private static BeanShell BSHFParams(String p1, String p2, String p3) throws Exception {
@@ -52,49 +51,20 @@ public class PackageTest extends JMeterTestCaseJUnit {
         return bsh;
     }
 
-    public static Test suite() throws Exception {
-        TestSuite allsuites = new TestSuite("Function PackageTest");
-
-        if (!BeanShellInterpreter.isInterpreterPresent()) {
-            final String msg = "BeanShell jar not present, tests ignored";
-            log.warn(msg);
-        } else {
-            TestSuite bsh = new TestSuite("BeanShell");
-            bsh.addTest(new PackageTest("BSH1"));
-            allsuites.addTest(bsh);
-        }
-
-
-        // Reset files
-
-        TestSuite xpath = new TestSuite("XPath");
-        xpath.addTest(new PackageTest("XPathtestColumns"));
-        xpath.addTest(new PackageTest("XPathtestDefault"));
-        xpath.addTest(new PackageTest("XPathtestNull"));
-        xpath.addTest(new PackageTest("XPathtestrowNum"));
-        xpath.addTest(new PackageTest("XPathEmpty"));
-        xpath.addTest(new PackageTest("XPathFile"));
-        xpath.addTest(new PackageTest("XPathFile1"));
-        xpath.addTest(new PackageTest("XPathFile2"));
-        xpath.addTest(new PackageTest("XPathNoFile"));
-
-        allsuites.addTest(xpath);
-
-        return allsuites;
-    }
-
     private JMeterContext jmctx = null;
 
     private JMeterVariables vars = null;
 
-    @Override
+    @BeforeEach
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         jmctx.setVariables(new JMeterVariables());
         vars = jmctx.getVariables();
     }
 
+    @Test
     public void BSH1() throws Exception {
+        assumeTrue(BeanShellInterpreter.isInterpreterPresent(), "BeanShell interpreter is needed for the test");
         String fn = "src/test/resources/org/apache/jmeter/functions/testfiles/BeanShellTest.bsh";
 
         assertThrows(InvalidVariableException.class, () -> BSHFParams(null, null, null));
@@ -160,10 +130,12 @@ public class PackageTest extends JMeterTestCaseJUnit {
 
     // XPathFileContainer tests
 
+    @Test
     public void XPathtestNull() throws Exception {
         assertThrows(FileNotFoundException.class, () -> new XPathFileContainer("nosuch.xml", "/"));
     }
 
+    @Test
     public void XPathtestrowNum() throws Exception {
         XPathFileContainer f = new XPathFileContainer(getResourceFilePath("xpathfilecontainer.xml"), "/project/target/@name");
         assertNotNull(f);
@@ -181,10 +153,11 @@ public class PackageTest extends JMeterTestCaseJUnit {
         assertEquals(3, f.getNextRow());
     }
 
+    @Test
     public void XPathtestColumns() throws Exception {
         XPathFileContainer f = new XPathFileContainer(getResourceFilePath("xpathfilecontainer.xml"), "/project/target/@name");
         assertNotNull(f);
-        assertTrue("Not empty", f.size() > 0);
+        assertTrue(f.size() > 0, "Not empty");
         int last = 0;
         for (int i = 0; i < f.size(); i++) {
             last = f.nextRow();
@@ -194,33 +167,37 @@ public class PackageTest extends JMeterTestCaseJUnit {
 
     }
 
+    @Test
     public void XPathtestDefault() throws Exception {
         XPathFileContainer f = new XPathFileContainer(getResourceFilePath("xpathfilecontainer.xml"), "/project/@default");
         assertNotNull(f);
-        assertTrue("Not empty", f.size() > 0);
+        assertTrue(f.size() > 0, "Not empty");
         assertEquals("install", f.getXPathString(0));
 
     }
 
+    @Test
     public void XPathEmpty() throws Exception{
         XPath xp = setupXPath("","");
         String val=xp.execute();
-        assertEquals("",val);
+        assertEquals("", val);
         val=xp.execute();
-        assertEquals("",val);
+        assertEquals("", val);
         val=xp.execute();
-        assertEquals("",val);
+        assertEquals("", val);
     }
 
+    @Test
     public void XPathNoFile() throws Exception{
         XPath xp = setupXPath("no-such-file","");
         String val=xp.execute();
-        assertEquals("",val); // TODO - should check that error has been logged...
+        assertEquals("", val); // TODO - should check that error has been logged...
     }
 
+    @Test
     public void XPathFile() throws Exception{
         XPath xp = setupXPath("testfiles/XPathTest2.xml","note/body");
-        assertEquals("Don't forget me this weekend!",xp.execute());
+        assertEquals("Don't forget me this weekend!", xp.execute());
 
         xp = setupXPath("testfiles/XPathTest2.xml","//note2");
         assertEquals("", xp.execute());
@@ -229,29 +206,30 @@ public class PackageTest extends JMeterTestCaseJUnit {
         assertEquals("Tove", xp.execute());
     }
 
+    @Test
     public void XPathFile1() throws Exception{
         XPath xp = setupXPath("testfiles/XPathTest.xml","//user/@username");
-        assertEquals("u1",xp.execute());
-        assertEquals("u2",xp.execute());
-        assertEquals("u3",xp.execute());
-        assertEquals("u4",xp.execute());
-        assertEquals("u5",xp.execute());
-        assertEquals("u1",xp.execute());
+        assertEquals("u1", xp.execute());
+        assertEquals("u2", xp.execute());
+        assertEquals("u3", xp.execute());
+        assertEquals("u4", xp.execute());
+        assertEquals("u5", xp.execute());
+        assertEquals("u1", xp.execute());
     }
 
+    @Test
     public void XPathFile2() throws Exception{
         XPath xp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
         XPath xp1a = setupXPath("testfiles/XPathTest.xml","//user/@username");
         XPath xp2  = setupXPath("testfiles/XPathTest.xml","//user/@password");
         XPath xp2a = setupXPath("testfiles/XPathTest.xml","//user/@password");
-        assertEquals("u1",xp1.execute());
-        assertEquals("p1",xp2.execute());
-        assertEquals("p2",xp2.execute());
-        assertEquals("u2",xp1a.execute());
-        assertEquals("u3",xp1.execute());
-        assertEquals("u4",xp1.execute());
-        assertEquals("p3",xp2a.execute());
-
+        assertEquals("u1", xp1.execute());
+        assertEquals("p1", xp2.execute());
+        assertEquals("p2", xp2.execute());
+        assertEquals("u2", xp1a.execute());
+        assertEquals("u3", xp1.execute());
+        assertEquals("u4", xp1.execute());
+        assertEquals("p3", xp2a.execute());
     }
 
     private XPath setupXPath(String file, String expr) throws Exception{

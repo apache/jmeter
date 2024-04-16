@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 
 public class ConfigTestElement extends AbstractTestElement implements Serializable, ConfigElement {
     private static final long serialVersionUID = 240L;
@@ -30,6 +31,16 @@ public class ConfigTestElement extends AbstractTestElement implements Serializab
     public static final String PASSWORD = "ConfigTestElement.password"; //NOSONAR this is not a hardcoded password
 
     public ConfigTestElement() {
+    }
+
+    @Override
+    public ConfigTestElementSchema getSchema() {
+        return ConfigTestElementSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends ConfigTestElement, ? extends ConfigTestElementSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     @Override

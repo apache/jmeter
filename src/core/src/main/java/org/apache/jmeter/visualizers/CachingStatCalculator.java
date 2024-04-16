@@ -28,7 +28,7 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class CachingStatCalculator extends SamplingStatCalculator {
 
-    private final List<Sample> storedValues = Collections.synchronizedList(new ArrayList<Sample>());
+    private final List<Sample> storedValues = Collections.synchronizedList(new ArrayList<>());
 
     public CachingStatCalculator(String string) {
         super(string);

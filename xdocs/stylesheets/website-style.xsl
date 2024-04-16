@@ -38,7 +38,7 @@
   <xsl:param name="cssdir" select="concat($relative-path, '/css')" />
   <xsl:param name="apidir" select="concat($relative-path, '/api')" />
   <xsl:param name="jakarta-site" select="'https://jakarta.apache.org'" />
-  <xsl:param name="year" select="'2022'" />
+  <xsl:param name="year" select="'2024'" />
   <xsl:param name="max-img-width" select="'600'" />
 
   <!-- Output method -->
@@ -568,14 +568,14 @@
 
   <xsl:template match="pr">
     <a href="https://github.com/apache/jmeter/pull/{./text()}">
-      Pull request #<xsl:value-of select="./text()" />
+      PR#<xsl:value-of select="./text()" />
     </a>
     <xsl:call-template name="issue_separator"/>
   </xsl:template>
 
   <xsl:template match="issue">
     <a href="https://github.com/apache/jmeter/issues/{./text()}">
-      Issue #<xsl:value-of select="./text()" />
+      Issue#<xsl:value-of select="./text()" />
     </a>
     <xsl:call-template name="issue_separator"/>
   </xsl:template>

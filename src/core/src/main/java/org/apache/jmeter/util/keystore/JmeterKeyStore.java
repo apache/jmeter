@@ -225,7 +225,7 @@ public final class JmeterKeyStore {
         }
     }
 
-    private static String decodeSanList(Collection<List<?>> subjectAlternativeNames) {
+    private static String decodeSanList(Collection<? extends List<?>> subjectAlternativeNames) {
         List<Pair<String, String>> decodedEntries = new ArrayList<>();
         for (List<?> entry : subjectAlternativeNames) {
             Object indexData = entry.get(0);

@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
+import java.util.Locale;
 
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
@@ -133,7 +134,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
         Object source = evt.getSource();
         if (source instanceof ComboStringEditor) {
             ComboStringEditor cse = (ComboStringEditor) source;
-            String lang = cse.getAsText().toLowerCase();
+            String lang = cse.getAsText().toLowerCase(Locale.ROOT);
             textUI.setLanguage(lang);
         }
     }

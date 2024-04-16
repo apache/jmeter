@@ -80,17 +80,11 @@ val srcLicense by configurations.creating {
     isCanBeConsumed = false
 }
 
-val allTestClasses by configurations.creating {
-    isCanBeConsumed = true
-    isCanBeResolved = false
-}
-
 // Note: you can inspect final classpath (list of jars in the binary distribution)  via
 // gw dependencies --configuration runtimeClasspath
 dependencies {
     for (p in jars) {
         api(project(p))
-        allTestClasses(project(p, "testClasses"))
     }
 
     binLicense(project(":src:licenses", "binLicense"))
@@ -171,8 +165,16 @@ val verifyReleaseDependencies by tasks.registering {
     dependsOn(configurations.runtimeClasspath)
     val expectedLibs = file("src/dist/expected_release_jars.csv")
     inputs.file(expectedLibs)
-    val actualLibs = File(buildDir, "dist/expected_release_jars.csv")
+    inputs.property("updateExpectedJars", updateExpectedJars)
+    val actualLibs = layout.buildDirectory.file("dist/expected_release_jars.csv")
     outputs.file(actualLibs)
+    val ignoreJarsMismatch = version.toString().endsWith("-SNAPSHOT")
+    if (ignoreJarsMismatch || updateExpectedJars) {
+        // The task does not fail in case of -SNAPSHOT version, so we make the task never UP-TO-DATE
+        // in that case. Otherwise, the task never executes on the second request, even if the user runs with
+        // -PupdateExpectedJars
+        outputs.upToDateWhen { false }
+    }
     doLast {
         val caseInsensitive: Comparator<String> = compareBy(String.CASE_INSENSITIVE_ORDER, { it })
 
@@ -231,13 +233,14 @@ val verifyReleaseDependencies by tasks.registering {
             sb.append(" ").append(dep)
         }
         val newline = System.getProperty("line.separator")
-        actualLibs.writeText(
+        val actualLibsFile = actualLibs.get().asFile
+        actualLibsFile.writeText(
             libs.map { "${it.value},${it.key}" }.joinToString(newline, postfix = newline)
         )
         if (updateExpectedJars) {
             println("Updating ${expectedLibs.relativeTo(rootDir)}")
-            actualLibs.copyTo(expectedLibs, overwrite = true)
-        } else if (version.toString().endsWith("-SNAPSHOT")) {
+            actualLibsFile.copyTo(expectedLibs, overwrite = true)
+        } else if (ignoreJarsMismatch) {
             // Renovate requires self-hosted runner for executing postUpgradeTasks,
             // so we can't make Renovate to update expected_release_jars.csv at the moment
             logger.lifecycle(sb.toString())
@@ -313,13 +316,13 @@ fun createAnakiaTask(
     excludes: Array<String>,
     includes: Array<String>
 ): TaskProvider<Task> {
-    val outputDir = "$buildDir/docs/$taskName"
+    val outputDir = layout.buildDirectory.dir("docs/$taskName").get().asFile
 
     val prepareProps = tasks.register("prepareProperties$taskName") {
         // AnakiaTask can't use relative paths, and it forbids ../, so we create a dedicated
         // velocity.properties file that contains absolute path
         inputs.file(velocityProperties)
-        val outputProps = "$buildDir/docProps/$taskName/velocity.properties"
+        val outputProps = layout.buildDirectory.file("docProps/$taskName/velocity.properties").get().asFile
         outputs.file(outputProps)
         doLast {
             // Unfortunately, Velocity does not use Java properties format.
@@ -426,7 +429,7 @@ val buildPrintableDoc = createAnakiaTask(
 val previewPrintableDocs by tasks.registering(Copy::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Creates preview of a printable documentation to build/docs/printable_preview"
-    into("$buildDir/docs/printable_preview")
+    into(layout.buildDirectory.dir("docs/printable_preview"))
     CrLfSpec().run {
         gitattributes(gitProps)
         printableDocumentation()
@@ -459,7 +462,7 @@ fun xslt(
 }
 
 val processSiteXslt by tasks.registering {
-    val outputDir = "$buildDir/siteXslt"
+    val outputDir = layout.buildDirectory.dir("siteXslt").get().asFile
     inputs.files(xdocs).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("xdocs")
     inputs.property("year", lastEditYear)
     outputs.dir(outputDir)
@@ -470,7 +473,7 @@ val processSiteXslt by tasks.registering {
             f.delete()
         }
         for (i in arrayOf("", "usermanual", "localising")) {
-            xslt(i, outputDir)
+            xslt(i, outputDir.absolutePath)
         }
     }
 }
@@ -487,7 +490,7 @@ fun CopySpec.siteLayout() {
 }
 
 // See https://github.com/gradle/gradle/issues/10960
-val previewSiteDir = buildDir.resolve("site")
+val previewSiteDir = layout.buildDirectory.dir("site")
 val previewSite by tasks.registering(Sync::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Creates preview of a site to build/docs/site"
@@ -495,6 +498,9 @@ val previewSite by tasks.registering(Sync::class) {
     CrLfSpec().run {
         gitattributes(gitProps)
         siteLayout()
+    }
+    doLast {
+        println("Site preview synchronized to ${previewSiteDir.get().file("index.html")}")
     }
 }
 
@@ -571,7 +577,7 @@ val javadocAggregate by tasks.registering(Javadoc::class) {
     // Aggregate javadoc needs to include generated JMeterVersion class
     // So we use delay computation of source files
     setSource(sourceSets.map { set -> set.map { it.allJava } })
-    setDestinationDir(file("$buildDir/docs/javadocAggregate"))
+    setDestinationDir(layout.buildDirectory.dir("docs/javadocAggregate").get().asFile)
 }
 
 // Generates distZip, distTar, distZipSource, and distTarSource tasks
@@ -627,6 +633,9 @@ val runGui by tasks.registering(JavaExec::class) {
     group = "Development"
     description = "Builds and starts JMeter GUI"
     dependsOn(createDist)
+    buildParameters.testJdk?.let {
+        javaLauncher.set(javaToolchains.launcherFor(it))
+    }
 
     workingDir = File(project.rootDir, "bin")
     mainClass.set("org.apache.jmeter.NewDriver")

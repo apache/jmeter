@@ -56,9 +56,12 @@ import org.apache.jorphan.reflect.Functor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Specializer panel to view a HTTP request parsed
  */
+@AutoService(RequestView.class)
 public class RequestViewHTTP implements RequestView {
 
     private static final Logger log = LoggerFactory.getLogger(RequestViewHTTP.class);
@@ -271,7 +274,7 @@ public class RequestViewHTTP implements RequestView {
      * @param headers the http request headers
      * @return true if the request is multipart
      */
-    private static boolean isMultipart(LinkedHashMap<String, String> headers) {
+    private static boolean isMultipart(Map<String, String> headers) {
         String contentType = headers.get(HTTPConstants.HEADER_CONTENT_TYPE);
         return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }

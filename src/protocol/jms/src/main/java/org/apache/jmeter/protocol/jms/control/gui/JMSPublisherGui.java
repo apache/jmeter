@@ -235,7 +235,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(jmsPropertiesPanel, "span, growx");
 
         mainPanel.add(msgChoice, "span");
-        fileEncoding = new JComboBox<String>(PublisherSampler.getSupportedEncodings());
+        fileEncoding = new JComboBox<>(PublisherSampler.getSupportedEncodings());
         fileEncoding.setEditable(true);
         mainPanel.add(JMeterUtils.labelFor(fileEncoding, "content_encoding"));
         mainPanel.add(fileEncoding, "span, growx");

@@ -191,7 +191,7 @@ public class SmtpSampler extends AbstractSampler {
     private long calculateMessageSize(Message message) throws IOException, MessagingException {
         if (getPropertyAsBoolean(MESSAGE_SIZE_STATS)) {
             // calculate message size
-            CountingOutputStream cs = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
+            CountingOutputStream cs = new CountingOutputStream(NullOutputStream.INSTANCE);
             message.writeTo(cs);
             return cs.getByteCount();
         } else {
@@ -333,7 +333,7 @@ public class SmtpSampler extends AbstractSampler {
     }
 
     @SuppressWarnings("JdkObsolete")
-    private static void writeHeaders(Enumeration<Header> headers, StringBuilder sb) {
+    private static void writeHeaders(Enumeration<? extends Header> headers, StringBuilder sb) {
         while (headers.hasMoreElements()) {
             Header header = headers.nextElement();
             sb.append(header.getName());

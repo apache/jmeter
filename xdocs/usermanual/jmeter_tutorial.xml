@@ -97,6 +97,7 @@ The folders inside of <code>apache-jmeter</code>
   <dt><code>lib/ext</code></dt><dd>contains the core jar files for JMeter and the protocols</dd>
   <dt><code>src</code></dt><dd>contains subdirectory for each protocol and component</dd>
   <dt><code>src/*/test</code></dt><dd>unit test related directory</dd>
+  <dt><code>src/testFixtures</code></dt><dd>Directory that contains test-related code that might be reused in other modules</dd>
   <dt><code>xdocs</code></dt><dd>XML files for documentation. JMeter generates its documentation from XML.</dd>
 </dl>
 
@@ -168,7 +169,49 @@ write.
 
 </subsection>
 
-<subsection name="&sect-num;.2 JMeter Gui – TestElement Contract" anchor="testelement-contract">
+  <subsection name="&sect-num;.2 JMeter Gui – Service lookup" anchor="service-lookup">
+    <p>
+      JMeter uses classpath scanning to detect plugins (e.g. functions, components, views). However, classpath scanning
+      is expensive,
+      so JMeter also provides a service lookup mechanism to allow plugins to be found without scanning the classpath.
+      That is if a plugin registers a Java service with <code>META-INF/services</code>, then JMeter won't need to scan
+      the classpath to find it.
+    </p>
+
+    <p>
+      Some of the existing features already use the new service lookup mechanism, but it is not yet used for all
+      features.
+      The interfaces that are supported for service loading are marked with
+      <code>org.apache.jorphan.reflect.JMeterService</code>
+      annotation.
+    </p>
+
+    <p>
+      Implementing a service the same as regular interface implementation, except you need to register the service
+      in a <code>META-INF/services/fully.qualified.interface.name</code>.
+      For instance you could use <code>@AutoService</code> to generate the file automatically at the build time.
+      Here's how <code>__counter</code> function is declared in JMeter itself:
+<source>
+import com.google.auto.service.AutoService;
+
+@AutoService(Function.class)
+public class IterationCounter extends AbstractFunction implements ThreadListener {
+</source>
+    </p>
+
+    <p>
+      For backward compatibility reasons, JMeter would still try searching the implementations with classpath scanning,
+      so you don't have to use <code>META-INF/services</code> for registering services. However, service lookup is much
+      faster, so exposing services would improve startup time, especially when there are many plugins.
+    </p>
+
+    <p>
+      As you add <code>META-INF/services</code> to your plugins, you can add <code>JMeter-Skip-Class-Scanning: true</code>
+      manifest attribute so JMeter knows there's no need to scan the jar as it provides all the plugins via services.
+    </p>
+  </subsection>
+
+<subsection name="&sect-num;.3 JMeter Gui – TestElement Contract" anchor="testelement-contract">
 
 <p>
 When writing any JMeter component, there are certain contracts you must be aware of – ways a
@@ -216,6 +259,10 @@ component. The resource will have to be entered into JMeters <code>messages.prop
 (and possibly translations as well).</li>
     </ol>
   </li>
+  <li>Override <code>org.apache.jmeter.gui.JMeterGUIComponent.makeTestElement</code> method so it returns
+  the appropriate <code>TestElement</code>. JMeter will use <code>makeTestElement</code> when user creates the element
+  from the UI. In most cases it should be just creating the test element like
+  <code>return new SetupThreadGroup()</code>.</li>
   <li>Create your GUI. Whatever style you like, layout your GUI. Your class ultimately extends
     <code>JPanel</code>, so your layout must be in your class's own <code>ContentPane</code>.
     Do not hook up GUI elements to your <code>TestElement</code> class via actions and events.
@@ -244,10 +291,15 @@ private void init() {
       </li>
     </ol>
   </li>
-  <li>Implement <code>public void configure(TestElement el)</code>
+  <li>Then you need to wire UI elements with the properties of the new <code>TestElement</code>. If you create
+  <code>TestElementSchema</code> for your test element (see <code>ThreadGroupSchema</code>), then you could use
+  automatic wiring with <code>PropertyEditorCollection</code></li>
+  <li>If you do not use schema for wiring properties to UI control, or if you have non-trivial controls,
+    you might customize <code>TestElement</code> properties to UI control mapping by overriding <code>public void configure(TestElement el)</code>
     <ol>
       <li>Be sure to call <code>super.configure(e)</code>. This will populate some of the data for you, like
-         the name of the element.</li>
+      the name of the element. Note: JMeter reuses UI elements when user changes the active element in test tree,
+      so you need to set all the text fields in <code>configure</code> method to avoid displaying stale contents.</li>
       <li>Use this method to set data into your GUI elements. Example:
 <source>
 public void configure(TestElement el) {
@@ -269,16 +321,18 @@ public void configure(TestElement el) {
 }
 </source>
       </li>
-      <li>Implement <code>public void modifyTestElement(TestElement e)</code>. This is where you
-         move the data from your GUI elements to the <code>TestElement</code>. It is the logical reverse of the
-         previous method.
+      <li>If you do not use schema for wiring UI controls to <code>TestElement</code> properties,
+         or if you want customized behavior, you might override <code>public void modifyTestElement(TestElement e)</code>.
+         It is the logical reverse of <code>configure</code> method.
          <ol>
-           <li>Call <code>super.configureTestElement(e)</code>. This will take care of some default data for
+           <li>Call <code>super.modifyTestElement(e)</code>. This will take care of some default data for
              you.</li>
+           <li>Note: in most cases, you want to treat "empty field" as "absent property", so make sure to
+           remove the property if the input field is empty.</li>
            <li>Example:
 <source>
 public void modifyTestElement(TestElement e) {
-    super.configureTestElement(e);
+    super.modifyTestElement(e);
     e.setProperty(new BooleanProperty(
             RegexExtractor.USEHEADERS,
             useHeaders.isSelected()));
@@ -296,16 +350,9 @@ public void modifyTestElement(TestElement e) {
            </li>
          </ol>
        </li>
-       <li>Implement <code>public TestElement createTestElement()</code>. This method should create a
-         new instance of your <code>TestElement</code> class, and then pass it to the <code>modifyTestElement(TestElement)</code>
-         method you made above
-<source>
-public TestElement createTestElement() {
-    RegexExtractor extractor = new RegexExtractor();
-    modifyTestElement(extractor);
-    return extractor;
-}
-</source>
+       <li>If your UI includes controls that do not map to <code>TestElement</code> properties (sliders, tabs),
+         then you might want to reset them when user switches the controls. You can do that by overriding
+         <code>clearGui()</code> method and resetting the controls there.
        </li>
     </ol>
   </li>
@@ -327,7 +374,7 @@ Writing Visualizers is somewhat of a special case, however.
 
 </subsection>
 
-<subsection name="&sect-num;.3 Writing a Visualizer" anchor="visualizer">
+<subsection name="&sect-num;.4 Writing a Visualizer" anchor="visualizer">
 <note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
 a look at more up to date components like:
 <ul>
@@ -537,7 +584,7 @@ added so that users can save a screen capture of any given visualizer.
 
 </subsection>
 
-<subsection name="&sect-num;.4 GraphListener" anchor="graphlistener">
+<subsection name="&sect-num;.5 GraphListener" anchor="graphlistener">
 <note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
 a look at more up to date components like:
 <ul>
@@ -571,7 +618,7 @@ implement the interface, please look at <code>GraphVisualizer</code>.
 
 </subsection>
 
-<subsection name="&sect-num;.5 Writing Custom Graphs" anchor="custom-graphs">
+<subsection name="&sect-num;.6 Writing Custom Graphs" anchor="custom-graphs">
 <note>Load Testing in GUI mode being a bad practice, you should not develop such plugin. Have
 a look at more up to date components like:
 <ul>
@@ -715,7 +762,7 @@ and predictable.
 
 </subsection>
 
-<subsection name="&sect-num;.6 Making a TestBean Plugin For JMeter" anchor="testbean">
+<subsection name="&sect-num;.7 Making a TestBean Plugin For JMeter" anchor="testbean">
 
 <p>
 In this part, we will go through the process of creating a simple component for JMeter that uses
@@ -860,7 +907,7 @@ p.setPropertyEditorClass(FileEditor.class);
 
 </subsection>
 
-<subsection name="&sect-num;.6 Building JMeter" anchor="building">
+<subsection name="&sect-num;.8 Building JMeter" anchor="building">
 
 <p>
 JMeter uses Gradle to compile and build the distribution. JMeter has

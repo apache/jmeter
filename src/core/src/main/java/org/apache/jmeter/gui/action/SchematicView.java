@@ -47,10 +47,16 @@ import org.apache.jorphan.collections.HashTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Schematic view of Test Plan
  * @since 5.1
  */
+@AutoService({
+        Command.class,
+        MenuCreator.class
+})
 public class SchematicView extends AbstractAction implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(SchematicView.class);
     private static final String DEFAULT_XSL_FILE =

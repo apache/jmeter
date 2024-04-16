@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.gui.logging;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,6 +107,6 @@ public class TestGuiLogEventAppender {
     public void testSimpleLogging() throws Exception {
         final Logger log = LoggerFactory.getLogger(TestGuiLogEventAppender.class);
         log.info("logger created.");
-        assertTrue("Logging appender error: " + log4j2LevelErrorMessages, log4j2LevelErrorMessages.isEmpty());
+        assertTrue(log4j2LevelErrorMessages.isEmpty(), "Logging appender error: " + log4j2LevelErrorMessages);
     }
 }

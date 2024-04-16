@@ -597,7 +597,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     public int getCommunicationstyle() {
         JMeterProperty prop = getProperty(JMS_COMMUNICATION_STYLE);
-        return Integer.parseInt(prop.getStringValue());
+        return prop.getIntValue();
     }
 
     public String getCommunicationstyleString() {

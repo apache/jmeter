@@ -28,7 +28,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
-import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.Document;
@@ -49,9 +49,6 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
 
     private static final Logger log = LoggerFactory.getLogger(RegexExtractor.class);
 
-    // What to match against. N.B. do not change the string value or test plans will break!
-    private static final String MATCH_AGAINST = "RegexExtractor.useHeaders"; // $NON-NLS-1$
-
     /*
      * Permissible values:
      *  true - match against headers
@@ -70,23 +67,24 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public static final String USE_CODE = "code"; // $NON-NLS-1$
     public static final String USE_MESSAGE = "message"; // $NON-NLS-1$
 
-    private static final String REGEX_PROP = "RegexExtractor.regex"; // $NON-NLS-1$
-    private static final String REFNAME_PROP = "RegexExtractor.refname"; // $NON-NLS-1$
-    private static final String MATCH_NUMBER_PROP = "RegexExtractor.match_number"; // $NON-NLS-1$
-    private static final String DEFAULT_PROP = "RegexExtractor.default"; // $NON-NLS-1$
-    private static final String DEFAULT_EMPTY_VALUE_PROP = "RegexExtractor.default_empty_value"; // $NON-NLS-1$
-    private static final String TEMPLATE_PROP = "RegexExtractor.template"; // $NON-NLS-1$
-
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
 
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
-
-    private static final boolean DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE = false;
 
     private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
             "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     private transient List<Object> template;
+
+    @Override
+    public RegexExtractorSchema getSchema() {
+        return RegexExtractorSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends RegexExtractor, ? extends RegexExtractorSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
 
     /**
      * Parses the response data using regular expressions and saving the results
@@ -313,7 +311,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     }
 
     private static int matchStrings(int matchNumber, Perl5Matcher matcher,
-            Pattern pattern, List<MatchResult> matches, int found,
+            Pattern pattern, List<? super MatchResult> matches, int found,
             String inputString) {
         PatternMatcherInput input = new PatternMatcherInput(inputString);
         while (matchNumber <=0 || found != matchNumber) {
@@ -329,7 +327,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     }
 
     private static int matchStrings(int matchNumber, java.util.regex.Pattern pattern,
-            List<java.util.regex.MatchResult> matches, int found,
+            List<? super java.util.regex.MatchResult> matches, int found,
             String inputString) {
         Matcher matcher = pattern.matcher(inputString);
         while (matchNumber <=0 || found != matchNumber) {
@@ -513,7 +511,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *            the entry number in the list
      * @return MatchResult
      */
-    private static MatchResult getCorrectMatch(List<MatchResult> matches, int entry) {
+    private static MatchResult getCorrectMatch(List<? extends MatchResult> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){
@@ -528,7 +526,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         return matches.get(entry - 1);
     }
 
-    private static java.util.regex.MatchResult getCorrectMatchJavaRegex(List<java.util.regex.MatchResult> matches, int entry) {
+    private static java.util.regex.MatchResult getCorrectMatchJavaRegex(List<? extends java.util.regex.MatchResult> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){
@@ -548,7 +546,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param regex The string representation of the regex
      */
     public void setRegex(String regex) {
-        setProperty(REGEX_PROP, regex);
+        set(getSchema().getRegularExpression(), regex);
     }
 
     /**
@@ -556,7 +554,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return string representing the regex
      */
     public String getRegex() {
-        return getPropertyAsString(REGEX_PROP);
+        return get(getSchema().getRegularExpression());
     }
 
     /**
@@ -564,7 +562,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param refName prefix of the variables to be used
      */
     public void setRefName(String refName) {
-        setProperty(REFNAME_PROP, refName);
+        set(getSchema().getReferenceName(), refName);
     }
 
     /**
@@ -572,7 +570,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return The prefix of the variables to be used
      */
     public String getRefName() {
-        return getPropertyAsString(REFNAME_PROP);
+        return get(getSchema().getReferenceName());
     }
 
     /**
@@ -585,19 +583,19 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *            random match should be used.
      */
     public void setMatchNumber(int matchNumber) {
-        setProperty(new IntegerProperty(MATCH_NUMBER_PROP, matchNumber));
+        set(getSchema().getMatchNumber(), matchNumber);
     }
 
     public void setMatchNumber(String matchNumber) {
-        setProperty(MATCH_NUMBER_PROP, matchNumber);
+        set(getSchema().getMatchNumber(), matchNumber);
     }
 
     public int getMatchNumber() {
-        return getPropertyAsInt(MATCH_NUMBER_PROP);
+        return get(getSchema().getMatchNumber());
     }
 
     public String getMatchNumberAsString() {
-        return getPropertyAsString(MATCH_NUMBER_PROP);
+        return getString(getSchema().getMatchNumber());
     }
 
     /**
@@ -606,7 +604,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param defaultValue The default value for the variable
      */
     public void setDefaultValue(String defaultValue) {
-        setProperty(DEFAULT_PROP, defaultValue);
+        set(getSchema().getDefault(), defaultValue);
     }
 
     /**
@@ -615,7 +613,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param defaultEmptyValue The default value for the variable
      */
     public void setDefaultEmptyValue(boolean defaultEmptyValue) {
-        setProperty(DEFAULT_EMPTY_VALUE_PROP, defaultEmptyValue, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);
+        set(getSchema().getDefaultIsEmpty(), defaultEmptyValue);
     }
 
     /**
@@ -625,7 +623,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return The default value for the variable
      */
     public String getDefaultValue() {
-        return getPropertyAsString(DEFAULT_PROP);
+        return get(getSchema().getDefault());
     }
 
     /**
@@ -633,57 +631,61 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @return true if we should set default value to "" if variable cannot be extracted
      */
     public boolean isEmptyDefaultValue() {
-        return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE_PROP, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);
+        return get(getSchema().getDefaultIsEmpty());
     }
 
     public void setTemplate(String template) {
-        setProperty(TEMPLATE_PROP, template);
+        set(getSchema().getTemplate(), template);
     }
 
     public String getTemplate() {
-        return getPropertyAsString(TEMPLATE_PROP);
+        return get(getSchema().getTemplate());
+    }
+
+    private String getMatchTarget() {
+        return get(getSchema().getMatchTarget());
     }
 
     public boolean useHeaders() {
-        return USE_HDRS.equalsIgnoreCase( getPropertyAsString(MATCH_AGAINST));
+        return USE_HDRS.equalsIgnoreCase(getMatchTarget());
     }
 
     public boolean useRequestHeaders() {
-        return USE_REQUEST_HDRS.equalsIgnoreCase(getPropertyAsString(MATCH_AGAINST));
+        return USE_REQUEST_HDRS.equalsIgnoreCase(getMatchTarget());
     }
 
     // Allow for property not yet being set (probably only applies to Test cases)
     public boolean useBody() {
-        String prop = getPropertyAsString(MATCH_AGAINST);
+        String prop = getMatchTarget();
         return prop.isEmpty() || USE_BODY.equalsIgnoreCase(prop);// $NON-NLS-1$
     }
 
     public boolean useUnescapedBody() {
-        String prop = getPropertyAsString(MATCH_AGAINST);
+        String prop = getMatchTarget();
         return USE_BODY_UNESCAPED.equalsIgnoreCase(prop);// $NON-NLS-1$
     }
 
     public boolean useBodyAsDocument() {
-        String prop = getPropertyAsString(MATCH_AGAINST);
+        String prop = getMatchTarget();
         return USE_BODY_AS_DOCUMENT.equalsIgnoreCase(prop);// $NON-NLS-1$
     }
 
     public boolean useUrl() {
-        String prop = getPropertyAsString(MATCH_AGAINST);
+        String prop = getMatchTarget();
         return USE_URL.equalsIgnoreCase(prop);
     }
 
     public boolean useCode() {
-        String prop = getPropertyAsString(MATCH_AGAINST);
+        String prop = getMatchTarget();
         return USE_CODE.equalsIgnoreCase(prop);
     }
 
     public boolean useMessage() {
-        String prop = getPropertyAsString(MATCH_AGAINST);
+        String prop = getMatchTarget();
         return USE_MESSAGE.equalsIgnoreCase(prop);
     }
 
     public void setUseField(String actionCommand) {
-        setProperty(MATCH_AGAINST,actionCommand);
+        set(getSchema().getMatchTarget(), actionCommand);
     }
 }

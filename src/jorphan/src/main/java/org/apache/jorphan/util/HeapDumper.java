@@ -108,7 +108,7 @@ public class HeapDumper {
 
     /**
      * Dumps live objects from the heap to the outputFile file in the same format as the hprof heap dump.
-     * <p>
+     *
      * @see #dumpHeap(String, boolean)
      * @param fileName name of the heap dump file. Must be creatable, i.e. must not exist.
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
@@ -122,7 +122,7 @@ public class HeapDumper {
      * <p>
      * Creates the dump using the file name: dump_yyyyMMdd_hhmmss_SSS.hprof
      * The dump is created in the current directory.
-     * <p>
+     * </p>
      * @see #dumpHeap(boolean)
      * @return the name of the dump file that was created
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
@@ -136,7 +136,7 @@ public class HeapDumper {
      * <p>
      * Creates the dump using the file name: dump_yyyyMMdd_hhmmss_SSS.hprof
      * The dump is created in the current directory.
-     * <p>
+     * </p>
      * @see #dumpHeap(String, boolean)
      * @param live true id only live objects are to be dumped.
      *
@@ -152,7 +152,7 @@ public class HeapDumper {
      * The dump is created in the specified directory.
      * <p>
      * Creates the dump using the file name: dump_yyyyMMdd_hhmmss_SSS.hprof
-     * <p>
+     * </p>
      * @see #dumpHeap(String, boolean)
      * @param basedir File object for the target base directory.
      * @param live true id only live objects are to be dumped.

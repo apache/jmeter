@@ -359,7 +359,7 @@ public class XPathUtil {
      */
     public static void putValuesForXPathInList(Document document,
             String xPathQuery,
-            List<String> matchStrings, boolean fragment) throws TransformerException {
+            List<? super String> matchStrings, boolean fragment) throws TransformerException {
         putValuesForXPathInList(document, xPathQuery, matchStrings, fragment, -1);
     }
 
@@ -372,7 +372,7 @@ public class XPathUtil {
      * @param matchNumber match number
      * @throws TransformerException when the internally used xpath engine fails
      */
-    public static void putValuesForXPathInList(Document document, String xPathQuery, List<String> matchStrings, boolean fragment, int matchNumber)
+    public static void putValuesForXPathInList(Document document, String xPathQuery, List<? super String> matchStrings, boolean fragment, int matchNumber)
             throws TransformerException {
         String val = null;
         XObject xObject = XPathAPI.eval(document, xPathQuery, getPrefixResolver(document));
@@ -414,7 +414,7 @@ public class XPathUtil {
 
     public static void putValuesForXPathInListUsingSaxon(
             String xmlFile, String xPathQuery,
-            List<String> matchStrings, boolean fragment,
+            List<? super String> matchStrings, boolean fragment,
             int matchNumber, String namespaces)
             throws SaxonApiException, FactoryConfigurationError {
 

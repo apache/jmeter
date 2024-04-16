@@ -44,6 +44,7 @@ public class MongoScriptRunner {
      * @throws Exception
      *             when evaluation on the database fails
      */
+    @SuppressWarnings("deprecation")
     public Object evaluate(DB db, String script)
         throws Exception {
 

@@ -23,10 +23,14 @@ plugins {
 }
 
 dependencies {
-    testImplementation("junit:junit")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.hamcrest:hamcrest")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+}
+
+plugins.withId("java-test-fixtures") {
+    dependencies {
+        "testFixturesImplementation"("org.junit.jupiter:junit-jupiter")
+    }
 }
 
 tasks.configureEach<Test> {

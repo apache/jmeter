@@ -17,13 +17,15 @@
 
 package org.apache.jmeter.timers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.UUID;
 
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.TestJMeterContextService;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.ScriptingTestElement;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
@@ -32,11 +34,11 @@ class ConstantThroughputTimerTest {
     @Test
     void testTimer1() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
-        Assertions.assertEquals(0, timer.getCalcMode());// Assume this thread only
+        assertEquals(0, timer.getCalcMode());// Assume this thread only
         timer.setThroughput(60.0);// 1 per second
         long start = System.currentTimeMillis();
         long delay = timer.delay(); // Initialise
-        Assertions.assertEquals(0, delay);
+        assertEquals(0, delay);
         // The test tries to check if the calculated delay is correct.
         // If the build machine is busy, then the sleep(500) may take longer in
         // which case the calculated delay should be shorter.
@@ -55,39 +57,39 @@ class ConstantThroughputTimerTest {
     private static void assertAlmostEquals(long expected, long actual, long delta) {
         long actualDelta = Math.abs(actual - expected);
         if (actualDelta > delta) {
-            Assertions.fail(() -> "Expected " + expected + " within delta of " + delta
+            fail("Expected " + expected + " within delta of " + delta
                     + ", but got " + actual + " which is a delta of " + actualDelta);
         }
     }
     @Test
     void testTimer2() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
-        Assertions.assertEquals(0, timer.getCalcMode());// Assume this thread only
+        assertEquals(0, timer.getCalcMode());// Assume this thread only
         timer.setThroughput(60.0);// 1 per second
-        Assertions.assertEquals(1000, timer.calculateCurrentTarget(0)); // Should delay for 1 second
+        assertEquals(1000, timer.calculateCurrentTarget(0)); // Should delay for 1 second
         timer.setThroughput(60000.0);// 1 per milli-second
-        Assertions.assertEquals(1, timer.calculateCurrentTarget(0)); // Should delay for 1 milli-second
+        assertEquals(1, timer.calculateCurrentTarget(0)); // Should delay for 1 milli-second
     }
 
     @Test
     void testTimer3() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
         timer.setMode(ConstantThroughputTimer.Mode.AllActiveThreads); //$NON-NLS-1$ - all threads
-        Assertions.assertEquals(1, timer.getCalcMode());// All threads
+        assertEquals(1, timer.getCalcMode());// All threads
         for(int i=1; i<=10; i++){
             TestJMeterContextService.incrNumberOfThreads();
         }
-        Assertions.assertEquals(10, JMeterContextService.getNumberOfThreads());
+        assertEquals(10, JMeterContextService.getNumberOfThreads());
         timer.setThroughput(600.0);// 10 per second
-        Assertions.assertEquals(1000, timer.calculateCurrentTarget(0)); // Should delay for 1 second
+        assertEquals(1000, timer.calculateCurrentTarget(0)); // Should delay for 1 second
         timer.setThroughput(600000.0);// 10 per milli-second
-        Assertions.assertEquals(1, timer.calculateCurrentTarget(0)); // Should delay for 1 milli-second
+        assertEquals(1, timer.calculateCurrentTarget(0)); // Should delay for 1 milli-second
         for(int i=1; i<=990; i++){
             TestJMeterContextService.incrNumberOfThreads();
         }
-        Assertions.assertEquals(1000, JMeterContextService.getNumberOfThreads());
+        assertEquals(1000, JMeterContextService.getNumberOfThreads());
         timer.setThroughput(60000000.0);// 1000 per milli-second
-        Assertions.assertEquals(1, timer.calculateCurrentTarget(0)); // Should delay for 1 milli-second
+        assertEquals(1, timer.calculateCurrentTarget(0)); // Should delay for 1 milli-second
     }
 
     @Test
@@ -97,13 +99,13 @@ class ConstantThroughputTimerTest {
         BeanShellTimer timer = new BeanShellTimer();
 
         timer.setScript("\"60\"");
-        Assertions.assertEquals(60, timer.delay());
+        assertEquals(60, timer.delay());
 
         timer.setScript("60");
-        Assertions.assertEquals(60, timer.delay());
+        assertEquals(60, timer.delay());
 
         timer.setScript("5*3*4");
-        Assertions.assertEquals(60, timer.delay());
+        assertEquals(60, timer.delay());
     }
 
     @Test
@@ -113,13 +115,13 @@ class ConstantThroughputTimerTest {
         timer.setCacheKey(UUID.randomUUID().toString());
 
         timer.setScript("\"60\"");
-        Assertions.assertEquals(60, timer.delay());
+        assertEquals(60, timer.delay());
 
         timer.setScript("60");
-        Assertions.assertEquals(60, timer.delay());
+        assertEquals(60, timer.delay());
 
         timer.setScript("5*3*4");
-        Assertions.assertEquals(60, timer.delay());
+        assertEquals(60, timer.delay());
     }
 
     @Test
@@ -127,14 +129,13 @@ class ConstantThroughputTimerTest {
         UniformRandomTimer timer = new UniformRandomTimer();
         timer.setDelay("1000");
         timer.setRange(100d);
-        timer.iterationStart(null);
         long delay = timer.delay();
         assertBetween(1000, 1100, delay);
     }
 
     private static void assertBetween(long expectedLow, long expectedHigh, long actual) {
         if (actual < expectedLow || actual > expectedHigh) {
-            Assertions.fail(() -> "delay not in expected range: expected " + actual
+            fail(() -> "delay not in expected range: expected " + actual
                     + " to be within " + expectedLow + " and " + expectedHigh);
         }
     }
@@ -142,8 +143,7 @@ class ConstantThroughputTimerTest {
     void testConstantTimer() throws Exception {
         ConstantTimer timer = new ConstantTimer();
         timer.setDelay("1000");
-        timer.iterationStart(null);
-        Assertions.assertEquals(1000, timer.delay());
+        assertEquals(1000, timer.delay());
     }
 
     @Test
@@ -151,7 +151,6 @@ class ConstantThroughputTimerTest {
         PoissonRandomTimer timer = new PoissonRandomTimer();
         timer.setDelay("300");
         timer.setRange(100d);
-        timer.iterationStart(null);
         long delay = timer.delay();
         assertBetween(356, 457, delay);
     }
@@ -161,7 +160,6 @@ class ConstantThroughputTimerTest {
         PoissonRandomTimer timer = new PoissonRandomTimer();
         timer.setDelay("300");
         timer.setRange(30d);
-        timer.iterationStart(null);
         long delay = timer.delay();
         assertBetween(305, 362, delay);
     }

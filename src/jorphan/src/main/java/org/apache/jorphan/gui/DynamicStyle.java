@@ -60,7 +60,7 @@ public class DynamicStyle {
      * @return input component (e.g. for fluent APIs)
      */
     @API(since = "5.3", status = API.Status.EXPERIMENTAL)
-    public <T extends JComponent> T withDynamic(T component, Consumer<T> onUpdateUi) {
+    public <T extends JComponent> T withDynamic(T component, Consumer<? super T> onUpdateUi) {
         // Explicit component update is required since the component already exists
         // and we can't want to wait for the next LaF change
         onUpdateUi.accept(component);
@@ -183,7 +183,7 @@ public class DynamicStyle {
         }
     }
 
-    private static void collectComponents(Component root, List<Component> components) {
+    private static void collectComponents(Component root, List<? super Component> components) {
         if (root == null) {
             // E.g. getTabComponentAt might return null
             // https://stackoverflow.com/questions/988734/jtabbedpane-gettabcomponentatint-returning-null

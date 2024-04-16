@@ -28,9 +28,9 @@ public final class GlobalUndoableEdit extends AbstractUndoableEdit {
     private static final long serialVersionUID = -4964577622742131354L;
     private final UndoHistoryItem item;
     private final UndoHistoryItem previous;
-    private final Consumer<UndoHistoryItem> loader;
+    private final Consumer<? super UndoHistoryItem> loader;
 
-    public GlobalUndoableEdit(UndoHistoryItem item, UndoHistoryItem previous, Consumer<UndoHistoryItem> loader) {
+    public GlobalUndoableEdit(UndoHistoryItem item, UndoHistoryItem previous, Consumer<? super UndoHistoryItem> loader) {
         this.item = item;
         this.previous = previous;
         this.loader = loader;

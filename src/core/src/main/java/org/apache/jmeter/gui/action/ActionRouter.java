@@ -20,17 +20,13 @@ package org.apache.jmeter.gui.action;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.CodeSource;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
@@ -38,7 +34,7 @@ import javax.swing.SwingUtilities;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.apache.jorphan.util.JMeterError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -221,7 +217,7 @@ public final class ActionRouter implements ActionListener {
      * @param listener {@link ActionListener}
      * @param actionListeners {@link Set} of {@link ActionListener}
      */
-    private static void removeActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
+    private static void removeActionListener(Class<?> action, ActionListener listener, Map<? super String, Set<ActionListener>> actionListeners) {
         if (action != null) {
             Set<ActionListener> set = actionListeners.get(action.getName());
             if (set != null) {
@@ -251,7 +247,7 @@ public final class ActionRouter implements ActionListener {
      * @param listener {@link ActionListener}
      * @param actionListeners {@link Set}
      */
-    private static void addActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
+    private static void addActionListener(Class<?> action, ActionListener listener, Map<? super String, Set<ActionListener>> actionListeners) {
         if (action != null) {
             Set<ActionListener> set = actionListeners.get(action.getName());
             if (set == null) {
@@ -297,7 +293,7 @@ public final class ActionRouter implements ActionListener {
      * @param e {@link ActionEvent}
      * @param actionListeners {@link Set}
      */
-    private static void actionPerformed(Class<? extends Command> action, ActionEvent e, Map<String, Set<ActionListener>> actionListeners) {
+    private static void actionPerformed(Class<? extends Command> action, ActionEvent e, Map<String, ? extends Set<ActionListener>> actionListeners) {
         if (action != null) {
             Set<ActionListener> listenerSet = actionListeners.get(action.getName());
             if (listenerSet != null && !listenerSet.isEmpty()) {
@@ -307,34 +303,6 @@ public final class ActionRouter implements ActionListener {
                 }
             }
         }
-    }
-
-    private static List<String> findClassesThatExtend(String className, String excluding, String[] searchPath) throws IOException, ClassNotFoundException {
-
-        return ClassFinder.findClassesThatExtend(
-                searchPath, // strPathsOrJars - pathNames or jar files to search for classes
-                new Class[] { Class.forName(className) },
-                false, // innerClasses - should we include inner classes?
-                null, // contains - className should contain this string
-                // Ignore the classes which are specific to the reporting tool
-                excluding, // notContains - className should not contain this string
-                false); // annotations - true if classNames are annotations
-    }
-
-    private static Optional<String[]> getCodeSourceSearchPath() {
-        CodeSource codeSource = ActionRouter.class.getProtectionDomain().getCodeSource();
-        if (codeSource != null) {
-            try {
-                URL ownLocation = codeSource.getLocation();
-                File ownPath = new File(ownLocation.toURI());
-                if (ownPath.exists()) {
-                    return Optional.of(new String[] { ownPath.getAbsolutePath() });
-                }
-            } catch (URISyntaxException ex) {
-                log.debug("Can't get location for class sources", ex);
-            }
-        }
-        return Optional.empty();
     }
 
     /**
@@ -347,28 +315,19 @@ public final class ActionRouter implements ActionListener {
             return; // already done
         }
         try {
-            List<String> listClasses = findClassesThatExtend("org.apache.jmeter.gui.action.Command", // $NON-NLS-1$
-                    "org.apache.jmeter.report.gui", // $NON-NLS-1$
-                    JMeterUtils.getSearchPaths());
+            Collection<Command> commandServices = JMeterUtils.loadServicesAndScanJars(
+                    Command.class,
+                    ServiceLoader.load(Command.class),
+                    Thread.currentThread().getContextClassLoader(),
+                    new LogAndIgnoreServiceLoadExceptionHandler(log)
+            );
 
-            if (listClasses.isEmpty()) {
-                //fallback
-                Optional<String[]> codeSourceSearchPath = getCodeSourceSearchPath();
-                if (codeSourceSearchPath.isPresent()) {
-                    log.info("Using fallback search path");
-                    listClasses = findClassesThatExtend("org.apache.jmeter.gui.action.Command", // $NON-NLS-1$
-                            "org.apache.jmeter.report.gui", // $NON-NLS-1$
-                            codeSourceSearchPath.get());
-                }
+            if (commandServices.isEmpty()) {
+                String message = "No implementations of " + Command.class + " found. Please ensure the classpath contains JMeter commands";
+                log.error(message);
+                throw new JMeterError(message);
             }
-
-            if (listClasses.isEmpty()) {
-                log.error("!!!!!Uh-oh, didn't find any action handlers!!!!!");
-                throw new JMeterError("No action handlers found - check JMeterHome and libraries");
-            }
-            for (String strClassName : listClasses) {
-                Class<?> commandClass = Class.forName(strClassName);
-                Command command = (Command) commandClass.getDeclaredConstructor().newInstance();
+            for (Command command : commandServices) {
                 for (String commandName : command.getActionNames()) {
                     Set<Command> commandObjects = commands.computeIfAbsent(commandName, k -> new HashSet<>());
                     commandObjects.add(command);

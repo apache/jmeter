@@ -25,7 +25,7 @@ import org.apiguardian.api.API
 
 @API(status = API.Status.EXPERIMENTAL, since = "5.5")
 public class OpenModelThreadGroupController : GenericController(), IteratingController {
-    public companion object {
+    private companion object {
         private const val serialVersionUID: Long = 1L
     }
 

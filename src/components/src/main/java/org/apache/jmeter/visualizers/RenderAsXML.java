@@ -53,6 +53,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(ResultRenderer.class)
 public class RenderAsXML extends SamplerResultTab
     implements ResultRenderer {
 
@@ -149,7 +152,7 @@ public class RenderAsXML extends SamplerResultTab
         }
 
         @SuppressWarnings("JdkObsolete")
-        private static void applyToChildren(TreePath parent, Consumer<TreePath> method) {
+        private static void applyToChildren(TreePath parent, Consumer<? super TreePath> method) {
             TreeNode node = (TreeNode) parent.getLastPathComponent();
             Enumeration<?> e = node.children();
             while (e.hasMoreElements()) {

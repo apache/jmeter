@@ -42,10 +42,13 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * About Command. It may be extended in the future to add a list of installed
  * protocols, config options, etc.
  */
+@AutoService(Command.class)
 public class AboutCommand extends AbstractAction {
     private static final Set<String> commandSet;
 

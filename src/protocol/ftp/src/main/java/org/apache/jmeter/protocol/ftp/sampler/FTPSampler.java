@@ -237,7 +237,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                                 }
                             }
                             if (target == null){
-                                target = NullOutputStream.NULL_OUTPUT_STREAM;
+                                target = NullOutputStream.INSTANCE;
                             }
                             input = ftp.retrieveFileStream(remote);
                             if (input == null){// Could not access file or other error
