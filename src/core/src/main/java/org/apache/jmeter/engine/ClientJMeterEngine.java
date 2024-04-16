@@ -66,9 +66,9 @@ public class ClientJMeterEngine implements JMeterEngine {
             port = Integer.parseInt(portAsString);
         }
         Registry registry = LocateRegistry.getRegistry(
-               host,
-               port,
-               RmiUtils.createClientSocketFactory());
+                host,
+                port,
+                RmiUtils.createClientSocketFactory());
         Remote remobj = registry.lookup(name);
         if (remobj instanceof RemoteJMeterEngine){
             final RemoteJMeterEngine rje = (RemoteJMeterEngine) remobj;
@@ -129,10 +129,10 @@ public class ClientJMeterEngine implements JMeterEngine {
         JMeterContextService.clearTotalThreads();
         HashTree testTree = test;
 
+        PreCompiler compiler = null;
         synchronized(testTree) {
-            PreCompiler compiler = new PreCompiler(true);
+            compiler = new PreCompiler(true);
             testTree.traverse(compiler);  // limit the changes to client only test elements
-            JMeterContextService.initClientSideVariables(compiler.getClientSideVariables());
             testTree.traverse(new TurnElementsOn());
             testTree.traverse(new ConvertListeners());
         }
@@ -144,7 +144,7 @@ public class ClientJMeterEngine implements JMeterEngine {
              * Add fix for Deadlocks, see:
              *
              * See https://bz.apache.org/bugzilla/show_bug.cgi?id=48350
-            */
+             */
             File baseDirRelative = FileServer.getFileServer().getBaseDirRelative();
             String scriptName = FileServer.getFileServer().getScriptName();
             synchronized(LOCK)
@@ -163,6 +163,13 @@ public class ClientJMeterEngine implements JMeterEngine {
             } catch (RemoteException e) {
                 log.warn("Could not set properties: {}, error:{}", savep, e.getMessage(), e);
             }
+
+            synchronized(testTree) {
+                compiler.setMasterPass(true);
+                testTree.traverse(compiler);  // limit the changes to client only test elements
+                JMeterContextService.initClientSideVariables(compiler.getClientSideVariables());
+            }
+
             methodName="rrunTest()";
             remote.rrunTest();
             log.info("sent run command to {}", hostAndPort);
