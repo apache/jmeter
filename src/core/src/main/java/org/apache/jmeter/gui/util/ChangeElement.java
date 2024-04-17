@@ -22,6 +22,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -66,7 +67,7 @@ public final class ChangeElement {
         updateElement(threadGroup, guiPackage, currentNode);
     }
 
-    public static void controller(AbstractTestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+    public static void controller(GenericController newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         updateElement(newParent, guiPackage, currentNode);
     }
 

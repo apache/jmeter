@@ -382,9 +382,6 @@ public final class MenuFactory {
                 JMeterUtils.getResString("change_controller"),// $NON-NLS-1$
                 ActionNames.CHANGE_CONTROLLER));
 
-        pop.add(makeMenus(new String[]{CONTROLLERS},
-                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-                ActionNames.ADD_PARENT));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;

@@ -65,14 +65,6 @@ public class IncludeControllerGui extends AbstractControllerGui
         includePanel.clearGui();
     }
 
-    @Override
-    public JPopupMenu createPopupMenu() {
-        JPopupMenu menu = new JPopupMenu();
-        MenuFactory.addEditMenu(menu, true);
-        MenuFactory.addFileMenu(menu);
-        return menu;
-    }
-
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
         setBorder(makeBorder());
