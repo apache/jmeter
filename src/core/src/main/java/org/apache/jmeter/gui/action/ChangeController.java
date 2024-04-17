@@ -17,7 +17,8 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
