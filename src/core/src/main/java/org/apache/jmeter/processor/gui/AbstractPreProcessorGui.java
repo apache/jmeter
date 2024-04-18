@@ -31,7 +31,7 @@ public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent
 
     @Override
     public JPopupMenu createPopupMenu() {
-        return MenuFactory.getDefaultExtractorMenu();
+        return MenuFactory.getDefaultPreProcessorMenu();
     }
 
     @Override

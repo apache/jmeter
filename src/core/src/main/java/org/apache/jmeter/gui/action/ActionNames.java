@@ -39,6 +39,8 @@ public final class ActionNames {
     public static final String CHANGE_CONFIG_ELEMENT = "change_config_element"; // $NON-NLS-1$
     public static final String CHANGE_CONTROLLER = "change_controller"; // $NON-NLS-1$
     public static final String CHANGE_LISTENER = "change_listener"; // $NON-NLS-1$
+    public static final String CHANGE_PRE_PROCESSOR = "change_pre_processor";
+    public static final String CHANGE_POST_PROCESSOR = "change_post_processor";
     public static final String CHANGE_SAMPLER = "change_sampler"; // $NON-NLS-1$
     public static final String CHANGE_THREAD_GROUP = "change_thread_group";
     public static final String CHANGE_TIMER = "change_timer";

@@ -461,6 +461,26 @@ public final class MenuFactory {
         return pop;
     }
 
+    public static JPopupMenu getDefaultPreProcessorMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{PRE_PROCESSORS},
+                JMeterUtils.getResString("change_pre_processor"),// $NON-NLS-1$
+                ActionNames.CHANGE_PRE_PROCESSOR));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
+    }
+
+    public static JPopupMenu getDefaultPostProcessorMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{POST_PROCESSORS},
+                JMeterUtils.getResString("change_post_processor"),// $NON-NLS-1$
+                ActionNames.CHANGE_POST_PROCESSOR));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
+    }
+
     public static JPopupMenu getDefaultExtractorMenu() {
         return createDefaultPopupMenu();
     }

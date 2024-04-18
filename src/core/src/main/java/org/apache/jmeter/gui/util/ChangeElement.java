@@ -86,4 +86,12 @@ public final class ChangeElement {
     public static void assertion(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         updateElement((AbstractTestElement) newParent, guiPackage, currentNode);
     }
+
+    public static void preProcessor(AbstractTestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+        updateElement(newParent, guiPackage, currentNode);
+    }
+
+    public static void postProcessor(AbstractTestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+        updateElement(newParent, guiPackage, currentNode);
+    }
 }
