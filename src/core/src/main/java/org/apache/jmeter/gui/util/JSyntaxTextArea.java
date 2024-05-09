@@ -34,7 +34,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.gui.ui.TextComponentUI;
-import org.checkerframework.checker.guieffect.qual.UI;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -154,7 +153,13 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             jSyntaxTextArea.setCaretColor(UIManager.getColor("TextArea.caretForeground"));
             jSyntaxTextArea.setSelectionColor(UIManager.getColor("TextArea.selectionBackground"));
             jSyntaxTextArea.setSelectedTextColor(UIManager.getColor("TextArea.selectionForeground"));
-            jSyntaxTextArea.setHyperlinkForeground(UIManager.getColor("Hyperlink.linkColor"));
+            //jSyntaxTextArea.setDisabledTextColor(UIManager.getColor("textInactiveText"));
+            //jSyntaxTextArea.setSecondaryLanguageBackground(1, UIManager.getColor("TextArea.inactiveForeground"));
+            jSyntaxTextArea.setMarkAllHighlightColor(UIManager.getColor("textHighlight"));
+            //not set in all themes
+            if (UIManager.getColor("Hyperlink.linkColor") != null)
+                jSyntaxTextArea.setHyperlinkForeground(UIManager.getColor("Hyperlink.linkColor"));
+            //TODO: decide if needed
             //jSyntaxTextArea.setFont(UIManager.getFont("TextArea.font"));
         }
 
