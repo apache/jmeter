@@ -62,7 +62,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     private static final Logger log = LoggerFactory.getLogger(ConstantThroughputTimer.class);
     private static final AtomicLong PREV_TEST_STARTED = new AtomicLong(0L);
 
-    private static final double MILLISEC_PER_MIN = 60000.0;
+    private static final double MICROSEC_PER_MIN = 60000000.0;
 
     private static final Mode DEFAULT_CALC_MODE = Mode.ThisThreadOnly;
 
@@ -190,47 +190,47 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
         long delay;
         // N.B. we fetch the throughput each time, as it may vary during a test
-        double msPerRequest = MILLISEC_PER_MIN / getThroughput();
+        double usPerRequest = MICROSEC_PER_MIN / getThroughput();
         switch (getMode()) {
-        case AllActiveThreads: // Total number of threads
-            delay = Math.round(JMeterContextService.getNumberOfThreads() * msPerRequest);
-            break;
+            case AllActiveThreads: // Total number of threads
+                delay = Math.round(JMeterContextService.getNumberOfThreads() * usPerRequest);
+                break;
 
-        case AllActiveThreadsInCurrentThreadGroup: // Active threads in this group
-            delay = Math.round(JMeterContextService.getContext().getThreadGroup().getNumberOfThreads() * msPerRequest);
-            break;
+            case AllActiveThreadsInCurrentThreadGroup: // Active threads in this group
+                delay = Math.round(JMeterContextService.getContext().getThreadGroup().getNumberOfThreads() * usPerRequest);
+                break;
 
-        case AllActiveThreads_Shared: // All threads - alternate calculation
-            delay = calculateSharedDelay(allThreadsInfo,Math.round(msPerRequest));
-            break;
+            case AllActiveThreads_Shared: // All threads - alternate calculation
+                delay = calculateSharedDelay(allThreadsInfo, Math.round(usPerRequest));
+                break;
 
-        case AllActiveThreadsInCurrentThreadGroup_Shared: //All threads in this group - alternate calculation
-            final org.apache.jmeter.threads.AbstractThreadGroup group =
-                JMeterContextService.getContext().getThreadGroup();
-            IdentityKey<AbstractThreadGroup> key = new IdentityKey<>(group);
-            ThroughputInfo groupInfo = threadGroupsInfoMap.get(key);
-            if (groupInfo == null) {
-                groupInfo = threadGroupsInfoMap.computeIfAbsent(key, (k) -> new ThroughputInfo());
-            }
-            delay = calculateSharedDelay(groupInfo,Math.round(msPerRequest));
-            break;
+            case AllActiveThreadsInCurrentThreadGroup_Shared: //All threads in this group - alternate calculation
+                final org.apache.jmeter.threads.AbstractThreadGroup group =
+                        JMeterContextService.getContext().getThreadGroup();
+                IdentityKey<AbstractThreadGroup> key = new IdentityKey<>(group);
+                ThroughputInfo groupInfo = threadGroupsInfoMap.get(key);
+                if (groupInfo == null) {
+                    groupInfo = threadGroupsInfoMap.computeIfAbsent(key, (k) -> new ThroughputInfo());
+                }
+                delay = calculateSharedDelay(groupInfo, Math.round(usPerRequest));
+                break;
 
-        case ThisThreadOnly:
-        default: // e.g. 0
-            delay = Math.round(msPerRequest); // i.e. * 1
-            break;
+            case ThisThreadOnly:
+            default: // e.g. 0
+                delay = Math.round(usPerRequest); // i.e. * 1
+                break;
         }
-        return delay;
+        return delay / 1000;
     }
 
-    private static long calculateSharedDelay(ThroughputInfo info, long milliSecPerRequest) {
-        final long now = System.currentTimeMillis();
+    private static long calculateSharedDelay(ThroughputInfo info, long microSecPerRequest) {
+        final long now = System.nanoTime() / 1000;
         final long calculatedDelay;
 
         //Synchronize on the info object's MUTEX to ensure
         //Multiple threads don't update the scheduled time simultaneously
         synchronized (info.MUTEX) {
-            final long nextRequestTime = info.lastScheduledTime + milliSecPerRequest;
+            final long nextRequestTime = info.lastScheduledTime + microSecPerRequest;
             info.lastScheduledTime = Math.max(now, nextRequestTime);
             calculatedDelay = info.lastScheduledTime - now;
         }
