@@ -57,7 +57,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     private static class ThroughputInfo{
         final Object MUTEX = new Object();
-        long lastScheduledTime = 0;
+        double lastScheduledTime = 0.0;
     }
     private static final Logger log = LoggerFactory.getLogger(ConstantThroughputTimer.class);
     private static final AtomicLong PREV_TEST_STARTED = new AtomicLong(0L);
@@ -201,7 +201,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
             break;
 
         case AllActiveThreads_Shared: // All threads - alternate calculation
-            delay = calculateSharedDelay(allThreadsInfo,Math.round(msPerRequest));
+            delay = calculateSharedDelay(allThreadsInfo, msPerRequest);
             break;
 
         case AllActiveThreadsInCurrentThreadGroup_Shared: //All threads in this group - alternate calculation
@@ -212,7 +212,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
             if (groupInfo == null) {
                 groupInfo = threadGroupsInfoMap.computeIfAbsent(key, (k) -> new ThroughputInfo());
             }
-            delay = calculateSharedDelay(groupInfo,Math.round(msPerRequest));
+            delay = calculateSharedDelay(groupInfo, msPerRequest);
             break;
 
         case ThisThreadOnly:
@@ -223,19 +223,19 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         return delay;
     }
 
-    private static long calculateSharedDelay(ThroughputInfo info, long milliSecPerRequest) {
-        final long now = System.currentTimeMillis();
-        final long calculatedDelay;
+    private static long calculateSharedDelay(ThroughputInfo info, double milliSecPerRequest) {
+        final double now = (double)System.currentTimeMillis();
+        final double calculatedDelay;
 
         //Synchronize on the info object's MUTEX to ensure
         //Multiple threads don't update the scheduled time simultaneously
         synchronized (info.MUTEX) {
-            final long nextRequestTime = info.lastScheduledTime + milliSecPerRequest;
+            final double nextRequestTime = info.lastScheduledTime + milliSecPerRequest;
             info.lastScheduledTime = Math.max(now, nextRequestTime);
             calculatedDelay = info.lastScheduledTime - now;
         }
 
-        return Math.max(calculatedDelay, 0);
+        return Math.round(Math.max(calculatedDelay, 0));
     }
 
     private void reset() {
