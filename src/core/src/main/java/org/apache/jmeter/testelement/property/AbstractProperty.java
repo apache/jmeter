@@ -108,11 +108,11 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public int getIntValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return 0;
         }
         try {
-            return Integer.parseInt(val);
+            return Integer.parseInt(val.trim());
         } catch (NumberFormatException e) {
             return 0;
         }
@@ -126,11 +126,11 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public long getLongValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return 0;
         }
         try {
-            return Long.parseLong(val);
+            return Long.parseLong(val.trim());
         } catch (NumberFormatException e) {
             return 0;
         }
@@ -144,11 +144,11 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public double getDoubleValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return 0;
         }
         try {
-            return Double.parseDouble(val);
+            return Double.parseDouble(val.trim());
         } catch (NumberFormatException e) {
             log.error("Tried to parse a non-number string to an integer", e);
             return 0;
@@ -163,11 +163,11 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public float getFloatValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return 0;
         }
         try {
-            return Float.parseFloat(val);
+            return Float.parseFloat(val.trim());
         } catch (NumberFormatException e) {
             log.error("Tried to parse a non-number string to an integer", e);
             return 0;
@@ -182,10 +182,10 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public boolean getBooleanValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return false;
         }
-        return Boolean.parseBoolean(val);
+        return Boolean.parseBoolean(val.trim());
     }
 
     /**
