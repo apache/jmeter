@@ -449,10 +449,6 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
         Set<JMeterTreeNode> matchingNodes = result.getRight();
         Set<JMeterTreeNode> replacedNodes = new HashSet<>();
         for (JMeterTreeNode jMeterTreeNode : matchingNodes) {
-//            if (isNamesReplaceable.isSelected()) {
-//                String nodeName = jMeterTreeNode.getName();
-//                jMeterTreeNode.setName(nodeName.replaceAll(wordToSearch, wordToReplace));
-//            }
             Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(jMeterTreeNode, regex, wordToReplace, caseSensitiveReplacement, namesReplacement);
             if(pair != null) {
                 totalReplaced += pair.getLeft();
