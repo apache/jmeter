@@ -21,20 +21,17 @@ import com.github.tomakehurst.wiremock.client.WireMock.aMultipart
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.containing
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
-import com.github.tomakehurst.wiremock.client.WireMock.matching
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
-import org.apache.jmeter.control.LoopController
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.protocol.http.control.Header
 import org.apache.jmeter.protocol.http.util.HTTPFileArg
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
-import org.apache.jmeter.threads.ThreadGroup
 import org.apache.jmeter.treebuilder.TreeBuilder
+import org.apache.jmeter.treebuilder.oneRequest
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
@@ -51,21 +48,8 @@ class HttpSamplerTest : JMeterTestCase() {
     @TempDir
     lateinit var dir: Path
 
-    fun TreeBuilder.oneRequest(body: ThreadGroup.() -> Unit) {
-        ThreadGroup::class {
-            numThreads = 1
-            rampUp = 0
-            setSamplerController(
-                LoopController().apply {
-                    loops = 1
-                }
-            )
-            body()
-        }
-    }
-
     fun TreeBuilder.httpPost(body: HTTPSamplerProxy.() -> Unit) {
-        org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
+        HTTPSamplerProxy::class {
             name = "Upload file"
             method = "POST"
             domain = "localhost"
@@ -134,24 +118,6 @@ class HttpSamplerTest : JMeterTestCase() {
                         )
                         .withBody(equalTo("hello, привет"))
                 )
-        )
-    }
-
-    fun RequestPatternBuilder.withRequestBody(
-        httpImplementation: String,
-        body: String
-    ) = apply {
-        // normalize line endings to CRLF
-        val normalizedBody = body.replace("\r\n", "\n").replace("\n", "\r\n")
-        withRequestBody(
-            if (httpImplementation == "Java") {
-                equalTo(normalizedBody)
-            } else {
-                matching(
-                    normalizedBody
-                        .replace(PostWriter.BOUNDARY, "[^ \\n\\r]{1,69}?")
-                )
-            }
         )
     }
 
