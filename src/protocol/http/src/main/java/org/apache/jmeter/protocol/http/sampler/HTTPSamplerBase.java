@@ -79,7 +79,6 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.testelement.schema.PropertyDescriptor;
 import org.apache.jmeter.threads.JMeterContext;
@@ -410,7 +409,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             return true;
         } else {
             boolean hasArguments = false;
-            for (JMeterProperty jMeterProperty : getArguments()) {
+            for (JMeterProperty jMeterProperty : getArguments().getEnabledArguments()) {
                 hasArguments = true;
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 if (arg.getName() != null && !arg.getName().isEmpty()) {
@@ -1156,9 +1155,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public String getQueryString(final String contentEncoding) {
 
-        CollectionProperty arguments = getArguments().getArguments();
+        Arguments args = getArguments();
+        Iterator<JMeterProperty> iter = args.getEnabledArguments().iterator();
         // Optimisation : avoid building useless objects if empty arguments
-        if(arguments.isEmpty()) {
+        if (!iter.hasNext()) {
             return "";
         }
         String lContentEncoding = contentEncoding;
@@ -1168,8 +1168,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             lContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
         }
 
-        StringBuilder buf = new StringBuilder(arguments.size() * 15);
-        PropertyIterator iter = arguments.iterator();
+        StringBuilder buf = new StringBuilder(args.getArgumentCount() * 15);
         boolean first = true;
         while (iter.hasNext()) {
             HTTPArgument item = null;
