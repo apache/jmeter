@@ -30,6 +30,9 @@ import org.apiguardian.api.API
 public abstract class HTTPArgumentSchema : ArgumentSchema() {
     public companion object INSTANCE : HTTPArgumentSchema()
 
+    public val enabledFromGui: BooleanPropertyDescriptor<HTTPArgumentSchema>
+        by boolean("HTTPArgument.enabled_from_gui")
+
     public val alwaysEncode: BooleanPropertyDescriptor<HTTPArgumentSchema>
         by boolean("HTTPArgument.always_encode")
 
