@@ -145,6 +145,7 @@
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                   <stringProp name="Argument.value">Value</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -395,6 +396,7 @@
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
+				  <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                   <stringProp name="Argument.value">Value</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
