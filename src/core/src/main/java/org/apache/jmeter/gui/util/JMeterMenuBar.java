@@ -40,6 +40,8 @@ import javax.swing.MenuElement;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
+
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -319,7 +321,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private static JMenu createLaFMenu() {
         JMenu lafMenu = makeMenuRes("appearance", 'L');
-        ButtonGroup lafGroup = new ButtonGroup();
+        JMenu flatLafSubMenu = new JMenu("FlatLaf Themes");
         String currentLafCommand = LookAndFeelCommand.getPreferredLafCommand();
         for (LookAndFeelCommand.MenuItem item : LookAndFeelCommand.getMenuItems()) {
             JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(item.getTitle());
@@ -328,9 +330,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             if (item.getCommand().equals(currentLafCommand)) {
                 menuItem.setSelected(true);
             }
-            lafGroup.add(menuItem);
+            if (item.getCommand().startsWith("laf:com.formdev.flatlaf")) {
+                flatLafSubMenu.add(menuItem);
+            } else {
             lafMenu.add(menuItem);
         }
+        }
+        lafMenu.addSeparator();
+        lafMenu.add(flatLafSubMenu);
         return lafMenu;
     }
 

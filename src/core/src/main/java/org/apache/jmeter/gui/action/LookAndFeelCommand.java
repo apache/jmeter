@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.gui.action;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.List;
@@ -223,11 +222,11 @@ public class LookAndFeelCommand extends AbstractAction {
     }
 
     public static boolean isFlatlafTheme() {
-        return UIManager.getLookAndFeel().getID().startsWith("Flat"); // $NON-NLS-1$
+        return UIManager.getLookAndFeel() instanceof FlatLaf;
     }
 
     public static boolean isDark() {
-        return (isDarklafTheme() && Theme.isDark(LafManager.getTheme())) || FlatLaf.isLafDark();
+        return (isDarklafTheme() && Theme.isDark(LafManager.getTheme())) || (isFlatlafTheme() && ((FlatLaf)UIManager.getLookAndFeel()).isDark());
     }
 
     public static void activateLookAndFeel(String command) {
