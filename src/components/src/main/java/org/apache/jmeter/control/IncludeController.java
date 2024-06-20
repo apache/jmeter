@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
@@ -102,6 +104,32 @@ public class IncludeController extends GenericController implements ReplaceableC
     }
 
     /**
+     * return the JMX file path with function support.
+     * @return the JMX file path with function support
+     */
+    public String getIncludePathAsFunction()
+    {
+        String jmxfile = this.getPropertyAsString(INCLUDE_PATH);
+        CompoundVariable masterFunction = new CompoundVariable();
+        try{
+            log.debug("Trying to evaluate 'Include Path' as an expression: {}", jmxfile);
+            masterFunction.setParameters(jmxfile);
+            if(masterFunction.hasFunction()) {
+                String jmxfileCompile = masterFunction.getFunction().execute();
+                log.debug("The value of 'Include Path' is computed as: {}", jmxfileCompile);
+                return jmxfileCompile;
+            }
+        } catch (InvalidVariableException e)
+        {
+            log.warn("Invalid variable in 'Include Path' {}. See log for details", jmxfile);
+            log.warn("Invalid variable in 'Include Path':", e);
+        }
+
+        log.debug("The value of 'Include Path' is simple string: {}", jmxfile);
+        return jmxfile;
+    }
+
+    /**
      * The way ReplaceableController works is clone is called first,
      * followed by replace(HashTree) and finally getReplacement().
      */
@@ -126,7 +154,7 @@ public class IncludeController extends GenericController implements ReplaceableC
      */
     protected HashTree loadIncludedElements() {
         // only try to load the JMX test plan if there is one
-        final String includePath = getIncludePath();
+        final String includePath = getIncludePathAsFunction();
         HashTree tree = null;
         if (includePath != null && includePath.length() > 0) {
             String fileName=PREFIX+includePath;
