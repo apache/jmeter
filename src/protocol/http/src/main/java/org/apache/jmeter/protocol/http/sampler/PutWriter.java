@@ -86,6 +86,9 @@ public class PutWriter extends PostWriter {
             StringBuilder putBodyBuffer = new StringBuilder();
              for (JMeterProperty jMeterProperty : sampler.getArguments()) {
                  HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
+                 if (!arg.isEnabledFromGui()) {
+                     continue; // Skip parameters if they've been disabled from GUI using the checkbox
+                 }
                  putBodyBuffer.append(arg.getEncodedValue(contentEncoding));
              }
 
