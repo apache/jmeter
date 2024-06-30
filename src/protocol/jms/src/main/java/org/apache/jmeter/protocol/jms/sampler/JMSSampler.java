@@ -254,7 +254,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private void handleRead(JMeterContext context, SampleResult res) {
         LOGGER.debug("isRead");
-        StringBuilder sb = new StringBuilder(75);
         res.setSuccessful(true);
         Sampler sampler = context.getPreviousSampler();
         SampleResult sr = context.getPreviousResult();
@@ -273,8 +272,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         do {
             result = browseQueueForConsumption(sendQueue, jmsSelector, res, buffer, propBuffer);
             if (result != null) {
-                sb.append(result);
-                sb.append('\n');
                 sampleCounter++;
             }
             sampleTries++;
