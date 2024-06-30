@@ -43,6 +43,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     private static final String BASEDIR = "basedir";
 
+    private transient List<AbstractThreadGroup> threadGroups = new ArrayList<>();
+
     // There's only 1 test plan, so can cache the mode here
     private static volatile boolean functionalMode = false;
 
@@ -66,6 +68,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     // create transient item
     protected Object readResolve(){
+        threadGroups = new ArrayList<>();
         return this;
     }
 
@@ -210,6 +213,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
      *            the feature to be added to the AbstractThreadGroup attribute
      */
     public void addThreadGroup(AbstractThreadGroup group) {
+        threadGroups.add(group);
     }
 
     /**

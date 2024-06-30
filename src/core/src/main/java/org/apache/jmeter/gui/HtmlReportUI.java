@@ -52,6 +52,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HtmlReportUI implements ActionListener {
+    private static final Set<String> commands = new HashSet<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportUI.class);
 
     private static final String CREATE_REQUEST = "CREATE_REQUEST";
@@ -80,6 +81,11 @@ public class HtmlReportUI implements ActionListener {
     private final ImageIcon runningIcon = JMeterUtils.getImage(IMAGES_PREFIX + iconSize +"/task-recurring.png");// $NON-NLS-1$
     private final ImageIcon inErrorIcon = JMeterUtils.getImage(IMAGES_PREFIX + iconSize +"/dialog-error-5.png");// $NON-NLS-1$
     private final ImageIcon completedIcon = JMeterUtils.getImage(IMAGES_PREFIX + iconSize +"/task-complete.png");// $NON-NLS-1$
+
+
+    static {
+        commands.add(ActionNames.HTML_REPORT);
+    }
 
     public HtmlReportUI() {
         super();
