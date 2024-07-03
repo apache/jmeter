@@ -1556,6 +1556,14 @@ JMETER-SERVER</source>
     Can be switched off by setting the value to <code>-1</code>.<br/>
     Defaults to: <code>10000</code>
 </property>
+  <property name="view.results.tree.autoscroll">
+    Set to <code>true</code> to enable by default the checkbox for 'Scroll automatically?'.<br/>
+    Defaults to: <code>false</code>
+  </property>
+  <property name="view.results.tree.width">
+    Default width of the scroll view.<br/>
+    Defaults to: <code>250</code>
+  </property>
 <property name="document.max_size">
     Maximum size (in bytes) of Document that can be parsed by Tika engine<br/>
     Set to zero to disable the size check.<br/>
