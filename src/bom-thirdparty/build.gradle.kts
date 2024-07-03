@@ -93,7 +93,7 @@ dependencies {
         api("net.sf.saxon:Saxon-HE:11.6")
         api("org.apache-extras.beanshell:bsh:2.0b6")
         api("org.apache.commons:commons-collections4:4.4")
-        api("org.apache.commons:commons-dbcp2:2.9.0")
+        api("org.apache.commons:commons-dbcp2:2.12.0")
         api("org.apache.commons:commons-jexl3:3.2.1")
         api("org.apache.commons:commons-jexl:2.1.1")
         api("org.apache.commons:commons-lang3:3.14.0")
