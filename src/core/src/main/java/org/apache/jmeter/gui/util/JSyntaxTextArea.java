@@ -153,14 +153,9 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             jSyntaxTextArea.setCaretColor(UIManager.getColor("TextArea.caretForeground"));
             jSyntaxTextArea.setSelectionColor(UIManager.getColor("TextArea.selectionBackground"));
             jSyntaxTextArea.setSelectedTextColor(UIManager.getColor("TextArea.selectionForeground"));
-            //jSyntaxTextArea.setDisabledTextColor(UIManager.getColor("textInactiveText"));
-            //jSyntaxTextArea.setSecondaryLanguageBackground(1, UIManager.getColor("TextArea.inactiveForeground"));
-            jSyntaxTextArea.setMarkAllHighlightColor(UIManager.getColor("textHighlight"));
             //not set in all themes
             if (UIManager.getColor("Hyperlink.linkColor") != null)
                 jSyntaxTextArea.setHyperlinkForeground(UIManager.getColor("Hyperlink.linkColor"));
-            //TODO: decide if needed
-            //jSyntaxTextArea.setFont(UIManager.getFont("TextArea.font"));
         }
 
         if (theme != null) {
@@ -262,13 +257,19 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         super.setWrapStyleWord(WRAP_STYLE_WORD);
         super.setMarkOccurrences(HIGHLIGHT_OCCURRENCES);
         this.disableUndo = disableUndo;
+
+        int fontSize = USER_FONT_SIZE > 0 ? USER_FONT_SIZE : getFont().getSize();
+        Font font = getFont();
         if (USER_FONT_FAMILY != null) {
-            int fontSize = USER_FONT_SIZE > 0 ? USER_FONT_SIZE : getFont().getSize();
-            setFont(JMeterUIDefaults.createFont(USER_FONT_FAMILY, Font.PLAIN, fontSize));
+            font = JMeterUIDefaults.createFont(USER_FONT_FAMILY, Font.PLAIN, fontSize);
+        } else {
+            font = font.deriveFont(font.getStyle(), fontSize);
+        }
+        setFont(font);
             if (log.isDebugEnabled()) {
                 log.debug("Font is set to: {}", getFont());
             }
-        }
+
         if(disableUndo) {
             TextComponentUI.uninstallUndo(this);
             // We need to do this to force recreation of undoManager which
