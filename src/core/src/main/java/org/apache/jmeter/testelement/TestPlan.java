@@ -20,8 +20,6 @@ package org.apache.jmeter.testelement;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.NewDriver;
