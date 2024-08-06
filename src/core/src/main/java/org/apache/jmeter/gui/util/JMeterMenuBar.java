@@ -40,6 +40,8 @@ import javax.swing.MenuElement;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
+
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -103,8 +105,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public static final String CROSS_PLATFORM_LAF = "CrossPlatform"; // $NON-NLS-1$
     public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
     public static final String DARKLAF_LAF = "Darklaf"; // $NON-NLS-1$
+    public static final String FLAT_LAF = "FlatLaf"; // $NON-NLS-1$
     public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
     public static final String DARKLAF_LAF_CLASS = "com.github.weisj.darklaf.DarkLaf"; // $NON-NLS-1$
+    public static final String FLATLAF_LAF_CLASS = "com.formdev.flatlaf.FlatLightLaf"; // $NON-NLS-1$
 
     public JMeterMenuBar() {
         // List for recent files menu items
@@ -317,6 +321,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private static JMenu createLaFMenu() {
         JMenu lafMenu = makeMenuRes("appearance", 'L');
+        JMenu flatLafSubMenu = new JMenu("FlatLaf Themes");
         ButtonGroup lafGroup = new ButtonGroup();
         String currentLafCommand = LookAndFeelCommand.getPreferredLafCommand();
         for (LookAndFeelCommand.MenuItem item : LookAndFeelCommand.getMenuItems()) {
@@ -326,9 +331,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             if (item.getCommand().equals(currentLafCommand)) {
                 menuItem.setSelected(true);
             }
+            if (item.getCommand().startsWith("laf:com.formdev.flatlaf")) {
+                flatLafSubMenu.add(menuItem);
+            } else {
+                lafMenu.add(menuItem);
+            }
             lafGroup.add(menuItem);
-            lafMenu.add(menuItem);
         }
+        lafMenu.addSeparator();
+        lafMenu.add(flatLafSubMenu);
         return lafMenu;
     }
 
