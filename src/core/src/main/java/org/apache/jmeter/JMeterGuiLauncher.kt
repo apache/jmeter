@@ -83,6 +83,7 @@ public object JMeterGuiLauncher {
     }
 
     private suspend fun startGuiInternal(testFile: String?) {
+        JMeterUtils.applyHiDPIOnFonts()
         setupLaF()
         val splash = SplashScreen()
         splash.showScreen()
