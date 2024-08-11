@@ -1040,7 +1040,7 @@ public class JMeter implements JMeterPlugin {
                 testListener.setStartedRemoteEngines(engines);
                 distributedRunner.start();
             }
-            startUdpDdaemon(engines);
+            startUdpDaemon(engines);
         } catch (ConfigurationException e) {
             throw e;
         } catch (Exception e) {
@@ -1379,7 +1379,7 @@ public class JMeter implements JMeterPlugin {
         return "true".equals(System.getProperty(JMeter.JMETER_NON_GUI)); //$NON-NLS-1$
     }
 
-    private static void startUdpDdaemon(final List<? extends JMeterEngine> engines) {
+    private static void startUdpDaemon(final List<? extends JMeterEngine> engines) {
         int port = JMeterUtils.getPropDefault("jmeterengine.nongui.port", UDP_PORT_DEFAULT); // $NON-NLS-1$
         int maxPort = JMeterUtils.getPropDefault("jmeterengine.nongui.maxport", 4455); // $NON-NLS-1$
         if (port > 1000){
