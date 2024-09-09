@@ -6832,9 +6832,9 @@ As a consequence:
 <li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:
 <source>
 1) The server's name "<code>www.example.com</code>" does not match the certificate's name
-   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>". Somebody may be trying to eavesdrop on you.
-2) The certificate for "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>" is signed by the unknown Certificate Authority
-   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>". It is not possible to verify that this is a valid certificate.
+   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT IS YOURS)</code>". Somebody may be trying to eavesdrop on you.
+2) The certificate for "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT IS YOURS)</code>" is signed by the unknown Certificate Authority
+   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT IS YOURS)</code>". It is not possible to verify that this is a valid certificate.
 </source>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it.

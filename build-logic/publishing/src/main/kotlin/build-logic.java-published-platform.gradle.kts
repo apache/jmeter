@@ -21,13 +21,16 @@ plugins {
     id("build-logic.publish-to-central")
 }
 
-val archivesBaseName = "ApacheJMeter_$name"
-setProperty("archivesBaseName", archivesBaseName)
+val archiveName = "ApacheJMeter_$name"
+
+base {
+    archivesName = archiveName
+}
 
 publishing {
     publications {
         create<MavenPublication>("mavenJavaPlatform") {
-            artifactId = archivesBaseName
+            artifactId = archiveName
             from(components["javaPlatform"])
         }
     }

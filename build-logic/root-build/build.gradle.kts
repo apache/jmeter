@@ -20,6 +20,11 @@ plugins {
 }
 
 dependencies {
+    constraints {
+        api("xerces:xercesImpl:2.12.1") {
+            because("Some of the plugins might depend on an older version, and we want using a more recent one")
+        }
+    }
     api(projects.buildParameters)
     api(projects.verification)
     api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.90")
