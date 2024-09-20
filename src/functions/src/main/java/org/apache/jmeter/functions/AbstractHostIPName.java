@@ -52,17 +52,18 @@ abstract class AbstractHostIPName extends AbstractFunction {
 
         String value = compute();
 
-        if (values.length >= 1){// we have a variable name
-            JMeterVariables vars = getVariables();
-            if (vars != null) {// May be null if function is used on TestPlan
-                String varName = ((CompoundVariable) values[0]).execute().trim();
-                if (varName.length() > 0) {
-                    vars.put(varName, value);
-                }
-            }
+        if (values.length < 1) { // we have a variable name
+            return value;
+        }
+        JMeterVariables vars = getVariables();
+        if (vars == null) {// May be null if function is used on TestPlan
+            return value;
+        }
+        String varName = ((CompoundVariable) values[0]).execute().trim();
+        if (varName.length() > 0) {
+            vars.put(varName, value);
         }
         return value;
-
     }
 
     abstract protected String compute();
