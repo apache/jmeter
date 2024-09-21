@@ -1,0 +1,58 @@
+name: Feature Request
+description: Suggest an idea
+labels:
+  - enhancement
+  - to-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe the use-case you have. This will better help us understand the context in which you're looking for a new feature.
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: |
+        Please describe the use-case you have. This will better help us understand the context in which you're looking for a new feature.
+      placeholder: Describe the use-case here
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Possible solution
+      description: |
+        Please describe a possible solution you'd like to see in JMeter, ideally with example code.
+        Please note, it's not always easy to describe a good solution. Describing the use-case above is much more important to us.
+      placeholder: Describe the possible solution here.
+    validations:
+      required: false
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Possible workarounds
+      description: |
+        Please describe the possible workarounds you've implemented to work around the lacking functionality.
+      placeholder: Describe the possible workarounds here.
+    validations:
+      required: false
+  - type: input
+    id: jmeter-version
+    attributes:
+      label: JMeter Version
+      description: What JMeter version and edition did you use?
+      placeholder: ex. 5.6
+    validations:
+      required: true
+  - type: input
+    id: java-version
+    attributes:
+      label: Java Version
+      description: What JDK version and distribution did you use (use `java -version`)
+      placeholder: ex. openjdk version "17" 2021-09-14
+  - type: input
+    id: os-version
+    attributes:
+      label: OS Version
+      description: What operating system version and distribution did you use (use e.g. `ver` on Windows)
+      placeholder: ex. Microsoft Windows [Version 10.0.22000.856]

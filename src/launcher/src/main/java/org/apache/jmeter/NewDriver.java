@@ -18,6 +18,7 @@
 package org.apache.jmeter;
 
 // N.B. this must only use standard Java packages
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,10 +26,11 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -266,7 +268,7 @@ public final class NewDriver {
      * @param exceptionsInInit List of {@link Exception}
      * @return String
      */
-    private static String exceptionsToString(List<Exception> exceptionsInInit) {
+    private static String exceptionsToString(List<? extends Exception> exceptionsInInit) {
         StringBuilder builder = new StringBuilder();
         for (Exception exception : exceptionsInInit) {
             StringWriter stringWriter = new StringWriter();
@@ -344,19 +346,17 @@ public final class NewDriver {
     /*
      * If the fileName contains at least one set of paired single-quotes, reformat using DateFormat
      */
-    @SuppressWarnings("JdkObsolete")
     private static String replaceDateFormatInFileName(String fileName) {
         try {
             StringBuilder builder = new StringBuilder();
 
-            // TODO: replace with java.time.*
-            final Date date = new Date();
+            final Instant date = Instant.now();
             int fromIndex = 0;
             int begin = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$
             int end;
 
             String format;
-            SimpleDateFormat dateFormat;
+            DateTimeFormatter dateFormat;
 
             while (begin != -1) {
                 builder.append(fileName.substring(fromIndex, begin));
@@ -368,7 +368,7 @@ public final class NewDriver {
                 }
 
                 format = fileName.substring(begin + 1, end);
-                dateFormat = new SimpleDateFormat(format);
+                dateFormat = DateTimeFormatter.ofPattern(format).withZone(ZoneId.systemDefault());
                 builder.append(dateFormat.format(date));
 
                 fromIndex = end + 1;

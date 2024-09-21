@@ -17,12 +17,13 @@
 
 package org.apache.jmeter.timers;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class SyncTimerTest {
@@ -35,10 +36,9 @@ public class SyncTimerTest {
         timer.setGroupSize(2);
         timer.testStarted();
         long duration = timeDelay(timer);
-        Assert.assertTrue(
-                "Calculating delay takes less then " + schedulerDuration * 2
-                        + " ms (took: " + duration + " ms)",
-                duration < schedulerDuration * 2);
+        assertTrue(duration < schedulerDuration * 2,
+            "Calculating delay takes less then " + schedulerDuration * 2
+                + " ms (took: " + duration + " ms)");
     }
 
     @Test
@@ -51,10 +51,9 @@ public class SyncTimerTest {
         timer.testStarted();
         timer.setTimeoutInMs(timerTimeout);
         long duration = timeDelay(timer);
-        Assert.assertTrue(
-                "Calculating delay takes less then " + timerTimeout * 2
-                        + " ms (took: " + duration + " ms)",
-                duration < timerTimeout * 2);
+        assertTrue(duration < timerTimeout * 2,
+            "Calculating delay takes less then " + timerTimeout * 2
+                + " ms (took: " + duration + " ms)");
     }
 
     @Test
@@ -67,10 +66,10 @@ public class SyncTimerTest {
         timer.testStarted();
         timer.setTimeoutInMs(timerTimeout);
         long duration = timeDelay(timer);
-        Assert.assertTrue(
-                "Calculating delay takes less then " + schedulerDuration * 2
-                        + " ms (took: " + duration + " ms)",
-                duration < schedulerDuration * 2);
+        assertTrue(
+            duration < schedulerDuration * 2,
+            "Calculating delay takes less then " + schedulerDuration * 2
+                + " ms (took: " + duration + " ms)");
     }
 
     @Test
@@ -82,9 +81,9 @@ public class SyncTimerTest {
         timer.setGroupSize(2);
         timer.testStarted();
         timer.setTimeoutInMs(timerTimeout);
-        Assertions.assertThrows(
-                IllegalArgumentException.class,
-                timer::delay);
+        assertThrows(
+            IllegalArgumentException.class,
+            timer::delay);
     }
 
     private long timeDelay(SyncTimer timer) {

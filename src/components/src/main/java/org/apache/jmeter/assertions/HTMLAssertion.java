@@ -124,7 +124,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
                 log.debug("Errors/warnings detected while parsing with tidy: {}", errbuf);
                 result.setFailure(true);
                 result.setFailureMessage(MessageFormat.format(
-                        "Tidy Parser errors: {} (allowed {}) Tidy Parser warnings: {} (allowed {})",
+                        "Tidy Parser errors: {0} (allowed {1}) Tidy Parser warnings: {2} (allowed {3})",
                         tidy.getParseErrors(), getErrorThreshold(), tidy.getParseWarnings(), getWarningThreshold()));
                 // return with an error
 
@@ -264,7 +264,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         setProperty(new BooleanProperty(ERRORS_ONLY_KEY, inErrorsOnly));
     }
 
-    private long capToZero(long value) {
+    private static long capToZero(long value) {
         if (value == Long.MAX_VALUE) {
             return 0;
         }

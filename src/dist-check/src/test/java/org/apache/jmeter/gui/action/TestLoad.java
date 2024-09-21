@@ -17,24 +17,27 @@
 
 package org.apache.jmeter.gui.action;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jorphan.collections.HashTree;
-import org.junit.runner.Describable;
-import org.junit.runner.Description;
-
-import junit.framework.TestSuite;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  *
  * Test JMX files to check that they can be loaded OK.
  */
-public class TestLoad extends JMeterTestCaseJUnit implements Describable {
+public class TestLoad  {
 
     private static final String basedir = new File(System.getProperty("user.dir")).getParentFile().getParent();
     private static final File testfiledir = new File(basedir,"bin/testfiles");
@@ -55,56 +58,31 @@ public class TestLoad extends JMeterTestCaseJUnit implements Describable {
         }
     };
 
-    private final File testFile;
-    private final String parent;
-
-    public TestLoad(String name) {
-        super(name);
-        testFile=null;
-        parent=null;
+    public static Stream<Arguments> inputFiles() {
+        return Stream.concat(
+                scanFiles(testfiledir),
+                scanFiles(demofiledir));
     }
 
-    public TestLoad(String name, File file, String dir) {
-        super(name);
-        testFile=file;
-        parent=dir;
-    }
-
-    @Override
-    public Description getDescription() {
-        return Description.createTestDescription(getClass(), getName() + " " + testFile + " " + parent);
-    }
-
-    public static TestSuite suite(){
-        TestSuite suite = new TestSuite("Load Test");
-        scanFiles(suite, testfiledir);
-        scanFiles(suite, demofiledir);
-        return suite;
-    }
-
-    private static void scanFiles(TestSuite suite, File parent) {
+    private static Stream<Arguments> scanFiles(File parent) {
         String dir = parent.getName();
         File[] testFiles = parent.listFiles(jmxFilter);
         if (testFiles == null) {
             fail("*.jmx files for test should be present in folder " + parent);
         }
-        for (File file : testFiles) {
-            suite.addTest(new TestLoad("checkTestFile", file, dir));
-        }
+        return Stream.of(testFiles)
+                .map(file -> arguments(dir, file));
     }
 
-    public void checkTestFile() throws Exception{
-        HashTree tree = null;
-        try {
-            tree =getTree(testFile);
-        } catch (Exception e) {
-            fail(parent+": "+ testFile.getName()+" caused "+e);
-        }
-        assertTree(tree);
+    @ParameterizedTest
+    @MethodSource("inputFiles")
+    public void checkTestFile(String parent, File testFile) throws Exception{
+        HashTree tree = getTree(testFile);
+        assertTree(tree, parent, testFile);
     }
 
-    private void assertTree(HashTree tree) throws Exception {
-        assertNotNull(parent+": "+ testFile.getName()+" caused null tree: ",tree);
+    private void assertTree(HashTree tree, String parent, File testFile) throws Exception {
+        assertNotNull(tree, parent+": "+ testFile.getName()+" caused null tree: ");
         final Object object = tree.getArray()[0];
         final String name = testFile.getName();
 

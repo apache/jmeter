@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.auto.service.AutoService;
 
 /**
  * RandomDate Function generates a date in a specific range
@@ -59,6 +60,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *
  * @since 3.3
  */
+@AutoService(Function.class)
 public class RandomDate extends AbstractFunction {
 
     private static final Logger log = LoggerFactory.getLogger(RandomDate.class);
@@ -75,13 +77,13 @@ public class RandomDate extends AbstractFunction {
 
     // Ensure that these are set, even if no parameters are provided
     private Locale locale = JMeterUtils.getLocale(); // $NON-NLS-1$
-    private ZoneId systemDefaultZoneID = ZoneId.systemDefault(); // $NON-NLS-1$
+    private static final ZoneId systemDefaultZoneID = ZoneId.systemDefault(); // $NON-NLS-1$
     private CompoundVariable[] values;
 
     private static final class LocaleFormatObject {
 
-        private String format;
-        private Locale locale;
+        private final String format;
+        private final Locale locale;
 
         public LocaleFormatObject(String format, Locale locale) {
             this.format = format;
@@ -203,7 +205,7 @@ public class RandomDate extends AbstractFunction {
     }
 
     @SuppressWarnings("JavaTimeDefaultTimeZone")
-    private DateTimeFormatter createFormatter(LocaleFormatObject format) {
+    private static DateTimeFormatter createFormatter(LocaleFormatObject format) {
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
         return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
                 // TODO: what if year changes? (e.g. the year changes as the test executes)

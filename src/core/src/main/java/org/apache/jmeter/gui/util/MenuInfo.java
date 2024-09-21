@@ -47,7 +47,7 @@ public class MenuInfo {
         sortOrder = getSortOrderFromName(classFullName);
     }
 
-    private int getSortOrderFromName(String classFullName) {
+    private static int getSortOrderFromName(String classFullName) {
         try {
             GUIMenuSortOrder menuSortOrder = Class.forName(classFullName, false, MenuInfo.class.getClassLoader())
                     .getDeclaredAnnotation(GUIMenuSortOrder.class);

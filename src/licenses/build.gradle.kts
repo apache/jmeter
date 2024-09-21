@@ -29,8 +29,24 @@ import com.github.vlsi.gradle.release.ExtraLicense
 import com.github.vlsi.gradle.release.dsl.dependencyLicenses
 import com.github.vlsi.gradle.release.dsl.licensesCopySpec
 
+plugins {
+    base
+    // jvm-ecosystem workarounds issue with "ambiguous variants for caffeine"
+    `jvm-ecosystem`
+}
+
+// https://github.com/gradle/gradle/pull/16627
+inline fun <reified T : Named> AttributeContainer.attribute(attr: Attribute<T>, value: String) =
+    attribute(attr, objects.named<T>(value))
+
 val binaryDependencies by configurations.creating {
     isCanBeConsumed = false
+    attributes {
+        attribute(Category.CATEGORY_ATTRIBUTE, Category.LIBRARY)
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, LibraryElements.JAR)
+        attribute(Usage.USAGE_ATTRIBUTE, Usage.JAVA_RUNTIME)
+        attribute(Bundling.BUNDLING_ATTRIBUTE, Bundling.EXTERNAL)
+    }
 }
 val binLicense by configurations.creating {
     isCanBeResolved = false
@@ -51,7 +67,7 @@ fun gradleWrapperVersion(wrapperProps: String) =
 
 val gatherSourceLicenses by tasks.registering(GatherLicenseTask::class) {
     val wrapperProps = "$rootDir/gradle/wrapper/gradle-wrapper.properties"
-    inputs.file(wrapperProps)
+    inputs.file(wrapperProps).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("wrapper.props")
     addDependency("org.gradle:gradle-wrapper:${gradleWrapperVersion(wrapperProps)}", SpdxLicense.Apache_2_0)
     addDependency(":bootstrap:3.3.4", SpdxLicense.MIT)
     addDependency(":bootstrap-social:4.8.0", SpdxLicense.MIT)
@@ -71,8 +87,8 @@ val gatherSourceLicenses by tasks.registering(GatherLicenseTask::class) {
 
 val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     configuration(binaryDependencies)
-    ignoreMissingLicenseFor.add(SpdxLicense.Apache_2_0.asExpression())
-    defaultTextFor.add(SpdxLicense.MPL_2_0.asExpression())
+    ignoreMissingLicenseFor.add(SpdxLicense.Apache_2_0.expression)
+    defaultTextFor.add(SpdxLicense.MPL_2_0.expression)
     // There are three major cases here:
     // 1. License id needs to be overridden (e.g. "BSD style" -> BSD-3-Clause)
     // 2. Jar file misses LICENSE/NOTICE files, thus we need to specify local folder with relevant files (e.g. licenses/rsyntaxtextarea)
@@ -97,11 +113,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }
 
-    overrideLicense("org.swinglabs:jxlayer") {
-        // See https://repo1.maven.org/maven2/org/swinglabs/jxlayer/3.0.4/jxlayer-3.0.4-sources.jar
-        effectiveLicense = SpdxLicense.BSD_3_Clause
-    }
-
     for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {
         overrideLicense(mig) {
             expectedLicense = SimpleLicense("BSD", uri("http://www.debian.org/misc/bsd.license"))
@@ -111,49 +122,25 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     }
 
     for (jodd in listOf("jodd-core", "jodd-lagarto", "jodd-log", "jodd-props")) {
-        overrideLicense("org.jodd:$jodd:5.0.13") {
+        overrideLicense("org.jodd:$jodd") {
             expectedLicense = SpdxLicense.BSD_2_Clause // SimpleLicense("The BSD 2-Clause License", uri("http://jodd.org/license.html"))
             licenseFiles = "jodd"
         }
     }
 
-    overrideLicense("xpp3:xpp3_min:1.1.4c") {
-        // pom.xml contains multiple licenses
-        expectedLicense = SpdxLicense.CC0_1_0 and
-            SimpleLicense(
-                "Indiana University Extreme! Lab Software License, vesion 1.1.1",
-                uri("http://www.extreme.indiana.edu/viewcvs/~checkout~/XPP3/java/LICENSE.txt")
-            )
-        effectiveLicense = SpdxLicense.CC0_1_0 and ExtraLicense.Indiana_University_1_1_1
+    overrideLicense("org.reactivestreams:reactive-streams") {
+        expectedLicense = SpdxLicense.MIT_0
     }
 
     overrideLicense("org.brotli:dec:0.1.2") {
         expectedLicense = SpdxLicense.MIT
     }
 
-    overrideLicense("org.slf4j:slf4j-api:1.7.30") {
+    overrideLicense("org.slf4j:slf4j-api") {
         expectedLicense = SpdxLicense.MIT
     }
 
-    for (
-        a in listOf(
-            "lets-plot-kotlin-jvm",
-            "lets-plot-common",
-            "plot-config-portable-jvm",
-            "plot-builder-portable-jvm",
-            "plot-base-portable-jvm",
-            "plot-common-portable-jvm",
-            "vis-svg-portable-jvm",
-            "base-portable-jvm"
-        )
-    ) {
-        overrideLicense("org.jetbrains.lets-plot:$a") {
-            expectedLicense = SpdxLicense.MIT
-            licenseFiles = "lets-plot"
-        }
-    }
-
-    overrideLicense("com.sun.mail:all:1.5.0-b01") {
+    overrideLicense("com.sun.mail:all") {
         // Multiple licenses, specify explicitly
         expectedLicense = SimpleLicense("CDDL", uri("http://www.sun.com/cddl")) and SimpleLicense("GPLv2+CE", uri("https://glassfish.java.net/public/CDDL+GPL_1_1.html"))
         effectiveLicense = SpdxLicense.CDDL_1_0 and (SpdxLicense.GPL_2_0_or_later with SpdxLicenseException.Classpath_exception_2_0)
@@ -179,9 +166,12 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SimpleLicense("Java HTML Tidy License", uri("http://jtidy.svn.sourceforge.net/viewvc/jtidy/trunk/jtidy/LICENSE.txt?revision=95"))
         effectiveLicense = SpdxLicense.BSD_3_Clause
     }
-    // https://github.com/typetools/checker-framework/issues/2798
-    overrideLicense("org.checkerframework:checker-qual:2.10.0") {
-        expectedLicense = SpdxLicense.MIT
+    // Xalan 2.7.3 misses license, see https://issues.apache.org/jira/browse/XALANJ-2650
+    overrideLicense("xalan:xalan") {
+        effectiveLicense = SpdxLicense.Apache_2_0
+    }
+    overrideLicense("xalan:serializer") {
+        effectiveLicense = SpdxLicense.Apache_2_0
     }
 }
 
@@ -200,7 +190,14 @@ val renderLicenseForBinary by tasks.registering(Apache2LicenseRenderer::class) {
     artifactType.set(ArtifactType.BINARY)
     metadata.from(gatherSourceLicenses)
     metadata.from(gatherBinaryLicenses)
-    licenseCategory.put(ExtraLicense.Indiana_University_1_1_1.asExpression(), AsfLicenseCategory.A)
+    licenseCategory.put(
+        SimpleLicense(
+            "Indiana University Extreme! Lab Software License",
+            uri("https://raw.githubusercontent.com/x-stream/mxparser/master/LICENSE.txt")
+        ).expression,
+        AsfLicenseCategory.A
+    )
+    licenseCategory.put(SpdxLicense.MIT_0.expression, AsfLicenseCategory.A)
 }
 
 tasks.build.configure {
@@ -214,20 +211,20 @@ val binLicenseSpec = licensesCopySpec(renderLicenseForBinary)
 val srcLicenseSpec = licensesCopySpec(renderLicenseForSource)
 
 val binLicenseDir by tasks.registering(Sync::class) {
-    into("$buildDir/$name")
+    into(layout.buildDirectory.dir(name))
     dependencyLicenses(binLicenseSpec)
 }
 
 val srcLicenseDir by tasks.registering(Sync::class) {
-    into("$buildDir/$name")
+    into(layout.buildDirectory.dir(name))
     dependencyLicenses(srcLicenseSpec)
 }
 
 artifacts {
-    add(binLicense.name, buildDir.resolve(binLicenseDir.name)) {
+    add(binLicense.name, layout.buildDirectory.dir(binLicenseDir.name)) {
         builtBy(binLicenseDir)
     }
-    add(srcLicense.name, buildDir.resolve(srcLicenseDir.name)) {
+    add(srcLicense.name, layout.buildDirectory.dir(srcLicenseDir.name)) {
         builtBy(srcLicenseDir)
     }
 }

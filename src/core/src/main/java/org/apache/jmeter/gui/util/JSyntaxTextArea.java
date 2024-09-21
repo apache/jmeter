@@ -23,12 +23,12 @@ import java.awt.HeadlessException;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
@@ -101,6 +101,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             // Allow override for unit testing only
             if ("true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
                 return new JSyntaxTextArea(disableUndo) {
+                    private String savedText = "";
                     private static final long serialVersionUID = 1L;
                     @Override
                     protected void init() {
@@ -118,7 +119,15 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
                     @Override
                     public void discardAllEdits() { }
                     @Override
-                    public void setText(String t) { }
+                    public void setText(String t) {
+                        savedText = t;
+                    }
+
+                    @Override
+                    public String getText() {
+                        return savedText;
+                    }
+
                     @Override
                     public boolean isCodeFoldingEnabled(){ return true; }
                 };
@@ -293,7 +302,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      */
     public void setInitialText(String string) {
         try {
-            setText(StringUtils.defaultString(string, ""));
+            setText(Objects.toString(string, ""));
         } catch (Exception e) {
             log.error("Dubious problem while setting text to {}", string, e);
         }

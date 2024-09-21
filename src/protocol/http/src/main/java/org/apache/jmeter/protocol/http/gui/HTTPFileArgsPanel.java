@@ -312,7 +312,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      *
      * @return a new File object
      */
-    private String browseAndGetFilePath() {
+    private static String browseAndGetFilePath() {
         String path = ""; //$NON-NLS-1$
         JFileChooser chooser = FileDialoger.promptToOpenFile();
         if (chooser != null) {
@@ -413,7 +413,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         table.revalidate();
     }
 
-    private JScrollPane makeScrollPane(Component comp) {
+    private static JScrollPane makeScrollPane(Component comp) {
         JScrollPane pane = new JScrollPane(comp);
         pane.setPreferredSize(pane.getMinimumSize());
         return GuiUtils.emptyBorder(pane);
@@ -542,7 +542,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         }
     }
 
-    private HTTPFileArg createHTTPFileArgFromClipboard(String[] clipboardCols) {
+    private static HTTPFileArg createHTTPFileArgFromClipboard(String[] clipboardCols) {
         if (clipboardCols.length == 1) {
             return new HTTPFileArg(clipboardCols[0]);
         } else if (clipboardCols.length == 2) {

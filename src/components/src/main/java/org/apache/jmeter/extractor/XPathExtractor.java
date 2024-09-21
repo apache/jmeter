@@ -90,11 +90,11 @@ public class XPathExtractor extends AbstractScopedTestElement implements
     //- JMX file attributes
 
 
-    private String concat(String s1,String s2){
+    private static String concat(String s1, String s2){
         return s1 + "_" + s2; // $NON-NLS-1$
     }
 
-    private String concat(String s1, int i){
+    private static String concat(String s1, int i){
         return s1 + "_" + i; // $NON-NLS-1$
     }
 
@@ -318,7 +318,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
      *
      * @throws TransformerException
      */
-    private void getValuesForXPath(Document d,String query, List<String> matchStrings, int matchNumber)
+    private void getValuesForXPath(Document d,String query, List<? super String> matchStrings, int matchNumber)
         throws TransformerException {
         XPathUtil.putValuesForXPathInList(d, query, matchStrings, getFragment(), matchNumber);
     }

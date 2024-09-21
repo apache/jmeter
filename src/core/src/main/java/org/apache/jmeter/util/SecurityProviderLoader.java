@@ -22,11 +22,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.Provider;
 import java.security.Security;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +49,7 @@ public class SecurityProviderLoader {
 
         if (matcher.matches()) {
             final String classname = matcher.group("classname");
-            final int position = Integer.parseInt(StringUtils.defaultString(matcher.group("position"), "0"));
+            final int position = Integer.parseInt(Objects.toString(matcher.group("position"), "0"));
             final String config = matcher.group("config");
 
             try {

@@ -17,20 +17,22 @@
 
 package org.apache.jmeter.save;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -85,8 +87,10 @@ public class TestSaveService extends JMeterTestCase {
     @Test
     public void testPROPVERSION() {
         assertEquals(
-                "Property Version mismatch, ensure you update SaveService#PROPVERSION field with _version property value from saveservice.properties",
-                SaveService.PROPVERSION, SaveService.getPropertyVersion());
+                SaveService.PROPVERSION,
+                SaveService.getPropertyVersion(),
+                "Property Version mismatch, ensure you update SaveService#PROPVERSION field with _version property value from saveservice.properties"
+        );
     }
 
     @Test
@@ -116,7 +120,7 @@ public class TestSaveService extends JMeterTestCase {
         final FileStats origStats = getFileStats(testFile);
         final FileStats savedStats = getFileStats(savedFile);
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
+        ByteArrayOutputStream out = new ByteArrayOutputStream(Math.toIntExact(testFile.length()));
         try {
             HashTree tree = SaveService.loadTree(testFile);
             SaveService.saveTree(tree, out);
@@ -128,8 +132,8 @@ public class TestSaveService extends JMeterTestCase {
 
         final FileStats outputStats;
         try (ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
-                Reader insReader = new InputStreamReader(ins);
-                BufferedReader bufferedReader = new BufferedReader(insReader)) {
+             Reader insReader = new InputStreamReader(ins, Charset.defaultCharset());
+             BufferedReader bufferedReader = new BufferedReader(insReader)) {
             outputStats = computeFileStats(bufferedReader);
         }
         // We only check the length of the result. Comparing the
@@ -167,7 +171,8 @@ public class TestSaveService extends JMeterTestCase {
         if (testFile == null || !testFile.exists()) {
             return FileStats.NO_STATS;
         }
-        try (FileReader fileReader = new FileReader(testFile);
+        try (FileInputStream fis = new FileInputStream(testFile);
+             InputStreamReader fileReader = new InputStreamReader(fis, Charset.defaultCharset());
                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             return computeFileStats(bufferedReader);
         }

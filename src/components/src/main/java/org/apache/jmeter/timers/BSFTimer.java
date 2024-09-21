@@ -55,6 +55,7 @@ public class BSFTimer extends BSFTestElement implements Cloneable, Timer, TestBe
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }

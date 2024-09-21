@@ -25,7 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,7 +61,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
@@ -74,6 +73,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JMeterUIDefaults;
+import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
+import org.apache.jorphan.util.StringWrap;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,6 +104,14 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     // Default limited to 10 megabytes
     private static final int MAX_DISPLAY_SIZE =
             JMeterUtils.getPropDefault("view.results.tree.max_size", 10485760); // $NON-NLS-1$
+
+    // Default limited to 110K
+    private static final int MAX_LINE_SIZE =
+            JMeterUtils.getPropDefault("view.results.tree.max_line_size", 110000); // $NON-NLS-1$
+
+    // Limit the soft wrap to 100K (hard limit divided by 1.1)
+    private static final int SOFT_WRAP_LINE_SIZE =
+            JMeterUtils.getPropDefault("view.results.tree.soft_wrap_line_size", (int) (MAX_LINE_SIZE / 1.1f)); // $NON-NLS-1$
 
     // default display order
     private static final String VIEWERS_ORDER =
@@ -224,9 +234,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return oldSelectedElement;
     }
 
-    private TreePath checkExpandedOrSelected(List<TreeNode> path,
+    private static TreePath checkExpandedOrSelected(List<TreeNode> path,
             Object item, Object oldSelectedObject,
-            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths,
+            Set<Object> oldExpandedObjects, Set<? super TreePath> newExpandedPaths,
             TreePath defaultPath) {
         TreePath result = defaultPath;
         if (oldSelectedObject == item) {
@@ -238,9 +248,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return result;
     }
 
-    private TreePath checkExpandedOrSelected(List<TreeNode> path,
+    private static TreePath checkExpandedOrSelected(List<TreeNode> path,
             Object item, Object oldSelectedObject,
-            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths,
+            Set<Object> oldExpandedObjects, Set<? super TreePath> newExpandedPaths,
             TreePath defaultPath, DefaultMutableTreeNode extensionNode) {
         TreePath result = defaultPath;
         if (oldSelectedObject == item) {
@@ -252,9 +262,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return result;
     }
 
-    private Set<Object> extractExpandedObjects(final Enumeration<TreePath> expandedElements) {
+    private static Set<Object> extractExpandedObjects(final Enumeration<TreePath> expandedElements) {
         if (expandedElements != null) {
-            final List<TreePath> list = EnumerationUtils.toList(expandedElements);
+            final List<TreePath> list = Collections.list(expandedElements);
             log.debug("Expanded: {}", list);
             Set<Object> result = list.stream()
                     .map(TreePath::getLastPathComponent)
@@ -269,7 +279,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private TreePath addSubResults(DefaultMutableTreeNode currNode,
             SampleResult res, List<TreeNode> path, Object selectedObject,
-            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths) {
+            Set<Object> oldExpandedObjects, Set<? super TreePath> newExpandedPaths) {
         SampleResult[] subResults = res.getSubResults();
 
         int leafIndex = 0;
@@ -300,11 +310,11 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return result;
     }
 
-    private TreePath toTreePath(List<TreeNode> newPath) {
+    private static TreePath toTreePath(List<TreeNode> newPath) {
         return new TreePath(newPath.toArray(new TreeNode[newPath.size()]));
     }
 
-    private TreePath toTreePath(List<TreeNode> path,
+    private static TreePath toTreePath(List<TreeNode> path,
             DefaultMutableTreeNode extensionNode) {
         TreeNode[] result = path.toArray(new TreeNode[path.size() + 1]);
         result[result.length - 1] = extensionNode;
@@ -445,42 +455,28 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         selectRenderPanel.addActionListener(this);
 
         // if no results render in jmeter.properties, load Standard (default)
-        List<String> classesToAdd = Collections.<String>emptyList();
-        try {
-            classesToAdd = JMeterUtils.findClassesThatExtend(ResultRenderer.class);
-        } catch (IOException e1) {
-            // ignored
-        }
         String defaultRenderer = expandToClassname(".RenderAsText"); // $NON-NLS-1$
         if (VIEWERS_ORDER.length() > 0) {
             defaultRenderer = expandToClassname(VIEWERS_ORDER.split(",", 2)[0]);
         }
-        Object defaultObject = null;
-        Map<String, ResultRenderer> map = new HashMap<>(classesToAdd.size());
-        for (String clazz : classesToAdd) {
-            try {
-                // Instantiate render classes
-                final ResultRenderer renderer = Class.forName(clazz)
-                        .asSubclass(ResultRenderer.class)
-                        .getDeclaredConstructor().newInstance();
-                if (defaultRenderer.equals(clazz)) {
-                    defaultObject=renderer;
-                }
-                renderer.setBackgroundColor(getBackground());
-                map.put(renderer.getClass().getName(), renderer);
-            } catch (NoClassDefFoundError e) { // NOSONAR See bug 60583
-                if (e.getMessage() != null && e.getMessage().contains("javafx")) {
-                    log.info("Add JavaFX to your Java installation if you want to use renderer: {}", clazz);
-                } else {
-                    log.warn("Error loading result renderer: {}", clazz, e);
-                }
-            } catch (Exception e) {
-                log.warn("Error loading result renderer: {}", clazz, e);
+        ResultRenderer defaultObject = null;
+        Map<String, ResultRenderer> map = new HashMap<>();
+        for (ResultRenderer renderer : JMeterUtils.loadServicesAndScanJars(
+                ResultRenderer.class,
+                ServiceLoader.load(ResultRenderer.class),
+                Thread.currentThread().getContextClassLoader(),
+                new LogAndIgnoreServiceLoadExceptionHandler(log)
+        )) {
+            // Instantiate render classes
+            if (defaultRenderer.equals(renderer.getClass().getName())) {
+                defaultObject = renderer;
             }
+            renderer.setBackgroundColor(getBackground());
+            map.put(renderer.getClass().getName(), renderer);
         }
         if (VIEWERS_ORDER.length() > 0) {
             Arrays.stream(VIEWERS_ORDER.split(","))
-                    .map(this::expandToClassname)
+                    .map(ViewResultsFullVisualizer::expandToClassname)
                     .forEach(key -> {
                         ResultRenderer renderer = map.remove(key);
                         if (renderer != null) {
@@ -499,7 +495,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         return selectRenderPanel;
     }
 
-    private String expandToClassname(String name) {
+    private static String expandToClassname(String name) {
         if (name.startsWith(".")) {
             return "org.apache.jmeter.visualizers" + name; // $NON-NLS-1$
         }
@@ -562,6 +558,19 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         return response;
     }
+
+    @API(status = API.Status.INTERNAL, since = "5.5")
+    public static String wrapLongLines(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        if (SOFT_WRAP_LINE_SIZE > 0 && MAX_LINE_SIZE > 0) {
+            StringWrap stringWrap = new StringWrap(SOFT_WRAP_LINE_SIZE, MAX_LINE_SIZE);
+            return stringWrap.wrap(input, "\n");
+        }
+        return input;
+    }
+
 
     private static class ResultsNodeRenderer extends DefaultTreeCellRenderer {
         private static final long serialVersionUID = 4159626601097711565L;

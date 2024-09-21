@@ -29,11 +29,14 @@ import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * This command clears the existing test plan, allowing the creation of a New
  * test plan.
  *
  */
+@AutoService(Command.class)
 public class Close extends AbstractActionWithNoRunningTest {
 
     private static final Set<String> commands = new HashSet<>();

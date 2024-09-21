@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.SystemCommand;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +44,9 @@ public class HtmlReportGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReportGenerator.class);
     private static final long COMMAND_TIMEOUT = JMeterUtils.getPropDefault("generate_report_ui.generation_timeout", 300_000L);
 
-    private String csvFilePath;
-    private String userPropertiesFilePath;
-    private String outputDirectoryPath;
+    private final String csvFilePath;
+    private final String userPropertiesFilePath;
+    private final String outputDirectoryPath;
 
     public HtmlReportGenerator(String csvFilePath, String userPropertiesFilePath, String outputDirectoryPath) {
         this.csvFilePath = csvFilePath;
@@ -83,7 +85,7 @@ public class HtmlReportGenerator {
             LOGGER.debug("Running report generation");
             resultCode = sc.run(generationCommand);
             if (resultCode != 0) {
-                errorMessageList.add(commandExecutionOutput.toString());
+                errorMessageList.add(commandExecutionOutput.toString(Charset.defaultCharset().name()));
                 LOGGER.info("The HTML report generation failed and returned: {}", commandExecutionOutput);
                 return errorMessageList;
             }
@@ -135,7 +137,8 @@ public class HtmlReportGenerator {
      *
      * @return whether or not the files are correct
      */
-    private List<String> checkArguments() {
+    @VisibleForTesting
+    List<String> checkArguments() {
         List<String> errors = new ArrayList<>();
 
         String csvError = checkFile(new File(csvFilePath));
@@ -161,7 +164,7 @@ public class HtmlReportGenerator {
      * @param fileToCheck the directory to check
      * @return the error message or null if the file is ok
      */
-    private String checkFile(File fileToCheck) {
+    private static String checkFile(File fileToCheck) {
         if (fileToCheck.exists() && fileToCheck.canRead() && fileToCheck.isFile()) {
             return null;
         } else {
@@ -175,7 +178,7 @@ public class HtmlReportGenerator {
      * @param directoryToCheck the directory to check
      * @return the error message or an empty string if the directory is fine
      */
-    private String checkDirectory(File directoryToCheck) {
+    private static String checkDirectory(File directoryToCheck) {
         if (directoryToCheck.exists()) {
             String[] files = directoryToCheck.list();
             if (files != null && files.length > 0) {

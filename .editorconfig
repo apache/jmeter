@@ -6,6 +6,11 @@ insert_final_newline = true
 charset = utf-8
 indent_style = space
 max_line_length = 120
+ij_any_align_multiline_parameters = false
+ij_any_do_while_brace_force = always
+ij_any_for_brace_force = always
+ij_any_if_brace_force = always
+ij_any_while_brace_force = always
 
 [{*.sh,gradlew}]
 end_of_line = lf
@@ -28,3 +33,6 @@ ij_kotlin_continuation_indent_size = 4
 #"static ", "java.", "javax", "org", "net", "com", ""
 ij_java_imports_layout = $*,|,java.**,|,javax.**,|,org.**,|,net.**,|,com.**,|,*
 ij_java_use_single_class_imports = true
+
+[*.xml]
+indent_size = 2

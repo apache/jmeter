@@ -18,7 +18,7 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 @TestElementMetadata(labelResource = "displayName")
 public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampler, TestBean, ConfigMergabilityIndicator {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
-            Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
+            Collections.singletonList("org.apache.jmeter.config.gui.SimpleConfigGui"));
 
     private static final long serialVersionUID = 235L;
 
@@ -58,7 +58,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
         result.setResponseMessageOK();
 
         final String filename = getFilename();
-        if (filename.length() > 0){
+        if (!filename.isEmpty()){
             result.setSamplerData("File: "+filename);
         } else {
             result.setSamplerData(getScript());
@@ -79,7 +79,9 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
             result.setResponseCode("500"); // $NON-NLS-1$
             result.setResponseMessage(e.toString());
         }
-        result.sampleEnd();
+        if (result.getEndTime() == 0) {
+            result.sampleEnd();
+        }
         return result;
     }
 
@@ -93,6 +95,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }

@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class SubConfiguration {
 
-    private HashMap<String, String> properties = new HashMap<>();
+    private final HashMap<String, String> properties = new HashMap<>();
 
     /**
      * Gets the properties of the item.
@@ -54,7 +54,7 @@ public class SubConfiguration {
      *             if cannot convert property
      */
     public final <TProperty> TProperty getProperty(String key,
-            TProperty defaultValue, Class<TProperty> clazz)
+            TProperty defaultValue, @SuppressWarnings("BoundedWildcard") Class<TProperty> clazz)
                     throws ConfigurationException {
         String value = properties.get(key);
         TProperty result;

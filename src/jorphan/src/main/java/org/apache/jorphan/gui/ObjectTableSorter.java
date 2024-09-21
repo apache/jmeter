@@ -44,7 +44,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
      * View row with model mapping. All data relates to model.
      */
     public class Row {
-        private int index;
+        private final int index;
 
         protected Row(int index) {
             this.index = index;
@@ -74,15 +74,15 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         }
     }
 
-    private ObjectTableModel model;
+    private final ObjectTableModel model;
     private SortKey sortkey;
 
     private Comparator<Row> comparator  = null;
-    private ArrayList<Row>  viewToModel = new ArrayList<>();
+    private final ArrayList<Row>  viewToModel = new ArrayList<>();
     private int[]           modelToView = new int[0];
 
     private Comparator<Row>  primaryComparator = null;
-    private Comparator<?>[]  valueComparators;
+    private final Comparator<?>[]  valueComparators;
     private Comparator<Row>  fallbackComparator;
 
     public ObjectTableSorter(ObjectTableModel model) {

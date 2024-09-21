@@ -1121,7 +1121,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
 
 <properties>
         <property name="Format" required="No">
-        The format to be passed to <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>.
+        The format to be passed to <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>.
         The function supports various shorthand aliases, see below.
         If omitted, the function returns the current time in milliseconds since the epoch.
         </property>
@@ -1131,7 +1131,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
 If the format matches "<code>/ddd</code>" (where <code>ddd</code> are decimal digits),
 then the function returns the current time in milliseconds divided by the value of <code>ddd</code>.
 For example, "<code>/1000</code>" returns the current time in seconds since the epoch.
-Otherwise, the current time is passed to SimpleDateFormat.
+Otherwise, the current time is passed to DateTimeFormatter.
 The following shorthand aliases are provided:
 </p>
 <ul>
@@ -1147,6 +1147,12 @@ The following shorthand aliases are provided:
 <p><source>${__time(dd/MM/yyyy,)}</source>  will return <code>21/01/2018</code> if ran on 21 january 2018</p>
 <p><source>${__time(YMD,)}</source>  will return <code>20180121</code> if ran on 21 january 2018</p>
 <p><source>${__time()}</source>  will return time in millis <code>1516540541624</code></p>
+<note>
+ The format to be passed to used to be <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>,
+ but that changed with JMeter 5.5 to <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>.
+ While they use mostly the same codes, they differ slightly. Most notable is probably the code <code>u</code>, that meant
+ <em>day number of week</em> and is now interpreted as <em>year</em>.
+</note>
 </component>
 
 <component index="&sect-num;.5.18" name="__jexl2">
@@ -1701,7 +1707,7 @@ returns:
     <properties>
     <property name="String to change case" required="Yes">The String
             which case will be changed</property>
-        <property name="change case mode" required="Yes">
+        <property name="change case mode" required="No">
             The mode to be used to change case, for example for <code>ab-CD eF</code>:
             <ul>
                 <li><code>UPPER</code> result as AB-CD EF</li>
@@ -1709,6 +1715,7 @@ returns:
                 <li><code>CAPITALIZE</code> result as Ab-CD eF</li>
             </ul>
             <note><code>change case mode</code> is case insensitive</note>
+            If no mode is given, <code>UPPER</code> is used as default.
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
     </properties>

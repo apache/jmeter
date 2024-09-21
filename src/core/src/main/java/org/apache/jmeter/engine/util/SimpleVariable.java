@@ -60,7 +60,7 @@ public class SimpleVariable {
         return ret;
     }
 
-    private JMeterVariables getVariables() {
+    private static JMeterVariables getVariables() {
         JMeterContext context = JMeterContextService.getContext();
         return context.getVariables();
     }

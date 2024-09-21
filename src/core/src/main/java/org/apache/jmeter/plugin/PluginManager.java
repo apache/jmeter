@@ -27,8 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class PluginManager {
-    private static final PluginManager instance = new PluginManager();
-
     private static final Logger log = LoggerFactory.getLogger(PluginManager.class);
 
     private PluginManager() {
@@ -44,11 +42,11 @@ public final class PluginManager {
      */
     public static void install(JMeterPlugin plugin, boolean useGui) {
         if (useGui) {
-            instance.installPlugin(plugin);
+            PluginManager.installPlugin(plugin);
         }
     }
 
-    private void installPlugin(JMeterPlugin plugin) {
+    private static void installPlugin(JMeterPlugin plugin) {
         String[][] icons = plugin.getIconMappings();
         ClassLoader classloader = plugin.getClass().getClassLoader();
 

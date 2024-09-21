@@ -1,0 +1,121 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "labels": ["dependencies"],
+  "schedule": ["every 3 weeks on Monday"],
+  "packageRules": [
+    {
+      "matchPackagePrefixes": ["com.fasterxml.jackson.core"],
+      "groupName": "com.fasterxml.jackson.core"
+    },
+    {
+      "matchPackagePrefixes": ["com.github.ben-manes.caffeine"],
+      "description": "TODO: Caffeine 3.0 requires Java 11",
+      "allowedVersions": "< 3.0"
+    },
+    {
+      "matchPackagePrefixes": ["com.github.vlsi"],
+      "groupName": "com.github.vlsi"
+    },
+    {
+      "matchPackagePrefixes": ["com.github.weisj"],
+      "groupName": "com.github.weisj"
+    },
+    {
+      "matchPackagePrefixes": ["com.google.auto.service"],
+      "groupName": "com.google.auto.service"
+    },
+    {
+      "matchPackagePrefixes": ["com.google.errorprone", "net.ltgt.errorprone"],
+      "groupName": "com.google.errorprone"
+    },
+    {
+      "matchPackageNames": ["com.google.guava:guava"],
+      "groupName": "guava",
+      "matchCurrentVersion": "0",
+      "enabled": false
+    },
+    {
+      "matchPackagePrefixes": ["com.helger"],
+      "groupName": "com.helger"
+    },
+    {
+      "matchPackagePrefixes": ["io.burt"],
+      "groupName": "io.burt"
+    },
+    {
+      "matchPackagePrefixes": ["net.minidev:accessors-smart", "net.minidev:json-smart"],
+      "groupName": "net.minidev json-smart"
+    },
+    {
+      "matchPackagePrefixes": ["com.miglayout"],
+      "groupName": "com.miglayout",
+      "allowedVersions": "< 11.0"
+    },
+    {
+      "matchPackagePrefixes": ["org.ajoberstar.grgit"],
+      "groupName": "org.ajoberstar.grgit",
+      "description": "TODO: grgit 5.0 requires Java 11",
+      "allowedVersions": "< 5.0"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.activemq"],
+      "groupName": "org.apache.activemq",
+      "description": "TODO: activemq 5.17.0 requires Java 11",
+      "allowedVersions": "< 5.17.0"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.ftpserver"],
+      "groupName": "org.apache.ftpserver"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.httpcomponents:"],
+      "groupName": "org.apache.httpcomponents4"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.httpcomponents.client5:"],
+      "groupName": "org.apache.httpcomponents5"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.logging.log4j"],
+      "groupName": "org.apache.logging.log4j"
+    },
+    {
+      "matchPackagePrefixes": ["org.apache.tika"],
+      "groupName": "org.apache.tika"
+    },
+    {
+      "matchPackagePrefixes": ["org.checkerframework"],
+      "groupName": "org.checkerframework"
+    },
+    {
+      "matchPackagePrefixes": ["org.eclipse.jgit"],
+      "groupName": "org.eclipse.jgit",
+      "description": "TODO: jgit 6.0 requires Java 11",
+      "allowedVersions": "< 6.0"
+    },
+    {
+      "matchPackagePrefixes": ["org.jetbrains.lets-plot"],
+      "groupName": "org.jetbrains.lets-plot"
+    },
+    {
+      "matchPackagePrefixes": ["org.jodd"],
+      "groupName": "org.jodd"
+    },
+    {
+      "matchPackagePrefixes": ["org.openjdk.jmh"],
+      "groupName": "org.openjdk.jmh"
+    },
+    {
+      "matchPackagePrefixes": ["org.slf4j"],
+      "groupName": "org.slf4j",
+      "allowedVersions": "< 2.0.0"
+    },
+    {
+      "matchPackagePatterns": ["^src:protocol"],
+      "enabled": false
+    }
+  ]
+}

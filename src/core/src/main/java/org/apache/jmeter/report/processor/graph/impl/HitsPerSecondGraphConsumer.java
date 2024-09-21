@@ -66,19 +66,6 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
                         new CountValueSelector(true), false, false));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #setGranularity(long)
-     */
-    @Override
-    public void setGranularity(long granularity) {
-        super.setGranularity(granularity);
-
-    }
-
     @Override
     public void initialize() {
         super.initialize();
@@ -90,17 +77,5 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
         ((StaticSeriesSelector) getGroupInfos().get(
                 AbstractGraphConsumer.DEFAULT_GROUP).getSeriesSelector())
                 .setSeriesName(getName());
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.AbstractSampleConsumer#setName
-     * (java.lang.String)
-     */
-    @Override
-    public void setName(String name) {
-        super.setName(name);
     }
 }

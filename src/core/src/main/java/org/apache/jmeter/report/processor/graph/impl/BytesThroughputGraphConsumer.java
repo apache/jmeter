@@ -90,18 +90,6 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
                 new GroupInfo(new TimeRateAggregatorFactory(), seriesSelector, graphValueSelector, false, false));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #setGranularity(long)
-     */
-    @Override
-    public void setGranularity(long granularity) {
-        super.setGranularity(granularity);
-    }
-
     @Override
     public void initialize() {
         super.initialize();

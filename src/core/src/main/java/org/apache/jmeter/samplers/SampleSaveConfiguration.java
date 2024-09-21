@@ -283,6 +283,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // Read in the properties having to do with saving from a properties file.
     static {
         Properties props = JMeterUtils.getJMeterProperties();
+        if (props == null) {
+            // If properties are not initialized, proceed with defaults
+            props = new Properties();
+        }
 
         SUB_RESULTS      = TRUE.equalsIgnoreCase(props.getProperty(SUBRESULTS_PROP, TRUE));
         ASSERTIONS      = TRUE.equalsIgnoreCase(props.getProperty(ASSERTIONS_PROP, TRUE));
@@ -464,7 +468,9 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private boolean idleTime = IDLE_TIME;
 
     // Does not appear to be used (yet)
-    private int assertionsResultsToSave = ASSERTIONS_RESULT_TO_SAVE;
+    // it is
+    @SuppressWarnings("FieldCanBeStatic")
+    private final int assertionsResultsToSave = ASSERTIONS_RESULT_TO_SAVE;
 
     // Don't save this, as it is derived from the time format
     private boolean printMilliseconds = PRINT_MILLISECONDS;

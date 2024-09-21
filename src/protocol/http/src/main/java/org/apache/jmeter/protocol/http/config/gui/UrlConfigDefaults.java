@@ -118,6 +118,7 @@ public class UrlConfigDefaults implements Serializable {
      * Return the default HTTP method to be selected in the {@link UrlConfigGui}.
      * @return the default HTTP method to be selected in the {@link UrlConfigGui}
      */
+    @Deprecated
     public String getDefaultMethod() {
         return defaultMethod;
     }
@@ -126,6 +127,7 @@ public class UrlConfigDefaults implements Serializable {
      * Set the default HTTP method to be selected in the {@link UrlConfigGui}.
      * @param defaultMethod the default HTTP method to be selected in the {@link UrlConfigGui}
      */
+    @Deprecated
     public void setDefaultMethod(String defaultMethod) {
         this.defaultMethod = defaultMethod;
     }
@@ -133,6 +135,7 @@ public class UrlConfigDefaults implements Serializable {
     /**
      * @return the default value to be set for the followRedirect checkbox in the {@link UrlConfigGui}.
      */
+    @Deprecated
     public boolean isFollowRedirects() {
         return followRedirects;
     }
@@ -141,6 +144,7 @@ public class UrlConfigDefaults implements Serializable {
      * Set the default value to be set for the followRedirect checkbox in the {@link UrlConfigGui}.
      * @param followRedirects flag whether redirects should be followed
      */
+    @Deprecated
     public void setFollowRedirects(boolean followRedirects) {
         this.followRedirects = followRedirects;
     }
@@ -148,6 +152,7 @@ public class UrlConfigDefaults implements Serializable {
     /**
      * @return the default value to be set for the autoRedirects checkbox in the {@link UrlConfigGui}.
      */
+    @Deprecated
     public boolean isAutoRedirects() {
         return autoRedirects;
     }
@@ -156,6 +161,7 @@ public class UrlConfigDefaults implements Serializable {
      * Set the default value to be set for the autoRedirects checkbox in the {@link UrlConfigGui}.
      * @param autoRedirects flag whether redirects should be followed automatically
      */
+    @Deprecated
     public void setAutoRedirects(boolean autoRedirects) {
         this.autoRedirects = autoRedirects;
     }
@@ -163,6 +169,7 @@ public class UrlConfigDefaults implements Serializable {
     /**
      * @return the default value to be set for the useKeepAlive checkbox in the {@link UrlConfigGui}.
      */
+    @Deprecated
     public boolean isUseKeepAlive() {
         return useKeepAlive;
     }
@@ -171,6 +178,7 @@ public class UrlConfigDefaults implements Serializable {
      * Set the default value to be set for the useKeepAlive checkbox in the {@link UrlConfigGui}.
      * @param useKeepAlive flag whether to use keep-alive on HTTP requests
      */
+    @Deprecated
     public void setUseKeepAlive(boolean useKeepAlive) {
         this.useKeepAlive = useKeepAlive;
     }
@@ -178,6 +186,7 @@ public class UrlConfigDefaults implements Serializable {
     /**
      * @return the default value to be set for the useMultipart checkbox in the {@link UrlConfigGui}.
      */
+    @Deprecated
     public boolean isUseMultipart() {
         return useMultipart;
     }
@@ -186,6 +195,7 @@ public class UrlConfigDefaults implements Serializable {
      * Set the default value to be set for the useMultipart checkbox in the {@link UrlConfigGui}.
      * @param useMultipart flag whether request data should use multi-part feature
      */
+    @Deprecated
     public void setUseMultipart(boolean useMultipart) {
         this.useMultipart = useMultipart;
     }
@@ -193,6 +203,7 @@ public class UrlConfigDefaults implements Serializable {
     /**
      * @return the default value to be set for the useBrowserCompatibleMultipartMode checkbox in the {@link UrlConfigGui}.
      */
+    @Deprecated
     public boolean isUseBrowserCompatibleMultipartMode() {
         return useBrowserCompatibleMultipartMode;
     }
@@ -201,6 +212,7 @@ public class UrlConfigDefaults implements Serializable {
      * Set the default value to be set for the useBrowserCompatibleMultipartMode checkbox in the {@link UrlConfigGui}.
      * @param useBrowserCompatibleMultipartMode flag whether to use browser compatible multi-part mode
      */
+    @Deprecated
     public void setUseBrowserCompatibleMultipartMode(boolean useBrowserCompatibleMultipartMode) {
         this.useBrowserCompatibleMultipartMode = useBrowserCompatibleMultipartMode;
     }

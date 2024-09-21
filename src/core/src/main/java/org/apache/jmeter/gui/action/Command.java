@@ -21,7 +21,9 @@ import java.awt.event.ActionEvent;
 import java.util.Set;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jorphan.reflect.JMeterService;
 
+@JMeterService
 public interface Command {
     void doAction(ActionEvent e) throws IllegalUserActionException;
 

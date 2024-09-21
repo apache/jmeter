@@ -17,7 +17,7 @@
 
 package org.apache.jorphan;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -35,37 +35,37 @@ public class TestFunctorUsers extends JMeterTestCase {
     @Test
     @SuppressWarnings("deprecation")
     public void testSummaryReport() throws Exception {
-        assertTrue("SummaryReport Functor", SummaryReport.testFunctors());
+        assertTrue(SummaryReport.testFunctors(), "SummaryReport Functor");
     }
 
     @Test
     public void testTableVisualizer() throws Exception {
-        assertTrue("TableVisualizer Functor", TableVisualizer.testFunctors());
+        assertTrue(TableVisualizer.testFunctors(), "TableVisualizer Functor");
     }
 
     @Test
     public void testStatGraphVisualizer() throws Exception {
-        assertTrue("StatGraphVisualizer Functor", StatGraphVisualizer.testFunctors());
+        assertTrue(StatGraphVisualizer.testFunctors(), "StatGraphVisualizer Functor");
     }
 
     @Test
     @SuppressWarnings("deprecation")
     public void testStatVisualizer() throws Exception {
-        assertTrue("StatVisualizer Functor", StatVisualizer.testFunctors());
+        assertTrue(StatVisualizer.testFunctors(), "StatVisualizer Functor");
     }
 
     @Test
     public void testArgumentsPanel() throws Exception {
-        assertTrue("ArgumentsPanel Functor", ArgumentsPanel.testFunctors());
+        assertTrue(ArgumentsPanel.testFunctors(), "ArgumentsPanel Functor");
     }
 
     @Test
     public void testHTTPArgumentsPanel() throws Exception {
-        assertTrue("HTTPArgumentsPanel Functor", HTTPArgumentsPanel.testFunctors());
+        assertTrue(HTTPArgumentsPanel.testFunctors(), "HTTPArgumentsPanel Functor");
     }
 
     @Test
     public void testLDAPArgumentsPanel() throws Exception {
-        assertTrue("LDAPArgumentsPanel Functor", LDAPArgumentsPanel.testFunctors());
+        assertTrue(LDAPArgumentsPanel.testFunctors(), "LDAPArgumentsPanel Functor");
     }
 }

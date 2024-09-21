@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ import org.slf4j.Marker;
  */
 public class LogRecordingDelegatingLogger implements Logger {
 
-    private List<LogRecord> logRecords = Collections.synchronizedList(new LinkedList<>());
+    private List<LogRecord> logRecords = Collections.synchronizedList(new ArrayList<>());
 
     private Logger delegate;
 

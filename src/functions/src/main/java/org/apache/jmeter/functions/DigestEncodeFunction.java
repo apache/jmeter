@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +33,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 
 /**
  * Digest Encode Function that provides computing of different SHA-XXX, can
@@ -43,6 +46,7 @@ import org.slf4j.LoggerFactory;
  *
  * @since 4.0
  */
+@AutoService(Function.class)
 public class DigestEncodeFunction extends AbstractFunction {
 
     private static final Logger log = LoggerFactory.getLogger(DigestEncodeFunction.class);
@@ -97,10 +101,10 @@ public class DigestEncodeFunction extends AbstractFunction {
      * @param index
      * @return
      */
-    private String uppercase(String encodedString, CompoundVariable[] values, int index) {
+    private static String uppercase(String encodedString, CompoundVariable[] values, int index) {
         String shouldUpperCase = values.length > index ? values[index].execute() : null;
         if (Boolean.parseBoolean(shouldUpperCase)) {
-            return encodedString.toUpperCase();
+            return encodedString.toUpperCase(Locale.ROOT);
         }
         return encodedString;
     }

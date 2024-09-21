@@ -34,10 +34,13 @@ import java.util.stream.IntStream;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Handles the loading of recent files, and also the content and
  * visibility of menu items for loading the recent files
  */
+@AutoService(Command.class)
 public class LoadRecentProject extends Load {
     /** Prefix for the user preference key */
     private static final String USER_PREFS_KEY = "recent_file_"; //$NON-NLS-1$
@@ -74,7 +77,7 @@ public class LoadRecentProject extends Load {
     /**
      * Get the recent file for the menu item
      */
-    private File getRecentFile(ActionEvent e) {
+    private static File getRecentFile(ActionEvent e) {
         JMenuItem menuItem = (JMenuItem)e.getSource();
         // Get the preference for the recent files
         return new File(getRecentFile(Integer.parseInt(menuItem.getName())));
@@ -251,7 +254,7 @@ public class LoadRecentProject extends Load {
      * @param fileLoadRecentFiles List of JMenuItem
      * @return true if at least on JMenuItem is visible
      */
-    public static boolean hasVisibleMenuItem(List<JComponent> fileLoadRecentFiles) {
+    public static boolean hasVisibleMenuItem(List<? extends JComponent> fileLoadRecentFiles) {
         return fileLoadRecentFiles.stream()
                 .anyMatch(JComponent::isVisible);
     }

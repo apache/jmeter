@@ -48,9 +48,12 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implement ResultsRender for XPath tester
  */
+@AutoService(ResultRenderer.class)
 public class RenderAsXPath2 implements ResultRenderer, ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(RenderAsXPath2.class);
@@ -143,7 +146,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     }
 
 
-    private String getDocumentNamespaces(String textToParse) {
+    private static String getDocumentNamespaces(String textToParse) {
         StringBuilder result = new StringBuilder();
         try {
             List<String[]> namespaces = XPathUtil.getNamespaces(textToParse);
@@ -164,6 +167,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
+        response = ViewResultsFullVisualizer.wrapLongLines(response);
         try {
             xmlDataField.setText(response == null ? "" : response);
             xmlDataField.setCaretPosition(0);
@@ -279,7 +283,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
         return panel;
     }
 
-    private void initConstraints(GridBagConstraints gbc) {
+    private static void initConstraints(GridBagConstraints gbc) {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridheight = 1;
         gbc.gridwidth = 1;

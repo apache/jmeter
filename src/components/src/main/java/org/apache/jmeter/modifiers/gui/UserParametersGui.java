@@ -71,7 +71,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
     private PowerTableModel tableModel;
 
-    private int numUserColumns = 1;
+    private static final int numUserColumns = 1;
 
     private JButton addParameterButton;
     private JButton addUserButton;
@@ -182,7 +182,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         perIterationCheck.setSelected(false);
     }
 
-    private String getUserColName(int user){
+    private static String getUserColName(int user){
         return USER_COL_RESOURCE+UNDERSCORE+user;
     }
 

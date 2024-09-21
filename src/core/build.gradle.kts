@@ -16,15 +16,18 @@
  */
 
 import com.github.autostyle.gradle.AutostyleTask
+import com.github.vlsi.gradle.ide.IdeExtension
+import java.util.jar.JarFile
 
 plugins {
-    id("com.github.vlsi.ide")
+    id("java-test-fixtures")
+    id("build-logic.jvm-published-library")
 }
 
 dependencies {
-    api(project(":src:launcher"))
-    api(project(":src:jorphan"))
-    testImplementation(project(":src:jorphan", "testClasses"))
+    api(projects.src.launcher)
+    api(projects.src.jorphan)
+    testImplementation(testFixtures(projects.src.jorphan))
 
     api("bsf:bsf") {
         because("protected BSFManager BSFTestElement#getManager()")
@@ -43,6 +46,9 @@ dependencies {
     api("org.apache.logging.log4j:log4j-core") {
         because("GuiLogEventAppender is using log4j-core to implement GUI-based log appender")
     }
+    kapt("org.apache.logging.log4j:log4j-core") {
+        because("Generates a plugin cache file for GuiLogEventAppender")
+    }
     api("org.apache.logging.log4j:log4j-slf4j-impl") {
         because("Both log4j and slf4j are included, so it makes sense to just add log4j->slf4j bridge as well")
     }
@@ -52,6 +58,12 @@ dependencies {
     }
     api("xalan:xalan") {
         because("PropertiesBasedPrefixResolver extends PrefixResolverDefault")
+    }
+    api("xalan:serializer") {
+        because("Xalan 2.7.3 misses xalan:serializer dependency in pom.xml, see https://issues.apache.org/jira/browse/XALANJ-2649")
+    }
+    api("xml-apis:xml-apis") {
+        because("Xalan 2.7.3 misses xml-apis:xml-apis dependency in pom.xml, see https://issues.apache.org/jira/browse/XALANJ-2649")
     }
     // Note: Saxon should go AFTER xalan so xalan XSLT is used
     // org.apache.jmeter.util.XPathUtilTest.testFormatXmlSimple assumes xalan transformer
@@ -68,6 +80,8 @@ dependencies {
         }
     }
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing")
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
@@ -81,17 +95,11 @@ dependencies {
     implementation("commons-codec:commons-codec") {
         because("DigestUtils")
     }
-    implementation("commons-collections:commons-collections") {
+    runtimeOnly("commons-collections:commons-collections") {
         because("Compatibility for old plugins")
     }
-    implementation("org.jetbrains.lets-plot:lets-plot-batik") {
-        // See https://github.com/JetBrains/lets-plot/issues/471
-        exclude("org.jetbrains.kotlin", "kotlin-reflect")
-    }
-    implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm") {
-        // See https://github.com/JetBrains/lets-plot/issues/471
-        exclude("org.jetbrains.kotlin", "kotlin-reflect")
-    }
+    implementation("org.jetbrains.lets-plot:lets-plot-batik")
+    implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm")
     implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
@@ -116,10 +124,14 @@ dependencies {
     runtimeOnly("xml-apis:xml-apis")
 
     testImplementation("commons-net:commons-net")
-    testRuntimeOnly("org.spockframework:spock-core")
+    testImplementation("io.mockk:mockk")
+
+    testFixturesApi(testFixtures(projects.src.jorphan))
+    testFixturesImplementation(projects.src.testkit)
+    testFixturesImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-val generatedVersionDir = File(buildDir, "generated/sources/version")
+val generatedVersionDir = layout.buildDirectory.dir("generated/sources/version")
 
 val versionClass by tasks.registering(Sync::class) {
     val lastEditYear: String by rootProject.extra
@@ -138,14 +150,30 @@ val versionClass by tasks.registering(Sync::class) {
     into(generatedVersionDir)
 }
 
-ide {
-    generatedJavaSources(versionClass.get(), generatedVersionDir)
+// For some reason, using `ide { ... }` sometimes causes
+// Caused by: java.lang.IllegalStateException: couldn't find inline method
+// Lorg/gradle/kotlin/dsl/Accessorslkzxmv806rumtqvft7195qyhKt;.getIde(Lorg/gradle/api/Project;)Lcom/github/vlsi/gradle/ide/IdeExtension;
+configure<IdeExtension> {
+    generatedJavaSources(versionClass.get(), generatedVersionDir.get().asFile)
 }
 
 // <editor-fold defaultstate="collapsed" desc="Gradle can't infer task dependencies, however it sees they use the same directories. So we add the dependencies">
+tasks.sourcesJar {
+    dependsOn(versionClass)
+}
+
 plugins.withId("org.jetbrains.kotlin.jvm") {
     tasks.named("compileKotlin") {
         dependsOn(versionClass)
+    }
+}
+plugins.withId("org.jetbrains.kotlin.kapt") {
+    // kapt adds kaptGenerateStubsKotlin in afterEvaluate, so we can't use just tasks.named here
+    // This workaround is needed for Kotlin Gradle Plugin 1.9
+    afterEvaluate {
+        tasks.named("kaptGenerateStubsKotlin") {
+            dependsOn(versionClass)
+        }
     }
 }
 
@@ -162,5 +190,18 @@ tasks.withType<AutostyleTask>().configureEach {
 tasks.jar {
     into("org/apache/jmeter/images") {
         from("$rootDir/xdocs/images/logo.svg")
+    }
+}
+
+// Checks the generated JAR for a Log4j plugin cache file.
+tasks.jar {
+    doLast {
+        val jarFile = archiveFile.get().asFile
+        JarFile(jarFile).use { jar ->
+            val entryName = "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat"
+            if (jar.getJarEntry(entryName) == null) {
+                throw IllegalStateException("$entryName was not found in $jarFile. The entry should be generated by log4j-core annotation processor")
+            }
+        }
     }
 }

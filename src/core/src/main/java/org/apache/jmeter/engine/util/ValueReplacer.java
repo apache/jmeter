@@ -81,7 +81,7 @@ public class ValueReplacer {
         setProperties(el, newProps);
     }
 
-    private void setProperties(TestElement el, Collection<JMeterProperty> newProps) {
+    private static void setProperties(TestElement el, Collection<? extends JMeterProperty> newProps) {
         el.clear();
         for (JMeterProperty jmp : newProps) {
             el.setProperty(jmp);
@@ -151,11 +151,10 @@ public class ValueReplacer {
      * {@link org.apache.jmeter.testelement.property.FunctionProperty} of
      * a {@link CompoundVariable} containing three functions
      * @param iter the {@link PropertyIterator} over all properties, in which the values should be replaced
-     * @param transform the {@link ValueTransformer}, that should do transformation
+     * @param transform the {@link PropertyTransformer}, that should do transformation
      * @return a new {@link Collection} with all the transformed {@link JMeterProperty}s
-     * @throws InvalidVariableException when <code>transform</code> throws an {@link InvalidVariableException} while transforming a value
      */
-    private Collection<JMeterProperty> replaceValues(PropertyIterator iter, ValueTransformer transform) throws InvalidVariableException {
+    private static Collection<JMeterProperty> replaceValues(PropertyIterator iter, PropertyTransformer transform) {
         List<JMeterProperty> props = new ArrayList<>();
         while (iter.hasNext()) {
             JMeterProperty val = iter.next();
@@ -166,11 +165,11 @@ public class ValueReplacer {
                 // Must not convert TestElement.gui_class etc
                 if (!val.getName().equals(TestElement.GUI_CLASS) &&
                         !val.getName().equals(TestElement.TEST_CLASS)) {
-                    val = transform.transformValue(val);
+                    val = transform.transform(val);
                     log.debug("Replacement result: {}", val);
                 }
             } else if (val instanceof NumberProperty) {
-                val = transform.transformValue(val);
+                val = transform.transform(val);
                 log.debug("Replacement result: {}", val);
             } else if (val instanceof MultiProperty) {
                 MultiProperty multiVal = (MultiProperty) val;

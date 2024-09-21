@@ -23,6 +23,9 @@ import java.util.Set;
 
 import org.apache.jmeter.functions.gui.FunctionHelper;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(Command.class)
 public class CreateFunctionDialog extends AbstractAction {
 
     private static final Set<String> commands;

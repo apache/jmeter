@@ -32,7 +32,7 @@ public class CsvFile extends File {
 
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 4721600093557427167L;
-    private char separator;
+    private final char separator;
 
     public CsvFile(File parent, String child, char separator) {
         super(parent, child);

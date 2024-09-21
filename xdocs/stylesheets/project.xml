@@ -53,7 +53,7 @@
      </menu>
      <menu name="Community">
         <item name="Issue Tracking"      href="/issues.html"/>
-        <item name="Security"            href="https://www.apache.org/security/"/>
+        <item name="Security"            href="/security.html"/>
         <item name="Mailing Lists"       href="/mail.html"/>
         <item name="Source Repositories"    href="/svnindex.html"/>
         <item name="Building and Contributing"    href="/building.html"/>
@@ -63,6 +63,7 @@
      <menu name="Foundation">
         <item name="The Apache Software Foundation (ASF)" href="https://www.apache.org/"/>
         <item name="Get Involved in the ASF" href="https://www.apache.org/foundation/getinvolved.html"/>
+        <item name="Privacy Policy"      href="https://privacy.apache.org/policies/privacy-policy-public.html"/>
         <item name="Sponsorship"         href="https://www.apache.org/foundation/sponsorship.html"/>
         <item name="Thanks"              href="https://www.apache.org/foundation/thanks.html"/>
      </menu>

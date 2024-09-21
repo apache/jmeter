@@ -28,11 +28,11 @@ import org.apache.jmeter.config.ConfigElement;
 // TODO - the class contents are not used at present - could perhaps be removed
 public class Entry {
 
-    private Map<Class<?>, ConfigElement> configSet;
+    private final Map<Class<?>, ConfigElement> configSet;
 
     private Class<?> sampler;
 
-    private List<Assertion> assertions;
+    private final List<Assertion> assertions;
 
     public Entry() {
         configSet = new HashMap<>();
@@ -84,7 +84,7 @@ public class Entry {
         }
     }
 
-    private ConfigElement cloneIfNecessary(ConfigElement config) {
+    private static ConfigElement cloneIfNecessary(ConfigElement config) {
         if (config.expectsModification()) {
             return config;
         }

@@ -23,12 +23,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
+import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 
 /**
  * The <code>SleepTest</code> class is a simple example class for a JMeter
@@ -47,6 +50,7 @@ import org.slf4j.LoggerFactory;
  * time.
  *
  */
+@AutoService(JavaSamplerClient.class)
 public class SleepTest extends AbstractJavaSamplerClient implements Serializable, Interruptible {
 
     private static final Logger LOG = LoggerFactory.getLogger(SleepTest.class);
@@ -198,7 +202,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
      * @param context
      *            the context which contains the initialization parameters.
      */
-    private void listParameters(JavaSamplerContext context) {
+    private static void listParameters(JavaSamplerContext context) {
         Iterator<String> argsIt = context.getParameterNamesIterator();
         while (argsIt.hasNext()) {
             String lName = argsIt.next();

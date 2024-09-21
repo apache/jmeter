@@ -33,10 +33,13 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Move a node up/down/left/right
  *
  */
+@AutoService(Command.class)
 public class Move extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 
@@ -100,7 +103,7 @@ public class Move extends AbstractAction {
         GuiPackage.getInstance().getMainFrame().repaint();
     }
 
-    private JMeterTreeNode getParentNode(JMeterTreeNode currentNode) {
+    private static JMeterTreeNode getParentNode(JMeterTreeNode currentNode) {
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
         TestElement te = currentNode.getTestElement();
         if (te instanceof TestPlan) {

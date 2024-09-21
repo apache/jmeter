@@ -17,35 +17,36 @@
 
 package org.apache.jmeter;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jorphan.test.JMeterSerialTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
+class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
 
     @Test
-    public void testFailureWhenJmxDoesntExist() {
+    void testFailureWhenJmxDoesNotExist() {
         JMeter jmeter = new JMeter();
         try {
             jmeter.runNonGui("testPlan.jmx", null, false, null, false);
-            fail("Expected ConfigurationException to be thrown");
+            Assertions.fail("Expected ConfigurationException to be thrown");
         } catch (ConfigurationException e) {
-            assertTrue("When the file doesn't exist, this method 'runNonGui' should have a detailed message",
-                    e.getMessage().contains("doesn't exist or can't be opened"));
+            Assertions.assertTrue(e.getMessage().contains("doesn't exist or can't be opened"),
+                    "When the file doesn't exist, this method 'runNonGui' should have a detailed message");
         }
     }
 
     @Test
-    public void testSuccessWhenJmxExists() throws IOException, ConfigurationException {
+    void testSuccessWhenJmxExists() throws IOException, ConfigurationException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT\">\n" + "  <hashTree>\n"
@@ -59,7 +60,8 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
                 + "        <collectionProp name=\"Arguments.arguments\"/>\n" + "      </elementProp>\n"
                 + "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp></TestPlan>"
                 + "    <hashTree/></hashTree></jmeterTestPlan>";
-        try (FileWriter fw = new FileWriter(temp);
+        try (FileOutputStream os = new FileOutputStream(temp);
+                Writer fw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
                 BufferedWriter out = new BufferedWriter(fw)) {
             out.write(testPlan);
         }
@@ -68,12 +70,12 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
             JMeter jmeter = new JMeter();
             jmeter.runNonGui(temp.getAbsolutePath(), null, false, null, false);
         } finally {
-            assertTrue("File "+ temp.getAbsolutePath()+ " should have been deleted", temp.delete());
+            Assertions.assertTrue(temp.delete(), () ->"File " + temp.getAbsolutePath() + " should have been deleted");
         }
     }
 
     @Test
-    public void testFailureWithMissingPlugin() throws IOException, ConfigurationException {
+    void testFailureWithMissingPlugin() throws IOException {
         File temp = File.createTempFile("testPlan", ".jmx");
         String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT.20190506\">\n"
@@ -102,19 +104,20 @@ public class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
                 + "          <stringProp name=\"CONNECT\">${__Random(1,5)}</stringProp>\n"
                 + "        </kg.apc.jmeter.samplers.DummySampler></hashTree></hashTree>\n"
                 + "  </hashTree></jmeterTestPlan><hashTree/></hashTree>\n" + "</jmeterTestPlan>";
-        try (FileWriter fw = new FileWriter(temp);
+        try (FileOutputStream os = new FileOutputStream(temp);
+                Writer fw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
                 BufferedWriter out = new BufferedWriter(fw)) {
             out.write(testPlan);
         }
         JMeter jmeter = new JMeter();
         try {
             jmeter.runNonGui(temp.getAbsolutePath(), null, false, null, false);
-            fail("Expected ConfigurationException to be thrown");
+            Assertions.fail("Expected ConfigurationException to be thrown");
         } catch (ConfigurationException e) {
-            assertTrue("When the plugin doesn't exist, the method 'runNonGui' should have a detailed message",
-                    e.getMessage().contains("Error in NonGUIDriver Problem loading XML from"));
+            Assertions.assertTrue(e.getMessage().contains("Error in NonGUIDriver Problem loading XML from"),
+                    "When the plugin doesn't exist, the method 'runNonGui' should have a detailed message");
         } finally {
-            assertTrue("File "+ temp.getAbsolutePath()+ " should have been deleted", temp.delete());
+            Assertions.assertTrue(temp.delete(), () -> "File " + temp.getAbsolutePath() + " should have been deleted");
         }
     }
 }

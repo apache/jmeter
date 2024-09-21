@@ -67,7 +67,7 @@ def user = &apos;SA&apos;
 def password = &apos;&apos;
 def driver = &apos;org.hsqldb.jdbcDriver&apos;
 def sql = Sql.newInstance(url, user, password, driver)
-def row = sql.firstRow(&apos;select count(*) from INFORMATION_SCHEMA.system_sessions&apos;) 
+def row = sql.firstRow(&apos;select count(*) from INFORMATION_SCHEMA.system_sessions&apos;)
 def sessionNum = row[0]
 
 try {
@@ -164,7 +164,7 @@ sql.close()
    title VARCHAR(50) NOT NULL,
    author VARCHAR(20) NOT NULL,
    submission_date DATE,
-   PRIMARY KEY (id) 
+   PRIMARY KEY (id)
 );
 
 </stringProp>
@@ -196,7 +196,7 @@ sql.close()
    BEGIN ATOMIC
      DECLARE result CURSOR FOR SELECT * FROM USERS WHERE ID = IDENTITY();
      INSERT INTO USERS VALUES (DEFAULT, title, author, CURRENT_DATE);
-     OPEN result;    
+     OPEN result;
    END ;</stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>
@@ -225,7 +225,7 @@ sql.close()
 	MODIFIES SQL DATA DYNAMIC RESULT SETS 1
    BEGIN ATOMIC
      DECLARE result CURSOR FOR SELECT * FROM USERS order by id FOR READ ONLY;
-     OPEN result;   
+     OPEN result;
    END ;</stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>
@@ -1284,7 +1284,7 @@ if (list.size()==3) {
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1643270117">Name for DataSoure must not be empty in JDBC_NoConfig</stringProp>
+              <stringProp name="-1643270117">Name for DataSource must not be empty in JDBC_NoConfig</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
             <boolProp name="Assertion.assume_success">true</boolProp>

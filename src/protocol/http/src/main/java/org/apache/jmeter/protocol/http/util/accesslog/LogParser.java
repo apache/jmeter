@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.http.util.accesslog;
 
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.reflect.JMeterService;
 
 /**
  * Description:<br>
@@ -34,6 +35,7 @@ import org.apache.jmeter.testelement.TestElement;
  *
  */
 
+@JMeterService
 public interface LogParser {
 
     /**

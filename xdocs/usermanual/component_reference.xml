@@ -1211,7 +1211,7 @@ props.put("PROP1","1234");</source>
     </property>
     <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
-    <property name="Cache compiled script if available" required="No">If checked (advised) and the language used supports <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</property>
+    <property name="Cache compiled script if available" required="No">If checked (advised) and the language used supports <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using its MD5 hash as unique cache key</property>
     <property name="Script" required="Yes (unless script file is provided)">Script to be passed to JSR223 language</property>
 </properties>
 <p>
@@ -4649,8 +4649,8 @@ These can be used anywhere within the expression and remain in effect until over
                 HTTP Responses with statuses in the <code>4xx</code> and <code>5xx</code> ranges are normally
                 regarded as unsuccessful.
                 The "<code>Ignore status</code>" checkbox can be used to set the status successful before performing further checks.
-                Note that this will have the effect of clearing any previous assertion failures,
-                so make sure that this is only set on the first assertion.
+                <note>Note that this will have the effect of clearing any previous assertion failures,
+                so make sure that this is only set on the first assertion.</note>
         </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates how the text being tested
         is checked against the pattern.
@@ -5035,6 +5035,11 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
             Second, it will search for specified path, using syntax from <a href="https://github.com/json-path/JsonPath" >Jayway JsonPath 1.2.0</a>. If the path is not found, it will fail.
             Third, if JSON path was found in the document, and validation against expected value was requested, it will perform validation. For the <code>null</code> value there is special checkbox in the GUI.
             Note that if the path will return array object, it will be iterated and if expected value is found, the assertion will succeed. To validate empty array use <code>[]</code> string. Also, if patch will return dictionary object, it will be converted to string before comparison.
+           <note>When using <a href="https://github.com/json-path/JsonPath#what-is-returned-when">indefinite JSON Paths</a>
+             you must assert the value due to the existing JSON library implementation, otherwise the assertion could always
+             return successful.<br></br>
+             Since JMeter version 5.5 the assertion will fail, if an indefinite path is given, an empty list is extracted and
+             no assertion value is set.</note>
         </p>
     </description>
     <properties>
@@ -6039,7 +6044,7 @@ extracting the node as text or attribute value and store the result into the giv
     use namespaces than with the old XPathExtractor version.</property>
    </properties>
    <p>To allow for use in a <complink name="ForEach Controller"/>, it works exactly the same as the above XPath Extractor</p>
-   <p>XPath2 Extractor provides some interestings tools such as an improved syntax and much more functions than in it's first version.</p>
+   <p>XPath2 Extractor provides some interestings tools such as an improved syntax and much more functions than in its first version.</p>
    <p>Here are some exemples: </p>
    <dl>
    <dt><code>abs(/book/page[2])</code></dt>
@@ -6164,8 +6169,7 @@ where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</co
 
 <component name="JSON JMESPath Extractor" index="&sect-num;.8.4" anchor="JSON_JMESPath_Extractor" width="896" height="205" screenshot="extractor/jmespath_extractor.png">
     <description>This test element allows the user to extract value(s) from
-        structured response - XML or (X)HTML - using JMESPath
-        query language.
+        JSON response using JMESPath query language.
    </description>
    <note>In the XPATH Extractor we support to extract multiple xpaths at the same time, but in JMES Extractor only
    one JMES Expression can be entered at a time.
@@ -6517,38 +6521,81 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
        The users are generated according to the schedule.
     </p>
     <p>The load profile consists of a sequence of constant, increasing or decreasing load.
-       The following commands are available:
-        <ul>
-            <li><code>rate(&lt;number&gt;/sec)</code> &mdash; configures target load rate.
+       The basic configuration is <code>rate(1/sec) random_arrivals(2 min) rate(3/sec)</code> which means the load will increase linearly
+        from one request per second to three requests per second during a period of two-minutes.
+       If you omit rate at the end, then it will be set to the same value as that from the start. For example,
+        <code>rate(1/sec) random_arrivals(2 min)</code> is exactly the same as <code>rate(1/sec) random_arrivals(2 min) rate(1/sec)</code>.
+       That is why <code>rate(1/sec) random_arrivals(2 min) random_arrivals(3 min) rate(4/sec)</code> is exactly the same as
+        <code>rate(1/sec) random_arrivals(2 min) rate(1/sec) random_arrivals(3 min) rate(4/sec)</code>, so the load is one request per second during the first two minutes,
+        after which it increases linearly from one request per second to four requests per second during three minutes.
+    </p>
+    <p>Here are examples for using the schedule:
+        <dl>
+            <dt><code>rate(10/sec) random_arrivals(1 min) rate(10/sec)</code></dt>
+            <dd>constant load rate of ten requests per second during one minute</dd>
+
+            <dt><code>rate(0) random_arrivals(1 min) rate(10/sec)</code></dt>
+            <dd>linearly increase the load from zero requests per second to ten requests per second during one minute</dd>
+
+            <dt><code>rate(0) random_arrivals(1 min) rate(10/sec) random_arrivals(1 min) rate(10/sec) random_arrivals(1 min) rate(0)</code></dt>
+            <dd>linearly increase the load from zero requests per second to ten requests per second during one minute, then hold the load during one minute,
+                then linearly decrease the load from ten requests per second to zero during one minute</dd>
+
+            <dt><code>rate(10) random_arrivals(1 min) rate(10/sec) random_arrivals(1 min) rate(10/sec) random_arrivals(1 min) rate(0)</code></dt>
+            <dd>linearly increase the load from zero requests per second to ten requests per second during one minute, then hold the load during one minute,
+                then linearly decrease the load from ten requests per second to zero requests per second during one minute</dd>
+
+            <dt><code>rate(10) random_arrivals(1 min) pause(2 sec) random_arrivals(1 min)</code></dt>
+            <dd>run with constant load of ten requests per second during one minute, then make two second pause, then resume the load of ten requests per second for one minute</dd>
+        </dl>
+    </p>
+    <p>The following commands are available:
+        <dl>
+            <dt><code>rate(&lt;number&gt;/sec)</code></dt>
+            <dd>configures target load rate.
                 The following time units are supported: <code>ms</code>, <code>sec</code>, <code>min</code>, <code>hour</code>, <code>day</code>.
-                You can omit time unit in case the rate is 0: <code>rate(0)</code></li>
-            <li><code>random_arrivals(&lt;number&gt; sec)</code> &mdash; configures random arrivals schedule with the given duration.
+                You can omit time unit in case the rate is 0: <code>rate(0)</code>
+            </dd>
+
+            <dt><code>random_arrivals(&lt;number&gt; sec)</code></dt>
+            <dd>configures random arrivals schedule with the given duration.
                 The starting load rate is configured before <code>random_arrivals</code>, and the finish load rate is configured after <code>random_arrivals</code>.
-                For example, 10 minute test from 5/sec at the beginning till 15/sec at the end could be configured as <code>rate(5/sec) random_arrivals(10 min) rate(15/sec)</code>.
-                <br/>The implicit rate at the beginning of the test is 0. If the finish rate is not provided (or if several <code>random_arrivals</code> steps go one after another),
+                For example, 10 minute test from five requests per second at the beginning to fifteen request per second at the end could be configured as <code>rate(5/sec) random_arrivals(10 min) rate(15/sec)</code>.
+                <br/>The implicit rate at the beginning of the test is <code>0</code>. If the finish rate is not provided (or if several <code>random_arrivals</code> steps go one after another),
                 then the load is constant. For instance, <code>rate(3/sec) random_arrivals(1 min) random_arrivals(2 min) rate(6/sec)</code> configures
-                constant rate of 3/sec for the first 1 minute, and then the load increases from 3/sec till 6/sec during the next 2 minutes.
+                constant rate of three requests per second for the first minute, and then the load increases from three requests per second to six requests per second during the next two minutes.
                 The time units are the same as in <code>rate</code>.
-            </li>
-            <li><code>even_arrivals(&lt;number&gt; sec)</code> &mdash; configures even arrivals (TODO: not implemented yet). For instance, if the desired load
-                is 1/sec, then <code>random_arrivals</code> would lauch samples with exactly 1 second intervals.</li>
-            <li><code>pause(&lt;number&gt; sec)</code> &mdash; configures a pause for the given duration.
+            </dd>
+
+            <dt><code>even_arrivals(&lt;number&gt; sec)</code></dt>
+            <dd>configures even arrivals (TODO: not implemented yet). For instance, if the desired load
+                is one request per second, then <code>random_arrivals</code> would lauch samples with exactly one second intervals.
+            </dd>
+
+            <dt><code>pause(&lt;number&gt; sec)</code></dt>
+            <dd>configures a pause for the given duration.
                 The rate is restored after the pause, so <code>rate(2/sec) random_arrivals(5 sec) pause(5 sec) random_arrivals(5 sec)</code>
-                generates random arrivals with 2/sec rate, then a pause for 5 seconds (no new arrivals), then 5 more seconds with 2/sec rate.<br/>
+                generates random arrivals with two requests per second rate, then a pause for five seconds (no new arrivals), then five more seconds with two requests per second rate.<br/>
                 Note: <code>pause</code> duration is always honoured, even if all the scenarios are complete, and no new ones will be scheduled.
                 For instance, if you use <code>rate(1/sec) random_arrivals(1 min) pause(1 hour)</code>, the thread group would
-                always last for 61 minutes no matter how much time do individual scenarios take.
-            </li>
-            <li><code>/* Comments */</code> can be used to clarify the schedule or temporary disable some steps. Comments
-                cannot be nested.</li>
-            <li><code>// line comments</code> can be used to clarify the schedule or temporary disable some steps.
-                Line comment lasts till the end of the line.</li>
-        </ul>
+                always last for sixty-one minutes no matter how much time do individual scenarios take.
+            </dd>
+
+            <dt><code>/* Comments */</code></dt>
+            <dd>can be used to clarify the schedule or temporary disable some steps. Comments
+                cannot be nested.
+            </dd>
+
+            <dt><code>// line comments</code></dt>
+            <dd>can be used to clarify the schedule or temporary disable some steps.
+                Line comment lasts till the end of the line.
+            </dd>
+        </dl>
     </p>
     <p>The thread groups terminates threads as soon as the schedule ends. In other words, the threads are interrupted
         after all <code>arrivals</code> and <code>pause</code> intervals.
         If you want to let the threads complete safely, consider adding <code>pause(5 min)</code> at the end of the schedule.
-        That will add 5 minutes for the threads to continue.
+        That will add five minutes for the threads to continue.
     </p>
     <p>There are no special functions for generating the load profile in a loop, however, the default JMeter templating functions
         can be helpful for generating the schedule.
@@ -6785,9 +6832,9 @@ As a consequence:
 <li>The browser should display a dialogue asking if you want to accept the certificate or not. For example:
 <source>
 1) The server's name "<code>www.example.com</code>" does not match the certificate's name
-   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>". Somebody may be trying to eavesdrop on you.
-2) The certificate for "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>" is signed by the unknown Certificate Authority
-   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT S YOURS)</code>". It is not possible to verify that this is a valid certificate.
+   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT IS YOURS)</code>". Somebody may be trying to eavesdrop on you.
+2) The certificate for "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT IS YOURS)</code>" is signed by the unknown Certificate Authority
+   "<code>_ JMeter Root CA for recording (INSTALL ONLY IF IT IS YOURS)</code>". It is not possible to verify that this is a valid certificate.
 </source>
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it.
@@ -6914,7 +6961,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
         <property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables? If checked replacement will use word boundaries, i.e. it will only replace word matching values of variable, not part of a word. A word boundary follows Perl5 definition and is equivalent to <code>\b</code>. More information below in the paragraph about "<code>User Defined Variable replacement</code>".</property>
         <property name="Prefix/Transaction name" required="No">Add a prefix to sampler name during recording (Prefix mode). Or replace sampler name by user chosen name (Transaction name)</property>
         <property name="Naming scheme" required="No">Select the naming scheme for sampler names during recording. Default is <code>Transaction name</code></property>
-        <property name="Naming format" required="No">If <code>Use format string</code> is selected as naming scheme, a freestyle format can be given. Placeholders for the transaction name, path and counter can be given by <code>#{name}</code>, <code>#{path}</code> and <code>#{counter}</code>. A simple format could be "<code>#{name}-#{counter}</code>", which would be equivalent to the numbered default naming scheme. For more complex formatting Java formatting for MessageFormat can be used, as in "<code>#{counter,number,000}: #{name}-#{path}</code>", which would print the counter filled with up to three zeroes. Default is an empty string.</property>
+        <property name="Naming format" required="No">If <code>Use format string</code> is selected as naming scheme, a freestyle format can be given. Placeholders for the transaction name, scheme, host, port, path and counter can be given by <code>#{name}</code>, <code>#{scheme}</code>, <code>#{host}</code>, <code>#{port}</code>, <code>#{path}</code>, <code>#{url}</code> and <code>#{counter}</code>. A simple format could be "<code>#{name}-#{counter}</code>", which would be equivalent to the numbered default naming scheme. For more complex formatting Java formatting for MessageFormat can be used, as in "<code>#{counter,number,000}: #{name}-#{path}</code>", which would print the counter filled with up to three zeroes. Note that scheme is called <code>protocol</code> in the sampler GUI and host is called <code>domain</code>. Default is an empty string.</property>
         <property name="Counter start value" required="No">Can be used to reset the counter to a given value. Note, that the next sample will first increment and then use the value. If the first sampler should start with <code>1</code>, reset the counter to <code>0</code>.</property>
         <property name="Create new transaction after request (ms)">Inactivity time between two requests needed to consider them in two separate groups.</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the HTTPClient default or Java)</property>

@@ -26,7 +26,7 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
  */
 public class MeanAggregator implements Aggregator {
 
-    private Mean mean = new Mean();
+    private final Mean mean = new Mean();
 
     /*
      * (non-Javadoc)

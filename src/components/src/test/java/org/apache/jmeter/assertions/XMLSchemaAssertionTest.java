@@ -17,14 +17,15 @@
 
 package org.apache.jmeter.assertions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
@@ -52,19 +53,21 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
     }
 
     private ByteArrayOutputStream readBA(String name) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(findTestFile(name)));
         ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
-        int len = 0;
-        byte[] data = new byte[512];
-        while ((len = bis.read(data)) >= 0) {
-            baos.write(data, 0, len);
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(findTestFile(name)))) {
+            int len = 0;
+            byte[] data = new byte[512];
+            while ((len = bis.read(data)) >= 0) {
+                baos.write(data, 0, len);
+            }
         }
-        bis.close();
         return baos;
     }
 
     private byte[] readFile(String name) throws IOException {
-        return readBA(name).toByteArray();
+        try (ByteArrayOutputStream baos = readBA(name)) {
+            return baos.toByteArray();
+        }
     }
 
     @Test
@@ -74,8 +77,8 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure " + res.getFailureMessage());
-        assertFalse("Should not be an error", res.isError());
-        assertFalse("Should not be a failure", res.isFailure());
+        assertFalse(res.isError(), "Should not be an error");
+        assertFalse(res.isFailure(), "Should not be a failure");
     }
 
     @Test
@@ -151,9 +154,10 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     @Test
     public void testXMLTrailingContent() throws Exception {
-        ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
-        baos.write("extra".getBytes()); // TODO - charset?
-        result.setResponseData(baos.toByteArray());
+        try (ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml")) {
+            baos.write("extra".getBytes(StandardCharsets.UTF_8));
+            result.setResponseData(baos.toByteArray());
+        }
         assertion.setXsdFileName(findTestPath("testfiles/XMLSchema-pass.xsd"));
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
@@ -165,9 +169,10 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     @Test
     public void testXMLTrailingWhitespace() throws Exception {
-        ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
-        baos.write(" \t\n".getBytes()); // TODO - charset?
-        result.setResponseData(baos.toByteArray());
+        try (ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml")) {
+            baos.write(" \t\n".getBytes(StandardCharsets.UTF_8));
+            result.setResponseData(baos.toByteArray());
+        }
         assertion.setXsdFileName(findTestPath("testfiles/XMLSchema-pass.xsd"));
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("xisError() " + res.isError() + " isFailure() " + res.isFailure());

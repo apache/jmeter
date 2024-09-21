@@ -26,10 +26,13 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.collections.HashTree;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Menu command to serve Undo/Redo
  * @since 2.12
  */
+@AutoService(Command.class)
 public class UndoCommand extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();

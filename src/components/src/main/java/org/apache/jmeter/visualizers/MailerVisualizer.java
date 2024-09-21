@@ -419,7 +419,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
     /**
      * Shows a message using a DialogBox.
      */
-    private void displayMessage(String message, boolean isError) {
+    private static void displayMessage(String message, boolean isError) {
         int type = isError ? JOptionPane.ERROR_MESSAGE : JOptionPane.INFORMATION_MESSAGE;
         JOptionPane.showMessageDialog(null, message, isError ?
                 JMeterUtils.getResString("mailer_msg_title_error") :  // $NON-NLS-1$

@@ -44,7 +44,7 @@ public class KeystoreConfigBeanInfo extends BeanInfoSupport {
 
         PropertyDescriptor p = property(PRELOAD);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "true"); // $NON-NLS-1$
+        p.setValue(DEFAULT, "True"); // $NON-NLS-1$
         p.setValue(NOT_EXPRESSION, Boolean.TRUE);
         p.setValue(NOT_OTHER, Boolean.TRUE);
         p.setValue(TAGS, new String[]{"True", "False"}); // $NON-NLS-1$ $NON-NLS-2$

@@ -36,6 +36,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
+import org.apache.jmeter.visualizers.backend.BackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.ErrorMetric;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
@@ -43,16 +44,19 @@ import org.apache.jmeter.visualizers.backend.UserMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implementation of {@link AbstractBackendListenerClient} to write to InfluxDB
  * using a custom schema; since JMeter 5.2, this also support the InfluxDB v2.
  *
  * @since 3.2
  */
+@AutoService(BackendListenerClient.class)
 public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(InfluxdbBackendListenerClient.class);
-    private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
     // Name of the measurement
     private static final String EVENTS_FOR_ANNOTATION = "events";
 

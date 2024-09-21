@@ -4,16 +4,17 @@ Want to show Apache JMeter some love? Help out by contributing!
 
 ## :beetle: Found a bug
 
-Log it in our bugzilla:
+Log it in GitHub issues:
 
-* *<https://jmeter.apache.org/issues.html>*
-* or send a note to the *user mailing list*.
+* https://github.com/apache/jmeter/issues
+* or send a note to the [user mailing list](https://jmeter.apache.org/mail2.html#JMeterUser).
+
 Be sure to include all relevant information, like the versions of JMeter you’re using as long as Java version.
 A Test plan  that caused the issue as well as any error messages are also very helpful.
 
 ## :question: Need help
 
-Simply contact:
+Contact:
 
 * [Our users mailing list](https://jmeter.apache.org/mail2.html#JMeterUser)
 * or ask question on [stackoverflow](https://stackoverflow.com/questions/tagged/jmeter).
@@ -22,8 +23,8 @@ Simply contact:
 
 See:
 
-* [Open bug entries for JMeter](https://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=NEEDINFO&bug_severity=Blocker&bug_severity=Critical&bug_severity=Major&bug_severity=Normal&bug_severity=Regression&bug_severity=Minor&bug_severity=Trivial&product=JMeter&order=Bug%20Number&list_id=164231)
-* [Enhancement requests for JMeter](https://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=NEEDINFO&bug_severity=Enhancement&product=JMeter&order=Bug%20Number&list_id=164232)
+* [Open issues for JMeter](https://github.com/apache/jmeter/issues)
+* [Enhancement requests for JMeter](https://github.com/apache/jmeter/issues?q=is%3Aopen+label%3Aenhancement)
 
 ## Development setup
 
@@ -52,9 +53,8 @@ Optionally you can generate an Eclipse project by running
 The steps to import the sources (based on Eclipse 2019-06) into Eclipse are as follows:
 
 1. Install `Eclipse IDE for Java Developers`
-1. Install the Groovy Eclipse plugin and select Groovy Compiler 2.4 (some tests are written in Groovy)
-1. Install `Kotlin for Eclipse` plugin (builds scripts are written in Kotlin)
-1. Make sure you have a Java 8 compatible JDK configured in your workspace
+1. Install `Kotlin for Eclipse` plugin (JMeter code uses Java and Kotlin)
+1. Make sure you have a Java 17 compatible JDK configured in your workspace
 1. Open `File->Import...`
 1. Select `Existing Gradle Project` and click `Next`
 1. Read `How to experience the best Gradle integration` and click `Next`
@@ -66,7 +66,7 @@ The best way to make sure your issue or feature is addressed is to submit a patc
 We accept patches through:
 
 * pull requests
-* patch attached to bugzilla.
+* patch attached to [JMeter developers mailing list](https://jmeter.apache.org/mail2.html#JMeterDev).
 
 However, before sending a patch, please make sure that the following applies:
 

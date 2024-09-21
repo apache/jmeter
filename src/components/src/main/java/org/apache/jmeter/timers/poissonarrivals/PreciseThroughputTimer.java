@@ -20,14 +20,16 @@ package org.apache.jmeter.timers.poissonarrivals;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.timers.Timer;
+import org.apache.jorphan.collections.IdentityKey;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -40,11 +42,16 @@ import org.slf4j.LoggerFactory;
  */
 @GUIMenuSortOrder(3)
 @TestElementMetadata(labelResource = "displayName")
-public class PreciseThroughputTimer extends AbstractTestElement implements Cloneable, Timer, TestStateListener, TestBean, ThroughputProvider, DurationProvider {
+public class PreciseThroughputTimer extends AbstractTestElement implements Cloneable, Timer, TestBean, ThroughputProvider, DurationProvider {
     private static final Logger log = LoggerFactory.getLogger(PreciseThroughputTimer.class);
 
     private static final long serialVersionUID = 4;
-    private static final ConcurrentMap<AbstractThreadGroup, EventProducer> groupEvents = new ConcurrentHashMap<>();
+
+    // TestElements can't be used as keys in a HashMap, so we use IdentityHashMap
+    private static final ConcurrentMap<IdentityKey<AbstractThreadGroup>, EventProducer> groupEvents =
+            new ConcurrentHashMap<>();
+
+    private static final AtomicLong PREV_TEST_STARTED = new AtomicLong(0L);
 
     /**
      * Desired throughput configured as {@code throughput/throughputPeriod} per second.
@@ -58,8 +65,6 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
      * so the timer picks only those random arrivals that end up with round total numbers.
      */
     private long duration;
-
-    private long testStarted;
 
     /**
      * When number of required samples exceeds {@code exactLimit}, random generator would resort to approximate match of
@@ -83,29 +88,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
     @Override
     public Object clone() {
         final PreciseThroughputTimer newTimer = (PreciseThroughputTimer) super.clone();
-        newTimer.testStarted = testStarted; // JMeter cloning does not clone fields
         return newTimer;
-    }
-
-    @Override
-    public void testStarted() {
-        testStarted(null);
-    }
-
-    @Override
-    public void testStarted(String host) {
-        groupEvents.clear();
-        testStarted = System.currentTimeMillis();
-    }
-
-    @Override
-    public void testEnded() {
-        // NOOP
-    }
-
-    @Override
-    public void testEnded(String s) {
-        // NOOP
     }
 
     @Override
@@ -116,6 +99,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
             nextEvent = events.next();
         }
         long now = System.currentTimeMillis();
+        long testStarted = JMeterContextService.getTestStartTime();
         long delay = (long) (nextEvent * TimeUnit.SECONDS.toMillis(1) + testStarted - now);
         if (log.isDebugEnabled()) {
             log.debug("Calculated delay is {}", delay);
@@ -133,10 +117,22 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
     }
 
     private EventProducer getEventProducer() {
+        long testStarted = JMeterContextService.getTestStartTime();
+        long prevStarted = PREV_TEST_STARTED.get();
+        if (prevStarted != testStarted && PREV_TEST_STARTED.compareAndSet(prevStarted, testStarted)) {
+            // Reset counters if we are calculating throughput for a new test, see https://github.com/apache/jmeter/issues/6165
+            groupEvents.clear();
+        }
+
         AbstractThreadGroup tg = getThreadContext().getThreadGroup();
+        IdentityKey<AbstractThreadGroup> key = new IdentityKey<>(tg);
+        EventProducer eventProducer = groupEvents.get(key);
+        if (eventProducer != null) {
+            return eventProducer;
+        }
         Long seed = randomSeed == null || randomSeed == 0 ? null : randomSeed;
         return
-                groupEvents.computeIfAbsent(tg, x -> new ConstantPoissonProcessGenerator(
+                groupEvents.computeIfAbsent(key, x -> new ConstantPoissonProcessGenerator(
                         () -> PreciseThroughputTimer.this.getThroughput() / throughputPeriod,
                         batchSize, batchThreadDelay, this, seed, true));
     }

@@ -66,7 +66,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private static final long serialVersionUID = 241L;
 
     /** The title label for this component. */
-    private JLabel tableLabel;
+    private final JLabel tableLabel;
 
     /** The table containing the list of arguments. */
     private transient JTable table;
@@ -85,7 +85,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /**
      * Added background support for reporting tool
      */
-    private Color background;
+    private final Color background;
 
     /**
      * Boolean indicating whether this component is a standalone component or it
@@ -108,7 +108,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /** Disable buttons :Detail, Add, Add from Clipboard, Delete, Up and Down*/
     private final boolean disableButtons;
 
-    private final Function<String[], Argument> argCreator;
+    private final Function<String[], ? extends Argument> argCreator;
 
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
@@ -250,7 +250,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * @param argCreator function to create {@link Argument}s from Strings taken from clipboard
      */
     public ArgumentsPanel(String label, Color bkg, boolean enableUpDown, boolean standalone, ObjectTableModel model,
-            boolean disableButtons, Function<String[], Argument> argCreator) {
+            boolean disableButtons, Function<String[], ? extends Argument> argCreator) {
         tableLabel = new JLabel(label);
         this.enableUpDown = enableUpDown;
         this.disableButtons = disableButtons;

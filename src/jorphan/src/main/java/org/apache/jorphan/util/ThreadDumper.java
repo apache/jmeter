@@ -27,8 +27,9 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Utility class to create a Thread Dump
@@ -56,10 +57,9 @@ public class ThreadDumper {
      * @return Name of file containing thread dump
      * @throws Exception  if file cannot we written
      */
-    @SuppressWarnings("JdkObsolete")
     public static String threadDump(File basedir) throws Exception {
-        SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
-        String stamp = timestampFormat.format(new Date());
+        DateTimeFormatter timestampFormat = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss_SSS").withZone(ZoneId.systemDefault());
+        String stamp = timestampFormat.format(Instant.now());
         File temp = new File(basedir,"thread_dump_"+stamp+".log");
         final String path = temp.getPath();
         try (FileOutputStream fos = new FileOutputStream(temp);

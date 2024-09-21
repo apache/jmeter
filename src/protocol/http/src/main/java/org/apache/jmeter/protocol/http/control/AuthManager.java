@@ -135,7 +135,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         }
     }
 
-    private KerberosManager kerberosManager = new KerberosManager();
+    private final KerberosManager kerberosManager = new KerberosManager();
 
     /**
      * Default Constructor.
@@ -503,7 +503,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @param url to be checked
      * @return <code>true</code> when port should omitted in SPN
      */
-    private boolean isStripPort(URL url) {
+    private static boolean isStripPort(URL url) {
         if (STRIP_PORT) {
             return true;
         }
@@ -518,7 +518,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @param b {@link Authorization}
      * @return true if a and b match
      */
-    private boolean match(Authorization a, Authorization b){
+    private static boolean match(Authorization a, Authorization b){
         return
                 a.getURL().equals(b.getURL())&&
                 a.getDomain().equals(b.getDomain())&&

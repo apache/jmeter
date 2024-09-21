@@ -266,13 +266,14 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         }
     }
 
-    private String variablesToString(JMeterVariables jMeterVariables) {
+    private static String variablesToString(JMeterVariables jMeterVariables) {
         StringBuilder sb = new StringBuilder();
         jMeterVariables.entrySet().forEach(e->sb.append(e.getKey()).append("=").append(e.getValue()).append("\r\n"));
         return sb.toString();
     }
 
-    private String buildFunctionCallString(String functionName, Arguments args) {
+    @VisibleForTesting
+    static String buildFunctionCallString(String functionName, Arguments args) {
         StringBuilder functionCall = new StringBuilder("${");
         functionCall.append(functionName);
         if (args.getArguments().size() > 0) {
@@ -301,7 +302,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
      * @param arg string that should be escaped
      * @return escaped string
      */
-    private String escapeCommata(String arg) {
+    private static String escapeCommata(String arg) {
         int level = 0;
         StringBuilder result = new StringBuilder(arg.length());
         try (Reader r = new StringReader(arg)) {

@@ -115,9 +115,9 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private final transient Calculator calc = new Calculator();
 
-    private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
+    private final Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
 
-    private Deque<SampleResult> newRows = new ConcurrentLinkedDeque<>();
+    private final Deque<SampleResult> newRows = new ConcurrentLinkedDeque<>();
 
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
@@ -243,7 +243,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                         }));
         for (int i=0; i<model.getColumnCount(); i++) {
             if (model.getColumnClass(i).equals(String.class)) {
-                rowSorter.setValueComparator(i, new AlphaNumericComparator<Object>(o -> o.toString()));
+                rowSorter.setValueComparator(i, AlphaNumericComparator.TO_STRING_COMPARATOR);
             }
         }
         table.setRowSorter(rowSorter);

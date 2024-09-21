@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -48,9 +50,12 @@ import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implement ResultsRender for Regexp tester
  */
+@AutoService(ResultRenderer.class)
 public class RenderAsRegexp implements ResultRenderer, ActionListener {
 
     private static final String REGEXP_TESTER_COMMAND = "regexp_tester"; // $NON-NLS-1$
@@ -64,6 +69,9 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     private JTextArea regexpResultField;
 
     private JTabbedPane rightSide;
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /** {@inheritDoc} */
     @Override
@@ -100,15 +108,48 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
      * @param textToParse
      */
     private void executeAndShowRegexpTester(String textToParse) {
-        if (textToParse != null && textToParse.length() > 0
-                && this.regexpField.getText().length() > 0) {
+        if (textToParse != null && !textToParse.isEmpty()
+                && !this.regexpField.getText().isEmpty()) {
             this.regexpResultField.setText(process(textToParse));
             this.regexpResultField.setCaretPosition(0); // go to first line
         }
     }
 
     private String process(String textToParse) {
+        if (USE_JAVA_REGEX) {
+            return processJavaRegex(textToParse);
+        }
+        return processOroRegex(textToParse);
+    }
 
+    private String processJavaRegex(String textToParse) {
+        java.util.regex.Pattern pattern;
+        try {
+            pattern = JMeterUtils.compilePattern(regexpField.getText());
+        } catch (PatternSyntaxException e) {
+            return e.toString();
+        }
+        Matcher matcher = pattern.matcher(textToParse);
+        List<java.util.regex.MatchResult> matches = new ArrayList<>();
+        while (matcher.find()) {
+            matches.add(matcher.toMatchResult());
+        }
+
+        // Construct a multi-line string with all matches
+        StringBuilder sb = new StringBuilder();
+        final int size = matches.size();
+        sb.append("Match count: ").append(size).append("\n");
+        for (int j = 0; j < size; j++) {
+            java.util.regex.MatchResult mr = matches.get(j);
+            final int groups = mr.groupCount();
+            for (int i = 0; i <= groups; i++) {
+                sb.append("Match[").append(j+1).append("][").append(i).append("]=").append(mr.group(i)).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private String processOroRegex(String textToParse) {
         Perl5Matcher matcher = new Perl5Matcher();
         PatternMatcherInput input = new PatternMatcherInput(textToParse);
 
@@ -123,6 +164,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         while (matcher.contains(input, pattern)) {
             matches.add(matcher.getMatch());
         }
+
         // Construct a multi-line string with all matches
         StringBuilder sb = new StringBuilder();
         final int size = matches.size();
@@ -143,6 +185,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     public void renderResult(SampleResult sampleResult) {
         clearData();
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
+        response = ViewResultsFullVisualizer.wrapLongLines(response);
         regexpDataField.setText(response);
         regexpDataField.setCaretPosition(0);
     }

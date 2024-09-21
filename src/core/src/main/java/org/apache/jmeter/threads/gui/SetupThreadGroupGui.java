@@ -38,9 +38,7 @@ public class SetupThreadGroupGui extends ThreadGroupGui implements ItemListener 
     }
 
     @Override
-    public TestElement createTestElement() {
-        SetupThreadGroup tg = new SetupThreadGroup();
-        modifyTestElement(tg);
-        return tg;
+    public TestElement makeTestElement() {
+        return new SetupThreadGroup();
     }
 }

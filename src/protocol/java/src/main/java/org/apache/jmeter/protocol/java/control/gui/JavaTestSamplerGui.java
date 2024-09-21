@@ -78,8 +78,10 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
     public void modifyTestElement(TestElement sampler) {
         sampler.clear();
         JavaConfig config = (JavaConfig) javaPanel.createTestElement();
-        configureTestElement(sampler);
         sampler.addTestElement(config);
+        // Set base parameters (name, description, enabled) from the main control
+        // to avoid merging them from the config element above
+        configureTestElement(sampler);
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */

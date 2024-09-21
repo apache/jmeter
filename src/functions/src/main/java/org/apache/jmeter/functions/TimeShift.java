@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.auto.service.AutoService;
 
 /**
  * timeShifting Function permit to shift a date
@@ -65,6 +66,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *
  * @since 3.3
  */
+@AutoService(Function.class)
 public class TimeShift extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(TimeShift.class);
 
@@ -80,13 +82,13 @@ public class TimeShift extends AbstractFunction {
     private CompoundVariable amountToShiftCompound; // $NON-NLS-1$
     private Locale locale = JMeterUtils.getLocale(); // $NON-NLS-1$
     private String variableName = ""; //$NON-NLS-1$
-    private ZoneId systemDefaultZoneID = ZoneId.systemDefault();
+    private static final ZoneId systemDefaultZoneID = ZoneId.systemDefault();
 
 
     private static final class LocaleFormatObject {
 
-        private String format;
-        private Locale locale;
+        private final String format;
+        private final Locale locale;
 
         public LocaleFormatObject(String format, Locale locale) {
             this.format = format;
@@ -146,7 +148,7 @@ public class TimeShift extends AbstractFunction {
         if (!StringUtils.isEmpty(format)) {
             try {
                 LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
-                formatter = dateTimeFormatterCache.get(lfo, this::createFormatter);
+                formatter = dateTimeFormatterCache.get(lfo, TimeShift::createFormatter);
             } catch (IllegalArgumentException ex) {
                 log.error("Format date pattern '{}' is invalid "
                         + "(see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
@@ -198,7 +200,7 @@ public class TimeShift extends AbstractFunction {
     }
 
     @SuppressWarnings("JavaTimeDefaultTimeZone")
-    private DateTimeFormatter createFormatter(LocaleFormatObject format) {
+    private static DateTimeFormatter createFormatter(LocaleFormatObject format) {
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
         return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
                 .parseDefaulting(ChronoField.NANO_OF_SECOND, 0)

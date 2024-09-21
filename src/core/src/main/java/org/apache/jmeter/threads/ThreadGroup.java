@@ -28,9 +28,11 @@ import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.util.JMeterStopTestException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +99,16 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     public ThreadGroup() {
         super();
+    }
+
+    @Override
+    public ThreadGroupSchema getSchema() {
+        return ThreadGroupSchema.INSTANCE;
+    }
+
+    @Override
+    public @NotNull PropertiesAccessor<? extends ThreadGroup, ? extends ThreadGroupSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     /**
@@ -175,7 +187,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     private boolean isDelayedStartup() {
-        return getPropertyAsBoolean(DELAYED_START);
+        return get(getSchema().getDelayedStart());
     }
 
     /**
@@ -330,7 +342,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param jvmThread {@link Thread}
      * @param interrupt Interrupt thread or not
      */
-    private void stopThread(JMeterThread jmeterThread, Thread jvmThread, boolean interrupt) {
+    private static void stopThread(JMeterThread jmeterThread, Thread jvmThread, boolean interrupt) {
         jmeterThread.stop();
         jmeterThread.interrupt(); // interrupt sampler if possible
         if (interrupt && jvmThread != null) { // Bug 49734
@@ -434,7 +446,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param thread Thread
      * @return boolean
      */
-    private boolean verifyThreadStopped(Thread thread) {
+    private static boolean verifyThreadStopped(Thread thread) {
         boolean stopped = true;
         if (thread != null && thread.isAlive()) {
             try {
@@ -465,7 +477,7 @@ public class ThreadGroup extends AbstractThreadGroup {
          * we have to check if allThreads is really empty before stopping
          */
         while (!allThreads.isEmpty()) {
-            allThreads.values().forEach(this::waitThreadStopped);
+            allThreads.values().forEach(ThreadGroup::waitThreadStopped);
         }
 
     }
@@ -474,7 +486,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      * Wait for thread to stop
      * @param thread Thread
      */
-    private void waitThreadStopped(Thread thread) {
+    private static void waitThreadStopped(Thread thread) {
         if (thread == null) {
             return;
         }

@@ -17,10 +17,8 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
-
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -50,7 +48,7 @@ public class TestIsVarDefined extends JMeterTestCase {
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
     }
 
     @Test
@@ -63,7 +61,7 @@ public class TestIsVarDefined extends JMeterTestCase {
         params.add(new CompoundVariable("file.encoding"));
         isVarDefined.setParameters(params);
         String returnValue = isVarDefined.execute(result, null);
-        assertEquals("false", returnValue);
+        Assertions.assertEquals("false", returnValue);
     }
 
     @Test
@@ -72,7 +70,7 @@ public class TestIsVarDefined extends JMeterTestCase {
         params.add(new CompoundVariable("varName"));
         isVarDefined.setParameters(params);
         String returnValue = isVarDefined.execute(result, null);
-        assertEquals("true", returnValue);
+        Assertions.assertEquals("true", returnValue);
     }
 
     @Test
@@ -80,7 +78,7 @@ public class TestIsVarDefined extends JMeterTestCase {
         params.add(new CompoundVariable("emptyProperty"));
         isVarDefined.setParameters(params);
         String returnValue = isVarDefined.execute(result, null);
-        assertEquals("false", returnValue);
+        Assertions.assertEquals("false", returnValue);
     }
 
     @Test
@@ -96,7 +94,7 @@ public class TestIsVarDefined extends JMeterTestCase {
         params.add(new CompoundVariable("emptyProperty"));
         isVarDefined.setParameters(params);
         String returnValue = isVarDefined.execute(result, null);
-        assertEquals("false", returnValue);
+        Assertions.assertEquals("false", returnValue);
     }
 
 }

@@ -176,7 +176,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         this.firePropertyChange();
     }
 
-    private Collection<Object> convertCollection(Collection<?> values) {
+    private static Collection<Object> convertCollection(Collection<?> values) {
         List<Object> l = new ArrayList<>();
         for(Object obj : values) {
             if(obj instanceof TestElementProperty) {
@@ -240,14 +240,14 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         table.addFocusListener(this);
     }
 
-    private Functor[] createWriters(List<String> propNames) {
+    private static Functor[] createWriters(List<String> propNames) {
         return propNames.stream()
                 .map(propName -> "set" + propName) // $NON-NLS-1$
                 .map(Functor::new)
                 .toArray(Functor[]::new);
     }
 
-    private Functor[] createReaders(Class<?> c, List<String> propNames) {
+    private static Functor[] createReaders(Class<?> c, List<String> propNames) {
         List<String> methodNames = Arrays.stream(c.getMethods())
                 .map(Method::getName)
                 .collect(Collectors.toList());
@@ -257,7 +257,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                 .toArray(Functor[]::new);
     }
 
-    private Class<?>[] getArgsForWriter(Class<?> c, List<String> propNames) {
+    private static Class<?>[] getArgsForWriter(Class<?> c, List<String> propNames) {
         return propNames.stream()
                 .map(propName -> Arrays.stream(c.getMethods())
                         .filter(m -> m.getName().equals("set" + propName)) // $NON-NLS-1$

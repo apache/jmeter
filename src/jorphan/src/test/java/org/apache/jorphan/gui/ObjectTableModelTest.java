@@ -19,9 +19,10 @@ package org.apache.jorphan.gui;
 
 import static java.lang.String.format;
 import static java.util.stream.IntStream.range;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.stream.IntStream;
 
 import javax.swing.event.TableModelEvent;
@@ -62,7 +63,7 @@ public class ObjectTableModelTest {
     @BeforeEach
     public void init() {
         String[] headers = { "a", "b", "c" };
-        Functor[] readFunctors = Arrays.stream(headers).map(name -> "get" + name.toUpperCase()).map(Functor::new).toArray(n -> new Functor[n]);
+        Functor[] readFunctors = Arrays.stream(headers).map(name -> "get" + name.toUpperCase(Locale.ROOT)).map(Functor::new).toArray(Functor[]::new);
         Functor[] writeFunctors = new Functor[headers.length];
         Class<?>[] editorClasses = new Class<?>[headers.length];
         Arrays.fill(editorClasses, String.class);
@@ -238,10 +239,10 @@ public class ObjectTableModelTest {
     }
 
     private void assertModel(String... as) {
-        assertEquals("model row count", as.length, model.getRowCount());
+        assertEquals(as.length, model.getRowCount(), "model row count");
 
         for (int row = 0; row < as.length; row++) {
-            assertEquals(format("model[%d,0]", row), as[row], model.getValueAt(row, 0));
+            assertEquals(as[row], model.getValueAt(row, 0), format("model[%d,0]", row));
         }
     }
 

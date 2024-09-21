@@ -23,9 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.engine.util.NoThreadClone;
@@ -123,13 +123,12 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     }
 
     @Override
-    @SuppressWarnings("JdkObsolete")
     public void testStarted(String host) {
         synchronized(LOCK){
             sequenceNumber = 0;
             if (getAddTimeStamp()) {
-                DateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);
-                timeStamp = format.format(new Date());
+                DateTimeFormatter format = DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT).withZone(ZoneId.systemDefault());
+                timeStamp = format.format(Instant.now());
             } else {
                 timeStamp = "";
             }
@@ -224,7 +223,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
      * Create path hierarchy to parentFile
      * @param parentFile
      */
-    private void createFoldersIfNeeded(File parentFile) {
+    private static void createFoldersIfNeeded(File parentFile) {
         if(parentFile == null) {
             return;
         }
@@ -340,22 +339,6 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     // Mutable int to keep track of sample count
     private static class Counter{
         int num;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
     }
 
     public void setAddTimestamp(boolean selected) {

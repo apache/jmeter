@@ -145,7 +145,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
      * @param entry   the entry number in the list
      * @return MatchResult
      */
-    private String getCorrectMatch(List<String> matches, int entry) {
+    private static String getCorrectMatch(List<String> matches, int entry) {
         int matchSize = matches.size();
 
         if (matchSize <= 0 || entry > matchSize){

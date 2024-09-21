@@ -56,9 +56,12 @@ import org.apache.jorphan.reflect.Functor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Specializer panel to view a HTTP request parsed
  */
+@AutoService(RequestView.class)
 public class RequestViewHTTP implements RequestView {
 
     private static final Logger log = LoggerFactory.getLogger(RequestViewHTTP.class);
@@ -255,7 +258,7 @@ public class RequestViewHTTP implements RequestView {
      * @param contentType the content type header
      * @return  the boundary string
      */
-    private String extractBoundary(String contentType) {
+    private static String extractBoundary(String contentType) {
         // Get the boundary string for the multiparts from the content type
         String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());
         //TODO check in the RFC if other char can be used as separator
@@ -271,7 +274,7 @@ public class RequestViewHTTP implements RequestView {
      * @param headers the http request headers
      * @return true if the request is multipart
      */
-    private boolean isMultipart(LinkedHashMap<String, String> headers) {
+    private static boolean isMultipart(Map<String, String> headers) {
         String contentType = headers.get(HTTPConstants.HEADER_CONTENT_TYPE);
         return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
@@ -287,6 +290,9 @@ public class RequestViewHTTP implements RequestView {
         String[] params = query.split(PARAM_CONCATENATE);
         for (String param : params) {
             String[] paramSplit = param.split("=");
+            if (paramSplit.length == 0) {
+                continue; // We found no key-/value-pair, so continue on the next param
+            }
             String name = decodeQuery(paramSplit[0]);
 
             // hack for SOAP request (generally)
@@ -318,7 +324,6 @@ public class RequestViewHTTP implements RequestView {
             }
             map.put(name, known);
         }
-
         return map;
     }
 
@@ -404,7 +409,7 @@ public class RequestViewHTTP implements RequestView {
         return panel;
     }
 
-    private void setFirstColumnPreferredAndMaxWidth(JTable table) {
+    private static void setFirstColumnPreferredAndMaxWidth(JTable table) {
         TableColumn column = table.getColumnModel().getColumn(0);
         column.setMaxWidth(300);
         column.setPreferredWidth(160);

@@ -43,12 +43,13 @@ class TestJSONPostProcessor {
 
     private static final String VAR_NAME = "varName";
 
+    @SuppressWarnings("ImmutableEnumChecker")
     private enum AccessMode {
         ALL(AbstractScopedTestElement::setScopeAll),
         PARENT(AbstractScopedTestElement::setScopeParent),
         CHILDREN(AbstractScopedTestElement::setScopeChildren);
 
-        private Consumer<AbstractScopedTestElement> applier;
+        private final Consumer<AbstractScopedTestElement> applier;
 
         AccessMode(Consumer<AbstractScopedTestElement> applier) {
             this.applier = applier;

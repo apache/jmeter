@@ -17,28 +17,33 @@
 
 package org.apache.jmeter.testbeans.gui;
 
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.apache.jmeter.gui.util.JMeterMenuBar;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.junit.runner.Describable;
-import org.junit.runner.Description;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.parallel.Isolated;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /*
  * Find all beans out there and check their resource property files: - Check
@@ -49,45 +54,17 @@ import junit.framework.TestSuite;
  * TODO: - Check property files don't have duplicate keys (is this important)
  *
  */
-public final class PackageTest extends JMeterTestCaseJUnit implements Describable {
+@Isolated("modifies jmeter locale")
+public final class PackageTest extends JMeterTestCase {
     private static final Logger log = LoggerFactory.getLogger(PackageTest.class);
 
     private static final Locale defaultLocale = new Locale("en","");
-
-    private final ResourceBundle defaultBundle;
-
-    private final Class<?> testBeanClass;
-
-    private final Locale testLocale;
-
-    private PackageTest(Class<?> testBeanClass, Locale locale, ResourceBundle defaultBundle) {
-        super(testBeanClass.getName() + " - " + locale.getLanguage() + " - " + locale.getCountry());
-        this.testBeanClass = testBeanClass;
-        this.testLocale = locale;
-        this.defaultBundle = defaultBundle;
-    }
-
-    private PackageTest(String name){
-        super(name);
-        this.testBeanClass = null;
-        this.testLocale = null;
-        this.defaultBundle = null;
-    }
-
-    @Override
-    public Description getDescription() {
-        return Description.createTestDescription(getClass(), getName() + " " + testLocale + " " + testBeanClass);
-    }
 
     private BeanInfo beanInfo;
 
     private ResourceBundle bundle;
 
-    @Override
-    public void setUp() {
-        if (testLocale == null) {
-            return;
-        }
+    public void setUp(Class<?> testBeanClass, Locale testLocale) {
         JMeterUtils.setLocale(testLocale);
         Introspector.flushFromCaches(testBeanClass);
         try {
@@ -102,25 +79,23 @@ public final class PackageTest extends JMeterTestCaseJUnit implements Describabl
         }
     }
 
-    @Override
+    @AfterEach
     public void tearDown() {
         JMeterUtils.setLocale(Locale.getDefault());
     }
 
-    @Override
-    public void runTest() throws Throwable {
-        if (testLocale == null) {
-            super.runTest();
-            return;
-        }
+    @ParameterizedTest
+    @MethodSource("testBeans")
+    public void runTest(Class<?> testBeanClass, Locale testLocale, ResourceBundle defaultBundle) {
+        setUp(testBeanClass, testLocale);
         if (bundle == defaultBundle) {
-            checkAllNecessaryKeysPresent();
+            checkAllNecessaryKeysPresent(bundle, defaultBundle);
         } else {
-            checkNoInventedKeys();
+            checkNoInventedKeys(bundle, defaultBundle);
         }
     }
 
-    public void checkNoInventedKeys() {
+    public void checkNoInventedKeys(ResourceBundle bundle, ResourceBundle defaultBundle) {
         // Check that all keys in the bundle are also in the default bundle:
         for (Enumeration<String> keys = bundle.getKeys(); keys.hasMoreElements();) {
             String key = keys.nextElement();
@@ -129,7 +104,7 @@ public final class PackageTest extends JMeterTestCaseJUnit implements Describabl
         }
     }
 
-    public void checkAllNecessaryKeysPresent() {
+    public void checkAllNecessaryKeysPresent(ResourceBundle bundle, ResourceBundle defaultBundle) {
         // Check that all necessary keys are there:
 
         // displayName is always mandatory:
@@ -168,14 +143,15 @@ public final class PackageTest extends JMeterTestCaseJUnit implements Describabl
         }
     }
 
-    public static Test suite() throws Exception {
-        TestSuite suite = new TestSuite("Bean Resource Test Suite");
+    public static Collection<Arguments> testBeans() throws Exception {
+        Collection<Arguments> suite = new ArrayList<>();
 
+        @SuppressWarnings("deprecation")
         List<String> testBeanClassNames = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class });
 
-        boolean errorDetected = false;
         JMeterUtils.setLocale(defaultLocale);
         String defaultLocaleId = defaultLocale.toString();
+        List<Class<?>> beansWithMissingBundle = new ArrayList<>();
         for (String className : testBeanClassNames) {
             Class<?> testBeanClass = Class.forName(className);
             ResourceBundle defaultBundle;
@@ -183,8 +159,7 @@ public final class PackageTest extends JMeterTestCaseJUnit implements Describabl
                 defaultBundle = (ResourceBundle) Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getValue(
                         GenericTestBeanCustomizer.RESOURCE_BUNDLE);
             } catch (IntrospectionException e) {
-                log.error("Can't get beanInfo for {}", testBeanClass, e);
-                throw new Error(e.toString(), e); // Programming error. Don't continue.
+                throw new Error("Can't get beanInfo for " + testBeanClass, e);
             }
 
             if (defaultBundle == null) {
@@ -192,12 +167,11 @@ public final class PackageTest extends JMeterTestCaseJUnit implements Describabl
                     log.info("No default bundle found for {}", className);
                     continue;
                 }
-                errorDetected=true;
-                log.error("No default bundle found for {} using {}", className, defaultLocale);
+                beansWithMissingBundle.add(testBeanClass);
                 continue;
             }
 
-            suite.addTest(new PackageTest(testBeanClass, defaultLocale, defaultBundle));
+            suite.add(arguments(testBeanClass, defaultLocale, defaultBundle));
 
             String[] languages = JMeterMenuBar.getLanguages();
             for (String lang : languages) {
@@ -207,25 +181,19 @@ public final class PackageTest extends JMeterTestCaseJUnit implements Describabl
                     if (locale.toString().equals(defaultLocaleId)) {
                         continue;
                     }
-                    suite.addTest(new PackageTest(testBeanClass, locale, defaultBundle));
+                    suite.add(arguments(testBeanClass, locale, defaultBundle));
                 } else if (language.length == 2) {
                     Locale locale = new Locale(language[0], language[1]);
                     if (locale.toString().equals(defaultLocaleId)) {
                         continue;
                     }
-                    suite.addTest(new PackageTest(testBeanClass, locale, defaultBundle));
+                    suite.add(arguments(testBeanClass, locale, defaultBundle));
                 }
             }
         }
-
-        if (errorDetected)
-        {
-            suite.addTest(new PackageTest("errorDetected"));
+        if (!beansWithMissingBundle.isEmpty()) {
+            fail("Default resource bundle not found for: " + beansWithMissingBundle);
         }
         return suite;
-    }
-
-    public void errorDetected(){
-        fail("One or more errors detected - see log file");
     }
 }

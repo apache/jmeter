@@ -60,6 +60,7 @@ public class TextAreaUIWithUndo {
      */
     @SuppressWarnings("unused")
     public static ComponentUI createUI(JComponent component) {
+        KerningOptimizer.INSTANCE.installKerningListener((JTextComponent) component);
         TextComponentUI.INSTANCE.installUndo((JTextComponent) component);
         if (component.getClass() == JTextArea.class) {
             component.addPropertyChangeListener("UI",

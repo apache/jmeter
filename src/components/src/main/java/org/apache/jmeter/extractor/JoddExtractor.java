@@ -94,7 +94,7 @@ public class JoddExtractor implements Extractor {
     }
 
 
-    private String extractValue(String attribute, Node element) {
+    private static String extractValue(String attribute, Node element) {
         if (!JOrphanUtils.isBlank(attribute)) {
             return element.getAttribute(attribute);
         } else {

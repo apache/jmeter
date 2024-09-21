@@ -56,22 +56,17 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * The default encoding to be used if not overridden.
      * The value is ISO-8859-1.
      */
-    public static final String DEFAULT_HTTP_ENCODING = StandardCharsets.ISO_8859_1.name();
+    public static final String DEFAULT_HTTP_ENCODING = StandardCharsets.UTF_8.name();
 
     private static final String OK_CODE = Integer.toString(HttpURLConnection.HTTP_OK);
     private static final String OK_MSG = "OK"; // $NON-NLS-1$
     private static final String INVALID_CALL_SEQUENCE_MSG = "Invalid call sequence"; // $NON-NLS-1$
 
 
-    // Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
-    // However the suggested System.getProperty("file.encoding") is Cp1252 on
-    // Windows
-    // So use a new property with the original value as default
-    // needs to be accessible from test code
     /**
      * The default encoding to be used to decode the responseData byte array.
      * The value is defined by the property "sampleresult.default.encoding"
-     * with a default of DEFAULT_HTTP_ENCODING if that is not defined.
+     * with a default of {@link #DEFAULT_HTTP_ENCODING} if that is not defined.
      */
     protected static final String DEFAULT_ENCODING
             = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
@@ -934,6 +929,62 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     @Override
     public String toString() {
         return getSampleLabel();
+    }
+
+    public String toDebugString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName()).append('{');
+        appendDebugParameters(sb);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    protected void appendDebugParameters(StringBuilder sb) {
+        sb.append("label='").append(label).append('\'');
+        sb.append(", success=").append(success);
+        sb.append(", saveConfig=").append(saveConfig);
+        if (parent != null) {
+            sb.append(", parent=").append(parent.toDebugString());
+        }
+        sb.append(", responseCode='").append(responseCode).append('\'');
+        sb.append(", resultFileName='").append(resultFileName).append('\'');
+        sb.append(", samplerData='").append(samplerData).append('\'');
+        sb.append(", threadName='").append(threadName).append('\'');
+        sb.append(", responseMessage='").append(responseMessage).append('\'');
+        sb.append(", responseHeaders='").append(responseHeaders).append('\'');
+        sb.append(", requestHeaders='").append(requestHeaders).append('\'');
+        sb.append(", timeStamp=").append(timeStamp);
+        sb.append(", startTime=").append(startTime);
+        sb.append(", endTime=").append(endTime);
+        sb.append(", idleTime=").append(idleTime);
+        sb.append(", pauseTime=").append(pauseTime);
+        sb.append(", assertionResults=").append(assertionResults);
+        sb.append(", subResults=").append(subResults);
+        sb.append(", dataType='").append(dataType).append('\'');
+        sb.append(", files=").append(files);
+        sb.append(", dataEncoding='").append(dataEncoding).append('\'');
+        sb.append(", contentType='").append(contentType).append('\'');
+        sb.append(", elapsedTime=").append(elapsedTime);
+        sb.append(", latency=").append(latency);
+        sb.append(", connectTime=").append(connectTime);
+        sb.append(", testLogicalAction=").append(testLogicalAction);
+        sb.append(", stopThread=").append(stopThread);
+        sb.append(", stopTest=").append(stopTest);
+        sb.append(", stopTestNow=").append(stopTestNow);
+        sb.append(", sampleCount=").append(sampleCount);
+        sb.append(", bytes=").append(bytes);
+        sb.append(", headersSize=").append(headersSize);
+        sb.append(", bodySize=").append(bodySize);
+        sb.append(", groupThreads=").append(groupThreads);
+        sb.append(", allThreads=").append(allThreads);
+        sb.append(", nanoTimeOffset=").append(nanoTimeOffset);
+        sb.append(", useNanoTime=").append(useNanoTime);
+        sb.append(", nanoThreadSleep=").append(nanoThreadSleep);
+        sb.append(", sentBytes=").append(sentBytes);
+        sb.append(", location=").append(location);
+        sb.append(", ignore=").append(ignore);
+        sb.append(", subResultIndex=").append(subResultIndex);
+        sb.append(", responseDataAsString='").append(getResponseDataAsString()).append('\'');
     }
 
     /**

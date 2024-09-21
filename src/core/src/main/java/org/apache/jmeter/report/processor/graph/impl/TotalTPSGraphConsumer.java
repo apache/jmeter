@@ -82,18 +82,6 @@ public class TotalTPSGraphConsumer extends AbstractOverTimeGraphConsumer {
                         new CountValueSelector(false), false, false));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #setGranularity(long)
-     */
-    @Override
-    public void setGranularity(long granularity) {
-        super.setGranularity(granularity);
-    }
-
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         super.initializeExtraResults(parentResult);

@@ -17,12 +17,11 @@
 
 package org.apache.jmeter.control.gui;
 
-import javax.swing.JCheckBox;
-
 import org.apache.jmeter.control.TransactionController;
+import org.apache.jmeter.control.TransactionControllerSchema;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
+import org.apache.jmeter.gui.JBooleanPropertyEditor;
 import org.apache.jmeter.gui.TestElementMetadata;
-import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -37,40 +36,36 @@ public class TransactionControllerGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 
     /** If selected, then generate parent sample, otherwise as per original controller */
-    private JCheckBox generateParentSample;
+    private final JBooleanPropertyEditor generateParentSample =
+            new JBooleanPropertyEditor(
+                    TransactionControllerSchema.INSTANCE.getGenearteParentSample(),
+                    JMeterUtils.getResString("transaction_controller_parent"));
 
     /** if selected, add duration of timers to total runtime */
-    private JCheckBox includeTimers;
+    private final JBooleanPropertyEditor includeTimers =
+            new JBooleanPropertyEditor(
+                    TransactionControllerSchema.INSTANCE.getIncludeTimers(),
+                    JMeterUtils.getResString("transaction_controller_include_timers"));
 
     /**
      * Create a new TransactionControllerGui instance.
      */
     public TransactionControllerGui() {
         init();
+        bindingGroup.add(generateParentSample);
+        bindingGroup.add(includeTimers);
     }
 
     @Override
-    public TestElement createTestElement() {
-        TransactionController lc = new TransactionController();
-        lc.setIncludeTimers(false); // change default for new test elements
-        configureTestElement(lc);
-        return lc;
+    public TestElement makeTestElement() {
+        return new TransactionController();
     }
 
     @Override
-    public void configure(TestElement el) {
-        super.configure(el);
-        generateParentSample.setSelected(((TransactionController) el).isGenerateParentSample());
-        includeTimers.setSelected(((TransactionController) el).isIncludeTimers());
-    }
-
-    @Override
-    public void modifyTestElement(TestElement el) {
-        configureTestElement(el);
-        ((TransactionController) el).setGenerateParentSample(generateParentSample.isSelected());
-        TransactionController tc = (TransactionController) el;
-        tc.setGenerateParentSample(generateParentSample.isSelected());
-        tc.setIncludeTimers(includeTimers.isSelected());
+    public void assignDefaultValues(TestElement element) {
+        super.assignDefaultValues(element);
+        // See https://github.com/apache/jmeter/issues/3282
+        ((TransactionController) element).setIncludeTimers(false);
     }
 
     @Override
@@ -85,9 +80,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
         setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
         setBorder(makeBorder());
         add(makeTitlePanel());
-        generateParentSample = new JCheckBox(JMeterUtils.getResString("transaction_controller_parent")); // $NON-NLS-1$
-        add(CheckBoxPanel.wrap(generateParentSample));
-        includeTimers = new JCheckBox(JMeterUtils.getResString("transaction_controller_include_timers"), true); // $NON-NLS-1$
-        add(CheckBoxPanel.wrap(includeTimers));
+        add(generateParentSample);
+        add(includeTimers);
     }
 }

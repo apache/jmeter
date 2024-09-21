@@ -47,7 +47,7 @@ public class ExampleSampler extends AbstractSampler {
     // The name of the property used to hold our data
     public static final String DATA = "ExampleSampler.data"; //$NON-NLS-1$
 
-    private static AtomicInteger classCount = new AtomicInteger(0); // keep track of classes created
+    private static final AtomicInteger classCount = new AtomicInteger(0); // keep track of classes created
 
     // (for instructional purposes only!)
 

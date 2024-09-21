@@ -308,7 +308,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         return hbuf.toString();
     }
 
-    private String encode(String value)  {
+    private static String encode(String value)  {
         StringBuilder newValue = new StringBuilder();
         char[] chars = value.toCharArray();
         for (char c : chars) {
@@ -335,7 +335,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         return cookieHeader;
     }
 
-    private int translateHeader(String n) {
+    private static int translateHeader(String n) {
         for(int i=0; i < HEADER_TRANS_ARRAY.length; i++) {
             if(HEADER_TRANS_ARRAY[i].equalsIgnoreCase(n)) {
                 return i+1;

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to you under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE document>
+<document>
+<properties>
+    <title>Security</title>
+</properties>
+<body>
+<section name="Security Model">
+  <p>
+    The purpose of JMeter is to execute the workload specified
+    in the input jmx file, which may include arbitrary code.
+  </p>
+  <p>
+    As such, the JMeter security model assumes you trust
+    jmx input files: even opening a jmx input file may in some
+    cases trigger code execution. If you want to use JMeter to
+    evaluate untrusted jmx files, it is up to you to provide the
+    required isolation.
+  </p>
+  <p>
+    Still in the area of security, when JMeter is used in distributed
+    environment, we recommend setting up the security manager in order
+    to avoid any execution of malicious code on the distributed
+    architecture. See the <a href="./usermanual/remote-test.html#security-manager">
+    Security-Manager documentation</a> for its implementation.
+  </p>
+</section>
+<section name="Reporting security issues">
+  <p>
+    We strongly encourage you to report potential security vulnerabilities to our private security mailing list, <a href="mailto:security@apache.org">security@apache.org</a>, before disclosing them in a public forum.
+  </p>
+  <p>
+    Only use this list to report undisclosed security vulnerabilities in Apache projects and manage the process of fixing such vulnerabilities. We cannot accept regular bug reports or other security-related queries at these addresses. We will ignore mail sent to these addresses that does not relate to an undisclosed security problem in an Apache project.
+  </p>
+  <p>
+    An overview of the vulnerability handling process is:
+    <ul>
+    <li>The reporter reports the vulnerability privately to Apache.</li>
+    <li>The appropriate project's security team works privately with the reporter to resolve the vulnerability.</li>
+    <li>The project creates a new release of the package the vulnerabilty affects to deliver its fix.</li>
+    <li>The project publicly announces the vulnerability and describes how to apply the fix.</li>
+    </ul>
+    Committers should read a <a href="https://www.apache.org/security/committers.html">more detailed description of the process</a>. Reporters of security vulnerabilities may also find it useful.
+  </p>
+</section>
+</body>
+</document>

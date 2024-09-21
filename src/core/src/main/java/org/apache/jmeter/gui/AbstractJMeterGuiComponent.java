@@ -35,9 +35,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.TestElementSchema;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.gui.JFactory;
@@ -69,7 +70,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     /** Logging */
     private static final Logger log = LoggerFactory.getLogger(AbstractJMeterGuiComponent.class);
 
-    /** Flag indicating whether or not this component is enabled. */
+    /** Flag indicating whether this component is enabled. */
     private boolean enabled = true;
 
     /**
@@ -82,6 +83,13 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     protected NamePanel namePanel;
 
     private final JTextArea commentField = JFactory.tabMovesFocus(new JTextArea());
+
+    /**
+     * Stores a collection of property editors, so GuiCompoenent can have default implementations that
+     * update the UI fields based on {@link TestElement} properties and vice versa.
+     */
+    @API(status = EXPERIMENTAL, since = "5.6.3")
+    protected final BindingGroup bindingGroup = new BindingGroup();
 
     /**
      * When constructing a new component, this takes care of basic tasks like
@@ -205,6 +213,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         setName(element.getName());
         enabled = element.isEnabled();
         commentField.setText(element.getComment());
+        bindingGroup.updateUi(element);
     }
 
     /**
@@ -228,6 +237,14 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         initGui();
     }
 
+    @Override
+    @API(status = EXPERIMENTAL, since = "5.6.3")
+    public void modifyTestElement(TestElement element) {
+        JMeterGUIComponent.super.modifyTestElement(element);
+        modifyTestElementEnabledAndComment(element);
+        bindingGroup.updateElement(element);
+    }
+
     /**
      * This provides a convenience for extenders when they implement the
      * {@link JMeterGUIComponent#modifyTestElement(TestElement)} method. This
@@ -235,21 +252,37 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * Element. It should be called by every extending class when
      * creating/modifying Test Elements, as that will best assure consistent
      * behavior.
+     * <p>Deprecation notice: most likely you do not need the method, and you should
+     * override {@link #modifyTestElement(TestElement)} instead</p>
      *
      * @param mc
      *            the TestElement being created.
      */
+    @API(status = DEPRECATED, since = "5.6.3")
     protected void configureTestElement(TestElement mc) {
-        mc.setName(getName());
+        mc.setName(StringUtils.defaultIfEmpty(getName(), null));
+        TestElementSchema schema = TestElementSchema.INSTANCE;
+        mc.set(schema.getGuiClass(), getClass());
+        mc.set(schema.getTestClass(), mc.getClass());
+        modifyTestElementEnabledAndComment(mc);
+    }
 
-        mc.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
-
-        mc.setProperty(new StringProperty(TestElement.TEST_CLASS, mc.getClass().getName()));
-
+    /**
+     * Assigns basic fields from UI to the test element: name, comments, gui class, and the registered editors.
+     *
+     * @param mc test element
+     */
+    private void modifyTestElementEnabledAndComment(TestElement mc) {
         // This stores the state of the TestElement
         log.debug("setting element to enabled: {}", enabled);
-        mc.setEnabled(enabled);
-        mc.setComment(getComment());
+        // We can skip storing "enabled" state if it's true, as it's default value.
+        // JMeter removes disabled elements early from the tree, so configuration elements
+        // with enabled=false (~HTTP Request Defaults) can't unexpectedly override the regular ones
+        // like HTTP Request.
+        mc.set(TestElementSchema.INSTANCE.getEnabled(), enabled ? null : Boolean.FALSE);
+        // Note: we can't use editors for "comments" as getComments() is not a final method, so plugins might
+        // override it and provide a different implementation.
+        mc.setComment(StringUtils.defaultIfEmpty(getComment(), null));
     }
 
     /**

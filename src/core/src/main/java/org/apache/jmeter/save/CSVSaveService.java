@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -62,6 +63,14 @@ import org.slf4j.LoggerFactory;
  */
 // For unit tests, @see TestCSVSaveService
 public final class CSVSaveService {
+    private static final java.util.regex.Pattern DELIMITER_PATTERN = java.util.regex.Pattern
+            // This assumes the header names are all single words with no spaces
+            // word followed by 0 or more repeats of (non-word char + word)
+            // where the non-word char (\2) is the same
+            // e.g. abc|def|ghi but not abd|def~ghi
+            .compile("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*" // $NON-NLS-1$
+                    // last entries may be quoted strings
+            );
     private static final Logger log = LoggerFactory.getLogger(CSVSaveService.class);
 
     // ---------------------------------------------------------------------
@@ -115,6 +124,9 @@ public final class CSVSaveService {
         };
 
     private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /**
      * Private constructor to prevent instantiation.
@@ -191,7 +203,7 @@ public final class CSVSaveService {
      *
      * @throws JMeterError
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private static SampleEvent makeResultFromDelimitedString(
             final String[] parts,
             final SampleSaveConfiguration saveConfig, // may be updated
@@ -510,20 +522,9 @@ public final class CSVSaveService {
         String delim = null;
 
         if (parts == null) {
-            Perl5Matcher matcher = JMeterUtils.getMatcher();
-            PatternMatcherInput input = new PatternMatcherInput(headerLine);
-            Pattern pattern = JMeterUtils.getPatternCache()
-            // This assumes the header names are all single words with no spaces
-            // word followed by 0 or more repeats of (non-word char + word)
-            // where the non-word char (\2) is the same
-            // e.g. abc|def|ghi but not abd|def~ghi
-                    .getPattern("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*", // $NON-NLS-1$
-                            // last entries may be quoted strings
-                            Perl5Compiler.READ_ONLY_MASK);
-            if (matcher.matches(input, pattern)) {
-                delim = matcher.getMatch().group(2);
-                parts = splitHeader(headerLine, delim);// now validate the
-                                                       // result
+            delim = extractDelimiter(headerLine);
+            if (delim != null) {
+                parts = splitHeader(headerLine, delim);// now validate the result
             }
         }
 
@@ -555,6 +556,38 @@ public final class CSVSaveService {
         saveConfig.setVarCount(varCount);
 
         return saveConfig;
+    }
+
+    private static String extractDelimiter(String headerLine) {
+        if (USE_JAVA_REGEX) {
+            return extractDelimWithJavaRegex(headerLine);
+        }
+        return extractDelimWithOroRegex(headerLine);
+    }
+
+    private static String extractDelimWithJavaRegex(String headerLine) {
+        Matcher matcher = DELIMITER_PATTERN.matcher(headerLine);
+        if (matcher.matches()) {
+            return matcher.group(2);
+        }
+        return null;
+    }
+
+    private static String extractDelimWithOroRegex(String headerLine) {
+        Perl5Matcher matcher = JMeterUtils.getMatcher();
+        PatternMatcherInput input = new PatternMatcherInput(headerLine);
+        Pattern pattern = JMeterUtils.getPatternCache()
+        // This assumes the header names are all single words with no spaces
+        // word followed by 0 or more repeats of (non-word char + word)
+        // where the non-word char (\2) is the same
+        // e.g. abc|def|ghi but not abd|def~ghi
+                .getPattern("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*", // $NON-NLS-1$
+                        // last entries may be quoted strings
+                        Perl5Compiler.READ_ONLY_MASK);
+        if (matcher.matches(input, pattern)) {
+            return matcher.getMatch().group(2);
+        }
+        return null;
     }
 
     private static String[] splitHeader(String headerLine, String delim) {
@@ -810,7 +843,7 @@ public final class CSVSaveService {
      *            the separation string
      * @return the separated value representation of the result
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     public static String resultToDelimitedString(SampleEvent event,
             SampleResult sample,
             SampleSaveConfiguration saveConfig,
@@ -1042,8 +1075,6 @@ public final class CSVSaveService {
                                     + baos.toString() + "]");
                 }
                 break;
-            default:
-                throw new IllegalStateException("Unexpected state " + state);
             } // switch(state)
             if (push) {
                 if (ch == '\r') {// Remove following \n if present

@@ -55,8 +55,8 @@ public class MenuScroller {
 
     private JPopupMenu menu;
     private Component[] menuItems;
-    private MenuScrollItem upItem;
-    private MenuScrollItem downItem;
+    private final MenuScrollItem upItem;
+    private final MenuScrollItem downItem;
     private final MenuScrollListener menuListener = new MenuScrollListener();
     private final MouseWheelListener mouseWheelListener = new MouseScrollListener();
     private int scrollCount;
@@ -512,19 +512,6 @@ public class MenuScroller {
             menu.removeMouseWheelListener(mouseWheelListener);
             menu = null;
         }
-    }
-
-    /**
-     * Ensures that the <code>dispose</code> method of this MenuScroller is
-     * called when there are no more references to it.
-     *
-     * @see MenuScroller#dispose()
-     */
-    @Override
-    @SuppressWarnings("deprecation")
-    public void finalize() throws Throwable {
-        dispose();
-        super.finalize();
     }
 
     private void refreshMenu() {

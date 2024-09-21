@@ -33,10 +33,13 @@ import org.apache.jorphan.collections.ListedHashTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Check if the TestPlan has been changed since it was last saved
  *
  */
+@AutoService(Command.class)
 public class CheckDirty extends AbstractAction implements HashTreeTraverser, ActionListener {
     private static final Logger log = LoggerFactory.getLogger(CheckDirty.class);
 

@@ -34,6 +34,8 @@ import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 
+import com.google.auto.service.AutoService;
+
 /**
  * SaveGraphics action is meant to be a generic reusable Action. The class will
  * use GUIPackage to get the current gui. Once it does, it checks to see if the
@@ -42,6 +44,7 @@ import org.apache.jmeter.visualizers.Printable;
  * file if no extension is provided. If either .png or .tif is in the filename,
  * it will call SaveGraphicsService to save in the format.
  */
+@AutoService(Command.class)
 public class SaveGraphics extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();
@@ -90,7 +93,7 @@ public class SaveGraphics extends AbstractAction {
         }
     }
 
-    private void saveImage(JComponent comp) {
+    private static void saveImage(JComponent comp) {
 
         String filename;
         JFileChooser chooser = FileDialoger.promptToSaveFile(

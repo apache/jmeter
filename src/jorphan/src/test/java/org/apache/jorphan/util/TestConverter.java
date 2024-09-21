@@ -17,8 +17,8 @@
 
 package org.apache.jorphan.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -65,14 +65,14 @@ public class TestConverter {
     }
 
     @Test
-    @SuppressWarnings({ "UndefinedEquals", "JdkObsolete" })
+    @SuppressWarnings({ "UndefinedEquals", "JavaUtilDate" })
     public void testGetDateObjectDateWithTimeAndNullDefault() {
         Date time = new Date();
         assertEquals(time, Converter.getDate(time, null));
     }
 
     @Test
-    @SuppressWarnings({ "UndefinedEquals", "JdkObsolete" })
+    @SuppressWarnings({ "UndefinedEquals", "JavaUtilDate" })
     public void testGetDateObjectDateWithNullAndDateAsDefault() {
         Date date = new Date();
         assertEquals(date, Converter.getDate(null, date));

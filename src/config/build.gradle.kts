@@ -19,7 +19,7 @@ import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
 
 plugins {
-    id("com.github.vlsi.crlf")
+    id("build-logic.jvm-published-library")
 }
 
 val srcLicense by configurations.creating

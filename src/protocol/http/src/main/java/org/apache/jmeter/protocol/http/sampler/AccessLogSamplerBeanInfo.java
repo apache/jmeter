@@ -18,90 +18,92 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.beans.PropertyDescriptor;
-import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.FileEditor;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
     private static final Logger log = LoggerFactory.getLogger(AccessLogSamplerBeanInfo.class);
-    private static final List<String> LOG_PARSER_CLASSES = logParsers();
-
-    private static List<String> logParsers() {
-        try {
-            return ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { LogParser.class });
-        } catch (IOException e) {
-            log.warn("Could not find log parsers.", e);
-            return Collections.emptyList();
-        }
-    }
+    private static final List<String> LOG_PARSER_CLASSES =
+            JMeterUtils.loadServicesAndScanJars(
+                    LogParser.class,
+                    ServiceLoader.load(LogParser.class),
+                    Thread.currentThread().getContextClassLoader(),
+                    new LogAndIgnoreServiceLoadExceptionHandler(log)
+            ).stream()
+                    .map(s -> s.getClass().getName())
+                    .sorted()
+                    .collect(Collectors.toList());
 
     public AccessLogSamplerBeanInfo() {
         super(AccessLogSampler.class);
         log.debug("Entered access log sampler bean info");
-        try {
-            createPropertyGroup("defaults",  // $NON-NLS-1$
-                    new String[] { "protocol", "domain", "portString", "imageParsing" });// $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$ $NON-NLS-4$
+        createPropertyGroup("defaults",  // $NON-NLS-1$
+                new String[] { "protocol", "domain", "portString", "imageParsing" });// $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$ $NON-NLS-4$
 
-            createPropertyGroup("plugins",  // $NON-NLS-1$
-                    new String[] { "parserClassName", "filterClassName" }); // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+        createPropertyGroup("plugins",  // $NON-NLS-1$
+                new String[] { "parserClassName", "filterClassName" }); // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
 
-            createPropertyGroup("accesslogfile",  // $NON-NLS-1$
-                    new String[] { "logFile" }); // $NON-NLS-1$
+        createPropertyGroup("accesslogfile",  // $NON-NLS-1$
+                new String[] { "logFile" }); // $NON-NLS-1$
 
-            PropertyDescriptor p;
+        PropertyDescriptor p;
 
-            p = property("parserClassName");
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-            p.setValue(DEFAULT, AccessLogSampler.DEFAULT_CLASS);
-            p.setValue(NOT_OTHER, Boolean.TRUE);
-            p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p = property("parserClassName");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, AccessLogSampler.DEFAULT_CLASS);
+        p.setValue(NOT_OTHER, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
 
-            log.debug("found parsers: {}", LOG_PARSER_CLASSES);
-            p.setValue(TAGS, LOG_PARSER_CLASSES.toArray(new String[LOG_PARSER_CLASSES.size()]));
+        log.debug("found parsers: {}", LOG_PARSER_CLASSES);
+        p.setValue(TAGS, LOG_PARSER_CLASSES.toArray(new String[0]));
 
-            p = property("filterClassName"); // $NON-NLS-1$
-            p.setValue(NOT_UNDEFINED, Boolean.FALSE);
-            p.setValue(DEFAULT, ""); // $NON-NLS-1$
-            p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-            List<String> classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-                    new Class[] { Filter.class }, false);
-            p.setValue(TAGS, classes.toArray(new String[classes.size()]));
+        p = property("filterClassName"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.FALSE);
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        String[] classes = JMeterUtils.loadServicesAndScanJars(
+                        Filter.class,
+                        ServiceLoader.load(Filter.class),
+                        Thread.currentThread().getContextClassLoader(),
+                        new LogAndIgnoreServiceLoadExceptionHandler(log)
+                ).stream()
+                .map(s -> s.getClass().getName())
+                .sorted()
+                .toArray(String[]::new);
+        p.setValue(TAGS, classes);
 
-            p = property("logFile"); // $NON-NLS-1$
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-            p.setValue(DEFAULT, "");
-            p.setPropertyEditorClass(FileEditor.class);
+        p = property("logFile"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
+        p.setPropertyEditorClass(FileEditor.class);
 
-            p = property("domain"); // $NON-NLS-1$
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-            p.setValue(DEFAULT, "");
+        p = property("domain"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "");
 
-            p = property("protocol"); // $NON-NLS-1$
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-            p.setValue(DEFAULT, "http"); // $NON-NLS-1$
-            p.setValue(DEFAULT_NOT_SAVED, Boolean.TRUE);
+        p = property("protocol"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, "http"); // $NON-NLS-1$
+        p.setValue(DEFAULT_NOT_SAVED, Boolean.TRUE);
 
-            p = property("portString"); // $NON-NLS-1$
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-            p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        p = property("portString"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
-            p = property("imageParsing"); // $NON-NLS-1$
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-            p.setValue(DEFAULT, Boolean.FALSE);
-            p.setValue(NOT_OTHER, Boolean.TRUE);
-        } catch (IOException e) {
-            log.warn("couldn't find classes and set up properties", e);
-            throw new RuntimeException("Could not find classes with class finder", e);
-        }
+        p = property("imageParsing"); // $NON-NLS-1$
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_OTHER, Boolean.TRUE);
         log.debug("Got to end of access log sampler bean info init");
     }
 

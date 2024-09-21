@@ -97,7 +97,7 @@ public class ScriptWrapperConverter implements Converter {
         return wrap;
     }
 
-    private ConversionException createConversionException(Throwable e) {
+    private static ConversionException createConversionException(Throwable e) {
         final ConversionException conversionException = new ConversionException(e);
         StackTraceElement[] ste = e.getStackTrace();
         if (ste!=null){

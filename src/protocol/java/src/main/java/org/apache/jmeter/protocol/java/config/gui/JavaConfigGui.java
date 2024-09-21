@@ -18,12 +18,13 @@
 package org.apache.jmeter.protocol.java.config.gui;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -47,7 +48,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,21 +137,15 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
      * @return a panel containing the relevant components
      */
     private JPanel createClassnamePanel() {
-        List<String> possibleClasses = new ArrayList<>();
-
-        try {
-            // Find all the classes which implement the JavaSamplerClient
-            // interface.
-            possibleClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-                    new Class[] { JavaSamplerClient.class });
-
-            // Remove the JavaConfig class from the list since it only
-            // implements the interface for error conditions.
-
-            possibleClasses.remove(JavaSampler.class.getName() + "$ErrorSamplerClient");
-        } catch (Exception e) {
-            log.debug("Exception getting interfaces.", e);
-        }
+        List<String> possibleClasses = JMeterUtils.loadServicesAndScanJars(
+                JavaSamplerClient.class,
+                ServiceLoader.load(JavaSamplerClient.class),
+                Thread.currentThread().getContextClassLoader(),
+                new LogAndIgnoreServiceLoadExceptionHandler(log)
+        ).stream()
+                .map(s -> s.getClass().getName())
+                .sorted()
+                .collect(Collectors.toList());
 
         classNameLabeledChoice = new JLabeledChoice(
                 JMeterUtils.getResString("protocol_java_classname"),

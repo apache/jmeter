@@ -37,6 +37,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xbill.DNS.ARecord;
@@ -112,6 +113,11 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         return clone;
     }
 
+    @VisibleForTesting
+    Resolver getResolver() {
+        return resolver;
+    }
+
     private Resolver createResolver() {
         CollectionProperty dnsServers = getServers();
         try {
@@ -163,7 +169,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         }
     }
 
-    private void logCache(String hitOrMiss, String host, InetAddress[] addresses) {
+    private static void logCache(String hitOrMiss, String host, InetAddress[] addresses) {
         if (log.isDebugEnabled()) {
             log.debug("Cache {} thread#{}: {} => {}", hitOrMiss, JMeterContextService.getContext().getThreadNum(), host,
                     Arrays.toString(addresses));
@@ -226,7 +232,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         return new InetAddress[0];
     }
 
-    private void addAsLiteralAddress(List<InetAddress> addresses, String address) {
+    private static void addAsLiteralAddress(List<? super InetAddress> addresses, String address) {
         try {
             addresses.add(InetAddress.getByName(address));
         } catch (UnknownHostException e) {

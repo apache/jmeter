@@ -82,6 +82,7 @@ public class BSFListener extends BSFTestElement
     }
 
     @Override
+    @SuppressWarnings("RedundantOverride")
     public Object clone() {
         return super.clone();
     }

@@ -206,7 +206,7 @@ public final class TristateCheckBox extends JCheckBox {
 
         public TristateButtonModel(TristateState initial,
                 TristateCheckBox tristateCheckBox, boolean original) {
-            setState(TristateState.DESELECTED);
+            setState(initial);
             this.tristateCheckBox = tristateCheckBox;
             icon = new TristateCheckBoxIcon();
             this.original = original;
@@ -343,7 +343,7 @@ public final class TristateCheckBox extends JCheckBox {
             g.drawLine(left, height - 1, right, height - 1);
         }
 
-        private void drawFlush3DBorder(Graphics g, int x, int y, int w, int h) {
+        private static void drawFlush3DBorder(Graphics g, int x, int y, int w, int h) {
             g.translate(x, y);
             g.setColor(MetalLookAndFeel.getControlDarkShadow());
             g.drawRect(0, 0, w - 2, h - 2);
@@ -355,7 +355,7 @@ public final class TristateCheckBox extends JCheckBox {
             g.translate(-x, -y);
         }
 
-        private void drawPressed3DBorder(Graphics g, int x, int y, int w, int h) {
+        private static void drawPressed3DBorder(Graphics g, int x, int y, int w, int h) {
             g.translate(x, y);
             drawFlush3DBorder(g, 0, 0, w, h);
             g.setColor(MetalLookAndFeel.getControlShadow());

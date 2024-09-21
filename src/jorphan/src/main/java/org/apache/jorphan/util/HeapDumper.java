@@ -19,8 +19,9 @@ package org.apache.jorphan.util;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
@@ -107,7 +108,7 @@ public class HeapDumper {
 
     /**
      * Dumps live objects from the heap to the outputFile file in the same format as the hprof heap dump.
-     * <p>
+     *
      * @see #dumpHeap(String, boolean)
      * @param fileName name of the heap dump file. Must be creatable, i.e. must not exist.
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
@@ -121,7 +122,7 @@ public class HeapDumper {
      * <p>
      * Creates the dump using the file name: dump_yyyyMMdd_hhmmss_SSS.hprof
      * The dump is created in the current directory.
-     * <p>
+     * </p>
      * @see #dumpHeap(boolean)
      * @return the name of the dump file that was created
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
@@ -135,7 +136,7 @@ public class HeapDumper {
      * <p>
      * Creates the dump using the file name: dump_yyyyMMdd_hhmmss_SSS.hprof
      * The dump is created in the current directory.
-     * <p>
+     * </p>
      * @see #dumpHeap(String, boolean)
      * @param live true id only live objects are to be dumped.
      *
@@ -151,7 +152,7 @@ public class HeapDumper {
      * The dump is created in the specified directory.
      * <p>
      * Creates the dump using the file name: dump_yyyyMMdd_hhmmss_SSS.hprof
-     * <p>
+     * </p>
      * @see #dumpHeap(String, boolean)
      * @param basedir File object for the target base directory.
      * @param live true id only live objects are to be dumped.
@@ -159,10 +160,9 @@ public class HeapDumper {
      * @return the name of the dump file that was created
      * @throws Exception if the MXBean cannot be found, or if there is a problem during invocation
      */
-    @SuppressWarnings("JdkObsolete")
     public static String dumpHeap(File basedir, boolean live) throws Exception {
-        SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
-        String stamp = timestampFormat.format(new Date());
+        DateTimeFormatter timestampFormat = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss_SSS").withZone(ZoneId.systemDefault());
+        String stamp = timestampFormat.format(Instant.now());
         File temp = new File(basedir,"dump_"+stamp+".hprof");
         final String path = temp.getPath();
         dumpHeap(path, live);

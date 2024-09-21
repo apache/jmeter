@@ -18,12 +18,11 @@
 package org.apache.jmeter.threads;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.jmeter.assertions.Assertion;
@@ -69,10 +68,10 @@ public class TestCompiler implements HashTreeTraverser {
     // TODO: replace with ArrayDequeue
     private final LinkedList<TestElement> stack = new LinkedList<>();
 
-    private final Map<Sampler, SamplePackage> samplerConfigMap = new HashMap<>();
+    private final IdentityHashMap<Sampler, SamplePackage> samplerConfigMap = new IdentityHashMap<>();
 
-    private final Map<TransactionController, SamplePackage> transactionControllerConfigMap =
-            new HashMap<>();
+    private final IdentityHashMap<TransactionController, SamplePackage> transactionControllerConfigMap =
+            new IdentityHashMap<>();
 
     private final HashTree testTree;
 
@@ -172,7 +171,8 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
-    private void trackIterationListeners(LinkedList<TestElement> pStack) {
+    @SuppressWarnings("NonApiType")
+    private static void trackIterationListeners(LinkedList<TestElement> pStack) {
         TestElement child = pStack.getLast();
         if (child instanceof LoopIterationListener) {
             ListIterator<TestElement> iter = pStack.listIterator(pStack.size());
@@ -271,7 +271,7 @@ public class TestCompiler implements HashTreeTraverser {
      * @param controllers
      * @param maybeController
      */
-    private void addDirectParentControllers(List<Controller> controllers, TestElement maybeController) {
+    private static void addDirectParentControllers(List<? super Controller> controllers, TestElement maybeController) {
         if (maybeController instanceof Controller) {
             log.debug("adding controller: {} to sampler config", maybeController);
             controllers.add((Controller) maybeController);
@@ -304,7 +304,7 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
-    private void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
+    private static void configureWithConfigElements(Sampler sam, List<? extends ConfigTestElement> configs) {
         sam.clearTestElementChildren();
         for (ConfigTestElement config  : configs) {
             if (!(config instanceof NoConfigMerge))

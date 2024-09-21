@@ -17,19 +17,26 @@
 
 package org.apache.jmeter.protocol.http.config;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class MultipartUrlConfigTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    public void testConstructors() {
+    void testConstructors() {
         MultipartUrlConfig muc = new MultipartUrlConfig();
         assertEquals(0, muc.getArguments().getArgumentCount());
         assertEquals(0, muc.getHTTPFileArgs().getHTTPFileArgCount());
@@ -41,7 +48,7 @@ public class MultipartUrlConfigTest {
 
     // TODO - should LF-only EOL be allowed?
     @Test
-    public void testParseArgumentsLF() {
+    void testParseArgumentsLF() {
         String queryString
             = "Content-Disposition: form-data; name=\"aa\"\n"
             + "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -90,7 +97,7 @@ public class MultipartUrlConfigTest {
     }
 
     @Test
-    public void testParseArgumentsCRLF() {
+    void testParseArgumentsCRLF() {
         String queryString
             = "Content-Disposition: form-data; name=\"aa\"\r\n"
             + "Content-Type: text/plain; charset=ISO-8859-1\r\n"
@@ -136,5 +143,74 @@ public class MultipartUrlConfigTest {
         arg = args.getArgument(2);
         assertEquals("abc", arg.getName());
         assertEquals("xyz  \r\nxyz  ", arg.getValue());
+    }
+
+    private static Stream<org.junit.jupiter.params.provider.Arguments> quotedMultiPartArgs() {
+        String boundary = "7d159c1302d0y0";
+        HTTPFileArgs fileArgs = new HTTPFileArgs();
+        List<Argument> args = new ArrayList<>();
+        List<String> queryLines = new ArrayList<>();
+        int counter = 1;
+        for (boolean quoteName: Arrays.asList(true, false)) {
+            String paramName = "abc" + counter;
+            counter++;
+            String quoteStringName = quoteName ? '"' + paramName + '"' : paramName;
+            String value = "some value for " + paramName;
+            queryLines.add(String.format("Content-Disposition: form-data; name=%s", quoteStringName));
+            queryLines.add("Content-Type: text/plain; charset=ISO-8859-1");
+            queryLines.add("Content-Transfer-Encoding: 8bit");
+            queryLines.add("");
+            queryLines.add(value);
+            queryLines.add("--" + boundary);
+            args.add(new Argument(paramName, value));
+            for (boolean quoteFilename: Arrays.asList(true, false)) {
+                String filenameName = "def" + counter;
+                counter++;
+                String quoteStringFile = quoteFilename ? '"' +filenameName + '"' : filenameName ;
+                String content = "some value for " + paramName + " and " + filenameName ;
+                queryLines.add(String.format("Content-Disposition: form-data; name=%s; filename=%s",
+                        quoteStringName,
+                        quoteStringFile
+                        ));
+                queryLines.add("Content-Type: text/plain");
+                queryLines.add("Content-Transfer-Encoding: binary");
+                queryLines.add("");
+                queryLines.add(content);
+                queryLines.add("");
+                queryLines.add("--" + boundary);
+                fileArgs.addHTTPFileArg(filenameName, paramName, "text/plain");
+            }
+        }
+        queryLines.remove(queryLines.size()-1);
+        queryLines.add("");
+        return Stream.of(
+                org.junit.jupiter.params.provider.Arguments.of(
+                        boundary, String.join("\n", queryLines), fileArgs, args),
+                org.junit.jupiter.params.provider.Arguments.of(
+                        boundary, String.join("\r\n", queryLines), fileArgs, args));
+    }
+
+    @ParameterizedTest()
+    @MethodSource("quotedMultiPartArgs")
+    void testParseArgumentsQuotingStyle(String boundary, String queryString, HTTPFileArgs expectedFiles, List<Argument> expectedArgs) {
+        MultipartUrlConfig muc = new MultipartUrlConfig(boundary);
+        muc.parseArguments(queryString);
+        HTTPFileArgs files = muc.getHTTPFileArgs();
+        assertEquals(expectedFiles.getHTTPFileArgCount(), files.getHTTPFileArgCount());
+        for (int i=0; i<files.getHTTPFileArgCount(); i++) {
+            HTTPFileArg got = files.getHTTPFileArg(i);
+            HTTPFileArg expected = expectedFiles.getHTTPFileArg(i);
+            assertEquals(expected.getParamName(), got.getParamName());
+            assertEquals(expected.getPath(), got.getPath());
+            assertEquals(expected.getMimeType(), got.getMimeType());
+        }
+        Arguments args = muc.getArguments();
+        assertEquals(expectedArgs.size(), args.getArgumentCount());
+        for (int i=0; i<args.getArgumentCount(); i++) {
+            Argument got = args.getArgument(i);
+            Argument expected = expectedArgs.get(i);
+            assertEquals(expected.getName(), got.getName());
+            assertEquals(expected.getValue(), got.getValue());
+        }
     }
 }

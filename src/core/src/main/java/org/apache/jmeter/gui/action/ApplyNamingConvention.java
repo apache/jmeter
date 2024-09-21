@@ -32,10 +32,13 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Allows to apply naming convention on nodes
  * @since 3.2
  */
+@AutoService(Command.class)
 public class ApplyNamingConvention extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(ApplyNamingConvention.class);
 
@@ -80,7 +83,7 @@ public class ApplyNamingConvention extends AbstractAction {
      * @param currentNode Parent node of elements on which we apply naming policy
      */
     @SuppressWarnings("JdkObsolete")
-    private void applyNamingPolicyToCurrentNode(GuiPackage guiPackage,
+    private static void applyNamingPolicyToCurrentNode(GuiPackage guiPackage,
             JMeterTreeNode currentNode) {
         TreeNodeNamingPolicy namingPolicy = guiPackage.getNamingPolicy();
         guiPackage.updateCurrentNode();

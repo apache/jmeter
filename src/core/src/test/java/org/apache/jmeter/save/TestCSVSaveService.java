@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.save;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedReader;
@@ -40,9 +40,9 @@ public class TestCSVSaveService extends JMeterTestCase {
     }
 
     private void checkStrings(String[] expected, String[] out) {
-        assertEquals("Incorrect number of strings returned",expected.length, out.length);
+        assertEquals(expected.length, out.length, "Incorrect number of strings returned");
         for(int i = 0; i < out.length; i++){
-           assertEquals("Incorrect entry returned",expected[i], out[i]);
+           assertEquals(expected[i], out[i], "Incorrect entry returned");
         }
     }
 
@@ -108,7 +108,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         checkStrings(new String[]{"","","f","g",""}, out);
         out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{""}, out); // Blank line
-        assertEquals("Expected to be at EOF",-1,br.read());
+        assertEquals(-1, br.read(), "Expected to be at EOF");
         // Empty strings at EOF
         out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{}, out);
@@ -121,7 +121,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         BufferedReader br = new BufferedReader(new StringReader("\n"));
         String[] out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{""}, out);
-        assertEquals("Expected to be at EOF",-1,br.read());
+        assertEquals(-1, br.read(), "Expected to be at EOF");
     }
 
     @Test
@@ -129,7 +129,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         BufferedReader br = new BufferedReader(new StringReader("\"\"\n"));
         String[] out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{""}, out);
-        assertEquals("Expected to be at EOF",-1,br.read());
+        assertEquals(-1, br.read(), "Expected to be at EOF");
     }
 
     @Test
@@ -137,7 +137,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         BufferedReader br = new BufferedReader(new StringReader(""));
         String[] out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{}, out);
-        assertEquals("Expected to be at EOF",-1,br.read());
+        assertEquals(-1, br.read(), "Expected to be at EOF");
     }
 
     @Test
@@ -145,7 +145,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         BufferedReader br = new BufferedReader(new StringReader("a"));
         String[] out = CSVSaveService.csvReadFile(br, ',');
         checkStrings(new String[]{"a"}, out);
-        assertEquals("Expected to be at EOF",-1,br.read());
+        assertEquals(-1, br.read(), "Expected to be at EOF");
     }
 
     @Test
@@ -154,7 +154,7 @@ public class TestCSVSaveService extends JMeterTestCase {
     public void testHeader() {
         final String HDR = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,"
                 + "failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect";
-        assertEquals("Header text has changed", HDR, CSVSaveService.printableFieldNamesToString());
+        assertEquals(HDR, CSVSaveService.printableFieldNamesToString(), "Header text has changed");
     }
 
     @Test
@@ -180,6 +180,6 @@ public class TestCSVSaveService extends JMeterTestCase {
         result.setIdleTime(13);
         result.setConnectTime(14);
 
-        assertEquals("Result text has changed", RESULT, CSVSaveService.resultToDelimitedString(new SampleEvent(result,"")));
+        assertEquals(RESULT, CSVSaveService.resultToDelimitedString(new SampleEvent(result,"")), "Result text has changed");
     }
 }

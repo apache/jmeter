@@ -932,7 +932,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">String textToCheck =  &apos;Content-Disposition: form-data; name=&quot;?_param&quot;&apos;;
+            <stringProp name="script">String textToCheck =  &apos;Content-Disposition: form-data; name=&quot;安_param&quot;&apos;;
 if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
 	AssertionResult.setFailure(true);
 	AssertionResult.setFailureMessage(&quot;Request does not contains &apos;&quot;+textToCheck+&quot;&apos;&quot;);
@@ -1005,7 +1005,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="-1049865380">nv_contentType</stringProp>
-              <stringProp name="817335912">text/plain</stringProp>
+              <stringProp name="1947100436">text/plain; charset=UTF-8</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>

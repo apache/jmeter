@@ -20,10 +20,10 @@ package org.apache.jmeter.report.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 
@@ -42,7 +42,7 @@ public class SampleMetadata {
     List<String> columns;
 
     /** Index to map column names to their corresponding indexes */
-    private TreeMap<String, Integer> index = new TreeMap<>();
+    private final TreeMap<String, Integer> index = new TreeMap<>();
 
     /** character separator used for separating columns */
     private char separator;
@@ -56,7 +56,7 @@ public class SampleMetadata {
      *            The list of columns names (must not be {@code null})
      */
     public SampleMetadata(char separator, String... columns) {
-        Validate.notNull(columns, "columns must not be null");
+        Objects.requireNonNull(columns, "columns must not be null");
         initialize(separator, Arrays.asList(columns));
     }
 

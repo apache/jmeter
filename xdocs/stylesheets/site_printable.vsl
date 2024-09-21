@@ -239,6 +239,10 @@ No
 <a href="https://github.com/apache/jmeter/pull/$id.getText()">Pull request #$id.getText()</a>##
 #end
 
+#macro ( issue $id)
+<a href="https://github.com/apache/jmeter/issues/$id.getText()">Issue #$id.getText()</a>##
+#end
+
 #macro ( rfc $id)
 #if($id.getText())
 <a href="https://tools.ietf.org/html/rfc$id.getAttributeValue('link')">$id.getText()</a>##
@@ -255,6 +259,11 @@ No
 ## Shorthand - automatically adds " - " before remaining text
 #macro ( pr $id)
 #pullrequest($id) - ##
+#end
+
+## Shorthand - automatically adds " - " before remaining text
+#macro ( issue_dash $id)
+#issue($id) - ##
 #end
 
 #macro ( contributor $id)
@@ -317,6 +326,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #bug ($node)
 #elseif ($node.getName().equals("pr"))
 #pr ($node)
+#elseif ($node.getName().equals("issue"))
+#issue ($node)
 #elseif ($node.getName().equals("rfc"))
 #rfc ($node)
 #elseif ($node.getName().equals("contributor"))

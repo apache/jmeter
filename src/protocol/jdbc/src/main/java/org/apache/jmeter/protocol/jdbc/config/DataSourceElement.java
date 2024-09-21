@@ -116,12 +116,12 @@ public class DataSourceElement extends AbstractTestElement
         JMeterVariables variables = getThreadContext().getVariables();
         String poolName = getDataSource();
         if (JOrphanUtils.isBlank(poolName)) {
-            throw new IllegalArgumentException("Name for DataSoure must not be empty in " + getName());
+            throw new IllegalArgumentException("Name for DataSource must not be empty in " + getName());
         } else if (variables.getObject(poolName) != null) {
             log.error("JDBC data source already defined for: {}", poolName);
         } else {
             String maxPool = getPoolMax();
-            perThreadPoolSet = Collections.synchronizedSet(new HashSet<BasicDataSource>());
+            perThreadPoolSet = Collections.synchronizedSet(new HashSet<>());
             if (maxPool.equals("0")){ // i.e. if we want per thread pooling
                 variables.putObject(poolName, new DataSourceComponentImpl()); // pool will be created later
             } else {

@@ -74,29 +74,29 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
         return groupInfos;
     }
 
-    private String formatPercentile(String percentileLabel) {
+    private static String formatPercentile(String percentileLabel) {
         return String.format("%sth percentile", percentileLabel);
     }
 
-    private GroupInfo createMinGroupInfo() {
+    private static GroupInfo createMinGroupInfo() {
         StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
         seriesSelector.setSeriesName("Min");
         return createGroupInfo(new MinAggregatorFactory(), seriesSelector);
     }
 
-    private GroupInfo createMaxGroupInfo() {
+    private static GroupInfo createMaxGroupInfo() {
         StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
         seriesSelector.setSeriesName("Max");
         return createGroupInfo(new MaxAggregatorFactory(), seriesSelector);
     }
 
-    private GroupInfo createMedianGroupInfo() {
+    private static GroupInfo createMedianGroupInfo() {
         StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
         seriesSelector.setSeriesName("Median");
         return createGroupInfo(new MedianAggregatorFactory(), seriesSelector);
     }
 
-    private GroupInfo createPercentileGroupInfo(String propKey, String label) {
+    private static GroupInfo createPercentileGroupInfo(String propKey, String label) {
         String seriesName = formatPercentile(label);
         double defaultValue = new BigDecimal(label).setScale(2, RoundingMode.CEILING).doubleValue();
         double property = JMeterUtils.getPropDefault(propKey, defaultValue);
@@ -108,7 +108,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer
         return createGroupInfo(factory, seriesSelector);
     }
 
-    private GroupInfo createGroupInfo(AggregatorFactory aggregationFactory, StaticSeriesSelector seriesSelector) {
+    private static GroupInfo createGroupInfo(AggregatorFactory aggregationFactory, StaticSeriesSelector seriesSelector) {
         return new GroupInfo(
                 aggregationFactory,
                 seriesSelector,

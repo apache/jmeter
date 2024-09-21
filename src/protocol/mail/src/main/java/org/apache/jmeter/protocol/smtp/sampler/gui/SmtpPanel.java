@@ -86,8 +86,8 @@ public class SmtpPanel extends JPanel {
     private JButton addHeaderFieldButton;
     private JLabel headerFieldName;
     private JLabel headerFieldValue;
-    private Map<JTextField, JTextField> headerFields = new HashMap<>();
-    private Map<JButton,JTextField> removeButtons = new HashMap<>();
+    private final Map<JTextField, JTextField> headerFields = new HashMap<>();
+    private final Map<JButton,JTextField> removeButtons = new HashMap<>();
     private int headerGridY = 0;
 
     private SecuritySettingsPanel securitySettingsPanel;

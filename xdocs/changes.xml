@@ -18,10 +18,15 @@
 
 <!DOCTYPE document
 [
-<!ENTITY hellip   "&#x02026;" >
-<!ENTITY rarr     "&#x02192;" >
-<!ENTITY vellip   "&#x022EE;" >
-<!ENTITY nbsp     "&#x00A0;" >
+<!ENTITY hellip   "&#x02026;">
+<!ENTITY le       "&#x02264;">
+<!ENTITY nbsp     "&#x000A0;">
+<!ENTITY ndash    "&#x02013;">
+<!ENTITY oacute   "&#x000F3;">
+<!ENTITY rarr     "&#x02192;">
+<!ENTITY rArr     "&#x021D2;">
+<!ENTITY THORN    "&#x000DE;">
+<!ENTITY vellip   "&#x022EE;">
 ]>
 <document>
 <properties>
@@ -40,224 +45,26 @@ h3 { color: #960000; }
 Earlier changes are detailed in the <a href="changes_history.html">History of Previous Changes</a>.
 </note>
 
+<br></br>
+<note>
+JMeter 6.x requires Java 17 or later for execution (Java 21 is recommended).
+</note>
 
-<!--  =================== 5.5 =================== -->
+<!--  =================== 6.0.0 =================== -->
 
-<h1>Version 5.5</h1>
+<h1>Version 6.0.0 </h1>
 <p>
 Summary
 </p>
 <ul>
-<li><a href="#New and Noteworthy">New and Noteworthy</a></li>
-<li><a href="#Incompatible changes">Incompatible changes</a></li>
 <li><a href="#Bug fixes">Bug fixes</a></li>
-<li><a href="#Improvements">Improvements</a></li>
-<li><a href="#Non-functional changes">Non-functional changes</a></li>
-<li><a href="#Known problems and workarounds">Known problems and workarounds</a></li>
-<li><a href="#Thanks">Thanks</a></li>
-
 </ul>
 
-<ch_section>New and Noteworthy</ch_section>
-<ul>
-  <li>Support building and running JMeter with Java 17</li>
-  <li>Open Model Thread Group: load generator with programmable profile</li>
-</ul>
-<!--
-<ch_title>Core improvements</ch_title>
-<ch_title>Test Plan</ch_title>
-<ch_title>Scripting / Debugging enhancements</ch_title>
-<ch_title>Functions</ch_title>
--->
-<ch_title>UX improvements</ch_title>
-
-<!-- =================== Incompatible changes =================== -->
-
-<ch_section>Incompatible changes</ch_section>
-<ul>
-</ul>
-<!-- =================== Improvements =================== -->
-
-<ch_section>Improvements</ch_section>
-
-<h3>HTTP Samplers and Test Script Recorder</h3>
-<ul>
-  <li><bug>65027</bug>Detect mime-type for files automatically when adding files to HTTP Sampler</li>
-  <li><bug>65020</bug>HTTP Sampler/Files upload tab - add missing buttons</li>
-  <li><pr>650</pr>HTTP Sampler timestamp fix when exception is caught. Contributed by Konstantin Kalinin (konstantin at kkalinin.pro)</li>
-  <li><bug>65328</bug><pr>666</pr>HTTP 308 Permanent Redirect is not supported. Contributed by
-    Baptiste Gaillard (baptiste.gaillard at gmail.com)</li>
-</ul>
-
-<h3>Other samplers</h3>
-<ul>
-  <li><bug>65149</bug><pr>644</pr>Encode the personal part of email addresses in SMTP Sampler</li>
-  <li><pr>638</pr>Various additions to the Bolt Sampler. Added <code>transaction timeout</code>, <code>database</code>
-    option required for Neo4j 4.x (with multi-database support) and <code>access mode</code> option, that allows running
-    against a Neo4j Enterprise Causal Cluster. Contributed by David Pecollet (david.pecollet at gmail.com)</li>
-</ul>
-
-<h3>Controllers</h3>
-<ul>
-  <li><pr>665</pr>Increase visible lines of code in <code>IfController</code> and <code>WhileController</code>.
-    Based on an idea by David Getzlaff (david.getzlaff at t-systems.com>).</li>
-</ul>
-
-<h3>Listeners</h3>
-<ul>
-  <li><bug>64988</bug>Sort properties and variables in a human expected order for DebugPostProcessor and DebugSampler</li>
-  <li><bug>63061</bug>Sort View Results in Table in a human expected order</li>
-</ul>
-
-<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<ul>
-    <li><pr>638</pr>Bolt Connection Configuration: added <code>ConnectionPoolMaxSize</code> parameter. Contributed by
-        David Pecollet (david.pecollet at gmail.com)</li>
-    <li><bug>65515</bug>Allow pooling of Prepared Statements in JDBC</li>
-    <li><bug>65299</bug>JSONPathAssertion attributes are out of order/Compare JSON objects and
-        not their string representations.</li>
-</ul>
-
-<h3>Functions</h3>
-<ul>
-</ul>
-
-<h3>I18N</h3>
-<ul>
-</ul>
-
-<h3>Report / Dashboard</h3>
-<ul>
-  <li><bug>65353</bug>Make the estimator used for calculating percentiles on the dashboard configurable</li>
-</ul>
-
-<h3>General</h3>
-<ul>
-  <li><bug>61805</bug><pr>663</pr>Add simple HTTP request template. Contributed by Ori Marko (orimarko at gmail.com)</li>
-  <li><bug>65611</bug><pr>673</pr>Add support for IPv6 addresses when specifying a remote worker node. Based on a patch by Peter Wong (peter.wong at csexperts.com)</li>
-  <li>Reduce memory consumption by the logging panel (disable undo events for it)</li>
-</ul>
-
-<ch_section>Non-functional changes</ch_section>
-<ul>
-  <li>Added Kotlin 1.6.0 for JMeter engine implementation (apiVersion=1.5). The set of JSR 223 languages is intact.</li>
-  <li><bug>65128</bug><pr>643</pr>Add missing documentation about <code>Same user on each iteration</code> for Thread Groups. Contributed by njkuzas.</li>
-  <li><pr>648</pr>Updated xmlgraphics-commons to 2.6 (from 2.3). Contributed by Stefan Seide (stefan at trilobyte-se.de)</li>
-  <li><pr>655</pr><pr>667</pr><pr>675</pr>Updated x-stream to 1.4.18 (from 1.4.15). Contributed by Stefan Seide (stefan at trilobyte-se.de)</li>
-  <li><pr>656</pr><pr>668</pr>Updated json-smart to 2.4.7 (from 2.3), accessors-smart to 2.4.7 (from 1.2) and asm 9.1 (from 9.0). Contributed by Stefan Seide (stefan at trilobyte-se.de)</li>
-  <li><bug>64831</bug>Log truststore entries in debug level for logger <code>org.apache.jmeter.util.keystore.JmeterKeyStore</code></li>
-  <li><bug>65232</bug>Hide splash screen when an error is displayed because the test plan could not be parsed.</li>
-  <li>Updated Groovy to 3.0.9 (from 3.0.7).</li>
-  <li>Updated Darklaf to 2.7.3 (from 2.5.4).</li>
-  <li>Updated Apache ActiveMQ to 15.6.2 (from 15.6.0).</li>
-  <li>Updated Asm to 9.2 (from 9.1).</li>
-  <li>Updated Bouncycastle to 1.69 (from 1.67).</li>
-  <li>Updated Caffeine to 2.9.2 (from 2.8.8).</li>
-  <li>Updated Apache commons-dbcp2 to 2.9.0 (from 2.8.0).</li>
-  <li>Updated Apache commons-io to 2.11.0 (from 2.8.0).</li>
-  <li>Updated Apache commons-lang3 to 3.12.0 (from 3.11).</li>
-  <li>Updated Apache commons-net to 3.8.0 (from 3.7.2).</li>
-  <li>Updated Apache commons-pool2 to 2.11.0 (from 2.9.0).</li>
-  <li>Updated equalsverifier to 3.7 (from 3.4.2).</li>
-  <li>Updated Apache Freemarker to 2.3.31 (from 2.3.30).</li>
-  <li>Updated hsqldb to 2.5.2 (from 2.5.0).</li>
-  <li>Updated hsqldb to 2.6.0 (from 2.5.0).</li>
-  <li>Updated Apache HttpClient to 4.5.13 (from 4.5.12).</li>
-  <li>Updated Apache HttpCore to 4.4.14 (from 4.4.13).</li>
-  <li>Updated jacoco to 0.8.7 (from 0.8.5).</li>
-  <li>Updated json-path to 2.6.0 (from 2.4.0).</li>
-  <li>Updated jsoup to 1.14.1 (from 1.13.1).</li>
-  <li>Updated JUnit to 4.13.2 and 5.8.1 (from 4.13.1 and 5.7.0).</li>
-  <li>Updated Apache log4j2 to 2.14.1 (from 2.13.3).</li>
-  <li>Updated Miglayout to 5.3 (from 5.2).</li>
-  <li>Updated Neo4j Java driver to 4.3.3 (from 4.2.0).</li>
-  <li>Updated Objenesis to 3.2 (from 2.6).</li>
-  <li>Updated ktlint to 0.40.0</li>
-  <li>Updated PH CSS and PH commons to 6.3.4 and 9.5.5 (from 6.2.3 and 9.5.1).</li>
-  <li>Updated RSyntaxTextArea to 3.1.3 (from 3.1.1).</li>
-  <li>Updated SLF4J to 1.7.32 (from 1.7.30).</li>
-  <li>Updated SvgSalamander to 1.1.2.4 (from 1.1.2.1).</li>
-  <li>Updated Apache Tika to 1.27 (from 1.26).</li>
-  <li>Updated WireMock-JRE8 to 2.30.0 (from 2.24.1).</li>
-  <li>Updated com.github.vlsi.vlsi-release-plugins 1.76 (from 1.74).</li>
-  <li><pr>671</pr>Move example definition of property <code>jmeter.reportgenerator.statistic_window</code>
-     to <code>user.properties</code>, as it is read from that place.
-     Contributed by Rithvik Patibandla (rithvikp98 at gmail.com)</li>
-  <li><bug>65456</bug>Updated commons-jexl 3 to 3.2.1 (from 3.1). Contributed by Ori Marko (orimarko at gmail.com>)</li>
-  <li><pr>654</pr>Try do give better feedback while loading keystores</li>
-  <li><pr>672</pr>Add more details to documentation for timeShift function. Contributed by Mariusz (mawasak at gmail.com)</li>
-  <li>Updated Gradle to 7.3 (from 7.2)</li>
-</ul>
-
- <!-- =================== Bug fixes =================== -->
-
-<ch_section>Bug fixes</ch_section>
-
-<h3>HTTP Samplers and Test Script Recorder</h3>
-<ul>
-  <li><bug>65310</bug>Don't let users override <code>multipart/form-data</code> <code>content-type</code>
-    header in HC4 sampler.</li>
-  <li><bug>65363</bug><code>NullPointerException</code> in <code>HTTPHC4Impl$ManagedCredentialsProvider.getAuthorizationForAuthScope</code> when <code>401</code> response from remote and <code>httpclient4.auth.preemptive=false</code></li>
-  <li><bug>65692</bug>HTTP(s) Test Script Recorder: Enable setting enabled cipher suite and enabled protocols on SSLContext/ Align ssl properties between Java and HC4 impl</li>
-</ul>
-
-<h3>Other Samplers</h3>
-<ul>
-  <li><bug>65152</bug>OS Process Sampler - Cannot <code>Add from Clipboard</code> Command parameters</li>
-  <li><pr>638</pr>Bolt Sampler: fixed error displaying results when "Record Query Results" is enabled. Contributed by
-        David Pecollet (david.pecollet at gmail.com)</li>
-</ul>
-
-<h3>Controllers</h3>
-<ul>
-</ul>
-
-<h3>Listeners</h3>
-<ul>
-  <li><bug>64962</bug>Save CSV sub-results recursively from View Results Tree</li>
-</ul>
-
-<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
-<ul>
-  <li><bug>65257</bug>JMESPathExtractor writes error log entries if JMESPath filter returns empty result</li>
-  <li><bug>65259</bug>JMESPathExtractor Attribute <code>Match No.</code> Required</li>
-  <li><bug>65269</bug>JSON Extractor and JSON JMESPath Extractor ignore sub-samples</li>
-  <li><bug>65352</bug>Warning logged when Boundary Extractor doesn't find any match</li>
-  <li><bug>65681</bug>Use default values for null values when extracting with JSONPostProcessor</li>
-</ul>
-
-<h3>Functions</h3>
-<ul>
-</ul>
-
-<h3>I18N</h3>
-<ul>
-</ul>
-
-<h3>Report / Dashboard</h3>
-<ul>
-</ul>
-
-<h3>Documentation</h3>
-<ul>
-</ul>
-
-<h3>General</h3>
-<ul>
-  <li><bug>64318</bug>DNS Cache Manager - custom DNS resolver does not use system resolver by default</li>
-  <li><pr>641</pr>Updated xercesImpl to 2.12.1 (from 2.12.0). Based on patch by Stefan Seide (stefan at trilobyte-se.de).</li>
-  <li><pr>645</pr>Add escaping for new lines in <code>AbstractInfluxdbMetricsSender</code>. Contributed by David Getzlaff (david.getzlaff at t-systems.com>)</li>
-  <li><bug>65198</bug>Can't copy generated function from FunctionHelper</li>
-  <li>Updated Apache Tika to 1.26 (from 1.24.1)</li>
-  <li><pr>658</pr>Improve javadoc. Contributed by Ori Marko (orimarko at gmail.com)</li>
-  <li><pr>661</pr>Fix wording in doc. Contributed by BugKing (wangzhen at fit2cloud.com)</li>
-  <li><pr>664</pr>Allow whitespace in path. Contributed by Till Neunast (github.com/tilln)</li>
-  <li><bug>65270</bug>POST <code>application/x-www-form-urlencoded</code> cURL code generated from Postman is not imported correctly</li>
-  <li>Silence warnings of missing font Arial on startup under linux</li>
-  <li><bug>65300</bug>IllegalAccessError when opening file dialog with Java 16</li>
-  <li><bug>65336</bug>Blank labels when different elements had the same name</li>
-  <li><bug>65522</bug>Restart doesn't work, when parameters contain spaces</li>
-</ul>
+  <ch_section>Changes</ch_section>
+  <h3>General</h3>
+  <ul>
+    <li><pr>6220</pr> Require Java 17 or later for running JMeter</li>
+  </ul>
 
  <!--  =================== Thanks =================== -->
 
@@ -265,22 +72,9 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-  <li>Stefan Seide (stefan at trilobyte-se.de)</li>
-  <li>njzukas (github.com/njzukas)</li>
-  <li>David Getzlaff (david.getzlaff at t-systems.com>)</li>
-  <li>Konstantin Kalinin (konstantin at kkalinin.pro)</li>
-  <li>David Pecollet (david.pecollet at gmail.com)</li>
-  <li>Ori Marko (orimarko at gmail.com)</li>
-  <li>BugKing (wangzhen at fit2cloud.com)</li>
-  <li>Till Neunast (github.com/tilln)</li>
-  <li>Baptiste Gaillard (baptiste.gaillard at gmail.com)</li>
-  <li>Rithvik Patibandla (rithvikp98 at gmail.com)</li>
-  <li>Mariusz (mawasak at gmail.com)</li>
-  <li>peter.wong@csexperts.com</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
-  <li>Nikola Aleksic (nalexic at gmail.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
@@ -323,25 +117,6 @@ See  <bugzilla>56357</bugzilla> for details.
 </li>
 
 <li>
-Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
-This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a>
-The fix is to use JDK8_u45 or later.
-</li>
-
-<li>
-View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
-This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
-See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
-The fix is to use JDK9 b65 or later.
-</li>
-
-<li>
-JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down</keysym></keycombo>) is totally unusable with Java 7 on Mac OSX.
-This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a>
-The fix is to use JDK 8 b132 or later.
-</li>
-
-<li>
 Since Java 11 the JavaScript implementation <a href="https://openjdk.java.net/jeps/335">Nashorn has been deprecated</a>.
 Java will emit the following deprecation warnings, if you are using JavaScript based on Nashorn.
 <source>
@@ -358,19 +133,19 @@ export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
 With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jeps/372">Nashorn has been removed</a>. To add back a JSR-223 compatible JavaScript engine you have two options:
   <dl>
     <dt>Use Mozilla Rhino</dt>
-    <dd>Copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_13_Release/rhino-engine-1.7.13.jar">rhino-engine-1.7.13.jar</a> into <code>$JMETER_HOME/lib/ext</code>.</dd>
+    <dd>Copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_14_Release/rhino-engine-1.7.14.jar">rhino-engine-1.7.14.jar</a> into <code>$JMETER_HOME/lib/ext</code>.</dd>
     <dt>Use OpenJDK Nashorn</dt>
     <dd>
       The OpenJDK Nashorn implementation comes as a module. To use it, you will have to download it and add it to the module path. A hacky way to download the version 15.0 (or later) and its dependencies and set the module path is outlined below:
       <source>
 mkdir lib/modules
 pushd lib/modules
-wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.3/nashorn-core-15.3.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.2/asm-9.2.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.2/asm-commons-9.2.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.2/asm-util-9.2.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.2/asm-tree-9.2.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.2/asm-analysis-9.2.jar
+wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.4/nashorn-core-15.4.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.6/asm-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.6/asm-commons-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.6/asm-util-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.6/asm-tree-9.6.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.6/asm-analysis-9.6.jar
 popd
 export JVM_ARGS="--module-path $PWD/lib/modules"
 ./bin/jmeter

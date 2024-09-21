@@ -72,16 +72,16 @@ public class VerticalLayout implements LayoutManager, Serializable {
     public static final int BOTTOM = 2;
 
     /** The vertical vgap between components...defaults to 5. */
-    private int vgap;
+    private final int vgap;
 
     /** LEFT, RIGHT, CENTER or BOTH...how the components are justified. */
-    private int alignment;
+    private final int alignment;
 
     /**
      * TOP, BOTTOM or CENTER ...where are the components positioned in an
      * overlarge space.
      */
-    private int anchor;
+    private final int anchor;
 
     // Constructors
     /**

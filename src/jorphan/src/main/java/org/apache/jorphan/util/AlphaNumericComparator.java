@@ -30,14 +30,15 @@ import java.util.regex.Pattern;
  * Heavily influenced by https://codereview.stackexchange.com/questions/37192/number-aware-string-sorting-with-comparator
  */
 public class AlphaNumericComparator<T> implements Comparator<T> {
+    public static final Comparator<?> TO_STRING_COMPARATOR = new AlphaNumericComparator<>(Object::toString);
 
-    private Function<T, String> converter;
+    private final Function<? super T, String> converter;
 
     /**
      * Constructs a comparator with a converter function
      * @param converter that generates a String value from the arguments given to {@link Comparator#compare(Object, Object)}
      */
-    public AlphaNumericComparator(Function<T, String> converter) {
+    public AlphaNumericComparator(Function<? super T, String> converter) {
         this.converter = converter;
     }
 
@@ -84,7 +85,7 @@ public class AlphaNumericComparator<T> implements Comparator<T> {
         return 1;
     }
 
-    private int compareOneEmptyPart(String numberPart1, String numberPart2) {
+    private static int compareOneEmptyPart(String numberPart1, String numberPart2) {
         if (numberPart1.isEmpty()) {
             if (numberPart2.isEmpty()) {
                 return 0;
@@ -96,7 +97,7 @@ public class AlphaNumericComparator<T> implements Comparator<T> {
         throw new IllegalArgumentException("At least one of the parameters have to be empty");
     }
 
-    private String trimLeadingZeroes(String numberPart) {
+    private static String trimLeadingZeroes(String numberPart) {
         int length = numberPart.length();
         for (int i = 0; i < length; i++) {
             if (numberPart.charAt(i) != '0') {

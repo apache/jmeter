@@ -15,9 +15,13 @@
  * limitations under the License.
  */
 
+plugins {
+    id("build-logic.jvm-published-library")
+}
+
 dependencies {
-    api(project(":src:components"))
-    testImplementation(project(":src:core", "testClasses"))
+    api(projects.src.components)
+    testImplementation(testFixtures(projects.src.core))
 
     implementation("org.mozilla:rhino")
     implementation("commons-codec:commons-codec")

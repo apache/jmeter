@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.control;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -139,7 +139,8 @@ public class TestLoopController extends JMeterTestCase {
         ReplaceStringWithFunctions transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
         jmctx.setVariables(new JMeterVariables());
 
-        StringProperty prop = new StringProperty(LoopController.LOOPS, "${__Random(1,12,)}");
+        StringProperty prop =
+                new StringProperty(LoopControllerSchema.INSTANCE.getLoops().getName(), "${__Random(1,12,)}");
         JMeterProperty newProp = transformer.transformValue(prop);
         newProp.setRunningVersion(true);
 

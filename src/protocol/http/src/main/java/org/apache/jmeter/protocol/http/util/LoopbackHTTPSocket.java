@@ -42,7 +42,7 @@ public class LoopbackHTTPSocket extends Socket {
 
     // wrap read() methods to track output buffer
     static class LoopBackInputStream extends ByteArrayInputStream{
-        private LoopbackOutputStream os;
+        private final LoopbackOutputStream os;
         @Override
         public synchronized int read() {
             buf=os.getBuffer();   // make sure buffer details

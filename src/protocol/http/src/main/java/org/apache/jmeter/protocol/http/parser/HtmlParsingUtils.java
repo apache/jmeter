@@ -25,6 +25,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -48,7 +49,13 @@ import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 
 public final class HtmlParsingUtils {
+    private static final java.util.regex.Pattern EXTRACT_STYLE_PATTERN = java.util.regex.Pattern.compile(
+            "URL\\(\\s*('|\")(.*)('|\")\\s*\\)", // $NON-NLS-1$
+            java.util.regex.Pattern.CASE_INSENSITIVE);
     private static final Logger log = LoggerFactory.getLogger(HtmlParsingUtils.class);
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     /**
      * Private constructor to prevent instantiation.
@@ -81,6 +88,46 @@ public final class HtmlParsingUtils {
 
         final Arguments arguments = config.getArguments();
 
+        if (USE_JAVA_REGEX) {
+            return isAnchorMatchedWithJavaRegex(newLink, config, query, arguments);
+        }
+        return isAnchorMatchedWithOroRegex(newLink, config, query, arguments);
+    }
+
+    private static boolean isAnchorMatchedWithJavaRegex(HTTPSamplerBase newLink, HTTPSamplerBase config, String query, Arguments arguments) {
+
+        if (!isEqualOrMatchesWithJavaRegex(newLink.getProtocol(), config.getProtocol())){
+            return false;
+        }
+
+        final String domain = config.getDomain();
+        if (domain != null && !domain.isEmpty()) {
+            if (!isEqualOrMatchesWithJavaRegex(newLink.getDomain(), domain)) {
+                return false;
+            }
+        }
+
+        final String path = config.getPath();
+        if (!newLink.getPath().equals(path)
+                && !JMeterUtils.compilePattern("[/]*" + path).matcher(newLink.getPath()).matches()) { // $NON-NLS-1$
+            return false;
+        }
+
+        for (JMeterProperty argument : arguments) {
+            Argument item = (Argument) argument.getObjectValue();
+            final String name = item.getName();
+            if (!query.contains(name + "=")) { // $NON-NLS-1$
+                if (!JMeterUtils.compilePattern(name).matcher(query).find()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    private static boolean isAnchorMatchedWithOroRegex(HTTPSamplerBase newLink, HTTPSamplerBase config, String query, Arguments arguments) {
         final Perl5Matcher matcher = JMeterUtils.getMatcher();
         final PatternCacheLRU patternCache = JMeterUtils.getPatternCache();
 
@@ -89,7 +136,7 @@ public final class HtmlParsingUtils {
         }
 
         final String domain = config.getDomain();
-        if (domain != null && domain.length() > 0) {
+        if (domain != null && !domain.isEmpty()) {
             if (!isEqualOrMatches(newLink.getDomain(), domain, matcher, patternCache)){
                 return false;
             }
@@ -125,12 +172,19 @@ public final class HtmlParsingUtils {
      * @return true if both name and value match
      */
     public static boolean isArgumentMatched(Argument arg, Argument patternArg) {
+        if (USE_JAVA_REGEX) {
+            return isEqualOrMatchesWithJavaRegex(arg.getName(), patternArg.getName())
+                    && isEqualOrMatchesWithJavaRegex(arg.getValue(), patternArg.getValue());
+        }
+        return isArgumentMatchedWithOroRegex(arg, patternArg);
+    }
+
+    private static boolean isArgumentMatchedWithOroRegex(Argument arg, Argument patternArg) {
         final Perl5Matcher matcher = JMeterUtils.getMatcher();
         final PatternCacheLRU patternCache = JMeterUtils.getPatternCache();
-        return
-            isEqualOrMatches(arg.getName(), patternArg.getName(), matcher, patternCache)
-        &&
-            isEqualOrMatches(arg.getValue(), patternArg.getValue(), matcher, patternCache);
+        return isEqualOrMatches(arg.getName(), patternArg.getName(), matcher, patternCache)
+                &&
+                isEqualOrMatches(arg.getValue(), patternArg.getValue(), matcher, patternCache);
     }
 
     /**
@@ -148,6 +202,10 @@ public final class HtmlParsingUtils {
             arg.equals(pat)
             ||
             matcher.matches(arg,cache.getPattern(pat,Perl5Compiler.READ_ONLY_MASK));
+    }
+
+    private static boolean isEqualOrMatchesWithJavaRegex(String arg, String pat) {
+        return arg.equals(pat) || JMeterUtils.compilePattern(pat).matcher(arg).matches();
     }
 
     /**
@@ -168,6 +226,11 @@ public final class HtmlParsingUtils {
             matcher.matches(arg,cache.getPattern(pat,Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK));
     }
 
+    private static boolean isEqualOrMatchesCaseBlindWithJavaRegex(String arg, String pat) {
+        return arg.equalsIgnoreCase(pat)
+                || JMeterUtils.compilePattern(pat, java.util.regex.Pattern.CASE_INSENSITIVE).matcher(arg).matches();
+    }
+
     /**
      * Match the input argument against the pattern using String.equals() or pattern matching if that fails
      * using case-insensitive matching.
@@ -177,7 +240,10 @@ public final class HtmlParsingUtils {
      *
      * @return true if input matches the pattern
      */
-    public static boolean isEqualOrMatches(String arg, String pat){
+    public static boolean isEqualOrMatches(String arg, String pat) {
+        if (USE_JAVA_REGEX) {
+            return isEqualOrMatchesWithJavaRegex(arg, pat);
+        }
         return isEqualOrMatches(arg, pat, JMeterUtils.getMatcher(), JMeterUtils.getPatternCache());
     }
 
@@ -190,7 +256,10 @@ public final class HtmlParsingUtils {
      *
      * @return true if input matches the pattern
      */
-    public static boolean isEqualOrMatchesCaseBlind(String arg, String pat){
+    public static boolean isEqualOrMatchesCaseBlind(String arg, String pat) {
+        if (USE_JAVA_REGEX) {
+            return isEqualOrMatchesCaseBlindWithJavaRegex(arg, pat);
+        }
         return isEqualOrMatchesCaseBlind(arg, pat, JMeterUtils.getMatcher(), JMeterUtils.getPatternCache());
     }
 
@@ -286,7 +355,7 @@ public final class HtmlParsingUtils {
     }
 
     // N.B. Since the tags are extracted from an HTML Form, any values must already have been encoded
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings({"JdkObsolete", "NonApiType"})
     private static boolean recurseForm(Node tempNode, LinkedList<HTTPSamplerBase> urlConfigs, URL context, String selectName,
             boolean inForm) {
         NamedNodeMap nodeAtts = tempNode.getAttributes();
@@ -377,6 +446,24 @@ public final class HtmlParsingUtils {
     }
 
     public static void extractStyleURLs(final URL baseUrl, final URLCollection urls, String styleTagStr) {
+        if (USE_JAVA_REGEX) {
+            extractStyleURLsWithJavaRegex(baseUrl, urls, styleTagStr);
+        } else {
+            extractStyleURLsWithOroRegex(baseUrl, urls, styleTagStr);
+        }
+    }
+
+    private static void extractStyleURLsWithJavaRegex(URL baseUrl, URLCollection urls, String styleTagStr) {
+
+        Matcher matcher = EXTRACT_STYLE_PATTERN.matcher(styleTagStr);
+        while (matcher.find()) {
+            // The value is in the second group
+            String styleUrl = matcher.group(2);
+            urls.addURL(styleUrl, baseUrl);
+        }
+    }
+
+    private static void extractStyleURLsWithOroRegex(URL baseUrl, URLCollection urls, String styleTagStr) {
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         Pattern pattern = JMeterUtils.getPatternCache().getPattern(
                 "URL\\(\\s*('|\")(.*)('|\")\\s*\\)", // $NON-NLS-1$
@@ -390,4 +477,5 @@ public final class HtmlParsingUtils {
             urls.addURL(styleUrl, baseUrl);
         }
     }
+
 }

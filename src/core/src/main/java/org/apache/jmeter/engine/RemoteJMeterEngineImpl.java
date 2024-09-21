@@ -220,6 +220,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     }
 
     @Override
+    @SuppressWarnings("NonApiType")
     public void rsetProperties(HashMap<String, String> map) throws RemoteException { // NOSONAR
         checkOwner("setProperties");
         if(remotelySetProperties != null) {

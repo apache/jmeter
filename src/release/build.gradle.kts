@@ -68,7 +68,7 @@ https://www.apache.org/dist/$tlpUrl/KEYS
 N.B.
 To create the distribution and test $tlp: "./gradlew build -Prelease -PskipSign".
 
-$tlp $version requires Java 8 or later to run.
+$tlp $version requires Java 17 or later to run.
 
 The artifacts were built with
   ${"java.runtime.name".prop} ${"java.vendor".prop} (build ${"java.runtime.version".prop})

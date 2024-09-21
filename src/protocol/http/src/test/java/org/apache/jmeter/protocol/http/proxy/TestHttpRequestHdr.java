@@ -17,13 +17,14 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -214,16 +215,22 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testGetRequest, null);
         assertEquals(HTTPConstants.GET, s.getMethod());
-        assertEquals(queryString, s.getQueryString());
-        assertEquals(contentEncoding, s.getContentEncoding());
+        // %20 and + are interchangeable in the URL, so we should expect any of them
+        String actualQueryString = s.getQueryString();
+        String alternativeExpectedQueryString = queryString.replaceAll("%20", "+");
+        if (!queryString.equals(actualQueryString) && !alternativeExpectedQueryString.equals(actualQueryString)) {
+            assertEquals(queryString, actualQueryString, "%20 is the same as +, so expecting either " +
+                    queryString + " or " + alternativeExpectedQueryString);
+        }
+        assertEquals("UTF-8", s.getContentEncoding());
 
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(3, arguments.getArgumentCount());
         // When the encoding is not known, the argument will get the encoded value, and the "encode?" set to false
-        checkArgument((HTTPArgument)arguments.getArgument(0), "abc%3FSPACE", "a+b", "a+b", contentEncoding, false);
-        checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a%20b", "a%20b", contentEncoding, false);
-        checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What%3F", "What%3F", contentEncoding, false);
+        checkArgument((HTTPArgument)arguments.getArgument(0), "abc?SPACE", "a b", "a+b", contentEncoding, true);
+        checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a b", "a+b", contentEncoding, true);
+        checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What?", "What%3F", contentEncoding, true);
 
         // A HTTP GET request, with UTF-8 encoding
         contentEncoding = "UTF-8";
@@ -257,17 +264,21 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // know the encoding for the page
         s = getSamplerForRequest(null, testPostRequest, null);
         assertEquals(HTTPConstants.POST, s.getMethod());
-        assertEquals(queryString, s.getQueryString());
-        assertEquals(contentEncoding, s.getContentEncoding());
+        alternativeExpectedQueryString = expectedQueryString.replaceAll("%20", "+");
+        if (!queryString.equals(actualQueryString) && !alternativeExpectedQueryString.equals(actualQueryString)) {
+            assertEquals(queryString, actualQueryString, "%20 is the same as +, so expecting either " +
+                    queryString + " or " + alternativeExpectedQueryString);
+        }
+        assertEquals("UTF-8", s.getContentEncoding());
         assertFalse(s.getDoMultipart());
 
         // Check arguments
         arguments = s.getArguments();
         assertEquals(3, arguments.getArgumentCount());
         // When the encoding is not known, the argument will get the encoded value, and the "encode?" set to false
-        checkArgument((HTTPArgument)arguments.getArgument(0), "abc%3FSPACE", "a+b", "a+b", contentEncoding, false);
-        checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a%20b", "a%20b", contentEncoding, false);
-        checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What%3F", "What%3F", contentEncoding, false);
+        checkArgument((HTTPArgument)arguments.getArgument(0), "abc?SPACE", "a b", "a+b", contentEncoding, true);
+        checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a b", "a+b", contentEncoding, true);
+        checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What?", "What%3F", contentEncoding, true);
 
         // A HTTP POST request, with UTF-8 encoding
         contentEncoding = "UTF-8";
@@ -317,18 +328,18 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testGetRequest, null);
         assertEquals(HTTPConstants.GET, s.getMethod());
-        assertEquals(contentEncoding, s.getContentEncoding());
+        assertEquals("UTF-8", s.getContentEncoding(), "Default content encoding is UTF-8");
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(2, arguments.getArgumentCount());
         checkArgument((HTTPArgument)arguments.getArgument(0), "param1", param1Value, param1Value, contentEncoding, false);
-        // When the encoding is not known, the argument will get the encoded value, and the "encode?" set to false
-        checkArgument((HTTPArgument)arguments.getArgument(1), "param2", param2ValueEncoded, param2ValueEncoded, contentEncoding, false);
+        // When the encoding is not known, it should assume UTF-8 by default
+        checkArgument((HTTPArgument)arguments.getArgument(1), "param2", param2Value, param2ValueEncoded, contentEncoding, true);
 
         // A HTTP GET request, with UTF-8 encoding
         contentEncoding = "UTF-8";
         param1Value = "yes";
-        param2Value = "0+5 -\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
+        param2Value = "0+5 -|\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
         param2ValueEncoded = URLEncoder.encode(param2Value, contentEncoding);
         testGetRequest =
             "GET " + url
@@ -383,18 +394,18 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // know the encoding for the page
         HTTPSamplerBase s = getSamplerForRequest(null, testPostRequest, null);
         assertEquals(HTTPConstants.POST, s.getMethod());
-        assertEquals(contentEncoding, s.getContentEncoding());
+        assertEquals("UTF-8", s.getContentEncoding(), "Default content encoding is UTF-8");
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(2, arguments.getArgumentCount());
         checkArgument((HTTPArgument)arguments.getArgument(0), "param1", param1Value, param1Value, contentEncoding, false);
-        // When the encoding is not known, the argument will get the encoded value, and the "encode?" set to false
-        checkArgument((HTTPArgument)arguments.getArgument(1), "param2", param2ValueEncoded, param2ValueEncoded, contentEncoding, false);
+        // When the encoding is not known, we expect UTF-8 by default
+        checkArgument((HTTPArgument)arguments.getArgument(1), "param2", param2Value, param2ValueEncoded, contentEncoding, true);
 
         // A HTTP POST request, with UTF-8 encoding
         contentEncoding = "UTF-8";
         param1Value = "yes";
-        param2Value = "0+5 -\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
+        param2Value = "0+5 -|\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85";
         param2ValueEncoded = URLEncoder.encode(param2Value, contentEncoding);
         postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n";
         testPostRequest =
@@ -525,32 +536,30 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     @Test
     public void testParse1() throws Exception {// no space after :
         HttpRequestHdr req = new HttpRequestHdr();
-        ByteArrayInputStream bis = null;
-        bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:value \r\n".getBytes("ISO-8859-1"));
-        req.parse(bis);
-        bis.close();
+        try (ByteArrayInputStream bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:value \r\n".getBytes("ISO-8859-1"))) {
+            req.parse(bis);
+        }
         HeaderManager mgr = req.getHeaderManager();
         Header header;
         mgr.getHeaders();
         header = mgr.getHeader(0);
-        assertEquals("name",header.getName());
-        assertEquals("value",header.getValue());
+        assertEquals("name", header.getName());
+        assertEquals("value", header.getValue());
     }
 
 
     @Test
     public void testParse2() throws Exception {// spaces after :
         HttpRequestHdr req = new HttpRequestHdr();
-        ByteArrayInputStream bis = null;
-        bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:           value \r\n".getBytes("ISO-8859-1"));
-        req.parse(bis);
-        bis.close();
+        try (ByteArrayInputStream bis = new ByteArrayInputStream("GET xxx HTTP/1.0\r\nname:           value \r\n".getBytes("ISO-8859-1"))) {
+            req.parse(bis);
+        }
         HeaderManager mgr = req.getHeaderManager();
         Header header;
         mgr.getHeaders();
         header = mgr.getHeader(0);
-        assertEquals("name",header.getName());
-        assertEquals("value",header.getValue());
+        assertEquals("name", header.getName());
+        assertEquals("value", header.getValue());
     }
 
     @Test
@@ -612,7 +621,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
             String fileMimeType, String fileContent, String boundary, String endOfLine) {
         // File upload multipart
         String postBody = "--" + boundary + endOfLine
-            + "Content-Disposition: form-data; name=\"" + fileField + "\" filename=\"" + fileName + "\"" + endOfLine
+            + "Content-Disposition: form-data; name=\"" + fileField + "\"; filename=\"" + fileName + "\"" + endOfLine
             + "Content-Type: " + fileMimeType + endOfLine
             + "Content-Transfer-Encoding: binary" + endOfLine
             + endOfLine
@@ -639,16 +648,15 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         ByteArrayInputStream bis = null;
         if(contentEncoding != null) {
             bis = new ByteArrayInputStream(request.getBytes(contentEncoding));
-
         }
         else {
-            // Most browsers use ISO-8859-1 as default encoding, even if spec says UTF-8
-            bis = new ByteArrayInputStream(request.getBytes("ISO-8859-1"));
+            // Most browsers use UTF-8 by default
+            bis = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
         }
         req.parse(bis);
         bis.close();
-        Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<String, String>());
-        Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<String, String>());
+        Map<String, String> pageEncodings = Collections.synchronizedMap(new HashMap<>());
+        Map<String, String> formEncodings = Collections.synchronizedMap(new HashMap<>());
         if(url != null && contentEncoding != null) {
             pageEncodings.put(url, contentEncoding);
         }
@@ -672,19 +680,19 @@ public class TestHttpRequestHdr extends JMeterTestCase {
             assertEquals(expectedEncodedValue, arg.getEncodedValue(contentEncoding));
         }
         else {
-            // Most browsers use ISO-8859-1 as default encoding, even if spec says UTF-8
-            assertEquals(expectedEncodedValue, arg.getEncodedValue("ISO-8859-1"));
+            // Most browsers use UTF-8 as default encoding
+            assertEquals(expectedEncodedValue, arg.getEncodedValue(StandardCharsets.UTF_8.name()));
         }
         assertPrimitiveEquals(expectedEncoded, arg.isAlwaysEncoded());
     }
 
     private int getBodyLength(String postBody, String contentEncoding) throws IOException {
-        if(contentEncoding != null && contentEncoding.length() > 0) {
+        if(contentEncoding != null && !contentEncoding.isEmpty()) {
             return postBody.getBytes(contentEncoding).length;
         }
         else {
-            // Most browsers use ISO-8859-1 as default encoding, even if spec says UTF-8
-            return postBody.getBytes().length; // TODO - charset?
+            // Most browsers use UTF-8
+            return postBody.getBytes(StandardCharsets.UTF_8).length; // TODO - charset?
         }
     }
 }

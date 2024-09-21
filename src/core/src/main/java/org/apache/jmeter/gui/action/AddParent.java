@@ -28,9 +28,12 @@ import org.apache.jmeter.testelement.TestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements the Add Parent menu command
  */
+@AutoService(Command.class)
 public class AddParent extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(AddParent.class);
 
@@ -62,7 +65,7 @@ public class AddParent extends AbstractAction {
         return commands;
     }
 
-    protected void addParentToTree(TestElement newParent) {
+    protected static void addParentToTree(TestElement newParent) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode newNode = new JMeterTreeNode(newParent, guiPackage.getTreeModel());
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
@@ -75,7 +78,7 @@ public class AddParent extends AbstractAction {
         }
     }
 
-    private void moveNode(GuiPackage guiPackage, JMeterTreeNode node, JMeterTreeNode newParentNode) {
+    private static void moveNode(GuiPackage guiPackage, JMeterTreeNode node, JMeterTreeNode newParentNode) {
         guiPackage.getTreeModel().removeNodeFromParent(node);
         guiPackage.getTreeModel().insertNodeInto(node, newParentNode, newParentNode.getChildCount());
     }

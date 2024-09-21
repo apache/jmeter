@@ -29,7 +29,7 @@ public class EncoderCache {
     /** The encoding which should be usd for URLs, according to HTTP specification */
     public static final String URL_ARGUMENT_ENCODING = StandardCharsets.UTF_8.name();
 
-    private Cache cache;
+    private final Cache cache;
 
     public EncoderCache(int cacheSize) {
         cache = new CacheLRU(cacheSize);

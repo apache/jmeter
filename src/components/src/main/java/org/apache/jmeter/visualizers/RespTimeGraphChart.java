@@ -282,7 +282,7 @@ public class RespTimeGraphChart extends JPanel {
             double[][] _data, int _width, int _height, int _incrScaleYAxis,
             Color[] _color, Font legendFont, Graphics g) {
 
-        double max = maxYAxisScale > 0 ? maxYAxisScale : getTopValue(findMax(_data), RoundingMode.HALF_EVEN); // define max scale y axis
+        double max = maxYAxisScale > 0 ? maxYAxisScale : getTopValue(findMax(_data), RoundingMode.UP); // define max scale y axis
         try {
             // if the title graph is empty, we can assume some default
             if (_title.length() == 0 ) {
@@ -332,7 +332,7 @@ public class RespTimeGraphChart extends JPanel {
                 double incrYAxis = max / numInterval;
                 double incrTopValue = _incrScaleYAxis;
                 if (_incrScaleYAxis == 0) {
-                    incrTopValue = getTopValue(incrYAxis, RoundingMode.HALF_EVEN);
+                    incrTopValue = getTopValue(incrYAxis, RoundingMode.HALF_UP);
                 }
                 if (incrTopValue < 1) {
                     incrTopValue = 1.0d; // Increment cannot be < 1
@@ -369,7 +369,7 @@ public class RespTimeGraphChart extends JPanel {
         }
     }
 
-    private int getTopValue(double value, RoundingMode roundingMode) {
+    private static int getTopValue(double value, RoundingMode roundingMode) {
         String maxStr = String.valueOf(Math.round(value));
         StringBuilder divValueStr = new StringBuilder(maxStr.length()+1);
         divValueStr.append("1");
@@ -399,7 +399,7 @@ public class RespTimeGraphChart extends JPanel {
      * @param datas array of positive or NaN doubles
      * @return double
      */
-    private double findMax(double[][] datas) {
+    private static double findMax(double[][] datas) {
         double max = 0;
         for (double[] data : datas) {
             for (final double value : data) {

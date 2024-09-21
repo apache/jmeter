@@ -30,7 +30,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 
 class BinaryMessageRenderer implements MessageRenderer<byte[]> {
 
-    private TextMessageRenderer delegate;
+    private final TextMessageRenderer delegate;
 
     public BinaryMessageRenderer(TextMessageRenderer delegate) {
         this.delegate = delegate;

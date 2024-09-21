@@ -26,11 +26,14 @@ import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Returns Thread Group Name
  *
  * @since 5.0
  */
+@AutoService(Function.class)
 public class ThreadGroupName extends AbstractFunctionByKey {
     private static final String KEY = "__threadGroupName"; //$NON-NLS-1$
 
@@ -40,10 +43,10 @@ public class ThreadGroupName extends AbstractFunctionByKey {
         super(KEY, 0); //$NON-NLS-1$
     }
 
-    @Override
     /**
      * Get current thread group using sampler's context
      */
+    @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         JMeterContext context;
         if (currentSampler != null) {

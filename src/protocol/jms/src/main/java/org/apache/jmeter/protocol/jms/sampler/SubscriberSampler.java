@@ -266,7 +266,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      * @param now current time
      * @return wait time
      */
-    private long calculateWait(long until, long now) {
+    private static long calculateWait(long until, long now) {
         if (until == 0) {
             return DEFAULT_WAIT; // Timeouts not active
         }

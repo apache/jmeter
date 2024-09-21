@@ -41,7 +41,7 @@ public class SearchableTreeNode extends DefaultMutableTreeNode {
 
     private boolean childrenNodesHaveMatched;
 
-    private transient DefaultTreeModel treeModel;
+    private final transient DefaultTreeModel treeModel;
 
     public SearchableTreeNode() {
         this((SampleResult) null, null);

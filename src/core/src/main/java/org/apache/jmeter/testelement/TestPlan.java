@@ -20,16 +20,13 @@ package org.apache.jmeter.testelement;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.NewDriver;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.services.FileServer;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -40,24 +37,9 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     private static final Logger log = LoggerFactory.getLogger(TestPlan.class);
 
-    //+ JMX field names - do not change values
-    private static final String FUNCTIONAL_MODE = "TestPlan.functional_mode"; //$NON-NLS-1$
-
-    private static final String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables"; //$NON-NLS-1$
-
-    private static final String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups"; //$NON-NLS-1$
-
-    private static final String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
-
-    private static final String TEARDOWN_ON_SHUTDOWN = "TestPlan.tearDown_on_shutdown"; //$NON-NLS-1$
-
-    //- JMX field names
-
     private static final String CLASSPATH_SEPARATOR = ","; //$NON-NLS-1$
 
     private static final String BASEDIR = "basedir";
-
-    private transient List<AbstractThreadGroup> threadGroups = new ArrayList<>();
 
     // There's only 1 test plan, so can cache the mode here
     private static volatile boolean functionalMode = false;
@@ -70,9 +52,18 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
         setName(name);
     }
 
+    @Override
+    public TestPlanSchema getSchema() {
+        return TestPlanSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends TestPlan, ? extends TestPlanSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
+
     // create transient item
     protected Object readResolve(){
-        threadGroups = new ArrayList<>();
         return this;
     }
 
@@ -87,15 +78,15 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
      * @return functional mode
      */
     public boolean isFunctionalMode() {
-        return getPropertyAsBoolean(FUNCTIONAL_MODE);
+        return get(getSchema().getFunctionalMode());
     }
 
     public void setUserDefinedVariables(Arguments vars) {
-        setProperty(new TestElementProperty(USER_DEFINED_VARIABLES, vars));
+        set(getSchema().getUserDefinedVariables(), vars);
     }
 
     public JMeterProperty getUserDefinedVariablesAsProperty() {
-        return getProperty(USER_DEFINED_VARIABLES);
+        return getProperty(getSchema().getUserDefinedVariables().getName());
     }
 
     public String getBasedir() {
@@ -117,16 +108,11 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     }
 
     private Arguments getVariables() {
-        Arguments args = (Arguments) getProperty(USER_DEFINED_VARIABLES).getObjectValue();
-        if (args == null) {
-            args = new Arguments();
-            setUserDefinedVariables(args);
-        }
-        return args;
+        return getSchema().getUserDefinedVariables().getOrCreate(this, Arguments::new);
     }
 
     public void setFunctionalMode(boolean funcMode) {
-        setProperty(new BooleanProperty(FUNCTIONAL_MODE, funcMode));
+        set(getSchema().getFunctionalMode(), funcMode);
         setGlobalFunctionalMode(funcMode);
     }
 
@@ -148,15 +134,15 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     }
 
     public void setSerialized(boolean serializeTGs) {
-        setProperty(new BooleanProperty(SERIALIZE_THREADGROUPS, serializeTGs));
+        set(getSchema().getSerializeThreadgroups(), serializeTGs);
     }
 
     public void setTearDownOnShutdown(boolean tearDown) {
-        setProperty(TEARDOWN_ON_SHUTDOWN, tearDown, false);
+        set(getSchema().getTearDownOnShutdown(), tearDown);
     }
 
     public boolean isTearDownOnShutdown() {
-        return getPropertyAsBoolean(TEARDOWN_ON_SHUTDOWN, false);
+        return get(getSchema().getTearDownOnShutdown());
     }
 
     /**
@@ -168,7 +154,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
      *            the classpath to be set
      */
     public void setTestPlanClasspath(String text) {
-        setProperty(CLASSPATHS,text);
+        set(getSchema().getTestPlanClasspath(), text);
     }
 
     public void setTestPlanClasspathArray(String[] text) {
@@ -191,7 +177,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
      * @return classpath
      */
     public String getTestPlanClasspath() {
-        return getPropertyAsString(CLASSPATHS);
+        return get(getSchema().getTestPlanClasspath());
     }
 
     /**
@@ -200,7 +186,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
      * @return serialized setting
      */
     public boolean isSerialized() {
-        return getPropertyAsBoolean(SERIALIZE_THREADGROUPS);
+        return get(getSchema().getSerializeThreadgroups());
     }
 
     public void addParameter(String name, String value) {
@@ -222,7 +208,6 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
      *            the feature to be added to the AbstractThreadGroup attribute
      */
     public void addThreadGroup(AbstractThreadGroup group) {
-        threadGroups.add(group);
     }
 
     /**

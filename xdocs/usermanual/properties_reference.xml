@@ -117,7 +117,7 @@ defined in the <code>system.properties</code> file or on the command-line. The
     JVM does not support the specified cipher suites, or if the cipher suites
     supported by the HTTPS server do not overlap this list.  See the
     <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#Customization">JSSE
-	    Reference Guide.</a><br/>
+    Reference Guide.</a><br/>
     For example: <source>https.cipherSuites=TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256</source>
     If not specified, JMeter will use the default list of cipher suites
     supported by the JVM.
@@ -1165,7 +1165,7 @@ JMETER-SERVER</source>
     Defaults to: <code>5000</code>
 </property>
 <property name="backend_metrics_percentile_estimator">
-    Specify the <a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.5/org/apache/commons/math3/stat/descriptive/rank/Percentile.EstimationType.html">Percentile Estimation Type</a> to use.<br/>
+    Specify the <a href="https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/org/apache/commons/math3/stat/descriptive/rank/Percentile.EstimationType.html">Percentile Estimation Type</a> to use.<br/>
     To make the values from the dashboard compatible with the Aggregate Report, use the value <code>R_3</code>.<br/>
     Defaults to: <code>LEGACY</code>
 </property>
@@ -1339,6 +1339,15 @@ JMETER-SERVER</source>
     ORO PatternCacheLRU size.<br/>
     Defaults to: <code>1000</code>
 </property>
+<property name="function.cache.per.iteration">
+    <p>Cache function execution during test execution.</p>
+    <p>By default, JMeter caches function properties during a test iteration, however,
+    it might cause unexpected results when a component is shared across threads and the expression depends on
+    the thread variables.</p>
+    <note>The property will likely be removed in an upcoming version, so if you need it consider raising
+     an issue with your use-case.</note>
+    Defaults to: <code>false</code>
+</property>
 <property name="propertyEditorSearchPath">
     TestBeanGui<br/>
     Defaults to: <code>null</code>
@@ -1390,7 +1399,7 @@ JMETER-SERVER</source>
 </property>
 <property name="sampleresult.default.encoding">
     The encoding to be used if none is provided.<br/>
-    Defaults to: <code>ISO-8859-1</code>
+    Defaults to: <code>UTF-8</code> (since 5.6.1)
 </property>
 <property name="CookieManager.delete_null_cookies">
     CookieManager behaviour - should cookies with null/empty values be deleted?<br/>
@@ -1425,6 +1434,17 @@ JMETER-SERVER</source>
     <note>JMeter uses Nashorn since 3.2 version.
     If you want to use Rhino, set this value to <code>true</code></note>
     Defaults to: <code>false</code>
+</property>
+<property name="jmeter.regex.engine">
+    Ability to switch out the old Oro Regex implementation with the JDK built-in implementation.
+    Any value different to <code>oro</code> will disable the Oro implementation and enable the JDK based.
+    <note>We intend to switch the default to the JDK based one in a later version of JMeter.</note>
+    Defaults to: <code>oro</code>
+</property>
+<property name="jmeter.regex.patterncache.size">
+    We assist the JDK based Regex implementation by caching Pattern objects. The size of the
+    cache can be set with this setting. It can be disabled by setting it to <code>0</code>.
+    Defaults to: <code>1000</code>
 </property>
 <property name="jmeterengine.threadstop.wait">
     Number of milliseconds to wait for a thread to stop.<br/>
@@ -1510,6 +1530,18 @@ JMETER-SERVER</source>
     Set to zero to disable the size check and display the whole response.<br/>
     Defaults to: <code>10485760</code>
 </property>
+<property name="view.results.tree.max_line_size">
+    Maximum size (in characters) of the line in the displayed.<br/>
+    This property works around Bug 63620 since Swing hangs when displaying very long lines.<br/>
+    Set to zero to disable line wrapping.<br/>
+    Defaults to: <code>110000</code>
+</property>
+<property name="view.results.tree.soft_wrap_line_size">
+    Line size (in characters) to consider wrapping to make UI faster.<br/>
+    This property works around Bug 63620 since Swing hangs when displaying very long lines.<br/>
+    Set to zero to disable line wrapping.<br/>
+    Defaults to: <code>view.results.tree.max_line_size / 1.1f</code>
+</property>
 <property name="view.results.tree.renderers_order">
     Order of Renderers in View Results Tree.<br/>
     <note>Note full class names should be used for non JMeter core renderers</note>
@@ -1518,10 +1550,20 @@ JMETER-SERVER</source>
     Defaults to:
     <source>.RenderAsText,.RenderAsRegexp,.RenderAsCssJQuery,.RenderAsXPath,.RenderAsHTML,.RenderAsHTMLWithEmbedded,.RenderAsDocument,.RenderAsJSON,.RenderAsXML</source>
 </property>
+<property name="view.results.tree.simple_view_limit">
+    Configures maximum document length for text view before switching to a simpler view, that does not do line breaks.<br/>
+    Works probably best, when combined with a low setting of <code>view.results.tree.max_line_size</code>.
+    Can be switched off by setting the value to <code>-1</code>.<br/>
+    Defaults to: <code>10000</code>
+</property>
 <property name="document.max_size">
     Maximum size (in bytes) of Document that can be parsed by Tika engine<br/>
     Set to zero to disable the size check.<br/>
     Defaults to: <code>10485760</code>
+</property>
+<property name="text.kerning.max_document_size">
+    Configures the maximum document length for rendering with kerning enabled.<br/>
+    Defaults to: <code>10000</code>
 </property>
 <property name="JMSSampler.useSecurity.properties">
     JMS options.<br/>

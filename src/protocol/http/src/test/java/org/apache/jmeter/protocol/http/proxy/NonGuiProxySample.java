@@ -78,7 +78,7 @@ public class NonGuiProxySample {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             SaveService.saveTree(treeModel.getTestPlan(), out);
             out.close();
-            System.out.println(out.toString());
+            System.out.println(out);
         }
 
     }

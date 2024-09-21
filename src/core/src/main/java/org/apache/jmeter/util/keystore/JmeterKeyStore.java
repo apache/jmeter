@@ -64,7 +64,7 @@ public final class JmeterKeyStore {
     private final int endIndex;
 
     /** name of the default alias */
-    private String clientCertAliasVarName;
+    private final String clientCertAliasVarName;
 
     private String[] names = new String[0];
     private Map<String, PrivateKey> privateKeyByAlias = new HashMap<>();
@@ -179,7 +179,7 @@ public final class JmeterKeyStore {
             "directoryName", "ediPartyName", "uniformResourceIdentifier", "iPAddress", "registeredID");
 
     @SuppressWarnings("JdkObsolete")
-    private void logDetailsOnKeystore(KeyStore keystore) {
+    private static void logDetailsOnKeystore(KeyStore keystore) {
         Enumeration<String> aliases;
         try {
             aliases = keystore.aliases();
@@ -225,7 +225,7 @@ public final class JmeterKeyStore {
         }
     }
 
-    private String decodeSanList(Collection<List<?>> subjectAlternativeNames) {
+    private static String decodeSanList(Collection<? extends List<?>> subjectAlternativeNames) {
         List<Pair<String, String>> decodedEntries = new ArrayList<>();
         for (List<?> entry : subjectAlternativeNames) {
             Object indexData = entry.get(0);
@@ -242,14 +242,14 @@ public final class JmeterKeyStore {
                 .collect(Collectors.joining(", "));
     }
 
-    private String sanDataToString(Object data) {
+    private static String sanDataToString(Object data) {
         if (data instanceof String) {
             return (String) data;
         }
         return Hex.encodeHexString((byte[]) data);
     }
 
-    private String sanGeneralNameIndexToName(Integer index) {
+    private static String sanGeneralNameIndexToName(Integer index) {
         String description;
         if (index < SAN_GENERAL_NAMES.size()) {
             description = SAN_GENERAL_NAMES.get(index);
@@ -259,7 +259,7 @@ public final class JmeterKeyStore {
         return description;
     }
 
-    private X509Certificate[] toX509Certificates(Certificate[] chain) {
+    private static X509Certificate[] toX509Certificates(Certificate[] chain) {
         X509Certificate[] x509certs = new X509Certificate[chain.length];
         for (int i = 0; i < x509certs.length; i++) {
             x509certs[i] = (X509Certificate) chain[i];
@@ -271,7 +271,7 @@ public final class JmeterKeyStore {
         return index >= startIndex && (endIndex == -1 || index <= endIndex);
     }
 
-    private char[] toCharArrayOrNull(String pword) {
+    private static char[] toCharArrayOrNull(String pword) {
         if (pword == null) {
             return null; // NOSONAR the api used requires null for "no password used"
         }

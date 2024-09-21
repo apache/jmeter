@@ -17,10 +17,10 @@
 
 package org.apache.jmeter.protocol.http.util.accesslog;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
@@ -37,11 +37,11 @@ public class TestTCLogParser extends JMeterTestCase {
     public void testConstruct() throws Exception {
         TCLogParser tcp;
         tcp = new TCLogParser();
-        assertNull("Should not have set the filename", tcp.FILENAME);
+        assertNull(tcp.FILENAME, "Should not have set the filename");
 
         String file = "testfiles/access.log";
         tcp = new TCLogParser(file);
-        assertEquals("Filename should have been saved", file, tcp.FILENAME);
+        assertEquals(file, tcp.FILENAME, "Filename should have been saved");
     }
 
     @Test
@@ -53,8 +53,8 @@ public class TestTCLogParser extends JMeterTestCase {
 
     @Test
     public void testcheckURL() throws Exception {
-        assertFalse("URL does not have a query", tclp.checkURL(URL1));
-        assertTrue("URL is a query", tclp.checkURL(URL2));
+        assertFalse(tclp.checkURL(URL1), "URL does not have a query");
+        assertTrue(tclp.checkURL(URL2), "URL is a query");
     }
 
     @Test

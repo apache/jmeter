@@ -79,7 +79,7 @@ public class LaxGZIPInputStream extends GZIPInputStream {
      * @return -1 if relax
      * @throws EOFException
      */
-    private int handleRelaxMode(final EOFException ex, final boolean relaxMode) throws EOFException {
+    private static int handleRelaxMode(final EOFException ex, final boolean relaxMode) throws EOFException {
         if(relaxMode) {
             return -1;
         } else {

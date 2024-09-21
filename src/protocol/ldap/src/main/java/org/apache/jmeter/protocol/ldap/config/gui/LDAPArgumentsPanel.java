@@ -55,7 +55,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     private static final long serialVersionUID = 240L;
 
     /** The title label for this component. */
-    private JLabel tableLabel;
+    private final JLabel tableLabel;
 
     /** The table containing the list of arguments. */
     private transient JTable table;
@@ -258,7 +258,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      *
      * @return a new LDAPArgument object
      */
-    private LDAPArgument makeNewLDAPArgument() {
+    private static LDAPArgument makeNewLDAPArgument() {
         return new LDAPArgument("", "", "");
     }
 

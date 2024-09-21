@@ -17,20 +17,20 @@
 
 package org.apache.jmeter.threads.openmodel.gui
 
-import jetbrains.datalore.base.registration.Disposable
-import jetbrains.datalore.plot.MonolithicCommon
-import jetbrains.datalore.vis.swing.batik.DefaultPlotPanelBatik
-import jetbrains.letsPlot.geom.geomLine
-import jetbrains.letsPlot.intern.toSpec
-import jetbrains.letsPlot.label.ggtitle
-import jetbrains.letsPlot.letsPlot
-import jetbrains.letsPlot.scale.scaleXContinuous
-import jetbrains.letsPlot.theme
 import org.apache.jmeter.threads.openmodel.ThreadSchedule
 import org.apache.jmeter.threads.openmodel.ThreadScheduleStep
 import org.apache.jmeter.threads.openmodel.asSeconds
 import org.apache.jmeter.threads.openmodel.rateUnitFor
 import org.apiguardian.api.API
+import org.jetbrains.letsPlot.batik.plot.component.DefaultPlotPanelBatik
+import org.jetbrains.letsPlot.commons.registration.Disposable
+import org.jetbrains.letsPlot.core.util.MonolithicCommon
+import org.jetbrains.letsPlot.geom.geomLine
+import org.jetbrains.letsPlot.intern.toSpec
+import org.jetbrains.letsPlot.label.ggtitle
+import org.jetbrains.letsPlot.letsPlot
+import org.jetbrains.letsPlot.scale.scaleXTime
+import org.jetbrains.letsPlot.themes.theme
 import org.slf4j.LoggerFactory
 import java.awt.BorderLayout
 import java.util.concurrent.TimeUnit
@@ -51,10 +51,15 @@ public class TargetRateChart : JPanel() {
         layout = BorderLayout()
     }
 
+    private var prevSteps: List<ThreadScheduleStep>? = null
     private var prevTimes: DoubleArray? = null
     private var prevRate: DoubleArray? = null
 
     public fun updateSchedule(threadSchedule: ThreadSchedule) {
+        if (threadSchedule.steps == prevSteps) {
+            return
+        }
+        prevSteps = threadSchedule.steps
         val timeValues = mutableListOf<Double>()
         val rateValues = mutableListOf<Double>()
         var time = 0.0
@@ -92,18 +97,9 @@ public class TargetRateChart : JPanel() {
         }
         prevTimes = time.copyOf()
         prevRate = rate.copyOf()
-        val totalDuration = time.last()
-        val timeUnit = when {
-            totalDuration > MIN_TICKS_FOR_TIME_AXIS * TimeUnit.DAYS.asSeconds -> TimeUnit.DAYS
-            totalDuration > MIN_TICKS_FOR_TIME_AXIS * TimeUnit.HOURS.asSeconds -> TimeUnit.HOURS
-            totalDuration > MIN_TICKS_FOR_TIME_AXIS * TimeUnit.MINUTES.asSeconds -> TimeUnit.MINUTES
-            else -> TimeUnit.SECONDS
-        }
-        if (timeUnit != TimeUnit.SECONDS) {
-            val scale = 1.0 / timeUnit.asSeconds
-            for (i in time.indices) {
-                time[i] *= scale
-            }
+        val timeScale = TimeUnit.SECONDS.toMillis(1).toDouble()
+        for (i in time.indices) {
+            time[i] *= timeScale
         }
         val maxRate = rate.maxOrNull() ?: 0.0
         val rateUnit = rateUnitFor(maxRate)
@@ -120,16 +116,16 @@ public class TargetRateChart : JPanel() {
             }
         }
         removeAll()
-        add(createChart(time = time, rate = rate, timeUnit = timeUnit, rateUnit = rateUnit), BorderLayout.CENTER)
+        add(createChart(time = time, rate = rate, rateUnit = rateUnit), BorderLayout.CENTER)
     }
 
-    private fun createChart(time: DoubleArray, rate: DoubleArray, timeUnit: TimeUnit, rateUnit: TimeUnit): JComponent {
+    private fun createChart(time: DoubleArray, rate: DoubleArray, rateUnit: TimeUnit): JComponent {
         val data = mapOf(
             "time" to time,
             "rate" to rate
         )
         val plot = letsPlot(data) + geomLine { x = "time"; y = "rate" } +
-            scaleXContinuous("Time, " + timeUnit.name.lowercase(), expand = listOf(0, 0)) +
+            scaleXTime("Time since test start", expand = listOf(0, 0)) +
             ggtitle("Target load rate per " + rateUnit.name.lowercase().removeSuffix("s")) +
             theme(axisTitleY = "blank")
 

@@ -58,7 +58,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     private static final boolean NUMBER_REQUESTS =
         JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
 
-    private static AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
+    private static final AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
 
 
     static {

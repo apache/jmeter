@@ -623,6 +623,10 @@ table {
     display: none;
   }
 
+  #topButton {
+    display: none;
+  }
+
   #content {
     display: block;
     width: 70rem;

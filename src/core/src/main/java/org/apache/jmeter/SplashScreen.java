@@ -109,6 +109,10 @@ public class SplashScreen extends JDialog {
      * @param progress Loading progress
      */
     public void setProgress(final int progress) {
-        SwingUtilities.invokeLater(() -> progressBar.setValue(progress));
+        if (SwingUtilities.isEventDispatchThread()) {
+            progressBar.setValue(progress);
+        } else {
+            SwingUtilities.invokeLater(() -> progressBar.setValue(progress));
+        }
     }
 }

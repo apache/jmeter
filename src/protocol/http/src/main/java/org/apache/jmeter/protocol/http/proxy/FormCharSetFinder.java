@@ -48,11 +48,16 @@ public class FormCharSetFinder {
      * @param pageEncoding the encoding used for the whole page
      * @throws HTMLParseException when parsing the <code>html</code> fails
      */
-    public void addFormActionsAndCharSet(String html, Map<String, String> formEncodings, String pageEncoding)
+    public void addFormActionsAndCharSet(String html, Map<? super String, ? super String> formEncodings, String pageEncoding)
             throws HTMLParseException {
         log.debug("Parsing html of: {}", html);
 
-        Document document = Jsoup.parse(html);
+        Document document;
+        try {
+            document = Jsoup.parse(html);
+        } catch (RuntimeException e) {
+            throw new HTMLParseException("Could not parse HTML to look for forms charsets", e);
+        }
         Elements forms = document.select("form");
         for (Element element : forms) {
             String action = element.attr("action");
@@ -62,17 +67,17 @@ public class FormCharSetFinder {
                 String formCharSet = pageEncoding;
                 String acceptCharSet = element.attr("accept-charset");
                 // Check if we found an accept-charset attribute on the form
-                if(acceptCharSet != null) {
+                if (acceptCharSet != null) {
                     String[] charSets = JOrphanUtils.split(acceptCharSet, ",");
                     // Just use the first one of the possible many charsets
-                    if(charSets.length > 0) {
+                    if (charSets.length > 0) {
                         formCharSet = charSets[0].trim();
-                        if(formCharSet.length() == 0) {
+                        if (formCharSet.isEmpty()) {
                             formCharSet = null;
                         }
                     }
                 }
-                if(formCharSet != null) {
+                if (formCharSet != null) {
                     formEncodings.put(action, formCharSet);
                 }
             }

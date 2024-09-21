@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -103,6 +104,9 @@ public class ReportGenerator {
     private final File testFile;
     private final ReportGeneratorConfiguration configuration;
 
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
+
     /**
      * ResultCollector used
      */
@@ -178,7 +182,7 @@ public class ReportGenerator {
         Matcher matcher = POTENTIAL_CAMEL_CASE_PATTERN.matcher(propertyKey);
         StringBuffer buffer = new StringBuffer(); // NOSONAR Unfortunately Matcher does not support StringBuilder
         while (matcher.find()) {
-            matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
+            matcher.appendReplacement(buffer, matcher.group(1).toUpperCase(Locale.ROOT));
         }
         matcher.appendTail(buffer);
         return buffer.toString();
@@ -267,7 +271,7 @@ public class ReportGenerator {
     /**
      * @return {@link FilterConsumer} that filter data based on date range
      */
-    @SuppressWarnings("JdkObsolete")
+    @SuppressWarnings("JavaUtilDate")
     private FilterConsumer createFilterByDateRange() {
         FilterConsumer dateRangeFilter = new FilterConsumer();
         dateRangeFilter.setName(DATE_RANGE_FILTER_CONSUMER_NAME);
@@ -293,7 +297,7 @@ public class ReportGenerator {
         return dateRangeFilter;
     }
 
-    private void removeTempDir(File tmpDir, boolean tmpDirCreated) {
+    private static void removeTempDir(File tmpDir, boolean tmpDirCreated) {
         if (tmpDirCreated) {
             try {
                 FileUtils.deleteDirectory(tmpDir);
@@ -303,7 +307,7 @@ public class ReportGenerator {
         }
     }
 
-    private boolean createTempDir(File tmpDir) throws GenerationException {
+    private static boolean createTempDir(File tmpDir) throws GenerationException {
         if (tmpDir.exists()) {
             return false;
         }
@@ -316,12 +320,12 @@ public class ReportGenerator {
             log.error(message);
             throw new GenerationException(message);
         }
-        return tmpDirCreated;
+        return true;
     }
 
-    private void addGraphConsumer(FilterConsumer nameFilter,
+    private static void addGraphConsumer(FilterConsumer nameFilter,
             FilterConsumer excludeControllerFilter,
-            Map.Entry<String, GraphConfiguration> entryGraphCfg)
+            Map.Entry<String, ? extends GraphConfiguration> entryGraphCfg)
             throws GenerationException {
         String graphName = entryGraphCfg.getKey();
         GraphConfiguration graphConfiguration = entryGraphCfg.getValue();
@@ -386,13 +390,13 @@ public class ReportGenerator {
         }
     }
 
-    private ErrorsSummaryConsumer createErrorsSummaryConsumer() {
+    private static ErrorsSummaryConsumer createErrorsSummaryConsumer() {
         ErrorsSummaryConsumer errorsSummaryConsumer = new ErrorsSummaryConsumer();
         errorsSummaryConsumer.setName(ERRORS_SUMMARY_CONSUMER_NAME);
         return errorsSummaryConsumer;
     }
 
-    private FilterConsumer createExcludeControllerFilter() {
+    private static FilterConsumer createExcludeControllerFilter() {
         FilterConsumer excludeControllerFilter = new FilterConsumer();
         excludeControllerFilter
                 .setName(START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME);
@@ -403,7 +407,7 @@ public class ReportGenerator {
         return excludeControllerFilter;
     }
 
-    private SampleConsumer createTop5ErrorsConsumer(ReportGeneratorConfiguration configuration) {
+    private static SampleConsumer createTop5ErrorsConsumer(ReportGeneratorConfiguration configuration) {
         Top5ErrorsBySamplerConsumer top5ErrorsBySamplerConsumer = new Top5ErrorsBySamplerConsumer();
         top5ErrorsBySamplerConsumer.setName(TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME);
         top5ErrorsBySamplerConsumer.setHasOverallResult(true);
@@ -411,14 +415,14 @@ public class ReportGenerator {
         return top5ErrorsBySamplerConsumer;
     }
 
-    private StatisticsSummaryConsumer createStatisticsSummaryConsumer() {
+    private static StatisticsSummaryConsumer createStatisticsSummaryConsumer() {
         StatisticsSummaryConsumer statisticsSummaryConsumer = new StatisticsSummaryConsumer();
         statisticsSummaryConsumer.setName(STATISTICS_SUMMARY_CONSUMER_NAME);
         statisticsSummaryConsumer.setHasOverallResult(true);
         return statisticsSummaryConsumer;
     }
 
-    private RequestsSummaryConsumer createRequestsSummaryConsumer() {
+    private static RequestsSummaryConsumer createRequestsSummaryConsumer() {
         RequestsSummaryConsumer requestsSummaryConsumer = new RequestsSummaryConsumer();
         requestsSummaryConsumer.setName(REQUESTS_SUMMARY_CONSUMER_NAME);
         return requestsSummaryConsumer;
@@ -439,9 +443,7 @@ public class ReportGenerator {
                 // by property jmeter.reportgenerator.apdex_per_transaction
                 // key in entry below can be a hardcoded name or a regex
                 for (Map.Entry<String, Long[]> entry : configuration.getApdexPerTransaction().entrySet()) {
-                    org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(entry.getKey());
-                    PatternMatcher matcher = JMeterUtils.getMatcher();
-                    if (sampleName != null && matcher.matches(sampleName, regex)) {
+                    if (isMatching(sampleName, entry.getKey())) {
                         Long satisfied = entry.getValue()[0];
                         Long tolerated = entry.getValue()[1];
                         if(log.isDebugEnabled()) {
@@ -456,6 +458,19 @@ public class ReportGenerator {
                 return info;
         });
         return apdexSummaryConsumer;
+    }
+
+    private static boolean isMatching(String sampleName, String keyName) {
+        if (sampleName == null) {
+            return false;
+        }
+        if (USE_JAVA_REGEX) {
+            java.util.regex.Pattern pattern = JMeterUtils.compilePattern(keyName);
+            return pattern.matcher(sampleName).matches();
+        }
+        org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(keyName);
+        PatternMatcher matcher = JMeterUtils.getMatcher();
+        return matcher.matches(sampleName, regex);
     }
 
     /**
@@ -483,7 +498,7 @@ public class ReportGenerator {
     /**
      * @return Consumer that compute the end date of the test
      */
-    private AggregateConsumer createEndDateConsumer() {
+    private static AggregateConsumer createEndDateConsumer() {
         AggregateConsumer endDateConsumer = new AggregateConsumer(
                 new MaxAggregator(), sample -> (double) sample.getEndTime());
         endDateConsumer.setName(END_DATE_CONSUMER_NAME);
@@ -493,7 +508,7 @@ public class ReportGenerator {
     /**
      * @return Consumer that compute the begining date of the test
      */
-    private AggregateConsumer createBeginDateConsumer() {
+    private static AggregateConsumer createBeginDateConsumer() {
         AggregateConsumer beginDateConsumer = new AggregateConsumer(
                 new MinAggregator(), sample -> (double) sample.getStartTime());
         beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
@@ -514,7 +529,7 @@ public class ReportGenerator {
      * @throws GenerationException    if conversion of the property value fails or reflection
      *                                throws an InvocationTargetException
      */
-    private void setProperty(String className, Object obj, Method[] methods,
+    private static void setProperty(String className, Object obj, Method[] methods,
             String propertyName, String propertyValue, String setterName)
             throws IllegalAccessException, GenerationException {
         try {

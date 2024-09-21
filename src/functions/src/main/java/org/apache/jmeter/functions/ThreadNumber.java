@@ -25,10 +25,13 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Function to return the current thread number.
  * @since 1.X
  */
+@AutoService(Function.class)
 public class ThreadNumber extends AbstractFunction {
 
     private static final String KEY = "__threadNum"; //$NON-NLS-1$

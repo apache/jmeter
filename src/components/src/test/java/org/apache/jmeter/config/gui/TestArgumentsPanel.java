@@ -17,25 +17,27 @@
 
 package org.apache.jmeter.config.gui;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
  */
-public class TestArgumentsPanel {
+class TestArgumentsPanel {
 
     /**
      * Test that adding an argument to the table results in an appropriate
      * TestElement being created.
      */
     @Test
-    public void testArgumentCreation() throws Exception {
+    void testArgumentCreation() throws Exception {
         ArgumentsPanel gui = new ArgumentsPanel();
         gui.tableModel.addRow(new Argument());
         gui.tableModel.setValueAt("howdy", 0, 0);
@@ -44,5 +46,21 @@ public class TestArgumentsPanel {
 
         assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue())
                 .getMetaData());
+    }
+
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "WITHOUT_SPACE,WITHOUT_SPACE",
+            " WITH_OUTER_SPACE ,WITH_OUTER_SPACE",
+            "WITH_SUFFIX_SPACE ,WITH_SUFFIX_SPACE",
+            " WITH_PREFIX_SPACE,WITH_PREFIX_SPACE"
+    }, ignoreLeadingAndTrailingWhitespace = false)
+    void testArgumentNames(String name, String expectedName) throws Exception {
+        ArgumentsPanel gui = new ArgumentsPanel();
+        gui.tableModel.addRow(new Argument());
+        gui.tableModel.setValueAt(name, 0, 0);
+
+        assertEquals(expectedName, ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue()).getName());
     }
 }

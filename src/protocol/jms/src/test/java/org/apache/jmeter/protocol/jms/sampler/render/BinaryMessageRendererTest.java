@@ -20,8 +20,6 @@ package org.apache.jmeter.protocol.jms.sampler.render;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.internal.matchers.ThrowableCauseMatcher.hasCause;
-import static org.junit.internal.matchers.ThrowableMessageMatcher.hasMessage;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,13 +28,75 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.jmeter.threads.JMeterVariables;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
+    public static class ThrowableMessageMatcher<T extends Throwable> extends
+            TypeSafeMatcher<T> {
+
+        private final Matcher<String> matcher;
+
+        public ThrowableMessageMatcher(Matcher<String> matcher) {
+            this.matcher = matcher;
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("exception with message ");
+            description.appendDescriptionOf(matcher);
+        }
+
+        @Override
+        protected boolean matchesSafely(T item) {
+            return matcher.matches(item.getMessage());
+        }
+
+        @Override
+        protected void describeMismatchSafely(T item, Description description) {
+            description.appendText("message ");
+            matcher.describeMismatch(item.getMessage(), description);
+        }
+    }
+
+    public static class ThrowableCauseMatcher<T extends Throwable> extends
+            TypeSafeMatcher<T> {
+
+        private final Matcher<?> causeMatcher;
+
+        public ThrowableCauseMatcher(Matcher<?> causeMatcher) {
+            this.causeMatcher = causeMatcher;
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("exception with cause ");
+            description.appendDescriptionOf(causeMatcher);
+        }
+
+        @Override
+        protected boolean matchesSafely(T item) {
+            return causeMatcher.matches(item.getCause());
+        }
+
+        @Override
+        protected void describeMismatchSafely(T item, Description description) {
+            description.appendText("cause ");
+            causeMatcher.describeMismatch(item.getCause(), description);
+        }
+    }
+
+    public static <T extends Throwable> Matcher<T> hasMessage(final Matcher<String> matcher) {
+        return new ThrowableMessageMatcher<T>(matcher);
+    }
+
+    public static <T extends Throwable> Matcher<T> hasCause(final Matcher<?> matcher) {
+        return new ThrowableCauseMatcher<T>(matcher);
+    }
 
     private BinaryMessageRenderer render = RendererFactory.getInstance().getBinary();
 

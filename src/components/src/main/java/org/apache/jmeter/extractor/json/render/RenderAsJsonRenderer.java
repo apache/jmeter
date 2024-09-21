@@ -21,13 +21,17 @@ import java.util.List;
 
 import org.apache.jmeter.extractor.json.jsonpath.JSONManager;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.ResultRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 
 /**
  * Implement ResultsRender for JSON Path tester
  * @since 3.0
  */
+@AutoService(ResultRenderer.class)
 public class RenderAsJsonRenderer extends AbstractRenderAsJsonRenderer {
     private static final Logger log = LoggerFactory.getLogger(RenderAsJsonRenderer.class);
 
@@ -70,7 +74,7 @@ public class RenderAsJsonRenderer extends AbstractRenderAsJsonRenderer {
         }
     }
 
-    private List<Object> extractWithTechnology(String textToParse, String expression) throws Exception {
+    private static List<Object> extractWithTechnology(String textToParse, String expression) throws Exception {
         JSONManager jsonManager = new JSONManager();
         return jsonManager.extractWithJsonPath(textToParse, expression);
     }

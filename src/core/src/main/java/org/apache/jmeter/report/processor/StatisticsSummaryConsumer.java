@@ -68,7 +68,7 @@ public class StatisticsSummaryConsumer extends
      * @param data {@link StatisticsSummaryData}
      * @param isOverall boolean indicating if aggregation concerns the Overall results in which case we ignore Transaction Controller's SampleResult
      */
-    private void aggregateSample(Sample sample, StatisticsSummaryData data, boolean isOverall) {
+    private static void aggregateSample(Sample sample, StatisticsSummaryData data, boolean isOverall) {
         if(isOverall && sample.isController()) {
             return;
         }
@@ -81,11 +81,11 @@ public class StatisticsSummaryConsumer extends
         }
 
         long elapsedTime = sample.getElapsedTime();
-        data.getPercentile1().addValue(elapsedTime);
-        data.getPercentile2().addValue(elapsedTime);
-        data.getPercentile3().addValue(elapsedTime);
-        data.getMean().addValue(elapsedTime);
-        data.getMedian().addValue(elapsedTime);
+        data.getPercentile1().addValue((double) elapsedTime);
+        data.getPercentile2().addValue((double) elapsedTime);
+        data.getPercentile3().addValue((double) elapsedTime);
+        data.getMean().addValue((double) elapsedTime);
+        data.getMedian().addValue((double) elapsedTime);
         data.setMin(elapsedTime);
         data.setMax(elapsedTime);
 
@@ -201,7 +201,7 @@ public class StatisticsSummaryConsumer extends
         return titles;
     }
 
-    private String formatPercentile(String percentileLabel) {
+    private static String formatPercentile(String percentileLabel) {
         return String.format(JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
                 percentileLabel);
     }

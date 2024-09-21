@@ -21,9 +21,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.jmeter.util.JMeterUtils;
@@ -75,10 +75,10 @@ public class CssParser implements LinkExtractorParser {
         }
     }
 
-    private URLCollection orDefault(URLCollection urlCollection,
+    private static URLCollection orDefault(URLCollection urlCollection,
             URLCollection defaultValue) {
         if (urlCollection == null) {
-            return Validate.notNull(defaultValue);
+            return Objects.requireNonNull(defaultValue);
         }
         return urlCollection;
     }

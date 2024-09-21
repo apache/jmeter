@@ -95,7 +95,7 @@ public class SamplePackage {
         sampler.setRunningVersion(running);
     }
 
-    private void setRunningVersion(List<?> list, boolean running) {
+    private static void setRunningVersion(List<?> list, boolean running) {
         @SuppressWarnings("unchecked") // all implementations extend TestElement
         List<TestElement> telist = (List<TestElement>)list;
         for (TestElement te : telist) {
@@ -103,7 +103,7 @@ public class SamplePackage {
         }
     }
 
-    private void recoverRunningVersion(List<?> list) {
+    private static void recoverRunningVersion(List<?> list) {
         @SuppressWarnings("unchecked") // All implementations extend TestElement
         List<TestElement> telist = (List<TestElement>)list;
         for (TestElement te : telist) {

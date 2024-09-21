@@ -23,10 +23,13 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Search nodes for a text
  * TODO Enhance search dialog to select kind of nodes ....
  */
+@AutoService(Command.class)
 public class SearchTreeCommand extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();
@@ -54,7 +57,7 @@ public class SearchTreeCommand extends AbstractAction {
      * @return A freshly created search dialog with the parent frame that could be
      *         found, or no parent otherwise.
      */
-    private SearchTreeDialog createSearchDialog(ActionEvent event) {
+    private static SearchTreeDialog createSearchDialog(ActionEvent event) {
         JFrame parent = getParentFrame(event);
         return new SearchTreeDialog(parent);
     }

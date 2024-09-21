@@ -564,7 +564,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      *
      * @return The BasicAttributes (null means all)
      **/
-    private String[] getRequestAttributes(String reqAttr) {
+    private static String[] getRequestAttributes(String reqAttr) {
         int index;
         String[] mods;
         int count = 0;
@@ -602,7 +602,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      *
      * @return The BasicAttribute
      **************************************************************************/
-    private BasicAttribute getBasicAttribute(String name, String value) {
+    private static BasicAttribute getBasicAttribute(String name, String value) {
         return new BasicAttribute(name, value);
     }
 
@@ -880,7 +880,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      * unless the number of results exceeds {@link #MAX_SORTED_RESULTS} in which case just stream
      * the results out without sorting.
      */
-    private void writeSearchResults(final XMLBuffer xmlb, final NamingEnumeration<SearchResult> srch)
+    private void writeSearchResults(final XMLBuffer xmlb, final NamingEnumeration<? extends SearchResult> srch)
             throws NamingException
     {
 
@@ -915,7 +915,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    private void writeSearchResult(final SearchResult sr, final XMLBuffer xmlb)
+    private static void writeSearchResult(final SearchResult sr, final XMLBuffer xmlb)
             throws NamingException
     {
         final Attributes attrs = sr.getAttributes();
@@ -955,7 +955,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    private void sortAttributes(final List<Attribute> sortedAttrs) {
+    private static void sortAttributes(final List<? extends Attribute> sortedAttrs) {
         sortedAttrs.sort((o1, o2) -> {
             String nm1 = o1.getID();
             String nm2 = o2.getID();
@@ -964,7 +964,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         });
     }
 
-    private void sortResults(final List<SearchResult> sortedResults) {
+    private static void sortResults(final List<? extends SearchResult> sortedResults) {
         sortedResults.sort(new Comparator<SearchResult>() {
             private int compareToReverse(final String s1, final String s2) {
                 int len1 = s1.length();
@@ -999,7 +999,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         });
     }
 
-    private String normaliseSearchDN(final SearchResult sr, final String searchBase, final String rootDn)
+    private static String normaliseSearchDN(final SearchResult sr, final String searchBase, final String rootDn)
     {
         String srName = sr.getName();
 
@@ -1019,7 +1019,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return srName;
     }
 
-    private String getWriteValue(final Object value) {
+    private static String getWriteValue(final Object value) {
         if (value instanceof String) {
             // assume it's sensitive data
             return StringEscapeUtils.escapeXml10((String)value);

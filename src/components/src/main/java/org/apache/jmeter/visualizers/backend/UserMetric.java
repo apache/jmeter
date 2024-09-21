@@ -32,7 +32,7 @@ public class UserMetric {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_window", 100); //$NON-NLS-1$
 
     // Limit to sliding window of SLIDING_WINDOW_SIZE values
-    private DescriptiveStatistics usersStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    private final DescriptiveStatistics usersStats = DescriptiveStatisticsFactory.createDescriptiveStatistics(SLIDING_WINDOW_SIZE);
 
     /**
      *

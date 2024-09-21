@@ -65,7 +65,7 @@ public class OnErrorPanel extends JPanel {
         return panel;
     }
 
-    private JRadioButton addRadioButton(String labelKey, ButtonGroup group, JPanel panel) {
+    private static JRadioButton addRadioButton(String labelKey, ButtonGroup group, JPanel panel) {
         JRadioButton radioButton = new JRadioButton(JMeterUtils.getResString(labelKey));
         group.add(radioButton);
         panel.add(radioButton);

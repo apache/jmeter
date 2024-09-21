@@ -19,8 +19,6 @@ package org.apache.jmeter.timers;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -29,13 +27,11 @@ import org.apache.jmeter.util.JMeterUtils;
  * value update and user interaction.
  *
  */
-public class ConstantTimer extends AbstractTestElement implements Timer, Serializable, LoopIterationListener {
+public class ConstantTimer extends AbstractTestElement implements Timer, Serializable {
 
     private static final long serialVersionUID = 240L;
 
     public static final String DELAY = "ConstantTimer.delay"; //$NON-NLS-1$
-
-    private long delay = 0;
 
     /**
      * No-arg constructor.
@@ -85,7 +81,7 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
      */
     @Override
     public long delay() {
-        return delay;
+        return getPropertyAsLong(DELAY);
     }
 
     /**
@@ -96,16 +92,5 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
     @Override
     public String toString() {
         return JMeterUtils.getResString("constant_timer_memo"); //$NON-NLS-1$
-    }
-
-    /**
-     * Gain access to any variables that have been defined.
-     *
-     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-     */
-    @Override
-    public void iterationStart(LoopIterationEvent event) {
-        delay = getPropertyAsLong(DELAY);
-
     }
 }

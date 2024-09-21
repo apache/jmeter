@@ -29,7 +29,7 @@ import java.util.Map;
 public class Top5ErrorsSummaryData {
 
     private static final Long ONE = 1L;
-    private Map<String, Long> countPerError;
+    private final Map<String, Long> countPerError;
     private long total;
     private long errors;
 

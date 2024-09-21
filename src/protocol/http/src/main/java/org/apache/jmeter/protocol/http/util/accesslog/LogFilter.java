@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -27,6 +28,8 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.auto.service.AutoService;
 
 /**
  * Description:<br>
@@ -68,11 +71,15 @@ import org.slf4j.LoggerFactory;
  * that should be replaced.
  */
 @SuppressWarnings("InconsistentCapitalization")
+@AutoService(Filter.class)
 public class LogFilter implements Filter, Serializable {
 
     private static final long serialVersionUID = 241L;
 
     private static final Logger log = LoggerFactory.getLogger(LogFilter.class);
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     // protected members used by class to filter
 
@@ -95,6 +102,10 @@ public class LogFilter implements Filter, Serializable {
     protected String[] EXCPTRN = null;
 
     protected boolean PTRNFILTER = false;
+
+    private final List<String> excludePatternStrings = new ArrayList<>();
+
+    private final List<String> includePatternStrings = new ArrayList<>();
 
     protected ArrayList<Pattern> EXCPATTERNS = new ArrayList<>();
 
@@ -176,6 +187,7 @@ public class LogFilter implements Filter, Serializable {
             // add it to the arraylist
             for (String includePattern : INCPTRN) {
                 this.INCPATTERNS.add(this.createPattern(includePattern));
+                this.includePatternStrings.add(includePattern);
             }
         }
     }
@@ -199,6 +211,7 @@ public class LogFilter implements Filter, Serializable {
             // add it to the arraylist
             for (String excludePattern : EXCPTRN) {
                 this.EXCPATTERNS.add(this.createPattern(excludePattern));
+                this.excludePatternStrings.add(excludePattern);
             }
         }
     }
@@ -327,6 +340,24 @@ public class LogFilter implements Filter, Serializable {
      * @return <code>true</code> if text is included
      */
     protected boolean incPattern(String text) {
+        if (USE_JAVA_REGEX) {
+            return incPatternWithJavaRegex(text);
+        }
+        return incPatternWithOroRegex(text);
+    }
+
+    private boolean incPatternWithJavaRegex(String text) {
+        this.USEFILE = false;
+        for (String includePattern : this.includePatternStrings) {
+            if (JMeterUtils.compilePattern(includePattern).matcher(text).find()) {
+                this.USEFILE = true;
+                break;
+            }
+        }
+        return this.USEFILE;
+    }
+
+    private boolean incPatternWithOroRegex(String text) {
         this.USEFILE = false;
         for (Pattern includePattern : this.INCPATTERNS) {
             if (JMeterUtils.getMatcher().contains(text, includePattern)) {
@@ -345,6 +376,24 @@ public class LogFilter implements Filter, Serializable {
      * @return <code>true</code> if text is excluded
      */
     protected boolean excPattern(String text) {
+        if (USE_JAVA_REGEX) {
+            return excPatternWithJavaRegex(text);
+        }
+        return excPatternWithOroRegex(text);
+    }
+
+    private boolean excPatternWithJavaRegex(String text) {
+        this.USEFILE = true;
+        for (String excludePattern : this.excludePatternStrings) {
+            if (JMeterUtils.compilePattern(excludePattern).matcher(text).find()) {
+                this.USEFILE = false;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean excPatternWithOroRegex(String text) {
         this.USEFILE = true;
         boolean exc = false;
         for (Pattern excludePattern : this.EXCPATTERNS) {

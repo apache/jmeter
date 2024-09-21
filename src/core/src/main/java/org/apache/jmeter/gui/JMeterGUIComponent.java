@@ -21,7 +21,10 @@ import java.util.Collection;
 
 import javax.swing.JPopupMenu;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestElementSchema;
+import org.apiguardian.api.API;
 
 /**
  * Implementing this interface indicates that the class is a JMeter GUI
@@ -82,9 +85,9 @@ public interface JMeterGUIComponent extends ClearGui {
      * the component's label in the local language. The resource name is fixed,
      * and does not vary with the selected language.
      *
-     * Normally this method should be overridden in preference to overriding
+     * <p>Normally this method should be overridden in preference to overriding
      * getStaticLabel(). However where the resource name is not available or required,
-     * getStaticLabel() may be overridden instead.
+     * getStaticLabel() may be overridden instead.</p>
      *
      * @return the resource name
      */
@@ -105,8 +108,19 @@ public interface JMeterGUIComponent extends ClearGui {
      * the model class that it knows how to display, and this method is called
      * when new test elements are created.
      *
+     * <p>Since 5.6.3, the default implementation is as follows, and subclasses should override
+     * {@link #makeTestElement()}
+     * <pre>
+     * public TestElement createTestElement() {
+     *     TestElement element = makeTestElement();
+     *     assignDefaultValues(element);
+     *     return el;
+     * }
+     * </pre>
+     *
      * <p>
-     * The canonical implementation looks like this:
+     * Before 5.6.3 the canonical implementation was as follows, however, it is recommended to
+     * avoid overriding {@link #createTestElement()} and override {@link #makeTestElement()} instead.
      * <pre>
      * public TestElement createTestElement() {
      *     TestElementXYZ el = new TestElementXYZ();
@@ -117,7 +131,35 @@ public interface JMeterGUIComponent extends ClearGui {
      *
      * @return the Test Element object that the GUI component represents.
      */
-    TestElement createTestElement();
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6.3")
+    default TestElement createTestElement() {
+        TestElement element = makeTestElement();
+        assignDefaultValues(element);
+        return element;
+    }
+
+    /**
+     * Creates the test element represented by the GUI component.
+     * @since 5.6.3
+     * @return a new {@link TestElement}
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6.3")
+    default TestElement makeTestElement() {
+        throw new UnsupportedOperationException("Please override makeTestElement with creating the element you need: return new ....");
+    }
+
+    /**
+     * Configures default values for element after its creation.
+     * Plugin authors should call this once in their {@link #createTestElement()} implementation.
+     * @since 5.6.3
+     * @param element test element to configure
+     */
+    default void assignDefaultValues(TestElement element) {
+        element.setName(StringUtils.defaultIfEmpty(getStaticLabel(), null));
+        TestElementSchema schema = TestElementSchema.INSTANCE;
+        element.set(schema.getGuiClass(), getClass());
+        element.set(schema.getTestClass(), element.getClass());
+    }
 
     /**
      * GUI components are responsible for populating TestElements they create
@@ -127,19 +169,26 @@ public interface JMeterGUIComponent extends ClearGui {
      * information.
      *
      * <p>
+     * If you override {@link AbstractJMeterGuiComponent}, you might want using {@link AbstractJMeterGuiComponent#bindingGroup}
+     * instead of overriding {@code modifyTestElement}.
+     *
+     * <p>
      * The canonical implementation looks like this:
      * <pre>
+     * &#064;Override
      * public void modifyTestElement(TestElement element) {
-     *     element.clear(); // many implementations use this
-     *     configureTestElement(element);
+     *     super.modifyTestElement(element); // clear the element and assign basic fields like name, gui class, test class
      *     // Using the element setters (preferred):
+     *     // If the field is empty, you probably want to remove the property instead of storing an empty string
+     *     // See <a href="https://github.com/apache/jmeter/pull/6199">Streamline binding of UI elements to TestElement properties</a>
+     *     // for more details
      *     TestElementXYZ xyz = (TestElementXYZ) element;
-     *     xyz.setState(guiState.getText());
-     *     xyz.setCode(guiCode.getText());
+     *     xyz.setState(StringUtils.defaultIfEmpty(guiState.getText(), null));
+     *     xyz.setCode(StringUtils.defaultIfEmpty(guiCode.getText(), null));
      *     ... other GUI fields ...
      *     // or directly (do not use unless there is no setter for the field):
-     *     element.setProperty(TestElementXYZ.STATE, guiState.getText())
-     *     element.setProperty(TestElementXYZ.CODE, guiCode.getText())
+     *     element.setProperty(TestElementXYZ.STATE, StringUtils.defaultIfEmpty(guiState.getText(), null))
+     *     element.setProperty(TestElementXYZ.CODE, StringUtils.defaultIfEmpty(guiCode.getText(), null))
      *     ... other GUI fields ...
      * }
      * </pre>
@@ -147,7 +196,16 @@ public interface JMeterGUIComponent extends ClearGui {
      * @param element
      *            the TestElement to modify
      */
-    void modifyTestElement(TestElement element);
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6.3")
+    default void modifyTestElement(TestElement element) {
+        // TODO: should we keep .clear() here? It probably makes it easier to remove all properties before populating
+        //   the values from UI, however, it might be inefficient.
+        element.clear();
+        element.setName(StringUtils.defaultIfEmpty(getName(), null));
+        TestElementSchema schema = TestElementSchema.INSTANCE;
+        element.set(schema.getGuiClass(), getClass());
+        element.set(schema.getTestClass(), element.getClass());
+    }
 
     /**
      * Test GUI elements can be disabled, in which case they do not become part

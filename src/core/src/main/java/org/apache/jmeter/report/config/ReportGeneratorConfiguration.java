@@ -281,8 +281,8 @@ public class ReportGeneratorConfiguration {
     private Map<String, Long[]> apdexPerTransaction = new HashMap<>();
     private Pattern filteredSamplesPattern;
     private boolean ignoreTCFromTop5ErrorsBySampler;
-    private Map<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
-    private Map<String, GraphConfiguration> graphConfigurations = new HashMap<>();
+    private final Map<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
+    private final Map<String, GraphConfiguration> graphConfigurations = new HashMap<>();
 
     /**
      * Gets the overall sample filter.
@@ -483,7 +483,7 @@ public class ReportGeneratorConfiguration {
      *             thrown when the property cannot be cast to the specified type
      */
     private static <TProperty> TProperty getProperty(Props props, String key,
-            TProperty defaultValue, Class<TProperty> clazz)
+            TProperty defaultValue, @SuppressWarnings("BoundedWildcard") Class<TProperty> clazz)
             throws ConfigurationException {
         String value = props.getValue(key);
         if (value == null) {

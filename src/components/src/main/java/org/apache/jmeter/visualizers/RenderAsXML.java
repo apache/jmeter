@@ -53,6 +53,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
+import com.google.auto.service.AutoService;
+
+@AutoService(ResultRenderer.class)
 public class RenderAsXML extends SamplerResultTab
     implements ResultRenderer {
 
@@ -111,8 +114,8 @@ public class RenderAsXML extends SamplerResultTab
     private static class ExpandPopupMenu extends JPopupMenu implements ActionListener {
 
         private static final long serialVersionUID = 1L;
-        private JMenuItem expand;
-        private JMenuItem collapse;
+        private final JMenuItem expand;
+        private final JMenuItem collapse;
         private JTree tree;
 
         ExpandPopupMenu() {
@@ -149,7 +152,7 @@ public class RenderAsXML extends SamplerResultTab
         }
 
         @SuppressWarnings("JdkObsolete")
-        private void applyToChildren(TreePath parent, Consumer<TreePath> method) {
+        private static void applyToChildren(TreePath parent, Consumer<? super TreePath> method) {
             TreeNode node = (TreeNode) parent.getLastPathComponent();
             Enumeration<?> e = node.children();
             while (e.hasMoreElements()) {
@@ -201,7 +204,7 @@ public class RenderAsXML extends SamplerResultTab
          *
          * @param parent {@link Node}
          */
-        private Node getFirstElement(Node parent) {
+        private static Node getFirstElement(Node parent) {
             NodeList childNodes = parent.getChildNodes();
             Node toReturn = parent; // Must return a valid node, or may generate an NPE
             for (int i = 0; i < childNodes.getLength(); i++) {
@@ -241,7 +244,7 @@ public class RenderAsXML extends SamplerResultTab
             /**
              * get the html
              */
-            private String getHTML(String str, String separator, int maxChar) {
+            private static String getHTML(String str, String separator, int maxChar) {
                 StringBuilder strBuf = new StringBuilder("<html><body bgcolor=\"yellow\"><b>"); // $NON-NLS-1$
                 char[] chars = str.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
@@ -257,7 +260,7 @@ public class RenderAsXML extends SamplerResultTab
 
             }
 
-            private String encode(char c) {
+            private static String encode(char c) {
                 String toReturn = String.valueOf(c);
                 switch (c) {
                     case '<': // $NON-NLS-1$

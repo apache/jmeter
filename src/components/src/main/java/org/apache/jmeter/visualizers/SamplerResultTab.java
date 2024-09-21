@@ -21,13 +21,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -43,11 +49,17 @@ import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
+import javax.swing.text.EditorKit;
+import javax.swing.text.Element;
+import javax.swing.text.PlainView;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -61,6 +73,7 @@ import org.apache.jmeter.visualizers.SearchTextExtension.JEditorPaneSearchProvid
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
+import org.apache.jorphan.gui.ui.KerningOptimizer;
 import org.apache.jorphan.reflect.Functor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,9 +86,13 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SamplerResultTab.class);
     // N.B. these are not multi-threaded, so don't make it static
-    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
+    private final DateTimeFormatter dateFormat = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss z")  // ISO format $NON-NLS-1$
+            .withZone(ZoneId.systemDefault());
 
     private static final String NL = "\n"; // $NON-NLS-1$
+
+    private static final String SPACE = " "; // $NON-NLS-1$
 
     public static final Color SERVER_ERROR_COLOR = Color.red;
 
@@ -92,6 +109,9 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private static final String STYLE_CLIENT_ERROR = "ClientError"; // $NON-NLS-1$
 
     private static final String STYLE_REDIRECT = "Redirect"; // $NON-NLS-1$
+
+    private static final int SIMPLE_VIEW_LIMIT =
+            JMeterUtils.getPropDefault("view.results.tree.simple_view_limit", 10_000); // $NON-NLS-1$
 
     private JTextPane stats;
 
@@ -243,53 +263,53 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 StringBuilder statsBuff = new StringBuilder(200);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_thread_name")) //$NON-NLS-1$
+                                .getResString("view_results_thread_name")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getThreadName()).append(NL);
                 String startTime = dateFormat
-                        .format(new Date(sampleResult.getStartTime()));
+                        .format(Instant.ofEpochMilli(sampleResult.getStartTime()));
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_sample_start")) //$NON-NLS-1$
+                                .getResString("view_results_sample_start")).append(SPACE) //$NON-NLS-1$
                         .append(startTime).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_load_time")) //$NON-NLS-1$
+                                .getResString("view_results_load_time")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getTime()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_connect_time")) //$NON-NLS-1$
+                                .getResString("view_results_connect_time")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getConnectTime()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_latency")) //$NON-NLS-1$
+                                .getResString("view_results_latency")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getLatency()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_size_in_bytes")) //$NON-NLS-1$
+                                .getResString("view_results_size_in_bytes")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getBytesAsLong()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_sent_bytes")) //$NON-NLS-1$
+                                .getResString("view_results_sent_bytes")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getSentBytes()).append(NL);
                 statsBuff
                         .append(JMeterUtils.getResString(
-                                "view_results_size_headers_in_bytes")) //$NON-NLS-1$
+                                "view_results_size_headers_in_bytes")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getHeadersSize()).append(NL);
                 statsBuff
                         .append(JMeterUtils.getResString(
-                                "view_results_size_body_in_bytes")) //$NON-NLS-1$
+                                "view_results_size_body_in_bytes")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getBodySizeAsLong()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_sample_count")) //$NON-NLS-1$
+                                .getResString("view_results_sample_count")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getSampleCount()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_error_count")) //$NON-NLS-1$
+                                .getResString("view_results_error_count")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getErrorCount()).append(NL);
                 statsBuff
                         .append(JMeterUtils
-                                .getResString("view_results_datatype")) //$NON-NLS-1$
+                                .getResString("view_results_datatype")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getDataType()).append(NL);
                 statsDoc.insertString(statsDoc.getLength(),
                         statsBuff.toString(), null);
@@ -628,7 +648,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         this.backGround = backGround;
     }
 
-    private void setFirstColumnPreferredSize(JTable table) {
+    private static void setFirstColumnPreferredSize(JTable table) {
         TableColumn column = table.getColumnModel().getColumn(0);
         column.setMaxWidth(300);
         column.setPreferredWidth(180);
@@ -688,10 +708,74 @@ public abstract class SamplerResultTab implements ResultRenderer {
         Document blank = new DefaultStyledDocument();
         results.setDocument(blank);
         try {
+            data = ViewResultsFullVisualizer.wrapLongLines(data);
             document.insertString(0, data == null ? "" : data, null);
         } catch (BadLocationException ex) {
             LOGGER.error("Error inserting text", ex);
         }
+        if (SIMPLE_VIEW_LIMIT >= 0 && document.getLength() > SIMPLE_VIEW_LIMIT) {
+            results.setEditorKit(new NonWrappingPlainTextEditorKit(results.getEditorKit()));
+        }
+        KerningOptimizer.INSTANCE.configureKerning(results, document.getLength());
         results.setDocument(document);
+    }
+    static class NonWrappingPlainTextEditorKit extends EditorKit {
+
+        private final EditorKit delegate;
+
+        NonWrappingPlainTextEditorKit(EditorKit delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public String getContentType() {
+            return delegate.getContentType();
+        }
+
+        @Override
+        public ViewFactory getViewFactory() {
+            //return new BasicTextAreaUI();
+            return new ViewFactory() {
+                @Override
+                public View create(Element elem) {
+                    return new PlainView(elem);
+                }
+            };
+        }
+
+        @Override
+        public Action[] getActions() {
+            return delegate.getActions();
+        }
+
+        @Override
+        public Caret createCaret() {
+            return delegate.createCaret();
+        }
+
+        @Override
+        public Document createDefaultDocument() {
+            return delegate.createDefaultDocument();
+        }
+
+        @Override
+        public void read(InputStream in, Document doc, int pos) throws IOException, BadLocationException {
+            delegate.read(in, doc, pos);
+        }
+
+        @Override
+        public void write(OutputStream out, Document doc, int pos, int len) throws IOException, BadLocationException {
+            delegate.write(out, doc, pos, len);
+        }
+
+        @Override
+        public void read(Reader in, Document doc, int pos) throws IOException, BadLocationException {
+            delegate.read(in, doc, pos);
+        }
+
+        @Override
+        public void write(Writer out, Document doc, int pos, int len) throws IOException, BadLocationException {
+            delegate.write(out, doc, pos, len);
+        }
     }
 }

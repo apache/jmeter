@@ -28,11 +28,14 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Provides a Random function which returns a random long integer between a min
  * (first argument) and a max (second argument).
  * @since 1.9
  */
+@AutoService(Function.class)
 public class Random extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();

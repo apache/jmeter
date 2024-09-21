@@ -320,7 +320,7 @@ public class AxisGraph extends JPanel {
         }
     }
 
-    private double findMax(double[][] _data) {
+    private static double findMax(double[][] _data) {
         double max = _data[0][0];
         for (double[] dArray : _data) {
             for (double d : dArray) {
@@ -332,7 +332,7 @@ public class AxisGraph extends JPanel {
         return max;
     }
 
-    private String squeeze(String input, int _maxLength) {
+    private static String squeeze(String input, int _maxLength) {
         if (input.length() > _maxLength) {
             return input.substring(0,_maxLength-ELLIPSIS_LEN)+ELLIPSIS;
         }
@@ -351,12 +351,15 @@ public class AxisGraph extends JPanel {
                 _maxLength = 3;
             }
             // if the "Title of Graph" is empty, we can assume some default
-            if (_title.length() == 0 ) {
+            if (_title.isEmpty()) {
                 _title = JMeterUtils.getResString("aggregate_graph_title"); //$NON-NLS-1$
             }
             // if the labels are too long, they'll be "squeezed" to make the chart viewable.
             for (int i = 0; i < _xAxisLabels.length; i++) {
                 String label = _xAxisLabels[i];
+                if (label.isEmpty()) {
+                    label = "<empty>";
+                }
                 _xAxisLabels[i]=squeeze(label, _maxLength);
             }
             this.setPreferredSize(new Dimension(_width,_height));
@@ -399,7 +402,7 @@ public class AxisGraph extends JPanel {
             // Y Axis
             try {
                 BigDecimal round = BigDecimal.valueOf(max / 1000d);
-                round = round.setScale(0, RoundingMode.HALF_EVEN);
+                round = round.setScale(0, RoundingMode.UP);
                 double topValue = round.doubleValue() * 1000;
                 yaxis.setUserDefinedScale(0, 500);
                 yaxis.setNumItems((int) (topValue / 500)+1);

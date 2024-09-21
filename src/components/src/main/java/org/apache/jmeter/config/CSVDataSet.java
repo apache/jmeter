@@ -242,7 +242,7 @@ public class CSVDataSet extends ConfigTestElement
      * trim content of array varNames
      * @param varsNames
      */
-    private void trimVarNames(String[] varsNames) {
+    private static void trimVarNames(String[] varsNames) {
         for (int i = 0; i < varsNames.length; i++) {
             varsNames[i] = varsNames[i].trim();
         }

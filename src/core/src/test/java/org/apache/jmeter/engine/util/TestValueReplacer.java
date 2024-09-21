@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.engine.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +98,7 @@ public class TestValueReplacer extends JMeterTestCase {
     public void testOverlappingMatches() throws Exception {
         TestPlan plan = new TestPlan();
         plan.addParameter("longMatch", "servername");
-        plan.addParameter("shortMatch", ".*");
+        plan.addParameter("shortMatch", ".+");
         ValueReplacer replacer = new ValueReplacer(plan);
         TestElement element = new TestPlan();
         element.setProperty(new StringProperty("domain", "servername.domain"));

@@ -100,7 +100,8 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
             prop.setName(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)));
             String element = reader.getAttribute(ConversionHelp.ATT_ELEMENT_TYPE);
             boolean isHeader = HEADER_CLASSNAME.equals(element);
-            prop.setObjectValue(mapper().realClass(element).getDeclaredConstructor().newInstance());// Always decode
+            Class<?> aClass = mapper().realClass(element);
+            prop.setObjectValue(aClass.asSubclass(TestElement.class).getDeclaredConstructor().newInstance());// Always decode
             TestElement te = (TestElement)prop.getObjectValue();
             // No need to check version, just process the attributes if present
             ConversionHelp.restoreSpecialProperties(te, reader);

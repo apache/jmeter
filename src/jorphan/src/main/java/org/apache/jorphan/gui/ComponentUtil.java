@@ -23,7 +23,7 @@ import java.awt.Rectangle;
 
 /**
  * This class is a Util for awt Component and could be used to place them in
- * center of an other.
+ * center of another.
  *
  */
 public final class ComponentUtil {
@@ -36,19 +36,12 @@ public final class ComponentUtil {
      * @param component
      *            the component you want to center and set size on
      * @param percentOfScreen
-     *            the percent of the current screensize you want the component
+     *            the percent of the current screen size you want the component
      *            to be
      */
     public static void centerComponentInWindow(Component component, int percentOfScreen) {
-        if (percentOfScreen < 0) {
-            centerComponentInWindow(component, -percentOfScreen);
-            return;
-        }
-        if (percentOfScreen > 100) {
-            centerComponentInWindow(component, 100);
-            return;
-        }
-        double percent = percentOfScreen / 100.d;
+        int validPercentOfScreen = Math.min(Math.abs(percentOfScreen), 100);
+        double percent = validPercentOfScreen / 100.d;
         Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().getBounds();
         component.setSize((int) (bounds.getWidth() * percent), (int) (bounds.getHeight() * percent));
         centerComponentInWindow(component);

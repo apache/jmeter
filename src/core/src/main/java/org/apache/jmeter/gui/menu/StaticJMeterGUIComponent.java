@@ -75,7 +75,7 @@ public class StaticJMeterGUIComponent implements JMeterGUIComponent {
         this.groups = getGroups(c, metadata);
     }
 
-    private List<String> getGroups(Class<?> c, TestElementMetadata metadata) {
+    private static List<String> getGroups(Class<?> c, TestElementMetadata metadata) {
         String[] groups = metadata.actionGroups();
         if (groups.length == 1 && groups[0].equals("")) {
             // Annotations can't hold null values, so we use empty string instead

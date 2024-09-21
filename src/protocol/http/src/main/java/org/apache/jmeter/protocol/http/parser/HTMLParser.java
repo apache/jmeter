@@ -63,6 +63,7 @@ public abstract class HTMLParser extends BaseParser {
 
     protected static final String SHORTCUT_ICON     = "shortcut icon";
     protected static final String ICON              = "icon";
+    protected static final String PRELOAD           = "preload";
 
     protected static final String IE_UA             = "MSIE ([0-9]+.[0-9]+)";// $NON-NLS-1$
     protected static final Pattern IE_UA_PATTERN    = Pattern.compile(IE_UA);
@@ -190,7 +191,7 @@ public abstract class HTMLParser extends BaseParser {
      * @param ieVersion Float IE version
      * @return true if IE version &lt; IE v10
      */
-    protected final boolean isEnableConditionalComments(Float ieVersion) {
+    protected static boolean isEnableConditionalComments(Float ieVersion) {
         // Conditional comment have been dropped in IE10
         // http://msdn.microsoft.com/en-us/library/ie/hh801214%28v=vs.85%29.aspx
         return ieVersion != null && ieVersion < IE_10;

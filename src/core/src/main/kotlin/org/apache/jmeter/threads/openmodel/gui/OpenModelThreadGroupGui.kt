@@ -19,14 +19,13 @@ package org.apache.jmeter.threads.openmodel.gui
 
 import net.miginfocom.swing.MigLayout
 import org.apache.jmeter.engine.util.CompoundVariable
+import org.apache.jmeter.gui.JTextComponentBinding
 import org.apache.jmeter.gui.TestElementMetadata
 import org.apache.jmeter.testelement.TestElement
-import org.apache.jmeter.testelement.property.TestElementProperty
-import org.apache.jmeter.threads.AbstractThreadGroup
 import org.apache.jmeter.threads.gui.AbstractThreadGroupGui
-import org.apache.jmeter.threads.openmodel.DefaultThreadSchedule
 import org.apache.jmeter.threads.openmodel.OpenModelThreadGroup
 import org.apache.jmeter.threads.openmodel.OpenModelThreadGroupController
+import org.apache.jmeter.threads.openmodel.OpenModelThreadGroupSchema
 import org.apache.jmeter.threads.openmodel.ThreadSchedule
 import org.apache.jmeter.threads.openmodel.ThreadScheduleStep
 import org.apache.jmeter.threads.openmodel.asSeconds
@@ -72,6 +71,12 @@ public class OpenModelThreadGroupGui : AbstractThreadGroupGui() {
                 updateExplanation()
             }
         })
+        bindingGroup.addAll(
+            listOf(
+                JTextComponentBinding(scheduleStringEditor, OpenModelThreadGroupSchema.schedule),
+                JTextComponentBinding(randomSeedEditor, OpenModelThreadGroupSchema.randomSeed)
+            )
+        )
     }
 
     private fun createPanel() =
@@ -90,6 +95,7 @@ public class OpenModelThreadGroupGui : AbstractThreadGroupGui() {
 
             add(explanation)
             add(targetRateChart, "height 200")
+            updateExplanation()
         }
 
     private fun templateButton(title: String) = JButton(title).apply {
@@ -134,37 +140,10 @@ public class OpenModelThreadGroupGui : AbstractThreadGroupGui() {
 
     private fun evaluate(input: String): String = CompoundVariable(input).execute()
 
-    override fun createTestElement(): TestElement =
-        OpenModelThreadGroup().also {
-            it.setProperty(TestElementProperty(AbstractThreadGroup.MAIN_CONTROLLER, OpenModelThreadGroupController()))
-            modifyTestElement(it)
-        }
+    override fun makeTestElement(): TestElement = OpenModelThreadGroup()
 
-    override fun modifyTestElement(tg: TestElement) {
-        configureTestElement(tg)
-        tg as OpenModelThreadGroup
-        tg.scheduleString = scheduleStringEditor.text
-        tg.randomSeedString = randomSeedEditor.text
-    }
-
-    override fun configure(tg: TestElement) {
-        super.configure(tg)
-        tg as OpenModelThreadGroup
-        scheduleStringEditor.text = tg.scheduleString
-        randomSeedEditor.text = tg.randomSeedString
-    }
-
-    override fun clearGui() {
-        super.clearGui()
-        scheduleStringEditor.text = ""
-        randomSeedEditor.text = ""
-        targetRateChart.updateSchedule(
-            DefaultThreadSchedule(
-                listOf(
-                    ThreadScheduleStep.RateStep(0.0),
-                    ThreadScheduleStep.ArrivalsStep(ThreadScheduleStep.ArrivalType.RANDOM, 1.0)
-                )
-            )
-        )
+    override fun modifyTestElement(element: TestElement) {
+        super.modifyTestElement(element)
+        element[OpenModelThreadGroupSchema.mainController] = OpenModelThreadGroupController()
     }
 }

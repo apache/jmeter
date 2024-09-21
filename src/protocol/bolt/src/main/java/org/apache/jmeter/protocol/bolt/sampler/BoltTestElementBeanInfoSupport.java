@@ -63,7 +63,7 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
         propertyDescriptor.setValue(DEFAULT, 60);
     }
 
-    private String[] getListAccessModes() {
+    private static String[] getListAccessModes() {
         return Arrays.stream(AccessMode.values()).map(Enum::toString).toArray(String[]::new);
     }
 }

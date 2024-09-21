@@ -29,6 +29,7 @@ import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.util.JMeterException;
@@ -62,28 +63,38 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
     private transient volatile BeanShellInterpreter savedBsh = null;
 
     @Override
+    public BeanShellSamplerSchema getSchema() {
+        return BeanShellSamplerSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends BeanShellSampler, ? extends BeanShellSamplerSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
+    }
+
+    @Override
     protected String getInitFileProperty() {
         return INIT_FILE;
     }
 
     @Override
     public String getScript() {
-        return this.getPropertyAsString(SCRIPT);
+        return get(getSchema().getScript());
     }
 
     @Override
     public String getFilename() {
-        return getPropertyAsString(FILENAME);
+        return get(getSchema().getFilename());
     }
 
     @Override
     public String getParameters() {
-        return getPropertyAsString(PARAMETERS);
+        return get(getSchema().getParameters());
     }
 
     @Override
     public boolean isResetInterpreter() {
-        return getPropertyAsBoolean(RESET_INTERPRETER);
+        return get(getSchema().getResetInterpreter());
     }
 
     @Override
@@ -102,14 +113,6 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
             return res;
         }
         try {
-            String request = getScript();
-            String fileName = getFilename();
-            if (fileName.length() == 0) {
-                res.setSamplerData(request);
-            } else {
-                res.setSamplerData(fileName);
-            }
-
             bshInterpreter.set("SampleResult", res); //$NON-NLS-1$
 
             // Set default values
@@ -120,7 +123,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
             res.setDataType(SampleResult.TEXT); // assume text output - script can override if necessary
 
             savedBsh = bshInterpreter;
-            Object bshOut = processFileOrScript(bshInterpreter);
+            Object bshOut = processFileOrScript(bshInterpreter, res);
             savedBsh = null;
 
             if (bshOut != null) {// Set response data

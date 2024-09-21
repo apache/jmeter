@@ -26,8 +26,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -51,7 +51,7 @@ public abstract class AbstractSampleWriter extends SampleWriter {
 
     private static final String CHARSET = SaveService.getFileEncoding(StandardCharsets.UTF_8.displayName());
 
-    private static Logger log = LoggerFactory.getLogger(AbstractSampleWriter.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractSampleWriter.class);
 
     /** output writer to write samples to */
     protected PrintWriter writer;
@@ -66,7 +66,7 @@ public abstract class AbstractSampleWriter extends SampleWriter {
      *            sample writer
      */
     public void setWriter(Writer newWriter) {
-        Validate.notNull(newWriter, "writer must not be null."); // NOSONAR
+        Objects.requireNonNull(newWriter, "writer must not be null."); // NOSONAR
 
         if (this.writer != null) {
             // flush and close previous writer
@@ -84,7 +84,7 @@ public abstract class AbstractSampleWriter extends SampleWriter {
      *            The output stream on which sample should be written
      */
     public void setOutputStream(OutputStream out) {
-        Validate.notNull(out, "out must not be null."); // NOSONAR
+        Objects.requireNonNull(out, "out must not be null."); // NOSONAR
 
         try {
             setWriter(new OutputStreamWriter(out, CHARSET));

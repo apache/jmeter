@@ -1,0 +1,59 @@
+name: Bug report
+description: Create a report and help us improve
+labels:
+  - defect
+  - to-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill in all required fields with as many details as possible.
+        Read the [User manual](https://jmeter.apache.org/usermanual/index.html) and/or [Reference documentation](https://jmeter.apache.org/usermanual/component_reference.html)
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: |
+        Describe what you were expecting JMeter to do
+      placeholder: |
+        Here you can also attach log files, screenshots or a video
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: |
+        Describe what you observed JMeter did instead
+      placeholder: |
+        Here you can also attach log files (e.g. jmeter.log), screenshots or a video
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce the problem
+      description: |
+        - If the problem relates to a third-party plugin, consider removing them first
+      placeholder: |
+        Here you can also attach log files, screenshots or a video
+    validations:
+      required: true
+  - type: input
+    id: jmeter-version
+    attributes:
+      label: JMeter Version
+      description: |
+        What JMeter version and edition did you use?
+        Note: While you can obviously continue using older versions of JMeter, it may well be that your bug is already fixed. If you're using an older version, please also try to reproduce the bug in the latest version of JMeter before reporting it.
+      placeholder: ex. 5.6
+    validations:
+      required: true
+  - type: input
+    id: java-version
+    attributes:
+      label: Java Version
+      description: What JDK version and distribution did you use (use `java -version`)
+      placeholder: ex. openjdk version "17" 2021-09-14
+  - type: input
+    id: os-version
+    attributes:
+      label: OS Version
+      description: What operating system version and distribution did you use (use e.g. `ver` on Windows)
+      placeholder: ex. Microsoft Windows [Version 10.0.22000.856]

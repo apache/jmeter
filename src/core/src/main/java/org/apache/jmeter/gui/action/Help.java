@@ -35,9 +35,12 @@ import org.apache.jorphan.gui.ComponentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implements the Help menu item.
  */
+@AutoService(Command.class)
 public class Help extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(Help.class);
     private static final boolean USE_LOCAL_HELP =

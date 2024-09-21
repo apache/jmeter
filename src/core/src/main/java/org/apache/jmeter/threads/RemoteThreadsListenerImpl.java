@@ -17,18 +17,16 @@
 
 package org.apache.jmeter.threads;
 
-import java.io.IOException;
-import java.lang.reflect.Modifier;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.ServiceLoader;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.rmi.RmiUtils;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +37,14 @@ import org.slf4j.LoggerFactory;
 public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         RemoteThreadsListener, ThreadListener {
     private static final Logger log = LoggerFactory.getLogger(RemoteThreadsListenerImpl.class);
-    private final List<RemoteThreadsLifeCycleListener> listeners = new ArrayList<>();
+
+    private final Collection<RemoteThreadsLifeCycleListener> listeners =
+            JMeterUtils.loadServicesAndScanJars(
+                    RemoteThreadsLifeCycleListener.class,
+                    ServiceLoader.load(RemoteThreadsLifeCycleListener.class),
+                    Thread.currentThread().getContextClassLoader(),
+                    new LogAndIgnoreServiceLoadExceptionHandler(log)
+            );
 
     /**
      *
@@ -56,27 +61,6 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
      */
     public RemoteThreadsListenerImpl() throws RemoteException {
         super(DEFAULT_LOCAL_PORT, RmiUtils.createClientSocketFactory(), RmiUtils.createServerSocketFactory());
-        try {
-            List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    JMeterUtils.getSearchPaths(),
-                    new Class[] {RemoteThreadsLifeCycleListener.class });
-            for (String strClassName : listClasses) {
-                try {
-                    log.debug("Loading class: {}", strClassName);
-                    Class<?> commandClass = Class.forName(strClassName);
-                    if (!Modifier.isAbstract(commandClass.getModifiers())) {
-                        log.debug("Instantiating: {}", commandClass);
-                        RemoteThreadsLifeCycleListener listener = (RemoteThreadsLifeCycleListener) commandClass.getDeclaredConstructor().newInstance();
-                        listeners.add(listener);
-                    }
-                } catch (Exception e) {
-                    log.error("Exception registering {} with implementation: {}", RemoteThreadsLifeCycleListener.class,
-                            strClassName, e);
-                }
-            }
-        } catch (IOException e) {
-            log.error("Exception finding implementations of {}", RemoteThreadsLifeCycleListener.class, e);
-        }
     }
 
     private static int addOffset(int port, int offset) {

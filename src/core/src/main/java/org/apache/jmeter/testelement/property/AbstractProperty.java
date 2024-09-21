@@ -17,8 +17,12 @@
 
 package org.apache.jmeter.testelement.property;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.slf4j.Logger;
@@ -77,6 +81,9 @@ public abstract class AbstractProperty implements JMeterProperty {
     }
 
     protected PropertyIterator getIterator(Collection<JMeterProperty> values) {
+        if (values.isEmpty()) {
+            return PropertyIteratorImpl.EMPTY_ITERATOR;
+        }
         return new PropertyIteratorImpl(values);
     }
 
@@ -101,11 +108,11 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public int getIntValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return 0;
         }
         try {
-            return Integer.parseInt(val);
+            return Integer.parseInt(val.trim());
         } catch (NumberFormatException e) {
             return 0;
         }
@@ -119,11 +126,11 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public long getLongValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return 0;
         }
         try {
-            return Long.parseLong(val);
+            return Long.parseLong(val.trim());
         } catch (NumberFormatException e) {
             return 0;
         }
@@ -137,11 +144,11 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public double getDoubleValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return 0;
         }
         try {
-            return Double.parseDouble(val);
+            return Double.parseDouble(val.trim());
         } catch (NumberFormatException e) {
             log.error("Tried to parse a non-number string to an integer", e);
             return 0;
@@ -156,11 +163,11 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public float getFloatValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return 0;
         }
         try {
-            return Float.parseFloat(val);
+            return Float.parseFloat(val.trim());
         } catch (NumberFormatException e) {
             log.error("Tried to parse a non-number string to an integer", e);
             return 0;
@@ -175,10 +182,10 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public boolean getBooleanValue() {
         String val = getStringValue();
-        if (val == null || val.length()==0) {
+        if (val == null || val.isEmpty()) {
             return false;
         }
-        return Boolean.parseBoolean(val);
+        return Boolean.parseBoolean(val.trim());
     }
 
     /**
@@ -293,13 +300,26 @@ public abstract class AbstractProperty implements JMeterProperty {
      */
     protected Collection<JMeterProperty> normalizeList(Collection<?> coll) {
         try {
-            @SuppressWarnings("unchecked") // empty collection
-            Collection<JMeterProperty> newColl = coll.getClass().getDeclaredConstructor().newInstance();
+            Collection<JMeterProperty> newColl;
+            try {
+                @SuppressWarnings("unchecked")
+                Collection<JMeterProperty> tmp = coll.getClass().getDeclaredConstructor().newInstance();
+                newColl = tmp;
+            } catch (Exception e) {
+                if (coll instanceof List) {
+                    newColl = new ArrayList<>(coll.size());
+                } else if (coll instanceof Set) {
+                    newColl = new LinkedHashSet<>();
+                } else {
+                    throw e;
+                }
+            }
             for (Object item : coll) {
                 newColl.add(convertObject(item));
             }
             return newColl;
         } catch (Exception e) {// should not happen
+            // TODO: replace with throwing an error, however it might break backward compatibility
             log.error("Cannot create copy of {}", coll.getClass(), e);
             return null;
         }

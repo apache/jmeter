@@ -113,7 +113,7 @@ public class SystemSampler extends AbstractSampler {
         cmds.add(command);
         for (int i=0;i<args.getArgumentCount();i++) {
             Argument arg = args.getArgument(i);
-            cmds.add(arg.getPropertyAsString(Argument.VALUE));
+            cmds.add(arg.getValue());
             cmdLine.append(" ");
             cmdLine.append(cmds.get(i+1));
         }
@@ -121,7 +121,7 @@ public class SystemSampler extends AbstractSampler {
         Map<String,String> env = new HashMap<>();
         for (int i=0;i<environment.getArgumentCount();i++) {
             Argument arg = environment.getArgument(i);
-            env.put(arg.getName(), arg.getPropertyAsString(Argument.VALUE));
+            env.put(arg.getName(), arg.getValue());
         }
 
         File directory;

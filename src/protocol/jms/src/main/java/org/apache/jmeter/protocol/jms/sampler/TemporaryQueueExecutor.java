@@ -35,7 +35,7 @@ public class TemporaryQueueExecutor implements QueueExecutor {
     private static final Logger LOGGER = LoggerFactory.getLogger(TemporaryQueueExecutor.class);
     /** The sender and receiver. */
     private final TimeoutEnabledQueueRequestor requestor;
-    private int timeout;
+    private final int timeout;
 
     /**
      * Constructor.

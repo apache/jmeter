@@ -39,11 +39,17 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Restart JMeter
  * Based on https://dzone.com/articles/programmatically-restart-java
  * @since 5.0
  */
+@AutoService({
+        Command.class,
+        MenuCreator.class
+})
 public class Restart extends AbstractActionWithNoRunningTest implements MenuCreator {
     private static final Logger log = LoggerFactory.getLogger(Restart.class);
 
@@ -171,7 +177,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
      * @param processArgs arguments to be given to ProcessBuilder
      * @param mainCommand original command line split at spaces
      */
-    private static void processRemainingArgs(List<String> processArgs, String[] mainCommand) {
+    private static void processRemainingArgs(List<? super String> processArgs, String[] mainCommand) {
         boolean paramValue = false;
         StringBuilder partialParamValue = new StringBuilder();
         for (int i = 1; i < mainCommand.length; i++) {

@@ -320,7 +320,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         }
     }
 
-    private void appendMessageData(SampleResult child, Message message)
+    private static void appendMessageData(SampleResult child, Message message)
             throws MessagingException, IOException {
         StringBuilder cdata = new StringBuilder();
         cdata.append("Date: "); // $NON-NLS-1$
@@ -363,7 +363,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         }
     }
 
-    private void appendMultiPart(SampleResult child, StringBuilder cdata,
+    private static void appendMultiPart(SampleResult child, StringBuilder cdata,
             MimeMultipart mmp) throws MessagingException, IOException {
         String preamble = mmp.getPreamble();
         if (preamble != null ){
@@ -613,7 +613,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
      * @param propname the property name suffix, i.e. "starttls.require" in the example
      * @return the constructed name
      */
-    private String mailProp(String protocol, String propname) {
+    private static String mailProp(String protocol, String propname) {
         return "mail." + protocol + "." + propname;
     }
 }

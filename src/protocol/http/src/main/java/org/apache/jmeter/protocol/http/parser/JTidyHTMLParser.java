@@ -75,7 +75,7 @@ class JTidyHTMLParser extends HTMLParser {
      *
      * @return new base URL
      */
-    private URL scanNodes(Node node, URLCollection urls, URL baseUrl) throws HTMLParseException {
+    private static URL scanNodes(Node node, URLCollection urls, URL baseUrl) throws HTMLParseException {
         if (node == null) {
             return baseUrl;
         }
@@ -148,7 +148,8 @@ class JTidyHTMLParser extends HTMLParser {
             if (TAG_LINK.equalsIgnoreCase(name) &&
                     (STYLESHEET.equalsIgnoreCase(getValue(attrs, ATT_REL))
                             || SHORTCUT_ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
-                            || ICON.equalsIgnoreCase(getValue(attrs, ATT_REL)))) {
+                            || ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
+                            || PRELOAD.equalsIgnoreCase(getValue(attrs, ATT_REL)))) {
                 urls.addURL(getValue(attrs, ATT_HREF), baseUrl);
                 break;
             }
@@ -201,7 +202,7 @@ class JTidyHTMLParser extends HTMLParser {
      * Helper method to get an attribute value, if it exists @param attrs list
      * of attributes @param attname attribute name @return
      */
-    private String getValue(NamedNodeMap attrs, String attname) {
+    private static String getValue(NamedNodeMap attrs, String attname) {
         String v = null;
         Node n = attrs.getNamedItem(attname);
         if (n != null) {

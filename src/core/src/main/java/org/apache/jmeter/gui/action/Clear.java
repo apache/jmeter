@@ -28,12 +28,15 @@ import org.apache.jmeter.samplers.Clearable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Handles the following actions:
  * - Clear (Data)
  * - Clear All (Data)
  * - Reset (Clear GUI)
  */
+@AutoService(Command.class)
 public class Clear extends AbstractAction {
     private static final Logger log = LoggerFactory.getLogger(Clear.class);
 

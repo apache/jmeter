@@ -17,10 +17,11 @@
 
 package org.apache.jmeter.functions;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -30,7 +31,6 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +52,7 @@ public class TestSetProperty extends JMeterTestCase implements JMeterSerialTest 
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        params = new LinkedList<>();
+        params = new ArrayList<>();
     }
 
     @Test
@@ -78,7 +78,7 @@ public class TestSetProperty extends JMeterTestCase implements JMeterSerialTest 
         function.setParameters(params);
         String returnValue = function.execute(result, null);
         assertEquals("value1", JMeterUtils.getProperty("prop1"));
-        Assert.assertNull(returnValue);
+        assertNull(returnValue);
 
         params.clear();
         params.add(new CompoundVariable("prop1"));

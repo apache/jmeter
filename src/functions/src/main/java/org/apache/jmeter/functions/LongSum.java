@@ -27,11 +27,14 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Provides a longSum function that adds two or more long values.
  * @see IntSum
  * @since 2.3.2
  */
+@AutoService(Function.class)
 public class LongSum extends AbstractFunction {
 
     private static final List<String> desc = new ArrayList<>();

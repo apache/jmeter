@@ -24,10 +24,13 @@ import java.util.Set;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Zoom IN/OUT
  * @since 3.2
  */
+@AutoService(Command.class)
 public class ZoomInOut extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 

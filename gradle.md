@@ -21,6 +21,11 @@ Useful commands (`gw` comes from https://github.com/dougborg/gdub, otherwise `./
       # Different tasks for current module
       gw tasks
 
+## List available build parameters
+
+      # List all build parameters
+      gw parameters
+
 ## Cleaning build directories
 
 Technically `clean` should not be required, every time it is required it might be a bug.
@@ -118,10 +123,10 @@ build only the required jars and files.
 ## Coverage
 
       # Generates code coverage report for the test task to build/reports/jacoco/test/html
-      gw jacocoTestReport
+      gw jacocoTestReport -Pcoverage
 
       # Generate combined coverage report
-      gw jacocoReport
+      gw jacocoReport -Pcoverage
 
 ## Generate Javadocs
 

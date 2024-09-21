@@ -150,11 +150,11 @@ public class JMeterUIDefaults {
         addDerivedFont(defaults, output, input, f -> f.deriveFont(f.getSize2D() * scale));
     }
 
-    private static void addDerivedFont(UIDefaults defaults, String output, String input, Function<Font, Font> f) {
+    private static void addDerivedFont(UIDefaults defaults, String output, String input, Function<? super Font, ? extends Font> f) {
         defaults.put(output, (UIDefaults.LazyValue) d -> map(d.getFont(input), f));
     }
 
-    private static Font map(Font input, Function<Font, Font> mapper) {
+    private static Font map(Font input, Function<? super Font, ? extends Font> mapper) {
         Font output = mapper.apply(input);
         // Note: we drop UIResource here so LaF treats the font as user-provided rather than
         // LaF-provided.
@@ -164,7 +164,7 @@ public class JMeterUIDefaults {
         return output;
     }
 
-    private void scaleIntProperties(UIDefaults defaults, float scale) {
+    private static void scaleIntProperties(UIDefaults defaults, float scale) {
         // Below are both standard and custom properties in a sorted order
         scaleIntProperty(defaults, "ArrowButton.size", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "ComboBox:\"ComboBox.arrowButton\".size", scale); // $NON-NLS-1$
@@ -173,7 +173,7 @@ public class JMeterUIDefaults {
         scaleIntProperty(defaults, "Spinner:\"Spinner.nextButton\".size", scale); // $NON-NLS-1$
     }
 
-    private void configureRowHeight(UIDefaults defaults, float scale, String rowHeight, String font) {
+    private static void configureRowHeight(UIDefaults defaults, float scale, String rowHeight, String font) {
         if (defaults.getInt(rowHeight) == 0) {
             return;
         }
@@ -196,14 +196,14 @@ public class JMeterUIDefaults {
     }
 
 
-    private void scaleControlsProperties(UIDefaults defaults, float scale) {
+    private static void scaleControlsProperties(UIDefaults defaults, float scale) {
         scaleIntProperty(defaults, "ScrollBar.thumbHeight", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "ScrollBar.width", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "ScrollBar:\"ScrollBar.button\".size", scale); // $NON-NLS-1$
         scaleIntProperty(defaults, "SplitPane.size", scale); // $NON-NLS-1$
     }
 
-    private void scaleIntProperty(UIDefaults defaults, String key, float scale) {
+    private static void scaleIntProperty(UIDefaults defaults, String key, float scale) {
         int value = defaults.getInt(key);
         if (value != 0) {
             defaults.put(key, Math.round(value * scale));

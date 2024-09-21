@@ -27,6 +27,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 
 /**
  * A set of Argument objects.
@@ -42,7 +43,17 @@ public class Arguments extends ConfigTestElement implements Serializable, Iterab
      * Create a new Arguments object with no arguments.
      */
     public Arguments() {
-        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList<Argument>()));
+        setArguments(new ArrayList<>());
+    }
+
+    @Override
+    public ArgumentsSchema getSchema() {
+        return ArgumentsSchema.INSTANCE;
+    }
+
+    @Override
+    public PropertiesAccessor<? extends Arguments, ? extends ArgumentsSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     /**
@@ -51,7 +62,7 @@ public class Arguments extends ConfigTestElement implements Serializable, Iterab
      * @return the arguments
      */
     public CollectionProperty getArguments() {
-        return (CollectionProperty) getProperty(ARGUMENTS);
+        return getOrNull(getSchema().getArguments());
     }
 
     /**
@@ -60,7 +71,7 @@ public class Arguments extends ConfigTestElement implements Serializable, Iterab
     @Override
     public void clear() {
         super.clear();
-        setProperty(new CollectionProperty(ARGUMENTS, new ArrayList<Argument>()));
+        setArguments(new ArrayList<>());
     }
 
     /**
@@ -70,7 +81,7 @@ public class Arguments extends ConfigTestElement implements Serializable, Iterab
      *            the new arguments
      */
     public void setArguments(List<Argument> arguments) {
-        setProperty(new CollectionProperty(ARGUMENTS, arguments));
+        set(getSchema().getArguments(), arguments);
     }
 
     /**

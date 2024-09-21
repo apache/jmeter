@@ -49,6 +49,7 @@ class FunctionParser {
      * @return list of Strings or Objects representing functions
      * @throws InvalidVariableException when evaluation of variables fail
      */
+    @SuppressWarnings("NonApiType")
     ArrayList<Object> compileString(String value) throws InvalidVariableException {
         StringReader reader = new StringReader(value);
         ArrayList<Object> result = new ArrayList<>();
@@ -162,7 +163,7 @@ class FunctionParser {
         return buffer.toString();
     }
 
-    private char firstNonSpace(StringReader reader, char defaultResult) throws IOException {
+    private static char firstNonSpace(StringReader reader, char defaultResult) throws IOException {
         char[] current = new char[1];
         while (reader.read(current) == 1) {
             if (!Character.isSpaceChar(current[0])) {
@@ -186,6 +187,7 @@ class FunctionParser {
      * @return a list of CompoundVariable elements
      * @throws InvalidVariableException when evaluation of variables fail
      */
+    @SuppressWarnings("NonApiType")
     ArrayList<CompoundVariable> parseParams(StringReader reader) throws InvalidVariableException {
         ArrayList<CompoundVariable> result = new ArrayList<>();
         StringBuilder buffer = new StringBuilder();

@@ -18,6 +18,7 @@
 package org.apache.jmeter.engine.util;
 
 import java.util.Map;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -46,12 +47,16 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
      * Functions are wrapped in ${ and }
      */
     private static final String FUNCTION_REF_PREFIX = "${"; //$NON-NLS-1$
+    private static final String FUNCTION_REF_PREFIX_REGEX_SAFE = "\\${"; //$NON-NLS-1$
     /**
      * Functions are wrapped in ${ and }
      */
     private static final String FUNCTION_REF_SUFFIX = "}"; //$NON-NLS-1$
 
     private final boolean regexMatch;// Should we match using regexes?
+
+    private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+            "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
 
     public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map<String, String> variables) {
         this(masterFunction, variables, false);
@@ -66,6 +71,13 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 
     @Override
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
+        if (USE_JAVA_REGEX) {
+            return transformValueWithJavaRegex(prop);
+        }
+        return transformValueWithOroRegex(prop);
+    }
+
+    private JMeterProperty transformValueWithOroRegex(JMeterProperty prop) throws InvalidVariableException {
         PatternMatcher pm = JMeterUtils.getMatcher();
         PatternCompiler compiler = new Perl5Compiler();
         String input = prop.getStringValue();
@@ -91,6 +103,28 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
         return new StringProperty(prop.getName(), input);
     }
 
+    private JMeterProperty transformValueWithJavaRegex(JMeterProperty prop) throws InvalidVariableException {
+        String input = prop.getStringValue();
+        if(input == null) {
+            return prop;
+        }
+        for(Map.Entry<String, String> entry : getVariables().entrySet()){
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (regexMatch) {
+                try {
+                    java.util.regex.Pattern pattern = JMeterUtils.compilePattern(constructPattern(value));
+                    input = pattern.matcher(input).replaceAll(FUNCTION_REF_PREFIX_REGEX_SAFE + key + FUNCTION_REF_SUFFIX);
+                } catch (PatternSyntaxException e) {
+                    log.warn("Malformed pattern: {}", value);
+                }
+            } else {
+                input = StringUtilities.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
+            }
+        }
+        return new StringProperty(prop.getName(), input);
+    }
+
     /**
      * Normal regexes will be surrounded by boundary character matches to make life easier for users.
      * If a user doesn't want that behaviour, they can prevent the modification by giving a regex, that
@@ -99,7 +133,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
      * @param value given by user
      * @return regex surrounded by boundary character matches, if value is not included in parens
      */
-    private String constructPattern(String value) {
+    private static String constructPattern(String value) {
         if (value.startsWith("(") && value.endsWith(")")) {
             return value;
         }

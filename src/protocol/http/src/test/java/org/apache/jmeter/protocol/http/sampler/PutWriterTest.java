@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URLConnection;
 
@@ -37,8 +37,7 @@ public class PutWriterTest {
                 "mime1") });
         PutWriter pw = new PutWriter();
         pw.setHeaders(uc, sampler);
-        assertEquals("mime1",
-                uc.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
+        assertEquals("mime1", uc.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 
     @Test
@@ -52,7 +51,6 @@ public class PutWriterTest {
         sampler.setArguments(arguments);
         PutWriter pw = new PutWriter();
         pw.setHeaders(uc, sampler);
-        assertEquals("mime2",
-                uc.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
+        assertEquals("mime2", uc.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 }

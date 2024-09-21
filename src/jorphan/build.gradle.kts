@@ -15,9 +15,12 @@
  * limitations under the License.
  */
 
-dependencies {
-    api(platform(project(":src:bom")))
+plugins {
+    id("java-test-fixtures")
+    id("build-logic.jvm-published-library")
+}
 
+dependencies {
     api("org.apiguardian:apiguardian-api")
     api("org.slf4j:slf4j-api")
 
@@ -26,4 +29,6 @@ dependencies {
     implementation("org.apache.commons:commons-lang3")
     implementation("org.apache.commons:commons-math3")
     implementation("org.apache.commons:commons-text")
+
+    testFixturesImplementation("org.junit.jupiter:junit-jupiter")
 }

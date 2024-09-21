@@ -29,7 +29,7 @@
 
 Before you can compile JMeter, you will need a few things:
 <ul>
-<li>a Java 8 compatible JDK (Java Development Kit)</li>
+<li>a Java 17 compatible JDK (Java Development Kit)</li>
 <li>Optional: <a href="https://gradle.org/">Gradle</a> installation</li>
 <li>the JMeter sources as shown in the next section</li>
 </ul>
@@ -109,22 +109,20 @@ Check that patch does not break JUnit tests by running:
 </p>
 <source>./gradlew test</source>
 
-<h3>Create a PR using GIT</h3>
+<h3>Create a pull request using Git</h3>
 <ul>
-    <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
-    <li>Fork <a href="https://www.github.com/apache/jmeter" >Apache JMeter mirror</a></li>
-    <li>Clone your forked repository locally : <source>git clone https://github.com/yourid/jmeter/</source></li>
-    <li>Create a branch using for example bugzilla id: <source>git branch BUGID</source></li>
-    <li>Checkout the new branch : <source>git checkout BUGID</source></li>
-    <li>commit your fix there : <source>git commit -m 'Fix to BUGID' list of files</source></li>
+    <li>Fork <a href="https://www.github.com/apache/jmeter">Apache JMeter mirror</a></li>
+    <li>Clone your forked repository locally: <source>git clone https://github.com/yourid/jmeter.git</source></li>
+    <li>Create a branch using for example issue id: <source>git branch gh123-thread-group-typo</source>
+      (please refrain from using <source>master</source> and <source>main</source> branches for pull request)</li>
+    <li>Checkout the new branch: <source>git checkout gh123-thread-group-typo</source></li>
+    <li>Commit your fix there: <source>git commit -m 'Fix to BUGID' list of files</source></li>
     <li>Please avoid creating merge commits in the PR. We embrace small changes, and merge commits are harder to review</li>
-    <li>Add JMeter repository as upstream : <source>git remote add upstream http://www.github.com/apache/jmeter</source></li>
-    <li>push it : <source>git push origin BUGID</source></li>
-    <li>Create a PR and link it in the bugzilla issue</li>
-    <li>Or create a diff and add as attachment to bugzilla issue <source>git diff &gt; BUGID.patch</source></li>
+    <li>Push it: <source>git push origin gh123-thread-group-typo</source></li>
+    <li>Create a <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request">pull request</a></li>
 </ul>
 
-<note>Different operation systems have different defaults for end-of-line markers.
+<note>Different operating systems have different defaults for end-of-line markers.
   Typical configuration is CRLF for Windows and LF for macOS and GNU/Linux.<br/>
   It is recommended to follow that configuration by appropriate settings of <code>core.autocrlf</code>.
   For Windows <source>git config --global core.autocrlf true</source>, and for macOS and GNU/Linux set <source>git config --global core.autocrlf input</source>
@@ -134,9 +132,9 @@ Check that patch does not break JUnit tests by running:
   no matter the configuration of the developer workstation.
 </note>
 
-<h3>Create a PR using Patch</h3>
+<h3>Proposing a change with a patch</h3>
+<p>If you cannot to create a pull request at GitHub, you might submit your changes as a unified diff patch on JMeter dev mailing list.</p>
 <ul>
-    <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
     <li>Checkout Apache JMeter source</li>
     <li>Code your fix</li>
     <li>Create your patch by Right clicking on Eclipse project and select
@@ -144,7 +142,7 @@ Check that patch does not break JUnit tests by running:
             <guimenuitem>Team</guimenuitem>
             <guimenuitem>Create Patch &hellip;</guimenuitem>
         </menuchoice></li>
-    <li>Attach your patch to the bugzilla issue</li>
+    <li>Attach your patch to email message on JMeter dev list</li>
 </ul>
 </section>
 
