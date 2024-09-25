@@ -204,7 +204,7 @@ public class OpenModelThreadGroup :
             val seed = randomSeed
             val rnd = if (seed == 0L) Random() else Random(seed)
             val gen = ThreadScheduleProcessGenerator(rnd, parsedSchedule)
-            val testStartTime = System.currentTimeMillis()
+            val testStartTime = this.startTime
             val executorService = Executors.newCachedThreadPool()
             this.executorService = executorService
             val starter = ThreadsStarter(testStartTime, executorService, activeThreads, gen) { threadNumber ->
