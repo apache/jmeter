@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.IdentityHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.IteratingController;
@@ -87,7 +86,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
 
     private final AtomicInteger numberOfThreads = new AtomicInteger(0); // Number of active threads in this group
 
-    private final AtomicLong startTime = new AtomicLong(0);
+    private long startTime;
 
     @Override
     public AbstractThreadGroupSchema getSchema() {
@@ -105,7 +104,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @return time in milliseconds since epoch
      */
     public long getStartTime() {
-        return startTime.get();
+        return startTime;
     }
 
     /**
@@ -114,7 +113,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      * @param startTime time in milliseconds since epoch
      */
     public void setStartTime(long startTime) {
-        this.startTime.set(startTime);
+        this.startTime = startTime;
     }
 
     /** {@inheritDoc} */
