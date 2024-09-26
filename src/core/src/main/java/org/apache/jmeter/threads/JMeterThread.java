@@ -728,6 +728,8 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     private IterationListener initRun(JMeterContext threadContext) {
         threadVars.putObject(JMeterVariables.VAR_IS_SAME_USER_KEY, isSameUserOnNextIteration);
+        threadVars.putObject(JMeterVariables.VAR_THREAD_START_TIME_ITERATION, threadVars.getStartThreadTimeIteration());
+
         threadContext.setVariables(threadVars);
         threadContext.setThreadNum(getThreadNum());
         setLastSampleOk(threadVars, true);
@@ -1029,6 +1031,8 @@ public class JMeterThread implements Runnable, Interruptible {
 
     void notifyTestListeners() {
         threadVars.incIteration();
+        threadVars.resetStartThreadTimeIteration();
+        threadVars.putObject(JMeterVariables.VAR_THREAD_START_TIME_ITERATION, threadVars.getStartThreadTimeIteration());
         for (TestIterationListener listener : testIterationStartListeners) {
             listener.testIterationStart(new LoopIterationEvent(threadGroupLoopController, threadVars.getIteration()));
             if (listener instanceof TestElement) {
