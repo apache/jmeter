@@ -4104,7 +4104,7 @@ instead. (see figures 12 and 13).</p>
               <dt>hsqldb</dt><dd>org.hsqldb.jdbc.JDBCDriver</dd>
               <dt>Oracle</dt><dd>oracle.jdbc.OracleDriver</dd>
               <dt>DB2</dt><dd>com.ibm.db2.jcc.DB2Driver</dd>
-              <dt>MySQL</dt><dd>com.mysql.jdbc.Driver</dd>
+              <dt>MySQL</dt><dd>com.mysql.cj.jdbc.Driver</dd><dd>com.mysql.jdbc.Driver (deprecated)</dd>
               <dt>Microsoft SQL Server (MS JDBC driver)</dt><dd>com.microsoft.sqlserver.jdbc.SQLServerDriver or com.microsoft.jdbc.sqlserver.SQLServerDriver</dd>
               <dt>PostgreSQL</dt><dd>org.postgresql.Driver</dd>
               <dt>Ingres</dt><dd>com.ingres.jdbc.IngresDriver</dd>
