@@ -101,6 +101,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
 
     /**
      * Get the time when this thread group has been started
+     * @since 6.0.0
      * @return time in milliseconds since epoch
      */
     public long getStartTime() {
@@ -110,6 +111,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     /**
      * Set the time when this thread group has been started.<br>
      * Will probably be set by StandardJMeterEngine.
+     * @since 6.0.0
      * @param startTime time in milliseconds since epoch
      */
     public void setStartTime(long startTime) {
