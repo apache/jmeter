@@ -4101,7 +4101,7 @@ instead. (see figures 12 and 13).</p>
         JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).
         <p>The list of the preconfigured jdbc driver classes can be configured with <code>jdbc.config.jdbc.driver.class</code> property and are by default:</p>
             <dl>
-              <dt>hsqldb</dt><dd><code>org.hsqldb.jdbc.JDBCDriver</code/><dd>
+              <dt>hsqldb</dt><dd><code>org.hsqldb.jdbc.JDBCDriver</code></dd>
               <dt>Oracle</dt><dd><code>oracle.jdbc.OracleDriver</code></dd>
               <dt>DB2</dt><dd><code>com.ibm.db2.jcc.DB2Driver</code></dd>
               <dt>MySQL</dt>
