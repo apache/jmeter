@@ -92,6 +92,16 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
     }
 
     @Override
+    public long getStartThreadTimeIteration() {
+        return variables.getStartThreadTimeIteration();
+    }
+
+    @Override
+    public void resetStartThreadTimeIteration() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
