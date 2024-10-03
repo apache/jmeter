@@ -263,6 +263,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         StringBuilder postBody = new StringBuilder();
         for (JMeterProperty argument : arguments) {
             HTTPArgument arg = (HTTPArgument) argument.getObjectValue();
+            if (!arg.isEnabledFromGui()) {
+                continue; // Skip parameters if they've been disabled from GUI using the checkbox
+            }
             String value = arg.getValue();
             if (crlfToLF) {
                 value = value.replaceAll("\r\n", "\n"); // See modifyTestElement

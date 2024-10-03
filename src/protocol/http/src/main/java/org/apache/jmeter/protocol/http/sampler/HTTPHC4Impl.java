@@ -1577,6 +1577,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (arg.isSkippable(parameterName)) {
                     continue;
                 }
+                if (!arg.isEnabledFromGui()) {
+                    continue; // Skip parameters if they've been disabled from GUI using the checkbox
+                }
                 ContentType contentType;
                 if (arg.getContentType().indexOf(';') >= 0) {
                     // assume, that the content type contains charset info
@@ -1655,6 +1658,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     StringBuilder postBody = new StringBuilder();
                     for (JMeterProperty jMeterProperty : getArguments()) {
                         HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
+                        if (!arg.isEnabledFromGui()) {
+                            continue; // Skip parameters if they've been disabled from GUI using the checkbox
+                        }
                         postBody.append(arg.getEncodedValue(contentEncoding));
                     }
                     // Let StringEntity perform the encoding
@@ -1806,6 +1812,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             String parameterName = arg.getName();
             if (arg.isSkippable(parameterName)) {
                 continue;
+            }
+            if (!arg.isEnabledFromGui()) {
+                continue; // Skip parameters if they've been disabled from GUI using the checkbox
             }
             String parameterValue = arg.getValue();
             if (!arg.isAlwaysEncoded()) {

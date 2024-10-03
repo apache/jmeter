@@ -70,6 +70,14 @@ public class HTTPArgument extends Argument implements Serializable {
         return new PropertiesAccessor<>(this, getSchema());
     }
 
+    public void setEnabledFromGui(boolean enabledFromGui) {
+        set(getSchema().getEnabledFromGui(), enabledFromGui);
+    }
+
+    public boolean isEnabledFromGui() {
+        return get(getSchema().getEnabledFromGui());
+    }
+
     public void setUseEquals(boolean ue) {
         if (ue) {
             setMetaData("=");
@@ -134,7 +142,7 @@ public class HTTPArgument extends Argument implements Serializable {
     }
 
     /**
-     * Construct a new HTTPArgument instance; alwaysEncoded is set to true.
+     * Construct a new HTTPArgument instance; enabledFromGui and alwaysEncoded are set to true.
      *
      * @param name the name of the parameter
      * @param value the value of the parameter
@@ -142,6 +150,7 @@ public class HTTPArgument extends Argument implements Serializable {
      * @param contentEncoding the encoding used for the parameter value
      */
     public HTTPArgument(String name, String value, boolean alreadyEncoded, String contentEncoding) {
+        setEnabledFromGui(true);
         setAlwaysEncoded(true);
         if (alreadyEncoded) {
             try {

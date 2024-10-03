@@ -24,6 +24,7 @@
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">request.job_id</stringProp>
                   <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                  <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                   <stringProp name="HTTPArgument.encoded_name">request.job_id</stringProp>
                   <stringProp name="HTTPArgument.encoded_value">.*</stringProp>
                 </elementProp>
@@ -33,6 +34,7 @@
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">request.action1</stringProp>
                   <stringProp name="HTTPArgument.always_encode">true</stringProp>
+                  <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                   <stringProp name="HTTPArgument.encoded_name">request.action1</stringProp>
                   <stringProp name="HTTPArgument.encoded_value">opjobadmin.action.inspect</stringProp>
                 </elementProp>
