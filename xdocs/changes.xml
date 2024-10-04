@@ -65,6 +65,7 @@ Summary
   <ul>
     <li><pr>6220</pr> Require Java 17 or later for running JMeter</li>
     <li><pr>6274</pr> Change references to old MySQL driver to new class <code>com.mysql.cj.jdbc.Driver</code></li>
+    <li><issue>6357</issue> Ensure writable directories when copying template files while report generation.</li>
   </ul>
 
  <!--  =================== Thanks =================== -->
