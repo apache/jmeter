@@ -67,7 +67,7 @@ Summary
     <li><pr>6274</pr> Change references to old MySQL driver to new class <code>com.mysql.cj.jdbc.Driver</code></li>
     <li><issue>6352</issue> Calculate delays in Open Model Thread Group and Precise Throughput
         Timer relative to start of Thread Group instead of the start of the test.</li>
-    <li><issue>6357</issue> Ensure writable directories when copying template files while report generation.</li>
+    <li><issue>6357</issue><pr>6358</pr> Ensure writable directories when copying template files while report generation.</li>
   </ul>
 
  <!--  =================== Thanks =================== -->
