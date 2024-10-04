@@ -20,6 +20,8 @@ package org.apache.jmeter.processor.gui;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.JPopupMenu;
+
 import org.apache.jmeter.gui.AbstractScopedJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
 
@@ -35,6 +37,11 @@ import org.apache.jmeter.gui.util.MenuFactory;
 public abstract class AbstractPostProcessorGui extends AbstractScopedJMeterGuiComponent {
 
     private static final long serialVersionUID = 240L;
+
+    @Override
+    public JPopupMenu createPopupMenu() {
+        return MenuFactory.getDefaultPostProcessorMenu();
+    }
 
     @Override
     public Collection<String> getMenuCategories() {

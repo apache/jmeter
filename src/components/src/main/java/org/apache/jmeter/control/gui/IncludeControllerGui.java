@@ -17,14 +17,12 @@
 
 package org.apache.jmeter.control.gui;
 
-import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.control.IncludeController;
 import org.apache.jmeter.control.IncludeControllerSchema;
 import org.apache.jmeter.gui.FilePanelEntryBinding;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.FilePanel;
-import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -63,14 +61,6 @@ public class IncludeControllerGui extends AbstractControllerGui
     public void clearGui() {
         super.clearGui();
         includePanel.clearGui();
-    }
-
-    @Override
-    public JPopupMenu createPopupMenu() {
-        JPopupMenu menu = new JPopupMenu();
-        MenuFactory.addEditMenu(menu, true);
-        MenuFactory.addFileMenu(menu);
-        return menu;
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)

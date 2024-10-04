@@ -286,9 +286,10 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
             return MenuFactory.getDefaultConfigElementMenu();
         } else if (Assertion.class.isAssignableFrom(testBeanClass)) {
             return MenuFactory.getDefaultAssertionMenu();
-        } else if (PostProcessor.class.isAssignableFrom(testBeanClass)
-                || PreProcessor.class.isAssignableFrom(testBeanClass)) {
-            return MenuFactory.getDefaultExtractorMenu();
+        } else if (PostProcessor.class.isAssignableFrom(testBeanClass)) {
+            return MenuFactory.getDefaultPostProcessorMenu();
+        } else if (PreProcessor.class.isAssignableFrom(testBeanClass)) {
+            return MenuFactory.getDefaultPreProcessorMenu();
         } else if (Visualizer.class.isAssignableFrom(testBeanClass)) {
             return MenuFactory.getDefaultVisualizerMenu();
         } else if (Controller.class.isAssignableFrom(testBeanClass)) {
