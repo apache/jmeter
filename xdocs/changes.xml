@@ -57,7 +57,7 @@ JMeter 6.x requires Java 17 or later for execution (Java 21 is recommended).
 Summary
 </p>
 <ul>
-<li><a href="#Bug fixes">Bug fixes</a></li>
+<li><a href="#Changes">Changes</a></li>
 </ul>
 
   <ch_section>Changes</ch_section>
@@ -65,6 +65,8 @@ Summary
   <ul>
     <li><pr>6220</pr> Require Java 17 or later for running JMeter</li>
     <li><pr>6274</pr> Change references to old MySQL driver to new class <code>com.mysql.cj.jdbc.Driver</code></li>
+    <li><issue>6352</issue> Calculate delays in Open Model Thread Group and Precise Throughput
+        Timer relative to start of Thread Group instead of the start of the test.</li>
   </ul>
 
  <!--  =================== Thanks =================== -->
