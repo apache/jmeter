@@ -72,7 +72,7 @@ dependencies {
         api("io.burt:jmespath-core:0.6.0")
         api("io.burt:jmespath-jackson:0.6.0")
         api("javax.activation:javax.activation-api:1.2.0")
-        api("javax.mail:mail:1.5.0-b01")
+        api("com.sun.mail:javax.mail:1.6.2")
         api("jcharts:jcharts:0.7.5")
         api("junit:junit:4.13.2") {
             because("ApacheJMeter_junit depends on junit4")
