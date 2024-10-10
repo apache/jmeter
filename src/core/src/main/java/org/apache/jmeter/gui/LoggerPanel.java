@@ -83,7 +83,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             JSyntaxTextArea jSyntaxTextArea = JSyntaxTextArea.getInstance(15, 80, true);
             jSyntaxTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
             jSyntaxTextArea.setCodeFoldingEnabled(false);
-            jSyntaxTextArea.setAntiAliasingEnabled(false);
+            jSyntaxTextArea.setAntiAliasingEnabled(true);
             jSyntaxTextArea.setEditable(false);
             jSyntaxTextArea.setLineWrap(false);
             jSyntaxTextArea.setLanguage("text");

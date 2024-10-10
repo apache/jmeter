@@ -18,25 +18,21 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.prefs.Preferences;
 
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.intellijthemes.*;
 import com.github.weisj.darklaf.LafManager;
 import com.github.weisj.darklaf.theme.DarculaTheme;
 import com.github.weisj.darklaf.theme.Theme;
@@ -47,6 +43,7 @@ import com.google.auto.service.AutoService;
  */
 @AutoService(Command.class)
 public class LookAndFeelCommand extends AbstractAction {
+    private static final Logger log = LoggerFactory.getLogger(LookAndFeelCommand.class);
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
     private static final Map<String, MenuItem> items = new LinkedHashMap<>();
@@ -107,6 +104,25 @@ public class LookAndFeelCommand extends AbstractAction {
             System.setProperty("darklaf.treeRowPopup", "false");
         }
         UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
+
+        //Add FlatLAF Themes
+        for (String flatLaf : new String[]{"FlatLightLaf", "FlatDarkLaf", "FlatIntelliJLaf", "FlatDarculaLaf"}) {
+            try {
+                UIManager.installLookAndFeel(flatLaf, "com.formdev.flatlaf." + flatLaf);
+            } catch( Exception ex ) {
+                log.warn("Failed to load FlatLAF theme: {}", flatLaf, ex);
+            }
+        }
+        for (String flatLaf : new String[]{"FlatMacDarkLaf", "FlatMacLightLaf"}) {
+            try {
+                UIManager.installLookAndFeel(flatLaf, "com.formdev.flatlaf.themes" + flatLaf);
+            } catch( Exception ex ) {
+                log.warn("Failed to load FlatLAF theme: {}", flatLaf, ex);
+            }
+        }
+        for (UIManager.LookAndFeelInfo lafInfo : FlatAllIJThemes.INFOS) {
+            UIManager.installLookAndFeel(lafInfo.getName(), lafInfo.getClassName());
+        }
 
         List<MenuItem> items = new ArrayList<>();
         for (UIManager.LookAndFeelInfo laf : JMeterMenuBar.getAllLAFs()) {
@@ -205,8 +221,12 @@ public class LookAndFeelCommand extends AbstractAction {
         return "Darklaf".equalsIgnoreCase(UIManager.getLookAndFeel().getID()); // $NON-NLS-1$
     }
 
+    public static boolean isFlatlafTheme() {
+        return UIManager.getLookAndFeel() instanceof FlatLaf;
+    }
+
     public static boolean isDark() {
-        return isDarklafTheme() && Theme.isDark(LafManager.getTheme());
+        return (isDarklafTheme() && Theme.isDark(LafManager.getTheme())) || (isFlatlafTheme() && ((FlatLaf)UIManager.getLookAndFeel()).isDark());
     }
 
     public static void activateLookAndFeel(String command) {

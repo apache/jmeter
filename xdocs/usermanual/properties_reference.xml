@@ -1507,6 +1507,10 @@ JMETER-SERVER</source>
     Set to zero to disable undo feature in JSyntaxTextArea.<br/>
     Defaults to: <code>50</code>
 </property>
+  <property name="jsyntaxtextarea.highlight">
+    Set to false to disable word highlight in JSyntaxTextArea.<br/>
+    Defaults to: <code>true</code>
+  </property>
 <property name="jsyntaxtextarea.font.family">
     Change the font on the (JSyntax) Text Areas. (Useful for HiDPI screens).<br/>
     Defaults to empty value, which means platform default monospaced font
@@ -1515,6 +1519,13 @@ JMETER-SERVER</source>
     Change the size of the (JSyntax) Text Areas. Will be used only,
     when <code>jsyntaxtextarea.font.family</code> is set.<br/>
     Defaults to: <code>-1</code></property>
+  <property name="jsyntaxtextarea.theme.default">
+    Change the default theme of the (JSyntax) Text Areas.<br/>
+    Defaults to: <code>themes/default.xml</code></property>
+  <property name="jsyntaxtextarea.theme.dark">
+    Change the default dark theme of the (JSyntax) Text Areas. When LAF is
+    detected to be of 'dark' type this is also applied in (JSyntax) Text Areas.<br/>
+    Defaults to: <code>themes/dark.xml</code></property>
 <property name="loggerpanel.usejsyntaxtext">
     Set this to <code>false</code> to disable the use of JSyntaxTextArea
     for the Console Logger panel.<br/>
