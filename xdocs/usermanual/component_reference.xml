@@ -4101,21 +4101,29 @@ instead. (see figures 12 and 13).</p>
         JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).
         <p>The list of the preconfigured jdbc driver classes can be configured with <code>jdbc.config.jdbc.driver.class</code> property and are by default:</p>
             <dl>
-              <dt>hsqldb</dt><dd>org.hsqldb.jdbc.JDBCDriver</dd>
-              <dt>Oracle</dt><dd>oracle.jdbc.OracleDriver</dd>
-              <dt>DB2</dt><dd>com.ibm.db2.jcc.DB2Driver</dd>
-              <dt>MySQL</dt><dd>com.mysql.jdbc.Driver</dd>
-              <dt>Microsoft SQL Server (MS JDBC driver)</dt><dd>com.microsoft.sqlserver.jdbc.SQLServerDriver or com.microsoft.jdbc.sqlserver.SQLServerDriver</dd>
-              <dt>PostgreSQL</dt><dd>org.postgresql.Driver</dd>
-              <dt>Ingres</dt><dd>com.ingres.jdbc.IngresDriver</dd>
-              <dt>Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
-              <dt>H2</dt><dd>org.h2.Driver</dd>
-              <dt>Firebird</dt><dd>org.firebirdsql.jdbc.FBDriver</dd>
-              <dt>Apache Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
-              <dt>MariaDB</dt><dd>org.mariadb.jdbc.Driver</dd>
-              <dt>SQLite</dt><dd>org.sqlite.JDBC</dd>
-              <dt>Sybase AES</dt><dd>net.sourceforge.jtds.jdbc.Driver</dd>
-              <dt>Exasol</dt><dd>com.exasol.jdbc.EXADriver</dd>
+              <dt>hsqldb</dt><dd><code>org.hsqldb.jdbc.JDBCDriver</code></dd>
+              <dt>Oracle</dt><dd><code>oracle.jdbc.OracleDriver</code></dd>
+              <dt>DB2</dt><dd><code>com.ibm.db2.jcc.DB2Driver</code></dd>
+              <dt>MySQL</dt>
+              <dd>
+                <code>com.mysql.cj.jdbc.Driver</code><br/>
+                <code>com.mysql.jdbc.Driver</code> (deprecated)
+              </dd>
+              <dt>Microsoft SQL Server (MS JDBC driver)</dt>
+              <dd>
+                <code>com.microsoft.sqlserver.jdbc.SQLServerDriver</code> or
+                <code>com.microsoft.jdbc.sqlserver.SQLServerDriver</code>
+              </dd>
+              <dt>PostgreSQL</dt><dd><code>org.postgresql.Driver</code></dd>
+              <dt>Ingres</dt><dd><code>com.ingres.jdbc.IngresDriver</code></dd>
+              <dt>Derby</dt><dd><code>org.apache.derby.jdbc.ClientDriver</code></dd>
+              <dt>H2</dt><dd><code>org.h2.Driver</code></dd>
+              <dt>Firebird</dt><dd><code>org.firebirdsql.jdbc.FBDriver</code></dd>
+              <dt>Apache Derby</dt><dd><code>org.apache.derby.jdbc.ClientDriver</code></dd>
+              <dt>MariaDB</dt><dd><code>org.mariadb.jdbc.Driver</code></dd>
+              <dt>SQLite</dt><dd><code>org.sqlite.JDBC</code></dd>
+              <dt>Sybase AES</dt><dd><code>net.sourceforge.jtds.jdbc.Driver</code></dd>
+              <dt>Exasol</dt><dd><code>com.exasol.jdbc.EXADriver</code></dd>
             </dl>
         </property>
         <property name="Username" required="No">Name of user to connect as.</property>
@@ -4142,7 +4150,7 @@ If the database server is not running or is not accessible, then JMeter will rep
   <dd>
     <dl>
       <dt>Driver class</dt>
-      <dd><code>com.mysql.jdbc.Driver</code></dd>
+      <dd><code>com.mysql.cj.jdbc.Driver</code></dd>
       <dt>Database URL</dt>
       <dd><code>jdbc:mysql://host[:port]/dbname</code></dd>
     </dl>
