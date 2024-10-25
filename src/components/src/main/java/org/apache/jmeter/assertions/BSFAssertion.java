@@ -37,7 +37,7 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
         BSFManager mgr =null;
         try {
             mgr = getManager();
-            mgr.declareBean("SampleResult", response, SampleResult.class);
+            mgr.declareBean("sampleResult", response, SampleResult.class);
             mgr.declareBean("AssertionResult", result, AssertionResult.class);
             processFileOrScript(mgr);
             result.setError(false);
