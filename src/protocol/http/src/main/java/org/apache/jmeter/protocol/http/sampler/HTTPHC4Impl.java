@@ -1562,7 +1562,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             // Write the request to our own stream
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-            multipartEntityBuilder.setCharset(charset);
             if (doBrowserCompatibleMultipart) {
                 multipartEntityBuilder.setLaxMode();
             } else {
