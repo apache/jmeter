@@ -223,9 +223,9 @@ public abstract class SSLManager {
                 }
                 System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
                 password = this.defaultpw;
+            } else {
+                log.warn("No password provided, and no GUI present so cannot prompt");
             }
-        } else {
-            log.warn("No password provided, and no GUI present so cannot prompt");
         }
         return password;
     }
