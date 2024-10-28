@@ -157,7 +157,10 @@ public abstract class SSLManager {
            } catch (IOException e) {
                log.error("Can't load keystore '{}'. Wrong password?", fileName, e);
            } catch (UnrecoverableKeyException e) {
-               log.error("Can't recover keys from keystore '{}'", fileName, e);
+               log.error(
+                   "Can't recover keys from keystore '{}'. Is key password different from keystore password?",
+                   fileName,
+                   e);
            } catch (NoSuchAlgorithmException e) {
                log.error("Problem finding the correct algorithm while loading keys from keystore '{}'", fileName, e);
            } catch (CertificateException e) {
