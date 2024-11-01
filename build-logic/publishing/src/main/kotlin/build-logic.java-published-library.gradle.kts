@@ -26,17 +26,21 @@ java {
     withSourcesJar()
 }
 
-val archivesBaseName = when (name) {
+// We maintain the file names for backward compatibility
+val archiveName = when (name) {
     "jorphan", "bshclient" -> name
     "launcher" -> "ApacheJMeter"
     else -> "ApacheJMeter_$name"
 }
-setProperty("archivesBaseName", archivesBaseName)
+
+base {
+    archivesName = archiveName
+}
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            artifactId = archivesBaseName
+            artifactId = archiveName
             from(components["java"])
         }
     }

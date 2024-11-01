@@ -93,6 +93,9 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
                             "{}, found non empty folder with following content {}, will be ignored",
                     file, newDir, ex.getMessage(), newDir.toFile().listFiles());
         }
+        if (!newDir.toFile().canWrite()) {
+            newDir.toFile().setWritable(true);
+        }
         return FileVisitResult.CONTINUE;
     }
 

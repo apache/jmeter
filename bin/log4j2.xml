@@ -16,7 +16,7 @@
   ~ limitations under the License.
   -->
 
-<Configuration status="WARN" packages="org.apache.jmeter.gui.logging">
+<Configuration status="WARN">
 
   <Appenders>
     <!-- Uncomment to set rotating logs up to 5 files of 100 MB-->

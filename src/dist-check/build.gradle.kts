@@ -82,8 +82,12 @@ val populateLibs by tasks.registering {
     doLast {
         val deps = extraTestDependencies.resolvedConfiguration.resolvedArtifacts
         with(libOpt) {
-            fileMode = "644".toInt(8)
-            dirMode = "755".toInt(8)
+            filePermissions {
+                unix("rw-r--r--")
+            }
+            dirPermissions {
+                unix("rwxr-xr-x")
+            }
             from(deps.map { it.file })
         }
     }

@@ -122,7 +122,7 @@ Then, select this new element to view its Control Panel (see Figure &sect-num;.3
 <ul>
 <li>Variable name (here: <code>myDatabase</code>) bound to pool. This needs to uniquely identify the configuration. It is used by the JDBC Sampler to identify the configuration to be used.</li>
 <li>Database URL: <code>jdbc:mysql://ipOfTheServer:3306/cloud</code></li>
-<li>JDBC Driver class: <code>com.mysql.jdbc.Driver</code></li>
+<li>JDBC Driver class: <code>com.mysql.cj.jdbc.Driver</code></li>
 <li>Username: <em>the username of database</em></li>
 <li>Password: <em>password for the username</em></li>
 </ul>

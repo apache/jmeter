@@ -74,7 +74,7 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
         try {
             String dataSource = getDataSource();
             if (JOrphanUtils.isBlank(dataSource)) {
-                throw new IllegalArgumentException("Name for DataSoure must not be empty in " + getName());
+                throw new IllegalArgumentException("Name for DataSource must not be empty in " + getName());
             }
 
             try {

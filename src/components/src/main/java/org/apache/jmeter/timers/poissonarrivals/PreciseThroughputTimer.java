@@ -99,7 +99,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
             nextEvent = events.next();
         }
         long now = System.currentTimeMillis();
-        long testStarted = JMeterContextService.getTestStartTime();
+        long testStarted = JMeterContextService.getContext().getThreadGroup().getStartTime();
         long delay = (long) (nextEvent * TimeUnit.SECONDS.toMillis(1) + testStarted - now);
         if (log.isDebugEnabled()) {
             log.debug("Calculated delay is {}", delay);
@@ -117,7 +117,7 @@ public class PreciseThroughputTimer extends AbstractTestElement implements Clone
     }
 
     private EventProducer getEventProducer() {
-        long testStarted = JMeterContextService.getTestStartTime();
+        long testStarted = JMeterContextService.getContext().getThreadGroup().getStartTime();
         long prevStarted = PREV_TEST_STARTED.get();
         if (prevStarted != testStarted && PREV_TEST_STARTED.compareAndSet(prevStarted, testStarted)) {
             // Reset counters if we are calculating throughput for a new test, see https://github.com/apache/jmeter/issues/6165
