@@ -18,6 +18,7 @@
 package org.apache.jmeter.report.dashboard
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.commons.io.FileUtils
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.util.JMeterUtils
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,7 +27,10 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.api.parallel.Isolated
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.absolutePathString
 
 @Isolated("modifies shared properties")
 class ReportGeneratorTest : JMeterTestCase() {
@@ -42,6 +46,29 @@ class ReportGeneratorTest : JMeterTestCase() {
      */
     fun combine(vararg paths: String) =
         Paths.get(JMeterUtils.getJMeterBinDir(), *paths).toString()
+
+    @Test
+    fun `check that report generation succeeds from read-only templates`() {
+        val roTemplate = Files.createTempDirectory("report-template-ro")
+        FileUtils.copyDirectoryToDirectory(Path.of(combine("report-template")).toFile(), roTemplate.toFile())
+        Files.walk(roTemplate).forEach { p -> p.toFile().setReadOnly() }
+        JMeterUtils.setProperty("jmeter.reportgenerator.exporter.html.property.template_dir", roTemplate.absolutePathString())
+        val roReport = Files.createTempDirectory("report-from-ro-template")
+
+        val mapper = ObjectMapper()
+        val expected = ReportGenerator::class.java.getResource("/org/apache/jmeter/gui/report/HTMLReportExpect.json")
+        val expectedRoot = mapper.readTree(expected)
+
+        JMeterUtils.setProperty("jmeter.reportgenerator.outputdir", roReport.absolutePathString())
+        val reportGenerator = ReportGenerator(
+            combine("testfiles", "HTMLReportTestFile.csv"), null
+        )
+        reportGenerator.generate()
+        val statistics = File(roReport.toFile(), "statistics.json")
+        val actualRoot = mapper.readTree(statistics)
+
+        assertEquals(expectedRoot, actualRoot, "test report json file")
+    }
 
     @Test
     fun `check that report generation succeeds and statistics json are generated`() {
