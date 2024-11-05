@@ -18,10 +18,12 @@
 package org.apache.jorphan.gui
 
 import org.apiguardian.api.API
+import java.awt.Color
 import java.awt.Container
 import java.awt.FlowLayout
 import java.awt.event.ActionEvent
 import javax.swing.AbstractAction
+import javax.swing.BorderFactory
 import javax.swing.Box
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
@@ -105,6 +107,8 @@ public open class JEditableCheckBox(
 
     private val checkbox: JCheckBox = JCheckBox(label).apply {
         val cb = this
+        cb.setBorderPainted(true)
+        cb.setBorder(BorderFactory.createLineBorder(Color(51,204,255))) // Very light blue
         componentPopupMenu = JPopupMenu().apply {
             add(useExpressionAction)
         }

@@ -33,6 +33,7 @@ public class JMeterVariables {
     private final Map<String, Object> variables = new HashMap<>();
 
     private int iteration = 0;
+    private long startTimeThreadIteration = System.currentTimeMillis();
 
     // Property names to preload into JMeter variables:
     private static final String [] PRE_LOAD = {
@@ -43,7 +44,7 @@ public class JMeterVariables {
     };
 
     static final String VAR_IS_SAME_USER_KEY = "__jmv_SAME_USER";
-
+    static final String VAR_THREAD_START_TIME_ITERATION ="__jmv_THREAD_START_TIME_ITERATION";
     /**
      * Constructor, that preloads the variables from the JMeter properties
      */
@@ -177,5 +178,13 @@ public class JMeterVariables {
      */
     public boolean isSameUserOnNextIteration() {
         return Boolean.TRUE.equals(variables.get(VAR_IS_SAME_USER_KEY));
+    }
+
+    public void resetStartThreadTimeIteration() {
+        startTimeThreadIteration = System.currentTimeMillis();
+    }
+
+    public long getStartThreadTimeIteration() {
+        return startTimeThreadIteration;
     }
 }
