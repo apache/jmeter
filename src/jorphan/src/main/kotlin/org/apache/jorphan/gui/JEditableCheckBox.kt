@@ -108,7 +108,7 @@ public open class JEditableCheckBox(
     private val checkbox: JCheckBox = JCheckBox(label).apply {
         val cb = this
         cb.setBorderPainted(true)
-        cb.setBorder(BorderFactory.createLineBorder(Color(51,204,255))) // Very light blue
+        cb.setBorder(BorderFactory.createLineBorder(Color(51, 204, 255))) // Very light blue
         componentPopupMenu = JPopupMenu().apply {
             add(useExpressionAction)
         }
