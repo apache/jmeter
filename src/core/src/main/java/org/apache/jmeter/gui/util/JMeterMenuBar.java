@@ -55,6 +55,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.logging.log4j.Level;
@@ -338,6 +339,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             }
             lafGroup.add(menuItem);
         }
+        GuiUtils.makeScrollableMenu(flatLafSubMenu);
         lafMenu.addSeparator();
         lafMenu.add(flatLafSubMenu);
         return lafMenu;

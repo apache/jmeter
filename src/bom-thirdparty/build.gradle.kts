@@ -144,7 +144,7 @@ dependencies {
         api("xml-apis:xml-apis:1.4.01")
         api("xmlpull:xmlpull:1.1.3.1")
         //FlatLaf: https://www.formdev.com/flatlaf/native-libraries/#gradle
-        val flatlafVersion = "3.4.1"
+        val flatlafVersion = "3.5.2"
         api("com.formdev:flatlaf:${flatlafVersion}" )
         api("com.formdev:flatlaf:${flatlafVersion}:linux-x86_64@so")
         api("com.formdev:flatlaf:${flatlafVersion}:macos-x86_64@dylib")
