@@ -574,6 +574,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             threadGroupTree.add(group, testLevelElements);
 
             groups.add(group);
+            group.setStartTime(System.currentTimeMillis());
             group.start(groupCount, notifier, threadGroupTree, this);
         } catch (JMeterStopTestException ex) { // NOSONAR Reported by log
             JMeterUtils.reportErrorToUser("Error occurred starting thread group :" + group.getName()+ ", error message:"+ex.getMessage()

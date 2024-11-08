@@ -132,12 +132,16 @@ val populateLibs by tasks.registering {
         val bshclientProject = projects.src.bshclient.dependencyProject.path
         val jorphanProject = projects.src.jorphan.dependencyProject.path
         listOf(libs, libsExt, binLibs).forEach {
-            it.fileMode = "644".toInt(8)
-            it.dirMode = "755".toInt(8)
+            it.filePermissions {
+                unix("rw-r--r--")
+            }
+            it.dirPermissions {
+                unix("rwxr-xr-x")
+            }
         }
         for (dep in deps) {
             val compId = dep.id.componentIdentifier
-            if (compId !is ProjectComponentIdentifier || !compId.build.isCurrentBuild) {
+            if (compId !is ProjectComponentIdentifier) {
                 // Move all non-JMeter jars to lib folder
                 libs.from(dep.file)
                 continue
