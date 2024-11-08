@@ -50,6 +50,7 @@ public class TestRegexExtractor {
         extractor.setThreadContext(jmctx);
         extractor.setRefName("regVal");
         result = new SampleResult();
+        result.setSuccessful(true);
         String data = "<company-xmlext-query-ret><row><value field=\"RetCode\">LIS_OK</value>\n" +
                 "<value field=\"RetCodeExtension\"></value><value field=\"alias\"></value>\n" +
                 "<value field=\"positioncount\"></value><value field=\"invalidpincount\">0</value>\n" +
@@ -479,5 +480,101 @@ public class TestRegexExtractor {
         extractor.process();
         final String found = vars.get("regVal");
         assertTrue(found.equals("ONE") || found.equals("TWO"));
+    }
+
+    @Test
+    public void testFailIfNotFound() {
+        extractor.setRegex("notfound");
+        extractor.setTemplate("$1$");
+        extractor.setMatchNumber(1);
+        extractor.setFailIfNotFound(true);
+        extractor.process();
+        assertFalse(result.isSuccessful(), "Result should be marked as failed");
+        assertEquals(1, result.getAssertionResults().length, "Should have one assertion result");
+        assertEquals("Pattern not found in body - notfound",
+                result.getAssertionResults()[0].getFailureMessage(),
+                "Should have correct failure message with source");
+    }
+
+    @Test
+    public void testFailIfNotFoundWhenFound() {
+        extractor.setRegex("<value field=\"RetCode\">([^<]+)</value>");
+        extractor.setTemplate("$1$");
+        extractor.setMatchNumber(1);
+        extractor.setFailIfNotFound(true);
+        extractor.process();
+        assertTrue(result.isSuccessful(), "Result should remain successful when pattern is found");
+        assertEquals(0, result.getAssertionResults().length, "Should have no assertion results");
+    }
+
+    @Test
+    public void testNotFailIfNotFoundWhenNotFound() {
+        extractor.setRegex("notfound");
+        extractor.setTemplate("$1$");
+        extractor.setMatchNumber(1);
+        extractor.setFailIfNotFound(false);
+        extractor.process();
+        assertTrue(result.isSuccessful(), "Result should remain successful when failIfNotFound is false");
+        assertEquals(0, result.getAssertionResults().length, "Should have no assertion results");
+    }
+
+    @Test
+    public void testFailIfNotFoundWithMatchAll() {
+        extractor.setRegex("notfound");
+        extractor.setTemplate("$1$");
+        extractor.setMatchNumber(-1);
+        extractor.setFailIfNotFound(true);
+        extractor.process();
+        assertFalse(result.isSuccessful(), "Result should be marked as failed");
+        assertEquals("0", vars.get("regVal_matchNr"), "matchNr should be 0 when no matches found");
+        assertEquals(1, result.getAssertionResults().length, "Should have one assertion result");
+    }
+
+    @Test
+    public void testFailIfNotFoundWithRandomMatch() {
+        extractor.setRegex("notfound");
+        extractor.setTemplate("$1$");
+        extractor.setMatchNumber(0);
+        extractor.setFailIfNotFound(true);
+        extractor.process();
+        assertFalse(result.isSuccessful(), "Result should be marked as failed");
+        assertNull(vars.get("regVal_matchNr"), "matchNr should not be set for random match mode");
+    }
+
+    @Test
+    public void testFailIfNotFoundWithDifferentSources() {
+        extractor.setUseField(RegexExtractor.USE_HDRS); // Headers
+        extractor.setRegex("notfound");
+        extractor.setFailIfNotFound(true);
+        extractor.process();
+        assertEquals("Pattern not found in response headers - notfound",
+                result.getAssertionResults()[0].getFailureMessage());
+
+        result = new SampleResult(); // Reset result
+        result.setSuccessful(true);
+        jmctx.setPreviousResult(result);
+        extractor.setUseField(RegexExtractor.USE_URL); // URL
+        extractor.process();
+        assertEquals("Pattern not found in URL - notfound",
+                result.getAssertionResults()[0].getFailureMessage());
+
+        result = new SampleResult();
+        result.setSuccessful(true);
+        jmctx.setPreviousResult(result);
+        extractor.setUseField(RegexExtractor.USE_CODE); // Response code
+        extractor.process();
+        assertEquals("Pattern not found in response code - notfound",
+                result.getAssertionResults()[0].getFailureMessage());
+    }
+
+    @Test
+    public void testFailIfNotFoundWithEmptyResponse() {
+        result.setResponseData("", null);
+        extractor.setRegex("something");
+        extractor.setFailIfNotFound(true);
+        extractor.process();
+        assertFalse(result.isSuccessful(), "Result should be marked as failed");
+        assertEquals("Pattern not found in body - something",
+                result.getAssertionResults()[0].getFailureMessage());
     }
 }
