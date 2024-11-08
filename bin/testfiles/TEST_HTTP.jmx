@@ -159,7 +159,6 @@ mirrorServer.start();</stringProp>
             <collectionProp name="Arguments.arguments">
               <elementProp name="name1" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="TestElement.enabled">true</boolProp>
                 <stringProp name="Argument.value">value1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
