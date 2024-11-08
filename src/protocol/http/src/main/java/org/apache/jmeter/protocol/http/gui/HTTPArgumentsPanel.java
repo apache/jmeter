@@ -46,7 +46,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     private static final long serialVersionUID = 240L;
 
-    private static final String ENABLED_FROM_GUI = "enabled_from_gui"; //$NON-NLS-1$
+    private static final String ENABLE = "enable"; //$NON-NLS-1$
 
     private static final String ENCODE_OR_NOT = "encode?"; //$NON-NLS-1$
 
@@ -63,17 +63,17 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     @Override
     protected void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] {
-                ENABLED_FROM_GUI, ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, CONTENT_TYPE, INCLUDE_EQUALS },
+                ENABLE, ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, CONTENT_TYPE, INCLUDE_EQUALS },
                 HTTPArgument.class,
                 new Functor[] {
-                new Functor("isEnabledFromGui"), //$NON-NLS-1$
+                new Functor("isEnabled"), //$NON-NLS-1$
                 new Functor("getName"), //$NON-NLS-1$
                 new Functor("getValue"), //$NON-NLS-1$
                 new Functor("isAlwaysEncoded"), //$NON-NLS-1$
                 new Functor("getContentType"), //$NON-NLS-1$
                 new Functor("isUseEquals") }, //$NON-NLS-1$
                 new Functor[] {
-                new Functor("setEnabledFromGui"), //$NON-NLS-1$
+                new Functor("setEnabled"), //$NON-NLS-1$
                 new Functor("setName"), //$NON-NLS-1$
                 new Functor("setValue"), //$NON-NLS-1$
                 new Functor("setAlwaysEncoded"), //$NON-NLS-1$
@@ -90,7 +90,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     @Override
     protected void sizeColumns(JTable table) {
-        GuiUtils.fixSize(table.getColumn(ENABLED_FROM_GUI), table);
+        GuiUtils.fixSize(table.getColumn(ENABLE), table);
         GuiUtils.fixSize(table.getColumn(INCLUDE_EQUALS), table);
         GuiUtils.fixSize(table.getColumn(ENCODE_OR_NOT), table);
     }
@@ -98,7 +98,6 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     @Override
     protected HTTPArgument makeNewArgument() {
         HTTPArgument arg = new HTTPArgument("", "");
-        arg.setEnabledFromGui(true);
         arg.setAlwaysEncoded(false);
         arg.setUseEquals(true);
         return arg;

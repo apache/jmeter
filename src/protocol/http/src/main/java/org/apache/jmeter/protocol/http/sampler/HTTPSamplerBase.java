@@ -1189,7 +1189,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             if (encodedName.isEmpty()) {
                 continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
             }
-            if(!item.isEnabledFromGui()){
+            if(!item.isEnabled()){
                 continue; // Skip parameters if they've been disabled from GUI using the checkbox
             }
             if (!first) {
