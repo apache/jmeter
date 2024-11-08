@@ -58,7 +58,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      *  These are passed to the setUseField() method
      *
      *  Do not change these values!
-     */
+    */
     public static final String USE_HDRS = "true"; // $NON-NLS-1$
     public static final String USE_REQUEST_HDRS = "request_headers"; // $NON-NLS-1$
     public static final String USE_BODY = "false"; // $NON-NLS-1$
@@ -269,8 +269,8 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 : useBodyAsDocument() ? Document.getTextFromDocument(result.getResponseData())
                 : result.getResponseDataAsString() // Bug 36898
                 ;
-        log.debug("Input = '{}'", inputString);
-        return inputString;
+       log.debug("Input = '{}'", inputString);
+       return inputString;
     }
 
     private List<MatchResult> processMatches(Pattern pattern, String regex, SampleResult result, int matchNumber, JMeterVariables vars) {
@@ -497,7 +497,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         PatternMatcher matcher = JMeterUtils.getMatcher();
         Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
                 , Perl5Compiler.READ_ONLY_MASK
-                        | Perl5Compiler.SINGLELINE_MASK);
+                | Perl5Compiler.SINGLELINE_MASK);
         if (log.isDebugEnabled()) {
             log.debug("Pattern = '{}', template = '{}'", templatePattern.getPattern(), rawTemplate);
         }
