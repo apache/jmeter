@@ -1577,7 +1577,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (arg.isSkippable(parameterName)) {
                     continue;
                 }
-                if (!arg.isEnabledFromGui()) {
+                if (!arg.isEnabled()) {
                     continue; // Skip parameters if they've been disabled from GUI using the checkbox
                 }
                 ContentType contentType;
@@ -1658,7 +1658,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     StringBuilder postBody = new StringBuilder();
                     for (JMeterProperty jMeterProperty : getArguments()) {
                         HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-                        if (!arg.isEnabledFromGui()) {
+                        if (!arg.isEnabled()) {
                             continue; // Skip parameters if they've been disabled from GUI using the checkbox
                         }
                         postBody.append(arg.getEncodedValue(contentEncoding));
@@ -1813,7 +1813,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (arg.isSkippable(parameterName)) {
                 continue;
             }
-            if (!arg.isEnabledFromGui()) {
+            if (!arg.isEnabled()) {
                 continue; // Skip parameters if they've been disabled from GUI using the checkbox
             }
             String parameterValue = arg.getValue();

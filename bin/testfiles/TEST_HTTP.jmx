@@ -159,7 +159,7 @@ mirrorServer.start();</stringProp>
             <collectionProp name="Arguments.arguments">
               <elementProp name="name1" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
+                <boolProp name="TestElement.enabled">true</boolProp>
                 <stringProp name="Argument.value">value1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -220,7 +220,6 @@ mirrorServer.start();</stringProp>
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                   <stringProp name="Argument.value">Get with body</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
@@ -534,7 +533,6 @@ mirrorServer.start();</stringProp>
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                   <stringProp name="Argument.value">Method has body</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
@@ -602,7 +600,6 @@ mirrorServer.start();</stringProp>
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                 <stringProp name="Argument.value">We have a body</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -744,7 +741,6 @@ mirrorServer.start();</stringProp>
             <collectionProp name="Arguments.arguments">
               <elementProp name="name1" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                 <stringProp name="Argument.value">value1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -797,7 +793,6 @@ mirrorServer.start();</stringProp>
             <collectionProp name="Arguments.arguments">
               <elementProp name="name1" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                 <stringProp name="Argument.value">value1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -865,7 +860,6 @@ mirrorServer.start();</stringProp>
             <collectionProp name="Arguments.arguments">
               <elementProp name="name1" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                 <stringProp name="Argument.value">value1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -873,7 +867,6 @@ mirrorServer.start();</stringProp>
               </elementProp>
               <elementProp name="安_param" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                 <stringProp name="Argument.value">value2</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -956,7 +949,6 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                 <stringProp name="Argument.value">Veni vidi vici</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -1336,7 +1328,6 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                 <stringProp name="Argument.value">Body of Put</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -1420,7 +1411,6 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
               <collectionProp name="Arguments.arguments">
                 <elementProp name="name1" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                   <stringProp name="Argument.value">value1</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -1502,7 +1492,6 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
               <collectionProp name="Arguments.arguments">
                 <elementProp name="name1" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <boolProp name="HTTPArgument.enabled_from_gui">true</boolProp>
                   <stringProp name="Argument.value">value1</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
