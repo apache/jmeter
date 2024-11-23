@@ -123,7 +123,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
             isToBeRegistered = !method.getDeclaringClass().equals(AbstractJavaSamplerClient.class);
             log.info("Created class: {}. Uses tearDownTest: {}", name, isToBeRegistered);
         } catch (Exception e) {
-            log.error("{}\tException initialising: {}", whoAmI(), name, e);
+            log.error("{}\tException initialising: {} {}", whoAmI(), name, e);
         }
 
     }
