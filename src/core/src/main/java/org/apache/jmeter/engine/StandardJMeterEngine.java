@@ -579,7 +579,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         } catch (JMeterStopTestException ex) { // NOSONAR Reported by log
             JMeterUtils.reportErrorToUser("Error occurred starting thread group :" + group.getName()+ ", error message:"+ex.getMessage()
                 +", \r\nsee log file for more details", ex);
-            return; // no point continuing
         }
     }
 
