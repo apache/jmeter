@@ -30,12 +30,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.control.TransactionSampler;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
-import org.apache.jmeter.control.TransactionSampler;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
@@ -1606,7 +1606,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         if (parent != null) {
             return;
         }
-        
+
         // Check if we're part of a parent transaction by walking up the sampler hierarchy
         JMeterContext context = JMeterContextService.getContext();
         if (context != null) {
@@ -1621,14 +1621,14 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
                 }
             }
         }
-        
+
         cleanRecursively();
     }
-    
+
     /**
      * Internal method to clean this result and all its sub-results
      */
-    private void cleanRecursively() {   
+    private void cleanRecursively() {
         // Clean sub-results first
         if (subResults != null) {
             for (SampleResult subResult : subResults) {
@@ -1639,13 +1639,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             subResults.clear();
             subResults = null;
         }
-        
+
         // Clean assertion results
         if (assertionResults != null) {
             assertionResults.clear();
             assertionResults = null;
         }
-        
+
         // Clear only memory-heavy data and caches, preserve samplerData
         this.parent = null;
         this.responseDataAsString = null;
@@ -1737,12 +1737,12 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             log.debug("Could not create clone with type: " + this.getClass().getName() + ", using base class", e);
             clone = new SampleResult(this);
         }
-        
+
         // Deep copy mutable fields that the copy constructor doesn't handle deeply
         if (responseData != EMPTY_BA) {
             clone.responseData = responseData.clone();
         }
-        
+
         // Deep copy subResults
         if (subResults != null) {
             clone.subResults = new ArrayList<>(subResults.size());
@@ -1752,7 +1752,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
                 clone.subResults.add(subClone);
             }
         }
-        
+
         // Deep copy assertion results
         if (assertionResults != null) {
             clone.assertionResults = new ArrayList<>(assertionResults.size());
@@ -1760,11 +1760,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
                 clone.assertionResults.add(assertionResult); // AssertionResult is immutable
             }
         }
-        
+
         // Clear only the caches and unnecessary references in the clone
         clone.responseDataAsString = null;
         clone.parent = null;  // Parent reference not needed in the clone
-        
+
         return clone;
     }
 }

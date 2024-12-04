@@ -672,12 +672,12 @@ public class JMeterThread implements Runnable, Interruptible {
             notifyListeners(transactionPack.getSampleListeners(), transactionResult);
         }
         compiler.done(transactionPack);
-        
+
         // Clean up the transaction result after listeners have processed it
         if (transactionResult != null) {
             transactionResult.cleanAfterSample();
         }
-        
+
         return transactionResult;
     }
 
