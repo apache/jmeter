@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -70,6 +71,8 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
 
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
+
+    private static final String FAILIFNOTFOUND = "RegexExtractor.fail_if_not_found";
 
     private static final boolean USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
             "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
@@ -126,6 +129,9 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         try {
             pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
             List<MatchResult> matches = processMatches(pattern, regex, previousResult, matchNumber, vars);
+            if(matches.isEmpty() && isFailIfNotFound()){
+                failResult(previousResult);
+            }
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
             if (prevString != null) {
@@ -184,6 +190,9 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         try {
             pattern = JMeterUtils.compilePattern(regex);
             List<java.util.regex.MatchResult> matches = processMatches(pattern, previousResult, matchNumber, vars);
+            if(matches.isEmpty() && isFailIfNotFound()){
+                failResult(previousResult);
+            }
             int prevCount = 0;
             String prevString = vars.get(refName + REF_MATCH_NR);
             if (prevString != null) {
@@ -232,6 +241,22 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         } catch (PatternSyntaxException e) {
             log.error("Error in pattern: '{}'", regex);
         }
+    }
+
+    private void failResult(SampleResult previousResult){
+        AssertionResult res = new AssertionResult(getName());
+        res.setFailure(true);
+        String sourceDescription = useUrl() ? "URL"
+                : useHeaders() ? "response headers"
+                : useRequestHeaders() ? "request headers"
+                : useCode() ? "response code"
+                : useMessage() ? "response message"
+                : useUnescapedBody() ? "unescaped body"
+                : useBodyAsDocument() ? "document"
+                : "body";  // Covers both empty and USE_BODY cases
+        res.setFailureMessage("Pattern not found in " + sourceDescription + " - " + getRegex());
+        previousResult.addAssertionResult(res);
+        previousResult.setSuccessful(false);
     }
 
     private String getInputString(SampleResult result) {
@@ -688,4 +713,14 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public void setUseField(String actionCommand) {
         set(getSchema().getMatchTarget(), actionCommand);
     }
+
+    public void setFailIfNotFound(Boolean isFailing){
+        log.warn("Setting fail as " + isFailing);
+        setProperty(FAILIFNOTFOUND, isFailing);
+    }
+
+    public boolean isFailIfNotFound(){
+        return getPropertyAsBoolean(FAILIFNOTFOUND);
+    }
+
 }
