@@ -114,6 +114,7 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler, I
         }
         try {
             bshInterpreter.set("SampleResult", res); //$NON-NLS-1$
+            bshInterpreter.set("sampleResult", res); //$NON-NLS-1$
 
             // Set default values
             bshInterpreter.set("ResponseCode", "200"); //$NON-NLS-1$
