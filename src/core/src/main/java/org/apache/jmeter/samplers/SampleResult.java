@@ -30,12 +30,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.assertions.AssertionResult;
-import org.apache.jmeter.control.TransactionSampler;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
@@ -67,15 +64,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private static final String INVALID_CALL_SEQUENCE_MSG = "Invalid call sequence"; // $NON-NLS-1$
 
 
-    // Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
-    // However the suggested System.getProperty("file.encoding") is Cp1252 on
-    // Windows
-    // So use a new property with the original value as default
-    // needs to be accessible from test code
     /**
      * The default encoding to be used to decode the responseData byte array.
      * The value is defined by the property "sampleresult.default.encoding"
-     * with a default of DEFAULT_HTTP_ENCODING if that is not defined.
+     * with a default of {@link #DEFAULT_HTTP_ENCODING} if that is not defined.
      */
     protected static final String DEFAULT_ENCODING
             = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
@@ -1603,62 +1595,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     }
 
     /**
-     * Clean up cached data, but only if this is a root result (no parent)
-     * and not part of a parent transaction.
+     * Clean up cached data
      */
     public void cleanAfterSample() {
-        // Only clean if this is a root result (no parent)
-        if (parent != null) {
-            return;
-        }
-
-        // Check if we're part of a parent transaction by walking up the sampler hierarchy
-        JMeterContext context = JMeterContextService.getContext();
-        if (context != null) {
-            Sampler currentSampler = context.getCurrentSampler();
-            if (currentSampler instanceof TransactionSampler) {
-                TransactionSampler transSampler = (TransactionSampler) currentSampler;
-                // Get the parent sampler from the transaction
-                Sampler parentSampler = transSampler.getSubSampler();
-                // If there's a parent sampler and it's a transaction, we're nested
-                if (parentSampler instanceof TransactionSampler) {
-                    return;
-                }
-            }
-        }
-
-        cleanRecursively();
-    }
-
-    /**
-     * Internal method to clean this result and all its sub-results
-     */
-    private void cleanRecursively() {
-        // Clean sub-results first
-        if (subResults != null) {
-            for (SampleResult subResult : subResults) {
-                if (subResult != null) {
-                    subResult.cleanRecursively();
-                }
-            }
-            subResults.clear();
-            subResults = null;
-        }
-
-        // Clean assertion results
-        if (assertionResults != null) {
-            assertionResults.clear();
-            assertionResults = null;
-        }
-
-        // Clear only memory-heavy data and caches, preserve samplerData
-        this.parent = null;
         this.responseDataAsString = null;
-        this.responseData = EMPTY_BA;
-        this.responseHeaders = "";
-        this.requestHeaders = "";
-        this.samplerData = null;
-
     }
 
     @Override
@@ -1725,51 +1665,5 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void setTestLogicalAction(TestLogicalAction testLogicalAction) {
         this.testLogicalAction = testLogicalAction;
-    }
-
-    /**
-     * Create a deep copy for async listeners
-     * @return A deep copy of this result
-     */
-    public SampleResult cloneForListeners() {
-        // Create clone with the correct type
-        SampleResult clone;
-        try {
-            // Use the same constructor that was used to create this instance
-            clone = this.getClass().getConstructor(this.getClass()).newInstance(this);
-        } catch (Exception e) {
-            // Fallback to base class if constructor is not available
-            log.debug("Could not create clone with type: " + this.getClass().getName() + ", using base class", e);
-            clone = new SampleResult(this);
-        }
-
-        // Deep copy mutable fields that the copy constructor doesn't handle deeply
-        if (responseData != EMPTY_BA) {
-            clone.responseData = responseData.clone();
-        }
-
-        // Deep copy subResults
-        if (subResults != null) {
-            clone.subResults = new ArrayList<>(subResults.size());
-            for (SampleResult sub : subResults) {
-                SampleResult subClone = sub.cloneForListeners();
-                subClone.setParent(clone);
-                clone.subResults.add(subClone);
-            }
-        }
-
-        // Deep copy assertion results
-        if (assertionResults != null) {
-            clone.assertionResults = new ArrayList<>(assertionResults.size());
-            for (AssertionResult assertionResult : assertionResults) {
-                clone.assertionResults.add(assertionResult); // AssertionResult is immutable
-            }
-        }
-
-        // Clear only the caches and unnecessary references in the clone
-        clone.responseDataAsString = null;
-        clone.parent = null;  // Parent reference not needed in the clone
-
-        return clone;
     }
 }

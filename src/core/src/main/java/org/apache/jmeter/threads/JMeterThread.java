@@ -672,12 +672,6 @@ public class JMeterThread implements Runnable, Interruptible {
             notifyListeners(transactionPack.getSampleListeners(), transactionResult);
         }
         compiler.done(transactionPack);
-
-        // Clean up the transaction result after listeners have processed it
-        if (transactionResult != null) {
-            transactionResult.cleanAfterSample();
-        }
-
         return transactionResult;
     }
 
@@ -1034,7 +1028,7 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     private void notifyListeners(List<SampleListener> listeners, SampleResult result) {
-        SampleEvent event = new SampleEvent(result.cloneForListeners(), threadGroup.getName(), threadVars);
+        SampleEvent event = new SampleEvent(result, threadGroup.getName(), threadVars);
         notifier.notifyListeners(event, listeners);
     }
 
