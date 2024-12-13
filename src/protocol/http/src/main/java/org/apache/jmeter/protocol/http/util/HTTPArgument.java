@@ -134,7 +134,7 @@ public class HTTPArgument extends Argument implements Serializable {
     }
 
     /**
-     * Construct a new HTTPArgument instance; alwaysEncoded is set to true.
+     * Construct a new HTTPArgument instance; enabled and alwaysEncoded set to true.
      *
      * @param name the name of the parameter
      * @param value the value of the parameter
@@ -142,6 +142,7 @@ public class HTTPArgument extends Argument implements Serializable {
      * @param contentEncoding the encoding used for the parameter value
      */
     public HTTPArgument(String name, String value, boolean alreadyEncoded, String contentEncoding) {
+        setEnabled(true);
         setAlwaysEncoded(true);
         if (alreadyEncoded) {
             try {
