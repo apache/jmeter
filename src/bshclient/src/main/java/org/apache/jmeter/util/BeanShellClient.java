@@ -36,9 +36,9 @@ public class BeanShellClient {
 
     private static final int MINARGS = 3;
 
-    public static void main(String [] args) throws Exception{
+    public static void main(String [] args) throws Exception {
         if (args.length < MINARGS){
-            System.out.println("Please provide "+MINARGS+" or more arguments:");
+            System.out.println("Please provide " + MINARGS + " or more arguments:");
             System.out.println("serverhost serverport filename [arg1 arg2 ...]");
             System.out.println("e.g. ");
             System.out.println("localhost 9000 extras/remote.bsh apple blake 7");
@@ -50,9 +50,9 @@ public class BeanShellClient {
 
         int port=Integer.parseInt(portString)+1;// convert to telnet port
 
-        System.out.println("Connecting to BSH server on "+host+":"+portString);
+        System.out.println("Connecting to BSH server on " + host + ":" + portString);
 
-        try (Socket sock = new Socket(host,port);
+        try (Socket sock = new Socket(host, port);
                 InputStream is = sock.getInputStream();
                 OutputStream os = sock.getOutputStream()) {
             SockRead sockRead = new SockRead(is);
@@ -79,7 +79,7 @@ public class BeanShellClient {
         }
     }
 
-    private static void sendLine( String line, OutputStream outPipe )
+    private static void sendLine(String line, OutputStream outPipe)
     throws IOException
     {
         outPipe.write(line.getBytes(StandardCharsets.UTF_8));
@@ -96,7 +96,7 @@ public class BeanShellClient {
 
         @Override
         @SuppressWarnings("CatchAndPrintStackTrace")
-        public void run(){
+        public void run() {
             System.out.println("Reading responses from server ...");
             int x = 0;
             try {

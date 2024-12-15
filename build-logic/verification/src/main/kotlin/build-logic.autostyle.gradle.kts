@@ -74,8 +74,6 @@ plugins.withId("java") {
     autostyle {
         java {
             license()
-            importOrder("static ", "java.", "javax", "org", "net", "com", "")
-            removeUnusedImports()
             indentWithSpaces(4)
         }
     }
