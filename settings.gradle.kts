@@ -114,7 +114,7 @@ if (property("localReleasePlugins").toBool(nullAs = false, blankAs = true, defau
 val isCiServer = System.getenv().containsKey("CI")
 
 gradleEnterprise {
-    server = "https://ge.apache.org"
+    server = "https://develocity.apache.org"
     allowUntrustedServer = false
 
     buildScan {
