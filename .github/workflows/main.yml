@@ -84,7 +84,7 @@ jobs:
           org.gradle.java.installations.auto-download=false
       env:
         _JAVA_OPTIONS: ${{ matrix.extraJvmArgs }}
-        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
+        DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
 
   errorprone:
     name: 'Error Prone (JDK 17)'
@@ -103,4 +103,4 @@ jobs:
         multi-cache-enabled: false
         arguments: --scan --no-parallel --no-daemon -PenableErrorprone classes
       env:
-        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
+        DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}

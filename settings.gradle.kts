@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.gradle.enterprise.gradleplugin.internal.extension.BuildScanExtensionWithHiddenFeatures
-
 import java.util.*
 
 pluginManagement {
@@ -25,8 +23,8 @@ pluginManagement {
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.15.1"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "1.12.1"
+    id("com.gradle.develocity") version "3.18.2"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.0.2"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
 }
 
@@ -113,16 +111,14 @@ if (property("localReleasePlugins").toBool(nullAs = false, blankAs = true, defau
 
 val isCiServer = System.getenv().containsKey("CI")
 
-gradleEnterprise {
+develocity {
     server = "https://develocity.apache.org"
     allowUntrustedServer = false
+    projectId = "jmeter"
 
     buildScan {
-        capture { isTaskInputFiles = true }
-        isUploadInBackground = !isCiServer
-        publishAlways()
-        this as BuildScanExtensionWithHiddenFeatures
-        publishIfAuthenticated()
+        uploadInBackground = !isCiServer
+        publishing.onlyIf { it.isAuthenticated }
         obfuscation {
             ipAddresses { addresses -> addresses.map { "0.0.0.0" } }
         }
@@ -151,8 +147,8 @@ val expectedSha512 = mapOf(
         to "JavaEWAH-1.1.12.jar",
     "5A3821A07EEBC9B56F87054C71B9BAFA0D9D0B556AA16191F8676D748CEC755A741CD5500E8676493FFCA69E6C9608CAF86D80B60B5934EE108D77030C490194"
         to "JavaEWAH-1.1.13.jar",
-    "D56423AD67E3EB133939BB69DA202445EBB476F8C2D570CD741C3043EADD132D4C1BB3D08757B266C08A4D2150BE2248A65580A517E3230322D13D983CACCDD6"
-        to "common-custom-user-data-gradle-plugin-1.12.1.jar",
+    "3EA1DC755BFC93EA97ACA9C3E40CA922C369907E31338DC06DE5226B51FF79D7E2584D5AE8CC011FF11C94DB750414E9E46F6DD712F945973A4992D6A2969B1"
+        to "common-custom-user-data-gradle-plugin-2.0.2.jar",
     "768DBB3BA2649A7025338197B4703B414983E4608138719B0D69201F7F49E57E0454846B41B775B135B083F820824749DA6121F20A812C4F155A97F09C9B15AC"
         to "org.eclipse.jgit-5.13.0.202109080827-r.jar",
     "DD1453E479CAC4E0D20143A1955654DC6C163916CA07C11F70F482F317BBF00A5FEDC8B198AF60BF17E9843E76DDA3103DAB3463384536F73A90AC0206CFB0E0"
@@ -161,8 +157,8 @@ val expectedSha512 = mapOf(
         to "org.eclipse.jgit-5.13.2.202306221912-r.jar",
     "E5435852569DDA596BA46138AF8EE9C4ECBA8A7A43F4F1E7897AEB4430523A0F037088A7B63877DF5734578F19D331F03D7B0F32D5AE6C425DF211947B3E6173"
         to "slf4j-api-1.7.30.jar",
-    "4B13DF3104932BCA325445276915BF710234888B76E315FE44BAEB2DF3D56AA21EDF77B5C7357887CF9D592010794192250B3E061437A102F63E68C075D67D3"
-        to "gradle-enterprise-gradle-plugin-3.15.1.jar",
+    "24638FE67382EBDA9529F00A54FA6133EA5434D870E6C1D20622F007E8CC1C00408060D7D578CFE62195650A1785FE7E65DC87B1D92FB27B31AB4134AEADAC0E"
+        to "develocity-gradle-plugin-3.18.2.jar",
     "4E240B7811EF90C090E83A181DACE41DA487555E4136221861B0060F9AF6D8B316F2DD0472F747ADB98CA5372F46055456EF04BDC0C3992188AB13302922FCE9"
         to "bcpg-jdk15on-1.70.jar",
     "7DCCFC636EE4DF1487615818CFA99C69941081DF95E8EF1EAF4BCA165594DFF9547E3774FD70DE3418ABACE77D2C45889F70BCD2E6823F8539F359E68EAF36D1"
@@ -217,7 +213,7 @@ buildCache {
     local {
         isEnabled = !isCiServer
     }
-    remote(gradleEnterprise.buildCache) {
+    remote(develocity.buildCache) {
         isEnabled = false
     }
 }
