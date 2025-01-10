@@ -36,7 +36,7 @@
     "sampleCount" : 252,
     "errorCount" : 0,
     "errorPct" : 0.0,
-    "meanResTime" : 235.90079365079367,
+    "meanResTime" : 235.9007936507938,
     "medianResTime":232.0,
     "minResTime" : 101.0,
     "maxResTime" : 353.0,

@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.report.processor;
 
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
+
 /**
  * The class MaxAggregator is used to get maximum from samples.
  *
@@ -44,7 +46,7 @@ public class MaxAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-        return value;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? value / 1000000.0D : value;
     }
 
     /*

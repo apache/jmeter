@@ -219,7 +219,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
 
         private Long getTimeInterval(Sample sample) {
             long time = sample.getEndTime();
-            return time - (time % parent.getGranularity());
+            return time - (time % (parent.getGranularity() * 1000000L));
         }
 
         // Adds a new field in the sample metadata for each channel

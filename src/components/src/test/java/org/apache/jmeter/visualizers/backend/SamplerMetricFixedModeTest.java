@@ -28,8 +28,8 @@ import org.junit.jupiter.api.Test;
 
 public class SamplerMetricFixedModeTest {
 
-    private static final int DEFAULT_ELAPSED_TIME = 1_000;
-    private static final double ALLOWED_DELTA = 25.0;
+    private static final int DEFAULT_ELAPSED_TIME = 1_000 * 1000000;
+    private static final double ALLOWED_DELTA = 25.0 * 1000000.0D;
 
     @BeforeEach
     @SuppressWarnings("deprecation")

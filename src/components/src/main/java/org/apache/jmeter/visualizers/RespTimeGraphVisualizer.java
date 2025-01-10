@@ -57,6 +57,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.SaveGraphics;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
@@ -164,7 +165,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private static final String Y_AXIS_LABEL = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
-    private static final String Y_AXIS_TITLE = JMeterUtils.getResString("aggregate_graph_ms"); //$NON-NLS-1$
+    private static final String Y_AXIS_TITLE = JMeterUtils.getResString(ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? "aggregate_graph_ms" : "aggregate_graph_ns"); //$NON-NLS-1$
 
     /**
      * Lock used to protect list update
@@ -410,7 +411,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 long keyShift = minStartTime + idx;
                 StatCalculatorLong value = subList.get(keyShift);
                 if (value != null) {
-                    nanLast = value.getMean();
+                    nanLast = ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? value.getMean() / 100000.0D : value.getMean();
                     data[s][idx] = nanLast;
                     // Calculate intermediate values (if needed)
                     int nlsize = nanList.size();
@@ -556,7 +557,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         tempList.addAll(internalList);
                         this.clearData();
                         for (RespTimeGraphDataBean data : tempList) {
-                            SampleResult sr = new SampleResult(data.getStartTime(), data.getTime());
+                            SampleResult sr = new SampleResult(data.getStartTime() / 1000000L, data.getTime() / 1000000L);
                             sr.setSampleLabel(data.getSamplerLabel());
                             this.add(sr);
                         }

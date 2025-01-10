@@ -44,6 +44,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.JMeterColor;
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -255,8 +256,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         maxYField = createYAxisField(5);
         minYField = createYAxisField(3);
 
-        graphYAxisPanel.add(createYAxisPanel("graph_results_ms", maxYField), BorderLayout.NORTH); // $NON-NLS-1$
-        graphYAxisPanel.add(createYAxisPanel("graph_results_ms", minYField), BorderLayout.SOUTH); // $NON-NLS-1$
+        graphYAxisPanel.add(createYAxisPanel(ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? "graph_results_ms" : "graph_results_ns", maxYField), BorderLayout.NORTH); // $NON-NLS-1$
+        graphYAxisPanel.add(createYAxisPanel(ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? "graph_results_ms" : "graph_results_ns", minYField), BorderLayout.SOUTH); // $NON-NLS-1$
 
         return graphYAxisPanel;
     }

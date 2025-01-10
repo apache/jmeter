@@ -17,13 +17,15 @@
 
 package org.apache.jorphan.math;
 
+import java.math.BigInteger;
+
 /**
  * StatCalculator for Long values
  */
-public class StatCalculatorLong extends StatCalculator<Long> {
+public class StatCalculatorLong extends StatCalculator<BigInteger> {
 
     public StatCalculatorLong() {
-        super(0L, Long.MIN_VALUE, Long.MAX_VALUE);
+        super(BigInteger.ZERO, BigInteger.valueOf(Long.MIN_VALUE), BigInteger.valueOf(Long.MAX_VALUE));
     }
 
     /**
@@ -32,7 +34,7 @@ public class StatCalculatorLong extends StatCalculator<Long> {
      * @param val the value to add, which should correspond with a single sample
      */
     public void addValue(long val){
-        super.addValue(val);
+        super.addValue(BigInteger.valueOf(val));
     }
 
     /**
@@ -42,16 +44,16 @@ public class StatCalculatorLong extends StatCalculator<Long> {
      * @param sampleCount the number of samples contributing to the aggregate value
      */
     public void addValue(long val, int sampleCount){
-        super.addValue(val, sampleCount);
+        super.addValue(BigInteger.valueOf(val), sampleCount);
     }
 
     @Override
-    protected Long divide(Long val, int n) {
-        return val / n;
+    protected BigInteger divide(BigInteger val, int n) {
+        return val.divide(BigInteger.valueOf(n));
     }
 
     @Override
-    protected Long divide(Long val, long n) {
-        return val / n;
+    protected BigInteger divide(BigInteger val, long n) {
+        return val.divide(BigInteger.valueOf(n));
     }
 }

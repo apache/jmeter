@@ -74,7 +74,7 @@ class TestSampleResult implements JMeterSerialTest {
     }
 
     private static void assertAlmostEquals(long expected, long actual, long delta, String message) {
-        long actualDelta = Math.abs(expected - actual);
+        long actualDelta = Math.abs(expected - actual / 1000000L);
         if (actualDelta > delta) {
             Assertions.fail(() -> message + ", expected " + expected
                     + " within delta of " + delta + ", but got " + actual
@@ -277,7 +277,7 @@ class TestSampleResult implements JMeterSerialTest {
          */
 
         long diff = parentElapsedTotal - sumSamplesTimes;
-        long maxDiff = nanoTime ? 10 : 16; // TimeMillis has granularity of 10-20
+        long maxDiff = nanoTime ? 10 * 1000000L : 16 * 1000000L; // TimeMillis has granularity of 10-20
         if (diff < 0 || diff > maxDiff) {
             Assertions.fail("ParentElapsed: " + parentElapsedTotal + " - " + " sum(samples): " + sumSamplesTimes
                     + " => " + diff + " not in [0," + maxDiff + "]; nanotime=" + nanoTime);
@@ -297,9 +297,9 @@ class TestSampleResult implements JMeterSerialTest {
         calculator.addSample(parent);
         Assertions.assertEquals(600, calculator.getTotalBytes());
         Assertions.assertEquals(1, calculator.getCount());
-        Assertions.assertEquals(1d / (parentElapsedTotal / 1000d), calculator.getRate(), 0.0001d); // Allow for some margin of error
+        Assertions.assertEquals(1d / (parentElapsedTotal / 1000000.0D / 1000d), calculator.getRate(), 0.0001d); // Allow for some margin of error
         // Check that the throughput uses the time elapsed for the sub results
-        Assertions.assertFalse(1d / (parentElapsed / 1000d) <= calculator.getRate());
+        Assertions.assertFalse(1d / (parentElapsed / 1000000.0D / 1000d) <= calculator.getRate());
     }
 
     // TODO some more invalid sequence tests needed

@@ -288,6 +288,9 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
                 // Init key and value depending on invertKeysAndValues property
                 Double key = entry.getKey();
+                if (this instanceof AbstractOverTimeGraphConsumer) {
+                    key /= 1000000.0D;
+                }
                 Double value = entry.getValue().getResult();
 
                 if (invertKeysAndValues) {

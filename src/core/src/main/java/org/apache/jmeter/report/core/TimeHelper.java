@@ -78,7 +78,7 @@ public class TimeHelper {
      */
     @SuppressWarnings("JavaUtilDate")
     public static String formatTimeStamp(long timeStamp, String format) {
-        SimpleDateFormat dateFormat = format != null ? new SimpleDateFormat(
+        SimpleDateFormat dateFormat = format != null && !"ms".equals(format) ? new SimpleDateFormat(
                 format) : new SimpleDateFormat();
         return dateFormat.format(new Date(timeStamp));
     }

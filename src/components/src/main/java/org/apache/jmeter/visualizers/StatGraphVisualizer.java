@@ -73,6 +73,7 @@ import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
@@ -202,7 +203,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private final String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
-    private final String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");        //$NON-NLS-1$
+    private final String yAxisTitle = JMeterUtils.getResString(ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? "aggregate_graph_ms" : "aggregate_graph_ns");        //$NON-NLS-1$
 
     private boolean saveGraphToFile = false;
 
