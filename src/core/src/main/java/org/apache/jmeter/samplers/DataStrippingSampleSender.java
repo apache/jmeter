@@ -126,6 +126,24 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     private static void stripResponse(SampleResult result) {
         result.setBytes(result.getBytesAsLong());
         result.setResponseData(EMPTY_BA);
+
+        if (result.isSuccessful()) {
+            result.setSentBytes(result.getSentBytes());
+            result.setSamplerData(null);
+            result.setRequestHeaders(null);
+
+            result.setBodySize(result.getBodySizeAsLong());
+            result.setDataType(null);
+            result.setDataEncoding(null);
+
+            result.setHeadersSize(result.getHeadersSize());
+            result.setResponseHeaders(null);
+
+            result.setURL(null);
+
+            result.setResponseMessage(null);
+            result.setResponseCode(null);
+        }
     }
 
     /**
