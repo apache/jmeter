@@ -84,11 +84,8 @@ public class PutWriter extends PostWriter {
 
             // Just append all the parameter values, and use that as the put body
             StringBuilder putBodyBuffer = new StringBuilder();
-             for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+             for (JMeterProperty jMeterProperty : sampler.getArguments().getEnabledArguments()) {
                  HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-                 if (!arg.isEnabled()) {
-                     continue; // Skip parameters if they've been disabled from GUI using the checkbox
-                 }
                  putBodyBuffer.append(arg.getEncodedValue(contentEncoding));
              }
 

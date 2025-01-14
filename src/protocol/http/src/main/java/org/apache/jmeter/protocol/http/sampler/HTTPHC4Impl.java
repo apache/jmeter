@@ -159,7 +159,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -1571,14 +1570,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             // Create the parts
             // Add any parameters
-            for (JMeterProperty jMeterProperty : getArguments()) {
+            for (JMeterProperty jMeterProperty : getArguments().getEnabledArguments()) {
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 String parameterName = arg.getName();
                 if (arg.isSkippable(parameterName)) {
                     continue;
-                }
-                if (!arg.isEnabled()) {
-                    continue; // Skip parameters if they've been disabled from GUI using the checkbox
                 }
                 ContentType contentType;
                 if (arg.getContentType().indexOf(';') >= 0) {
@@ -1656,11 +1652,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
                     // Just append all the parameter values, and use that as the post body
                     StringBuilder postBody = new StringBuilder();
-                    for (JMeterProperty jMeterProperty : getArguments()) {
+                    for (JMeterProperty jMeterProperty : getArguments().getEnabledArguments()) {
                         HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-                        if (!arg.isEnabled()) {
-                            continue; // Skip parameters if they've been disabled from GUI using the checkbox
-                        }
                         postBody.append(arg.getEncodedValue(contentEncoding));
                     }
                     // Let StringEntity perform the encoding
@@ -1802,19 +1795,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private UrlEncodedFormEntity createUrlEncodedFormEntity(final String urlContentEncoding) throws UnsupportedEncodingException {
         // It is a normal request, with parameter names and values
         // Add the parameters
-        PropertyIterator args = getArguments().iterator();
         List<NameValuePair> nvps = new ArrayList<>();
-        while (args.hasNext()) {
-            HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+        for (JMeterProperty jMeterProperty: getArguments().getEnabledArguments()) {
+            HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
             // The HTTPClient always urlencodes both name and value,
             // so if the argument is already encoded, we have to decode
             // it before adding it to the post request
             String parameterName = arg.getName();
             if (arg.isSkippable(parameterName)) {
                 continue;
-            }
-            if (!arg.isEnabled()) {
-                continue; // Skip parameters if they've been disabled from GUI using the checkbox
             }
             String parameterValue = arg.getValue();
             if (!arg.isAlwaysEncoded()) {
