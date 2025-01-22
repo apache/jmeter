@@ -84,11 +84,11 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
     }
 
     private static JMenuItem createMenuItem(String name, String actionCommand) {
-        JMenuItem addThinkTimesToChildren = new JMenuItem(JMeterUtils.getResString(name));
-        addThinkTimesToChildren.setName(name);
-        addThinkTimesToChildren.addActionListener(ActionRouter.getInstance());
-        addThinkTimesToChildren.setActionCommand(actionCommand);
-        return addThinkTimesToChildren;
+        JMenuItem menuItem = new JMenuItem(JMeterUtils.getResString(name));
+        menuItem.setName(name);
+        menuItem.addActionListener(ActionRouter.getInstance());
+        menuItem.setActionCommand(actionCommand);
+        return menuItem;
     }
 
     private static JMenu createAddMenu() {

@@ -86,6 +86,8 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
 
     private final AtomicInteger numberOfThreads = new AtomicInteger(0); // Number of active threads in this group
 
+    private long startTime;
+
     @Override
     public AbstractThreadGroupSchema getSchema() {
         return AbstractThreadGroupSchema.INSTANCE;
@@ -95,6 +97,25 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     @Override
     public PropertiesAccessor<? extends AbstractThreadGroup, ? extends AbstractThreadGroupSchema> getProps() {
         return new PropertiesAccessor<>(this, getSchema());
+    }
+
+    /**
+     * Get the time when this thread group has been started
+     * @since 6.0.0
+     * @return time in milliseconds since epoch
+     */
+    public long getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * Set the time when this thread group has been started.<br>
+     * Will probably be set by StandardJMeterEngine.
+     * @since 6.0.0
+     * @param startTime time in milliseconds since epoch
+     */
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
     /** {@inheritDoc} */
