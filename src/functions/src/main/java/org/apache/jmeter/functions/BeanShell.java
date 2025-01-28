@@ -90,6 +90,7 @@ public class BeanShell extends AbstractFunction {
 
             if (previousResult != null) {
                 bshInterpreter.set("SampleResult", previousResult); //$NON-NLS-1$
+                bshInterpreter.set("sampleResult", previousResult); //$NON-NLS-1$
             }
 
             // Allow access to context and variables directly
