@@ -133,16 +133,16 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
             result.setRequestHeaders(null);
 
             result.setBodySize(result.getBodySizeAsLong());
-            result.setDataType(null);
-            result.setDataEncoding(null);
+            //result.setDataType(null);
+            //result.setDataEncoding(null);
 
             result.setHeadersSize(result.getHeadersSize());
             result.setResponseHeaders(null);
 
-            result.setURL(null);
+            //result.setURL(null);
 
-            result.setResponseMessage(null);
-            result.setResponseCode(null);
+            //result.setResponseMessage(null);
+            //result.setResponseCode(null);
         }
     }
 
