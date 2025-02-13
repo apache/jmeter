@@ -17,8 +17,10 @@
 
 package org.apache.jmeter.reporters;
 
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
@@ -40,7 +42,7 @@ class SummariserRunningSample {
 
     private long counter;
 
-    private long runningSum;
+    private BigInteger runningSum;
 
     private long max;
 
@@ -79,7 +81,7 @@ class SummariserRunningSample {
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         counter = 0L;
-        runningSum = 0L;
+        runningSum = BigInteger.ZERO;
         max = Long.MIN_VALUE;
         min = Long.MAX_VALUE;
         errorCount = 0L;
@@ -101,7 +103,7 @@ class SummariserRunningSample {
     public void addSample(SummariserRunningSample rs) {
         counter += rs.counter;
         errorCount += rs.errorCount;
-        runningSum += rs.runningSum;
+        runningSum = runningSum.add(rs.runningSum);
         if (max < rs.max) {
             max = rs.max;
         }
@@ -120,7 +122,7 @@ class SummariserRunningSample {
         counter += res.getSampleCount();
         errorCount += res.getErrorCount();
         long aTimeInMillis = res.getTime();
-        runningSum += aTimeInMillis;
+        runningSum = runningSum.add(BigInteger.valueOf(aTimeInMillis));
         if (aTimeInMillis > max) {
             max = aTimeInMillis;
         }
@@ -182,7 +184,7 @@ class SummariserRunningSample {
         if (counter == 0) {
             return 0;
         }
-        return runningSum / counter;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? runningSum.divide(BigInteger.valueOf(counter)).divide(BigInteger.valueOf(1000000L)).longValue() : runningSum.divide(BigInteger.valueOf(counter)).longValue();
     }
 
     /**
@@ -225,7 +227,7 @@ class SummariserRunningSample {
      * @return the time in milliseconds of the slowest sample.
      */
     public long getMax() {
-        return max;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? max / 1000000L : max;
     }
 
     /**
@@ -234,7 +236,7 @@ class SummariserRunningSample {
      * @return the time in milliseconds of the quickest sample.
      */
     public long getMin() {
-        return min;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? min / 1000000L : min;
     }
 
     /**

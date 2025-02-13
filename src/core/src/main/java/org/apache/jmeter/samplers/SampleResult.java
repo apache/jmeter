@@ -135,6 +135,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private static final String NULL_FILENAME = "NULL";
 
+    private static final long ms = System.currentTimeMillis() * 1000000L;
+    private static final long ns = System.nanoTime();
+
     static {
         if (START_TIMESTAMP) {
             log.info("Note: Sample TimeStamps are START times");
@@ -147,7 +150,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
         if (USE_NANO_TIME && NANOTHREAD_SLEEP > 0) {
             // Make sure we start with a reasonable value
-            NanoOffset.nanoOffset = System.currentTimeMillis() - SampleResult.sampleNsClockInMs();
+            NanoOffset.nanoOffset = ms + System.nanoTime() - ns - sampleNsClockInMs();
             NanoOffset nanoOffset = new NanoOffset();
             nanoOffset.setDaemon(true);
             nanoOffset.setName("NanoOffset");
@@ -384,7 +387,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private long initOffset(){
         if (useNanoTime){
-            return nanoThreadSleep > 0 ? NanoOffset.getNanoOffset() : System.currentTimeMillis() - sampleNsClockInMs();
+            return nanoThreadSleep > 0 ? NanoOffset.getNanoOffset() : ms + System.nanoTime() - ns - sampleNsClockInMs();
         } else {
             return Long.MIN_VALUE;
         }
@@ -434,12 +437,12 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return sample that starts 'now' and ends <code>elapsed</code> milliseconds later
      */
     public static SampleResult createTestSample(long elapsed) {
-        long now = System.currentTimeMillis();
+        long now = ms + System.nanoTime() - ns;
         return createTestSample(now, now + elapsed);
     }
 
     private static long sampleNsClockInMs() {
-        return System.nanoTime() / 1000000;
+        return ms + System.nanoTime() - ns;
     }
 
     /**
@@ -457,7 +460,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             }
             return sampleNsClockInMs() + nanoTimeOffset;
         }
-        return System.currentTimeMillis();
+        return ms + System.nanoTime() - ns;
     }
 
     // Helper method to maintain timestamp relationships
@@ -1561,7 +1564,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         private static void getOffset(long wait) {
             try {
                 TimeUnit.MILLISECONDS.sleep(wait);
-                long clock = System.currentTimeMillis();
+                long clock = ms + System.nanoTime() - ns;
                 long nano = SampleResult.sampleNsClockInMs();
                 nanoOffset = clock - nano;
             } catch (InterruptedException ignore) {

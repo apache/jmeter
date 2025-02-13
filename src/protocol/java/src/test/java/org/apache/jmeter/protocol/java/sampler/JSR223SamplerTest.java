@@ -41,6 +41,6 @@ class JSR223SamplerTest {
         sampler.setScript("'OK'");
         sampler.setScriptLanguage("groovy");
         SampleResult sampleResult = sampler.sample(null);
-        assertEquals(System.currentTimeMillis(), sampleResult.getEndTime(), 1000);
+        assertEquals(System.currentTimeMillis() * 1000000L, sampleResult.getEndTime(), 1000 * 1000000L);
     }
 }
