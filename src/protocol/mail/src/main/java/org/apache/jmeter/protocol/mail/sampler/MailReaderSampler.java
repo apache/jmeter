@@ -220,7 +220,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             }
 
             // Get directory
-            Message[] messages = folder.getMessages(1,n);
+            Message[] messages = folder.getMessages(messageTotal - n + 1, messageTotal);
             String pdata = messages.length + " messages found\n";
             parent.setResponseData(pdata,null);
             parent.setDataType(SampleResult.TEXT);
