@@ -190,7 +190,7 @@ public class PostWriter {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(bos, contentEncoding);
             // Add any parameters
-            for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+            for (JMeterProperty jMeterProperty : sampler.getArguments().getEnabledArguments()) {
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 String parameterName = arg.getName();
                 if (arg.isSkippable(parameterName)) {
@@ -299,7 +299,7 @@ public class PostWriter {
 
                     // Just append all the parameter values, and use that as the post body
                     StringBuilder postBodyBuffer = new StringBuilder();
-                    for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+                    for (JMeterProperty jMeterProperty : sampler.getArguments().getEnabledArguments()) {
                         HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                         postBodyBuffer.append(arg.getEncodedValue(contentEncoding));
                     }
