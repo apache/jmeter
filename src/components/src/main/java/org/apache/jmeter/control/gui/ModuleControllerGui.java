@@ -31,7 +31,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -49,7 +48,6 @@ import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.MenuInfo;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
@@ -271,15 +269,6 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         if(moduleToRunTreeNodes != null) {
             moduleToRunTreeNodes.clearSelection();
         }
-    }
-
-    /** {@inheritDoc}} */
-    @Override
-    public JPopupMenu createPopupMenu() {
-        JPopupMenu menu = new JPopupMenu();
-        MenuFactory.addEditMenu(menu, true);
-        MenuFactory.addFileMenu(menu);
-        return menu;
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
