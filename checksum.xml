@@ -100,7 +100,7 @@
     <trusted-key id='fc411cd3cb7dcb0abc9801058118b3bcdb1a5000' group='jakarta.xml.bind' />
     <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.activation' />
     <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.annotation' />
-    <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.mail' />
+    <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='com.sun.mail' />
     <trusted-key id='4f7e32d440ef90a83011a8fc6425559c47cc79c4' group='javax.servlet' />
     <trusted-key id='4daded739cdf2cd0e48e0ec44044edf1bb73efea' group='jaxen' />
     <trusted-key id='ca491704d613780d2bee00f2c6fc46eb51cf569c' group='jaxen' />
