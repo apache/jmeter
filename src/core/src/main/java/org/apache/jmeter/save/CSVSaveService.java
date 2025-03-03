@@ -854,7 +854,7 @@ public final class CSVSaveService {
                 text.append(sample.getTimeStamp());
             } else if (saveConfig.threadSafeLenientFormatter() != null) {
                 String stamp = saveConfig.threadSafeLenientFormatter().format(
-                        new Date(sample.getTimeStamp()));
+                        new Date(sample.getTimeStamp() / 1000000L));
                 text.append(stamp);
             }
         }

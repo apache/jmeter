@@ -104,6 +104,6 @@ public abstract class AbstractOverTimeGraphConsumer extends
     @Override
     public void initialize() {
         super.initialize();
-        ((TimeStampKeysSelector) getKeysSelector()).setGranularity(granularity);
+        ((TimeStampKeysSelector) getKeysSelector()).setGranularity(granularity * 1000000L);
     }
 }

@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.ListResultData;
 import org.apache.jmeter.report.processor.MapResultData;
@@ -69,9 +70,9 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
                 return Collections.singletonList(FAILED_LABEL);
             } else {
                 long elapsedTime = sample.getElapsedTime();
-                if (elapsedTime <= getSatisfiedThreshold()) {
+                if (elapsedTime <= satisfiedThreshold * 1000000L) {
                     return satisfiedLabels;
-                } else if (elapsedTime <= getToleratedThreshold()) {
+                } else if (elapsedTime <= toleratedThreshold * 1000000L) {
                     return toleratedLabels;
                 } else {
                     return untoleratedLabels;
@@ -91,9 +92,9 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
         return sample -> {
             if (sample.getSuccess()) {
                 long elapsedTime = sample.getElapsedTime();
-                if (elapsedTime <= satisfiedThreshold) {
+                if (elapsedTime <= satisfiedThreshold * 1000000L) {
                     return (double) 0;
-                } else if (elapsedTime <= toleratedThreshold) {
+                } else if (elapsedTime <= toleratedThreshold * 1000000L) {
                     return 1d;
                 } else {
                     return 2d;
@@ -124,9 +125,9 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     protected void initializeExtraResults(MapResultData parentResult) {
         ListResultData listResultData = new ListResultData();
         String[] seriesLabels = new String[]{
-                SATISFIED_LABEL.format(new Object[]{getSatisfiedThreshold()}),
-                TOLERATED_LABEL.format(new Object[]{getSatisfiedThreshold(), getToleratedThreshold()}),
-                UNTOLERATED_LABEL.format(new Object[]{getToleratedThreshold()}),
+                SATISFIED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }),
+                TOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }),
+                UNTOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }),
                 FAILED_LABEL
         };
         String[] colors = new String[]{
@@ -191,10 +192,10 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
 
     private void formatLabels() {
         this.satisfiedLabels = Collections.singletonList(
-                SATISFIED_LABEL.format(new Object[]{this.satisfiedThreshold}));
+                SATISFIED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }));
         this.toleratedLabels = Collections.singletonList(
-                TOLERATED_LABEL.format(new Object[]{this.satisfiedThreshold, this.toleratedThreshold}));
+                TOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }));
         this.untoleratedLabels = Collections.singletonList(
-                UNTOLERATED_LABEL.format(new Object[]{this.toleratedThreshold}));
+                UNTOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }));
     }
 }
