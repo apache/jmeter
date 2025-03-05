@@ -125,9 +125,9 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     protected void initializeExtraResults(MapResultData parentResult) {
         ListResultData listResultData = new ListResultData();
         String[] seriesLabels = new String[]{
-                SATISFIED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }),
-                TOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }),
-                UNTOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }),
+                SATISFIED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns }),
+                TOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns }),
+                UNTOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns }),
                 FAILED_LABEL
         };
         String[] colors = new String[]{
@@ -192,10 +192,10 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
 
     private void formatLabels() {
         this.satisfiedLabels = Collections.singletonList(
-                SATISFIED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }));
+                SATISFIED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns }));
         this.toleratedLabels = Collections.singletonList(
-                TOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }));
+                TOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? satisfiedThreshold : satisfiedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns }));
         this.untoleratedLabels = Collections.singletonList(
-                UNTOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_msns }));
+                UNTOLERATED_LABEL.format(new Object[] { ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? toleratedThreshold : toleratedThreshold * 1000000L, ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns }));
     }
 }

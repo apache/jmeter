@@ -203,7 +203,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private final String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
-    private final String yAxisTitle = JMeterUtils.getResString(ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? "aggregate_graph_ms" : "aggregate_graph_ns");        //$NON-NLS-1$
+    private final String yAxisTitle = JMeterUtils.getResString(ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? "aggregate_graph_ms" : "aggregate_graph_ns");        //$NON-NLS-1$
 
     private boolean saveGraphToFile = false;
 

@@ -46,7 +46,7 @@ public class MeanAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? mean.getResult() / 1000000.0D : mean.getResult();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? mean.getResult() / 1000000.0D : mean.getResult();
     }
 
     /*

@@ -148,7 +148,10 @@ public class Sample {
      * @return the time stamp
      */
     public long getTimestamp() {
-        return getData(long.class, CSVSaveService.TIME_STAMP);
+        if (metadata.indexOf(CSVSaveService.TIME_STAMP_NS) > -1) {
+            return getData(long.class, CSVSaveService.TIME_STAMP_NS);
+        }
+        return getData(long.class, CSVSaveService.TIME_STAMP) * 1000000L;
     }
 
     /**
@@ -157,7 +160,10 @@ public class Sample {
      * @return the elapsed time stored in the sample
      */
     public long getElapsedTime() {
-        return getData(long.class, CSVSaveService.CSV_ELAPSED);
+        if (metadata.indexOf(CSVSaveService.CSV_ELAPSED_NS) > -1) {
+            return getData(long.class, CSVSaveService.CSV_ELAPSED_NS);
+        }
+        return getData(long.class, CSVSaveService.CSV_ELAPSED) * 1000000L;
     }
 
     /**
@@ -242,7 +248,10 @@ public class Sample {
      * @return the latency stored in the sample
      */
     public long getLatency() {
-        return getData(long.class, CSVSaveService.CSV_LATENCY);
+        if (metadata.indexOf(CSVSaveService.CSV_LATENCY_NS) > -1) {
+            return getData(long.class, CSVSaveService.CSV_LATENCY_NS);
+        }
+        return getData(long.class, CSVSaveService.CSV_LATENCY) * 1000000L;
     }
 
     /**
@@ -251,8 +260,11 @@ public class Sample {
      * @return the connect time stored in the sample or 0 is column is not in results
      */
     public long getConnectTime() {
+        if (metadata.indexOf(CSVSaveService.CSV_CONNECT_TIME_NS) > -1) {
+            return getData(long.class, CSVSaveService.TIME_STAMP_NS);
+        }
         if(metadata.indexOf(CSVSaveService.CSV_CONNECT_TIME) >= 0) {
-            return getData(long.class, CSVSaveService.CSV_CONNECT_TIME);
+            return getData(long.class, CSVSaveService.CSV_CONNECT_TIME) * 1000000L;
         } else {
             return 0L;
         }

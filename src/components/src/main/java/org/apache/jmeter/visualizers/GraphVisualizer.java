@@ -256,8 +256,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         maxYField = createYAxisField(5);
         minYField = createYAxisField(3);
 
-        graphYAxisPanel.add(createYAxisPanel(ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? "graph_results_ms" : "graph_results_ns", maxYField), BorderLayout.NORTH); // $NON-NLS-1$
-        graphYAxisPanel.add(createYAxisPanel(ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? "graph_results_ms" : "graph_results_ns", minYField), BorderLayout.SOUTH); // $NON-NLS-1$
+        graphYAxisPanel.add(createYAxisPanel(ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? "graph_results_ms" : "graph_results_ns", maxYField), BorderLayout.NORTH); // $NON-NLS-1$
+        graphYAxisPanel.add(createYAxisPanel(ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? "graph_results_ms" : "graph_results_ns", minYField), BorderLayout.SOUTH); // $NON-NLS-1$
 
         return graphYAxisPanel;
     }

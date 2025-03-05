@@ -41,7 +41,7 @@ function summaryTableHeader(header) {
     cell = document.createElement('th');
     cell.setAttribute("data-sorter", false);
     cell.colSpan = 7;
-    cell.innerHTML = "Response Times (${jmeter_reportgenerator_msns})";
+    cell.innerHTML = "Response Times (${jmeter_reportgenerator_ms_ns})";
     newRow.appendChild(cell);
 
     cell = document.createElement('th');

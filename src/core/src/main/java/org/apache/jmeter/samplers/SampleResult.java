@@ -382,7 +382,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public SampleResult(long stamp, long elapsed) {
         this();
-        stampAndTime(stamp, elapsed);
+        stampAndTime(stamp * 1000000L, elapsed * 1000000L);
     }
 
     private long initOffset(){
@@ -437,7 +437,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return sample that starts 'now' and ends <code>elapsed</code> milliseconds later
      */
     public static SampleResult createTestSample(long elapsed) {
-        long now = ms + System.nanoTime() - ns;
+        long now = System.currentTimeMillis();
         return createTestSample(now, now + elapsed);
     }
 
@@ -488,6 +488,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *             set already
      */
     public void setStampAndTime(long stamp, long elapsed) {
+        setStampAndTime_ns(stamp * 1000000L, elapsed * 1000000L);
+    }
+
+    /**
+     * @see #setStampAndTime, But param in nanosecond format
+     */
+    public void setStampAndTime_ns(long stamp, long elapsed) {
         if (startTime != 0 || endTime != 0){
             throw new IllegalStateException("Calling setStampAndTime() after start/end times have been set");
         }
@@ -650,7 +657,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         subResult.setThreadName(tn);
 
         // Extend the time to the end of the added sample
-        setEndTime(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
+        setEndTime_ns(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
         // Include the byte count for the added sample
         setBytes(getBytesAsLong() + subResult.getBytesAsLong());
         setSentBytes(getSentBytes() + subResult.getSentBytes());
@@ -1146,6 +1153,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * allow the original start time to be kept
      */
     protected final void setStartTime(long start) {
+        setStartTime_ns(start * 1000000L);
+    }
+
+    /**
+     * @see #setStartTime , But param in nanosecond format
+     */
+    protected final void setStartTime_ns(long start) {
         startTime = start;
         if (START_TIMESTAMP) {
             timeStamp = startTime;
@@ -1153,6 +1167,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     }
 
     public void setEndTime(long end) {
+        setEndTime_ns(end * 1000000L);
+    }
+
+    /**
+     * @see #setEndTime , But param in nanosecond format
+     */
+    public void setEndTime_ns(long end) {
         endTime = end;
         if (!START_TIMESTAMP) {
             timeStamp = endTime;
@@ -1170,6 +1191,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @param idle long
      */
     public void setIdleTime(long idle) {
+        setIdleTime_ns(idle * 1000000L);
+    }
+
+    /**
+     * @see #setIdleTime , But param in nanosecond format
+     */
+    public void setIdleTime_ns(long idle) {
         idleTime = idle;
     }
 
@@ -1184,7 +1212,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void sampleStart() {
         if (startTime == 0) {
-            setStartTime(currentTimeInMillis());
+            setStartTime_ns(currentTimeInMillis());
         } else {
             log.error("sampleStart called twice", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
@@ -1196,7 +1224,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void sampleEnd() {
         if (endTime == 0) {
-            setEndTime(currentTimeInMillis());
+            setEndTime_ns(currentTimeInMillis());
         } else {
             log.error("sampleEnd called twice", new Throwable(INVALID_CALL_SEQUENCE_MSG));
         }
@@ -1385,6 +1413,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            The latency to set.
      */
     public void setLatency(long latency) {
+        setLatency_ns(latency * 1000000L);
+    }
+
+    /**
+     * @see #setLatency , But param in nanosecond format
+     */
+    public void setLatency_ns(long latency) {
         this.latency = latency;
     }
 
@@ -1408,6 +1443,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @param time The connect time to set.
      */
     public void setConnectTime(long time) {
+        setConnectTime_ns(time * 1000000L);
+    }
+
+    /**
+     * @see #setConnectTime , But param in nanosecond format
+     */
+    public void setConnectTime_ns(long time) {
         this.connectTime = time;
     }
 
@@ -1418,6 +1460,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            The timeStamp to set.
      */
     public void setTimeStamp(long timeStamp) {
+        setTimeStamp_ns(timeStamp * 1000000L);
+    }
+
+    /**
+     * @see #setTimeStamp , But param in nanosecond format
+     */
+    public void setTimeStamp_ns(long timeStamp) {
         this.timeStamp = timeStamp;
     }
 

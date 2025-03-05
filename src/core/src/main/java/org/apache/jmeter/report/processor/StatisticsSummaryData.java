@@ -52,7 +52,7 @@ public class StatisticsSummaryData {
      * @return the firstTime
      */
     public final long getFirstTime() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? firstTime / 1000000L : firstTime;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? firstTime / 1000000L : firstTime;
     }
 
     /**
@@ -71,7 +71,7 @@ public class StatisticsSummaryData {
      * @return the endTime
      */
     public final long getEndTime() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? endTime / 1000000L : endTime;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? endTime / 1000000L : endTime;
     }
 
     /**
@@ -137,7 +137,7 @@ public class StatisticsSummaryData {
      * @return the min
      */
     public final long getMin() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? min / 1000000L : min;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? min / 1000000L : min;
     }
 
     /**
@@ -152,7 +152,7 @@ public class StatisticsSummaryData {
      * @return the max
      */
     public final long getMax() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? max / 1000000L : max;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? max / 1000000L : max;
     }
 
     /**

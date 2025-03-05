@@ -68,7 +68,7 @@ public class ResponseTimeDistributionGraphConsumer extends
     protected final GraphKeysSelector createKeysSelector() {
         return sample -> {
             long elapsed = sample.getElapsedTime();
-            return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? (elapsed - elapsed % (granularity * 1000000L)) / 1000000.0D : (double) elapsed - elapsed % (granularity * 1000000L);
+            return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? (elapsed - elapsed % (granularity * 1000000L)) / 1000000.0D : (double) elapsed - elapsed % (granularity * 1000000L);
         };
     }
 

@@ -184,7 +184,7 @@ class SummariserRunningSample {
         if (counter == 0) {
             return 0;
         }
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? runningSum.divide(BigInteger.valueOf(counter)).divide(BigInteger.valueOf(1000000L)).longValue() : runningSum.divide(BigInteger.valueOf(counter)).longValue();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? runningSum.divide(BigInteger.valueOf(counter)).divide(BigInteger.valueOf(1000000L)).longValue() : runningSum.divide(BigInteger.valueOf(counter)).longValue();
     }
 
     /**
@@ -227,7 +227,7 @@ class SummariserRunningSample {
      * @return the time in milliseconds of the slowest sample.
      */
     public long getMax() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? max / 1000000L : max;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? max / 1000000L : max;
     }
 
     /**
@@ -236,7 +236,7 @@ class SummariserRunningSample {
      * @return the time in milliseconds of the quickest sample.
      */
     public long getMin() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? min / 1000000L : min;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? min / 1000000L : min;
     }
 
     /**

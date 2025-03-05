@@ -307,7 +307,7 @@ public class RunningSample {
         if (counter == 0) {
             return 0;
         }
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? runningSum.divide(BigInteger.valueOf(counter)).divide(BigInteger.valueOf(1000000L)).longValue() : runningSum.divide(BigInteger.valueOf(counter)).longValue();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? runningSum.divide(BigInteger.valueOf(counter)).divide(BigInteger.valueOf(1000000L)).longValue() : runningSum.divide(BigInteger.valueOf(counter)).longValue();
     }
 
     /**

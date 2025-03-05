@@ -198,10 +198,10 @@ public class SamplingStatCalculator {
             }
 
             rtime = res.getTime();
-            cmean = ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? (long) calculator.getMean() / 1000000L : (long) calculator.getMean();
+            cmean = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? (long) calculator.getMean() / 1000000L : (long) calculator.getMean();
             cstdv = (long)calculator.getStandardDeviation();
-            cmedian = ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? calculator.getMedian().divide(BigInteger.valueOf(1000000L)).longValue() : calculator.getMedian().longValue();
-            cpercent = ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? calculator.getPercentPoint(0.500D).divide(BigInteger.valueOf(1000000L)).longValue() : calculator.getPercentPoint(0.500D).longValue();
+            cmedian = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMedian().divide(BigInteger.valueOf(1000000L)).longValue() : calculator.getMedian().longValue();
+            cpercent = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getPercentPoint(0.500D).divide(BigInteger.valueOf(1000000L)).longValue() : calculator.getPercentPoint(0.500D).longValue();
 // TODO cpercent is the same as cmedian here - why? and why pass it to "distributionLine"?
             rbool = res.isSuccessful();
         }
@@ -275,7 +275,7 @@ public class SamplingStatCalculator {
     }
 
     public Number getPercentPoint(double percent) {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? calculator.getPercentPoint(percent).divide(BigInteger.valueOf(1000000L)) : calculator.getPercentPoint(percent);
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getPercentPoint(percent).divide(BigInteger.valueOf(1000000L)) : calculator.getPercentPoint(percent);
     }
 
     public long getCount() {
@@ -283,11 +283,11 @@ public class SamplingStatCalculator {
     }
 
     public Number getMax() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? calculator.getMax().divide(BigInteger.valueOf(1000000L)) : calculator.getMax();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMax().divide(BigInteger.valueOf(1000000L)) : calculator.getMax();
     }
 
     public double getMean() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? calculator.getMean() / 1000000.0D : calculator.getMean();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMean() / 1000000.0D : calculator.getMean();
     }
 
     public Number getMeanAsNumber() {
@@ -295,18 +295,18 @@ public class SamplingStatCalculator {
     }
 
     public Number getMedian() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? calculator.getMedian().divide(BigInteger.valueOf(1000000L))  : calculator.getMedian();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMedian().divide(BigInteger.valueOf(1000000L))  : calculator.getMedian();
     }
 
     public Number getMin() {
         if (calculator.getMin().compareTo(BigInteger.valueOf(0L)) < 0) {
             return 0L;
         }
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? calculator.getMin().divide(BigInteger.valueOf(1000000L)) : calculator.getMin();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMin().divide(BigInteger.valueOf(1000000L)) : calculator.getMin();
     }
 
     public Number getPercentPoint(float percent) {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? calculator.getPercentPoint(percent).divide(BigInteger.valueOf(1000000L)) : calculator.getPercentPoint(percent);
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getPercentPoint(percent).divide(BigInteger.valueOf(1000000L)) : calculator.getPercentPoint(percent);
     }
 
     public double getStandardDeviation() {

@@ -57,7 +57,7 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-        return sample -> ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? sample.getElapsedTime() / 1000000.0D : (double) sample.getElapsedTime();
+        return sample -> ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sample.getElapsedTime() / 1000000.0D : (double) sample.getElapsedTime();
     }
 
     /*

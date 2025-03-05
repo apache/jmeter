@@ -165,7 +165,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private static final String Y_AXIS_LABEL = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
 
-    private static final String Y_AXIS_TITLE = JMeterUtils.getResString(ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? "aggregate_graph_ms" : "aggregate_graph_ns"); //$NON-NLS-1$
+    private static final String Y_AXIS_TITLE = JMeterUtils.getResString(ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? "aggregate_graph_ms" : "aggregate_graph_ns"); //$NON-NLS-1$
 
     /**
      * Lock used to protect list update
@@ -411,7 +411,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 long keyShift = minStartTime + idx;
                 StatCalculatorLong value = subList.get(keyShift);
                 if (value != null) {
-                    nanLast = ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? value.getMean() / 100000.0D : value.getMean();
+                    nanLast = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? value.getMean() / 100000.0D : value.getMean();
                     data[s][idx] = nanLast;
                     // Calculate intermediate values (if needed)
                     int nlsize = nanList.size();
@@ -557,7 +557,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         tempList.addAll(internalList);
                         this.clearData();
                         for (RespTimeGraphDataBean data : tempList) {
-                            SampleResult sr = new SampleResult(data.getStartTime() / 1000000L, data.getTime() / 1000000L);
+                            SampleResult sr = new SampleResult(data.getStartTime() / 1000000L / 1000000L, data.getTime() / 1000000L / 1000000L);
                             sr.setSampleLabel(data.getSamplerLabel());
                             this.add(sr);
                         }

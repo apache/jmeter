@@ -46,7 +46,7 @@ public class MinAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? value / 1000000.0D : value;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? value / 1000000.0D : value;
     }
 
     /*

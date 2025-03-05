@@ -126,8 +126,8 @@ public class ReportGeneratorConfiguration {
     public static final String SUBCONF_KEY_CLASSNAME = "classname";
     public static final String SUBCONF_KEY_PROPERTY = "property";
 
-    public static final String jmeter_reportgenerator_msns = "ms".equalsIgnoreCase(JMeterUtils.getProperty(REPORT_GENERATOR_KEY_PREFIX + KEY_DELIMITER + "msns")) ? "ms" : "ns".equalsIgnoreCase(JMeterUtils.getProperty(REPORT_GENERATOR_KEY_PREFIX + KEY_DELIMITER + "msns")) ? "ns" : "ms";
-    public static final boolean jmeter_reportgenerator_msns_isMs = "ms".equals(jmeter_reportgenerator_msns);
+    public static final String jmeter_reportgenerator_ms_ns = "ms".equalsIgnoreCase(JMeterUtils.getProperty(REPORT_GENERATOR_KEY_PREFIX + KEY_DELIMITER + "ms_ns")) ? "ms" : "ns".equalsIgnoreCase(JMeterUtils.getProperty(REPORT_GENERATOR_KEY_PREFIX + KEY_DELIMITER + "ms_ns")) ? "ns" : "ms";
+    public static final boolean jmeter_reportgenerator_ms_ns_isMs = "ms".equals(jmeter_reportgenerator_ms_ns);
 
     private static final class ExporterConfigurationFactory implements
             SubConfigurationFactory<ExporterConfiguration> {

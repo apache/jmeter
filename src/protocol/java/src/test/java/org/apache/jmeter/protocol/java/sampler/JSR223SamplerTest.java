@@ -31,7 +31,7 @@ class JSR223SamplerTest {
         sampler.setScript("SampleResult.setEndTime(42); 'OK'");
         sampler.setScriptLanguage("groovy");
         SampleResult sampleResult = sampler.sample(null);
-        assertEquals(42, sampleResult.getEndTime());
+        assertEquals(42000000, sampleResult.getEndTime());
     }
 
     @Test

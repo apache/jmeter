@@ -29,26 +29,26 @@ class CalculatorTest {
     @Test
     fun min() {
         assertEquals(Long.MAX_VALUE / 1000000L, calculator.min, "min()")
-        calculator.addSample(SampleResult(10 * 1000000L, 42 * 1000000L))
+        calculator.addSample(SampleResult(10, 42))
         assertEquals(42, calculator.min, "min(42)")
-        calculator.addSample(SampleResult(10 * 1000000L, 40 * 1000000L))
+        calculator.addSample(SampleResult(10, 40))
         assertEquals(40, calculator.min, "min(42, 40)")
-        calculator.addSample(SampleResult(10 * 1000000L, 50 * 1000000L))
+        calculator.addSample(SampleResult(10, 50))
         assertEquals(40, calculator.min, "min(42, 40, 50)")
-        calculator.addSample(SampleResult(10 * 1000000L, 50 * 1000000L).apply { sampleCount = 2 })
+        calculator.addSample(SampleResult(10, 50).apply { sampleCount = 2 })
         assertEquals(25, calculator.min, "min(42, 40, 50, 50/2)")
     }
 
     @Test
     fun max() {
         assertEquals(Long.MIN_VALUE / 1000000L, calculator.max, "max()")
-        calculator.addSample(SampleResult(10 * 1000000L, 40 * 1000000L))
+        calculator.addSample(SampleResult(10, 40))
         assertEquals(40, calculator.max, "max(40)")
-        calculator.addSample(SampleResult(10 * 1000000L, 42 * 1000000L))
+        calculator.addSample(SampleResult(10, 42))
         assertEquals(42, calculator.max, "max(40, 42)")
-        calculator.addSample(SampleResult(10 * 1000000L, 30 * 1000000L))
+        calculator.addSample(SampleResult(10, 30))
         assertEquals(42, calculator.max, "max(40, 42, 30)")
-        calculator.addSample(SampleResult(10 * 1000000L, 90 * 1000000L).apply { sampleCount = 2 })
+        calculator.addSample(SampleResult(10, 90).apply { sampleCount = 2 })
         assertEquals(45, calculator.max, "max(40, 42, 30, 90/2)")
     }
 
@@ -66,11 +66,11 @@ class CalculatorTest {
     @Test
     fun mean() {
         assertEquals(0.0, calculator.mean, "mean()")
-        calculator.addSample(SampleResult(10 * 1000000L, 40 * 1000000L))
+        calculator.addSample(SampleResult(10, 40))
         assertEquals(40.0, calculator.mean, 0.001, "mean(40)")
-        calculator.addSample(SampleResult(10 * 1000000L, 42 * 1000000L))
+        calculator.addSample(SampleResult(10, 42))
         assertEquals((40.0 + 42.0) / 2, calculator.mean, 0.001, "mean(40, 42)")
-        calculator.addSample(SampleResult(10 * 1000000L, 48 * 1000000L).apply { sampleCount = 2 })
+        calculator.addSample(SampleResult(10, 48).apply { sampleCount = 2 })
         assertEquals((40.0 + 42.0 + 48) / 4, calculator.mean, 0.001, "mean(40, 42, 48/2)")
     }
 
@@ -80,18 +80,18 @@ class CalculatorTest {
         calculator.addSample(SampleResult(10, 40))
         assertEquals(0.0, calculator.standardDeviation, "standardDeviation(40)")
         calculator.addSample(SampleResult(10, 42))
-        assertEquals(1.0, calculator.standardDeviation, "standardDeviation(40, 42)")
+        assertEquals(1000000.0, calculator.standardDeviation, "standardDeviation(40, 42)")
         calculator.addSample(SampleResult(10, 43))
         // Math.sqrt((sumOfSquares / count) - (mean * mean))
         assertEquals(
-            sqrt((40 * 40 + 42 * 42 + 43 * 43) / 3.0 - ((40.0 + 42 + 43) / 3).pow(2)),
+            sqrt((40 * 1000000L * 40 * 1000000L + 42 * 1000000L * 42 * 1000000L + 43 * 1000000L * 43 * 1000000L) / 3.0 - ((40.0 * 1000000.0 + 42 * 1000000.0 + 43 * 1000000.0) / 3).pow(2)),
             calculator.standardDeviation,
             0.001,
             "standardDeviation(40, 42, 43)"
         )
         calculator.addSample(SampleResult(10, 48).apply { sampleCount = 2 })
         assertEquals(
-            sqrt((40 * 40 + 42 * 42 + 43 * 43 + 24 * 24 + 24 * 24) / 5.0 - ((40.0 + 42 + 43 + 24 + 24) / 5.0).pow(2)),
+            sqrt((40 * 1000000L * 40 * 1000000L + 42 * 1000000L * 42 * 1000000L + 43 * 1000000L * 43 * 1000000L + 24 * 1000000L * 24 * 1000000L + 24 * 1000000L * 24 * 1000000L) / 5.0 - ((40.0 * 1000000.0 + 42 * 1000000.0 + 43 * 1000000.0 + 24 * 1000000.0 + 24 * 1000000.0) / 5.0).pow(2)),
             calculator.standardDeviation,
             0.001,
             "standardDeviation(40, 42, 43, 48/2)"
@@ -112,14 +112,14 @@ class CalculatorTest {
     @Test
     fun bytesPerSecond() {
         assertEquals(0.0, calculator.bytesPerSecond, "bytesPerSecond()")
-        calculator.addSample(SampleResult(40 * 1000000L, 30 * 1000000L).apply { setBodySize(50L) })
+        calculator.addSample(SampleResult(40, 30).apply { setBodySize(50L) })
         assertEquals(
             50.0 * 1000 / (40 - 10.0),
             calculator.bytesPerSecond,
             0.001,
             "bytesPerSecond({50bytes, 10ms..40ms})"
         )
-        calculator.addSample(SampleResult(60 * 1000000L, 20 * 1000000L).apply { setBodySize(70L) })
+        calculator.addSample(SampleResult(60, 20).apply { setBodySize(70L) })
         assertEquals(
             (50 + 70.0) * 1000 / (60 - 10.0),
             calculator.bytesPerSecond,
@@ -131,14 +131,14 @@ class CalculatorTest {
     @Test
     fun sentBytesPerSecond() {
         assertEquals(0.0, calculator.sentBytesPerSecond, "sentBytesPerSecond()")
-        calculator.addSample(SampleResult(40 * 1000000L, 30 * 1000000L).apply { sentBytes = 50L })
+        calculator.addSample(SampleResult(40, 30).apply { sentBytes = 50L })
         assertEquals(
             50.0 * 1000 / (40 - 10.0),
             calculator.sentBytesPerSecond,
             0.001,
             "sentBytesPerSecond({sent=50bytes, 10ms..40ms})"
         )
-        calculator.addSample(SampleResult(60 * 1000000L, 20 * 1000000L).apply { sentBytes = 70L })
+        calculator.addSample(SampleResult(60, 20).apply { sentBytes = 70L })
         assertEquals(
             (50 + 70.0) * 1000 / (60 - 10.0),
             calculator.sentBytesPerSecond,

@@ -162,7 +162,7 @@ public class Calculator {
         if (count == 0) {
             return 0.0;
         }
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(1000000L), 16, RoundingMode.HALF_UP).doubleValue() : sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).doubleValue();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(1000000L), 16, RoundingMode.HALF_UP).doubleValue() : sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).doubleValue();
     }
 
     public Number getMeanAsNumber() {
@@ -180,11 +180,11 @@ public class Calculator {
     }
 
     public long getMin() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? minimum.get() / 1000000L : minimum.get();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? minimum.get() / 1000000L : minimum.get();
     }
 
     public long getMax() {
-        return ReportGeneratorConfiguration.jmeter_reportgenerator_msns_isMs ? maximum.get() / 1000000L : maximum.get();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? maximum.get() / 1000000L : maximum.get();
     }
 
     public int getCount() {

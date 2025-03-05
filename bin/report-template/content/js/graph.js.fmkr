@@ -58,7 +58,7 @@ var responseTimePercentilesInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Percentile value in ${jmeter_reportgenerator_msns}",
+                    axisLabel: "Percentile value in ${jmeter_reportgenerator_ms_ns}",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -70,7 +70,7 @@ var responseTimePercentilesInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s : %x.2 percentile was %y ${jmeter_reportgenerator_msns}"
+                    content: "%s : %x.2 percentile was %y ${jmeter_reportgenerator_ms_ns}"
                 },
                 selection: { mode: "xy" },
             };
@@ -127,7 +127,7 @@ var responseTimeDistributionInfos = {
                     container: '#legendResponseTimeDistribution'
                 },
                 xaxis:{
-                    axisLabel: "Response times in ${jmeter_reportgenerator_msns}",
+                    axisLabel: "Response times in ${jmeter_reportgenerator_ms_ns}",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -151,7 +151,7 @@ var responseTimeDistributionInfos = {
                 tooltip: true,
                 tooltipOpts: {
                     content: function(label, xval, yval, flotItem){
-                        return yval + " responses for " + label + " were between " + xval + " and " + (xval + granularity) + " ${jmeter_reportgenerator_msns}";
+                        return yval + " responses for " + label + " were between " + xval + " and " + (xval + granularity) + " ${jmeter_reportgenerator_ms_ns}";
                     }
                 }
             };
@@ -355,7 +355,7 @@ var timeVsThreadsInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Average response times in ${jmeter_reportgenerator_msns}",
+                    axisLabel: "Average response times in ${jmeter_reportgenerator_ms_ns}",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -370,7 +370,7 @@ var timeVsThreadsInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s: At %x.2 active threads, Average response time was %y.2 ${jmeter_reportgenerator_msns}"
+                    content: "%s: At %x.2 active threads, Average response time was %y.2 ${jmeter_reportgenerator_ms_ns}"
                 }
             };
         },
@@ -505,7 +505,7 @@ var responseTimesOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Average response time in ${jmeter_reportgenerator_msns}",
+                    axisLabel: "Average response time in ${jmeter_reportgenerator_ms_ns}",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -525,7 +525,7 @@ var responseTimesOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s : at %x Average response time was %y ${jmeter_reportgenerator_msns}"
+                    content: "%s : at %x Average response time was %y ${jmeter_reportgenerator_ms_ns}"
                 }
             };
         },
@@ -586,7 +586,7 @@ var latenciesOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Average response latencies in ${jmeter_reportgenerator_msns}",
+                    axisLabel: "Average response latencies in ${jmeter_reportgenerator_ms_ns}",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -606,7 +606,7 @@ var latenciesOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s : at %x Average latency was %y ${jmeter_reportgenerator_msns}"
+                    content: "%s : at %x Average latency was %y ${jmeter_reportgenerator_ms_ns}"
                 }
             };
         },
@@ -667,7 +667,7 @@ var connectTimeOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Average Connect Time in ${jmeter_reportgenerator_msns}",
+                    axisLabel: "Average Connect Time in ${jmeter_reportgenerator_ms_ns}",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -687,7 +687,7 @@ var connectTimeOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s : at %x Average connect time was %y ${jmeter_reportgenerator_msns}"
+                    content: "%s : at %x Average connect time was %y ${jmeter_reportgenerator_ms_ns}"
                 }
             };
         },
@@ -749,7 +749,7 @@ var responseTimePercentilesOverTimeInfos = {
                     axisLabelPadding: 20,
                 },
                 yaxis: {
-                    axisLabel: "Response Time in ${jmeter_reportgenerator_msns}",
+                    axisLabel: "Response Time in ${jmeter_reportgenerator_ms_ns}",
                     axisLabelUseCanvas: true,
                     axisLabelFontSizePixels: 12,
                     axisLabelFontFamily: 'Verdana, Arial',
@@ -769,7 +769,7 @@ var responseTimePercentilesOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s : at %x Response time was %y ${jmeter_reportgenerator_msns}"
+                    content: "%s : at %x Response time was %y ${jmeter_reportgenerator_ms_ns}"
                 }
             };
         },
@@ -825,7 +825,7 @@ var responseTimeVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Response Time in ${jmeter_reportgenerator_msns}",
+                axisLabel: "Median Response Time in ${jmeter_reportgenerator_ms_ns}",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -844,7 +844,7 @@ var responseTimeVsRequestInfos = {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s : Median response time at %x req/s was %y ${jmeter_reportgenerator_msns}"
+                content: "%s : Median response time at %x req/s was %y ${jmeter_reportgenerator_ms_ns}"
             },
             colors: ["#9ACD32", "#FF6347"]
         };
@@ -899,7 +899,7 @@ var latenciesVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Latency in ${jmeter_reportgenerator_msns}",
+                axisLabel: "Median Latency in ${jmeter_reportgenerator_ms_ns}",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -914,7 +914,7 @@ var latenciesVsRequestInfos = {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s : Median Latency time at %x req/s was %y ${jmeter_reportgenerator_msns}"
+                content: "%s : Median Latency time at %x req/s was %y ${jmeter_reportgenerator_ms_ns}"
             },
             colors: ["#9ACD32", "#FF6347"]
         };
