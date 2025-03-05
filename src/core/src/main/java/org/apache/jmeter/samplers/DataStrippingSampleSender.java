@@ -53,6 +53,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     private final SampleSender decoratedSender;
     // Configuration items, set up by readResolve
     private transient volatile boolean stripAlsoOnError;
+    private static boolean stripIfSuccess = JMeterUtils.getPropDefault("sample_sender_strip_if_success", false);
 
 
     /**
@@ -127,7 +128,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
         result.setBytes(result.getBytesAsLong());
         result.setResponseData(EMPTY_BA);
 
-        if (result.isSuccessful()) {
+        if (stripIfSuccess && result.isSuccessful()) {
             result.setSentBytes(result.getSentBytes());
             result.setSamplerData(null);
             result.setRequestHeaders(null);
@@ -156,10 +157,12 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     protected Object readResolve() throws ObjectStreamException{
         if (isClientConfigured()) {
             stripAlsoOnError = clientConfiguredStripAlsoOnError;
+            stripIfSuccess = JMeterUtils.getPropDefault("sample_sender_strip_if_success", false);
         } else {
             stripAlsoOnError = SERVER_CONFIGURED_STRIP_ALSO_ON_ERROR;
         }
         log.info("Using DataStrippingSampleSender for this run with stripAlsoOnError: {}", stripAlsoOnError);
+        log.info("Using DataStrippingSampleSender for this run with stripIfSuccess: {}", stripIfSuccess);
         return this;
     }
 }
