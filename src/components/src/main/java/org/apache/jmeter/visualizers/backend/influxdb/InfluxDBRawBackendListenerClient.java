@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.backend.BackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
@@ -125,7 +126,7 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
     private void addMetricFromSampleResult(SampleResult sampleResult) {
         String tags = "," + createTags(sampleResult);
         String fields = createFields(sampleResult);
-        long timestamp = sampleResult.getTimeStamp();
+        long timestamp = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getTimeStamp() / 1000000L : sampleResult.getTimeStamp();
 
         influxDBMetricsManager.addMetric(measurement, tags, fields, timestamp);
     }
@@ -145,9 +146,9 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
 
     @VisibleForTesting
     static String createFields(SampleResult sampleResult) {
-        long duration = sampleResult.getTime();
-        long latency = sampleResult.getLatency();
-        long connectTime = sampleResult.getConnectTime();
+        long duration = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getTime() / 1000000L : sampleResult.getTime();
+        long latency = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getLatency() / 1000000L : sampleResult.getLatency();
+        long connectTime = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getConnectTime() / 1000000L : sampleResult.getConnectTime();
         return "duration=" + duration
                 + ",ttfb=" + latency
                 + ",connectTime=" + connectTime;

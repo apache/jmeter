@@ -438,6 +438,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         // Add the overall filter property to the context
         addToContext(DATA_CTX_OVERALL_FILTER, configuration.getSampleFilter(), dataContext);
 
+        dataContext.put("jmeter_reportgenerator_ms_ns", ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns);
+
         // Walk template directory to copy files and process templated ones
         Configuration templateCfg = new Configuration(Configuration.VERSION_2_3_30);
         try {

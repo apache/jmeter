@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.jmeter.control.TransactionController;
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.processor.DescriptiveStatisticsFactory;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -230,7 +231,7 @@ public class SamplerMetric {
      *         been added yet
      */
     public double getOkMaxTime() {
-        return okResponsesStats.getMax();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? okResponsesStats.getMax() / 1000000.0D : okResponsesStats.getMax();
     }
 
     /**
@@ -240,7 +241,7 @@ public class SamplerMetric {
      *         added yet
      */
     public double getOkMinTime() {
-        return okResponsesStats.getMin();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? okResponsesStats.getMin() / 1000000.0D : okResponsesStats.getMin();
     }
 
     /**
@@ -249,7 +250,7 @@ public class SamplerMetric {
      * @return The arithmetic mean of the stored values
      */
     public double getOkMean() {
-        return okResponsesStats.getMean();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? okResponsesStats.getMean() / 1000000.0D : okResponsesStats.getMean();
     }
 
     /**
@@ -261,7 +262,7 @@ public class SamplerMetric {
      *         values.
      */
     public double getOkPercentile(double percentile) {
-        return okResponsesStats.getPercentile(percentile);
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? okResponsesStats.getMean() / 1000000.0D : okResponsesStats.getMean();
     }
 
     /**
@@ -271,7 +272,7 @@ public class SamplerMetric {
      *         been added yet
      */
     public double getKoMaxTime() {
-        return koResponsesStats.getMax();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? koResponsesStats.getMax() / 1000000.0D : koResponsesStats.getMax();
     }
 
     /**
@@ -281,7 +282,7 @@ public class SamplerMetric {
      *         added yet
      */
     public double getKoMinTime() {
-        return koResponsesStats.getMin();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? koResponsesStats.getMin() / 1000000.0D : koResponsesStats.getMin();
     }
 
     /**
@@ -290,7 +291,7 @@ public class SamplerMetric {
      * @return The arithmetic mean of the stored values
      */
     public double getKoMean() {
-        return koResponsesStats.getMean();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? koResponsesStats.getMean() / 1000000.0D : koResponsesStats.getMean();
     }
 
     /**
@@ -302,7 +303,7 @@ public class SamplerMetric {
      *         values.
      */
     public double getKoPercentile(double percentile) {
-        return koResponsesStats.getPercentile(percentile);
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? koResponsesStats.getPercentile(percentile) / 1000000.0D : koResponsesStats.getPercentile(percentile);
     }
 
     /**
@@ -312,7 +313,7 @@ public class SamplerMetric {
      *         been added yet
      */
     public double getAllMaxTime() {
-        return allResponsesStats.getMax();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? allResponsesStats.getMax() / 1000000.0D : allResponsesStats.getMax();
     }
 
     /**
@@ -322,7 +323,7 @@ public class SamplerMetric {
      *         added yet
      */
     public double getAllMinTime() {
-        return allResponsesStats.getMin();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? allResponsesStats.getMin() / 1000000.0D : allResponsesStats.getMin();
     }
 
     /**
@@ -331,7 +332,7 @@ public class SamplerMetric {
      * @return The arithmetic mean of the stored values
      */
     public double getAllMean() {
-        return allResponsesStats.getMean();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? allResponsesStats.getMean() / 1000000.0D : allResponsesStats.getMean();
     }
 
     /**
@@ -343,7 +344,7 @@ public class SamplerMetric {
      *         values.
      */
     public double getAllPercentile(double percentile) {
-        return pctResponseStats.getPercentile(percentile);
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? pctResponseStats.getPercentile(percentile) / 1000000.0D : pctResponseStats.getPercentile(percentile);
     }
 
     /**
