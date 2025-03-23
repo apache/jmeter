@@ -95,6 +95,9 @@ dependencies {
     implementation("commons-codec:commons-codec") {
         because("DigestUtils")
     }
+    implementation("org.apache-extras.beanshell:bsh:2.0b6") {
+        because("Direct dependency required from BeanShellInterpreter")
+    }
     runtimeOnly("commons-collections:commons-collections") {
         because("Compatibility for old plugins")
     }

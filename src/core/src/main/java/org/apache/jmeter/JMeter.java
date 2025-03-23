@@ -632,7 +632,7 @@ public class JMeter implements JMeterPlugin {
             try {
                 BeanShellInterpreter bsi = new BeanShellInterpreter();
                 bsi.source(bshinit);
-            } catch (ClassNotFoundException|JMeterException e) {
+            } catch (JMeterException e) {
                 if (log.isWarnEnabled()) {
                     log.warn("Could not process Beanshell file: {}", e.getMessage());
                 }
