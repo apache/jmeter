@@ -47,8 +47,6 @@ public class BeanShellInterpreter {
 
     private final Logger logger; // Logger to use during initialization and script run
 
-    private static final String BSH_ERROR_TEMPLATE = "Error invoking bsh method: %s";
-
     public BeanShellInterpreter() {
         this(null, null);
     }
@@ -110,13 +108,7 @@ public class BeanShellInterpreter {
         try {
             r = bshInstance.eval(s);
         } catch (EvalError e) {
-            String message = String.format(BSH_ERROR_TEMPLATE, "eval");
-            Throwable cause = e.getCause();
-            if (cause != null) {
-                message += "\t" + cause.getLocalizedMessage();
-            }
-            log.error(message);
-            throw new JMeterException(message, e);
+            handleException("eval", e, true);
         }
         return r;
     }
@@ -126,12 +118,7 @@ public class BeanShellInterpreter {
         try {
             r = bshInstance.eval(s);
         } catch (EvalError e) {
-            String message = String.format(BSH_ERROR_TEMPLATE, "eval");
-            Throwable cause = e.getCause();
-            if (cause != null) {
-                message += "\t" + cause.getLocalizedMessage();
-            }
-            throw new JMeterException(message, e);
+            handleException("eval", e, false);
         }
         return r;
     }
@@ -140,13 +127,7 @@ public class BeanShellInterpreter {
         try {
             bshInstance.set(s, o);
         } catch (EvalError e) {
-            String message = String.format(BSH_ERROR_TEMPLATE, "set");
-            Throwable cause = e.getCause();
-            if (cause != null) {
-                message += "\t" + cause.getLocalizedMessage();
-            }
-            log.error(message);
-            throw new JMeterException(message, e);
+            handleException("set", e, true);
         }
     }
 
@@ -154,13 +135,7 @@ public class BeanShellInterpreter {
         try {
             bshInstance.set(s, b);
         } catch (EvalError e) {
-            String message = String.format(BSH_ERROR_TEMPLATE, "set");
-            Throwable cause = e.getCause();
-            if (cause != null) {
-                message += "\t" + cause.getLocalizedMessage();
-            }
-            log.error(message);
-            throw new JMeterException(message, e);
+            handleException("set", e, true);
         }
     }
 
@@ -169,13 +144,7 @@ public class BeanShellInterpreter {
         try {
             r = bshInstance.source(s);
         } catch (EvalError | IOException e) {
-            String message = String.format(BSH_ERROR_TEMPLATE, "source");
-            Throwable cause = e.getCause();
-            if (cause != null) {
-                message += "\t" + cause.getLocalizedMessage();
-            }
-            log.error(message);
-            throw new JMeterException(message, e);
+            handleException("source", e, true);
         }
         return r;
     }
@@ -185,15 +154,21 @@ public class BeanShellInterpreter {
         try {
             r = bshInstance.get(s);
         } catch (EvalError e) {
-            String message = String.format(BSH_ERROR_TEMPLATE, "get");
-            Throwable cause = e.getCause();
-            if (cause != null) {
-                message += "\t" + cause.getLocalizedMessage();
-            }
-            log.error(message);
-            throw new JMeterException(message, e);
+            handleException("get", e, true);
         }
         return r;
+    }
+
+    private static void handleException(String methodName, Exception e, boolean shouldLog) throws JMeterException {
+        String message = String.format("Error invoking bsh method: %s", methodName);
+        Throwable cause = e.getCause();
+        if (cause != null) {
+            message += "\t" + cause.getLocalizedMessage();
+        }
+        if (shouldLog) {
+            log.error(message);
+        }
+        throw new JMeterException(message, e);
     }
 
     // For use by Unit Tests
