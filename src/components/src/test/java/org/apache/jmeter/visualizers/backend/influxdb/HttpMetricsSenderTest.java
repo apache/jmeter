@@ -36,6 +36,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.extension.Parameters;
+import com.github.tomakehurst.wiremock.extension.ServeEventListener;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
@@ -47,7 +48,7 @@ public class HttpMetricsSenderTest {
     private MappingBuilder influxRequest(CountDownLatch latch) {
         return WireMock.post(API_URL)
                 .willReturn(WireMock.aResponse().withStatus(HttpURLConnection.HTTP_NO_CONTENT))
-                .withPostServeAction("countdown", Parameters.one("latch", latch));
+                .withServeEventListener(ServeEventListener.RequestPhase.AFTER_COMPLETE, "countdown", Parameters.one("latch", latch));
     }
 
     static Collection<Arguments> emptyTokens() {

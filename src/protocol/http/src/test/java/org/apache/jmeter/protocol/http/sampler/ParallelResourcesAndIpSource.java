@@ -123,14 +123,12 @@ public class ParallelResourcesAndIpSource {
                     continue;
                 }
 
-                localIps.forEach(localIp -> {
-                    if (finalLocal4 != null) {
-                        res.add(arguments(impl, targetHost, finalLocal4));
-                    }
-                    if (finalLocal6 != null) {
-                        res.add(arguments(impl, targetHost, finalLocal6));
-                    }
-                });
+                if (finalLocal4 != null) {
+                    res.add(arguments(impl, targetHost, finalLocal4));
+                }
+                if (finalLocal6 != null) {
+                    res.add(arguments(impl, targetHost, finalLocal6));
+                }
             }
         }
         return res;
