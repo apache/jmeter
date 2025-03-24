@@ -114,6 +114,7 @@ dependencies {
         isTransitive = false
     }
     implementation("org.apache.xmlgraphics:xmlgraphics-commons")
+    implementation("org.brotli:dec")
     implementation("org.freemarker:freemarker")
     implementation("org.jodd:jodd-core")
     implementation("org.jodd:jodd-props")
