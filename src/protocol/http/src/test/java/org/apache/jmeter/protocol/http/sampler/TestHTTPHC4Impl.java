@@ -98,6 +98,25 @@ public class TestHTTPHC4Impl {
     }
 
     @Test
+    void testMultipartFormHeaderWithoutCharset() throws Exception {
+        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+        sampler.setThreadContext(jmctx);
+        sampler.setDoMultipart(true);
+        sampler.setDoBrowserCompatibleMultipart(true);
+        sampler.setHTTPFiles(new HTTPFileArg[] {new HTTPFileArg("filename", "file", "application/octect; charset=utf-8")});
+        sampler.getArguments().addArgument(new HTTPArgument("param", "value"));
+        HTTPHC4Impl hc = new HTTPHC4Impl(sampler);
+
+        HttpEntityEnclosingRequestBase post = new HttpPost();
+        hc.setupHttpEntityEnclosingRequestData(post);
+        String contentTypeWithEntity = post.getEntity().getContentType().getValue();
+        Assertions.assertFalse(
+                contentTypeWithEntity.contains("charset"),
+                () -> "multipart/form-data's Content-Type should not contain charset=.... Got " + contentTypeWithEntity
+        );
+    }
+
+    @Test
     public void testNotifyFirstSampleAfterLoopRestartWhenThreadIterationIsSameUser() {
         jmvars.putObject(SAME_USER, true);
         jmctx.setVariables(jmvars);
