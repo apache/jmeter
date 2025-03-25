@@ -36,6 +36,13 @@ import org.slf4j.LoggerFactory;
  * If there is no EOL byte defined, then reads until
  * the end of the stream is reached.
  * The EOL byte is defined by the property "tcp.eolByte".
+ * in one test plan several sampler's charset can change by pre-processors in groovy:
+ * if(sampler.firstSample) {
+ *     sampler.initSampling()
+ *     sampler.firstSample = false
+ * }
+ * sampler.protocolHandler.charset = samplerSpecificCharset // by sampler.name
+ *
  */
 public class TCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggerFactory.getLogger(TCPClientImpl.class);
@@ -51,12 +58,7 @@ public class TCPClientImpl extends AbstractTCPClient {
             log.info("Using eolByte={}", eolByte);
         }
         setCharset(CHARSET);
-        String configuredCharset = JMeterUtils.getProperty("tcp.charset");
-        if(StringUtils.isEmpty(configuredCharset)) {
-            log.info("Using platform default charset:{}",CHARSET);
-        } else {
-            log.info("Using charset:{}", configuredCharset);
-        }
+        log.info("Init charset:{}", CHARSET);
     }
 
     /**
@@ -67,7 +69,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         if(log.isDebugEnabled()) {
             log.debug("WriteS: {}", showEOL(s));
         }
-        os.write(s.getBytes(CHARSET));
+        os.write(s.getBytes(getCharset()));
         os.flush();
     }
 
@@ -75,20 +77,21 @@ public class TCPClientImpl extends AbstractTCPClient {
      * {@inheritDoc}
      */
     @Override
-    public void write(OutputStream os, InputStream is) throws IOException{
+    public void write(OutputStream os, InputStream is) throws IOException {
         byte[] buff = new byte[512];
-        while(is.read(buff) > 0){
+        int read;
+        while((read = is.read(buff)) > 0) {
             if(log.isDebugEnabled()) {
-                log.debug("WriteIS: {}", showEOL(new String(buff, CHARSET)));
+                log.debug("WriteIS: {}", showEOL(new String(buff, 0, read, getCharset())));
             }
-            os.write(buff);
+            os.write(buff, 0, read);
             os.flush();
         }
     }
 
     @Deprecated
     public String read(InputStream is) throws ReadException {
-        return read(is, new SampleResult());
+        return read(is, null);
     }
 
     /**
@@ -97,35 +100,38 @@ public class TCPClientImpl extends AbstractTCPClient {
      * the end of the stream is reached.
      */
     @Override
-    public String read(InputStream is, SampleResult sampleResult) throws ReadException{
+    public String read(InputStream is, SampleResult sampleResult) throws ReadException {
         ByteArrayOutputStream w = new ByteArrayOutputStream();
         try {
             byte[] buffer = new byte[4096];
             int x;
-            boolean first = true;
+            int last = Integer.MAX_VALUE;
+            boolean first = sampleResult != null;
             while ((x = is.read(buffer)) > -1) {
                 if (first) {
                     sampleResult.latencyEnd();
                     first = false;
                 }
-                w.write(buffer, 0, x);
-                if (useEolByte && (buffer[x - 1] == eolByte)) {
+                if(x > 0) {
+                    w.write(buffer, 0, x);
+                    last = buffer[x - 1];
+                } else if (useEolByte && last == eolByte) {
                     break;
                 }
             }
 
             // do we need to close byte array (or flush it?)
             if(log.isDebugEnabled()) {
-                log.debug("Read: {}\n{}", w.size(), w.toString(CHARSET));
+                log.debug("Read: {}\n{}", w.size(), w.toString(getCharset()));
             }
-            return w.toString(CHARSET);
+            return w.toString(getCharset());
         } catch (UnsupportedEncodingException e) {
-            throw new ReadException("Error decoding bytes from server with " + CHARSET + ", bytes read: " + w.size(),
+            throw new ReadException("Error decoding bytes from server with " + getCharset() + ", bytes read: " + w.size(),
                     e, "<Read bytes with bad encoding>");
         } catch (IOException e) {
             String decodedBytes;
             try {
-                decodedBytes = w.toString(CHARSET);
+                decodedBytes = w.toString(getCharset());
             } catch (UnsupportedEncodingException uee) {
                 // we should never get here, as it would have crashed earlier
                 decodedBytes = "<Read bytes with bad encoding>";
