@@ -261,7 +261,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      */
     private static String computePostBody(Arguments arguments, boolean crlfToLF) {
         StringBuilder postBody = new StringBuilder();
-        for (JMeterProperty argument : arguments) {
+        for (JMeterProperty argument : arguments.getEnabledArguments()) {
             HTTPArgument arg = (HTTPArgument) argument.getObjectValue();
             String value = arg.getValue();
             if (crlfToLF) {
