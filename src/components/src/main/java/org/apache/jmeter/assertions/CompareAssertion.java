@@ -77,7 +77,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         for (SampleResult currentResult : responses) {
             long currentTime = currentResult.getTime();
             if (prevTime != -1) {
-                boolean failure = Math.abs(prevTime - currentTime) > compareTime;
+                boolean failure = Math.abs(prevTime - currentTime) > compareTime * 1000000L;
                 if (failure) {
                     markTimeFailure(result, prevResult, prevTime, currentResult, currentTime);
                     return;

@@ -500,7 +500,7 @@ public class ReportGenerator {
      */
     private static AggregateConsumer createEndDateConsumer() {
         AggregateConsumer endDateConsumer = new AggregateConsumer(
-                new MaxAggregator(), sample -> (double) sample.getEndTime());
+                new MaxAggregator(), sample -> ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? (double) sample.getEndTime() : sample.getEndTime() / 1000000.0D);
         endDateConsumer.setName(END_DATE_CONSUMER_NAME);
         return endDateConsumer;
     }
@@ -510,7 +510,7 @@ public class ReportGenerator {
      */
     private static AggregateConsumer createBeginDateConsumer() {
         AggregateConsumer beginDateConsumer = new AggregateConsumer(
-                new MinAggregator(), sample -> (double) sample.getStartTime());
+                new MinAggregator(), sample -> ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? (double) sample.getStartTime() : sample.getStartTime() / 1000000.0D);
         beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
         return beginDateConsumer;
     }

@@ -51,6 +51,10 @@ public class StatisticalSampleResult extends SampleResult implements
         this.elapsed = elapsed;
     }
 
+    public StatisticalSampleResult(long elapsed) {
+        this.elapsed = elapsed;
+    }
+
     /**
      * Create a statistical sample result from an ordinary sample result.
      *
@@ -82,14 +86,14 @@ public class StatisticalSampleResult extends SampleResult implements
 
         // Set start/end times
         if (getStartTime()==0){ // Bug 40954 - ensure start time gets started!
-            this.setStartTime(res.getStartTime());
+            this.setStartTime_ns(res.getStartTime());
         } else {
-            this.setStartTime(Math.min(getStartTime(), res.getStartTime()));
+            this.setStartTime_ns(Math.min(getStartTime(), res.getStartTime()));
         }
-        this.setEndTime(Math.max(getEndTime(), res.getEndTime()));
+        this.setEndTime_ns(Math.max(getEndTime(), res.getEndTime()));
 
-        setLatency(getLatency()+ res.getLatency());
-        setConnectTime(getConnectTime()+ res.getConnectTime());
+        setLatency_ns(getLatency()+ res.getLatency());
+        setConnectTime_ns(getConnectTime()+ res.getConnectTime());
 
         elapsed += res.getTime();
     }

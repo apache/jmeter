@@ -18,6 +18,7 @@
 package org.apache.jmeter.report.processor;
 
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 
 /**
  * The class MeanAggregator is used to get mean from samples.
@@ -26,7 +27,7 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
  */
 public class MeanAggregator implements Aggregator {
 
-    private final Mean mean = new Mean();
+    protected final Mean mean = new Mean();
 
     /*
      * (non-Javadoc)
@@ -45,7 +46,7 @@ public class MeanAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-        return mean.getResult();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? mean.getResult() / 1000000.0D : mean.getResult();
     }
 
     /*

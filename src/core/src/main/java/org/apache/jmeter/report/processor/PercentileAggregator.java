@@ -71,7 +71,7 @@ public class PercentileAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-        return statistics.getPercentile(percentileIndex);
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? statistics.getPercentile(percentileIndex) / 1000000.0D : statistics.getPercentile(percentileIndex);
     }
 
     /*
