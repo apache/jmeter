@@ -1094,7 +1094,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
         <li><code>FileName</code> - the file name, if any</li>
         <li><code>Parameters</code> - text from the Parameters field</li>
         <li><code>bsh.args</code> - the parameters, split as described above</li>
-        <li><code>SampleResult</code> - pointer to the current <apilink href="org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></apilink></li>
+        <li><code>sampleResult</code> - pointer to the current <apilink href="org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></apilink></li>
             <li><code>ResponseCode</code> defaults to <code>200</code></li>
             <li><code>ResponseMessage</code> defaults to "<code>OK</code>"</li>
             <li><code>IsSuccess</code> defaults to <code>true</code></li>
@@ -1109,7 +1109,7 @@ vars.putObject("OBJ1",new Object());</source></li>
 props.put("PROP1","1234");</source></li>
         </ul>
         <p>When the script completes, control is returned to the Sampler, and it copies the contents
-            of the following script variables into the corresponding variables in the <apilink href="org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></apilink>:</p>
+            of the following script variables into the corresponding variables in the <apilink href="org/apache/jmeter/samplers/SampleResult.html"><code>sampleResult</code></apilink>:</p>
             <ul>
             <li><code>ResponseCode</code> - for example <code>200</code></li>
             <li><code>ResponseMessage</code> - for example "<code>OK</code>"</li>
@@ -1117,24 +1117,26 @@ props.put("PROP1","1234");</source></li>
             </ul>
             <p>The SampleResult ResponseData is set from the return value of the script.
             If the script returns null, it can set the response directly, by using the method
-            <code>SampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
+            <code>sampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
             The data type defaults to "<code>text</code>", but can be set to binary by using the method
-            <code>SampleResult.setDataType(SampleResult.BINARY)</code>.
+            <code>sampleResult.setDataType(SampleResult.BINARY)</code>.
             </p>
-            <p>The <code>SampleResult</code> variable gives the script full access to all the fields and
+            <p>The <code>sampleResult</code> variable gives the script full access to all the fields and
                 methods in the <code>SampleResult</code>. For example, the script has access to the methods
-                <code>setStopThread(boolean)</code> and <code>setStopTest(boolean)</code>.
+                <code>setStopThread(boolean)</code> and <code>setStopTest(boolean)</code>.</p>
 
-                Here is a simple (not very useful!) example script:</p>
+            <p>Here is a simple (not very useful!) example script:</p>
 
 <source>
 if (bsh.args[0].equalsIgnoreCase("StopThread")) {
     log.info("Stop Thread detected!");
-    SampleResult.setStopThread(true);
+    sampleResult.setStopThread(true);
 }
 return "Data from sample with Label "+Label;
-//or
-SampleResult.setResponseData("My data");
+</source>
+or
+<source>
+sampleResult.setResponseData("My data");
 return null;
 </source>
 <p>Another example:<br></br> ensure that the property <code>beanshell.sampler.init=BeanShellSampler.bshrc</code> is defined in <code>jmeter.properties</code>.
@@ -1155,12 +1157,12 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample or some computation required to create/update variables.
 <note>
 If you don't want to generate a <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> when this sampler is run, call the following method:
-<source>SampleResult.setIgnore();</source>
+<source>sampleResult.setIgnore();</source>
 This call will have the following impact:
 <ul>
-    <li>SampleResult will not be delivered to SampleListeners like View Results Tree, Summariser ...</li>
-    <li>SampleResult will not be evaluated in Assertions nor PostProcessors</li>
-    <li>SampleResult will be evaluated to computing last sample status (${JMeterThread.last_sample_ok}),
+    <li>SampleResult will not be delivered to SampleListeners like View Results Tree, Summariser, &hellip;</li>
+    <li>SampleResult will neither be evaluated in Assertions nor in PostProcessors</li>
+    <li>SampleResult will be evaluated to compute last sample status (<code>${JMeterThread.last_sample_ok}</code>),
     and ThreadGroup "Action to be taken after a Sampler error" (since JMeter 5.4)</li>
 </ul>
 </note>
@@ -1227,7 +1229,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 <li><code>FileName</code> - the file name, if any</li>
 <li><code>Parameters</code> - text from the Parameters field</li>
 <li><code>args</code> - the parameters, split as described above</li>
-<li><code>SampleResult</code> - pointer to the current <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink></li>
+<li><code>sampleResult</code> - pointer to the current <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink></li>
 <li><code>sampler</code> - (<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>) - pointer to current Sampler</li>
 <li><code>ctx</code> - <apilink href="org/apache/jmeter/threads/JMeterContext.html">JMeterContext</apilink></li>
 <li><code>vars</code> - <apilink href="org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</apilink>  - e.g.
@@ -1243,12 +1245,12 @@ props.put("PROP1","1234");</source></li>
 <p>
 The <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> ResponseData is set from the return value of the script.
 If the script returns <code>null</code>, it can set the response directly, by using the method
-<code>SampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
+<code>sampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
 The data type defaults to "<code>text</code>", but can be set to binary by using the method
-<code>SampleResult.setDataType(SampleResult.BINARY)</code>.
+<code>sampleResult.setDataType(SampleResult.BINARY)</code>.
 </p>
 <p>
-The SampleResult variable gives the script full access to all the fields and
+The <code>sampleResult</code> variable gives the script full access to all the fields and
 methods in the SampleResult. For example, the script has access to the methods
 <code>setStopThread(boolean)</code> and <code>setStopTest(boolean)</code>.
 </p>
@@ -1257,9 +1259,9 @@ Unlike the BeanShell Sampler, the JSR223 Sampler does not set the <code>Response
 Currently the only way to changes these is via the <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> methods:
 </p>
 <ul>
-<li><code>SampleResult.setSuccessful(true/false)</code></li>
-<li><code>SampleResult.setResponseCode("code")</code></li>
-<li><code>SampleResult.setResponseMessage("message")</code></li>
+<li><code>sampleResult.setSuccessful(true/false)</code></li>
+<li><code>sampleResult.setResponseCode("code")</code></li>
+<li><code>sampleResult.setResponseMessage("message")</code></li>
 </ul>
 </component>
 
@@ -4798,7 +4800,7 @@ These are strings unless otherwise noted:
 </p>
 <ul>
   <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> Object. (e.g.) <code>log.warn("Message"[,Throwable])</code></li>
-  <li><code>SampleResult</code>, <code>prev</code> - the <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> Object; read-write</li>
+  <li><code>sampleResult</code>, <code>prev</code> - the <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink> Object; read-write</li>
   <li><code>Response</code> - the response Object; read-write</li>
   <li><code>Failure</code> - boolean; read-write; used to set the Assertion status</li>
   <li><code>FailureMessage</code> - String; read-write; used to set the Assertion message</li>
@@ -4973,7 +4975,7 @@ vars.getObject("OBJ2");
 props.get("START.HMS");
 props.put("PROP1","1234");
 </source></li>
-<li><code>SampleResult</code>, <code>prev</code> - (<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the previous SampleResult (if any)</li>
+<li><code>sampleResult</code>, <code>prev</code> - (<apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>) - gives access to the previous SampleResult (if any)</li>
 <li><code>sampler</code> - (<apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>) - gives access to the current sampler</li>
 <li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
 <li><code>AssertionResult</code> - (<apilink href="org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</apilink>) - the assertion result</li>
