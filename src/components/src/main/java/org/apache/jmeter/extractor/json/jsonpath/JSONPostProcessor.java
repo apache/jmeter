@@ -70,7 +70,7 @@ public class JSONPostProcessor
         List<String> jsonResponses = extractJsonResponse(context, vars);
         String[] refNames = getRefNames().split(SEPARATOR);
         String[] jsonPathExpressions = getJsonPathExpressions().split(SEPARATOR);
-        String[] defaultValues = getDefaultValues().split(SEPARATOR);
+        String[] defaultValues = getDefaultValues().split(SEPARATOR, -1);
         int[] matchNumbers = getMatchNumbersAsInt(defaultValues.length);
 
         validateSameLengthOfArguments(refNames, jsonPathExpressions, defaultValues);
