@@ -317,6 +317,35 @@ class TestJSONPostProcessor {
         assertEquals("3", vars.get(VAR_NAME + "_matchNr"));
     }
 
+    @Test
+    void testProcessDefaultsWithAllEmptyStrings() {
+        JMeterContext context = JMeterContextService.getContext();
+        // Use match number 1 for simplicity
+        JSONPostProcessor processor = setupProcessor(context, "1", false);
+        JMeterVariables vars = new JMeterVariables();
+        context.setVariables(vars);
+
+        // Set up sample result that won't match JSON Paths
+        SampleResult sampleResult = createSampleResult("{}"); // Empty JSON
+        context.setPreviousResult(sampleResult);
+
+        // Configure the processor
+        // Three paths and names, corresponding to the three empty defaults
+        processor.setJsonPathExpressions("$.key1;$.key2;$.key3");
+        processor.setRefNames("var1;var2;var3");
+        // *** Default values string containing only separators ***
+        // This should split into ["", "", ""] with the fix
+        processor.setDefaultValues(";;"); // Represents 3 empty default values
+        processor.setScopeAll(); // Ensure it processes the main sample
+
+        // Process the sample
+        processor.process();
+
+        // Assertions: Verify all variables received an empty string default
+        assertEquals("", vars.get("var1"), "Variable var1 should get the first (empty) default value");
+        assertEquals("", vars.get("var2"), "Variable var2 should get the second (empty) default value");
+        assertEquals("", vars.get("var3"), "Variable var3 should get the third (empty) default value");
+    }
 
     private static JSONPostProcessor setupProcessor(JMeterContext context, String matchNumbers) {
         return setupProcessor(context, matchNumbers, true);
