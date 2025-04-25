@@ -67,6 +67,7 @@ import org.apache.jmeter.gui.util.JSyntaxSearchToolBar;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.TextBoxDialoger.TextBoxDoubleClick;
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.SearchTextExtension.JEditorPaneSearchProvider;
@@ -266,7 +267,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                                 .getResString("view_results_thread_name")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getThreadName()).append(NL);
                 String startTime = dateFormat
-                        .format(Instant.ofEpochMilli(sampleResult.getStartTime()));
+                        .format(Instant.ofEpochMilli(sampleResult.getStartTime() / 1000000L));
                 statsBuff
                         .append(JMeterUtils
                                 .getResString("view_results_sample_start")).append(SPACE) //$NON-NLS-1$
@@ -274,15 +275,15 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 statsBuff
                         .append(JMeterUtils
                                 .getResString("view_results_load_time")).append(SPACE) //$NON-NLS-1$
-                        .append(sampleResult.getTime()).append(NL);
+                        .append(ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getTime() / 1000000L : sampleResult.getTime()).append(NL);
                 statsBuff
                         .append(JMeterUtils
                                 .getResString("view_results_connect_time")).append(SPACE) //$NON-NLS-1$
-                        .append(sampleResult.getConnectTime()).append(NL);
+                        .append(ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getConnectTime() / 1000000L : sampleResult.getConnectTime()).append(NL);
                 statsBuff
                         .append(JMeterUtils
                                 .getResString("view_results_latency")).append(SPACE) //$NON-NLS-1$
-                        .append(sampleResult.getLatency()).append(NL);
+                        .append(ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getLatency() / 1000000L : sampleResult.getLatency()).append(NL);
                 statsBuff
                         .append(JMeterUtils
                                 .getResString("view_results_size_in_bytes")).append(SPACE) //$NON-NLS-1$
@@ -376,13 +377,13 @@ public abstract class SamplerResultTab implements ResultRenderer {
                         startTime));
                 resultModel.addRow(new RowResult(
                         JMeterUtils.getParsedLabel("view_results_load_time"), //$NON-NLS-1$
-                        sampleResult.getTime()));
+                        ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getTime() / 1000000L : sampleResult.getTime()));
                 resultModel.addRow(new RowResult(
                         JMeterUtils.getParsedLabel("view_results_connect_time"), //$NON-NLS-1$
-                        sampleResult.getConnectTime()));
+                        ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getConnectTime() / 1000000L : sampleResult.getConnectTime()));
                 resultModel.addRow(new RowResult(
                         JMeterUtils.getParsedLabel("view_results_latency"), //$NON-NLS-1$
-                        sampleResult.getLatency()));
+                        ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sampleResult.getLatency() / 1000000L : sampleResult.getLatency()));
                 resultModel.addRow(new RowResult(
                         JMeterUtils
                                 .getParsedLabel("view_results_size_in_bytes"), //$NON-NLS-1$

@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.apache.jmeter.report.core.Sample;
+import org.apache.jmeter.report.processor.Aggregator;
+import org.apache.jmeter.report.processor.MeanAggregator;
 import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
@@ -85,7 +87,17 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
 
         return Collections.singletonMap(
                 AbstractGraphConsumer.DEFAULT_GROUP,
-                new GroupInfo(new MeanAggregatorFactory(), seriesSelector, graphValueSelector, false, false));
+                new GroupInfo(new MeanAggregatorFactory() {
+                    @Override
+                    protected Aggregator createAggregator() {
+                        return new MeanAggregator() {
+                            @Override
+                            public double getResult() {
+                                return mean.getResult();
+                            }
+                        };
+                    }
+                }, seriesSelector, graphValueSelector, false, false));
     }
 
 }

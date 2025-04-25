@@ -17,8 +17,10 @@
 
 package org.apache.jmeter.visualizers;
 
+import java.math.BigInteger;
 import java.util.Map;
 
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.math.StatCalculatorLong;
 
@@ -74,7 +76,7 @@ public class SamplingStatCalculator {
         if (getCurrentSample().getEndTime() == 0) {
             return 0;// No samples collected ...
         }
-        return getCurrentSample().getEndTime() - firstTime;
+        return (getCurrentSample().getEndTime() - firstTime) / 1000000L;
     }
 
     /**
@@ -190,16 +192,16 @@ public class SamplingStatCalculator {
             eCount += res.getErrorCount();
             endTime = getEndTime(res);
             long howLongRunning = endTime - firstTime;
-            throughput = ((double) calculator.getCount() / (double) howLongRunning) * 1000.0;
+            throughput = (double) calculator.getCount() / (howLongRunning / 1000000.0D / 1000.0D);
             if (throughput > maxThroughput) {
                 maxThroughput = throughput;
             }
 
             rtime = res.getTime();
-            cmean = (long)calculator.getMean();
+            cmean = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? (long) calculator.getMean() / 1000000L : (long) calculator.getMean();
             cstdv = (long)calculator.getStandardDeviation();
-            cmedian = calculator.getMedian();
-            cpercent = calculator.getPercentPoint(0.500);
+            cmedian = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMedian().divide(BigInteger.valueOf(1000000L)).longValue() : calculator.getMedian().longValue();
+            cpercent = ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getPercentPoint(0.500D).divide(BigInteger.valueOf(1000000L)).longValue() : calculator.getPercentPoint(0.500D).longValue();
 // TODO cpercent is the same as cmedian here - why? and why pass it to "distributionLine"?
             rbool = res.isSuccessful();
         }
@@ -273,7 +275,7 @@ public class SamplingStatCalculator {
     }
 
     public Number getPercentPoint(double percent) {
-        return calculator.getPercentPoint(percent);
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getPercentPoint(percent).divide(BigInteger.valueOf(1000000L)) : calculator.getPercentPoint(percent);
     }
 
     public long getCount() {
@@ -281,30 +283,30 @@ public class SamplingStatCalculator {
     }
 
     public Number getMax() {
-        return calculator.getMax();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMax().divide(BigInteger.valueOf(1000000L)) : calculator.getMax();
     }
 
     public double getMean() {
-        return calculator.getMean();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMean() / 1000000.0D : calculator.getMean();
     }
 
     public Number getMeanAsNumber() {
-        return (long) calculator.getMean();
+        return (long) getMean();
     }
 
     public Number getMedian() {
-        return calculator.getMedian();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMedian().divide(BigInteger.valueOf(1000000L))  : calculator.getMedian();
     }
 
     public Number getMin() {
-        if (calculator.getMin() < 0) {
+        if (calculator.getMin().compareTo(BigInteger.valueOf(0L)) < 0) {
             return 0L;
         }
-        return calculator.getMin();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getMin().divide(BigInteger.valueOf(1000000L)) : calculator.getMin();
     }
 
     public Number getPercentPoint(float percent) {
-        return calculator.getPercentPoint(percent);
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? calculator.getPercentPoint(percent).divide(BigInteger.valueOf(1000000L)) : calculator.getPercentPoint(percent);
     }
 
     public double getStandardDeviation() {
