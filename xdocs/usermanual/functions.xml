@@ -942,7 +942,7 @@ The following variables are set before the script is executed:
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - the threadName (String)</li>
 <li><code>Sampler</code> - the current <apilink href="org/apache/jmeter/samplers/Sampler.html">Sampler</apilink>, if any</li>
-<li><code>SampleResult</code> - the current <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>, if any</li>
+<li><code>sampleResult</code> - the current <apilink href="org/apache/jmeter/samplers/SampleResult.html">SampleResult</apilink>, if any</li>
 </ul>
 (*) means that this is set before the init file, if any, is processed.
 Other variables vary from invocation to invocation.

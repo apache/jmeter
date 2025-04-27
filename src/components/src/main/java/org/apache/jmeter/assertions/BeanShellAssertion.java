@@ -88,6 +88,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
 
             // Add SamplerData for consistency with BeanShell Sampler
             bshInterpreter.set("SampleResult", response); //$NON-NLS-1$
+            bshInterpreter.set("sampleResult", response); //$NON-NLS-1$
             bshInterpreter.set("Response", response); //$NON-NLS-1$
             bshInterpreter.set("ResponseData", response.getResponseData());//$NON-NLS-1$
             bshInterpreter.set("ResponseCode", response.getResponseCode());//$NON-NLS-1$

@@ -82,6 +82,7 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
         try {
             initManager(mgr);
             mgr.declareBean("SampleResult", res, res.getClass()); // $NON-NLS-1$
+            mgr.declareBean("sampleResult", res, res.getClass()); // $NON-NLS-1$
 
             // N.B. some engines (e.g. Javascript) cannot handle certain declareBean() calls
             // after the engine has been initialised, so create the engine last
