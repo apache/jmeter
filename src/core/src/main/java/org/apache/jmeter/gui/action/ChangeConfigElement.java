@@ -18,68 +18,54 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.gui.util.ChangeElement;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.auto.service.AutoService;
 
 /**
- * Implements the Add Parent menu command
+ * Allows to change Config element implementation
  */
 @AutoService(Command.class)
-public class AddParent extends AbstractAction {
-    private static final Logger log = LoggerFactory.getLogger(AddParent.class);
-
+public class ChangeConfigElement extends AbstractAction {
+    private static final Logger log = LoggerFactory.getLogger(ChangeConfigElement.class);
     private static final Set<String> commands = new HashSet<>();
 
     static {
-        commands.add(ActionNames.ADD_PARENT);
-    }
-
-    public AddParent() {
+        commands.add(ActionNames.CHANGE_CONFIG_ELEMENT);
     }
 
     @Override
-    public void doAction(ActionEvent e) {
+    public void doAction(ActionEvent e) throws IllegalUserActionException {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
+        JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
+        if (!(currentNode.getUserObject() instanceof AbstractTestElement)) {
+            Toolkit.getDefaultToolkit().beep();
+            return;
+        }
         try {
             guiPackage.updateCurrentNode();
-            TestElement controller = guiPackage.createTestElement(name);
-            addParentToTree(controller);
+            AbstractTestElement configElement = (AbstractTestElement) guiPackage.createTestElement(name);
+            ChangeElement.configElement(configElement, guiPackage, currentNode);
         } catch (Exception err) {
-            log.error("Exception while adding a TestElement.", err);
+            Toolkit.getDefaultToolkit().beep();
+            log.error("Failed to change config element", err);
         }
-
     }
 
     @Override
     public Set<String> getActionNames() {
         return commands;
-    }
-
-    protected static void addParentToTree(TestElement newParent) {
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeNode newNode = new JMeterTreeNode(newParent, guiPackage.getTreeModel());
-        JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
-        int index = parentNode.getIndex(currentNode);
-        guiPackage.getTreeModel().insertNodeInto(newNode, parentNode, index);
-        JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
-        for (JMeterTreeNode node : nodes) {
-            moveNode(guiPackage, node, newNode);
-        }
-    }
-
-    private static void moveNode(GuiPackage guiPackage, JMeterTreeNode node, JMeterTreeNode newParentNode) {
-        guiPackage.getTreeModel().removeNodeFromParent(node);
-        guiPackage.getTreeModel().insertNodeInto(node, newParentNode, newParentNode.getChildCount());
     }
 }
