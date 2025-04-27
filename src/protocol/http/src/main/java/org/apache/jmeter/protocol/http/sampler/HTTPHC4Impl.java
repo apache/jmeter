@@ -57,7 +57,6 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthSchemeProvider;
@@ -72,7 +71,6 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.InputStreamFactory;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -86,7 +84,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.config.Lookup;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -147,8 +144,6 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.DynamicKerberosSchemeFactory;
 import org.apache.jmeter.protocol.http.control.DynamicSPNegoSchemeFactory;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.sampler.hc.LaxDeflateInputStream;
-import org.apache.jmeter.protocol.http.sampler.hc.LaxGZIPInputStream;
 import org.apache.jmeter.protocol.http.sampler.hc.LazyLayeredConnectionSocketFactory;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -166,7 +161,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.brotli.dec.BrotliInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,19 +189,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final boolean DISABLE_DEFAULT_UA = JMeterUtils.getPropDefault("httpclient4.default_user_agent_disabled", false);
 
-    private static final boolean GZIP_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.gzip_relax_mode", false);
-
-    private static final boolean DEFLATE_RELAX_MODE = JMeterUtils.getPropDefault("httpclient4.deflate_relax_mode", false);
-
     private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
-
-    private static final InputStreamFactory GZIP =
-            instream -> new LaxGZIPInputStream(instream, GZIP_RELAX_MODE);
-
-    private static final InputStreamFactory DEFLATE =
-            instream -> new LaxDeflateInputStream(instream, DEFLATE_RELAX_MODE);
-
-    private static final InputStreamFactory BROTLI = BrotliInputStream::new;
 
     private static final class ManagedCredentialsProvider implements CredentialsProvider {
         private final AuthManager authManager;
@@ -472,55 +454,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
 
-    private static final String[] HEADERS_TO_SAVE = new String[]{
-                    "content-length",
-                    "content-encoding",
-                    "content-md5"
-            };
-
-    /**
-     * Custom implementation that backups headers related to Compressed responses
-     * that HC core {@link ResponseContentEncoding} removes after uncompressing
-     * See Bug 59401
-     */
-    @SuppressWarnings("UnnecessaryAnonymousClass")
-    private static final HttpResponseInterceptor RESPONSE_CONTENT_ENCODING = new ResponseContentEncoding(createLookupRegistry()) {
-        @Override
-        public void process(HttpResponse response, HttpContext context)
-                throws HttpException, IOException {
-            ArrayList<Header[]> headersToSave = null;
-
-            final HttpEntity entity = response.getEntity();
-            final HttpClientContext clientContext = HttpClientContext.adapt(context);
-            final RequestConfig requestConfig = clientContext.getRequestConfig();
-            // store the headers if necessary
-            if (requestConfig.isContentCompressionEnabled() && entity != null && entity.getContentLength() != 0) {
-                final Header ceheader = entity.getContentEncoding();
-                if (ceheader != null) {
-                    headersToSave = new ArrayList<>(3);
-                    for(String name : HEADERS_TO_SAVE) {
-                        Header[] hdr = response.getHeaders(name); // empty if none
-                        headersToSave.add(hdr);
-                    }
-                }
-            }
-
-            // Now invoke original parent code
-            super.process(response, clientContext);
-            // Should this be in a finally ?
-            if(headersToSave != null) {
-                for (Header[] headers : headersToSave) {
-                    for (Header headerToRestore : headers) {
-                        if (response.containsHeader(headerToRestore.getName())) {
-                            break;
-                        }
-                        response.addHeader(headerToRestore);
-                    }
-                }
-            }
-        }
-    };
-
     /**
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
@@ -556,19 +489,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     protected HTTPHC4Impl(HTTPSamplerBase testElement) {
         super(testElement);
-    }
-
-    /**
-     * Customize to plug Brotli
-     * @return {@link Lookup}
-     */
-    private static Lookup<InputStreamFactory> createLookupRegistry() {
-        return
-                RegistryBuilder.<InputStreamFactory>create()
-                .register("br", BROTLI)
-                .register("gzip", GZIP)
-                .register("x-gzip", GZIP)
-                .register("deflate", DEFLATE).build();
     }
 
     /**
@@ -675,7 +595,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
-                res.setResponseData(readResponse(res, entity.getContent(), entity.getContentLength()));
+                Header contentEncodingHeader = entity.getContentEncoding();
+                if (contentEncodingHeader != null) {
+                    res.setResponseData(EntityUtils.toByteArray(entity), contentEncodingHeader.getValue());
+                } else {
+                    res.setResponseData(EntityUtils.toByteArray(entity));
+                }
             }
 
             res.sampleEnd(); // Done with the sampling proper.
@@ -1157,7 +1082,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
                 builder.setDefaultCredentialsProvider(credsProvider);
             }
-            builder.disableContentCompression().addInterceptorLast(RESPONSE_CONTENT_ENCODING);
+            builder.disableContentCompression(); // Disable automatic decompression
             if(BASIC_AUTH_PREEMPTIVE) {
                 builder.addInterceptorFirst(PREEMPTIVE_AUTH_INTERCEPTOR);
             } else {

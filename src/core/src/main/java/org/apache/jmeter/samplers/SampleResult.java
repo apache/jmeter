@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.samplers;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -25,9 +29,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.Searchable;
@@ -160,6 +168,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private byte[] responseData = EMPTY_BA;
 
+    private String contentEncoding; // Stores gzip/deflate encoding if response is compressed
+
     private String responseCode = "";// Never return null
 
     private String label = "";// Never return null
@@ -217,7 +227,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     // TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
     private String dataEncoding;// (is this really the character set?) e.g.
-                                // ISO-8895-1, UTF-8
+    // ISO-8895-1, UTF-8
 
     private String contentType = ""; // e.g. text/html; charset=utf-8
 
@@ -791,6 +801,27 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return the responseData value (cannot be null)
      */
     public byte[] getResponseData() {
+        if (responseData == null) {
+            return EMPTY_BA;
+        }
+        if (contentEncoding != null && responseData.length > 0) {
+            try {
+                switch (contentEncoding.toLowerCase(Locale.ROOT)) {
+                    case "gzip":
+                        return decompressGzip(responseData);
+                    case "x-gzip":
+                        return decompressGzip(responseData);
+                    case "deflate":
+                        return decompressDeflate(responseData);
+                    case "br":
+                        return decompressBrotli(responseData);
+                    default:
+                        return responseData;
+                }
+            } catch (IOException e) {
+                log.warn("Failed to decompress response data", e);
+            }
+        }
         return responseData;
     }
 
@@ -802,12 +833,12 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public String getResponseDataAsString() {
         try {
             if(responseDataAsString == null) {
-                responseDataAsString= new String(responseData,getDataEncodingWithDefault());
+                responseDataAsString= new String(getResponseData(),getDataEncodingWithDefault());
             }
             return responseDataAsString;
         } catch (UnsupportedEncodingException e) {
             log.warn("Using platform default as {} caused {}", getDataEncodingWithDefault(), e.getLocalizedMessage());
-            return new String(responseData,Charset.defaultCharset()); // N.B. default charset is used deliberately here
+            return new String(getResponseData(),Charset.defaultCharset()); // N.B. default charset is used deliberately here
         }
     }
 
@@ -1664,5 +1695,64 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void setTestLogicalAction(TestLogicalAction testLogicalAction) {
         this.testLogicalAction = testLogicalAction;
+    }
+
+    /**
+     * Sets the response data and its compression encoding.
+     * @param data The response data
+     * @param encoding The content encoding (e.g. gzip, deflate)
+     */
+    public void setResponseData(byte[] data, String encoding) {
+        responseData = data == null ? EMPTY_BA : data;
+        contentEncoding = encoding;
+        responseDataAsString = null;
+    }
+
+    private static byte[] decompressGzip(byte[] in) throws IOException {
+        try (GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(in));
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            byte[] buf = new byte[8192];
+            int len;
+            while ((len = gis.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            return out.toByteArray();
+        }
+    }
+
+    private static byte[] decompressDeflate(byte[] in) throws IOException {
+        // Try with ZLIB wrapper first
+        try {
+            return decompressWithInflater(in, false);
+        } catch (IOException e) {
+            // If that fails, try with NO_WRAP for raw DEFLATE
+            return decompressWithInflater(in, true);
+        }
+    }
+
+    private static byte[] decompressWithInflater(byte[] in, boolean nowrap) throws IOException {
+        try (InflaterInputStream iis = new InflaterInputStream(
+                new ByteArrayInputStream(in),
+                new Inflater(nowrap));
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            byte[] buf = new byte[8192];
+            int len;
+            while ((len = iis.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            return out.toByteArray();
+        }
+    }
+
+    private static byte[] decompressBrotli(byte[] in) throws IOException {
+        try (InputStream bis = new org.brotli.dec.BrotliInputStream(new ByteArrayInputStream(in));
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            byte[] buf = new byte[8192];
+            int len;
+            while ((len = bis.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            return out.toByteArray();
+        }
     }
 }
