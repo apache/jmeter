@@ -437,7 +437,8 @@ public final class CSVSaveService {
         appendFields(saveConfig.saveIdleTime(), text, delim, CSV_IDLETIME);
         appendFields(saveConfig.saveConnectTime(), text, delim, CSV_CONNECT_TIME);
 
-        for (int i = 0; i < SampleEvent.getVarCount(); i++) {
+        int sampleVariableCount = SampleEvent.getVarCount();
+        for (int i = 0; i < sampleVariableCount; i++) {
             text.append(VARIABLE_NAME_QUOTE_CHAR);
             text.append(SampleEvent.getVarName(i));
             text.append(VARIABLE_NAME_QUOTE_CHAR);
@@ -594,7 +595,8 @@ public final class CSVSaveService {
         String[] parts = headerLine.split("\\Q" + delim);// $NON-NLS-1$
         int previous = -1;
         // Check if the line is a header
-        for (int i = 0; i < parts.length; i++) {
+        int partsCount = parts.length;
+        for (int i = 0; i < partsCount; i++) {
             final String label = parts[i];
             // Check for Quoted variable names
             if (isVariableName(label)) {
@@ -666,7 +668,8 @@ public final class CSVSaveService {
         final char DELIM = ',';
         final char[] SPECIALS = new char[] { DELIM, QUOTING_CHAR };
         if (headers != null) {
-            for (int i = 0; i < headers.length; i++) {
+            int headerCount = headers.length;
+            for (int i = 0; i < headerCount; i++) {
                 if (i > 0) {
                     writer.write(DELIM);
                 }
@@ -676,7 +679,8 @@ public final class CSVSaveService {
         }
         for (Object o : data) {
             List<?> row = (List<?>) o;
-            for (int idy = 0; idy < row.size(); idy++) {
+            int rowSize = row.size();
+            for (int idy = 0; idy < rowSize; idy++) {
                 if (idy > 0) {
                     writer.write(DELIM);
                 }
@@ -943,7 +947,8 @@ public final class CSVSaveService {
             text.append(sample.getConnectTime());
         }
 
-        for (int i = 0; i < SampleEvent.getVarCount(); i++) {
+        int sampleVarCount = SampleEvent.getVarCount();
+        for (int i = 0; i < sampleVarCount; i++) {
             text.append(event.getVarValue(i));
         }
 
@@ -986,10 +991,11 @@ public final class CSVSaveService {
         if (StringUtils.containsNone(input, specialChars)) {
             return input;
         }
-        StringBuilder buffer = new StringBuilder(input.length() + 10);
+        int inputLength = input.length();
+        StringBuilder buffer = new StringBuilder(inputLength + 10);
         final char quote = specialChars[1];
         buffer.append(quote);
-        for (int i = 0; i < input.length(); i++) {
+        for (int i = 0; i < inputLength; i++) {
             char c = input.charAt(i);
             if (c == quote) {
                 buffer.append(quote); // double the quote char

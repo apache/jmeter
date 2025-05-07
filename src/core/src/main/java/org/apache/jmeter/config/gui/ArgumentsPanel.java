@@ -441,10 +441,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
+        int selectedRowsCount = rowsSelected.length;
 
-        if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
+        if (selectedRowsCount > 0 && rowsSelected[selectedRowsCount - 1] < table.getRowCount() - 1) {
             table.clearSelection();
-            for (int i = rowsSelected.length - 1; i >= 0; i--) {
+            for (int i = selectedRowsCount - 1; i >= 0; i--) {
                 int rowSelected = rowsSelected[i];
                 tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected + 1);
             }
@@ -535,8 +536,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         int[] rowsSelected = table.getSelectedRows();
         int anchorSelection = table.getSelectionModel().getAnchorSelectionIndex();
         table.clearSelection();
-        if (rowsSelected.length > 0) {
-            for (int i = rowsSelected.length - 1; i >= 0; i--) {
+        int selectedRowsCount = rowsSelected.length;
+        if (selectedRowsCount > 0) {
+            for (int i = selectedRowsCount - 1; i >= 0; i--) {
                 tableModel.removeRow(rowsSelected[i]);
             }
 

@@ -216,10 +216,11 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         Arrays.sort(descriptors, new PropertyComparator(beanInfo));
 
         // Obtain the propertyEditors:
-        editors = new PropertyEditor[descriptors.length];
+        int descriptorsCount = descriptors.length;
+        editors = new PropertyEditor[descriptorsCount];
         int scriptLanguageIndex = 0;
         int textAreaEditorIndex = 0;
-        for (int i = 0; i < descriptors.length; i++) { // Index is also used for accessing editors array
+        for (int i = 0; i < descriptorsCount; i++) { // Index is also used for accessing editors array
             PropertyDescriptor descriptor = descriptors[i];
             String name = descriptor.getName();
 
@@ -503,7 +504,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         }
 
         // Now set the editors to the element's values:
-        for (int i = 0; i < editors.length; i++) {
+        int editorsCount = editors.length;
+        for (int i = 0; i < editorsCount; i++) {
             if (editors[i] == null) {
                 continue;
             }
@@ -556,7 +558,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         String currentGroup = DEFAULT_GROUP;
         int y = 0;
 
-        for (int i = 0; i < editors.length; i++) {
+        int editorsCount = editors.length;
+        for (int i = 0; i < editorsCount; i++) {
             if (editors[i] == null) {
                 continue;
             }
@@ -733,7 +736,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Save values from the GUI fields into the property map
      */
     void saveGuiFields() {
-        for (int i = 0; i < editors.length; i++) {
+        int editorsCount = editors.length;
+        for (int i = 0; i < editorsCount; i++) {
             PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
             if (propertyEditor != null) {
                 Object value = propertyEditor.getValue();
@@ -750,7 +754,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     }
 
     void clearGuiFields() {
-        for (int i = 0; i < editors.length; i++) {
+        int editorsCount = editors.length;
+        for (int i = 0; i < editorsCount; i++) {
             PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
             if (propertyEditor != null) {
                 try {

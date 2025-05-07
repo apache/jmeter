@@ -164,7 +164,8 @@ public class CsvFileSampleSource extends AbstractSampleSource {
         SampleContext context = getSampleContext();
         Validate.validState(context != null, "Set a sample context before producing samples.");
 
-        for (int i = 0; i < csvReaders.length; i++) {
+        int readerCount = csvReaders.length;
+        for (int i = 0; i < readerCount; i++) {
             long sampleCount = 0;
             long start = now();
             CsvSampleReader csvReader = csvReaders[i];

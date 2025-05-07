@@ -203,7 +203,8 @@ public class TestCompiler implements HashTreeTraverser {
         List<Assertion> assertions = new ArrayList<>();
         List<PostProcessor> posts = new ArrayList<>();
         List<PreProcessor> pres = new ArrayList<>();
-        for (int i = stack.size(); i > 0; i--) {
+        int stackSize = stack.size();
+        for (int i = stackSize; i > 0; i--) {
             addDirectParentControllers(controllers, stack.get(i - 1));
             List<PreProcessor>  tempPre = new ArrayList<>();
             List<PostProcessor> tempPost = new ArrayList<>();
@@ -248,7 +249,8 @@ public class TestCompiler implements HashTreeTraverser {
         List<Assertion> assertions = new ArrayList<>();
         List<PostProcessor> posts = new ArrayList<>();
         List<PreProcessor> pres = new ArrayList<>();
-        for (int i = stack.size(); i > 0; i--) {
+        int stackSize = stack.size();
+        for (int i = stackSize; i > 0; i--) {
             addDirectParentControllers(controllers, stack.get(i - 1));
             for (Object item : testTree.list(stack.subList(0, i))) {
                 if (item instanceof SampleListener) {

@@ -78,7 +78,8 @@ public class Remove extends AbstractAction {
             JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
             TreePath newTreePath = // Save parent node for later
             guiPackage.getTreeListener().removedSelectedNode();
-            for (int i = nodes.length - 1; i >= 0; i--) {
+            int nodesCount = nodes.length;
+            for (int i = nodesCount - 1; i >= 0; i--) {
                 removeNode(nodes[i]);
             }
             guiPackage.getTreeListener().getJTree().setSelectionPath(newTreePath);
