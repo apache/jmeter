@@ -442,7 +442,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
         int selectedRowsCount = rowsSelected.length;
-
         if (selectedRowsCount > 0 && rowsSelected[selectedRowsCount - 1] < table.getRowCount() - 1) {
             table.clearSelection();
             for (int i = selectedRowsCount - 1; i >= 0; i--) {
