@@ -624,13 +624,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     private void getRemoteItems() {
-        if (remoteHosts.length > 0) {
+        int hostCount = remoteHosts.length;
+        if (hostCount > 0) {
             remoteStart = makeMenuRes("remote_start"); //$NON-NLS-1$
             remoteStop = makeMenuRes("remote_stop"); //$NON-NLS-1$
             remoteShut = makeMenuRes("remote_shut"); //$NON-NLS-1$
             remoteExit = makeMenuRes("remote_exit"); //$NON-NLS-1$
 
-            for (int i = 0; i < remoteHosts.length; i++) {
+            for (int i = 0; i < hostCount; i++) {
                 remoteHosts[i] = remoteHosts[i].trim();
 
                 JMenuItem item = makeMenuItemNoRes(remoteHosts[i], ActionNames.REMOTE_START);
