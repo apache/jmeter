@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.http.control;
 
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -173,20 +174,38 @@ public class HC4CookieHandler implements CookieHandler {
     }
 
     @Override
-    public String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,
-            boolean allowVariableCookie) {
-        List<org.apache.http.cookie.Cookie> c =
-                getCookiesForUrl(cookiesCP, url, allowVariableCookie);
+    public String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url, boolean allowVariableCookie) {
+        List<org.apache.http.cookie.Cookie> c = getCookiesForUrl(cookiesCP, url, allowVariableCookie);
 
         boolean debugEnabled = log.isDebugEnabled();
-        if (debugEnabled){
+        if (debugEnabled) {
             log.debug("Found {} cookies for {}", c.size(), url);
         }
+
         if (c.isEmpty()) {
             return null;
         }
-        List<Header> lstHdr = cookieSpec.formatCookies(c);
 
+        // Get current time as an Instant
+        Instant currentTime = Instant.now();
+        List<org.apache.http.cookie.Cookie> validCookies = new ArrayList<>();
+
+        for (org.apache.http.cookie.Cookie cookie : c) {
+            Date expiryDate = cookie.getExpiryDate();
+
+            // Convert Date to Instant for proper comparison
+            if (expiryDate == null || expiryDate.toInstant().isAfter(currentTime)) {
+                validCookies.add(cookie);
+            } else if (debugEnabled) {
+                log.info("Skipping expired cookie: {} for URL {}", cookie.getName(), url);
+            }
+        }
+
+        if (validCookies.isEmpty()) {
+            return null;
+        }
+
+        List<Header> lstHdr = cookieSpec.formatCookies(validCookies);
         StringBuilder sbHdr = new StringBuilder();
         for (Header header : lstHdr) {
             sbHdr.append(header.getValue());
@@ -194,6 +213,7 @@ public class HC4CookieHandler implements CookieHandler {
 
         return sbHdr.toString();
     }
+
 
     /**
      * Get array of valid HttpClient cookies for the URL
