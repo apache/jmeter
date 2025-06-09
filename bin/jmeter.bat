@@ -78,7 +78,7 @@ if not defined JMETER_LANGUAGE (
 )
 
 rem Minimal version to run JMeter
-set MINIMAL_VERSION=1.8.0
+set MINIMAL_VERSION=17.0.0
 
 
 rem --add-opens if JAVA 9
