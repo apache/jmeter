@@ -236,9 +236,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AbstractTestElement) {
+        if (o instanceof AbstractTestElement other) {
             try (ResourceLock ignored = readLock()) {
-                return ((AbstractTestElement) o).propMap.equals(propMap);
+                return other.propMap.equals(propMap);
             }
         } else {
             return false;
