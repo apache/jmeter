@@ -82,16 +82,15 @@ public class ChangeCase extends AbstractFunction {
     protected String changeCase(String originalString, String mode) {
         // mode is case insensitive, allow upper for example
         ChangeCaseMode changeCaseMode = ChangeCaseMode.typeOf(mode.toUpperCase(Locale.ROOT));
-        if (changeCaseMode != null) {
-            return switch (changeCaseMode) {
-                case UPPER -> StringUtils.upperCase(originalString);
-                case LOWER -> StringUtils.lowerCase(originalString);
-                case CAPITALIZE -> StringUtils.capitalize(originalString);
-            };
-        } else {
-            LOGGER.error("Unknown mode {}, returning {} unchanged", mode, originalString);
-            return originalString;
-        }
+        return switch (changeCaseMode) {
+            case UPPER -> StringUtils.upperCase(originalString);
+            case LOWER -> StringUtils.lowerCase(originalString);
+            case CAPITALIZE -> StringUtils.capitalize(originalString);
+            case null -> {
+                LOGGER.error("Unknown mode {}, returning {} unchanged", mode, originalString);
+                yield originalString;
+            }
+        };
     }
 
     @Override
