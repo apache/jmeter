@@ -633,8 +633,9 @@ public class BasicCurlParser {
             "Tells curl to use HTTP negotiate authentication when communicating with the given proxy. ");
     private static final CLOptionDescriptor D_KEEPALIVETILE_OPT = new CLOptionDescriptor("keepalive-time",
             CLOptionDescriptor.ARGUMENT_REQUIRED, KEEPALIVETILE_OPT,
-            " This option sets the  time  a  connection  needs  to  remain  idle  before  sending"
-                    + " keepalive  probes and the time between individual keepalive probes..");
+            """
+                    This option sets the time a connection needs to remain idle before sending \
+                    keepalive probes and the time between individual keepalive probes..""");
     private static final CLOptionDescriptor D_MAX_TIME_OPT = new CLOptionDescriptor("max-time",
             CLOptionDescriptor.ARGUMENT_REQUIRED, MAX_TIME_OPT,
             "Maximum time in seconds that you allow the whole operation to take. ");
@@ -645,8 +646,9 @@ public class BasicCurlParser {
             "Create the necessary local directory hierarchy as needed for output file");
     private static final CLOptionDescriptor D_RAW_OPT = new CLOptionDescriptor("raw",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, RAW_OPT,
-            "When used, it disables all internal HTTP decoding of content or transfer encodings "
-                    + "and instead makes them passed on unaltered raw. ");
+            """
+                    When used, it disables all internal HTTP decoding of content or transfer \
+                    encodings and instead makes them passed on unaltered raw.""");
     private static final CLOptionDescriptor D_INTERFACE_OPT = new CLOptionDescriptor("interface",
             CLOptionDescriptor.ARGUMENT_REQUIRED, INTERFACE_OPT, "Perform an operation using a specified interface");
     private static final CLOptionDescriptor D_DNS_RESOLVER_OPT = new CLOptionDescriptor("resolve",
