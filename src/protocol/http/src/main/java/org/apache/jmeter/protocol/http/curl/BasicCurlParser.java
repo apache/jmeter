@@ -287,19 +287,12 @@ public class BasicCurlParser {
         public void setLimitRate(String limitRate) {
             String unit = limitRate.substring(limitRate.length() - 1, limitRate.length()).toLowerCase(Locale.ROOT);
             int value = Integer.parseInt(limitRate.substring(0, limitRate.length() - 1).toLowerCase(Locale.ROOT));
-            switch (unit) {
-            case "k":
-                this.limitRate = value * ONE_KILOBYTE_IN_CPS;
-                break;
-            case "m":
-                this.limitRate = value * ONE_KILOBYTE_IN_CPS * 1000;
-                break;
-            case "g":
-                this.limitRate = value * ONE_KILOBYTE_IN_CPS * 1000000;
-                break;
-            default:
-                break;
-            }
+            this.limitRate = switch (unit) {
+                case "k" -> value * ONE_KILOBYTE_IN_CPS;
+                case "m" -> value * ONE_KILOBYTE_IN_CPS * 1000;
+                case "g" -> value * ONE_KILOBYTE_IN_CPS * 1000000;
+                default -> this.limitRate; // Keep current value if unit is not recognized
+            };
         }
 
         /**
