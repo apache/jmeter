@@ -115,18 +115,19 @@ if [ -z "$JAVA_HOME" ]; then
   JAVA_HOME="$JRE_HOME"
 fi
 
-#--add-opens if JAVA 9
-JAVA9_OPTS=
+# Module access for modern Java versions (required for JMeter components)
+JAVA_OPTS="--add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/java.awt=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED --add-opens=java.desktop/sun.awt.shell=ALL-UNNAMED"
 
 # Minimal version to run JMeter
-MINIMAL_VERSION=8
+MINIMAL_VERSION=17
 
-# Check if version is from OpenJDK or Oracle Hotspot JVM prior to 9 containing 1.${version}.x
+# Check if version meets the minimal requirement
 CURRENT_VERSION=`"${JAVA_HOME}/bin/java" -version 2>&1 | awk -F'"' '/version/ {gsub("^1[.]", "", $2); gsub("[^0-9].*$", "", $2); print $2}'`
 
-# Check if Java is present and the minimal version requirement
-if [ "$CURRENT_VERSION" -gt "$MINIMAL_VERSION" ]; then
-    JAVA9_OPTS="--add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/java.awt=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED --add-opens=java.desktop/sun.awt.shell=ALL-UNNAMED"
+# Check if Java is present and meets the minimal version requirement
+if [ "$CURRENT_VERSION" -lt "$MINIMAL_VERSION" ]; then
+    echo "ERROR: Java version $CURRENT_VERSION is too low. JMeter requires Java $MINIMAL_VERSION or higher."
+    exit 1
 fi
 
 : "${JMETER_OPTS:=""}"
@@ -169,20 +170,26 @@ esac
 # Default to en_EN
 : "${JMETER_LANGUAGE:="-Duser.language=en -Duser.region=EN"}"
 
-# Uncomment this to generate GC verbose file with Java prior to 9
-# VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintAdaptiveSizePolicy -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
+# Legacy GC verbose options removed (Java 8/9 support discontinued)
 
-# Uncomment this to generate GC verbose file with Java 9 and above
-# VERBOSE_GC="-Xlog:gc*,gc+age=trace,gc+heap=debug:file=gc_jmeter_%p.log"
+# Optimized GC logging for Java 17 with structured output and performance analysis
+# Uncomment to enable comprehensive GC logging with rotation and detailed metrics
+# VERBOSE_GC="-Xlog:gc,gc+heap,gc+regions,gc+refine,gc+phases:gc_jmeter_%p_%t.log:time,level,tags:filecount=5,filesize=50M"
 
-# Uncomment this if you run JMeter in DOCKER (need Java SE 8u131 or JDK 9)
-# see https://blogs.oracle.com/java-platform-group/java-se-support-for-docker-cpu-and-memory-limits
-# RUN_IN_DOCKER="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
+# Alternative: Minimal GC logging for production (uncomment if needed)
+# VERBOSE_GC="-Xlog:gc:gc_jmeter_%p.log:time"
 
-# Finally, some tracing to help in case things go astray:
-# You may want to add those settings:
-# -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem
-: "${GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"}"
+# Docker support for Java 17+
+# Modern container memory detection is automatic in Java 17+
+# RUN_IN_DOCKER="-XX:+UseContainerSupport"
+
+# Java 17 specific performance optimizations
+# Modern JVM performance flags for better throughput and reduced latency
+JAVA17_PERFORMANCE="-XX:+AlwaysPreTouch -XX:+UseLargePages -XX:+OptimizeStringConcat"
+
+# Enhanced G1GC tuning for Java 17
+# Improved G1 performance with better defaults and new features
+: "${GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:G1HeapRegionSize=16m"}"
 
 
 # Always dump on OOM (does not cost anything unless triggered)
@@ -191,7 +198,7 @@ SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
 if [ -z "${JMETER_COMPLETE_ARGS}" ]; then
-    ARGS="$JAVA9_OPTS $SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
+    ARGS="$JAVA_OPTS $SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $JAVA17_PERFORMANCE $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
 else
     ARGS=""
 fi
