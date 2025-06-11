@@ -183,22 +183,28 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         ComparisonResult comparison = switch (comp) {
             case EQUAL -> new ComparisonResult(
                 resultSize == allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_equal")); //$NON-NLS-1$
+                JMeterUtils.getResString("size_assertion_comparator_error_equal") //$NON-NLS-1$
+            );
             case NOTEQUAL -> new ComparisonResult(
                 resultSize != allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_notequal")); //$NON-NLS-1$
+                JMeterUtils.getResString("size_assertion_comparator_error_notequal") //$NON-NLS-1$
+            );
             case GREATERTHAN -> new ComparisonResult(
                 resultSize > allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_greater")); //$NON-NLS-1$
+                JMeterUtils.getResString("size_assertion_comparator_error_greater") //$NON-NLS-1$
+            );
             case LESSTHAN -> new ComparisonResult(
                 resultSize < allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_less")); //$NON-NLS-1$
+                JMeterUtils.getResString("size_assertion_comparator_error_less") //$NON-NLS-1$
+            );
             case GREATERTHANEQUAL -> new ComparisonResult(
                 resultSize >= allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_greaterequal")); //$NON-NLS-1$
+                JMeterUtils.getResString("size_assertion_comparator_error_greaterequal") //$NON-NLS-1$
+            );
             case LESSTHANEQUAL -> new ComparisonResult(
                 resultSize <= allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_lessequal")); //$NON-NLS-1$
+                JMeterUtils.getResString("size_assertion_comparator_error_lessequal") //$NON-NLS-1$
+            );
             default -> new ComparisonResult(false, "ERROR - invalid condition");
         };
         
