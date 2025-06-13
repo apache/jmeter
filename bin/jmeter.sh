@@ -90,14 +90,17 @@ fi
 JAVA9_OPTS=
 
 # Minimal version to run JMeter
-MINIMAL_VERSION=8
+MINIMAL_VERSION=17
 
 # Check if version is from OpenJDK or Oracle Hotspot JVM prior to 9 containing 1.${version}.x
 CURRENT_VERSION=`"${JAVA_HOME}/bin/java" -version 2>&1 | awk -F'"' '/version/ {gsub("^1[.]", "", $2); gsub("[^0-9].*$", "", $2); print $2}'`
 
 # Check if Java is present and the minimal version requirement
-if [ "$CURRENT_VERSION" -gt "$MINIMAL_VERSION" ]; then
+if [ "$CURRENT_VERSION" -ge "$MINIMAL_VERSION" ]; then
     JAVA9_OPTS="--add-opens java.desktop/sun.awt=ALL-UNNAMED --add-opens java.desktop/sun.swing=ALL-UNNAMED --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED --add-opens java.desktop/java.awt=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED --add-opens=java.desktop/sun.awt.shell=ALL-UNNAMED"
+else
+    echo "JMeter requires Java $MINIMAL_VERSION or later. Current Java version is $CURRENT_VERSION"
+    exit 1
 fi
 
 # Don't add additional arguments to the JVM start, except those needed for Java 9

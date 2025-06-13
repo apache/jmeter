@@ -195,13 +195,12 @@ public abstract class AbstractProperty implements JMeterProperty {
      */
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof JMeterProperty)) {
+        if (!(o instanceof JMeterProperty jpo)) {
             return false;
         }
         if (this == o) {
             return true;
         }
-        JMeterProperty jpo = (JMeterProperty) o;
         if (!name.equals(jpo.getName())) {
             return false;
         }
@@ -275,18 +274,18 @@ public abstract class AbstractProperty implements JMeterProperty {
         if (item == null) {
             return new NullProperty();
         }
-        if (item instanceof String) {
-            return new StringProperty("", item.toString());
-        } else if (item instanceof Boolean) {
-            return new BooleanProperty("", (Boolean) item);
-        } else if (item instanceof Float) {
-            return new FloatProperty("", (Float) item);
-        } else if (item instanceof Double) {
-            return new DoubleProperty("", (Double) item);
-        } else if (item instanceof Integer) {
-            return new IntegerProperty("", (Integer) item);
-        } else if (item instanceof Long) {
-            return new LongProperty("", (Long) item);
+        if (item instanceof String str) {
+            return new StringProperty("", str);
+        } else if (item instanceof Boolean bool) {
+            return new BooleanProperty("", bool);
+        } else if (item instanceof Float floatVal) {
+            return new FloatProperty("", floatVal);
+        } else if (item instanceof Double doubleVal) {
+            return new DoubleProperty("", doubleVal);
+        } else if (item instanceof Integer intVal) {
+            return new IntegerProperty("", intVal);
+        } else if (item instanceof Long longVal) {
+            return new LongProperty("", longVal);
         } else {
             return new StringProperty("", item.toString());
         }
@@ -341,8 +340,8 @@ public abstract class AbstractProperty implements JMeterProperty {
                 Object key = entry.getKey();
                 Object prop = entry.getValue();
                 String item=null;
-                if (key instanceof String) {
-                    item = (String) key;
+                if (key instanceof String keyStr) {
+                    item = keyStr;
                 } else {
                     if (key != null) {
                         log.error("Expected key type String, found: {}", key.getClass());
@@ -378,18 +377,17 @@ public abstract class AbstractProperty implements JMeterProperty {
      * @return the JMeterProperty
      */
     protected static JMeterProperty makeProperty(Object item) {
-        if (item instanceof JMeterProperty) {
-            return (JMeterProperty) item;
+        if (item instanceof JMeterProperty prop) {
+            return prop;
         }
-        if (item instanceof TestElement) {
-            return new TestElementProperty(((TestElement) item).getName(),
-                    (TestElement) item);
+        if (item instanceof TestElement testElement) {
+            return new TestElementProperty(testElement.getName(), testElement);
         }
-        if (item instanceof Collection<?>) {
-            return new CollectionProperty(Integer.toString(item.hashCode()), (Collection<?>) item);
+        if (item instanceof Collection<?> collection) {
+            return new CollectionProperty(Integer.toString(item.hashCode()), collection);
         }
-        if (item instanceof Map<?, ?>) {
-            return new MapProperty(Integer.toString(item.hashCode()), (Map<?, ?>) item);
+        if (item instanceof Map<?, ?> map) {
+            return new MapProperty(Integer.toString(item.hashCode()), map);
         }
         return null;
     }

@@ -228,10 +228,10 @@ public final class CSVSaveService {
                                 Arrays.asList(DATE_FORMAT_STRINGS));
                         boolean foundMatch = false;
                         for(String fmt : DATE_FORMAT_STRINGS) {
-                            SimpleDateFormat dateFormat = new SimpleDateFormat(fmt);
+                            var dateFormat = new SimpleDateFormat(fmt);
                             dateFormat.setLenient(false);
                             try {
-                                Date stamp = dateFormat.parse(text);
+                                var stamp = dateFormat.parse(text);
                                 timeStamp = stamp.getTime();
                                 log.warn("Setting date format to: {}", fmt);
                                 saveConfig.setDateFormat(fmt);
@@ -246,7 +246,7 @@ public final class CSVSaveService {
                         }
                     }
                 } else if (saveConfig.strictDateFormatter() != null) {
-                    Date stamp = saveConfig.strictDateFormatter().parse(text);
+                    var stamp = saveConfig.strictDateFormatter().parse(text);
                     timeStamp = stamp.getTime();
                 } else { // can this happen?
                     final String msg = "Unknown timestamp format";

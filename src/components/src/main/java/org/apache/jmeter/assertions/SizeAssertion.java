@@ -174,42 +174,41 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
      * than equal, less than equal.
      *
      */
+    private record ComparisonResult(boolean result, String errorMessage) {}
+
     private String compareSize(long resultSize) {
-        String comparatorErrorMessage;
         long allowedSize = Long.parseLong(getAllowedSize());
-        boolean result;
         int comp = getCompOper();
-        switch (comp) {
-        case EQUAL:
-            result = resultSize == allowedSize;
-            comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal"); //$NON-NLS-1$
-            break;
-        case NOTEQUAL:
-            result = resultSize != allowedSize;
-            comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal"); //$NON-NLS-1$
-            break;
-        case GREATERTHAN:
-            result = resultSize > allowedSize;
-            comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater"); //$NON-NLS-1$
-            break;
-        case LESSTHAN:
-            result = resultSize < allowedSize;
-            comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less"); //$NON-NLS-1$
-            break;
-        case GREATERTHANEQUAL:
-            result = resultSize >= allowedSize;
-            comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal"); //$NON-NLS-1$
-            break;
-        case LESSTHANEQUAL:
-            result = resultSize <= allowedSize;
-            comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal"); //$NON-NLS-1$
-            break;
-        default:
-            result = false;
-            comparatorErrorMessage = "ERROR - invalid condition";
-            break;
-        }
-        return result ? "" : comparatorErrorMessage;
+        
+        ComparisonResult comparison = switch (comp) {
+            case EQUAL -> new ComparisonResult(
+                resultSize == allowedSize,
+                JMeterUtils.getResString("size_assertion_comparator_error_equal") //$NON-NLS-1$
+            );
+            case NOTEQUAL -> new ComparisonResult(
+                resultSize != allowedSize,
+                JMeterUtils.getResString("size_assertion_comparator_error_notequal") //$NON-NLS-1$
+            );
+            case GREATERTHAN -> new ComparisonResult(
+                resultSize > allowedSize,
+                JMeterUtils.getResString("size_assertion_comparator_error_greater") //$NON-NLS-1$
+            );
+            case LESSTHAN -> new ComparisonResult(
+                resultSize < allowedSize,
+                JMeterUtils.getResString("size_assertion_comparator_error_less") //$NON-NLS-1$
+            );
+            case GREATERTHANEQUAL -> new ComparisonResult(
+                resultSize >= allowedSize,
+                JMeterUtils.getResString("size_assertion_comparator_error_greaterequal") //$NON-NLS-1$
+            );
+            case LESSTHANEQUAL -> new ComparisonResult(
+                resultSize <= allowedSize,
+                JMeterUtils.getResString("size_assertion_comparator_error_lessequal") //$NON-NLS-1$
+            );
+            default -> new ComparisonResult(false, "ERROR - invalid condition");
+        };
+        
+        return comparison.result() ? "" : comparison.errorMessage();
     }
 
     private void setTestField(String testField) {

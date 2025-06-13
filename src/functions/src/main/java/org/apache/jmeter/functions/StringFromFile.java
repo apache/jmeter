@@ -296,7 +296,7 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         checkParameterCount(parameters, MIN_PARAM_COUNT, MAX_PARAM_COUNT);
         values = parameters.toArray();
 
-        StringBuilder sb = new StringBuilder(40);
+        var sb = new StringBuilder(40);
         sb.append("setParameters(");//$NON-NLS-1$
         for (int i = 0; i < values.length; i++) {
             if (i > 0) {

@@ -45,23 +45,25 @@ class TestGraphQLRequestParamUtils {
 
     private static final String OPERATION_NAME = "";
 
-    private static final String QUERY =
-            "query($id: ID!) {\n"
-            + "  droid(id: $id) {\n"
-            + "    id\n"
-            + "    name\n"
-            + "    friends {\n"
-            + "      id\n"
-            + "      name\n"
-            + "      appearsIn\n"
-            + "    }\n"
-            + "  }\n"
-            + "}\n";
+    private static final String QUERY = """
+            query($id: ID!) {
+              droid(id: $id) {
+                id
+                name
+                friends {
+                  id
+                  name
+                  appearsIn
+                }
+              }
+            }
+            """;
 
-    private static final String VARIABLES =
-            "{\n"
-            + "  \"id\": \"2001\"\n"
-            + "}\n";
+    private static final String VARIABLES = """
+            {
+              "id": "2001"
+            }
+            """;
 
     private static final String EXPECTED_QUERY_GET_PARAM_VALUE =
             "query($id: ID!) { droid(id: $id) { id name friends { id name appearsIn } } }";

@@ -164,8 +164,7 @@ public class DataSourceElement extends AbstractTestElement
     public static String getConnectionInfo(String poolName) throws SQLException{
         Object poolObject =
                 JMeterContextService.getContext().getVariables().getObject(poolName);
-        if (poolObject instanceof DataSourceComponentImpl) {
-            DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
+        if (poolObject instanceof DataSourceComponentImpl pool) {
             return pool.getConnectionInfo();
         } else {
             return "Object:" + poolName + " is not of expected type '" + DataSourceComponentImpl.class.getName() + "'";
@@ -194,8 +193,7 @@ public class DataSourceElement extends AbstractTestElement
         if (poolObject == null) {
             throw new SQLException("No pool found named: '" + poolName + "', ensure Variable Name matches Variable Name of JDBC Connection Configuration");
         } else {
-            if(poolObject instanceof DataSourceComponentImpl) {
-                DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
+            if(poolObject instanceof DataSourceComponentImpl pool) {
                 return pool.getConnection();
             } else {
                 String errorMsg = "Found object stored under variable:'" + poolName + "' with class:"

@@ -222,20 +222,21 @@ public class CSVDataSet extends ConfigTestElement
     private void setAlias(final JMeterContext context, String alias) {
         String mode = getShareMode();
         int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
-        switch(modeInt){
-            case CSVDataSetBeanInfo.SHARE_ALL:
-                this.alias = alias;
-                break;
-            case CSVDataSetBeanInfo.SHARE_GROUP:
-                this.alias = alias + "@" + System.identityHashCode(context.getThreadGroup());
-                break;
-            case CSVDataSetBeanInfo.SHARE_THREAD:
-                this.alias = alias + "@" + System.identityHashCode(context.getThread());
-                break;
-            default:
-                this.alias = alias + "@" + mode; // user-specified key
-                break;
-        }
+        this.alias = switch(modeInt){
+            case CSVDataSetBeanInfo.SHARE_ALL -> alias;
+            case CSVDataSetBeanInfo.SHARE_GROUP -> {
+                // Complex logic for thread group sharing
+                yield alias + "@" + System.identityHashCode(context.getThreadGroup());
+            }
+            case CSVDataSetBeanInfo.SHARE_THREAD -> {
+                // Complex logic for thread-specific sharing
+                yield alias + "@" + System.identityHashCode(context.getThread());
+            }
+            default -> {
+                // User-specified key with validation
+                yield alias + "@" + mode; // user-specified key
+            }
+        };
     }
 
     /**

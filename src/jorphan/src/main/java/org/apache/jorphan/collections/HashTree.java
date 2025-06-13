@@ -95,8 +95,10 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      */
     private HashTree(Map<Object, ? extends HashTree> _map, Object key) {
         if(_map != null) {
-            if (_map instanceof IdentityHashMap) {
-                data = (IdentityHashMap<Object, HashTree>) _map;
+            if (_map instanceof IdentityHashMap<?, ?> identityMapRaw) {
+                @SuppressWarnings("unchecked")
+                IdentityHashMap<Object, HashTree> identityMap = (IdentityHashMap<Object, HashTree>) identityMapRaw;
+                data = identityMap;
             } else {
                 // Technically speaking, TestElements can't be placed in HashMapk keys,
                 // so we have to convert the map to an IdentityHashMap.
@@ -122,8 +124,8 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      */
     @Override
     public void putAll(Map<?, ? extends HashTree> map) {
-        if (map instanceof HashTree) {
-            this.add((HashTree) map);
+        if (map instanceof HashTree hashTree) {
+            this.add(hashTree);
         } else {
             throw new UnsupportedOperationException("can only putAll other HashTree objects");
         }
@@ -916,7 +918,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if (o == this) {
             return true;
         }
-        if (!(o instanceof HashTree)) {
+        if (!(o instanceof HashTree hashTree)) {
             return false;
         }
         HashTree oo = (HashTree) o;
