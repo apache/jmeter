@@ -48,7 +48,7 @@ jobs:
         fetch-depth: 50
     - name: Set up Java ${{ matrix.java_version }}, oracle
       if: ${{ matrix.oracle_java_website != '' }}
-      uses: oracle-actions/setup-java@7a0114d66dbd02646abd345c3395b34c148e6126 # v1.3.2
+      uses: oracle-actions/setup-java@b1546e588c27008e88bfcabda44d11c22316b9b8 # v1.4.2
       with:
         website: ${{ matrix.oracle_java_website }}
         release: ${{ matrix.java_version }}
