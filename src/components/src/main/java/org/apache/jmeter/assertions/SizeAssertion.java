@@ -35,17 +35,77 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
 
     private static final long serialVersionUID = 241L;
 
-    // Static int to signify the type of logical comparator to assert
+    /**
+     * Comparison operators for size assertions
+     */
+    public enum ComparisonOperator {
+        EQUAL(1, "size_assertion_comparator_error_equal"),
+        NOTEQUAL(2, "size_assertion_comparator_error_notequal"),
+        GREATERTHAN(3, "size_assertion_comparator_error_greater"),
+        LESSTHAN(4, "size_assertion_comparator_error_less"),
+        GREATERTHANEQUAL(5, "size_assertion_comparator_error_greaterequal"),
+        LESSTHANEQUAL(6, "size_assertion_comparator_error_lessequal");
+
+        private final int value;
+        private final String errorMessageKey;
+
+        ComparisonOperator(int value, String errorMessageKey) {
+            this.value = value;
+            this.errorMessageKey = errorMessageKey;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getErrorMessageKey() {
+            return errorMessageKey;
+        }
+
+        public static ComparisonOperator fromValue(int value) {
+            for (ComparisonOperator op : values()) {
+                if (op.value == value) {
+                    return op;
+                }
+            }
+            throw new IllegalArgumentException("Invalid comparison operator value: " + value);
+        }
+
+        public boolean evaluate(long actual, long expected) {
+            return switch (this) {
+                case EQUAL -> actual == expected;
+                case NOTEQUAL -> actual != expected;
+                case GREATERTHAN -> actual > expected;
+                case LESSTHAN -> actual < expected;
+                case GREATERTHANEQUAL -> actual >= expected;
+                case LESSTHANEQUAL -> actual <= expected;
+            };
+        }
+    }
+
+    // Backward compatibility constants - deprecated
+    /** @deprecated Use {@link ComparisonOperator#EQUAL} instead */
+    @Deprecated
     public static final int EQUAL = 1;
 
+    /** @deprecated Use {@link ComparisonOperator#NOTEQUAL} instead */
+    @Deprecated
     public static final int NOTEQUAL = 2;
 
+    /** @deprecated Use {@link ComparisonOperator#GREATERTHAN} instead */
+    @Deprecated
     public static final int GREATERTHAN = 3;
 
+    /** @deprecated Use {@link ComparisonOperator#LESSTHAN} instead */
+    @Deprecated
     public static final int LESSTHAN = 4;
 
+    /** @deprecated Use {@link ComparisonOperator#GREATERTHANEQUAL} instead */
+    @Deprecated
     public static final int GREATERTHANEQUAL = 5;
 
+    /** @deprecated Use {@link ComparisonOperator#LESSTHANEQUAL} instead */
+    @Deprecated
     public static final int LESSTHANEQUAL = 6;
 
     /** Key for storing assertion-information in the jmx-file. */
@@ -174,41 +234,20 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
      * than equal, less than equal.
      *
      */
-    private record ComparisonResult(boolean result, String errorMessage) {}
-
     private String compareSize(long resultSize) {
         long allowedSize = Long.parseLong(getAllowedSize());
-        int comp = getCompOper();
+        ComparisonOperator operator;
+        try {
+            operator = ComparisonOperator.fromValue(getCompOper());
+        } catch (IllegalArgumentException e) {
+            return "ERROR - invalid condition";
+        }
         
-        ComparisonResult comparison = switch (comp) {
-            case EQUAL -> new ComparisonResult(
-                resultSize == allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_equal") //$NON-NLS-1$
-            );
-            case NOTEQUAL -> new ComparisonResult(
-                resultSize != allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_notequal") //$NON-NLS-1$
-            );
-            case GREATERTHAN -> new ComparisonResult(
-                resultSize > allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_greater") //$NON-NLS-1$
-            );
-            case LESSTHAN -> new ComparisonResult(
-                resultSize < allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_less") //$NON-NLS-1$
-            );
-            case GREATERTHANEQUAL -> new ComparisonResult(
-                resultSize >= allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_greaterequal") //$NON-NLS-1$
-            );
-            case LESSTHANEQUAL -> new ComparisonResult(
-                resultSize <= allowedSize,
-                JMeterUtils.getResString("size_assertion_comparator_error_lessequal") //$NON-NLS-1$
-            );
-            default -> new ComparisonResult(false, "ERROR - invalid condition");
-        };
-        
-        return comparison.result() ? "" : comparison.errorMessage();
+        if (operator.evaluate(resultSize, allowedSize)) {
+            return "";
+        } else {
+            return JMeterUtils.getResString(operator.getErrorMessageKey());
+        }
     }
 
     private void setTestField(String testField) {
