@@ -224,18 +224,9 @@ public class CSVDataSet extends ConfigTestElement
         int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
         this.alias = switch(modeInt){
             case CSVDataSetBeanInfo.SHARE_ALL -> alias;
-            case CSVDataSetBeanInfo.SHARE_GROUP -> {
-                // Complex logic for thread group sharing
-                yield alias + "@" + System.identityHashCode(context.getThreadGroup());
-            }
-            case CSVDataSetBeanInfo.SHARE_THREAD -> {
-                // Complex logic for thread-specific sharing
-                yield alias + "@" + System.identityHashCode(context.getThread());
-            }
-            default -> {
-                // User-specified key with validation
-                yield alias + "@" + mode; // user-specified key
-            }
+            case CSVDataSetBeanInfo.SHARE_GROUP -> alias + "@" + System.identityHashCode(context.getThreadGroup());
+            case CSVDataSetBeanInfo.SHARE_THREAD -> alias + "@" + System.identityHashCode(context.getThread());
+            default -> alias + "@" + mode; // user-specified key
         };
     }
 
