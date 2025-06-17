@@ -80,9 +80,6 @@ if not defined JMETER_LANGUAGE (
 rem Minimal version to run JMeter
 set MINIMAL_VERSION=17.0.0
 
-rem Java 17 specific performance optimizations
-rem Modern JVM performance flags for better throughput and reduced latency
-set JAVA17_PERFORMANCE=-XX:+AlwaysPreTouch -XX:+UseLargePages -XX:+OptimizeStringConcat
 
 rem Optimized GC logging for Java 17 with structured output and performance analysis
 rem Uncomment to enable comprehensive GC logging with rotation and detailed metrics
@@ -150,10 +147,8 @@ if not defined HEAP (
 )
 
 rem Legacy GC verbose options removed (Java 8/9 support discontinued)
-rem Enhanced G1GC tuning for Java 17
-rem Improved G1 performance with better defaults and new features
 if not defined GC_ALGO (
-    set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:G1HeapRegionSize=16m
+    set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20
 )
 
 set SYSTEM_PROPS=-Djava.security.egd=file:/dev/urandom
@@ -182,7 +177,7 @@ if not defined DDRAW (
 
 rem Collect the settings defined above
 if not defined JMETER_COMPLETE_ARGS (
-    set ARGS=%JAVA_OPTS% %DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %JAVA17_PERFORMANCE% %DDRAW% %SYSTEM_PROPS% %JMETER_LANGUAGE% %RUN_IN_DOCKER%
+    set ARGS=%JAVA_OPTS% %DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %JMETER_LANGUAGE% %RUN_IN_DOCKER%
 ) else (
     set ARGS=
 )

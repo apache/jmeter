@@ -183,13 +183,11 @@ esac
 # Modern container memory detection is automatic in Java 17+
 # RUN_IN_DOCKER="-XX:+UseContainerSupport"
 
-# Java 17 specific performance optimizations
-# Modern JVM performance flags for better throughput and reduced latency
-JAVA17_PERFORMANCE="-XX:+AlwaysPreTouch -XX:+UseLargePages -XX:+OptimizeStringConcat"
 
-# Enhanced G1GC tuning for Java 17
-# Improved G1 performance with better defaults and new features
-: "${GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:G1HeapRegionSize=16m"}"
+# Finally, some tracing to help in case things go astray:
+# You may want to add those settings:
+# -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem
+: "${GC_ALGO:="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20"}"
 
 
 # Always dump on OOM (does not cost anything unless triggered)
@@ -198,7 +196,7 @@ SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
 if [ -z "${JMETER_COMPLETE_ARGS}" ]; then
-    ARGS="$JAVA_OPTS $SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $JAVA17_PERFORMANCE $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
+    ARGS="$JAVA_OPTS $SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS $JMETER_LANGUAGE $RUN_IN_DOCKER"
 else
     ARGS=""
 fi
