@@ -46,6 +46,8 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         GREATERTHANEQUAL(5, "size_assertion_comparator_error_greaterequal"),
         LESSTHANEQUAL(6, "size_assertion_comparator_error_lessequal");
 
+        private static final ComparisonOperator[] VALUES = values();
+
         private final int value;
         private final String errorMessageKey;
 
@@ -63,23 +65,30 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         }
 
         public static ComparisonOperator fromValue(int value) {
-            for (ComparisonOperator op : values()) {
+            for (ComparisonOperator op : VALUES) {
                 if (op.value == value) {
                     return op;
                 }
             }
-            throw new IllegalArgumentException("Invalid comparison operator value: " + value);
+            return null;
         }
 
         public boolean evaluate(long actual, long expected) {
-            return switch (this) {
-                case EQUAL -> actual == expected;
-                case NOTEQUAL -> actual != expected;
-                case GREATERTHAN -> actual > expected;
-                case LESSTHAN -> actual < expected;
-                case GREATERTHANEQUAL -> actual >= expected;
-                case LESSTHANEQUAL -> actual <= expected;
-            };
+            switch (this) {
+                case EQUAL:
+                    return actual == expected;
+                case NOTEQUAL:
+                    return actual != expected;
+                case GREATERTHAN:
+                    return actual > expected;
+                case LESSTHAN:
+                    return actual < expected;
+                case GREATERTHANEQUAL:
+                    return actual >= expected;
+                case LESSTHANEQUAL:
+                    return actual <= expected;
+            }
+            throw new IllegalStateException("Unexpected value: " + this);
         }
     }
 
@@ -236,10 +245,8 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
      */
     private String compareSize(long resultSize) {
         long allowedSize = Long.parseLong(getAllowedSize());
-        ComparisonOperator operator;
-        try {
-            operator = ComparisonOperator.fromValue(getCompOper());
-        } catch (IllegalArgumentException e) {
+        ComparisonOperator operator = ComparisonOperator.fromValue(getCompOper());
+        if (operator == null) {
             return "ERROR - invalid condition";
         }
         
