@@ -178,15 +178,15 @@ public class SamplerMetric {
      */
     public synchronized void resetForTimeInterval() {
         switch (globalWindowMode) {
-        case FIXED:
-            // We don't clear responsesStats nor usersStats as it will slide as per my understanding of
-            // http://commons.apache.org/proper/commons-math/userguide/stat.html
-            break;
-        case TIMED:
-            for (DescriptiveStatistics stat : windowedStats) {
-                stat.clear();
+            case FIXED -> {
+                // We don't clear responsesStats nor usersStats as it will slide as per my understanding of
+                // http://commons.apache.org/proper/commons-math/userguide/stat.html
             }
-            break;
+            case TIMED -> {
+                for (DescriptiveStatistics stat : windowedStats) {
+                    stat.clear();
+                }
+            }
         }
         errors.clear();
         successes = 0;

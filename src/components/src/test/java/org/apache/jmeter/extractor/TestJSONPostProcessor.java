@@ -86,8 +86,10 @@ class TestJSONPostProcessor {
         processor.setJsonPathExpressions(path);
         processor.setRefNames("result");
         accessMode.configure(processor);
-        SampleResult sampleResult = createSampleResult("{\"a\": 23, \"b\": \"parent_only\"}");
-        sampleResult.addSubResult(createSampleResult("{\"a\": 42, \"c\": \"child_only\"}"));
+        SampleResult sampleResult = createSampleResult("""
+                {"a": 23, "b": "parent_only"}""");
+        sampleResult.addSubResult(createSampleResult("""
+                {"a": 42, "c": "child_only"}"""));
         context.setPreviousResult(sampleResult);
         context.setVariables(vars);
         processor.process();
@@ -297,7 +299,8 @@ class TestJSONPostProcessor {
     void testExtractComplexElements() {
         JMeterContext context = JMeterContextService.getContext();
         JSONPostProcessor processor = setupProcessor(context, "-1");
-        String data = "[{\"a\":[1,{\"d\":2},3]},[\"b\",{\"h\":23}],3]";
+        String data = """
+                [{"a":[1,{"d":2},3]},["b",{"h":23}],3]""";
         SampleResult result = new SampleResult();
         result.setResponseData(data.getBytes(StandardCharsets.UTF_8));
         JMeterVariables vars = new JMeterVariables();
@@ -310,8 +313,10 @@ class TestJSONPostProcessor {
         String jsonWithoutOuterParens = data.substring(1, data.length() - 1);
         assertEquals(jsonWithoutOuterParens, vars.get(VAR_NAME + "_ALL"));
 
-        assertEquals("{\"a\":[1,{\"d\":2},3]}", vars.get(VAR_NAME + "_1"));
-        assertEquals("[\"b\",{\"h\":23}]", vars.get(VAR_NAME + "_2"));
+        assertEquals("""
+                {"a":[1,{"d":2},3]}""", vars.get(VAR_NAME + "_1"));
+        assertEquals("""
+                ["b",{"h":23}]""", vars.get(VAR_NAME + "_2"));
         assertEquals("3", vars.get(VAR_NAME + "_3"));
 
         assertEquals("3", vars.get(VAR_NAME + "_matchNr"));

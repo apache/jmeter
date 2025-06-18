@@ -211,8 +211,8 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         if (headerName == null) {
             return null;
         }
-        final Set<String> names = new HashSet<>(Arrays.asList(headerName.split(",\\s*")));
-        final Map<String, List<String>> values = new HashMap<>();
+        final var names = new HashSet<>(Arrays.asList(headerName.split(",\\s*")));
+        final var values = new HashMap<String, List<String>>();
         for (final String name: names) {
             values.put(name, new ArrayList<>());
         }

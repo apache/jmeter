@@ -90,8 +90,8 @@ public class Converter {
      */
     public static Calendar getCalendar(Object date, Calendar defaultValue) {
         Calendar cal = new GregorianCalendar();
-        if (date instanceof java.util.Date) {
-            cal.setTime((java.util.Date) date);
+        if (date instanceof java.util.Date dateValue) {
+            cal.setTime(dateValue);
             return cal;
         } else if (date != null) {
             Optional<Date> d = tryToParseDate(date);
@@ -145,8 +145,8 @@ public class Converter {
      *         <code>defaultValue</code> if conversion failed
      */
     public static Date getDate(Object date, Date defaultValue) {
-        if (date instanceof java.util.Date) {
-            return (Date) date;
+        if (date instanceof java.util.Date dateValue) {
+            return dateValue;
         } else if (date != null) {
             return tryToParseDate(date).orElse(defaultValue);
         } else {
@@ -182,8 +182,8 @@ public class Converter {
         if (o == null) {
             return defaultValue;
         }
-        if (o instanceof Number) {
-            return ((Number) o).floatValue();
+        if (o instanceof Number number) {
+            return number.floatValue();
         }
         try {
             return Float.parseFloat(o.toString());
@@ -221,8 +221,8 @@ public class Converter {
             if (o == null) {
                 return defaultValue;
             }
-            if (o instanceof Number) {
-                return ((Number) o).doubleValue();
+            if (o instanceof Number number) {
+                return number.doubleValue();
             }
             return Double.parseDouble(o.toString());
         } catch (NumberFormatException e) {
@@ -270,8 +270,8 @@ public class Converter {
     public static boolean getBoolean(Object o, boolean defaultValue) {
         if (o == null) {
             return defaultValue;
-        } else if (o instanceof Boolean) {
-            return (Boolean) o;
+        } else if (o instanceof Boolean boolValue) {
+            return boolValue;
         }
         return Boolean.parseBoolean(o.toString());
     }
@@ -291,8 +291,8 @@ public class Converter {
             if (o == null) {
                 return defaultValue;
             }
-            if (o instanceof Number) {
-                return ((Number) o).intValue();
+            if (o instanceof Number number) {
+                return number.intValue();
             }
             return Integer.parseInt(o.toString());
         } catch (NumberFormatException e) {
@@ -327,12 +327,12 @@ public class Converter {
             if (o == null) {
                 return defaultValue;
             }
-            if (o instanceof Character) {
-                return (Character) o;
-            } else if (o instanceof Byte) {
-                return (char) ((Byte) o).byteValue();
-            } else if (o instanceof Integer) {
-                return (char) ((Integer) o).intValue();
+            if (o instanceof Character charValue) {
+                return charValue;
+            } else if (o instanceof Byte byteValue) {
+                return (char) byteValue.byteValue();
+            } else if (o instanceof Integer intValue) {
+                return (char) intValue.intValue();
             } else {
                 String s = o.toString();
                 if (s.length() > 0) {
@@ -373,8 +373,8 @@ public class Converter {
             if (o == null) {
                 return defaultValue;
             }
-            if (o instanceof Number) {
-                return ((Number) o).longValue();
+            if (o instanceof Number number) {
+                return number.longValue();
             }
             return Long.parseLong(o.toString());
         } catch (NumberFormatException e) {
@@ -546,11 +546,11 @@ public class Converter {
      *             when object can not be converted
      */
     public static File getFile(Object o){
-        if (o instanceof File) {
-            return (File) o;
+        if (o instanceof File file) {
+            return file;
         }
-        if (o instanceof String) {
-            return new File((String) o);
+        if (o instanceof String str) {
+            return new File(str);
         }
         throw new IllegalArgumentException("Expected String or file, actual "+o.getClass().getName());
     }

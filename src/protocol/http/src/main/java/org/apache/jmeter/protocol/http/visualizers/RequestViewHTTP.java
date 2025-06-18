@@ -286,10 +286,10 @@ public class RequestViewHTTP implements RequestView {
     //TODO: move to utils class (JMeterUtils?)
     public static Map<String, String[]> getQueryMap(String query) {
 
-        Map<String, String[]> map = new HashMap<>();
-        String[] params = query.split(PARAM_CONCATENATE);
+        var map = new HashMap<String, String[]>();
+        var params = query.split(PARAM_CONCATENATE);
         for (String param : params) {
-            String[] paramSplit = param.split("=");
+            var paramSplit = param.split("=");
             if (paramSplit.length == 0) {
                 continue; // We found no key-/value-pair, so continue on the next param
             }
