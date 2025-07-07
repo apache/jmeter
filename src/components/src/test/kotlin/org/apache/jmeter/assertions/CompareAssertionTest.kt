@@ -39,7 +39,6 @@ class CompareAssertionTest {
         fun simpleResult(data: String, elapsed: Long) =
             SampleResult(0, elapsed).apply {
                 setResponseData(data, Charsets.UTF_8.name())
-                sampleEnd()
             }
 
         @JvmStatic

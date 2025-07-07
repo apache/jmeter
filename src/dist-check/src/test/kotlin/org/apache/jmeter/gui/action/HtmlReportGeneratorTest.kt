@@ -154,4 +154,16 @@ class HtmlReportGeneratorTest : JMeterTestCase() {
             fail("First result message should contain '$expectedError', but was '$firstMessage'")
         }
     }
+
+    @Test
+    fun ns() {
+        val mapper = ObjectMapper()
+
+        val expectedRoot = mapper.readTree(File(combine("testfiles", "ns.json")))
+
+        HtmlReportGenerator(combine("testfiles", "ns.jtl"), combine("testfiles", "ns.properties"), testDirectory.toString()).run()
+        val actualRoot = mapper.readTree(File(testDirectory, "statistics.json"))
+
+        assertEquals(expectedRoot, actualRoot, "ns")
+    }
 }

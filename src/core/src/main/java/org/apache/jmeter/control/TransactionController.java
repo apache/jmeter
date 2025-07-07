@@ -215,7 +215,7 @@ public class TransactionController extends GenericController implements SampleLi
                     long processingTimeOfLastChild = res.currentTimeInMillis() - prevEndTime;
                     pauseTime += processingTimeOfLastChild;
                 }
-                res.setIdleTime(pauseTime+res.getIdleTime());
+                res.setIdleTime_ns(pauseTime+res.getIdleTime());
                 res.sampleEnd();
                 res.setResponseMessage(
                         TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX
@@ -252,7 +252,7 @@ public class TransactionController extends GenericController implements SampleLi
     public void triggerEndOfLoop() {
         if(!isGenerateParentSample()) {
             if (res != null) {
-                res.setIdleTime(pauseTime + res.getIdleTime());
+                res.setIdleTime_ns(pauseTime + res.getIdleTime());
                 res.sampleEnd();
                 res.setSuccessful(TRUE.equals(JMeterContextService.getContext().getVariables().get(JMeterThread.LAST_SAMPLE_OK)));
                 res.setResponseMessage(
@@ -320,8 +320,8 @@ public class TransactionController extends GenericController implements SampleLi
                 }
                 res.setAllThreads(sampleResult.getAllThreads());
                 res.setGroupThreads(sampleResult.getGroupThreads());
-                res.setLatency(res.getLatency() + sampleResult.getLatency());
-                res.setConnectTime(res.getConnectTime() + sampleResult.getConnectTime());
+                res.setLatency_ns(res.getLatency() + sampleResult.getLatency());
+                res.setConnectTime_ns(res.getConnectTime() + sampleResult.getConnectTime());
             }
         }
     }
