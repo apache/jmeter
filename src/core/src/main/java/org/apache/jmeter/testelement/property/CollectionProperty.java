@@ -66,27 +66,27 @@ public class CollectionProperty extends MultiProperty {
     }
 
     public void set(int index, String prop) {
-        if (value instanceof List<?>) {
-            ((List<JMeterProperty>) value).set(index, new StringProperty(prop, prop));
+        if (value instanceof List<JMeterProperty> list) {
+            list.set(index, new StringProperty(prop, prop));
         }
     }
 
     public void set(int index, JMeterProperty prop) {
-        if (value instanceof List<?>) {
-            ((List<JMeterProperty>) value).set(index, prop);
+        if (value instanceof List<JMeterProperty> list) {
+            list.set(index, prop);
         }
     }
 
     public JMeterProperty get(int row) {
-        if (value instanceof List<?>) {
-            return ((List<JMeterProperty>) value).get(row);
+        if (value instanceof List<JMeterProperty> list) {
+            return list.get(row);
         }
         return null;
     }
 
     public void remove(int index) {
-        if (value instanceof List<?>) {
-            ((List<?>) value).remove(index);
+        if (value instanceof List<?> list) {
+            list.remove(index);
         }
     }
 

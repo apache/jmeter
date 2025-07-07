@@ -84,23 +84,14 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             }
             // These are new fields; not saved unless true
             // This list MUST agree with the list in the marshall() method below
-            switch (fieldName) {
-                case NODE_BYTES:
-                case NODE_SENT_BYTES:
-                case NODE_URL:
-                case NODE_FILENAME:
-                case NODE_HOSTNAME:
-                case NODE_THREAD_COUNT:
-                case NODE_SAMPLE_COUNT:
-                case NODE_IDLE_TIME:
-                case NODE_CONNECT_TIME:
-                // The two fields below are not currently saved or restored
-                case NODE_DELIMITER:
-                case NODE_PRINTMS:
-                    return false;
-                default:
-                    return true;
-            }
+            return switch (fieldName) {
+                case NODE_BYTES, NODE_SENT_BYTES, NODE_URL, NODE_FILENAME,
+                     NODE_HOSTNAME, NODE_THREAD_COUNT, NODE_SAMPLE_COUNT,
+                     NODE_IDLE_TIME, NODE_CONNECT_TIME,
+                     // The two fields below are not currently saved or restored
+                     NODE_DELIMITER, NODE_PRINTMS -> false;
+                default -> true;
+            };
         }
     }
 
