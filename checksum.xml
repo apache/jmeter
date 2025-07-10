@@ -11,14 +11,19 @@
     <trusted-key id='dcba03381ef6c89096acd985ac5ec74981f9cda6' group='com.beust' />
     <trusted-key id='28118c070cb22a0175a2e8d43d12ca2ac19f3181' group='com.fasterxml.jackson.core' />
     <trusted-key id='8a10792983023d5d14c93b488d7f1bec1e2ecae7' group='com.fasterxml.jackson.core' />
+    <trusted-key id='28118c070cb22a0175a2e8d43d12ca2ac19f3181' group='com.fasterxml.jackson.dataformat' />
     <trusted-key id='8a10792983023d5d14c93b488d7f1bec1e2ecae7' group='com.fasterxml.jackson.dataformat' />
+    <trusted-key id='28118c070cb22a0175a2e8d43d12ca2ac19f3181' group='com.fasterxml.jackson.datatype' />
+    <trusted-key id='28118c070cb22a0175a2e8d43d12ca2ac19f3181' group='com.fasterxml.jackson.module' />
     <trusted-key id='8a10792983023d5d14c93b488d7f1bec1e2ecae7' group='com.fasterxml.jackson.module' />
+    <trusted-key id='28118c070cb22a0175a2e8d43d12ca2ac19f3181' group='com.fasterxml.woodstox' />
     <trusted-key id='8a10792983023d5d14c93b488d7f1bec1e2ecae7' group='com.fasterxml.woodstox' />
     <trusted-key id='58f086abb0ede8f7a04b76c34c00043bec5cb7cb' group='com.fifesoft' />
     <trusted-key id='4ac55a85d30c3499a3219500b7e2662a7640a051' group='com.formdev' />
     <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='com.formdev' />
     <trusted-key id='d112630c899f508198c09018105cb91cac2aee0e' group='com.github.autostyle' />
     <trusted-key id='635ee627345f3c1dd422b2e207d3516820bcf6b1' group='com.github.ben-manes.caffeine' />
+    <trusted-key id='2655176f748fd83725b4805ff2a01147d830c125' group='com.github.docker-java' />
     <trusted-key id='55e770230e69cc6de143fb5b62c82e50836eb3ee' group='com.github.gundy' />
     <trusted-key id='253e8e4c6fb28d11748115c1249dee8e2c07a0a2' group='com.github.javaparser' />
     <trusted-key id='fc2c31fc25fede4e7ad0d18c2bfd7825a8984fbe' group='com.github.javaparser' />
@@ -85,16 +90,23 @@
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='commons-net' />
     <trusted-key id='0186f8b24c5bc02c94a0e0e486f75e83e1ee085f' group='de.thetaphi' />
     <trusted-key id='1fa37fbe4453c1073e7ef61d6449005f96bc97a3' group='de.undercouch' />
+    <trusted-key id='cde577234159e222bc56e50f9c61220417aaa02e' group='dev.failsafe' />
     <trusted-key id='3e1ac64f4e34e290503c90323449ec3ac2efe8aa' group='dnsjava' />
     <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='info.picocli' />
     <trusted-key id='aa417737bd805456db3cbdde6601e5c08dccbb96' group='info.picocli' />
     <trusted-key id='c62c0ce2e5c346b2d9bf2d8bb2ca0dfe9ed21c6e' group='io.burt' />
     <trusted-key id='1ab9bdf40ed49debb5caaded5b30d3b10694f057' group='io.codearte.gradle.nexus' />
+    <trusted-key id='1f47744c9b6e14f2049c2857f1f111af65925306' group='io.github.classgraph' />
     <trusted-key id='7186bbf993566d8c2f4f7ed7d945e643368fef62' group='io.github.eisop' />
+    <trusted-key id='ed09733fa05dedf15100abeb32bbf14af07ca77b' group='io.github.fastfilter' />
     <trusted-key id='d477d51812e692011db11e66a6ea2e2bf22e0543' group='io.github.java-diff-utils' />
     <trusted-key id='e52567d2589415bd74eb4c2867631bc0568801c3' group='io.github.microutils' />
+    <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='io.github.resilience4j' />
     <trusted-key id='050a37a2e0577f4baa095b52602ec18d20c4661c' group='io.github.x-stream' />
+    <trusted-key id='48b086a7d843cfa258e83286928fbf39003c0425' group='io.micrometer' />
     <trusted-key id='59b06224fd8912e36603be79fefe78456eddc34a' group='io.mockk' />
+    <trusted-key id='7119b89feb81209430e65c62c2ad9c8a7d4e988a' group='io.quarkus.gizmo' />
+    <trusted-key id='1d339b6a68ae2e8daeda65d5276962ca56e73c81' group='io.vavr' />
     <trusted-key id='6dd3b8c64ef75253beb2c53ad908a43fb7ec07ac' group='jakarta.activation' />
     <trusted-key id='a1483f88ba771993ab609c43590c2310cee1c9be' group='jakarta.jms' />
     <trusted-key id='fc411cd3cb7dcb0abc9801058118b3bcdb1a5000' group='jakarta.xml.bind' />
@@ -170,10 +182,12 @@
     <trusted-key id='7c669810892cbd3148fa92995b05ccde140c2876' group='org.eclipse.jgit' />
     <trusted-key id='1def9646901a1652e5b3e5ea694db6f419c8d1fd' group='org.exparity' />
     <trusted-key id='13ac2213964abe1d1c147c0e1939a2520bab1d90' group='org.freemarker' />
+    <trusted-key id='bd3b8aab16ea001cda79d4773e8a7f8a3597e7fb' group='org.functionaljava' />
     <trusted-key id='e5b8247af8a619a28f90fdfc9ff25980f5ba7e4f' group='org.fusesource.hawtbuf' />
     <trusted-key id='1bd97a6a154e7810ee0bc832e2f38302c8075e3d' group='org.gradle.kotlin' />
     <trusted-key id='4db1a49729b053caf015cee9a6adfc93ef34893e' group='org.hamcrest' />
     <trusted-key id='e3a9f95079e84ce201f7cf60bede11eaf1164480' group='org.hamcrest' />
+    <trusted-key id='e113159331a1f87bfc2a93d0960d2e8635a91268' group='org.hdrhistogram' />
     <trusted-key id='d76260c72df74e66268f7770ab049df4ab24c1ef' group='org.hsqldb' />
     <trusted-key id='a413f67d71beec23add0ce0acb43338e060cf9fa' group='org.jacoco' />
     <trusted-key id='e5c3b1929191df06136ccb2b164779204e106a76' group='org.javassist' />
@@ -195,11 +209,17 @@
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.jupiter' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.platform' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.vintage' />
+    <trusted-key id='7a1d848e7c2af85eeba69c99e7bf252cf360097e' group='org.latencyutils' />
     <trusted-key id='08ba61cf501c09f70911b83b82216a03caa86c78' group='org.mongodb' />
     <trusted-key id='e9af5293c334c7c0b583227d2f45f85cdf082e68' group='org.mozilla' />
     <trusted-key id='07a4fa67a8222f1b39f9edaef8052e4e1bd0db31' group='org.neo4j.driver' />
     <trusted-key id='e85aed155021af8a6c6b7a4a7c7d8456294423ba' group='org.objenesis' />
     <trusted-key id='019082bc00e0324e2aef4cf00d3b328562a119a7' group='org.openjdk.jmh' />
+    <trusted-key id='f36ca0c4b500f0cdde0c5aa1913f763cd0f9cfd8' group='org.openrewrite' />
+    <trusted-key id='f36ca0c4b500f0cdde0c5aa1913f763cd0f9cfd8' group='org.openrewrite.gradle.tooling' />
+    <trusted-key id='f36ca0c4b500f0cdde0c5aa1913f763cd0f9cfd8' group='org.openrewrite.meta' />
+    <trusted-key id='f36ca0c4b500f0cdde0c5aa1913f763cd0f9cfd8' group='org.openrewrite.recipe' />
+    <trusted-key id='f36ca0c4b500f0cdde0c5aa1913f763cd0f9cfd8' group='org.openrewrite.tools' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.opentest4j' />
     <trusted-key id='a5bd02b93e7a40482eb1d66a5f69ad087600b22c' group='org.ow2.asm' />
     <trusted-key id='908366594e746bf3c449f5622be5d98f751f4136' group='org.pcollections' />
@@ -207,16 +227,20 @@
     <trusted-key id='50a628ffaf58480736b1079fd1031d14464180e0' group='org.reactivestreams' />
     <trusted-key id='a33a0b49a4c1ab590b0a4ddc1364c5e2df3e99c5' group='org.reactivestreams' />
     <trusted-key id='3f2a008a91d11a7fac4a0786f13d3e721d56bd54' group='org.reflections' />
+    <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='org.rnorth.duct-tape' />
     <trusted-key id='475f3b8e59e6e63aa78067482c7b12f2a511e325' group='org.slf4j' />
     <trusted-key id='60200ac4ae761f1614d6c46766d68daa073be985' group='org.slf4j' />
     <trusted-key id='2b1042677fd8190c7b9fc0dc2161d72e7dcd4258' group='org.sonarsource.scanner.api' />
     <trusted-key id='f1182e81c792928921dbcab4cfca4a29d26468de' group='org.sonarsource.scanner.api' />
     <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='org.springframework' />
     <trusted-key id='e2acb037933cdeaab7bf77d49a2c7a98e457c53d' group='org.springframework' />
+    <trusted-key id='2655176f748fd83725b4805ff2a01147d830c125' group='org.testcontainers' />
     <trusted-key id='7cd52b5a8295137c88fb5748dddafa7674e54418' group='org.testng' />
     <trusted-key id='fa1703b1d287caea3a60f931e0130a3ed5a2079e' group='org.webjars' />
+    <trusted-key id='56b505dc8a29c69138a430b9429c8816dea04cdb' group='org.xerial.snappy' />
     <trusted-key id='4c5f68d09d42ba7fac888df9a929ea2321fdbf8f' group='org.xmlresolver' />
     <trusted-key id='ce8075a251547bee249bc151a2115ae15f6b8b72' group='org.xmlunit' />
+    <trusted-key id='120d6f34e627ed3a772ebbfe55c7e5e701832382' group='org.yaml' />
     <trusted-key id='2db4f1ef0fa761ecc4ea935c86fdc7e2a11262cb' group='xalan' />
     <trusted-key id='e5b8247af8a619a28f90fdfc9ff25980f5ba7e4f' group='xalan' />
     <trusted-key id='6cb87b18a453990eac9453f87d713008cc07e9ad' group='xerces' />
@@ -322,6 +346,9 @@
     <dependency group='org.gradle.kotlin' module='gradle-kotlin-dsl-plugins' version='4.1.2'>
       <sha512>B23C4355CBAB2098506528D196F6C9A71D4689F4A3334494B97D9F6D868883D429D851FC319761C25ACC86F0C4E02F028B33C1868B6EF7BA1246E3D79ADF1582</sha512>
     </dependency>
+    <dependency group='org.jboss' module='jandex' version='2.4.2.Final'>
+      <sha512>635642582701F6AE26DF91E39D5BFD9345C4C219DA73E71A27F4740A4C0C7970F52CEF667BB9CC4DD08C26D9B0447EE003C9E56D5EDE68870976356C2FCC4A5C</sha512>
+    </dependency>
     <dependency group='org.jetbrains.kotlin' module='kotlin-gradle-plugin' version='1.8.21'>
       <sha512>09D6B646399888DBD6498D24C2B6FABBEF49444FD0710E8F93FE266FFFD11A4A2C1CFEE3431D52AD03CA781E2EFAB60896DCA53AE56924AA0C48F9C85FCE66BB</sha512>
     </dependency>
@@ -345,6 +372,9 @@
     </dependency>
     <dependency group='org.nosphere.apache' module='creadur-rat-gradle' version='0.8.1'>
       <sha512>397C3257C5448C26304B312212F6DA1649AD15E52CE0419C5BA647F8A68864707A0C8071FA9860C28AA9D626D66C8FAF2D5F576E693F9D01B0F71EEEB84B57FB</sha512>
+    </dependency>
+    <dependency group='org.openrewrite' module='plugin' version='6.6.3'>
+      <sha512>FAE9431F2ADE6A8460C7E86AC5FA4AB7A2E11DB919BB9C60F59BD684CF5AF42A9D0DBFD4835AC8450F0F5B36258B6DF1920E445F84CBD3CFE2944F4CE430DF58</sha512>
     </dependency>
     <dependency group='org.ow2.asm' module='asm-analysis' version='6.2.1'>
       <sha512>BE273F8E886BBCFDA81180917145996AB8FD26A17264EBEB5E1FC2337950A309D64DC8CBD373220009728622A8CBF56B8578E960B5561C22EA66848D296AE44E</sha512>

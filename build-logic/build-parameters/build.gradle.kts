@@ -82,6 +82,10 @@ buildParameters {
         defaultValue.set(false)
         description.set("Skip AutoStyle verifications")
     }
+    bool("skipOpenrewrite") {
+        defaultValue.set(false)
+        description.set("Skip OpenRewrite processing")
+    }
     bool("skipCheckstyle") {
         defaultValue.set(false)
         description.set("Skip Checkstyle verifications")

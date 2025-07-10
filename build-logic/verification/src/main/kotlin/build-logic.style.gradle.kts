@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+import com.github.autostyle.gradle.AutostyleTask
+import de.thetaphi.forbiddenapis.gradle.CheckForbiddenApis
 import org.gradle.kotlin.dsl.apply
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
@@ -24,6 +26,14 @@ plugins {
 
 if (!buildParameters.skipAutostyle) {
     apply(plugin = "build-logic.autostyle")
+}
+
+// OpenRewrite Gradle plugin applies to allprojects when it is applied to the root project
+// So the workaround is to avoid applying openrewrite to the root
+val skipOpenrewrite = project == rootProject || buildParameters.skipOpenrewrite
+
+if (!skipOpenrewrite) {
+    apply(plugin = "build-logic.openrewrite")
 }
 
 val skipCheckstyle = buildParameters.skipCheckstyle || run {
@@ -61,12 +71,15 @@ if (!skipCheckstyle && !buildParameters.skipAutostyle) {
     }
 }
 
-if (!buildParameters.skipAutostyle || !skipCheckstyle || !buildParameters.skipForbiddenApis) {
+if (!buildParameters.skipAutostyle || !skipCheckstyle || !buildParameters.skipForbiddenApis || !skipOpenrewrite) {
     tasks.register("style") {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
         description = "Formats code (license header, import order, whitespace at end of line, ...) and executes Checkstyle verifications"
         if (!buildParameters.skipAutostyle) {
             dependsOn("autostyleApply")
+        }
+        if (!skipOpenrewrite) {
+            dependsOn("rewriteRun")
         }
         if (!skipCheckstyle) {
             dependsOn("checkstyleAll")
@@ -75,6 +88,23 @@ if (!buildParameters.skipAutostyle || !skipCheckstyle || !buildParameters.skipFo
             dependsOn("forbiddenApis")
         }
     }
+    tasks.register("styleCheck") {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = "Report code style violations (license header, import order, whitespace at end of line, ...)"
+        if (!buildParameters.skipAutostyle) {
+            dependsOn("autostyleCheck")
+        }
+        if (!skipOpenrewrite) {
+            dependsOn("rewriteDryRun")
+        }
+        if (!skipCheckstyle) {
+            dependsOn("checkstyleAll")
+        }
+        if (!buildParameters.skipForbiddenApis) {
+            dependsOn("forbiddenApis")
+        }
+    }
+
 }
 
 tasks.register("checkstyle") {
@@ -88,5 +118,24 @@ tasks.register("checkstyle") {
     }
     if (!buildParameters.skipForbiddenApis) {
         dependsOn("forbiddenApis")
+    }
+}
+
+// OpenRewrite fixes many warnings, so it should run the first
+if (!skipOpenrewrite) {
+    if (!buildParameters.skipForbiddenApis) {
+        tasks.withType<CheckForbiddenApis>().configureEach {
+            mustRunAfter("rewriteRun", "rewriteDryRun")
+        }
+    }
+    if (!buildParameters.skipCheckstyle) {
+        tasks.withType<Checkstyle>().configureEach {
+            mustRunAfter("rewriteRun", "rewriteDryRun")
+        }
+    }
+    if (!buildParameters.skipAutostyle) {
+        tasks.withType<AutostyleTask>().configureEach {
+            mustRunAfter("rewriteRun", "rewriteDryRun")
+        }
     }
 }

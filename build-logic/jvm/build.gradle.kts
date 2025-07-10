@@ -22,6 +22,7 @@ plugins {
 dependencies {
     api(projects.buildParameters)
     api(projects.verification)
+    api(projects.openrewrite)
     api("me.champeau.jmh:me.champeau.jmh.gradle.plugin:0.7.2")
     api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.90")
     api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.90")

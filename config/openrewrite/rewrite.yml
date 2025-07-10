@@ -1,0 +1,163 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to you under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+# See reference at https://docs.openrewrite.org/concepts-explanations/styles#declarative-styles
+type: specs.openrewrite.org/v1beta/style
+name: org.apache.jmeter.style.Style
+styleConfigs:
+  - org.openrewrite.java.style.TabsAndIndentsStyle:
+      # See https://github.com/openrewrite/rewrite/issues/3666
+      # For now, it should be the same as in .editorconfig
+      useTabCharacter: false
+      tabSize: 2
+      indentSize: 2
+      continuationIndent: 4
+  - org.openrewrite.java.style.SpacesStyle:
+      # See https://github.com/openrewrite/rewrite/blob/1d0aeec11e2d7f239f2f656bfd964b17ca8e4d17/rewrite-java/src/main/java/org/openrewrite/java/style/SpacesStyle.java#L26C14-L26C25
+      other:
+        afterForSemicolon: true
+  - org.openrewrite.java.style.NoWhitespaceAfterStyle:
+      # This is to workaround https://github.com/openrewrite/rewrite/issues/3869
+      arrayDeclarator: false
+  - org.openrewrite.java.style.ImportLayoutStyle:
+      classCountToUseStarImport: 999
+      nameCountToUseStarImport: 999
+      # The order of the imports should match ij_java_imports_layout in .editorconfig
+      layout:
+        - import static all other imports
+        - <blank line>
+        - import java.*
+        - <blank line>
+        - import javax.*
+        - <blank line>
+        - import org.*
+        - <blank line>
+        - import net.*
+        - <blank line>
+        - import com.*
+        - <blank line>
+        - import all other imports
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: org.apache.jmeter.staticanalysis.CodeCleanup
+displayName: Code cleanup
+description: Automatically cleanup code, e.g. remove unnecessary parentheses, simplify expressions.
+recipeList:
+  # The list is taken from https://github.com/openrewrite/rewrite-static-analysis/blob/8c803a9c50b480841a4af031f60bac5ee443eb4e/src/main/resources/META-INF/rewrite/static-analysis.yml#L16C1-L42
+  - org.openrewrite.staticanalysis.DefaultComesLast
+  - org.openrewrite.staticanalysis.EmptyBlock
+  - org.openrewrite.java.format.EmptyNewlineAtEndOfFile
+  - org.openrewrite.staticanalysis.ForLoopControlVariablePostfixOperators
+  - org.openrewrite.staticanalysis.FinalizePrivateFields
+  - org.openrewrite.java.format.MethodParamPad
+  - org.openrewrite.java.format.NoWhitespaceAfter
+  - org.openrewrite.java.format.NoWhitespaceBefore
+  - org.openrewrite.java.format.PadEmptyForLoopComponents
+  - org.openrewrite.staticanalysis.TypecastParenPad
+  - org.openrewrite.staticanalysis.EqualsAvoidsNull
+  - org.openrewrite.staticanalysis.ExplicitInitialization
+  - org.openrewrite.staticanalysis.FallThrough
+  # It breaks backward compatibility, so
+  # - org.openrewrite.staticanalysis.HideUtilityClassConstructor
+  - org.openrewrite.staticanalysis.NeedBraces
+  - org.openrewrite.staticanalysis.OperatorWrap
+  - org.openrewrite.staticanalysis.UnnecessaryParentheses
+  - org.openrewrite.staticanalysis.ReplaceThreadRunWithThreadStart
+  - org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls
+  - org.openrewrite.staticanalysis.ReplaceStringBuilderWithString
+  - org.openrewrite.java.ShortenFullyQualifiedTypeReferences
+  - org.openrewrite.staticanalysis.MissingOverrideAnnotation
+  - org.openrewrite.java.OrderImports
+---
+# Copied from https://github.com/openrewrite/rewrite-static-analysis/blob/8c803a9c50b480841a4af031f60bac5ee443eb4e/src/main/resources/META-INF/rewrite/common-static-analysis.yml#L17-L93
+type: specs.openrewrite.org/v1beta/recipe
+name: org.apache.jmeter.staticanalysis.CommonStaticAnalysis
+displayName: Common static analysis issues
+description: Resolve common static analysis issues discovered through 3rd party tools.
+recipeList:
+  #  - org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable
+  - org.openrewrite.staticanalysis.AtomicPrimitiveEqualsUsesGet
+  - org.openrewrite.staticanalysis.BigDecimalRoundingConstantsToEnums
+  - org.openrewrite.staticanalysis.BooleanChecksNotInverted
+  - org.openrewrite.staticanalysis.CaseInsensitiveComparisonsDoNotChangeCase
+  - org.openrewrite.staticanalysis.CatchClauseOnlyRethrows
+  - org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls
+  - org.openrewrite.staticanalysis.CovariantEquals
+  - org.openrewrite.staticanalysis.DefaultComesLast
+  - org.openrewrite.staticanalysis.EmptyBlock
+  - org.openrewrite.staticanalysis.EqualsAvoidsNull
+  - org.openrewrite.staticanalysis.ExplicitInitialization
+  - org.openrewrite.staticanalysis.ExternalizableHasNoArgsConstructor
+  - org.openrewrite.staticanalysis.FinalizePrivateFields
+  # pgjdbc: see https://github.com/openrewrite/rewrite/issues/3668
+  # - org.openrewrite.staticanalysis.FallThrough
+  # pgjdbc: it might break backward compatibility
+  # - org.openrewrite.staticanalysis.FinalClass
+  - org.openrewrite.staticanalysis.FixStringFormatExpressions
+  - org.openrewrite.staticanalysis.ForLoopIncrementInUpdate
+  #  - org.openrewrite.staticanalysis.HideUtilityClassConstructor
+  - org.openrewrite.staticanalysis.IndexOfChecksShouldUseAStartPosition
+  - org.openrewrite.staticanalysis.IndexOfReplaceableByContains
+  - org.openrewrite.staticanalysis.IndexOfShouldNotCompareGreaterThanZero
+  - org.openrewrite.staticanalysis.InlineVariable
+  - org.openrewrite.staticanalysis.IsEmptyCallOnCollections
+  - org.openrewrite.staticanalysis.LambdaBlockToExpression
+  #  - org.openrewrite.staticanalysis.LowercasePackage
+  - org.openrewrite.staticanalysis.MethodNameCasing
+  - org.openrewrite.staticanalysis.MinimumSwitchCases
+  - org.openrewrite.staticanalysis.ModifierOrder
+  - org.openrewrite.staticanalysis.MultipleVariableDeclarations
+  - org.openrewrite.staticanalysis.NeedBraces
+  - org.openrewrite.staticanalysis.NestedEnumsAreNotStatic
+  - org.openrewrite.staticanalysis.NewStringBuilderBufferWithCharArgument
+  - org.openrewrite.staticanalysis.NoDoubleBraceInitialization
+  - org.openrewrite.staticanalysis.NoEmptyCollectionWithRawType
+  - org.openrewrite.staticanalysis.NoEqualityInForCondition
+  - org.openrewrite.staticanalysis.NoFinalizer
+  - org.openrewrite.staticanalysis.NoPrimitiveWrappersForToStringOrCompareTo
+  - org.openrewrite.staticanalysis.NoRedundantJumpStatements
+  - org.openrewrite.staticanalysis.NoToStringOnStringType
+  - org.openrewrite.staticanalysis.NoValueOfOnStringType
+  - org.openrewrite.staticanalysis.ObjectFinalizeCallsSuper
+  - org.openrewrite.staticanalysis.PrimitiveWrapperClassConstructorToValueOf
+  - org.openrewrite.staticanalysis.RedundantFileCreation
+  - org.openrewrite.staticanalysis.RemoveExtraSemicolons
+  #  - org.openrewrite.staticanalysis.RemoveRedundantTypeCast
+  - org.openrewrite.java.RemoveUnusedImports
+  #  - org.openrewrite.staticanalysis.RemoveUnusedLocalVariables
+  #  - org.openrewrite.staticanalysis.RemoveUnusedPrivateMethods
+  - org.openrewrite.staticanalysis.RenameLocalVariablesToCamelCase
+  - org.openrewrite.staticanalysis.RenameMethodsNamedHashcodeEqualOrTostring
+  - org.openrewrite.staticanalysis.RenamePrivateFieldsToCamelCase
+  - org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference
+  - org.openrewrite.staticanalysis.ReplaceStringBuilderWithString
+  - org.openrewrite.staticanalysis.SimplifyBooleanExpression
+  - org.openrewrite.staticanalysis.SimplifyBooleanReturn
+  - org.openrewrite.staticanalysis.StaticMethodNotFinal
+  - org.openrewrite.staticanalysis.StringLiteralEquality
+  - org.openrewrite.staticanalysis.UnnecessaryCloseInTryWithResources
+  - org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments
+  - org.openrewrite.staticanalysis.UnnecessaryParentheses
+  - org.openrewrite.staticanalysis.UnnecessaryPrimitiveAnnotations
+  - org.openrewrite.staticanalysis.UpperCaseLiteralSuffixes
+  #  - org.openrewrite.staticanalysis.UnnecessaryThrows
+  #  - org.openrewrite.staticanalysis.UseCollectionInterfaces
+  - org.openrewrite.staticanalysis.UseDiamondOperator
+  - org.openrewrite.staticanalysis.UseJavaStyleArrayDeclarations
+  # https://github.com/openrewrite/rewrite-static-analysis/issues/10
+  #  - org.openrewrite.staticanalysis.UseLambdaForFunctionalInterface
+  #  - org.openrewrite.staticanalysis.UseStringReplace
+  - org.openrewrite.staticanalysis.WhileInsteadOfFor
+  - org.openrewrite.staticanalysis.WriteOctalValuesAsDecimal
