@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.input.CountingInputStream;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -240,15 +239,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         // works OK even if ContentEncoding is null
-        boolean gzipped = HTTPConstants.ENCODING_GZIP.equals(conn.getContentEncoding());
+        String contentEncoding = conn.getContentEncoding();
         CountingInputStream instream = null;
         try {
             instream = new CountingInputStream(conn.getInputStream());
-            if (gzipped) {
-                in = new GZIPInputStream(instream);
-            } else {
-                in = instream;
-            }
+            in = instream;
         } catch (IOException e) {
             if (! (e.getCause() instanceof FileNotFoundException))
             {
@@ -276,21 +271,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 log.info("Error Response Code: {}", conn.getResponseCode());
             }
 
-            if (gzipped) {
-                in = new GZIPInputStream(errorStream);
-            } else {
-                in = errorStream;
-            }
-        } catch (Exception e) {
-            log.error("readResponse: {}", e.toString());
-            Throwable cause = e.getCause();
-            if (cause != null){
-                log.error("Cause: {}", cause.toString());
-                if(cause instanceof Error) {
-                    throw (Error)cause;
-                }
-            }
-            in = conn.getErrorStream();
+            in = errorStream;
         }
         // N.B. this closes 'in'
         byte[] responseData = readResponse(res, in, contentLength);
@@ -298,6 +279,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             res.setBodySize(instream.getByteCount());
             instream.close();
         }
+        res.setResponseData(responseData, contentEncoding);
         return responseData;
     }
 

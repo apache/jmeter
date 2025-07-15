@@ -73,7 +73,6 @@ dependencies {
     implementation("dnsjava:dnsjava")
     implementation("org.apache.httpcomponents:httpmime")
     implementation("org.apache.httpcomponents:httpcore")
-    implementation("org.brotli:dec")
     implementation("com.miglayout:miglayout-swing")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
