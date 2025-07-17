@@ -213,15 +213,14 @@ public class JsseSSLManager extends SSLManager {
         JmeterKeyStore keys = this.getKeyStore();
         managerFactory.init(null, defaultpw == null ? new char[]{} : defaultpw.toCharArray());
         KeyManager[] managers = managerFactory.getKeyManagers();
-        int managersCount = managers.length;
-        KeyManager[] newManagers = new KeyManager[managersCount];
+        KeyManager[] newManagers = new KeyManager[managers.length];
 
         if (log.isDebugEnabled()) {
             log.debug("JmeterKeyStore type: {}", keys.getClass());
         }
 
         // Now wrap the default managers with our key manager
-        for (int i = 0; i < managersCount; i++) {
+        for (int i = 0; i < managers.length; i++) {
             if (managers[i] instanceof X509KeyManager) {
                 X509KeyManager manager = (X509KeyManager) managers[i];
                 newManagers[i] = new WrappedX509KeyManager(manager, keys);
@@ -237,8 +236,7 @@ public class JsseSSLManager extends SSLManager {
 
         // Wrap the defaults in our custom trust manager
         TrustManager[] trustmanagers = tmfactory.getTrustManagers();
-        int trustManagersCount = trustmanagers.length;
-        for (int i = 0; i < trustManagersCount; i++) {
+        for (int i = 0; i < trustmanagers.length; i++) {
             if (trustmanagers[i] instanceof X509TrustManager) {
                 trustmanagers[i] = new CustomX509TrustManager(
                     (X509TrustManager)trustmanagers[i]);
