@@ -125,13 +125,8 @@ develocity {
     }
 }
 
-// Checksum plugin sources can be validated at https://github.com/vlsi/vlsi-release-plugins
 buildscript {
     dependencies {
-        classpath("com.github.vlsi.gradle:checksum-dependency-plugin:${settings.extra["com.github.vlsi.checksum-dependency.version"]}") {
-            // Gradle ships kotlin-stdlib which is good enough
-            exclude("org.jetbrains.kotlin", "kotlin-stdlib")
-        }
         // Remove when Autostyle updates jgit dependency
         classpath("org.eclipse.jgit:org.eclipse.jgit:5.13.2.202306221912-r")
     }
@@ -139,64 +134,6 @@ buildscript {
         gradlePluginPortal()
     }
 }
-
-// Note: we need to verify the checksum for checksum-dependency-plugin itself
-val expectedSha512 = mapOf(
-    // TODO: remove JavaEWAH-1.1.12.jar, org.eclipse.jgit-5.13.0.202109080827-r.jar, slf4j-api-1.7.30.jar when Autostyle updates jgit
-    "ECBBFD1C6593AFBAA4CA7F65E10BC67B12FF75EB221E490051522FAC8D291B202A0A165644A9C5AC9E5618CD771817C9052F171E5E6210CB021DF5A6E4CBF787"
-        to "JavaEWAH-1.1.12.jar",
-    "5A3821A07EEBC9B56F87054C71B9BAFA0D9D0B556AA16191F8676D748CEC755A741CD5500E8676493FFCA69E6C9608CAF86D80B60B5934EE108D77030C490194"
-        to "JavaEWAH-1.1.13.jar",
-    "3EA1DC755BFC93EA97ACA9C3E40CA922C369907E31338DC06DE5226B51FF79D7E2584D5AE8CC011FF11C94DB750414E9E46F6DD712F945973A4992D6A2969B1"
-        to "common-custom-user-data-gradle-plugin-2.0.2.jar",
-    "768DBB3BA2649A7025338197B4703B414983E4608138719B0D69201F7F49E57E0454846B41B775B135B083F820824749DA6121F20A812C4F155A97F09C9B15AC"
-        to "org.eclipse.jgit-5.13.0.202109080827-r.jar",
-    "DD1453E479CAC4E0D20143A1955654DC6C163916CA07C11F70F482F317BBF00A5FEDC8B198AF60BF17E9843E76DDA3103DAB3463384536F73A90AC0206CFB0E0"
-        to "org.eclipse.jgit-5.13.1.202206130422-r.jar",
-    "37ED7485AF83C40D3FC1965512F88E73D139D1CD099CFC71A7E87A38B2D2CD14BB34918718EC7F19A155AC0632B97BAC77295CFFC49F11275B1F7D82D0655357"
-        to "org.eclipse.jgit-5.13.2.202306221912-r.jar",
-    "E5435852569DDA596BA46138AF8EE9C4ECBA8A7A43F4F1E7897AEB4430523A0F037088A7B63877DF5734578F19D331F03D7B0F32D5AE6C425DF211947B3E6173"
-        to "slf4j-api-1.7.30.jar",
-    "24638FE67382EBDA9529F00A54FA6133EA5434D870E6C1D20622F007E8CC1C00408060D7D578CFE62195650A1785FE7E65DC87B1D92FB27B31AB4134AEADAC0E"
-        to "develocity-gradle-plugin-3.18.2.jar",
-    "4E240B7811EF90C090E83A181DACE41DA487555E4136221861B0060F9AF6D8B316F2DD0472F747ADB98CA5372F46055456EF04BDC0C3992188AB13302922FCE9"
-        to "bcpg-jdk15on-1.70.jar",
-    "7DCCFC636EE4DF1487615818CFA99C69941081DF95E8EF1EAF4BCA165594DFF9547E3774FD70DE3418ABACE77D2C45889F70BCD2E6823F8539F359E68EAF36D1"
-        to "bcprov-jdk15on-1.70.jar",
-    "17DAAF511BE98F99007D7C6B3762C9F73ADD99EAB1D222985018B0258EFBE12841BBFB8F213A78AA5300F7A3618ACF252F2EEAD196DF3F8115B9F5ED888FE827"
-        to "okhttp-4.1.0.jar",
-    "93E7A41BE44CC17FB500EA5CD84D515204C180AEC934491D11FC6A71DAEA761FB0EECEF865D6FD5C3D88AAF55DCE3C2C424BE5BA5D43BEBF48D05F1FA63FA8A7"
-        to "okio-2.2.2.jar",
-    "A7E32B1E638C47049683ED945BBCD2678F9FC2AEE1E329C61C05DF8FF426DF5FAE21C81446F4361ABBDB18E5B3B7B7DD01AA1074EDCB3A6D5D148C2B3DEB3FC9"
-        to "foojay-resolver-0.7.0.jar",
-    "10BF91C79AB151B684834E3CA8BA7D7E19742A3EEB580BDE690FBA433F9FFFE3ABBD79ED3FE3F97986C3A2BADC4D14E28835A8EF89167B4B9CC6014242338769"
-        to "gson-2.9.1.jar",
-    settings.extra["com.github.vlsi.checksum-dependency.sha512"].toString()
-        to "checksum-dependency-plugin.jar"
-)
-
-fun File.sha512(): String {
-    val md = java.security.MessageDigest.getInstance("SHA-512")
-    forEachBlock { buffer, bytesRead ->
-        md.update(buffer, 0, bytesRead)
-    }
-    return BigInteger(1, md.digest()).toString(16).uppercase(Locale.ROOT)
-}
-
-val violations =
-    buildscript.configurations["classpath"]
-        .resolve()
-        .sortedBy { it.name }
-        .associateWith { it.sha512() }
-        .filterNot { (_, sha512) -> expectedSha512.contains(sha512) }
-        .entries
-        .joinToString("\n  ") { (file, sha512) -> "SHA-512(${file.name}) = $sha512 ($file)" }
-
-if (violations.isNotBlank()) {
-    throw GradleException("Buildscript classpath has files that were not explicitly permitted:\n  $violations")
-}
-
-apply(plugin = "com.github.vlsi.checksum-dependency")
 
 // This enables to try local Autostyle
 property("localAutostyle")?.ifBlank { "../autostyle" }?.let {
