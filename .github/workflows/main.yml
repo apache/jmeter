@@ -80,6 +80,8 @@ jobs:
           jdkBuildVersion=17
           jdkTestVersion=${{ matrix.java_version }}
           jdkTestVendor=${{ matrix.java_vendor }}
+          # We have a separate job with Errorprone verifications, so avoid duplicate warnings
+          enableErrorprone=false
           # We provision JDKs with GitHub Actions for caching purposes, so Gradle should rather fail in case JDK is not found
           org.gradle.java.installations.auto-download=false
       env:
@@ -101,6 +103,6 @@ jobs:
       with:
         job-id: errprone
         multi-cache-enabled: false
-        arguments: --scan --no-parallel --no-daemon -PenableErrorprone classes
+        arguments: --scan --no-parallel --no-daemon classes
       env:
         DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
