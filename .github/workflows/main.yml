@@ -67,7 +67,7 @@ jobs:
         script: |
           console.log('The following command might help reproducing CI results, use Java ${{ matrix.java_version }}')
           console.log('TZ="${{ matrix.tz }}" _JAVA_OPTIONS="${{ matrix.extraJvmArgs }}" ./gradlew build -x distTar -x distTarSource -x distTarSha512 -x distTarSourceSha512 ${{ matrix.extraGradleArgs }} -PtestExtraJvmArgs="${{ matrix.testExtraJvmArgs }}" -PtestDisableCaching="${{ matrix.testDisableCaching }}"')
-    - uses: burrunan/gradle-cache-action@v1
+    - uses: burrunan/gradle-cache-action@v3
       name: Test
       with:
         job-id: jdk${{ matrix.java_version }}
@@ -96,7 +96,7 @@ jobs:
       with:
         java-version: 17
         distribution: 'zulu'
-    - uses: burrunan/gradle-cache-action@v1
+    - uses: burrunan/gradle-cache-action@v3
       name: Test
       with:
         job-id: errprone
