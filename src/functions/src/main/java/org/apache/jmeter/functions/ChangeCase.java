@@ -86,7 +86,7 @@ public class ChangeCase extends AbstractFunction {
             LOGGER.error("Unknown mode {}, returning {} unchanged", mode, originalString);
             return originalString;
         }
-        
+
         return switch (changeCaseMode) {
             case UPPER -> StringUtils.upperCase(originalString);
             case LOWER -> StringUtils.lowerCase(originalString);

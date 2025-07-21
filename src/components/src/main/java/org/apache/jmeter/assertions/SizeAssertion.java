@@ -249,7 +249,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         if (operator == null) {
             return "ERROR - invalid condition";
         }
-        
+
         if (operator.evaluate(resultSize, allowedSize)) {
             return "";
         } else {
