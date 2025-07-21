@@ -112,6 +112,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         DEFAULT_ARGS.put("percentiles", "99;95;90");
         DEFAULT_ARGS.put("testTitle", "Test name");
         DEFAULT_ARGS.put("eventTags", "");
+        DEFAULT_ARGS.put("enabled", "${__P(InfluxdbBackendListener.enabled, true)}");
     }
 
     private boolean summaryOnly;
@@ -125,10 +126,12 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private String testTags;
     private String applicationName = "";
     private String userTag = "";
-    private InfluxdbMetricsSender influxdbMetricsManager;
+    private InfluxdbMetricsSender influxDBMetricsManager;
 
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> timerHandle;
+
+    private boolean listenerIsEnabled;
 
     public InfluxdbBackendListenerClient() {
         super();
@@ -136,11 +139,12 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     @Override
     public void run() {
-        sendMetrics();
+        if (listenerIsEnabled) {
+            sendMetrics();
+        }
     }
 
     private void sendMetrics() {
-
         synchronized (LOCK) {
             for (Map.Entry<String, SamplerMetric> entry : metricsPerSampler.entrySet()) {
                 SamplerMetric metric = entry.getValue();
@@ -167,9 +171,9 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         field.append(METRIC_STARTED_THREADS).append(userMetrics.getStartedThreads()).append(',');
         field.append(METRIC_ENDED_THREADS).append(userMetrics.getFinishedThreads());
 
-        influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+        influxDBMetricsManager.addMetric(measurement, tag.toString(), field.toString());
 
-        influxdbMetricsManager.writeAndSendMetrics();
+        influxDBMetricsManager.writeAndSendMetrics();
     }
 
     @FunctionalInterface
@@ -207,14 +211,14 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
         StringBuilder field = new StringBuilder(30);
         field.append(METRIC_COUNT).append(count);
-        influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+        influxDBMetricsManager.addMetric(measurement, tag.toString(), field.toString());
     }
 
     private void addMetric(String transaction, int count,
-                           Long sentBytes, Long receivedBytes,
-                           String status, double mean, double minTime, double maxTime,
-                           int hits,
-                           Collection<Float> pcts, PercentileProvider percentileProvider) {
+            Long sentBytes, Long receivedBytes,
+            String status, double mean, double minTime, double maxTime,
+            int hits,
+            Collection<Float> pcts, PercentileProvider percentileProvider) {
         if (count <= 0) {
             return;
         }
@@ -246,7 +250,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(
                     percentileProvider.getPercentileValue(pct));
         }
-        influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+        influxDBMetricsManager.addMetric(measurement, tag.toString(), field.toString());
     }
 
     private void addCumulatedMetrics(SamplerMetric metric) {
@@ -281,7 +285,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         for (Float pct : pcts) {
             field.append(',').append(METRIC_PCT_PREFIX).append(pct).append('=').append(Double.toString(metric.getAllPercentile(pct)));
         }
-        influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+        influxDBMetricsManager.addMetric(measurement, tag.toString(), field.toString());
     }
 
     public String getSamplersRegex() {
@@ -297,17 +301,20 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     @Override
     public void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context) {
-        synchronized (LOCK) {
-            UserMetric userMetrics = getUserMetrics();
-            for (SampleResult sampleResult : sampleResults) {
-                userMetrics.add(sampleResult);
-                Matcher matcher = samplersToFilter.matcher(sampleResult.getSampleLabel());
-                if (!summaryOnly && matcher.find()) {
-                    SamplerMetric samplerMetric = getSamplerMetricInfluxdb(sampleResult.getSampleLabel());
-                    samplerMetric.add(sampleResult);
+        if (listenerIsEnabled) {
+            log.debug("Handling {} sample results", sampleResults.size());
+            synchronized (LOCK) {
+                UserMetric userMetrics = getUserMetrics();
+                for (SampleResult sampleResult : sampleResults) {
+                    userMetrics.add(sampleResult);
+                    Matcher matcher = samplersToFilter.matcher(sampleResult.getSampleLabel());
+                    if (!summaryOnly && matcher.find()) {
+                        SamplerMetric samplerMetric = getSamplerMetricInfluxdb(sampleResult.getSampleLabel());
+                        samplerMetric.add(sampleResult);
+                    }
+                    SamplerMetric cumulatedMetrics = getSamplerMetricInfluxdb(CUMULATED_METRICS);
+                    cumulatedMetrics.addCumulated(sampleResult);
                 }
-                SamplerMetric cumulatedMetrics = getSamplerMetricInfluxdb(CUMULATED_METRICS);
-                cumulatedMetrics.addCumulated(sampleResult);
             }
         }
     }
@@ -324,25 +331,30 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         testTags = AbstractInfluxdbMetricsSender.tagToStringValue(
                 context.getParameter("eventTags", ""));
 
-        initPercentiles(context);
-        initUserTags(context);
-        initInfluxdbMetricsManager(context);
+        listenerIsEnabled = Boolean.parseBoolean(context.getParameter("enabled", "true"));
+        log.info("{} will send metrics: {}", this.getClass().getSimpleName(), listenerIsEnabled);
 
-        samplersToFilter = Pattern.compile(samplersRegex);
-        addAnnotation(true);
+        if (listenerIsEnabled) {
+            initPercentiles(context);
+            initUserTags(context);
+            initinfluxDBMetricsManager(context);
 
-        scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
-        // Start immediately the scheduler and put the pooling ( 5 seconds by default )
-        this.timerHandle = scheduler.scheduleAtFixedRate(this, 0, SEND_INTERVAL, TimeUnit.SECONDS);
+            samplersToFilter = Pattern.compile(samplersRegex);
+            addAnnotation(true);
+
+            scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
+            // Start immediately the scheduler and put the pooling ( 5 seconds by default )
+            this.timerHandle = scheduler.scheduleAtFixedRate(this, 0, SEND_INTERVAL, TimeUnit.SECONDS);
+        }
     }
 
-    private void initInfluxdbMetricsManager(BackendListenerContext context) throws Exception {
+    private void initinfluxDBMetricsManager(BackendListenerContext context) throws Exception {
         Class<?> clazz = Class.forName(context.getParameter("influxdbMetricsSender"));
-        influxdbMetricsManager = (InfluxdbMetricsSender) clazz.getDeclaredConstructor().newInstance();
+        influxDBMetricsManager = (InfluxdbMetricsSender) clazz.getDeclaredConstructor().newInstance();
 
         String influxdbUrl = context.getParameter("influxdbUrl");
         String influxdbToken = context.getParameter("influxdbToken");
-        influxdbMetricsManager.setup(influxdbUrl, influxdbToken);
+        influxDBMetricsManager.setup(influxdbUrl, influxdbToken);
     }
 
     private void initUserTags(BackendListenerContext context) {
@@ -405,23 +417,26 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     @Override
     public void teardownTest(BackendListenerContext context) throws Exception {
-        boolean cancelState = timerHandle.cancel(false);
-        log.debug("Canceled state: {}", cancelState);
-        scheduler.shutdown();
-        try {
-            scheduler.awaitTermination(30, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            log.error("Error waiting for end of scheduler");
-            Thread.currentThread().interrupt();
+        if (listenerIsEnabled) {
+            boolean cancelState = timerHandle.cancel(false);
+            log.debug("Canceled state: {}", cancelState);
+            scheduler.shutdown();
+            try {
+                scheduler.awaitTermination(30, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                log.error("Error waiting for end of scheduler");
+                Thread.currentThread().interrupt();
+            }
+
+            addAnnotation(false);
+
+            // Send last set of data before ending
+            log.info("Sending last metrics to InfluxDB");
+            sendMetrics();
         }
-
-        addAnnotation(false);
-
-        // Send last set of data before ending
-        log.info("Sending last metrics to InfluxDB");
-        sendMetrics();
-
-        influxdbMetricsManager.destroy();
+        if (influxDBMetricsManager != null) {
+            influxDBMetricsManager.destroy();
+        }
         super.teardownTest(context);
     }
 
@@ -443,7 +458,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                 AbstractInfluxdbMetricsSender.fieldToStringValue(
                         testTitle + (isStartOfTest ? " started" : " ended")) + "\"";
 
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, tags, field);
+        influxDBMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, tags, field);
     }
 
     @Override
