@@ -81,7 +81,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
                 Content-type: %s\r
                 Content-length: %d\r
                 \r
-                %s""".formatted(url, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED, 
+                %s""".formatted(url, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED,
                               getBodyLength(postBody, contentEncoding), postBody);
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
         assertEquals(HTTPConstants.POST, s.getMethod());
@@ -597,15 +597,15 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     private String createMultipartFormBody(String titleValue, String descriptionValue,
             String contentEncoding, boolean includeExtraHeaders,
             String boundary, String endOfLine) {
-        
+
         String titleHeaders = includeExtraHeaders ? """
                 Content-Type: text/plain; charset=%s%s\
                 Content-Transfer-Encoding: 8bit%s""".formatted(contentEncoding, endOfLine, endOfLine) : "";
-        
+
         String descriptionHeaders = includeExtraHeaders ? """
                 Content-Type: text/plain; charset=%s%s\
                 Content-Transfer-Encoding: 8bit%s""".formatted(contentEncoding, endOfLine, endOfLine) : "";
-        
+
         return """
                 --%s%s\
                 Content-Disposition: form-data; name="title"%s\
