@@ -17,7 +17,7 @@
 
 plugins {
     id("java-base")
-    id("org.jetbrains.dokka")
+    id("org.jetbrains.dokka-javadoc")
 }
 
 java {
@@ -30,15 +30,15 @@ tasks.named<Jar>("javadocJar") {
     archiveClassifier.set("javadoc_java")
 }
 
-tasks.dokkaJavadoc {
-    moduleName.set("Apache JMeter ${project.name}")
+tasks.dokkaGeneratePublicationJavadoc {
     mustRunAfter("kaptKotlin")
+    generator.moduleName = "Apache JMeter ${project.name}"
 }
 
 val dokkaJar by tasks.registering(Jar::class) {
     group = LifecycleBasePlugin.BUILD_GROUP
     description = "Assembles a jar archive containing javadoc"
-    from(tasks.dokkaJavadoc)
+    from(tasks.dokkaGeneratePublicationJavadoc)
     archiveClassifier.set("javadoc")
 }
 
