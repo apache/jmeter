@@ -83,6 +83,8 @@ matrix.exclude({os: 'macos-latest', java_distribution: {value: 'oracle'}})
 // Ignore builds with JAVA EA for now, see https://github.com/apache/jmeter/issues/6114
 matrix.exclude({java_version: eaJava})
 matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
+// Oracle JDK is only supported for JDK 21 and later
+matrix.imply({java_distribution: {value: 'oracle'}}, {java_version: v => v === eaJava || v >= 21});
 // TODO: Semeru does not ship Java 21 builds yet
 matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'});
 // Ensure at least one job with "same" hashcode exists
