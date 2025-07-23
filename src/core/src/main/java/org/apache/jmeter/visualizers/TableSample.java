@@ -109,7 +109,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
      */
     @SuppressWarnings("JavaUtilDate")
     public String getStartTimeFormatted(Format format) {
-        return format.format(new Date(getStartTime()));
+        return format.format(new Date(getStartTime() / 1000000L));
     }
 
     public String getThreadName() {

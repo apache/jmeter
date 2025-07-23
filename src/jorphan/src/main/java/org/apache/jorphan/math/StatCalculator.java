@@ -17,6 +17,8 @@
 
 package org.apache.jorphan.math;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,9 +40,9 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     // We use a TreeMap because we need the entries to be sorted
 
     // Running values, updated for each sample
-    private double sum = 0;
+    private BigDecimal sum = BigDecimal.ZERO;
 
-    private double sumOfSquares = 0;
+    private BigDecimal sumOfSquares = BigDecimal.ZERO;
 
     private double mean = 0;
 
@@ -79,8 +81,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     public void clear() {
         valuesMap.clear();
-        sum = 0;
-        sumOfSquares = 0;
+        sum = BigDecimal.ZERO;
+        sumOfSquares = BigDecimal.ZERO;
         mean = 0;
         deviation = 0;
         count = 0;
@@ -212,7 +214,7 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public double getSum() {
-        return sum;
+        return sum.doubleValue();
     }
 
     protected abstract T divide(T val, int n);
@@ -227,10 +229,9 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
      */
     void addEachValue(T val, long sampleCount) {
         count += sampleCount;
-        double currentVal = val.doubleValue();
-        sum += currentVal * sampleCount;
+        sum = sum.add(BigDecimal.valueOf(val.longValue()).multiply(BigDecimal.valueOf(sampleCount)));
         // For n same values in sum of square is equal to n*val^2
-        sumOfSquares += currentVal * currentVal * sampleCount;
+        sumOfSquares = sumOfSquares.add(BigDecimal.valueOf(val.longValue()).multiply(BigDecimal.valueOf(val.longValue())).multiply(BigDecimal.valueOf(sampleCount)));
         updateValueCount(val, sampleCount);
         calculateDerivedValues(val);
     }
@@ -244,23 +245,23 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     public void addValue(T val, long sampleCount) {
         count += sampleCount;
         double currentVal = val.doubleValue();
-        sum += currentVal;
+        sum = sum.add(BigDecimal.valueOf(val.longValue()));
         T actualValue = val;
         if (sampleCount > 1){
             // For n values in an aggregate sample the average value = (val/n)
             // So need to add n * (val/n) * (val/n) = val * val / n
-            sumOfSquares += currentVal * currentVal / sampleCount;
+            sumOfSquares = sumOfSquares.add(BigDecimal.valueOf(currentVal).multiply(BigDecimal.valueOf(currentVal)).divide(BigDecimal.valueOf(sampleCount), 16, RoundingMode.HALF_UP));
             actualValue = divide(val, sampleCount);
         } else { // no need to divide by 1
-            sumOfSquares += currentVal * currentVal;
+            sumOfSquares = sumOfSquares.add(BigDecimal.valueOf(currentVal).multiply(BigDecimal.valueOf(currentVal)));
         }
         updateValueCount(actualValue, sampleCount);
         calculateDerivedValues(actualValue);
     }
 
     private void calculateDerivedValues(T actualValue) {
-        mean = sum / count;
-        deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
+        mean = sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).doubleValue();
+        deviation = Math.sqrt(sumOfSquares.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).subtract(sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).pow(2)).doubleValue());
         if (actualValue.compareTo(max) > 0){
             max=actualValue;
         }

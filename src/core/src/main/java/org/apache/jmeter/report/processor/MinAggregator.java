@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.report.processor;
 
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
+
 /**
  * The class MinAggregator is used to get minimum from samples.
  *
@@ -44,7 +46,7 @@ public class MinAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-        return value;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? value / 1000000.0D : value;
     }
 
     /*

@@ -85,12 +85,14 @@ public final class CSVSaveService {
     public static final String SUCCESSFUL = "success"; // $NON-NLS-1$
     public static final String THREAD_NAME = "threadName"; // $NON-NLS-1$
     public static final String TIME_STAMP = "timeStamp"; // $NON-NLS-1$
+    public static final String TIME_STAMP_NS = "timeStamp_ns"; // $NON-NLS-1$
 
     // ---------------------------------------------------------------------
     // ADDITIONAL CSV RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
     // ---------------------------------------------------------------------
 
     public static final String CSV_ELAPSED = "elapsed"; // $NON-NLS-1$
+    public static final String CSV_ELAPSED_NS = "elapsed_ns"; // $NON-NLS-1$
     public static final String CSV_BYTES = "bytes"; // $NON-NLS-1$
     public static final String CSV_SENT_BYTES = "sentBytes"; // $NON-NLS-1$
     public static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
@@ -100,10 +102,13 @@ public final class CSVSaveService {
     public static final String CSV_URL = "URL"; // $NON-NLS-1$
     public static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
     public static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
+    public static final String CSV_LATENCY_NS = "Latency_ns"; // $NON-NLS-1$
     public static final String CSV_CONNECT_TIME = "Connect"; // $NON-NLS-1$
+    public static final String CSV_CONNECT_TIME_NS = "Connect_ns"; // $NON-NLS-1$
     public static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
     public static final String CSV_HOSTNAME = "Hostname"; // $NON-NLS-1$
     public static final String CSV_IDLETIME = "IdleTime"; // $NON-NLS-1$
+    public static final String CSV_IDLETIME_NS = "IdleTime_ns"; // $NON-NLS-1$
 
     // Used to enclose variable name labels, to distinguish from any of the
     // above labels
@@ -245,9 +250,21 @@ public final class CSVSaveService {
                             throw new ParseException("No date-time format found matching "+text,-1);
                         }
                     }
+                    try {
+                        timeStamp = Long.parseLong(parts[i++]);
+                    } catch (NumberFormatException e) {
+                        i--;
+                        timeStamp *= 100000L;
+                    }
                 } else if (saveConfig.strictDateFormatter() != null) {
                     var stamp = saveConfig.strictDateFormatter().parse(text);
                     timeStamp = stamp.getTime();
+                    try {
+                        timeStamp = Long.parseLong(parts[i++]);
+                    } catch (NumberFormatException e) {
+                        i--;
+                        timeStamp *= 100000L;
+                    }
                 } else { // can this happen?
                     final String msg = "Unknown timestamp format";
                     log.warn(msg);
@@ -259,14 +276,22 @@ public final class CSVSaveService {
                 field = CSV_ELAPSED;
                 text = parts[i++];
                 elapsed = Long.parseLong(text);
+                try {
+                    elapsed = Long.parseLong(parts[i++]);
+                } catch (NumberFormatException e) {
+                    i--;
+                    elapsed *= 100000L;
+                }
             }
 
             if (saveConfig.saveSampleCount()) {
                 @SuppressWarnings("deprecation")
-                StatisticalSampleResult sampleResult = new StatisticalSampleResult(timeStamp, elapsed);
+                StatisticalSampleResult sampleResult = new StatisticalSampleResult(elapsed);
+                sampleResult.setStampAndTime_ns(timeStamp, elapsed);
                 result = sampleResult;
             } else {
-                result = new SampleResult(timeStamp, elapsed);
+                result = new SampleResult();
+                result.setStampAndTime_ns(timeStamp, elapsed);
             }
 
             if (saveConfig.saveLabel()) {
@@ -345,6 +370,11 @@ public final class CSVSaveService {
                 field = CSV_LATENCY;
                 text = parts[i++];
                 result.setLatency(Long.parseLong(text));
+                try {
+                    result.setLatency_ns(Long.parseLong(parts[i++]));
+                } catch (NumberFormatException e) {
+                    i--;
+                }
             }
 
             if (saveConfig.saveEncoding()) {
@@ -371,11 +401,21 @@ public final class CSVSaveService {
                 field = CSV_IDLETIME;
                 text = parts[i++];
                 result.setIdleTime(Long.parseLong(text));
+                try {
+                    result.setIdleTime_ns(Long.parseLong(parts[i++]));
+                } catch (NumberFormatException e) {
+                    i--;
+                }
             }
             if (saveConfig.saveConnectTime()) {
                 field = CSV_CONNECT_TIME;
                 text = parts[i++];
                 result.setConnectTime(Long.parseLong(text));
+                try {
+                    result.setConnectTime_ns(Long.parseLong(parts[i++]));
+                } catch (NumberFormatException e) {
+                    i--;
+                }
             }
 
             if (i + saveConfig.getVarCount() < parts.length) {
@@ -416,8 +456,8 @@ public final class CSVSaveService {
         StringBuilder text = new StringBuilder();
         String delim = saveConfig.getDelimiter();
 
-        appendFields(saveConfig.saveTimestamp(), text, delim, TIME_STAMP);
-        appendFields(saveConfig.saveTime(), text, delim, CSV_ELAPSED);
+        appendFields(saveConfig.saveTimestamp(), text, delim, TIME_STAMP, TIME_STAMP_NS);
+        appendFields(saveConfig.saveTime(), text, delim, CSV_ELAPSED, CSV_ELAPSED_NS);
         appendFields(saveConfig.saveLabel(), text, delim, LABEL);
         appendFields(saveConfig.saveCode(), text, delim, RESPONSE_CODE);
         appendFields(saveConfig.saveMessage(), text, delim, RESPONSE_MESSAGE);
@@ -430,12 +470,12 @@ public final class CSVSaveService {
         appendFields(saveConfig.saveThreadCounts(), text, delim, CSV_THREAD_COUNT1, CSV_THREAD_COUNT2);
         appendFields(saveConfig.saveUrl(), text, delim, CSV_URL);
         appendFields(saveConfig.saveFileName(), text, delim, CSV_FILENAME);
-        appendFields(saveConfig.saveLatency(), text, delim, CSV_LATENCY);
+        appendFields(saveConfig.saveLatency(), text, delim, CSV_LATENCY, CSV_LATENCY_NS);
         appendFields(saveConfig.saveEncoding(), text, delim, CSV_ENCODING);
         appendFields(saveConfig.saveSampleCount(), text, delim, CSV_SAMPLE_COUNT, CSV_ERROR_COUNT);
         appendFields(saveConfig.saveHostname(), text, delim, CSV_HOSTNAME);
-        appendFields(saveConfig.saveIdleTime(), text, delim, CSV_IDLETIME);
-        appendFields(saveConfig.saveConnectTime(), text, delim, CSV_CONNECT_TIME);
+        appendFields(saveConfig.saveIdleTime(), text, delim, CSV_IDLETIME, CSV_IDLETIME_NS);
+        appendFields(saveConfig.saveConnectTime(), text, delim, CSV_CONNECT_TIME, CSV_CONNECT_TIME_NS);
 
         for (int i = 0; i < SampleEvent.getVarCount(); i++) {
             text.append(VARIABLE_NAME_QUOTE_CHAR);
@@ -473,7 +513,9 @@ public final class CSVSaveService {
 
     static {
         headerLabelMethods.put(TIME_STAMP, new Functor("setTimestamp"));
+        headerLabelMethods.put(TIME_STAMP_NS, new Functor("setTimestamp"));
         headerLabelMethods.put(CSV_ELAPSED, new Functor("setTime"));
+        headerLabelMethods.put(CSV_ELAPSED_NS, new Functor("setTime"));
         headerLabelMethods.put(LABEL, new Functor("setLabel"));
         headerLabelMethods.put(RESPONSE_CODE, new Functor("setCode"));
         headerLabelMethods.put(RESPONSE_MESSAGE, new Functor("setMessage"));
@@ -493,6 +535,7 @@ public final class CSVSaveService {
         headerLabelMethods.put(CSV_URL, new Functor("setUrl"));
         headerLabelMethods.put(CSV_FILENAME, new Functor("setFileName"));
         headerLabelMethods.put(CSV_LATENCY, new Functor("setLatency"));
+        headerLabelMethods.put(CSV_LATENCY_NS, new Functor("setLatency"));
         headerLabelMethods.put(CSV_ENCODING, new Functor("setEncoding"));
         // Both these are needed in the list even though they set the same
         // variable
@@ -500,7 +543,9 @@ public final class CSVSaveService {
         headerLabelMethods.put(CSV_ERROR_COUNT, new Functor("setSampleCount"));
         headerLabelMethods.put(CSV_HOSTNAME, new Functor("setHostname"));
         headerLabelMethods.put(CSV_IDLETIME, new Functor("setIdleTime"));
+        headerLabelMethods.put(CSV_IDLETIME_NS, new Functor("setIdleTime"));
         headerLabelMethods.put(CSV_CONNECT_TIME, new Functor("setConnectTime"));
+        headerLabelMethods.put(CSV_CONNECT_TIME_NS, new Functor("setConnectTime"));
     }
 
     /**
@@ -851,15 +896,17 @@ public final class CSVSaveService {
         StringQuoter text = new StringQuoter(delimiter.charAt(0));
         if (saveConfig.saveTimestamp()) {
             if (saveConfig.printMilliseconds()) {
+                text.append(sample.getTimeStamp() / 1000000L);
                 text.append(sample.getTimeStamp());
             } else if (saveConfig.threadSafeLenientFormatter() != null) {
                 String stamp = saveConfig.threadSafeLenientFormatter().format(
-                        new Date(sample.getTimeStamp()));
+                        new Date(sample.getTimeStamp() / 1000000L));
                 text.append(stamp);
             }
         }
 
         if (saveConfig.saveTime()) {
+            text.append(sample.getTime() / 1000000L);
             text.append(sample.getTime());
         }
 
@@ -918,6 +965,7 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveLatency()) {
+            text.append(sample.getLatency() / 1000000L);
             text.append(sample.getLatency());
         }
 
@@ -936,10 +984,12 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveIdleTime()) {
+            text.append(sample.getIdleTime() / 1000000L);
             text.append(sample.getIdleTime());
         }
 
         if (saveConfig.saveConnectTime()) {
+            text.append(sample.getConnectTime() / 1000000L);
             text.append(sample.getConnectTime());
         }
 

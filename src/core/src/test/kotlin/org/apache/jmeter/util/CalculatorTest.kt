@@ -28,7 +28,7 @@ class CalculatorTest {
 
     @Test
     fun min() {
-        assertEquals(Long.MAX_VALUE, calculator.min, "min()")
+        assertEquals(Long.MAX_VALUE / 1000000L, calculator.min, "min()")
         calculator.addSample(SampleResult(10, 42))
         assertEquals(42, calculator.min, "min(42)")
         calculator.addSample(SampleResult(10, 40))
@@ -41,7 +41,7 @@ class CalculatorTest {
 
     @Test
     fun max() {
-        assertEquals(Long.MIN_VALUE, calculator.max, "max()")
+        assertEquals(Long.MIN_VALUE / 1000000L, calculator.max, "max()")
         calculator.addSample(SampleResult(10, 40))
         assertEquals(40, calculator.max, "max(40)")
         calculator.addSample(SampleResult(10, 42))
@@ -80,18 +80,18 @@ class CalculatorTest {
         calculator.addSample(SampleResult(10, 40))
         assertEquals(0.0, calculator.standardDeviation, "standardDeviation(40)")
         calculator.addSample(SampleResult(10, 42))
-        assertEquals(1.0, calculator.standardDeviation, "standardDeviation(40, 42)")
+        assertEquals(1000000.0, calculator.standardDeviation, "standardDeviation(40, 42)")
         calculator.addSample(SampleResult(10, 43))
         // Math.sqrt((sumOfSquares / count) - (mean * mean))
         assertEquals(
-            sqrt((40 * 40 + 42 * 42 + 43 * 43) / 3.0 - ((40.0 + 42 + 43) / 3).pow(2)),
+            sqrt((40 * 1000000L * 40 * 1000000L + 42 * 1000000L * 42 * 1000000L + 43 * 1000000L * 43 * 1000000L) / 3.0 - ((40.0 * 1000000.0 + 42 * 1000000.0 + 43 * 1000000.0) / 3).pow(2)),
             calculator.standardDeviation,
             0.001,
             "standardDeviation(40, 42, 43)"
         )
         calculator.addSample(SampleResult(10, 48).apply { sampleCount = 2 })
         assertEquals(
-            sqrt((40 * 40 + 42 * 42 + 43 * 43 + 24 * 24 + 24 * 24) / 5.0 - ((40.0 + 42 + 43 + 24 + 24) / 5.0).pow(2)),
+            sqrt((40 * 1000000L * 40 * 1000000L + 42 * 1000000L * 42 * 1000000L + 43 * 1000000L * 43 * 1000000L + 24 * 1000000L * 24 * 1000000L + 24 * 1000000L * 24 * 1000000L) / 5.0 - ((40.0 * 1000000.0 + 42 * 1000000.0 + 43 * 1000000.0 + 24 * 1000000.0 + 24 * 1000000.0) / 5.0).pow(2)),
             calculator.standardDeviation,
             0.001,
             "standardDeviation(40, 42, 43, 48/2)"

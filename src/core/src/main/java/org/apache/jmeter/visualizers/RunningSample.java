@@ -17,8 +17,10 @@
 
 package org.apache.jmeter.visualizers;
 
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
@@ -43,7 +45,7 @@ public class RunningSample {
 
     private long counter;
 
-    private long runningSum;
+    private BigInteger runningSum;
 
     private long max;
 
@@ -91,7 +93,7 @@ public class RunningSample {
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         counter = 0L;
-        runningSum = 0L;
+        runningSum = BigInteger.ZERO;
         max = Long.MIN_VALUE;
         min = Long.MAX_VALUE;
         errorCount = 0L;
@@ -138,7 +140,7 @@ public class RunningSample {
             return Double.MAX_VALUE;
         }
 
-        return (double) counter / howLongRunning * 1000.0;
+        return (double) counter / (howLongRunning / 100000.0D / 1000.0D);
     }
 
     /**
@@ -232,7 +234,7 @@ public class RunningSample {
         if (lastTime < endTime) {
             lastTime = endTime;
         }
-        runningSum += aTimeInMillis;
+        runningSum = runningSum.add(BigInteger.valueOf(aTimeInMillis));
 
         if (aTimeInMillis > max) {
             max = aTimeInMillis;
@@ -253,7 +255,7 @@ public class RunningSample {
     public void addSample(RunningSample rs) {
         this.counter += rs.counter;
         this.errorCount += rs.errorCount;
-        this.runningSum += rs.runningSum;
+        runningSum = runningSum.add(rs.runningSum);
         if (this.firstTime > rs.firstTime) {
             this.firstTime = rs.firstTime;
         }
@@ -305,7 +307,7 @@ public class RunningSample {
         if (counter == 0) {
             return 0;
         }
-        return runningSum / counter;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? runningSum.divide(BigInteger.valueOf(counter)).divide(BigInteger.valueOf(1000000L)).longValue() : runningSum.divide(BigInteger.valueOf(counter)).longValue();
     }
 
     /**

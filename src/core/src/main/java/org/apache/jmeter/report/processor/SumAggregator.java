@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.report.processor;
 
+import java.math.BigDecimal;
+
 /**
  * The class SumAggregator is used to get sum from samples.
  *
@@ -25,7 +27,7 @@ package org.apache.jmeter.report.processor;
 public class SumAggregator implements Aggregator {
 
     private long count = 0;
-    private double sum = 0;
+    private BigDecimal sum = BigDecimal.ZERO;
 
     /*
      * (non-Javadoc)
@@ -44,7 +46,7 @@ public class SumAggregator implements Aggregator {
      */
     @Override
     public double getResult() {
-        return sum;
+        return sum.doubleValue();
     }
 
     /*
@@ -55,7 +57,7 @@ public class SumAggregator implements Aggregator {
     @Override
     public void addValue(double value) {
         count++;
-        sum += value;
+        sum = sum.add(BigDecimal.valueOf(value));
     }
 
     /*
@@ -66,7 +68,7 @@ public class SumAggregator implements Aggregator {
     @Override
     public void reset() {
         count = 0;
-        sum = 0;
+        sum = BigDecimal.ZERO;
     }
 
 }

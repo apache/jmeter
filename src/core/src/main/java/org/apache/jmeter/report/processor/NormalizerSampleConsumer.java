@@ -107,6 +107,9 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
                     TIMESTAMP_FORMAT, s.toString()), e);
         }
         long time = date.getTime();
+        if (!isMillisFormat) {
+            time *= 1000000L;
+        }
         int cc = sampleMetadata.getColumnCount();
         String[] data = new String[cc];
         for (int i = 0; i < cc; i++) {

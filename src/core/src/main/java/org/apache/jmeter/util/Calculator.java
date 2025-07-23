@@ -17,11 +17,14 @@
 
 package org.apache.jmeter.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.concurrent.atomic.LongAccumulator;
 import java.util.concurrent.atomic.LongAdder;
 
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
@@ -35,9 +38,9 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class Calculator {
 
-    private final DoubleAdder sum = new DoubleAdder();
+    private BigDecimal sum = BigDecimal.ZERO;
 
-    private final DoubleAdder sumOfSquares = new DoubleAdder();
+    private BigDecimal sumOfSquares = BigDecimal.ZERO;
 
     private final LongAdder count = new LongAdder();
 
@@ -69,8 +72,8 @@ public class Calculator {
     public void clear() {
         maximum.set(Long.MIN_VALUE);
         minimum.set(Long.MAX_VALUE);
-        sum.reset();
-        sumOfSquares.reset();
+        sum = BigDecimal.ZERO;
+        sumOfSquares = BigDecimal.ZERO;
         count.reset();
         bytes.reset();
         sentBytes.reset();
@@ -88,7 +91,7 @@ public class Calculator {
      */
     private void addValue(long newValue, int sampleCount) {
         count.add(sampleCount);
-        sum.add((double) newValue);
+        sum = sum.add(BigDecimal.valueOf(newValue));
         long value;
         double extraSumOfSquares;
         if (sampleCount > 1) {
@@ -100,7 +103,7 @@ public class Calculator {
             value = newValue;
             extraSumOfSquares = (double) newValue * (double) newValue;
         }
-        sumOfSquares.add(extraSumOfSquares);
+        sumOfSquares = sumOfSquares.add(BigDecimal.valueOf(extraSumOfSquares));
 
         long currentMinimum = minimum.get();
         if (currentMinimum > value) {
@@ -155,12 +158,11 @@ public class Calculator {
 
 
     public double getMean() {
-        double sum = this.sum.sum();
         double count = this.count.sum();
         if (count == 0) {
             return 0.0;
         }
-        return sum / count;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).divide(BigDecimal.valueOf(1000000L), 16, RoundingMode.HALF_UP).doubleValue() : sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).doubleValue();
     }
 
     public Number getMeanAsNumber() {
@@ -169,23 +171,20 @@ public class Calculator {
     }
 
     public double getStandardDeviation() {
-        double sum = this.sum.sum();
-        double sumOfSquares = this.sumOfSquares.sum();
         double count = this.count.sum();
         // Just in case
         if (count == 0) {
             return 0.0;
         }
-        double mean = sum / count;
-        return Math.sqrt((sumOfSquares / count) - (mean * mean));
+        return Math.sqrt(sumOfSquares.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).subtract(sum.divide(BigDecimal.valueOf(count), 16, RoundingMode.HALF_UP).pow(2)).doubleValue());
     }
 
     public long getMin() {
-        return minimum.get();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? minimum.get() / 1000000L : minimum.get();
     }
 
     public long getMax() {
-        return maximum.get();
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? maximum.get() / 1000000L : maximum.get();
     }
 
     public int getCount() {
@@ -286,7 +285,7 @@ public class Calculator {
     private double getRatePerSecond(long value) {
         long elapsedTime = this.elapsedTime.get();
         if (elapsedTime > 0) {
-            return value / ((double) elapsedTime / 1000); // 1000 = millisecs/sec
+            return value / (elapsedTime / 1000000.0D / 1000.0D); // 1000 = millisecs/sec
         }
         return 0.0;
     }

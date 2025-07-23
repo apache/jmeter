@@ -49,7 +49,7 @@ public class DurationAssertion extends AbstractScopedAssertion implements Serial
         if (duration > 0) {
             long responseTime=response.getTime();
             // has the Sample lasted too long?
-            if ( responseTime > duration ) {
+            if ( responseTime > duration * 1000000L ) {
                 result.setFailure(true);
                 Object[] arguments = {responseTime, duration};
                 String message = MessageFormat.format(

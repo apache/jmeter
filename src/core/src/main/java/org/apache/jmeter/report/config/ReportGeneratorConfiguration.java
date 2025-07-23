@@ -28,6 +28,7 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,6 +125,9 @@ public class ReportGeneratorConfiguration {
     // Sub configuration keys
     public static final String SUBCONF_KEY_CLASSNAME = "classname";
     public static final String SUBCONF_KEY_PROPERTY = "property";
+
+    public static final String jmeter_reportgenerator_ms_ns = "ms".equalsIgnoreCase(JMeterUtils.getProperty(REPORT_GENERATOR_KEY_PREFIX + KEY_DELIMITER + "ms_ns")) ? "ms" : "ns".equalsIgnoreCase(JMeterUtils.getProperty(REPORT_GENERATOR_KEY_PREFIX + KEY_DELIMITER + "ms_ns")) ? "ns" : "ms";
+    public static final boolean jmeter_reportgenerator_ms_ns_isMs = "ms".equals(jmeter_reportgenerator_ms_ns);
 
     private static final class ExporterConfigurationFactory implements
             SubConfigurationFactory<ExporterConfiguration> {

@@ -20,6 +20,7 @@ package org.apache.jorphan.math;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -107,8 +108,8 @@ public class TestStatCalculator {
         calc.addValue(0L);
         calc.addValue(2L);
         calc.addValue(2L);
-        final Long long0 = 0L;
-        final Long long2 = 2L;
+        final BigInteger long0 = BigInteger.valueOf(0L);
+        final BigInteger long2 = BigInteger.valueOf(2L);
         assertEquals(long2, calc.getMax());
         assertEquals(long0, calc.getMin());
         Map<Number, Number[]> map = calc.getDistribution();
@@ -141,7 +142,7 @@ public class TestStatCalculator {
         calc.addValue(2L);
         assertEquals(6, calc.getCount());
         assertEquals(12.0, calc.getSum(), 0.000000000001);
-        assertEquals(0.5773502691896255, calc.getStandardDeviation(), 0.000000000000001);
+        assertEquals(0.5773502691896257, calc.getStandardDeviation(), 0.000000000000001);
     }
 
     @Test
@@ -150,10 +151,10 @@ public class TestStatCalculator {
         calc.addValue(1L);
         calc.addValue(2L);
         calc.addValue(3L);
-        calc.addEachValue(2L, 3);
+        calc.addEachValue(BigInteger.valueOf(2L), 3);
         assertEquals(6, calc.getCount());
         assertEquals(12.0, calc.getSum(), 0.000000000001);
-        assertEquals(0.5773502691896255, calc.getStandardDeviation(), 0.000000000000001);
+        assertEquals(0.5773502691896257, calc.getStandardDeviation(), 0.000000000000001);
     }
 
     @Test
@@ -164,7 +165,7 @@ public class TestStatCalculator {
         calc.addValue(6L, 3);
         assertEquals(6, calc.getCount());
         assertEquals(12.0, calc.getSum(), 0.00000001);
-        assertEquals(0.5773502691896255, calc.getStandardDeviation(), 0.000000000000001);
+        assertEquals(0.5773502691896257, calc.getStandardDeviation(), 0.000000000000001);
     }
 
     @Test
@@ -179,6 +180,6 @@ public class TestStatCalculator {
         calc.addAll(calc2);
         assertEquals(6, calc.getCount());
         assertEquals(12.0, calc.getSum(), 0.000000000001);
-        assertEquals(0.5773502691896255, calc.getStandardDeviation(), 0.000000000000001);
+        assertEquals(0.5773502691896257, calc.getStandardDeviation(), 0.000000000000001);
     }
 }

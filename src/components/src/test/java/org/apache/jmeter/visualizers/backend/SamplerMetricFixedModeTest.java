@@ -95,7 +95,7 @@ public class SamplerMetricFixedModeTest {
         result.setSampleCount(1);
         result.setErrorCount(success ? 0 : 1);
         result.sampleStart();
-        result.setEndTime(result.getStartTime() + DEFAULT_ELAPSED_TIME);
+        result.setEndTime_ns(result.getStartTime() + DEFAULT_ELAPSED_TIME * 1000000L);
         result.setSentBytes(1000);
         result.setBytes(2000L);
         return result;
@@ -116,7 +116,7 @@ public class SamplerMetricFixedModeTest {
         result.setSuccessful(success);
         result.addSubResult(createSampleResult(success));
         result.addSubResult(createSampleResult(success));
-        result.setEndTime(Arrays.stream(result.getSubResults()).mapToLong(SampleResult::getEndTime).max().orElse(0));
+        result.setEndTime_ns(Arrays.stream(result.getSubResults()).mapToLong(SampleResult::getEndTime).max().orElse(0));
         result.setBytes(Arrays.stream(result.getSubResults()).mapToLong(SampleResult::getBytesAsLong).sum());
         result.setSentBytes(Arrays.stream(result.getSubResults()).mapToLong(SampleResult::getSentBytes).sum());
         result.setResponseMessage("Number of samples in transaction : "); // This is a constant in TransactionController

@@ -122,19 +122,19 @@ public class ApdexSummaryConsumer extends
 
             // Increment the counters depending on the elapsed time.
             ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
-            if (elapsedTime <= thresholdsInfo.getSatisfiedThreshold()) {
+            if (elapsedTime <= thresholdsInfo.getSatisfiedThreshold() * 1000000L) {
                 data.incSatisfiedCount();
-            } else if (elapsedTime <= thresholdsInfo.getToleratedThreshold()) {
+            } else if (elapsedTime <= thresholdsInfo.getToleratedThreshold() * 1000000L) {
                 data.incToleratedCount();
             }
 
             // Increment the overall counters depending on the elapsed time.
             ApdexThresholdsInfo overallThresholdsInfo = overallData
                     .getApdexThresholdInfo();
-            if (elapsedTime <= overallThresholdsInfo.getSatisfiedThreshold()) {
+            if (elapsedTime <= overallThresholdsInfo.getSatisfiedThreshold() * 1000000L) {
                 overallData.incSatisfiedCount();
             } else if (elapsedTime <= overallThresholdsInfo
-                    .getToleratedThreshold()) {
+                    .getToleratedThreshold() * 1000000L) {
                 overallData.incToleratedCount();
             }
         }

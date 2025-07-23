@@ -72,7 +72,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     private static final String ATT_HOSTNAME          = "hn"; //$NON-NLS-1$
     private static final String ATT_LABEL             = "lb"; //$NON-NLS-1$
     private static final String ATT_LATENCY           = "lt"; //$NON-NLS-1$
+    private static final String ATT_LATENCY_NS        = "lt_ns"; //$NON-NLS-1$
     private static final String ATT_CONNECT_TIME      = "ct"; //$NON-NLS-1$
+    private static final String ATT_CONNECT_TIME_NS   = "ct_ns"; //$NON-NLS-1$
 
     private static final String ATT_ALL_THRDS         = "na"; //$NON-NLS-1$
     private static final String ATT_GRP_THRDS         = "ng"; //$NON-NLS-1$
@@ -87,9 +89,12 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     private static final String ATT_SUCCESS           = "s";  //$NON-NLS-1$
     private static final String ATT_SAMPLE_COUNT      = "sc"; //$NON-NLS-1$
     private static final String ATT_TIME              = "t";  //$NON-NLS-1$
+    private static final String ATT_TIME_NS           = "t_ns";  //$NON-NLS-1$
     private static final String ATT_IDLETIME          = "it"; //$NON-NLS-1$
+    private static final String ATT_IDLETIME_NS       = "it_ns"; //$NON-NLS-1$
     private static final String ATT_THREADNAME        = "tn"; //$NON-NLS-1$
     private static final String ATT_TIME_STAMP        = "ts"; //$NON-NLS-1$
+    private static final String ATT_TIME_STAMP_NS     = "ts_ns"; //$NON-NLS-1$
 
     /**
      * Returns the converter version; used to check for possible
@@ -281,19 +286,24 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected void setAttributes(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
             SampleSaveConfiguration save) {
         if (save.saveTime()) {
-            writer.addAttribute(ATT_TIME, Long.toString(res.getTime()));
+            writer.addAttribute(ATT_TIME, Long.toString(res.getTime() / 1000000L));
+            writer.addAttribute(ATT_TIME_NS, Long.toString(res.getTime()));
         }
         if (save.saveIdleTime()) {
-            writer.addAttribute(ATT_IDLETIME, Long.toString(res.getIdleTime()));
+            writer.addAttribute(ATT_IDLETIME, Long.toString(res.getIdleTime() / 1000000L));
+            writer.addAttribute(ATT_IDLETIME_NS, Long.toString(res.getIdleTime()));
         }
         if (save.saveLatency()) {
-            writer.addAttribute(ATT_LATENCY, Long.toString(res.getLatency()));
+            writer.addAttribute(ATT_LATENCY, Long.toString(res.getLatency() / 1000000L));
+            writer.addAttribute(ATT_LATENCY_NS, Long.toString(res.getLatency()));
         }
         if (save.saveConnectTime()) {
-            writer.addAttribute(ATT_CONNECT_TIME, Long.toString(res.getConnectTime()));
+            writer.addAttribute(ATT_CONNECT_TIME, Long.toString(res.getConnectTime() / 1000000L));
+            writer.addAttribute(ATT_CONNECT_TIME_NS, Long.toString(res.getConnectTime()));
         }
         if (save.saveTimestamp()) {
-            writer.addAttribute(ATT_TIME_STAMP, Long.toString(res.getTimeStamp()));
+            writer.addAttribute(ATT_TIME_STAMP, Long.toString(res.getTimeStamp() / 1000000L));
+            writer.addAttribute(ATT_TIME_STAMP_NS, Long.toString(res.getTimeStamp()));
         }
         if (save.saveSuccess()) {
             writer.addAttribute(ATT_SUCCESS, Boolean.toString(res.isSuccessful()));
@@ -441,11 +451,28 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         res.setResponseMessage(ConversionHelp.decode(reader.getAttribute(ATT_RESPONSE_MESSAGE)));
         res.setSuccessful(Converter.getBoolean(reader.getAttribute(ATT_SUCCESS), true));
         res.setThreadName(ConversionHelp.decode(reader.getAttribute(ATT_THREADNAME)));
-        res.setStampAndTime(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP)),
-                Converter.getLong(reader.getAttribute(ATT_TIME)));
-        res.setIdleTime(Converter.getLong(reader.getAttribute(ATT_IDLETIME)));
-        res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
-        res.setConnectTime(Converter.getLong(reader.getAttribute(ATT_CONNECT_TIME)));
+        if (reader.getAttribute(ATT_TIME_STAMP_NS) != null && reader.getAttribute(ATT_TIME_NS) != null) {
+            res.setStampAndTime_ns(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP_NS)),
+                    Converter.getLong(reader.getAttribute(ATT_TIME_NS)));
+        } else {
+            res.setStampAndTime(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP)),
+                    Converter.getLong(reader.getAttribute(ATT_TIME)));
+        }
+        if (reader.getAttribute(ATT_IDLETIME_NS) != null) {
+            res.setIdleTime_ns(Converter.getLong(reader.getAttribute(ATT_IDLETIME_NS)));
+        } else {
+            res.setIdleTime(Converter.getLong(reader.getAttribute(ATT_IDLETIME)));
+        }
+        if (reader.getAttribute(ATT_LATENCY_NS) != null) {
+            res.setLatency_ns(Converter.getLong(reader.getAttribute(ATT_LATENCY_NS)));
+        } else {
+            res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
+        }
+        if (reader.getAttribute(ATT_CONNECT_TIME_NS) != null) {
+            res.setConnectTime_ns(Converter.getLong(reader.getAttribute(ATT_CONNECT_TIME_NS)));
+        } else {
+            res.setConnectTime(Converter.getLong(reader.getAttribute(ATT_CONNECT_TIME)));
+        }
         res.setBytes(Converter.getLong(reader.getAttribute(ATT_BYTES)));
         res.setSentBytes(Converter.getLong(reader.getAttribute(ATT_SENT_BYTES)));
         res.setSampleCount(Converter.getInt(reader.getAttribute(ATT_SAMPLE_COUNT),1)); // default is 1

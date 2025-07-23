@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.report.processor;
 
+import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
+
 /**
  * The class ApdexSummaryData provides information for
  * StatisticsSummaryConsumer.
@@ -41,7 +43,7 @@ public class StatisticsSummaryData {
     private long max = Long.MIN_VALUE;
 
     public long getElapsedTime() {
-        return endTime - firstTime;
+        return (endTime - firstTime) / 1000000L;
     }
 
     /**
@@ -50,7 +52,7 @@ public class StatisticsSummaryData {
      * @return the firstTime
      */
     public final long getFirstTime() {
-        return firstTime;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? firstTime / 1000000L : firstTime;
     }
 
     /**
@@ -69,7 +71,7 @@ public class StatisticsSummaryData {
      * @return the endTime
      */
     public final long getEndTime() {
-        return endTime;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? endTime / 1000000L : endTime;
     }
 
     /**
@@ -135,7 +137,7 @@ public class StatisticsSummaryData {
      * @return the min
      */
     public final long getMin() {
-        return min;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? min / 1000000L : min;
     }
 
     /**
@@ -150,7 +152,7 @@ public class StatisticsSummaryData {
      * @return the max
      */
     public final long getMax() {
-        return max;
+        return ReportGeneratorConfiguration.jmeter_reportgenerator_ms_ns_isMs ? max / 1000000L : max;
     }
 
     /**
