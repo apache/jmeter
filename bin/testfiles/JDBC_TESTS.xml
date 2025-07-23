@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testResults version="1.2">
-<sample s="true" lb="JSR223_CHECK_POOL_PREINIT" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="JSR223_CHECK_POOL_PREINIT" rc="200" rm="OK" tn="Setup Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>JSR223_CHECK_POOL_PREINIT_ASSERTION</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </sample>
-<sample s="true" lb="JDBC_DROP_PROCEDURE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="JDBC_DROP_PROCEDURE" rc="200" rm="OK" tn="Setup Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </sample>
-<sample s="true" lb="JDBC_DROP_PROCEDURE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="JDBC_DROP_PROCEDURE" rc="200" rm="OK" tn="Setup Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </sample>
-<sample s="true" lb="JDBC_DROP_TABLE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="JDBC_DROP_TABLE" rc="200" rm="OK" tn="Setup Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </sample>
-<sample s="true" lb="JDBC_CREATE_TABLE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="JDBC_CREATE_TABLE" rc="200" rm="OK" tn="Setup Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </sample>
-<sample s="true" lb="JDBC_CREATE_PROCEDURE" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="JDBC_CREATE_PROCEDURE" rc="200" rm="OK" tn="Setup Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>RA</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
 </sample>
-<sample s="true" lb="JDBC_CREATE_PROCEDURE_SELECT" rc="200" rm="OK" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+<sample s="true" lb="JDBC_CREATE_PROCEDURE_SELECT" rc="200" rm="OK" tn="Setup Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>RA</name>
     <failure>false</failure>
