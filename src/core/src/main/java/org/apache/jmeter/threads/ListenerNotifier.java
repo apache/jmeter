@@ -54,6 +54,9 @@ public class ListenerNotifier implements Serializable {
     public void notifyListeners(SampleEvent res, List<SampleListener> listeners) {
         for (SampleListener sampleListener : listeners) {
             try {
+                if (!((TestElement) sampleListener).isEnabled()) {
+                    continue;
+                }
                 TestBeanHelper.prepare((TestElement) sampleListener);
                 sampleListener.sampleOccurred(res);
             } catch (RuntimeException e) {
