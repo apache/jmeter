@@ -22,7 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.report.processor.DescriptiveStatisticsFactory;
 import org.apache.jmeter.samplers.SampleResult;
@@ -123,8 +125,25 @@ public class SamplerMetric {
             successes+=result.getSampleCount()-result.getErrorCount();
         } else {
             failures+=result.getErrorCount();
-            ErrorMetric error = new ErrorMetric(result);
-            errors.put(error, errors.getOrDefault(error, 0) + result.getErrorCount() );
+            // Check if there are assertion failures
+            AssertionResult[] assertionResults = result.getAssertionResults();
+            boolean hasAssertionFailures = false;
+            // Process all failed assertions
+            if (ObjectUtils.isNotEmpty(assertionResults)) {
+                for (AssertionResult assertionResult : assertionResults) {
+                    if (assertionResult.isFailure() || assertionResult.isError()) {
+                        hasAssertionFailures = true;
+                        // Create ErrorMetric for each failed assertion
+                        ErrorMetric error = new ErrorMetric(assertionResult);
+                        errors.put(error, errors.getOrDefault(error, 0) + 1);
+                    }
+                }
+            }
+            // If no assertion failures, create ErrorMetric based on response code/message
+            if (!hasAssertionFailures) {
+                ErrorMetric error = new ErrorMetric(result);
+                errors.put(error, errors.getOrDefault(error, 0) + result.getErrorCount());
+            }
         }
         long time = result.getTime();
         allResponsesStats.addValue((double) time);
