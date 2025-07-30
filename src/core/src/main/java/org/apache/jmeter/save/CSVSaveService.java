@@ -888,7 +888,7 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveAssertionResultsFailureMessage()) {
-            String message = sample.getFirstAssertionFailureMessage();
+            String message = sample.getFirstAssertionFailureMessage().getRight();
             if (message != null) {
                 text.append(message);
             } else {

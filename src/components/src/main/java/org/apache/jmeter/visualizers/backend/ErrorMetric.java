@@ -19,7 +19,9 @@ package org.apache.jmeter.visualizers.backend;
 
 import java.util.Locale;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.SampleResult;
 
@@ -45,13 +47,18 @@ public class ErrorMetric {
     public ErrorMetric(SampleResult result) {
         if (MetricUtils.isSuccessCode(responseCode) ||
                 (StringUtils.isEmpty(responseCode) &&
-                        !StringUtils.isEmpty(result.getFirstAssertionFailureMessage()))) {
-            responseCode = MetricUtils.ASSERTION_FAILED;
-            responseMessage = result.getFirstAssertionFailureMessage();
+                        !StringUtils.isEmpty(result.getFirstAssertionFailureMessage().getLeft()))) {
+            responseCode = result.getFirstAssertionFailureMessage().getLeft();
+            responseMessage = result.getFirstAssertionFailureMessage().getRight();
         } else {
             responseCode = result.getResponseCode();
             responseMessage = result.getResponseMessage();
         }
+    }
+
+    public ErrorMetric(AssertionResult assertionResult) {
+        responseCode = ObjectUtils.isNotEmpty(assertionResult.getName()) ? assertionResult.getName() : "";
+        responseMessage = ObjectUtils.isNotEmpty(assertionResult.getFailureMessage()) ? assertionResult.getFailureMessage() : "";
     }
 
     /**

@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.testelement.TestPlan;
@@ -1636,20 +1637,22 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /**
      * @return String first non null assertion failure message if assertionResults is not null, null otherwise
      */
-    public String getFirstAssertionFailureMessage() {
+    public Pair<String, String> getFirstAssertionFailureMessage() {
+        String code = null;
         String message = null;
         AssertionResult[] results = getAssertionResults();
 
         if (results != null) {
             // Find the first non-null message
             for (AssertionResult result : results) {
+                code = result.getName();
                 message = result.getFailureMessage();
-                if (message != null) {
+                if (code != null && message != null) {
                     break;
                 }
             }
         }
-        return message;
+        return Pair.of(code, message);
     }
 
     /**
