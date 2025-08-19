@@ -27,6 +27,7 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -52,6 +53,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     private JLabeledTextField defaultField;
     private JLabeledTextField matchNumberField;
     private JLabeledTextField refNameField;
+    private JLabel failResultField;
     private JRadioButton useBody;
     private JRadioButton useUnescapedBody;
     private JRadioButton useBodyAsDocument;
@@ -62,6 +64,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     private JRadioButton useMessage;
     private ButtonGroup group;
     private JCheckBox emptyDefaultValue;
+    private JCheckBox failResult;
 
     public RegexExtractorGui() {
         super();
@@ -93,6 +96,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
             emptyDefaultValue.setSelected(re.isEmptyDefaultValue());
             matchNumberField.setText(re.getMatchNumberAsString());
             refNameField.setText(re.getRefName());
+            failResult.setSelected(re.isFailIfNotFound());
         }
     }
 
@@ -124,6 +128,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
             regex.setDefaultValue(defaultField.getText());
             regex.setDefaultEmptyValue(emptyDefaultValue.isSelected());
             regex.setMatchNumber(matchNumberField.getText());
+            regex.setFailIfNotFound(failResult.isSelected());
         }
     }
 
@@ -142,6 +147,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         emptyDefaultValue.setSelected(false);
         refNameField.setText(""); //$NON-NLS-1$
         matchNumberField.setText(""); //$NON-NLS-1$
+        failResult.setSelected(false);
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -208,6 +214,8 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         templateField = new JLabeledTextField(JMeterUtils.getResString("template_field")); //$NON-NLS-1$
         refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field")); //$NON-NLS-1$
         matchNumberField = new JLabeledTextField(JMeterUtils.getResString("match_num_field")); //$NON-NLS-1$
+        failResultField = new JLabel(JMeterUtils.getResString("fail_if_not_matched_field"));
+        failResult = new JCheckBox();
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -219,6 +227,8 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         addField(panel, templateField, gbc);
         resetContraints(gbc);
         addField(panel, matchNumberField, gbc);
+        resetContraints(gbc);
+        addField(panel, failResultField, failResult, gbc);
         resetContraints(gbc);
         gbc.weighty = 1;
 
@@ -251,6 +261,14 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         gbc.weightx = 1;
         gbc.fill=GridBagConstraints.HORIZONTAL;
         panel.add(item.get(1), gbc.clone());
+    }
+
+    private static void addField(JPanel panel, JLabel label, JCheckBox checkBox, GridBagConstraints gbc) {
+        panel.add(label, gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(checkBox, gbc.clone());
     }
 
     // Next line
