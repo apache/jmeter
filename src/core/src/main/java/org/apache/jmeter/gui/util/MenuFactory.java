@@ -269,6 +269,12 @@ public final class MenuFactory {
         }
     }
 
+    public static void addThreadGroupMenu(JPopupMenu pop) {
+        pop.add(makeMenus(new String[]{THREADS},
+                JMeterUtils.getResString("change_thread_group"),// $NON-NLS-1$
+                ActionNames.CHANGE_THREAD_GROUP));
+    }
+
     public static void addPasteResetMenu(JPopupMenu menu) {
         addSeparator(menu);
         menu.add(makeMenuItemRes("paste", ActionNames.PASTE, KeyStrokes.PASTE)); //$NON-NLS-1$
@@ -373,12 +379,9 @@ public final class MenuFactory {
                 ActionNames.APPLY_NAMING_CONVENTION));
 
         pop.add(makeMenus(new String[]{CONTROLLERS},
-                JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
-                ActionNames.CHANGE_PARENT));
+                JMeterUtils.getResString("change_controller"),// $NON-NLS-1$
+                ActionNames.CHANGE_CONTROLLER));
 
-        pop.add(makeMenus(new String[]{CONTROLLERS},
-                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-                ActionNames.ADD_PARENT));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
@@ -408,33 +411,74 @@ public final class MenuFactory {
     public static JPopupMenu getDefaultSamplerMenu() {
         JPopupMenu pop = new JPopupMenu();
         pop.add(createDefaultAddMenu());
-        pop.add(makeMenus(new String[]{CONTROLLERS},
-                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-                ActionNames.ADD_PARENT));
+        pop.add(makeMenus(new String[]{SAMPLERS},
+                JMeterUtils.getResString("change_sampler"),// $NON-NLS-1$
+                ActionNames.CHANGE_SAMPLER));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
     }
 
     public static JPopupMenu getDefaultConfigElementMenu() {
-        return createDefaultPopupMenu();
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{CONFIG_ELEMENTS},
+                JMeterUtils.getResString("change_config_element"),// $NON-NLS-1$
+                ActionNames.CHANGE_CONFIG_ELEMENT));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
     }
 
     public static JPopupMenu getDefaultVisualizerMenu() {
         JPopupMenu pop = new JPopupMenu();
         pop.add(MenuFactory.makeMenuItemRes(
                 "clear", ActionNames.CLEAR)); //$NON-NLS-1$
+        pop.add(makeMenus(new String[]{LISTENERS},
+                JMeterUtils.getResString("change_listener"),// $NON-NLS-1$
+                ActionNames.CHANGE_LISTENER));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
     }
 
     public static JPopupMenu getDefaultTimerMenu() {
-        return createDefaultPopupMenu();
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{TIMERS},
+                JMeterUtils.getResString("change_timer"),// $NON-NLS-1$
+                ActionNames.CHANGE_TIMER));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
     }
 
     public static JPopupMenu getDefaultAssertionMenu() {
-        return createDefaultPopupMenu();
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{ASSERTIONS},
+                JMeterUtils.getResString("change_assertion"),// $NON-NLS-1$
+                ActionNames.CHANGE_ASSERTION));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
+    }
+
+    public static JPopupMenu getDefaultPreProcessorMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{PRE_PROCESSORS},
+                JMeterUtils.getResString("change_pre_processor"),// $NON-NLS-1$
+                ActionNames.CHANGE_PRE_PROCESSOR));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
+    }
+
+    public static JPopupMenu getDefaultPostProcessorMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        pop.add(makeMenus(new String[]{POST_PROCESSORS},
+                JMeterUtils.getResString("change_post_processor"),// $NON-NLS-1$
+                ActionNames.CHANGE_POST_PROCESSOR));
+        MenuFactory.addEditMenu(pop, true);
+        MenuFactory.addFileMenu(pop);
+        return pop;
     }
 
     public static JPopupMenu getDefaultExtractorMenu() {
@@ -683,4 +727,5 @@ public final class MenuFactory {
                 .filter(userObj -> exceptions.stream().noneMatch(c -> c.isInstance(userObj)))
                 .anyMatch(userObj -> classes.stream().anyMatch(c -> c.isInstance(userObj)));
     }
+
 }
