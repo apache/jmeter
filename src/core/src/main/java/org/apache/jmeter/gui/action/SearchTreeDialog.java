@@ -104,6 +104,8 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
 
     private JCheckBox isCaseSensitiveCB;
 
+    private JCheckBox isNamesReplaceableCB;
+
 
     private transient Triple<String, Boolean, Boolean> lastSearchConditions = null;
 
@@ -171,14 +173,17 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
         statusLabel.setMinimumSize(new Dimension(100, 20));
         isRegexpCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), false); //$NON-NLS-1$
         isCaseSensitiveCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), true); //$NON-NLS-1$
+        isNamesReplaceableCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_names_replaceable"), false); //$NON-NLS-1$
 
         JFactory.small(isRegexpCB);
         JFactory.small(isCaseSensitiveCB);
+        JFactory.small(isNamesReplaceableCB);
 
         JPanel searchCriterionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         searchCriterionPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("search_matching"))); //$NON-NLS-1$
         searchCriterionPanel.add(isCaseSensitiveCB);
         searchCriterionPanel.add(isRegexpCB);
+        searchCriterionPanel.add(isNamesReplaceableCB);
 
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new MigLayout("fillx, wrap 2", "[][fill,grow]"));
@@ -288,7 +293,8 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
                 String wordToReplace = replaceTF.getText();
                 String regex = isRegexpCB.isSelected() ? wordToSearch : Pattern.quote(wordToSearch);
                 boolean caseSensitiveReplacement = isCaseSensitiveCB.isSelected();
-                Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(currentNode, regex, wordToReplace, caseSensitiveReplacement);
+                boolean namesReplacement = isNamesReplaceableCB.isSelected();
+                Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(currentNode, regex, wordToReplace, caseSensitiveReplacement, namesReplacement);
                 if(pair != null) {
                     nbReplacements = pair.getLeft();
                     GuiPackage.getInstance().updateCurrentGui();
@@ -437,12 +443,13 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
         String regex = isRegexpCB.isSelected() ? wordToSearch : Pattern.quote(wordToSearch);
         GuiPackage guiPackage = GuiPackage.getInstance();
         boolean caseSensitiveReplacement = isCaseSensitiveCB.isSelected();
+        boolean namesReplacement = isNamesReplaceableCB.isSelected();
         int totalReplaced = 0;
         Pair<Integer, Set<JMeterTreeNode>> result = searchInTree(guiPackage, searcher, wordToSearch);
         Set<JMeterTreeNode> matchingNodes = result.getRight();
         Set<JMeterTreeNode> replacedNodes = new HashSet<>();
         for (JMeterTreeNode jMeterTreeNode : matchingNodes) {
-            Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(jMeterTreeNode, regex, wordToReplace, caseSensitiveReplacement);
+            Pair<Integer, JMeterTreeNode> pair = doReplacementInCurrentNode(jMeterTreeNode, regex, wordToReplace, caseSensitiveReplacement, namesReplacement);
             if(pair != null) {
                 totalReplaced += pair.getLeft();
                 replacedNodes.add(pair.getRight());
@@ -468,11 +475,15 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
      * @return null if no replacement occurred or Pair of (number of replacement, current tree node)
      */
     private static Pair<Integer, JMeterTreeNode> doReplacementInCurrentNode(JMeterTreeNode jMeterTreeNode,
-            String regex, String replaceBy, boolean caseSensitiveReplacement) {
+            String regex, String replaceBy, boolean caseSensitiveReplacement, boolean namesReplacement) {
         try {
             if (jMeterTreeNode.getUserObject() instanceof Replaceable) {
                 Replaceable replaceable = (Replaceable) jMeterTreeNode.getUserObject();
                 int numberOfReplacements = replaceable.replace(regex, replaceBy, caseSensitiveReplacement);
+                if (namesReplacement) {
+                    jMeterTreeNode.setName(jMeterTreeNode.getName().replaceAll(regex, replaceBy));
+                    numberOfReplacements++;
+                }
                 if (numberOfReplacements > 0) {
                     if (logger.isInfoEnabled()) {
                         logger.info("Replaced {} in element:{}", numberOfReplacements,
@@ -480,7 +491,11 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
                     }
                     return Pair.of(numberOfReplacements, jMeterTreeNode);
                 }
+            } else if (namesReplacement) {
+                jMeterTreeNode.setName(jMeterTreeNode.getName().replaceAll(regex, replaceBy));
+                return Pair.of(1, jMeterTreeNode);
             }
+
         } catch (Exception ex) {
             logger.error("Error occurred replacing data in node:{}", jMeterTreeNode.getName(), ex);
         }
