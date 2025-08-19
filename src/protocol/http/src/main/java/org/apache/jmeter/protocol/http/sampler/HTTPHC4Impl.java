@@ -104,7 +104,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.FormBodyPartBuilder;
 import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.MultipartEntityBuilder2;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
@@ -1561,7 +1561,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         doBrowserCompatibleMultipart, charset, haveContentEncoding);
             }
             // Write the request to our own stream
-            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            MultipartEntityBuilder2 multipartEntityBuilder = MultipartEntityBuilder2.create();
             multipartEntityBuilder.setCharset(charset);
             if (doBrowserCompatibleMultipart) {
                 multipartEntityBuilder.setLaxMode();
