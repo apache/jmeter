@@ -88,6 +88,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     public static final String SO_LINGER = "TCPSampler.soLinger"; //$NON-NLS-1$
 
+    public static final String CHARSET = "TCPSampler.charset"; //$NON-NLS-1$
+
     public static final String EOL_BYTE = "TCPSampler.EolByte"; //$NON-NLS-1$
 
     private static final String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
@@ -236,6 +238,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return getPropertyAsInt(SO_LINGER);
     }
 
+    public void setCharset(String charset) {
+        this.setProperty(CHARSET, charset, "");
+    }
+
+    public String getCharset() {
+        return getPropertyAsString(CHARSET);
+    }
+
     public void setEolByte(String eol) {
         this.setProperty(EOL_BYTE, eol, "");
     }
@@ -337,6 +347,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             if (getPropertyAsString(EOL_BYTE, "").length()>0){
                 tcpClient.setEolByte(getEolByte());
                 log.info("Using eolByte={}", getEolByte());
+            }
+
+            if(getPropertyAsString(CHARSET, "").length() > 0 && tcpClient instanceof AbstractTCPClient) {
+                ((AbstractTCPClient)tcpClient).setCharset(getCharset());
+                log.info("Using charset={}", getCharset());
             }
 
             if (log.isDebugEnabled()) {
