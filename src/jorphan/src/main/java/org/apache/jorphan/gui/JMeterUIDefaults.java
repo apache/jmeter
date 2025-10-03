@@ -103,11 +103,13 @@ public class JMeterUIDefaults {
     @API(since = "5.3", status = API.Status.INTERNAL)
     public void install() {
         DynamicStyle.onLaFChange(() -> {
+            log.info("LAF changed, updating JMeter-specific properties"); // $NON-NLS-1$
             // We put JMeter-specific properties into getLookAndFeelDefaults,
             // so the properties are removed when LaF is changed
             UIDefaults defaults = UIManager.getLookAndFeelDefaults();
 
             if (Math.abs(scale - 1.0f) > 0.01f) {
+                log.info("Applying scale factor: {}", scale); // $NON-NLS-1$
                 scaleFonts(defaults);
                 scaleIntProperties(defaults, scale);
                 // We don't want to make controls extra big, so we damp the scaling factors
@@ -183,8 +185,9 @@ public class JMeterUIDefaults {
             if (f == null) {
                 height = 16 * scale;
             } else {
-                Canvas c = new Canvas();
-                height = c.getFontMetrics(f).getHeight();
+                //Canvas c = new Canvas();
+                //height = c.getFontMetrics(f).getHeight();
+                height = f.getSize2D();
             }
             // Set line height to be 1.3 of the font size. The number of completely made up,
             // 1.2 seems to be the minimal usable scale. 1.3 looks good.

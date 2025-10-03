@@ -40,8 +40,6 @@ import javax.swing.MenuElement;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
-
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -104,10 +102,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     public static final String SYSTEM_LAF = "System"; // $NON-NLS-1$
     public static final String CROSS_PLATFORM_LAF = "CrossPlatform"; // $NON-NLS-1$
-    public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
     public static final String DARKLAF_LAF = "Darklaf"; // $NON-NLS-1$
     public static final String FLAT_LAF = "FlatLaf"; // $NON-NLS-1$
-    public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
     public static final String DARKLAF_LAF_CLASS = "com.github.weisj.darklaf.DarkLaf"; // $NON-NLS-1$
     public static final String FLATLAF_LAF_CLASS = "com.formdev.flatlaf.FlatLightLaf"; // $NON-NLS-1$
 
