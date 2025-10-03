@@ -93,7 +93,6 @@ public object JMeterGuiLauncher {
             // Allow UI updates
             yield()
         }
-        setProgress(1)
         log.debug("Setup tree")
         setProgress(5)
         val treeModel = JMeterTreeModel()

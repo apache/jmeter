@@ -75,7 +75,6 @@ plugins.withId("java") {
         java {
             license()
             importOrder("static ", "java.", "javax", "org", "net", "com", "")
-            removeUnusedImports()
             indentWithSpaces(4)
         }
     }

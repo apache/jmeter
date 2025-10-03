@@ -135,7 +135,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
         lessthanButton.setSelected(false);
         greaterthanequalButton.setSelected(false);
         lessthanequalButton.setSelected(false);
-        execState = SizeAssertion.EQUAL;
+        execState = SizeAssertion.ComparisonOperator.EQUAL.getValue();
     }
 
     @Override
@@ -164,32 +164,32 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
      * <p>
      * Allowed states are
      * <ul>
-     * <li>{@link SizeAssertion#EQUAL}</li>
-     * <li>{@link SizeAssertion#NOTEQUAL}</li>
-     * <li>{@link SizeAssertion#GREATERTHAN}</li>
-     * <li>{@link SizeAssertion#LESSTHAN}</li>
-     * <li>{@link SizeAssertion#GREATERTHANEQUAL}</li>
-     * <li>{@link SizeAssertion#LESSTHANEQUAL}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#EQUAL}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#NOTEQUAL}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#GREATERTHAN}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#LESSTHAN}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#GREATERTHANEQUAL}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#LESSTHANEQUAL}</li>
      * </ul>
      * @param state One of the allowed states
      */
     public void setState(int state) {
-        if (state == SizeAssertion.EQUAL) {
+        if (state == SizeAssertion.ComparisonOperator.EQUAL.getValue()) {
             equalButton.setSelected(true);
             execState = state;
-        } else if (state == SizeAssertion.NOTEQUAL) {
+        } else if (state == SizeAssertion.ComparisonOperator.NOTEQUAL.getValue()) {
             notequalButton.setSelected(true);
             execState = state;
-        } else if (state == SizeAssertion.GREATERTHAN) {
+        } else if (state == SizeAssertion.ComparisonOperator.GREATERTHAN.getValue()) {
             greaterthanButton.setSelected(true);
             execState = state;
-        } else if (state == SizeAssertion.LESSTHAN) {
+        } else if (state == SizeAssertion.ComparisonOperator.LESSTHAN.getValue()) {
             lessthanButton.setSelected(true);
             execState = state;
-        } else if (state == SizeAssertion.GREATERTHANEQUAL) {
+        } else if (state == SizeAssertion.ComparisonOperator.GREATERTHANEQUAL.getValue()) {
             greaterthanequalButton.setSelected(true);
             execState = state;
-        } else if (state == SizeAssertion.LESSTHANEQUAL) {
+        } else if (state == SizeAssertion.ComparisonOperator.LESSTHANEQUAL.getValue()) {
             lessthanequalButton.setSelected(true);
             execState = state;
         }
@@ -200,12 +200,12 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
      * <p>
      * Possible states are
      * <ul>
-     * <li>{@link SizeAssertion#EQUAL}</li>
-     * <li>{@link SizeAssertion#NOTEQUAL}</li>
-     * <li>{@link SizeAssertion#GREATERTHAN}</li>
-     * <li>{@link SizeAssertion#LESSTHAN}</li>
-     * <li>{@link SizeAssertion#GREATERTHANEQUAL}</li>
-     * <li>{@link SizeAssertion#LESSTHANEQUAL}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#EQUAL}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#NOTEQUAL}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#GREATERTHAN}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#LESSTHAN}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#GREATERTHANEQUAL}</li>
+     * <li>{@link SizeAssertion.ComparisonOperator#LESSTHANEQUAL}</li>
      * </ul>
      * @return The current state of the radio Button
      */
@@ -273,12 +273,12 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
     private Box createComparatorButtonPanel() {
         ButtonGroup group = new ButtonGroup();
 
-        equalButton = createComparatorButton("=", SizeAssertion.EQUAL, group); //$NON-NLS-1$
-        notequalButton = createComparatorButton("!=", SizeAssertion.NOTEQUAL, group); //$NON-NLS-1$
-        greaterthanButton = createComparatorButton(">", SizeAssertion.GREATERTHAN, group); //$NON-NLS-1$
-        lessthanButton = createComparatorButton("<", SizeAssertion.LESSTHAN, group); //$NON-NLS-1$
-        greaterthanequalButton = createComparatorButton(">=", SizeAssertion.GREATERTHANEQUAL, group); //$NON-NLS-1$
-        lessthanequalButton = createComparatorButton("<=", SizeAssertion.LESSTHANEQUAL, group); //$NON-NLS-1$
+        equalButton = createComparatorButton("=", SizeAssertion.ComparisonOperator.EQUAL.getValue(), group); //$NON-NLS-1$
+        notequalButton = createComparatorButton("!=", SizeAssertion.ComparisonOperator.NOTEQUAL.getValue(), group); //$NON-NLS-1$
+        greaterthanButton = createComparatorButton(">", SizeAssertion.ComparisonOperator.GREATERTHAN.getValue(), group); //$NON-NLS-1$
+        lessthanButton = createComparatorButton("<", SizeAssertion.ComparisonOperator.LESSTHAN.getValue(), group); //$NON-NLS-1$
+        greaterthanequalButton = createComparatorButton(">=", SizeAssertion.ComparisonOperator.GREATERTHANEQUAL.getValue(), group); //$NON-NLS-1$
+        lessthanequalButton = createComparatorButton("<=", SizeAssertion.ComparisonOperator.LESSTHANEQUAL.getValue(), group); //$NON-NLS-1$
 
         equalButton.setSelected(true);
         execState = Integer.parseInt(equalButton.getActionCommand());

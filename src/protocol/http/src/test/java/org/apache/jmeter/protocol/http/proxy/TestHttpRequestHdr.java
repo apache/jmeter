@@ -76,12 +76,13 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // A HTTP POST request
         contentEncoding = "UTF-8";
         String postBody = "update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d=";
-        String testPostRequest = "POST " + url + " HTTP/1.0\n"
-                + "Content-type: "
-                + HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED + "\r\n"
-                + "Content-length: " + getBodyLength(postBody, contentEncoding) + "\r\n"
-                + "\r\n"
-                + postBody;
+        String testPostRequest = """
+                POST %s HTTP/1.0
+                Content-type: %s\r
+                Content-length: %d\r
+                \r
+                %s""".formatted(url, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED,
+                              getBodyLength(postBody, contentEncoding), postBody);
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
         assertEquals(HTTPConstants.POST, s.getMethod());
         assertFalse(s.getDoMultipart());
@@ -147,35 +148,37 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         // The encoding should be picked up from the header we send with the request
         contentEncoding = "UTF-8";
         url =  "http://vmdal-hqqa9/retalixhq/GG_Implementation/ScreenEntity/ScreenEntityHTTP.aspx?Action=Save&ET=Vendor&TT=Single&Sid=1347280336092";
-        postBody = "<Action UIStatus=\"2\"><Vendor Id=\"9292\" HOST_ID=\"0\" VENDOR=\"9292\" TERMS_TYPE=\"No Terms\" TERMS=\"0 %\""
-                + " AUTO_PRICE=\"Use System Default\" VM_VENDOR_TYPE=\"DSD Vendor\" ITEM_FORMAT=\"PLU\" COST_ENTRY_SORT=\"UPC/EAN\""
-                + " VM_REPORT_SORT=\"UPC/EAN\" VM_ORDER_SORT=\"UPC/EAN\" VM_RECEIVING_SORT=\"UPC/EAN\" VM_MAX_BACK_ORDERS=\"99\""
-                + " MAX_OPEN_DAYS=\"99\" PAY_BASED_ON=\"System Cost\" ORDER_COST_DATE=\"Use System Rule\" VM_CONSIDER_FREE=\"False\""
-                + " VM_SHOW_DETAIL=\"False\" VM_UPDATE_COST=\"No\" RD_USE_VENDOR_CC=\"False\" BLIND_RECEIVING=\"Default\""
-                + " EXCLUDE_RECEIVED_COST=\"False\" PRINT_ITEM_ADJ=\"False\" PRINT_OVERALL_ADJ=\"False\" PRINT_TAX_DETAIL=\"False\""
-                + " BLOCK_PRICE_VIEW=\"False\" DELIVERY_STATUS=\"No Delivery\" AUTO_RECEIVE=\"False\" TARGET_GM_FLAG=\"%\""
-                + " MINIMUM_GM_FLAG=\"%\" MARGIN_TYPE=\"Gross Margin\" HOLD_REGULAR=\"Default\" HOLD_SPECIALS=\"Default\""
-                + " TRUSTING_VENDOR=\"False\" AUTO_ACCEPT=\"All\" EARLY_RCPT_AFFECTS=\"All Costs\" SBT_ELIGIBLE=\"Not eligible\""
-                + " SBT_REPORTING_DAY=\"Monday\" AUTO_BALANCE_FLAG=\"$\" DAX_MANAGED=\"False\" CHANGE_ID=\"QA\" CHANGE_SOURCE=\"Manual Change\""
-                + " ORIGINAL_SOURCE=\"Manual Change\" RECORD_STATUS=\"Add\" RECORD_STATUS_DATE=\"9/7/2012 8:34:58 AM\" VENDOR_NAME=\"test\""
-                + " UIStatus=\"2\"/></Action>";
-        testPostRequest = "POST " + url + " HTTP/1.1\r\n"
-                + "x-requested-with: XMLHttpRequest" + "\r\n"
-                + "Accept-Language: en-us" + "\r\n"
-                + "Referer: http://vmdal-hqqa9/retalixhq/GG_Implementation/ScreenEntity/ScreenEntityPage.aspx?ET=Vendor&TT=Single&"
-                + "WM=2&UID=9292&Sid=1347280331908&UITH=Blue&MUID=window_0" + "\r\n"
-                + "Accept: */*" + "\r\n"
-                + "Content-Type: application/x-www-form-urlencoded" + "\r\n"
-                + "Accept-Encoding: gzip, deflate" + "\r\n"
-                + "User-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729;"
-                + " .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; Tablet PC 2.0)" + "\r\n"
-                + "Host: vmdal-hqqa9" + "\r\n"
-                + "Content-Length: "+ getBodyLength(postBody, contentEncoding) + "\r\n"
-                + "Proxy-Connection: Keep-Alive" + "\r\n"
-                + "Pragma: no-cache" + "\r\n"
-                + "Cookie: RHQ=sid=5aaeb66c-e174-4f4c-9928-83cffcc62150" + "\r\n"
-                + "\r\n"
-                + postBody;
+        postBody = """
+                <Action UIStatus="2">
+                    <Vendor Id="9292" HOST_ID="0" VENDOR="9292" TERMS_TYPE="No Terms" TERMS="0 %"\
+                     AUTO_PRICE="Use System Default" VM_VENDOR_TYPE="DSD Vendor" ITEM_FORMAT="PLU" COST_ENTRY_SORT="UPC/EAN"\
+                     VM_REPORT_SORT="UPC/EAN" VM_ORDER_SORT="UPC/EAN" VM_RECEIVING_SORT="UPC/EAN" VM_MAX_BACK_ORDERS="99"\
+                     MAX_OPEN_DAYS="99" PAY_BASED_ON="System Cost" ORDER_COST_DATE="Use System Rule" VM_CONSIDER_FREE="False"\
+                     VM_SHOW_DETAIL="False" VM_UPDATE_COST="No" RD_USE_VENDOR_CC="False" BLIND_RECEIVING="Default"\
+                     EXCLUDE_RECEIVED_COST="False" PRINT_ITEM_ADJ="False" PRINT_OVERALL_ADJ="False" PRINT_TAX_DETAIL="False"\
+                     BLOCK_PRICE_VIEW="False" DELIVERY_STATUS="No Delivery" AUTO_RECEIVE="False" TARGET_GM_FLAG="%"\
+                     MINIMUM_GM_FLAG="%" MARGIN_TYPE="Gross Margin" HOLD_REGULAR="Default" HOLD_SPECIALS="Default"\
+                     TRUSTING_VENDOR="False" AUTO_ACCEPT="All" EARLY_RCPT_AFFECTS="All Costs" SBT_ELIGIBLE="Not eligible"\
+                     SBT_REPORTING_DAY="Monday" AUTO_BALANCE_FLAG="$" DAX_MANAGED="False" CHANGE_ID="QA" CHANGE_SOURCE="Manual Change"\
+                     ORIGINAL_SOURCE="Manual Change" RECORD_STATUS="Add" RECORD_STATUS_DATE="9/7/2012 8:34:58 AM" VENDOR_NAME="test"\
+                     UIStatus="2"/>
+                </Action>""";
+        testPostRequest = """
+                POST %s HTTP/1.1\r
+                x-requested-with: XMLHttpRequest\r
+                Accept-Language: en-us\r
+                Referer: http://vmdal-hqqa9/retalixhq/GG_Implementation/ScreenEntity/ScreenEntityPage.aspx?ET=Vendor&TT=Single&WM=2&UID=9292&Sid=1347280331908&UITH=Blue&MUID=window_0\r
+                Accept: */*\r
+                Content-Type: application/x-www-form-urlencoded\r
+                Accept-Encoding: gzip, deflate\r
+                User-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; Tablet PC 2.0)\r
+                Host: vmdal-hqqa9\r
+                Content-Length: %d\r
+                Proxy-Connection: Keep-Alive\r
+                Pragma: no-cache\r
+                Cookie: RHQ=sid=5aaeb66c-e174-4f4c-9928-83cffcc62150\r
+                \r
+                %s""".formatted(url, getBodyLength(postBody, contentEncoding), postBody);
         // Use null for url to simulate that HttpRequestHdr do not
         // know the encoding for the page. Specify contentEncoding, so the
         // request is "sent" using that encoding
@@ -594,27 +597,34 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     private String createMultipartFormBody(String titleValue, String descriptionValue,
             String contentEncoding, boolean includeExtraHeaders,
             String boundary, String endOfLine) {
-        // Title multipart
-        String postBody = "--" + boundary + endOfLine
-            + "Content-Disposition: form-data; name=\"title\"" + endOfLine;
-        if(includeExtraHeaders) {
-            postBody += "Content-Type: text/plain; charset=" + contentEncoding + endOfLine
-            + "Content-Transfer-Encoding: 8bit" + endOfLine;
-        }
-        postBody += endOfLine
-            + titleValue + endOfLine
-            + "--" + boundary + endOfLine;
-        // Description multipart
-        postBody += "Content-Disposition: form-data; name=\"description\"" + endOfLine;
-        if(includeExtraHeaders) {
-            postBody += "Content-Type: text/plain; charset=" + contentEncoding + endOfLine
-                + "Content-Transfer-Encoding: 8bit" + endOfLine;
-        }
-        postBody += endOfLine
-            + descriptionValue + endOfLine
-            + "--" + boundary + "--" + endOfLine;
 
-        return postBody;
+        String titleHeaders = includeExtraHeaders ? """
+                Content-Type: text/plain; charset=%s%s\
+                Content-Transfer-Encoding: 8bit%s""".formatted(contentEncoding, endOfLine, endOfLine) : "";
+
+        String descriptionHeaders = includeExtraHeaders ? """
+                Content-Type: text/plain; charset=%s%s\
+                Content-Transfer-Encoding: 8bit%s""".formatted(contentEncoding, endOfLine, endOfLine) : "";
+
+        return """
+                --%s%s\
+                Content-Disposition: form-data; name="title"%s\
+                %s%s\
+                %s%s\
+                --%s%s\
+                Content-Disposition: form-data; name="description"%s\
+                %s%s\
+                %s%s\
+                --%s--%s""".formatted(
+                    boundary, endOfLine,
+                    endOfLine,
+                    titleHeaders, endOfLine,
+                    titleValue, endOfLine,
+                    boundary, endOfLine,
+                    endOfLine,
+                    descriptionHeaders, endOfLine,
+                    descriptionValue, endOfLine,
+                    boundary, endOfLine);
     }
 
     private String createMultipartFileUploadBody(String fileField, String fileName,

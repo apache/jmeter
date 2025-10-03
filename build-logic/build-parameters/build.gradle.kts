@@ -16,7 +16,7 @@
  */
 
 plugins {
-    id("org.gradlex.build-parameters") version "1.4.3"
+    id("org.gradlex.build-parameters") version "1.4.4"
     id("com.github.vlsi.gradle-extensions") version "1.90"
     id("build-logic.kotlin-dsl-gradle-plugin")
 }
@@ -99,8 +99,7 @@ buildParameters {
         description.set("Skip suppressPomMetadataWarningsFor warnings triggered by inability to map test fixtures dependences to Maven pom.xml")
     }
     bool("enableErrorprone") {
-        // By default, disable errorProne in CI so we don't perform the same checks in several jobs
-        defaultValue.set(System.getenv("CI") != "true")
+        defaultValue.set(true)
         description.set("Enable ErrorProne verifications")
     }
     bool("skipJavadoc") {

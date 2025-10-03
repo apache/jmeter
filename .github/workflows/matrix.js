@@ -78,9 +78,13 @@ matrix.setNamePattern(['java_version', 'java_distribution', 'hash', 'os', 'tz', 
 
 // Semeru uses OpenJ9 jit which has no option for making hash codes the same
 matrix.exclude({java_distribution: {value: 'semeru'}, hash: {value: 'same'}});
+// MacOS and Oracle Java does not work currently. No JAVA_HOME_${VERSION}_x64 set and thus no java found
+matrix.exclude({os: 'macos-latest', java_distribution: {value: 'oracle'}})
 // Ignore builds with JAVA EA for now, see https://github.com/apache/jmeter/issues/6114
 matrix.exclude({java_version: eaJava})
 matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
+// Oracle JDK is only supported for JDK 21 and later
+matrix.imply({java_distribution: {value: 'oracle'}}, {java_version: v => v === eaJava || v >= 21});
 // TODO: Semeru does not ship Java 21 builds yet
 matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'});
 // Ensure at least one job with "same" hashcode exists

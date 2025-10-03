@@ -18,77 +18,36 @@
 package org.apache.jmeter.util;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JMeterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import bsh.EvalError;
+import bsh.Interpreter;
 
 /**
  * BeanShell setup function - encapsulates all the access to the BeanShell
  * Interpreter in a single class.
  *
- * The class uses dynamic class loading to access BeanShell, which means that
- * all the source files can be built without needing access to the bsh jar.
+ * This class wraps a BeanShell instance.
  *
- * If the beanshell jar is not present at run-time, an error will be logged
- *
+ * Note that reflection-based dynamic class loading has been removed, so the
+ * bsh jar must be available at compile-time and runtime.
  */
-
 public class BeanShellInterpreter {
     private static final Logger log = LoggerFactory.getLogger(BeanShellInterpreter.class);
 
-    private static final Method bshGet;
-
-    private static final Method bshSet;
-
-    private static final Method bshEval;
-
-    private static final Method bshSource;
-
-    private static final Class<?> bshClass;
-
-    private static final String BSH_INTERPRETER = "bsh.Interpreter"; //$NON-NLS-1$
-
-    static {
-        // Temporary copies, so can set the final ones
-        Method get = null;
-        Method eval = null;
-        Method set = null;
-        Method source = null;
-        Class<?> clazz = null;
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        try {
-            clazz = loader.loadClass(BSH_INTERPRETER);
-            Class<String> string = String.class;
-            Class<Object> object = Object.class;
-
-            get = clazz.getMethod("get", string); //$NON-NLS-1$
-            eval = clazz.getMethod("eval", string); //$NON-NLS-1$
-            set = clazz.getMethod("set", string, object); //$NON-NLS-1$
-            source = clazz.getMethod("source", string); //$NON-NLS-1$
-        } catch (ClassNotFoundException|SecurityException | NoSuchMethodException e) {
-            log.error("Beanshell Interpreter not found", e);
-        } finally {
-            bshEval = eval;
-            bshGet = get;
-            bshSet = set;
-            bshSource = source;
-            bshClass = clazz;
-        }
-    }
-
     // This class is not serialised
-    private Object bshInstance = null; // The interpreter instance for this class
+    private Interpreter bshInstance = null; // The interpreter instance for this class
 
     private final String initFile; // Script file to initialize the Interpreter with
 
     private final Logger logger; // Logger to use during initialization and script run
 
-    public BeanShellInterpreter() throws ClassNotFoundException {
+    public BeanShellInterpreter() {
         this(null, null);
     }
 
@@ -96,25 +55,16 @@ public class BeanShellInterpreter {
      *
      * @param init initialisation file
      * @param log logger to pass to interpreter
-     * @throws ClassNotFoundException when beanshell can not be instantiated
      */
-    public BeanShellInterpreter(String init, Logger log)  throws ClassNotFoundException {
+    public BeanShellInterpreter(String init, Logger log) {
         initFile = init;
         logger = log;
         init();
     }
 
     // Called from ctor, so must be private (or final, but it does not seem useful elsewhere)
-    private void init() throws ClassNotFoundException {
-        if (bshClass == null) {
-            throw new ClassNotFoundException(BSH_INTERPRETER);
-        }
-        try {
-            bshInstance = bshClass.getDeclaredConstructor().newInstance();
-        } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
-            log.error("Can't instantiate BeanShell", e);
-            throw new ClassNotFoundException("Can't instantiate BeanShell", e);
-        }
+    private void init() {
+        bshInstance = new Interpreter();
          if (logger != null) {// Do this before starting the script
             try {
                 set("log", logger);//$NON-NLS-1$
@@ -148,65 +98,88 @@ public class BeanShellInterpreter {
 
     /**
      * Resets the BeanShell interpreter.
-     *
-     * @throws ClassNotFoundException if interpreter cannot be instantiated
      */
-    public void reset() throws ClassNotFoundException {
+    public void reset() {
        init();
     }
 
-    private Object bshInvoke(Method m, Object[] o, boolean shouldLog) throws JMeterException {
+    public Object eval(String s) throws JMeterException {
         Object r = null;
-        final String errorString = "Error invoking bsh method: ";
         try {
-            r = m.invoke(bshInstance, o);
-        } catch (IllegalArgumentException | IllegalAccessException e) { // Programming error
-            final String message = errorString + m.getName();
-            log.error(message);
-            throw new JMeterError(message, e);
-        } catch (InvocationTargetException e) { // Can occur at run-time
-            // could be caused by the bsh Exceptions:
-            // EvalError, ParseException or TargetError
-            String message = errorString + m.getName();
-            Throwable cause = e.getCause();
-            if (cause != null) {
-                message += "\t" + cause.getLocalizedMessage();
-            }
-
-            if (shouldLog) {
-                log.error(message);
-            }
-            throw new JMeterException(message, e);
+            r = bshInstance.eval(s);
+        } catch (EvalError e) {
+            handleException("eval", e, true);
         }
         return r;
     }
 
-    public Object eval(String s) throws JMeterException {
-        return bshInvoke(bshEval, new Object[] { s }, true);
-    }
-
     public Object evalNoLog(String s) throws JMeterException {
-        return bshInvoke(bshEval, new Object[] { s }, false);
+        Object r = null;
+        try {
+            r = bshInstance.eval(s);
+        } catch (EvalError e) {
+            handleException("eval", e, false);
+        }
+        return r;
     }
 
-    public Object set(String s, Object o) throws JMeterException {
-        return bshInvoke(bshSet, new Object[] { s, o }, true);
+    public void set(String s, Object o) throws JMeterException {
+        try {
+            bshInstance.set(s, o);
+        } catch (EvalError e) {
+            handleException("set", e, true);
+        }
     }
 
-    public Object set(String s, boolean b) throws JMeterException {
-        return bshInvoke(bshSet, new Object[] { s, b}, true);
+    public void set(String s, boolean b) throws JMeterException {
+        try {
+            bshInstance.set(s, b);
+        } catch (EvalError e) {
+            handleException("set", e, true);
+        }
     }
 
     public Object source(String s) throws JMeterException {
-        return bshInvoke(bshSource, new Object[] { s }, true);
+        Object r = null;
+        try {
+            r = bshInstance.source(s);
+        } catch (EvalError | IOException e) {
+            handleException("source", e, true);
+        }
+        return r;
     }
 
     public Object get(String s) throws JMeterException {
-        return bshInvoke(bshGet, new Object[] { s }, true);
+        Object r = null;
+        try {
+            r = bshInstance.get(s);
+        } catch (EvalError e) {
+            handleException("get", e, true);
+        }
+        return r;
+    }
+
+    private static void handleException(String methodName, Exception e, boolean shouldLog) throws JMeterException {
+        String message = String.format("Error invoking bsh method: %s", methodName);
+        Throwable cause = e.getCause();
+        if (cause != null) {
+            message += "\t" + cause.getLocalizedMessage();
+        }
+        if (shouldLog) {
+            log.error(message);
+        }
+        throw new JMeterException(message, e);
     }
 
     // For use by Unit Tests
-    public static boolean isInterpreterPresent(){
+    public static boolean isInterpreterPresent() {
+        Class<?> bshClass = null;
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        try {
+            bshClass = loader.loadClass("bsh.Interpreter");
+        } catch (ClassNotFoundException e) {
+            log.error("Beanshell Interpreter not found", e);
+        }
         return bshClass != null;
     }
 }

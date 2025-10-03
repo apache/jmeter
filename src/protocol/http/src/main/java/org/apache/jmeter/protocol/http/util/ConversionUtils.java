@@ -119,20 +119,12 @@ public class ConversionUtils {
         StringBuilder sb = new StringBuilder(value.length() + 2);
         for (int i = 0; i < value.length(); i++) {
             char c = value.charAt(i);
-            switch (c) {
-                case '"':
-                    sb.append("%22");
-                    break;
-                case 0x0A:
-                    sb.append("%0A");
-                    break;
-                case 0x0D:
-                    sb.append("%0D");
-                    break;
-                default:
-                    sb.append(c);
-                    break;
-            }
+            sb.append(switch (c) {
+                case '"' -> "%22";
+                case 0x0A -> "%0A";
+                case 0x0D -> "%0D";
+                default -> String.valueOf(c);
+            });
         }
         return sb.toString();
     }

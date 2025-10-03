@@ -1,8 +1,6 @@
-checksum.xml
-build-logic/checksum.xml
-build-logic/gradle/checksum-dependency-plugin/cached-pgp-keys/**
 gradle/wrapper/gradle-wrapper.jar
-gradle/checksum-dependency-plugin/cached-pgp-keys/**
+gradle/verification-keyring.keys
+gradle/verification-metadata.xml
 **/.*
 .*/**
 CODE_OF_CONDUCT.md
