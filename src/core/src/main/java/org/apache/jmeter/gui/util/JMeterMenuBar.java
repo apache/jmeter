@@ -53,6 +53,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.logging.log4j.Level;
@@ -101,10 +102,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     public static final String SYSTEM_LAF = "System"; // $NON-NLS-1$
     public static final String CROSS_PLATFORM_LAF = "CrossPlatform"; // $NON-NLS-1$
-    public static final String DARCULA_LAF = "Darcula"; // $NON-NLS-1$
     public static final String DARKLAF_LAF = "Darklaf"; // $NON-NLS-1$
-    public static final String DARCULA_LAF_CLASS = "com.bulenkov.darcula.DarculaLaf"; // $NON-NLS-1$
+    public static final String FLAT_LAF = "FlatLaf"; // $NON-NLS-1$
     public static final String DARKLAF_LAF_CLASS = "com.github.weisj.darklaf.DarkLaf"; // $NON-NLS-1$
+    public static final String FLATLAF_LAF_CLASS = "com.formdev.flatlaf.FlatLightLaf"; // $NON-NLS-1$
 
     public JMeterMenuBar() {
         // List for recent files menu items
@@ -317,6 +318,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private static JMenu createLaFMenu() {
         JMenu lafMenu = makeMenuRes("appearance", 'L');
+        JMenu flatLafSubMenu = new JMenu("FlatLaf Themes");
         ButtonGroup lafGroup = new ButtonGroup();
         String currentLafCommand = LookAndFeelCommand.getPreferredLafCommand();
         for (LookAndFeelCommand.MenuItem item : LookAndFeelCommand.getMenuItems()) {
@@ -326,9 +328,16 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             if (item.getCommand().equals(currentLafCommand)) {
                 menuItem.setSelected(true);
             }
+            if (item.getCommand().startsWith("laf:com.formdev.flatlaf")) {
+                flatLafSubMenu.add(menuItem);
+            } else {
+                lafMenu.add(menuItem);
+            }
             lafGroup.add(menuItem);
-            lafMenu.add(menuItem);
         }
+        GuiUtils.makeScrollableMenu(flatLafSubMenu);
+        lafMenu.addSeparator();
+        lafMenu.add(flatLafSubMenu);
         return lafMenu;
     }
 

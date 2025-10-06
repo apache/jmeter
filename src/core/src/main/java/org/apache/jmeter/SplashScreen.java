@@ -30,6 +30,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +75,7 @@ public class SplashScreen extends JDialog {
             log.warn("Unable to find logo {}", svgResourcePath, e);
         }
 
-        if (svgUri != null) {
+        if (svgUri != null && LookAndFeelCommand.isDarklafTheme()) {
             Icon icon = new ThemedSVGIcon(svgUri, 521, 177);
             logo.setIcon(icon);
         } else {
