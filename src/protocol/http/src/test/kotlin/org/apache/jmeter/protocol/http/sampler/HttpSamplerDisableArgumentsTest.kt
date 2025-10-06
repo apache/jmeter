@@ -29,11 +29,14 @@ import com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import org.apache.jmeter.config.ConfigTestElement
+import org.apache.jmeter.config.Argument
 import org.apache.jmeter.junit.JMeterTestCase
+import org.apache.jmeter.protocol.http.control.arguments
+import org.apache.jmeter.protocol.http.control.httpRequestDefaults
+import org.apache.jmeter.protocol.http.util.HTTPArgument
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
-import org.apache.jmeter.treebuilder.oneRequest
 import org.apache.jmeter.treebuilder.TreeBuilder
+import org.apache.jmeter.treebuilder.oneRequest
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.time.Duration.Companion.seconds
@@ -115,22 +118,25 @@ class HttpSamplerDisableArgumentsTest : JMeterTestCase() {
 
         executePlanAndCollectEvents(10.seconds) {
             oneRequest {
-                httpRequest {
-                    ConfigTestElement::class {
-                        addArgument("param0", "value0")
-                        arguments.getArgument(0).isEnabled = false
-                        addArgument("param4", "value4")
-                        props {
-                            // guiClass is needed for org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.applies
-                            it[guiClass] = "org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui"
-                        }
+                httpRequestDefaults {
+                    arguments {
+                        addArgument(
+                            HTTPArgument("param0", "value0").apply {
+                                isEnabled = false
+                            }
+                        )
+                        addArgument(
+                            HTTPArgument("param4", "value4")
+                        )
                     }
+                }
+                httpRequest {
                     method = "POST"
                     doMultipart = true
                     implementation = httpImplementation
                     port = server.httpPort
                     addArgument("param1", "value1")
-                    arguments.getArgument(1).isEnabled = false
+                    arguments.getArgument(0).isEnabled = false
                     addArgument("param2", "value2")
                 }
             }
@@ -142,6 +148,9 @@ class HttpSamplerDisableArgumentsTest : JMeterTestCase() {
                 .withRequestBodyPart(
                     aMultipart("param2").withBody(equalTo("value2")).build()
                 )
+                .withRequestBodyPart(
+                    aMultipart("param4").withBody(equalTo("value4")).build()
+                )
                 .withRequestBody(
                     httpImplementation,
                     """
@@ -151,6 +160,12 @@ class HttpSamplerDisableArgumentsTest : JMeterTestCase() {
                     Content-Transfer-Encoding: 8bit
 
                     value2
+                    -----------------------------7d159c1302d0y0
+                    Content-Disposition: form-data; name="param4"
+                    Content-Type: text/plain; charset=UTF-8
+                    Content-Transfer-Encoding: 8bit
+
+                    value4
                     -----------------------------7d159c1302d0y0--
 
                     """.trimIndent()
