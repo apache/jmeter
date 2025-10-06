@@ -39,6 +39,8 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
@@ -529,6 +531,30 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         fileLoadRecentFiles = LoadRecentProject.getRecentFileMenuItems();
         fileLoadRecentFiles.forEach(jc -> recentFilesOpen.add(jc));
         recentFilesOpen.setEnabled(LoadRecentProject.hasVisibleMenuItem(fileLoadRecentFiles));
+
+        // Add menu listener to refresh recent files when menu is selected
+        recentFilesOpen.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                // Clear existing recent files from menu
+                recentFilesOpen.removeAll();
+
+                // Reload recent files
+                fileLoadRecentFiles = LoadRecentProject.getRecentFileMenuItems();
+                fileLoadRecentFiles.forEach(jc -> recentFilesOpen.add(jc));
+                recentFilesOpen.setEnabled(LoadRecentProject.hasVisibleMenuItem(fileLoadRecentFiles));
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+                // Not needed
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+                // Not needed
+            }
+        });
 
         addPluginsMenuItems(fileMenu, menuCreators, MENU_LOCATION.FILE);
 

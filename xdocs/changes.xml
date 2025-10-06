@@ -70,6 +70,7 @@ Summary
     <li><issue>6352</issue> Calculate delays in Open Model Thread Group and Precise Throughput
         Timer relative to start of Thread Group instead of the start of the test.</li>
     <li><issue>6357</issue><pr>6358</pr> Ensure writable directories when copying template files while report generation.</li>
+    <li><pr>6509</pr><pr>6675</pr> Synchronize recent file menu across multiple JVMs. Contributed by Corneliu C (https://github.com/KingRabbid)</li>
   </ul>
 
   <h3>HTTP Samplers and Test Script Recorder</h3>
