@@ -29,7 +29,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import org.apache.jmeter.config.Argument
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.protocol.http.control.arguments
 import org.apache.jmeter.protocol.http.control.httpRequestDefaults
@@ -172,5 +171,4 @@ class HttpSamplerDisableArgumentsTest : JMeterTestCase() {
                 )
         )
     }
-
 }
