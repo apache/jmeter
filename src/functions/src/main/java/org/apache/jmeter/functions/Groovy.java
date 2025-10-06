@@ -130,7 +130,7 @@ public class Groovy extends AbstractFunction {
             }
         } catch (Exception ex) // Mainly for bsh.EvalError
         {
-            log.warn("Error running Groovy script in element named: {}", currentSampler.getName(), ex);
+            log.warn("Error running Groovy script in element named: '{}'", currentSampler.getName(), ex);
         }
         log.debug("__groovy({},{})={}",script, varName, resultStr);
         return resultStr;
