@@ -114,7 +114,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         String lang = getScriptLanguageWithDefault();
         ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
         if (scriptEngine == null) {
-            throw new ScriptException("Cannot find engine named: '"+lang+"', ensure you set language field in JSR223 Test Element: "+getName());
+            throw new ScriptException("Cannot find engine named: '"+lang+"', ensure you set language field in JSR223 element named: " + getName());
         }
 
         return scriptEngine;
@@ -192,11 +192,11 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             if (!StringUtils.isEmpty(filename)) {
                 if (!scriptFile.isFile()) {
                     throw new ScriptException("Script file '" + scriptFile.getAbsolutePath()
-                            + "' is not a file for element: " + getName());
+                            + "' is not a file for JSR223 element named: " + getName());
                 }
                 if (!scriptFile.canRead()) {
                     throw new ScriptException("Script file '" + scriptFile.getAbsolutePath()
-                            + "' is not readable for element:" + getName());
+                            + "' is not readable for JSR223 element named: " + getName());
                 }
                 if (!supportsCompilable) {
                     try (BufferedReader fileReader = Files.newBufferedReader(scriptFile.toPath())) {
@@ -232,7 +232,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                     return scriptEngine.eval(script, bindings);
                 }
             } else {
-                throw new ScriptException("Both script file and script text are empty for element:" + getName());
+                throw new ScriptException("Both script file and script text are empty for JSR223 element named: " + getName());
             }
         } catch (ScriptException ex) {
             Throwable rootCause = ex.getCause();
@@ -257,11 +257,11 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         } catch (ScriptCompilationInvocationTargetException e) {
             Throwable cause = e.getCause();
             if (cause instanceof IOException) {
-                cause.addSuppressed(new IllegalStateException("Unable to compile script " + newCacheKey));
+                cause.addSuppressed(new IllegalStateException("Unable to compile JSR223 script: " + newCacheKey));
                 throw (IOException) cause;
             }
             if (cause instanceof ScriptException) {
-                cause.addSuppressed(new IllegalStateException("Unable to compile script " + newCacheKey));
+                cause.addSuppressed(new IllegalStateException("Unable to compile JSR223 script: " + newCacheKey));
                 throw (ScriptException) cause;
             }
             throw e;
@@ -287,7 +287,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                 ((Compilable) scriptEngine).compile(getScript());
                 return true;
             } catch (ScriptException e) { // NOSONAR
-                logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
+                logger.error("Error compiling script for JSR223 element named: '{}', error: {}", getName(), e.getMessage());
                 return false;
             }
         } else {
@@ -297,7 +297,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                     ((Compilable) scriptEngine).compile(fileReader);
                     return true;
                 } catch (ScriptException e) { // NOSONAR
-                    logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
+                    logger.error("Error compiling script for JSR223 element named: '{}', error: {}", getName(), e.getMessage());
                     return false;
                 }
             }
