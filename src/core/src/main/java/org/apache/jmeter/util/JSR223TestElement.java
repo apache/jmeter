@@ -60,10 +60,8 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * Cache of compiled scripts
      */
     private static final Cache<ScriptCacheKey, CompiledScript> COMPILED_SCRIPT_CACHE =
-            Caffeine
-                    .newBuilder()
-                    .maximumSize(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100))
-                    .build();
+            Caffeine.from(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_spec","maximumSize=" +
+                    JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100) + ",recordStats")).build();
 
     /**
      * Lambdas can't throw checked exceptions, so we wrap cache loading failure with a runtime one.
@@ -257,11 +255,11 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         } catch (ScriptCompilationInvocationTargetException e) {
             Throwable cause = e.getCause();
             if (cause instanceof IOException) {
-                cause.addSuppressed(new IllegalStateException("Unable to compile script " + newCacheKey));
+                cause.addSuppressed(new IllegalStateException("Unable to compile script: " + newCacheKey));
                 throw (IOException) cause;
             }
             if (cause instanceof ScriptException) {
-                cause.addSuppressed(new IllegalStateException("Unable to compile script " + newCacheKey));
+                cause.addSuppressed(new IllegalStateException("Unable to compile script: " + newCacheKey));
                 throw (ScriptException) cause;
             }
             throw e;
@@ -287,7 +285,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                 ((Compilable) scriptEngine).compile(getScript());
                 return true;
             } catch (ScriptException e) { // NOSONAR
-                logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
+                logger.error("Error compiling script for test element named: '{}', error: {}", getName(), e.getMessage());
                 return false;
             }
         } else {
@@ -297,7 +295,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                     ((Compilable) scriptEngine).compile(fileReader);
                     return true;
                 } catch (ScriptException e) { // NOSONAR
-                    logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
+                    logger.error("Error compiling script for test element named: '{}', error: {}", getName(), e.getMessage());
                     return false;
                 }
             }
@@ -357,6 +355,8 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     @Override
     public void testEnded(String host) {
+        if (COMPILED_SCRIPT_CACHE.estimatedSize() > 0)
+            logger.info("Compiled cache size: {}, stats: {}", COMPILED_SCRIPT_CACHE.estimatedSize(), COMPILED_SCRIPT_CACHE.stats());
         COMPILED_SCRIPT_CACHE.invalidateAll();
         scriptMd5 = null;
     }
