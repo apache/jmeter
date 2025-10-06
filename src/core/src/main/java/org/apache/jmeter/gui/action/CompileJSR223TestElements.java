@@ -70,16 +70,16 @@ public class CompileJSR223TestElements extends AbstractAction implements MenuCre
                 JSR223TestElement element = (JSR223TestElement) userObject;
                 TestBeanHelper.prepare(element);
                 try {
-                    log.info("Compiling {}", element.getName());
+                    log.info("Compiling JSR223 element named: '{}'", element.getName());
                     if(!element.compile()) {
                         elementsWithCompilationErrors++;
                         treeNode.setMarkedBySearch(true);
                     } else {
-                        log.info("Compilation succeeded for {}", element.getName());
+                        log.info("Compilation succeeded for JSR223 element named: '{}'", element.getName());
                     }
                 } catch (Exception e) {
                     treeNode.setMarkedBySearch(true);
-                    log.error("Error compiling test element {}", element.getName(), e);
+                    log.error("Error compiling JSR223 element named: '{}'", element.getName(), e);
                 }
             }
         }
