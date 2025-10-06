@@ -44,7 +44,7 @@ val platformProjects by extra {
     setOf(
         projects.src.bom,
         projects.src.bomThirdparty,
-    ).mapTo(mutableSetOf()) { it.dependencyProject }
+    ).mapTo(mutableSetOf()) { it.path }
 }
 
 val notPublishedProjects by extra {
@@ -62,35 +62,11 @@ val notPublishedProjects by extra {
         projects.src.testkit,
         projects.src.testkitWiremock,
         projects.src.testServices,
-    ).mapTo(mutableSetOf()) { it.dependencyProject }
+    ).mapTo(mutableSetOf()) { it.path }
 }
 
 val publishedProjects by extra {
-    allprojects - notPublishedProjects
-}
-
-notPublishedProjects.forEach { project ->
-    if (project != rootProject) {
-        project.plugins.withId("maven-publish") {
-            throw IllegalStateException(
-                "Project ${project.path} is listed in notPublishedProjects, however it has maven-publish plugin applied. " +
-                    "Please remove maven-publish plugin (e.g. replace build-logic.jvm-published-library with build-logic.jvm-library) or " +
-                    "move the project to the list of published ones"
-            )
-        }
-    }
-}
-
-publishedProjects.forEach {project ->
-    project.afterEvaluate {
-        if (!pluginManager.hasPlugin("maven-publish")) {
-            throw IllegalStateException(
-                "Project ${project.path} is listed in publishedProjects, however it misses maven-publish plugin. " +
-                    "Please add maven-publish plugin (e.g. replace build-logic.jvm-library with build-logic.jvm-published-library) or " +
-                    "move the project to the list of notPublishedProjects"
-            )
-        }
-    }
+    allprojects.mapTo(mutableSetOf()) { it.path } - notPublishedProjects
 }
 
 val displayVersion by extra {
@@ -116,7 +92,7 @@ tasks.validateBeforeBuildingReleaseArtifacts {
 }
 
 releaseArtifacts {
-    fromProject(projects.src.dist.dependencyProject.path)
+    fromProject(projects.src.dist.path)
     previewSite {
         into("rat")
         from(tasks.rat) {

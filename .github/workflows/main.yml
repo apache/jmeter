@@ -48,7 +48,7 @@ jobs:
         fetch-depth: 50
     - name: Set up Java ${{ matrix.java_version }}, oracle
       if: ${{ matrix.oracle_java_website != '' }}
-      uses: oracle-actions/setup-java@7a0114d66dbd02646abd345c3395b34c148e6126 # v1.3.2
+      uses: oracle-actions/setup-java@b1546e588c27008e88bfcabda44d11c22316b9b8 # v1.4.2
       with:
         website: ${{ matrix.oracle_java_website }}
         release: ${{ matrix.java_version }}
@@ -67,7 +67,7 @@ jobs:
         script: |
           console.log('The following command might help reproducing CI results, use Java ${{ matrix.java_version }}')
           console.log('TZ="${{ matrix.tz }}" _JAVA_OPTIONS="${{ matrix.extraJvmArgs }}" ./gradlew build -x distTar -x distTarSource -x distTarSha512 -x distTarSourceSha512 ${{ matrix.extraGradleArgs }} -PtestExtraJvmArgs="${{ matrix.testExtraJvmArgs }}" -PtestDisableCaching="${{ matrix.testDisableCaching }}"')
-    - uses: burrunan/gradle-cache-action@v1
+    - uses: burrunan/gradle-cache-action@v3
       name: Test
       with:
         job-id: jdk${{ matrix.java_version }}
@@ -80,11 +80,13 @@ jobs:
           jdkBuildVersion=17
           jdkTestVersion=${{ matrix.java_version }}
           jdkTestVendor=${{ matrix.java_vendor }}
+          # We have a separate job with Errorprone verifications, so avoid duplicate warnings
+          enableErrorprone=false
           # We provision JDKs with GitHub Actions for caching purposes, so Gradle should rather fail in case JDK is not found
           org.gradle.java.installations.auto-download=false
       env:
         _JAVA_OPTIONS: ${{ matrix.extraJvmArgs }}
-        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GE_ACCESS_TOKEN }}
+        DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
 
   errorprone:
     name: 'Error Prone (JDK 17)'
@@ -96,11 +98,11 @@ jobs:
       with:
         java-version: 17
         distribution: 'zulu'
-    - uses: burrunan/gradle-cache-action@v1
+    - uses: burrunan/gradle-cache-action@v3
       name: Test
       with:
         job-id: errprone
         multi-cache-enabled: false
-        arguments: --scan --no-parallel --no-daemon -PenableErrorprone classes
+        arguments: --scan --no-parallel --no-daemon classes
       env:
-        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GE_ACCESS_TOKEN }}
+        DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}

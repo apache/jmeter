@@ -128,16 +128,20 @@ val populateLibs by tasks.registering {
     doLast {
         val deps = configurations.runtimeClasspath.get().resolvedConfiguration.resolvedArtifacts
         // This ensures project exists, if project is renamed, names should be corrected here as wells
-        val launcherProject = projects.src.launcher.dependencyProject.path
-        val bshclientProject = projects.src.bshclient.dependencyProject.path
-        val jorphanProject = projects.src.jorphan.dependencyProject.path
+        val launcherProject = projects.src.launcher.path
+        val bshclientProject = projects.src.bshclient.path
+        val jorphanProject = projects.src.jorphan.path
         listOf(libs, libsExt, binLibs).forEach {
-            it.fileMode = "644".toInt(8)
-            it.dirMode = "755".toInt(8)
+            it.filePermissions {
+                unix("rw-r--r--")
+            }
+            it.dirPermissions {
+                unix("rwxr-xr-x")
+            }
         }
         for (dep in deps) {
             val compId = dep.id.componentIdentifier
-            if (compId !is ProjectComponentIdentifier || !compId.build.isCurrentBuild) {
+            if (compId !is ProjectComponentIdentifier) {
                 // Move all non-JMeter jars to lib folder
                 libs.from(dep.file)
                 continue

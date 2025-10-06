@@ -432,13 +432,12 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     }
 
     private void updateUi(JMeterGUIComponent comp) {
-        if (!(comp instanceof JComponent)) {
+        if (!(comp instanceof JComponent jc)) {
             return;
         }
-        JComponent jc = (JComponent) comp;
         Object epoch = jc.getClientProperty(LAF_EPOCH);
         int currentLafEpoch = lafEpoch.get();
-        if (epoch instanceof Integer && ((Integer) epoch) < currentLafEpoch) {
+        if (epoch instanceof Integer epochInt && epochInt < currentLafEpoch) {
             JFactory.updateUi(jc);
         }
         jc.putClientProperty(LAF_EPOCH, currentLafEpoch);

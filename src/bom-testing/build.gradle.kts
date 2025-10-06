@@ -37,8 +37,8 @@ dependencies {
         // compilation classpath (e.g. it is used as a transitive by a third-party library)
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
-        api("com.github.tomakehurst:wiremock-jre8:2.35.1")
-        api("io.mockk:mockk:1.13.7")
+        api("com.github.tomakehurst:wiremock-jre8:2.35.2")
+        api("io.mockk:mockk:1.13.17")
         api("net.bytebuddy:byte-buddy:1.14.11")
         api("nl.jqno.equalsverifier:equalsverifier:3.15.5")
         // activemq-all should not be used as it provides secondary slf4j binding

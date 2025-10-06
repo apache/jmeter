@@ -254,7 +254,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private void handleRead(JMeterContext context, SampleResult res) {
         LOGGER.debug("isRead");
-        StringBuilder sb = new StringBuilder(75);
         res.setSuccessful(true);
         Sampler sampler = context.getPreviousSampler();
         SampleResult sr = context.getPreviousResult();
@@ -273,8 +272,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         do {
             result = browseQueueForConsumption(sendQueue, jmsSelector, res, buffer, propBuffer);
             if (result != null) {
-                sb.append(result);
-                sb.append('\n');
                 sampleCounter++;
             }
             sampleTries++;
@@ -310,8 +307,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         if (replyMsg == null) {
             res.setResponseMessage("No reply message received");
         } else {
-            if (replyMsg instanceof TextMessage) {
-                res.setResponseData(((TextMessage) replyMsg).getText(), null);
+            if (replyMsg instanceof TextMessage textMessage) {
+                res.setResponseData(textMessage.getText(), null);
             } else {
                 res.setResponseData(replyMsg.toString(), null);
             }
@@ -358,20 +355,17 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private static void extractContent(StringBuilder buffer, StringBuilder propBuffer, Message msg) {
         if (msg != null) {
             try {
-                if (msg instanceof TextMessage) {
-                    buffer.append(((TextMessage) msg).getText());
-                } else if (msg instanceof ObjectMessage) {
-                    ObjectMessage objectMessage = (ObjectMessage) msg;
+                if (msg instanceof TextMessage textMessage) {
+                    buffer.append(textMessage.getText());
+                } else if (msg instanceof ObjectMessage objectMessage) {
                     if (objectMessage.getObject() != null) {
                         buffer.append(objectMessage.getObject().getClass());
                     } else {
                         buffer.append("object is null");
                     }
-                } else if (msg instanceof BytesMessage) {
-                    BytesMessage bytesMessage = (BytesMessage) msg;
+                } else if (msg instanceof BytesMessage bytesMessage) {
                     buffer.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
-                } else if (msg instanceof MapMessage) {
-                    MapMessage mapm = (MapMessage) msg;
+                } else if (msg instanceof MapMessage mapm) {
                     @SuppressWarnings("unchecked") // MapNames are Strings
                     Enumeration<String> enumb = mapm.getMapNames();
                     while (enumb.hasMoreElements()) {
@@ -487,8 +481,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         Object o = getProperty(JMS_PROPERTIES).getObjectValue();
         JMSProperties jmsProperties = null;
         // Backward compatibility with versions <= 2.10
-        if (o instanceof Arguments) {
-            jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments) o);
+        if (o instanceof Arguments arguments) {
+            jmsProperties = Utils.convertArgumentsToJmsProperties(arguments);
         } else {
             jmsProperties = (JMSProperties) o;
         }

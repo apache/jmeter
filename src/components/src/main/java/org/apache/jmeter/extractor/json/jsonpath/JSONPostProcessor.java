@@ -70,7 +70,7 @@ public class JSONPostProcessor
         List<String> jsonResponses = extractJsonResponse(context, vars);
         String[] refNames = getRefNames().split(SEPARATOR);
         String[] jsonPathExpressions = getJsonPathExpressions().split(SEPARATOR);
-        String[] defaultValues = getDefaultValues().split(SEPARATOR);
+        String[] defaultValues = getDefaultValues().split(SEPARATOR, -1);
         int[] matchNumbers = getMatchNumbersAsInt(defaultValues.length);
 
         validateSameLengthOfArguments(refNames, jsonPathExpressions, defaultValues);
@@ -157,12 +157,12 @@ public class JSONPostProcessor
         if (matchNumber < 0) {
             // Extract all
             int index = 1;
-            StringBuilder concat =
+            var concat =
                     new StringBuilder(getComputeConcatenation()
                             ? extractedValues.size() * 20
                             : 1);
             for (Object extractedObject : extractedValues) {
-                String extractedString = Objects.toString(extractedObject, defaultValue);
+                var extractedString = Objects.toString(extractedObject, defaultValue);
                 vars.put(currentRefName + "_" + index,
                         extractedString); //$NON-NLS-1$
                 if (getComputeConcatenation()) {

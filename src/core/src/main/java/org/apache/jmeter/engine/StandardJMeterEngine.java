@@ -185,13 +185,13 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     @Override
     public void configure(HashTree testTree) {
         // Is testplan serialised?
-        SearchByClass<TestPlan> testPlan = new SearchByClass<>(TestPlan.class);
+        var testPlan = new SearchByClass<>(TestPlan.class);
         testTree.traverse(testPlan);
-        Object[] plan = testPlan.getSearchResults().toArray();
+        var plan = testPlan.getSearchResults().toArray();
         if (plan.length == 0) {
             throw new IllegalStateException("Could not find the TestPlan class!");
         }
-        TestPlan tp = (TestPlan) plan[0];
+        var tp = (TestPlan) plan[0];
         serialized = tp.isSerialized();
         tearDownOnShutdown = tp.isTearDownOnShutdown();
         active = true;
@@ -409,7 +409,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
         JMeterContextService.startTest();
         try {
-            PreCompiler compiler = new PreCompiler();
+            var compiler = new PreCompiler();
             test.traverse(compiler);
         } catch (RuntimeException e) {
             log.error("Error occurred compiling the tree:",e);
@@ -420,7 +420,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
          * Notification of test listeners needs to happen after function
          * replacement, but before setting RunningVersion to true.
          */
-        SearchByClass<TestStateListener> testListeners = new SearchByClass<>(TestStateListener.class); // TL - S&E
+        var testListeners = new SearchByClass<>(TestStateListener.class); // TL - S&E
         test.traverse(testListeners);
 
         // Merge in any additional test listeners
@@ -431,12 +431,12 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         test.traverse(new TurnElementsOn());
         notifyTestListenersOfStart(testListeners);
 
-        List<?> testLevelElements = new ArrayList<>(test.list(test.getArray()[0]));
+        var testLevelElements = new ArrayList<>(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
 
-        SearchByClass<SetupThreadGroup> setupSearcher = new SearchByClass<>(SetupThreadGroup.class);
-        SearchByClass<AbstractThreadGroup> searcher = new SearchByClass<>(AbstractThreadGroup.class);
-        SearchByClass<PostThreadGroup> postSearcher = new SearchByClass<>(PostThreadGroup.class);
+        var setupSearcher = new SearchByClass<>(SetupThreadGroup.class);
+        var searcher = new SearchByClass<>(AbstractThreadGroup.class);
+        var postSearcher = new SearchByClass<>(PostThreadGroup.class);
 
         test.traverse(setupSearcher);
         test.traverse(searcher);
@@ -446,11 +446,11 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         // for each thread group, generate threads
         // hand each thread the sampler controller
         // and the listeners, and the timer
-        Iterator<SetupThreadGroup> setupIter = setupSearcher.getSearchResults().iterator();
-        Iterator<AbstractThreadGroup> iter = searcher.getSearchResults().iterator();
-        Iterator<PostThreadGroup> postIter = postSearcher.getSearchResults().iterator();
+        var setupIter = setupSearcher.getSearchResults().iterator();
+        var iter = searcher.getSearchResults().iterator();
+        var postIter = postSearcher.getSearchResults().iterator();
 
-        ListenerNotifier notifier = new ListenerNotifier();
+        var notifier = new ListenerNotifier();
 
         int groupCount = 0;
         JMeterContextService.clearTotalThreads();
@@ -458,9 +458,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         if (setupIter.hasNext()) {
             log.info("Starting setUp thread groups");
             while (running && setupIter.hasNext()) {//for each setup thread group
-                AbstractThreadGroup group = setupIter.next();
+                var group = setupIter.next();
                 groupCount++;
-                String groupName = group.getName();
+                var groupName = group.getName();
                 log.info("Starting setUp ThreadGroup: {} : {} ", groupCount, groupName);
                 startThreadGroup(group, groupCount, setupSearcher, testLevelElements, notifier);
                 if (serialized && setupIter.hasNext()) {
@@ -489,7 +489,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         JMeterContextService.getContext().setSamplingStarted(true);
         boolean mainGroups = running; // still running at this point, i.e. setUp was not cancelled
         while (running && iter.hasNext()) {// for each thread group
-            AbstractThreadGroup group = iter.next();
+            var group = iter.next();
             //ignore Setup and Post here.  We could have filtered the searcher. but then
             //future Thread Group objects wouldn't execute.
             if (group instanceof SetupThreadGroup ||
@@ -497,7 +497,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 continue;
             }
             groupCount++;
-            String groupName = group.getName();
+            var groupName = group.getName();
             log.info("Starting ThreadGroup: {} : {}", groupCount, groupName);
             startThreadGroup(group, groupCount, searcher, testLevelElements, notifier);
             if (serialized && iter.hasNext()) {
@@ -527,9 +527,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 running = tearDownOnShutdown; // re-enable for tearDown if necessary
             }
             while (running && postIter.hasNext()) {//for each setup thread group
-                AbstractThreadGroup group = postIter.next();
+                var group = postIter.next();
                 groupCount++;
-                String groupName = group.getName();
+                var groupName = group.getName();
                 log.info("Starting tearDown ThreadGroup: {} : {}", groupCount, groupName);
                 startThreadGroup(group, groupCount, postSearcher, testLevelElements, notifier);
                 if (serialized && postIter.hasNext()) {
@@ -557,7 +557,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             boolean onErrorStopTestNow = group.getOnErrorStopTestNow();
             boolean onErrorStopThread = group.getOnErrorStopThread();
             boolean onErrorStartNextLoop = group.getOnErrorStartNextLoop();
-            String groupName = group.getName();
+            var groupName = group.getName();
             log.info("Starting {} threads for group {}.", numThreads, groupName);
             if (onErrorStopTest) {
                 log.info("Test will stop on error");
@@ -570,15 +570,15 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             } else {
                 log.info("Thread will continue on error");
             }
-            ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
+            var threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
             threadGroupTree.add(group, testLevelElements);
 
             groups.add(group);
+            group.setStartTime(System.currentTimeMillis());
             group.start(groupCount, notifier, threadGroupTree, this);
         } catch (JMeterStopTestException ex) { // NOSONAR Reported by log
             JMeterUtils.reportErrorToUser("Error occurred starting thread group :" + group.getName()+ ", error message:"+ex.getMessage()
                 +", \r\nsee log file for more details", ex);
-            return; // no point continuing
         }
     }
 
