@@ -31,6 +31,7 @@ import org.apache.jmeter.protocol.http.control.Header
 import org.apache.jmeter.protocol.http.util.HTTPFileArg
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
 import org.apache.jmeter.treebuilder.TreeBuilder
+import org.apache.jmeter.treebuilder.oneRequest
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
@@ -48,7 +49,7 @@ class HttpSamplerTest : JMeterTestCase() {
     lateinit var dir: Path
 
     fun TreeBuilder.httpPost(body: HTTPSamplerProxy.() -> Unit) {
-        org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
+        HTTPSamplerProxy::class {
             name = "Upload file"
             method = "POST"
             domain = "localhost"

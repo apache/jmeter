@@ -15,26 +15,20 @@
  * limitations under the License.
  */
 
-package org.apache.jmeter.protocol.http.sampler
+package org.apache.jmeter.treebuilder
 
-import com.github.tomakehurst.wiremock.client.WireMock.equalTo
-import com.github.tomakehurst.wiremock.client.WireMock.matching
-import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
+import org.apache.jmeter.control.LoopController
+import org.apache.jmeter.threads.ThreadGroup
 
-fun RequestPatternBuilder.withRequestBody(
-    httpImplementation: String,
-    body: String
-) = apply {
-    // normalize line endings to CRLF
-    val normalizedBody = body.replace("\r\n", "\n").replace("\n", "\r\n")
-    withRequestBody(
-        if (httpImplementation == "Java") {
-            equalTo(normalizedBody)
-        } else {
-            matching(
-                normalizedBody
-                    .replace(PostWriter.BOUNDARY, "[^ \\n\\r]{1,69}?")
-            )
-        }
-    )
+fun TreeBuilder.oneRequest(body: ThreadGroup.() -> Unit) {
+    ThreadGroup::class {
+        numThreads = 1
+        rampUp = 0
+        setSamplerController(
+            LoopController().apply {
+                loops = 1
+            }
+        )
+        body()
+    }
 }

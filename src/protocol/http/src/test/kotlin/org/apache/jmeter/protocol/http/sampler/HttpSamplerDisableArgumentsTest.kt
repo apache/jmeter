@@ -29,8 +29,10 @@ import com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
+import org.apache.jmeter.config.ConfigTestElement
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
+import org.apache.jmeter.treebuilder.oneRequest
 import org.apache.jmeter.treebuilder.TreeBuilder
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -39,33 +41,12 @@ import kotlin.time.Duration.Companion.seconds
 @WireMockTest
 class HttpSamplerDisableArgumentsTest : JMeterTestCase() {
 
-    fun TreeBuilder.httpGet(body: HTTPSamplerProxy.() -> Unit) {
-        org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
+    fun TreeBuilder.httpRequest(body: HTTPSamplerProxy.() -> Unit) {
+        HTTPSamplerProxy::class {
             name = "Test disabled params"
             method = "GET"
             domain = "localhost"
             path = "/test"
-            body()
-        }
-    }
-
-    fun TreeBuilder.httpPut(body: HTTPSamplerProxy.() -> Unit) {
-        org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
-            name = "Test disabled params"
-            method = "PUT"
-            domain = "localhost"
-            path = "/test"
-            body()
-        }
-    }
-
-    fun TreeBuilder.httpPost(body: HTTPSamplerProxy.() -> Unit) {
-        org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy::class {
-            name = "Test disabled params"
-            method = "POST"
-            domain = "localhost"
-            path = "/test"
-            doMultipart = true
             body()
         }
     }
@@ -79,7 +60,8 @@ class HttpSamplerDisableArgumentsTest : JMeterTestCase() {
 
         executePlanAndCollectEvents(10.seconds) {
             oneRequest {
-                httpGet {
+                httpRequest {
+                    method = "GET"
                     implementation = httpImplementation
                     port = server.httpPort
                     addArgument("param1", "value1")
@@ -104,7 +86,8 @@ class HttpSamplerDisableArgumentsTest : JMeterTestCase() {
 
         executePlanAndCollectEvents(1000.seconds) {
             oneRequest {
-                httpPut {
+                httpRequest {
+                    method = "PUT"
                     implementation = httpImplementation
                     port = server.httpPort
                     postBodyRaw = true
@@ -132,15 +115,18 @@ class HttpSamplerDisableArgumentsTest : JMeterTestCase() {
 
         executePlanAndCollectEvents(10.seconds) {
             oneRequest {
-                httpPost {
-                    org.apache.jmeter.config.ConfigTestElement::class {
+                httpRequest {
+                    ConfigTestElement::class {
                         addArgument("param0", "value0")
                         arguments.getArgument(0).isEnabled = false
+                        addArgument("param4", "value4")
                         props {
                             // guiClass is needed for org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.applies
                             it[guiClass] = "org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui"
                         }
                     }
+                    method = "POST"
+                    doMultipart = true
                     implementation = httpImplementation
                     port = server.httpPort
                     addArgument("param1", "value1")
