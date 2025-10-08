@@ -35,7 +35,7 @@ checkstyle {
     // TOOD: move to /config
     val configDir = File(rootDir, "config/checkstyle")
 
-    toolVersion = "10.26.1"
+    toolVersion = "11.1.0"
     configProperties = mapOf(
         "cache_file" to layout.buildDirectory.dir("checkstyle/cacheFile").get().asFile.relativeTo(configDir)
     )
