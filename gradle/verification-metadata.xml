@@ -196,6 +196,7 @@
             <trusting group="com.google.guava"/>
             <trusting group="com.google.j2objc"/>
          </trusted-key>
+         <trusted-key id="C3259D20DAEC4ACE6D57CC83340B090F727518D8" group="com.google.j2objc" name="j2objc-annotations" version="3.1"/>
          <trusted-key id="C62C0CE2E5C346B2D9BF2D8BB2CA0DFE9ED21C6E" group="io.burt"/>
          <trusted-key id="C758F9CC982AC877E7B295DD6E97418B04B11DCB" group="org.apache.xbean"/>
          <trusted-key id="C7BE5BCC9FEC15518CFDA882B0F3710FA64900E7">
