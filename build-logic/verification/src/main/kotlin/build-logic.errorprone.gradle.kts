@@ -47,6 +47,7 @@ if (buildParameters.enableErrorprone) {
                 disableWarningsInGeneratedCode.set(true)
                 enable(
                     "MissingDefault",
+                    "MissingBraces",
                     "PackageLocation",
                     "RedundantOverride",
                     "StronglyTypeTime",
