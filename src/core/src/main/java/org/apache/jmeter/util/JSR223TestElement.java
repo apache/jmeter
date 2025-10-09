@@ -355,8 +355,9 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     @Override
     public void testEnded(String host) {
-        if (COMPILED_SCRIPT_CACHE.estimatedSize() > 0)
+        if (COMPILED_SCRIPT_CACHE.estimatedSize() > 0) {
             logger.info("Compiled cache size: {}, stats: {}", COMPILED_SCRIPT_CACHE.estimatedSize(), COMPILED_SCRIPT_CACHE.stats());
+        }
         COMPILED_SCRIPT_CACHE.invalidateAll();
         scriptMd5 = null;
     }
