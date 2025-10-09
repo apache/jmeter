@@ -87,7 +87,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private static final Logger LOGGER = LoggerFactory.getLogger(SamplerResultTab.class);
     // N.B. these are not multi-threaded, so don't make it static
     private final DateTimeFormatter dateFormat = DateTimeFormatter
-            .ofPattern("yyyy-MM-dd HH:mm:ss z")  // ISO format $NON-NLS-1$
+            .ofPattern("yyyy-MM-dd HH:mm:ss.SSS O")  // ISO format $NON-NLS-1$
             .withZone(ZoneId.systemDefault());
 
     private static final String NL = "\n"; // $NON-NLS-1$
