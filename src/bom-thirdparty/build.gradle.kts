@@ -64,7 +64,7 @@ dependencies {
         api("com.thoughtworks.xstream:xstream:1.4.21")
         api("commons-codec:commons-codec:1.16.0")
         api("commons-collections:commons-collections:3.2.2")
-        api("commons-io:commons-io:2.15.1")
+        api("commons-io:commons-io:2.20.0")
         api("commons-lang:commons-lang:2.6")
         api("commons-logging:commons-logging:1.3.5")
         api("commons-net:commons-net:3.10.0")
