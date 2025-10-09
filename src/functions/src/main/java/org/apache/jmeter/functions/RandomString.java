@@ -91,9 +91,9 @@ public class RandomString extends AbstractFunction {
 
         String myValue;
         if (StringUtilities.isEmpty(charsToUse)) {
-            myValue = RandomStringUtils.random(length);
+            myValue = RandomStringUtils.insecure().next(length);
         } else {
-            myValue = RandomStringUtils.random(length, charsToUse);
+            myValue = RandomStringUtils.insecure().next(length, charsToUse);
         }
 
         if (myName.length() > 0) {
