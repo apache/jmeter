@@ -20,7 +20,6 @@ package org.apache.jmeter.config;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoConfigMerge;
@@ -30,6 +29,7 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,9 +87,18 @@ public class RandomVariableConfig extends ConfigTestElement
      */
     private void init(){
         final String minAsString = getMinimumValue();
-        minimum = NumberUtils.toLong(minAsString);
+        try {
+            minimum = Long.parseLong(minAsString);
+        } catch (NumberFormatException e) {
+            log.warn("Unable to parse minimum value as long: {}", minAsString, e);
+        }
         final String maxAsString = getMaximumValue();
-        long maximum = NumberUtils.toLong(maxAsString);
+        long maximum = 0;
+        try {
+            maximum = Long.parseLong(maxAsString);
+        } catch (NumberFormatException e) {
+            log.warn("Unable to parse maximum value as long: {}", maxAsString, e);
+        }
         long rangeL=maximum-minimum+1; // This can overflow
         if (minimum > maximum){
             log.error("maximum({}) must be >= minimum({})", maxAsString, minAsString);
@@ -130,7 +139,7 @@ public class RandomVariableConfig extends ConfigTestElement
     // Use format to create number; if it fails, use the default
     private String formatNumber(long value){
         String format = getOutputFormat();
-        if (format != null && format.length() > 0) {
+        if (StringUtilities.isNotEmpty(format)) {
             try {
                 DecimalFormat myFormatter = new DecimalFormat(format);
                 return myFormatter.format(value);

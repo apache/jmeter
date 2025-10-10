@@ -28,6 +28,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +66,7 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
         }
 
         Map<String, String> paramMap = buildParamsMap();
-        if(paramMap == null || paramMap.isEmpty()){
+        if (paramMap == null || paramMap.isEmpty()){
             log.info(
                     "RegExUserParameters element: {} => Referenced RegExp was not found, no parameter will be changed",
                     getName());

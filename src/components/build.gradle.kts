@@ -67,7 +67,6 @@ dependencies {
     implementation("org.apache.httpcomponents:httpasyncclient")
     implementation("org.apache.httpcomponents:httpcore-nio")
     implementation("org.jsoup:jsoup")
-    implementation("org.apache.commons:commons-lang3")
     implementation("net.sf.jtidy:jtidy")
     implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3")

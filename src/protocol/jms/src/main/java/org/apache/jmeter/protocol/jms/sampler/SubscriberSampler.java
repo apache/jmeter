@@ -29,7 +29,6 @@ import javax.jms.TextMessage;
 import javax.naming.NamingException;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
 import org.apache.jmeter.protocol.jms.client.ReceiveSubscriber;
@@ -39,6 +38,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -307,7 +307,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     }
                 }
                 Utils.messageProperties(propBuffer, msg);
-                if(!isLast && !StringUtils.isEmpty(separator)) {
+                if(!isLast && StringUtilities.isNotEmpty(separator)) {
                     propBuffer.append(separator);
                     buffer.append(separator);
                 }

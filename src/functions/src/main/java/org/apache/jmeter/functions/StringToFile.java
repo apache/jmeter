@@ -33,11 +33,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +96,7 @@ public class StringToFile extends AbstractFunction {
         Charset charset = StandardCharsets.UTF_8;
         if (values.length == 4) {
             String charsetParamValue = ((CompoundVariable) values[3]).execute();
-            if (StringUtils.isNotEmpty(charsetParamValue)) {
+            if (StringUtilities.isNotEmpty(charsetParamValue)) {
                 charset = Charset.forName(charsetParamValue);
             }
         }

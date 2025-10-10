@@ -32,10 +32,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTest;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jorphan.util.StringUtilities;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -110,7 +110,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCase {
                             components.item(j);
                     funcTitles.put(comp.getAttribute("name"), Boolean.FALSE);
                     String tag = comp.getAttribute("tag");
-                    if (!StringUtils.isEmpty(tag)){
+                    if (StringUtilities.isNotEmpty(tag)){
                         funcTitles.put(tag, Boolean.FALSE);
                     }
                 }

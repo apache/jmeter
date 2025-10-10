@@ -62,8 +62,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.control.gui.TreeNodeWrapper;
@@ -92,6 +90,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -346,8 +346,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setContentTypeInclude(contentTypeInclude.getText());
             model.setContentTypeExclude(contentTypeExclude.getText());
             httpSampleNameFormat.setEnabled(httpSampleNamingMode.getSelectedIndex() == 3);
-            if (StringUtils.isNotBlank(httpSampleNameFormat.getText())) {
-                model.setHttpSampleNameFormat(httpSampleNameFormat.getText());
+            String httpSampleNameFormat = this.httpSampleNameFormat.getText();
+            if (StringUtilities.isNotBlank(httpSampleNameFormat)) {
+                model.setHttpSampleNameFormat(httpSampleNameFormat);
             }
             TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
             if (nw == null) {
@@ -699,14 +700,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     void setSetCounters() {
-        if ((counterValue.getText().length() > 0) && NumberUtils.isParsable(counterValue.getText())) {
-            Proxy.setCounter(Integer.parseInt(counterValue.getText()));
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    JMeterUtils.getResString("proxy_settings_counter_error_digits"), // $NON-NLS-1$
-                    JMeterUtils.getResString("proxy_settings_counter_error_invalid_data"), // $NON-NLS-1$
-                    JOptionPane.WARNING_MESSAGE);
+        String counterValue = this.counterValue.getText();
+        try {
+            Proxy.setCounter(Integer.parseInt(counterValue));
+            return;
+        } catch (NumberFormatException ignore) {
+            // ignore
         }
+        JOptionPane.showMessageDialog(this,
+                JMeterUtils.getResString("proxy_settings_counter_error_digits"), // $NON-NLS-1$
+                JMeterUtils.getResString("proxy_settings_counter_error_invalid_data"), // $NON-NLS-1$
+                JOptionPane.WARNING_MESSAGE);
     }
     /** {@inheritDoc} */
     @Override

@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testbeans.TestBean;
@@ -36,7 +35,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,7 +114,7 @@ public class DataSourceElement extends AbstractTestElement
         TestBeanHelper.prepare(this);
         JMeterVariables variables = getThreadContext().getVariables();
         String poolName = getDataSource();
-        if (JOrphanUtils.isBlank(poolName)) {
+        if (StringUtilities.isBlank(poolName)) {
             throw new IllegalArgumentException("Name for DataSource must not be empty in " + getName());
         } else if (variables.getObject(poolName) != null) {
             log.error("JDBC data source already defined for: {}", poolName);
@@ -220,16 +219,16 @@ public class DataSourceElement extends AbstractTestElement
         dataSource.setMinIdle(0);
         dataSource.setInitialSize(poolSize);
         dataSource.setAutoCommitOnReturn(false);
-        if(StringUtils.isNotEmpty(initQuery)) {
+        if (StringUtilities.isNotEmpty(initQuery)) {
             String[] sqls = initQuery.split("\n");
             dataSource.setConnectionInitSqls(Arrays.asList(sqls));
         } else {
             dataSource.setConnectionInitSqls(Collections.emptyList());
         }
-        if(StringUtils.isNotEmpty(connectionProperties)) {
+        if (StringUtilities.isNotEmpty(connectionProperties)) {
             dataSource.setConnectionProperties(connectionProperties);
         }
-        if (StringUtils.isNotEmpty(poolPreparedStatements)) {
+        if (StringUtilities.isNotEmpty(poolPreparedStatements)) {
             int maxPreparedStatements = Integer.parseInt(poolPreparedStatements);
             if (maxPreparedStatements < 0) {
                 dataSource.setPoolPreparedStatements(false);
@@ -263,7 +262,7 @@ public class DataSourceElement extends AbstractTestElement
         if(isKeepAlive()) {
             dataSource.setTestWhileIdle(true);
             String validationQuery = getCheckQuery();
-            if (StringUtils.isBlank(validationQuery)) {
+            if (StringUtilities.isBlank(validationQuery)) {
                 dataSource.setValidationQuery(null);
             } else {
                 dataSource.setValidationQuery(validationQuery);

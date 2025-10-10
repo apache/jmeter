@@ -34,12 +34,12 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.extractor.BoundaryExtractor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.StringUtilities;
 
 import com.google.auto.service.AutoService;
 
@@ -73,7 +73,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         String boundaryExtractorDataFieldText = boundaryExtractorDataField.getText();
-        if (StringUtils.isNotEmpty(boundaryExtractorDataFieldText) && BOUNDARY_EXTRACTOR_TESTER_COMMAND.equals(command)) {
+        if (StringUtilities.isNotEmpty(boundaryExtractorDataFieldText) && BOUNDARY_EXTRACTOR_TESTER_COMMAND.equals(command)) {
             executeAndShowBoundaryExtractorTester(boundaryExtractorDataFieldText);
         }
     }
@@ -83,7 +83,7 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
      * @param textToParse
      */
     private void executeAndShowBoundaryExtractorTester(String textToParse) {
-        if (textToParse != null && textToParse.length() > 0
+        if (StringUtilities.isNotEmpty(textToParse)
                 && this.boundaryExtractorFieldLeft.getText().length() > 0
                 && this.boundaryExtractorFieldRight.getText().length() > 0) {
             this.boundaryExtractorResultField.setText(process(textToParse));

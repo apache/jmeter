@@ -35,7 +35,6 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.TeeOutputStream;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -45,6 +44,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -273,7 +273,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             } else {
                 res.setResponseCode("501");
                 String replyString = ftp.getReplyString();
-                if(StringUtils.isEmpty(replyString)) {
+                if (StringUtilities.isEmpty(replyString)) {
                     res.setResponseMessage("Could not connect");
                 }
                 else {

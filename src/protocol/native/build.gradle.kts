@@ -22,9 +22,5 @@ plugins {
 dependencies {
     api(projects.src.core)
 
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
-
     testImplementation(testFixtures(projects.src.core))
 }

@@ -35,6 +35,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1003,7 +1004,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return the value of the dataEncoding or the provided default
      */
     protected String getDataEncodingWithDefault(String defaultEncoding) {
-        if (dataEncoding != null && dataEncoding.length() > 0) {
+        if (StringUtilities.isNotEmpty(dataEncoding)) {
             return dataEncoding;
         }
         return defaultEncoding;

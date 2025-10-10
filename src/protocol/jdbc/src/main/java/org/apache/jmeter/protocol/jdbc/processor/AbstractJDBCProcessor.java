@@ -23,7 +23,7 @@ import java.sql.SQLException;
 
 import org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement;
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public abstract class AbstractJDBCProcessor extends AbstractJDBCTestElement {
      * Calls the JDBC code to be executed.
      */
     protected void process() {
-        if (JOrphanUtils.isBlank(getDataSource())) {
+        if (StringUtilities.isBlank(getDataSource())) {
             throw new IllegalArgumentException("Name for DataSource must not be empty in " + getName());
         }
         try (Connection conn = DataSourceElement.getConnection(getDataSource())){

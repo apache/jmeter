@@ -27,7 +27,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -41,6 +40,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,8 +116,9 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         SystemSampler systemSampler = (SystemSampler)sampler;
         systemSampler.setCheckReturnCode(checkReturnCode.isSelected());
         if(checkReturnCode.isSelected()) {
-            if(!StringUtils.isEmpty(desiredReturnCode.getText())) {
-                systemSampler.setExpectedReturnCode(Integer.parseInt(desiredReturnCode.getText()));
+            String desiredReturnCode = this.desiredReturnCode.getText();
+            if (StringUtilities.isNotEmpty(desiredReturnCode)) {
+                systemSampler.setExpectedReturnCode(Integer.parseInt(desiredReturnCode));
             } else {
                 systemSampler.setExpectedReturnCode(SystemSampler.DEFAULT_RETURN_CODE);
             }
@@ -131,11 +132,12 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         systemSampler.setStdin(stdin.getFilename());
         systemSampler.setStdout(stdout.getFilename());
         systemSampler.setStderr(stderr.getFilename());
-        if(!StringUtils.isEmpty(timeout.getText())) {
+        String timeout = this.timeout.getText();
+        if (StringUtilities.isNotEmpty(timeout)) {
             try {
-                systemSampler.setTimout(Long.parseLong(timeout.getText()));
+                systemSampler.setTimout(Long.parseLong(timeout));
             } catch (NumberFormatException e) {
-                log.error("Error parsing timeout field value:"+timeout.getText(), e);
+                log.error("Error parsing timeout field value:"+ timeout, e);
             }
         }
     }

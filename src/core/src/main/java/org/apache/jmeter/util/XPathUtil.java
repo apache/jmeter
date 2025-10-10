@@ -46,9 +46,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.xml.utils.PrefixResolver;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XObject;
@@ -81,9 +80,14 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
  */
 public class XPathUtil {
 
+    /**
+     * Simple record to hold a pair of values for cache keys.
+     */
+    public record XPathCacheKey(String query, String namespaces) {}
+
     private static final Logger log = LoggerFactory.getLogger(XPathUtil.class);
 
-    private static final LoadingCache<ImmutablePair<String, String>, XPathExecutable> XPATH_CACHE;
+    private static final LoadingCache<XPathCacheKey, XPathExecutable> XPATH_CACHE;
     static {
         final int cacheSize = JMeterUtils.getPropDefault(
                 "xpath2query.parser.cache.size", 400);
@@ -419,11 +423,11 @@ public class XPathUtil {
             throws SaxonApiException, FactoryConfigurationError {
 
         // generating the cache key
-        final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
+        final XPathCacheKey key = new XPathCacheKey(xPathQuery, namespaces);
 
         //check the cache
         XPathExecutable xPathExecutable;
-        if(StringUtils.isNotEmpty(xPathQuery)) {
+        if (StringUtilities.isNotEmpty(xPathQuery)) {
             xPathExecutable = XPATH_CACHE.get(key);
         }
         else {
@@ -522,7 +526,7 @@ public class XPathUtil {
             throws XMLStreamException, FactoryConfigurationError{
         List<String[]> res= new ArrayList<>();
         XMLStreamReader reader;
-        if(StringUtils.isNotEmpty(xml)) {
+        if (StringUtilities.isNotEmpty(xml)) {
             reader = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
             while (reader.hasNext()) {
                 int event = reader.next();
@@ -674,10 +678,10 @@ public class XPathUtil {
    public static void computeAssertionResultUsingSaxon(AssertionResult result, String xmlFile, String xPathQuery,
            String namespaces, Boolean isNegated) throws SaxonApiException, FactoryConfigurationError {
        // generating the cache key
-       final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
+       final XPathCacheKey key = new XPathCacheKey(xPathQuery, namespaces);
        // check the cache
        XPathExecutable xPathExecutable;
-       if (StringUtils.isNotEmpty(xPathQuery)) {
+       if (StringUtilities.isNotEmpty(xPathQuery)) {
            xPathExecutable = XPATH_CACHE.get(key);
        } else {
            log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));

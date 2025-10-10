@@ -51,6 +51,7 @@ import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.util.JMeterError;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -438,7 +439,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     private static PrintWriter getFileWriter(final String pFilename, SampleSaveConfiguration saveConfig)
             throws IOException {
-        if (pFilename == null || pFilename.length() == 0) {
+        if (StringUtilities.isEmpty(pFilename)) {
             return null;
         }
         if(log.isDebugEnabled()) {

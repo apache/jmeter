@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ErrorHandler;
@@ -64,7 +65,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 
         String xsdFileName = getXsdFileName();
         log.debug("xmlString: {}, xsdFileName: {}", resultData, xsdFileName);
-        if (xsdFileName == null || xsdFileName.length() == 0) {
+        if (StringUtilities.isEmpty(xsdFileName)) {
             result.setResultForFailure(FILE_NAME_IS_REQUIRED);
         } else {
             setSchemaResult(result, resultData, xsdFileName);

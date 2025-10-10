@@ -30,7 +30,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -109,7 +108,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
 
     ComboStringEditor(String []pTags, boolean noEdit, boolean noUndefined, ResourceBundle rb) {
 
-        tags = pTags == null ? ArrayUtils.EMPTY_STRING_ARRAY : pTags.clone();
+        tags = pTags == null ? new String[0] : pTags.clone();
 
         model = new DefaultComboBoxModel<>();
 

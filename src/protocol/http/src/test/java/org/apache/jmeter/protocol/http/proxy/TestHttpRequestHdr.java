@@ -37,6 +37,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.apache.jorphan.util.StringUtilities;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -686,7 +687,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
             boolean expectedEncoded) throws IOException {
         assertEquals(expectedName, arg.getName());
         assertEquals(expectedValue, arg.getValue());
-        if(contentEncoding != null && contentEncoding.length() > 0) {
+        if (StringUtilities.isNotEmpty(contentEncoding)) {
             assertEquals(expectedEncodedValue, arg.getEncodedValue(contentEncoding));
         }
         else {
@@ -697,7 +698,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     }
 
     private int getBodyLength(String postBody, String contentEncoding) throws IOException {
-        if(contentEncoding != null && !contentEncoding.isEmpty()) {
+        if (StringUtilities.isNotEmpty(contentEncoding)) {
             return postBody.getBytes(contentEncoding).length;
         }
         else {

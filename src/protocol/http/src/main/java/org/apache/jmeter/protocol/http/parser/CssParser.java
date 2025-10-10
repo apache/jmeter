@@ -22,10 +22,9 @@ import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.lang3.stream.Streams;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +41,26 @@ public class CssParser implements LinkExtractorParser {
     private static final URLCollection EMPTY_URL_COLLECTION = new URLCollection(Collections.emptyList());
     private static final Logger LOG = LoggerFactory.getLogger(CssParser.class);
 
-    private static final LoadingCache<Triple<String, URL, Charset>, URLCollection> CSS_URL_CACHE;
+    private static final LoadingCache<CssCacheKey, URLCollection> CSS_URL_CACHE;
+
+    record CssCacheKey(URL baseUrl, String cssContents, Charset charset) {
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            CssCacheKey that = (CssCacheKey) o;
+            return Objects.equals(baseUrl, that.baseUrl) && Objects.equals(cssContents, that.cssContents);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = Objects.hashCode(baseUrl);
+            result = 31 * result + Objects.hashCode(cssContents);
+            return result;
+        }
+    }
+
     static {
         final int cacheSize = JMeterUtils.getPropDefault(
                 "css.parser.cache.size", 400);
@@ -60,27 +78,19 @@ public class CssParser implements LinkExtractorParser {
             throws LinkExtractorParseException {
         try {
             final String cssContent = new String(data, encoding);
-            final Charset charset = Charset.forName(encoding);
-            final Triple<String, URL, Charset> triple = ImmutableTriple.of(
-                    cssContent, baseUrl, charset);
-            final URLCollection urlCollection = orDefault(CSS_URL_CACHE.get(triple), EMPTY_URL_COLLECTION);
+            final CssCacheKey key = new CssCacheKey(baseUrl, cssContent, Charset.forName(encoding));
+            final URLCollection urlCollection =
+                    Objects.requireNonNullElse(CSS_URL_CACHE.get(key), EMPTY_URL_COLLECTION);
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Parsed: {}, got: {}", baseUrl, StringUtils.join(urlCollection, ","));
+                LOG.debug("Parsed: {}, got: {}", baseUrl,
+                        Streams.of(urlCollection).map(String::valueOf).collect(Collectors.joining(",")));
             }
 
             return urlCollection.iterator();
         } catch (Exception e) {
             throw new LinkExtractorParseException(e);
         }
-    }
-
-    private static URLCollection orDefault(URLCollection urlCollection,
-            URLCollection defaultValue) {
-        if (urlCollection == null) {
-            return Objects.requireNonNull(defaultValue);
-        }
-        return urlCollection;
     }
 
     @Override

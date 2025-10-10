@@ -23,11 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,7 +131,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
      * @return integer value of the given transaction isolation mode
      */
     public static int getTransactionIsolationMode(String tag) {
-        if (!StringUtils.isEmpty(tag)) {
+        if (StringUtilities.isNotEmpty(tag)) {
             Integer isolationMode = TRANSACTION_ISOLATION_MAP.get(tag);
             if (isolationMode == null) {
                 try {

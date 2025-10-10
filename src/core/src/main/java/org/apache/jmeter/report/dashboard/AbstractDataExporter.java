@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.report.dashboard;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.processor.MapResultData;
@@ -73,7 +72,7 @@ public abstract class AbstractDataExporter implements DataExporter {
      * @return the ResultData matching the data name
      */
     protected static ResultData findData(String data, ResultData root) {
-        String[] pathItems = StringUtils.split(data, '.');
+        String[] pathItems = data.split("\\.");
         if (pathItems == null || !(root instanceof MapResultData)) {
             return null;
         }

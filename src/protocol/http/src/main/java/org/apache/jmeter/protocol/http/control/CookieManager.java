@@ -42,6 +42,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -222,7 +223,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
             final CollectionProperty cookies = getCookies();
             while ((line = reader.readLine()) != null) {
                 try {
-                    if (line.startsWith("#") || JOrphanUtils.isBlank(line)) {//$NON-NLS-1$
+                    if (line.startsWith("#") || StringUtilities.isBlank(line)) {//$NON-NLS-1$
                         continue;
                     }
                     String[] st = JOrphanUtils.split(line, TAB, false);

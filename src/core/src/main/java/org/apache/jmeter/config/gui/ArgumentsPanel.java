@@ -42,7 +42,6 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.TestElementMetadata;
@@ -53,6 +52,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These
@@ -300,7 +300,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             Iterator<Argument> modelData = (Iterator<Argument>) tableModel.iterator();
             while (modelData.hasNext()) {
                 Argument arg = modelData.next();
-                if(StringUtils.isEmpty(arg.getName()) && StringUtils.isEmpty(arg.getValue())) {
+                if (StringUtilities.isEmpty(arg.getName()) && StringUtilities.isEmpty(arg.getValue())) {
                     continue;
                 }
                 arg.setMetaData("="); // $NON-NLS-1$

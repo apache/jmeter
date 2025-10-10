@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 
 import jodd.lagarto.EmptyTagVisitor;
@@ -118,7 +118,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 } else if (tag.nameEquals(TAG_BASE)) {
                     CharSequence baseref = tag.getAttributeValue(ATT_HREF);
                     try {
-                        if (!StringUtils.isEmpty(baseref))// Bugzilla 30713
+                        if (StringUtilities.isNotEmpty(baseref))// Bugzilla 30713
                         {
                             baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref.toString());
                         }
@@ -131,12 +131,12 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                     CharSequence codebase = tag.getAttributeValue(ATT_CODEBASE);
                     CharSequence archive = tag.getAttributeValue(ATT_ARCHIVE);
                     CharSequence code = tag.getAttributeValue(ATT_CODE);
-                    if (StringUtils.isNotBlank(codebase)) {
+                    if (StringUtilities.isNotBlank(codebase)) {
                         String result;
-                        if (StringUtils.isNotBlank(archive)) {
-                            result = codebase.toString() + "/" + archive;
+                        if (StringUtilities.isNotBlank(archive)) {
+                            result = codebase + "/" + archive;
                         } else {
-                            result = codebase.toString() + "/" + code;
+                            result = codebase + "/" + code;
                         }
                         urls.addURL(normalizeUrlValue(result), baseUrl.url);
                     } else {
@@ -176,7 +176,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 }
                 // Now look for URLs in the STYLE attribute
                 CharSequence styleTagStr = tag.getAttributeValue(ATT_STYLE);
-                if(!StringUtils.isEmpty(styleTagStr)) {
+                if (StringUtilities.isNotEmpty(styleTagStr)) {
                     HtmlParsingUtils.extractStyleURLs(baseUrl.url, urls, styleTagStr.toString());
                 }
                 break;

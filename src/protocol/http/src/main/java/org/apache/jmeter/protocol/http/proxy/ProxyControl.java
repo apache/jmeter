@@ -44,13 +44,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.assertions.gui.AssertionGui;
@@ -101,6 +101,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -807,7 +808,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
     // Package protected to allow test case access
     boolean filterUrl(HTTPSamplerBase sampler) {
         String domain = sampler.getDomain();
-        if (domain == null || domain.isEmpty()) {
+        if (StringUtilities.isEmpty(domain)) {
             return false;
         }
 
@@ -839,14 +840,14 @@ public class ProxyControl extends GenericController implements NonTestElement {
         String excludeExp = getContentTypeExclude();
 
         // If no expressions are specified, we let the sample pass
-        if ((includeExp == null || includeExp.isEmpty()) &&
-                (excludeExp == null || excludeExp.isEmpty())) {
+        if (StringUtilities.isEmpty(includeExp) &&
+                StringUtilities.isEmpty(excludeExp)) {
             return true;
         }
 
         // Check that we have a content type
         String sampleContentType = result.getContentType();
-        if (sampleContentType == null || sampleContentType.isEmpty()) {
+        if (StringUtilities.isEmpty(sampleContentType)) {
             if (log.isDebugEnabled()) {
                 log.debug("No Content-type found for : {}", result.getUrlAsString());
             }
@@ -881,7 +882,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
      * @return boolean true if Matching expression
      */
     private static boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
-        if (expression == null || expression.isEmpty()) {
+        if (StringUtilities.isEmpty(expression)) {
             return true;
         }
         if(log.isDebugEnabled()) {
@@ -1351,7 +1352,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             for (ConfigTestElement config : configurations) {
                 String configValue = config.getPropertyAsString(name);
 
-                if (configValue != null && !configValue.isEmpty()) {
+                if (StringUtilities.isNotEmpty(configValue)) {
                     if (configValue.equals(value)) {
                         sampler.setProperty(name, ""); // $NON-NLS-1$
                     }
@@ -1556,7 +1557,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 log.error("Could not find key with alias {}", CERT_ALIAS);
                 keyStore = null;
             } else {
-                caCert.checkValidity(new Date(System.currentTimeMillis() + DateUtils.MILLIS_PER_DAY));
+                caCert.checkValidity(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)));
             }
         } catch (Exception e) {
             keyStore = null;
@@ -1580,7 +1581,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                         keyStore = null; // no CA key - probably the wrong store type.
                         break; // cannot continue
                     } else {
-                        caCert.checkValidity(new Date(System.currentTimeMillis()+DateUtils.MILLIS_PER_DAY));
+                        caCert.checkValidity(new Date(System.currentTimeMillis()+TimeUnit.DAYS.toMillis(1)));
                         log.info("Valid alias found for {}", alias);
                     }
                 }
@@ -1671,7 +1672,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
             try {
                 keyStore = getKeyStore(storePassword.toCharArray());
                 X509Certificate caCert = (X509Certificate) keyStore.getCertificate(JMETER_SERVER_ALIAS);
-                caCert.checkValidity(new Date(System.currentTimeMillis() + DateUtils.MILLIS_PER_DAY));
+                caCert.checkValidity(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)));
             } catch (Exception e) { // store is faulty, we need to recreate it
                 keyStore = null; // if cert is not valid, flag up to recreate it
                 log.warn(

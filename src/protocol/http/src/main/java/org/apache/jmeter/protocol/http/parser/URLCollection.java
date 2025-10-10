@@ -25,6 +25,7 @@ import java.util.Objects;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,7 @@ public class URLCollection implements Iterable<URL> {
      *         collection
      */
     public boolean addURL(String url, URL baseUrl) {
-        if (url == null || url.length() == 0) {
+        if (StringUtilities.isEmpty(url)) {
             return false;
         }
         url=StringEscapeUtils.unescapeXml(url);

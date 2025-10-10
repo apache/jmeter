@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -30,6 +29,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -166,7 +166,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         List<String> result = new ArrayList<>();
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
-            if (!StringUtils.isEmpty(inputString)) {
+            if (StringUtilities.isNotEmpty(inputString)) {
                 getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, "-1");
             } else {
                 if (inputString==null && log.isWarnEnabled()) {

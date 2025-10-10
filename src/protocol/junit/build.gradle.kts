@@ -23,9 +23,6 @@ dependencies {
     api(projects.src.core)
 
     api("junit:junit")
-    implementation("org.apache.commons:commons-lang3") {
-        because("ArrayUtils")
-    }
     implementation("org.exparity:hamcrest-date") {
         because("hamcrest-date.jar was historically shipped with JMeter")
     }

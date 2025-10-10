@@ -96,7 +96,9 @@ dependencies {
         api("org.apache.commons:commons-dbcp2:2.9.0")
         api("org.apache.commons:commons-jexl3:3.2.1")
         api("org.apache.commons:commons-jexl:2.1.1")
-        api("org.apache.commons:commons-lang3:3.14.0")
+        api("org.apache.commons:commons-lang3:3.14.0") {
+            because("User might still rely on commons-lang3")
+        }
         api("org.apache.commons:commons-math3:3.6.1")
         api("org.apache.commons:commons-pool2:2.12.1")
         api("org.apache.commons:commons-text:1.11.0")

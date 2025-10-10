@@ -20,12 +20,12 @@ package org.apache.jmeter.assertions;
 import java.io.Serializable;
 import java.util.concurrent.CompletionException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.XPathUtil;
+import org.apache.jorphan.util.StringUtilities;
 
 import net.sf.saxon.s9api.SaxonApiException;
 
@@ -56,7 +56,7 @@ public class XPath2Assertion extends AbstractScopedAssertion implements Serializ
         String responseData = null;
         if (isScopeVariable()) {
             String inputString = getThreadContext().getVariables().get(getVariableName());
-            if (!StringUtils.isEmpty(inputString)) {
+            if (StringUtilities.isNotEmpty(inputString)) {
                 responseData = inputString;
             }
         } else {

@@ -24,7 +24,6 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.core.CsvSampleReader;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
@@ -162,7 +161,9 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      */
     private void produce() {
         SampleContext context = getSampleContext();
-        Validate.validState(context != null, "Set a sample context before producing samples.");
+        if (context == null) {
+            throw new IllegalStateException("Set a sample context before producing samples.");
+        }
 
         for (int i = 0; i < csvReaders.length; i++) {
             long sampleCount = 0;

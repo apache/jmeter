@@ -17,17 +17,16 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ import java.util.function.Predicate;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -87,7 +85,9 @@ import org.apache.jmeter.testelement.schema.PropertyDescriptor;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.ExceptionUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Matcher;
@@ -240,7 +240,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         ));
         String userDefinedMethods = JMeterUtils.getPropDefault(
                 "httpsampler.user_defined_methods", "");
-        if (StringUtils.isNotBlank(userDefinedMethods)) {
+        if (StringUtilities.isNotBlank(userDefinedMethods)) {
             defaultMethods.addAll(Arrays.asList(userDefinedMethods.split("\\s*,\\s*")));
         }
         METHODLIST = Collections.unmodifiableList(defaultMethods);
@@ -449,7 +449,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static boolean hasNoMissingFile(HTTPFileArg[] files) {
         for (HTTPFileArg httpFileArg : files) {
-            if(StringUtils.isEmpty(httpFileArg.getPath())) {
+            String path = httpFileArg.getPath();
+            if (StringUtilities.isEmpty(path)) {
                 log.warn("File {} is invalid as no path is defined", httpFileArg);
                 return false;
             }
@@ -468,7 +469,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public String getProtocol() {
         String protocol = getString(getSchema().getProtocol());
-        if (protocol == null || protocol.isEmpty()) {
+        if (StringUtilities.isEmpty(protocol)) {
             return HTTPConstants.PROTOCOL_HTTP;
         }
         return protocol;
@@ -672,7 +673,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 contentEncoding);
 
         HTTPArgument arg;
-        final boolean nonEmptyEncoding = !StringUtils.isEmpty(contentEncoding);
+        final boolean nonEmptyEncoding = StringUtilities.isNotEmpty(contentEncoding);
         if (nonEmptyEncoding) {
             arg = new HTTPArgument(name, value, metaData, true, contentEncoding);
         } else {
@@ -786,7 +787,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public int getPortIfSpecified() {
         String portAsString = getString(getSchema().getPort());
-        if(portAsString == null || portAsString.isEmpty()) {
+        if (StringUtilities.isEmpty(portAsString)) {
             return UNSPECIFIED_PORT;
         }
 
@@ -1069,9 +1070,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     protected HTTPSampleResult errorResult(Throwable e, HTTPSampleResult res) {
         res.setSampleLabel(res.getSampleLabel());
         res.setDataType(SampleResult.TEXT);
-        ByteArrayOutputStream text = new ByteArrayOutputStream(200);
-        e.printStackTrace(new PrintStream(text)); // NOSONAR Stacktrace will be used in the response
-        res.setResponseData(text.toByteArray());
+        res.setResponseData(ExceptionUtils.getStackTraceAsBytes(e, StandardCharsets.UTF_8));
+        res.setDataEncoding(StandardCharsets.UTF_8.name());
         res.setResponseCode(NON_HTTP_RESPONSE_CODE+": " + e.getClass().getName());
         res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE+": " + e.getMessage());
         res.setSuccessful(false);
@@ -1162,7 +1162,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         String lContentEncoding = contentEncoding;
         // Check if the sampler has a specified content encoding
-        if (JOrphanUtils.isBlank(lContentEncoding)) {
+        if (StringUtilities.isBlank(lContentEncoding)) {
             // We use the encoding which should be used according to the HTTP spec, which is UTF-8
             lContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
         }
@@ -1255,7 +1255,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 log.debug("Name: {} Value: {} Metadata: {}", name, value, metaData);
                 // If we know the encoding, we can decode the argument value,
                 // to make it easier to read for the user
-                if (!StringUtils.isEmpty(contentEncoding)) {
+                if (StringUtilities.isNotEmpty(contentEncoding)) {
                     addEncodedArgument(name, value, metaData, contentEncoding);
                 } else {
                     // If we do not know the encoding, we just use the encoded value
@@ -1487,7 +1487,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     private static Predicate<URL> generateMatcherPredicate(String regex, String explanation, boolean defaultAnswer) {
-        if (StringUtils.isEmpty(regex)) {
+        if (StringUtilities.isEmpty(regex)) {
             return s -> defaultAnswer;
         }
         if (USE_JAVA_REGEX) {
@@ -1525,7 +1525,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             throws LinkExtractorParseException {
         String parserClassName =
                 PARSERS_FOR_CONTENT_TYPE.get(res.getMediaType());
-        if (!StringUtils.isEmpty(parserClassName)) {
+        if (StringUtilities.isNotEmpty(parserClassName)) {
             return BaseParser.getParser(parserClassName);
         }
         return null;

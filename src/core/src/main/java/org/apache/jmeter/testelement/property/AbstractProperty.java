@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,7 +109,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public int getIntValue() {
         String val = getStringValue();
-        if (val == null || val.isEmpty()) {
+        if (StringUtilities.isEmpty(val)) {
             return 0;
         }
         try {
@@ -126,7 +127,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public long getLongValue() {
         String val = getStringValue();
-        if (val == null || val.isEmpty()) {
+        if (StringUtilities.isEmpty(val)) {
             return 0;
         }
         try {
@@ -144,7 +145,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public double getDoubleValue() {
         String val = getStringValue();
-        if (val == null || val.isEmpty()) {
+        if (StringUtilities.isEmpty(val)) {
             return 0;
         }
         try {
@@ -163,7 +164,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public float getFloatValue() {
         String val = getStringValue();
-        if (val == null || val.isEmpty()) {
+        if (StringUtilities.isEmpty(val)) {
             return 0;
         }
         try {
@@ -182,7 +183,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     @Override
     public boolean getBooleanValue() {
         String val = getStringValue();
-        if (val == null || val.isEmpty()) {
+        if (StringUtilities.isEmpty(val)) {
             return false;
         }
         return Boolean.parseBoolean(val.trim());

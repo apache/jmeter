@@ -18,7 +18,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Factory to return the appropriate HTTPSampler for use with classes that need
@@ -67,7 +67,7 @@ public final class HTTPSamplerFactory {
      * @throws UnsupportedOperationException if alias is not recognised
      */
     public static HTTPSamplerBase newInstance(String alias) {
-        if (alias ==null || alias.length() == 0) {
+        if (StringUtilities.isEmpty(alias)) {
             return new HTTPSamplerProxy();
         }
         if (alias.equals(HTTP_SAMPLER_JAVA) || alias.equals(IMPL_JAVA)) {
@@ -87,7 +87,7 @@ public final class HTTPSamplerFactory {
         if (HTTPSamplerBase.PROTOCOL_FILE.equals(base.getProtocol())) {
             return new HTTPFileImpl(base);
         }
-        if (JOrphanUtils.isBlank(impl)){
+        if (StringUtilities.isBlank(impl)){
             impl = DEFAULT_CLASSNAME;
         }
         if (IMPL_JAVA.equals(impl) || HTTP_SAMPLER_JAVA.equals(impl)) {

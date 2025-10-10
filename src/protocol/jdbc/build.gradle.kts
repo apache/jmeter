@@ -23,9 +23,6 @@ dependencies {
     api(projects.src.core)
 
     implementation("org.apache.commons:commons-dbcp2")
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils, ObjectUtils")
-    }
     implementation("commons-io:commons-io") {
         because("IOUtils")
     }

@@ -50,7 +50,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -68,6 +67,7 @@ import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.math.StatCalculatorLong;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -279,7 +279,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     }
 
     private static String[] keys(Map<String, ?> map) {
-        return map.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return map.keySet().toArray(new String[0]);
     }
 
     @Override
@@ -543,7 +543,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
             } else if (forceReloadData) {
                 pattern = null;
             }
-            if (getFile() != null && getFile().length() > 0) {
+            if (StringUtilities.isNotEmpty(getFile())) {
                 // Reload data from file
                 clearData();
                 FilePanel filePanel = (FilePanel) getFilePanel();

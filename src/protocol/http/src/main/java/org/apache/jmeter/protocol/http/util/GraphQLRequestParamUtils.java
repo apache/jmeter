@@ -25,13 +25,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.RegExUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jorphan.util.StringUtilities;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -72,7 +71,7 @@ public final class GraphQLRequestParamUtils {
      * @return true if the content type is GraphQL content type
      */
     public static boolean isGraphQLContentType(final String contentType) {
-        if (StringUtils.isEmpty(contentType)) {
+        if (StringUtilities.isEmpty(contentType)) {
             return false;
         }
         final ContentType type = ContentType.parse(contentType);
@@ -91,14 +90,16 @@ public final class GraphQLRequestParamUtils {
         try (JsonGenerator gen = jsonFactory.createGenerator(writer)) {
             gen.writeStartObject();
 
-            gen.writeStringField(OPERATION_NAME_FIELD, StringUtils.trimToNull(params.getOperationName()));
+            gen.writeStringField(OPERATION_NAME_FIELD, StringUtilities.trimToNull(params.getOperationName()));
 
-            if (StringUtils.isNotBlank(params.getVariables())) {
+            String variables = params.getVariables();
+            if (StringUtilities.isNotEmpty(variables)) {
                 gen.writeFieldName(VARIABLES_FIELD);
-                gen.writeRawValue(StringUtils.trim(params.getVariables()));
+                gen.writeRawValue(variables.trim());
             }
 
-            gen.writeStringField(QUERY_FIELD, StringUtils.trim(params.getQuery()));
+            String query = params.getQuery();
+            gen.writeStringField(QUERY_FIELD, query == null ? null : query.trim());
 
             gen.writeEndObject();
         } catch (IOException e) {
@@ -114,7 +115,10 @@ public final class GraphQLRequestParamUtils {
      * @return an HTTP GET request parameter value converted from the GraphQL Query input string
      */
     public static String queryToGetParamValue(final String query) {
-        return RegExUtils.replaceAll(StringUtils.trim(query), WHITESPACES_PATTERN, " ");
+        if (query == null) {
+            return null;
+        }
+        return WHITESPACES_PATTERN.matcher(query.trim()).replaceAll(" ");
     }
 
     /**
@@ -123,7 +127,7 @@ public final class GraphQLRequestParamUtils {
      * @return an HTTP GET request parameter value converted from the GraphQL Variables JSON input string
      */
     public static String variablesToGetParamValue(final String variables) {
-        return StringUtils.trimToNull(variables);
+        return StringUtilities.trimToNull(variables);
     }
 
     /**
@@ -137,7 +141,7 @@ public final class GraphQLRequestParamUtils {
      */
     public static GraphQLRequestParams toGraphQLRequestParams(byte[] postData, final String contentEncoding)
             throws JsonProcessingException, UnsupportedEncodingException {
-        final String encoding = StringUtils.isNotEmpty(contentEncoding) ? contentEncoding
+        final String encoding = StringUtilities.isNotEmpty(contentEncoding) ? contentEncoding
                 : EncoderCache.URL_ARGUMENT_ENCODING;
 
         ObjectNode data;
@@ -162,8 +166,8 @@ public final class GraphQLRequestParamUtils {
         }
         final JsonNode queryNode = data.get(QUERY_FIELD);
         query = getJsonNodeTextContent(queryNode, false);
-        final String trimmedQuery = StringUtils.trim(query);
-        if (!StringUtils.startsWith(trimmedQuery, QUERY_FIELD) && !StringUtils.startsWith(trimmedQuery, "mutation")) {
+        final String trimmedQuery = query == null ? null : query.trim();
+        if (trimmedQuery != null && !trimmedQuery.startsWith(QUERY_FIELD) && !trimmedQuery.startsWith("mutation")) {
             throw new IllegalArgumentException("Not a valid GraphQL query.");
         }
 
@@ -192,7 +196,8 @@ public final class GraphQLRequestParamUtils {
      */
     public static GraphQLRequestParams toGraphQLRequestParams(final Arguments arguments, final String contentEncoding)
             throws UnsupportedEncodingException {
-        final String encoding = StringUtils.defaultIfEmpty(contentEncoding, EncoderCache.URL_ARGUMENT_ENCODING);
+        final String encoding =
+                contentEncoding != null && contentEncoding.isEmpty() ? contentEncoding : EncoderCache.URL_ARGUMENT_ENCODING;
 
         String operationName = null;
         String query = null;
@@ -206,7 +211,7 @@ public final class GraphQLRequestParamUtils {
 
             final String name = arg.getName();
             final String metadata = arg.getMetaData();
-            final String value = StringUtils.trimToNull(arg.getValue());
+            final String value = StringUtilities.trimToNull(arg.getValue());
 
             if ("=".equals(metadata) && value != null) {
                 final boolean alwaysEncoded = ((HTTPArgument) arg).isAlwaysEncoded();
@@ -241,13 +246,11 @@ public final class GraphQLRequestParamUtils {
     }
 
     private static boolean isNoJsonObject(String variables) {
-        return StringUtils.isNotEmpty(variables)
-                && (!StringUtils.startsWith(variables, "{") || !StringUtils.endsWith(variables, "}"));
+        return StringUtilities.isNotEmpty(variables) && (!variables.startsWith("{") || !variables.endsWith("}"));
     }
 
     private static boolean isNoQueryOrMutation(String query) {
-        return StringUtils.isEmpty(query)
-                || (!StringUtils.startsWith(query, QUERY_FIELD) && !StringUtils.startsWith(query, "mutation"));
+        return StringUtilities.isEmpty(query) || !query.startsWith(QUERY_FIELD) && !query.startsWith("mutation");
     }
 
     private static String getJsonNodeTextContent(final JsonNode jsonNode, final boolean nullable) {

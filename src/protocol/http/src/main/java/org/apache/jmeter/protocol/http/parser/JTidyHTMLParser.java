@@ -23,8 +23,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -113,10 +113,10 @@ class JTidyHTMLParser extends HTMLParser {
             if (name.equalsIgnoreCase(TAG_APPLET)) {
                 String codebase = getValue(attrs, ATT_CODEBASE);
                 String code = getValue(attrs, ATT_ARCHIVE);
-                if (StringUtils.isBlank(code)) {
+                if (StringUtilities.isBlank(code)) {
                     code = getValue(attrs, ATT_CODE);
                 }
-                if (StringUtils.isBlank(codebase)) {
+                if (StringUtilities.isBlank(codebase)) {
                     urls.addURL(code, baseUrl);
                 } else {
                     urls.addURL(codebase + "/" + code, baseUrl);
@@ -126,12 +126,12 @@ class JTidyHTMLParser extends HTMLParser {
 
             if (name.equalsIgnoreCase(TAG_OBJECT)) {
                 String data = getValue(attrs, "codebase");
-                if(!StringUtils.isEmpty(data)) {
+                if (StringUtilities.isNotEmpty(data)) {
                     urls.addURL(data, baseUrl);
                 }
 
                 data = getValue(attrs, "data");
-                if(!StringUtils.isEmpty(data)) {
+                if (StringUtilities.isNotEmpty(data)) {
                     urls.addURL(data, baseUrl);
                 }
                 break;

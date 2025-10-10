@@ -35,9 +35,6 @@ dependencies {
 
     testImplementation(testFixtures(projects.src.core))
     testImplementation(testFixtures(projects.src.components))
-    testImplementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
     testImplementation("commons-io:commons-io") {
         because("IOUtils")
     }

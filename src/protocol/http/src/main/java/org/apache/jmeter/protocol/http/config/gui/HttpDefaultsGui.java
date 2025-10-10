@@ -29,7 +29,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
@@ -46,6 +45,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JEditableCheckBox;
 import org.apache.jorphan.gui.JFactory;
+import org.apache.jorphan.util.StringUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -144,7 +144,8 @@ public class HttpDefaultsGui extends AbstractConfigGui {
             config.removeProperty(httpSchema.getConcurrentDownloadPoolSize());
         }
 
-        if(!StringUtils.isEmpty(sourceIpAddr.getText())) {
+        String text = sourceIpAddr.getText();
+        if (StringUtilities.isNotEmpty(text)) {
             config.set(httpSchema.getIpSourceType(), sourceIpType.getSelectedIndex());
         } else {
             config.removeProperty(httpSchema.getIpSourceType());

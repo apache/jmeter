@@ -30,7 +30,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.JBooleanPropertyEditor;
 import org.apache.jmeter.gui.JTextComponentBinding;
@@ -48,6 +47,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JEditableCheckBox;
 import org.apache.jorphan.gui.JFactory;
+import org.apache.jorphan.util.StringUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -170,13 +170,15 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         HTTPSamplerBaseSchema httpSchema = samplerBase.getSchema();
         enableConcurrentDwn();
         if (!isAJP) {
-            if (!StringUtils.isEmpty(sourceIpAddr.getText())) {
+            String text = sourceIpAddr.getText();
+            if (StringUtilities.isNotEmpty(text)) {
                 samplerBase.set(httpSchema.getIpSourceType(), sourceIpType.getSelectedIndex());
             } else {
                 samplerBase.removeProperty(httpSchema.getIpSourceType());
             }
             String selectedImplementation = String.valueOf(httpImplementation.getSelectedItem());
-            samplerBase.set(httpSchema.getImplementation(), StringUtils.defaultIfBlank(selectedImplementation, null));
+            samplerBase.set(httpSchema.getImplementation(),
+                    StringUtilities.isBlank(selectedImplementation) ? null : selectedImplementation);
         }
     }
 

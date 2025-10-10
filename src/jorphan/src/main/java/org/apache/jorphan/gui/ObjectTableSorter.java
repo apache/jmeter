@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 
-import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * Implementation of a {@link RowSorter} for {@link ObjectTableModel}
@@ -148,7 +147,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
      */
     public ObjectTableSorter setValueComparator(int column, Comparator<?> comparator) {
         invalidate();
-        valueComparators[column] = ObjectUtils.defaultIfNull(comparator, getDefaultComparator(column));
+        valueComparators[column] = comparator != null ? comparator : getDefaultComparator(column);
         return this;
     }
 
@@ -185,7 +184,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
      */
     public ObjectTableSorter setFallbackComparator(Comparator<Row> comparator) {
         invalidate();
-        fallbackComparator = ObjectUtils.defaultIfNull(comparator, Comparator.comparingInt(Row::getIndex));
+        fallbackComparator = Objects.requireNonNullElse(comparator, Comparator.comparingInt(Row::getIndex));
         return this;
     }
 

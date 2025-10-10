@@ -29,10 +29,10 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.Stoppable;
 import org.apache.jmeter.testelement.NonTestElement;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
@@ -256,7 +256,7 @@ public class HttpMirrorServer extends Thread implements Stoppable, NonTestElemen
         }
 
         String value = logLevelOption.getArgument(1);
-        if (StringUtils.isEmpty(value)) {
+        if (StringUtilities.isEmpty(value)) {
             // Set root level
             getLogger().info("Setting root log level to '{}'", name);// $NON-NLS-1$
             Configurator.setRootLevel(logLevel);

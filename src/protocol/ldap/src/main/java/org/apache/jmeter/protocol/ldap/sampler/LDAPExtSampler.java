@@ -38,7 +38,6 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchResult;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -945,7 +944,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                         sortedVals.add(value.toString());
                     }
                     Collections.sort(sortedVals);
-                    sb.append(StringUtils.join(sortedVals, ", "));
+                    sb.append(String.join(", ", sortedVals));
                 }
                 xmlb.tag(attr.getID(),sb);
             }

@@ -30,6 +30,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -95,7 +96,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
         // Bug 15025 - save session value across samplers
         if (shouldCache()) {
-            if (value == null || value.isEmpty()) {
+            if (StringUtilities.isEmpty(value)) {
                 value = savedValue;
             } else {
                 savedValue = value;
