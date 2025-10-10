@@ -17,6 +17,8 @@
 
 import com.github.vlsi.gradle.dsl.configureEach
 import com.github.vlsi.gradle.properties.dsl.props
+import org.jetbrains.kotlin.gradle.tasks.BaseKapt
+import org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -43,6 +45,9 @@ kotlin {
 }
 
 tasks.configureEach<KotlinCompile> {
+    if (gradle.startParameter.writeDependencyVerifications.isNotEmpty()) {
+        enabled = false
+    }
     kotlinOptions {
         if (!name.startsWith("compileTest")) {
             apiVersion = "kotlin.api".v
@@ -51,6 +56,17 @@ tasks.configureEach<KotlinCompile> {
         val jdkRelease = buildParameters.targetJavaVersion.toString()
         freeCompilerArgs += "-Xjdk-release=$jdkRelease"
         kotlinOptions.jvmTarget = jdkRelease
+    }
+}
+
+if (gradle.startParameter.writeDependencyVerifications.isNotEmpty()) {
+    plugins.withId("org.jetbrains.kotlin.kapt") {
+        tasks.configureEach<BaseKapt> {
+            enabled = false
+        }
+        tasks.configureEach<KaptGenerateStubs> {
+            enabled = false
+        }
     }
 }
 
