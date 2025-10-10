@@ -5,7 +5,7 @@ name: Dependency Submission
 on:
   push:
     branches:
-      - main
+      - master
 
 # Declare default permissions as read-only.
 permissions: read-all
