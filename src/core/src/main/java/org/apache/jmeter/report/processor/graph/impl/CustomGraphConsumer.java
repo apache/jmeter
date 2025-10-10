@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.report.core.ConvertException;
 import org.apache.jmeter.report.core.Converters;
 import org.apache.jmeter.report.core.Sample;
@@ -38,6 +37,7 @@ import org.apache.jmeter.report.processor.graph.GraphValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 import org.apache.jmeter.save.CSVSaveService;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * The class CustomGraphConsumer is added by the custom Graphs plugin.
@@ -208,7 +208,7 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
                         + CSVSaveService.VARIABLE_NAME_QUOTE_CHAR);
             }
 
-            if (StringUtils.isEmpty(value) || "null".equals(value)) {
+            if (StringUtilities.isEmpty(value) || "null".equals(value)) {
                 return null;
             }
 

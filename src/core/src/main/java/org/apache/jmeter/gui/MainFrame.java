@@ -78,7 +78,6 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
@@ -104,6 +103,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -408,7 +408,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         }
         stoppingMessage = new EscapeDialog(this, JMeterUtils.getResString("stopping_test_title"), true); //$NON-NLS-1$
         String label = JMeterUtils.getResString("stopping_test"); //$NON-NLS-1
-        if (!StringUtils.isEmpty(host)) {
+        if (StringUtilities.isNotEmpty(host)) {
             label = label + " " + JMeterUtils.getResString("stopping_test_host") + ": " + host;
         }
         JLabel stopLabel = new JLabel(label); //$NON-NLS-1$$NON-NLS-2$
@@ -673,8 +673,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                         Object testElement = ((DefaultMutableTreeNode) treeNode).getUserObject();
                         if (testElement instanceof TestElement) {
                             String comment = ((TestElement) testElement).getComment();
-                            if (StringUtils.isNotBlank(comment)) {
-                                return StringUtils.abbreviate(comment, 80);
+                            if (StringUtilities.isNotBlank(comment)) {
+                                return comment.length() <= 80 ? comment : comment.substring(0, 77) + "...";
                             }
                         }
                     }

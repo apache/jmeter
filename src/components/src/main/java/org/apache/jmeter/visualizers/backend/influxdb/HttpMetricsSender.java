@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -43,6 +42,7 @@ import org.apache.http.nio.reactor.ConnectingIOReactor;
 import org.apache.http.util.EntityUtils;
 import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,7 +141,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
 
         HttpPost currentHttpRequest = new HttpPost(url.toURI());
         currentHttpRequest.setConfig(defaultRequestConfig);
-        if (StringUtils.isNotBlank(token)) {
+        if (StringUtilities.isNotBlank(token)) {
             currentHttpRequest.setHeader(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE + token);
         }
         log.debug("Created InfluxDBMetricsSender with url: {}", url);

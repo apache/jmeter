@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -666,13 +666,13 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_END_DATE, String.class);
 
         String rangeDateFormat = getOptionalProperty(props, REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT, String.class);
-        if (StringUtils.isEmpty(rangeDateFormat)) {
+        if (StringUtilities.isEmpty(rangeDateFormat)) {
             rangeDateFormat = RANGE_DATE_FORMAT_DEFAULT;
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat(rangeDateFormat, Locale.ENGLISH);
 
         try {
-            if(!StringUtils.isEmpty(startDateValue)) {
+            if (StringUtilities.isNotEmpty(startDateValue)) {
                 reportStartDate = dateFormat.parse(startDateValue);
                 configuration.setStartDate(reportStartDate);
             }
@@ -681,7 +681,7 @@ public class ReportGeneratorConfiguration {
                     startDateValue, rangeDateFormat, e);
         }
         try {
-            if(!StringUtils.isEmpty(endDateValue)) {
+            if (StringUtilities.isNotEmpty(endDateValue)) {
                 reportEndDate = dateFormat.parse(endDateValue);
                 configuration.setEndDate(reportEndDate);
             }
@@ -728,8 +728,7 @@ public class ReportGeneratorConfiguration {
      */
     public static Map<String, Long[]> getApdexPerTransactionParts(String apdexPerTransaction) {
         Map <String, Long[]> specificApdexes = new HashMap<>();
-        if (StringUtils.isEmpty(apdexPerTransaction) ||
-                apdexPerTransaction.trim().length() == 0) {
+        if (StringUtilities.isBlank(apdexPerTransaction)) {
             log.info("apdex_per_transaction is empty, not APDEX per transaction customization");
         } else {
             // data looks like : sample(\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000
@@ -771,7 +770,7 @@ public class ReportGeneratorConfiguration {
      * @return the filteredSamplesPattern
      */
     public Pattern getFilteredSamplesPattern() {
-        if(StringUtils.isEmpty(sampleFilter)) {
+        if (StringUtilities.isEmpty(sampleFilter)) {
             return null;
         }
         if(filteredSamplesPattern == null) {

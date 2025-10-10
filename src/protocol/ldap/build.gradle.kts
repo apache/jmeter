@@ -25,9 +25,6 @@ dependencies {
     implementation("org.apache.commons:commons-text") {
         because("StringEscapeUtils")
     }
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
 
     testImplementation(testFixtures(projects.src.core))
 }

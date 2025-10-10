@@ -43,6 +43,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Isolated;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -394,7 +395,7 @@ public class TestHTMLParser extends JMeterTestCase {
 
     // Get expected results as a List
     private static List<String> getFile(String file) throws Exception {
-        if (file == null || file.isEmpty()) {
+        if (StringUtilities.isEmpty(file)) {
             return Collections.emptyList();
         }
         try (InputStream is = getInputStream(file);

@@ -22,7 +22,7 @@ import java.util.Map;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.util.StringUtilities;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Replaces ${key} by value extracted from
@@ -41,7 +41,7 @@ public class UndoVariableReplacement extends AbstractTransformer {
         for (Map.Entry<String, String> entry : getVariables().entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            input = StringUtilities.substitute(input, "${" + key + "}", value);
+            input = JOrphanUtils.substitute(input, "${" + key + "}", value);
         }
         return new StringProperty(prop.getName(), input);
     }

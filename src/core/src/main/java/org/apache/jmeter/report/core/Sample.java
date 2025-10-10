@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.report.core;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -139,7 +138,7 @@ public class Sample {
      */
     @Override
     public String toString() {
-        return StringUtils.join(data, metadata.getSeparator());
+        return String.join(String.valueOf(metadata.getSeparator()), data);
     }
 
     /**

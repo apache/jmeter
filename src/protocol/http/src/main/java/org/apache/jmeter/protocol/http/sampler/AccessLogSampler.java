@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
@@ -29,6 +28,7 @@ import org.apache.jmeter.testelement.TestCloneable;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.JMeterException;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -197,11 +197,13 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     public void instantiateParser() {
         if (parser == null) {
             try {
-                if (StringUtils.isNotBlank(this.getParserClassName())) {
-                    if (StringUtils.isNotBlank(this.getLogFile())) {
-                        parser = Class.forName(getParserClassName())
+                String parserClassName = this.getParserClassName();
+                if (StringUtilities.isNotBlank(parserClassName)) {
+                    String logFile = this.getLogFile();
+                    if (StringUtilities.isNotBlank(logFile)) {
+                        parser = Class.forName(parserClassName)
                                 .asSubclass(LogParser.class).getDeclaredConstructor().newInstance();
-                        parser.setSourceFile(this.getLogFile());
+                        parser.setSourceFile(logFile);
                         parser.setFilter(filter);
                     } else {
                         log.error("No log file specified");
@@ -302,7 +304,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     }
 
     protected void initFilter() {
-        if (filter == null && StringUtils.isNotBlank(filterClassName)) {
+        if (filter == null && StringUtilities.isNotBlank(filterClassName)) {
             try {
                 filter = Class.forName(filterClassName)
                     .asSubclass(Filter.class).getDeclaredConstructor().newInstance();
@@ -318,7 +320,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     @Override
     public Object clone() {
         AccessLogSampler s = (AccessLogSampler) super.clone();
-        if (started && StringUtils.isNotBlank(filterClassName)) {
+        if (started && StringUtilities.isNotBlank(filterClassName)) {
 
             try {
                 if (TestCloneable.class.isAssignableFrom(Class.forName(filterClassName))) {

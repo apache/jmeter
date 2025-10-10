@@ -232,7 +232,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      */
     protected InetAddress getIpSourceAddress() throws UnknownHostException, SocketException {
         final String ipSource = getIpSource();
-        if (ipSource.trim().length() > 0) {
+        if (!ipSource.isBlank()) {
             Class<? extends InetAddress> ipClass = null;
             final SourceType sourceType = HTTPSamplerBase.SourceType.values()[testElement.getIpSourceType()];
             switch (sourceType) {

@@ -23,7 +23,6 @@ import java.beans.Introspector;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoConfigMerge;
@@ -40,6 +39,7 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -204,7 +204,7 @@ public class CSVDataSet extends ConfigTestElement
         String fileName = getFilename().trim();
         setAlias(context, fileName);
         final String names = getVariableNames();
-        if (StringUtils.isEmpty(names)) {
+        if (StringUtilities.isEmpty(names)) {
             String header = server.reserveFile(fileName, getFileEncoding(), alias, true);
             try {
                 vars = CSVSaveService.csvSplitString(header, delim.charAt(0));

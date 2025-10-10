@@ -25,8 +25,8 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.jms.Utils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +69,7 @@ public final class Receiver implements Runnable {
         }
         session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
         log.debug("Receiver - ctor. Creating consumer with JMS Selector:{}", jmsSelector);
-        if(StringUtils.isEmpty(jmsSelector)) {
+        if (StringUtilities.isEmpty(jmsSelector)) {
             consumer = session.createConsumer(receiveQueue);
         } else {
             consumer = session.createConsumer(receiveQueue, jmsSelector);

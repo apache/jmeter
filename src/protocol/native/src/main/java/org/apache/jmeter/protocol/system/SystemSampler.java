@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -39,6 +38,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.exec.SystemCommand;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,13 +125,14 @@ public class SystemSampler extends AbstractSampler {
         }
 
         File directory;
-        if(StringUtils.isEmpty(getDirectory())) {
+        String directoryName = getDirectory();
+        if (StringUtilities.isEmpty(directoryName)) {
             directory = new File(FileServer.getDefaultBase());
             if(log.isDebugEnabled()) {
                 log.debug("Using default directory:"+directory.getAbsolutePath());
             }
         } else {
-            directory = new File(getDirectory());
+            directory = new File(directoryName);
             if(log.isDebugEnabled()) {
                 log.debug("Using configured directory:"+directory.getAbsolutePath());
             }

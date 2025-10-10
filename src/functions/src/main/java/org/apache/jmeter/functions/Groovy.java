@@ -29,7 +29,6 @@ import java.util.Properties;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -38,6 +37,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JSR223TestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +144,7 @@ public class Groovy extends AbstractFunction {
         scriptEngine = JSR223TestElement.getInstance().getEngineByName(GROOVY_ENGINE_NAME); //$NON-NLS-N$
 
         String fileName = JMeterUtils.getProperty(INIT_FILE);
-        if(!StringUtils.isEmpty(fileName)) {
+        if (StringUtilities.isNotEmpty(fileName)) {
             File file = new File(fileName);
             if(!(file.exists() && file.canRead())) {
                 // File maybe relative to JMeter home

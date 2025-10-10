@@ -44,11 +44,11 @@ import javax.mail.internet.MimeMultipart;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.util.TrustAllSSLSocketFactory;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -282,10 +282,9 @@ public class SendMailCommand {
     void configureTLSProtocols(Properties props, String protocol) {
         String tlsProtocolsToUse = getTlsProtocolsToUse();
         if (useStartTLS || useSSL) {
-            if (StringUtils.isEmpty(tlsProtocolsToUse)) {
+            if (StringUtilities.isEmpty(tlsProtocolsToUse)) {
                 try {
-                    tlsProtocolsToUse = StringUtils.join(
-                        SSLContext.getDefault().getSupportedSSLParameters().getProtocols(), " ");
+                    tlsProtocolsToUse = String.join(" ", SSLContext.getDefault().getSupportedSSLParameters().getProtocols());
                 } catch (Exception e) {
                     logger.error("Problem setting ssl/tls protocols for mail", e);
                 }

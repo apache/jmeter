@@ -28,6 +28,7 @@ import java.util.StringTokenizer;
 
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +82,7 @@ public class FileRowColContainer {
              * N.B. Stop reading the file if we get a blank line: This allows
              * for trailing comments in the file
              */
-            while (line != null && line.length() > 0) {
+            while (StringUtilities.isNotEmpty(line)) {
                 fileData.add(splitLine(line, delimiter));
                 line = myBread.readLine();
             }

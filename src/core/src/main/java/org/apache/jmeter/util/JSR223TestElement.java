@@ -33,7 +33,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -41,6 +40,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,7 +125,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     private String getScriptLanguageWithDefault() {
         String lang = getScriptLanguage();
-        if (StringUtils.isNotEmpty(lang)) {
+        if (StringUtilities.isNotEmpty(lang)) {
             return lang;
         }
         return DEFAULT_SCRIPT_LANGUAGE;
@@ -189,7 +189,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         boolean supportsCompilable = scriptEngine instanceof Compilable
                 && !"bsh.engine.BshScriptEngine".equals(scriptEngine.getClass().getName()); // NOSONAR // $NON-NLS-1$
         try {
-            if (!StringUtils.isEmpty(filename)) {
+            if (StringUtilities.isNotEmpty(filename)) {
                 if (!scriptFile.isFile()) {
                     throw new ScriptException("Script file '" + scriptFile.getAbsolutePath()
                             + "' is not a file for JSR223 element named: " + getName());
@@ -216,7 +216,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                 return compiledScript.eval(bindings);
             }
             String script = getScript();
-            if (!StringUtils.isEmpty(script)) {
+            if (StringUtilities.isNotEmpty(script)) {
                 if (supportsCompilable &&
                         !ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheKey)) {
                     computeScriptMD5(script);
@@ -282,7 +282,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         if(!supportsCompilable) {
             return true;
         }
-        if (!StringUtils.isEmpty(getScript())) {
+        if (!(getScript() == null || getScript().isEmpty())) {
             try {
                 ((Compilable) scriptEngine).compile(getScript());
                 return true;

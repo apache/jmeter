@@ -17,12 +17,12 @@
 
 package org.apache.jmeter.report.processor;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
 
@@ -93,16 +93,16 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         }
         String responseCode = sample.getResponseCode();
         String responseMessage = sample.getResponseMessage();
-        String key = responseCode + (!StringUtils.isEmpty(responseMessage) ?
+        String key = responseCode + (StringUtilities.isNotEmpty(responseMessage) ?
                  "/" + escapeJson(responseMessage) : "");
 
         if (MetricUtils.isSuccessCode(responseCode) ||
-                (StringUtils.isEmpty(responseCode) &&
-                   StringUtils.isNotBlank(sample.getFailureMessage()))) {
+                (StringUtilities.isEmpty(responseCode) &&
+                   StringUtilities.isNotBlank(sample.getFailureMessage()))) {
             key = MetricUtils.ASSERTION_FAILED;
             if (ASSERTION_RESULTS_FAILURE_MESSAGE) {
                 String msg = sample.getFailureMessage();
-                if (StringUtils.isNotBlank(msg)) {
+                if (StringUtilities.isNotBlank(msg)) {
                     key = escapeJson(msg);
                 }
             }

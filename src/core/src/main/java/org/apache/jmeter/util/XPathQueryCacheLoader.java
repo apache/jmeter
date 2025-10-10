@@ -19,7 +19,7 @@ package org.apache.jmeter.util;
 
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.jmeter.util.XPathUtil.XPathCacheKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,15 +35,15 @@ import com.github.benmanes.caffeine.cache.CacheLoader;
  * Return the compiled XPathQuery with the associated
  * namespaces.
  */
-public class XPathQueryCacheLoader implements CacheLoader<ImmutablePair<String, String>, XPathExecutable> {
+public class XPathQueryCacheLoader implements CacheLoader<XPathCacheKey, XPathExecutable> {
 
     private static final Logger log = LoggerFactory.getLogger(XPathQueryCacheLoader.class);
 
     @Override
-    public XPathExecutable load(ImmutablePair<String, String> key)
+    public XPathExecutable load(XPathCacheKey key)
             throws Exception {
-        String xPathQuery = key.left;
-        String namespacesString = key.right;
+        String xPathQuery = key.query();
+        String namespacesString = key.namespaces();
 
         Processor processor = XPathUtil.getProcessor();
         XPathCompiler xPathCompiler = processor.newXPathCompiler();

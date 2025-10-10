@@ -43,12 +43,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -386,7 +386,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     }
 
     private int[] setArguments(PreparedStatement pstmt) throws SQLException, IOException {
-        if (getQueryArguments().trim().length()==0) {
+        if (getQueryArguments().isBlank()) {
             return new int[]{};
         }
         String[] arguments = CSVSaveService.csvSplitString(getQueryArguments(), COMMA_CHAR);
@@ -659,7 +659,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
      */
     public int getIntegerQueryTimeout() {
         int timeout;
-        if(StringUtils.isEmpty(queryTimeout)) {
+        if (StringUtilities.isEmpty(queryTimeout)) {
             return 0;
         } else {
             try {
@@ -690,7 +690,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
      */
     public int getIntegerResultSetMaxRows() {
         int maxrows;
-        if(StringUtils.isEmpty(resultSetMaxRows)) {
+        if (StringUtilities.isEmpty(resultSetMaxRows)) {
             return -1;
         } else {
             try {

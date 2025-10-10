@@ -19,10 +19,10 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.util.StringUtilities;
 
 // For unit tests @see TestSwitchController
 
@@ -88,11 +88,11 @@ public class SwitchController extends GenericController implements Serializable 
     private int getSelectionAsInt() {
         getProperty(SWITCH_VALUE).recoverRunningVersion(null);
         String sel = getSelection();
-        if (StringUtils.isEmpty(sel)) {
+        if (StringUtilities.isEmpty(sel)) {
             return 0;
         } else {
             try {
-                if(StringUtils.isNumeric(sel)) {
+                if (StringUtilities.isNumeric(sel)) {
                     int ret = Integer.parseInt(sel);
                     if (ret < 0 || ret >= getSubControllers().size()) {
                         // Out of range, we return first one

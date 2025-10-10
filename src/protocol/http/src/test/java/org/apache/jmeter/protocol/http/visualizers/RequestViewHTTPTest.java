@@ -17,14 +17,14 @@
 
 package org.apache.jmeter.protocol.http.visualizers;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jorphan.util.StringUtilities;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -157,7 +157,7 @@ class RequestViewHTTPTest {
         Assertions.assertNotNull(param1);
         Assertions.assertEquals(1, param1.getValue().length);
         Assertions.assertEquals(query, param1.getValue()[0]);
-        Assertions.assertTrue(StringUtils.isBlank(param1.getKey()));
+        Assertions.assertTrue(StringUtilities.isBlank(param1.getKey()));
     }
 
     @Test
@@ -199,11 +199,11 @@ class RequestViewHTTPTest {
         Assertions.assertNotNull(param1);
         Assertions.assertEquals(1, param1.getValue().length);
         Assertions.assertEquals(query, param1.getValue()[0]);
-        Assertions.assertTrue(StringUtils.isBlank(param1.getKey()));
+        Assertions.assertTrue(StringUtilities.isBlank(param1.getKey()));
     }
 
     @SafeVarargs
-    private static Map<String, List<String>> mapOf(Pair<String, String>... args) {
+    private static Map<String, List<String>> mapOf(Map.Entry<String, String>... args) {
         Map<String, List<String>> results = new HashMap<>();
         Arrays.stream(args)
                 .forEach(arg -> results.put(arg.getKey(), Arrays.asList(arg.getValue().split(","))));
@@ -213,18 +213,18 @@ class RequestViewHTTPTest {
     private static Stream<Arguments> data() {
         return Stream.of(Arguments.of("k1=v1&=&k2=v2",
                 mapOf(
-                        Pair.of("k1", "v1"),
-                        Pair.of("k2", "v2"))),
+                        new AbstractMap.SimpleEntry<>("k1", "v1"),
+                        new AbstractMap.SimpleEntry<>("k2", "v2"))),
                 Arguments.of("=", mapOf()),
                 Arguments.of("k1=v1&=value&k2=v2",
                         mapOf(
-                                Pair.of("k1", "v1"),
-                                Pair.of("", "value"),
-                                Pair.of("k2", "v2"))),
+                                new AbstractMap.SimpleEntry<>("k1", "v1"),
+                                new AbstractMap.SimpleEntry<>("", "value"),
+                                new AbstractMap.SimpleEntry<>("k2", "v2"))),
                 Arguments.of("a=1&a=2&=abc&=def",
                         mapOf(
-                                Pair.of("a", "1,2"),
-                                Pair.of("", "abc,def"))));
+                                new AbstractMap.SimpleEntry<>("a", "1,2"),
+                                new AbstractMap.SimpleEntry<>("", "abc,def"))));
     }
 
     @ParameterizedTest

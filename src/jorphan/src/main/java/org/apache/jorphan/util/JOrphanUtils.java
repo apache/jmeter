@@ -34,8 +34,8 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.RandomStringGenerator;
+import org.apiguardian.api.API;
 
 /**
  * This class contains frequently-used static utility methods.
@@ -517,16 +517,12 @@ public final class JOrphanUtils {
      *
      * @param input String
      * @return trimmed input or {@code null}
+     * @deprecated use {@link StringUtilities#trimToNull(String)}
      */
+    @Deprecated
+    @API(since = "6.0.0", status = API.Status.DEPRECATED)
     public static String nullifyIfEmptyTrimmed(final String input) {
-        if (input == null) {
-            return null;
-        }
-        String trimmed = input.trim();
-        if (trimmed.length() == 0) {
-            return null;
-        }
-        return trimmed;
+        return StringUtilities.trimToNull(input);
     }
 
     /**
@@ -534,9 +530,12 @@ public final class JOrphanUtils {
      *
      * @param value Value
      * @return {@code true} if the String is not empty (""), not {@code null} and not whitespace only.
+     * @deprecated use {@link StringUtilities#isBlank(CharSequence)}
      */
+    @Deprecated
+    @API(since = "6.0.0", status = API.Status.DEPRECATED)
     public static boolean isBlank(final String value) {
-        return StringUtils.isBlank(value);
+        return StringUtilities.isBlank(value);
     }
 
     /**
@@ -719,7 +718,7 @@ public final class JOrphanUtils {
      * @return number of matches that were replaced
      */
     public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<? super String> setter) {
-        if (StringUtils.isBlank(value)) {
+        if (StringUtilities.isBlank(value)) {
             return 0;
         }
         Object[] result = replaceAllWithRegex(value, regex, replaceBy, caseSensitive);

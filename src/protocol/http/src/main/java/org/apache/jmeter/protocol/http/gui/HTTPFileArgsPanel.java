@@ -40,7 +40,6 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.gui.RowDetailDialog;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -51,6 +50,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.StringUtilities;
 
 /*
  * Note: this class is currently only suitable for use with HTTSamplerBase.
@@ -283,7 +283,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
             tableModel.removeRow(rowSelected);
         } else if (BROWSE.equals(command)) {
             String path = browseAndGetFilePath();
-            if(StringUtils.isNotBlank(path)) {
+            if (StringUtilities.isNotBlank(path)) {
                 tableModel.setValueAt(path, rowSelected, 0);
             }
         }

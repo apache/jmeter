@@ -56,7 +56,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.gui.ObsoleteGui;
 import org.apache.jmeter.control.IfControllerSchema;
 import org.apache.jmeter.control.LoopControllerSchema;
@@ -95,6 +94,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.BackendListenerGui;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -203,7 +203,7 @@ public class JMeterTest extends JMeterTestCase {
                     org.w3c.dom.Element comp = (org.w3c.dom.Element)
                             components.item(j);
                     String tag = comp.getAttribute("tag");
-                    if (!StringUtils.isEmpty(tag)){
+                    if (StringUtilities.isNotEmpty(tag)){
                         guiTags.put(tag, Boolean.FALSE);
                     }
                 }
@@ -279,7 +279,7 @@ public class JMeterTest extends JMeterTestCase {
             }
             String name = guiItem.getClass().getName();
             if (// Is this a work in progress or an internal GUI component?
-                title != null && !title.isEmpty() // Will be "" for internal components
+                StringUtilities.isNotEmpty(title) // Will be "" for internal components
                 && !title.toUpperCase(Locale.ENGLISH).contains("(ALPHA")
                 && !title.toUpperCase(Locale.ENGLISH).contains("(BETA")
                 && !title.toUpperCase(Locale.ENGLISH).contains("(DEPRECATED")
@@ -337,7 +337,7 @@ public class JMeterTest extends JMeterTestCase {
         assertEquals(name, el.getPropertyAsString(TestElement.GUI_CLASS), "GUI-CLASS: Failed on " + name);
 
         assertEquals(guiItem.getName(), el.getName(), () -> "NAME: Failed on " + name);
-        if (StringUtils.isEmpty(el.getName())) {
+        if (StringUtilities.isEmpty(el.getName())) {
             fail("Name of the element must not be blank. Gui class " + name + ", element class " + el.getClass().getName());
         }
         assertEquals(el.getClass().getName(), el
@@ -467,7 +467,7 @@ public class JMeterTest extends JMeterTestCase {
         TestElement el = guiItem.createTestElement();
 
         assertFalse(
-                StringUtils.isEmpty(el.getName()),
+                StringUtilities.isEmpty(el.getName()),
                 () -> "Name should be non-blank for element " + componentHolder);
         PropertyIterator it = el.propertyIterator();
         while (it.hasNext()) {

@@ -23,8 +23,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -35,6 +33,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.BooleanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * A GUI panel allowing the user to enter HTTP Parameters.
@@ -148,7 +148,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     protected boolean isMetaDataNormal(HTTPArgument arg) {
         return arg.getMetaData() == null || arg.getMetaData().equals("=")
-                || (arg.getValue() != null && arg.getValue().length() > 0);
+                || StringUtilities.isNotEmpty(arg.getValue());
     }
 
     @Override
@@ -198,7 +198,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         int[] rowsSelected = getTable().getSelectedRows();
         for (int selectedRow : rowsSelected) {
             String name = (String) tableModel.getValueAt(selectedRow, 0);
-            if (StringUtils.isNotBlank(name)) {
+            if (StringUtilities.isNotBlank(name)) {
                 name = name.trim();
                 name = name.replaceAll("\\$", "_");
                 name = name.replaceAll("\\{", "_");

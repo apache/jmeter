@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
@@ -227,7 +228,7 @@ public class HTTPSampleResult extends SampleResult {
     @Override
     public String getDataEncodingWithDefault(String defaultEncoding) {
         String dataEncodingNoDefault = getDataEncodingNoDefault();
-        if(dataEncodingNoDefault != null && dataEncodingNoDefault.length()> 0) {
+        if (StringUtilities.isNotEmpty(dataEncodingNoDefault)) {
             return dataEncodingNoDefault;
         }
         return defaultEncoding;

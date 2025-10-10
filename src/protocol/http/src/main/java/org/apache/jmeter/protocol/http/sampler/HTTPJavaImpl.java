@@ -204,7 +204,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         if (res != null) {
             res.setRequestHeaders(getAllHeadersExceptCookie(conn, securityHeaders));
-            if(cookies != null && !cookies.isEmpty()) {
+            if (StringUtilities.isNotEmpty(cookies)) {
                 res.setCookies(cookies);
             } else {
                 // During recording Cookie Manager doesn't handle cookies

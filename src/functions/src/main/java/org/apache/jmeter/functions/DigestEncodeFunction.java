@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +81,7 @@ public class DigestEncodeFunction extends AbstractFunction {
         try {
             MessageDigest md = MessageDigest.getInstance(digestAlgorithm);
             md.update(stringToEncode.getBytes(StandardCharsets.UTF_8));
-            if (StringUtils.isNotEmpty(salt)) {
+            if (StringUtilities.isNotEmpty(salt)) {
                 md.update(salt.getBytes(StandardCharsets.UTF_8));
             }
             byte[] bytes = md.digest();

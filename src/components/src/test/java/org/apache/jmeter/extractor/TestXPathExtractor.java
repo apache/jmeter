@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
@@ -122,8 +121,8 @@ public class TestXPathExtractor {
         extractor.setMatchNumber(0);
         extractor.process();
         assertEquals("1", vars.get(VAL_NAME_NR));
-        assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME)));
-        assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME + "_1")));
+        assertTrue(vars.get(VAL_NAME) != null && !vars.get(VAL_NAME).isEmpty());
+        assertTrue(vars.get(VAL_NAME + "_1") != null && !vars.get(VAL_NAME + "_1").isEmpty());
         assertNull(vars.get(VAL_NAME + "_2"));
         assertNull(vars.get(VAL_NAME + "_3"));
 

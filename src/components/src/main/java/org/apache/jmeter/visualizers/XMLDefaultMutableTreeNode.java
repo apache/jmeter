@@ -19,6 +19,7 @@ package org.apache.jmeter.visualizers;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
@@ -160,7 +161,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
      */
     private static void initCommentNode(Comment node, DefaultMutableTreeNode mTreeNode) throws SAXException {
         String data = node.getData();
-        if (data != null && data.length() > 0) {
+        if (StringUtilities.isNotEmpty(data)) {
             String value = "<!--" + node.getData() + "-->"; // $NON-NLS-1$ $NON-NLS-2$
             XMLDefaultMutableTreeNode commentNode = new XMLDefaultMutableTreeNode(value, node);
             mTreeNode.add(commentNode);
@@ -176,7 +177,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
      */
     private static void initCDATASectionNode(CDATASection node, DefaultMutableTreeNode mTreeNode) throws SAXException {
         String data = node.getData();
-        if (data != null && data.length() > 0) {
+        if (StringUtilities.isNotEmpty(data)) {
             String value = "<!-[CDATA" + node.getData() + "]]>"; // $NON-NLS-1$ $NON-NLS-2$
             XMLDefaultMutableTreeNode commentNode = new XMLDefaultMutableTreeNode(value, node);
             mTreeNode.add(commentNode);
@@ -192,7 +193,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
      */
     private static void initTextNode(Text node, DefaultMutableTreeNode mTreeNode) throws SAXException {
         String text = node.getNodeValue().trim();
-        if (text != null && text.length() > 0) {
+        if (StringUtilities.isNotEmpty(text)) {
             XMLDefaultMutableTreeNode textNode = new XMLDefaultMutableTreeNode(text, node);
             mTreeNode.add(textNode);
         }

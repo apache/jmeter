@@ -28,6 +28,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jorphan.util.StringUtilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -506,7 +507,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     // we have to check and make sure the constructor is
                     // accessible. if we didn't it would throw an exception
                     // and cause a NPE.
-                    if (label == null || label.length() == 0) {
+                    if (StringUtilities.isEmpty(label)) {
                         label = className;
                     }
                     if (strCon.getModifiers() == Modifier.PUBLIC) {

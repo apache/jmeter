@@ -36,7 +36,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
@@ -51,6 +50,7 @@ import org.apache.jmeter.protocol.http.util.GraphQLRequestParamUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -462,7 +462,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 formEncodings, urlWithoutQuery);
 
         // Set the content encoding
-        if(!StringUtils.isEmpty(contentEncoding)) {
+        if (StringUtilities.isNotEmpty(contentEncoding)) {
             sampler.setContentEncoding(contentEncoding);
         }
     }

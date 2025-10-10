@@ -22,12 +22,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,8 +89,8 @@ public class RandomString extends AbstractFunction {
             myName = values[PARAM_NAME - 1].execute().trim();
         }
 
-        String myValue = null;
-        if(StringUtils.isEmpty(charsToUse)) {
+        String myValue;
+        if (StringUtilities.isEmpty(charsToUse)) {
             myValue = RandomStringUtils.random(length);
         } else {
             myValue = RandomStringUtils.random(length, charsToUse);
