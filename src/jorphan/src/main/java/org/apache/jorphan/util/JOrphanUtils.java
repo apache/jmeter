@@ -763,7 +763,7 @@ public final class JOrphanUtils {
         RandomStringGenerator pwdGenerator = new RandomStringGenerator.Builder()
                 .usingRandom(LazySecureRandom.INSTANCE::nextInt)
                 .withinRange(pairs)
-                .build();
+                .get();
         return pwdGenerator.generate(length);
     }
 }
