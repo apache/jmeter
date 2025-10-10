@@ -35,6 +35,12 @@ fun Project.boolProp(name: String) =
 val String.v: String get() = rootProject.extra["$this.version"] as String
 version = "jmeter".v + releaseParams.snapshotSuffix
 
+if (gradle.startParameter.writeDependencyVerifications.isNotEmpty()) {
+    tasks.named("dependencies") {
+        dependsOn(":src:dist:verifyReleaseDependencies")
+    }
+}
+
 allprojects {
     group = "org.apache.jmeter"
     version = rootProject.version
