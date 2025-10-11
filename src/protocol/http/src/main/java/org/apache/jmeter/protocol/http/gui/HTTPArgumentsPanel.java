@@ -39,11 +39,14 @@ import org.apache.jorphan.util.StringUtilities;
 /**
  * A GUI panel allowing the user to enter HTTP Parameters.
  * These have names and values, as well as check-boxes to determine whether or not to
- * include the "=" sign in the output and whether or not to encode the output.
+ * include the "=" sign in the output and whether or not to encode the output and
+ * whether or not to enable them.
  */
 public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     private static final long serialVersionUID = 240L;
+
+    private static final String ENABLE = "enable"; //$NON-NLS-1$
 
     private static final String ENCODE_OR_NOT = "encode?"; //$NON-NLS-1$
 
@@ -60,21 +63,23 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     @Override
     protected void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] {
-                ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, CONTENT_TYPE, INCLUDE_EQUALS },
+                ENABLE, ArgumentsPanel.COLUMN_RESOURCE_NAMES_0, ArgumentsPanel.COLUMN_RESOURCE_NAMES_1, ENCODE_OR_NOT, CONTENT_TYPE, INCLUDE_EQUALS },
                 HTTPArgument.class,
                 new Functor[] {
+                new Functor("isEnabled"), //$NON-NLS-1$
                 new Functor("getName"), //$NON-NLS-1$
                 new Functor("getValue"), //$NON-NLS-1$
                 new Functor("isAlwaysEncoded"), //$NON-NLS-1$
                 new Functor("getContentType"), //$NON-NLS-1$
                 new Functor("isUseEquals") }, //$NON-NLS-1$
                 new Functor[] {
+                new Functor("setEnabled"), //$NON-NLS-1$
                 new Functor("setName"), //$NON-NLS-1$
                 new Functor("setValue"), //$NON-NLS-1$
                 new Functor("setAlwaysEncoded"), //$NON-NLS-1$
                 new Functor("setContentType"),
                 new Functor("setUseEquals")}, //$NON-NLS-1$
-                new Class[] {String.class, String.class, Boolean.class, String.class, Boolean.class });
+                new Class[] {Boolean.class, String.class, String.class, Boolean.class, String.class, Boolean.class });
     }
 
     public static boolean testFunctors(){
@@ -85,6 +90,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     @Override
     protected void sizeColumns(JTable table) {
+        GuiUtils.fixSize(table.getColumn(ENABLE), table);
         GuiUtils.fixSize(table.getColumn(INCLUDE_EQUALS), table);
         GuiUtils.fixSize(table.getColumn(ENCODE_OR_NOT), table);
     }

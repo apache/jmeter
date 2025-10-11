@@ -85,7 +85,7 @@ public class PutWriter extends PostWriter {
 
             // Just append all the parameter values, and use that as the put body
             StringBuilder putBodyBuffer = new StringBuilder();
-             for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+             for (JMeterProperty jMeterProperty : sampler.getArguments().getEnabledArguments()) {
                  HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                  putBodyBuffer.append(arg.getEncodedValue(contentEncoding));
              }
