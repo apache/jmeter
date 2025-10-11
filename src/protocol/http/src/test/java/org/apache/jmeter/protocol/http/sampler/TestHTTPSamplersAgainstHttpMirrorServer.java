@@ -56,6 +56,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -64,6 +65,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * The samples are executed against the HttpMirrorServer, which is
  * started when the unit tests are executed.
  */
+@Isolated("modifies jmeter locale")
 public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private static final java.util.regex.Pattern EMPTY_LINE_PATTERN = java.util.regex.Pattern.compile("^$",
             java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);

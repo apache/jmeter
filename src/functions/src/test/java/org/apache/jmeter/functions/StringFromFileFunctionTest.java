@@ -25,12 +25,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-public class StringFromFileFunctionTest {
+public class StringFromFileFunctionTest extends JMeterTestCase {
     private static Path dir;
 
     @BeforeAll
