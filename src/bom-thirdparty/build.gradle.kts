@@ -67,7 +67,7 @@ dependencies {
         api("commons-io:commons-io:2.20.0")
         api("commons-lang:commons-lang:2.6")
         api("commons-logging:commons-logging:1.3.5")
-        api("commons-net:commons-net:3.10.0")
+        api("commons-net:commons-net:3.12.0")
         api("dnsjava:dnsjava:2.1.9")
         api("io.burt:jmespath-core:0.6.0")
         api("io.burt:jmespath-jackson:0.6.0")
