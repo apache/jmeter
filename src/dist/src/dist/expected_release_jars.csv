@@ -1,7 +1,7 @@
-29901,accessors-smart-2.5.0.jar
+30245,accessors-smart-2.6.0.jar
 30570,annotations-24.1.0.jar
 6806,apiguardian-api-1.1.2.jar
-123598,asm-9.6.jar
+126093,asm-9.7.1.jar
 485898,batik-anim-1.16.jar
 424607,batik-awt-util-1.16.jar
 704905,batik-bridge-1.16.jar
@@ -87,7 +87,7 @@
 19858,jodd-log-5.0.13.jar
 26047,jodd-props-5.0.13.jar
 277582,json-path-2.8.0.jar
-120233,json-smart-2.5.0.jar
+122808,json-smart-2.6.0.jar
 473788,jsoup-1.17.1.jar
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar

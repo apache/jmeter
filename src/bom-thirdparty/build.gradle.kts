@@ -87,8 +87,8 @@ dependencies {
         api("org.hamcrest:hamcrest:2.2") {
             because("ApacheJMeter_junit depends on junit4")
         }
-        api("net.minidev:accessors-smart:2.5.0")
-        api("net.minidev:json-smart:2.5.0")
+        api("net.minidev:accessors-smart:2.6.0")
+        api("net.minidev:json-smart:2.6.0")
         api("net.sf.jtidy:jtidy:r938")
         api("net.sf.saxon:Saxon-HE:11.6")
         api("org.apache-extras.beanshell:bsh:2.0b6")
