@@ -56,6 +56,12 @@ tasks.configureEach<JavaExec> {
     }
 }
 
+if (gradle.startParameter.writeDependencyVerifications.isNotEmpty()) {
+    tasks.configureEach<Jar> {
+        enabled = false
+    }
+}
+
 tasks.configureEach<Checkstyle> {
     buildParameters.buildJdk?.let {
         javaLauncher.convention(javaToolchains.launcherFor(it))
