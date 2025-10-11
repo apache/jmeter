@@ -46,6 +46,7 @@
          <trusted-key id="1AA8CF92D409A73393D0B736BFF2EE42C8282E76" group="org.apache.activemq"/>
          <trusted-key id="1BD97A6A154E7810EE0BC832E2F38302C8075E3D" group="^org[.]gradle($|([.].*))" regex="true"/>
          <trusted-key id="1BE2DD4B1FCF252FE4F0A1D103281AA0289FF53A" group="com.soywiz.korlibs.korte"/>
+         <trusted-key id="1D04A424F505394DBED15D451D0690E353BE126D" group="net.minidev"/>
          <trusted-key id="1DEF9646901A1652E5B3E5EA694DB6F419C8D1FD" group="org.exparity"/>
          <trusted-key id="1FCFFE916B6670868FA0EA0391AE1504568EC4DD" group="org.jodd"/>
          <trusted-key id="223D3A74B068ECA354DC385CE126833F9CF64915" group="org.apache.xbean"/>
