@@ -64,6 +64,7 @@ Summary
   <h3>General</h3>
   <ul>
     <li><pr>6220</pr> Require Java 17 or later for running JMeter</li>
+    <li><pr>6550</pr> Require Kotlin 1.9 or later for running JMeter</li>
     <li><pr>6274</pr> Change references to old MySQL driver to new class <code>com.mysql.cj.jdbc.Driver</code></li>
     <li><issue>6352</issue> Calculate delays in Open Model Thread Group and Precise Throughput
         Timer relative to start of Thread Group instead of the start of the test.</li>
