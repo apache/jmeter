@@ -19,9 +19,7 @@ package org.apache.jmeter.protocol.http.parser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.Iterator;
 
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
@@ -34,7 +32,6 @@ import jodd.lagarto.LagartoParser;
 import jodd.lagarto.Tag;
 import jodd.lagarto.TagType;
 import jodd.lagarto.dom.HtmlCCommentExpressionMatcher;
-import jodd.lagarto.dom.LagartoDomBuilderConfig;
 import jodd.log.LoggerFactory;
 import jodd.log.impl.Slf4jLogger;
 import jodd.util.CharSequenceUtil;
@@ -60,21 +57,16 @@ public class LagartoBasedHtmlParser extends HTMLParser {
     }
 
     private static final class JMeterTagVisitor extends EmptyTagVisitor {
-        private HtmlCCommentExpressionMatcher htmlCCommentExpressionMatcher;
         private final URLCollection urls;
         private final URLPointer baseUrl;
-        private final Float ieVersion;
-        private final Deque<Boolean> enabled = new ArrayDeque<>();
 
         /**
          * @param baseUrl base url to add possibly missing information to urls found in <code>urls</code>
          * @param urls collection of urls to consider
-         * @param ieVersion version number of IE to emulate
          */
-        public JMeterTagVisitor(final URLPointer baseUrl, URLCollection urls, Float ieVersion) {
+        public JMeterTagVisitor(final URLPointer baseUrl, URLCollection urls) {
             this.urls = urls;
             this.baseUrl = baseUrl;
-            this.ieVersion = ieVersion;
         }
 
         private void extractAttribute(Tag tag, String attributeName) {
@@ -93,9 +85,6 @@ public class LagartoBasedHtmlParser extends HTMLParser {
          */
         @Override
         public void script(Tag tag, CharSequence body) {
-            if (!enabled.peek()) {
-                return;
-            }
             extractAttribute(tag, ATT_SRC);
         }
 
@@ -106,9 +95,6 @@ public class LagartoBasedHtmlParser extends HTMLParser {
          */
         @Override
         public void tag(Tag tag) {
-            if (!enabled.peek()) {
-                return;
-            }
             TagType tagType = tag.getType();
             switch (tagType) {
             case START:
@@ -184,54 +170,16 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 break;
             }
         }
-
-        /* (non-Javadoc)
-         * @see jodd.lagarto.EmptyTagVisitor#condComment(java.lang.CharSequence, boolean, boolean, boolean)
-         */
-        @Override
-        public void condComment(CharSequence expression, boolean isStartingTag,
-                boolean isHidden, boolean isHiddenEndTag) {
-            // See http://css-tricks.com/how-to-create-an-ie-only-stylesheet/
-            if(!isStartingTag) {
-                enabled.pop();
-            } else {
-                if (htmlCCommentExpressionMatcher == null) {
-                    htmlCCommentExpressionMatcher = new HtmlCCommentExpressionMatcher();
-                }
-                String expressionString = expression.toString().trim();
-                enabled.push(htmlCCommentExpressionMatcher.match(ieVersion,
-                        expressionString));
-            }
-        }
-
-        /* (non-Javadoc)
-         * @see jodd.lagarto.EmptyTagVisitor#start()
-         */
-        @Override
-        public void start() {
-            super.start();
-            enabled.clear();
-            enabled.push(Boolean.TRUE);
-        }
     }
 
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl,
             URLCollection coll, String encoding) throws HTMLParseException {
         try {
-            Float ieVersion = extractIEVersion(userAgent);
-
             String contents = new String(html,encoding);
             LagartoParser lagartoParser = new LagartoParser(contents.toCharArray());
-            LagartoDomBuilderConfig config = new LagartoDomBuilderConfig();
-            config.setCaseSensitive(false);
-            // Conditional comments only apply for IE < 10
-            config.setEnableConditionalComments(isEnableConditionalComments(ieVersion));
-            if(ieVersion != null) {
-                config.setCondCommentIEVersion(ieVersion);
-            }
-            lagartoParser.setConfig(config);
-            JMeterTagVisitor tagVisitor = new JMeterTagVisitor(new URLPointer(baseUrl), coll, ieVersion);
+            lagartoParser.getConfig().setCaseSensitive(false);
+            JMeterTagVisitor tagVisitor = new JMeterTagVisitor(new URLPointer(baseUrl), coll);
             lagartoParser.parse(tagVisitor);
             return coll.iterator();
         } catch (LagartoException e) {

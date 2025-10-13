@@ -70,6 +70,11 @@ Summary
     <li><issue>6357</issue><pr>6358</pr> Ensure writable directories when copying template files while report generation.</li>
   </ul>
 
+  <h3>HTTP Samplers and Test Script Recorder</h3>
+  <ul>
+    <li><pr>5891</pr>Skip Internet Explorer 6-9 conditional comment processing when fetching resource links</li>
+  </ul>
+
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>
