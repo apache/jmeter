@@ -30,6 +30,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -61,12 +62,6 @@ public class TestHTMLParser extends JMeterTestCase {
 
     private static final String DEFAULT_UA  = "Apache-HttpClient/4.2.6";
     private static final String UA_FF       = "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0";
-    private static final String UA_IE55     = "Mozilla/4.0 (compatible;MSIE 5.5; Windows 98)";
-    private static final String UA_IE6      = "Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)";
-    private static final String UA_IE7      = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
-    private static final String UA_IE8      = "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; "
-            + "GTB7.4; InfoPath.2; SV1; .NET CLR 3.3.69573; WOW64; en-US)";
-    private static final String UA_IE9      = "Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))";
     private static final String UA_IE10     = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)";
 
     private static class StaticTestClass // Can't instantiate
@@ -119,6 +114,10 @@ public class TestHTMLParser extends JMeterTestCase {
             this.userAgent = userAgent;
         }
 
+        @Override
+        public String toString() {
+            return "TestData [userAgent=" + userAgent + ", htmlFileName=" + fileName + ", expectedList=" + expectedList + "]";
+        }
     }
 
     private static final String DEFAULT_JMETER_PARSER =
@@ -183,26 +182,6 @@ public class TestHTMLParser extends JMeterTestCase {
                 null,
                 "testfiles/HTMLParserTestCaseWithConditional1_FF.all",
                 UA_FF),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_IE6.all",
-                UA_IE6),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_IE7.all",
-                UA_IE7),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_IE8.all",
-                UA_IE8),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional1.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional1_IE8.all",
-                UA_IE8),
 
         // FF gets mixed up by nested comments
         new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
@@ -211,41 +190,17 @@ public class TestHTMLParser extends JMeterTestCase {
                 "testfiles/HTMLParserTestCaseWithConditional2_FF.all",
                 UA_FF),
 
-        new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional2_IE7.all",
-                UA_IE7),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional2_IE8.all",
-                UA_IE8),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional2.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional2_IE9.all",
-                UA_IE9),
         new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
                 "http://localhost/mydir/myfile.html",
                 null,
                 "testfiles/HTMLParserTestCaseWithConditional3_FF.all",
                 UA_FF),
+
         new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
                 "http://localhost/mydir/myfile.html",
                 null,
                 "testfiles/HTMLParserTestCaseWithConditional3_IE10.all",
                 UA_IE10),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional3_IE55.all",
-                UA_IE55),
-        new TestData("testfiles/HTMLParserTestCaseWithConditional3.html",
-                "http://localhost/mydir/myfile.html",
-                null,
-                "testfiles/HTMLParserTestCaseWithConditional3_IE6.all",
-                UA_IE6)
     };
 
     static Stream<Arguments> parsersAndTestNumbers() {
@@ -255,8 +210,8 @@ public class TestHTMLParser extends JMeterTestCase {
     }
 
     static Stream<Arguments> specificParserTests() {
-        return IntStream.range(0, SPECIFIC_PARSER_TESTS.length)
-                        .mapToObj(testNumber -> arguments(DEFAULT_JMETER_PARSER, testNumber));
+        return Arrays.stream(SPECIFIC_PARSER_TESTS)
+                .map(testData -> arguments(DEFAULT_JMETER_PARSER, testData));
     }
 
     // Test if can instantiate parser using property name
@@ -354,13 +309,13 @@ public class TestHTMLParser extends JMeterTestCase {
 
     @ParameterizedTest
     @MethodSource("specificParserTests")
-    public void testSpecificParserList(String parserName, int testNumber) throws Exception {
+    public void testSpecificParserList(String parserName, TestData testData) throws Exception {
         HTMLParser p = (HTMLParser) BaseParser.getParser(parserName);
-        filetest(p, SPECIFIC_PARSER_TESTS[testNumber].fileName,
-                SPECIFIC_PARSER_TESTS[testNumber].baseUrl,
-                SPECIFIC_PARSER_TESTS[testNumber].expectedList,
+        filetest(p, testData.fileName,
+                testData.baseUrl,
+                testData.expectedList,
                 new ArrayList<>(), true,
-                SPECIFIC_PARSER_TESTS[testNumber].userAgent);
+                testData.userAgent);
     }
 
 
