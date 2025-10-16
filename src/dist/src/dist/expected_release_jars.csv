@@ -82,10 +82,11 @@
 16555,jcl-over-slf4j-1.7.36.jar
 489286,jmespath-core-0.6.0.jar
 7090,jmespath-jackson-0.6.0.jar
-403497,jodd-core-5.0.13.jar
-220475,jodd-lagarto-5.0.13.jar
-19858,jodd-log-5.0.13.jar
-26047,jodd-props-5.0.13.jar
+104067,jodd-core-5.3.0.jar
+226181,jodd-lagarto-6.0.6.jar
+20311,jodd-log-5.1.6.jar
+25989,jodd-props-6.0.2.jar
+337315,jodd-util-6.1.0.jar
 277582,json-path-2.8.0.jar
 122808,json-smart-2.6.0.jar
 473788,jsoup-1.17.1.jar
