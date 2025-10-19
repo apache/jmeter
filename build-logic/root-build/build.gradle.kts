@@ -27,9 +27,9 @@ dependencies {
     }
     api(projects.buildParameters)
     api(projects.verification)
-    api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:1.90")
-    api("com.github.vlsi.ide:com.github.vlsi.ide.gradle.plugin:1.90")
-    api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:1.90")
+    api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:2.0.0")
+    api("com.github.vlsi.ide:com.github.vlsi.ide.gradle.plugin:2.0.0")
+    api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:2.0.0")
     api("org.nosphere.apache.rat:org.nosphere.apache.rat.gradle.plugin:0.8.1")
     api("org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin:1.1.7")
     api("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.2.20")
