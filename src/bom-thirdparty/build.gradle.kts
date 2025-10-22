@@ -26,7 +26,7 @@ javaPlatform {
 }
 
 dependencies {
-    api(platform("org.codehaus.groovy:groovy-bom:3.0.20"))
+    api(platform("org.codehaus.groovy:groovy-bom:3.0.25"))
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"))
 
     constraints {
@@ -62,12 +62,12 @@ dependencies {
         api("com.miglayout:miglayout-swing:5.3")
         api("com.sun.activation:javax.activation:1.2.0")
         api("com.thoughtworks.xstream:xstream:1.4.21")
-        api("commons-codec:commons-codec:1.16.0")
+        api("commons-codec:commons-codec:1.19.0")
         api("commons-collections:commons-collections:3.2.2")
-        api("commons-io:commons-io:2.15.1")
+        api("commons-io:commons-io:2.20.0")
         api("commons-lang:commons-lang:2.6")
         api("commons-logging:commons-logging:1.3.5")
-        api("commons-net:commons-net:3.10.0")
+        api("commons-net:commons-net:3.12.0")
         api("dnsjava:dnsjava:2.1.9")
         api("io.burt:jmespath-core:0.6.0")
         api("io.burt:jmespath-jackson:0.6.0")
@@ -87,19 +87,21 @@ dependencies {
         api("org.hamcrest:hamcrest:2.2") {
             because("ApacheJMeter_junit depends on junit4")
         }
-        api("net.minidev:accessors-smart:2.5.0")
-        api("net.minidev:json-smart:2.5.0")
+        api("net.minidev:accessors-smart:2.6.0")
+        api("net.minidev:json-smart:2.6.0")
         api("net.sf.jtidy:jtidy:r938")
         api("net.sf.saxon:Saxon-HE:11.6")
         api("org.apache-extras.beanshell:bsh:2.0b6")
-        api("org.apache.commons:commons-collections4:4.4")
+        api("org.apache.commons:commons-collections4:4.5.0")
         api("org.apache.commons:commons-dbcp2:2.9.0")
         api("org.apache.commons:commons-jexl3:3.2.1")
         api("org.apache.commons:commons-jexl:2.1.1")
-        api("org.apache.commons:commons-lang3:3.14.0")
+        api("org.apache.commons:commons-lang3:3.19.0") {
+            because("User might still rely on commons-lang3")
+        }
         api("org.apache.commons:commons-math3:3.6.1")
-        api("org.apache.commons:commons-pool2:2.12.0")
-        api("org.apache.commons:commons-text:1.11.0")
+        api("org.apache.commons:commons-pool2:2.12.1")
+        api("org.apache.commons:commons-text:1.14.0")
         api("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1")
         api("org.apache.httpcomponents.client5:httpclient5:5.3")
         api("org.apache.httpcomponents:httpasyncclient:4.1.5")
@@ -127,10 +129,10 @@ dependencies {
         api("org.jetbrains.lets-plot:lets-plot-batik:4.1.0")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.5.0")
         api("org.jetbrains:annotations:24.1.0")
-        api("org.jodd:jodd-core:5.0.13")
-        api("org.jodd:jodd-lagarto:5.0.13")
-        api("org.jodd:jodd-log:5.0.13")
-        api("org.jodd:jodd-props:5.0.13")
+        api("org.jodd:jodd-core:5.3.0")
+        api("org.jodd:jodd-lagarto:6.0.6")
+        api("org.jodd:jodd-log:5.1.6")
+        api("org.jodd:jodd-props:6.0.2")
         api("org.jsoup:jsoup:1.17.1")
         api("org.mongodb:mongo-java-driver:2.14.3")
         api("org.mozilla:rhino:1.7.14")

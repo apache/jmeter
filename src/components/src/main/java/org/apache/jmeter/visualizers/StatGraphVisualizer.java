@@ -64,7 +64,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -337,7 +336,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
 
     private static String[] keys(Map<String, ?> map) {
-        return map.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return map.keySet().toArray(new String[0]);
     }
 
     /**

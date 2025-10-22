@@ -27,6 +27,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +82,7 @@ public class HTTPArgument extends Argument implements Serializable {
 
     public boolean isUseEquals() {
         boolean eq = get(getSchema().getUseEquals());
-        if (getMetaData().equals("=") || (getValue() != null && getValue().length() > 0)) {
+        if (getMetaData().equals("=") || StringUtilities.isNotEmpty(getValue())) {
             setUseEquals(true);
             return true;
         }

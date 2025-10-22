@@ -26,11 +26,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.curl.ArgumentHolder;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser;
@@ -94,10 +95,10 @@ public class BasicCurlParserTest {
         assertEquals(5, request.getHeaders().size());
         assertTrue(request.isCompressed());
         assertEquals("GET", request.getMethod());
-        String resParser = "Request [compressed=true, url=http://jmeter.apache.org/, method=GET, headers=[(User-Agent,Mozilla/5.0 "
-                +"(Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0), (Accept,text/html,application/xhtml+xml,"
-                + "application/xml;q=0.9,*/*;q=0.8), (Accept-Language,en-US,en;q=0.5), (DNT,1), "
-                + "(Upgrade-Insecure-Requests,1)]]";
+        String resParser = "Request [compressed=true, url=http://jmeter.apache.org/, method=GET, headers=["
+                + "User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:63.0) Gecko/20100101 Firefox/63.0"
+                + ", Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+                + ", Accept-Language=en-US,en;q=0.5, DNT=1, Upgrade-Insecure-Requests=1]]";
         assertEquals(resParser, request.toString(),
                 "The method 'toString' should get all parameters correctly");
     }
@@ -245,7 +246,7 @@ public class BasicCurlParserTest {
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
         assertEquals(5, request.getHeaders().size(),
                 "With method 'parser', the quantity of Headers should be 5'");
-        assertTrue(request.getHeaders().contains(Pair.of("User-Agent", "Mozilla/5.0")),
+        assertTrue(request.getHeaders().contains(new AbstractMap.SimpleEntry<>("User-Agent", "Mozilla/5.0")),
                 "With method 'parser', Headers need to add 'user-agent' with value 'Mozilla/5.0' ");
     }
 
@@ -463,8 +464,8 @@ public class BasicCurlParserTest {
                 + "-H 'cache-control: no-cache' -F 'test=name' -F 'test1=name1' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Pair<String,ArgumentHolder>> res = request.getFormData();
-        assertTrue(res.contains(Pair.of("test1", StringArgumentHolder.of("name1"))),
+        List<Map.Entry<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(new AbstractMap.SimpleEntry<>("test1", StringArgumentHolder.of("name1"))),
                 "With method 'parser', we should post form data");
     }
 
@@ -473,8 +474,8 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'https://example.invalid' -F 'test=\"\"' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Pair<String,ArgumentHolder>> res = request.getFormData();
-        assertTrue(res.contains(Pair.of("test", StringArgumentHolder.of(""))),
+        List<Map.Entry<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(new AbstractMap.SimpleEntry<>("test", StringArgumentHolder.of(""))),
                 "With method 'parser', we should post form data: " + request.getFormData());
     }
 
@@ -483,8 +484,8 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'https://example.invalid' -H 'X-Something;' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Pair<String, String>> res = request.getHeaders();
-        assertTrue(res.contains(Pair.of("X-Something", "")),
+        List<Map.Entry<String, String>> res = request.getHeaders();
+        assertTrue(res.contains(new AbstractMap.SimpleEntry<>("X-Something", "")),
                 "With method 'parser', we should post form data: " + request.getFormData());
     }
 
@@ -494,8 +495,8 @@ public class BasicCurlParserTest {
                 + "--form 'test=\"something quoted\"'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Pair<String,ArgumentHolder>> res = request.getFormData();
-        assertTrue(res.contains(Pair.of("test", StringArgumentHolder.of("something quoted"))),
+        List<Map.Entry<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(new AbstractMap.SimpleEntry<>("test", StringArgumentHolder.of("something quoted"))),
                 "With method 'form', we should post form data");
     }
 
@@ -505,8 +506,8 @@ public class BasicCurlParserTest {
                 + "--form 'test=\"something \\\"quoted\\\"\"'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Pair<String,ArgumentHolder>> res = request.getFormData();
-        assertTrue(res.contains(Pair.of("test", StringArgumentHolder.of("something \"quoted\""))),
+        List<Map.Entry<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(new AbstractMap.SimpleEntry<>("test", StringArgumentHolder.of("something \"quoted\""))),
                 "With method 'form', we should post form data");
     }
 
@@ -517,8 +518,8 @@ public class BasicCurlParserTest {
                 + "--form 'image=@\"/some/file.jpg\"'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Pair<String,ArgumentHolder>> res = request.getFormData();
-        assertTrue(res.contains(Pair.of("image", FileArgumentHolder.of("/some/file.jpg"))),
+        List<Map.Entry<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(new AbstractMap.SimpleEntry<>("image", FileArgumentHolder.of("/some/file.jpg"))),
                 "With method 'form', we should post form data: " + request.getFormData());
     }
 
@@ -529,8 +530,8 @@ public class BasicCurlParserTest {
                 + "--form 'image=\"@/some/file.jpg\"'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Pair<String,ArgumentHolder>> res = request.getFormData();
-        assertTrue(res.contains(Pair.of("image", StringArgumentHolder.of("@/some/file.jpg"))),
+        List<Map.Entry<String,ArgumentHolder>> res = request.getFormData();
+        assertTrue(res.contains(new AbstractMap.SimpleEntry<>("image", StringArgumentHolder.of("@/some/file.jpg"))),
                 "With method 'form', we should post form data");
     }
 
@@ -540,8 +541,8 @@ public class BasicCurlParserTest {
                 + "-H 'cache-control: no-cache' --form-string 'image=@C:\\Test\\test.jpg' ";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        List<Pair<String,String>> res = request.getFormStringData();
-        assertTrue(res.contains(Pair.of("image", "@C:\\Test\\test.jpg")),
+        List<Map.Entry<String,String>> res = request.getFormStringData();
+        assertTrue(res.contains(new AbstractMap.SimpleEntry<>("image", "@C:\\Test\\test.jpg")),
                 "With method 'parser', we should post form data: " + request.getFormStringData());
     }
 
@@ -634,7 +635,7 @@ public class BasicCurlParserTest {
         String cmdLine = "curl 'http://jmeter.apache.org/' --referer 'www.baidu.com'";
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         BasicCurlParser.Request request = basicCurlParser.parse(cmdLine);
-        assertTrue(request.getHeaders().contains(Pair.of("Referer", "www.baidu.com")));
+        assertTrue(request.getHeaders().contains(new AbstractMap.SimpleEntry<>("Referer", "www.baidu.com")));
     }
 
     @Test

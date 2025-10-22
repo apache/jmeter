@@ -18,6 +18,7 @@
 package org.apache.jmeter.functions
 
 import org.apache.jmeter.engine.util.CompoundVariable
+import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
 import org.junit.jupiter.api.Assertions
@@ -25,7 +26,7 @@ import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
 import kotlin.concurrent.thread
 
-class IterationCounterTest {
+class IterationCounterTest : JMeterTestCase() {
 
     @Test
     fun `Counter per thread counts for each thread`() {

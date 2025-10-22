@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.mongodb.mongo;
 
 import java.util.List;
 
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +54,7 @@ public class MongoDB {
         boolean authenticated = db.isAuthenticated();
 
         if(!authenticated) {
-            if(username != null && password != null && username.length() > 0 && password.length() > 0) {
+            if (StringUtilities.isNotEmpty(username) && StringUtilities.isNotEmpty(password)) {
                 authenticated = db.authenticate(username, password.toCharArray());
             }
         }

@@ -288,6 +288,7 @@ public class TestJorphanUtils {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testNullifyIfEmptyTrimmed() {
         assertNull(JOrphanUtils.nullifyIfEmptyTrimmed(null));
         assertNull(JOrphanUtils.nullifyIfEmptyTrimmed("\u0001"));
@@ -295,6 +296,7 @@ public class TestJorphanUtils {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testIsBlank() {
         assertTrue(JOrphanUtils.isBlank(""));
         assertTrue(JOrphanUtils.isBlank(null));

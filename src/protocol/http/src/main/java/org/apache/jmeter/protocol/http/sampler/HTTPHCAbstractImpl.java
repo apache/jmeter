@@ -25,10 +25,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +104,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
             ThreadLocal.withInitial(() -> Boolean.FALSE);
 
     static {
-        if(!StringUtils.isEmpty(JMeterUtils.getProperty("httpclient.timeout"))) { //$NON-NLS-1$
+        if (!JMeterUtils.getPropDefault("httpclient.timeout", "").isEmpty()) { //$NON-NLS-1$
             log.warn("You're using property 'httpclient.timeout' that will soon be deprecated for HttpClient3.1, you should either set "
                     + "timeout in HTTP Request GUI, HTTP Request Defaults or set http.socket.timeout in httpclient.parameters");
         }
@@ -166,7 +165,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @return {@code true} iff both ProxyPort and ProxyHost are defined.
      */
     protected boolean isDynamicProxy(String proxyHost, int proxyPort){
-        return !JOrphanUtils.isBlank(proxyHost) && proxyPort > 0;
+        return StringUtilities.isNotBlank(proxyHost) && proxyPort > 0;
     }
 
     /**
@@ -184,6 +183,6 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @return true if value is null or empty trimmed
      */
     protected static boolean isNullOrEmptyTrimmed(String value) {
-        return JOrphanUtils.isBlank(value);
+        return StringUtilities.isBlank(value);
     }
 }

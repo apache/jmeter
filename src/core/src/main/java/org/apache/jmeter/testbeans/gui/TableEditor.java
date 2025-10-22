@@ -43,13 +43,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -226,7 +226,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                 throw new RuntimeException("attribute OBJECT_PROPERTIES must be a String array");
             }
             List<String> props = Arrays.stream((String[]) value)
-                    .map(StringUtils::capitalize)
+                    .map(StringUtilities::capitalize)
                     .collect(Collectors.toList());
             Functor[] writers = createWriters(props);
             Functor[] readers = createReaders(clazz, props);

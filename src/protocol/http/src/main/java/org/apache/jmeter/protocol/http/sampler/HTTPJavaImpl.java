@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.io.input.CountingInputStream;
+import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -204,7 +204,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         if (res != null) {
             res.setRequestHeaders(getAllHeadersExceptCookie(conn, securityHeaders));
-            if(cookies != null && !cookies.isEmpty()) {
+            if (StringUtilities.isNotEmpty(cookies)) {
                 res.setCookies(cookies);
             } else {
                 // During recording Cookie Manager doesn't handle cookies
@@ -241,9 +241,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         // works OK even if ContentEncoding is null
         boolean gzipped = HTTPConstants.ENCODING_GZIP.equals(conn.getContentEncoding());
-        CountingInputStream instream = null;
+
+        BoundedInputStream instream = null;
         try {
-            instream = new CountingInputStream(conn.getInputStream());
+            instream = BoundedInputStream.builder().setInputStream(conn.getInputStream()).get();
             if (gzipped) {
                 in = new GZIPInputStream(instream);
             } else {
@@ -295,7 +296,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // N.B. this closes 'in'
         byte[] responseData = readResponse(res, in, contentLength);
         if (instream != null) {
-            res.setBodySize(instream.getByteCount());
+            res.setBodySize(instream.getCount());
             instream.close();
         }
         return responseData;

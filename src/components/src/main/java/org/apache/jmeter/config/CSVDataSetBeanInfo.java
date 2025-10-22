@@ -24,6 +24,7 @@ import org.apache.jmeter.testbeans.gui.FileEditor;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
 
@@ -106,7 +107,7 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     }
 
     public static int getShareModeAsInt(String mode) {
-        if (mode == null || mode.length() == 0){
+        if (StringUtilities.isEmpty(mode)){
             return SHARE_ALL; // default (e.g. if test plan does not have definition)
         }
         for (int i = 0; i < SHARE_TAGS.length; i++) {

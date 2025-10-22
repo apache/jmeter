@@ -21,8 +21,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 public class StringArgumentHolder implements ArgumentHolder {
 
     @Override
@@ -54,8 +52,8 @@ public class StringArgumentHolder implements ArgumentHolder {
     }
 
     public static StringArgumentHolder of(String name) {
-        Pair<String, Map<String, String>> argdata = ArgumentHolder.parse(name);
-        return new StringArgumentHolder(argdata.getLeft(), argdata.getRight());
+        Map.Entry<String, Map<String, String>> argdata = ArgumentHolder.parse(name);
+        return new StringArgumentHolder(argdata.getKey(), argdata.getValue());
     }
 
     @Override

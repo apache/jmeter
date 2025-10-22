@@ -60,7 +60,6 @@ import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.DistributedRunner;
@@ -98,6 +97,7 @@ import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.jorphan.util.ThreadDumper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
@@ -645,7 +645,8 @@ public class JMeter implements JMeterPlugin {
             log.info("Running JSR-223 init script in file: {}", jsr223Init);
             File file = new File(jsr223Init);
             if(file.exists() && file.canRead()) {
-                String extension = StringUtils.defaultIfBlank(FilenameUtils.getExtension(jsr223Init), "Groovy");
+                String ext = FilenameUtils.getExtension(jsr223Init);
+                String extension = StringUtilities.isBlank(ext) ? "Groovy" : ext;
                 try (Reader reader = Files.newBufferedReader(file.toPath())) {
                     ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
                     ScriptEngine engine = scriptEngineManager.getEngineByExtension(extension);
@@ -712,7 +713,7 @@ public class JMeter implements JMeterPlugin {
             String proxyScheme = null;
             if (parser.getArgumentById(PROXY_SCHEME) != null) {
                 proxyScheme = parser.getArgumentById(PROXY_SCHEME).getArgument();
-                if(!StringUtils.isBlank(proxyScheme)){
+                if (StringUtilities.isNotBlank(proxyScheme)) {
                     System.setProperty("http.proxyScheme",  proxyScheme );// $NON-NLS-1$
                 }
             }

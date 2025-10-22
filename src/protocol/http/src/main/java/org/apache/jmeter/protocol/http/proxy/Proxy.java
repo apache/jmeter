@@ -19,15 +19,14 @@ package org.apache.jmeter.protocol.http.proxy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -52,6 +51,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.ExceptionUtils;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -486,9 +486,8 @@ public class Proxy extends Thread {
     private static SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e, String msg) {
         if (result == null) {
             result = new SampleResult();
-            ByteArrayOutputStream text = new ByteArrayOutputStream(200);
-            e.printStackTrace(new PrintStream(text)); // NOSONAR we store the Stacktrace in the result
-            result.setResponseData(text.toByteArray());
+            result.setResponseData(ExceptionUtils.getStackTraceAsBytes(e, StandardCharsets.UTF_8));
+            result.setDataEncoding(StandardCharsets.UTF_8.name());
             result.setSamplerData(request.getFirstLine());
             result.setSampleLabel(request.getUrl());
         }

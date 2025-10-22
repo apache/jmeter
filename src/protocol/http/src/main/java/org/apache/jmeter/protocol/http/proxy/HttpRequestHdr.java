@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang3.CharUtils;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -40,6 +39,7 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.CharUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,7 +157,7 @@ public class HttpRequestHdr {
         while ((inHeaders || readLength < dataLength) && ((x = in.read()) != -1)) {
             line.write(x);
             clientRequest.write(x);
-            if (firstLine && !CharUtils.isAscii((char) x)){// includes \n
+            if (firstLine && x >= 128){// includes \n
                 throw new IllegalArgumentException("Only ASCII supported in headers (perhaps SSL was used?)");
             }
             if (inHeaders && (byte) x == (byte) '\n') { // $NON-NLS-1$

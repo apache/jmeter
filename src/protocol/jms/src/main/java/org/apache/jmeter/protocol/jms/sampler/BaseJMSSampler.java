@@ -26,7 +26,6 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -406,7 +405,8 @@ public abstract class BaseJMSSampler extends AbstractSampler {
      *
      */
     protected void configureIsReconnectErrorCode() {
-        String regex = StringUtils.trimToEmpty(getReconnectionErrorCodes());
+        String codes = getReconnectionErrorCodes();
+        String regex = codes == null ? "" : codes.trim();
         if (regex.isEmpty()) {
             isReconnectErrorCode = e -> false;
         } else {

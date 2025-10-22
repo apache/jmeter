@@ -22,11 +22,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.testelement.schema.PropertyDescriptor;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.tika.Tika;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
@@ -97,11 +97,11 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
     }
 
     private static String detectMimeType(String path, String mimetype) {
-        if (StringUtils.isNotBlank(mimetype)) {
+        if (StringUtilities.isNotBlank(mimetype)) {
             return mimetype;
         }
         mimetype = Objects.toString(mimetype, "");
-        if (StringUtils.isBlank(path)) {
+        if (StringUtilities.isBlank(path)) {
             return mimetype;
         }
         File file = new File(path);

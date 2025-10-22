@@ -32,10 +32,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.MenuElement;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.plugin.MenuCreator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,7 +108,7 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
     public static void restartApplication(Runnable runBeforeRestart) {
         String javaCommand = System.getProperty(SUN_JAVA_COMMAND);
         List<String> processArgs = new ArrayList<>();
-        if(StringUtils.isEmpty(javaCommand)) {
+        if (StringUtilities.isEmpty(javaCommand)) {
             JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
                     JMeterUtils.getResString("restart_error")+":\n This command is only supported on Open JDK or Oracle JDK" ,  //$NON-NLS-1$  //$NON-NLS-2$
                     JMeterUtils.getResString("error_title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$

@@ -160,7 +160,7 @@ val populateLibs by tasks.registering {
     }
 }
 
-val updateExpectedJars by props()
+val updateExpectedJars by props(default = gradle.startParameter.writeDependencyVerifications.isNotEmpty())
 
 val verifyReleaseDependencies by tasks.registering {
     description = "Verifies if binary release archive contains the expected set of external jars"

@@ -40,8 +40,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.assertions.gui.XMLConfPanel;
 import org.apache.jmeter.extractor.XPathExtractor;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -52,7 +50,9 @@ import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.ExceptionUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,7 +113,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         String xmlDataFieldText = xmlDataField.getText();
-        if (StringUtils.isNotEmpty(xmlDataFieldText) && XPATH_TESTER_COMMAND.equals(command)) {
+        if (StringUtilities.isNotEmpty(xmlDataFieldText) && XPATH_TESTER_COMMAND.equals(command)) {
             XPathExtractor extractor = new XPathExtractor();
             xmlConfPanel.modifyTestElement(extractor);
             extractor.setFragment(getFragment.isSelected());
@@ -126,7 +126,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
      * @param textToParse
      */
     private void executeAndShowXPathTester(String textToParse, XPathExtractor extractor) {
-        if (textToParse != null && textToParse.length() > 0
+        if (StringUtilities.isNotEmpty(textToParse)
                 && this.xpathExpressionField.getText().length() > 0) {
             this.xpathResultField.setText(process(textToParse, extractor));
             this.xpathResultField.setCaretPosition(0); // go to first line

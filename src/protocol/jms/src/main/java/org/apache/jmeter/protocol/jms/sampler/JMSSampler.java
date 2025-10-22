@@ -46,7 +46,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -61,6 +60,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -699,11 +699,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private Context getInitialContext() throws NamingException {
         Hashtable<String, String> table = new Hashtable<>();
 
-        if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
+        if (StringUtilities.isNotBlank(getInitialContextFactory())) {
             LOGGER.debug("Using InitialContext [{}]", getInitialContextFactory());
             table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
         }
-        if (getContextProvider() != null && getContextProvider().trim().length() > 0) {
+        if (StringUtilities.isNotBlank(getContextProvider())) {
             LOGGER.debug("Using Provider [{}]", getContextProvider());
             table.put(Context.PROVIDER_URL, getContextProvider());
         }
@@ -766,7 +766,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private int getTimeoutAsInt() {
         String propAsString = getPropertyAsString(TIMEOUT);
-        if(StringUtils.isEmpty(propAsString)){
+        if (StringUtilities.isEmpty(propAsString)){
             return DEFAULT_TIMEOUT;
         } else {
             return Integer.parseInt(propAsString);
@@ -827,7 +827,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private boolean useTemporyQueue() {
         String recvQueue = getReceiveQueue();
-        return recvQueue == null || recvQueue.trim().length() == 0;
+        return StringUtilities.isBlank(recvQueue);
     }
 
     public void setArguments(Arguments args) {

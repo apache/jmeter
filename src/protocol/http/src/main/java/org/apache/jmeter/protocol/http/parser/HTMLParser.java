@@ -25,7 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -203,7 +203,7 @@ public abstract class HTMLParser extends BaseParser {
      * @return version null if not IE or the version after MSIE
      */
     protected Float extractIEVersion(String userAgent) {
-        if (StringUtils.isEmpty(userAgent)) {
+        if (StringUtilities.isEmpty(userAgent)) {
             log.info("userAgent is null");
             return null;
         }
@@ -229,7 +229,7 @@ public abstract class HTMLParser extends BaseParser {
      * @return normalized url
      */
     protected static String normalizeUrlValue(CharSequence url) {
-        if (!StringUtils.isEmpty(url)) {
+        if (StringUtilities.isNotEmpty(url)) {
             String trimmed = NORMALIZE_URL_PATTERN.matcher(url.toString().trim()).replaceAll("");
             if (!trimmed.isEmpty()) {
                 return trimmed;

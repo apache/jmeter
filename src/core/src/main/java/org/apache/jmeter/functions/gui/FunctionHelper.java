@@ -41,7 +41,6 @@ import javax.swing.JRootPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -67,6 +66,7 @@ import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -254,8 +254,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
                 resultTextArea.setText(function.execute().trim());
             } catch(Exception ex) {
                 log.error("Error calling function {}", functionCall, ex);
-                resultTextArea.setText(ex.getMessage() + ", \nstacktrace:\n "+
-                        ExceptionUtils.getStackTrace(ex));
+                resultTextArea.setText(ex.getMessage() + ", \nstacktrace:\n "+ ExceptionUtils.getStackTrace(ex));
                 resultTextArea.setCaretPosition(0);
             }
 

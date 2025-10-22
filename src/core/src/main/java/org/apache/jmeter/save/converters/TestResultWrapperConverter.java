@@ -24,6 +24,7 @@ import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.save.TestResultWrapper;
+import org.apache.jorphan.util.StringUtilities;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -83,7 +84,7 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
         TestResultWrapper results = new TestResultWrapper();
         Collection<SampleResult> samples = new ArrayList<>();
         String ver = reader.getAttribute("version");  //$NON-NLS-1$
-        if (ver == null || ver.length() == 0) {
+        if (StringUtilities.isEmpty(ver)) {
             ver = "1.0";  //$NON-NLS-1$
         }
         results.setVersion(ver);

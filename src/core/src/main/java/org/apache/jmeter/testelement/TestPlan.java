@@ -29,6 +29,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -236,7 +237,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
      */
     @Override
     public void testStarted() {
-        if (getBasedir() != null && getBasedir().length() > 0) {
+        if (StringUtilities.isNotEmpty(getBasedir())) {
             try {
                 FileServer.getFileServer().setBasedir(FileServer.getFileServer().getBaseDir() + getBasedir());
             } catch (IllegalStateException e) {

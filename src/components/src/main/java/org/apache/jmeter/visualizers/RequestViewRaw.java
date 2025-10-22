@@ -29,6 +29,7 @@ import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 import com.google.auto.service.AutoService;
 
@@ -95,12 +96,12 @@ public class RequestViewRaw implements RequestView {
             SampleResult sampleResult = (SampleResult) objectResult;
             // Don't display Request headers label if rh is null or empty
             String rh = sampleResult.getRequestHeaders();
-            if (rh != null && !rh.isEmpty()) {
+            if (StringUtilities.isNotEmpty(rh)) {
                 headerData.setInitialText(rh);
                 sampleDataField.setCaretPosition(0);
             }
             String data = sampleResult.getSamplerData();
-            if (data != null && !data.isEmpty()) {
+            if (StringUtilities.isNotEmpty(data)) {
                 sampleDataField.setText(data);
                 sampleDataField.setCaretPosition(0);
             } else {

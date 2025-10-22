@@ -34,6 +34,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -82,7 +83,7 @@ public final class HtmlParsingUtils {
             query = URLDecoder.decode(newLink.getQueryString(), StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             // UTF-8 unsupported? You must be joking!
-            log.error("UTF-8 encoding not supported!");
+            log.error("UTF-8 charset not supported!");
             throw new Error("Should not happen: " + e.toString(), e);
         }
 
@@ -101,7 +102,7 @@ public final class HtmlParsingUtils {
         }
 
         final String domain = config.getDomain();
-        if (domain != null && !domain.isEmpty()) {
+        if (StringUtilities.isNotEmpty(domain)) {
             if (!isEqualOrMatchesWithJavaRegex(newLink.getDomain(), domain)) {
                 return false;
             }
@@ -136,7 +137,7 @@ public final class HtmlParsingUtils {
         }
 
         final String domain = config.getDomain();
-        if (domain != null && !domain.isEmpty()) {
+        if (StringUtilities.isNotEmpty(domain)) {
             if (!isEqualOrMatches(newLink.getDomain(), domain, matcher, patternCache)){
                 return false;
             }

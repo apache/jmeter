@@ -32,7 +32,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.UndoHistory;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -44,6 +43,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.weisj.darklaf.icons.ThemedSVGIcon;
 import com.github.weisj.darklaf.ui.button.DarkButtonUI;
+
+import kotlin.text.StringsKt;
 
 /**
  * The JMeter main toolbar class
@@ -159,7 +160,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         if (imageURL == null) {
             throw new IllegalArgumentException("No icon for: " + iconBean.getActionName());
         }
-        if (StringUtils.endsWithIgnoreCase(iconBean.getIconPath(), ".svg")) {
+        if (StringsKt.endsWith(iconBean.getIconPath(), ".svg", true)) {
             return new ThemedSVGIcon(imageURL.toURI(), iconBean.getWidth(), iconBean.getHeight());
         }
         return new ImageIcon(imageURL);

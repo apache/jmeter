@@ -32,6 +32,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -177,7 +178,7 @@ public class CompoundVariable implements Function {
 
     public void setParameters(String parameters) throws InvalidVariableException {
         this.rawParameters = parameters;
-        if (parameters == null || parameters.length() == 0) {
+        if (StringUtilities.isEmpty(parameters)) {
             return;
         }
 

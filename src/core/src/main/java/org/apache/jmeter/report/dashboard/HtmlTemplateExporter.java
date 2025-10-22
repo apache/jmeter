@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.report.config.ExporterConfiguration;
@@ -46,6 +45,7 @@ import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -317,7 +317,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         File outputDir = getPropertyFromConfig(exportCfg, OUTPUT_DIR,
                 new File(JMeterUtils.getJMeterBinDir(), OUTPUT_DIR_NAME_DEFAULT), File.class);
         String globallyDefinedOutputDir = JMeterUtils.getProperty(JMeter.JMETER_REPORT_OUTPUT_DIR_PROPERTY);
-        if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
+        if (StringUtilities.isNotEmpty(globallyDefinedOutputDir)) {
             outputDir = new File(globallyDefinedOutputDir);
         }
 
@@ -337,7 +337,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         // Add the series filter to the context
         final String seriesFilter = exportCfg.getSeriesFilter();
         Pattern filterPattern = null;
-        if (StringUtils.isNotBlank(seriesFilter)) {
+        if (StringUtilities.isNotBlank(seriesFilter)) {
             try {
                 filterPattern = Pattern.compile(seriesFilter);
             } catch (PatternSyntaxException ex) {
@@ -428,7 +428,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                 dataContext);
 
         // Add report title to the context
-        if (StringUtils.isNotEmpty(configuration.getReportTitle())) {
+        if (StringUtilities.isNotEmpty(configuration.getReportTitle())) {
             dataContext.put(DATA_CTX_REPORT_TITLE, StringEscapeUtils.escapeHtml4(configuration.getReportTitle()));
         }
 

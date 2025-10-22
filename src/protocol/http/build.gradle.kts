@@ -39,9 +39,6 @@ dependencies {
     implementation("commons-io:commons-io") {
         because("IOUtils")
     }
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
     implementation("org.apache.commons:commons-text") {
         because("StringEscapeUtils")
     }

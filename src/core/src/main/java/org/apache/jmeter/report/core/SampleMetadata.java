@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 
@@ -226,6 +225,6 @@ public class SampleMetadata {
      */
     @Override
     public String toString() {
-        return StringUtils.join(columns, separator);
+        return String.join(String.valueOf(separator), columns);
     }
 }

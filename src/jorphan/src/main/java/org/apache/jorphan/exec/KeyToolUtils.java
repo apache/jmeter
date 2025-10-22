@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,8 +92,9 @@ public class KeyToolUtils {
         } else {
             keytoolPath = KEYTOOL;
             if (!checkKeytool(keytoolPath)) { // Not found on PATH, check Java Home
-                File javaHome = SystemUtils.getJavaHome();
-                if (javaHome != null) {
+                String javaHomePath = System.getProperty("java.home");
+                if (javaHomePath != null) {
+                    File javaHome = new File(javaHomePath);
                     keytoolPath = new File(new File(javaHome, "bin"), KEYTOOL).getPath(); // $NON-NLS-1$
                     if (!checkKeytool(keytoolPath)) {
                         keytoolPath = null;
@@ -314,7 +313,7 @@ public class KeyToolUtils {
      * @return a string that is safe to use as subject name
      */
     private static String guardSubjectName(String subject) {
-        if (NumberUtils.isDigits(subject.substring(0,1))) {
+        if (!subject.isEmpty() && Character.isDigit(subject.charAt(0))) {
             return "ip" + subject;
         }
         return subject;
@@ -328,7 +327,7 @@ public class KeyToolUtils {
      * @return prefixed extension
      */
     private static String chooseExtension(String subject) {
-        if (NumberUtils.isDigits(subject.substring(0,1))) {
+        if (!subject.isEmpty() && Character.isDigit(subject.charAt(0))) {
             return "ip:" + subject;
         }
         return "dns:" + subject;

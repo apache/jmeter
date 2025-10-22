@@ -46,6 +46,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
@@ -55,6 +56,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -63,6 +65,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * The samples are executed against the HttpMirrorServer, which is
  * started when the unit tests are executed.
  */
+@Isolated("modifies jmeter locale")
 public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private static final java.util.regex.Pattern EMPTY_LINE_PATTERN = java.util.regex.Pattern.compile("^$",
             java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
@@ -821,7 +824,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             String descriptionField,
             String descriptionValue,
             boolean valuesAlreadyUrlEncoded) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = samplerDefaultEncoding;
         }
         // Check URL
@@ -852,7 +855,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             String titleValue,
             String descriptionField,
             String descriptionValue) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
         // Check URL
@@ -900,7 +903,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             File fileValue,
             String fileMimeType,
             byte[] fileContent) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
         // Check URL
@@ -940,7 +943,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             String contentEncoding,
             String expectedPostBody,
             String expectedContentType) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = samplerDefaultEncoding;
         }
         // Check URL
@@ -1021,7 +1024,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             String descriptionField,
             String descriptionValue,
             boolean valuesAlreadyUrlEncoded) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
         }
         // Check URL
@@ -1077,7 +1080,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         assertEquals(expectedMethod, methodSent);
         String uriSent = headersSent.substring(indexFirstSpace + 1, indexSecondSpace);
         int indexQueryStart = uriSent.indexOf('?');
-        if (expectedQueryString != null && !expectedQueryString.isEmpty()) {
+        if (StringUtilities.isNotEmpty(expectedQueryString)) {
             // We should have a query string part
             if (indexQueryStart <= 0 || indexQueryStart == uriSent.length() - 1) {
                 fail("Could not find query string in URI");
@@ -1094,7 +1097,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         String pathSent = uriSent.substring(0, indexQueryStart);
         assertEquals(expectedPath, pathSent);
         // Check query
-        if (expectedQueryString != null && !expectedQueryString.isEmpty()) {
+        if (StringUtilities.isNotEmpty(expectedQueryString)) {
             String queryStringSent = uriSent.substring(indexQueryStart + 1);
             // Is it only the parameter values which are encoded in the specified
             // content encoding, the rest of the query is encoded in UTF-8

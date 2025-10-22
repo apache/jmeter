@@ -1,121 +1,177 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
-  "labels": ["dependencies"],
-  "schedule": ["every 3 weeks on Monday"],
+  "labels": [
+    "dependencies"
+  ],
+  "schedule": [
+    "every 3 weeks on Monday"
+  ],
   "packageRules": [
     {
-      "matchPackagePrefixes": ["com.fasterxml.jackson.core"],
-      "groupName": "com.fasterxml.jackson.core"
+      "groupName": "com.fasterxml.jackson.core",
+      "matchPackageNames": [
+        "com.fasterxml.jackson.core{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.github.ben-manes.caffeine"],
       "description": "TODO: Caffeine 3.0 requires Java 11",
-      "allowedVersions": "< 3.0"
+      "allowedVersions": "< 3.0",
+      "matchPackageNames": [
+        "com.github.ben-manes.caffeine{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.github.vlsi"],
-      "groupName": "com.github.vlsi"
+      "groupName": "com.github.vlsi",
+      "matchPackageNames": [
+        "com.github.vlsi{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.github.weisj"],
-      "groupName": "com.github.weisj"
+      "groupName": "com.github.weisj",
+      "matchPackageNames": [
+        "com.github.weisj{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.google.auto.service"],
-      "groupName": "com.google.auto.service"
+      "groupName": "com.google.auto.service",
+      "matchPackageNames": [
+        "com.google.auto.service{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.google.errorprone", "net.ltgt.errorprone"],
-      "groupName": "com.google.errorprone"
+      "groupName": "com.google.errorprone",
+      "matchPackageNames": [
+        "com.google.errorprone{/,}**",
+        "net.ltgt.errorprone{/,}**"
+      ]
     },
     {
-      "matchPackageNames": ["com.google.guava:guava"],
+      "matchPackageNames": [
+        "com.google.guava:guava"
+      ],
       "groupName": "guava",
       "matchCurrentVersion": "0",
       "enabled": false
     },
     {
-      "matchPackagePrefixes": ["com.helger"],
-      "groupName": "com.helger"
+      "groupName": "com.helger",
+      "matchPackageNames": [
+        "com.helger{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["io.burt"],
-      "groupName": "io.burt"
+      "groupName": "io.burt",
+      "matchPackageNames": [
+        "io.burt{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["net.minidev:accessors-smart", "net.minidev:json-smart"],
-      "groupName": "net.minidev json-smart"
+      "groupName": "net.minidev json-smart",
+      "matchPackageNames": [
+        "net.minidev:accessors-smart{/,}**",
+        "net.minidev:json-smart{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["com.miglayout"],
       "groupName": "com.miglayout",
-      "allowedVersions": "< 11.0"
+      "allowedVersions": "< 11.0",
+      "matchPackageNames": [
+        "com.miglayout{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.ajoberstar.grgit"],
       "groupName": "org.ajoberstar.grgit",
       "description": "TODO: grgit 5.0 requires Java 11",
-      "allowedVersions": "< 5.0"
+      "allowedVersions": "< 5.0",
+      "matchPackageNames": [
+        "org.ajoberstar.grgit{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.apache.activemq"],
       "groupName": "org.apache.activemq",
       "description": "TODO: activemq 5.17.0 requires Java 11",
-      "allowedVersions": "< 5.17.0"
+      "allowedVersions": "< 5.17.0",
+      "matchPackageNames": [
+        "org.apache.activemq{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.apache.ftpserver"],
-      "groupName": "org.apache.ftpserver"
+      "groupName": "org.apache.ftpserver",
+      "matchPackageNames": [
+        "org.apache.ftpserver{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.apache.httpcomponents:"],
-      "groupName": "org.apache.httpcomponents4"
+      "groupName": "org.apache.httpcomponents4",
+      "matchPackageNames": [
+        "org.apache.httpcomponents:{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.apache.httpcomponents.client5:"],
-      "groupName": "org.apache.httpcomponents5"
+      "groupName": "org.apache.httpcomponents5",
+      "matchPackageNames": [
+        "org.apache.httpcomponents.client5:{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.apache.logging.log4j"],
-      "groupName": "org.apache.logging.log4j"
+      "groupName": "org.apache.logging.log4j",
+      "matchPackageNames": [
+        "org.apache.logging.log4j{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.apache.tika"],
-      "groupName": "org.apache.tika"
+      "groupName": "org.apache.tika",
+      "matchPackageNames": [
+        "org.apache.tika{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.checkerframework"],
-      "groupName": "org.checkerframework"
+      "groupName": "org.checkerframework",
+      "matchPackageNames": [
+        "org.checkerframework{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.eclipse.jgit"],
       "groupName": "org.eclipse.jgit",
       "description": "TODO: jgit 6.0 requires Java 11",
-      "allowedVersions": "< 6.0"
+      "allowedVersions": "< 6.0",
+      "matchPackageNames": [
+        "org.eclipse.jgit{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.jetbrains.lets-plot"],
-      "groupName": "org.jetbrains.lets-plot"
+      "groupName": "org.jetbrains.lets-plot",
+      "matchPackageNames": [
+        "org.jetbrains.lets-plot{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.jodd"],
-      "groupName": "org.jodd"
+      "groupName": "org.jodd",
+      "matchPackageNames": [
+        "org.jodd{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.openjdk.jmh"],
-      "groupName": "org.openjdk.jmh"
+      "groupName": "org.openjdk.jmh",
+      "matchPackageNames": [
+        "org.openjdk.jmh{/,}**"
+      ]
     },
     {
-      "matchPackagePrefixes": ["org.slf4j"],
       "groupName": "org.slf4j",
-      "allowedVersions": "< 2.0.0"
+      "allowedVersions": "< 2.0.0",
+      "matchPackageNames": [
+        "org.slf4j{/,}**"
+      ]
     },
     {
-      "matchPackagePatterns": ["^src:protocol"],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": [
+        "/^src:protocol/"
+      ]
     }
   ]
 }

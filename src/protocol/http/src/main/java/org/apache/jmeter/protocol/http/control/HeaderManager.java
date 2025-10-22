@@ -35,6 +35,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * This class provides an interface to headers file to pass HTTP headers along
@@ -155,7 +156,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    if (line.startsWith("#") || JOrphanUtils.isBlank(line)) {// $NON-NLS-1$
+                    if (line.startsWith("#") || StringUtilities.isBlank(line)) {// $NON-NLS-1$
                         continue;
                     }
                     String[] st = JOrphanUtils.split(line, "\t", " ");// $NON-NLS-1$ $NON-NLS-2$

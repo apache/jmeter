@@ -27,9 +27,6 @@ dependencies {
     implementation("commons-codec:commons-codec")
     implementation("org.apache.commons:commons-jexl")
     implementation("org.apache.commons:commons-jexl3")
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
     implementation("commons-io:commons-io") {
         because("FileUtils")
     }

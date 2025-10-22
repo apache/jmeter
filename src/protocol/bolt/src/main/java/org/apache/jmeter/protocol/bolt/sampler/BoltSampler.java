@@ -24,9 +24,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.gui.TestElementMetadata;
@@ -36,6 +36,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
@@ -132,14 +133,14 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
             res.setResponseCode("500");
         }
         res.setResponseData(
-                ObjectUtils.defaultIfNull(ex.getMessage(), "NO MESSAGE"),
+                Objects.requireNonNullElse(ex.getMessage(), "NO MESSAGE"),
                 res.getDataEncodingNoDefault());
         res.setSuccessful(false);
         return res;
     }
 
     private Map<String, Object> getParamsAsMap() throws IOException {
-        if (getParams() != null && getParams().length() > 0) {
+        if (StringUtilities.isNotEmpty(getParams())) {
             return Holder.OBJECT_READER.readValue(getParams());
         } else {
             return Collections.emptyMap();

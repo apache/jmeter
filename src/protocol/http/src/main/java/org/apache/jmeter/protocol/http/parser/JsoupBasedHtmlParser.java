@@ -22,8 +22,8 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -84,7 +84,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             } else if (tagName.equals(TAG_BASE)) {
                 String baseref = tag.attr(ATT_HREF);
                 try {
-                    if (!StringUtils.isEmpty(baseref))// Bugzilla 30713
+                    if (StringUtilities.isNotEmpty(baseref))// Bugzilla 30713
                     {
                         baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref);
                     }
@@ -97,12 +97,12 @@ public class JsoupBasedHtmlParser extends HTMLParser {
                 CharSequence codebase = tag.attr(ATT_CODEBASE);
                 CharSequence archive = tag.attr(ATT_ARCHIVE);
                 CharSequence code = tag.attr(ATT_CODE);
-                if (StringUtils.isNotBlank(codebase)) {
+                if (StringUtilities.isNotBlank(codebase)) {
                     String result;
-                    if (StringUtils.isNotBlank(archive)) {
-                        result = codebase.toString() + "/" + archive;
+                    if (StringUtilities.isNotBlank(archive)) {
+                        result = codebase + "/" + archive;
                     } else {
-                        result = codebase.toString() + "/" + code;
+                        result = codebase + "/" + code;
                     }
                     urls.addURL(normalizeUrlValue(result), baseUrl.url);
                 } else {

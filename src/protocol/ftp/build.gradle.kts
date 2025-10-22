@@ -26,9 +26,6 @@ dependencies {
     implementation("commons-io:commons-io") {
         because("IOUtils")
     }
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
 
     testImplementation(testFixtures(projects.src.core))
 }

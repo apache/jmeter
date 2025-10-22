@@ -31,6 +31,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -40,8 +42,6 @@ import java.util.regex.Matcher;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.commons.collections4.map.LinkedMap;
-import org.apache.commons.lang3.CharUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -769,8 +769,8 @@ public final class CSVSaveService {
 
         public StringQuoter(char delim) {
             sb = new StringBuilder(150);
-            specials = new char[] { delim, QUOTING_CHAR, CharUtils.CR,
-                    CharUtils.LF };
+            specials = new char[] { delim, QUOTING_CHAR, '\r',
+                    '\n' };
             addDelim = false; // Don't add delimiter first time round
         }
 
@@ -854,7 +854,7 @@ public final class CSVSaveService {
                 text.append(sample.getTimeStamp());
             } else if (saveConfig.threadSafeLenientFormatter() != null) {
                 String stamp = saveConfig.threadSafeLenientFormatter().format(
-                        new Date(sample.getTimeStamp()));
+                        Instant.ofEpochMilli(sample.getTimeStamp()).atZone(ZoneId.systemDefault()));
                 text.append(stamp);
             }
         }
@@ -983,7 +983,7 @@ public final class CSVSaveService {
      * contains a special character, <code>null</code> for null string input
      */
     public static String quoteDelimiters(String input, char[] specialChars) {
-        if (StringUtils.containsNone(input, specialChars)) {
+        if (containsNone(input, specialChars)) {
             return input;
         }
         StringBuilder buffer = new StringBuilder(input.length() + 10);
@@ -998,6 +998,28 @@ public final class CSVSaveService {
         }
         buffer.append(quote);
         return buffer.toString();
+    }
+
+    /**
+     * Helper method to check if a string contains none of the specified characters.
+     *
+     * @param str the string to check
+     * @param chars the characters to look for
+     * @return true if the string contains none of the characters, false otherwise
+     */
+    private static boolean containsNone(String str, char[] chars) {
+        if (str == null) {
+            return true;
+        }
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            for (char ch : chars) {
+                if (c == ch) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     // State of the parser

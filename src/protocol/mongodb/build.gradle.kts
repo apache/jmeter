@@ -23,9 +23,6 @@ dependencies {
     api(projects.src.core)
 
     api("org.mongodb:mongo-java-driver")
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
 
     testImplementation(testFixtures(projects.src.core))
 }

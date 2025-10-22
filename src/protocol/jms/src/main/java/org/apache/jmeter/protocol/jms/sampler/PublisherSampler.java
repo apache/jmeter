@@ -51,6 +51,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -291,10 +292,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
             result.setResponseCode(errorCode);
         }
 
-        StringWriter writer = new StringWriter();
-        e.printStackTrace(new PrintWriter(writer)); // NOSONAR We're getting it
-                                                    // to put it in ResponseData
-        result.setResponseData(writer.toString(), "UTF-8");
+        result.setResponseData(ExceptionUtils.getStackTraceAsBytes(e, StandardCharsets.UTF_8));
+        result.setDataEncoding(StandardCharsets.UTF_8.name());
     }
 
     protected static Cache<Object, Object> buildCache(String configChoice) {

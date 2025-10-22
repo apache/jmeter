@@ -62,7 +62,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
@@ -74,6 +73,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.jorphan.util.StringWrap;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -413,8 +413,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      * @return true if sampleResult is text or has empty content type
      */
     protected static boolean isTextDataType(SampleResult sampleResult) {
-        return SampleResult.TEXT.equals(sampleResult.getDataType())
-                || StringUtils.isEmpty(sampleResult.getDataType());
+        String dataType = sampleResult.getDataType();
+        return SampleResult.TEXT.equals(dataType) ||
+                StringUtilities.isEmpty(dataType);
     }
 
     private synchronized Component createLeftPanel() {
@@ -563,7 +564,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     @API(status = API.Status.INTERNAL, since = "5.5")
     public static String wrapLongLines(String input) {
-        if (input == null || input.isEmpty()) {
+        if (StringUtilities.isEmpty(input)) {
             return input;
         }
         if (SOFT_WRAP_LINE_SIZE > 0 && MAX_LINE_SIZE > 0) {

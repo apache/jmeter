@@ -29,6 +29,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * GUI class supporting the MD5Hex assertion functionality.
@@ -100,7 +101,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
         configureTestElement(element);
         String md5HexString = this.md5HexInput.getText();
         // initialize to empty string, this will fail the assertion
-        if (md5HexString == null || md5HexString.length() == 0) {
+        if (StringUtilities.isEmpty(md5HexString)) {
             md5HexString = "";
         }
         ((MD5HexAssertion) element).setAllowedMD5Hex(md5HexString);

@@ -19,7 +19,6 @@ package org.apache.jmeter.visualizers;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -91,7 +90,7 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
     private static class PrettyJSONStyle extends JSONStyle {
         private int level = 0;
-        private String indentString = TAB_SEPARATOR;
+        private final String indentString;
 
         public PrettyJSONStyle(String indentString) {
             this.indentString = indentString;
@@ -99,7 +98,9 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
         private void indent(Appendable out) throws IOException {
             out.append('\n');
-            out.append(StringUtils.repeat(indentString, level));
+            for (int i = 0; i < level; i++) {
+                 out.append(indentString);
+            }
         }
 
         @Override

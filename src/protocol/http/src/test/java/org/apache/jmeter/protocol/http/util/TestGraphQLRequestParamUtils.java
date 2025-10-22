@@ -27,7 +27,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +73,7 @@ class TestGraphQLRequestParamUtils {
             "{"
             + "\"operationName\":null,"
             + "\"variables\":" + EXPECTED_VARIABLES_GET_PARAM_VALUE + ","
-            + "\"query\":\"" + StringUtils.replace(QUERY.trim(), "\n", "\\n") + "\""
+            + "\"query\":\"" + (QUERY.trim() == null ? null : QUERY.trim().replace("\n", "\\n")) + "\""
             + "}";
 
     private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()

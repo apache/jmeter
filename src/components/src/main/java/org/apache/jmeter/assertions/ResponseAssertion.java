@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.assertions.gui.AssertionGui;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
@@ -35,6 +34,7 @@ import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.Document;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -312,7 +312,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
         log.debug("Test Type Info: contains={}, notTest={}, orTest={}", contains, notTest, orTest);
 
-        if (StringUtils.isEmpty(toCheck)) {
+        if (StringUtilities.isEmpty(toCheck)) {
             if (notTest) { // Not should always succeed against an empty result
                 return result;
             }
@@ -365,7 +365,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                         log.debug("Failed: {}", stringPattern);
                         result.setFailure(true);
                         String customMsg = getCustomFailureMessage();
-                        if (StringUtils.isEmpty(customMsg)) {
+                        if (StringUtilities.isEmpty(customMsg)) {
                             result.setFailureMessage(getFailText(stringPattern, toCheck));
                         } else {
                             result.setFailureMessage(customMsg);
@@ -378,7 +378,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             if (orTest && !hasTrue){
                 result.setFailure(true);
                 String customMsg = getCustomFailureMessage();
-                if (StringUtils.isEmpty(customMsg)) {
+                if (StringUtilities.isEmpty(customMsg)) {
                     result.setFailureMessage(
                             allCheckMessage.stream()
                                     .collect(Collectors.joining("\t", "", "\t")));

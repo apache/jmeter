@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,11 +45,10 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.Cookie;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +126,7 @@ public class BasicCurlParser {
     public static final class Request {
         private boolean compressed;
         private String url;
-        private final List<Pair<String, String>> headers = new ArrayList<>();
+        private final List<Map.Entry<String, String>> headers = new ArrayList<>();
         private String method = "GET";
         private String postData;
         private String interfaceName;
@@ -136,8 +136,8 @@ public class BasicCurlParser {
         private String filepathCookie="";
         private final Authorization authorization = new Authorization();
         private String caCert = "";
-        private final List<Pair<String, ArgumentHolder>> formData = new ArrayList<>();
-        private final List<Pair<String, String>> formStringData = new ArrayList<>();
+        private final List<Map.Entry<String, ArgumentHolder>> formData = new ArrayList<>();
+        private final List<Map.Entry<String, String>> formStringData = new ArrayList<>();
         private final Set<String> dnsServers = new HashSet<>();
         private boolean isKeepAlive = true;
         private double maxTime = -1;
@@ -173,7 +173,7 @@ public class BasicCurlParser {
          * @param value the post data
          */
         public void setPostData(String value) {
-            if (StringUtils.isBlank(this.postData)) {
+            if (StringUtilities.isBlank(this.postData)) {
                 this.postData = value;
             } else {
                 this.postData = this.postData + "&" + value;
@@ -212,9 +212,9 @@ public class BasicCurlParser {
                 return;
             } else {
                 if (UNIQUE_HEADERS.contains(name.toLowerCase(Locale.US))) {
-                    headers.removeIf(p -> p.getLeft().equalsIgnoreCase(name));
+                    headers.removeIf(p -> p.getKey().equalsIgnoreCase(name));
                 }
-                headers.add(Pair.of(name, value));
+                headers.add(new AbstractMap.SimpleEntry<>(name, value));
             }
         }
 
@@ -252,7 +252,7 @@ public class BasicCurlParser {
         /**
          * @return the headers
          */
-        public List<Pair<String, String>> getHeaders() {
+        public List<Map.Entry<String, String>> getHeaders() {
             return Collections.unmodifiableList(this.headers);
         }
 
@@ -412,7 +412,7 @@ public class BasicCurlParser {
         /**
          * @return the map of form data
          */
-        public List<Pair<String,String>> getFormStringData() {
+        public List<Map.Entry<String,String>> getFormStringData() {
             return Collections.unmodifiableList(this.formStringData);
         }
 
@@ -421,13 +421,13 @@ public class BasicCurlParser {
          * @param value the value of form data
          */
         public void addFormStringData(String key, String value) {
-            formStringData.add(Pair.of(key, value));
+            formStringData.add(new AbstractMap.SimpleEntry<>(key, value));
         }
 
         /**
          * @return the map of form data
          */
-        public List<Pair<String,ArgumentHolder>> getFormData() {
+        public List<Map.Entry<String,ArgumentHolder>> getFormData() {
             return Collections.unmodifiableList(this.formData);
         }
 
@@ -436,7 +436,7 @@ public class BasicCurlParser {
          * @param value the value of form data
          */
         public void addFormData(String key, ArgumentHolder value) {
-            formData.add(Pair.of(key, value));
+            formData.add(new AbstractMap.SimpleEntry<>(key, value));
         }
 
         /**
@@ -828,7 +828,7 @@ public class BasicCurlParser {
      * An empty or null toProcess parameter results in a zero sized array.
      */
     public static String[] translateCommandline(String toProcess) {
-        if (toProcess == null || toProcess.isEmpty()) {
+        if (StringUtilities.isEmpty(toProcess)) {
             //no command? no string
             return new String[0];
         }
