@@ -283,7 +283,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         } else {
             // Makes expiresDate effectively-final
             Date entryExpiresDate = expiresDate;
-            getCache().get(
+            var unused = getCache().get(
                     url,
                     key -> {
                         CacheEntry cacheEntry = new CacheEntry(lastModified, entryExpiresDate, etag, null);
