@@ -62,7 +62,7 @@ public class BeanShellPreProcessor extends BeanShellTestElement
             processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
             if (log.isWarnEnabled()) {
-                log.warn("Problem in BeanShell script. {}", e.toString());
+                log.warn("Problem in BeanShell element named: '{}'", getName(), e);
             }
         }
     }
