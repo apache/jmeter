@@ -87,7 +87,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
     private static final Logger LOGGER = LoggerFactory.getLogger(SamplerResultTab.class);
     // N.B. these are not multi-threaded, so don't make it static
     private final DateTimeFormatter dateFormat = DateTimeFormatter
-            .ofPattern("yyyy-MM-dd HH:mm:ss z")  // ISO format $NON-NLS-1$
+            .ofPattern("yyyy-MM-dd HH:mm:ss.SSS O")  // ISO format $NON-NLS-1$
             .withZone(ZoneId.systemDefault());
 
     private static final String NL = "\n"; // $NON-NLS-1$
@@ -265,6 +265,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
                         .append(JMeterUtils
                                 .getResString("view_results_thread_name")).append(SPACE) //$NON-NLS-1$
                         .append(sampleResult.getThreadName()).append(NL);
+                statsBuff
+                        .append(JMeterUtils
+                                .getResString("view_results_sample_name")) //$NON-NLS-1$
+                        .append(sampleResult.getSampleLabel()).append(NL);
                 String startTime = dateFormat
                         .format(Instant.ofEpochMilli(sampleResult.getStartTime()));
                 statsBuff
@@ -371,6 +375,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 resultModel.addRow(new RowResult(
                         JMeterUtils.getParsedLabel("view_results_thread_name"), //$NON-NLS-1$
                         sampleResult.getThreadName()));
+                resultModel.addRow(new RowResult(
+                        JMeterUtils.getParsedLabel(
+                                "view_results_sample_name"), //$NON-NLS-1$
+                        sampleResult.getSampleLabel()));
                 resultModel.addRow(new RowResult(
                         JMeterUtils.getParsedLabel("view_results_sample_start"), //$NON-NLS-1$
                         startTime));

@@ -104,7 +104,7 @@ public abstract class AbstractVisualizer
     /** Logging. */
     private static final Logger log = LoggerFactory.getLogger(AbstractVisualizer.class);
 
-    /** File Extensions */
+    /** Default File Extensions */
     private static final String[] EXTS = { ".xml", ".jtl", ".csv" }; // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
 
     /** A panel allowing results to be saved. */
@@ -150,7 +150,7 @@ public abstract class AbstractVisualizer
             d.setVisible(true);
         });
 
-        filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), EXTS); // $NON-NLS-1$
+        filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), getFileExts()); // $NON-NLS-1$
         filePanel.addChangeListener(this);
         filePanel.add(new JLabel(JMeterUtils.getResString("log_only"))); // $NON-NLS-1$
         filePanel.add(errorLogging);
@@ -345,5 +345,9 @@ public abstract class AbstractVisualizer
     public void clearGui(){
         super.clearGui();
         filePanel.clearGui();
+    }
+
+    public String[] getFileExts() {
+            return EXTS;
     }
 }
