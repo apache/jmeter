@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.8" jmeter="2.13.20160310">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Generator2.13" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -11,19 +11,15 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">1</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <boolProp name="LoopController.continue_forever">false</boolProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
           <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
-        <longProp name="ThreadGroup.start_time">1457798199000</longProp>
-        <longProp name="ThreadGroup.end_time">1457798199000</longProp>
-        <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="ThreadGroup.duration"></stringProp>
-        <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Controllers" enabled="true"/>
@@ -41,14 +37,14 @@
           <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller" enabled="true">
             <stringProp name="IfController.condition"></stringProp>
             <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">false</boolProp>
           </IfController>
           <hashTree/>
-          <IncludeController guiclass="IncludeControllerGui" testclass="IncludeController" testname="Include Controller" enabled="true">
-            <stringProp name="IncludeController.includepath"></stringProp>
-          </IncludeController>
+          <IncludeController guiclass="IncludeControllerGui" testclass="IncludeController" testname="Include Controller" enabled="true"/>
           <hashTree/>
           <InterleaveControl guiclass="InterleaveControlGui" testclass="InterleaveControl" testname="Interleave Controller" enabled="true">
             <intProp name="InterleaveControl.style">1</intProp>
+            <boolProp name="InterleaveControl.accrossThreads">false</boolProp>
           </InterleaveControl>
           <hashTree/>
           <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -91,7 +87,6 @@
           <hashTree/>
           <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Transaction Controller" enabled="true">
             <boolProp name="TransactionController.includeTimers">false</boolProp>
-            <boolProp name="TransactionController.parent">false</boolProp>
           </TransactionController>
           <hashTree/>
           <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
@@ -99,7 +94,7 @@
           </WhileController>
           <hashTree/>
         </hashTree>
-        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config Elements" enabled="true"/>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config Elements"/>
         <hashTree>
           <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
             <stringProp name="CounterConfig.start"></stringProp>
@@ -119,10 +114,12 @@
             <stringProp name="shareMode">shareMode.all</stringProp>
             <boolProp name="stopThread">false</boolProp>
             <stringProp name="variableNames"></stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
           </CSVDataSet>
           <hashTree/>
           <DNSCacheManager guiclass="DNSCachePanel" testclass="DNSCacheManager" testname="DNS Cache Manager" enabled="true">
             <collectionProp name="DNSCacheManager.servers"/>
+            <collectionProp name="DNSCacheManager.hosts"/>
             <boolProp name="DNSCacheManager.clearEachIteration">false</boolProp>
             <boolProp name="DNSCacheManager.isCustomResolver">false</boolProp>
           </DNSCacheManager>
@@ -140,16 +137,19 @@
           <hashTree/>
           <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
             <collectionProp name="AuthManager.auth_list"/>
+            <boolProp name="AuthManager.controlledByThreadGroup">false</boolProp>
           </AuthManager>
           <hashTree/>
           <CacheManager guiclass="CacheManagerGui" testclass="CacheManager" testname="HTTP Cache Manager" enabled="true">
             <boolProp name="clearEachIteration">false</boolProp>
             <boolProp name="useExpires">false</boolProp>
+            <boolProp name="CacheManager.controlledByThread">false</boolProp>
           </CacheManager>
           <hashTree/>
           <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
             <collectionProp name="CookieManager.cookies"/>
             <boolProp name="CookieManager.clearEachIteration">false</boolProp>
+            <boolProp name="CookieManager.controlledByThreadGroup">false</boolProp>
           </CookieManager>
           <hashTree/>
           <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
@@ -157,21 +157,14 @@
           </HeaderManager>
           <hashTree/>
           <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
-            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-            <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            <stringProp name="HTTPSampler.protocol"></stringProp>
-            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path"></stringProp>
-            <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
+            <stringProp name="HTTPSampler.implementation"></stringProp>
           </ConfigTestElement>
           <hashTree/>
           <JavaConfig guiclass="JavaConfigGui" testclass="JavaConfig" testname="Java Request Defaults" enabled="true">
-            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="Sleep_Time" elementType="Argument">
                   <stringProp name="Argument.name">Sleep_Time</stringProp>
@@ -232,6 +225,9 @@
             <stringProp name="transactionIsolation">DEFAULT</stringProp>
             <stringProp name="trimInterval">60000</stringProp>
             <stringProp name="username"></stringProp>
+            <boolProp name="preinit">false</boolProp>
+            <stringProp name="initQuery"></stringProp>
+            <stringProp name="connectionProperties"></stringProp>
           </JDBCDataSource>
           <hashTree/>
           <KeystoreConfig guiclass="TestBeanGUI" testclass="KeystoreConfig" testname="Keystore Configuration" enabled="true">
@@ -254,6 +250,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -269,7 +266,7 @@
             <boolProp name="user_defined">false</boolProp>
             <stringProp name="test">add</stringProp>
             <stringProp name="base_entry_dn"></stringProp>
-            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
           </ConfigTestElement>
@@ -278,25 +275,6 @@
             <stringProp name="ConfigTestElement.username"></stringProp>
             <stringProp name="ConfigTestElement.password"></stringProp>
           </ConfigTestElement>
-          <hashTree/>
-          <MongoSourceElement guiclass="TestBeanGUI" testclass="MongoSourceElement" testname="MongoDB Source Config" enabled="true">
-            <boolProp name="autoConnectRetry">false</boolProp>
-            <intProp name="connectTimeout">0</intProp>
-            <stringProp name="connection"></stringProp>
-            <intProp name="connectionsPerHost">10</intProp>
-            <boolProp name="continueOnInsertError">false</boolProp>
-            <boolProp name="fsync">false</boolProp>
-            <longProp name="maxAutoConnectRetryTime">0</longProp>
-            <intProp name="maxWaitTime">120000</intProp>
-            <boolProp name="safe">false</boolProp>
-            <boolProp name="socketKeepAlive">false</boolProp>
-            <intProp name="socketTimeout">0</intProp>
-            <stringProp name="source"></stringProp>
-            <intProp name="threadsAllowedToBlockForConnectionMultiplier">5</intProp>
-            <boolProp name="waitForJournaling">false</boolProp>
-            <intProp name="writeOperationNumberOfServers">0</intProp>
-            <intProp name="writeOperationTimeout">0</intProp>
-          </MongoSourceElement>
           <hashTree/>
           <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable" enabled="true">
             <stringProp name="maximumValue"></stringProp>
@@ -359,7 +337,7 @@
           </GaussianRandomTimer>
           <hashTree/>
           <JSR223Timer guiclass="TestBeanGUI" testclass="JSR223Timer" testname="JSR223 Timer" enabled="true">
-            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
@@ -419,10 +397,11 @@
             <stringProp name="resultSetHandler">Store as String</stringProp>
             <stringProp name="resultVariable"></stringProp>
             <stringProp name="variableNames"></stringProp>
+            <stringProp name="resultSetMaxRows"></stringProp>
           </JDBCPreProcessor>
           <hashTree/>
           <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
-            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
@@ -444,7 +423,7 @@
           </UserParameters>
           <hashTree/>
         </hashTree>
-        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Samplers" enabled="true"/>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Samplers"/>
         <hashTree>
           <AccessLogSampler guiclass="TestBeanGUI" testclass="AccessLogSampler" testname="Access Log Sampler" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -458,31 +437,16 @@
           </AccessLogSampler>
           <hashTree/>
           <AjpSampler guiclass="AjpSamplerGui" testclass="AjpSampler" testname="AJP/1.3 Sampler" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
-            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-            <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            <stringProp name="HTTPSampler.protocol"></stringProp>
-            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path"></stringProp>
-            <stringProp name="HTTPSampler.method">GET</stringProp>
-            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <boolProp name="HTTPSampler.monitor">false</boolProp>
-            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </AjpSampler>
           <hashTree/>
-          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BeanShell Sampler" enabled="true">
-            <stringProp name="BeanShellSampler.query"></stringProp>
-            <stringProp name="BeanShellSampler.filename"></stringProp>
-            <stringProp name="BeanShellSampler.parameters"></stringProp>
-            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
-          </BeanShellSampler>
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BeanShell Sampler"/>
           <hashTree/>
           <BSFSampler guiclass="TestBeanGUI" testclass="BSFSampler" testname="BSF Sampler" enabled="true">
             <stringProp name="filename"></stringProp>
@@ -511,27 +475,17 @@
           </FTPSampler>
           <hashTree/>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
-            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-            <stringProp name="HTTPSampler.response_timeout"></stringProp>
-            <stringProp name="HTTPSampler.protocol"></stringProp>
-            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path"></stringProp>
-            <stringProp name="HTTPSampler.method">GET</stringProp>
-            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <boolProp name="HTTPSampler.monitor">false</boolProp>
-            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
           <hashTree/>
           <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="Java Request" enabled="true">
-            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="Sleep_Time" elementType="Argument">
                   <stringProp name="Argument.name">Sleep_Time</stringProp>
@@ -588,25 +542,26 @@
             <stringProp name="resultSetHandler">Store as String</stringProp>
             <stringProp name="resultVariable"></stringProp>
             <stringProp name="variableNames"></stringProp>
+            <stringProp name="resultSetMaxRows"></stringProp>
           </JDBCSampler>
           <hashTree/>
           <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS Point-to-Point" enabled="true">
             <stringProp name="JMSSampler.queueconnectionfactory"></stringProp>
             <stringProp name="JMSSampler.SendQueue"></stringProp>
             <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
-            <boolProp name="JMSSampler.isFireAndForget">true</boolProp>
             <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
             <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
             <stringProp name="JMSSampler.timeout"></stringProp>
             <stringProp name="HTTPSamper.xml_data"></stringProp>
             <stringProp name="JMSSampler.initialContextFactory"></stringProp>
             <stringProp name="JMSSampler.contextProviderUrl"></stringProp>
-            <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
             <elementProp name="arguments" elementType="JMSProperties">
               <collectionProp name="JMSProperties.properties"/>
             </elementProp>
+            <intProp name="JMSSampler.communicationStyle">0</intProp>
           </JMSSampler>
           <hashTree/>
           <PublisherSampler guiclass="JMSPublisherGui" testclass="PublisherSampler" testname="JMS Publisher" enabled="true">
@@ -629,6 +584,7 @@
             <elementProp name="jms.jmsProperties" elementType="JMSProperties">
               <collectionProp name="JMSProperties.properties"/>
             </elementProp>
+            <stringProp name="jms_error_reconnect_on_codes"></stringProp>
           </PublisherSampler>
           <hashTree/>
           <SubscriberSampler guiclass="JMSSubscriberGui" testclass="SubscriberSampler" testname="JMS Subscriber" enabled="true">
@@ -643,10 +599,11 @@
             <stringProp name="jms.iterations">1</stringProp>
             <stringProp name="jms.read_response">true</stringProp>
             <stringProp name="jms.client_choice">jms_subscriber_receive</stringProp>
+            <stringProp name="jms_error_reconnect_on_codes"></stringProp>
           </SubscriberSampler>
           <hashTree/>
           <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
-            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
@@ -654,9 +611,7 @@
           </JSR223Sampler>
           <hashTree/>
           <JUnitSampler guiclass="JUnitTestSamplerGui" testclass="JUnitSampler" testname="JUnit Request" enabled="true">
-            <stringProp name="junitSampler.classname">test.RerunTest</stringProp>
             <stringProp name="junitsampler.constructorstring"></stringProp>
-            <stringProp name="junitsampler.method">testRerun</stringProp>
             <stringProp name="junitsampler.pkg.filter"></stringProp>
             <stringProp name="junitsampler.success">Test successful</stringProp>
             <stringProp name="junitsampler.success.code">1000</stringProp>
@@ -682,6 +637,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -697,7 +653,7 @@
             <boolProp name="user_defined">false</boolProp>
             <stringProp name="test">add</stringProp>
             <stringProp name="base_entry_dn"></stringProp>
-            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
             <stringProp name="ConfigTestElement.username"></stringProp>
@@ -707,35 +663,28 @@
           <MailReaderSampler guiclass="MailReaderSamplerGui" testclass="MailReaderSampler" testname="Mail Reader Sampler" enabled="true">
             <stringProp name="host_type">pop3</stringProp>
             <stringProp name="folder">INBOX</stringProp>
-            <intProp name="num_messages">-1</intProp>
-            <boolProp name="delete">false</boolProp>
             <stringProp name="host"></stringProp>
             <stringProp name="username"></stringProp>
             <stringProp name="password"></stringProp>
+            <intProp name="num_messages">-1</intProp>
+            <boolProp name="delete">false</boolProp>
             <stringProp name="SMTPSampler.useSSL">false</stringProp>
             <stringProp name="SMTPSampler.useStartTLS">false</stringProp>
             <stringProp name="SMTPSampler.trustAllCerts">false</stringProp>
             <stringProp name="SMTPSampler.enforceStartTLS">false</stringProp>
             <stringProp name="SMTPSampler.useLocalTrustStore">false</stringProp>
             <stringProp name="SMTPSampler.trustStoreToUse"></stringProp>
+            <stringProp name="SMTPSampler.tlsProtocols"></stringProp>
           </MailReaderSampler>
-          <hashTree/>
-          <MongoScriptSampler guiclass="TestBeanGUI" testclass="MongoScriptSampler" testname="MongoDB Script" enabled="true">
-            <stringProp name="database"></stringProp>
-            <stringProp name="password"></stringProp>
-            <stringProp name="source"></stringProp>
-            <stringProp name="username"></stringProp>
-            <stringProp name="script"></stringProp>
-          </MongoScriptSampler>
           <hashTree/>
           <SystemSampler guiclass="SystemSamplerGui" testclass="SystemSampler" testname="OS Process Sampler" enabled="true">
             <boolProp name="SystemSampler.checkReturnCode">false</boolProp>
             <stringProp name="SystemSampler.expectedReturnCode">0</stringProp>
             <stringProp name="SystemSampler.command"></stringProp>
-            <elementProp name="SystemSampler.arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <elementProp name="SystemSampler.arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <elementProp name="SystemSampler.environment" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <elementProp name="SystemSampler.environment" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
             <stringProp name="SystemSampler.directory"></stringProp>
@@ -761,6 +710,7 @@
             <stringProp name="SMTPSampler.enforceStartTLS">false</stringProp>
             <stringProp name="SMTPSampler.useLocalTrustStore">false</stringProp>
             <stringProp name="SMTPSampler.trustStoreToUse"></stringProp>
+            <stringProp name="SMTPSampler.tlsProtocols"></stringProp>
             <boolProp name="SMTPSampler.use_eml">false</boolProp>
             <stringProp name="SMTPSampler.emlMessageToSend"></stringProp>
             <stringProp name="SMTPSampler.useAuth">false</stringProp>
@@ -825,6 +775,7 @@
             <stringProp name="HtmlExtractor.default"></stringProp>
             <stringProp name="HtmlExtractor.match_number"></stringProp>
             <stringProp name="HtmlExtractor.extractor_impl"></stringProp>
+            <boolProp name="HtmlExtractor.default_empty_value">false</boolProp>
           </HtmlExtractor>
           <hashTree/>
           <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
@@ -844,10 +795,11 @@
             <stringProp name="resultSetHandler">Store as String</stringProp>
             <stringProp name="resultVariable"></stringProp>
             <stringProp name="variableNames"></stringProp>
+            <stringProp name="resultSetMaxRows"></stringProp>
           </JDBCPostProcessor>
           <hashTree/>
           <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
-            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
@@ -861,6 +813,7 @@
             <stringProp name="RegexExtractor.template"></stringProp>
             <stringProp name="RegexExtractor.default"></stringProp>
             <stringProp name="RegexExtractor.match_number"></stringProp>
+            <boolProp name="RegexExtractor.default_empty_value">false</boolProp>
           </RegexExtractor>
           <hashTree/>
           <ResultAction guiclass="ResultActionGui" testclass="ResultAction" testname="Result Status Action Handler" enabled="true">
@@ -874,6 +827,7 @@
             <boolProp name="XPathExtractor.validate">false</boolProp>
             <boolProp name="XPathExtractor.tolerant">false</boolProp>
             <boolProp name="XPathExtractor.namespace">false</boolProp>
+            <stringProp name="XPathExtractor.matchNumber">-1</stringProp>
           </XPathExtractor>
           <hashTree/>
         </hashTree>
@@ -913,7 +867,7 @@
           </HTMLAssertion>
           <hashTree/>
           <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
-            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
@@ -929,6 +883,7 @@
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
           </ResponseAssertion>
           <hashTree/>
           <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="Size Assertion" enabled="true">
@@ -1069,7 +1024,7 @@
           </ResultCollector>
           <hashTree/>
           <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Backend Listener" enabled="true">
-            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="graphiteMetricsSender" elementType="Argument">
                   <stringProp name="Argument.name">graphiteMetricsSender</stringProp>
@@ -1227,7 +1182,7 @@
           </ResultCollector>
           <hashTree/>
           <JSR223Listener guiclass="TestBeanGUI" testclass="JSR223Listener" testname="JSR223 Listener" enabled="true">
-            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>

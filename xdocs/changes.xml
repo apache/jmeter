@@ -69,6 +69,7 @@ Summary
     <li><issue>6352</issue> Calculate delays in Open Model Thread Group and Precise Throughput
         Timer relative to start of Thread Group instead of the start of the test.</li>
     <li><issue>6357</issue><pr>6358</pr> Ensure writable directories when copying template files while report generation.</li>
+    <li><issue>6052</issue> Remove deprecated MongoDB test elements: MongoScriptSampler, MongoSourceElement</li>
   </ul>
 
   <h3>HTTP Samplers and Test Script Recorder</h3>
