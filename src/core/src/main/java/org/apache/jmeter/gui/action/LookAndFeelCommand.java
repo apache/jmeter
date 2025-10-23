@@ -165,17 +165,10 @@ public class LookAndFeelCommand extends AbstractAction {
      */
     @Deprecated
     public static String getJMeterLaf(){
-        String laf = PREFS.get(USER_PREFS_KEY, null);
-        if (laf != null) {
-            for (UIManager.LookAndFeelInfo lafInfo : JMeterMenuBar.getAllLAFs())
-                if (lafInfo.getName().equalsIgnoreCase(laf))
-            return checkLafName(laf);
-        }
-
         String osName = System.getProperty("os.name") // $NON-NLS-1$
                         .toLowerCase(Locale.ENGLISH);
         // Spaces are not allowed in property names read from files
-        laf = JMeterUtils.getProperty(JMETER_LAF+"."+osName.replace(' ', '_'));
+        String laf = JMeterUtils.getProperty(JMETER_LAF+"."+osName.replace(' ', '_'));
         if (laf != null) {
             return checkLafName(laf);
         }
@@ -195,15 +188,16 @@ public class LookAndFeelCommand extends AbstractAction {
     public static String getPreferredLafCommand() {
         String laf = PREFS.get(USER_PREFS_KEY, null);
         if (laf != null) {
-            return laf;
+            MenuItem item = items.get(laf);
+            if (item == null) {
+                log.warn("LookAndFeel command '{}' not found in available items, falling back to default LAFs", laf);
+            } else {
+                return item.command;
+            }
         }
 
         String jMeterLaf = getJMeterLaf();
-        if (jMeterLaf != null) {
             return MenuItem.of("default", jMeterLaf).command; // $NON-NLS-1$
-        } else {
-            return MenuItem.of("default", UIManager.getCrossPlatformLookAndFeelClassName()).command; // $NON-NLS-1$
-        }
     }
 
     // Check if LAF is a built-in one
