@@ -36,9 +36,12 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import com.github.weisj.darklaf.LafManager;
-import com.github.weisj.darklaf.theme.DarculaTheme;
 import com.github.weisj.darklaf.theme.Theme;
 import com.google.auto.service.AutoService;
 
@@ -47,6 +50,7 @@ import com.google.auto.service.AutoService;
  */
 @AutoService(Command.class)
 public class LookAndFeelCommand extends AbstractAction {
+    private static final Logger log = LoggerFactory.getLogger(LookAndFeelCommand.class);
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
     private static final Map<String, MenuItem> items = new LinkedHashMap<>();
@@ -106,11 +110,29 @@ public class LookAndFeelCommand extends AbstractAction {
         if (System.getProperty("darklaf.treeRowPopup") == null) {
             System.setProperty("darklaf.treeRowPopup", "false");
         }
-        UIManager.installLookAndFeel(JMeterMenuBar.DARCULA_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
+
+        //Add FlatLAF Themes
+        for (String flatLaf : new String[]{"FlatLightLaf", "FlatDarkLaf", "FlatIntelliJLaf", "FlatDarculaLaf"}) {
+            try {
+                UIManager.installLookAndFeel(flatLaf, "com.formdev.flatlaf." + flatLaf);
+            } catch( Exception ex ) {
+                log.warn("Failed to load FlatLAF theme: {}", flatLaf, ex);
+            }
+        }
+        for (String flatLaf : new String[]{"FlatMacDarkLaf", "FlatMacLightLaf"}) {
+            try {
+                UIManager.installLookAndFeel(flatLaf, "com.formdev.flatlaf.themes" + flatLaf);
+            } catch( Exception ex ) {
+                log.warn("Failed to load FlatLAF theme: {}", flatLaf, ex);
+            }
+        }
+        for (UIManager.LookAndFeelInfo lafInfo : FlatAllIJThemes.INFOS) {
+            UIManager.installLookAndFeel(lafInfo.getName(), lafInfo.getClassName());
+        }
 
         List<MenuItem> items = new ArrayList<>();
         for (UIManager.LookAndFeelInfo laf : JMeterMenuBar.getAllLAFs()) {
-            if (!laf.getClassName().equals(JMeterMenuBar.DARCULA_LAF_CLASS)) {
+            if (!laf.getClassName().equals(JMeterMenuBar.DARKLAF_LAF_CLASS)) {
                 items.add(MenuItem.of(laf.getName(), laf.getClassName()));
             } else {
                 for (Theme theme : LafManager.getRegisteredThemes()) {
@@ -143,15 +165,10 @@ public class LookAndFeelCommand extends AbstractAction {
      */
     @Deprecated
     public static String getJMeterLaf(){
-        String laf = PREFS.get(USER_PREFS_KEY, null);
-        if (laf != null) {
-            return checkLafName(laf);
-        }
-
         String osName = System.getProperty("os.name") // $NON-NLS-1$
                         .toLowerCase(Locale.ENGLISH);
         // Spaces are not allowed in property names read from files
-        laf = JMeterUtils.getProperty(JMETER_LAF+"."+osName.replace(' ', '_'));
+        String laf = JMeterUtils.getProperty(JMETER_LAF+"."+osName.replace(' ', '_'));
         if (laf != null) {
             return checkLafName(laf);
         }
@@ -160,10 +177,7 @@ public class LookAndFeelCommand extends AbstractAction {
         if (laf != null) {
             return checkLafName(laf);
         }
-        laf = JMeterUtils.getPropDefault(JMETER_LAF, JMeterMenuBar.DARCULA_LAF_CLASS);
-        if (laf != null) {
-            return checkLafName(laf);
-        }
+
         return UIManager.getCrossPlatformLookAndFeelClassName();
     }
 
@@ -174,16 +188,16 @@ public class LookAndFeelCommand extends AbstractAction {
     public static String getPreferredLafCommand() {
         String laf = PREFS.get(USER_PREFS_KEY, null);
         if (laf != null) {
-            return laf;
+            MenuItem item = items.get(laf);
+            if (item == null) {
+                log.warn("LookAndFeel command '{}' not found in available items, falling back to default LAFs", laf);
+            } else {
+                return item.command;
+            }
         }
 
         String jMeterLaf = getJMeterLaf();
-        if (jMeterLaf.equals(JMeterMenuBar.DARCULA_LAF_CLASS)) {
-            // Convert old Darcula to new Darklaf-Darcula LaF
-            return MenuItem.ofDarklafTheme(new DarculaTheme()).command;
-        }
-
-        return MenuItem.of("default", jMeterLaf).command; // $NON-NLS-1$
+            return MenuItem.of("default", jMeterLaf).command; // $NON-NLS-1$
     }
 
     // Check if LAF is a built-in one
@@ -205,8 +219,12 @@ public class LookAndFeelCommand extends AbstractAction {
         return "Darklaf".equalsIgnoreCase(UIManager.getLookAndFeel().getID()); // $NON-NLS-1$
     }
 
+    public static boolean isFlatlafTheme() {
+        return UIManager.getLookAndFeel() instanceof FlatLaf;
+    }
+
     public static boolean isDark() {
-        return isDarklafTheme() && Theme.isDark(LafManager.getTheme());
+        return (isDarklafTheme() && Theme.isDark(LafManager.getTheme())) || (isFlatlafTheme() && ((FlatLaf)UIManager.getLookAndFeel()).isDark());
     }
 
     public static void activateLookAndFeel(String command) {
