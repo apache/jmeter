@@ -47,6 +47,13 @@ public class LocalHostTest {
         String externInterface = guessExternalIPv4Interface();
         perr("Choose " + externInterface + " to talk to external services");
         String localHost = getLocalHost().getHostAddress();
+        InetAddress lh = InetAddress.getByName(localHost);
+        if (!lh.isSiteLocalAddress() && !lh.isLoopbackAddress()) {
+            // CI/container/cloud setups might resolve to a public/NAT or external DNS,
+            // so we should not check for localHost binding in that case
+            perr("Skipping localHost binding check for non-site-local address: " + localHost);
+            return;
+        }
         boolean localHostIsBound = Collections
                 .list(NetworkInterface.getNetworkInterfaces()).stream()
                 .flatMap(iface -> iface.getInterfaceAddresses().stream())
