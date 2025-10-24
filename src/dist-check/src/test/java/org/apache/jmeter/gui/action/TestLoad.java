@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jorphan.collections.HashTree;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +38,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  *
  * Test JMX files to check that they can be loaded OK.
  */
-public class TestLoad  {
+public class TestLoad extends JMeterTestCase {
 
     private static final String basedir = new File(System.getProperty("user.dir")).getParentFile().getParent();
     private static final File testfiledir = new File(basedir,"bin/testfiles");
