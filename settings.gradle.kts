@@ -73,7 +73,6 @@ include(
     "src:protocol:junit-sample",
     "src:protocol:ldap",
     "src:protocol:mail",
-    "src:protocol:mongodb",
     "src:protocol:native",
     "src:protocol:tcp",
     "src:release",

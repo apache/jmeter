@@ -222,11 +222,6 @@ http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
 - httpasyncclient implementation for InfluxDB Backend Listener Client
 
-mongo-java-driver 2.11.3
-------------------------
-http://www.mongodb.org/
-- MongoDB sampler
-
 oro-2.0.8
 ---------
 http://jakarta.apache.org/site/downloads/downloads_oro.cgi
