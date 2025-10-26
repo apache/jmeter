@@ -1984,7 +1984,14 @@ JMETER-SERVER</source>
     <property name="jsr223.compiled_scripts_cache_size">
     Used by JSR-223 elements.<br/>
     Size of compiled scripts cache.<br/>
-    Defaults to: <code>100</code></property>
+    Defaults to: <code>100</code>
+    </property>
+    <property name="jsr223.compiled_scripts_cache_spec">
+      Used by JSR-223 elements.<br/>
+      Caffeine framework spec configuration in String format. Overrides <code>jsr223.compiled_scripts_cache_size</code><br/>
+      Defaults to: <code>maximumSize=jsr223.compiled_scripts_cache_size,recordStats</code>.
+      Extra details: <a href="https://www.javadoc.io/doc/com.github.ben-manes.caffeine/caffeine/3.1.8/com.github.benmanes.caffeine/com/github/benmanes/caffeine/cache/CaffeineSpec.html">Caffeine spec</a>
+    </property>
 </properties>
 </section>
 

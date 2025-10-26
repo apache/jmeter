@@ -46,12 +46,13 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.stats.CacheStats;
 
 /**
  * Base class for JSR223 Test elements
  */
 public abstract class JSR223TestElement extends ScriptingTestElement
-    implements Serializable, TestStateListener
+        implements Serializable, TestStateListener
 {
     private static final long serialVersionUID = 233L;
 
@@ -59,11 +60,12 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     /**
      * Cache of compiled scripts
      */
-    private static final Cache<ScriptCacheKey, CompiledScript> COMPILED_SCRIPT_CACHE =
-            Caffeine
-                    .newBuilder()
-                    .maximumSize(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100))
-                    .build();
+    private static Cache<ScriptCacheKey, CompiledScript> COMPILED_SCRIPT_CACHE;
+
+    /**
+     * Used for locking cache initialization
+     */
+    private static final Object lock = new Object();
 
     /**
      * Lambdas can't throw checked exceptions, so we wrap cache loading failure with a runtime one.
@@ -79,11 +81,11 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         }
     }
 
-    /** If not empty then script in ScriptText will be compiled and cached */
-    private String cacheKey = "";
+    /** If JSR223 element has checkbox 'Cache compile' checked then script in ScriptText will be compiled and cached */
+    private String cacheChecked = "";
 
-    /** md5 of the script, used as an unique key for the cache */
-    private ScriptCacheKey scriptMd5;
+    /** Used as an unique key for the cache */
+    private ScriptCacheKey scriptCacheKey;
 
     /**
      * Initialization On Demand Holder pattern
@@ -99,7 +101,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * @return ScriptEngineManager singleton
      */
     public static ScriptEngineManager getInstance() {
-            return LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     }
 
     protected JSR223TestElement() {
@@ -203,13 +205,14 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                         return scriptEngine.eval(fileReader, bindings);
                     }
                 }
-                CompiledScript compiledScript;
-                ScriptCacheKey newCacheKey =
-                        ScriptCacheKey.ofFile(getScriptLanguage(), scriptFile.getAbsolutePath(), scriptFile.lastModified());
-                compiledScript = getCompiledScript(newCacheKey, key -> {
+                computeScriptCacheKey(scriptFile);
+                CompiledScript compiledScript = getCompiledScript(scriptCacheKey, key -> {
                     try (BufferedReader fileReader = Files.newBufferedReader(scriptFile.toPath())) {
                         return ((Compilable) scriptEngine).compile(fileReader);
                     } catch (IOException | ScriptException e) {
+                        if (logger.isDebugEnabled()) {
+                            logger.warn("Cache missed access: for file script: '{}' for element named: '{}'", scriptFile.getAbsolutePath(), getName());
+                        }
                         throw new ScriptCompilationInvocationTargetException(e);
                     }
                 });
@@ -217,17 +220,31 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             }
             String script = getScript();
             if (StringUtilities.isNotEmpty(script)) {
-                if (supportsCompilable &&
-                        !ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheKey)) {
-                    computeScriptMD5(script);
-                    CompiledScript compiledScript = getCompiledScript(scriptMd5, key -> {
-                        try {
-                            return ((Compilable) scriptEngine).compile(script);
-                        } catch (ScriptException e) {
-                            throw new ScriptCompilationInvocationTargetException(e);
+                if (supportsCompilable) {
+                    if (!ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheChecked)) {
+                        computeScriptCacheKey(script);
+                        CompiledScript compiledScript = getCompiledScript(scriptCacheKey, key -> {
+                            try {
+                                return ((Compilable) scriptEngine).compile(script);
+                            } catch (ScriptException e) {
+                                if (logger.isDebugEnabled()) {
+                                    logger.debug("Cache missed access: failed compile of JSR223 element named: '{}'", getName());
+                                }
+                                throw new ScriptCompilationInvocationTargetException(e);
+                            }
+                        });
+                        return compiledScript.eval(bindings);
+                    } else {
+                        computeScriptCacheKey(script.hashCode());
+                        //simulate a cache miss when JSR223 'Cache compiled script if available' is unchecked to have better view of cache usage
+                        var unused = COMPILED_SCRIPT_CACHE.get(scriptCacheKey, k -> {
+                            return null;
+                        });
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Cache missed access: 'Cache compile' is unchecked for JSR223 element named: '{}'", getName());
                         }
-                    });
-                    return compiledScript.eval(bindings);
+                        return scriptEngine.eval(script, bindings);
+                    }
                 } else {
                     return scriptEngine.eval(script, bindings);
                 }
@@ -236,7 +253,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             }
         } catch (ScriptException ex) {
             Throwable rootCause = ex.getCause();
-            if(isStopCondition(rootCause)) {
+            if (isStopCondition(rootCause)) {
                 throw (RuntimeException) ex.getCause();
             } else {
                 throw ex;
@@ -274,7 +291,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * @throws ScriptException if compilation fails
      */
     public boolean compile()
-        throws ScriptException, IOException {
+            throws ScriptException, IOException {
         String lang = getScriptLanguageWithDefault();
         ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
         boolean supportsCompilable = scriptEngine instanceof Compilable
@@ -305,27 +322,46 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     }
 
     /**
-     * compute MD5 if it is null
+     * compute MD5 of a script if null
      */
-    private void computeScriptMD5(String script) {
+    private void computeScriptCacheKey(String script) {
         // compute the md5 of the script if needed
-        if(scriptMd5 == null) {
-            scriptMd5 = ScriptCacheKey.ofString(DigestUtils.md5Hex(script));
+        if (scriptCacheKey == null) {
+            scriptCacheKey = ScriptCacheKey.ofString(DigestUtils.md5Hex(script));
         }
     }
 
     /**
-     * @return the cacheKey
+     * compute cache key for a file based script if null
      */
-    public String getCacheKey() {
-        return cacheKey;
+    private void computeScriptCacheKey(File scriptFile) {
+        if (scriptCacheKey == null) {
+            scriptCacheKey = ScriptCacheKey.ofFile(getScriptLanguage(), scriptFile.getAbsolutePath(), scriptFile.lastModified());
+        }
     }
 
     /**
-     * @param cacheKey the cacheKey to set
+     * compute cache key of a long value if null
      */
-    public void setCacheKey(String cacheKey) {
-        this.cacheKey = cacheKey;
+    private void computeScriptCacheKey(int reference) {
+        if (scriptCacheKey == null) {
+            scriptCacheKey = ScriptCacheKey.ofString(Integer.toString(reference));
+        }
+    }
+
+
+    /**
+     * @return the cacheChecked
+     */
+    public String getCacheKey() {
+        return cacheChecked;
+    }
+
+    /**
+     * @param cacheChecked the cacheChecked to set
+     */
+    public void setCacheKey(String cacheChecked) {
+        this.cacheChecked = cacheChecked;
     }
 
     /**
@@ -333,7 +369,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     @Override
     public void testStarted() {
-        // NOOP
+        testStarted("");
     }
 
     /**
@@ -341,7 +377,13 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     @Override
     public void testStarted(String host) {
-        // NOOP
+        synchronized (lock) {
+            if (COMPILED_SCRIPT_CACHE == null) {
+                COMPILED_SCRIPT_CACHE =
+                        Caffeine.from(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_spec", "maximumSize=" +
+                                JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100) + ",recordStats")).build();
+            }
+        }
     }
 
     /**
@@ -357,8 +399,25 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     @Override
     public void testEnded(String host) {
-        COMPILED_SCRIPT_CACHE.invalidateAll();
-        scriptMd5 = null;
+        synchronized (lock) {
+            if (COMPILED_SCRIPT_CACHE != null) {
+                CacheStats stats = COMPILED_SCRIPT_CACHE.stats();
+                logger.info("JSR223 cached scripts: {}, requestsCount: {} (hitCount: {} + missedCount: {}), (hitRate: {}, missRate: {}), " +
+                                "loadCount: {} (loadSuccessCount: {} + loadFailureCount: {}), " +
+                                "evictionCount: {}, evictionWeight: {}, " +
+                                "totalLoadTime: {} ms, averageLoadPenalty: {} ms",
+                        COMPILED_SCRIPT_CACHE.estimatedSize(),
+                        stats.requestCount(), stats.hitCount(), stats.missCount(),
+                        String.format("%.02f", stats.hitRate()), String.format("%.02f", stats.missRate()),
+                        stats.loadCount(), stats.loadSuccessCount(), stats.loadFailureCount(),
+                        stats.evictionCount(), stats.evictionWeight(),
+                        String.format("%.02f", (stats.totalLoadTime() / 100000f)), String.format("%.02f", (stats.averageLoadPenalty() / 100000f)));
+                COMPILED_SCRIPT_CACHE.invalidateAll();
+                COMPILED_SCRIPT_CACHE.cleanUp();
+                COMPILED_SCRIPT_CACHE = null;
+            }
+        }
+        scriptCacheKey = null;
     }
 
     public String getScriptLanguage() {
