@@ -29,13 +29,16 @@ import java.util.Properties;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.action.LookAndFeelCommand;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.gui.ui.TextComponentUI;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.Style;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RUndoManager;
 import org.slf4j.Logger;
@@ -53,7 +56,8 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final long serialVersionUID = 211L;
     private static final Logger log = LoggerFactory.getLogger(JSyntaxTextArea.class);
 
-    private static final Theme DEFAULT_THEME = loadTheme(Theme.class, "themes/default.xml");
+    private static final Theme DEFAULT_THEME = loadTheme(Theme.class, JMeterUtils.getPropDefault("jsyntaxtextarea.theme.default", "themes/default.xml"));
+    private static final Theme DEFAULT_DARK_THEME = loadTheme(Theme.class, JMeterUtils.getPropDefault("jsyntaxtextarea.theme.dark", "themes/dark.xml"));
 
     private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$
 
@@ -64,6 +68,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final int MAX_UNDOS = JMeterUtils.getPropDefault("jsyntaxtextarea.maxundos", 50);
     private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", null);
     private static final int USER_FONT_SIZE = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", -1);
+    private static final boolean HIGHLIGHT_OCCURRENCES = JMeterUtils.getPropDefault("jsyntaxtextarea.highlight", true);
 
     private static final HierarchyListener GUTTER_THEME_PATCHER = e -> {
         if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0
@@ -93,6 +98,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     public static JSyntaxTextArea getInstance(int rows, int cols, boolean disableUndo) {
         try {
             JSyntaxTextArea jSyntaxTextArea = new JSyntaxTextArea(rows, cols, disableUndo);
+            jSyntaxTextArea.createPopupMenu();
             JFactory.withDynamic(jSyntaxTextArea, JSyntaxTextArea::applyTheme);
             // Gutter styling is only applied if the text area is contained in a scroll pane.
             jSyntaxTextArea.addHierarchyListener(GUTTER_THEME_PATCHER);
@@ -143,16 +149,53 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      */
     private static void applyTheme(JSyntaxTextArea jSyntaxTextArea) {
         final boolean isDarklafTheme = LookAndFeelCommand.isDarklafTheme();
-        final Theme theme = isDarklafTheme ? new DarklafRSyntaxTheme(jSyntaxTextArea) : DEFAULT_THEME;
+        final boolean isFlatlafTheme = LookAndFeelCommand.isFlatlafTheme();
+        final Theme theme = isDarklafTheme ? new DarklafRSyntaxTheme(jSyntaxTextArea) : (LookAndFeelCommand.isDark() ? DEFAULT_DARK_THEME : DEFAULT_THEME);
+
+        // Calculate scaled font size
+        float scale = JMeterUIDefaults.INSTANCE.getScale();
+        Font baseFont;
+        if (USER_FONT_FAMILY != null) {
+            baseFont = JMeterUIDefaults.createFont(USER_FONT_FAMILY, Font.PLAIN, USER_FONT_SIZE > 0 ? USER_FONT_SIZE : 12);
+        } else {
+            baseFont = jSyntaxTextArea.getFont();
+        }
+        if (Math.abs(scale - 1.0f) > 0.01) {
+            baseFont = baseFont.deriveFont(baseFont.getSize2D() * scale);
+        }
+
+        // Apply theme first
         if (theme != null) {
             theme.apply(jSyntaxTextArea);
-            Font font = jSyntaxTextArea.getFont();
-            float scale = JMeterUIDefaults.INSTANCE.getScale();
-            if (Math.abs(scale - 1.0f) > 0.01) {
-                font = font.deriveFont(font.getSize2D() * scale);
-                jSyntaxTextArea.setFont(font);
+        }
+
+        // Apply scaled font to all token types
+        SyntaxScheme scheme = jSyntaxTextArea.getSyntaxScheme();
+        for (int i = 0; i < scheme.getStyleCount(); i++) {
+            Style style = scheme.getStyle(i);
+            if (style != null) {
+                if (style.font != null) {
+                    // Keep the style (bold/italic) but use scaled size
+                    style.font = style.font.deriveFont(baseFont.getSize2D());
+                } else {
+                    style.font = baseFont;
+                }
             }
         }
+        jSyntaxTextArea.setFont(baseFont);
+        jSyntaxTextArea.setSyntaxScheme(scheme);
+        jSyntaxTextArea.setFractionalFontMetricsEnabled(true);
+
+        if (isFlatlafTheme) {
+            jSyntaxTextArea.setForeground(UIManager.getColor("TextArea.foreground"));
+            jSyntaxTextArea.setCaretColor(UIManager.getColor("TextArea.caretForeground"));
+            jSyntaxTextArea.setSelectionColor(UIManager.getColor("TextArea.selectionBackground"));
+            jSyntaxTextArea.setSelectedTextColor(UIManager.getColor("TextArea.selectionForeground"));
+            if (UIManager.getColor("Hyperlink.linkColor") != null) {
+                jSyntaxTextArea.setHyperlinkForeground(UIManager.getColor("Hyperlink.linkColor"));
+        }
+            }
+
         if (!isDarklafTheme) {
             // Darklaf themes provide a custom background color for editors, so we don't overwrite it.
             Color color = UIManager.getColor("TextArea.background");
@@ -241,14 +284,31 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         super.setAntiAliasingEnabled(true);
         super.setLineWrap(LINE_WRAP);
         super.setWrapStyleWord(WRAP_STYLE_WORD);
+        super.setMarkOccurrences(HIGHLIGHT_OCCURRENCES);
         this.disableUndo = disableUndo;
+
+        // Add component listener to handle window resizing
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                // Ensure text wraps to the new width
+                revalidate();
+                repaint();
+            }
+        });
+
+        int fontSize = USER_FONT_SIZE > 0 ? USER_FONT_SIZE : getFont().getSize();
+        Font font = getFont();
         if (USER_FONT_FAMILY != null) {
-            int fontSize = USER_FONT_SIZE > 0 ? USER_FONT_SIZE : getFont().getSize();
-            setFont(JMeterUIDefaults.createFont(USER_FONT_FAMILY, Font.PLAIN, fontSize));
+            font = JMeterUIDefaults.createFont(USER_FONT_FAMILY, Font.PLAIN, fontSize);
+        } else {
+            font = font.deriveFont(font.getStyle(), fontSize);
+        }
+        setFont(font);
             if (log.isDebugEnabled()) {
                 log.debug("Font is set to: {}", getFont());
             }
-        }
+
         if(disableUndo) {
             TextComponentUI.uninstallUndo(this);
             // We need to do this to force recreation of undoManager which

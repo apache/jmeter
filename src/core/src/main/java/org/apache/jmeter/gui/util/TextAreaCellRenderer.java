@@ -21,7 +21,10 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
+
+import org.apache.jmeter.gui.action.LookAndFeelCommand;
 
 public class TextAreaCellRenderer implements TableCellRenderer {
 
@@ -36,13 +39,20 @@ public class TextAreaCellRenderer implements TableCellRenderer {
         } else {
             rend = createRenderer(""); //$NON-NLS-1$
         }
+
         if (hasFocus || isSelected) {
-            rend.setBackground(Color.blue);
+            if (LookAndFeelCommand.isFlatlafTheme()) {
+                rend.setBackground(UIManager.getColor("Table.selectionBackground"));
+                rend.setForeground(UIManager.getColor("Table.selectionForeground"));
+            } else {
+                rend.setBackground(Color.pink);
             rend.setForeground(Color.white);
+        }
         }
         if (table.getRowHeight(row) < getPreferredHeight()) {
             table.setRowHeight(row, getPreferredHeight());
         }
+
         return JTextScrollPane.getInstance(rend);
     }
 
