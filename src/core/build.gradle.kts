@@ -71,11 +71,11 @@ dependencies {
         because("XPathUtil: throws SaxonApiException")
     }
 
-    runtimeOnly("org.codehaus.groovy:groovy") {
+    runtimeOnly("org.apache.groovy:groovy") {
         because("Groovy is a default JSR232 engine")
     }
     arrayOf("dateutil", "datetime", "jmx", "json", "jsr223", "sql", "templates").forEach {
-        runtimeOnly("org.codehaus.groovy:groovy-$it") {
+        runtimeOnly("org.apache.groovy:groovy-$it") {
             because("Groovy is a default JSR232 engine")
         }
     }

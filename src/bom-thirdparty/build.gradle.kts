@@ -26,7 +26,7 @@ javaPlatform {
 }
 
 dependencies {
-    api(platform("org.codehaus.groovy:groovy-bom:3.0.25"))
+    api(platform("org.apache.groovy:groovy-bom:5.0.2"))
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"))
 
     constraints {
