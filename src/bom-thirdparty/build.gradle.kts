@@ -90,7 +90,7 @@ dependencies {
         api("net.minidev:accessors-smart:2.6.0")
         api("net.minidev:json-smart:2.6.0")
         api("net.sf.jtidy:jtidy:r938")
-        api("net.sf.saxon:Saxon-HE:11.6")
+        api("net.sf.saxon:Saxon-HE:12.9")
         api("org.apache-extras.beanshell:bsh:2.0b6")
         api("org.apache.commons:commons-collections4:4.5.0")
         api("org.apache.commons:commons-dbcp2:2.9.0")
