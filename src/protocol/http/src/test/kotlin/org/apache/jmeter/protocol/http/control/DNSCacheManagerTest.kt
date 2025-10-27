@@ -17,20 +17,37 @@
 
 package org.apache.jmeter.protocol.http.control
 
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory
+import org.apache.jmeter.protocol.http.sampler.ResultAsString
+import org.apache.jmeter.protocol.http.util.MockDnsServer
+import org.apache.jmeter.wiremock.WireMockExtension
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.fail
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.MethodSource
 import org.xbill.DNS.ExtendedResolver
 import org.xbill.DNS.ResolverConfig
+import java.net.Inet4Address
+import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.UnknownHostException
 
+@ExtendWith(WireMockExtension::class)
 class DNSCacheManagerTest {
 
     companion object {
@@ -120,7 +137,7 @@ class DNSCacheManagerTest {
     fun `Valid DNS resolves and caches with custom resolve true`() {
         assumeLocalDnsResolverOK()
         for (dns in VALID_DNS_SERVERS) {
-            sut.addServer(dns)
+            sut.addServer(dns.hostString)
         }
         sut.isCustomResolver = true
         sut.timeoutMs = 5000
@@ -134,7 +151,7 @@ class DNSCacheManagerTest {
     fun `Cache should be used where entries exist`() {
         assumeLocalDnsResolverOK()
         for (dns in VALID_DNS_SERVERS) {
-            sut.addServer(dns)
+            sut.addServer(dns.hostString)
         }
         sut.isCustomResolver = true
         sut.timeoutMs = 5000
@@ -189,5 +206,96 @@ class DNSCacheManagerTest {
             sut.resolve("jmeterxxx.apache.org")
         }
         assertNull(sut.resolver, ".resolver")
+    }
+
+    @ParameterizedTest
+    @MethodSource("org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory#getImplementations")
+    fun `custom resolver should use mock DNS server to resolve host`(
+        httpImplementation: String,
+        server: WireMockServer
+    ) {
+        assumeTrue(
+            httpImplementation != HTTPSamplerFactory.IMPL_JAVA,
+            "Java implementation does not support custom DNS resolver yet"
+        )
+
+        // Set up WireMock to respond to requests
+        server.stubFor(
+            get(urlEqualTo("/index.html"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withBody("OK")
+                )
+        )
+
+        val testDomainName = "non.existing.domain.for.tests"
+        // Resolve
+        val mockDnsServer = MockDnsServer(
+            answers = mapOf(
+                // This should map to WireMock listen address, and it is not clear
+                // how to tell if WireMock listens on IPv4 or IPv6
+                testDomainName to listOf("127.0.0.1")
+            )
+        )
+
+        mockDnsServer.start()
+        try {
+            // Use a custom DNS resolver with a mock DNS server
+            val dns = DNSCacheManager().apply {
+                isCustomResolver = true
+                addServer(
+                    when (mockDnsServer.localAddress) {
+                        is Inet4Address -> "127.0.0.1"
+                        is Inet6Address -> "[::1]"
+                        else -> TODO("Unexpected address type of mockDnsServer.localAddress: ${mockDnsServer.localAddress::class.simpleName}")
+                    } + ":" + mockDnsServer.boundPort
+                )
+            }
+
+            val http = HTTPSamplerFactory.newInstance(httpImplementation).apply {
+                dnsResolver = dns
+                method = HTTPSampler.GET
+                port = server.port()
+                domain = testDomainName
+                path = "/index.html"
+                isRunningVersion = true
+            }
+
+            val result = http.sample()
+
+            assertTrue(result.isSuccessful) {
+                "HTTP request should succeed using custom DNS resolver with mock DNS server. " +
+                    "Response: ${result.responseMessage}\n" +
+                    ResultAsString.toString(result)
+            }
+
+            assertEquals("200", result.responseCode) {
+                "Expected 200 response code\n${ResultAsString.toString(result)}"
+            }
+        } finally {
+            mockDnsServer.close()
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "one.one.one.one, one.one.one.one, 53",
+        "1.1.1.1, 1.1.1.1, 53",
+        "::1, ::1, 53",
+        "one.one.one.one:8053, one.one.one.one, 8053",
+        "1.1.1.1:53, 1.1.1.1, 53",
+        "[::1]:53, ::1, 53",
+        "127.0.0.1:53, 127.0.0.1, 53",
+        "ff06:0:0:0:0:0:0:c3, ff06:0:0:0:0:0:0:c3, 53",
+        "2001:db8:85a3:0:0:8a2e:370:7334, 2001:db8:85a3:0:0:8a2e:370:7334, 53",
+        "[ff06:0:0:0:0:0:0:c3]:8053, ff06:0:0:0:0:0:0:c3, 8053"
+    )
+    fun parseHostPort(input: String, expectedHost: String, expectedPort: Int) {
+        val addr = DNSCacheManager.parseHostPort(input)
+        assertAll(
+            { assertEquals(expectedHost, addr.hostString) { "host from $input" } },
+            { assertEquals(expectedPort, addr.port) { "port from $input" } }
+        )
     }
 }

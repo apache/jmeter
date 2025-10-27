@@ -19,7 +19,9 @@ package org.apache.jmeter.protocol.http.control;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -46,6 +48,7 @@ import org.xbill.DNS.ExtendedResolver;
 import org.xbill.DNS.Lookup;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.Resolver;
+import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.TextParseException;
 import org.xbill.DNS.Type;
 
@@ -121,13 +124,22 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     private Resolver createResolver() {
         CollectionProperty dnsServers = getServers();
         try {
-            String[] serverNames = new String[dnsServers.size()];
-            int index = 0;
+            List<Resolver> resolvers = new ArrayList<>();
             for (JMeterProperty jMeterProperty : dnsServers) {
-                serverNames[index] = jMeterProperty.getStringValue();
-                index++;
+                // it can be either ipv4 or ipv6
+                String hostPort = jMeterProperty.getStringValue();
+                InetSocketAddress address = parseHostPort(hostPort);
+                // dnsjava needs resolved address
+                InetSocketAddress resolvedDnsServer = new InetSocketAddress(address.getHostString(), address.getPort());
+                // Check if the address is unresolved (hostname couldn't be resolved or invalid IP format)
+                if (resolvedDnsServer.isUnresolved()) {
+                    throw new UnknownHostException("Cannot resolve DNS server address: " + hostPort);
+                }
+                SimpleResolver resolver = new SimpleResolver(resolvedDnsServer);
+                resolver.setTimeout(ExtendedResolver.DEFAULT_TIMEOUT); // it was previously in new ExtendedResolver(String[])
+                resolvers.add(resolver);
             }
-            ExtendedResolver result = new ExtendedResolver(serverNames);
+            ExtendedResolver result = new ExtendedResolver(resolvers);
             if (log.isDebugEnabled()) {
                 log.debug("Using DNS Resolvers: {}", Arrays.asList(result.getResolvers()));
             }
@@ -139,6 +151,73 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             log.warn("Failed to create Extended resolver: {}", uhe.getMessage(), uhe);
             return null;
         }
+    }
+
+    /**
+     * Parses a hostPort string into an InetSocketAddress.
+     * Supports formats:
+     * - hostname (e.g., "one.one.one.one")
+     * - IPv4 (e.g., "1.1.1.1")
+     * - IPv6 (e.g., "::1", "2001:db8::1", "ff06:0:0:0:0:0:0:c3")
+     * - hostname:port (e.g., "one.one.one.one:53")
+     * - IPv4:port (e.g., "1.1.1.1:53")
+     * - [IPv6]:port (e.g., "[::1]:53", "[ff06:0:0:0:0:0:0:c3]:53")
+     *
+     * @param hostPort the host and optional port string
+     * @return InetSocketAddress with default port 53 if not specified
+     * @throws UnknownHostException if the format is invalid
+     */
+    @VisibleForTesting
+    static InetSocketAddress parseHostPort(String hostPort) throws UnknownHostException {
+        String host;
+        int port = 53; // Default DNS port
+
+        if (hostPort.startsWith("[")) {
+            // IPv6 with optional port: [::1] or [::1]:53
+            int closeBracket = hostPort.lastIndexOf(']');
+            if (closeBracket == -1) {
+                throw new UnknownHostException("Invalid IPv6 address format: " + hostPort);
+            }
+            host = hostPort.substring(1, closeBracket);
+            if (closeBracket + 1 < hostPort.length()) {
+                if (hostPort.charAt(closeBracket + 1) == ':') {
+                    try {
+                        port = Integer.parseInt(hostPort.substring(closeBracket + 2));
+                    } catch (NumberFormatException e) {
+                        throw new UnknownHostException("Invalid port in: " + hostPort);
+                    }
+                } else {
+                    throw new UnknownHostException("Invalid format after IPv6 address: " + hostPort);
+                }
+            }
+        } else {
+            // Could be:
+            //   * single colon: hostname:port, IPv4:port
+            //   * 0 or 2+ colons: hostname, IPv4, or bare IPv6
+            // Single colon means
+            int firstColon = hostPort.indexOf(':');
+            int secondColon = firstColon == -1 ? -1 : hostPort.indexOf(':', firstColon + 1);
+
+            if (firstColon == -1 || secondColon != -1) {
+                // Zero or 2+ colons indicate bare IPv4, bare hostname, or bare IPv6 address
+                // Examples: ::1, 2001:db8::1, ff06:0:0:0:0:0:0:c3
+                host = hostPort;
+            } else {
+                // Single colon: check if it's a port separator
+                int colonPos = hostPort.indexOf(':');
+                String possiblePort = hostPort.substring(colonPos + 1);
+                try {
+                    port = Integer.parseInt(possiblePort);
+                    // It's a valid port, so everything before is the host
+                    host = hostPort.substring(0, colonPos);
+                } catch (NumberFormatException e) {
+                    // Not a port, treat entire string as host
+                    host = hostPort;
+                }
+            }
+        }
+
+        return InetSocketAddress.createUnresolved(host, port);
     }
 
     /**
@@ -270,7 +349,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             Lookup lookup = new Lookup(host, Type.A);
             lookup.setCache(lookupCache);
             if (timeoutMs > 0) {
-                resolver.setTimeout(timeoutMs / 1000, timeoutMs % 1000);
+                resolver.setTimeout(Duration.ofMillis(timeoutMs));
             }
             lookup.setResolver(resolver);
             Record[] records = lookup.run();
@@ -281,6 +360,9 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             for (int i = 0; i < records.length; i++) {
                 addresses[i] = ((ARecord) records[i]).getAddress();
             }
+        } catch (java.nio.channels.UnresolvedAddressException uae) {
+            // Thrown when DNS server address itself couldn't be resolved
+            throw new UnknownHostException("DNS server address is unresolved: " + uae.getMessage());
         } catch (TextParseException tpe) { // NOSONAR Exception handled
             log.debug("Failed to create Lookup object for host:{}, error message:{}", host, tpe.toString());
         }
