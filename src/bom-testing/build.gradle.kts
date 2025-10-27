@@ -27,6 +27,7 @@ javaPlatform {
 
 dependencies {
     api(platform("org.junit:junit-bom:5.14.0"))
+    api(platform("org.springframework:spring-framework-bom:6.2.12"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
@@ -55,7 +56,5 @@ dependencies {
         api("org.objenesis:objenesis:3.3")
         api("org.openjdk.jmh:jmh-core:1.37")
         api("org.openjdk.jmh:jmh-generator-annprocess:1.37")
-        api("org.springframework:spring-beans:4.3.30.RELEASE")
-        api("org.springframework:spring-context:4.3.30.RELEASE")
     }
 }
