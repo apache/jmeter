@@ -103,6 +103,7 @@
          <trusted-key id="44FBDBBC1A00FE414F1C1873586654072EAD6677" group="org.sonatype.oss"/>
          <trusted-key id="475F3B8E59E6E63AA78067482C7B12F2A511E325" group="org.slf4j"/>
          <trusted-key id="48B086A7D843CFA258E83286928FBF39003C0425">
+            <trusting group="io.micrometer"/>
             <trusting group="io.projectreactor"/>
             <trusting group="org.springframework"/>
          </trusted-key>

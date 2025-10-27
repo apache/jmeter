@@ -135,11 +135,11 @@
       ]
     },
     {
-      "groupName": "org.eclipse.jgit",
-      "description": "TODO: jgit 6.0 requires Java 11",
-      "allowedVersions": "< 6.0",
+      "groupName": "org.eclipse.jetty",
+      "description": "wiremock uses jetty 11",
+      "allowedVersions": "< 12.0",
       "matchPackageNames": [
-        "org.eclipse.jgit{/,}**"
+        "org.eclipse.jetty{/,}**"
       ]
     },
     {
