@@ -85,7 +85,6 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.formdev:svgSalamander")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("com.github.weisj:darklaf-core")
     implementation("com.github.weisj:darklaf-theme")

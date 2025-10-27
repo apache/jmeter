@@ -108,11 +108,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.BSD_2_Clause
     }
 
-    overrideLicense("com.formdev:svgSalamander") {
-        // See https://github.com/blackears/svgSalamander/blob/d6b6fe9a8ece7d0e0e7aeb3de82f027a38a6fe25/www/license/license-bsd.txt
-        effectiveLicense = SpdxLicense.BSD_3_Clause
-    }
-
     for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {
         overrideLicense(mig) {
             expectedLicense = SimpleLicense("BSD", uri("http://www.debian.org/misc/bsd.license"))
