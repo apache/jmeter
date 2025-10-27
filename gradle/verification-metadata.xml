@@ -51,6 +51,7 @@
          <trusted-key id="190D5A957FF22273E601F7A7C92C5FEC70161C62" group="org.apache"/>
          <trusted-key id="19BEAB2D799C020F17C69126B16698A4ADF4D638" group="org.checkerframework"/>
          <trusted-key id="1A2D608BF6D37AEF12D53A4F37B0A85F5CE89B0C" group="org.eclipse.jetty.toolchain" name="jetty-jakarta-servlet-api" version="5.0.2"/>
+         <trusted-key id="1A55F091AD28C07F831FA44D7905DE25C78AD456" group="com.google.protobuf"/>
          <trusted-key id="1A6090D3223DCA95BFD25C0E38F47D3E410C47B1" group="com.github.vlsi.gradle"/>
          <trusted-key id="1AA8CF92D409A73393D0B736BFF2EE42C8282E76" group="org.apache.activemq"/>
          <trusted-key id="1BD97A6A154E7810EE0BC832E2F38302C8075E3D" group="^org[.]gradle($|([.].*))" regex="true"/>
