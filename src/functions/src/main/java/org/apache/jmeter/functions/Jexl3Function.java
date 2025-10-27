@@ -26,6 +26,7 @@ import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.JexlScript;
 import org.apache.commons.jexl3.MapContext;
+import org.apache.commons.jexl3.introspection.JexlPermissions;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -116,6 +117,8 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
                 .cache(512)
                 .silent(true)
                 .strict(true)
+                // TODO: allow customization for the permissions
+                .permissions(JexlPermissions.UNRESTRICTED)
                 // debug is true by default an impact negatively performances
                 // by a factory of 10
                 // Use JexlInfo if necessary
