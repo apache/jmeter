@@ -143,6 +143,14 @@
       ]
     },
     {
+      "groupName": "org.jdom",
+      "description": "Velocity Anakia uses JDOM 1.0",
+      "allowedVersions": "< 2.0",
+      "matchPackageNames": [
+        "org.jdom{/,}**"
+      ]
+    },
+    {
       "groupName": "org.jetbrains.lets-plot",
       "matchPackageNames": [
         "org.jetbrains.lets-plot{/,}**"
