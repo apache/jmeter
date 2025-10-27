@@ -41,7 +41,7 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.weisj.darklaf.icons.ThemedSVGIcon;
+import com.github.weisj.darklaf.properties.icons.ThemedSVGIcon;
 import com.github.weisj.darklaf.ui.button.DarkButtonUI;
 
 import kotlin.text.StringsKt;
