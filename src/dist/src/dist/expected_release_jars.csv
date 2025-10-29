@@ -1,5 +1,5 @@
 30245,accessors-smart-2.6.0.jar
-30570,annotations-24.1.0.jar
+31170,annotations-26.0.2-1.jar
 6806,apiguardian-api-1.1.2.jar
 126093,asm-9.7.1.jar
 485992,batik-anim-1.17.jar
@@ -99,10 +99,10 @@
 675271,kotlinx-datetime-jvm-0.6.2.jar
 996,lets-plot-batik-4.7.3.jar
 996,lets-plot-common-4.7.3.jar
-356564,log4j-1.2-api-2.22.1.jar
-335001,log4j-api-2.22.1.jar
-1900022,log4j-core-2.22.1.jar
-27364,log4j-slf4j2-impl-2.22.1.jar
+358528,log4j-1.2-api-2.25.2.jar
+349595,log4j-api-2.25.2.jar
+2018265,log4j-core-2.25.2.jar
+30232,log4j-slf4j2-impl-2.25.2.jar
 519087,mail-1.5.0-b01.jar
 106949,miglayout-core-5.3.jar
 22576,miglayout-swing-5.3.jar
