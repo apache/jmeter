@@ -28,4 +28,4 @@ jobs:
         java-version: 21
         server-id: central
     - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4
+      uses: gradle/actions/dependency-submission@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
