@@ -128,7 +128,7 @@ dependencies {
         api("org.jdom:jdom:1.1.3")
         api("org.jetbrains.lets-plot:lets-plot-batik:4.7.3")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.11.2")
-        api("org.jetbrains:annotations:24.1.0")
+        api("org.jetbrains:annotations:26.0.2-1")
         api("org.jodd:jodd-core:5.3.0")
         api("org.jodd:jodd-lagarto:6.0.6")
         api("org.jodd:jodd-log:5.1.6")
