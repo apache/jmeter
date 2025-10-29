@@ -49,7 +49,7 @@ dependencies {
     kapt("org.apache.logging.log4j:log4j-core") {
         because("Generates a plugin cache file for GuiLogEventAppender")
     }
-    api("org.apache.logging.log4j:log4j-slf4j-impl") {
+    api("org.apache.logging.log4j:log4j-slf4j2-impl") {
         because("Both log4j and slf4j are included, so it makes sense to just add log4j->slf4j bridge as well")
     }
     api("org.apiguardian:apiguardian-api")

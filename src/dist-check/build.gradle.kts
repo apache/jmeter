@@ -67,7 +67,7 @@ dependencies {
     loggingClasspath("org.apache.logging.log4j:log4j-api")
     loggingClasspath("org.apache.logging.log4j:log4j-core")
     loggingClasspath("org.apache.logging.log4j:log4j-1.2-api")
-    loggingClasspath("org.apache.logging.log4j:log4j-slf4j-impl")
+    loggingClasspath("org.apache.logging.log4j:log4j-slf4j2-impl")
 }
 
 val libOpt = copySpec {
