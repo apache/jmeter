@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.CacheLoader;
-import com.helger.css.ECSSVersion;
 import com.helger.css.decl.CSSDeclaration;
 import com.helger.css.decl.CSSExpressionMemberTermURI;
 import com.helger.css.decl.CSSImportRule;
@@ -56,7 +55,6 @@ public class CssParserCacheLoader implements
         final CSSReaderSettings readerSettings = new CSSReaderSettings()
                 .setBrowserCompliantMode(true)
                 .setFallbackCharset(charset)
-                .setCSSVersion(ECSSVersion.CSS30)
                 .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
                 .setUseSourceLocation(false)
                 .setCustomExceptionHandler(
