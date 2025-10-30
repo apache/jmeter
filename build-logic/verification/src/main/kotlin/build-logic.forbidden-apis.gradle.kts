@@ -15,9 +15,6 @@
  * limitations under the License.
  */
 
-import com.github.vlsi.gradle.dsl.configureEach
-import de.thetaphi.forbiddenapis.gradle.CheckForbiddenApis
-
 plugins {
     id("de.thetaphi.forbiddenapis")
 }
