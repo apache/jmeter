@@ -43,9 +43,6 @@ public class LaxGZIPInputStream extends GZIPInputStream {
         this.relax = relax;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.http.client.entity.DeflateInputStream#read(byte[], int, int)
-     */
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
         try {

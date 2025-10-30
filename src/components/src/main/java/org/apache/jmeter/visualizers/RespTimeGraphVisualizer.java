@@ -348,16 +348,16 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         if (!dynamicGraphSize.isSelected()) {
             String wstr = graphWidth.getText();
             String hstr = graphHeight.getText();
-            if (wstr.length() != 0) {
+            if (!wstr.isEmpty()) {
                 width = Integer.parseInt(wstr);
             }
-            if (hstr.length() != 0) {
+            if (!hstr.isEmpty()) {
                 height = Integer.parseInt(hstr);
             }
         }
 
         String yAxisStr = maxValueYAxisLabel.getText();
-        int maxYAxisScale = yAxisStr.length() == 0 ? 0 : Integer.parseInt(yAxisStr);
+        int maxYAxisScale = yAxisStr.isEmpty() ? 0 : Integer.parseInt(yAxisStr);
 
         graphPanel.setData(this.getData());
         graphPanel.setTitle(graphTitle.getText());
@@ -538,7 +538,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 intervalValue = Integer.parseInt(intervalField.getText());
             }
             if (eventSource == applyFilterBtn && samplerSelection.isSelected() && samplerMatchLabel.getText() != null
-                    && samplerMatchLabel.getText().length() > 0) {
+                    && !samplerMatchLabel.getText().isEmpty()) {
                 pattern = createPattern(samplerMatchLabel.getText());
             } else if (forceReloadData) {
                 pattern = null;
@@ -742,7 +742,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     private int getIncrScaleYAxis() {
         int incrYAxisScale = 0;
         String iyas = incrScaleYAxis.getText();
-        if (iyas.length() != 0) {
+        if (!iyas.isEmpty()) {
             incrYAxisScale = Integer.parseInt(iyas);
         }
         return incrYAxisScale;

@@ -214,7 +214,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         private final Credentials proxyCredentials;
         private final AuthScope proxyAuthScope;
 
-        public ManagedCredentialsProvider(AuthManager authManager, AuthScope proxyAuthScope, Credentials proxyCredentials) {
+        private ManagedCredentialsProvider(AuthManager authManager, AuthScope proxyAuthScope, Credentials proxyCredentials) {
             this.authManager = authManager;
             this.proxyAuthScope = proxyAuthScope;
             this.proxyCredentials = proxyCredentials;
@@ -256,8 +256,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             for (JMeterProperty authProp : authManager.getAuthObjects()) {
                 Object authObject = authProp.getObjectValue();
-                if (authObject instanceof Authorization) {
-                    Authorization auth = (Authorization) authObject;
+                if (authObject instanceof Authorization auth) {
                     if (!authScope.getRealm().equals(auth.getRealm())) {
                         continue;
                     }
@@ -308,8 +307,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 return;
             }
             URI requestURI = null;
-            if (request instanceof HttpUriRequest) {
-                requestURI = ((HttpUriRequest) request).getURI();
+            if (request instanceof HttpUriRequest httpUriRequest) {
+                requestURI = httpUriRequest.getURI();
             } else {
                 try {
                     requestURI = new URI(request.getRequestLine().getUri());
@@ -391,17 +390,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final class JMeterDefaultHttpClientConnectionOperator extends DefaultHttpClientConnectionOperator {
 
-        public JMeterDefaultHttpClientConnectionOperator(Lookup<ConnectionSocketFactory> socketFactoryRegistry, SchemePortResolver schemePortResolver,
+        private JMeterDefaultHttpClientConnectionOperator(Lookup<ConnectionSocketFactory> socketFactoryRegistry, SchemePortResolver schemePortResolver,
                 DnsResolver dnsResolver) {
             super(socketFactoryRegistry, schemePortResolver, dnsResolver);
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.http.impl.conn.DefaultHttpClientConnectionOperator#connect(
-         *  org.apache.http.conn.ManagedHttpClientConnection, org.apache.http.HttpHost,
-         *      java.net.InetSocketAddress, int, org.apache.http.config.SocketConfig,
-         *      org.apache.http.protocol.HttpContext)
-         */
         @Override
         public void connect(ManagedHttpClientConnection conn, HttpHost host, InetSocketAddress localAddress,
                 int connectTimeout, SocketConfig socketConfig, HttpContext context) throws IOException {
@@ -886,8 +879,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected void handleMethod(String method, HTTPSampleResult result,
             HttpRequestBase httpRequest, HttpContext localContext) throws IOException {
         // Handle the various methods
-        if (httpRequest instanceof HttpEntityEnclosingRequestBase) {
-            String entityBody = setupHttpEntityEnclosingRequestData((HttpEntityEnclosingRequestBase)httpRequest);
+        if (httpRequest instanceof HttpEntityEnclosingRequestBase httpEntityEnclosingRequestBase) {
+            String entityBody = setupHttpEntityEnclosingRequestData(httpEntityEnclosingRequestBase);
             result.setQueryString(entityBody);
         }
     }
@@ -965,7 +958,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
          * @param proxyUser proxy user
          * @param proxyPass proxy password
          */
-        public HttpClientKey(URL url, boolean hasProxy, String proxyScheme, String proxyHost,
+        private HttpClientKey(URL url, boolean hasProxy, String proxyScheme, String proxyHost,
                 int proxyPort, String proxyUser, String proxyPass) {
             // N.B. need to separate protocol from authority otherwise http://server would match https://erver (<= sic, not typo error)
             // could use separate fields, but simpler to combine them
@@ -1005,10 +998,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (this == obj) {
                 return true;
             }
-            if (!(obj instanceof HttpClientKey)) {
+            if (!(obj instanceof HttpClientKey other)) {
                 return false;
             }
-            HttpClientKey other = (HttpClientKey) obj;
             if (!Objects.equals(authority, other.authority) ||
                     !Objects.equals(protocol, other.protocol) ||
                     hasProxy != other.hasProxy) {
@@ -1237,7 +1229,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             jMeterVariables.remove(JMETER_VARIABLE_USER_TOKEN);
             ((JsseSSLManager) SSLManager.getInstance()).resetContext();
-            resetStateOnThreadGroupIteration.set(Boolean.FALSE);
+            resetStateOnThreadGroupIteration.set(false);
         }
     }
 
@@ -1353,8 +1345,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param header {@link Header}
      */
     private static void writeHeader(StringBuilder headerBuffer, Header header) {
-        if(header instanceof BufferedHeader) {
-            CharArrayBuffer buffer = ((BufferedHeader)header).getBuffer();
+        if(header instanceof BufferedHeader bufferedHeader) {
+            CharArrayBuffer buffer = bufferedHeader.getBuffer();
             headerBuffer.append(buffer.buffer(), 0, buffer.length()).append('\n'); // $NON-NLS-1$
         }
         else {
@@ -1506,7 +1498,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 "<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8);
         private boolean hideFileData;
 
-        public ViewableFileBody(File file, ContentType contentType, Charset charset) {
+        private ViewableFileBody(File file, ContentType contentType, Charset charset) {
             // Note: HttpClient4 does not support encoding the file name, and it always encodes names in IS88
             // See https://issues.apache.org/jira/browse/HTTPCLIENT-293
             super(file, contentType, encodeFilename(file.getName(), charset));

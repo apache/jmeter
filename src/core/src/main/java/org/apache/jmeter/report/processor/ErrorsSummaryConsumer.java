@@ -52,13 +52,6 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         super(false);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createDataResult
-     * (java.lang.String)
-     */
     @Override
     protected ListResultData createDataResult(String key, Long data) {
         ListResultData result = new ListResultData();
@@ -71,13 +64,6 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
-     * (org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected String getKeyFromSample(Sample sample) {
         return getErrorKey(sample);
@@ -114,14 +100,6 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         return new String(JsonStringEncoder.getInstance().quoteAsString(StringEscapeUtils.escapeHtml4(responseMessage)));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
-     * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
-     * org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected void updateData(SummaryInfo info, Sample sample) {
         // Initialize overall data if they don't exist
@@ -144,11 +122,6 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
-     */
     @Override
     public void stopConsuming() {
         super.stopConsuming();
@@ -157,13 +130,6 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         errorCount = 0L;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
-     * ()
-     */
     @Override
     protected ListResultData createResultTitles() {
         ListResultData titles = new ListResultData();

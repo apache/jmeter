@@ -72,32 +72,32 @@ public class PreCompiler implements HashTreeTraverser {
                 }
             }
 
-            if (node instanceof TestPlan) {
-                this.clientSideVariables = createVars((TestPlan)node);
+            if (node instanceof TestPlan testPlan) {
+                this.clientSideVariables = createVars(testPlan);
             }
 
-            if (node instanceof Arguments) {
+            if (node instanceof Arguments arguments) {
                 // Don't store User Defined Variables in the context for client side
-                Map<String, String> args = createArgumentsMap((Arguments) node);
+                Map<String, String> args = createArgumentsMap(arguments);
                 clientSideVariables.putAll(args);
             }
 
         } else {
-            if(node instanceof TestElement) {
+            if(node instanceof TestElement testElement) {
                 try {
-                    replacer.replaceValues((TestElement) node);
+                    replacer.replaceValues(testElement);
                 } catch (InvalidVariableException e) {
-                    log.error("invalid variables in node {}", ((TestElement)node).getName(), e);
+                    log.error("invalid variables in node {}", testElement.getName(), e);
                 }
             }
 
-            if (node instanceof TestPlan) {
-                JMeterVariables vars = createVars((TestPlan)node);
+            if (node instanceof TestPlan testPlan) {
+                JMeterVariables vars = createVars(testPlan);
                 JMeterContextService.getContext().setVariables(vars);
             }
 
-            if (node instanceof Arguments) {
-                Map<String, String> args = createArgumentsMap((Arguments) node);
+            if (node instanceof Arguments arguments) {
+                Map<String, String> args = createArgumentsMap(arguments);
                 JMeterContextService.getContext().getVariables().putAll(args);
             }
         }

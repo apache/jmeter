@@ -293,8 +293,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     @Override
     public void modifyTestElement(TestElement args) {
         GuiUtils.stopTableEditing(table);
-        if (args instanceof Arguments) {
-            Arguments arguments = (Arguments) args;
+        if (args instanceof Arguments arguments) {
             arguments.clear();
             @SuppressWarnings("unchecked") // only contains Argument (or HTTPArgument)
             Iterator<Argument> modelData = (Iterator<Argument>) tableModel.iterator();
@@ -321,9 +320,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (el instanceof Arguments) {
+        if (el instanceof Arguments arguments) {
             tableModel.clearData();
-            for (JMeterProperty jMeterProperty : (Arguments) el) {
+            for (JMeterProperty jMeterProperty : arguments) {
                 Argument arg = (Argument) jMeterProperty.getObjectValue();
                 tableModel.addRow(arg);
             }

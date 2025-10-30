@@ -89,8 +89,8 @@ public class MongoSourceElement
         if(mongoSource == null) {
             throw new IllegalStateException("mongoSource is null");
         } else {
-            if(mongoSource instanceof MongoDB) {
-                return (MongoDB)mongoSource;
+            if(mongoSource instanceof MongoDB mongoDB) {
+                return mongoDB;
             } else {
                 throw new IllegalStateException("Variable:"+ source +" is not a MongoDB instance, class:"+mongoSource.getClass());
             }

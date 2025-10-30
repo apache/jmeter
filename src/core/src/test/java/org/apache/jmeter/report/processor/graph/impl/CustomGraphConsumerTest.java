@@ -160,7 +160,7 @@ public class CustomGraphConsumerTest {
     }
 
     // Create a static SampleMetadataObject
-    private SampleMetadata createTestMetaData() {
+    private static SampleMetadata createTestMetaData() {
         String columnsString = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,success,failureMessage,bytes,sentBytes,"
                 + "grpThreads,allThreads,URL,Latency,IdleTime,Connect,\"stream\",\"aws_region\",\"bitrate\",\"ulp_buffer_fill\",\"ulp_lag_time\","
                 + "\"ulp_play_time\",\"ulp_lag_ratio\",\"lag_ratio_wo_bf\",\"ulp_dwn_time\",\"ulp_hits\",\"ulp_avg_chunk_time\","

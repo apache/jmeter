@@ -34,28 +34,28 @@ public abstract class BeanShellBeanInfoSupport extends BeanInfoSupport {
         PropertyDescriptor p;
 
         p = property("resetInterpreter");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
+        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_OTHER, true);
 
         createPropertyGroup("resetGroup", new String[] { "resetInterpreter" });
 
         p = property("parameters");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
 
         createPropertyGroup("parameterGroup", new String[] { "parameters" });
 
         p = property("filename");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p.setPropertyEditorClass(FileEditor.class);
 
         createPropertyGroup("filenameGroup", new String[] { "filename" });
 
         p = property("script");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p.setPropertyEditorClass(TextAreaEditor.class);
 

@@ -88,8 +88,7 @@ public class JMESPathExtractorGui extends AbstractPostProcessorGui {
     @Override
     public void modifyTestElement(TestElement c) {
         super.configureTestElement(c);
-        if (c instanceof JMESPathExtractor) {
-            JMESPathExtractor config = (JMESPathExtractor) c;
+        if (c instanceof JMESPathExtractor config) {
             saveScopeSettings(config);
             config.setRefName(refNameField.getText());
             config.setJmesPathExpression(jmesPathExpressionField.getText());

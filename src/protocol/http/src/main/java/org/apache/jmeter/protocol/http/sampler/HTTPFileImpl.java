@@ -82,7 +82,7 @@ public class HTTPFileImpl extends HTTPAbstractImpl {
             StringBuilder ctb=new StringBuilder("text/html"); // $NON-NLS-1$
             // TODO can this be obtained from the file somehow?
             String contentEncoding = getContentEncoding();
-            if (contentEncoding.length() > 0) {
+            if (!contentEncoding.isEmpty()) {
                 ctb.append("; charset="); // $NON-NLS-1$
                 ctb.append(contentEncoding);
             }

@@ -82,7 +82,7 @@ public class TestLoad extends JMeterTestCase {
         assertTree(tree, parent, testFile);
     }
 
-    private void assertTree(HashTree tree, String parent, File testFile) throws Exception {
+    private static void assertTree(HashTree tree, String parent, File testFile) throws Exception {
         assertNotNull(tree, parent+": "+ testFile.getName()+" caused null tree: ");
         final Object object = tree.getArray()[0];
         final String name = testFile.getName();
@@ -92,7 +92,7 @@ public class TestLoad extends JMeterTestCase {
         }
     }
 
-    private HashTree getTree(File f) throws Exception {
+    private static HashTree getTree(File f) throws Exception {
         HashTree tree = SaveService.loadTree(f);
         return tree;
     }

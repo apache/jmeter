@@ -240,7 +240,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
                         throw new IOException("Expected "+_fields+" fields, found "+st.length+" in "+line);
                     }
 
-                    if (st[_path].length()==0) {
+                    if (st[_path].isEmpty()) {
                         st[_path] = "/"; //$NON-NLS-1$
                     }
                     boolean secure = Boolean.parseBoolean(st[_secure]);
@@ -294,7 +294,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
         String cn = c.getName();
         removeMatchingCookies(c); // Can't have two matching cookies
 
-        if (DELETE_NULL_COOKIES && (null == cv || cv.length()==0)) {
+        if (DELETE_NULL_COOKIES && (null == cv || cv.isEmpty())) {
             if (log.isDebugEnabled()) {
                 log.debug("Dropping cookie with null value {}", c.toString());
             }
@@ -319,7 +319,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
         clearCookies(); // ensure data is set up OK initially
     }
 
-    /*
+    /**
      * Remove all the cookies.
      */
     private void clearCookies() {

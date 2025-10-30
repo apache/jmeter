@@ -87,7 +87,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         int matchNumber = getMatchNumber();
         final String defaultValue = getDefaultValue();
 
-        if (defaultValue.length() > 0  || isEmptyDefaultValue()) {
+        if (!defaultValue.isEmpty() || isEmptyDefaultValue()) {
             // Only replace default if it is provided or empty default value is explicitly requested
             vars.put(refName, defaultValue);
         }

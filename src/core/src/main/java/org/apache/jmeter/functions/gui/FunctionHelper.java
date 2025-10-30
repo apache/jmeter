@@ -275,7 +275,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     static String buildFunctionCallString(String functionName, Arguments args) {
         StringBuilder functionCall = new StringBuilder("${");
         functionCall.append(functionName);
-        if (args.getArguments().size() > 0) {
+        if (!args.getArguments().isEmpty()) {
             functionCall.append("(");
             PropertyIterator iter = args.iterator();
             boolean first = true;

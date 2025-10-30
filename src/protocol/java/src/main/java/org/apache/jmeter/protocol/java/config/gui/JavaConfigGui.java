@@ -305,9 +305,6 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
         ((JavaConfig) config).setClassname(classNameLabeledChoice.getText().trim());
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#clearGui()
-     */
     @Override
     public void clearGui() {
         super.clearGui();

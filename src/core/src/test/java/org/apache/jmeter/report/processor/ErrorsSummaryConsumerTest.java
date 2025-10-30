@@ -73,7 +73,7 @@ public class ErrorsSummaryConsumerTest {
         assertEquals(Long.valueOf(2), info.getData());
     }
 
-    private Sample createSample(boolean success) {
+    private static Sample createSample(boolean success) {
         SampleMetadata metadata = new SampleMetadata(',', CSVSaveService.SUCCESSFUL);
         return new Sample(0, metadata, String.valueOf(success));
     }

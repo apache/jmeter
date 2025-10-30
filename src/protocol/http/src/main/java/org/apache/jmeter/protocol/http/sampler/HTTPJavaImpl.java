@@ -146,7 +146,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         final HttpURLConnection conn;
         final String proxyHost = getProxyHost();
         final int proxyPort = getProxyPortInt();
-        if (proxyHost.length() > 0 && proxyPort > 0){
+        if (!proxyHost.isEmpty() && proxyPort > 0){
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
             //TODO - how to define proxy authentication for a single connection?
             conn = (HttpURLConnection) u.openConnection(proxy);
@@ -257,8 +257,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 Throwable cause = e.getCause();
                 if (cause != null){
                     log.error("Cause: {}", cause.toString());
-                    if(cause instanceof Error) {
-                        throw (Error)cause;
+                    if(cause instanceof Error error) {
+                        throw error;
                     }
                 }
             }
@@ -287,8 +287,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             Throwable cause = e.getCause();
             if (cause != null){
                 log.error("Cause: {}", cause.toString());
-                if(cause instanceof Error) {
-                    throw (Error)cause;
+                if(cause instanceof Error error) {
+                    throw error;
                 }
             }
             in = conn.getErrorStream();

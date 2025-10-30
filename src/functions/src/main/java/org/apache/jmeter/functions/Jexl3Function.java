@@ -102,7 +102,7 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
             {
                 str = o.toString();
             }
-            if (vars != null && varName.length() > 0) {// vars will be null on TestPlan
+            if (vars != null && !varName.isEmpty()) {// vars will be null on TestPlan
                 vars.put(varName, str);
             }
         } catch (Exception e) {

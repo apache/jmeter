@@ -279,8 +279,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         result.setSuccessful(false);
         result.setResponseMessage(e.toString());
 
-        if (e instanceof JMSException) {
-            JMSException jms = (JMSException) e;
+        if (e instanceof JMSException jms) {
 
             String errorCode = Optional.ofNullable(jms.getErrorCode()).orElse("");
             if (checkForReconnect && publisher != null && getIsReconnectErrorCode().test(errorCode)) {
@@ -299,25 +298,19 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     protected static Cache<Object, Object> buildCache(String configChoice) {
         Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
         switch (configChoice) {
-        case JMSPublisherGui.USE_FILE_RSC:
-            cacheBuilder.maximumSize(1);
-            break;
-        default:
-            cacheBuilder.expireAfterWrite(0, TimeUnit.MILLISECONDS).maximumSize(0);
+            case JMSPublisherGui.USE_FILE_RSC -> cacheBuilder.maximumSize(1);
+            default -> cacheBuilder.expireAfterWrite(0, TimeUnit.MILLISECONDS).maximumSize(0);
         }
         return cacheBuilder.build();
     }
 
     /** Gets file path to use **/
     private String getFilePath(String... ext) {
-        switch (getConfigChoice()) {
-        case JMSPublisherGui.USE_FILE_RSC:
-            return getInputFile();
-        case JMSPublisherGui.USE_RANDOM_RSC:
-            return FSERVER.getRandomFile(getRandomPath(), ext).getAbsolutePath();
-        default:
-            throw new IllegalArgumentException("Type of input not handled:" + getConfigChoice());
-        }
+        return switch (getConfigChoice()) {
+            case JMSPublisherGui.USE_FILE_RSC -> getInputFile();
+            case JMSPublisherGui.USE_RANDOM_RSC -> FSERVER.getRandomFile(getRandomPath(), ext).getAbsolutePath();
+            default -> throw new IllegalArgumentException("Type of input not handled:" + getConfigChoice());
+        };
     }
 
     /**
@@ -457,7 +450,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
 
     public String getExpiration() {
         String expiration = getPropertyAsString(JMS_EXPIRATION);
-        if (expiration.length() == 0) {
+        if (expiration.isEmpty()) {
             return Utils.DEFAULT_NO_EXPIRY;
         } else {
             return expiration;
@@ -466,7 +459,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
 
     public String getPriority() {
         String priority = getPropertyAsString(JMS_PRIORITY);
-        if (priority.length() == 0) {
+        if (priority.isEmpty()) {
             return Utils.DEFAULT_PRIORITY_4;
         } else {
             return priority;
@@ -511,8 +504,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         Object o = getProperty(JMS_PROPERTIES).getObjectValue();
         JMSProperties jmsProperties = null;
         // Backward compatibility with versions <= 2.10
-        if (o instanceof Arguments) {
-            jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments) o);
+        if (o instanceof Arguments arguments) {
+            jmsProperties = Utils.convertArgumentsToJmsProperties(arguments);
         } else {
             jmsProperties = (JMSProperties) o;
         }

@@ -68,7 +68,7 @@ public final class ClassFinder {
 
     @API(status = API.Status.EXPERIMENTAL, since = "5.6")
     public static boolean getSkipJarsWithJmeterSkipClassScanningAttribute() {
-        return Objects.equals(SKIP_JARS_WITH_JMETER_SKIP_ATTRIBUTE.get(), Boolean.TRUE);
+        return Objects.equals(SKIP_JARS_WITH_JMETER_SKIP_ATTRIBUTE.get(), true);
     }
 
     /**
@@ -209,9 +209,6 @@ public final class ClassFinder {
             return false;
         }
 
-        /* (non-Javadoc)
-         * @see java.lang.Object#toString()
-         */
         @Override
         public String toString() {
             return "ExtendsClassFilter [parents=" +

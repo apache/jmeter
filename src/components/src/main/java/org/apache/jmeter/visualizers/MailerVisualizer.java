@@ -431,8 +431,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
      */
     @Override
     public void stateChanged(ChangeEvent e) {
-        if (e.getSource() instanceof MailerModel) {
-            MailerModel testModel = (MailerModel) e.getSource();
+        if (e.getSource() instanceof MailerModel testModel) {
             updateVisualizer(testModel);
         } else {
             super.stateChanged(e);

@@ -41,7 +41,7 @@ public class LocalHostTest {
     public void testInterfaces() throws Exception {
         String interfaces = Collections
                 .list(NetworkInterface.getNetworkInterfaces()).stream()
-                .map(this::ifaceWithAddresses)
+                .map(LocalHostTest::ifaceWithAddresses)
                 .collect(Collectors.joining(", "));
         perr("Interfaces: {" + interfaces + "}");
         String externInterface = guessExternalIPv4Interface();
@@ -80,7 +80,7 @@ public class LocalHostTest {
                         .getInfo();
     }
 
-    private String ifaceWithAddresses(NetworkInterface iface) {
+    private static String ifaceWithAddresses(NetworkInterface iface) {
         return iface + " => ["
                 + iface.getInterfaceAddresses().stream()
                         .map(InterfaceAddress::toString)
@@ -99,7 +99,7 @@ public class LocalHostTest {
         }
     }
 
-    private InetAddress getLocalHost() throws UnknownHostException {
+    private static InetAddress getLocalHost() throws UnknownHostException {
         final String key = "java.rmi.server.hostname";
         String host = System.getProperties().getProperty(key); // $NON-NLS-1$
         perr(key + "=" + host);

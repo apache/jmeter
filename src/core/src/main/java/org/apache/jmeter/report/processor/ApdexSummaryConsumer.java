@@ -66,26 +66,11 @@ public class ApdexSummaryConsumer extends
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
-     * (org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected String getKeyFromSample(Sample sample) {
         return sample.getName();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
-     * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
-     * org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected void updateData(SummaryInfo info, Sample sample) {
         if(sample.isEmptyController()) {
@@ -144,13 +129,6 @@ public class ApdexSummaryConsumer extends
                 / data.getTotalCount();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
-     * ()
-     */
     @Override
     protected ListResultData createResultTitles() {
         ListResultData titles = new ListResultData();

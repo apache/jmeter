@@ -81,9 +81,6 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
         return "md5hex_assertion_title"; // $NON-NLS-1$
     }
 
-    /*
-     * @return
-     */
     @Override
     public TestElement createTestElement() {
 
@@ -93,9 +90,6 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
     }
 
-    /*
-     * @param element
-     */
     @Override
     public void modifyTestElement(TestElement element) {
         configureTestElement(element);

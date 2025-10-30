@@ -93,8 +93,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
     @Override
     public void modifyTestElement(TestElement c) {
         super.configureTestElement(c);
-        if (c instanceof JSONPostProcessor) {
-            JSONPostProcessor config = (JSONPostProcessor) c;
+        if (c instanceof JSONPostProcessor config) {
             saveScopeSettings(config);
             config.setRefNames(refNamesField.getText());
             config.setJsonPathExpressions(jsonPathExpressionsField.getText());

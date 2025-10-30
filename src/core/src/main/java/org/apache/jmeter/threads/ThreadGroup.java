@@ -522,7 +522,7 @@ public class ThreadGroup extends AbstractThreadGroup {
          * Pause ms milliseconds
          * @param ms long milliseconds
          */
-        private void pause(long ms){
+        private static void pause(long ms){
             try {
                 TimeUnit.MILLISECONDS.sleep(ms);
             } catch (InterruptedException e) {

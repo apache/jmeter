@@ -184,10 +184,6 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         log.info("... stopped");
     }
 
-    /*
-     * Called by:
-     * - ClientJMeterEngine.exe() which is called on remoteStop
-     */
     @Override
     public void rexit() throws RemoteException {
         log.info("Exiting");

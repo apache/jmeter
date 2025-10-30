@@ -285,14 +285,13 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      *             {@link HeaderManager}
      */
     public HeaderManager merge(TestElement element) {
-        if (!(element instanceof HeaderManager)) {
+        if (!(element instanceof HeaderManager other)) {
             throw new IllegalArgumentException("Cannot merge type:" + this.getClass().getName() + " with type:" + element.getClass().getName());
         }
 
         // start off with a merged object as a copy of the local object
         HeaderManager merged = (HeaderManager)this.clone();
 
-        HeaderManager other = (HeaderManager)element;
         // iterate thru each of the other headers
         for (int i = 0; i < other.getHeaders().size(); i++) {
             Header otherHeader = other.get(i);

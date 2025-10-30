@@ -66,7 +66,7 @@ public class SendMailCommand {
 
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
-    private static final String FALSE = Boolean.FALSE.toString();
+    private static final String FALSE = "false";
 
     private boolean useSSL = false;
     private boolean useStartTLS = false;
@@ -182,7 +182,7 @@ public class SendMailCommand {
             Multipart multipart = new MimeMultipart();
             final int attachmentCount = attachments.size();
             if (plainBody &&
-               (attachmentCount == 0 ||  (mailBody.length() == 0 && attachmentCount == 1))) {
+               (attachmentCount == 0 ||  (mailBody.isEmpty() && attachmentCount == 1))) {
                 if (attachmentCount == 1) { // i.e. mailBody is empty
                     File first = attachments.get(0);
                     try (FileInputStream fis = new FileInputStream(first);
@@ -758,7 +758,7 @@ public class SendMailCommand {
      */
     private String getPort() {
         String port = smtpPort.trim();
-        if (port.length() > 0) { // OK, it has been supplied
+        if (!port.isEmpty()) { // OK, it has been supplied
             return port;
         }
         if (useSSL){
@@ -785,7 +785,7 @@ public class SendMailCommand {
      */
     public String getTimeout() {
         String timeout = timeOut.trim();
-        if (timeout.length() > 0) { // OK, it has been supplied
+        if (!timeout.isEmpty()) { // OK, it has been supplied
             return timeout;
         }
         return "0"; // Default is infinite timeout (value 0).
@@ -806,7 +806,7 @@ public class SendMailCommand {
      */
     public String getConnectionTimeout() {
         String connectionTimeout = connectionTimeOut.trim();
-        if (connectionTimeout.length() > 0) { // OK, it has been supplied
+        if (!connectionTimeout.isEmpty()) { // OK, it has been supplied
             return connectionTimeout;
         }
         return "0"; // Default is infinite timeout (value 0).

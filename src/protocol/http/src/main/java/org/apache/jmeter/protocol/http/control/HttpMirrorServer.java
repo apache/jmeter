@@ -83,7 +83,7 @@ public class HttpMirrorServer extends Thread implements Stoppable, NonTestElemen
 
     /** Initialization On Demand Holder pattern */
     private static class LazyHolder {
-        public static final Logger LOGGER = LoggerFactory.getLogger(HttpMirrorServer.class);
+        private static final Logger LOGGER = LoggerFactory.getLogger(HttpMirrorServer.class);
     }
 
     private volatile boolean isRunning;

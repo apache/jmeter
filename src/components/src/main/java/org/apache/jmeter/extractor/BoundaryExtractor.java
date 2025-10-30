@@ -403,7 +403,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
 
     public boolean useBody() {
         String prop = getPropertyAsString(MATCH_AGAINST);
-        return prop.length() == 0 || USE_BODY.equalsIgnoreCase(prop);
+        return prop.isEmpty() || USE_BODY.equalsIgnoreCase(prop);
     }
 
     public boolean useUnescapedBody() {

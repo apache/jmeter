@@ -116,7 +116,7 @@ public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
         assertCacheContentInBytes(text);
     }
 
-    private void assertContains(String value, String substring, String message) {
+    private static void assertContains(String value, String substring, String message) {
         assertTrue(value.contains(substring), () -> message + ": " + value + " should contain " + substring);
     }
 

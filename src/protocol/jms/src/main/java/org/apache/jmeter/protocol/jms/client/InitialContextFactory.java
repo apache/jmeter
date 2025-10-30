@@ -57,7 +57,7 @@ public class InitialContextFactory {
             props.setProperty(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
             props.setProperty(Context.PROVIDER_URL, providerUrl);
             if (useAuth && securityPrincipal != null && securityCredentials != null
-                    && securityPrincipal.length() > 0 && securityCredentials.length() > 0) {
+                    && !securityPrincipal.isEmpty() && !securityCredentials.isEmpty()) {
                 props.setProperty(Context.SECURITY_PRINCIPAL, securityPrincipal);
                 props.setProperty(Context.SECURITY_CREDENTIALS, securityCredentials);
                 log.info("authentication properties set");

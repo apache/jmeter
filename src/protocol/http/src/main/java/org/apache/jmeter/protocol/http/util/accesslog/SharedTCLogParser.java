@@ -82,7 +82,7 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
             // BufferedReader
             line = breader.readLine(FILENAME);
             while (line != null) {
-                if (line.length() > 0) {
+                if (!line.isEmpty()) {
                     actualCount += this.parseLine(line, el);
                 }
                 // we check the count to see if we have exceeded

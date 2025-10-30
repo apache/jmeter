@@ -178,8 +178,8 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
      *         otherwise
      */
     public boolean isLeaf(Object node) {
-        if (node instanceof TreeNode) {
-            return ((TreeNode)node).isLeaf();
+        if (node instanceof TreeNode treeNode) {
+            return treeNode.isLeaf();
         } else {
             return false;
         }

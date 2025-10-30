@@ -105,7 +105,7 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
      */
     protected void executeTester(String textToParse) {
         if (StringUtilities.isNotEmpty(textToParse)
-                && this.expressionField.getText().length() > 0) {
+                && !this.expressionField.getText().isEmpty()) {
             this.resultField.setText(process(textToParse));
             this.resultField.setCaretPosition(0); // go to first line
         }
@@ -202,8 +202,8 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
     /** {@inheritDoc} */
     @Override
     public synchronized void setSamplerResult(Object userObject) {
-        if (userObject instanceof SampleResult) {
-            sampleResult = (SampleResult) userObject;
+        if (userObject instanceof SampleResult result) {
+            sampleResult = result;
         }
     }
 

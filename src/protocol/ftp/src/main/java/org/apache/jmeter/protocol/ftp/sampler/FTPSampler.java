@@ -156,7 +156,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         sb.append("ftp://");// $NON-NLS-1$
         sb.append(getServer());
         String port = getPort();
-        if (port.length() > 0){
+        if (!port.isEmpty()){
             sb.append(':');
             sb.append(port);
         }
@@ -206,7 +206,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                     boolean ftpOK=false;
                     if (isUpload()) {
                         String contents=getLocalFileContents();
-                        if (contents.length() > 0){
+                        if (!contents.isEmpty()){
                             @SuppressWarnings("DefaultCharset")
                             byte[] bytes = contents.getBytes(); // TODO - charset?
                             input = new ByteArrayInputStream(bytes);
@@ -228,7 +228,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                                 baos  = new ByteArrayOutputStream();
                                 target=baos;
                             }
-                            if (local.length()>0){
+                            if (!local.isEmpty()){
                                 output=new FileOutputStream(local); // NOSONAR False positive, the output is closed in finally and not overwritten
                                 if (target==null) {
                                     target=output;

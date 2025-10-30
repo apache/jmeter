@@ -117,8 +117,7 @@ public class ResourcesDownloader {
         if (!drainList.isEmpty()) {
             LOG.warn("the pool executor workqueue is not empty size={}", drainList.size());
             for (Runnable runnable : drainList) {
-                if (runnable instanceof Future<?>) {
-                    Future<?> f = (Future<?>) runnable;
+                if (runnable instanceof Future<?> f) {
                     f.cancel(true);
                 } else {
                     LOG.warn("Content of workqueue is not an instance of Future");

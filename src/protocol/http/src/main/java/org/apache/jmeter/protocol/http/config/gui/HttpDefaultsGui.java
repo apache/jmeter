@@ -280,6 +280,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         return field;
     }
 
+    @SuppressWarnings("EnumOrdinal")
     protected JPanel createSourceAddrPanel() {
         final JPanel sourceAddrPanel = new HorizontalPanel();
         sourceAddrPanel.setBorder(BorderFactory.createTitledBorder(

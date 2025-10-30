@@ -394,8 +394,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             resultsRender.setSamplerResult(userObject);
             resultsRender.setupTabPane(); // Processes Assertions
             // display a SampleResult
-            if (userObject instanceof SampleResult) {
-                SampleResult sampleResult = (SampleResult) userObject;
+            if (userObject instanceof SampleResult sampleResult) {
                 if (isTextDataType(sampleResult)){
                     resultsRender.renderResult(sampleResult);
                 } else {
@@ -457,7 +456,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
         // if no results render in jmeter.properties, load Standard (default)
         String defaultRenderer = expandToClassname(".RenderAsText"); // $NON-NLS-1$
-        if (VIEWERS_ORDER.length() > 0) {
+        if (!VIEWERS_ORDER.isEmpty()) {
             defaultRenderer = expandToClassname(VIEWERS_ORDER.split(",", 2)[0]);
         }
         ResultRenderer defaultObject = null;
@@ -475,7 +474,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             renderer.setBackgroundColor(getBackground());
             map.put(renderer.getClass().getName(), renderer);
         }
-        if (VIEWERS_ORDER.length() > 0) {
+        if (!VIEWERS_ORDER.isEmpty()) {
             Arrays.stream(VIEWERS_ORDER.split(","))
                     .map(ViewResultsFullVisualizer::expandToClassname)
                     .forEach(key -> {
@@ -584,10 +583,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
             boolean failure = true;
             Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
-            if (userObject instanceof SampleResult) {
-                failure = !((SampleResult) userObject).isSuccessful();
-            } else if (userObject instanceof AssertionResult) {
-                AssertionResult assertion = (AssertionResult) userObject;
+            if (userObject instanceof SampleResult sampleResult) {
+                failure = !sampleResult.isSuccessful();
+            } else if (userObject instanceof AssertionResult assertion) {
                 failure = assertion.isError() || assertion.isFailure();
             }
 

@@ -414,7 +414,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             // Write the EOL separately so we generate LF line ends on Unix and Windows
             writer.print("\n"); // $NON-NLS-1$
             String pi=saveConfig.getXmlPi();
-            if (pi.length() > 0) {
+            if (!pi.isEmpty()) {
                 writer.println(pi);
             }
             // Can't do it as a static initialisation, because SaveService

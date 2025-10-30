@@ -231,9 +231,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
             PropertyEditor propertyEditor;
             Object guiType = descriptor.getValue(GUITYPE);
-            if (guiType instanceof TypeEditor) {
-                propertyEditor = ((TypeEditor) guiType).getInstance(descriptor);
-            } else if (guiType instanceof Class && Enum.class.isAssignableFrom((Class<?>) guiType)) {
+            if (guiType instanceof TypeEditor typeEditor) {
+                propertyEditor = typeEditor.getInstance(descriptor);
+            } else if (guiType instanceof Class<?> aClass && Enum.class.isAssignableFrom(aClass)) {
                     @SuppressWarnings("unchecked") // we check the class type above
                     final Class<? extends Enum<?>> enumClass = (Class<? extends Enum<?>>) guiType;
                     propertyEditor = new EnumEditor(descriptor, enumClass, (ResourceBundle) descriptor.getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE));
@@ -271,9 +271,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 propertyEditor = createWrapperEditor(propertyEditor, descriptor);
                 log.debug("Editor for property {} is wrapped in {}", name, propertyEditor);
             }
-            if(propertyEditor instanceof TestBeanPropertyEditor)
+            if(propertyEditor instanceof TestBeanPropertyEditor testBeanPropertyEditor)
             {
-                ((TestBeanPropertyEditor)propertyEditor).setDescriptor(descriptor);
+                testBeanPropertyEditor.setDescriptor(descriptor);
             }
 
             if (propertyEditor instanceof TextAreaEditor) {
@@ -458,7 +458,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Returns true if the property disallows constant values different from the provided tags.
      *
      * @param descriptor the property descriptor
-     * @return true if the attribute {@link #NOT_OTHER} is defined and equal to Boolean.TRUE;
+     * @return true if the attribute {@link #NOT_OTHER} is defined and equal to true;
      *  otherwise the default is false
      */
     static boolean notOther(PropertyDescriptor descriptor) {
@@ -469,7 +469,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Returns true if the property does not allow JMeter expressions.
      *
      * @param descriptor the property descriptor
-     * @return true if the attribute {@link #NOT_EXPRESSION} is defined and equal to Boolean.TRUE;
+     * @return true if the attribute {@link #NOT_EXPRESSION} is defined and equal to true;
      *  otherwise the default is false
      */
     static boolean notExpression(PropertyDescriptor descriptor) {
@@ -480,7 +480,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Returns true if the property must be defined (i.e. is required);
      *
      * @param descriptor the property descriptor
-     * @return true if the attribute {@link #NOT_UNDEFINED} is defined and equal to Boolean.TRUE;
+     * @return true if the attribute {@link #NOT_UNDEFINED} is defined and equal to true;
      *  otherwise the default is false
      */
     static boolean notNull(PropertyDescriptor descriptor) {
@@ -491,7 +491,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * Returns true if the property default value is not saved
      *
      * @param descriptor the property descriptor
-     * @return true if the attribute {@link #DEFAULT_NOT_SAVED} is defined and equal to Boolean.TRUE;
+     * @return true if the attribute {@link #DEFAULT_NOT_SAVED} is defined and equal to true;
      *  otherwise the default is false
      */
     static boolean noSaveDefault(PropertyDescriptor descriptor) {
@@ -704,7 +704,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         private static final long serialVersionUID = 240L;
 
         private final BeanInfo beanInfo;
-        public PropertyComparator(BeanInfo beanInfo) {
+        private PropertyComparator(BeanInfo beanInfo) {
             this.beanInfo = beanInfo;
         }
 
@@ -790,10 +790,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
             PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
             if (propertyEditor != null) {
                 try {
-                if (propertyEditor instanceof ClearGui) {
-                    ((ClearGui) propertyEditor).clearGui();
-                } else if (propertyEditor instanceof WrapperEditor){
-                    WrapperEditor we = (WrapperEditor) propertyEditor;
+                if (propertyEditor instanceof ClearGui clearGui) {
+                    clearGui.clearGui();
+                } else if (propertyEditor instanceof WrapperEditor we){
                     String[] tags = we.getTags();
                     if (tags != null && tags.length > 0) {
                         we.setAsText(tags[0]);

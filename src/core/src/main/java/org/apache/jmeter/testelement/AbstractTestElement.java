@@ -340,10 +340,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         traverser.startProperty(value);
         if (value instanceof TestElementProperty) {
             ((TestElement) value.getObjectValue()).traverse(traverser);
-        } else if (value instanceof CollectionProperty) {
-            traverseCollection((CollectionProperty) value, traverser);
-        } else if (value instanceof MapProperty) {
-            traverseMap((MapProperty) value, traverser);
+        } else if (value instanceof CollectionProperty collectionProperty) {
+            traverseCollection(collectionProperty, traverser);
+        } else if (value instanceof MapProperty mapProperty) {
+            traverseMap(mapProperty, traverser);
         }
         traverser.endProperty(value);
     }
@@ -742,10 +742,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public JMeterContext getThreadContext() {
         if (threadContext == null) {
-            /*
-             * Only samplers have the thread context set up by JMeterThread at
-             * present, so suppress the warning for now
-             */
+            // Only samplers have the thread context set up by JMeterThread at
+            // present, so suppress the warning for now
             threadContext = JMeterContextService.getContext();
         }
         return threadContext;

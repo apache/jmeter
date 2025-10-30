@@ -103,7 +103,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
         setArguments(new Arguments());
     }
 
-    /*
+    /**
      * Ensure that the required class variables are cloned,
      * as this is not currently done by the super-implementation.
      */
@@ -197,7 +197,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
         SampleResult result = javaClient.runTest(context);
 
         // Only set the default label if it has not been set
-        if (result != null && result.getSampleLabel().length() == 0) {
+        if (result != null && result.getSampleLabel().isEmpty()) {
             result.setSampleLabel(getName());
         }
 
@@ -348,8 +348,8 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
 
     @Override
     public boolean interrupt() {
-        if (javaClient instanceof Interruptible) {
-            return ((Interruptible) javaClient).interrupt();
+        if (javaClient instanceof Interruptible interruptible) {
+            return interruptible.interrupt();
 
         }
         return false;

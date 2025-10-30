@@ -56,7 +56,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
 
     private final MessageConsumer subscriber;
 
-    /*
+    /**
      * We use a LinkedBlockingQueue (rather than a ConcurrentLinkedQueue) because it has a
      * poll-with-wait method that avoids the need to use a polling loop.
      */

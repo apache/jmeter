@@ -32,9 +32,6 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
     private long count;
     private long errorCount;
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
-     */
     @Override
     public void startConsuming() {
         count = 0L;
@@ -49,9 +46,6 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
         super.startProducing();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.jmeter.report.core.Sample, int)
-     */
     @Override
     public void consume(Sample sample, int channel) {
         if(!sample.isController()) {
@@ -63,11 +57,6 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
         super.produce(sample, channel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
-     */
     @Override
     public void stopConsuming() {
         MapResultData result = new MapResultData();

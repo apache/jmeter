@@ -132,8 +132,7 @@ public class ForeachControlPanel extends AbstractControllerGui {
     @Override
     public void modifyTestElement(TestElement lc) {
         configureTestElement(lc);
-        if (lc instanceof ForeachController) {
-            ForeachController fec = (ForeachController) lc;
+        if (lc instanceof ForeachController fec) {
             fec.setInputVal(inputVal.getText());
             fec.setStartIndex(startIndex.getText());
             fec.setEndIndex(endIndex.getText());

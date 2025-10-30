@@ -41,7 +41,7 @@ public class HtmlPane extends JTextPane {
             String ref = e.getURL().getRef();
             if (ref != null) {
                 log.debug("reference to scroll to = '{}'", ref);
-                if (ref.length() > 0) {
+                if (!ref.isEmpty()) {
                     scrollToReference(ref);
                 } else { // href="#"
                     scrollRectToVisible(new Rectangle(1,1,1,1));

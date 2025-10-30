@@ -49,7 +49,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected static final int PROXY_PORT = Integer.parseInt(System.getProperty("http.proxyPort","0"));
 
-    protected static final boolean PROXY_DEFINED = PROXY_HOST.length() > 0 && PROXY_PORT > 0;
+    protected static final boolean PROXY_DEFINED = !PROXY_HOST.isEmpty() && PROXY_PORT > 0;
 
     protected static final String PROXY_USER = JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,"");
 
@@ -101,14 +101,14 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      *  Shared state for any HC based implementation, because SSL contexts are the same
      */
     protected static final ThreadLocal<Boolean> resetStateOnThreadGroupIteration =
-            ThreadLocal.withInitial(() -> Boolean.FALSE);
+            ThreadLocal.withInitial(() -> false);
 
     static {
         if (!JMeterUtils.getPropDefault("httpclient.timeout", "").isEmpty()) { //$NON-NLS-1$
             log.warn("You're using property 'httpclient.timeout' that will soon be deprecated for HttpClient3.1, you should either set "
                     + "timeout in HTTP Request GUI, HTTP Request Defaults or set http.socket.timeout in httpclient.parameters");
         }
-        if (NONPROXY_HOSTS.length() > 0) {
+        if (!NONPROXY_HOSTS.isEmpty()) {
             StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$
             while (s.hasMoreTokens()) {
                 String t = s.nextToken();
@@ -124,7 +124,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
         InetAddress inet = null;
         String localHostOrIP =
             JMeterUtils.getPropDefault("httpclient.localaddress",""); // $NON-NLS-1$
-        if (localHostOrIP.length() > 0) {
+        if (!localHostOrIP.isEmpty()) {
             try {
                 inet = InetAddress.getByName(localHostOrIP);
                 log.info("Using localAddress {}", inet.getHostAddress());

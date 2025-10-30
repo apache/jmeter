@@ -89,10 +89,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * Initialization On Demand Holder pattern
      */
     private static class LazyHolder {
-        private LazyHolder() {
-            super();
-        }
-        public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
+        private static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
 
     /**
@@ -256,13 +253,13 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             return compiledScript;
         } catch (ScriptCompilationInvocationTargetException e) {
             Throwable cause = e.getCause();
-            if (cause instanceof IOException) {
+            if (cause instanceof IOException ioException) {
                 cause.addSuppressed(new IllegalStateException("Unable to compile JSR223 script: " + newCacheKey));
-                throw (IOException) cause;
+                throw ioException;
             }
-            if (cause instanceof ScriptException) {
+            if (cause instanceof ScriptException scriptException) {
                 cause.addSuppressed(new IllegalStateException("Unable to compile JSR223 script: " + newCacheKey));
-                throw (ScriptException) cause;
+                throw scriptException;
             }
             throw e;
         }

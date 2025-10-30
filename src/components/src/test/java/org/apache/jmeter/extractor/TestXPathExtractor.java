@@ -317,7 +317,7 @@ public class TestXPathExtractor {
         assertEquals("0", vars.get(VAL_NAME_NR));
     }
 
-    private void assertContains(String value, String substring, String message) {
+    private static void assertContains(String value, String substring, String message) {
         assertTrue(value.contains(substring), () -> message + ": " + value + " should contain " + substring);
     }
 }

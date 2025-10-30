@@ -114,7 +114,7 @@ public class TestDecompression {
         }
     }
 
-    private WireMockServer createServer(Consumer<WireMockConfiguration> config) {
+    private static WireMockServer createServer(Consumer<WireMockConfiguration> config) {
         WireMockConfiguration configuration =
                 WireMockConfiguration
                         .wireMockConfig()

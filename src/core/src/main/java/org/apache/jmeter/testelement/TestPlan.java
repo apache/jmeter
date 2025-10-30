@@ -197,8 +197,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     @Override
     public void addTestElement(TestElement tg) {
         super.addTestElement(tg);
-        if (tg instanceof AbstractThreadGroup && !isRunningVersion()) {
-            addThreadGroup((AbstractThreadGroup) tg);
+        if (tg instanceof AbstractThreadGroup abstractThreadGroup && !isRunningVersion()) {
+            addThreadGroup(abstractThreadGroup);
         }
     }
 

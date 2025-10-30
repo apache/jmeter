@@ -121,7 +121,7 @@ public class CSVDataSet extends ConfigTestElement
      */
     @Override
     public void setProperty(JMeterProperty property) {
-        if (!(property instanceof StringProperty)) {
+        if (!(property instanceof StringProperty stringProperty)) {
             super.setProperty(property);
             return;
         }
@@ -142,7 +142,7 @@ public class CSVDataSet extends ConfigTestElement
                         if (log.isDebugEnabled()) {
                             log.debug("Converted {}={} to {} using Locale: {}", propName, propValue, resKey, rb.getLocale());
                         }
-                        ((StringProperty) property).setValue(resKey); // reset the value
+                        stringProperty.setValue(resKey); // reset the value
                         super.setProperty(property);
                         return;
                     }

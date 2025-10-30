@@ -197,12 +197,10 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                 @Override
                 public void completed(final HttpResponse response) {
                     int code = response.getStatusLine().getStatusCode();
-                    /*
-                     * If your write request received HTTP
-                     * 204 No Content: it was a success!
-                     * 4xx: InfluxDB could not understand the request.
-                     * 5xx: The system is overloaded or significantly impaired.
-                     */
+                    // If your write request received HTTP
+                    // 204 No Content: it was a success!
+                    // 4xx: InfluxDB could not understand the request.
+                    // 5xx: The system is overloaded or significantly impaired.
                     if (MetricUtils.isSuccessCode(code)) {
                         if (log.isDebugEnabled()) {
                             log.debug("Success, number of metrics written: {}", copyMetrics.size());

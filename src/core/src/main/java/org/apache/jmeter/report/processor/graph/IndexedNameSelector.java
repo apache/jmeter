@@ -42,13 +42,6 @@ public class IndexedNameSelector implements GraphKeysSelector {
         return names;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleSelector#select(org.apache
-     * .jmeter.report.csv.core.Sample)
-     */
     @Override
     public Double select(Sample sample) {
         String name = sample.getName();

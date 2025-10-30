@@ -68,9 +68,8 @@ public class JsonExporter extends AbstractDataExporter {
     public void export(SampleContext context, File file, ReportGeneratorConfiguration reportGeneratorConfiguration)
             throws ExportException {
         Object data = context.getData().get(ReportGenerator.STATISTICS_SUMMARY_CONSUMER_NAME);
-        if (data instanceof MapResultData) {
+        if (data instanceof MapResultData result) {
             LOGGER.info("Found data for consumer {} in context", ReportGenerator.STATISTICS_SUMMARY_CONSUMER_NAME);
-            MapResultData result = (MapResultData) data;
             Map<String, SamplingStatistic> statistics = new HashMap<>();
             MapResultData overallData = (MapResultData) result.getResult("overall");
             LOGGER.info("Creating statistics for overall");

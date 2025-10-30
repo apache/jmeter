@@ -641,7 +641,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             return;
         }
         String tn = getThreadName();
-        if (tn.length()==0) {
+        if (tn.isEmpty()) {
             tn=Thread.currentThread().getName();
             this.setThreadName(tn);
         }
@@ -892,7 +892,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         }
     }
 
-    /*
+    /**
      * Determine if content-type is known to be binary, i.e. not displayable as text.
      *
      * @param ct content type
@@ -1137,7 +1137,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         return startTime;
     }
 
-    /*
+    /**
      * Helper methods N.B. setStartTime must be called before setEndTime
      *
      * setStartTime is used by HTTPSampleResult to clone the parent sampler and

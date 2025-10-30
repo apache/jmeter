@@ -285,7 +285,7 @@ public class RespTimeGraphChart extends JPanel {
         double max = maxYAxisScale > 0 ? maxYAxisScale : getTopValue(findMax(_data), RoundingMode.UP); // define max scale y axis
         try {
             // if the title graph is empty, we can assume some default
-            if (_title.length() == 0 ) {
+            if (_title.isEmpty()) {
                 _title = JMeterUtils.getResString("graph_resp_time_title"); //$NON-NLS-1$
             }
             this.setPreferredSize(new Dimension(_width,_height));

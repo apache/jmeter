@@ -113,7 +113,7 @@ public class TestSaveService extends JMeterTestCase {
         }
     }
 
-    private boolean loadAndSave(File testFile, String fileName, boolean checkSize, File savedFile) throws Exception {
+    private static boolean loadAndSave(File testFile, String fileName, boolean checkSize, File savedFile) throws Exception {
 
         boolean failed = false;
 
@@ -166,7 +166,7 @@ public class TestSaveService extends JMeterTestCase {
         return failed;
     }
 
-    private FileStats getFileStats(File testFile) throws IOException,
+    private static FileStats getFileStats(File testFile) throws IOException,
             FileNotFoundException {
         if (testFile == null || !testFile.exists()) {
             return FileStats.NO_STATS;
@@ -183,7 +183,7 @@ public class TestSaveService extends JMeterTestCase {
      * "jmeterTestPlan" element which may vary because of
      * different attributes/attribute lengths.
      */
-    private FileStats computeFileStats(BufferedReader br) throws IOException {
+    private static FileStats computeFileStats(BufferedReader br) throws IOException {
         int length = 0;
         int lines = 0;
         String line;
@@ -213,7 +213,7 @@ public class TestSaveService extends JMeterTestCase {
     @Test
     public void testClasses(){
         List<String> missingClasses = SaveService.checkClasses();
-        if (missingClasses.size() > 0) {
+        if (!missingClasses.isEmpty()) {
             fail("One or more classes not found:"+missingClasses);
         }
     }

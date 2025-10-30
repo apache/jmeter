@@ -363,6 +363,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         return checkBoxPanel;
     }
 
+    @SuppressWarnings("EnumOrdinal")
     protected JPanel createSourceAddrPanel() {
         final JPanel sourceAddrPanel = new HorizontalPanel();
         sourceAddrPanel.setBorder(BorderFactory.createTitledBorder(

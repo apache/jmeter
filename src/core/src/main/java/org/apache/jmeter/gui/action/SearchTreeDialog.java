@@ -471,8 +471,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
     private static Map.Entry<Integer, JMeterTreeNode> doReplacementInCurrentNode(JMeterTreeNode jMeterTreeNode,
             String regex, String replaceBy, boolean caseSensitiveReplacement) {
         try {
-            if (jMeterTreeNode.getUserObject() instanceof Replaceable) {
-                Replaceable replaceable = (Replaceable) jMeterTreeNode.getUserObject();
+            if (jMeterTreeNode.getUserObject() instanceof Replaceable replaceable) {
                 int numberOfReplacements = replaceable.replace(regex, replaceBy, caseSensitiveReplacement);
                 if (numberOfReplacements > 0) {
                     if (logger.isInfoEnabled()) {
@@ -488,9 +487,6 @@ public class SearchTreeDialog extends JDialog implements ActionListener { // NOS
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Dialog#setVisible(boolean)
-     */
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);

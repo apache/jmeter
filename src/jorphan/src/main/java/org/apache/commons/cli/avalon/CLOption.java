@@ -149,7 +149,7 @@ public final class CLOption {
         return sb.toString();
     }
 
-    /*
+    /**
      * Convert to a shorter String for test purposes
      *
      * @return the string value

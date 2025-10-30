@@ -131,11 +131,6 @@ public class Sample {
         return getData(clazz, metadata.ensureIndexOf(name), name);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return String.join(String.valueOf(metadata.getSeparator()), data);

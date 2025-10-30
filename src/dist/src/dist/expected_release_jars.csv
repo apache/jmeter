@@ -55,7 +55,7 @@
 362793,datamodel-jvm-4.7.3.jar
 98115,dec-0.1.2.jar
 588267,dnsjava-3.6.3.jar
-16829,error_prone_annotations-2.24.0.jar
+20390,error_prone_annotations-2.43.0.jar
 1736381,freemarker-2.3.32.jar
 32359,geronimo-jms_1.1_spec-1.1.1.jar
 8057697,groovy-5.0.2.jar
@@ -90,7 +90,7 @@
 337315,jodd-util-6.1.0.jar
 277582,json-path-2.8.0.jar
 122808,json-smart-2.6.0.jar
-473788,jsoup-1.17.1.jar
+500363,jsoup-1.21.2.jar
 723652,jsvg-2.0.0.jar
 249924,jtidy-r938.jar
 384581,junit-4.13.2.jar

@@ -53,7 +53,7 @@ public final class HttpReplyHdr {
         out.append("Server: ").append(HTTP_SERVER).append(CR);
         out.append("MIME-version: 1.0").append(CR);
 
-        if (0 < contentType.length()) {
+        if (!contentType.isEmpty()) {
             out.append("Content-Type: ").append(contentType).append(CR);
         } else {
             out.append("Content-Type: text/html").append(CR);

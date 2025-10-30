@@ -59,7 +59,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         // Note: initialised with error = failure = false
 
         String resultData = response.getResponseDataAsString();
-        if (resultData.length() == 0) {
+        if (resultData.isEmpty()) {
             return result.setResultForNull();
         }
 
@@ -141,16 +141,13 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
     private static class SAXErrorHandler implements ErrorHandler {
         private final AssertionResult result;
 
-        public SAXErrorHandler(AssertionResult result) {
+        private SAXErrorHandler(AssertionResult result) {
             this.result = result;
         }
 
-        /*
-         * Can be caused by: - failure to read XSD file - xml does not match XSD
-         */
         @Override
         public void error(SAXParseException exception) throws SAXParseException {
-
+            // Can be caused by: - failure to read XSD file - xml does not match XSD
             String msg = "error: " + errorDetails(exception);
             log.debug(msg);
             result.setFailureMessage(msg);
@@ -158,12 +155,9 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
             throw exception;
         }
 
-        /*
-         * Can be caused by: - premature end of file - non-whitespace content
-         * after trailer
-         */
         @Override
         public void fatalError(SAXParseException exception) throws SAXParseException {
+            // Can be caused by: - premature end of file - non-whitespace content after trailer
             String msg = "fatal: " + errorDetails(exception);
             log.debug(msg);
             result.setFailureMessage(msg);
@@ -171,11 +165,9 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
             throw exception;
         }
 
-        /*
-         * Not clear what can cause this ? conflicting versions perhaps
-         */
         @Override
         public void warning(SAXParseException exception) throws SAXParseException {
+            // Not clear what can cause this ? conflicting versions perhaps
             String msg = "warning: " + errorDetails(exception);
             log.debug(msg);
             result.setFailureMessage(msg);

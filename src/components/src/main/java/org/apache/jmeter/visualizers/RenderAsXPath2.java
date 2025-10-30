@@ -122,7 +122,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
      */
     private void executeAndShowXPathTester(String textToParse, XPath2Extractor extractor) {
         if (StringUtilities.isNotEmpty(textToParse)
-                && this.xpathExpressionField.getText().length() > 0) {
+                && !this.xpathExpressionField.getText().isEmpty()) {
             this.xpathResultField.setText(process(textToParse, extractor));
             this.xpathResultField.setCaretPosition(0); // go to first line
         }

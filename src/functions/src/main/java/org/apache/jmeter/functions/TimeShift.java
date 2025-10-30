@@ -90,16 +90,16 @@ public class TimeShift extends AbstractFunction {
         private final String format;
         private final Locale locale;
 
-        public LocaleFormatObject(String format, Locale locale) {
+        private LocaleFormatObject(String format, Locale locale) {
             this.format = format;
             this.locale = locale;
         }
 
-        public String getFormat() {
+        private String getFormat() {
             return format;
         }
 
-        public Locale getLocale() {
+        private Locale getLocale() {
             return locale;
         }
 
@@ -110,11 +110,10 @@ public class TimeShift extends AbstractFunction {
 
         @Override
         public boolean equals(Object other) {
-            if (!(other instanceof LocaleFormatObject)) {
+            if (!(other instanceof LocaleFormatObject otherError)) {
                 return false;
             }
 
-            LocaleFormatObject otherError = (LocaleFormatObject) other;
             return format.equals(otherError.getFormat())
                     && locale.getDisplayName().equals(otherError.getLocale().getDisplayName());
         }

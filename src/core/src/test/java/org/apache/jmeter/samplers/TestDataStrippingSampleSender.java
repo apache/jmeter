@@ -62,7 +62,7 @@ class TestDataStrippingSampleSender extends JMeterTestCase implements JMeterSeri
         assertEquals(nextSender.getResult(), sample);
     }
 
-    private void assertResultsHaveContent(String content, SampleResult sample) {
+    private static void assertResultsHaveContent(String content, SampleResult sample) {
         assertEquals(content, sample.getResponseDataAsString());
         for (SampleResult subResult : sample.getSubResults()) {
             assertResultsHaveContent(content, subResult);

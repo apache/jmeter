@@ -146,8 +146,8 @@ public final class Utils {
      */
     public static Destination lookupDestination(Context context, String name) throws NamingException {
         Object o = context.lookup(name);
-        if (o instanceof Destination){
-            return (Destination) o;
+        if (o instanceof Destination destination) {
+            return destination;
         }
         throw new NamingException("Found: "+name+"; expected Destination, but was: "+(o!=null ? o.getClass().getName() : "null"));
     }
@@ -201,14 +201,14 @@ public final class Utils {
         } catch (NoClassDefFoundError e) {
             throw new NamingException("Lookup failed: "+e.toString());
         }
-        if (objfac instanceof javax.jms.ConnectionFactory) {
+        if (objfac instanceof javax.jms.ConnectionFactory connectionFactory) {
             String username = getFromEnvironment(ctx, Context.SECURITY_PRINCIPAL);
             if(username != null) {
                 String password = getFromEnvironment(ctx, Context.SECURITY_CREDENTIALS);
-                return ((javax.jms.ConnectionFactory) objfac).createConnection(username, password);
+                return connectionFactory.createConnection(username, password);
             }
             else {
-                return ((javax.jms.ConnectionFactory) objfac).createConnection();
+                return connectionFactory.createConnection();
             }
         }
         throw new NamingException("Expected javax.jms.ConnectionFactory, found "+(objfac != null ? objfac.getClass().getName(): "null"));

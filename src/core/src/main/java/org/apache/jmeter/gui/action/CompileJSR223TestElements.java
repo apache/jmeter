@@ -58,7 +58,7 @@ public class CompileJSR223TestElements extends AbstractAction implements MenuCre
      */
     private static class JSR223TestElementCompilerVisitor implements HashTreeTraverser {
         private int elementsWithCompilationErrors = 0;
-        public JSR223TestElementCompilerVisitor() {
+        private JSR223TestElementCompilerVisitor() {
             super();
         }
         @Override
@@ -66,8 +66,7 @@ public class CompileJSR223TestElements extends AbstractAction implements MenuCre
             JMeterTreeNode treeNode = (JMeterTreeNode) object;
             Object userObject = treeNode.getUserObject();
             treeNode.setMarkedBySearch(false);
-            if (treeNode.isEnabled() && (userObject instanceof JSR223TestElement)) {
-                JSR223TestElement element = (JSR223TestElement) userObject;
+            if (treeNode.isEnabled() && (userObject instanceof JSR223TestElement element)) {
                 TestBeanHelper.prepare(element);
                 try {
                     log.info("Compiling JSR223 element named: '{}'", element.getName());
@@ -92,10 +91,11 @@ public class CompileJSR223TestElements extends AbstractAction implements MenuCre
         public void processPath() {
             // NOOP
         }
+
         /**
          * @return the elementsWithCompilationErrors
          */
-        public int getElementsWithCompilationErrors() {
+        private int getElementsWithCompilationErrors() {
             return elementsWithCompilationErrors;
         }
     }

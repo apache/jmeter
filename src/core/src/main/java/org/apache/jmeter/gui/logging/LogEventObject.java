@@ -39,8 +39,8 @@ public class LogEventObject extends EventObject {
 
     public LogEventObject(Object source, String seralizedString) {
         super(source);
-        if (source instanceof LogEvent) {
-            level = ((LogEvent) source).getLevel();
+        if (source instanceof LogEvent logEvent) {
+            level = logEvent.getLevel();
         }
         this.seralizedString = seralizedString;
     }

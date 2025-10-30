@@ -37,24 +37,12 @@ import org.apache.jmeter.report.processor.graph.StatusSeriesSelector;
 public class ResponseTimeVSRequestGraphConsumer extends
         AbstractVersusRequestsGraphConsumer {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
-     * createKeysSelector()
-     */
     @Override
     protected GraphKeysSelector createKeysSelector() {
         return sample -> sample.getData(
                 Double.class, AbstractVersusRequestsGraphConsumer.TIME_INTERVAL_LABEL);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         return Collections.singletonMap(

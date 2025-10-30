@@ -175,7 +175,7 @@ class SMIMEAssertion {
                         checkSubject(testElement, res, cert, failureMessage);
                         checkIssuer(testElement, res, cert, failureMessage);
 
-                        if (failureMessage.length() > 0) {
+                        if (!failureMessage.isEmpty()) {
                             res.setFailureMessage(failureMessage.toString());
                         }
                     }
@@ -244,7 +244,7 @@ class SMIMEAssertion {
     private static void checkIssuer(SMIMEAssertionTestElement testElement, AssertionResult res,
             X509CertificateHolder cert, StringBuilder failureMessage) {
         String issuer = testElement.getIssuerDn();
-        if (issuer.length() > 0) {
+        if (!issuer.isEmpty()) {
             String subject = testElement.getSignerDn();
             final X500Name issuerX500Name = cert.getIssuer();
             log.debug("IssuerDN from cert: {}", issuerX500Name);
@@ -262,7 +262,7 @@ class SMIMEAssertion {
     private static void checkSubject(SMIMEAssertionTestElement testElement, AssertionResult res,
             X509CertificateHolder cert, StringBuilder failureMessage) {
         String subject = testElement.getSignerDn();
-        if (subject.length() > 0) {
+        if (!subject.isEmpty()) {
             final X500Name certPrincipal = cert.getSubject();
             log.debug("DN from cert: {}", certPrincipal);
             X500Name principal = new X500Name(subject);

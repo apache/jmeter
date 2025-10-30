@@ -339,35 +339,30 @@ public class Proxy extends Thread {
         }
         final String hashAlias;
         final String keyAlias;
-        switch(ProxyControl.KEYSTORE_MODE) {
-        case DYNAMIC_KEYSTORE:
-            try {
-                keyStore = target.getKeyStore(); // pick up any recent changes from other threads
-                String alias = getDomainMatch(keyStore, host);
-                if (alias == null) {
-                    hashAlias = host;
-                    keyAlias = host;
-                    keyStore = target.updateKeyStore(port, keyAlias);
-                } else if (alias.equals(host)) { // the host has a key already
-                    hashAlias = host;
-                    keyAlias = host;
-                } else { // the host matches a domain; use its key
-                    hashAlias = alias;
-                    keyAlias = alias;
+        switch (ProxyControl.KEYSTORE_MODE) {
+            case DYNAMIC_KEYSTORE -> {
+                try {
+                    keyStore = target.getKeyStore(); // pick up any recent changes from other threads
+                    String alias = getDomainMatch(keyStore, host);
+                    if (alias == null) {
+                        hashAlias = host;
+                        keyAlias = host;
+                        keyStore = target.updateKeyStore(port, keyAlias);
+                    } else if (alias.equals(host)) { // the host has a key already
+                        hashAlias = host;
+                        keyAlias = host;
+                    } else { // the host matches a domain; use its key
+                        hashAlias = alias;
+                        keyAlias = alias;
+                    }
+                } catch (IOException | GeneralSecurityException e) {
+                    log.error("{} Problem with keystore", port, e);
+                    return null;
                 }
-            } catch (IOException | GeneralSecurityException e) {
-                log.error("{} Problem with keystore", port, e);
-                return null;
             }
-            break;
-        case JMETER_KEYSTORE:
-            hashAlias = keyAlias = ProxyControl.JMETER_SERVER_ALIAS;
-            break;
-        case USER_KEYSTORE:
-            hashAlias = keyAlias = ProxyControl.CERT_ALIAS;
-            break;
-        default:
-            throw new IllegalStateException("Impossible case: " + ProxyControl.KEYSTORE_MODE);
+            case JMETER_KEYSTORE -> hashAlias = keyAlias = ProxyControl.JMETER_SERVER_ALIAS;
+            case USER_KEYSTORE -> hashAlias = keyAlias = ProxyControl.CERT_ALIAS;
+            default -> throw new IllegalStateException("Impossible case: " + ProxyControl.KEYSTORE_MODE);
         }
         synchronized (HOST2SSL_SOCK_FAC) {
             final SSLSocketFactory sslSocketFactory = HOST2SSL_SOCK_FAC.get(hashAlias);

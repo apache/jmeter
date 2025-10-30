@@ -38,15 +38,15 @@ public class PreciseThroughputTimerBeanInfo extends BeanInfoSupport {
 
         PropertyDescriptor p;
         p = property("throughput"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 100d);
 
         p = property("throughputPeriod"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 3600);
 
         p = property("duration"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 3600L);
 
         createPropertyGroup(
@@ -58,21 +58,21 @@ public class PreciseThroughputTimerBeanInfo extends BeanInfoSupport {
         );
 
         p = property("batchSize"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 1);
 
         p = property("batchThreadDelay"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 0);
 
 
         p = property("exactLimit"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 10000);
         p.setHidden(true);
 
         p = property("allowedThroughputSurplus"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 1.0d);
         p.setHidden(true);
 
@@ -84,7 +84,7 @@ public class PreciseThroughputTimerBeanInfo extends BeanInfoSupport {
         );
 
         p = property("randomSeed"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 0L);
     }
 }

@@ -105,9 +105,6 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
         return jTextArea;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.logging.GuiLogEventListener#processLogEvent(org.apache.jmeter.gui.logging.LogEventObject)
-     */
     @Override
     public void processLogEvent(final LogEventObject logEventObject) {
         if(!LOGGER_PANEL_RECEIVE_WHEN_CLOSED && !GuiPackage.getInstance().getMenuItemLoggerPanel().getModel().isSelected()) {

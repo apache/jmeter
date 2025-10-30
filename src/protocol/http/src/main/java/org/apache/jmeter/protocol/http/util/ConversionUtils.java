@@ -316,7 +316,7 @@ public class ConversionUtils {
                 final String thisToken = tokens.get(i);
 
                 // Verify for a ".." component at next iteration
-                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
+                if (!thisToken.isEmpty() && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
                     tokens.remove(i);
                     tokens.remove(i);
                     i = i - 2; // CHECKSTYLE IGNORE ModifiedControlVariable

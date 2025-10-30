@@ -180,7 +180,7 @@ public class SaveService {
 
     private static File getSaveServiceFile() {
         String saveServiceProps = JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,SAVESERVICE_PROPERTIES_FILE); //$NON-NLS-1$
-        if (saveServiceProps.length() > 0){ //$NON-NLS-1$
+        if (!saveServiceProps.isEmpty()){ //$NON-NLS-1$
             return JMeterUtils.findFile(saveServiceProps);
         }
         throw new IllegalStateException("Could not find file configured in saveservice_properties property set to:"+saveServiceProps);

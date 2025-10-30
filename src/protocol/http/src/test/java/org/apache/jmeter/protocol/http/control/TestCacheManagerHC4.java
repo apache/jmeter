@@ -77,25 +77,16 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
             }
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.http.message.AbstractHttpMessage#getAllHeaders()
-         */
         @Override
         public org.apache.http.Header[] getAllHeaders() {
             return headers.toArray(new org.apache.http.Header[headers.size()]);
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.http.message.AbstractHttpMessage#addHeader(org.apache.http.Header)
-         */
         @Override
         public void addHeader(org.apache.http.Header header) {
             headers.add(header);
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.http.message.AbstractHttpMessage#getFirstHeader(java.lang.String)
-         */
         @Override
         public Header getFirstHeader(String headerName) {
             Header[] headers = getHeaders(headerName);
@@ -105,9 +96,6 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
             return null;
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.http.message.AbstractHttpMessage#getLastHeader(java.lang.String)
-         */
         @Override
         public Header getLastHeader(String headerName) {
             Header[] headers = getHeaders(headerName);
@@ -117,9 +105,6 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
             return null;
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.http.message.AbstractHttpMessage#getHeaders(java.lang.String)
-         */
         @Override
         public Header[] getHeaders(String headerName) {
             org.apache.http.Header header = null;

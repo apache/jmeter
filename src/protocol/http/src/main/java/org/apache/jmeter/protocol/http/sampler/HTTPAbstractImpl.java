@@ -230,23 +230,19 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * @throws UnknownHostException if the hostname/ip for {@link #getIpSource()} could not be resolved or not interface was found for it
      * @throws SocketException if an I/O error occurs
      */
+    @SuppressWarnings("EnumOrdinal")
     protected InetAddress getIpSourceAddress() throws UnknownHostException, SocketException {
         final String ipSource = getIpSource();
         if (!ipSource.isBlank()) {
             Class<? extends InetAddress> ipClass = null;
             final SourceType sourceType = HTTPSamplerBase.SourceType.values()[testElement.getIpSourceType()];
             switch (sourceType) {
-            case DEVICE:
-                ipClass = InetAddress.class;
-                break;
-            case DEVICE_IPV4:
-                ipClass = Inet4Address.class;
-                break;
-            case DEVICE_IPV6:
-                ipClass = Inet6Address.class;
-                break;
-            case HOSTNAME:
-                return InetAddress.getByName(ipSource);
+                case DEVICE -> ipClass = InetAddress.class;
+                case DEVICE_IPV4 -> ipClass = Inet4Address.class;
+                case DEVICE_IPV6 -> ipClass = Inet6Address.class;
+                case HOSTNAME -> {
+                    return InetAddress.getByName(ipSource);
+                }
             }
 
             NetworkInterface net = NetworkInterface.getByName(ipSource);
@@ -580,23 +576,23 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * @return HTTPSampleResult
      */
     protected HTTPSampleResult updateSampleResultForResourceInCache(HTTPSampleResult res) {
-        switch (CACHED_RESOURCE_MODE) {
-            case RETURN_NO_SAMPLE:
-                return null;
-            case RETURN_200_CACHE:
+        return switch (CACHED_RESOURCE_MODE) {
+            case RETURN_NO_SAMPLE -> null;
+            case RETURN_200_CACHE -> {
                 res.sampleEnd();
                 res.setResponseCodeOK();
                 res.setResponseMessage(RETURN_200_CACHE_MESSAGE);
                 res.setSuccessful(true);
-                return res;
-            case RETURN_CUSTOM_STATUS:
+                yield res;
+            }
+            case RETURN_CUSTOM_STATUS -> {
                 res.sampleEnd();
                 res.setResponseCode(RETURN_CUSTOM_STATUS_CODE);
                 res.setResponseMessage(RETURN_CUSTOM_STATUS_MESSAGE);
                 res.setSuccessful(true);
-                return res;
-        }
-        throw new IllegalStateException("Unknown CACHED_RESOURCE_MODE: " + CACHED_RESOURCE_MODE);
+                yield res;
+            }
+        };
     }
 
     protected final void configureSampleLabel(SampleResult res, URL url) {

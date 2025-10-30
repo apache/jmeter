@@ -587,23 +587,13 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         for (Map.Entry<String, String> proxyPara : proxyServer.entrySet()) {
             String key = proxyPara.getKey();
             switch (key) {
-            case "servername":
-                httpSampler.setProxyHost(proxyPara.getValue());
-                break;
-            case "port":
-                httpSampler.setProxyPortInt(proxyPara.getValue());
-                break;
-            case "scheme":
-                httpSampler.setProxyScheme(proxyPara.getValue());
-                break;
-            case "username":
-                httpSampler.setProxyUser(proxyPara.getValue());
-                break;
-            case "password":
-                httpSampler.setProxyPass(proxyPara.getValue());
-                break;
-            default:
-                break;
+                case "servername" -> httpSampler.setProxyHost(proxyPara.getValue());
+                case "port" -> httpSampler.setProxyPortInt(proxyPara.getValue());
+                case "scheme" -> httpSampler.setProxyScheme(proxyPara.getValue());
+                case "username" -> httpSampler.setProxyUser(proxyPara.getValue());
+                case "password" -> httpSampler.setProxyPass(proxyPara.getValue());
+                default -> {
+                }
             }
         }
     }

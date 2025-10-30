@@ -179,8 +179,8 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     private static Collection<Object> convertCollection(Collection<?> values) {
         List<Object> l = new ArrayList<>();
         for(Object obj : values) {
-            if(obj instanceof TestElementProperty) {
-                l.add(((TestElementProperty)obj).getElement());
+            if (obj instanceof TestElementProperty testElementProperty) {
+                l.add(testElementProperty.getElement());
             } else {
                 l.add(obj);
             }
@@ -215,23 +215,23 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     void initializeModel()
     {
         Object hdrs = descriptor.getValue(HEADERS);
-        if (!(hdrs instanceof String[])) {
+        if (!(hdrs instanceof String[] headers)) {
             throw new RuntimeException("attribute HEADERS must be a String array");
         }
         if (clazz == String.class) {
-            model = new ObjectTableModel((String[]) hdrs, new Functor[0], new Functor[0], new Class[]{String.class});
+            model = new ObjectTableModel(headers, new Functor[0], new Functor[0], new Class[]{String.class});
         } else {
             Object value = descriptor.getValue(OBJECT_PROPERTIES);
-            if (!(value instanceof String[])) {
+            if (!(value instanceof String[] valueArray)) {
                 throw new RuntimeException("attribute OBJECT_PROPERTIES must be a String array");
             }
-            List<String> props = Arrays.stream((String[]) value)
+            List<String> props = Arrays.stream(valueArray)
                     .map(StringUtilities::capitalize)
                     .collect(Collectors.toList());
             Functor[] writers = createWriters(props);
             Functor[] readers = createReaders(clazz, props);
             Class<?>[] editors = getArgsForWriter(clazz, props);
-            model = new ObjectTableModel((String[]) hdrs, readers, writers, editors);
+            model = new ObjectTableModel(headers, readers, writers, editors);
         }
         model.addTableModelListener(this);
         table = new JTable(model);

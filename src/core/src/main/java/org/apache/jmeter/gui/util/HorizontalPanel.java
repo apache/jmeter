@@ -62,8 +62,8 @@ public class HorizontalPanel extends JPanel {
             subPanel.add(Box.createHorizontalStrut(hgap));
         }
 
-        if (c instanceof JComponent) {
-            ((JComponent) c).setAlignmentY(verticalAlign);
+        if (c instanceof JComponent jComponent) {
+            jComponent.setAlignmentY(verticalAlign);
         }
         return subPanel.add(c);
     }

@@ -335,10 +335,8 @@ public class TestHTMLParser extends JMeterTestCase {
             result = p.getEmbeddedResourceURLs(userAgent, buffer, new URL(url), c,System.getProperty("file.encoding"));
         }
         List<String> actual = Lists.newArrayList(Iterators.transform(result, Object::toString));
-        /*
-         * TODO: Exact ordering is only required for some tests; change the
-         * comparison to do a set compare where necessary.
-         */
+        // TODO: Exact ordering is only required for some tests; change the
+        //   comparison to do a set compare where necessary.
         List<String> expected = getFile(resultFile);
         if (!orderMatters) {
             Collections.sort(expected);

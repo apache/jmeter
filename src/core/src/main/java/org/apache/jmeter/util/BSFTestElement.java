@@ -94,7 +94,7 @@ public abstract class BSFTestElement extends ScriptingTestElement
     protected void processFileOrScript(BSFManager mgr) throws BSFException{
         BSFEngine bsfEngine = mgr.loadScriptingEngine(getScriptLanguage());
         final String scriptFile = getFilename();
-        if (scriptFile.length() == 0) {
+        if (scriptFile.isEmpty()) {
             bsfEngine.exec("[script]",0,0,getScript());
         } else {// we have a file, read and process it
             try {
@@ -112,7 +112,7 @@ public abstract class BSFTestElement extends ScriptingTestElement
     protected Object evalFileOrScript(BSFManager mgr) throws BSFException{
         BSFEngine bsfEngine = mgr.loadScriptingEngine(getScriptLanguage());
         final String scriptFile = getFilename();
-        if (scriptFile.length() == 0) {
+        if (scriptFile.isEmpty()) {
             return bsfEngine.eval("[script]",0,0,getScript());
         } else {// we have a file, read and process it
             try {

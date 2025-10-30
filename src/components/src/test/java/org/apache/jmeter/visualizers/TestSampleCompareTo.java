@@ -46,7 +46,7 @@ class TestSampleCompareTo {
         assertEquals(compareResult, sample(thisCount).compareTo(sample(otherCount)));
     }
 
-    private Sample sample(long count) {
+    private static Sample sample(long count) {
         return new Sample("dummy", 0L, 0L, 0L, 0L, 0L, 0.0, 0L, true, count, 0L);
     }
 

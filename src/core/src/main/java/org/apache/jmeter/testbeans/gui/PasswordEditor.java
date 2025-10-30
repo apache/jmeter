@@ -70,8 +70,8 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof String) {
-            setAsText((String) value);
+        if (value instanceof String string) {
+            setAsText(string);
         } else {
             throw new IllegalArgumentException();
         }

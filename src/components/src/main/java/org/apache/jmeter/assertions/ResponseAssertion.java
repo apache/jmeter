@@ -463,30 +463,16 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             sb.append("URL");
         }
 
-        switch (getTestType()) {
-        case CONTAINS:
-        case SUBSTRING:
-            sb.append(" expected to contain ");
-            break;
-        case NOT | CONTAINS:
-        case NOT | SUBSTRING:
-            sb.append(" expected not to contain ");
-            break;
-        case MATCH:
-            sb.append(" expected to match ");
-            break;
-        case NOT | MATCH:
-            sb.append(" expected not to match ");
-            break;
-        case EQUALS:
-            sb.append(" expected to equal ");
-            break;
-        case NOT | EQUALS:
-            sb.append(" expected not to equal ");
-            break;
-        default:// should never happen...
-            sb.append(" expected something using ");
-        }
+        sb.append(switch (getTestType()) {
+            case CONTAINS, SUBSTRING -> " expected to contain ";
+            case NOT | CONTAINS, NOT | SUBSTRING -> " expected not to contain ";
+            case MATCH -> " expected to match ";
+            case NOT | MATCH -> " expected not to match ";
+            case EQUALS -> " expected to equal ";
+            case NOT | EQUALS -> " expected not to equal ";
+            default ->// should never happen...
+                    " expected something using ";
+        });
 
         sb.append("/");
 

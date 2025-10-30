@@ -249,7 +249,7 @@ public class HttpRequestHdr {
         log.debug("First Line url: {}", url);
     }
 
-    /*
+    /**
      * Split line into name/value pairs and store in headers if relevant
      * If name = "content-length", then return value as int, else return 0
      */

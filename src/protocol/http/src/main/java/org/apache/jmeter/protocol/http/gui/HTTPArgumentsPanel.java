@@ -135,10 +135,10 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (el instanceof Arguments) {
+        if (el instanceof Arguments arguments) {
             tableModel.clearData();
-            HTTPArgument.convertArgumentsToHTTP((Arguments) el);
-            for (JMeterProperty jMeterProperty : ((Arguments) el).getArguments()) {
+            HTTPArgument.convertArgumentsToHTTP(arguments);
+            for (JMeterProperty jMeterProperty : arguments.getArguments()) {
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 tableModel.addRow(arg);
             }

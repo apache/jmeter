@@ -74,7 +74,7 @@ implements ChangeListener, ActionListener, ItemListener
     private static final String ONETIMETEARDOWN = "oneTimeTearDown"; //$NON-NLS-1$
     private static final String SUITE = "suite"; //$NON-NLS-1$
 
-    private static final AtomicBoolean IS_INITILIAZED = new AtomicBoolean(Boolean.FALSE);
+    private static final AtomicBoolean IS_INITILIAZED = new AtomicBoolean(false);
     private static final String[] SPATHS;
 
     static {
@@ -332,32 +332,32 @@ implements ChangeListener, ActionListener, ItemListener
         setupMethods();
         methodName.setSelectedItem(sampler.getMethod());
         constructorLabel.setText(sampler.getConstructorString());
-        if (sampler.getSuccessCode().length() > 0) {
+        if (!sampler.getSuccessCode().isEmpty()) {
             successCode.setText(sampler.getSuccessCode());
         } else {
             successCode.setText(JMeterUtils.getResString("junit_success_default_code")); //$NON-NLS-1$
         }
-        if (sampler.getSuccess().length() > 0) {
+        if (!sampler.getSuccess().isEmpty()) {
             successMsg.setText(sampler.getSuccess());
         } else {
             successMsg.setText(JMeterUtils.getResString("junit_success_default_msg")); //$NON-NLS-1$
         }
-        if (sampler.getFailureCode().length() > 0) {
+        if (!sampler.getFailureCode().isEmpty()) {
             failureCode.setText(sampler.getFailureCode());
         } else {
             failureCode.setText(JMeterUtils.getResString("junit_failure_default_code")); //$NON-NLS-1$
         }
-        if (sampler.getFailure().length() > 0) {
+        if (!sampler.getFailure().isEmpty()) {
             failureMsg.setText(sampler.getFailure());
         } else {
             failureMsg.setText(JMeterUtils.getResString("junit_failure_default_msg")); //$NON-NLS-1$
         }
-        if (sampler.getError().length() > 0) {
+        if (!sampler.getError().isEmpty()) {
             errorMsg.setText(sampler.getError());
         } else {
             errorMsg.setText(JMeterUtils.getResString("junit_error_default_msg")); //$NON-NLS-1$
         }
-        if (sampler.getErrorCode().length() > 0) {
+        if (!sampler.getErrorCode().isEmpty()) {
             errorCode.setText(sampler.getErrorCode());
         } else {
             errorCode.setText(JMeterUtils.getResString("junit_error_default_code")); //$NON-NLS-1$

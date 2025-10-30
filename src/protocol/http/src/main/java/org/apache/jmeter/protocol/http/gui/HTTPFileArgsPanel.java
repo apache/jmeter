@@ -155,8 +155,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      */
     public void modifyTestElement(TestElement testElement) {
         GuiUtils.stopTableEditing(table);
-        if (testElement instanceof HTTPSamplerBase) {
-            HTTPSamplerBase base = (HTTPSamplerBase) testElement;
+        if (testElement instanceof HTTPSamplerBase base) {
             int rows = tableModel.getRowCount();
             @SuppressWarnings("unchecked") // we only put HTTPFileArgs in it
             Iterator<HTTPFileArg> modelData = (Iterator<HTTPFileArg>) tableModel.iterator();
@@ -183,8 +182,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      * @param testElement the HTTPSamplerBase to be used to configure the GUI
      */
     public void configure(TestElement testElement) {
-        if (testElement instanceof HTTPSamplerBase) {
-            HTTPSamplerBase base = (HTTPSamplerBase) testElement;
+        if (testElement instanceof HTTPSamplerBase base) {
             tableModel.clearData();
             for(HTTPFileArg file : base.getHTTPFiles()){
                 tableModel.addRow(file);

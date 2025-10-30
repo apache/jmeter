@@ -279,7 +279,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         // JMeter removes disabled elements early from the tree, so configuration elements
         // with enabled=false (~HTTP Request Defaults) can't unexpectedly override the regular ones
         // like HTTP Request.
-        mc.set(TestElementSchema.INSTANCE.getEnabled(), enabled ? null : Boolean.FALSE);
+        mc.set(TestElementSchema.INSTANCE.getEnabled(), enabled ? null : false);
         // Note: we can't use editors for "comments" as getComments() is not a final method, so plugins might
         // override it and provide a different implementation.
         String comment = getComment();
