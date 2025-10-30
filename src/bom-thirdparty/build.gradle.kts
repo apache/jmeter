@@ -110,7 +110,7 @@ dependencies {
         api("org.apache.logging.log4j:log4j-api:2.25.2")
         api("org.apache.logging.log4j:log4j-core:2.25.2")
         api("org.apache.logging.log4j:log4j-slf4j2-impl:2.25.2")
-        api("org.apache.rat:apache-rat:0.15")
+        api("org.apache.rat:apache-rat:0.17")
         api("org.apache.tika:tika-core:3.2.3")
         api("org.apache.tika:tika-parsers:3.2.3")
         api("org.apache.velocity:velocity:1.7")
