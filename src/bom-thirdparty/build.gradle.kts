@@ -122,7 +122,6 @@ dependencies {
         api("org.bouncycastle:bcpkix-jdk18on:1.82")
         api("org.bouncycastle:bcprov-jdk18on:1.82")
         api("org.brotli:dec:0.1.2")
-        api("org.exparity:hamcrest-date:2.0.8")
         api("org.freemarker:freemarker:2.3.32")
         api("org.jdom:jdom:1.1.3")
         api("org.jetbrains.lets-plot:lets-plot-batik:4.7.3")

@@ -17,10 +17,9 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
 public class TestAuthorization {
@@ -29,7 +28,7 @@ public class TestAuthorization {
     public void testToBasicHeader() {
         Authorization basicAuthorization = new Authorization("http://example.com", "foo", "bar", null, "Test Realm",
                 Mechanism.BASIC);
-        assertThat(basicAuthorization.toBasicHeader(), CoreMatchers.is("Basic Zm9vOmJhcg=="));
+        assertEquals("Basic Zm9vOmJhcg==", basicAuthorization.toBasicHeader());
     }
 
 }

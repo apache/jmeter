@@ -17,9 +17,7 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.File;
 
@@ -45,7 +43,8 @@ public class TestSerializedHTTPSampler extends JMeterTestCase implements JMeterS
             sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg(file.getName(), "", "")});
 
             SampleResult sample = sampler.sample();
-            assertThat(sample.getResponseDataAsString(), not(containsString("java.io.FileNotFoundException:")));
+            assertFalse(sample.getResponseDataAsString().contains("java.io.FileNotFoundException:"),
+                    () -> sample.getResponseDataAsString() + " should not contain java.io.FileNotFoundException:");
         } finally {
             FileServer.getFileServer().setBase(baseDir);
         }

@@ -35,6 +35,4 @@ dependencies {
     }
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("oro:oro")
-    testImplementation("org.hamcrest:hamcrest-core")
-    testImplementation("org.exparity:hamcrest-date")
 }

@@ -21,14 +21,11 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -48,7 +45,6 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 
 import org.apache.jorphan.reflect.Functor;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -145,25 +141,25 @@ public class ObjectTableSorterTest {
     @Test
     public void getDefaultComparatorForNullClass() {
         ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("null", null));
-        assertThat(sorter.getValueComparator(0), is(nullValue()));
+        assertNull(sorter.getValueComparator(0));
     }
 
     @Test
     public void getDefaultComparatorForStringClass() {
         ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("string", String.class));
-        assertThat(sorter.getValueComparator(0), is(CoreMatchers.notNullValue()));
+        assertNotNull(sorter.getValueComparator(0));
     }
 
     @Test
     public void getDefaultComparatorForIntegerClass() {
         ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("integer", Integer.class));
-        assertThat(sorter.getValueComparator(0), is(CoreMatchers.notNullValue()));
+        assertNotNull(sorter.getValueComparator(0));
     }
 
     @Test
     public void getDefaultComparatorForObjectClass() {
         ObjectTableSorter sorter = new ObjectTableSorter(createTableModel("object", Object.class));
-        assertThat(sorter.getValueComparator(0), is(nullValue()));
+        assertNull(sorter.getValueComparator(0));
     }
 
     @Test
@@ -229,7 +225,10 @@ public class ObjectTableSorterTest {
     public void setSortKeys_single() {
         List<SortKey> keys = singletonList(new SortKey(0, SortOrder.ASCENDING));
         sorter.setSortKeys(keys);
-        assertThat(sorter.getSortKeys(), allOf(is(not(sameInstance(keys))), is(equalTo(keys))));
+        assertAll(
+                () -> assertNotSame(keys, sorter.getSortKeys(), "keys vs sorter.getSortKeys()"),
+                () -> assertEquals(keys, sorter.getSortKeys(), "keys vs sorter.getSortKeys()")
+        );
     }
 
     @Test

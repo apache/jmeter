@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.protocol.http.visualizers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,8 +27,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.jorphan.util.StringUtilities;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -233,9 +233,11 @@ class RequestViewHTTPTest {
         Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
         Assertions.assertNotNull(params);
         Assertions.assertEquals(expected.size(), params.size());
-        expected.forEach((key, values) -> {
-            MatcherAssert.assertThat(params, Matchers.hasKey(key));
-            Assertions.assertArrayEquals(values.toArray(), params.get(key));
-        });
+        expected.forEach((key, values) ->
+                assertEquals(
+                        values.toString(),
+                        Arrays.asList(params.get(key)).toString(),
+                        "RequestViewHTTP.getQueryMap(..).get(" + key + ")"
+                ));
     }
 }
