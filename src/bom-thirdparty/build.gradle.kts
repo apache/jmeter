@@ -28,6 +28,7 @@ javaPlatform {
 dependencies {
     api(platform("org.apache.groovy:groovy-bom:5.0.2"))
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"))
+    api(platform("com.fasterxml.jackson:jackson-bom:2.20.0"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
@@ -42,9 +43,6 @@ dependencies {
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
-        api("com.fasterxml.jackson.core:jackson-annotations:2.16.1")
-        api("com.fasterxml.jackson.core:jackson-core:2.16.1")
-        api("com.fasterxml.jackson.core:jackson-databind:2.16.1")
         api("com.fifesoft:rsyntaxtextarea:3.3.4")
         api("com.github.ben-manes.caffeine:caffeine:2.9.3")
         api("com.github.weisj:darklaf-core:3.1.1")
