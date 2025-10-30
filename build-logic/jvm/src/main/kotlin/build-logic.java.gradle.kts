@@ -88,7 +88,8 @@ dependencies {
 tasks.register<DependencyInsightReportTask>("allDependencyInsight") {
     group = HelpTasksPlugin.HELP_GROUP
     description =
-        "Shows insights where the dependency is used. For instance: allDependencyInsight --configuration compile --dependency org.jsoup:jsoup"
+        "Shows insights where the dependency is used. For instance: allDependencyInsight --configuration compileClasspath --dependency org.jsoup:jsoup"
+    showingAllVariants = false
 }
 
 tasks.configureEach<JavaCompile> {
