@@ -106,11 +106,6 @@ groovy-3.0.3
 ----------------------
 Advised scripting language for JSR223 Test Elements
 
-hamcrest-core-1.3
-----------------------
-- unit tests, JUnit sampler
-https://github.com/hamcrest/JavaHamcrest
-
 freemarker-2.3.29.jar
 ----------------------
 - used by Report/Dashboard feature

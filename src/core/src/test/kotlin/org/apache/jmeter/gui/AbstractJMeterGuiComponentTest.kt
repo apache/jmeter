@@ -18,7 +18,7 @@
 package org.apache.jmeter.gui
 
 import org.apache.jmeter.testelement.TestElement
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import javax.swing.JPopupMenu
 
@@ -37,9 +37,9 @@ class AbstractJMeterGuiComponentTest {
             override fun getMenuCategories(): MutableCollection<String> = TODO()
         }
 
-        assertEquals(true, element.isEnabled, "element.isEnabled after creation of the element")
+        assertTrue(element.isEnabled, "element.isEnabled after creation of the element")
 
         element.clearGui()
-        assertEquals(true, element.isEnabled, "element.isEnabled after element.clearGui()")
+        assertTrue(element.isEnabled, "element.isEnabled after element.clearGui()")
     }
 }

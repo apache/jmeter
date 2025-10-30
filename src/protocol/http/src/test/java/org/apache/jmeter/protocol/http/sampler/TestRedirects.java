@@ -72,7 +72,7 @@ class TestRedirects {
             if (shouldRedirect) {
                 Assertions.assertEquals(server.url("/redirected"), res.getRedirectLocation());
             } else {
-                Assertions.assertEquals(null, res.getRedirectLocation());
+                Assertions.assertNull(res.getRedirectLocation());
             }
             Assertions.assertEquals("" + redirectCode, res.getResponseCode());
         } finally {

@@ -17,8 +17,6 @@
 
 package org.apache.jmeter.extractor;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -274,15 +272,15 @@ public class TestXPathExtractor {
         assertEquals(1, result.getAssertionResults().length);
         AssertionResult firstResult = result.getAssertionResults()[0];
         assertEquals(extractor.getName(), firstResult.getName());
-        assertThat(
-                "'<' is an invalid character in xpath, so it is expected to be present in the error message",
+        assertContains(
                 firstResult.getFailureMessage(),
-                containsString("<")
-        );
+                "<",
+                "'<' is an invalid character in xpath, so it is expected to be present in the error message");
         if (Locale.getDefault().getLanguage().startsWith(Locale.ENGLISH.getLanguage())) {
-            assertThat(
+            assertContains(
                     firstResult.getFailureMessage(),
-                    containsString("A location path was expected, but the following token was encountered")
+                    "A location path was expected, but the following token was encountered",
+                    ""
             );
         }
         assertEquals("Default", vars.get(VAL_NAME));
@@ -296,8 +294,9 @@ public class TestXPathExtractor {
         extractor.process();
         assertEquals(1, result.getAssertionResults().length);
         assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-        assertThat(result.getAssertionResults()[0].getFailureMessage(),
-                containsString("Content is not allowed in prolog"));
+        assertContains(result.getAssertionResults()[0].getFailureMessage(),
+                "Content is not allowed in prolog",
+                "");
         assertEquals("Default", vars.get(VAL_NAME));
         assertEquals("0", vars.get(VAL_NAME_NR));
     }
@@ -310,10 +309,15 @@ public class TestXPathExtractor {
 
         assertEquals(1, result.getAssertionResults().length);
         assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-        assertThat(result.getAssertionResults()[0].getFailureMessage(),
-                containsString("XML document structures must start and end within the same entity"));
+        assertContains(result.getAssertionResults()[0].getFailureMessage(),
+                "XML document structures must start and end within the same entity",
+                "");
 
         assertEquals("Default", vars.get(VAL_NAME));
         assertEquals("0", vars.get(VAL_NAME_NR));
+    }
+
+    private void assertContains(String value, String substring, String message) {
+        assertTrue(value.contains(substring), () -> message + ": " + value + " should contain " + substring);
     }
 }
