@@ -40,8 +40,11 @@ public class XmlAssertionTest extends JMeterTestCase {
             + "Don't forget me this weekend!</body></note1>";
     private static final String VALID_XML = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
     private static final String NO_XML = "response Data";
-    private static final String UNSECURE_XML = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" + "<!DOCTYPE foo [\n"
-            + "   <!ENTITY xxe SYSTEM \"file:///etc/passwd\" > ]>\n" + "<foo>&xxe;</foo>";
+    private static final String UNSECURE_XML = """
+            <?xml version="1.0" encoding="ISO-8859-1"?>
+            <!DOCTYPE foo [
+               <!ENTITY xxe SYSTEM "file:///etc/passwd" > ]>
+            <foo>&xxe;</foo>""";
 
     @BeforeEach
     public void setUp() {

@@ -62,7 +62,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         function = new TimeShift();
     }
 
-    private void assertDateEquals(LocalDateTime expected, LocalDateTime actual, Duration delta) {
+    private static void assertDateEquals(LocalDateTime expected, LocalDateTime actual, Duration delta) {
         Duration diff = Duration.between(expected, actual);
         if (diff.abs().compareTo(delta) > 0) {
             fail(expected + " should be within " + delta + " of " + actual + ", actual diff is " + diff);

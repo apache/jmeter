@@ -227,14 +227,9 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
     @Override
     public void setSortKeys(List<? extends SortKey> keys) {
         switch (keys.size()) {
-            case 0:
-                setSortKey(null);
-                break;
-            case 1:
-                setSortKey(keys.get(0));
-                break;
-            default:
-                throw new IllegalArgumentException("Only one column can be sorted");
+            case 0 -> setSortKey(null);
+            case 1 -> setSortKey(keys.get(0));
+            default -> throw new IllegalArgumentException("Only one column can be sorted");
         }
     }
 

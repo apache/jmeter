@@ -103,7 +103,7 @@ public class BeanShell extends AbstractFunction {
             if (bshOut != null) {
                 resultStr = bshOut.toString();
             }
-            if (vars != null && varName.length() > 0) {// vars will be null on TestPlan
+            if (vars != null && !varName.isEmpty()) {// vars will be null on TestPlan
                 vars.put(varName, resultStr);
             }
         } catch (Exception ex) // Mainly for bsh.EvalError
@@ -115,9 +115,8 @@ public class BeanShell extends AbstractFunction {
 
     }
 
-    /*
+    /**
      * Helper method for use by scripts
-     *
      */
     public void log_info(String s) {
         log.info(s);

@@ -61,7 +61,7 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
             log.debug("{} Running up named: {}", Thread.currentThread().getName(), getName());//$NON-NLS-1$
         }
         Sampler entry = getThreadContext().getCurrentSampler();
-        if (!(entry instanceof HTTPSamplerBase)) {
+        if (!(entry instanceof HTTPSamplerBase sampler)) {
             return;
         }
 
@@ -73,7 +73,6 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
             return;
         }
 
-        HTTPSamplerBase sampler = (HTTPSamplerBase) entry;
         for (JMeterProperty jMeterProperty : sampler.getArguments()) {
             Argument arg = (Argument) jMeterProperty.getObjectValue();
             String oldValue = arg.getValue();

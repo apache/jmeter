@@ -279,20 +279,17 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             Message msg, boolean isLast) {
         if (msg != null) {
             try {
-                if (msg instanceof TextMessage){
-                    buffer.append(((TextMessage) msg).getText());
-                } else if (msg instanceof ObjectMessage){
-                    ObjectMessage objectMessage = (ObjectMessage) msg;
+                if (msg instanceof TextMessage textMessage){
+                    buffer.append(textMessage.getText());
+                } else if (msg instanceof ObjectMessage objectMessage){
                     if(objectMessage.getObject() != null) {
                         buffer.append(objectMessage.getObject().getClass());
                     } else {
                         buffer.append("object is null");
                     }
-                } else if (msg instanceof BytesMessage){
-                    BytesMessage bytesMessage = (BytesMessage) msg;
+                } else if (msg instanceof BytesMessage bytesMessage){
                     buffer.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
-                } else if (msg instanceof MapMessage){
-                    MapMessage mapm = (MapMessage) msg;
+                } else if (msg instanceof MapMessage mapm){
                     @SuppressWarnings("unchecked") // MapNames are Strings
                     Enumeration<String> enumb = mapm.getMapNames();
                     while(enumb.hasMoreElements()){

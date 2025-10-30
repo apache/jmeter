@@ -268,8 +268,7 @@ public class TransactionController extends GenericController implements SampleLi
             // in this case normal workflow doesn't happen, so we need
             // to notify the children of TransactionController and
             // update them with SubSamplerResult
-            if(subSampler instanceof TransactionSampler) {
-                TransactionSampler tc = (TransactionSampler) subSampler;
+            if(subSampler instanceof TransactionSampler tc) {
                 transactionSampler.addSubSamplerResult(tc.getTransactionResult());
             }
             transactionSampler.setTransactionDone();

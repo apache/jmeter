@@ -64,8 +64,8 @@ public class WhileControllerGui extends AbstractControllerGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (element instanceof WhileController) {
-            theCondition.setText(((WhileController) element).getCondition());
+        if (element instanceof WhileController whileController) {
+            theCondition.setText(whileController.getCondition());
         }
 
     }
@@ -86,11 +86,11 @@ public class WhileControllerGui extends AbstractControllerGui {
     @Override
     public void modifyTestElement(TestElement controller) {
         configureTestElement(controller);
-        if (controller instanceof WhileController) {
-            if (theCondition.getText().length() > 0) {
-                ((WhileController) controller).setCondition(theCondition.getText());
+        if (controller instanceof WhileController whileController) {
+            if (!theCondition.getText().isEmpty()) {
+                whileController.setCondition(theCondition.getText());
             } else {
-                ((WhileController) controller).setCondition(""); // $NON-NLS-1$
+                whileController.setCondition(""); // $NON-NLS-1$
             }
         }
     }

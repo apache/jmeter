@@ -282,17 +282,14 @@ public class JMeterThread implements Runnable, Interruptible {
                             triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
                         } else {
                             switch (threadContext.getTestLogicalAction()) {
-                                case BREAK_CURRENT_LOOP:
-                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::breakOnCurrentLoop);
-                                    break;
-                                case START_NEXT_ITERATION_OF_THREAD:
-                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
-                                    break;
-                                case START_NEXT_ITERATION_OF_CURRENT_LOOP:
-                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnCurrentLoop);
-                                    break;
-                                default:
-                                    break;
+                                case BREAK_CURRENT_LOOP ->
+                                        triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::breakOnCurrentLoop);
+                                case START_NEXT_ITERATION_OF_THREAD ->
+                                        triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
+                                case START_NEXT_ITERATION_OF_CURRENT_LOOP ->
+                                        triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnCurrentLoop);
+                                default -> {
+                                }
                             }
                         }
                         threadContext.setTestLogicalAction(TestLogicalAction.CONTINUE);
@@ -427,8 +424,7 @@ public class JMeterThread implements Runnable, Interruptible {
     private static void continueOnThreadLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
         List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
         for (Controller parentController : controllersToReinit) {
-            if (parentController instanceof AbstractThreadGroup) {
-                AbstractThreadGroup tg = (AbstractThreadGroup) parentController;
+            if (parentController instanceof AbstractThreadGroup tg) {
                 tg.startNextLoop();
             } else {
                 parentController.triggerEndOfLoop();
@@ -742,11 +738,9 @@ public class JMeterThread implements Runnable, Interruptible {
         if (log.isInfoEnabled()) {
             log.info("Thread started: {}", Thread.currentThread().getName());
         }
-        /*
-         * Setting SamplingStarted before the controllers are initialised allows
-         * them to access the running values of functions and variables (however
-         * it does not seem to help with the listeners)
-         */
+        // Setting SamplingStarted before the controllers are initialised allows
+        // them to access the running values of functions and variables (however
+        // it does not seem to help with the listeners)
         threadContext.setSamplingStarted(true);
 
         threadGroupLoopController.initialize();
@@ -840,12 +834,12 @@ public class JMeterThread implements Runnable, Interruptible {
         interruptLock.lock();
         try {
             Sampler samp = currentSamplerForInterruption; // fetch once; must be done under lock
-            if (samp instanceof Interruptible){ // (also protects against null)
+            if (samp instanceof Interruptible interruptible){ // (also protects against null)
                 if (log.isWarnEnabled()) {
                     log.warn("Interrupting: {} sampler: {}", threadName, samp.getName());
                 }
                 try {
-                    boolean found = ((Interruptible)samp).interrupt();
+                    boolean found = interruptible.interrupt();
                     if (!found) {
                         log.warn("No operation pending");
                     }

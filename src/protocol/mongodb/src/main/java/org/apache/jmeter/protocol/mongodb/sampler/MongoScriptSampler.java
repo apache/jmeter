@@ -132,9 +132,6 @@ public class MongoScriptSampler
         setProperty(SOURCE, source);
     }
 
-    /*
-    * Helper
-    */
     private void trace(String s) {
         if(log.isDebugEnabled()) {
             log.debug(Thread.currentThread().getName() + " (" + getTitle() + " " + s + " " + this.toString());

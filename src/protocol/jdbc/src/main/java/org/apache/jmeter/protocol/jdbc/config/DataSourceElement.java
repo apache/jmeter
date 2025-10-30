@@ -65,11 +65,11 @@ public class DataSourceElement extends AbstractTestElement
     private transient boolean autocommit;
     private transient boolean preinit;
 
-    /*
+    /**
      *  The datasource is set up by testStarted and cleared by testEnded.
      *  These are called from different threads, so access must be synchronized.
      *  The same instance is called in each case.
-    */
+     */
     private transient BasicDataSource dbcpDataSource;
 
     // Keep a record of the pre-thread pools so that they can be disposed of at the end of a test
@@ -204,10 +204,10 @@ public class DataSourceElement extends AbstractTestElement
         }
     }
 
-    /*
+    /*/
      * Set up the DataSource - maxPool is a parameter, so the same code can
      * also be used for setting up the per-thread pools.
-    */
+     */
     private BasicDataSource initPool(String maxPool) {
         BasicDataSource dataSource = new BasicDataSource();
 
@@ -290,7 +290,7 @@ public class DataSourceElement extends AbstractTestElement
         dataSource.setDriverClassName(getDriver());
         dataSource.setUrl(getDbUrl());
 
-        if (_username.length() > 0){
+        if (!_username.isEmpty()){
             dataSource.setUsername(_username);
             dataSource.setPassword(getPassword());
         }
@@ -340,7 +340,7 @@ public class DataSourceElement extends AbstractTestElement
         /**
          * @return String connection information
          */
-        public String getConnectionInfo() {
+        private String getConnectionInfo() {
             BasicDataSource dsc = getConfiguredDataSource();
             StringBuilder builder = new StringBuilder(100);
             builder.append("shared:").append(sharedDSC != null)
@@ -354,7 +354,7 @@ public class DataSourceElement extends AbstractTestElement
          * @return Connection
          * @throws SQLException if database access error occurred
          */
-        public Connection getConnection() throws SQLException {
+        private Connection getConnection() throws SQLException {
             BasicDataSource dsc = getConfiguredDataSource();
             Connection conn=dsc.getConnection();
             int isolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());

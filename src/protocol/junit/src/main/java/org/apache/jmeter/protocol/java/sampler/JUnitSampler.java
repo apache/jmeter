@@ -402,8 +402,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                 }
             } catch (InvocationTargetException e) {
                 Throwable cause = e.getCause();
-                if (cause instanceof AssertionFailedError){
-                    tr.addFailure(theClazz, (AssertionFailedError) cause);
+                if (cause instanceof AssertionFailedError assertionFailedError){
+                    tr.addFailure(theClazz, assertionFailedError);
                 } else if (cause instanceof AssertionError) {
                     // Convert JUnit4 failure to Junit3 style
                     AssertionFailedError afe = new AssertionFailedError(cause.toString());
@@ -575,7 +575,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         return null;
     }
 
-    /*
+    /**
      * Wrapper to convert a JUnit4 class into a TestCase
      *
      *  TODO - work out how to convert JUnit4 assertions so they are treated as failures rather than errors
@@ -584,7 +584,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
         private final Method method;
         private final Class<? extends Throwable> expectedException;
         private final long timeout;
-        public AnnotatedTestCase(Method method, Class<? extends Throwable> expectedException2, long timeout) {
+        private AnnotatedTestCase(Method method, Class<? extends Throwable> expectedException2, long timeout) {
             this.method = method;
             this.expectedException = expectedException2;
             this.timeout = timeout;
@@ -654,7 +654,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
      */
     private void initializeTestObject() {
         String rlabel = getConstructorString();
-        if (rlabel.length()== 0) {
+        if (rlabel.isEmpty()) {
             rlabel = JUnitSampler.class.getName();
         }
         this.testObject = getClassInstance(className, rlabel);
@@ -679,11 +679,9 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     try {
                         m.invoke(theClazz, new Object[0]);
                     } catch (InvocationTargetException e) {
-                        /*
-                         * Calling a method via reflection results in wrapping any
-                         * Exceptions in ITE; unwrap these here so runProtected can
-                         * allocate them correctly.
-                         */
+                        // Calling a method via reflection results in wrapping any
+                        // Exceptions in ITE; unwrap these here so runProtected can
+                        // allocate them correctly.
                         Throwable t = e.getCause();
                         if (t != null) {
                             throw t;

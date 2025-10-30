@@ -34,7 +34,7 @@ public class TestClassFinder {
 
     private String[] libDirs;
 
-    private String getJMeterHome() throws Exception {
+    private static String getJMeterHome() throws Exception {
         JMeterTestUtils.setupJMeterHome();
         String path = JMeterUtils.getJMeterHome() + "/lib";
         return Paths.get(path).toRealPath().toString();

@@ -535,7 +535,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         while (iter.hasNext()) {
             BasicAttribute attr;
             LDAPArgument item = (LDAPArgument) iter.next().getObjectValue();
-            if (item.getValue().length() == 0) {
+            if (item.getValue().isEmpty()) {
                 attr = new BasicAttribute(item.getName());
             } else {
                 attr = getBasicAttribute(item.getName(), item.getValue());
@@ -567,7 +567,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         int index;
         String[] mods;
         int count = 0;
-        if (reqAttr.length() == 0) {
+        if (reqAttr.isEmpty()) {
             return null; // NOSONAR null means all , empty array means nothing
         }
         if (!reqAttr.endsWith(SEMI_COLON)) {
@@ -575,7 +575,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
         String attr = reqAttr;
 
-        while (attr.length() > 0) {
+        while (!attr.isEmpty()) {
             index = attr.indexOf(SEMI_COLON);
             count += 1;
             attr = attr.substring(index + 1);
@@ -584,7 +584,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             mods = new String[count];
             attr = reqAttr;
             count = 0;
-            while (attr.length() > 0) {
+            while (!attr.isEmpty()) {
                 index = attr.indexOf(SEMI_COLON);
                 mods[count] = attr.substring(0, index);
                 count += 1;
@@ -873,7 +873,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return res;
     }
 
-    /*
+    /**
      *   Write out search results in a stable order (including order of all subelements which might
      * be reordered like attributes and their values) so that simple textual comparison can be done,
      * unless the number of results exceeds {@link #MAX_SORTED_RESULTS} in which case just stream
@@ -965,7 +965,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
     private static void sortResults(final List<? extends SearchResult> sortedResults) {
         sortedResults.sort(new Comparator<SearchResult>() {
-            private int compareToReverse(final String s1, final String s2) {
+            private static int compareToReverse(final String s1, final String s2) {
                 int len1 = s1.length();
                 int len2 = s2.length();
                 int s1i = len1 - 1;
@@ -1003,13 +1003,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         String srName = sr.getName();
 
         if (!srName.endsWith(searchBase)) {
-            if (srName.length() > 0) {
+            if (!srName.isEmpty()) {
                 srName = srName + ',';
             }
             srName = srName + searchBase;
         }
-        if ((rootDn.length() > 0) && !srName.endsWith(rootDn)) {
-            if (srName.length() > 0) {
+        if (!rootDn.isEmpty() && !srName.endsWith(rootDn)) {
+            if (!srName.isEmpty()) {
                 srName = srName + ',';
             }
             srName = srName + rootDn;
@@ -1019,12 +1019,12 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     }
 
     private static String getWriteValue(final Object value) {
-        if (value instanceof String) {
+        if (value instanceof String s) {
             // assume it's sensitive data
-            return StringEscapeUtils.escapeXml10((String)value);
+            return StringEscapeUtils.escapeXml10(s);
         }
-        if (value instanceof byte[]) {
-            return StringEscapeUtils.escapeXml10(new String((byte[])value, StandardCharsets.UTF_8));
+        if (value instanceof byte[] bytes) {
+            return StringEscapeUtils.escapeXml10(new String(bytes, StandardCharsets.UTF_8));
         }
         return StringEscapeUtils.escapeXml10(value.toString());
     }

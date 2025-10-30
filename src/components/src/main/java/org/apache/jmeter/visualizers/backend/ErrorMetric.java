@@ -79,11 +79,10 @@ public class ErrorMetric {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof ErrorMetric)) {
+        if (!(other instanceof ErrorMetric otherError)) {
             return false;
         }
 
-        ErrorMetric otherError = (ErrorMetric) other;
         return getResponseCode().equalsIgnoreCase(otherError.getResponseCode())
                 && getResponseMessage().equalsIgnoreCase(otherError.getResponseMessage());
 

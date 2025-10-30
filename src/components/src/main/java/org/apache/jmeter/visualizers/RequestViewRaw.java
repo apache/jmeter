@@ -48,9 +48,6 @@ public class RequestViewRaw implements RequestView {
 
     private JPanel paneRaw; /** request pane content */
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#init()
-     */
     @Override
     public void init() {
         paneRaw = new JPanel(new BorderLayout(0, 5));
@@ -78,22 +75,15 @@ public class RequestViewRaw implements RequestView {
 
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#clearData()
-     */
     @Override
     public void clearData() {
         sampleDataField.setInitialText(""); //$NON-NLS-1$
         headerData.setInitialText(""); //$NON-NLS-1$
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#setSamplerResult(java.lang.Object)
-     */
     @Override
     public void setSamplerResult(Object objectResult) {
-        if (objectResult instanceof SampleResult) {
-            SampleResult sampleResult = (SampleResult) objectResult;
+        if (objectResult instanceof SampleResult sampleResult) {
             // Don't display Request headers label if rh is null or empty
             String rh = sampleResult.getRequestHeaders();
             if (StringUtilities.isNotEmpty(rh)) {
@@ -112,17 +102,11 @@ public class RequestViewRaw implements RequestView {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#getPanel()
-     */
     @Override
     public JPanel getPanel() {
         return paneRaw;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#getLabel()
-     */
     @Override
     public String getLabel() {
         return JMeterUtils.getResString(KEY_LABEL);

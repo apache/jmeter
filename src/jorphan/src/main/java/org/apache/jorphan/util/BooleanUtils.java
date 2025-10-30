@@ -44,15 +44,15 @@ public class BooleanUtils {
 
         @SuppressWarnings("NullTernary")
         Boolean result = switch (firstChar) {
-            case 't', 'T' -> len == 1 || "true".equalsIgnoreCase(s) ? Boolean.TRUE : null;
-            case 'y', 'Y' -> len == 1 || "yes".equalsIgnoreCase(s) ? Boolean.TRUE : null;
-            case 'o', 'O' -> "on".equalsIgnoreCase(s) ? Boolean.TRUE : (
-                    "off".equalsIgnoreCase(s) ? Boolean.FALSE : null
+            case 't', 'T' -> len == 1 || "true".equalsIgnoreCase(s) ? true : null;
+            case 'y', 'Y' -> len == 1 || "yes".equalsIgnoreCase(s) ? true : null;
+            case 'o', 'O' -> "on".equalsIgnoreCase(s) ? true : (
+                    "off".equalsIgnoreCase(s) ? false : null
             );
-            case '1' -> len == 1 ? Boolean.TRUE : null;
-            case 'f', 'F' -> len == 1 || "false".equalsIgnoreCase(s) ? Boolean.FALSE : null;
-            case 'n', 'N' -> len == 1 || "no".equalsIgnoreCase(s) ? Boolean.FALSE : null;
-            case '0' -> len == 1 ? Boolean.FALSE : null;
+            case '1' -> len == 1 ? true : null;
+            case 'f', 'F' -> len == 1 || "false".equalsIgnoreCase(s) ? false : null;
+            case 'n', 'N' -> len == 1 || "no".equalsIgnoreCase(s) ? false : null;
+            case '0' -> len == 1 ? false : null;
             default -> null;
         };
         return result;

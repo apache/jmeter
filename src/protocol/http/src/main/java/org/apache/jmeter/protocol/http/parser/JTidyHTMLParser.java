@@ -85,122 +85,117 @@ class JTidyHTMLParser extends HTMLParser {
         int type = node.getNodeType();
 
         switch (type) {
+            case Node.DOCUMENT_NODE -> scanNodes(((Document) node).getDocumentElement(), urls, baseUrl);
+            case Node.ELEMENT_NODE -> {
+                NamedNodeMap attrs = node.getAttributes();
+                if (name.equalsIgnoreCase(TAG_BASE)) {
+                    String tmp = getValue(attrs, ATT_HREF);
+                    if (tmp != null) {
+                        try {
+                            baseUrl = ConversionUtils.makeRelativeURL(baseUrl, tmp);
+                        } catch (MalformedURLException e) {
+                            throw new HTMLParseException(e);
+                        }
+                    }
+                    break;
+                }
 
-        case Node.DOCUMENT_NODE:
-            scanNodes(((Document) node).getDocumentElement(), urls, baseUrl);
-            break;
+                if (name.equalsIgnoreCase(TAG_IMAGE) || name.equalsIgnoreCase(TAG_EMBED)) {
+                    urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
+                    break;
+                }
 
-        case Node.ELEMENT_NODE:
+                if (name.equalsIgnoreCase(TAG_APPLET)) {
+                    String codebase = getValue(attrs, ATT_CODEBASE);
+                    String code = getValue(attrs, ATT_ARCHIVE);
+                    if (StringUtilities.isBlank(code)) {
+                        code = getValue(attrs, ATT_CODE);
+                    }
+                    if (StringUtilities.isBlank(codebase)) {
+                        urls.addURL(code, baseUrl);
+                    } else {
+                        urls.addURL(codebase + "/" + code, baseUrl);
+                    }
+                    break;
+                }
 
-            NamedNodeMap attrs = node.getAttributes();
-            if (name.equalsIgnoreCase(TAG_BASE)) {
-                String tmp = getValue(attrs, ATT_HREF);
-                if (tmp != null) {
-                    try {
-                        baseUrl = ConversionUtils.makeRelativeURL(baseUrl, tmp);
-                    } catch (MalformedURLException e) {
-                        throw new HTMLParseException(e);
+                if (name.equalsIgnoreCase(TAG_OBJECT)) {
+                    String data = getValue(attrs, "codebase");
+                    if (StringUtilities.isNotEmpty(data)) {
+                        urls.addURL(data, baseUrl);
+                    }
+
+                    data = getValue(attrs, "data");
+                    if (StringUtilities.isNotEmpty(data)) {
+                        urls.addURL(data, baseUrl);
+                    }
+                    break;
+                }
+
+                if (name.equalsIgnoreCase(TAG_INPUT)) {
+                    String src = getValue(attrs, ATT_SRC);
+                    String typ = getValue(attrs, ATT_TYPE);
+                    if ((src != null) && ATT_IS_IMAGE.equalsIgnoreCase(typ)) {
+                        urls.addURL(src, baseUrl);
+                    }
+                    break;
+                }
+                if (TAG_LINK.equalsIgnoreCase(name) &&
+                        (STYLESHEET.equalsIgnoreCase(getValue(attrs, ATT_REL))
+                                || SHORTCUT_ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
+                                || ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
+                                || PRELOAD.equalsIgnoreCase(getValue(attrs, ATT_REL)))) {
+                    urls.addURL(getValue(attrs, ATT_HREF), baseUrl);
+                    break;
+                }
+                if (name.equalsIgnoreCase(TAG_SCRIPT)) {
+                    urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
+                    break;
+                }
+                if (name.equalsIgnoreCase(TAG_FRAME)) {
+                    urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
+                    break;
+                }
+                if (name.equalsIgnoreCase(TAG_IFRAME)) {
+                    urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
+                    break;
+                }
+                String back = getValue(attrs, ATT_BACKGROUND);
+                if (back != null) {
+                    urls.addURL(back, baseUrl);
+                }
+                if (name.equalsIgnoreCase(TAG_BGSOUND)) {
+                    urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
+                    break;
+                }
+
+                String style = getValue(attrs, ATT_STYLE);
+                if (style != null) {
+                    HtmlParsingUtils.extractStyleURLs(baseUrl, urls, style);
+                }
+
+                NodeList children = node.getChildNodes();
+                if (children != null) {
+                    int len = children.getLength();
+                    for (int i = 0; i < len; i++) {
+                        baseUrl = scanNodes(children.item(i), urls, baseUrl);
                     }
                 }
-                break;
             }
-
-            if (name.equalsIgnoreCase(TAG_IMAGE) || name.equalsIgnoreCase(TAG_EMBED)) {
-                urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
-                break;
+            default -> {
             }
-
-            if (name.equalsIgnoreCase(TAG_APPLET)) {
-                String codebase = getValue(attrs, ATT_CODEBASE);
-                String code = getValue(attrs, ATT_ARCHIVE);
-                if (StringUtilities.isBlank(code)) {
-                    code = getValue(attrs, ATT_CODE);
-                }
-                if (StringUtilities.isBlank(codebase)) {
-                    urls.addURL(code, baseUrl);
-                } else {
-                    urls.addURL(codebase + "/" + code, baseUrl);
-                }
-                break;
-            }
-
-            if (name.equalsIgnoreCase(TAG_OBJECT)) {
-                String data = getValue(attrs, "codebase");
-                if (StringUtilities.isNotEmpty(data)) {
-                    urls.addURL(data, baseUrl);
-                }
-
-                data = getValue(attrs, "data");
-                if (StringUtilities.isNotEmpty(data)) {
-                    urls.addURL(data, baseUrl);
-                }
-                break;
-            }
-
-            if (name.equalsIgnoreCase(TAG_INPUT)) {
-                String src = getValue(attrs, ATT_SRC);
-                String typ = getValue(attrs, ATT_TYPE);
-                if ((src != null) && ATT_IS_IMAGE.equalsIgnoreCase(typ)) {
-                    urls.addURL(src, baseUrl);
-                }
-                break;
-            }
-            if (TAG_LINK.equalsIgnoreCase(name) &&
-                    (STYLESHEET.equalsIgnoreCase(getValue(attrs, ATT_REL))
-                            || SHORTCUT_ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
-                            || ICON.equalsIgnoreCase(getValue(attrs, ATT_REL))
-                            || PRELOAD.equalsIgnoreCase(getValue(attrs, ATT_REL)))) {
-                urls.addURL(getValue(attrs, ATT_HREF), baseUrl);
-                break;
-            }
-            if (name.equalsIgnoreCase(TAG_SCRIPT)) {
-                urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
-                break;
-            }
-            if (name.equalsIgnoreCase(TAG_FRAME)) {
-                urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
-                break;
-            }
-            if (name.equalsIgnoreCase(TAG_IFRAME)) {
-                urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
-                break;
-            }
-            String back = getValue(attrs, ATT_BACKGROUND);
-            if (back != null) {
-                urls.addURL(back, baseUrl);
-            }
-            if (name.equalsIgnoreCase(TAG_BGSOUND)) {
-                urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
-                break;
-            }
-
-            String style = getValue(attrs, ATT_STYLE);
-            if (style != null) {
-                HtmlParsingUtils.extractStyleURLs(baseUrl, urls, style);
-            }
-
-            NodeList children = node.getChildNodes();
-            if (children != null) {
-                int len = children.getLength();
-                for (int i = 0; i < len; i++) {
-                    baseUrl = scanNodes(children.item(i), urls, baseUrl);
-                }
-            }
-
-            break;
-
-        default:
             // ignored
-            break;
         }
 
         return baseUrl;
 
     }
 
-    /*
-     * Helper method to get an attribute value, if it exists @param attrs list
-     * of attributes @param attname attribute name @return
+    /**
+     * Helper method to get an attribute value, if it exists
+     * @param attrs list of attributes
+     * @param attname attribute name
+     * @return attribute value
      */
     private static String getValue(NamedNodeMap attrs, String attname) {
         String v = null;

@@ -191,37 +191,16 @@ public class CsvFileSampleSource extends AbstractSampleSource {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSampleSource#addSampleConsumers
-     * (java.util.List)
-     */
     @Override
     public void setSampleConsumers(List<SampleConsumer> consumers) {
         producer.setSampleConsumers(consumers);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSampleSource#addSampleConsumer
-     * (org.apache.jmeter.report.processor.SampleConsumer)
-     */
     @Override
     public void addSampleConsumer(SampleConsumer consumer) {
         producer.addSampleConsumer(consumer);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSampleSource#removeSampleConsumer
-     * (org.apache.jmeter.report.processor.SampleConsumer)
-     */
     @Override
     public void removeSampleConsumer(SampleConsumer consumer) {
         producer.removeSampleConsumer(consumer);
@@ -248,20 +227,20 @@ public class CsvFileSampleSource extends AbstractSampleSource {
          * @param consumers list of consumers for the samples (must not be
          *                  {@code null})
          */
-        public void setSampleConsumers(List<SampleConsumer> consumers) {
+        private void setSampleConsumers(List<SampleConsumer> consumers) {
             Objects.requireNonNull(consumers, "consumers must not be null");
 
             this.sampleConsumers = consumers;
         }
 
-        public void addSampleConsumer(SampleConsumer consumer) {
+        private void addSampleConsumer(SampleConsumer consumer) {
             if (consumer == null) {
                 return;
             }
             this.sampleConsumers.add(consumer);
         }
 
-        public void removeSampleConsumer(SampleConsumer consumer) {
+        private void removeSampleConsumer(SampleConsumer consumer) {
             if (consumer == null) {
                 return;
             }

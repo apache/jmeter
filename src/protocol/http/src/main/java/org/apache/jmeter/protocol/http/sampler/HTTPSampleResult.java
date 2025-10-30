@@ -160,7 +160,7 @@ public class HTTPSampleResult extends SampleResult {
                 sb.append(queryString);
                 sb.append('\n');
             }
-            if (cookies.length()>0){
+            if (!cookies.isEmpty()){
                 sb.append("\nCookie Data:\n");
                 sb.append(cookies);
             } else {
@@ -270,9 +270,6 @@ public class HTTPSampleResult extends SampleResult {
         setResponseMessage(HTTP_NO_CONTENT_MSG);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.samplers.SampleResult#getSearchableTokens()
-     */
     @Override
     public List<String> getSearchableTokens() throws Exception {
         List<String> list = new ArrayList<>(super.getSearchableTokens());

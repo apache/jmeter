@@ -70,7 +70,7 @@ public class TestCssParser extends JMeterTestCase {
         return extractUrls(parser, css);
     }
 
-    private List<URL> extractUrls(CssParser parser, String css)
+    private static List<URL> extractUrls(CssParser parser, String css)
             throws LinkExtractorParseException, MalformedURLException {
         List<URL> result = new ArrayList<>();
         Iterator<URL> urlIterator = parser.getEmbeddedResourceURLs(

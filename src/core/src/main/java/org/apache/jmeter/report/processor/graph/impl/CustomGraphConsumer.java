@@ -169,13 +169,6 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
         parentResult.setResult(RESULT_CONTENT_MESSAGE, new ValueResultData(getContentMessage()));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #createTimeStampKeysSelector()
-     */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
@@ -183,12 +176,6 @@ public class CustomGraphConsumer extends AbstractOverTimeGraphConsumer implement
         return keysSelector;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         AbstractSeriesSelector seriesSelector = new AbstractSeriesSelector() {

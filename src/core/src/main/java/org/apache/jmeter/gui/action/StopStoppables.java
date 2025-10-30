@@ -47,25 +47,16 @@ public class StopStoppables extends AbstractAction implements ActionListener {
         super();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.action.AbstractAction#getActionNames()
-     */
     @Override
     public Set<String> getActionNames() {
         return commands;
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.action.AbstractAction#doAction(java.awt.event.ActionEvent)
-     */
     @Override
     public void doAction(ActionEvent e) {
         GuiPackage instance = GuiPackage.getInstance();

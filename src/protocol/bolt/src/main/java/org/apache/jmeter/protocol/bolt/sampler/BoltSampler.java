@@ -127,8 +127,8 @@ public class BoltSampler extends AbstractBoltTestElement implements Sampler, Tes
 
     private static SampleResult handleException(SampleResult res, Exception ex) {
         res.setResponseMessage(ex.toString());
-        if (ex instanceof Neo4jException) {
-            res.setResponseCode(((Neo4jException)ex).code());
+        if (ex instanceof Neo4jException neo4jException) {
+            res.setResponseCode(neo4jException.code());
         } else {
             res.setResponseCode("500");
         }

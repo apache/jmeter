@@ -230,8 +230,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     @Override
     public void modifyTestElement(TestElement element) {
         // Fetch data from screen fields
-        if (customizer instanceof GenericTestBeanCustomizer) {
-            GenericTestBeanCustomizer gtbc = (GenericTestBeanCustomizer) customizer;
+        if (customizer instanceof GenericTestBeanCustomizer gtbc) {
             gtbc.saveGuiFields();
         }
         configureTestElement(element);
@@ -454,8 +453,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     @Override
     public void clearGui() {
         super.clearGui();
-        if (customizer instanceof GenericTestBeanCustomizer) {
-            GenericTestBeanCustomizer gtbc = (GenericTestBeanCustomizer) customizer;
+        if (customizer instanceof GenericTestBeanCustomizer gtbc) {
             gtbc.clearGuiFields();
         }
         propertyMap.clear();

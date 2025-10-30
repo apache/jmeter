@@ -138,7 +138,7 @@ public class JMeterTest extends JMeterTestCase {
         Locale.setDefault(DEFAULT_LOCALE);
     }
 
-    /*
+    /**
      * Extract titles from component_reference.xml
      */
     @BeforeAll
@@ -157,13 +157,13 @@ public class JMeterTest extends JMeterTestCase {
                             components.item(j);
                     String nm = comp.getAttribute("name");
                     if (!nm.equals("SSL Manager")) {// Not a true GUI component
-                        guiTitles.put(nm.replace(' ', '_'), Boolean.FALSE);
+                        guiTitles.put(nm.replace(' ', '_'), false);
                     }
                 }
             }
         }
         // Add titles that don't need to be documented
-        guiTitles.put("Example Sampler", Boolean.FALSE);
+        guiTitles.put("Example Sampler", false);
     }
 
     /**
@@ -184,7 +184,7 @@ public class JMeterTest extends JMeterTestCase {
         return body;
     }
 
-    /*
+    /**
      * Extract titles from component_reference.xml
      */
     @BeforeAll
@@ -204,7 +204,7 @@ public class JMeterTest extends JMeterTestCase {
                             components.item(j);
                     String tag = comp.getAttribute("tag");
                     if (StringUtilities.isNotEmpty(tag)){
-                        guiTags.put(tag, Boolean.FALSE);
+                        guiTags.put(tag, false);
                     }
                 }
             }
@@ -213,7 +213,7 @@ public class JMeterTest extends JMeterTestCase {
 
     public static<T> List<T> keysWithFalseValues(Map<? extends T, Boolean> map) {
         return map.entrySet().stream()
-                .filter(e -> !e.getValue().equals(Boolean.TRUE))
+                .filter(e -> !e.getValue().equals(true))
                 .map(Map.Entry::getKey)
                 .sorted()
                 .collect(Collectors.toList());
@@ -251,7 +251,7 @@ public class JMeterTest extends JMeterTestCase {
         return components;
     }
 
-    /*
+    /**
      * Test GUI elements - create the suite of tests
      */
     static Collection<GuiComponentHolder> guiComponents() throws Throwable {
@@ -264,7 +264,7 @@ public class JMeterTest extends JMeterTestCase {
         return components;
     }
 
-    /*
+    /**
      * Test GUI elements - run the test
      */
     @ParameterizedTest
@@ -275,7 +275,7 @@ public class JMeterTest extends JMeterTestCase {
             String title = guiItem.getDocAnchor();
             boolean ct = guiTitles.containsKey(title);
             if (ct) {
-                guiTitles.put(title, Boolean.TRUE);// So we can detect extra entries
+                guiTitles.put(title, true);// So we can detect extra entries
             }
             String name = guiItem.getClass().getName();
             if (// Is this a work in progress or an internal GUI component?
@@ -295,7 +295,7 @@ public class JMeterTest extends JMeterTestCase {
         }
     }
 
-    /*
+    /**
      * Test GUI elements - run for all components
      */
     @ParameterizedTest
@@ -321,7 +321,7 @@ public class JMeterTest extends JMeterTestCase {
         checkElementAlias(guiItem);
     }
 
-    /*
+    /**
      * Test GUI elements - not run for TestBeanGui items
      */
     @ParameterizedTest
@@ -584,7 +584,7 @@ public class JMeterTest extends JMeterTestCase {
                 .filter(o -> !o.getClass().getName().endsWith("_Stub"));
     }
 
-    /*
+    /**
      * Test serializable elements - test the object
      */
     @ParameterizedTest
@@ -616,7 +616,7 @@ public class JMeterTest extends JMeterTestCase {
         assertNotNull(nameMap, "SaveService nameMap (saveservice.properties) should not be null");
     }
 
-    private void checkElementAlias(Object item) {
+    private static void checkElementAlias(Object item) {
         String name=item.getClass().getName();
         boolean contains = nameMap.values().contains(name);
         if (!contains){

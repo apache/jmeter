@@ -36,8 +36,8 @@ public class MinMaxLongRenderer extends NumberRenderer { // NOSONAR
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof Long) {
-            long longValue = (Long) value;
+        if (value instanceof Long longVal) {
+            long longValue = longVal;
             if (!(longValue == Long.MAX_VALUE || longValue == Long.MIN_VALUE)) {
                 setText(formatter.format(longValue));
                 return;

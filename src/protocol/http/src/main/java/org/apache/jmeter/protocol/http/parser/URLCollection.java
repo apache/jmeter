@@ -102,7 +102,7 @@ public class URLCollection implements Iterable<URL> {
         return new UrlIterator(coll.iterator());
     }
 
-    /*
+    /**
      * Private iterator used to unwrap the URL from the URLString class
      */
     private static class UrlIterator implements Iterator<URL> {
@@ -117,7 +117,7 @@ public class URLCollection implements Iterable<URL> {
             return iter.hasNext();
         }
 
-        /*
+        /**
          * Unwraps the URLString class to return the URL
          */
         @Override

@@ -99,7 +99,7 @@ public class ReportGeneratorConfiguration {
     // Required graph properties
     // Exclude controllers
     public static final String GRAPH_KEY_EXCLUDE_CONTROLLERS = "exclude_controllers";
-    public static final Boolean GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT = Boolean.FALSE;
+    public static final Boolean GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT = false;
 
     // Title
     public static final String GRAPH_KEY_TITLE = "title";
@@ -108,7 +108,7 @@ public class ReportGeneratorConfiguration {
     // Required exporter properties
     // Filters only sample series ?
     public static final String EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES = "filters_only_sample_series";
-    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = Boolean.TRUE;
+    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = true;
 
     // Series filter
     public static final String EXPORTER_KEY_SERIES_FILTER = "series_filter";
@@ -116,7 +116,7 @@ public class ReportGeneratorConfiguration {
 
     // Show controllers only
     public static final String EXPORTER_KEY_SHOW_CONTROLLERS_ONLY = "show_controllers_only";
-    public static final Boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = Boolean.FALSE;
+    public static final Boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = false;
 
     // Optional exporter properties
     public static final String EXPORTER_KEY_GRAPH_EXTRA_OPTIONS = "graph_options";
@@ -645,7 +645,7 @@ public class ReportGeneratorConfiguration {
         final boolean ignoreTCFromTop5ErrorsBySampler = getRequiredProperty(
                 props,
                 REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER,
-                Boolean.TRUE,
+                true,
                 Boolean.class);
         configuration.setIgnoreTCFromTop5ErrorsBySampler(ignoreTCFromTop5ErrorsBySampler);
 

@@ -88,7 +88,7 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
             bsfEngine = mgr.loadScriptingEngine(getScriptLanguage());
 
             Object bsfOut = null;
-            if (fileName.length()>0) {
+            if (!fileName.isEmpty()) {
                 res.setSamplerData("File: "+fileName);
                 try (FileInputStream fis = new FileInputStream(fileName);
                         BufferedInputStream is = new BufferedInputStream(fis)) {

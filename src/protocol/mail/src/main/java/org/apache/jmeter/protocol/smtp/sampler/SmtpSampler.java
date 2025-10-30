@@ -303,8 +303,7 @@ public class SmtpSampler extends AbstractSampler {
     private static String getSamplerData(Message message) throws MessagingException, IOException {
         StringBuilder sb = new StringBuilder();
         Object content = message.getContent(); // throws ME
-        if (content instanceof Multipart) {
-            Multipart multipart = (Multipart) content;
+        if (content instanceof Multipart multipart) {
             String contentType = multipart.getContentType();
             ContentType ct = new ContentType(contentType);
             String boundary = ct.getParameter("boundary");
@@ -319,8 +318,7 @@ public class SmtpSampler extends AbstractSampler {
             sb.append(boundary);
             sb.append("--");
             sb.append("\n");
-        } else if (content instanceof BodyPart) {
-            BodyPart bodyPart = (BodyPart) content;
+        } else if (content instanceof BodyPart bodyPart) {
             writeBodyPart(sb, bodyPart); // throws IOE, ME
         } else if (content instanceof String) {
             sb.append(content);

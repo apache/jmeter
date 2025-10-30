@@ -266,9 +266,9 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      * @return true if Path, name or mimetype fields are not the empty string
      */
     public boolean isNotEmpty() {
-        return getPath().length() > 0
-            || getParamName().length() > 0
-            || getMimeType().length() > 0; // TODO should we allow mimetype only?
+        return !getPath().isEmpty()
+            || !getParamName().isEmpty()
+            || !getMimeType().isEmpty(); // TODO should we allow mimetype only?
     }
 
 }

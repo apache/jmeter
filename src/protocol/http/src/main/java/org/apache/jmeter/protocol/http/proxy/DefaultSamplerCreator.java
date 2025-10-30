@@ -138,7 +138,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             log.debug("sampler path = {}", sampler.getPath());
         }
         Arguments arguments = sampler.getArguments();
-        if(arguments.getArgumentCount() == 1 && arguments.getArgument(0).getName().length()==0) {
+        if(arguments.getArgumentCount() == 1 && arguments.getArgument(0).getName().isEmpty()) {
             sampler.setPostBodyRaw(true);
         }
 
@@ -259,7 +259,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 // We also assume this if no content type is present, to be most backwards compatible,
                 // but maybe we should only parse arguments if the content type is as expected
                 sampler.parseArguments(postData.trim(), contentEncoding); //standard name=value postData
-            } else if (postData.length() > 0) {
+            } else if (!postData.isEmpty()) {
                 if (isBinaryContent(contentType)) {
                     try {
                         File tempDir = new File(getBinaryDirectory());
@@ -321,20 +321,11 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
     private static final class ErrorDetectionHandler extends DefaultHandler {
         private boolean errorDetected = false;
-        public ErrorDetectionHandler() {
-            super();
-        }
-        /* (non-Javadoc)
-         * @see org.xml.sax.helpers.DefaultHandler#error(org.xml.sax.SAXParseException)
-         */
         @Override
         public void error(SAXParseException e) throws SAXException {
             this.errorDetected = true;
         }
 
-        /* (non-Javadoc)
-         * @see org.xml.sax.helpers.DefaultHandler#fatalError(org.xml.sax.SAXParseException)
-         */
         @Override
         public void fatalError(SAXParseException e) throws SAXException {
             this.errorDetected = true;
@@ -342,7 +333,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         /**
          * @return the errorDetected
          */
-        public boolean isErrorDetected() {
+        private boolean isErrorDetected() {
             return errorDetected;
         }
     }

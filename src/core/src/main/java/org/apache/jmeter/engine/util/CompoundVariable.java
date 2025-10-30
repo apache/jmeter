@@ -78,7 +78,7 @@ public class CompoundVariable implements Function {
                     new LogAndIgnoreServiceLoadExceptionHandler(log)
             )) {
                 String referenceKey = function.getReferenceKey();
-                if (referenceKey.length() > 0) { // ignore self
+                if (!referenceKey.isEmpty()) { // ignore self
                     functions.put(referenceKey, function.getClass());
                 }
             }
@@ -135,15 +135,15 @@ public class CompoundVariable implements Function {
 
         StringBuilder results = new StringBuilder();
         for (Object item : compiledComponents) {
-            if (item instanceof Function) {
+            if (item instanceof Function function) {
                 try {
-                    results.append(((Function) item).execute(previousResult, currentSampler));
+                    results.append(function.execute(previousResult, currentSampler));
                 } catch (InvalidVariableException e) {
                     // TODO should level be more than debug ?
                     log.debug("Invalid variable: {}", item, e);
                 }
-            } else if (item instanceof SimpleVariable) {
-                results.append(((SimpleVariable) item).toString());
+            } else if (item instanceof SimpleVariable simpleVariable) {
+                results.append(simpleVariable.toString());
             } else {
                 results.append(item);
             }

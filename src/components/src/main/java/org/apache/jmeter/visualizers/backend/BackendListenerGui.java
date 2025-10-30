@@ -296,9 +296,6 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         backendListener.setQueueSize(queueSize.getText());
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#clearGui()
-     */
     @Override
     public void clearGui() {
         super.clearGui();

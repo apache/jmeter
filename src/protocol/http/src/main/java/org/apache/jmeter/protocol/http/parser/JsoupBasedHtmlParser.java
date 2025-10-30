@@ -38,7 +38,7 @@ import org.jsoup.select.NodeVisitor;
  */
 public class JsoupBasedHtmlParser extends HTMLParser {
 
-    /*
+    /**
      * A dummy class to pass the pointer of URL.
      */
     private static class URLPointer {
@@ -57,7 +57,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
          * @param baseUrl base url to extract possibly missing information from urls found in <code>urls</code>
          * @param urls collection of urls to consider
          */
-        public JMeterNodeVisitor(final URLPointer baseUrl, URLCollection urls) {
+        private JMeterNodeVisitor(final URLPointer baseUrl, URLCollection urls) {
             this.urls = urls;
             this.baseUrl = baseUrl;
         }
@@ -72,10 +72,9 @@ public class JsoupBasedHtmlParser extends HTMLParser {
 
         @Override
         public void head(Node node, int depth) {
-            if (!(node instanceof Element)) {
+            if (!(node instanceof Element tag)) {
                 return;
             }
-            Element tag = (Element) node;
             String tagName = tag.tagName().toLowerCase(Locale.ROOT);
             if (tagName.equals(TAG_BODY)) {
                 extractAttribute(tag, ATT_BACKGROUND);

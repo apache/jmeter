@@ -52,14 +52,14 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
         /**
          *
          */
-        public BarrierWrapper() {
+        private BarrierWrapper() {
             this.barrier = null;
         }
 
         /**
          * @param parties Number of parties
          */
-        public BarrierWrapper(int parties) {
+        private BarrierWrapper(int parties) {
             this.barrier = new CyclicBarrier(parties);
         }
 
@@ -67,7 +67,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
          * Synchronized is required to ensure CyclicBarrier is initialized only once per Thread Group
          * @param parties Number of parties
          */
-        public synchronized void setup(int parties) {
+        private synchronized void setup(int parties) {
             if(this.barrier== null) {
                 this.barrier = new CyclicBarrier(parties);
             }
@@ -87,7 +87,7 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
          * @see java.util.concurrent.CyclicBarrier#await()
          */
         @SuppressWarnings("UnusedMethod")
-        public int await() throws InterruptedException, BrokenBarrierException{
+        private int await() throws InterruptedException, BrokenBarrierException{
             return barrier.await();
         }
 
@@ -109,14 +109,14 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
          *             if the specified time elapses
          * @see java.util.concurrent.CyclicBarrier#await()
          */
-        public int await(long timeout, TimeUnit timeUnit) throws InterruptedException, BrokenBarrierException, TimeoutException {
+        private int await(long timeout, TimeUnit timeUnit) throws InterruptedException, BrokenBarrierException, TimeoutException {
             return barrier.await(timeout, timeUnit);
         }
 
         /**
          * @see java.util.concurrent.CyclicBarrier#reset()
          */
-        public void reset() {
+        private void reset() {
             barrier.reset();
         }
 

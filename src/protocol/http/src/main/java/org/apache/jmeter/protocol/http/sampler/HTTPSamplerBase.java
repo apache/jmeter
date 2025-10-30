@@ -212,6 +212,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final boolean IGNORE_EMBEDDED_RESOURCES_DATA =
             JMeterUtils.getPropDefault("httpsampler.embedded_resources_use_md5", false); // $NON-NLS-1$ // default value: false
 
+    @SuppressWarnings("EnumOrdinal")
     public static final int SOURCE_TYPE_DEFAULT = HTTPSamplerBase.SourceType.HOSTNAME.ordinal();
 
     public static final String DEFAULT_METHOD = HTTPConstants.GET; // $NON-NLS-1$
@@ -731,18 +732,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     @Override
     public void addTestElement(TestElement el) {
-        if (el instanceof CookieManager) {
-            setCookieManager((CookieManager) el);
-        } else if (el instanceof CacheManager) {
-            setCacheManager((CacheManager) el);
-        } else if (el instanceof HeaderManager) {
-            setHeaderManager((HeaderManager) el);
-        } else if (el instanceof AuthManager) {
-            setAuthManager((AuthManager) el);
-        } else if (el instanceof DNSCacheManager) {
-            setDNSResolver((DNSCacheManager) el);
-        } else if (el instanceof KeystoreConfig) {
-            setKeystoreConfigProperty((KeystoreConfig) el);
+        if (el instanceof CookieManager cookieManager) {
+            setCookieManager(cookieManager);
+        } else if (el instanceof CacheManager cacheManager) {
+            setCacheManager(cacheManager);
+        } else if (el instanceof HeaderManager headerManager) {
+            setHeaderManager(headerManager);
+        } else if (el instanceof AuthManager authManager) {
+            setAuthManager(authManager);
+        } else if (el instanceof DNSCacheManager dnsCacheManager) {
+            setDNSResolver(dnsCacheManager);
+        } else if (el instanceof KeystoreConfig keystoreConfig) {
+            setKeystoreConfigProperty(keystoreConfig);
         }  else {
             super.addTestElement(el);
         }
@@ -1825,7 +1826,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return newValue.toString();
     }
 
-    /*
+    /**
      * Method to set files list to be uploaded.
      *
      * @param value
@@ -1835,7 +1836,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         set(getSchema().getFileArguments(), value.getHTTPFileArgCount() == 0 ? null : value);
     }
 
-    /*
+    /**
      * Method to get files list to be uploaded.
      */
     private @Nullable HTTPFileArgs getHTTPFileArgs() {
@@ -2003,12 +2004,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return byte array
      */
     private static byte[] toByteArray(OutputStream w) {
-        if(w instanceof DirectAccessByteArrayOutputStream) {
-            return ((DirectAccessByteArrayOutputStream) w).toByteArray();
+        if(w instanceof DirectAccessByteArrayOutputStream directAccessByteArrayOutputStream) {
+            return directAccessByteArrayOutputStream.toByteArray();
         }
 
-        if(w instanceof org.apache.commons.io.output.ByteArrayOutputStream) {
-            return ((org.apache.commons.io.output.ByteArrayOutputStream) w).toByteArray();
+        if(w instanceof org.apache.commons.io.output.ByteArrayOutputStream byteArrayOutputStream) {
+            return byteArrayOutputStream.toByteArray();
         }
 
         log.warn("Unknown stream type {}", w.getClass());

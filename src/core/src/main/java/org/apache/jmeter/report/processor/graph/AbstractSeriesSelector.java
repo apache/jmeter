@@ -50,12 +50,6 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
         this.allowsControllerDiscrimination = allowsControllerDiscrimination;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.GraphSeriesSelector#
-     * supportsControllersDiscrimination()
-     */
     @Override
     public final boolean allowsControllersDiscrimination() {
         return allowsControllerDiscrimination;

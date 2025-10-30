@@ -72,10 +72,16 @@ class TestJMESPathExtractor {
         return Stream.of(
             Arguments.of("[\"one\"]", "[*]", "one", "1"),
             Arguments.of("{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", "a.b.c.d", "value", "1"),
-            Arguments.of("{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
-                    + "    {\"first\": \"Jacob\", \"last\": \"e\"},\r\n"
-                    + "    {\"first\": \"Jayden\", \"last\": \"f\"},\r\n" + "    {\"missing\": \"different\"}\r\n"
-                    + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}", "people[2]",
+            Arguments.of("""
+                            {\r
+                              "people": [\r
+                                {"first": "James", "last": "d"},\r
+                                {"first": "Jacob", "last": "e"},\r
+                                {"first": "Jayden", "last": "f"},\r
+                                {"missing": "different"}\r
+                              ],\r
+                              "foo": {"bar": "baz"}\r
+                            }""", "people[2]",
                     "{\"first\":\"Jayden\",\"last\":\"f\"}",
                     "1")
         );
@@ -93,7 +99,7 @@ class TestJMESPathExtractor {
         testOneMatchOnAllExtractedValues(false, data, jmesPath, expectedResult, expectedMatchNumber);
     }
 
-    private void testOneMatchOnAllExtractedValues(boolean fromVars, String data, String jmesPath, String expectedResult, String expectedMatchNumber) {
+    private static void testOneMatchOnAllExtractedValues(boolean fromVars, String data, String jmesPath, String expectedResult, String expectedMatchNumber) {
         JMeterVariables vars = new JMeterVariables();
         SampleResult sampleResult = new SampleResult();
         JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "-1");
@@ -112,10 +118,16 @@ class TestJMESPathExtractor {
         return Stream.of(
             Arguments.of("[\"one\", \"two\"]", "[*]", new String[] {"one", "two"}, "2"),
             Arguments.of("[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]", "[0:3]", new String[] {"a", "b","c"}, "3"),
-            Arguments.of("{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
-                    + "    {\"first\": \"Jacob\", \"last\": \"e\"},\r\n"
-                    + "    {\"first\": \"Jayden\", \"last\": \"f\"},\r\n" + "    {\"missing\": \"different\"}\r\n"
-                    + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}", "people[:2].first", new String[] {"James", "Jacob"}, "2")
+            Arguments.of("""
+                    {\r
+                      "people": [\r
+                        {"first": "James", "last": "d"},\r
+                        {"first": "Jacob", "last": "e"},\r
+                        {"first": "Jayden", "last": "f"},\r
+                        {"missing": "different"}\r
+                      ],\r
+                      "foo": {"bar": "baz"}\r
+                    }""", "people[:2].first", new String[] {"James", "Jacob"}, "2")
         );
     }
 
@@ -131,7 +143,7 @@ class TestJMESPathExtractor {
         testMultipleMatchesOnAllExtractedValues(false, data, jmesPath, expectedResults, expectedMatchNumber);
     }
 
-    private void testMultipleMatchesOnAllExtractedValues(boolean fromVars, String data, String jmesPath, String[] expectedResults, String expectedMatchNumber) {
+    private static void testMultipleMatchesOnAllExtractedValues(boolean fromVars, String data, String jmesPath, String[] expectedResults, String expectedMatchNumber) {
         SampleResult sampleResult = new SampleResult();
         JMeterVariables vars = new JMeterVariables();
         JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "-1");
@@ -145,11 +157,16 @@ class TestJMESPathExtractor {
         assertEquals(expectedMatchNumber, vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
-    private static final String TEST_DATA = "{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\", \"age\":10},\r\n"
-            + "    {\"first\": \"Jacob\", \"last\": \"e\", \"age\":20},\r\n"
-            + "    {\"first\": \"Jayden\", \"last\": \"f\", \"age\":30},\r\n"
-            + "    {\"missing\": \"different\"}\r\n" + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n"
-            + "}";
+    private static final String TEST_DATA = """
+            {\r
+              "people": [\r
+                {"first": "James", "last": "d", "age":10},\r
+                {"first": "Jacob", "last": "e", "age":20},\r
+                {"first": "Jayden", "last": "f", "age":30},\r
+                {"missing": "different"}\r
+              ],\r
+              "foo": {"bar": "baz"}\r
+            }""";
 
     private static Stream<Arguments> dataMatchNumberMoreThanZero() {
         return Stream.of(
@@ -175,8 +192,8 @@ class TestJMESPathExtractor {
         testMatchNumberMoreThanZeroOn1ExtractedValue(false, data, jmesPath, matchNumber, expectedResult, expectedMatchNumber);
     }
 
-    private void testMatchNumberMoreThanZeroOn1ExtractedValue(boolean fromVars, String data, String jmesPath,
-            String matchNumber, String expectedResult, String expectedMatchNumber) {
+    private static void testMatchNumberMoreThanZeroOn1ExtractedValue(boolean fromVars, String data, String jmesPath,
+                                                                     String matchNumber, String expectedResult, String expectedMatchNumber) {
         SampleResult sampleResult = new SampleResult();
         JMeterVariables vars = new JMeterVariables();
         JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "1");
@@ -239,7 +256,7 @@ class TestJMESPathExtractor {
     }
 
     private static Stream<Arguments> dataSourceVarOrResponse() {
-        return Stream.of(Arguments.of(Boolean.TRUE), Arguments.of(Boolean.FALSE));
+        return Stream.of(Arguments.of(true), Arguments.of(false));
     }
 
     @ParameterizedTest

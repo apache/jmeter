@@ -112,7 +112,7 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
      */
     private void executeAndShowCssJqueryTester(String textToParse) {
         if (StringUtilities.isNotEmpty(textToParse)
-                && this.cssJqueryField.getText().length() > 0) {
+                && !this.cssJqueryField.getText().isEmpty()) {
             this.cssJqueryResultField.setText(process(textToParse));
             this.cssJqueryResultField.setCaretPosition(0); // go to first line
         }

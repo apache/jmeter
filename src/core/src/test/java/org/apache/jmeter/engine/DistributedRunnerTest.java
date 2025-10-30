@@ -86,7 +86,7 @@ public class DistributedRunnerTest {
         obj.exit(hosts);
     }
 
-    private void initRunner(DistributedRunnerEmul runner, List<String> hosts) {
+    private static void initRunner(DistributedRunnerEmul runner, List<String> hosts) {
         PrintStream origSystemOut = System.out;
         ByteArrayOutputStream catchingOut = new ByteArrayOutputStream();
         System.setOut(new PrintStream(catchingOut));

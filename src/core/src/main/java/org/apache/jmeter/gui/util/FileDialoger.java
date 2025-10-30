@@ -253,7 +253,7 @@ public final class FileDialoger {
     public static JFileChooser promptToSaveFile(String filename, String[] extensions) {
         if (lastJFCDirectory == null) {
             String start = System.getProperty("user.dir", "");//$NON-NLS-1$//$NON-NLS-2$
-            if (start.length() > 0) {
+            if (!start.isEmpty()) {
                 jfc = new JFileChooser(new File(start));
             }
             lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();

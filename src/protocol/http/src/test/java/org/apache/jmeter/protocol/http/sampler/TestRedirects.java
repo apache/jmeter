@@ -80,7 +80,7 @@ class TestRedirects {
         }
     }
 
-    private WireMockServer createServer() {
+    private static WireMockServer createServer() {
         WireMockConfiguration configuration = WireMockConfiguration.wireMockConfig().dynamicPort();
         return new WireMockServer(configuration);
     }

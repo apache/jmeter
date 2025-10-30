@@ -46,13 +46,6 @@ public class PercentileAggregatorFactory extends AbstractAggregatorFactory {
         this.percentileIndex = percentileIndex;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.core.AbstractAggregatorFactory#createAggregator
-     * ()
-     */
     @Override
     protected Aggregator createAggregator() {
         Aggregator newAggregator = null;

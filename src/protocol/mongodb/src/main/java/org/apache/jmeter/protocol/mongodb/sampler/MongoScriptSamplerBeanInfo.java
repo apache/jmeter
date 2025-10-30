@@ -45,22 +45,22 @@ public class MongoScriptSamplerBeanInfo
                 "script"});
 
         PropertyDescriptor p = property("database");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("username");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("password", TypeEditor.PasswordEditor);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("source");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
 
         p = property("script", TypeEditor.TextAreaEditor);
-        p.setValue(NOT_UNDEFINED, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, false);
         p.setValue(DEFAULT, "");
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, true);
         p.setValue(TEXT_LANGUAGE, "javascript");  // $NON-NLS-1$
 
         if(log.isDebugEnabled()) {

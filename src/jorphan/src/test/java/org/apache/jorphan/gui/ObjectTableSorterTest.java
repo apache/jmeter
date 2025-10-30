@@ -131,7 +131,7 @@ public class ObjectTableSorterTest {
         assertRowOrderAndIndexes(asList(a3(), c1(), b2(), d4()));
     }
 
-    private ObjectTableModel createTableModel(
+    private static ObjectTableModel createTableModel(
             final String name, final Class<?> klass) {
         return new ObjectTableModel(new String[]{name},
                 new Functor[]{null}, new Functor[]{null},

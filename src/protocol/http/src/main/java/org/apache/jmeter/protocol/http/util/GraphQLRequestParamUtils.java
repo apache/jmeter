@@ -205,7 +205,7 @@ public final class GraphQLRequestParamUtils {
 
         for (JMeterProperty prop : arguments) {
             final Argument arg = (Argument) prop.getObjectValue();
-            if (!(arg instanceof HTTPArgument)) {
+            if (!(arg instanceof HTTPArgument httpArgument)) {
                 continue;
             }
 
@@ -214,7 +214,7 @@ public final class GraphQLRequestParamUtils {
             final String value = StringUtilities.trimToNull(arg.getValue());
 
             if ("=".equals(metadata) && value != null) {
-                final boolean alwaysEncoded = ((HTTPArgument) arg).isAlwaysEncoded();
+                final boolean alwaysEncoded = httpArgument.isAlwaysEncoded();
 
                 if (OPERATION_NAME_FIELD.equals(name)) {
                     operationName = encodedField(value, encoding, alwaysEncoded);

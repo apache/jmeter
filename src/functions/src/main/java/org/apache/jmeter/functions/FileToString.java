@@ -114,7 +114,7 @@ public class FileToString extends AbstractFunction {
             log.warn("Could not read file: {} {}", fileName, e.getMessage(), e);
         }
 
-        if (myName.length() > 0) {
+        if (!myName.isEmpty()) {
             JMeterVariables vars = getVariables();
             if (vars != null) {// Can be null if called from Config item testEnded() method
                 vars.put(myName, myValue);

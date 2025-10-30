@@ -370,11 +370,11 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      */
     @Override
     public void threadFinished() {
-        if(parser instanceof ThreadListener) {
-            ((ThreadListener)parser).threadFinished();
+        if(parser instanceof ThreadListener listener) {
+            listener.threadFinished();
         }
-        if(filter instanceof ThreadListener) {
-            ((ThreadListener)filter).threadFinished();
+        if(filter instanceof ThreadListener threadListener) {
+            threadListener.threadFinished();
         }
     }
 }

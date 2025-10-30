@@ -90,7 +90,7 @@ public class BeanShellClient {
 
         private final InputStream is;
 
-        public SockRead(InputStream _is) {
+        private SockRead(InputStream _is) {
             this.is=_is;
         }
 

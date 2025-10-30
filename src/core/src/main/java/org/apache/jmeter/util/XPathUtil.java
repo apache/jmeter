@@ -625,38 +625,38 @@ public class XPathUtil {
         try {
             XObject xObject = XPathAPI.eval(doc, xPathExpression, getPrefixResolver(doc));
             switch (xObject.getType()) {
-            case XObject.CLASS_NODESET:
-                NodeList nodeList = xObject.nodelist();
-                final int len = (nodeList != null) ? nodeList.getLength() : 0;
-                log.debug("nodeList length {}", len);
-                // length == 0 means nodelist is null
-                if (len == 0) {
-                    log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
-                    result.setFailure(!isNegated);
-                    result.setFailureMessage("No Nodes Matched " + xPathExpression);
-                    return;
-                }
-                if (log.isDebugEnabled() && !isNegated) {
-                    for (int i = 0; i < len; i++) {
-                        log.debug("nodeList[{}]: {}", i, nodeList.item(i));
+                case XObject.CLASS_NODESET -> {
+                    NodeList nodeList = xObject.nodelist();
+                    final int len = (nodeList != null) ? nodeList.getLength() : 0;
+                    log.debug("nodeList length {}", len);
+                    // length == 0 means nodelist is null
+                    if (len == 0) {
+                        log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
+                        result.setFailure(!isNegated);
+                        result.setFailureMessage("No Nodes Matched " + xPathExpression);
+                        return;
+                    }
+                    if (log.isDebugEnabled() && !isNegated) {
+                        for (int i = 0; i < len; i++) {
+                            log.debug("nodeList[{}]: {}", i, nodeList.item(i));
+                        }
+                    }
+                    result.setFailure(isNegated);
+                    if (isNegated) {
+                        result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
                     }
                 }
-                result.setFailure(isNegated);
-                if (isNegated) {
-                    result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
+                case XObject.CLASS_BOOLEAN -> {
+                    boolean resultOfEval = xObject.bool();
+                    result.setFailure(isNegated ? resultOfEval : !resultOfEval);
+                    result.setFailureMessage(isNegated ?
+                            "Nodes Matched for " + xPathExpression
+                            : "No Nodes Matched for " + xPathExpression);
                 }
-                return;
-            case XObject.CLASS_BOOLEAN:
-                boolean resultOfEval = xObject.bool();
-                result.setFailure(isNegated ? resultOfEval : !resultOfEval);
-                result.setFailureMessage(isNegated ?
-                        "Nodes Matched for " + xPathExpression
-                        : "No Nodes Matched for " + xPathExpression);
-                return;
-            default:
-                result.setFailure(true);
-                result.setFailureMessage("Cannot understand: " + xPathExpression);
-                return;
+                default -> {
+                    result.setFailure(true);
+                    result.setFailureMessage("Cannot understand: " + xPathExpression);
+                }
             }
         } catch (TransformerException e) {
             result.setError(true);

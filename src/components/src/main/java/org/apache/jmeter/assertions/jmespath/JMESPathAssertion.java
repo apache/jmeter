@@ -224,9 +224,6 @@ public class JMESPathAssertion extends AbstractTestElement implements Serializab
         JMESPathCache.getInstance().cleanUp();
     }
 
-    /*
-     * ------------------------ GETTER/SETTER ------------------------
-     */
     public String getJmesPath() {
         return getPropertyAsString(JMESPATH);
     }

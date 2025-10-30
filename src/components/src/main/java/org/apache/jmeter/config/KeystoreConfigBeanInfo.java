@@ -43,22 +43,22 @@ public class KeystoreConfigBeanInfo extends BeanInfoSupport {
                 PRELOAD, CLIENT_CERT_ALIAS_VAR_NAME, ALIAS_START_INDEX, ALIAS_END_INDEX });
 
         PropertyDescriptor p = property(PRELOAD);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "True"); // $NON-NLS-1$
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_OTHER, true);
         p.setValue(TAGS, new String[]{"True", "False"}); // $NON-NLS-1$ $NON-NLS-2$
 
         p = property(CLIENT_CERT_ALIAS_VAR_NAME);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, JmeterKeyStore.DEFAULT_ALIAS_VAR_NAME); // $NON-NLS-1$
 
         p = property(ALIAS_START_INDEX);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "0"); // $NON-NLS-1$
 
         p = property(ALIAS_END_INDEX);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "-1"); // $NON-NLS-1$
     }
 }

@@ -72,20 +72,14 @@ public class DummyAnnotatedTest
 
     //should always fail
     @Test(timeout = 1000)
-    public void timeOutFail() {
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException ignored) {
-        }
+    public void timeOutFail() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
     }
 
     //should not fail
     @Test(timeout = 1000)
-    public void timeOutPass() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(500);
-        } catch (InterruptedException ignored) {
-        }
+    public void timeOutPass() throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(500);
     }
 
     @Test

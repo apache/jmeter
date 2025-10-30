@@ -73,14 +73,14 @@ public class ComponentReferenceFunctionTest extends JMeterTestCase {
         }
     }
 
-    /*
+    /**
      * Test Functions - create the suite of tests
      */
     static Collection<Function> functions() throws Throwable {
         return Holder.FUNCTIONS;
     }
 
-    private Element getBodyFromXMLDocument(InputStream stream)
+    private static Element getBodyFromXMLDocument(InputStream stream)
             throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setIgnoringElementContentWhitespace(true);
@@ -108,10 +108,10 @@ public class ComponentReferenceFunctionTest extends JMeterTestCase {
                 for (int j = 0; j < components.getLength(); j++) {
                     org.w3c.dom.Element comp = (org.w3c.dom.Element)
                             components.item(j);
-                    funcTitles.put(comp.getAttribute("name"), Boolean.FALSE);
+                    funcTitles.put(comp.getAttribute("name"), false);
                     String tag = comp.getAttribute("tag");
                     if (StringUtilities.isNotEmpty(tag)){
-                        funcTitles.put(tag, Boolean.FALSE);
+                        funcTitles.put(tag, false);
                     }
                 }
             }
@@ -123,17 +123,17 @@ public class ComponentReferenceFunctionTest extends JMeterTestCase {
         Assertions.assertEquals("[]", JMeterTest.keysWithFalseValues(funcTitles).toString(), "Should not have any names left over in funcTitles");
     }
 
-    /*
+    /**
      * run the function test
      */
     @ParameterizedTest
     @MethodSource("functions")
     public void runFunction(Function funcItem) throws Exception {
-        if (funcTitles.size() > 0) {
+        if (!funcTitles.isEmpty()) {
             String title = funcItem.getReferenceKey();
             boolean ct = funcTitles.containsKey(title);
             if (ct) {
-                funcTitles.put(title, Boolean.TRUE);// For detecting extra entries
+                funcTitles.put(title, true);// For detecting extra entries
             }
             // Is this a work in progress ?
             if (!title.contains("(ALPHA") && !title.contains("(EXPERIMENTAL")) {
@@ -147,7 +147,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCase {
         }
     }
 
-    /*
+    /**
      * Check that function descriptions are OK
      */
     @ParameterizedTest

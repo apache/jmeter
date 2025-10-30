@@ -218,11 +218,6 @@ public class SampleMetadata {
         return index;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return String.join(String.valueOf(separator), columns);

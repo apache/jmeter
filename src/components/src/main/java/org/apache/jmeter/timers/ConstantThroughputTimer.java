@@ -134,10 +134,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         return getPropertyAsDouble(THROUGHPUT);
     }
 
+    @SuppressWarnings("EnumOrdinal")
     public int getCalcMode() {
         return getPropertyAsInt(CALC_MODE, DEFAULT_CALC_MODE.ordinal());
     }
 
+    @SuppressWarnings("EnumOrdinal")
     public void setCalcMode(int mode) {
         Mode resolved = Mode.CACHED_VALUES[mode];
         setProperty(new IntegerProperty(CALC_MODE, resolved.ordinal()));
@@ -152,10 +154,8 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     public long delay() {
         long currentTime = System.currentTimeMillis();
 
-        /*
-         * If previous time is zero, then target will be in the past.
-         * This is what we want, so first sample is run without a delay.
-        */
+        // If previous time is zero, then target will be in the past.
+        // This is what we want, so first sample is run without a delay.
         long currentTarget = previousTime  + calculateDelay();
         if (currentTime > currentTarget) {
             // We're behind schedule -- try to catch up:
@@ -269,6 +269,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * so the conversion only needs to happen once.
      */
     @Override
+    @SuppressWarnings("EnumOrdinal")
     public void setProperty(JMeterProperty property) {
         if (property instanceof StringProperty) {
             final String pn = property.getName();
@@ -303,6 +304,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     }
 
     // For access from test code
+    @SuppressWarnings("EnumOrdinal")
     void setMode(Mode newMode) {
         setCalcMode(newMode.ordinal());
     }

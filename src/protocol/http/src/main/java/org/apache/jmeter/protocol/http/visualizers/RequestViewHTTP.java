@@ -145,9 +145,6 @@ public class RequestViewHTTP implements RequestView {
                         String.class, String.class }, false);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#init()
-     */
     @Override
     public void init() {
         paneParsed = new JPanel(new BorderLayout(0, 5));
@@ -156,9 +153,6 @@ public class RequestViewHTTP implements RequestView {
         paneParsed.add(searchTextExtension.getSearchToolBar(), BorderLayout.NORTH);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#clearData()
-     */
     @Override
     public void clearData() {
         requestModel.clearData();
@@ -166,15 +160,11 @@ public class RequestViewHTTP implements RequestView {
         headersModel.clearData(); // clear results table before filling
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#setSamplerResult(java.lang.Object)
-     */
     @Override
     public void setSamplerResult(Object objectResult) {
 
         this.searchTextExtension.resetTextToFind();
-        if (objectResult instanceof HTTPSampleResult) {
-            HTTPSampleResult sampleResult = (HTTPSampleResult) objectResult;
+        if (objectResult instanceof HTTPSampleResult sampleResult) {
 
             // Display with same order HTTP protocol
             requestModel.addRow(new RowResult(
@@ -209,7 +199,7 @@ public class RequestViewHTTP implements RequestView {
                 // Concatenate query post if exists
                 String queryPost = sampleResult.getQueryString();
                 if (!isMultipart && StringUtilities.isNotBlank(queryPost)) {
-                    if (queryGet.length() > 0) {
+                    if (!queryGet.isEmpty()) {
                         queryGet += PARAM_CONCATENATE;
                     }
                     queryGet += queryPost;
@@ -415,9 +405,6 @@ public class RequestViewHTTP implements RequestView {
         column.setPreferredWidth(160);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#getLabel()
-     */
     @Override
     public String getLabel() {
         return JMeterUtils.getResString(KEY_LABEL);
@@ -447,8 +434,8 @@ public class RequestViewHTTP implements RequestView {
                 for (int i = lastPosition+1; i < tableParams.getRowCount(); i++) {
                     for (int j = 0; j < COLUMNS_PARAMS.length; j++) {
                         Object o = tableParams.getModel().getValueAt(i, j);
-                        if(o instanceof String) {
-                            Matcher matcher = pattern.matcher((String) o);
+                        if(o instanceof String s) {
+                            Matcher matcher = pattern.matcher(s);
                             if (matcher.find()) {
                                 found =  true;
                                 tableParams.setRowSelectionInterval(i, i);

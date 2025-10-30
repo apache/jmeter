@@ -319,19 +319,20 @@ class TestJSONPathAssertion {
     @Test
     void testGetResult_match_msg_problem2() {
         SampleResult samplerResult = new SampleResult();
-        String str = "{\n" +
-                " \"code\":200,\n" +
-                " \"contact\":{\n" +
-                "   \"id\":28071,\n" +
-                "   \"description\":\"test description\",\n" +
-                "   \"info\":{\n" +
-                "       \"ngn_number\":[\n" +
-                "           \"2003\",\n" +
-                "           \"2004\"\n" +
-                "       ]\n" +
-                "   }\n" +
-                " }\n" +
-                "}";
+        String str = """
+                {
+                 "code":200,
+                 "contact":{
+                   "id":28071,
+                   "description":"test description",
+                   "info":{
+                       "ngn_number":[
+                           "2003",
+                           "2004"
+                       ]
+                   }
+                 }
+                }""";
         samplerResult.setResponseData(str.getBytes(Charset.defaultCharset()));
 
         JSONPathAssertion instance = new JSONPathAssertion();

@@ -70,13 +70,6 @@ public class TimeStampKeysSelector implements GraphKeysSelector {
         this.selectBeginTime = selectBeginTime;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.core.SampleSelector#select(org.apache.jmeter
-     * .report.core.Sample)
-     */
     @Override
     public Double select(Sample sample) {
         long time = selectBeginTime ? sample.getStartTime() : sample.getEndTime();

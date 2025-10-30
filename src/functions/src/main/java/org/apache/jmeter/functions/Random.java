@@ -73,7 +73,7 @@ public class Random extends AbstractFunction {
         if (varName != null) {
             JMeterVariables vars = getVariables();
             final String varTrim = varName.execute().trim();
-            if (vars != null && varTrim.length() > 0){// vars will be null on TestPlan
+            if (vars != null && !varTrim.isEmpty()){// vars will be null on TestPlan
                 vars.put(varTrim, randString);
             }
         }

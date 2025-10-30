@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
  */
 public class TestBooleanPropertyEditor {
 
-     // N.B. These values are NOT the same as Boolean.FALSE|TRUE.toString()
+     // N.B. These values are NOT the same as false|TRUE.toString()
      // which returns lower-case only.
      // The getAsText() method converts the result to mixed case.
     private static final String FALSE = "False"; // $NON-NLS-1$
@@ -51,14 +51,14 @@ public class TestBooleanPropertyEditor {
         testBooleanEditor(propertyEditor);
     }
 
-    private void testBooleanEditor(PropertyEditor propertyEditor) {
+    private static void testBooleanEditor(PropertyEditor propertyEditor) {
         assertNotNull(propertyEditor, "Expected to find property editor");
         String[] tags = propertyEditor.getTags();
         assertEquals(2, tags.length);
         assertEquals(TRUE, tags[0]);
         assertEquals(FALSE, tags[1]);
 
-        propertyEditor.setValue(Boolean.FALSE);
+        propertyEditor.setValue(false);
         assertEquals(FALSE, propertyEditor.getAsText());
         propertyEditor.setAsText(FALSE);
         assertEquals(FALSE, propertyEditor.getAsText());
@@ -69,7 +69,7 @@ public class TestBooleanPropertyEditor {
         propertyEditor.setAsText("FALSE");
         assertEquals(FALSE, propertyEditor.getAsText());
 
-        propertyEditor.setValue(Boolean.TRUE);
+        propertyEditor.setValue(true);
         assertEquals(TRUE, propertyEditor.getAsText());
         propertyEditor.setAsText(TRUE);
         assertEquals(TRUE, propertyEditor.getAsText());

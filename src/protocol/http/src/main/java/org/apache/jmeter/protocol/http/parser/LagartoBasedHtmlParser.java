@@ -46,7 +46,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
         LoggerFactory.setLoggerProvider(Slf4jLogger.PROVIDER);
     }
 
-    /*
+    /**
      * A dummy class to pass the pointer of URL.
      */
     private static class URLPointer {
@@ -64,7 +64,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
          * @param baseUrl base url to add possibly missing information to urls found in <code>urls</code>
          * @param urls collection of urls to consider
          */
-        public JMeterTagVisitor(final URLPointer baseUrl, URLCollection urls) {
+        private JMeterTagVisitor(final URLPointer baseUrl, URLCollection urls) {
             this.urls = urls;
             this.baseUrl = baseUrl;
         }
@@ -77,97 +77,85 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             }
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see jodd.lagarto.EmptyTagVisitor#script(jodd.lagarto.Tag,
-         * java.lang.CharSequence)
-         */
         @Override
         public void script(Tag tag, CharSequence body) {
             extractAttribute(tag, ATT_SRC);
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see jodd.lagarto.EmptyTagVisitor#tag(jodd.lagarto.Tag)
-         */
         @Override
         public void tag(Tag tag) {
             TagType tagType = tag.getType();
             switch (tagType) {
-            case START:
-            case SELF_CLOSING:
-                if (tag.nameEquals(TAG_BODY)) {
-                    extractAttribute(tag, ATT_BACKGROUND);
-                } else if (tag.nameEquals(TAG_BASE)) {
-                    CharSequence baseref = tag.getAttributeValue(ATT_HREF);
-                    try {
-                        if (StringUtilities.isNotEmpty(baseref))// Bugzilla 30713
-                        {
-                            baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref.toString());
+                case START, SELF_CLOSING -> {
+                    if (tag.nameEquals(TAG_BODY)) {
+                        extractAttribute(tag, ATT_BACKGROUND);
+                    } else if (tag.nameEquals(TAG_BASE)) {
+                        CharSequence baseref = tag.getAttributeValue(ATT_HREF);
+                        try {
+                            if (StringUtilities.isNotEmpty(baseref))// Bugzilla 30713
+                            {
+                                baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref.toString());
+                            }
+                        } catch (MalformedURLException e1) {
+                            throw new IllegalArgumentException("Error creating relative url from " + baseref, e1);
                         }
-                    } catch (MalformedURLException e1) {
-                        throw new IllegalArgumentException("Error creating relative url from " + baseref, e1);
-                    }
-                } else if (tag.nameEquals(TAG_IMAGE)) {
-                    extractAttribute(tag, ATT_SRC);
-                } else if (tag.nameEquals(TAG_APPLET)) {
-                    CharSequence codebase = tag.getAttributeValue(ATT_CODEBASE);
-                    CharSequence archive = tag.getAttributeValue(ATT_ARCHIVE);
-                    CharSequence code = tag.getAttributeValue(ATT_CODE);
-                    if (StringUtilities.isNotBlank(codebase)) {
-                        String result;
-                        if (StringUtilities.isNotBlank(archive)) {
-                            result = codebase + "/" + archive;
-                        } else {
-                            result = codebase + "/" + code;
-                        }
-                        urls.addURL(normalizeUrlValue(result), baseUrl.url);
-                    } else {
-                        extractAttribute(tag, ATT_CODE);
-                    }
-                } else if (tag.nameEquals(TAG_OBJECT)) {
-                    extractAttribute(tag, ATT_CODEBASE);
-                    extractAttribute(tag, ATT_DATA);
-                } else if (tag.nameEquals(TAG_INPUT)) {
-                    // we check the input tag type for image
-                    CharSequence type = tag.getAttributeValue(ATT_TYPE);
-                    if (type != null && CharSequenceUtil.equalsIgnoreCase(ATT_IS_IMAGE, type)) {
-                        // then we need to download the binary
+                    } else if (tag.nameEquals(TAG_IMAGE)) {
                         extractAttribute(tag, ATT_SRC);
+                    } else if (tag.nameEquals(TAG_APPLET)) {
+                        CharSequence codebase = tag.getAttributeValue(ATT_CODEBASE);
+                        CharSequence archive = tag.getAttributeValue(ATT_ARCHIVE);
+                        CharSequence code = tag.getAttributeValue(ATT_CODE);
+                        if (StringUtilities.isNotBlank(codebase)) {
+                            String result;
+                            if (StringUtilities.isNotBlank(archive)) {
+                                result = codebase + "/" + archive;
+                            } else {
+                                result = codebase + "/" + code;
+                            }
+                            urls.addURL(normalizeUrlValue(result), baseUrl.url);
+                        } else {
+                            extractAttribute(tag, ATT_CODE);
+                        }
+                    } else if (tag.nameEquals(TAG_OBJECT)) {
+                        extractAttribute(tag, ATT_CODEBASE);
+                        extractAttribute(tag, ATT_DATA);
+                    } else if (tag.nameEquals(TAG_INPUT)) {
+                        // we check the input tag type for image
+                        CharSequence type = tag.getAttributeValue(ATT_TYPE);
+                        if (type != null && CharSequenceUtil.equalsIgnoreCase(ATT_IS_IMAGE, type)) {
+                            // then we need to download the binary
+                            extractAttribute(tag, ATT_SRC);
+                        }
+                    } else if (tag.nameEquals(TAG_SCRIPT)) {
+                        extractAttribute(tag, ATT_SRC);
+                        // Bug 51750
+                    } else if (tag.nameEquals(TAG_FRAME) || tag.nameEquals(TAG_IFRAME)) {
+                        extractAttribute(tag, ATT_SRC);
+                    } else if (tag.nameEquals(TAG_EMBED)) {
+                        extractAttribute(tag, ATT_SRC);
+                    } else if (tag.nameEquals(TAG_BGSOUND)) {
+                        extractAttribute(tag, ATT_SRC);
+                    } else if (tag.nameEquals(TAG_LINK)) {
+                        CharSequence relAttribute = tag.getAttributeValue(ATT_REL);
+                        // Putting the string first means it works even if the attribute is null
+                        if (relAttribute != null &&
+                                (CharSequenceUtil.equalsIgnoreCase(STYLESHEET, relAttribute)
+                                        || CharSequenceUtil.equalsIgnoreCase(ICON, relAttribute)
+                                        || CharSequenceUtil.equalsIgnoreCase(SHORTCUT_ICON, relAttribute)
+                                        || CharSequenceUtil.equalsIgnoreCase(PRELOAD, relAttribute))) {
+                            extractAttribute(tag, ATT_HREF);
+                        }
+                    } else {
+                        extractAttribute(tag, ATT_BACKGROUND);
                     }
-                } else if (tag.nameEquals(TAG_SCRIPT)) {
-                    extractAttribute(tag, ATT_SRC);
-                    // Bug 51750
-                } else if (tag.nameEquals(TAG_FRAME) || tag.nameEquals(TAG_IFRAME)) {
-                    extractAttribute(tag, ATT_SRC);
-                } else if (tag.nameEquals(TAG_EMBED)) {
-                    extractAttribute(tag, ATT_SRC);
-                } else if (tag.nameEquals(TAG_BGSOUND)){
-                    extractAttribute(tag, ATT_SRC);
-                } else if (tag.nameEquals(TAG_LINK)) {
-                    CharSequence relAttribute = tag.getAttributeValue(ATT_REL);
-                    // Putting the string first means it works even if the attribute is null
-                    if (relAttribute != null &&
-                            (CharSequenceUtil.equalsIgnoreCase(STYLESHEET,relAttribute)
-                                    || CharSequenceUtil.equalsIgnoreCase(ICON, relAttribute)
-                                    || CharSequenceUtil.equalsIgnoreCase(SHORTCUT_ICON, relAttribute)
-                                    || CharSequenceUtil.equalsIgnoreCase(PRELOAD, relAttribute))) {
-                        extractAttribute(tag, ATT_HREF);
+                    // Now look for URLs in the STYLE attribute
+                    CharSequence styleTagStr = tag.getAttributeValue(ATT_STYLE);
+                    if (StringUtilities.isNotEmpty(styleTagStr)) {
+                        HtmlParsingUtils.extractStyleURLs(baseUrl.url, urls, styleTagStr.toString());
                     }
-                } else {
-                    extractAttribute(tag, ATT_BACKGROUND);
                 }
-                // Now look for URLs in the STYLE attribute
-                CharSequence styleTagStr = tag.getAttributeValue(ATT_STYLE);
-                if (StringUtilities.isNotEmpty(styleTagStr)) {
-                    HtmlParsingUtils.extractStyleURLs(baseUrl.url, urls, styleTagStr.toString());
+                case END -> {
                 }
-                break;
-            case END:
-                break;
             }
         }
     }

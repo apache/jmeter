@@ -125,11 +125,23 @@ class TestJMESPathAssertion {
                         ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "", ResultType.FAILURE,
                         AssertionResult.RESPONSE_WAS_NULL),
                 Arguments.of(InvertType.USE_NO_INVERT,
-                        "{\n" + "  \"reservations\": [\n" + "    {\n" + "      \"instances\": [\n"
-                                + "        {\"state\": \"running\"},\n" + "        {\"state\": \"stopped\"}\n"
-                                + "      ]\n" + "    },\n" + "    {\n" + "      \"instances\": [\n"
-                                + "        {\"state\": \"terminated\"},\n" + "        {\"state\": \"running\"}\n"
-                                + "      ]\n" + "    }\n" + "  ]\n" + "}",
+                        """
+                                {
+                                  "reservations": [
+                                    {
+                                      "instances": [
+                                        {"state": "running"},
+                                        {"state": "stopped"}
+                                      ]
+                                    },
+                                    {
+                                      "instances": [
+                                        {"state": "terminated"},
+                                        {"state": "running"}
+                                      ]
+                                    }
+                                  ]
+                                }""",
                         "reservations[*].instances[*].state", ValidationType.USE_VALIDATION,
                         ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL,
                         "[[\"running\",\"stopped\"],[\"terminated\",\"running\"]]", ResultType.SUCCESS, ""),

@@ -345,19 +345,15 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         if(mailAuthType != MailAuthType.NONE) {
             props.put(MAIL_SMTP_AUTH, "true");
             switch (mailAuthType) {
-                case SSL:
+                case SSL -> {
                     props.put(MAIL_SMTP_SOCKETFACTORY_CLASS,
                             "javax.net.ssl.SSLSocketFactory");
                     props.put(MAIL_SMTP_CHECK_SERVER_IDENTITY, true);
-                    break;
-                case TLS:
-                    props.put(MAIL_SMTP_STARTTLS,
-                            "true");
-                    break;
-
-                default:
-                    break;
                 }
+                case TLS -> props.put(MAIL_SMTP_STARTTLS, "true");
+                default -> {
+                }
+            }
         }
 
         if (StringUtilities.isNotEmpty(user)) {

@@ -100,8 +100,8 @@ public class ConstantPoissonProcessGenerator implements EventProducer {
             if (log.isInfoEnabled()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Generated ").append(events.position()).append(" timings (");
-                if (this.durationProvider instanceof AbstractTestElement) {
-                    sb.append(((AbstractTestElement) this.durationProvider).getName());
+                if (this.durationProvider instanceof AbstractTestElement abstractTestElement) {
+                    sb.append(abstractTestElement.getName());
                 }
                 sb.append(" ").append(samples).append(" required, rate ").append(throughput)
                         .append(", duration ").append(duration)

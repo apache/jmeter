@@ -84,8 +84,8 @@ public class RenderAsBoundaryExtractor implements ResultRenderer, ActionListener
      */
     private void executeAndShowBoundaryExtractorTester(String textToParse) {
         if (StringUtilities.isNotEmpty(textToParse)
-                && this.boundaryExtractorFieldLeft.getText().length() > 0
-                && this.boundaryExtractorFieldRight.getText().length() > 0) {
+                && !this.boundaryExtractorFieldLeft.getText().isEmpty()
+                && !this.boundaryExtractorFieldRight.getText().isEmpty()) {
             this.boundaryExtractorResultField.setText(process(textToParse));
             this.boundaryExtractorResultField.setCaretPosition(0); // go to first line
         }

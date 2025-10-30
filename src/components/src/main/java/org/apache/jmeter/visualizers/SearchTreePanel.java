@@ -184,8 +184,8 @@ public class SearchTreePanel extends JPanel implements ActionListener {
 
         try {
             Searchable searchable;
-            if(userObject instanceof Searchable) {
-                searchable = (Searchable) userObject;
+            if(userObject instanceof Searchable searchable1) {
+                searchable = searchable1;
             } else {
                 return false;
             }

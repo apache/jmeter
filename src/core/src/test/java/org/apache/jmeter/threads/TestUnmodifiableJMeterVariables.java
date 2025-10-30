@@ -108,7 +108,7 @@ public class TestUnmodifiableJMeterVariables {
         assertThrowsUnsupportedOperation(iterator::remove);
     }
 
-    private void assertThrowsUnsupportedOperation(Executable executable) {
+    private static void assertThrowsUnsupportedOperation(Executable executable) {
         assertThrows(
                 UnsupportedOperationException.class,
                 executable
@@ -120,7 +120,7 @@ public class TestUnmodifiableJMeterVariables {
         assertEquals(iteratorToMap(vars.getIterator()), iteratorToMap(unmodifiables.getIterator()));
     }
 
-    private <K, V> Map<K, V> iteratorToMap(Iterator<Map.Entry<K, V>> it) {
+    private static <K, V> Map<K, V> iteratorToMap(Iterator<Map.Entry<K, V>> it) {
         Map<K, V> result = new HashMap<>();
         while (it.hasNext()) {
             Map.Entry<K, V> entry = it.next();

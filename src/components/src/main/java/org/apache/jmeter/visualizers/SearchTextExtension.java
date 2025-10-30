@@ -271,7 +271,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         @Override
         public boolean executeAndShowTextFind(Pattern pattern) {
             boolean found = false;
-            if (results != null && results.getText().length() > 0
+            if (results != null && !results.getText().isEmpty()
                     && pattern != null) {
 
                 log.debug("lastPosition={}", lastPosition);

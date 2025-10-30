@@ -754,7 +754,7 @@ public class JMeter implements JMeterPlugin {
 
         // Add local JMeter properties, if the file is found
         String userProp = JMeterUtils.getPropDefault("user.properties",""); //$NON-NLS-1$
-        if (userProp.length() > 0){ //$NON-NLS-1$
+        if (!userProp.isEmpty()) {
             File file = JMeterUtils.findFile(userProp);
             if (file.canRead()){
                 try (FileInputStream fis = new FileInputStream(file)){
@@ -770,7 +770,7 @@ public class JMeter implements JMeterPlugin {
 
         // Add local system properties, if the file is found
         String sysProp = JMeterUtils.getPropDefault("system.properties",""); //$NON-NLS-1$
-        if (sysProp.length() > 0){
+        if (!sysProp.isEmpty()) {
             File file = JMeterUtils.findFile(sysProp);
             if (file.canRead()) {
                 try (FileInputStream fis = new FileInputStream(file)){
@@ -791,105 +791,99 @@ public class JMeter implements JMeterPlugin {
             String value = option.getArgument(1);
 
             switch (option.getDescriptor().getId()) {
-
-            // Should not have any text arguments
-            case CLOption.TEXT_ARGUMENT:
-                throw new IllegalArgumentException("Unknown arg: " + option.getArgument());
-
-            case PROPFILE2_OPT: // Bug 33920 - allow multiple props
-                log.info("Loading additional properties from: {}", name);
-                try (FileInputStream fis = new FileInputStream(new File(name))){
-                    Properties tmp = new Properties();
-                    tmp.load(fis);
-                    jmeterProps.putAll(tmp);
-                } catch (FileNotFoundException e) { // NOSONAR
-                    log.warn("Can't find additional property file: {}", name, e);
-                } catch (IOException e) { // NOSONAR
-                    log.warn("Error loading additional property file: {}", name, e);
-                }
-                break;
-            case SYSTEM_PROPFILE:
-                log.info("Setting System properties from file: {}", name);
-                try (FileInputStream fis = new FileInputStream(new File(name))){
-                    System.getProperties().load(fis);
-                } catch (IOException e) { // NOSONAR
-                    if (log.isWarnEnabled()) {
-                        log.warn("Cannot find system property file. {}", e.getLocalizedMessage());
+                // Should not have any text arguments
+                case CLOption.TEXT_ARGUMENT ->
+                        throw new IllegalArgumentException("Unknown arg: " + option.getArgument());
+                case PROPFILE2_OPT -> {
+                    log.info("Loading additional properties from: {}", name);
+                    try (FileInputStream fis = new FileInputStream(name)) {
+                        Properties tmp = new Properties();
+                        tmp.load(fis);
+                        jmeterProps.putAll(tmp);
+                    } catch (FileNotFoundException e) { // NOSONAR
+                        log.warn("Can't find additional property file: {}", name, e);
+                    } catch (IOException e) { // NOSONAR
+                        log.warn("Error loading additional property file: {}", name, e);
                     }
                 }
-                break;
-            case SYSTEM_PROPERTY:
-                if (value.length() > 0) { // Set it
-                    log.info("Setting System property: {}={}", name, value);
-                    System.getProperties().setProperty(name, value);
-                } else { // Reset it
-                    log.warn("Removing System property: {}", name);
-                    System.getProperties().remove(name);
+                case SYSTEM_PROPFILE -> {
+                    log.info("Setting System properties from file: {}", name);
+                    try (FileInputStream fis = new FileInputStream(name)) {
+                        System.getProperties().load(fis);
+                    } catch (IOException e) { // NOSONAR
+                        if (log.isWarnEnabled()) {
+                            log.warn("Cannot find system property file. {}", e.getLocalizedMessage());
+                        }
+                    }
                 }
-                break;
-            case JMETER_PROPERTY:
-                if (value.length() > 0) { // Set it
-                    log.info("Setting JMeter property: {}={}", name, value);
-                    jmeterProps.setProperty(name, value);
-                } else { // Reset it
-                    log.warn("Removing JMeter property: {}", name);
-                    jmeterProps.remove(name);
+                case SYSTEM_PROPERTY -> {
+                    if (!value.isEmpty()) { // Set it
+                        log.info("Setting System property: {}={}", name, value);
+                        System.getProperties().setProperty(name, value);
+                    } else { // Reset it
+                        log.warn("Removing System property: {}", name);
+                        System.getProperties().remove(name);
+                    }
                 }
-                break;
-            case JMETER_GLOBAL_PROP:
-                if (value.length() > 0) { // Set it
-                    log.info("Setting Global property: {}={}", name, value);
-                    remoteProps.setProperty(name, value);
-                } else {
-                    File propFile = new File(name);
-                    if (propFile.canRead()) {
-                        log.info("Setting Global properties from the file {}", name);
-                        try (FileInputStream fis = new FileInputStream(propFile)){
-                            remoteProps.load(fis);
-                        } catch (FileNotFoundException e) { // NOSONAR
-                            if (log.isWarnEnabled()) {
-                                log.warn("Could not find properties file: {}", e.getLocalizedMessage());
-                            }
-                        } catch (IOException e) { // NOSONAR
-                            if (log.isWarnEnabled()) {
-                                log.warn("Could not load properties file: {}", e.getLocalizedMessage());
+                case JMETER_PROPERTY -> {
+                    if (!value.isEmpty()) { // Set it
+                        log.info("Setting JMeter property: {}={}", name, value);
+                        jmeterProps.setProperty(name, value);
+                    } else { // Reset it
+                        log.warn("Removing JMeter property: {}", name);
+                        jmeterProps.remove(name);
+                    }
+                }
+                case JMETER_GLOBAL_PROP -> {
+                    if (!value.isEmpty()) { // Set it
+                        log.info("Setting Global property: {}={}", name, value);
+                        remoteProps.setProperty(name, value);
+                    } else {
+                        File propFile = new File(name);
+                        if (propFile.canRead()) {
+                            log.info("Setting Global properties from the file {}", name);
+                            try (FileInputStream fis = new FileInputStream(propFile)) {
+                                remoteProps.load(fis);
+                            } catch (FileNotFoundException e) { // NOSONAR
+                                if (log.isWarnEnabled()) {
+                                    log.warn("Could not find properties file: {}", e.getLocalizedMessage());
+                                }
+                            } catch (IOException e) { // NOSONAR
+                                if (log.isWarnEnabled()) {
+                                    log.warn("Could not load properties file: {}", e.getLocalizedMessage());
+                                }
                             }
                         }
                     }
                 }
-                break;
-            case LOGLEVEL:
-                if (value.length() > 0) { // Set category
-                    log.info("LogLevel: {}={}", name, value);
-                    final Level logLevel = Level.getLevel(value);
-                    if (logLevel != null) {
-                        String loggerName = name;
-                        if (name.startsWith("jmeter") || name.startsWith("jorphan")) {
-                            loggerName = PACKAGE_PREFIX + name;
+                case LOGLEVEL -> {
+                    if (!value.isEmpty()) { // Set category
+                        log.info("LogLevel: {}={}", name, value);
+                        final Level logLevel = Level.getLevel(value);
+                        if (logLevel != null) {
+                            String loggerName = name;
+                            if (name.startsWith("jmeter") || name.startsWith("jorphan")) {
+                                loggerName = PACKAGE_PREFIX + name;
+                            }
+                            Configurator.setAllLevels(loggerName, logLevel);
+                        } else {
+                            log.warn("Invalid log level, '{}' for '{}'.", value, name);
                         }
-                        Configurator.setAllLevels(loggerName, logLevel);
-                    } else {
-                        log.warn("Invalid log level, '{}' for '{}'.", value, name);
-                    }
-                } else { // Set root level
-                    log.warn("LogLevel: {}", name);
-                    final Level logLevel = Level.getLevel(name);
-                    if (logLevel != null) {
-                        Configurator.setRootLevel(logLevel);
-                    } else {
-                        log.warn("Invalid log level, '{}', for the root logger.", name);
+                    } else { // Set root level
+                        log.warn("LogLevel: {}", name);
+                        final Level logLevel = Level.getLevel(name);
+                        if (logLevel != null) {
+                            Configurator.setRootLevel(logLevel);
+                        } else {
+                            log.warn("Invalid log level, '{}', for the root logger.", name);
+                        }
                     }
                 }
-                break;
-            case REMOTE_STOP:
-                remoteStop = true;
-                break;
-            case FORCE_DELETE_RESULT_FILE:
-                deleteResultFile = true;
-                break;
-            default:
+                case REMOTE_STOP -> remoteStop = true;
+                case FORCE_DELETE_RESULT_FILE -> deleteResultFile = true;
+                default -> {
+                }
                 // ignored
-                break;
             }
         }
 
@@ -900,7 +894,7 @@ public class JMeter implements JMeterPlugin {
         jmeterProps.put("jmeter.version", JMeterUtils.getJMeterVersion());
     }
 
-    /*
+    /**
      * Checks for LAST or LASTsuffix.
      * Returns the LAST name with .JMX replaced by suffix.
      */
@@ -974,7 +968,7 @@ public class JMeter implements JMeterPlugin {
 
             Summariser summariser = null;
             String summariserName = JMeterUtils.getPropDefault("summariser.name", "");//$NON-NLS-1$
-            if (summariserName.length() > 0) {
+            if (!summariserName.isEmpty()) {
                 log.info("Creating summariser <{}>", summariserName);
                 println("Creating summariser <" + summariserName + ">");
                 summariser = new Summariser(summariserName);
@@ -1108,8 +1102,7 @@ public class JMeter implements JMeterPlugin {
      */
     private static void pConvertSubTree(HashTree tree) {
         for (Object o : new ArrayList<>(tree.list())) {
-            if (o instanceof TestElement) {
-                TestElement item = (TestElement) o;
+            if (o instanceof TestElement item) {
                 if (item.isEnabled()) {
                     if (item instanceof ReplaceableController) {
                         ReplaceableController rc = ensureReplaceableControllerIsLoaded(item);
@@ -1179,7 +1172,7 @@ public class JMeter implements JMeterPlugin {
         return rc;
     }
 
-    /*
+    /**
      * Listen to test and handle tidyup after non-GUI test completes.
      * If running a remote test, then after waiting a few seconds for listeners to finish files,
      * it calls ClientJMeterEngine.tidyRMI() to deal with the Naming Timer Thread.
@@ -1206,13 +1199,13 @@ public class JMeter implements JMeterPlugin {
          * @param remoteStop
          * @param reportGenerator {@link ReportGenerator}
          */
-        public ListenToTest(RunMode runMode, boolean remoteStop, ReportGenerator reportGenerator) {
+        private ListenToTest(RunMode runMode, boolean remoteStop, ReportGenerator reportGenerator) {
             this.runMode = runMode;
             this.remoteStop = remoteStop;
             this.reportGenerator = reportGenerator;
         }
 
-        public void setStartedRemoteEngines(List<? extends JMeterEngine> engines) {
+        private void setStartedRemoteEngines(List<? extends JMeterEngine> engines) {
             if (runMode != RunMode.REMOTE) {
                 throw new IllegalArgumentException("This method should only be called in RunMode.REMOTE");
             }
@@ -1413,25 +1406,20 @@ public class JMeter implements JMeterPlugin {
                     String command = new String(request.getData(), request.getOffset(), request.getLength(), StandardCharsets.US_ASCII);
                     System.out.println("Command: "+command+" received from "+address);//NOSONAR
                     log.info("Command: {} received from {}", command, address);
-                    switch(command) {
-                        case "StopTestNow" :
-                            for(JMeterEngine engine : engines) {
+                    switch (command) {
+                        case "StopTestNow" -> {
+                            for (JMeterEngine engine : engines) {
                                 engine.stopTest(true);
                             }
-                            break;
-                        case "Shutdown" :
-                            for(JMeterEngine engine : engines) {
+                        }
+                        case "Shutdown" -> {
+                            for (JMeterEngine engine : engines) {
                                 engine.stopTest(false);
                             }
-                            break;
-                        case "HeapDump" :
-                            HeapDumper.dumpHeap();
-                            break;
-                        case "ThreadDump" :
-                            ThreadDumper.threadDump();
-                            break;
-                        default:
-                            System.out.println("Command: "+command+" not recognised ");//NOSONAR
+                        }
+                        case "HeapDump" -> HeapDumper.dumpHeap();
+                        case "ThreadDump" -> ThreadDumper.threadDump();
+                        default -> System.out.println("Command: " + command + " not recognised ");//NOSONAR
                     }
                 }
             }

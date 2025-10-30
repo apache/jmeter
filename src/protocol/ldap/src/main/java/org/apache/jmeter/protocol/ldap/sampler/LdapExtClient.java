@@ -99,7 +99,7 @@ public class LdapExtClient {
             sb.append("ldap://"); // $NON-NLS-1$
         }
         sb.append(host);
-        if (port.length()>0){
+        if (!port.isEmpty()){
             sb.append(":"); // $NON-NLS-1$
             sb.append(port);
         }
@@ -109,7 +109,7 @@ public class LdapExtClient {
         if(log.isInfoEnabled()) {
             log.info("prov_url= {}", env.get(Context.PROVIDER_URL)); // $NON-NLS-1$
         }
-        if (connTimeOut.length()> 0) {
+        if (!connTimeOut.isEmpty()) {
             env.put("com.sun.jndi.ldap.connect.timeout", connTimeOut); // $NON-NLS-1$
         }
         env.put(Context.REFERRAL, "throw"); // $NON-NLS-1$

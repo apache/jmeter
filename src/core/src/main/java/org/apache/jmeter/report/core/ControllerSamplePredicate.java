@@ -24,13 +24,6 @@ package org.apache.jmeter.report.core;
  * @since 3.0
  */
 public class ControllerSamplePredicate implements SamplePredicate {
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SamplePredicate#matches(org.apache
-     * .jmeter.report.csv.core.Sample)
-     */
     @Override
     public boolean matches(Sample sample) {
         return sample.isController();

@@ -72,7 +72,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     public void process() {
         JMeterContext ctx = getThreadContext();
         Sampler sampler = ctx.getCurrentSampler();
-        if (!(sampler instanceof HTTPSamplerBase)) {// Ignore non-HTTP samplers
+        if (!(sampler instanceof HTTPSamplerBase httpSamplerBase)) {// Ignore non-HTTP samplers
             return;
         }
         SampleResult responseText = ctx.getPreviousResult();
@@ -102,7 +102,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
                 savedValue = value;
             }
         }
-        modify((HTTPSamplerBase) sampler, value);
+        modify(httpSamplerBase, value);
     }
 
     private void modify(HTTPSamplerBase sampler, String value) {

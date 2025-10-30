@@ -139,12 +139,12 @@ public class StringFromFileFunctionTest extends JMeterTestCase {
         }
     }
 
-    private void closeFile(StringFromFile sff) {
+    private static void closeFile(StringFromFile sff) {
         sff.testEnded();
     }
 
     // Create the StringFromFile function and set its parameters.
-    private StringFromFile createSFF(Object... params) throws Exception {
+    private static StringFromFile createSFF(Object... params) throws Exception {
         StringFromFile sff = new StringFromFile();
         sff.setParameters(FunctionTestHelper.makeParams(params));
         return sff;

@@ -634,13 +634,12 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         try {
             context = getInitialContext();
             Object obj = context.lookup(getQueueConnectionFactory());
-            if (!(obj instanceof QueueConnectionFactory)) {
+            if (!(obj instanceof QueueConnectionFactory factory)) {
                 String msg = "QueueConnectionFactory expected, but got "
                         + (obj != null ? obj.getClass().getName() : "null");
                 LOGGER.error(msg);
                 throw new IllegalStateException(msg);
             }
-            QueueConnectionFactory factory = (QueueConnectionFactory) obj;
             sendQueue = (Queue) context.lookup(getSendQueue());
 
             if (!useTemporyQueue()) {
@@ -779,7 +778,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     public String getExpiration() {
         String expiration = getPropertyAsString(JMS_EXPIRATION);
-        if (expiration.length() == 0) {
+        if (expiration.isEmpty()) {
             return Utils.DEFAULT_NO_EXPIRY;
         } else {
             return expiration;
@@ -788,7 +787,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     public String getPriority() {
         String priority = getPropertyAsString(JMS_PRIORITY);
-        if (priority.length() == 0) {
+        if (priority.isEmpty()) {
             return Utils.DEFAULT_PRIORITY_4;
         } else {
             return priority;

@@ -45,7 +45,7 @@ import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 public class HttpMetricsSenderTest {
     private static final String API_URL = "/api/v2/write";
 
-    private MappingBuilder influxRequest(CountDownLatch latch) {
+    private static MappingBuilder influxRequest(CountDownLatch latch) {
         return WireMock.post(API_URL)
                 .willReturn(WireMock.aResponse().withStatus(HttpURLConnection.HTTP_NO_CONTENT))
                 .withServeEventListener(ServeEventListener.RequestPhase.AFTER_COMPLETE, "countdown", Parameters.one("latch", latch));
@@ -78,7 +78,7 @@ public class HttpMetricsSenderTest {
         assertAuthHeader(server, WireMock.equalTo("Token my-token"));
     }
 
-    private void setupSenderAndSendMetric(String influxdbUrl, String influxDBToken) throws Exception {
+    private static void setupSenderAndSendMetric(String influxdbUrl, String influxDBToken) throws Exception {
         HttpMetricsSender metricsSender = new HttpMetricsSender();
         metricsSender.setup(influxdbUrl, influxDBToken);
         metricsSender.addMetric("measurement", ",location=west", "size=10");
@@ -86,7 +86,7 @@ public class HttpMetricsSenderTest {
         metricsSender.destroy();
     }
 
-    private void assertAuthHeader(WireMockServer server, StringValuePattern authHeader) {
+    private static void assertAuthHeader(WireMockServer server, StringValuePattern authHeader) {
         server.verify(1, RequestPatternBuilder
                 .newRequestPattern(RequestMethod.POST, WireMock.urlEqualTo(API_URL))
                 .withRequestBody(WireMock.matching("measurement,location=west size=10 \\d{19}\\s*"))

@@ -109,12 +109,12 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         setProperty(new BooleanProperty(CONTROLLED_BY_THREAD, control));
     }
 
-    /*
+    /**
      * Holder for storing cache details.
      * Perhaps add original response later?
      */
-    // package-protected to allow access by unit-test cases
     static class CacheEntry {
+        // The class is package-protected to allow access by unit-test cases
         private final String lastModified;
         private final String etag;
         private final Date expires;
@@ -165,9 +165,6 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return varyHeader;
         }
 
-        /* (non-Javadoc)
-         * @see java.lang.Object#toString()
-         */
         @Override
         public String toString() {
             return "CacheEntry [lastModified=" + lastModified + ", etag=" + etag + ", expires=" + expires
@@ -367,7 +364,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return hdr != null ? hdr.getValue() : null;
     }
 
-    /*
+    /**
      * Is the sample result OK to cache?
      * i.e is it in the 2xx range or equal to 304, and is it a cacheable method?
      */
@@ -497,7 +494,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
         private final org.apache.jmeter.protocol.http.control.Header delegate;
 
-        public HeaderAdapter(org.apache.jmeter.protocol.http.control.Header delegate) {
+        private HeaderAdapter(org.apache.jmeter.protocol.http.control.Header delegate) {
             this.delegate = delegate;
         }
 

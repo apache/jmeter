@@ -669,10 +669,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 TreePath path = this.getPathForLocation(event.getX(), event.getY());
                 if (path != null) {
                     Object treeNode = path.getLastPathComponent();
-                    if (treeNode instanceof DefaultMutableTreeNode) {
-                        Object testElement = ((DefaultMutableTreeNode) treeNode).getUserObject();
-                        if (testElement instanceof TestElement) {
-                            String comment = ((TestElement) testElement).getComment();
+                    if (treeNode instanceof DefaultMutableTreeNode defaultMutableTreeNode) {
+                        Object testElement = defaultMutableTreeNode.getUserObject();
+                        if (testElement instanceof TestElement element) {
+                            String comment = element.getComment();
                             if (StringUtilities.isNotBlank(comment)) {
                                 return comment.length() <= 80 ? comment : comment.substring(0, 77) + "...";
                             }
@@ -767,7 +767,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             }
         }
 
-        /*
+        /**
          * Bug 62336: On Windows CTRL+6 doesn't give us an actionCommand, so
          * we have to try harder and read the KeyEvent from the EventQueue
          */
@@ -777,8 +777,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 return actionCommand;
             }
             AWTEvent currentEvent = EventQueue.getCurrentEvent();
-            if (currentEvent instanceof KeyEvent) {
-                KeyEvent keyEvent = (KeyEvent) currentEvent;
+            if (currentEvent instanceof KeyEvent keyEvent) {
                 return KeyEvent.getKeyText(keyEvent.getKeyCode());
             }
             log.debug("No keycode could be found for this actionEvent {}", actionEvent);

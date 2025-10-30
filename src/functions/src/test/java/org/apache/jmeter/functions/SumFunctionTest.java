@@ -86,7 +86,7 @@ class SumFunctionTest extends JMeterTestCase {
     }
 
     // Perform a sum and check the results
-    private void checkSumNoVar(AbstractFunction func, String value, String[] addends)  throws Exception {
+    private static void checkSumNoVar(AbstractFunction func, String value, String[] addends)  throws Exception {
         Collection<CompoundVariable> parms = Arrays.stream(addends)
                 .map(CompoundVariable::new)
                 .collect(Collectors.toCollection(ArrayList::new));

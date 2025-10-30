@@ -99,7 +99,7 @@ public class JMeterUtils implements UnitTestManager {
         private LazyPatternCacheHolder() {
             super();
         }
-        public static final PatternCacheLRU INSTANCE = new PatternCacheLRU(
+        private static final PatternCacheLRU INSTANCE = new PatternCacheLRU(
                 getPropDefault("oro.patterncache.size",1000), // $NON-NLS-1$
                 new Perl5Compiler());
     }
@@ -108,7 +108,7 @@ public class JMeterUtils implements UnitTestManager {
         private LazyJavaPatternCacheHolder() {
             super();
         }
-        public static final LoadingCache<Map.Entry<String, Integer>, java.util.regex.Pattern> INSTANCE =
+        private static final LoadingCache<Map.Entry<String, Integer>, java.util.regex.Pattern> INSTANCE =
                 Caffeine
                         .newBuilder()
                         .maximumSize(getPropDefault("jmeter.regex.patterncache.size", 1000))

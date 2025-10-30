@@ -78,7 +78,7 @@ public class SamplerMetricFixedModeTest {
     }
 
     @Test
-    public void checkErrorsDetailStat() {
+    public static void checkErrorsDetailStat() {
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult("400", "bad request"));
         metric.add(createSampleResult("400", "Bad Request "));
@@ -89,7 +89,7 @@ public class SamplerMetricFixedModeTest {
         assertEquals(1, metric.getErrors().get(error), 0.0, "Count for '500 - Internal Server Error' error ");
     }
 
-    private SampleResult createSampleResult(boolean success) {
+    private static SampleResult createSampleResult(boolean success) {
         SampleResult result = new SampleResult();
         result.setSuccessful(success);
         result.setSampleCount(1);
@@ -101,14 +101,14 @@ public class SamplerMetricFixedModeTest {
         return result;
     }
 
-    private SampleResult createSampleResult(String errorCode, String errorMessage) {
+    private static SampleResult createSampleResult(String errorCode, String errorMessage) {
         SampleResult result = createSampleResult(false);
         result.setResponseCode(errorCode);
         result.setResponseMessage(errorMessage);
         return result;
     }
 
-    private SampleResult createSampleResultWithSubresults(boolean success) {
+    private static SampleResult createSampleResultWithSubresults(boolean success) {
         SampleResult result = new SampleResult();
         result.sampleStart();
         result.setSampleCount(1);
@@ -124,10 +124,10 @@ public class SamplerMetricFixedModeTest {
     }
 
     @Test
-    public void checkAddCumulatedOk() throws Exception {
+    public static void checkAddCumulatedOk() throws Exception {
         SamplerMetric metric = new SamplerMetric();
         SampleResult sample = createSampleResultWithSubresults(true);
-        assertEquals(Boolean.TRUE, TransactionController.isFromTransactionController(sample), "We are recognized as a TransactionController made sample");
+        assertEquals(true, TransactionController.isFromTransactionController(sample), "We are recognized as a TransactionController made sample");
         metric.addCumulated(sample);
         assertEquals(DEFAULT_ELAPSED_TIME, metric.getOkMaxTime(), ALLOWED_DELTA, "Before reset  ok.max");
         assertEquals(DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), ALLOWED_DELTA, "Before reset all.max");
@@ -145,10 +145,10 @@ public class SamplerMetricFixedModeTest {
     }
 
     @Test
-    public void checkAddCumulatedKo() throws Exception {
+    public static void checkAddCumulatedKo() throws Exception {
         SamplerMetric metric = new SamplerMetric();
         SampleResult sample = createSampleResultWithSubresults(false);
-        assertEquals(Boolean.TRUE, TransactionController.isFromTransactionController(sample), "We are recognized as a TransactionController made sample");
+        assertEquals(true, TransactionController.isFromTransactionController(sample), "We are recognized as a TransactionController made sample");
         metric.addCumulated(sample);
         assertEquals(DEFAULT_ELAPSED_TIME, metric.getKoMaxTime(), ALLOWED_DELTA, "Before reset  ko.max");
         assertEquals(DEFAULT_ELAPSED_TIME, metric.getAllMaxTime(), ALLOWED_DELTA, "Before reset all.max");

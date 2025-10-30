@@ -41,10 +41,8 @@ public class RandomVariableConfig extends ConfigTestElement
 
     private static final long serialVersionUID = 235L;
 
-    /*
-     *  N.B. this class is shared between threads (NoThreadClone) so all access to variables
-     *  needs to be protected by a lock (either sync. or volatile) to ensure safe publication.
-     */
+    // N.B. this class is shared between threads (NoThreadClone) so all access to variables
+    // needs to be protected by a lock (either sync. or volatile) to ensure safe publication.
 
     private String minimumValue;
 
@@ -81,7 +79,7 @@ public class RandomVariableConfig extends ConfigTestElement
         return this;
     }
 
-    /*
+    /**
      * nextInt(n) returns values in the range [0,n),
      * so n must be set to max-min+1
      */
@@ -207,7 +205,7 @@ public class RandomVariableConfig extends ConfigTestElement
     }
 
     private Random createRandom() {
-        if (randomSeed.length()>0){
+        if (!randomSeed.isEmpty()){
             Long seed = getRandomSeedAsLong();
             if(seed != null) {
                 return new Random(seed);

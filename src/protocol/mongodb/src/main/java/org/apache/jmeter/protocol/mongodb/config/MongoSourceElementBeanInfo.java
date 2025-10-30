@@ -57,55 +57,55 @@ public class MongoSourceElementBeanInfo
                 "continueOnInsertError"});
 
         PropertyDescriptor p = property("connection");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("source");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
 
         p = property("autoConnectRetry");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
         p = property("connectionsPerHost");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 10);
         p = property("connectTimeout");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 0);
         p = property("threadsAllowedToBlockForConnectionMultiplier");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 5);
         p = property("maxAutoConnectRetryTime");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 0L);
         p = property("maxWaitTime");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 120000);
         p = property("socketTimeout");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 0);
         p = property("socketKeepAlive");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
 
         p = property("fsync");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
         p = property("safe");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
         p = property("waitForJournaling");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
         p = property("writeOperationNumberOfServers");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 0);
         p = property("writeOperationTimeout");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 0);
         p = property("continueOnInsertError");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
 
         if(log.isDebugEnabled()) {
             for (PropertyDescriptor pd : getPropertyDescriptors()) {

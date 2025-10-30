@@ -100,9 +100,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             return result;
         }
 
-        /*
-         * Run tidy.
-         */
+        // Run tidy.
         try {
             log.debug("HTMLAssertions.getResult(): start parsing with tidy ...");
 

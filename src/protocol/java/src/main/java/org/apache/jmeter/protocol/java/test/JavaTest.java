@@ -164,7 +164,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
         LOG.debug(whoAmI() + "\tConstruct");
     }
 
-    /*
+    /**
      * Utility method to set up all the values
      */
     private void setupValues(JavaSamplerContext context) {
@@ -179,7 +179,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
         success = "OK".equalsIgnoreCase(context.getParameter(SUCCESS_NAME, SUCCESS_DEFAULT));
 
         label = context.getParameter(LABEL_NAME, "");
-        if (label.length() == 0) {
+        if (label.isEmpty()) {
             label = context.getParameter(TestElement.NAME); // default to name of element
         }
 

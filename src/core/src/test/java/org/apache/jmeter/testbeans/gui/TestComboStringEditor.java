@@ -24,12 +24,12 @@ import org.junit.jupiter.api.Test;
 
 public class TestComboStringEditor {
 
-    private void testSetGet(ComboStringEditor e, Object value) throws Exception {
+    private static void testSetGet(ComboStringEditor e, Object value) throws Exception {
         e.setValue(value);
         assertEquals(value, e.getValue());
     }
 
-    private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
+    private static void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
         e.setAsText(text);
         assertEquals(text, e.getAsText());
     }

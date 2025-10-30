@@ -52,7 +52,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         jmctx.setPreviousResult(result);
     }
 
-    private ByteArrayOutputStream readBA(String name) throws IOException {
+    private static ByteArrayOutputStream readBA(String name) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
         try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(findTestFile(name)))) {
             int len = 0;
@@ -64,7 +64,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         return baos;
     }
 
-    private byte[] readFile(String name) throws IOException {
+    private static byte[] readFile(String name) throws IOException {
         try (ByteArrayOutputStream baos = readBA(name)) {
             return baos.toByteArray();
         }

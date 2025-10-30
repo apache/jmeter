@@ -359,7 +359,7 @@ public class TestAnchorModifier extends JMeterTestCase {
     }
 
 
-    private HTTPSamplerBase makeContext(String url) throws MalformedURLException {
+    private static HTTPSamplerBase makeContext(String url) throws MalformedURLException {
         URL u = new URL(url);
         HTTPSamplerBase context = new HTTPNullSampler();
         context.setDomain(u.getHost());
@@ -370,7 +370,7 @@ public class TestAnchorModifier extends JMeterTestCase {
         return context;
     }
 
-    private HTTPSamplerBase makeUrlConfig(String path) {
+    private static HTTPSamplerBase makeUrlConfig(String path) {
         HTTPSamplerBase config = new HTTPNullSampler();
         config.setDomain("www.apache.org");
         config.setMethod(HTTPConstants.GET);

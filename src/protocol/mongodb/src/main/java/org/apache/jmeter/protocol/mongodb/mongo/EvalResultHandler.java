@@ -30,17 +30,17 @@ public class EvalResultHandler {
             return "ok";
         }
 
-        if(o instanceof Double) {
-            return this.handle((Double)o);
+        if(o instanceof Double v) {
+            return this.handle(v);
         }
-        else if(o instanceof Integer) {
-            return this.handle((Integer)o);
+        else if(o instanceof Integer i) {
+            return this.handle(i);
         }
-        else if(o instanceof String) {
-            return this.handle((String)o);
+        else if(o instanceof String s) {
+            return this.handle(s);
         }
-        else if(o instanceof DBObject) {
-            return this.handle((DBObject)o);
+        else if(o instanceof DBObject dbObject) {
+            return this.handle(dbObject);
         }
         else {
             return "return type not handled";

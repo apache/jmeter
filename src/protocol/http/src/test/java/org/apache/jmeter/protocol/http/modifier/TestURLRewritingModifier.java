@@ -86,7 +86,7 @@ public class TestURLRewritingModifier extends JMeterTestCase {
         assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
     }
 
-    private HTTPSamplerBase createSampler() {
+    private static HTTPSamplerBase createSampler() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
         sampler.setDomain("server.com");
         sampler.setPath("index.html");

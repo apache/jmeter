@@ -132,8 +132,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Object source = evt.getSource();
-        if (source instanceof ComboStringEditor) {
-            ComboStringEditor cse = (ComboStringEditor) source;
+        if (source instanceof ComboStringEditor cse) {
             String lang = cse.getAsText().toLowerCase(Locale.ROOT);
             textUI.setLanguage(lang);
         }

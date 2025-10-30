@@ -32,8 +32,8 @@ public class TurnElementsOn implements HashTreeTraverser {
      */
     @Override
     public void addNode(Object node, HashTree subTree) {
-        if (node instanceof TestElement && !(node instanceof TestPlan)) {
-            ((TestElement) node).setRunningVersion(true);
+        if (node instanceof TestElement testElement && !(node instanceof TestPlan)) {
+            testElement.setRunningVersion(true);
         }
 
     }

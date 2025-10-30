@@ -192,8 +192,7 @@ public class JsseSSLManager extends SSLManager {
         }
     }
 
-    /*
-     *
+    /**
      * Creates new SSL context
      *
      * @return SSL context
@@ -221,8 +220,7 @@ public class JsseSSLManager extends SSLManager {
 
         // Now wrap the default managers with our key manager
         for (int i = 0; i < managers.length; i++) {
-            if (managers[i] instanceof X509KeyManager) {
-                X509KeyManager manager = (X509KeyManager) managers[i];
+            if (managers[i] instanceof X509KeyManager manager) {
                 newManagers[i] = new WrappedX509KeyManager(manager, keys);
             } else {
                 newManagers[i] = managers[i];
@@ -291,7 +289,7 @@ public class JsseSSLManager extends SSLManager {
          * @param ks
          *            The KeyStore we derive our client certs and keys from
          */
-        public WrappedX509KeyManager(X509KeyManager parent, JmeterKeyStore ks) {
+        private WrappedX509KeyManager(X509KeyManager parent, JmeterKeyStore ks) {
             this.manager = parent;
             this.store = ks;
         }
