@@ -54,7 +54,7 @@ dependencies {
         api("org.hamcrest:hamcrest-library:2.2")
         api("org.hamcrest:hamcrest:2.2")
         api("org.hsqldb:hsqldb:2.7.2")
-        api("org.objenesis:objenesis:3.3")
+        api("org.objenesis:objenesis:3.4")
         api("org.openjdk.jmh:jmh-core:1.37")
         api("org.openjdk.jmh:jmh-generator-annprocess:1.37")
     }
