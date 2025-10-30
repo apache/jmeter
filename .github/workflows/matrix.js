@@ -28,6 +28,7 @@ matrix.addAxis({
   values: [
     '17',
     '21',
+    '25',
     eaJava,
   ]
 });
@@ -95,8 +96,8 @@ matrix.generateRow({os: 'windows-latest'});
 // matrix.generateRow({os: 'ubuntu-latest'});
 // Ensure there will be at least one job with Java 17
 matrix.generateRow({java_version: "17"});
-// Ensure there will be at least one job with Java 21
-matrix.generateRow({java_version: "21"});
+// Ensure there will be at least one job with Java 25
+matrix.generateRow({java_version: "25"});
 // Ensure there will be at least one job with Java EA
 // matrix.generateRow({java_version: eaJava});
 const include = matrix.generateRows(process.env.MATRIX_JOBS || 5);

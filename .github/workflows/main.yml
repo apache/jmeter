@@ -52,13 +52,13 @@ jobs:
       with:
         website: ${{ matrix.oracle_java_website }}
         release: ${{ matrix.java_version }}
-    - name: Set up Java 17 and ${{ matrix.non_ea_java_version }}, ${{ matrix.java_distribution }}
+    - name: Set up Java 21 and ${{ matrix.non_ea_java_version }}, ${{ matrix.java_distribution }}
       uses: actions/setup-java@v5
       with:
-        # The latest one will be the default, so we use Java 17 for launching Gradle
+        # The latest one will be the default, so we use Java 21 for launching Gradle
         java-version: |
           ${{ matrix.non_ea_java_version }}
-          17
+          21
         distribution: ${{ matrix.java_distribution }}
         architecture: x64
     - name: Steps to reproduce
@@ -77,7 +77,7 @@ jobs:
         properties: |
           testExtraJvmArgs=${{ matrix.testExtraJvmArgs }}
           testDisableCaching=${{ matrix.testDisableCaching }}
-          jdkBuildVersion=17
+          jdkBuildVersion=21
           jdkTestVersion=${{ matrix.java_version }}
           jdkTestVendor=${{ matrix.java_vendor }}
           # We have a separate job with Errorprone verifications, so avoid duplicate warnings
@@ -89,14 +89,14 @@ jobs:
         DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
 
   errorprone:
-    name: 'Error Prone (JDK 17)'
+    name: 'Error Prone (JDK 21)'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
-    - name: 'Set up JDK 17'
+    - name: 'Set up JDK 21'
       uses: actions/setup-java@v5
       with:
-        java-version: 17
+        java-version: 21
         distribution: 'zulu'
     - uses: burrunan/gradle-cache-action@v3
       name: Test
