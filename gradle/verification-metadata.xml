@@ -33,7 +33,6 @@
             <trusting group="org.neo4j.bolt"/>
             <trusting group="org.neo4j.driver"/>
          </trusted-key>
-         <trusted-key id="08BA61CF501C09F70911B83B82216A03CAA86C78" group="org.mongodb"/>
          <trusted-key id="08F0AAB4D0C1A4BDDE340765B341DDB020FCB6AB" group="org.bouncycastle"/>
          <trusted-key id="0A4AA2D7C6053AB068D206AA4692A312EF600C15" group="org.wiremock" name="wiremock" version="3.13.1"/>
          <trusted-key id="0CC641C3A62453AB390066C4A41F13C999945293">
