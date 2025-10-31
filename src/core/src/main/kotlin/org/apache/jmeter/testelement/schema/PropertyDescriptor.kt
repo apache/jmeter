@@ -19,6 +19,7 @@ package org.apache.jmeter.testelement.schema
 
 import org.apache.jmeter.testelement.JMeterPropertySchemaUnchecked
 import org.apache.jmeter.testelement.TestElement
+import org.apache.jmeter.testelement.property.JMeterProperty
 import org.apiguardian.api.API
 import java.io.Serializable
 

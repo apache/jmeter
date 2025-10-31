@@ -78,10 +78,10 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
                                              " not found.", "none", 0);
             }
 
-            cx.setOptimizationLevel(-1);
+            cx.setInterpretedMode(true);
             cx.setGeneratingDebug(false);
             cx.setGeneratingSource(false);
-            cx.setOptimizationLevel(0);
+            cx.setInterpretedMode(false);
             cx.setDebugger(null, null);
 
             retval =
@@ -129,10 +129,10 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
         try {
             cx = Context.enter();
 
-            cx.setOptimizationLevel(-1);
+            cx.setInterpretedMode(true);
             cx.setGeneratingDebug(false);
             cx.setGeneratingSource(false);
-            cx.setOptimizationLevel(0);
+            cx.setInterpretedMode(false);
             cx.setDebugger(null, null);
 
             retval = cx.evaluateString(global, scriptText,
