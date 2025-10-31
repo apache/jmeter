@@ -96,10 +96,10 @@
 384581,junit-4.13.2.jar
 43729,kotlin-logging-jvm-2.1.23.jar
 1761445,kotlin-stdlib-2.2.21.jar
-963,kotlin-stdlib-jdk7-1.8.20.jar
-969,kotlin-stdlib-jdk8-1.8.20.jar
-1548360,kotlinx-coroutines-core-jvm-1.8.0.jar
-9846,kotlinx-coroutines-swing-1.8.0.jar
+963,kotlin-stdlib-jdk7-1.8.0.jar
+968,kotlin-stdlib-jdk8-1.8.0.jar
+1479317,kotlinx-coroutines-core-jvm-1.10.2.jar
+8890,kotlinx-coroutines-swing-1.10.2.jar
 675271,kotlinx-datetime-jvm-0.6.2.jar
 996,lets-plot-batik-4.7.3.jar
 996,lets-plot-common-4.7.3.jar
