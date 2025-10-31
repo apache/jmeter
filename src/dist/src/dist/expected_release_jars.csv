@@ -75,8 +75,8 @@
 368896,httpcore-nio-4.4.16.jar
 41727,httpmime-4.5.14.jar
 79195,jackson-annotations-2.20.jar
-593063,jackson-core-2.20.0.jar
-1688471,jackson-databind-2.20.0.jar
+593176,jackson-core-2.20.1.jar
+1688480,jackson-databind-2.20.1.jar
 26378,jakarta.annotation-api-3.0.0.jar
 78030,javax.activation-1.2.0.jar
 142391,jcharts-0.7.5.jar
