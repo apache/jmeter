@@ -80,6 +80,7 @@ import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
@@ -1416,7 +1417,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return {@link XStream} XStream instance following JMeter security policy
      */
     public static final XStream createXStream() {
-        XStream xstream = new XStream();
+        XStream xstream = new XStream(new PureJavaReflectionProvider());
         JMeterUtils.setupXStreamSecurityPolicy(xstream);
         return xstream;
     }
