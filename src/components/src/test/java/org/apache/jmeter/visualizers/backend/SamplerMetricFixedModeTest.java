@@ -78,7 +78,7 @@ public class SamplerMetricFixedModeTest {
     }
 
     @Test
-    public static void checkErrorsDetailStat() {
+    public void checkErrorsDetailStat() {
         SamplerMetric metric = new SamplerMetric();
         metric.add(createSampleResult("400", "bad request"));
         metric.add(createSampleResult("400", "Bad Request "));
@@ -124,7 +124,7 @@ public class SamplerMetricFixedModeTest {
     }
 
     @Test
-    public static void checkAddCumulatedOk() throws Exception {
+    public void checkAddCumulatedOk() throws Exception {
         SamplerMetric metric = new SamplerMetric();
         SampleResult sample = createSampleResultWithSubresults(true);
         assertEquals(true, TransactionController.isFromTransactionController(sample), "We are recognized as a TransactionController made sample");
@@ -145,7 +145,7 @@ public class SamplerMetricFixedModeTest {
     }
 
     @Test
-    public static void checkAddCumulatedKo() throws Exception {
+    public void checkAddCumulatedKo() throws Exception {
         SamplerMetric metric = new SamplerMetric();
         SampleResult sample = createSampleResultWithSubresults(false);
         assertEquals(true, TransactionController.isFromTransactionController(sample), "We are recognized as a TransactionController made sample");

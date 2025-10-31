@@ -106,7 +106,7 @@ public class SamplerMetricTimedModeTest {
     }
 
     @Test
-    public static void checkAddCumulatedOk() throws Exception {
+    public void checkAddCumulatedOk() throws Exception {
         SamplerMetric metric = new SamplerMetric();
         SampleResult sample = createSampleResultWithSubresults(true);
         assertEquals(true, TransactionController.isFromTransactionController(sample), "We are recognized as a TransactionController made sample");
@@ -127,7 +127,7 @@ public class SamplerMetricTimedModeTest {
     }
 
     @Test
-    public static void checkAddCumulatedKo() throws Exception {
+    public void checkAddCumulatedKo() throws Exception {
         SamplerMetric metric = new SamplerMetric();
         SampleResult sample = createSampleResultWithSubresults(false);
         assertEquals(true, TransactionController.isFromTransactionController(sample), "We are recognized as a TransactionController made sample");
