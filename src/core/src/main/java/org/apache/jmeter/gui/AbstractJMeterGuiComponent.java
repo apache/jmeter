@@ -40,6 +40,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestElementSchema;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.gui.JEditableCheckBox;
 import org.apache.jorphan.gui.JFactory;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -69,9 +70,6 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     /** Logging */
     private static final Logger log = LoggerFactory.getLogger(AbstractJMeterGuiComponent.class);
 
-    /** Flag indicating whether this component is enabled. */
-    private boolean enabled = true;
-
     /**
      *  A GUI panel containing the name of this component.
      * @deprecated use {@link #getName()} or {@link AbstractJMeterGuiComponent#createTitleLabel()} for better alignment of the fields
@@ -82,6 +80,10 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     protected NamePanel namePanel;
 
     private final JTextArea commentField = JFactory.tabMovesFocus(new JTextArea());
+
+    private final JBooleanPropertyEditor enabled = new JBooleanPropertyEditor(
+            TestElementSchema.INSTANCE.getEnabled(),
+            JMeterUtils.getResString("enable"));
 
     /**
      * Stores a collection of property editors, so GuiCompoenent can have default implementations that
@@ -98,6 +100,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     protected AbstractJMeterGuiComponent() {
         namePanel = new NamePanel();
         init();
+        bindingGroup.add(enabled);
     }
 
     /**
@@ -126,7 +129,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      */
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return enabled.getValue().equals(JEditableCheckBox.Value.of(true));
     }
 
     /**
@@ -136,7 +139,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @Override
     public void setEnabled(boolean enabled) {
         log.debug("Setting enabled: {}", enabled);
-        this.enabled = enabled;
+        this.enabled.setValue(JEditableCheckBox.Value.of(enabled));
     }
 
     /**
@@ -210,7 +213,6 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @Override
     public void configure(TestElement element) {
         setName(element.getName());
-        enabled = element.isEnabled();
         commentField.setText(element.getComment());
         bindingGroup.updateUi(element);
     }
@@ -224,7 +226,6 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @Override
     public void clearGui() {
         initGui();
-        enabled = true;
     }
 
     private void initGui() {
@@ -240,7 +241,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @API(status = EXPERIMENTAL, since = "5.6.3")
     public void modifyTestElement(TestElement element) {
         JMeterGUIComponent.super.modifyTestElement(element);
-        modifyTestElementEnabledAndComment(element);
+        modifyTestElementComment(element);
         bindingGroup.updateElement(element);
     }
 
@@ -264,7 +265,10 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         TestElementSchema schema = TestElementSchema.INSTANCE;
         mc.set(schema.getGuiClass(), getClass());
         mc.set(schema.getTestClass(), mc.getClass());
-        modifyTestElementEnabledAndComment(mc);
+        modifyTestElementComment(mc);
+        // This stores the state of the TestElement
+        log.debug("setting element to enabled: {}", enabled.getValue());
+        enabled.updateElement(mc);
     }
 
     /**
@@ -272,14 +276,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      *
      * @param mc test element
      */
-    private void modifyTestElementEnabledAndComment(TestElement mc) {
-        // This stores the state of the TestElement
-        log.debug("setting element to enabled: {}", enabled);
-        // We can skip storing "enabled" state if it's true, as it's default value.
-        // JMeter removes disabled elements early from the tree, so configuration elements
-        // with enabled=false (~HTTP Request Defaults) can't unexpectedly override the regular ones
-        // like HTTP Request.
-        mc.set(TestElementSchema.INSTANCE.getEnabled(), enabled ? null : Boolean.FALSE);
+    private void modifyTestElementComment(TestElement mc) {
         // Note: we can't use editors for "comments" as getComments() is not a final method, so plugins might
         // override it and provide a different implementation.
         String comment = getComment();
@@ -306,6 +303,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         commentField.setWrapStyleWord(true);
         commentField.setLineWrap(true);
         titlePanel.add(commentField);
+        titlePanel.add(enabled, "span 2");
 
         // Note: VerticalPanel has a workaround for Box layout which aligns elements, so we can't
         // use trivial JPanel.

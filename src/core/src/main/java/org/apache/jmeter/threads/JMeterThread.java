@@ -264,7 +264,10 @@ public class JMeterThread implements Runnable, Interruptible {
             iterationListener = initRun(threadContext);
             while (running) {
                 Sampler sam = threadGroupLoopController.next();
-                while (running && sam != null) {
+                for (; running && sam != null; sam = threadGroupLoopController.next()) {
+                    if (!sam.isEnabled()) {
+                        continue;
+                    }
                     processSampler(sam, null, threadContext);
                     threadContext.cleanAfterSample();
 
@@ -296,11 +299,8 @@ public class JMeterThread implements Runnable, Interruptible {
                             }
                         }
                         threadContext.setTestLogicalAction(TestLogicalAction.CONTINUE);
-                        sam = null;
                         setLastSampleOk(threadContext.getVariables(), true);
-                    }
-                    else {
-                        sam = threadGroupLoopController.next();
+                        break;
                     }
                 }
 
@@ -898,6 +898,9 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private static void checkAssertions(List<? extends Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
         for (Assertion assertion : assertions) {
+            if (!((TestElement) assertion).isEnabled()) {
+                continue;
+            }
             TestBeanHelper.prepare((TestElement) assertion);
             if (assertion instanceof AbstractScopedAssertion scopedAssertion) {
                 String scope = scopedAssertion.fetchScope();
@@ -965,6 +968,9 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private static void runPostProcessors(List<? extends PostProcessor> extractors) {
         for (PostProcessor ex : extractors) {
+            if (!((TestElement) ex).isEnabled()) {
+                continue;
+            }
             TestBeanHelper.prepare((TestElement) ex);
             ex.process();
         }
@@ -972,6 +978,9 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private static void runPreProcessors(List<? extends PreProcessor> preProcessors) {
         for (PreProcessor ex : preProcessors) {
+            if (!((TestElement) ex).isEnabled()) {
+                continue;
+            }
             if (log.isDebugEnabled()) {
                 log.debug("Running preprocessor: {}", ((AbstractTestElement) ex).getName());
             }
@@ -992,6 +1001,9 @@ public class JMeterThread implements Runnable, Interruptible {
     private void delay(List<? extends Timer> timers) {
         long totalDelay = 0;
         for (Timer timer : timers) {
+            if (!((TestElement) timer).isEnabled()) {
+                continue;
+            }
             TestBeanHelper.prepare((TestElement) timer);
             long delay = timer.delay();
             if (APPLY_TIMER_FACTOR && timer.isModifiable()) {
