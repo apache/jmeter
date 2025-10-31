@@ -125,8 +125,9 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
         if (paths == null) {
             return new JMeterTreeNode[] { getCurrentNode() };
         }
-        JMeterTreeNode[] nodes = new JMeterTreeNode[paths.length];
-        for (int i = 0; i < paths.length; i++) {
+        int numberOfPaths = paths.length;
+        JMeterTreeNode[] nodes = new JMeterTreeNode[numberOfPaths];
+        for (int i = 0; i < numberOfPaths; i++) {
             nodes[i] = (JMeterTreeNode) paths[i].getLastPathComponent();
         }
 
