@@ -17,30 +17,15 @@
 
 package org.apache.jmeter.timers
 
-import org.apache.jmeter.control.LoopController
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.sampler.DebugSampler
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
-import org.apache.jmeter.threads.ThreadGroup
-import org.apache.jmeter.treebuilder.TreeBuilder
+import org.apache.jmeter.treebuilder.oneRequest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
 
 class ConstantThroughputTimerKtTest : JMeterTestCase() {
-    fun TreeBuilder.oneRequest(body: ThreadGroup.() -> Unit) {
-        ThreadGroup::class {
-            numThreads = 1
-            rampUp = 0
-            setSamplerController(
-                LoopController().apply {
-                    loops = 1
-                }
-            )
-            body()
-        }
-    }
-
     @Test
     fun `throughput as variable`() {
         val events = executePlanAndCollectEvents(5.seconds) {
