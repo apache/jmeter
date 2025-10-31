@@ -137,7 +137,6 @@ dependencies {
         api("oro:oro:2.0.8")
         api("xalan:serializer:2.7.3")
         api("xalan:xalan:2.7.3")
-        api("xerces:xercesImpl:2.12.2")
         api("xml-apis:xml-apis:1.4.01")
         api("xmlpull:xmlpull:1.1.3.1")
     }

@@ -851,8 +851,7 @@ If set to <code>0</code> (default value), then JMeter does not print non-termina
     <property name="ssl.provider">You can specify the class for your SSL
     implementation if you don't want to use the built-in Java implementation.
     </property>
-    <property name="xml.parser">You can specify an implementation as your XML
-    parser. The default value is: <code>org.apache.xerces.parsers.SAXParser</code></property>
+    <property name="xml.parser">You can specify an implementation as your XML parser.</property>
   <property name="remote_hosts">Comma-delimited list of remote JMeter hosts (or <code>host:port</code> if required).
     If you are running JMeter in a distributed environment, list the machines where
   you have JMeter remote servers running.  This will allow you to control those

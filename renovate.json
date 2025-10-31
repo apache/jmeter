@@ -176,6 +176,13 @@
       ]
     },
     {
+      "groupName": "xml-apis:xml-apis",
+      "allowedVersions": "< 2.0.0",
+      "matchPackageNames": [
+        "xml-apis:xml-apis{/,}**"
+      ]
+    },
+    {
       "enabled": false,
       "matchPackageNames": [
         "/^src:protocol/"

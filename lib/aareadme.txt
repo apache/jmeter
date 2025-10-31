@@ -262,12 +262,6 @@ xalan_2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 +org.apache.xalan|xml|xpath
 
-xercesImpl-2.12.0
-----------------
-http://xerces.apache.org/xerces2-j/download.cgi
-+org.apache.html.dom|org.apache.wml|org.apache.xerces|org.apache.xml.serialize
-+org.w3c.dom.html|ls
-
 xml-apis-1.4.01
 --------------
 http://xerces.apache.org/xerces2-j/download.cgi
