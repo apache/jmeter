@@ -43,7 +43,7 @@ dependencies {
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
-        api("com.fifesoft:rsyntaxtextarea:3.3.4")
+        api("com.fifesoft:rsyntaxtextarea:3.6.0")
         api("com.github.ben-manes.caffeine:caffeine:2.9.3")
         api("com.github.weisj:darklaf-core:3.1.1")
         api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.4.1")
