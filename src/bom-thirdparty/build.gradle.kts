@@ -75,13 +75,13 @@ dependencies {
             because("ApacheJMeter_junit depends on junit4")
         }
         api("org.checkerframework:checker-qual:3.51.1")
-        api("org.hamcrest:hamcrest-core:2.2") {
+        api("org.hamcrest:hamcrest-core:3.0") {
             because("ApacheJMeter_junit depends on junit4")
         }
-        api("org.hamcrest:hamcrest-library:2.2") {
+        api("org.hamcrest:hamcrest-library:3.0") {
             because("ApacheJMeter_junit depends on junit4")
         }
-        api("org.hamcrest:hamcrest:2.2") {
+        api("org.hamcrest:hamcrest:3.0") {
             because("ApacheJMeter_junit depends on junit4")
         }
         api("net.minidev:accessors-smart:2.6.0")

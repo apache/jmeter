@@ -149,14 +149,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.Apache_2_0 and SpdxLicense.SAX_PD and SimpleLicense("The W3C License", uri("http://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407/java-binding.zip"))
         effectiveLicense = SpdxLicense.Apache_2_0
     }
-    for (lib in listOf("hamcrest-core", "hamcrest")) {
-        overrideLicense("org.hamcrest:$lib:2.2") {
-            // https://github.com/hamcrest/JavaHamcrest/issues/264
-            // pom.xml lists "New BSD License", however it is BSD_3
-            expectedLicense = SpdxLicense.BSD_3_Clause
-            licenseFiles = "hamcrest"
-        }
-    }
     overrideLicense("net.sf.jtidy:jtidy:r938") {
         expectedLicense = SimpleLicense("Java HTML Tidy License", uri("http://jtidy.svn.sourceforge.net/viewvc/jtidy/trunk/jtidy/LICENSE.txt?revision=95"))
         effectiveLicense = SpdxLicense.BSD_3_Clause
