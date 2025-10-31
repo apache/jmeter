@@ -54,7 +54,7 @@ dependencies {
         api("com.google.errorprone:error_prone_annotations:2.43.0")
         api("com.helger.commons:ph-commons:12.0.4")
         api("com.helger:ph-css:8.0.1")
-        api("com.jayway.jsonpath:json-path:2.8.0")
+        api("com.jayway.jsonpath:json-path:2.10.0")
         api("com.miglayout:miglayout-core:5.3")
         api("com.miglayout:miglayout-swing:5.3")
         api("com.sun.activation:javax.activation:1.2.0")
