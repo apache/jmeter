@@ -26,7 +26,7 @@ javaPlatform {
 }
 
 dependencies {
-    api(platform("org.junit:junit-bom:5.14.0"))
+    api(platform("org.junit:junit-bom:5.14.1"))
     api(platform("org.springframework:spring-framework-bom:6.2.12"))
     api(platform("org.eclipse.jetty:jetty-bom:11.0.26"))
 
