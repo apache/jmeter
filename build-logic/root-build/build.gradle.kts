@@ -21,7 +21,7 @@ plugins {
 
 dependencies {
     constraints {
-        api("xerces:xercesImpl:2.12.1") {
+        api("xerces:xercesImpl:2.12.2") {
             because("Some of the plugins might depend on an older version, and we want using a more recent one")
         }
     }
