@@ -36,6 +36,10 @@ test/resources/**
 #**/*.log
 **/download_jmeter.cgi
 xdocs/extending/HTML_REPORT_README.TXT
+xdocs/node_modules/**
+xdocs/package.json
+xdocs/package-lock.json
+xdocs/yarn.lock
 # Rat should automatically detect below files as binary, however it fails
 **/*.sxi
 **/*.sxw

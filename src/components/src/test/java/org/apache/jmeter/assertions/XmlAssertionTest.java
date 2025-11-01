@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.apache.jmeter.assertions.AssertionResultExtensionsKt.assertEnFailureMessageContains;
+import static org.apache.jmeter.assertions.AssertionResultExtensionsKt.assertFailureMessageContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -62,8 +64,7 @@ public class XmlAssertionTest extends JMeterTestCase {
         result = assertion.getResult(sampleResult);
         assertTrue(result.isFailure());
         assertTrue(result.isError());
-        assertEquals("DOCTYPE is disallowed when the feature \"http://apache.org/xml/features/disallow-doctype-decl\" set to true.",
-                    result.getFailureMessage());
+        assertFailureMessageContains(result, "http://apache.org/xml/features/disallow-doctype-decl");
     }
 
     @Test
@@ -91,6 +92,6 @@ public class XmlAssertionTest extends JMeterTestCase {
         assertTrue(result.isFailure());
         assertTrue(result.isError());
         assertNotNull(result.getFailureMessage());
-        assertTrue(result.getFailureMessage().contains("Content is not allowed in prolog"));
+        assertEnFailureMessageContains(result, "Content is not allowed in prolog");
     }
 }

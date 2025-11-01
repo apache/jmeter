@@ -50,6 +50,8 @@ autostyle {
             include("**/*.xsd", "**/*.xsl", "**/*.xml")
             // Autostyle does not support gitignore yet https://github.com/autostyle/autostyle/issues/13
             exclude("out/**")
+            exclude(".gradle/**")
+            exclude("node_modules")
             if (project == rootProject) {
                 if (isActualPluginApplication) {
                     exclude(rootDir.resolve(".ratignore").readLines())
@@ -65,7 +67,11 @@ autostyle {
         license()
     }
     format("markdown") {
-        filter.include("**/*.md")
+        filter {
+            include("**/*.md")
+            exclude(".gradle/**")
+            exclude("node_modules")
+        }
         endWithNewline()
     }
 }

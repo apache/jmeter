@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.extractor;
 
+import static org.apache.jmeter.assertions.AssertionResultExtensionsKt.assertEnFailureMessageContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -276,13 +277,7 @@ public class TestXPathExtractor {
                 firstResult.getFailureMessage(),
                 "<",
                 "'<' is an invalid character in xpath, so it is expected to be present in the error message");
-        if (Locale.getDefault().getLanguage().startsWith(Locale.ENGLISH.getLanguage())) {
-            assertContains(
-                    firstResult.getFailureMessage(),
-                    "A location path was expected, but the following token was encountered",
-                    ""
-            );
-        }
+        assertEnFailureMessageContains(firstResult, "A location path was expected, but the following token was encountered");
         assertEquals("Default", vars.get(VAL_NAME));
         assertEquals("0", vars.get(VAL_NAME_NR));
     }
@@ -294,9 +289,9 @@ public class TestXPathExtractor {
         extractor.process();
         assertEquals(1, result.getAssertionResults().length);
         assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-        assertContains(result.getAssertionResults()[0].getFailureMessage(),
-                "Content is not allowed in prolog",
-                "");
+        assertEnFailureMessageContains(
+            result.getAssertionResults()[0],
+            "Content is not allowed in prolog");
         assertEquals("Default", vars.get(VAL_NAME));
         assertEquals("0", vars.get(VAL_NAME_NR));
     }
@@ -309,10 +304,9 @@ public class TestXPathExtractor {
 
         assertEquals(1, result.getAssertionResults().length);
         assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-        assertContains(result.getAssertionResults()[0].getFailureMessage(),
-                "XML document structures must start and end within the same entity",
-                "");
-
+        assertEnFailureMessageContains(
+                result.getAssertionResults()[0],
+                "XML document structures must start and end within the same entity");
         assertEquals("Default", vars.get(VAL_NAME));
         assertEquals("0", vars.get(VAL_NAME_NR));
     }

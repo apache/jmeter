@@ -18,6 +18,7 @@
 pluginManagement {
     plugins {
         id("com.github.vlsi.stage-vote-release") version "2.0.0"
+        id("com.github.node-gradle.node") version "7.1.0"
     }
 }
 
@@ -32,6 +33,20 @@ dependencyResolutionManagement {
     repositories {
         // TODO: support enableMavenLocal
         mavenCentral()
+        // Declare the Node.js download repository
+        ivy {
+            name = "Node.js"
+            setUrl("https://nodejs.org/dist/")
+            patternLayout {
+                artifact("v[revision]/[artifact](-v[revision]-[classifier]).[ext]")
+            }
+            metadataSources {
+                artifact()
+            }
+            content {
+                includeModule("org.nodejs", "node")
+            }
+        }
     }
 }
 
