@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+import com.github.autostyle.gradle.AutostyleTask
+import com.github.gradle.node.yarn.task.YarnTask
 import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
 import com.github.vlsi.gradle.git.FindGitAttributes
@@ -28,6 +30,7 @@ plugins {
     id("com.github.vlsi.crlf")
     id("com.github.vlsi.stage-vote-release")
     id("build-logic.jvm-library")
+    id("com.github.node-gradle.node")
 }
 
 var jars = arrayOf(
@@ -96,6 +99,16 @@ dependencies {
     buildDocs("commons-lang:commons-lang")
     buildDocs("org.apache.commons:commons-collections4")
     buildDocs("org.jdom:jdom")
+}
+
+node {
+    // Do not declare the repository
+    // See https://github.com/node-gradle/gradle-node-plugin/blob/master/docs/faq.md#is-this-plugin-compatible-with-centralized-repositories-declaration
+    distBaseUrl = null
+    download = true
+    version = "25.1.0"
+    yarnVersion = "1.22.22"
+    // nodeProjectDir = rootProject.layout.projectDirectory.dir("xdocs")
 }
 
 tasks.clean {
@@ -311,7 +324,7 @@ val gitProps by rootProject.tasks.existing(FindGitAttributes::class)
 
 fun createAnakiaTask(
     taskName: String,
-    baseDir: String,
+    baseDir: Directory,
     extension: String = ".html",
     style: String,
     velocityProperties: String,
@@ -336,7 +349,7 @@ fun createAnakiaTask(
                 p.load(it)
             }
             p["resource.loader"] = "file"
-            p["file.resource.loader.path"] = baseDir
+            p["file.resource.loader.path"] = baseDir.asFile.absolutePath
             p["file.resource.loader.class"] = "org.apache.velocity.runtime.resource.loader.FileResourceLoader"
             val specials = Regex("""([,\\])""")
             val lines = p.entries
@@ -392,7 +405,7 @@ fun createAnakiaTask(
     }
 }
 
-val xdocs = "$rootDir/xdocs"
+val xdocs = rootProject.layout.projectDirectory.dir("xdocs")
 
 fun CopySpec.docCssAndImages() {
     from(xdocs) {
@@ -420,12 +433,24 @@ fun CopySpec.printableDocumentation() {
     }
 }
 
+tasks.yarnSetup {
+    mustRunAfter(tasks.withType<AutostyleTask>())
+}
+
+val yarn_install = tasks.named<YarnTask>("yarn_install") {
+    workingDir = xdocs
+    mustRunAfter(":rat")
+    inputs.file(xdocs.file("package.json")).withPropertyName("package_json").withPathSensitivity(PathSensitivity.NONE)
+    outputs.file(xdocs.file("yarn.lock")).withPropertyName("yarn.lock")
+    outputs.dir(xdocs.dir("node_modules")).withPropertyName("node_modules")
+}
+
 val buildPrintableDoc = createAnakiaTask(
     "buildPrintableDoc", baseDir = xdocs,
     style = "stylesheets/site_printable.vsl",
     velocityProperties = "$xdocs/velocity.properties",
     projectFile = "stylesheets/printable_project.xml",
-    excludes = arrayOf("**/stylesheets/**", "extending.xml", "extending/*.xml"),
+    excludes = arrayOf("**/stylesheets/**", "extending.xml", "extending/*.xml", "node_modules", "package.json", "package-lock.json", "yarn.lock"),
     includes = arrayOf("**/*.xml")
 )
 
@@ -466,7 +491,14 @@ fun xslt(
 
 val processSiteXslt by tasks.registering {
     val outputDir = layout.buildDirectory.dir("siteXslt").get().asFile
-    inputs.files(xdocs).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("xdocs")
+    inputs.files(
+        fileTree(xdocs) {
+            exclude("node_modules")
+            exclude("package.json")
+            exclude("package-lock.json")
+            exclude("yarn.lock")
+        }
+    ).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("xdocs")
     inputs.property("year", lastEditYear)
     outputs.dir(outputDir)
     outputs.cacheIf { true }
@@ -490,10 +522,39 @@ fun CopySpec.siteLayout() {
     from(processSiteXslt)
     docCssAndImages()
     manuals()
+    into("fonts") {
+        from(
+            fileTree(xdocs.dir("node_modules/@fontsource/merriweather/files")) {
+                builtBy(yarn_install)
+            }
+        ) {
+            include("*400*normal*.woff2")
+        }
+        from(xdocs.dir("node_modules/@fortawesome/fontawesome-free/webfonts")) {
+            include("fa-brands*.woff2")
+        }
+    }
+    into("css") {
+        from(xdocs.dir("node_modules/@fontsource/merriweather")) {
+            include("400.css")
+            rename { "merriweather.css" }
+            filter {
+                it.replace("./files", "../fonts")
+            }
+        }
+        from(xdocs.dir("node_modules/@fortawesome/fontawesome-free/css")) {
+            include("fontawesome.min.css")
+            include("brands.min.css")
+            filter {
+                it.replace("../webfonts", "../fonts")
+            }
+        }
+    }
 }
 
 // See https://github.com/gradle/gradle/issues/10960
 val previewSiteDir = layout.buildDirectory.dir("site")
+
 val previewSite by tasks.registering(Sync::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Creates preview of a site to build/docs/site"
@@ -566,6 +627,10 @@ fun CrLfSpec.sourceLayout() = copySpec {
         from(rootDir) {
             gitignore(gitProps)
             excludeLicenseFromSourceRelease()
+            exclude("xdocs/node_modules")
+            exclude("xdocs/package.json")
+            exclude("xdocs/package-lock.json")
+            exclude("xdocs/yarn.lock")
         }
     }
 }

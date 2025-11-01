@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.apache.jmeter.assertions.AssertionResultExtensionsKt.assertEnFailureMessageContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -99,7 +100,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure " + res.getFailureMessage());
-        assertTrue(res.getFailureMessage().indexOf("Failed to read schema document") > 0);
+        assertEnFailureMessageContains(res, "Failed to read schema document");
         assertTrue(res.isError());// TODO - should this be a failure?
         assertFalse(res.isFailure());
     }
@@ -147,7 +148,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure " + res.getFailureMessage());
-        assertTrue(res.getFailureMessage().indexOf("Premature end of file") > 0);
+        assertEnFailureMessageContains(res, "Premature end of file");
         assertTrue(res.isError());
         assertFalse(res.isFailure());
     }
@@ -162,7 +163,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
         testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
         testLog.debug("failure " + res.getFailureMessage());
-        assertTrue(res.getFailureMessage().indexOf("Content is not allowed in trailing section") > 0);
+        assertEnFailureMessageContains(res, "Content is not allowed in trailing section");
         assertTrue(res.isError());
         assertFalse(res.isFailure());
     }
