@@ -223,17 +223,11 @@ public class MultipartEntityBuilder2 {
         final List<FormBodyPart> bodyPartsCopy = bodyParts != null ? new ArrayList<>(bodyParts) :
                 Collections.emptyList();
         final HttpMultipartMode modeCopy = mode != null ? mode : HttpMultipartMode.STRICT;
-        final AbstractMultipartForm form;
-        switch (modeCopy) {
-            case BROWSER_COMPATIBLE:
-                form = new HttpBrowserCompatibleMultipart(charsetCopy, boundaryCopy, bodyPartsCopy);
-                break;
-            case RFC6532:
-                form = new HttpRFC6532Multipart(charsetCopy, boundaryCopy, bodyPartsCopy);
-                break;
-            default:
-                form = new HttpStrictMultipart(charsetCopy, boundaryCopy, bodyPartsCopy);
-        }
+        final AbstractMultipartForm form = switch (modeCopy) {
+            case BROWSER_COMPATIBLE -> new HttpBrowserCompatibleMultipart(charsetCopy, boundaryCopy, bodyPartsCopy);
+            case RFC6532 -> new HttpRFC6532Multipart(charsetCopy, boundaryCopy, bodyPartsCopy);
+            default -> new HttpStrictMultipart(charsetCopy, boundaryCopy, bodyPartsCopy);
+        };
         return new MultipartFormEntity(form, contentTypeCopy, form.getTotalLength());
     }
 
