@@ -8,7 +8,7 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <stringProp name="TestPlan.user_define_classpath">../lib/opt/hsqldb-2.4.0.jar</stringProp>
+      <stringProp name="TestPlan.user_define_classpath">../lib/opt/hsqldb-2.7.4.jar</stringProp>
     </TestPlan>
     <hashTree>
       <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
