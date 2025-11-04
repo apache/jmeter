@@ -41,9 +41,8 @@ import org.apiguardian.api.API;
  * Builder for multipart {@link HttpEntity}s.
  *
  * Note: the code was taken from
- * <a href="https://github.com/apache/httpcomponents-client/blob/54900db4653d7f207477e6ee40135b88e9bcf832/httpmime/src/
- *   main/java/org/apache/http/entity/mime/MultipartEntityBuilder.java">MultipartEntityBuilder 4.5.14</a>
- *
+ * <a href="https://github.com/apache/httpcomponents-client/blob/rel/v4.5.14/httpmime/src/main/java/org/apache/http/entity/mime/MultipartEntityBuilder.java">
+ *     MultipartEntityBuilder 4.5.14</a>
  */
 @API(status = API.Status.INTERNAL, since = "5.6.4")
 public class MultipartEntityBuilder2 {
