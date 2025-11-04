@@ -168,13 +168,11 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
             try (Statement stmt = conn.createStatement()) {
                 setQueryTimeout(stmt, getIntegerQueryTimeout());
                 configureMaxRows(stmt);
-                ResultSet rs = null;
-                try {
-                    rs = stmt.executeQuery(getQuery());
+                try (ResultSet rs = stmt.executeQuery(getQuery())) {
                     sample.latencyEnd();
                     return getStringFromResultSet(rs).getBytes(ENCODING);
                 } finally {
-                    close(rs);
+                    commitTransaction(conn);
                 }
             }
         } else if (CALLABLE.equals(currentQueryType)) {
@@ -186,6 +184,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                 sample.latencyEnd();
                 String sb = resultSetsToString(cstmt,hasResultSet, out);
                 return sb.getBytes(ENCODING);
+            } finally {
+                commitTransaction(conn);
             }
         } else if (UPDATE.equals(currentQueryType)) {
             try (Statement stmt = conn.createStatement()) {
@@ -195,18 +195,18 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                 int updateCount = stmt.getUpdateCount();
                 String results = updateCount + " updates";
                 return results.getBytes(ENCODING);
+            } finally {
+                commitTransaction(conn);
             }
         } else if (PREPARED_SELECT.equals(currentQueryType)) {
             try (PreparedStatement pstmt = getPreparedStatement(conn)) {
                 setArguments(pstmt);
                 configureMaxRows(pstmt);
-                ResultSet rs = null;
-                try {
-                    rs = pstmt.executeQuery();
+                try (ResultSet rs = pstmt.executeQuery()) {
                     sample.latencyEnd();
                     return getStringFromResultSet(rs).getBytes(ENCODING);
                 } finally {
-                    close(rs);
+                    commitTransaction(conn);
                 }
             }
         } else if (PREPARED_UPDATE.equals(currentQueryType)) {
@@ -216,6 +216,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                 sample.latencyEnd();
                 String sb = resultSetsToString(pstmt,false,null);
                 return sb.getBytes(ENCODING);
+            } finally {
+                commitTransaction(conn);
             }
         } else if (ROLLBACK.equals(currentQueryType)){
             conn.rollback();
@@ -235,6 +237,13 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
             return AUTOCOMMIT_TRUE.getBytes(ENCODING);
         } else { // User provided incorrect query type
             throw new UnsupportedOperationException("Unexpected query type: "+currentQueryType);
+        }
+    }
+
+    private static void commitTransaction(Connection conn) throws SQLException {
+        if (!conn.getAutoCommit()) {
+            // HikariCP rollsback the transaction when a dirty connection returns back to the pool, so we commit it explicitly
+            conn.commit();
         }
     }
 

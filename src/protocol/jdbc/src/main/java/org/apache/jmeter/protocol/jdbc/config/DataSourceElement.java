@@ -19,14 +19,15 @@ package org.apache.jmeter.protocol.jdbc.config;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testbeans.TestBean;
@@ -39,12 +40,17 @@ import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 @TestElementMetadata(labelResource = "displayName")
 public class DataSourceElement extends AbstractTestElement
     implements ConfigElement, TestStateListener, TestBean {
     private static final Logger log = LoggerFactory.getLogger(DataSourceElement.class);
 
     private static final long serialVersionUID = 235L;
+
+    private static final AtomicBoolean VALIDATION_QUERY_USED_WARNING = new AtomicBoolean();
+    private static final AtomicBoolean POOL_PREPARED_STATEMENTS_WARNING = new AtomicBoolean();
 
     private transient String dataSource;
     private transient String driver;
@@ -70,10 +76,10 @@ public class DataSourceElement extends AbstractTestElement
      *  These are called from different threads, so access must be synchronized.
      *  The same instance is called in each case.
      */
-    private transient BasicDataSource dbcpDataSource;
+    private transient HikariDataSource hikariDataSource;
 
     // Keep a record of the pre-thread pools so that they can be disposed of at the end of a test
-    private transient Set<BasicDataSource> perThreadPoolSet;
+    private transient Set<HikariDataSource> perThreadPoolSet;
 
     public DataSourceElement() {
     }
@@ -81,23 +87,15 @@ public class DataSourceElement extends AbstractTestElement
     @Override
     public void testEnded() {
         synchronized (this) {
-            if (dbcpDataSource != null) {
-                try {
-                    dbcpDataSource.close();
-                } catch (SQLException ex) {
-                    log.error("Error closing pool: {}", getName(), ex);
-                }
+            if (hikariDataSource != null) {
+                hikariDataSource.close();
             }
-            dbcpDataSource = null;
+            hikariDataSource = null;
         }
         if (perThreadPoolSet != null) {// in case
-            for(BasicDataSource dsc : perThreadPoolSet){
+            for(HikariDataSource dsc : perThreadPoolSet){
                 log.debug("Closing pool: {}@{}", getDataSourceName(), System.identityHashCode(dsc));
-                try {
-                    dsc.close();
-                } catch (SQLException ex) {
-                    log.error("Error closing pool:{}", getName(), ex);
-                }
+                dsc.close();
             }
             perThreadPoolSet=null;
         }
@@ -124,10 +122,10 @@ public class DataSourceElement extends AbstractTestElement
             if (maxPool.equals("0")){ // i.e. if we want per thread pooling
                 variables.putObject(poolName, new DataSourceComponentImpl()); // pool will be created later
             } else {
-                BasicDataSource src = initPool(maxPool);
+                HikariDataSource src = initPool(maxPool);
                 synchronized(this){
-                    dbcpDataSource = src;
-                    variables.putObject(poolName, new DataSourceComponentImpl(dbcpDataSource));
+                    hikariDataSource = src;
+                    variables.putObject(poolName, new DataSourceComponentImpl(hikariDataSource));
                 }
             }
         }
@@ -142,7 +140,7 @@ public class DataSourceElement extends AbstractTestElement
     public Object clone() {
         DataSourceElement el = (DataSourceElement) super.clone();
         synchronized (this) {
-            el.dbcpDataSource = dbcpDataSource;
+            el.hikariDataSource = hikariDataSource;
             el.perThreadPoolSet = perThreadPoolSet;
         }
         return el;
@@ -208,41 +206,35 @@ public class DataSourceElement extends AbstractTestElement
      * Set up the DataSource - maxPool is a parameter, so the same code can
      * also be used for setting up the per-thread pools.
      */
-    private BasicDataSource initPool(String maxPool) {
-        BasicDataSource dataSource = new BasicDataSource();
+    private HikariDataSource initPool(String maxPool) {
+        HikariDataSource dataSource = new HikariDataSource();
 
         if (log.isDebugEnabled()) {
             log.debug("MaxPool: {} Timeout: {} TrimInt: {} Auto-Commit: {} Preinit: {} poolPreparedStatements: {}",
                     maxPool, getTimeout(), getTrimInterval(), isAutocommit(), isPreinit(), poolPreparedStatements);
         }
         int poolSize = Integer.parseInt(maxPool);
-        dataSource.setMinIdle(0);
-        dataSource.setInitialSize(poolSize);
-        dataSource.setAutoCommitOnReturn(false);
+        dataSource.setMinimumIdle(0);
         if (StringUtilities.isNotEmpty(initQuery)) {
             String[] sqls = initQuery.split("\n");
-            dataSource.setConnectionInitSqls(Arrays.asList(sqls));
-        } else {
-            dataSource.setConnectionInitSqls(Collections.emptyList());
+            dataSource.setConnectionInitSql(String.join(";", sqls));
         }
         if (StringUtilities.isNotEmpty(connectionProperties)) {
-            dataSource.setConnectionProperties(connectionProperties);
+            dataSource.setDataSourceProperties(parseConnectionProperties(connectionProperties));
         }
         if (StringUtilities.isNotEmpty(poolPreparedStatements)) {
-            int maxPreparedStatements = Integer.parseInt(poolPreparedStatements);
-            if (maxPreparedStatements < 0) {
-                dataSource.setPoolPreparedStatements(false);
-            } else {
-                dataSource.setPoolPreparedStatements(true);
-                dataSource.setMaxOpenPreparedStatements(10);
+            if (POOL_PREPARED_STATEMENTS_WARNING.compareAndSet(false, true)) {
+                log.warn(
+                        "Pool prepared statements required in element \"{}\" in is discouraged." +
+                                "Statement cache at the pool level is an anti-pattern, " +
+                                "see https://github.com/brettwooldridge/HikariCP?tab=readme-ov-file#statement-cache",
+                        getName()
+                );
             }
         }
-        dataSource.setRollbackOnReturn(false);
-        dataSource.setMaxIdle(poolSize);
-        dataSource.setMaxTotal(poolSize);
-        dataSource.setMaxWaitMillis(Long.parseLong(getTimeout()));
-
-        dataSource.setDefaultAutoCommit(isAutocommit());
+        dataSource.setMaximumPoolSize(poolSize);
+        dataSource.setConnectionTimeout(Long.parseLong(getTimeout()));
+        dataSource.setAutoCommit(isAutocommit());
 
         if (log.isDebugEnabled()) {
             StringBuilder sb = new StringBuilder(40);
@@ -254,26 +246,26 @@ public class DataSourceElement extends AbstractTestElement
             sb.append(getCheckQuery());
             log.debug(sb.toString());
         }
-        dataSource.setTestOnBorrow(false);
-        dataSource.setTestOnReturn(false);
-        dataSource.setTestOnCreate(false);
-        dataSource.setTestWhileIdle(false);
 
-        if(isKeepAlive()) {
-            dataSource.setTestWhileIdle(true);
+        if (isKeepAlive()) {
+            dataSource.setMaxLifetime(Long.parseLong(getConnectionAge()));
             String validationQuery = getCheckQuery();
-            if (StringUtilities.isBlank(validationQuery)) {
-                dataSource.setValidationQuery(null);
-            } else {
-                dataSource.setValidationQuery(validationQuery);
+            if (StringUtilities.isNotBlank(validationQuery)) {
+                if (VALIDATION_QUERY_USED_WARNING.compareAndSet(false, true)) {
+                    log.warn(
+                            "Using explicit connection validation query \"{}\" in element \"{}\" in is discouraged." +
+                            "Consider leaving the validation query empty so JDBC's Connection#isValid() would be used for the validation",
+                            validationQuery, getName()
+                    );
+                }
+                dataSource.setConnectionTestQuery(validationQuery);
             }
-            dataSource.setSoftMinEvictableIdleTimeMillis(Long.parseLong(getConnectionAge()));
-            dataSource.setTimeBetweenEvictionRunsMillis(Integer.parseInt(getTrimInterval()));
+            dataSource.setKeepaliveTime(Long.parseLong(getTrimInterval()));
         }
 
-        int transactionIsolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
-        if (transactionIsolation >= 0) {
-            dataSource.setDefaultTransactionIsolation(transactionIsolation);
+        String transactionIsolation = getTransactionIsolation();
+        if (!"DEFAULT".equals(transactionIsolation)) {
+            dataSource.setTransactionIsolation(transactionIsolation);
         }
 
         String _username = getUsername();
@@ -288,7 +280,7 @@ public class DataSourceElement extends AbstractTestElement
             log.debug(sb.toString());
         }
         dataSource.setDriverClassName(getDriver());
-        dataSource.setUrl(getDbUrl());
+        dataSource.setJdbcUrl(getDbUrl());
 
         if (!_username.isEmpty()){
             dataSource.setUsername(_username);
@@ -297,7 +289,7 @@ public class DataSourceElement extends AbstractTestElement
 
         if(isPreinit()) {
             // side effect - connection pool init - that is what we want
-            // see also https://commons.apache.org/proper/commons-dbcp/apidocs/org/apache/commons/dbcp2/BasicDataSource.html#setInitialSize-int-
+            // see also https://commons.apache.org/proper/commons-dbcp/apidocs/org/apache/commons/dbcp2/HikariDataSource.html#setInitialSize-int-
             // it says: "The pool is initialized the first time one of the following methods is invoked:
             // getConnection, setLogwriter, setLoginTimeout, getLoginTimeout, getLogWriter."
             // so we get a connection and close it - which releases it back to the pool (but stays open)
@@ -317,8 +309,29 @@ public class DataSourceElement extends AbstractTestElement
         return dataSource;
     }
 
+    private static Properties parseConnectionProperties( String connectionProperties) {
+        Objects.requireNonNull(connectionProperties, "connectionProperties is null");
+        String[] entries = connectionProperties.split(";");
+        Properties properties = new Properties();
+        for (String entry : entries) {
+            if (!entry.isEmpty()) {
+                int index = entry.indexOf('=');
+                if (index > 0) {
+                    String name = entry.substring(0, index);
+                    String value = entry.substring(index + 1);
+                    properties.setProperty(name, value);
+                } else {
+                    // no value is empty string which is how
+                    // java.util.Properties works
+                    properties.setProperty(entry, "");
+                }
+            }
+        }
+        return properties;
+    }
+
     // used to hold per-thread singleton connection pools
-    private static final ThreadLocal<Map<String, BasicDataSource>> perThreadPoolMap =
+    private static final ThreadLocal<Map<String, HikariDataSource>> perThreadPoolMap =
             ThreadLocal.withInitial(HashMap::new);
 
     /**
@@ -327,13 +340,13 @@ public class DataSourceElement extends AbstractTestElement
      */
     private class DataSourceComponentImpl {
 
-        private final BasicDataSource sharedDSC;
+        private final HikariDataSource sharedDSC;
 
         DataSourceComponentImpl(){
             sharedDSC=null;
         }
 
-        DataSourceComponentImpl(BasicDataSource dsc){
+        DataSourceComponentImpl(HikariDataSource dsc){
             sharedDSC = dsc;
         }
 
@@ -341,13 +354,11 @@ public class DataSourceElement extends AbstractTestElement
          * @return String connection information
          */
         private String getConnectionInfo() {
-            BasicDataSource dsc = getConfiguredDataSource();
-            StringBuilder builder = new StringBuilder(100);
-            builder.append("shared:").append(sharedDSC != null)
-                .append(", driver:").append(dsc.getDriverClassName())
-                .append(", url:").append(dsc.getUrl())
-                .append(", user:").append(dsc.getUsername());
-            return builder.toString();
+            HikariDataSource dsc = getConfiguredDataSource();
+            return "shared:" + (sharedDSC != null) +
+                    ", driver:" + dsc.getDriverClassName() +
+                    ", url:" + dsc.getJdbcUrl() +
+                    ", user:" + dsc.getUsername();
         }
 
         /**
@@ -355,7 +366,7 @@ public class DataSourceElement extends AbstractTestElement
          * @throws SQLException if database access error occurred
          */
         private Connection getConnection() throws SQLException {
-            BasicDataSource dsc = getConfiguredDataSource();
+            HikariDataSource dsc = getConfiguredDataSource();
             Connection conn=dsc.getConnection();
             int isolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
             if (isolation >= 0 && conn.getTransactionIsolation() != isolation) {
@@ -372,12 +383,12 @@ public class DataSourceElement extends AbstractTestElement
             return conn;
         }
 
-        private BasicDataSource getConfiguredDataSource() {
-            BasicDataSource dsc;
+        private HikariDataSource getConfiguredDataSource() {
+            HikariDataSource dsc;
             if (sharedDSC != null){ // i.e. shared pool
                 dsc = sharedDSC;
             } else {
-                Map<String, BasicDataSource> poolMap = perThreadPoolMap.get();
+                Map<String, HikariDataSource> poolMap = perThreadPoolMap.get();
                 dsc = poolMap.get(getDataSourceName());
                 if (dsc == null){
                     dsc = initPool("1");
@@ -437,11 +448,11 @@ public class DataSourceElement extends AbstractTestElement
     }
 
     /**
-     * @param dataSource
+     * @param dataSourceName
      *            The poolname to set.
      */
-    public void setDataSource(String dataSource) {
-        this.dataSource = dataSource;
+    public void setDataSource(String dataSourceName) {
+        this.dataSource = dataSourceName;
     }
 
     private String getDataSourceName() {

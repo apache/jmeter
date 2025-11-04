@@ -22,7 +22,7 @@ plugins {
 dependencies {
     api(projects.src.core)
 
-    implementation("org.apache.commons:commons-dbcp2")
+    implementation("com.zaxxer:HikariCP")
     implementation("commons-io:commons-io") {
         because("IOUtils")
     }

@@ -244,10 +244,6 @@ tika-1.21
 http://tika.apache.org/
 - Regular Expression Extractor
 
-commons-dbcp2-2.5.0 (org.apache.commons.dbcp2)
---------------------------
-- DataSourceElement (JDBC)
-
 Saxon-HE-9.9.1-5 (net.sf.saxon)
 --------------------------
 - XPath2Extractor (XML)

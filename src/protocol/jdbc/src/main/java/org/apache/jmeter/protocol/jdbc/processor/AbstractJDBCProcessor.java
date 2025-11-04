@@ -40,17 +40,18 @@ public abstract class AbstractJDBCProcessor extends AbstractJDBCTestElement {
      * Calls the JDBC code to be executed.
      */
     protected void process() {
-        if (StringUtilities.isBlank(getDataSource())) {
+        String dataSourceName = getDataSource();
+        if (StringUtilities.isBlank(dataSourceName)) {
             throw new IllegalArgumentException("Name for DataSource must not be empty in " + getName());
         }
-        try (Connection conn = DataSourceElement.getConnection(getDataSource())){
+        try (Connection conn = DataSourceElement.getConnection(dataSourceName)){
             execute(conn);
         } catch (SQLException ex) {
-            log.warn("SQL Problem in {}: {}", getName(), ex.toString());
+            log.warn("SQL Problem in {}, query {}", getName(), getQuery(), ex);
         } catch (IOException ex) {
-            log.warn("IO Problem in {}: {}", getName(), ex.toString());
+            log.warn("IO Problem in {}", getName(), ex);
         } catch (UnsupportedOperationException ex) {
-            log.warn("Execution Problem in {}: {}", getName(), ex.toString());
+            log.warn("Execution Problem in {}", getName(), ex);
         }
     }
 

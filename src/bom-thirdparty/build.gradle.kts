@@ -59,6 +59,7 @@ dependencies {
         api("com.miglayout:miglayout-swing:5.3")
         api("com.sun.activation:javax.activation:1.2.0")
         api("com.thoughtworks.xstream:xstream:1.4.21")
+        api("com.zaxxer:HikariCP:7.0.2")
         api("commons-codec:commons-codec:1.19.0")
         api("commons-collections:commons-collections:3.2.2")
         api("commons-io:commons-io:2.20.0")
@@ -90,7 +91,6 @@ dependencies {
         api("net.sf.saxon:Saxon-HE:12.9")
         api("org.apache-extras.beanshell:bsh:2.0b6")
         api("org.apache.commons:commons-collections4:4.5.0")
-        api("org.apache.commons:commons-dbcp2:2.9.0")
         api("org.apache.commons:commons-jexl3:3.5.0")
         api("org.apache.commons:commons-jexl:2.1.1")
         api("org.apache.commons:commons-lang3:3.19.0") {
