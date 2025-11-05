@@ -25,7 +25,6 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -75,7 +74,7 @@ public class TestStringtoFile extends JMeterTestCase {
 
     @Test
     public void testWriteToFileWhenDirectoryDoesntExist() throws Exception {
-        String pathname = Paths.get("/does/not.exist", FILENAME).toString();
+        String pathname = Path.of("/does/not.exist", FILENAME).toString();
         function.setParameters(functionParams(pathname, STRING_TO_WRITE, "true", ENCODING));
         String returnValue = function.execute(result, null);
         assertFalse(Boolean.parseBoolean(returnValue),

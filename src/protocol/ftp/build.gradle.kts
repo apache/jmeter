@@ -23,9 +23,6 @@ dependencies {
     api(projects.src.core)
 
     implementation("commons-net:commons-net")
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
 
     testImplementation(testFixtures(projects.src.core))
 }

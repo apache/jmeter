@@ -30,9 +30,5 @@ dependencies {
     // This is an API-only jar. javax.activation is present in Java 8,
     // however it is not there in Java 9
     compileOnly("javax.activation:javax.activation-api")
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
-
     testImplementation(testFixtures(projects.src.core))
 }

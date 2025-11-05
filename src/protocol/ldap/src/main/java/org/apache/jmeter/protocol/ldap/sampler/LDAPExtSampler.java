@@ -38,7 +38,6 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchResult;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -57,6 +56,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.XMLBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unbescape.xml.XmlEscape;
 
 /*******************************************************************************
  * Ldap Sampler class is main class for the LDAP test. This will control all the
@@ -809,7 +809,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 final String countLimit = getCountlim();
 
                 res.setSamplerData("Search with filter " + searchFilter);
-                xmlBuffer.tag("searchfilter", StringEscapeUtils.escapeXml10(searchFilter)); // $NON-NLS-1$
+                xmlBuffer.tag("searchfilter", XmlEscape.escapeXml10(searchFilter)); // $NON-NLS-1$
                 xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
                 xmlBuffer.tag("searchbase",searchBase);// $NON-NLS-1$
                 xmlBuffer.tag("scope" , scopeStr); // $NON-NLS-1$
@@ -1021,12 +1021,12 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private static String getWriteValue(final Object value) {
         if (value instanceof String s) {
             // assume it's sensitive data
-            return StringEscapeUtils.escapeXml10(s);
+            return XmlEscape.escapeXml10(s);
         }
         if (value instanceof byte[] bytes) {
-            return StringEscapeUtils.escapeXml10(new String(bytes, StandardCharsets.UTF_8));
+            return XmlEscape.escapeXml10(new String(bytes, StandardCharsets.UTF_8));
         }
-        return StringEscapeUtils.escapeXml10(value.toString());
+        return XmlEscape.escapeXml10(value.toString());
     }
 
     @Override

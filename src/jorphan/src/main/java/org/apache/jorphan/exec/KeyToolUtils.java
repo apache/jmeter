@@ -23,12 +23,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -258,10 +259,10 @@ public class KeyToolUtils {
         // Export the Root CA for Firefox/Chrome/IE
         KeyToolUtils.keytool("-exportcert", keystore, password, ROOTCA_ALIAS, null, null, "-rfc", "-file", ROOT_CACERT_CRT);
         // Copy for Opera
-        if(caCertCrt.exists() && caCertCrt.canRead()) {
-            FileUtils.copyFile(caCertCrt, caCertUsr);
+        if (caCertCrt.exists() && caCertCrt.canRead()) {
+            Files.copy(caCertCrt.toPath(), caCertUsr.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
         } else {
-            log.warn("Failed creating "+caCertCrt.getAbsolutePath()+", check 'keytool' utility in path is available and points to a JDK >= 7");
+            log.warn("Failed creating {}, check 'keytool' utility in path is available and points to a JDK >= 7", caCertCrt.getAbsolutePath());
         }
     }
 

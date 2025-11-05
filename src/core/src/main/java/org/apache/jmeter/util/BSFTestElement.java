@@ -17,17 +17,17 @@
 
 package org.apache.jmeter.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
 import org.apache.bsf.BSFEngine;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
@@ -98,7 +98,7 @@ public abstract class BSFTestElement extends ScriptingTestElement
             bsfEngine.exec("[script]",0,0,getScript());
         } else {// we have a file, read and process it
             try {
-                String script=FileUtils.readFileToString(new File(scriptFile), Charset.defaultCharset());
+                String script = Files.readString(Path.of(scriptFile), Charset.defaultCharset());
                 bsfEngine.exec(scriptFile,0,0,script);
             } catch (IOException e) {
                 if (log.isWarnEnabled()) {
@@ -116,7 +116,7 @@ public abstract class BSFTestElement extends ScriptingTestElement
             return bsfEngine.eval("[script]",0,0,getScript());
         } else {// we have a file, read and process it
             try {
-                String script=FileUtils.readFileToString(new File(scriptFile), Charset.defaultCharset());
+                String script = Files.readString(Path.of(scriptFile), Charset.defaultCharset());
                 return bsfEngine.eval(scriptFile,0,0,script);
             } catch (IOException e) {
                 if (log.isWarnEnabled()) {

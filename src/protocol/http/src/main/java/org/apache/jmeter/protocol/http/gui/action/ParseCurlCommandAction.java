@@ -28,7 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,7 +50,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.tree.TreePath;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.KeystoreConfig;
 import org.apache.jmeter.control.Controller;
@@ -805,9 +805,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
     }
 
     public List<String> readFromFile(String pathname) throws IOException {
-        String encoding = StandardCharsets.UTF_8.name();
-        File file = new File(pathname);
-        return FileUtils.readLines(file, encoding);
+        return Files.readAllLines(Path.of(pathname));
     }
 
     public List<String> readFromTextPanel(String commands) {

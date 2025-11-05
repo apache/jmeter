@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -46,6 +45,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.io.CountingInputStream;
 import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -242,9 +242,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // works OK even if ContentEncoding is null
         boolean gzipped = HTTPConstants.ENCODING_GZIP.equals(conn.getContentEncoding());
 
-        BoundedInputStream instream = null;
+        CountingInputStream instream = null;
         try {
-            instream = BoundedInputStream.builder().setInputStream(conn.getInputStream()).get();
+            instream = new CountingInputStream(conn.getInputStream());
             if (gzipped) {
                 in = new GZIPInputStream(instream);
             } else {
@@ -296,7 +296,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // N.B. this closes 'in'
         byte[] responseData = readResponse(res, in, contentLength);
         if (instream != null) {
-            res.setBodySize(instream.getCount());
+            res.setBodySize(instream.getBytesRead());
             instream.close();
         }
         return responseData;

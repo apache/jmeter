@@ -99,7 +99,7 @@ dependencies {
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
     }
-    implementation("org.apache.commons:commons-text")
+    implementation("org.unbescape:unbescape")
     implementation("org.apache.tika:tika-core") {
         isTransitive = false
     }

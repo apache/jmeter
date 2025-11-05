@@ -26,7 +26,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -191,7 +191,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
         // check if filename defined
         if (StringUtilities.isNotBlank(filename)) {
-            try (Writer writer = Files.newBufferedWriter(Paths.get(filename))) {
+            try (Writer writer = Files.newBufferedWriter(Path.of(filename))) {
                 // write to file
                 writer.write(inOutput);
                 log.debug("writeOutput() -> output successfully written to file: {}", filename);

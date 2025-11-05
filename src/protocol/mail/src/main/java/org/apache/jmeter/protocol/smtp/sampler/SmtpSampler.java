@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.smtp.sampler;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,9 +42,6 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.CountingOutputStream;
-import org.apache.commons.io.output.NullOutputStream;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.SendMailCommand;
@@ -53,6 +51,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jorphan.io.CountingOutputStream;
 import org.apache.jorphan.util.CharUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,9 +189,9 @@ public class SmtpSampler extends AbstractSampler {
     private long calculateMessageSize(Message message) throws IOException, MessagingException {
         if (getPropertyAsBoolean(MESSAGE_SIZE_STATS)) {
             // calculate message size
-            CountingOutputStream cs = new CountingOutputStream(NullOutputStream.INSTANCE);
+            CountingOutputStream cs = new CountingOutputStream(OutputStream.nullOutputStream());
             message.writeTo(cs);
-            return cs.getByteCount();
+            return cs.getBytesWritten();
         } else {
             return -1L;
         }
@@ -201,7 +200,7 @@ public class SmtpSampler extends AbstractSampler {
     private static byte[] processSampler(Message message) throws IOException, MessagingException {
         // process the sampler result
         try (InputStream is = message.getInputStream()) {
-            return IOUtils.toByteArray(is);
+            return is.readAllBytes();
         }
     }
 

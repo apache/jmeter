@@ -34,9 +34,10 @@ import java.util.StringTokenizer;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.text.RandomStringGenerator;
+import org.apache.jorphan.text.RandomStringGenerator;
 import org.apiguardian.api.API;
+
+import kotlin.io.path.PathsKt;
 
 /**
  * This class contains frequently-used static utility methods.
@@ -636,7 +637,11 @@ public final class JOrphanUtils {
                 if (listedFiles != null && listedFiles.length > 0) {
                     if (deleteFolderIfExists) {
                         try {
-                            FileUtils.deleteDirectory(folder);
+                            PathsKt.deleteRecursively(folder.toPath());
+                            //noinspection ConstantValue
+                            if (false) {
+                                throw new IOException("Make javac happy as deleteRecursively can throw IOException");
+                            }
                         } catch (IOException ex) {
                             throw new IllegalArgumentException("Cannot write to '" + folder.getAbsolutePath()
                                     + "' as folder is not empty and cleanup failed with error:" + ex.getMessage(), ex);
@@ -745,11 +750,7 @@ public final class JOrphanUtils {
      * @return String random password
      */
     public static String generateRandomAlphanumericPassword(int length) {
-        char[][] pairs = {{'a', 'z'}, {'A', 'Z'}, {'0', '9'}};
-        RandomStringGenerator pwdGenerator = new RandomStringGenerator.Builder()
-                .usingRandom(LazySecureRandom.INSTANCE::nextInt)
-                .withinRange(pairs)
-                .get();
+        RandomStringGenerator pwdGenerator = RandomStringGenerator.alphanumeric(LazySecureRandom.INSTANCE);
         return pwdGenerator.generate(length);
     }
 }

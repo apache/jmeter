@@ -58,8 +58,6 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.DistributedRunner;
@@ -103,6 +101,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import kotlin.io.FilesKt;
 
 /**
  * Main JMeter class; processes options and starts the GUI, non-GUI or server as appropriate.
@@ -551,8 +551,8 @@ public class JMeter implements JMeterPlugin {
      */
     private static void displayAsciiArt() {
         try (InputStream inputStream = JMeter.class.getResourceAsStream("jmeter_as_ascii_art.txt")) {
-            if(inputStream != null) {
-                String text = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            if (inputStream != null) {
+                String text = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 System.out.println(text);//NOSONAR
             }
         } catch (Exception e1) { //NOSONAR No logging here
@@ -645,7 +645,7 @@ public class JMeter implements JMeterPlugin {
             log.info("Running JSR-223 init script in file: {}", jsr223Init);
             File file = new File(jsr223Init);
             if(file.exists() && file.canRead()) {
-                String ext = FilenameUtils.getExtension(jsr223Init);
+                String ext = FilesKt.getExtension(file);
                 String extension = StringUtilities.isBlank(ext) ? "Groovy" : ext;
                 try (Reader reader = Files.newBufferedReader(file.toPath())) {
                     ScriptEngineManager scriptEngineManager = new ScriptEngineManager();

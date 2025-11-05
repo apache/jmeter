@@ -22,9 +22,5 @@ plugins {
 dependencies {
     api(projects.src.core)
 
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
-
     testImplementation(testFixtures(projects.src.core))
 }

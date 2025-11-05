@@ -40,7 +40,6 @@ import javax.mail.Store;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.LocalTrustStoreSSLSocketFactory;
@@ -354,7 +353,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         if (content instanceof MimeMultipart mimeMultipart) {
             appendMultiPart(child, cdata, mimeMultipart);
         } else if (content instanceof InputStream inputStream){
-            child.setResponseData(IOUtils.toByteArray(inputStream));
+            child.setResponseData(inputStream.readAllBytes());
         } else {
             cdata.append(content);
             child.setResponseData(cdata.toString(),child.getDataEncodingNoDefault());
@@ -380,7 +379,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             sr.setEncodingAndType(contentType);
             sr.sampleStart();
             if (bodyPartContent instanceof InputStream inputStream){
-                sr.setResponseData(IOUtils.toByteArray(inputStream));
+                sr.setResponseData(inputStream.readAllBytes());
             } else if (bodyPartContent instanceof MimeMultipart mimeMultipart){
                 appendMultiPart(sr, cdata, mimeMultipart);
             } else {

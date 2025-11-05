@@ -17,9 +17,7 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +35,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.naming.NamingException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.client.ClientPool;
@@ -52,6 +49,7 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.ExceptionUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -282,10 +280,11 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         if (e instanceof JMSException jms) {
 
             String errorCode = Optional.ofNullable(jms.getErrorCode()).orElse("");
+            Publisher publisher = this.publisher;
             if (checkForReconnect && publisher != null && getIsReconnectErrorCode().test(errorCode)) {
                 ClientPool.removeClient(publisher);
-                IOUtils.closeQuietly(publisher, null);
-                publisher = null;
+                JOrphanUtils.closeQuietly(this.publisher);
+                this.publisher = null;
             }
 
             result.setResponseCode(errorCode);

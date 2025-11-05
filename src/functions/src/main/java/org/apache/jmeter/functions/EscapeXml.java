@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
+import org.unbescape.xml.XmlEscape;
 
 import com.google.auto.service.AutoService;
 
@@ -42,7 +42,7 @@ import com.google.auto.service.AutoService;
  * </p>
  *
  *
- * @see StringEscapeUtils#escapeXml10(String) (Commons Lang)
+ * @see XmlEscape#escapeXml10(String)
  * @since 3.2
  */
 @AutoService(Function.class)
@@ -67,7 +67,7 @@ public class EscapeXml extends AbstractFunction {
             throws InvalidVariableException {
 
         String rawString = ((CompoundVariable) values[0]).execute();
-        return StringEscapeUtils.escapeXml10(rawString);
+        return XmlEscape.escapeXml10(rawString);
 
     }
 

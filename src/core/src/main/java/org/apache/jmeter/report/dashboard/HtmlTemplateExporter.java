@@ -27,8 +27,6 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.GraphConfiguration;
@@ -48,6 +46,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unbescape.html.HtmlEscape;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -420,7 +419,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Add report title to the context
         if (StringUtilities.isNotEmpty(configuration.getReportTitle())) {
-            dataContext.put(DATA_CTX_REPORT_TITLE, StringEscapeUtils.escapeHtml4(configuration.getReportTitle()));
+            dataContext.put(DATA_CTX_REPORT_TITLE, HtmlEscape.escapeHtml5(configuration.getReportTitle()));
         }
 
         // Add the test file name to the context
@@ -437,7 +436,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             if (log.isInfoEnabled()) {
                 log.info("Report will be generated in: {}, creating folder structure", outputDir.getAbsolutePath());
             }
-            FileUtils.forceMkdir(outputDir);
+            Files.createDirectories(outputDir.toPath());
             TemplateVisitor visitor = new TemplateVisitor(
                     templateDirectory.toPath(),
                     outputDir.toPath(),

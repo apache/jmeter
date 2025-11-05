@@ -24,14 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.curl.ArgumentHolder;
 import org.apache.jmeter.protocol.http.curl.BasicCurlParser;
@@ -367,8 +367,7 @@ public class BasicCurlParserTest {
 
     @Test
     public void testDataReadFromFile() throws IOException {
-        String encoding = StandardCharsets.UTF_8.name();
-        FileUtils.writeStringToFile(tempFile, "name=test" + System.lineSeparator(), encoding, true);
+        Files.writeString(tempFile.toPath(), "name=test" + System.lineSeparator(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         String pathname = tempFile.getAbsolutePath();
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
                 + "-H 'cache-control: no-cache' --data '@" + pathname + "' ";
@@ -421,8 +420,7 @@ public class BasicCurlParserTest {
 
     @Test
     public void testDataUrlEncodeFromFile() throws IOException {
-        String encoding = StandardCharsets.UTF_8.name();
-        FileUtils.writeStringToFile(tempFile, "test", encoding, true);
+        Files.writeString(tempFile.toPath(), "test", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         String pathname = tempFile.getAbsolutePath();
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
                 + "-H 'cache-control: no-cache' --data-urlencode 'name@" + pathname + "' ";
@@ -434,8 +432,7 @@ public class BasicCurlParserTest {
 
     @Test
     public void testDataUrlEncodeWith2AtSymbol() throws IOException {
-        String encoding = StandardCharsets.UTF_8.name();
-        FileUtils.writeStringToFile(tempFile, "test@", encoding, true);
+        Files.writeString(tempFile.toPath(), "test@", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         String pathname = tempFile.getAbsolutePath();
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
                 + "-H 'cache-control: no-cache' --data-urlencode 'name@" + pathname + "' ";
@@ -447,8 +444,7 @@ public class BasicCurlParserTest {
 
     @Test
     public void testDataBinaryReadFromFile() throws IOException {
-        String encoding = StandardCharsets.UTF_8.name();
-        FileUtils.writeStringToFile(tempFile, "name=test" + System.lineSeparator(), encoding, true);
+        Files.writeString(tempFile.toPath(), "name=test" + System.lineSeparator(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         String pathname = tempFile.getAbsolutePath();
         String cmdLine = "curl 'https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit/action_page.php' "
                 + "-H 'cache-control: no-cache' --data-binary '@" + pathname + "' ";

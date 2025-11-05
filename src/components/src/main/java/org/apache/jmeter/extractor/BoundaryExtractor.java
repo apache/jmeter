@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -37,6 +36,7 @@ import org.apache.jorphan.util.StringUtilities;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unbescape.html.HtmlEscape;
 
 /**
  * Extracts Strings from a text response between a start and end boundary.
@@ -229,7 +229,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
             return result.getResponseMessage(); // Bug 43451
         }
         if (useUnescapedBody()) {
-            return StringEscapeUtils.unescapeHtml4(result.getResponseDataAsString());
+            return HtmlEscape.unescapeHtml(result.getResponseDataAsString());
         }
         if (useBodyAsDocument()) {
             return Document.getTextFromDocument(result.getResponseData());

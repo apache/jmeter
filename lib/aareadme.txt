@@ -87,11 +87,6 @@ commons-pool2-2.7.0
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
 
-commons-text-1.8
------------------
-https://commons.apache.org/proper/commons-text/
-- Random Strings
-
 darcula
 -----------------
 https://github.com/bulenkov/Darcula/

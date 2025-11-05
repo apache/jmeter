@@ -30,7 +30,6 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -333,7 +332,7 @@ public class TestHTTPMirrorThread extends JMeterTestCase {
         conn.addRequestProperty("X-ResponseLength", "10");
         conn.connect();
         final InputStream inputStream = conn.getInputStream();
-        assertEquals(10, IOUtils.toByteArray(inputStream).length);
+        assertEquals(10, inputStream.readAllBytes().length);
         inputStream.close();
     }
 

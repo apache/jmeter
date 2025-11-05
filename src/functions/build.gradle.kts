@@ -26,12 +26,7 @@ dependencies {
     implementation("org.mozilla:rhino")
     implementation("org.apache.commons:commons-jexl")
     implementation("org.apache.commons:commons-jexl3")
-    implementation("commons-io:commons-io") {
-        because("FileUtils")
-    }
-    implementation("org.apache.commons:commons-text") {
-        because("StringEscapeUtils")
-    }
+    implementation("org.unbescape:unbescape")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("oro:oro")
 }

@@ -41,7 +41,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.StringUtilities;
@@ -327,7 +326,7 @@ public class TestHTMLParser extends JMeterTestCase {
         String parserName = p.getClass().getName().substring("org.apache.jmeter.protocol.http.parser.".length());
         String fname = file.substring(file.indexOf('/')+1);
         log.debug("file   {}", file);
-        byte[] buffer = IOUtils.toByteArray(getInputStream(file));
+        byte[] buffer = getInputStream(file).readAllBytes();
         Iterator<URL> result;
         if (c == null) {
             result = p.getEmbeddedResourceURLs(userAgent, buffer, new URL(url), System.getProperty("file.encoding"));

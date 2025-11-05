@@ -24,9 +24,7 @@ dependencies {
     api("org.apiguardian:apiguardian-api")
     api("org.slf4j:slf4j-api")
 
-    implementation("commons-io:commons-io")
     implementation("org.apache.commons:commons-math3")
-    implementation("org.apache.commons:commons-text")
 
     testFixturesImplementation("org.junit.jupiter:junit-jupiter")
 }

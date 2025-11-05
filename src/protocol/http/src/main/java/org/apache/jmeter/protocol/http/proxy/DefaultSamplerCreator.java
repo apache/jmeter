@@ -17,13 +17,12 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +34,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
@@ -176,9 +174,9 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
         if (params != null) {
             sampler.setProperty(TestElement.GUI_CLASS, GraphQLHTTPSamplerGui.class.getName());
-            sampler.setProperty(GraphQLUrlConfigGui.OPERATION_NAME, defaultIfEmpty(params.getOperationName(), null));
-            sampler.setProperty(GraphQLUrlConfigGui.QUERY, defaultIfEmpty(params.getQuery(), null));
-            sampler.setProperty(GraphQLUrlConfigGui.VARIABLES, defaultIfEmpty(params.getVariables(), null));
+            sampler.setProperty(GraphQLUrlConfigGui.OPERATION_NAME, StringUtilities.trimToNull(params.getOperationName()));
+            sampler.setProperty(GraphQLUrlConfigGui.QUERY, StringUtilities.trimToNull(params.getQuery()));
+            sampler.setProperty(GraphQLUrlConfigGui.VARIABLES, StringUtilities.trimToNull(params.getVariables()));
         }
     }
 
@@ -264,7 +262,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                     try {
                         File tempDir = new File(getBinaryDirectory());
                         File out = File.createTempFile(request.getMethod(), getBinaryFileSuffix(), tempDir);
-                        FileUtils.writeByteArrayToFile(out,request.getRawPostData());
+                        Files.write(out.toPath(), request.getRawPostData());
                         HTTPFileArg [] files = {new HTTPFileArg(out.getPath(),"",contentType)};
                         sampler.setHTTPFiles(files);
                     } catch (IOException e) {

@@ -61,8 +61,12 @@ dependencies {
         api("com.thoughtworks.xstream:xstream:1.4.21")
         api("commons-codec:commons-codec:1.19.0")
         api("commons-collections:commons-collections:3.2.2")
-        api("commons-io:commons-io:2.20.0")
-        api("commons-lang:commons-lang:2.6")
+        api("commons-io:commons-io:2.20.0") {
+            because("User might still rely on commons-io")
+        }
+        api("commons-lang:commons-lang:2.6") {
+            because("User might still rely on commons-lang")
+        }
         api("commons-logging:commons-logging:1.3.5")
         api("commons-net:commons-net:3.12.0")
         api("dnsjava:dnsjava:3.6.3")
@@ -98,7 +102,9 @@ dependencies {
         }
         api("org.apache.commons:commons-math3:3.6.1")
         api("org.apache.commons:commons-pool2:2.12.1")
-        api("org.apache.commons:commons-text:1.14.0")
+        api("org.apache.commons:commons-text:1.14.0") {
+            because("User might still rely on commons-text")
+        }
         api("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1")
         api("org.apache.httpcomponents.client5:httpclient5:5.5.1")
         api("org.apache.httpcomponents:httpasyncclient:4.1.5")
@@ -134,6 +140,7 @@ dependencies {
         api("org.neo4j.driver:neo4j-java-driver:6.0.1")
         api("org.slf4j:jcl-over-slf4j:1.7.36")
         api("org.slf4j:slf4j-api:1.7.36")
+        api("org.unbescape:unbescape:1.1.6.RELEASE")
         api("oro:oro:2.0.8")
         api("xalan:serializer:2.7.3")
         api("xalan:xalan:2.7.3")

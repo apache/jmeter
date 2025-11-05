@@ -24,7 +24,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 // N.B. Do not call any JMeter methods; the jar is standalone
 
@@ -67,7 +67,7 @@ public class BeanShellClient {
             sendLine("};", os);
 
             int b;
-            try (BufferedReader fis = Files.newBufferedReader(Paths.get(file))) {
+            try (BufferedReader fis = Files.newBufferedReader(Path.of(file))) {
                 while ((b = fis.read()) != -1) {
                     os.write(b);
                 }

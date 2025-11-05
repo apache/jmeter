@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestUtils;
@@ -37,7 +37,7 @@ public class TestClassFinder {
     private static String getJMeterHome() throws Exception {
         JMeterTestUtils.setupJMeterHome();
         String path = JMeterUtils.getJMeterHome() + "/lib";
-        return Paths.get(path).toRealPath().toString();
+        return Path.of(path).toRealPath().toString();
     }
 
     @BeforeEach
