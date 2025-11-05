@@ -36,12 +36,7 @@ dependencies {
     }
 
     implementation("com.github.ben-manes.caffeine:caffeine")
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
-    implementation("org.apache.commons:commons-text") {
-        because("StringEscapeUtils")
-    }
+    implementation("org.unbescape:unbescape")
     implementation("org.jodd:jodd-lagarto") {
         exclude("ch.qos.logback")
         exclude("commons-logging")

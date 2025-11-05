@@ -35,9 +35,6 @@ dependencies {
 
     testImplementation(testFixtures(projects.src.core))
     testImplementation(testFixtures(projects.src.components))
-    testImplementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
     testImplementation("com.fasterxml.jackson.core:jackson-databind") {
         because("It is used in ReportGeneratorSpec and HtmlReportGeneratorSpec")
     }

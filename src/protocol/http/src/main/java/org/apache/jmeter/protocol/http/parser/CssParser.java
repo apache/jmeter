@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import org.apache.commons.lang3.stream.Streams;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +84,9 @@ public class CssParser implements LinkExtractorParser {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Parsed: {}, got: {}", baseUrl,
-                        Streams.of(urlCollection).map(String::valueOf).collect(Collectors.joining(",")));
+                        StreamSupport.stream(urlCollection.spliterator(), false)
+                                .map(String::valueOf)
+                                .collect(Collectors.joining(",")));
             }
 
             return urlCollection.iterator();

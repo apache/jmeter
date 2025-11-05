@@ -27,7 +27,7 @@ import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
-import java.nio.file.Paths
+import java.nio.file.Path
 import java.text.MessageFormat
 
 class HtmlReportGeneratorTest : JMeterTestCase() {
@@ -45,7 +45,7 @@ class HtmlReportGeneratorTest : JMeterTestCase() {
          * @return combined path as string
          */
         fun combine(vararg paths: String) =
-            Paths.get(JMeterUtils.getJMeterBinDir(), *paths).toString()
+            Path.of(JMeterUtils.getJMeterBinDir(), *paths).toString()
 
         @JvmStatic
         fun checkArgumentsCases() = listOf(

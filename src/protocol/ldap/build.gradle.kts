@@ -22,9 +22,7 @@ plugins {
 dependencies {
     api(projects.src.core)
 
-    implementation("org.apache.commons:commons-text") {
-        because("StringEscapeUtils")
-    }
+    implementation("org.unbescape:unbescape")
 
     testImplementation(testFixtures(projects.src.core))
 }

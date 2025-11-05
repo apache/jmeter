@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -42,6 +41,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unbescape.html.HtmlEscape;
 
 public class RegexExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
 
@@ -240,7 +240,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 : useRequestHeaders() ? result.getRequestHeaders()
                 : useCode() ? result.getResponseCode() // Bug 43451
                 : useMessage() ? result.getResponseMessage() // Bug 43451
-                : useUnescapedBody() ? StringEscapeUtils.unescapeHtml4(result.getResponseDataAsString())
+                : useUnescapedBody() ? HtmlEscape.unescapeHtml(result.getResponseDataAsString())
                 : useBodyAsDocument() ? Document.getTextFromDocument(result.getResponseData())
                 : result.getResponseDataAsString() // Bug 36898
                 ;

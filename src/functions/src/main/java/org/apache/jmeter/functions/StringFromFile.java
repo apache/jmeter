@@ -20,13 +20,12 @@ package org.apache.jmeter.functions;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -34,6 +33,7 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JMeterStopThreadException;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,10 +212,10 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
 
         log.info("{} opening file {}", tn, fileName);//$NON-NLS-1$
         try {
-            myBread = Files.newBufferedReader(Paths.get(fileName));
+            myBread = Files.newBufferedReader(Path.of(fileName));
         } catch (Exception e) {
-            log.error("openFile() error: {}", e.toString());//$NON-NLS-1$
-            IOUtils.closeQuietly(myBread, null);
+            log.error("openFile() error", e);//$NON-NLS-1$
+            JOrphanUtils.closeQuietly(myBread);
             myBread = null;
         }
     }

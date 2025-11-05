@@ -33,12 +33,13 @@
           <stringProp name="script">import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.BrokerFactory;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.commons.io.FileUtils;
-import java.io.File;
+import java.nio.file.Path;
+import kotlin.io.path.PathsKt;
 
-File file = new File(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;);
-log.info(&quot;Deleting {}&quot;, file);
-FileUtils.deleteDirectory(file);
+Path activemqData = Path.of(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;);
+log.info(&quot;Deleting {}&quot;, activemqData);
+PathsKt.deleteRecursively(activemqData);
+
 log.info(&quot;Creating activemq config from {}&quot;, JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;);
 try {
 	String path = JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;;
@@ -120,10 +121,10 @@ import org.slf4j.LoggerFactory;
 import javax.naming.InitialContext;
 import javax.naming.Context;
 import java.util.Properties;
-def thread = Thread.start { 
+def thread = Thread.start {
 	Properties props = new Properties();
 	props.setProperty(Context.INITIAL_CONTEXT_FACTORY,		&quot;org.apache.activemq.jndi.ActiveMQInitialContextFactory&quot;);
-	props.setProperty(Context.PROVIDER_URL,&quot;tcp://127.0.0.1:61616&quot;);	
+	props.setProperty(Context.PROVIDER_URL,&quot;tcp://127.0.0.1:61616&quot;);
 	Context namingCtx = new InitialContext(props);
 	ConnectionFactory cf = (ConnectionFactory)namingCtx.lookup(&quot;ConnectionFactory&quot;);
 	Connection con = cf.createConnection();
@@ -131,7 +132,7 @@ def thread = Thread.start {
 	Destination dest = (Destination)namingCtx.lookup(Parameters);
 
 	try {
-		Session session = 
+		Session session =
 		      con.createSession(false, Session.AUTO_ACKNOWLEDGE);  // non-transacted session (more)
 		MessageConsumer consumer = session.createConsumer(dest);
 		consumer.setMessageListener(new MyMessageListener(session));
@@ -141,7 +142,7 @@ def thread = Thread.start {
 		session.close();
 		log.info(&quot;Closed session&quot;);
 	} finally {
-		con.close();                                             // free all resources (more)	
+		con.close();                                             // free all resources (more)
 	}
 }
 SampleResult.setResponseMessageOK();
@@ -400,7 +401,7 @@ Connection con = cf.createConnection();
 Destination dest = (Destination)namingCtx.lookup(&quot;dynamicQueues/requestQueue4&quot;);
 
 try {
-  Session session = 
+  Session session =
       con.createSession(false, Session.AUTO_ACKNOWLEDGE);  // non-transacted session (more)
 
   MessageConsumer consumer = session.createConsumer(dest);
@@ -1396,7 +1397,8 @@ propFloat	1.2</stringProp>
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="script">import org.apache.activemq.broker.BrokerService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.commons.io.FileUtils;
+import java.nio.file.Path;
+import kotlin.io.path.PathsKt;
 
 BrokerService broker = props.get(&quot;ACTIVEMQ_BROKER&quot;);
 Thread.start {
@@ -1406,7 +1408,7 @@ Thread.start {
   // Otherwise &quot;The following non-daemon threads are still running&quot; is printed
   sleep(700)
   broker.stop()
-  FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;))
+  PathsKt.deleteRecursively(Path.of(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;))
 }
 </stringProp>
         </JSR223Sampler>

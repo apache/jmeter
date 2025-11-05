@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
@@ -112,7 +111,7 @@ public class JsonExporter extends AbstractDataExporter {
 
         JOrphanUtils.canSafelyWriteToFolder(outputDir, JSON_FILE_FILTER);
         try {
-            FileUtils.forceMkdir(outputDir);
+            Files.createDirectories(outputDir.toPath());
         } catch (IOException ex) {
             throw new ExportException("Error creating output folder "+outputDir.getAbsolutePath(), ex);
         }

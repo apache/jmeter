@@ -17,12 +17,12 @@
 
 package org.apache.jmeter.report.processor;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.StringUtilities;
+import org.unbescape.html.HtmlEscape;
 
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
 
@@ -97,7 +97,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
     }
 
     private static String escapeJson(String responseMessage) {
-        return new String(JsonStringEncoder.getInstance().quoteAsString(StringEscapeUtils.escapeHtml4(responseMessage)));
+        return new String(JsonStringEncoder.getInstance().quoteAsString(HtmlEscape.escapeHtml5(responseMessage)));
     }
 
     @Override

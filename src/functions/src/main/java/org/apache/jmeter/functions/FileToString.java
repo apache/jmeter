@@ -19,11 +19,13 @@ package org.apache.jmeter.functions;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -104,9 +106,9 @@ public class FileToString extends AbstractFunction {
         String myValue = ERR_IND;
 
         try {
-            File file = new File(fileName);
-            if(file.exists() && file.canRead()) {
-                myValue = FileUtils.readFileToString(new File(fileName), encoding);
+            Path path = Path.of(fileName);
+            if (Files.exists(path) && Files.isReadable(path)) {
+                myValue = Files.readString(path, encoding == null ? Charset.defaultCharset() : Charset.forName(encoding));
             } else {
                 log.warn("Could not read open: {} ", fileName);
             }

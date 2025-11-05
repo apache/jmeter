@@ -34,7 +34,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -122,7 +121,8 @@ public class FileEditor implements PropertyEditor, ActionListener {
 
     private static String toUnix(final File selectedFile) {
         if (File.separatorChar == '\\') {
-            return FilenameUtils.separatorsToUnix(selectedFile.getPath());
+            // TODO: is this normalization really useful?
+            return selectedFile.getPath().replace('\\', '/');
         }
         return selectedFile.getPath();
     }

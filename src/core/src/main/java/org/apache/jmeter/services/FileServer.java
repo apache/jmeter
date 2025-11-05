@@ -17,27 +17,29 @@
 
 package org.apache.jmeter.services;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.commons.io.input.BOMInputStream;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.io.BomInputStream;
 import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -424,20 +426,17 @@ public class FileServer {
             throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
         }
 
-        BOMInputStream fis = BOMInputStream.builder().setFile(fileEntry.file).get();
-        InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding
         String charsetName = fileEntry.charSetEncoding;
+        Path filePath = fileEntry.file.toPath();
         if (StringUtilities.isNotBlank(charsetName)) {
-            isr = new InputStreamReader(fis, charsetName);
-        } else if (fis.hasBOM()) {
-            isr = new InputStreamReader(fis, fis.getBOM().getCharsetName());
-        } else {
-            @SuppressWarnings("DefaultCharset")
-            final InputStreamReader withPlatformEncoding = new InputStreamReader(fis);
-            isr = withPlatformEncoding;
+            return Files.newBufferedReader(filePath, Charset.forName(charsetName));
         }
-        return new BufferedReader(isr);
+        // InputStreamReader does not buffer reads, so we need to buffer file reads
+        BufferedInputStream fis = new BufferedInputStream(Files.newInputStream(filePath));
+        // Detect BOM
+        Reader reader = BomInputStream.reader(fis);
+        return new BufferedReader(reader);
     }
 
     public synchronized void write(String filename, String value) throws IOException {

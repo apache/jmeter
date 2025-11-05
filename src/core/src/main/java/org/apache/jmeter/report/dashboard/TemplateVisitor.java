@@ -31,7 +31,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.report.core.DataContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import kotlin.io.path.PathsKt;
 
 /**
  * The class TemplateVisitor visits files in a template directory to copy
@@ -98,13 +98,13 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
             throws IOException {
 
         // Depending on file extension, copy or process file
-        String extension = FilenameUtils.getExtension(file.toString());
+        String extension = PathsKt.getExtension(file);
+        Path relativePath = source.relativize(file);
         if (TEMPLATED_FILE_EXT.equalsIgnoreCase(extension)) {
             // Process template file
-            String templatePath = source.relativize(file).toString();
+            String templatePath = relativePath.toString();
             Template template = configuration.getTemplate(templatePath);
-            Path newPath = target.resolve(FilenameUtils
-                    .removeExtension(templatePath));
+            Path newPath = target.resolve(PathsKt.getNameWithoutExtension(relativePath));
             try (FileOutputStream stream = new FileOutputStream(newPath.toString());
                     Writer writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
                     BufferedWriter bufferedWriter = new BufferedWriter(writer)){
@@ -115,7 +115,7 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
 
         } else {
             // Copy regular file
-            Path newFile = target.resolve(source.relativize(file));
+            Path newFile = target.resolve(relativePath);
             Files.copy(file, newFile, StandardCopyOption.REPLACE_EXISTING);
         }
         return FileVisitResult.CONTINUE;

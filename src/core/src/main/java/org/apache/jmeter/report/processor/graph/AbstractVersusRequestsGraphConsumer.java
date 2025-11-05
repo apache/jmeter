@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.report.core.CsvSampleReader;
 import org.apache.jmeter.report.core.CsvSampleWriter;
 import org.apache.jmeter.report.core.Sample;
@@ -36,6 +35,8 @@ import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.ValueResultData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import kotlin.io.path.PathsKt;
 
 /**
  * The class AbstractOverTimeGraphConsumer provides a base class for over time
@@ -316,7 +317,11 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             if (createdWorkDir) {
                 File workingDir = parent.getWorkingDirectory();
                 try {
-                    FileUtils.deleteDirectory(workingDir);
+                    PathsKt.deleteRecursively(workingDir.toPath());
+                    //noinspection ConstantValue
+                    if (false) {
+                        throw new IOException("Make javac happy as deleteRecursively can throw IOException");
+                    }
                 } catch (IOException e) {
                     log.warn("Cannot delete created temporary directory, '{}'", workingDir, e);
                 }

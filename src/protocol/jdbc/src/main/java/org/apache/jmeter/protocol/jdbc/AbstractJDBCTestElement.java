@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.jdbc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -42,7 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -51,6 +51,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import kotlin.io.TextStreamsKt;
 
 /**
  * A base class for all JDBC test elements handling the basics of a SQL request.
@@ -330,12 +332,12 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                 try (Reader reader = clob.getCharacterStream(0,MAX_RETAIN_SIZE)) {
                     jmvars.put(
                             name,
-                            IOUtils.toString(reader)
+                            TextStreamsKt.readText(reader)
                             + "<result cut off, it is too big>");
                 }
             } else {
                 try (Reader reader = clob.getCharacterStream()) {
-                    jmvars.put(name, IOUtils.toString(reader));
+                    jmvars.put(name, TextStreamsKt.readText(reader));
                 }
             }
         } catch (IOException e) {
@@ -346,20 +348,17 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     private void putIntoVar(final JMeterVariables jmvars, final String name,
             final Blob blob) throws SQLException {
         if (RS_STORE_AS_OBJECT.equals(resultSetHandler)) {
-            try {
-                long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
-                jmvars.putObject(name,
-                        IOUtils.toByteArray(blob.getBinaryStream(0, length)));
-            } catch (IOException e) {
-                log.warn("Could not read BLOB into {} as object.", name, e);
-            }
+            long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
+            jmvars.putObject(name,
+                    blob.getBytes(0, Math.toIntExact(length)));
         } else if (RS_COUNT_RECORDS.equals(resultSetHandler)) {
             jmvars.put(name, blob.length() + " bytes");
         } else {
             try {
                 long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
-                try (InputStream is = blob.getBinaryStream(0, length)) {
-                    jmvars.put(name, IOUtils.toString(is, ENCODING));
+                try (InputStream is = blob.getBinaryStream(0, length);
+                     InputStreamReader reader = new InputStreamReader(is, ENCODING)) {
+                    jmvars.put(name, TextStreamsKt.readText(reader));
                 }
             } catch (IOException e) {
                 log.warn("Can't convert BLOB to String using {}", ENCODING, e);

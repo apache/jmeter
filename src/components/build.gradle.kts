@@ -68,12 +68,7 @@ dependencies {
     implementation("org.jsoup:jsoup")
     implementation("net.sf.jtidy:jtidy")
     implementation("org.apache.commons:commons-math3")
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
-    implementation("org.apache.commons:commons-text") {
-        because("StringEscapeUtils")
-    }
+    implementation("org.unbescape:unbescape")
     implementation("com.miglayout:miglayout-swing")
     // we use bcmail for compilation only, and bcmail is not shipped in the release
     compileOnly("org.bouncycastle:bcmail-jdk18on")

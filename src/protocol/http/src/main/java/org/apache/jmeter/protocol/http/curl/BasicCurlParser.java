@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +45,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.Cookie;
@@ -1038,7 +1038,7 @@ public class BasicCurlParser {
        File file = new File(filePath.trim());
        if (file.isFile() && file.exists()) {
            try {
-               return FileUtils.readFileToString(file, StandardCharsets.UTF_8.name());
+               return Files.readString(file.toPath());
            } catch (IOException e) {
                LOGGER.error("Failed to read from File {}", filePath, e);
                throw new IllegalArgumentException("Failed to read from File " + filePath);

@@ -23,9 +23,6 @@ dependencies {
     api(projects.src.core)
 
     implementation("org.apache.commons:commons-dbcp2")
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
 
     testImplementation(testFixtures(projects.src.core))
     testImplementation("io.mockk:mockk")

@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -44,7 +43,6 @@ import java.util.concurrent.Future;
 import java.util.function.Predicate;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -62,7 +60,6 @@ import org.apache.jmeter.protocol.http.parser.LinkExtractorParseException;
 import org.apache.jmeter.protocol.http.parser.LinkExtractorParser;
 import org.apache.jmeter.protocol.http.sampler.ResourcesDownloader.AsynSamplerResultHolder;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.apache.jmeter.protocol.http.util.DirectAccessByteArrayOutputStream;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -84,6 +81,7 @@ import org.apache.jmeter.testelement.schema.PropertyDescriptor;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.io.DirectAccessByteArrayOutputStream;
 import org.apache.jorphan.util.ExceptionUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
@@ -1921,7 +1919,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public byte[] readResponse(SampleResult sampleResult, InputStream in, long length) throws IOException {
 
-        OutputStream w = null;
+        DirectAccessByteArrayOutputStream w = null;
         try (Closeable ignore = in) { // NOSONAR No try with resource as performance is critical here
             byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
             int bufferSize = 32;// Enough for MD5
@@ -1951,13 +1949,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 if (first) {
                     sampleResult.latencyEnd();
                     first = false;
-                    if(md == null) {
-                        if(!knownResponseLength) {
-                            w = new org.apache.commons.io.output.ByteArrayOutputStream(bufferSize);
-                        }
-                        else {
-                            w = new DirectAccessByteArrayOutputStream(bufferSize);
-                        }
+                    if (md == null) {
+                        w = new DirectAccessByteArrayOutputStream(knownResponseLength ? bufferSize : 8192);
                     }
                 }
 
@@ -1985,7 +1978,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
 
             if (md == null) {
-                return toByteArray(w);
+                return w.toByteArray();
             } else {
                 byte[] md5Result = md.digest();
                 sampleResult.setBytes(totalBytes);
@@ -1993,27 +1986,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
 
         } finally {
-            IOUtils.closeQuietly(w, null);
+            JOrphanUtils.closeQuietly(w);
         }
-    }
-
-    /**
-     * Optimized method to get byte array from {@link OutputStream}
-     * @param w {@link OutputStream}
-     * @return byte array
-     */
-    private static byte[] toByteArray(OutputStream w) {
-        if(w instanceof DirectAccessByteArrayOutputStream directAccessByteArrayOutputStream) {
-            return directAccessByteArrayOutputStream.toByteArray();
-        }
-
-        if(w instanceof org.apache.commons.io.output.ByteArrayOutputStream byteArrayOutputStream) {
-            return byteArrayOutputStream.toByteArray();
-        }
-
-        log.warn("Unknown stream type {}", w.getClass());
-
-        return null;
     }
 
     /**

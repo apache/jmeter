@@ -17,9 +17,9 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +27,6 @@ import java.util.Set;
 import org.apache.bsf.BSFEngine;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.samplers.Entry;
@@ -90,10 +89,7 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
             Object bsfOut = null;
             if (!fileName.isEmpty()) {
                 res.setSamplerData("File: "+fileName);
-                try (FileInputStream fis = new FileInputStream(fileName);
-                        BufferedInputStream is = new BufferedInputStream(fis)) {
-                    bsfOut = bsfEngine.eval(fileName, 0, 0, IOUtils.toString(is, Charset.defaultCharset()));
-                }
+                bsfOut = bsfEngine.eval(fileName, 0, 0, Files.readString(Path.of(fileName), Charset.defaultCharset()));
             } else {
                 res.setSamplerData(request);
                 bsfOut = bsfEngine.eval("script", 0, 0, request);

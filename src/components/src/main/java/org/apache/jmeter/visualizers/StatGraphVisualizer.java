@@ -24,10 +24,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
+import java.io.Writer;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.MessageFormat;
@@ -731,8 +730,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             if (chooser == null) {
                 return;
             }
-            try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
-                    OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){
+            try (Writer writer = Files.newBufferedWriter(chooser.getSelectedFile().toPath())){
                 CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),
                         writer,
                         saveHeaders.isSelected() ? getLabels(COLUMNS, getColumnsMsgParameters()) : null);

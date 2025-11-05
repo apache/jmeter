@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -43,7 +43,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.net.ssl.SSLContext;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -185,10 +184,7 @@ public class SendMailCommand {
                (attachmentCount == 0 ||  (mailBody.isEmpty() && attachmentCount == 1))) {
                 if (attachmentCount == 1) { // i.e. mailBody is empty
                     File first = attachments.get(0);
-                    try (FileInputStream fis = new FileInputStream(first);
-                            InputStream is = new BufferedInputStream(fis)){
-                        message.setText(IOUtils.toString(is, Charset.defaultCharset()));
-                    }
+                    message.setText(Files.readString(first.toPath(), Charset.defaultCharset()));
                 } else {
                     message.setText(mailBody);
                 }

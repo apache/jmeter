@@ -22,7 +22,7 @@ import static java.lang.String.format;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
 
@@ -61,7 +61,7 @@ class BinaryMessageRenderer implements MessageRenderer<byte[]> {
 
     byte[] getContent(String filename) {
         try {
-            return Files.readAllBytes(Paths.get(filename));
+            return Files.readAllBytes(Path.of(filename));
         } catch (IOException e) {
             throw new RuntimeException(format("Can't read content of %s", filename), e);
         }

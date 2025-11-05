@@ -28,6 +28,7 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
@@ -376,7 +377,7 @@ public class PostWriter {
         // uploads were being done. Could be fixed by increasing the evacuation
         // ratio in bin/jmeter[.bat], but this is better.
         int read;
-        try (InputStream in = Files.newInputStream(Paths.get(filename))) {
+        try (InputStream in = Files.newInputStream(Path.of(filename))) {
             while ((read = in.read(buf)) > 0) {
                 out.write(buf, 0, read);
             }

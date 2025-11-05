@@ -22,9 +22,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.io.DirectAccessByteArrayOutputStream;
 
 /**
  * HTTP Sampler which can read from file: URLs
@@ -50,27 +50,27 @@ public class HTTPFileImpl extends HTTPAbstractImpl {
         res.setHTTPMethod(HTTPConstants.GET); // Dummy
         res.setURL(url);
         res.setSampleLabel(url.toString());
-        InputStream is = null;
         res.sampleStart();
         int bufferSize = 4096;
-        try ( org.apache.commons.io.output.ByteArrayOutputStream bos = new org.apache.commons.io.output.ByteArrayOutputStream(bufferSize) ) {
+        try (DirectAccessByteArrayOutputStream bos = new DirectAccessByteArrayOutputStream(bufferSize) ) {
             byte[] responseData;
             URLConnection conn = url.openConnection();
-            is = conn.getInputStream();
-            byte[] readBuffer = new byte[bufferSize];
-            int bytesReadInBuffer = 0;
             long totalBytes = 0;
-            boolean storeInBOS = true;
-            while ((bytesReadInBuffer = is.read(readBuffer)) > -1) {
-                if(storeInBOS) {
-                    if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) {
-                        bos.write(readBuffer, 0, bytesReadInBuffer);
-                    } else {
-                        bos.write(readBuffer, 0, (int)(MAX_BYTES_TO_STORE_PER_REQUEST-totalBytes));
-                        storeInBOS = false;
+            try (InputStream is = conn.getInputStream()){
+                byte[] readBuffer = new byte[bufferSize];
+                int bytesReadInBuffer = 0;
+                boolean storeInBOS = true;
+                while ((bytesReadInBuffer = is.read(readBuffer)) > -1) {
+                    if (storeInBOS) {
+                        if (totalBytes + bytesReadInBuffer <= MAX_BYTES_TO_STORE_PER_REQUEST) {
+                            bos.write(readBuffer, 0, bytesReadInBuffer);
+                        } else {
+                            bos.write(readBuffer, 0, (int) (MAX_BYTES_TO_STORE_PER_REQUEST - totalBytes));
+                            storeInBOS = false;
+                        }
                     }
+                    totalBytes += bytesReadInBuffer;
                 }
-                totalBytes += bytesReadInBuffer;
             }
             responseData = bos.toByteArray();
             res.sampleEnd();
@@ -95,9 +95,6 @@ public class HTTPFileImpl extends HTTPAbstractImpl {
             return res;
         } catch (IOException e) {
             return errorResult(e, res);
-        } finally {
-            IOUtils.closeQuietly(is, null);
         }
-
     }
 }
