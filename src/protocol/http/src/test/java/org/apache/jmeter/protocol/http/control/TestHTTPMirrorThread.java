@@ -365,7 +365,7 @@ public class TestHTTPMirrorThread extends JMeterTestCase {
     /**
      * Check that the two byte arrays have identical content
      */
-    private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
+    private static void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
                 System.out.println(">>>>>>>>>>>>>>>>>>>> (expected) : length " + expected.length);
@@ -404,7 +404,7 @@ public class TestHTTPMirrorThread extends JMeterTestCase {
         }
     }
 
-    private byte[] getMirroredResponse(byte[] allResponse) {
+    private static byte[] getMirroredResponse(byte[] allResponse) {
         // The response includes the headers from the mirror server,
         // we want to skip those, to only keep the content mirrored.
         // Look for the first CRLFCRLF section

@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,11 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
@@ -49,6 +46,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,12 +109,12 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         setProperty(new BooleanProperty(CONTROLLED_BY_THREAD, control));
     }
 
-    /*
+    /**
      * Holder for storing cache details.
      * Perhaps add original response later?
      */
-    // package-protected to allow access by unit-test cases
     static class CacheEntry {
+        // The class is package-protected to allow access by unit-test cases
         private final String lastModified;
         private final String etag;
         private final Date expires;
@@ -167,9 +165,6 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return varyHeader;
         }
 
-        /* (non-Javadoc)
-         * @see java.lang.Object#toString()
-         */
         @Override
         public String toString() {
             return "CacheEntry [lastModified=" + lastModified + ", etag=" + etag + ", expires=" + expires
@@ -200,14 +195,14 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private static boolean anyNotBlank(String... values) {
         for (String value: values) {
-            if (StringUtils.isNotBlank(value)) {
+            if (StringUtilities.isNotBlank(value)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static Pair<String, String> getVaryHeader(String headerName, Header[] reqHeaders) {
+    private static Map.Entry<String, String> getVaryHeader(String headerName, Header[] reqHeaders) {
         if (headerName == null) {
             return null;
         }
@@ -222,7 +217,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 values.get(header.getName()).add(header.getValue());
             }
         }
-        return new ImmutablePair<>(headerName, values.toString());
+        return new AbstractMap.SimpleEntry<>(headerName, values.toString());
     }
 
     /**
@@ -252,7 +247,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     // helper method to save the cache entry
     private void setCache(String lastModified, String cacheControl, String expires,
-            String etag, String url, String date, Pair<String, String> varyHeader) {
+            String etag, String url, String date, Map.Entry<String, String> varyHeader) {
         log.debug("setCache({}, {}, {}, {}, {}, {}, {})", lastModified,
                 cacheControl, expires, etag, url, date, varyHeader);
         Date expiresDate = null; // i.e. not using Expires
@@ -278,10 +273,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             if (log.isDebugEnabled()) {
                 log.debug("Set entry into cache for url {} and vary {} ({})", url,
                         varyHeader,
-                        varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()));
+                        varyUrl(url, varyHeader.getKey(), varyHeader.getValue()));
             }
-            getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getLeft()));
-            getCache().put(varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()), new CacheEntry(lastModified, expiresDate, etag, null));
+            getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getKey()));
+            getCache().put(varyUrl(url, varyHeader.getKey(), varyHeader.getValue()), new CacheEntry(lastModified, expiresDate, etag, null));
         } else {
             // Makes expiresDate effectively-final
             Date entryExpiresDate = expiresDate;
@@ -334,7 +329,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     @SuppressWarnings("JavaUtilDate")
     private static Date calcExpiresDate(String lastModified, String cacheControl,
             String expires, String etag, String url, String date) {
-        if(!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(date)) {
+        if (StringUtilities.isNotEmpty(lastModified) && StringUtilities.isNotEmpty(date)) {
             try {
                 Date responseDate = DateUtils.parseDate(date);
                 Date lastModifiedAsDate = DateUtils.parseDate(lastModified);
@@ -369,7 +364,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return hdr != null ? hdr.getValue() : null;
     }
 
-    /*
+    /**
      * Is the sample result OK to cache?
      * i.e is it in the 2xx range or equal to 304, and is it a cacheable method?
      */
@@ -499,7 +494,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
         private final org.apache.jmeter.protocol.http.control.Header delegate;
 
-        public HeaderAdapter(org.apache.jmeter.protocol.http.control.Header delegate) {
+        private HeaderAdapter(org.apache.jmeter.protocol.http.control.Header delegate) {
             this.delegate = delegate;
         }
 
@@ -556,12 +551,12 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             }
             return null;
         }
-        Pair<String, String> varyPair = getVaryHeader(entry.getVaryHeader(), headers);
+        Map.Entry<String, String> varyPair = getVaryHeader(entry.getVaryHeader(), headers);
         if (varyPair != null) {
             if(log.isDebugEnabled()) {
                 log.debug("Looking again for {} because of {} with vary: {} ({})", url, entry, entry.getVaryHeader(), varyPair);
             }
-            return getEntry(varyUrl(url, entry.getVaryHeader(), varyPair.getRight()), null);
+            return getEntry(varyUrl(url, entry.getVaryHeader(), varyPair.getValue()), null);
         }
         return null;
     }

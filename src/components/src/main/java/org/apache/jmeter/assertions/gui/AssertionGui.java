@@ -157,8 +157,7 @@ public class AssertionGui extends AbstractAssertionGui {
     public void modifyTestElement(TestElement el) {
         GuiUtils.stopTableEditing(stringTable);
         configureTestElement(el);
-        if (el instanceof ResponseAssertion) {
-            ResponseAssertion ra = (ResponseAssertion) el;
+        if (el instanceof ResponseAssertion ra) {
             ra.setCustomFailureMessage(alternativeFailureMessage.getText());
             saveScopeSettings(ra);
 
@@ -294,7 +293,7 @@ public class AssertionGui extends AbstractAssertionGui {
             tableModel.addRow(new Object[] { jMeterProperty.getStringValue() });
         }
 
-        boolean testStringsPresent = model.getTestStrings().size() != 0;
+        boolean testStringsPresent = !model.getTestStrings().isEmpty();
         deletePattern.setEnabled(testStringsPresent);
 
         tableModel.fireTableDataChanged();

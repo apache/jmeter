@@ -40,7 +40,7 @@ public class PowerTableModel extends DefaultTableModel {
     private Class<?>[] columnClasses;
 
     private static final List<Object> DEFAULT_ARGS = Collections.unmodifiableList(Arrays.asList("", 0,
-            0L, Boolean.FALSE, 0F, 0D, ' ',
+            0L, false, 0F, 0D, ' ',
             Byte.MIN_VALUE, Short.MIN_VALUE));
 
     public PowerTableModel(String[] headers, Class<?>[] classes) {

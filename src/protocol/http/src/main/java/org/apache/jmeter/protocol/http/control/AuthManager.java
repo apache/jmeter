@@ -51,7 +51,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -390,7 +390,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    if (line.startsWith("#") || JOrphanUtils.isBlank(line)) { //$NON-NLS-1$
+                    if (line.startsWith("#") || StringUtilities.isBlank(line)) { //$NON-NLS-1$
                         continue;
                     }
                     String[] tokens = line.split("\t"); //$NON-NLS-1$

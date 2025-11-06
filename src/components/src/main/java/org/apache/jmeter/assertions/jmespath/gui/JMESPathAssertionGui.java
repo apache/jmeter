@@ -113,8 +113,7 @@ public class JMESPathAssertionGui extends JSONPathAssertionGui {
     @Override
     public void modifyTestElement(TestElement element) {
         super.configureTestElement(element);
-        if (element instanceof JMESPathAssertion) {
-            JMESPathAssertion jmesAssertion = (JMESPathAssertion) element;
+        if (element instanceof JMESPathAssertion jmesAssertion) {
             jmesAssertion.setJmesPath(jsonPath.getText());
             jmesAssertion.setExpectedValue(jsonValue.getText());
             jmesAssertion.setJsonValidationBool(jsonValidation.isSelected());
@@ -130,8 +129,7 @@ public class JMESPathAssertionGui extends JSONPathAssertionGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (element instanceof JMESPathAssertion) {
-            JMESPathAssertion jmesAssertion = (JMESPathAssertion) element;
+        if (element instanceof JMESPathAssertion jmesAssertion) {
             jsonPath.setText(jmesAssertion.getJmesPath());
             jsonValue.setText(jmesAssertion.getExpectedValue());
             jsonValidation.setSelected(jmesAssertion.isJsonValidationBool());

@@ -26,7 +26,9 @@ javaPlatform {
 }
 
 dependencies {
-    api(platform("org.junit:junit-bom:5.10.1"))
+    api(platform("org.junit:junit-bom:5.14.1"))
+    api(platform("org.springframework:spring-framework-bom:6.2.12"))
+    api(platform("org.eclipse.jetty:jetty-bom:11.0.26"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
@@ -37,25 +39,23 @@ dependencies {
         // compilation classpath (e.g. it is used as a transitive by a third-party library)
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
-        api("com.github.tomakehurst:wiremock-jre8:2.35.2")
-        api("io.mockk:mockk:1.13.17")
-        api("net.bytebuddy:byte-buddy:1.14.11")
-        api("nl.jqno.equalsverifier:equalsverifier:3.15.5")
+        api("org.wiremock:wiremock:3.13.1")
+        api("io.mockk:mockk:1.14.6")
+        api("net.bytebuddy:byte-buddy:1.17.8")
+        api("nl.jqno.equalsverifier:equalsverifier:4.2.1")
         // activemq-all should not be used as it provides secondary slf4j binding
-        api("org.apache.activemq:activemq-broker:5.16.7")
-        api("org.apache.activemq:activemq-client:5.16.7")
-        api("org.apache.activemq:activemq-spring:5.16.7")
-        api("org.apache.ftpserver:ftplet-api:1.2.0")
-        api("org.apache.ftpserver:ftpserver-core:1.2.0")
-        api("org.apache.mina:mina-core:2.2.3")
-        api("org.hamcrest:hamcrest-core:2.2")
-        api("org.hamcrest:hamcrest-library:2.2")
-        api("org.hamcrest:hamcrest:2.2")
-        api("org.hsqldb:hsqldb:2.7.2")
-        api("org.objenesis:objenesis:3.3")
+        api("org.apache.activemq:activemq-broker:5.16.8")
+        api("org.apache.activemq:activemq-client:5.16.8")
+        api("org.apache.activemq:activemq-spring:5.16.8")
+        api("org.apache.ftpserver:ftplet-api:1.2.1")
+        api("org.apache.ftpserver:ftpserver-core:1.2.1")
+        api("org.apache.mina:mina-core:2.2.4")
+        api("org.hamcrest:hamcrest-core:3.0")
+        api("org.hamcrest:hamcrest-library:3.0")
+        api("org.hamcrest:hamcrest:3.0")
+        api("org.hsqldb:hsqldb:2.7.4")
+        api("org.objenesis:objenesis:3.4")
         api("org.openjdk.jmh:jmh-core:1.37")
         api("org.openjdk.jmh:jmh-generator-annprocess:1.37")
-        api("org.springframework:spring-beans:4.3.30.RELEASE")
-        api("org.springframework:spring-context:4.3.30.RELEASE")
     }
 }

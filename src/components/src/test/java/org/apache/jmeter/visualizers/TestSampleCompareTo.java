@@ -17,11 +17,10 @@
 
 package org.apache.jmeter.visualizers;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.stream.Stream;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -44,11 +43,10 @@ class TestSampleCompareTo {
     @ParameterizedTest
     @MethodSource("data")
     void testCompareTo(long thisCount, long otherCount, int compareResult) {
-        assertThat(sample(thisCount).compareTo(sample(otherCount)),
-                CoreMatchers.is(compareResult));
+        assertEquals(compareResult, sample(thisCount).compareTo(sample(otherCount)));
     }
 
-    private Sample sample(long count) {
+    private static Sample sample(long count) {
         return new Sample("dummy", 0L, 0L, 0L, 0L, 0L, 0.0, 0L, true, count, 0L);
     }
 

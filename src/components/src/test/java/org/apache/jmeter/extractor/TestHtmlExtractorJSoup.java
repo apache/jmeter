@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.extractor;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -25,7 +24,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -65,9 +63,9 @@ public class TestHtmlExtractorJSoup {
         extractor.setScopeVariable("content");
         extractor.setThreadContext(jmctx);
         extractor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is("http://jmeter.apache.org/"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("1"));
+        assertNull(vars.get("varname"));
+        assertEquals("http://jmeter.apache.org/", vars.get("varname_1"));
+        assertEquals("1", vars.get("varname_matchNr"));
     }
 
     @Test
@@ -82,10 +80,10 @@ public class TestHtmlExtractorJSoup {
         extractor.setScopeVariable("content");
         extractor.setThreadContext(jmctx);
         extractor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is("http://www.apache.org/"));
-        assertThat(vars.get("varname_2"), CoreMatchers.is("http://jmeter.apache.org/"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("2"));
+        assertNull(vars.get("varname"));
+        assertEquals("http://www.apache.org/", vars.get("varname_1"));
+        assertEquals("http://jmeter.apache.org/", vars.get("varname_2"));
+        assertEquals("2", vars.get("varname_matchNr"));
     }
 
     @Test
@@ -147,7 +145,7 @@ public class TestHtmlExtractorJSoup {
         extractor.setAttribute("href");
         extractor.setMatchNumber(-1);
         extractor.process();
-        assertThat(vars.get("regVal_matchNr"), CoreMatchers.is("2"));
+        assertEquals("2", vars.get("regVal_matchNr"));
         assertEquals("http://example.com/", vars.get("regVal_1"));
         assertEquals("http://example2.com/", vars.get("regVal_2"));
     }
@@ -157,7 +155,7 @@ public class TestHtmlExtractorJSoup {
         extractor.setExpression("b");
         extractor.setMatchNumber(-1);
         extractor.process();
-        assertThat(vars.get("regVal_matchNr"), CoreMatchers.is("2"));
+        assertEquals("2", vars.get("regVal_matchNr"));
         assertEquals("example1", vars.get("regVal_1"));
         assertEquals("example2", vars.get("regVal_2"));
     }
@@ -167,7 +165,7 @@ public class TestHtmlExtractorJSoup {
         extractor.setExpression("c");
         extractor.setMatchNumber(-1);
         extractor.process();
-        assertThat(vars.get("regVal_matchNr"), CoreMatchers.is("0"));
+        assertEquals("0", vars.get("regVal_matchNr"));
         assertNull(vars.get("regVal"));
         assertNull(vars.get("regVal_1"));
     }

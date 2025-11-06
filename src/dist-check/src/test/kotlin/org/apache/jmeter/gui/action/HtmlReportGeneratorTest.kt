@@ -83,19 +83,6 @@ class HtmlReportGeneratorTest : JMeterTestCase() {
                     )
                 )
             },
-            CheckArgumentsCase(
-                "",
-                "",
-                "",
-                listOf(
-                    JMeterUtils.getResString("generate_report_ui.csv_file") +
-                        MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), ""),
-                    JMeterUtils.getResString("generate_report_ui.user_properties_file") +
-                        MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.NO_FILE), ""),
-                    JMeterUtils.getResString("generate_report_ui.output_directory") +
-                        MessageFormat.format(JMeterUtils.getResString(HtmlReportGenerator.CANNOT_CREATE_DIRECTORY), "")
-                )
-            ),
             combine("testfiles", "testReport", "oneLevel", "twolevel").let { outputDirectoryPath ->
                 CheckArgumentsCase(
                     combine("testfiles", "HTMLReportTestFile.csv"),

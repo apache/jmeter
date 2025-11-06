@@ -42,6 +42,7 @@ import org.apache.jmeter.visualizers.ResultRenderer;
 import org.apache.jmeter.visualizers.ViewResultsFullVisualizer;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.StringUtilities;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -103,8 +104,8 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
      * @param textToParse the text that will be parsed
      */
     protected void executeTester(String textToParse) {
-        if (textToParse != null && textToParse.length() > 0
-                && this.expressionField.getText().length() > 0) {
+        if (StringUtilities.isNotEmpty(textToParse)
+                && !this.expressionField.getText().isEmpty()) {
             this.resultField.setText(process(textToParse));
             this.resultField.setCaretPosition(0); // go to first line
         }
@@ -201,8 +202,8 @@ abstract class AbstractRenderAsJsonRenderer implements ResultRenderer, ActionLis
     /** {@inheritDoc} */
     @Override
     public synchronized void setSamplerResult(Object userObject) {
-        if (userObject instanceof SampleResult) {
-            sampleResult = (SampleResult) userObject;
+        if (userObject instanceof SampleResult result) {
+            sampleResult = result;
         }
     }
 

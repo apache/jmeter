@@ -138,8 +138,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         GuiUtils.stopTableEditing(dnsServersTable);
         dnsRes.clear();
         configureTestElement(dnsRes);
-        if (dnsRes instanceof DNSCacheManager) {
-            DNSCacheManager dnsCacheManager = (DNSCacheManager) dnsRes;
+        if (dnsRes instanceof DNSCacheManager dnsCacheManager) {
             // Init servers list
             dnsCacheManager.getServers();
             for (int i = 0; i < dnsServersTableModel.getRowCount(); i++) {

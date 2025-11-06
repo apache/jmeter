@@ -27,7 +27,6 @@ import javax.swing.JTree;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
@@ -35,6 +34,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +87,7 @@ public class ChangeParent extends AbstractAction {
         Controller currentController = (Controller) currentNode.getUserObject();
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
-        if(StringUtils.isNotBlank(currentController.getName())
+        if (StringUtilities.isNotBlank(currentController.getName())
                 && !currentController.getName().equals(defaultName)){
             newParent.setName(currentController.getName());
         }

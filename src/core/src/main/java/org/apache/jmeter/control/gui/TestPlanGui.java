@@ -141,8 +141,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     @Override
     public void modifyTestElement(TestElement plan) {
         super.modifyTestElement(plan);
-        if (plan instanceof TestPlan) {
-            TestPlan tp = (TestPlan) plan;
+        if (plan instanceof TestPlan tp) {
             // TODO: set expression to TestPlan somehow
             tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
             String[] files = browseJar.getFiles();
@@ -185,8 +184,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (el instanceof TestPlan) {
-            TestPlan tp = (TestPlan) el;
+        if (el instanceof TestPlan tp) {
             final JMeterProperty udv = tp.getUserDefinedVariablesAsProperty();
             if (udv != null) {
                 argsPanel.configure((Arguments) udv.getObjectValue());

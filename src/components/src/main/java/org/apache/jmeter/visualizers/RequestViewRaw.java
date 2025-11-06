@@ -29,6 +29,7 @@ import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 import com.google.auto.service.AutoService;
 
@@ -47,9 +48,6 @@ public class RequestViewRaw implements RequestView {
 
     private JPanel paneRaw; /** request pane content */
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#init()
-     */
     @Override
     public void init() {
         paneRaw = new JPanel(new BorderLayout(0, 5));
@@ -77,30 +75,23 @@ public class RequestViewRaw implements RequestView {
 
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#clearData()
-     */
     @Override
     public void clearData() {
         sampleDataField.setInitialText(""); //$NON-NLS-1$
         headerData.setInitialText(""); //$NON-NLS-1$
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#setSamplerResult(java.lang.Object)
-     */
     @Override
     public void setSamplerResult(Object objectResult) {
-        if (objectResult instanceof SampleResult) {
-            SampleResult sampleResult = (SampleResult) objectResult;
+        if (objectResult instanceof SampleResult sampleResult) {
             // Don't display Request headers label if rh is null or empty
             String rh = sampleResult.getRequestHeaders();
-            if (rh != null && !rh.isEmpty()) {
+            if (StringUtilities.isNotEmpty(rh)) {
                 headerData.setInitialText(rh);
                 sampleDataField.setCaretPosition(0);
             }
             String data = sampleResult.getSamplerData();
-            if (data != null && !data.isEmpty()) {
+            if (StringUtilities.isNotEmpty(data)) {
                 sampleDataField.setText(data);
                 sampleDataField.setCaretPosition(0);
             } else {
@@ -111,17 +102,11 @@ public class RequestViewRaw implements RequestView {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#getPanel()
-     */
     @Override
     public JPanel getPanel() {
         return paneRaw;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#getLabel()
-     */
     @Override
     public String getLabel() {
         return JMeterUtils.getResString(KEY_LABEL);

@@ -24,9 +24,9 @@ import java.util.Arrays;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -203,7 +203,7 @@ public final class FileDialoger {
 
     private static void setCurrentDirOnJFC(String... dirNames) {
         for (String dirName : dirNames) {
-            if (StringUtils.isBlank(dirName)) {
+            if (StringUtilities.isBlank(dirName)) {
                 continue;
             }
             File possibleDir = new File(dirName);
@@ -253,7 +253,7 @@ public final class FileDialoger {
     public static JFileChooser promptToSaveFile(String filename, String[] extensions) {
         if (lastJFCDirectory == null) {
             String start = System.getProperty("user.dir", "");//$NON-NLS-1$//$NON-NLS-2$
-            if (start.length() > 0) {
+            if (!start.isEmpty()) {
                 jfc = new JFileChooser(new File(start));
             }
             lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();

@@ -33,7 +33,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
@@ -49,6 +48,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,7 +149,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
 
         classNameLabeledChoice = new JLabeledChoice(
                 JMeterUtils.getResString("protocol_java_classname"),
-                possibleClasses.toArray(ArrayUtils.EMPTY_STRING_ARRAY), true,
+                possibleClasses.toArray(new String[0]), true,
                 false);
         classNameLabeledChoice.addChangeListener(this);
 
@@ -213,7 +213,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
                     // values that they did in the original test.
                     if (currArgsMap.containsKey(name)) {
                         String newVal = currArgsMap.get(name);
-                        if (newVal != null && newVal.length() > 0) {
+                        if (StringUtilities.isNotEmpty(newVal)) {
                             value = newVal;
                         }
                     }
@@ -305,9 +305,6 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
         ((JavaConfig) config).setClassname(classNameLabeledChoice.getText().trim());
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#clearGui()
-     */
     @Override
     public void clearGui() {
         super.clearGui();

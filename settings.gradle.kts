@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import java.util.*
 
 pluginManagement {
     plugins {
-        id("com.github.vlsi.stage-vote-release") version "1.90"
+        id("com.github.vlsi.stage-vote-release") version "2.0.0"
+        id("com.github.node-gradle.node") version "7.1.0"
     }
 }
 
 plugins {
-    id("com.gradle.develocity") version "3.18.2"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.0.2"
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
+    id("com.gradle.develocity") version "4.2.2"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.4.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 dependencyResolutionManagement {
@@ -33,6 +33,20 @@ dependencyResolutionManagement {
     repositories {
         // TODO: support enableMavenLocal
         mavenCentral()
+        // Declare the Node.js download repository
+        ivy {
+            name = "Node.js"
+            setUrl("https://nodejs.org/dist/")
+            patternLayout {
+                artifact("v[revision]/[artifact](-v[revision]-[classifier]).[ext]")
+            }
+            metadataSources {
+                artifact()
+            }
+            content {
+                includeModule("org.nodejs", "node")
+            }
+        }
     }
 }
 
@@ -73,7 +87,6 @@ include(
     "src:protocol:junit-sample",
     "src:protocol:ldap",
     "src:protocol:mail",
-    "src:protocol:mongodb",
     "src:protocol:native",
     "src:protocol:tcp",
     "src:release",
@@ -128,7 +141,7 @@ develocity {
 buildscript {
     dependencies {
         // Remove when Autostyle updates jgit dependency
-        classpath("org.eclipse.jgit:org.eclipse.jgit:5.13.2.202306221912-r")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:6.10.1.202505221210-r")
     }
     repositories {
         gradlePluginPortal()

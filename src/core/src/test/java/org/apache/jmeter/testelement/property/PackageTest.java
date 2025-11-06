@@ -69,7 +69,7 @@ class PackageTest {
         assertEquals("username=password", prop.getStringValue());
     }
 
-    private void checkEquals(JMeterProperty jp1, JMeterProperty jp2) {
+    private static void checkEquals(JMeterProperty jp1, JMeterProperty jp2) {
         assertEquals(jp1, jp2);
         assertEquals(jp2, jp1);
         assertEquals(jp1, jp1);
@@ -77,7 +77,7 @@ class PackageTest {
         assertEquals(jp1.hashCode(), jp2.hashCode());
     }
 
-    private void checkNotEquals(JMeterProperty jp1, JMeterProperty jp2) {
+    private static void checkNotEquals(JMeterProperty jp1, JMeterProperty jp2) {
         assertEquals(jp1, jp1);
         assertEquals(jp2, jp2);
         assertNotEquals(jp1, jp2);

@@ -41,13 +41,6 @@ public class TransactionsPerSecondGraphConsumer extends AbstractOverTimeGraphCon
     private static final String SUCCESS_SERIES_SUFFIX = "success";
     private static final String FAILURE_SERIES_SUFFIX = "failure";
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #createTimeStampKeysSelector()
-     */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
@@ -55,12 +48,6 @@ public class TransactionsPerSecondGraphConsumer extends AbstractOverTimeGraphCon
         return keysSelector;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         AbstractSeriesSelector seriesSelector = new AbstractSeriesSelector(true) {

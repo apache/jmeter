@@ -95,8 +95,8 @@ public class CollectionProperty extends MultiProperty {
      */
     @Override
     public void setObjectValue(Object v) {
-        if (v instanceof Collection<?>) {
-            setCollection((Collection<?>) v);
+        if (v instanceof Collection<?> objects) {
+            setCollection(objects);
         }
 
     }

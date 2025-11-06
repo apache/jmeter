@@ -227,20 +227,20 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
         private static final long serialVersionUID = 4638155137475747946L;
         final JMSProperties jmsProperties;
 
-        public InnerTableModel() {
+        private InnerTableModel() {
             jmsProperties = new JMSProperties();
         }
 
-        public void addNewRow() {
+        private void addNewRow() {
             jmsProperties.addJmsProperty(new JMSProperty("","",String.class.getName()));
         }
 
-        public void clearData() {
+        private void clearData() {
             jmsProperties.clear();
             fireTableDataChanged();
         }
 
-        public void removeRow(int row) {
+        private void removeRow(int row) {
             jmsProperties.removeJmsProperty(row);
         }
 
@@ -276,16 +276,12 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
          */
         @Override
         public String getColumnName(int column) {
-            switch(column) {
-                case COL_NAME:
-                    return "name";
-                case COL_VALUE:
-                    return "value";
-                case COL_TYPE:
-                    return "jms_properties_type";
-                default:
-                    return null;
-            }
+            return switch (column) {
+                case COL_NAME -> "name";
+                case COL_VALUE -> "value";
+                case COL_TYPE -> "jms_properties_type";
+                default -> null;
+            };
         }
 
         /**
@@ -295,46 +291,32 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
         public Object getValueAt(int row, int column) {
             JMSProperty property = jmsProperties.getJmsProperty(row);
 
-            switch (column){
-                case COL_NAME:
-                    return property.getName();
-                case COL_VALUE:
-                    return property.getValue();
-                case COL_TYPE:
-                    return property.getType();
-                default:
-                    return null;
-            }
+            return switch (column) {
+                case COL_NAME -> property.getName();
+                case COL_VALUE -> property.getValue();
+                case COL_TYPE -> property.getType();
+                default -> null;
+            };
         }
 
         @Override
         public void setValueAt(Object value, int row, int column) {
             JMSProperty property = jmsProperties.getJmsProperty(row);
             log.debug("Setting jms property value: {}", value);
-            switch (column){
-                case COL_NAME:
-                    property.setName((String)value);
-                    break;
-                case COL_VALUE:
-                    property.setValue((String) value);
-                    break;
-                case COL_TYPE:
-                    property.setType((String) value);
-                    break;
-                default:
-                    break;
+            switch (column) {
+                case COL_NAME -> property.setName((String) value);
+                case COL_VALUE -> property.setValue((String) value);
+                case COL_TYPE -> property.setType((String) value);
+                default -> {
+                }
             }
         }
     }
 
     private static class TypeCellEditor extends DefaultCellEditor {
-
-        /**
-         *
-         */
         private static final long serialVersionUID = 1L;
 
-        public TypeCellEditor() {
+        private TypeCellEditor() {
             super(new JComboBox<>(new Object[]{
                     Boolean.class.getName(),
                     Byte.class.getName(),

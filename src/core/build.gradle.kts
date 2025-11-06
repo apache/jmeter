@@ -49,7 +49,7 @@ dependencies {
     kapt("org.apache.logging.log4j:log4j-core") {
         because("Generates a plugin cache file for GuiLogEventAppender")
     }
-    api("org.apache.logging.log4j:log4j-slf4j-impl") {
+    api("org.apache.logging.log4j:log4j-slf4j2-impl") {
         because("Both log4j and slf4j are included, so it makes sense to just add log4j->slf4j bridge as well")
     }
     api("org.apiguardian:apiguardian-api")
@@ -71,11 +71,11 @@ dependencies {
         because("XPathUtil: throws SaxonApiException")
     }
 
-    runtimeOnly("org.codehaus.groovy:groovy") {
+    runtimeOnly("org.apache.groovy:groovy") {
         because("Groovy is a default JSR232 engine")
     }
     arrayOf("dateutil", "datetime", "jmx", "json", "jsr223", "sql", "templates").forEach {
-        runtimeOnly("org.codehaus.groovy:groovy-$it") {
+        runtimeOnly("org.apache.groovy:groovy-$it") {
             because("Groovy is a default JSR232 engine")
         }
     }
@@ -85,7 +85,6 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.formdev:svgSalamander")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("com.github.weisj:darklaf-core")
     implementation("com.github.weisj:darklaf-theme")
@@ -122,9 +121,6 @@ dependencies {
     implementation("org.jodd:jodd-props")
     implementation("org.mozilla:rhino")
     implementation("org.slf4j:jcl-over-slf4j")
-    // TODO: JMeter bundles Xerces, however the reason is unknown
-    runtimeOnly("xerces:xercesImpl")
-    runtimeOnly("xml-apis:xml-apis")
 
     testImplementation("commons-net:commons-net")
     testImplementation("io.mockk:mockk")

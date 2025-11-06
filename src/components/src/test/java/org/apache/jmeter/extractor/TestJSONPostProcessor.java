@@ -17,8 +17,9 @@
 
 package org.apache.jmeter.extractor;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
@@ -30,7 +31,6 @@ import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -93,7 +93,7 @@ class TestJSONPostProcessor {
         context.setPreviousResult(sampleResult);
         context.setVariables(vars);
         processor.process();
-        assertThat(vars.get("result"), CoreMatchers.is(resultObject));
+        assertEquals(resultObject, vars.get("result"));
     }
 
     @Test
@@ -108,9 +108,9 @@ class TestJSONPostProcessor {
         context.setVariables(vars);
         vars.put("contentvar", "[\"one\"]");
         processor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is("one"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("1"));
+        assertNull(vars.get("varname"));
+        assertEquals("one", vars.get("varname_1"));
+        assertEquals("1", vars.get("varname_matchNr"));
     }
 
     @Test
@@ -125,9 +125,9 @@ class TestJSONPostProcessor {
         context.setVariables(vars);
         vars.put("contentvar", "[\"one\", \"two\"]");
         processor.process();
-        assertThat(vars.get("varname_1"), CoreMatchers.is("one"));
-        assertThat(vars.get("varname_2"), CoreMatchers.is("two"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("2"));
+        assertEquals("one", vars.get("varname_1"));
+        assertEquals("two", vars.get("varname_2"));
+        assertEquals("2", vars.get("varname_matchNr"));
     }
 
     @Test
@@ -142,10 +142,13 @@ class TestJSONPostProcessor {
         context.setVariables(vars);
         vars.put("contentvar", "[\"one\", \"two\"]");
         processor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.anyOf(CoreMatchers.is("one"), CoreMatchers.is("two"))));
-        assertThat(vars.get("varname_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_2"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
+        String varname = vars.get("varname");
+        if (!"one".equals(varname) && !"two".equals(varname)) {
+            fail("vars.get(\"varname\") should be one or two, got " + varname);
+        }
+        assertNull(vars.get("varname_1"));
+        assertNull(vars.get("varname_2"));
+        assertNull(vars.get("varname_matchNr"));
     }
 
     @Test
@@ -160,14 +163,14 @@ class TestJSONPostProcessor {
         context.setVariables(vars);
         vars.put("contentvar", "[\"one\", \"two\"]");
         processor.process();
-        assertThat(vars.get("varname_1"), CoreMatchers.is("one"));
-        assertThat(vars.get("varname_2"), CoreMatchers.is("two"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("2"));
+        assertEquals("one", vars.get("varname_1"));
+        assertEquals("two", vars.get("varname_2"));
+        assertEquals("2", vars.get("varname_matchNr"));
         vars.put("contentvar", "");
         processor.process();
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_2"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertNull(vars.get("varname_matchNr"));
+        assertNull(vars.get("varname_1"));
+        assertNull(vars.get("varname_2"));
     }
 
     @Test
@@ -182,13 +185,13 @@ class TestJSONPostProcessor {
         context.setVariables(vars);
         vars.remove("contentvar");
         processor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is("NONE"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertEquals("NONE", vars.get("varname"));
+        assertNull(vars.get("varname_matchNr"));
 
         vars.put("contentvar", "");
         processor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is("NONE"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertEquals("NONE", vars.get("varname"));
+        assertNull(vars.get("varname_matchNr"));
     }
 
     @Test
@@ -203,16 +206,19 @@ class TestJSONPostProcessor {
         context.setVariables(vars);
         vars.put("contentvar", "[\"one\", \"two\"]");
         processor.process();
-        assertThat(vars.get("varname_1"), CoreMatchers.is("one"));
-        assertThat(vars.get("varname_2"), CoreMatchers.is("two"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("2"));
+        assertEquals("one", vars.get("varname_1"));
+        assertEquals("two", vars.get("varname_2"));
+        assertEquals("2", vars.get("varname_matchNr"));
         vars.put("contentvar", "[\"A\", \"B\"]");
         processor.setMatchNumbers("0");
         processor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.anyOf(CoreMatchers.is("A"), CoreMatchers.is("B"))));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_2"), CoreMatchers.is(CoreMatchers.nullValue()));
+        String varname = vars.get("varname");
+        if (!"A".equals(varname) && !"B".equals(varname)) {
+            fail("vars.get(\"varname\") should be A or B, got " + varname);
+        }
+        assertNull(vars.get("varname_matchNr"));
+        assertNull(vars.get("varname_1"));
+        assertNull(vars.get("varname_2"));
     }
 
     private static Stream<Arguments> provideEmptyOrNullResultArgs() {
@@ -243,9 +249,9 @@ class TestJSONPostProcessor {
         processor.setScopeAll();
         processor.process();
 
-        assertThat(vars.get(VAR_NAME), CoreMatchers.is(expectedResult));
-        assertThat(vars.get(VAR_NAME + "_matchNr"), CoreMatchers.is(expectedMatchNumber));
-        assertThat(vars.get(VAR_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertEquals(expectedResult, vars.get(VAR_NAME));
+        assertEquals(expectedMatchNumber, vars.get(VAR_NAME + "_matchNr"));
+        assertNull(vars.get(VAR_NAME + "_1"));
     }
 
     @Test
@@ -267,9 +273,9 @@ class TestJSONPostProcessor {
 
         JSONParser parser = new JSONParser(0);
         Object expectedValue = parser.parse(innerValue);
-        assertThat(parser.parse(vars.get(VAR_NAME)), CoreMatchers.is(expectedValue));
-        assertThat(vars.get(VAR_NAME + "_matchNr"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(VAR_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertEquals(expectedValue, parser.parse(vars.get(VAR_NAME)));
+        assertNull(vars.get(VAR_NAME + "_matchNr"));
+        assertNull(vars.get(VAR_NAME + "_1"));
     }
 
     @Test

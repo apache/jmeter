@@ -50,8 +50,6 @@ import javax.swing.UIManager;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.KeystoreConfig;
 import org.apache.jmeter.control.Controller;
@@ -105,6 +103,7 @@ import org.apache.jmeter.visualizers.ViewResultsFullVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JMeterUIDefaults;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.tika.Tika;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
@@ -312,8 +311,9 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             httpSampler.setPort(url.getPort());
         }
         String path = url.getPath();
-        if (StringUtils.isNotEmpty(url.getQuery())) {
-            path += "?" + url.getQuery();
+        String query = url.getQuery();
+        if (StringUtilities.isNotEmpty(query)) {
+            path += "?" + query;
         }
         // setMethod must be before setPath as setPath uses method to determine if parameters should be parsed or not
         httpSampler.setMethod(request.getMethod());
@@ -370,7 +370,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         headerManager.setProperty(TestElement.NAME, "HTTP HeaderManager");
         headerManager.setProperty(TestElement.COMMENTS, getDefaultComment());
         boolean hasAcceptEncoding = false;
-        for (Pair<String, String> header : request.getHeaders()) {
+        for (Map.Entry<String, String> header : request.getHeaders()) {
             String key = header.getKey();
             hasAcceptEncoding = hasAcceptEncoding || key.equalsIgnoreCase(ACCEPT_ENCODING);
             headerManager.getHeaders().addItem(new Header(key, header.getValue()));
@@ -539,12 +539,12 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
             throw new IllegalArgumentException("--form and --data can't appear in the same command");
         }
         List<HTTPFileArg> httpFileArgs = new ArrayList<>();
-        for (Pair<String, String> entry : request.getFormStringData()) {
+        for (Map.Entry<String, String> entry : request.getFormStringData()) {
             String formName = entry.getKey();
             String formValue = entry.getValue();
             httpSampler.addNonEncodedArgument(formName, formValue, "");
         }
-        for (Pair<String, ArgumentHolder> entry : request.getFormData()) {
+        for (Map.Entry<String, ArgumentHolder> entry : request.getFormData()) {
             String formName = entry.getKey();
             ArgumentHolder formValueObject = entry.getValue();
             String formValue = formValueObject.getName();
@@ -587,23 +587,13 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         for (Map.Entry<String, String> proxyPara : proxyServer.entrySet()) {
             String key = proxyPara.getKey();
             switch (key) {
-            case "servername":
-                httpSampler.setProxyHost(proxyPara.getValue());
-                break;
-            case "port":
-                httpSampler.setProxyPortInt(proxyPara.getValue());
-                break;
-            case "scheme":
-                httpSampler.setProxyScheme(proxyPara.getValue());
-                break;
-            case "username":
-                httpSampler.setProxyUser(proxyPara.getValue());
-                break;
-            case "password":
-                httpSampler.setProxyPass(proxyPara.getValue());
-                break;
-            default:
-                break;
+                case "servername" -> httpSampler.setProxyHost(proxyPara.getValue());
+                case "port" -> httpSampler.setProxyPortInt(proxyPara.getValue());
+                case "scheme" -> httpSampler.setProxyScheme(proxyPara.getValue());
+                case "username" -> httpSampler.setProxyUser(proxyPara.getValue());
+                case "password" -> httpSampler.setProxyPass(proxyPara.getValue());
+                default -> {
+                }
             }
         }
     }
@@ -630,10 +620,10 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
         if (e.getActionCommand().equals(CREATE_REQUEST)) {
             List<String> commandsList = null;
             try {
-                if (!filePanel.getFilename().trim().isEmpty() && cURLCommandTA.getText().trim().isEmpty()) {
+                if (StringUtilities.isNotBlank(filePanel.getFilename()) && StringUtilities.isBlank(cURLCommandTA.getText())) {
                     commandsList = readFromFile(filePanel.getFilename().trim());
                     isReadFromFile = true;
-                } else if (filePanel.getFilename().trim().isEmpty() && !cURLCommandTA.getText().trim().isEmpty()) {
+                } else if (StringUtilities.isBlank(filePanel.getFilename()) && StringUtilities.isNotBlank(cURLCommandTA.getText())) {
                     commandsList = readFromTextPanel(cURLCommandTA.getText().trim());
                 } else {
                     throw new IllegalArgumentException(

@@ -37,16 +37,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.util.ExceptionUtils;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -180,7 +180,7 @@ public class SaveService {
 
     private static File getSaveServiceFile() {
         String saveServiceProps = JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,SAVESERVICE_PROPERTIES_FILE); //$NON-NLS-1$
-        if (saveServiceProps.length() > 0){ //$NON-NLS-1$
+        if (!saveServiceProps.isEmpty()){ //$NON-NLS-1$
             return JMeterUtils.findFile(saveServiceProps);
         }
         throw new IllegalStateException("Could not find file configured in saveservice_properties property set to:"+saveServiceProps);
@@ -358,7 +358,7 @@ public class SaveService {
      */
     private static String showDebuggingInfo(SampleResult result) {
         try {
-            return "class:"+result.getClass()+",content:"+ToStringBuilder.reflectionToString(result);
+            return "class:"+result.getClass()+",content:"+result.toString();
         } catch(Exception e) {
             return "Exception occurred creating debug from event, message:"+e.getMessage();
         }
@@ -461,6 +461,7 @@ public class SaveService {
         }
 
     }
+
     private static InputStreamReader getInputStreamReader(InputStream inStream) {
         // Check if we have a encoding to use from properties
         Charset charset = getFileEncodingCharset();
@@ -481,7 +482,7 @@ public class SaveService {
      */
     // Used by ResultCollector when creating output files
     public static String getFileEncoding(String dflt){
-        if(fileEncoding != null && fileEncoding.length() > 0) {
+        if (StringUtilities.isNotEmpty(fileEncoding)) {
             return fileEncoding;
         }
         else {
@@ -492,7 +493,7 @@ public class SaveService {
     // @NotNull
     private static Charset getFileEncodingCharset() {
         // Check if we have a encoding to use from properties
-        if(fileEncoding != null && fileEncoding.length() > 0) {
+        if (StringUtilities.isNotEmpty(fileEncoding)) {
             return Charset.forName(fileEncoding);
         }
         else {

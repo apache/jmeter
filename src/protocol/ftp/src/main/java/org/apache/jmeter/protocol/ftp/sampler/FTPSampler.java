@@ -35,7 +35,6 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.TeeOutputStream;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -45,6 +44,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,7 +156,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         sb.append("ftp://");// $NON-NLS-1$
         sb.append(getServer());
         String port = getPort();
-        if (port.length() > 0){
+        if (!port.isEmpty()){
             sb.append(':');
             sb.append(port);
         }
@@ -206,7 +206,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                     boolean ftpOK=false;
                     if (isUpload()) {
                         String contents=getLocalFileContents();
-                        if (contents.length() > 0){
+                        if (!contents.isEmpty()){
                             @SuppressWarnings("DefaultCharset")
                             byte[] bytes = contents.getBytes(); // TODO - charset?
                             input = new ByteArrayInputStream(bytes);
@@ -228,7 +228,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                                 baos  = new ByteArrayOutputStream();
                                 target=baos;
                             }
-                            if (local.length()>0){
+                            if (!local.isEmpty()){
                                 output=new FileOutputStream(local); // NOSONAR False positive, the output is closed in finally and not overwritten
                                 if (target==null) {
                                     target=output;
@@ -273,7 +273,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             } else {
                 res.setResponseCode("501");
                 String replyString = ftp.getReplyString();
-                if(StringUtils.isEmpty(replyString)) {
+                if (StringUtilities.isEmpty(replyString)) {
                     res.setResponseMessage("Could not connect");
                 }
                 else {

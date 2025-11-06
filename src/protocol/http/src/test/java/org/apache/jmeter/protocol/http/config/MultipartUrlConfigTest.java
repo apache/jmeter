@@ -50,31 +50,33 @@ public class MultipartUrlConfigTest {
     @Test
     void testParseArgumentsLF() {
         String queryString
-            = "Content-Disposition: form-data; name=\"aa\"\n"
-            + "Content-Type: text/plain; charset=ISO-8859-1\n"
-            + "Content-Transfer-Encoding: 8bit\n"
-            + "\n"
-            + "bb\n"
-            + "--7d159c1302d0y0\n"
-            + "Content-Disposition: form-data; name=\"xx\"\n"
-            + "Content-Type: text/plain; charset=ISO-8859-1\n"
-            + "Content-Transfer-Encoding: 8bit\n"
-            + "\n"
-            + "yy\n"
-            + "--7d159c1302d0y0\n"
-            + "Content-Disposition: form-data; name=\"abc\"\n"
-            + "Content-Type: text/plain; charset=ISO-8859-1\n"
-            + "Content-Transfer-Encoding: 8bit\n"
-            + "\n"
-            + "xyz  \n"
-            + "xyz  \n"
-            + "--7d159c1302d0y0\n"
-            + "Content-Disposition: form-data; name=\"param1\"; filename=\"file1\"\n"
-            + "Content-Type: text/plain\n"
-            + "Content-Transfer-Encoding: binary\n"
-            + "\n"
-            + "file content\n"
-            + "\n";
+            = """
+                Content-Disposition: form-data; name="aa"
+                Content-Type: text/plain; charset=ISO-8859-1
+                Content-Transfer-Encoding: 8bit
+
+                bb
+                --7d159c1302d0y0
+                Content-Disposition: form-data; name="xx"
+                Content-Type: text/plain; charset=ISO-8859-1
+                Content-Transfer-Encoding: 8bit
+
+                yy
+                --7d159c1302d0y0
+                Content-Disposition: form-data; name="abc"
+                Content-Type: text/plain; charset=ISO-8859-1
+                Content-Transfer-Encoding: 8bit
+
+                xyz \s
+                xyz \s
+                --7d159c1302d0y0
+                Content-Disposition: form-data; name="param1"; filename="file1"
+                Content-Type: text/plain
+                Content-Transfer-Encoding: binary
+
+                file content
+
+                """;
         MultipartUrlConfig muc = new MultipartUrlConfig("7d159c1302d0y0");
         muc.parseArguments(queryString);
         HTTPFileArgs files = muc.getHTTPFileArgs();
@@ -99,31 +101,33 @@ public class MultipartUrlConfigTest {
     @Test
     void testParseArgumentsCRLF() {
         String queryString
-            = "Content-Disposition: form-data; name=\"aa\"\r\n"
-            + "Content-Type: text/plain; charset=ISO-8859-1\r\n"
-            + "Content-Transfer-Encoding: 8bit\r\n"
-            + "\r\n"
-            + "bb\r\n"
-            + "--7d159c1302d0y0\r\n"
-            + "Content-Disposition: form-data; name=\"xx\"\r\n"
-            + "Content-Type: text/plain; charset=ISO-8859-1\r\n"
-            + "Content-Transfer-Encoding: 8bit\r\n"
-            + "\r\n"
-            + "yy\r\n"
-            + "--7d159c1302d0y0\r\n"
-            + "Content-Disposition: form-data; name=\"abc\"\r\n"
-            + "Content-Type: text/plain; charset=ISO-8859-1\r\n"
-            + "Content-Transfer-Encoding: 8bit\r\n"
-            + "\r\n"
-            + "xyz  \r\n"
-            + "xyz  \r\n"
-            + "--7d159c1302d0y0\r\n"
-            + "Content-Disposition: form-data; name=\"param1\"; filename=\"file1\"\r\n"
-            + "Content-Type: text/plain\r\n"
-            + "Content-Transfer-Encoding: binary\r\n"
-            + "\r\n"
-            + "file content\r\n"
-            + "\r\n";
+            = """
+                Content-Disposition: form-data; name="aa"\r
+                Content-Type: text/plain; charset=ISO-8859-1\r
+                Content-Transfer-Encoding: 8bit\r
+                \r
+                bb\r
+                --7d159c1302d0y0\r
+                Content-Disposition: form-data; name="xx"\r
+                Content-Type: text/plain; charset=ISO-8859-1\r
+                Content-Transfer-Encoding: 8bit\r
+                \r
+                yy\r
+                --7d159c1302d0y0\r
+                Content-Disposition: form-data; name="abc"\r
+                Content-Type: text/plain; charset=ISO-8859-1\r
+                Content-Transfer-Encoding: 8bit\r
+                \r
+                xyz  \r
+                xyz  \r
+                --7d159c1302d0y0\r
+                Content-Disposition: form-data; name="param1"; filename="file1"\r
+                Content-Type: text/plain\r
+                Content-Transfer-Encoding: binary\r
+                \r
+                file content\r
+                \r
+                """;
         MultipartUrlConfig muc = new MultipartUrlConfig("7d159c1302d0y0");
         muc.parseArguments(queryString);
         HTTPFileArgs files = muc.getHTTPFileArgs();

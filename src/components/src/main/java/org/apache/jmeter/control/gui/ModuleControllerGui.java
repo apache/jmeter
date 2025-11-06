@@ -120,7 +120,7 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
 
             private static final long serialVersionUID = 4062816201792954617L;
 
-            private boolean isSelectedPathAllowed(DefaultMutableTreeNode lastSelected) {
+            private static boolean isSelectedPathAllowed(DefaultMutableTreeNode lastSelected) {
                 JMeterTreeNode tn = null;
                 if (lastSelected != null && lastSelected.getUserObject() instanceof JMeterTreeNode) {
                     tn = (JMeterTreeNode) lastSelected.getUserObject();

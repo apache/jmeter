@@ -202,11 +202,6 @@ public abstract class AbstractSummaryConsumer<TData> extends
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
-     */
     @Override
     public void startConsuming() {
 
@@ -218,13 +213,6 @@ public abstract class AbstractSummaryConsumer<TData> extends
         super.startProducing();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.
-     * jmeter.report.core.Sample, int)
-     */
     @Override
     public void consume(Sample sample, int channel) {
         String key = getKeyFromSample(sample);
@@ -240,11 +228,6 @@ public abstract class AbstractSummaryConsumer<TData> extends
         super.produce(sample, channel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
-     */
     @Override
     public void stopConsuming() {
         MapResultData result = new MapResultData();

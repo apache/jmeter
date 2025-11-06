@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
@@ -36,6 +35,7 @@ import org.apache.jmeter.report.processor.SampleContext;
 import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,9 +68,8 @@ public class JsonExporter extends AbstractDataExporter {
     public void export(SampleContext context, File file, ReportGeneratorConfiguration reportGeneratorConfiguration)
             throws ExportException {
         Object data = context.getData().get(ReportGenerator.STATISTICS_SUMMARY_CONSUMER_NAME);
-        if (data instanceof MapResultData) {
+        if (data instanceof MapResultData result) {
             LOGGER.info("Found data for consumer {} in context", ReportGenerator.STATISTICS_SUMMARY_CONSUMER_NAME);
-            MapResultData result = (MapResultData) data;
             Map<String, SamplingStatistic> statistics = new HashMap<>();
             MapResultData overallData = (MapResultData) result.getResult("overall");
             LOGGER.info("Creating statistics for overall");
@@ -107,7 +106,7 @@ public class JsonExporter extends AbstractDataExporter {
         File outputDir = getPropertyFromConfig(exportCfg, HtmlTemplateExporter.OUTPUT_DIR,
                 new File(JMeterUtils.getJMeterBinDir(), HtmlTemplateExporter.OUTPUT_DIR_NAME_DEFAULT), File.class);
         String globallyDefinedOutputDir = JMeterUtils.getProperty(JMeter.JMETER_REPORT_OUTPUT_DIR_PROPERTY);
-        if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
+        if (StringUtilities.isNotEmpty(globallyDefinedOutputDir)) {
             outputDir = new File(globallyDefinedOutputDir);
         }
 

@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.core.CsvFile;
 import org.apache.jmeter.report.core.CsvSampleReader;
 import org.apache.jmeter.report.core.CsvSampleWriter;
@@ -271,8 +270,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     @Override
     public void startConsuming() {
-        Validate.validState(sampleComparator != null,
-                "sampleComparator is not set, call setSampleComparator() first.");
+        if (sampleComparator == null) {
+            throw new IllegalStateException("sampleComparator is not set, call setSampleComparator() first.");
+        }
 
         File workDir = getWorkingDirectory();
         workDir.mkdir();

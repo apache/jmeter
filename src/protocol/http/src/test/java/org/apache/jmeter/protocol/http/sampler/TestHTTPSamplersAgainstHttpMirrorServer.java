@@ -46,6 +46,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
@@ -55,6 +56,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -63,6 +65,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * The samples are executed against the HttpMirrorServer, which is
  * started when the unit tests are executed.
  */
+@Isolated("modifies jmeter locale")
 public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     private static final java.util.regex.Pattern EMPTY_LINE_PATTERN = java.util.regex.Pattern.compile("^$",
             java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
@@ -106,76 +109,76 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public void itemised_testPostRequest_UrlEncoded(int item) throws Exception {
+    public static void itemised_testPostRequest_UrlEncoded(int item) throws Exception {
         testPostRequest_UrlEncoded(HTTP_SAMPLER, ISO_8859_1, item);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public void itemised_testPostRequest_UrlEncoded3(int item) throws Exception {
+    public static void itemised_testPostRequest_UrlEncoded3(int item) throws Exception {
         testPostRequest_UrlEncoded(HTTP_SAMPLER3, US_ASCII, item);
     }
 
     @Test
-    public void testPostRequest_FormMultipart_0() throws Exception {
+    public static void testPostRequest_FormMultipart_0() throws Exception {
         testPostRequest_FormMultipart(HTTP_SAMPLER);
     }
 
     @Test
-    public void testPostRequest_FormMultipart3() throws Exception {
+    public static void testPostRequest_FormMultipart3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
         testPostRequest_FormMultipart(HTTP_SAMPLER3);
     }
 
     @Test
-    public void testPostRequest_FileUpload() throws Exception {
+    public static void testPostRequest_FileUpload() throws Exception {
         testPostRequest_FileUpload(HTTP_SAMPLER);
     }
 
     @Test
-    public void testPostRequest_FileUpload3() throws Exception {
+    public static void testPostRequest_FileUpload3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
         testPostRequest_FileUpload(HTTP_SAMPLER3);
     }
 
     @Test
-    public void testPostRequest_BodyFromParameterValues() throws Exception {
+    public static void testPostRequest_BodyFromParameterValues() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER, ISO_8859_1);
     }
 
     @Test
-    public void testPostRequest_BodyFromParameterValues3() throws Exception {
+    public static void testPostRequest_BodyFromParameterValues3() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
     }
 
     @Test
-    public void testGetRequest() throws Exception {
+    public static void testGetRequest() throws Exception {
         testGetRequest(HTTP_SAMPLER);
     }
 
     @Test
-    public void testGetRequest3() throws Exception {
+    public static void testGetRequest3() throws Exception {
         testGetRequest(HTTP_SAMPLER3);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public void itemised_testGetRequest_Parameters(int item) throws Exception {
+    public static void itemised_testGetRequest_Parameters(int item) throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER, item);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public void itemised_testGetRequest_Parameters3(int item) throws Exception {
+    public static void itemised_testGetRequest_Parameters3(int item) throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER3, item);
     }
 
     @Test
-    public void testPutRequest_BodyFromParameterValues3() throws Exception {
+    public static void testPutRequest_BodyFromParameterValues3() throws Exception {
         testPutRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
     }
 
-    private void testPutRequest_BodyFromParameterValues(int samplerType, String samplerDefaultEncoding) throws Exception {
+    private static void testPutRequest_BodyFromParameterValues(int samplerType, String samplerDefaultEncoding) throws Exception {
 
         final String titleField = "titleKey"; // ensure only values are used
         String titleValue = "mytitle";
@@ -197,7 +200,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
     }
 
-    private void testPostRequest_UrlEncoded(int samplerType, String samplerDefaultEncoding, int test) throws Exception {
+    private static void testPostRequest_UrlEncoded(int samplerType, String samplerDefaultEncoding, int test) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -331,7 +334,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         }
     }
 
-    private void testPostRequest_FormMultipart(int samplerType) throws Exception {
+    private static void testPostRequest_FormMultipart(int samplerType) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -443,7 +446,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 descriptionField, expectedDescriptionValue);
     }
 
-    private void testPostRequest_FileUpload(int samplerType) throws Exception {
+    private static void testPostRequest_FileUpload(int samplerType) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -493,7 +496,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 TEST_FILE_CONTENT);
     }
 
-    private void testPostRequest_BodyFromParameterValues(int samplerType, String samplerDefaultEncoding) throws Exception {
+    private static void testPostRequest_BodyFromParameterValues(int samplerType, String samplerDefaultEncoding) throws Exception {
         final String titleField = ""; // ensure only values are used
         String titleValue = "mytitle";
         final String descriptionField = ""; // ensure only values are used
@@ -644,7 +647,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody, CONTENT_TYPE_TEXT_PLAIN);
     }
 
-    private void testGetRequest(int samplerType) throws Exception {
+    private static void testGetRequest(int samplerType) throws Exception {
         // Test sending simple HTTP get
         // Test sending data with default encoding
         HTTPSamplerBase sampler = createHttpSampler(samplerType);
@@ -671,7 +674,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkGetRequest(sampler, res);
     }
 
-    private void testGetRequest_Parameters(int samplerType, int test) throws Exception {
+    private static void testGetRequest_Parameters(int samplerType, int test) throws Exception {
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -802,7 +805,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         }
     }
 
-    private HTTPSampleResult executeSampler(HTTPSamplerBase sampler) {
+    private static HTTPSampleResult executeSampler(HTTPSamplerBase sampler) {
         sampler.setRunningVersion(true);
         sampler.threadStarted();
         HTTPSampleResult res = (HTTPSampleResult) sampler.sample();
@@ -811,7 +814,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return res;
     }
 
-    private void checkPostRequestUrlEncoded(
+    private static void checkPostRequestUrlEncoded(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
             String samplerDefaultEncoding,
@@ -821,7 +824,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             String descriptionField,
             String descriptionValue,
             boolean valuesAlreadyUrlEncoded) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = samplerDefaultEncoding;
         }
         // Check URL
@@ -844,7 +847,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
                 HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
     }
 
-    private void checkPostRequestFormMultipart(
+    private static void checkPostRequestFormMultipart(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
             String contentEncoding,
@@ -852,7 +855,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             String titleValue,
             String descriptionField,
             String descriptionValue) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
         // Check URL
@@ -888,7 +891,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
 
-    private void checkPostRequestFileUpload(
+    private static void checkPostRequestFileUpload(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
             String contentEncoding,
@@ -900,7 +903,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             File fileValue,
             String fileMimeType,
             byte[] fileContent) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = DEFAULT_HTTP_CONTENT_ENCODING;
         }
         // Check URL
@@ -933,14 +936,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
 
-    private void checkPostRequestBody(
+    private static void checkPostRequestBody(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
             String samplerDefaultEncoding,
             String contentEncoding,
             String expectedPostBody,
             String expectedContentType) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = samplerDefaultEncoding;
         }
         // Check URL
@@ -982,7 +985,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
 
-    private void checkGetRequest(
+    private static void checkGetRequest(
             HTTPSamplerBase sampler,
             HTTPSampleResult res
     ) throws IOException {
@@ -1011,7 +1014,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
 
-    private void checkGetRequest_Parameters(
+    private static void checkGetRequest_Parameters(
             HTTPSamplerBase sampler,
             HTTPSampleResult res,
             String contentEncoding,
@@ -1021,7 +1024,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             String descriptionField,
             String descriptionValue,
             boolean valuesAlreadyUrlEncoded) throws IOException {
-        if (contentEncoding == null || contentEncoding.isEmpty()) {
+        if (StringUtilities.isEmpty(contentEncoding)) {
             contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
         }
         // Check URL
@@ -1058,7 +1061,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), expectedQueryString, res);
     }
 
-    private void checkMethodPathQuery(
+    private static void checkMethodPathQuery(
             String headersSent,
             String expectedMethod,
             String expectedPath,
@@ -1077,7 +1080,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         assertEquals(expectedMethod, methodSent);
         String uriSent = headersSent.substring(indexFirstSpace + 1, indexSecondSpace);
         int indexQueryStart = uriSent.indexOf('?');
-        if (expectedQueryString != null && !expectedQueryString.isEmpty()) {
+        if (StringUtilities.isNotEmpty(expectedQueryString)) {
             // We should have a query string part
             if (indexQueryStart <= 0 || indexQueryStart == uriSent.length() - 1) {
                 fail("Could not find query string in URI");
@@ -1094,7 +1097,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         String pathSent = uriSent.substring(0, indexQueryStart);
         assertEquals(expectedPath, pathSent);
         // Check query
-        if (expectedQueryString != null && !expectedQueryString.isEmpty()) {
+        if (StringUtilities.isNotEmpty(expectedQueryString)) {
             String queryStringSent = uriSent.substring(indexQueryStart + 1);
             // Is it only the parameter values which are encoded in the specified
             // content encoding, the rest of the query is encoded in UTF-8
@@ -1108,7 +1111,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         }
     }
 
-    private String getHeadersSent(byte[] responseData) throws IOException {
+    private static String getHeadersSent(byte[] responseData) throws IOException {
         // Find the data sent to the mirror server, which the mirror server is sending back to us
         // We assume the headers are in ISO_8859_1, and the body can be in any content encoding.
         String dataSentToMirrorServer = new String(responseData, StandardCharsets.ISO_8859_1);
@@ -1120,7 +1123,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return headersSent;
     }
 
-    private byte[] getBodySent(byte[] responseData) throws IOException {
+    private static byte[] getBodySent(byte[] responseData) throws IOException {
         // Find the data sent to the mirror server, which the mirror server is sending back to us
         // We assume the headers are in ISO_8859_1, and the body can be in any content encoding.
         // Therefore we get the data sent in ISO_8859_1, to be able to determine the end of the
@@ -1145,13 +1148,13 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return bodySent;
     }
 
-    private boolean isInRequestHeaders(String requestHeaders, String headerName, String headerValue) {
+    private static boolean isInRequestHeaders(String requestHeaders, String headerName, String headerValue) {
         return checkRegularExpression(requestHeaders, headerName + ": " + headerValue);
     }
 
     // Java 1.6.0_22+ no longer allows Content-Length to be set, so don't check it.
     // See: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6996110
-    private void checkHeaderContentType(String requestHeaders, String contentType) {
+    private static void checkHeaderContentType(String requestHeaders, String contentType) {
         if (contentType == null) {
             boolean isPresent = checkRegularExpression(requestHeaders, HTTPConstants.HEADER_CONTENT_TYPE + ": .*");
             assertFalse(isPresent, "Expected no Content-Type in request headers:\n" + requestHeaders);
@@ -1161,14 +1164,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         }
     }
 
-    private String getSentRequestHeaderValue(String requestHeaders, String headerName) {
+    private static String getSentRequestHeaderValue(String requestHeaders, String headerName) {
         if (USE_JAVA_REGEX) {
             return getSentRequestHeaderValueWithJavaRegex(requestHeaders, headerName);
         }
         return getSentRequestHeaderValueWithOroRegex(requestHeaders, headerName);
     }
 
-    private String getSentRequestHeaderValueWithJavaRegex(String requestHeaders, String headerName) {
+    private static String getSentRequestHeaderValueWithJavaRegex(String requestHeaders, String headerName) {
         String expression = ".*" + headerName + ": (\\d*).*";
         java.util.regex.Pattern pattern = JMeterUtils.compilePattern(expression,
                         java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.DOTALL);
@@ -1180,7 +1183,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return null;
     }
 
-    private String getSentRequestHeaderValueWithOroRegex(String requestHeaders, String headerName) {
+    private static String getSentRequestHeaderValueWithOroRegex(String requestHeaders, String headerName) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         String expression = ".*" + headerName + ": (\\d*).*";
         Pattern pattern = JMeterUtils.getPattern(expression,
@@ -1194,20 +1197,20 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return null;
     }
 
-    private boolean checkRegularExpression(String stringToCheck, String regularExpression) {
+    private static boolean checkRegularExpression(String stringToCheck, String regularExpression) {
         if (USE_JAVA_REGEX) {
             return checkRegularExpressionWithJavaRegex(stringToCheck, regularExpression);
         }
         return checkRegularExpressionWithOroRegex(stringToCheck, regularExpression);
     }
 
-    private boolean checkRegularExpressionWithJavaRegex(String stringToCheck, String regularExpression) {
+    private static boolean checkRegularExpressionWithJavaRegex(String stringToCheck, String regularExpression) {
         java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
                 java.util.regex.Pattern.CASE_INSENSITIVE);
         return pattern.matcher(stringToCheck).find();
     }
 
-    private boolean checkRegularExpressionWithOroRegex(String stringToCheck, String regularExpression) {
+    private static boolean checkRegularExpressionWithOroRegex(String stringToCheck, String regularExpression) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         Pattern pattern = JMeterUtils.getPattern(regularExpression,
                 Perl5Compiler.READ_ONLY_MASK
@@ -1216,14 +1219,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return localMatcher.contains(stringToCheck, pattern);
     }
 
-    private int getPositionOfBody(String stringToCheck) {
+    private static int getPositionOfBody(String stringToCheck) {
         if (USE_JAVA_REGEX) {
             return getPositionOfBodyWithJavaRegex(stringToCheck);
         }
         return getPositionOfBodyWithOroRegex(stringToCheck);
     }
 
-    private int getPositionOfBodyWithJavaRegex(String stringToCheck) {
+    private static int getPositionOfBodyWithJavaRegex(String stringToCheck) {
         // The headers and body are divided by a blank line
 
         Matcher localMatcher = EMPTY_LINE_PATTERN.matcher(stringToCheck);
@@ -1235,7 +1238,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return -1;
     }
 
-    private int getPositionOfBodyWithOroRegex(String stringToCheck) {
+    private static int getPositionOfBodyWithOroRegex(String stringToCheck) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         // The headers and body are divided by a blank line
         String regularExpression = "^.$";
@@ -1253,14 +1256,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return -1;
     }
 
-    private String getBoundaryStringFromContentType(String requestHeaders) {
+    private static String getBoundaryStringFromContentType(String requestHeaders) {
         if (USE_JAVA_REGEX) {
             return getBoundaryStringFromContentTypeWithJavaRegex(requestHeaders);
         }
         return getBoundaryStringFromContentTypeWithOroRegex(requestHeaders);
     }
 
-    private String getBoundaryStringFromContentTypeWithJavaRegex(String requestHeaders) {
+    private static String getBoundaryStringFromContentTypeWithJavaRegex(String requestHeaders) {
         String regularExpression = "^" + HTTPConstants.HEADER_CONTENT_TYPE + ": multipart/form-data; boundary=(.+)$";
         java.util.regex.Pattern pattern = JMeterUtils.compilePattern(regularExpression,
                 java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.MULTILINE);
@@ -1279,7 +1282,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         }
     }
 
-    private String getBoundaryStringFromContentTypeWithOroRegex(String requestHeaders) {
+    private static String getBoundaryStringFromContentTypeWithOroRegex(String requestHeaders) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         String regularExpression = "^" + HTTPConstants.HEADER_CONTENT_TYPE + ": multipart/form-data; boundary=(.+)$";
         Pattern pattern = JMeterUtils.getPattern(regularExpression,
@@ -1301,7 +1304,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         }
     }
 
-    private void setupUrl(HTTPSamplerBase sampler, String contentEncoding) {
+    private static void setupUrl(HTTPSamplerBase sampler, String contentEncoding) {
         String protocol = "http";
         String domain = "localhost";
         String path = "/test/somescript.jsp";
@@ -1314,9 +1317,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     }
 
     /** Setup the form data with specified values */
-    private void setupFormData(HTTPSamplerBase httpSampler, boolean isEncoded,
-                               String titleField, String titleValue,
-                               String descriptionField, String descriptionValue) {
+    private static void setupFormData(HTTPSamplerBase httpSampler, boolean isEncoded,
+            String titleField, String titleValue,
+            String descriptionField, String descriptionValue) {
         if (isEncoded) {
             httpSampler.addEncodedArgument(titleField, titleValue);
             httpSampler.addEncodedArgument(descriptionField, descriptionValue);
@@ -1327,7 +1330,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     }
 
     /** Setup the form data with specified values, and file to upload */
-    private void setupFileUploadData(
+    private static void setupFileUploadData(
             HTTPSamplerBase httpSampler,
             boolean isEncoded,
             String titleField,
@@ -1346,8 +1349,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
     }
 
     /** Check that the two byte arrays have identical content */
-    private void checkArraysHaveSameContent(byte[] expected, byte[] actual,
-                                            String encoding, HTTPSampleResult res)
+    private static void checkArraysHaveSameContent(byte[] expected, byte[] actual,
+            String encoding, HTTPSampleResult res)
             throws UnsupportedEncodingException {
         if (expected != null && actual != null) {
             if (expected.length != actual.length) {
@@ -1401,7 +1404,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
      *
      * @param lastMultipart true if this is the last multipart in the request
      */
-    private byte[] createExpectedFormDataOutput(
+    private static byte[] createExpectedFormDataOutput(
             String boundaryString,
             String contentEncoding,
             String titleField,
@@ -1473,7 +1476,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return output.toByteArray();
     }
 
-    private byte[] createExpectedFilepartOutput(
+    private static byte[] createExpectedFilepartOutput(
             String boundaryString,
             String fileField,
             File file,
@@ -1511,7 +1514,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
      * Create the expected output post body for form data and file multi-parts
      * with specified values, when request is multipart
      */
-    private byte[] createExpectedFormAndUploadOutput(
+    private static byte[] createExpectedFormAndUploadOutput(
             String boundaryString,
             String contentEncoding,
             String titleField,
@@ -1540,14 +1543,11 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
         return output.toByteArray();
     }
 
-    private HTTPSamplerBase createHttpSampler(int samplerType) {
-        switch (samplerType) {
-            case HTTP_SAMPLER:
-                return new HTTPSampler();
-            case HTTP_SAMPLER3:
-                return new HTTPSampler3();
-            default:
-                throw new IllegalArgumentException("Unexpected type: " + samplerType);
-        }
+    private static HTTPSamplerBase createHttpSampler(int samplerType) {
+        return switch (samplerType) {
+            case HTTP_SAMPLER -> new HTTPSampler();
+            case HTTP_SAMPLER3 -> new HTTPSampler3();
+            default -> throw new IllegalArgumentException("Unexpected type: " + samplerType);
+        };
     }
 }

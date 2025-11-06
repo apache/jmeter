@@ -24,7 +24,8 @@ plugins {
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.hamcrest:hamcrest")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 plugins.withId("java-test-fixtures") {

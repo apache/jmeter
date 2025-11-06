@@ -571,12 +571,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *
      * @return the JMeter tree model
      */
-    /*
-     * TODO consider removing this method, and providing method wrappers instead.
-     * This would allow the Gui package to do any additional clearups if required,
-     * as has been done with clearTestPlan()
-    */
     public JMeterTreeModel getTreeModel() {
+        // TODO consider removing this method, and providing method wrappers instead.
+        //   This would allow the Gui package to do any additional clearups if required,
+        //   as has been done with clearTestPlan()
         return treeModel;
     }
 
@@ -909,9 +907,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         PropertyIterator it = el.propertyIterator();
         while (it.hasNext()) {
             JMeterProperty obj = it.next();
-            if (obj instanceof TestElementProperty) {
+            if (obj instanceof TestElementProperty jMeterProperties) {
                 ret ^= getTestElementCheckSum(
-                        ((TestElementProperty) obj).getElement());
+                        jMeterProperties.getElement());
             } else {
                 ret ^= obj.getName().hashCode();
                 String stringValue = obj.getStringValue();
@@ -985,8 +983,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @return boolean
      */
     public boolean shouldSaveBeforeRunByPreference() {
-        return Boolean.TRUE.toString().
-                equalsIgnoreCase(PREFS.get(SBR_PREFS_KEY, null));
+        return "true".equalsIgnoreCase(PREFS.get(SBR_PREFS_KEY, null));
     }
 
     /**

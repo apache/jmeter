@@ -67,7 +67,6 @@ dependencies {
     implementation("org.apache.httpcomponents:httpasyncclient")
     implementation("org.apache.httpcomponents:httpcore-nio")
     implementation("org.jsoup:jsoup")
-    implementation("org.apache.commons:commons-lang3")
     implementation("net.sf.jtidy:jtidy")
     implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3")
@@ -79,13 +78,13 @@ dependencies {
     }
     implementation("com.miglayout:miglayout-swing")
     // we use bcmail for compilation only, and bcmail is not shipped in the release
-    compileOnly("org.bouncycastle:bcmail-jdk15on")
-    compileOnly("org.bouncycastle:bcpkix-jdk15on")
-    compileOnly("org.bouncycastle:bcprov-jdk15on")
+    compileOnly("org.bouncycastle:bcmail-jdk18on")
+    compileOnly("org.bouncycastle:bcpkix-jdk18on")
+    compileOnly("org.bouncycastle:bcprov-jdk18on")
     // Certain tests use bouncycastle, so it is added to test classpath
-    testRuntimeOnly("org.bouncycastle:bcmail-jdk15on")
-    testRuntimeOnly("org.bouncycastle:bcpkix-jdk15on")
-    testRuntimeOnly("org.bouncycastle:bcprov-jdk15on")
+    testRuntimeOnly("org.bouncycastle:bcmail-jdk18on")
+    testRuntimeOnly("org.bouncycastle:bcpkix-jdk18on")
+    testRuntimeOnly("org.bouncycastle:bcprov-jdk18on")
     testImplementation("nl.jqno.equalsverifier:equalsverifier")
     testImplementation(testFixtures(projects.src.testkitWiremock))
     testFixturesImplementation(testFixtures(projects.src.core))

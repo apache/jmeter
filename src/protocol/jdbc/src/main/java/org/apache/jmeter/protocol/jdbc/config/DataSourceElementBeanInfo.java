@@ -23,11 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,62 +57,62 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         createPropertyGroup("database", new String[] { "dbUrl", "driver", "username", "password", "connectionProperties" });
 
         PropertyDescriptor p = property("dataSource");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("poolMax");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "0");
         p = property("timeout");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "10000");
         p = property("trimInterval");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "60000");
         p = property("autocommit");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, true);
         p = property("transactionIsolation");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "DEFAULT");
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, true);
         Set<String> modesSet = TRANSACTION_ISOLATION_MAP.keySet();
         String[] modes = modesSet.toArray(new String[modesSet.size()]);
         p.setValue(TAGS, modes);
         p = property("poolPreparedStatements");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT_NOT_SAVED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT_NOT_SAVED, true);
         p.setValue(DEFAULT, "-1");
         p = property("preinit");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
         p = property("initQuery", TypeEditor.TextAreaEditor);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("keepAlive");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, true);
         p = property("connectionAge");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "5000");
         p = property("checkQuery", TypeEditor.ComboStringEditor);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p.setValue(TAGS, getListCheckQuery());
         p = property("dbUrl");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("driver", TypeEditor.ComboStringEditor);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p.setValue(TAGS, getListJDBCDriverClass());
         p = property("username");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("password", TypeEditor.PasswordEditor);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p = property("connectionProperties");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
     }
 
@@ -131,7 +131,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
      * @return integer value of the given transaction isolation mode
      */
     public static int getTransactionIsolationMode(String tag) {
-        if (!StringUtils.isEmpty(tag)) {
+        if (StringUtilities.isNotEmpty(tag)) {
             Integer isolationMode = TRANSACTION_ISOLATION_MAP.get(tag);
             if (isolationMode == null) {
                 try {

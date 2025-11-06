@@ -106,11 +106,6 @@ groovy-3.0.3
 ----------------------
 Advised scripting language for JSR223 Test Elements
 
-hamcrest-core-1.3
-----------------------
-- unit tests, JUnit sampler
-https://github.com/hamcrest/JavaHamcrest
-
 freemarker-2.3.29.jar
 ----------------------
 - used by Report/Dashboard feature
@@ -222,11 +217,6 @@ http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
 - httpasyncclient implementation for InfluxDB Backend Listener Client
 
-mongo-java-driver 2.11.3
-------------------------
-http://www.mongodb.org/
-- MongoDB sampler
-
 oro-2.0.8
 ---------
 http://jakarta.apache.org/site/downloads/downloads_oro.cgi
@@ -271,12 +261,6 @@ xalan_2.7.1
 -----------
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 +org.apache.xalan|xml|xpath
-
-xercesImpl-2.12.0
-----------------
-http://xerces.apache.org/xerces2-j/download.cgi
-+org.apache.html.dom|org.apache.wml|org.apache.xerces|org.apache.xml.serialize
-+org.w3c.dom.html|ls
 
 xml-apis-1.4.01
 --------------

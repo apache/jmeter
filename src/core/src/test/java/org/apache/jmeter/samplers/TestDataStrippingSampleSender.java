@@ -19,7 +19,7 @@ package org.apache.jmeter.samplers;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.test.JMeterSerialTest;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -60,11 +59,11 @@ class TestDataStrippingSampleSender extends JMeterTestCase implements JMeterSeri
         SampleResult sample = result(successfulParent, result(result(result())));
         sut.sampleOccurred(event(sample));
         assertResultsHaveContent(content, sample);
-        assertThat(sample, CoreMatchers.is(nextSender.getResult()));
+        assertEquals(nextSender.getResult(), sample);
     }
 
-    private void assertResultsHaveContent(String content, SampleResult sample) {
-        assertThat(sample.getResponseDataAsString(), CoreMatchers.is(content));
+    private static void assertResultsHaveContent(String content, SampleResult sample) {
+        assertEquals(content, sample.getResponseDataAsString());
         for (SampleResult subResult : sample.getSubResults()) {
             assertResultsHaveContent(content, subResult);
         }

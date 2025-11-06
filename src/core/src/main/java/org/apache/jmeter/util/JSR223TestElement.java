@@ -33,7 +33,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -41,6 +40,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,10 +89,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * Initialization On Demand Holder pattern
      */
     private static class LazyHolder {
-        private LazyHolder() {
-            super();
-        }
-        public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
+        private static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
 
     /**
@@ -114,7 +111,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         String lang = getScriptLanguageWithDefault();
         ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
         if (scriptEngine == null) {
-            throw new ScriptException("Cannot find engine named: '"+lang+"', ensure you set language field in JSR223 Test Element: "+getName());
+            throw new ScriptException("Cannot find engine named: '"+lang+"', ensure you set language field in JSR223 element named: " + getName());
         }
 
         return scriptEngine;
@@ -125,7 +122,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     private String getScriptLanguageWithDefault() {
         String lang = getScriptLanguage();
-        if (StringUtils.isNotEmpty(lang)) {
+        if (StringUtilities.isNotEmpty(lang)) {
             return lang;
         }
         return DEFAULT_SCRIPT_LANGUAGE;
@@ -189,14 +186,14 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         boolean supportsCompilable = scriptEngine instanceof Compilable
                 && !"bsh.engine.BshScriptEngine".equals(scriptEngine.getClass().getName()); // NOSONAR // $NON-NLS-1$
         try {
-            if (!StringUtils.isEmpty(filename)) {
+            if (StringUtilities.isNotEmpty(filename)) {
                 if (!scriptFile.isFile()) {
                     throw new ScriptException("Script file '" + scriptFile.getAbsolutePath()
-                            + "' is not a file for element: " + getName());
+                            + "' is not a file for JSR223 element named: " + getName());
                 }
                 if (!scriptFile.canRead()) {
                     throw new ScriptException("Script file '" + scriptFile.getAbsolutePath()
-                            + "' is not readable for element:" + getName());
+                            + "' is not readable for JSR223 element named: " + getName());
                 }
                 if (!supportsCompilable) {
                     try (BufferedReader fileReader = Files.newBufferedReader(scriptFile.toPath())) {
@@ -216,7 +213,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                 return compiledScript.eval(bindings);
             }
             String script = getScript();
-            if (!StringUtils.isEmpty(script)) {
+            if (StringUtilities.isNotEmpty(script)) {
                 if (supportsCompilable &&
                         !ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheKey)) {
                     computeScriptMD5(script);
@@ -232,7 +229,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                     return scriptEngine.eval(script, bindings);
                 }
             } else {
-                throw new ScriptException("Both script file and script text are empty for element:" + getName());
+                throw new ScriptException("Both script file and script text are empty for JSR223 element named: " + getName());
             }
         } catch (ScriptException ex) {
             Throwable rootCause = ex.getCause();
@@ -256,13 +253,13 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             return compiledScript;
         } catch (ScriptCompilationInvocationTargetException e) {
             Throwable cause = e.getCause();
-            if (cause instanceof IOException) {
-                cause.addSuppressed(new IllegalStateException("Unable to compile script " + newCacheKey));
-                throw (IOException) cause;
+            if (cause instanceof IOException ioException) {
+                cause.addSuppressed(new IllegalStateException("Unable to compile JSR223 script: " + newCacheKey));
+                throw ioException;
             }
-            if (cause instanceof ScriptException) {
-                cause.addSuppressed(new IllegalStateException("Unable to compile script " + newCacheKey));
-                throw (ScriptException) cause;
+            if (cause instanceof ScriptException scriptException) {
+                cause.addSuppressed(new IllegalStateException("Unable to compile JSR223 script: " + newCacheKey));
+                throw scriptException;
             }
             throw e;
         }
@@ -282,12 +279,12 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         if(!supportsCompilable) {
             return true;
         }
-        if (!StringUtils.isEmpty(getScript())) {
+        if (!(getScript() == null || getScript().isEmpty())) {
             try {
                 ((Compilable) scriptEngine).compile(getScript());
                 return true;
             } catch (ScriptException e) { // NOSONAR
-                logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
+                logger.error("Error compiling script for JSR223 element named: '{}', error: {}", getName(), e.getMessage());
                 return false;
             }
         } else {
@@ -297,7 +294,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                     ((Compilable) scriptEngine).compile(fileReader);
                     return true;
                 } catch (ScriptException e) { // NOSONAR
-                    logger.error("Error compiling script for test element {}, error:{}", getName(), e.getMessage());
+                    logger.error("Error compiling script for JSR223 element named: '{}', error: {}", getName(), e.getMessage());
                     return false;
                 }
             }

@@ -27,9 +27,11 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 
 import com.github.benmanes.caffeine.cache.Cache;
 
+@Isolated("modifies jmeter locale")
 public class PublisherSamplerTest {
 
     @BeforeEach

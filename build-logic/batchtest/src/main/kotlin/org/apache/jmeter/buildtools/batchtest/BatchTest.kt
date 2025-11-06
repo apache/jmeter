@@ -32,9 +32,12 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.kotlin.dsl.property
 import java.io.File
 import java.net.InetAddress
+import java.net.ServerSocket
 import javax.inject.Inject
 
 open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
@@ -107,13 +110,23 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
         get() = project.rootProject.layout.projectDirectory.dir("lib").asFileTree
 
     @get:InputFile
+    @get:PathSensitive(PathSensitivity.NONE)
     val jmeterJar
         get() = project.rootProject.layout.projectDirectory.dir("bin").file("ApacheJMeter.jar")
+
+    @Internal
+    val serverWorkingDir = objects.directoryProperty()
+        .convention(project.rootProject.layout.projectDirectory.dir("bin"))
+
+    @InputFile
+    @PathSensitive(PathSensitivity.NONE)
+    val jmeterProperties = objects.fileProperty()
+        .convention(serverWorkingDir.file("jmeter.properties"))
 
     init {
         group = BATCH_TESTS_GROUP_NAME
         description = "Runs jmx file via process fork and verifies outputs"
-        workingDir = File(project.rootDir, "bin")
+        workingDir = serverWorkingDir.get().asFile
         mainClass.set("org.apache.jmeter.NewDriver")
         classpath(jmeterJar)
 
@@ -121,8 +134,35 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
         // It enables to override the properties later (e.g. in the build script)
         maxHeapSize = "128m"
         jvmArgs("-Xss256k", "-XX:MaxMetaspaceSize=128m")
-        systemProperty("java.rmi.server.hostname", InetAddress.getLocalHost().canonicalHostName)
+        systemProperty("java.rmi.server.hostname", getServerHost())
         systemProperty("java.awt.headless", "true")
+    }
+
+    @Internal
+    protected fun getServerHost(): String {
+        // If JVM has IPv4 enabled, 127.0.0.1 will work; otherwise fall back to ::1
+        return try {
+            // Will throw if IPv4 is completely disabled in the JVM/OS
+            InetAddress.getByAddress(byteArrayOf(127, 0, 0, 1))
+            "127.0.0.1"
+        } catch (_: Exception) {
+            "::1"
+        }
+    }
+
+    protected fun getFreePort(retries: Int = 10): Int {
+        repeat(retries - 1) {
+            try {
+                ServerSocket(0).use {
+                    return it.localPort
+                }
+            } catch (_: Exception) {
+                Thread.sleep(25)
+            }
+        }
+        ServerSocket(0).use {
+            return it.localPort
+        }
     }
 
     fun jmeterArgument(name: String, value: String) {
@@ -162,7 +202,7 @@ open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
         systemProperty("user.language", userLanguage.get())
         systemProperty("user.region", userRegion.get())
         systemProperty("user.country", userCountry.get())
-        args("-pjmeter.properties")
+        args("-p${jmeterProperties.get().asFile.name}")
         args("-q", batchProperties.get())
         args("-n")
         args("-t", jmx.get())

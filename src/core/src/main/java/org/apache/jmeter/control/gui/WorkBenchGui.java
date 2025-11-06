@@ -95,8 +95,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
     @SuppressWarnings("deprecation")
     public void configure(TestElement el) {
         super.configure(el);
-        if (el instanceof org.apache.jmeter.testelement.WorkBench) {
-            org.apache.jmeter.testelement.WorkBench tp = (org.apache.jmeter.testelement.WorkBench) el;
+        if (el instanceof org.apache.jmeter.testelement.WorkBench tp) {
             saveWorkBench.setSelected(tp.getSaveWorkBench());
         }
     }

@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.java.control.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
 
 class ClassFilter {
 
@@ -52,9 +51,9 @@ class ClassFilter {
             }
         }
         if (!newList.isEmpty()) {
-            return newList.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+            return newList.toArray(new String[0]);
         } else {
-            return ArrayUtils.EMPTY_STRING_ARRAY;
+            return new String[0];
         }
     }
 

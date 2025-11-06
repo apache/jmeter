@@ -87,7 +87,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
      */
     private static class SamplerAndTransactionNameVisitor implements HashTreeTraverser {
         private final Set<String> listOfTransactions = new TreeSet<>();
-        public SamplerAndTransactionNameVisitor() {
+        private SamplerAndTransactionNameVisitor() {
             super();
         }
         @Override
@@ -113,10 +113,11 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
         public void processPath() {
             // NOOP
         }
+
         /**
          * @return the listOfTransactions
          */
-        public Set<String> getListOfTransactions() {
+        private Set<String> getListOfTransactions() {
             return listOfTransactions;
         }
     }

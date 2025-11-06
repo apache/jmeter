@@ -20,8 +20,6 @@ package org.apache.jmeter.protocol.http.parser;
 import java.net.URL;
 import java.util.Iterator;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 /**
  * Test class, that implements an dummy {@link LinkExtractorParser} that is
  * reusable
@@ -32,7 +30,7 @@ public class ReusableParser implements LinkExtractorParser {
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent,
             byte[] responseData, URL baseUrl, String encoding)
             throws LinkExtractorParseException {
-        throw new NotImplementedException("Test class");
+        throw new UnsupportedOperationException("Test class");
     }
 
     @Override

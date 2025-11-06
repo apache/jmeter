@@ -35,6 +35,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -640,7 +641,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             return;
         }
         String tn = getThreadName();
-        if (tn.length()==0) {
+        if (tn.isEmpty()) {
             tn=Thread.currentThread().getName();
             this.setThreadName(tn);
         }
@@ -891,7 +892,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         }
     }
 
-    /*
+    /**
      * Determine if content-type is known to be binary, i.e. not displayable as text.
      *
      * @param ct content type
@@ -1003,7 +1004,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return the value of the dataEncoding or the provided default
      */
     protected String getDataEncodingWithDefault(String defaultEncoding) {
-        if (dataEncoding != null && dataEncoding.length() > 0) {
+        if (StringUtilities.isNotEmpty(dataEncoding)) {
             return dataEncoding;
         }
         return defaultEncoding;
@@ -1136,7 +1137,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         return startTime;
     }
 
-    /*
+    /**
      * Helper methods N.B. setStartTime must be called before setEndTime
      *
      * setStartTime is used by HTTPSampleResult to clone the parent sampler and

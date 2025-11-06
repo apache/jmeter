@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
@@ -34,6 +33,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.Document;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,17 +92,17 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         if (log.isDebugEnabled()) {
             log.debug("Boundary Extractor {}: processing result", getName());
         }
-        if (StringUtils.isEmpty(getRefName())) {
+        String refName = getRefName();
+        if (StringUtilities.isEmpty(refName)) {
             throw new IllegalArgumentException(
                     "One of the mandatory properties is missing in Boundary Extractor:" + getName());
         }
 
         JMeterVariables vars = context.getVariables();
 
-        String refName = getRefName();
         final String defaultValue = getDefaultValue();
 
-        if (StringUtils.isNotBlank(defaultValue) || isEmptyDefaultValue()) {
+        if (StringUtilities.isNotBlank(defaultValue) || isEmptyDefaultValue()) {
             vars.put(refName, defaultValue);
         }
 
@@ -261,11 +261,11 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
      */
     @VisibleForTesting
     static List<String> extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString) {
-        if (StringUtils.isBlank(inputString)) {
+        if (StringUtilities.isBlank(inputString)) {
             return Collections.emptyList();
         }
-        boolean isEmptyLeftBoundary = StringUtils.isEmpty(leftBoundary);
-        boolean isEmptyRightBoundary = StringUtils.isEmpty(rightBoundary);
+        boolean isEmptyLeftBoundary = StringUtilities.isEmpty(leftBoundary);
+        boolean isEmptyRightBoundary = StringUtilities.isEmpty(rightBoundary);
         if (isEmptyLeftBoundary && isEmptyRightBoundary) {
             return Collections.singletonList(inputString);
         }
@@ -403,7 +403,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
 
     public boolean useBody() {
         String prop = getPropertyAsString(MATCH_AGAINST);
-        return prop.length() == 0 || USE_BODY.equalsIgnoreCase(prop);
+        return prop.isEmpty() || USE_BODY.equalsIgnoreCase(prop);
     }
 
     public boolean useUnescapedBody() {

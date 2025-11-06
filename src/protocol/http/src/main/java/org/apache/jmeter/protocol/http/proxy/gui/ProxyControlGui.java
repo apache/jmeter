@@ -62,8 +62,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.control.gui.TreeNodeWrapper;
@@ -92,6 +90,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -155,7 +155,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      */
     private JCheckBox detectGraphQLRequest;
 
-    /*
+    /**
      * Use regexes to match the source data
      */
     private JCheckBox regexMatch;
@@ -318,8 +318,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         GuiUtils.stopTableEditing(excludeTable);
         GuiUtils.stopTableEditing(includeTable);
         configureTestElement(el);
-        if (el instanceof ProxyControl) {
-            model = (ProxyControl) el;
+        if (el instanceof ProxyControl proxyControl) {
+            model = proxyControl;
             model.setPort(portField.getText());
             model.setSslDomains(sslDomains.getText());
             setIncludeListInProxyControl(model);
@@ -346,8 +346,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setContentTypeInclude(contentTypeInclude.getText());
             model.setContentTypeExclude(contentTypeExclude.getText());
             httpSampleNameFormat.setEnabled(httpSampleNamingMode.getSelectedIndex() == 3);
-            if (StringUtils.isNotBlank(httpSampleNameFormat.getText())) {
-                model.setHttpSampleNameFormat(httpSampleNameFormat.getText());
+            String httpSampleNameFormat = this.httpSampleNameFormat.getText();
+            if (StringUtilities.isNotBlank(httpSampleNameFormat)) {
+                model.setHttpSampleNameFormat(httpSampleNameFormat);
             }
             TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
             if (nw == null) {
@@ -430,16 +431,15 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         pModel.fireTableDataChanged();
     }
 
-    /*
+    /**
      * Handles groupingMode. actionPerfomed is not suitable, as that seems to be
      * activated whenever the Proxy is selected in the Test Plan
      * Also handles samplerTypeName
+     * {@inheritDoc}
      */
-    /** {@inheritDoc} */
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (e.getSource() instanceof JComboBox) {
-            JComboBox<?> combo = (JComboBox<?>) e.getSource();
+        if (e.getSource() instanceof JComboBox<?> combo) {
             if (HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())) {
                 model.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
                 httpSampleNameFormat.setEnabled(httpSampleNamingMode.getSelectedIndex() == 3);
@@ -699,14 +699,17 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     void setSetCounters() {
-        if ((counterValue.getText().length() > 0) && NumberUtils.isParsable(counterValue.getText())) {
-            Proxy.setCounter(Integer.parseInt(counterValue.getText()));
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    JMeterUtils.getResString("proxy_settings_counter_error_digits"), // $NON-NLS-1$
-                    JMeterUtils.getResString("proxy_settings_counter_error_invalid_data"), // $NON-NLS-1$
-                    JOptionPane.WARNING_MESSAGE);
+        String counterValue = this.counterValue.getText();
+        try {
+            Proxy.setCounter(Integer.parseInt(counterValue));
+            return;
+        } catch (NumberFormatException ignore) {
+            // ignore
         }
+        JOptionPane.showMessageDialog(this,
+                JMeterUtils.getResString("proxy_settings_counter_error_digits"), // $NON-NLS-1$
+                JMeterUtils.getResString("proxy_settings_counter_error_invalid_data"), // $NON-NLS-1$
+                JOptionPane.WARNING_MESSAGE);
     }
     /** {@inheritDoc} */
     @Override
@@ -1058,8 +1061,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static JScrollPane findScrollPane(JPopupMenu popup) {
         Component[] components = popup.getComponents();
         for (Component component : components) {
-            if(component instanceof JScrollPane) {
-                return (JScrollPane) component;
+            if(component instanceof JScrollPane jScrollPane) {
+                return jScrollPane;
             }
         }
         return null;

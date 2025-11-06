@@ -51,8 +51,8 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
             model.addElement((String) rb.getObject(e.toString()));
         }
         Object def = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
-        if (def instanceof Integer) {
-            defaultIndex = (Integer) def;
+        if (def instanceof Integer integer) {
+            defaultIndex = integer;
         } else {
             defaultIndex = 0;
         }
@@ -81,11 +81,12 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
     }
 
     @Override
+    @SuppressWarnings("EnumOrdinal")
     public void setValue(Object value) {
-        if (value instanceof Enum<?>){
-            combo.setSelectedIndex(((Enum<?>) value).ordinal());
-        } else if (value instanceof Integer) {
-            combo.setSelectedIndex((Integer) value);
+        if (value instanceof Enum<?> anEnum){
+            combo.setSelectedIndex(anEnum.ordinal());
+        } else if (value instanceof Integer integer) {
+            combo.setSelectedIndex(integer);
         } else {
             combo.setSelectedItem(value);
         }

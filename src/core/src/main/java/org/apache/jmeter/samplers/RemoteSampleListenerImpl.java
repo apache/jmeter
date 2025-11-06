@@ -41,13 +41,13 @@ public class RemoteSampleListenerImpl extends java.rmi.server.UnicastRemoteObjec
 
     public RemoteSampleListenerImpl(Object listener) throws RemoteException {
         super(DEFAULT_LOCAL_PORT, RmiUtils.createClientSocketFactory(),  RmiUtils.createServerSocketFactory());
-        if (listener instanceof TestStateListener) {
-            testListener = (TestStateListener) listener;
+        if (listener instanceof TestStateListener testStateListener) {
+            testListener = testStateListener;
         } else {
             testListener = null;
         }
-        if (listener instanceof SampleListener) {
-            sampleListener = (SampleListener) listener;
+        if (listener instanceof SampleListener sampleListener1) {
+            sampleListener = sampleListener1;
         } else {
             sampleListener = null;
         }

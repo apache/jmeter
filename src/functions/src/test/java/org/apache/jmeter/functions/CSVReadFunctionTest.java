@@ -52,13 +52,13 @@ public class CSVReadFunctionTest extends JMeterTestCase implements JMeterSerialT
         csvFilePath = path.toString();
     }
 
-    private CSVRead createCsvRead(String fileName, String column) throws Exception {
+    private static CSVRead createCsvRead(String fileName, String column) throws Exception {
         CSVRead cr = new CSVRead();
         cr.setParameters(FunctionTestHelper.makeParams(fileName, column));
         return cr;
     }
 
-    private void eq(CSVRead a, String expected) throws InvalidVariableException {
+    private static void eq(CSVRead a, String expected) throws InvalidVariableException {
         assertEquals(expected, a.execute(null, null));
     }
 

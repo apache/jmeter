@@ -102,8 +102,8 @@ class TestSampleResult implements JMeterSerialTest {
     private LogRecordingDelegatingLogger recordLogger;
 
     private void divertLog() {// N.B. This needs to divert the log for SampleResult
-        if (SampleResult.log instanceof LogRecordingDelegatingLogger) {
-            recordLogger = (LogRecordingDelegatingLogger) SampleResult.log;
+        if (SampleResult.log instanceof LogRecordingDelegatingLogger logRecordingDelegatingLogger) {
+            recordLogger = logRecordingDelegatingLogger;
         } else {
             recordLogger = new LogRecordingDelegatingLogger(SampleResult.log);
             SampleResult.log = recordLogger;
@@ -193,11 +193,11 @@ class TestSampleResult implements JMeterSerialTest {
         }
     }
 
-    private void testSubResults(boolean nanoTime, long pause) throws Exception {
+    private static void testSubResults(boolean nanoTime, long pause) throws Exception {
         testSubResults(nanoTime, 0L, pause); // Don't use nanoThread
     }
 
-    private void testSubResults(boolean nanoTime, long nanoThreadSleep, long pause) throws Exception {
+    private static void testSubResults(boolean nanoTime, long nanoThreadSleep, long pause) throws Exception {
         // This test tries to emulate a http sample, with two
         // subsamples, representing images that are downloaded for the
         // page representing the first sample.
@@ -339,7 +339,7 @@ class TestSampleResult implements JMeterSerialTest {
 
     // sleep and return how long we actually slept
     // may be rather longer if the system is busy
-    private long sleep(long ms) throws InterruptedException {
+    private static long sleep(long ms) throws InterruptedException {
         long start = System.currentTimeMillis();
         Thread.sleep(ms);
         return System.currentTimeMillis() - start;

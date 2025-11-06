@@ -80,19 +80,13 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createKeysSelector()
-     */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
         return sample -> {
             if (sample.getSuccess()) {
                 long elapsedTime = sample.getElapsedTime();
                 if (elapsedTime <= satisfiedThreshold) {
-                    return (double) 0;
+                    return 0d;
                 } else if (elapsedTime <= toleratedThreshold) {
                     return 1d;
                 } else {
@@ -104,12 +98,6 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
         };
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         return Collections.singletonMap(

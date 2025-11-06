@@ -32,24 +32,11 @@ public class AbstractSampleProcessor implements SampleProcessor {
 
     private final ArrayList<ChannelContext> channelContexts = new ArrayList<>();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleProcessor#getSampleContext()
-     */
     @Override
     public SampleContext getSampleContext() {
         return sampleContext;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleProcessor#setSampleContext
-     * (org.apache.jmeter.report.csv.processor.SampleContext)
-     */
     @Override
     public void setSampleContext(SampleContext sampleContext) {
         this.sampleContext = sampleContext;
@@ -71,25 +58,11 @@ public class AbstractSampleProcessor implements SampleProcessor {
         return channelContexts.get(channel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleProcessor#setChannelAttribute
-     * (int, java.lang.String, java.lang.Object)
-     */
     @Override
     public void setChannelAttribute(int channel, String key, Object value) {
         getChannelContext(channel).put(key, value);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleProcessor#getChannelAttribute
-     * (int, java.lang.String)
-     */
     @Override
     public Object getChannelAttribute(int channel, String key) {
         return getChannelContext(channel).get(key);

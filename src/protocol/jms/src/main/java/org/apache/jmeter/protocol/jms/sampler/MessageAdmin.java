@@ -48,12 +48,12 @@ public class MessageAdmin {
             this.reply = reply;
         }
 
-        public Object getReply() {
+        private Object getReply() {
             return reply;
         }
 
         @SuppressWarnings("UnusedMethod")
-        public Object getRequest() {
+        private Object getRequest() {
             return request;
         }
 
@@ -69,7 +69,7 @@ public class MessageAdmin {
         /**
          * @return the latch
          */
-        public CountDownLatch getLatch() {
+        private CountDownLatch getLatch() {
             return latch;
         }
     }

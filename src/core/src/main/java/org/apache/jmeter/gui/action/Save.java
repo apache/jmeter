@@ -468,7 +468,7 @@ public class Save extends AbstractAction {
 
         private final Pattern pattern;
 
-        public PrivatePatternFileFilter(Pattern pattern) {
+        private PrivatePatternFileFilter(Pattern pattern) {
             if(pattern == null) {
                 throw new IllegalArgumentException("pattern cannot be null !"); //$NON-NLS-1$
             }

@@ -31,11 +31,11 @@ import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,16 +85,16 @@ public class RandomDate extends AbstractFunction {
         private final String format;
         private final Locale locale;
 
-        public LocaleFormatObject(String format, Locale locale) {
+        private LocaleFormatObject(String format, Locale locale) {
             this.format = format;
             this.locale = locale;
         }
 
-        public String getFormat() {
+        private String getFormat() {
             return format;
         }
 
-        public Locale getLocale() {
+        private Locale getLocale() {
             return locale;
         }
 
@@ -105,18 +105,14 @@ public class RandomDate extends AbstractFunction {
 
         @Override
         public boolean equals(Object other) {
-            if (!(other instanceof LocaleFormatObject)) {
+            if (!(other instanceof LocaleFormatObject otherError)) {
                 return false;
             }
 
-            LocaleFormatObject otherError = (LocaleFormatObject) other;
             return format.equals(otherError.getFormat())
                     && locale.getDisplayName().equals(otherError.getLocale().getDisplayName());
         }
 
-        /**
-         * @see java.lang.Object#toString()
-         */
         @Override
         public String toString() {
             return "LocaleFormatObject [format=" + format + ", locale=" + locale + "]";
@@ -137,13 +133,13 @@ public class RandomDate extends AbstractFunction {
         DateTimeFormatter formatter;
         if(values.length>3) {
             String localeAsString = values[3].execute().trim();
-            if (!localeAsString.trim().isEmpty()) {
+            if (!localeAsString.isEmpty()) {
                 locale = LocaleUtils.toLocale(localeAsString);
             }
         }
 
         String format = values[0].execute().trim();
-        if (!StringUtils.isEmpty(format)) {
+        if (StringUtilities.isNotEmpty(format)) {
             try {
                 LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
                 formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));

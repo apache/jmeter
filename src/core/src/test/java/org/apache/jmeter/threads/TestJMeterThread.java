@@ -168,20 +168,20 @@ class TestJMeterThread {
         assertTrue(duration <= maxDuration, "Test plan should not run for longer than duration");
     }
 
-    private LoopController createLoopController() {
+    private static LoopController createLoopController() {
         LoopController result = new LoopController();
         result.setLoops(LoopController.INFINITE_LOOP_COUNT);
         result.setEnabled(true);
         return result;
     }
 
-    private DummySampler createSampler() {
+    private static DummySampler createSampler() {
         DummySampler result = new DummySampler();
         result.setName("Call me");
         return result;
     }
 
-    private Timer createConstantTimer(long delay) {
+    private static Timer createConstantTimer(long delay) {
         DummyTimer timer = new DummyTimer();
         timer.setEnabled(true);
         timer.setDelay(delay);

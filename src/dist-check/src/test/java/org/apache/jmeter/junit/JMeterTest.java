@@ -56,7 +56,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.gui.ObsoleteGui;
 import org.apache.jmeter.control.IfControllerSchema;
 import org.apache.jmeter.control.LoopControllerSchema;
@@ -95,6 +94,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.BackendListenerGui;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -138,7 +138,7 @@ public class JMeterTest extends JMeterTestCase {
         Locale.setDefault(DEFAULT_LOCALE);
     }
 
-    /*
+    /**
      * Extract titles from component_reference.xml
      */
     @BeforeAll
@@ -157,13 +157,13 @@ public class JMeterTest extends JMeterTestCase {
                             components.item(j);
                     String nm = comp.getAttribute("name");
                     if (!nm.equals("SSL Manager")) {// Not a true GUI component
-                        guiTitles.put(nm.replace(' ', '_'), Boolean.FALSE);
+                        guiTitles.put(nm.replace(' ', '_'), false);
                     }
                 }
             }
         }
         // Add titles that don't need to be documented
-        guiTitles.put("Example Sampler", Boolean.FALSE);
+        guiTitles.put("Example Sampler", false);
     }
 
     /**
@@ -184,7 +184,7 @@ public class JMeterTest extends JMeterTestCase {
         return body;
     }
 
-    /*
+    /**
      * Extract titles from component_reference.xml
      */
     @BeforeAll
@@ -203,8 +203,8 @@ public class JMeterTest extends JMeterTestCase {
                     org.w3c.dom.Element comp = (org.w3c.dom.Element)
                             components.item(j);
                     String tag = comp.getAttribute("tag");
-                    if (!StringUtils.isEmpty(tag)){
-                        guiTags.put(tag, Boolean.FALSE);
+                    if (StringUtilities.isNotEmpty(tag)){
+                        guiTags.put(tag, false);
                     }
                 }
             }
@@ -213,7 +213,7 @@ public class JMeterTest extends JMeterTestCase {
 
     public static<T> List<T> keysWithFalseValues(Map<? extends T, Boolean> map) {
         return map.entrySet().stream()
-                .filter(e -> !e.getValue().equals(Boolean.TRUE))
+                .filter(e -> !e.getValue().equals(true))
                 .map(Map.Entry::getKey)
                 .sorted()
                 .collect(Collectors.toList());
@@ -251,7 +251,7 @@ public class JMeterTest extends JMeterTestCase {
         return components;
     }
 
-    /*
+    /**
      * Test GUI elements - create the suite of tests
      */
     static Collection<GuiComponentHolder> guiComponents() throws Throwable {
@@ -264,7 +264,7 @@ public class JMeterTest extends JMeterTestCase {
         return components;
     }
 
-    /*
+    /**
      * Test GUI elements - run the test
      */
     @ParameterizedTest
@@ -275,11 +275,11 @@ public class JMeterTest extends JMeterTestCase {
             String title = guiItem.getDocAnchor();
             boolean ct = guiTitles.containsKey(title);
             if (ct) {
-                guiTitles.put(title, Boolean.TRUE);// So we can detect extra entries
+                guiTitles.put(title, true);// So we can detect extra entries
             }
             String name = guiItem.getClass().getName();
             if (// Is this a work in progress or an internal GUI component?
-                title != null && !title.isEmpty() // Will be "" for internal components
+                StringUtilities.isNotEmpty(title) // Will be "" for internal components
                 && !title.toUpperCase(Locale.ENGLISH).contains("(ALPHA")
                 && !title.toUpperCase(Locale.ENGLISH).contains("(BETA")
                 && !title.toUpperCase(Locale.ENGLISH).contains("(DEPRECATED")
@@ -295,7 +295,7 @@ public class JMeterTest extends JMeterTestCase {
         }
     }
 
-    /*
+    /**
      * Test GUI elements - run for all components
      */
     @ParameterizedTest
@@ -321,7 +321,7 @@ public class JMeterTest extends JMeterTestCase {
         checkElementAlias(guiItem);
     }
 
-    /*
+    /**
      * Test GUI elements - not run for TestBeanGui items
      */
     @ParameterizedTest
@@ -337,7 +337,7 @@ public class JMeterTest extends JMeterTestCase {
         assertEquals(name, el.getPropertyAsString(TestElement.GUI_CLASS), "GUI-CLASS: Failed on " + name);
 
         assertEquals(guiItem.getName(), el.getName(), () -> "NAME: Failed on " + name);
-        if (StringUtils.isEmpty(el.getName())) {
+        if (StringUtilities.isEmpty(el.getName())) {
             fail("Name of the element must not be blank. Gui class " + name + ", element class " + el.getClass().getName());
         }
         assertEquals(el.getClass().getName(), el
@@ -467,7 +467,7 @@ public class JMeterTest extends JMeterTestCase {
         TestElement el = guiItem.createTestElement();
 
         assertFalse(
-                StringUtils.isEmpty(el.getName()),
+                StringUtilities.isEmpty(el.getName()),
                 () -> "Name should be non-blank for element " + componentHolder);
         PropertyIterator it = el.propertyIterator();
         while (it.hasNext()) {
@@ -584,7 +584,7 @@ public class JMeterTest extends JMeterTestCase {
                 .filter(o -> !o.getClass().getName().endsWith("_Stub"));
     }
 
-    /*
+    /**
      * Test serializable elements - test the object
      */
     @ParameterizedTest
@@ -616,7 +616,7 @@ public class JMeterTest extends JMeterTestCase {
         assertNotNull(nameMap, "SaveService nameMap (saveservice.properties) should not be null");
     }
 
-    private void checkElementAlias(Object item) {
+    private static void checkElementAlias(Object item) {
         String name=item.getClass().getName();
         boolean contains = nameMap.values().contains(name);
         if (!contains){

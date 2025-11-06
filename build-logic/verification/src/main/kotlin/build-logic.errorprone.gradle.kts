@@ -29,7 +29,8 @@ if (buildParameters.enableErrorprone) {
     apply(plugin = "net.ltgt.errorprone")
 
     dependencies {
-        "errorprone"("com.google.errorprone:error_prone_core:2.24.0")
+        "errorprone"(platform("com.google.protobuf:protobuf-bom:4.33.0"))
+        "errorprone"("com.google.errorprone:error_prone_core:2.43.0")
         "annotationProcessor"("com.google.guava:guava-beta-checker:1.0")
     }
 
@@ -47,6 +48,7 @@ if (buildParameters.enableErrorprone) {
                 disableWarningsInGeneratedCode.set(true)
                 enable(
                     "MissingDefault",
+                    "MissingBraces",
                     "PackageLocation",
                     "RedundantOverride",
                     "StronglyTypeTime",

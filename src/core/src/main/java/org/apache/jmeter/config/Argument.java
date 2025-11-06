@@ -19,10 +19,9 @@ package org.apache.jmeter.config;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Class representing an argument. Each argument consists of a name/value pair,
@@ -122,7 +121,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      */
     @Override
     public void setName(String newName) {
-        set(getSchema().getArgumentName(), StringUtils.strip(newName));
+        set(getSchema().getArgumentName(), (newName == null ? null : newName.strip()));
     }
 
     /**
@@ -195,7 +194,7 @@ public class Argument extends AbstractTestElement implements Serializable {
     @Override
     public String toString() {
         final String desc = getDescription();
-        if (desc == null || desc.isEmpty()) {
+        if (StringUtilities.isEmpty(desc)) {
             return getName() + getMetaData() + getValue();
         } else {
             return getName() + getMetaData() + getValue() + " //" + getDescription();
@@ -210,7 +209,7 @@ public class Argument extends AbstractTestElement implements Serializable {
      * @return true if parameter should be skipped
      */
     public boolean isSkippable(String parameterName) {
-        if (JOrphanUtils.isBlank(parameterName)){
+        if (StringUtilities.isBlank(parameterName)){
             return true; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
         }
         // TODO: improve this test

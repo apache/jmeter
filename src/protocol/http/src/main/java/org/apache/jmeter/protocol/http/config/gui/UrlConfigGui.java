@@ -30,7 +30,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.BindingGroup;
@@ -51,6 +50,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Basic URL / HTTP Request configuration:
@@ -261,7 +261,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      */
     private static String computePostBody(Arguments arguments, boolean crlfToLF) {
         StringBuilder postBody = new StringBuilder();
-        for (JMeterProperty argument : arguments) {
+        for (JMeterProperty argument : arguments.getEnabledArguments()) {
             HTTPArgument arg = (HTTPArgument) argument.getObjectValue();
             String value = arg.getValue();
             if (crlfToLF) {
@@ -490,7 +490,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         private boolean canSwitchToRawBodyPane() {
             Arguments arguments = argsPanel.createTestElement();
             for (int i = 0; i < arguments.getArgumentCount(); i++) {
-                if(!StringUtils.isEmpty(arguments.getArgument(i).getName())) {
+                String name = arguments.getArgument(i).getName();
+                if (StringUtilities.isNotEmpty(name)) {
                     return false;
                 }
             }

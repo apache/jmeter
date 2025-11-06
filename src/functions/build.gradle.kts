@@ -27,9 +27,6 @@ dependencies {
     implementation("commons-codec:commons-codec")
     implementation("org.apache.commons:commons-jexl")
     implementation("org.apache.commons:commons-jexl3")
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
     implementation("commons-io:commons-io") {
         because("FileUtils")
     }
@@ -38,6 +35,4 @@ dependencies {
     }
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("oro:oro")
-    testImplementation("org.hamcrest:hamcrest-core")
-    testImplementation("org.exparity:hamcrest-date")
 }

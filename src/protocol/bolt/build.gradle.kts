@@ -23,7 +23,6 @@ dependencies {
     api(projects.src.core)
 
     implementation("org.neo4j.driver:neo4j-java-driver")
-    implementation("org.apache.commons:commons-lang3")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
 

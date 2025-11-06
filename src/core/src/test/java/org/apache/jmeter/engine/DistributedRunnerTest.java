@@ -34,9 +34,11 @@ import org.apache.jorphan.collections.HashTree;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Isolated("modifies jmeter locale")
 @Execution(ExecutionMode.SAME_THREAD) // System.setOut must not be run concurrently with other tests
 public class DistributedRunnerTest {
 
@@ -84,7 +86,7 @@ public class DistributedRunnerTest {
         obj.exit(hosts);
     }
 
-    private void initRunner(DistributedRunnerEmul runner, List<String> hosts) {
+    private static void initRunner(DistributedRunnerEmul runner, List<String> hosts) {
         PrintStream origSystemOut = System.out;
         ByteArrayOutputStream catchingOut = new ByteArrayOutputStream();
         System.setOut(new PrintStream(catchingOut));

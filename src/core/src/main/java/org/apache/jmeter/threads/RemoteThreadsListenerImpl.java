@@ -86,9 +86,6 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.samplers.RemoteThreadsListener#threadFinished()
-     */
     @Override
     public void threadFinished() {
         JMeterContextService.decrNumberOfThreads();

@@ -17,7 +17,7 @@
 
 plugins {
     id("org.gradlex.build-parameters") version "1.4.4"
-    id("com.github.vlsi.gradle-extensions") version "1.90"
+    id("com.github.vlsi.gradle-extensions") version "2.0.0"
     id("build-logic.kotlin-dsl-gradle-plugin")
 }
 
@@ -43,7 +43,7 @@ buildParameters {
         description.set("Java version for source and target compatibility")
     }
     integer("jdkBuildVersion") {
-        defaultValue.set(17)
+        defaultValue.set(21)
         mandatory.set(true)
         description.set("JDK version to use for building JMeter. If the value is 0, then the current Java is used. (see https://docs.gradle.org/8.0/userguide/toolchains.html#sec:consuming)")
     }

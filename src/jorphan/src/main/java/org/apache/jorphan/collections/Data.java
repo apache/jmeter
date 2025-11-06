@@ -471,8 +471,8 @@ public class Data implements Serializable {
             int index = 0;
             for (Object o : temp) {
                 if (o != null) {
-                    if (o instanceof String) {
-                        returnValue[index++] = (String) o;
+                    if (o instanceof String s) {
+                        returnValue[index++] = s;
                     } else {
                         returnValue[index++] = o.toString();
                     }
@@ -555,7 +555,7 @@ public class Data implements Serializable {
         String[] h = getHeaders();
         for (int count = 0; count < h.length; count++) {
             tempList = data.get(h[count]);
-            if (count < line.length && line[count].length() > 0) {
+            if (count < line.length && !line[count].isEmpty()) {
                 tempList.add(line[count]);
             } else {
                 tempList.add("N/A");
@@ -580,7 +580,7 @@ public class Data implements Serializable {
         String[] h = getHeaders();
         for (int count = 0; count < h.length; count++) {
             tempList = data.get(h[count]);
-            if (count < line.length && line[count].length() > 0) {
+            if (count < line.length && !line[count].isEmpty()) {
                 tempList.add(line[count]);
             } else {
                 tempList.add(deflt);

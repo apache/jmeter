@@ -32,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -44,6 +43,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
 import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,7 +196,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 // values that they did in the original test.
                 if (currArgsMap.containsKey(name)) {
                     String newVal = currArgsMap.get(name);
-                    if (StringUtils.isNotBlank(newVal)) {
+                    if (StringUtilities.isNotBlank(newVal)) {
                         value = newVal;
                     }
                 }
@@ -296,9 +296,6 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         backendListener.setQueueSize(queueSize.getText());
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#clearGui()
-     */
     @Override
     public void clearGui() {
         super.clearGui();

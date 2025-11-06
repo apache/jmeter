@@ -37,8 +37,8 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
  */
 public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
-    static final String FALSE_AS_STRING = Boolean.FALSE.toString();
-    static final String TRUE_AS_STRING = Boolean.TRUE.toString();
+    static final String FALSE_AS_STRING = "false";
+    static final String TRUE_AS_STRING = "true";
 
     protected ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] languageTags) {
         this(beanClass, languageTags, null);
@@ -49,7 +49,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         PropertyDescriptor p;
 
         p = property("scriptLanguage"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         if (JSR223TestElement.class.isAssignableFrom(beanClass) ) {
             p.setValue(DEFAULT, "groovy"); // $NON-NLS-1$
         } else {
@@ -65,14 +65,14 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
                 new String[] { "scriptLanguage" }); // $NON-NLS-1$
 
         p = property("parameters"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         createPropertyGroup("parameterGroup", // $NON-NLS-1$
                 new String[] { "parameters" }); // $NON-NLS-1$
 
         p = property("filename"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
         p.setPropertyEditorClass(FileEditor.class);
 
@@ -104,8 +104,8 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
          */
         if (JSR223TestElement.class.isAssignableFrom(beanClass) ) {
             p = property("cacheKey"); // $NON-NLS-1$
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-            p.setValue(NOT_OTHER, Boolean.TRUE);
+            p.setValue(NOT_UNDEFINED, true);
+            p.setValue(NOT_OTHER, true);
             p.setValue(DEFAULT, TRUE_AS_STRING); // $NON-NLS-1$
             p.setPropertyEditorClass(JSR223ScriptCacheCheckboxEditor.class);
             p.setValue(TAGS, new String[]{TRUE_AS_STRING,FALSE_AS_STRING});
@@ -114,7 +114,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         }
 
         p = property("script"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
         p.setPropertyEditorClass(TextAreaEditor.class);
 

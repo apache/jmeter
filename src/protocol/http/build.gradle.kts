@@ -39,9 +39,6 @@ dependencies {
     implementation("commons-io:commons-io") {
         because("IOUtils")
     }
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
     implementation("org.apache.commons:commons-text") {
         because("StringEscapeUtils")
     }
@@ -79,7 +76,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind")
     testImplementation(testFixtures(projects.src.core))
     testImplementation(testFixtures(projects.src.testkitWiremock))
-    testImplementation("com.github.tomakehurst:wiremock-jre8")
+    testImplementation("org.wiremock:wiremock")
     // For some reason JMeter bundles just tika-core and tika-parsers without transitive
     // dependencies. So we exclude those
     implementation("org.apache.tika:tika-core") {

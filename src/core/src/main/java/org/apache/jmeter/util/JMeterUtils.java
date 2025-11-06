@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -57,8 +58,6 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.gui.JFactory;
@@ -68,6 +67,7 @@ import org.apache.jorphan.reflect.ServiceLoadExceptionHandler;
 import org.apache.jorphan.test.UnitTestManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
@@ -80,6 +80,7 @@ import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
@@ -99,7 +100,7 @@ public class JMeterUtils implements UnitTestManager {
         private LazyPatternCacheHolder() {
             super();
         }
-        public static final PatternCacheLRU INSTANCE = new PatternCacheLRU(
+        private static final PatternCacheLRU INSTANCE = new PatternCacheLRU(
                 getPropDefault("oro.patterncache.size",1000), // $NON-NLS-1$
                 new Perl5Compiler());
     }
@@ -108,13 +109,13 @@ public class JMeterUtils implements UnitTestManager {
         private LazyJavaPatternCacheHolder() {
             super();
         }
-        public static final LoadingCache<Pair<String, Integer>, java.util.regex.Pattern> INSTANCE =
+        private static final LoadingCache<Map.Entry<String, Integer>, java.util.regex.Pattern> INSTANCE =
                 Caffeine
                         .newBuilder()
                         .maximumSize(getPropDefault("jmeter.regex.patterncache.size", 1000))
                         .build(key -> {
                             //noinspection MagicConstant
-                            return java.util.regex.Pattern.compile(key.getLeft(), key.getRight().intValue());
+                            return java.util.regex.Pattern.compile(key.getKey(), key.getValue().intValue());
                         });
     }
 
@@ -281,7 +282,7 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     public static java.util.regex.Pattern compilePattern(String expression, int flags) {
-        return LazyJavaPatternCacheHolder.INSTANCE.get(Pair.of(expression, Integer.valueOf(flags)));
+        return LazyJavaPatternCacheHolder.INSTANCE.get(Map.entry(expression, Integer.valueOf(flags)));
     }
 
     public static PatternCacheLRU getPatternCache() {
@@ -821,7 +822,7 @@ public class JMeterUtils implements UnitTestManager {
     public static String[] getArrayPropDefault(String propName, String[] defaultVal) {
         try {
             String strVal = appProperties.getProperty(propName);
-            if (StringUtils.isNotBlank(strVal)) {
+            if (StringUtilities.isNotBlank(strVal)) {
                 return strVal.trim().split("\\s+");
             }
         } catch (Exception e) {
@@ -1416,7 +1417,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return {@link XStream} XStream instance following JMeter security policy
      */
     public static final XStream createXStream() {
-        XStream xstream = new XStream();
+        XStream xstream = new XStream(new PureJavaReflectionProvider());
         JMeterUtils.setupXStreamSecurityPolicy(xstream);
         return xstream;
     }

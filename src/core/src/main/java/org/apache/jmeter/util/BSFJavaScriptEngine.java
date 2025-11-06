@@ -78,16 +78,16 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
                                              " not found.", "none", 0);
             }
 
-            cx.setOptimizationLevel(-1);
+            cx.setInterpretedMode(true);
             cx.setGeneratingDebug(false);
             cx.setGeneratingSource(false);
-            cx.setOptimizationLevel(0);
+            cx.setInterpretedMode(false);
             cx.setDebugger(null, null);
 
             retval =
                 ((Function) fun).call(cx, global, global, args);
-            if (retval instanceof Wrapper) {
-                retval = ((Wrapper) retval).unwrap();
+            if (retval instanceof Wrapper wrapper) {
+                retval = wrapper.unwrap();
             }
         }
         catch (Throwable t) { //NOSONAR We handle correctly Error case in function
@@ -129,18 +129,18 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
         try {
             cx = Context.enter();
 
-            cx.setOptimizationLevel(-1);
+            cx.setInterpretedMode(true);
             cx.setGeneratingDebug(false);
             cx.setGeneratingSource(false);
-            cx.setOptimizationLevel(0);
+            cx.setInterpretedMode(false);
             cx.setDebugger(null, null);
 
             retval = cx.evaluateString(global, scriptText,
                                        source, lineNo,
                                        null);
 
-            if (retval instanceof NativeJavaObject) {
-                retval = ((NativeJavaObject) retval).unwrap();
+            if (retval instanceof NativeJavaObject nativeJavaObject) {
+                retval = nativeJavaObject.unwrap();
             }
 
         }
@@ -159,20 +159,20 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
      */
     private static void handleError(Throwable t) throws BSFException {
         Throwable target = t;
-        if (t instanceof WrappedException) {
-            target = ((WrappedException) t).getWrappedException();
+        if (t instanceof WrappedException wrappedException) {
+            target = wrappedException.getWrappedException();
         }
 
         String message = null;
-        if (target instanceof JavaScriptException) {
+        if (target instanceof JavaScriptException javaScriptException) {
             message = target.getLocalizedMessage();
 
             // Is it an exception wrapped in a JavaScriptException?
-            Object value = ((JavaScriptException) target).getValue();
-            if (value instanceof Throwable) {
+            Object value = javaScriptException.getValue();
+            if (value instanceof Throwable throwable) {
                 // likely a wrapped exception from a LiveConnect call.
                 // Display its stack trace as a diagnostic
-                target = (Throwable) value;
+                target = throwable;
             }
         }
         else if (target instanceof EvaluatorException ||
@@ -190,12 +190,12 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             message = target.toString();
         }
 
-        if (target instanceof Error && !(target instanceof StackOverflowError)) {
+        if (target instanceof Error error && !(target instanceof StackOverflowError)) {
             // Re-throw Errors because we're supposed to let the JVM see it
             // Don't re-throw StackOverflows, because we know we've
             // corrected the situation by aborting the loop and
             // a long stacktrace would end up on the user's console
-            throw (Error) target;
+            throw error;
         }
         else {
             throw new BSFException(BSFException.REASON_OTHER_ERROR,

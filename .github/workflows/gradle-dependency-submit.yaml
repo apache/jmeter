@@ -1,0 +1,31 @@
+name: Dependency Submission
+
+# See https://github.com/gradle/actions/blob/768a17f3488dc3fe0155ff431553e1f53d57e22e/dependency-submission/README.md#the-dependency-submission-action
+# The action allows GitHub to alert about reported vulnerabilities in the project
+on:
+  push:
+    branches:
+      - master
+
+# Declare default permissions as read-only.
+permissions: read-all
+
+jobs:
+  dependency-submission:
+    name: Submit dependencies
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      with:
+        persist-credentials: false
+    - name: Set up JDK 21
+      uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5
+      with:
+        distribution: zulu
+        java-version: 21
+        server-id: central
+    - name: Generate and submit dependency graph
+      uses: gradle/actions/dependency-submission@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5

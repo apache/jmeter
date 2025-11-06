@@ -38,7 +38,7 @@ import org.apache.commons.io.input.BOMInputStream;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -252,7 +252,7 @@ public class FileServer {
      * @throws IllegalArgumentException if header could not be read or filename is null or empty
      */
     public synchronized String reserveFile(String filename, String charsetName, String alias, boolean hasHeader) {
-        if (filename == null || filename.isEmpty()){
+        if (StringUtilities.isEmpty(filename)){
             throw new IllegalArgumentException("Filename must not be null or empty");
         }
         if (alias == null){
@@ -428,7 +428,7 @@ public class FileServer {
         InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding
         String charsetName = fileEntry.charSetEncoding;
-        if(!JOrphanUtils.isBlank(charsetName)) {
+        if (StringUtilities.isNotBlank(charsetName)) {
             isr = new InputStreamReader(fis, charsetName);
         } else if (fis.hasBOM()) {
             isr = new InputStreamReader(fis, fis.getBOM().getCharsetName());
@@ -461,7 +461,7 @@ public class FileServer {
         OutputStreamWriter osw;
         // If file encoding is specified, write using that encoding, otherwise use default platform encoding
         String charsetName = fileEntry.charSetEncoding;
-        if(!JOrphanUtils.isBlank(charsetName)) {
+        if (StringUtilities.isNotBlank(charsetName)) {
             osw = new OutputStreamWriter(fos, charsetName);
         } else {
             @SuppressWarnings("DefaultCharset")

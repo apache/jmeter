@@ -17,12 +17,11 @@
 
 package org.apache.jmeter.testelement.property;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
 public class MapPropertyTest {
@@ -36,13 +35,13 @@ public class MapPropertyTest {
     @Test
     public void testGetPropertyTypeOfEmptyMap() {
         MapProperty props = new MapProperty("foo", new HashMap<>());
-        assertThat(props.getPropertyType(), CoreMatchers.equalTo(NullProperty.class));
+        assertEquals(NullProperty.class, props.getPropertyType());
     }
 
     public void testGetPropertyTypeOfStringElements() {
         Map<String, Integer> numberMap = new HashMap<>();
         numberMap.put("One", 1);
         MapProperty props = new MapProperty("foo", numberMap);
-        assertThat(props.getPropertyType(), CoreMatchers.equalTo(IntegerProperty.class));
+        assertEquals(IntegerProperty.class, props.getPropertyType());
     }
 }

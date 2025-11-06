@@ -36,7 +36,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apiguardian.api.API;
 
 // @see TestHTTPUtils for unit tests
@@ -78,9 +78,9 @@ public class ConversionUtils {
                 charSet = contentType.substring(charSetStartPos + CHARSET_EQ_LEN);
                 if (charSet != null) {
                     // Remove quotes from charset name, see bug 55852
-                    charSet = StringUtils.replaceChars(charSet, "\'\"", null);
+                    charSet = StringUtilities.replaceChars(charSet, "'\"", null);
                     charSet = charSet.trim();
-                    if (charSet.length() > 0) {
+                    if (!charSet.isEmpty()) {
                         // See Bug 44784
                         int semi = charSet.indexOf(';');
                         if (semi == 0){
@@ -316,7 +316,7 @@ public class ConversionUtils {
                 final String thisToken = tokens.get(i);
 
                 // Verify for a ".." component at next iteration
-                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
+                if (!thisToken.isEmpty() && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
                     tokens.remove(i);
                     tokens.remove(i);
                     i = i - 2; // CHECKSTYLE IGNORE ModifiedControlVariable

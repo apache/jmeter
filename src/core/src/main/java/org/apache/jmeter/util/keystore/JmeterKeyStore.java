@@ -40,9 +40,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,9 +149,7 @@ public final class JmeterKeyStore {
             }
         }
 
-        /*
-         * Note: if is == null and no pkcs11 store is configured, the arrays will be empty
-         */
+        // Note: if is == null and no pkcs11 store is configured, the arrays will be empty
         this.names = aliasesList.toArray(new String[aliasesList.size()]);
     }
 
@@ -226,15 +223,14 @@ public final class JmeterKeyStore {
     }
 
     private static String decodeSanList(Collection<? extends List<?>> subjectAlternativeNames) {
-        List<Pair<String, String>> decodedEntries = new ArrayList<>();
+        List<Map.Entry<String, String>> decodedEntries = new ArrayList<>();
         for (List<?> entry : subjectAlternativeNames) {
             Object indexData = entry.get(0);
             Object data = entry.get(1);
-            if (indexData instanceof Integer) {
-                Integer generalNameIndex = (Integer) indexData;
+            if (indexData instanceof Integer generalNameIndex) {
                 String description = sanGeneralNameIndexToName(generalNameIndex);
                 String valueString = sanDataToString(data);
-                decodedEntries.add(Pair.of(description, valueString));
+                decodedEntries.add(Map.entry(description, valueString));
             }
         }
         return decodedEntries.stream()
@@ -243,8 +239,8 @@ public final class JmeterKeyStore {
     }
 
     private static String sanDataToString(Object data) {
-        if (data instanceof String) {
-            return (String) data;
+        if (data instanceof String s) {
+            return s;
         }
         return Hex.encodeHexString((byte[]) data);
     }
@@ -304,9 +300,9 @@ public final class JmeterKeyStore {
      *                                  is not empty and no key for this alias could be found
      */
     public String getAlias() {
-        if (StringUtils.isNotEmpty(clientCertAliasVarName)) {
+        if (StringUtilities.isNotEmpty(clientCertAliasVarName)) {
             String aliasName = JMeterContextService.getContext().getVariables().get(clientCertAliasVarName);
-            if (StringUtils.isEmpty(aliasName)) {
+            if (StringUtilities.isEmpty(aliasName)) {
                 log.error("No var called '{}' found", clientCertAliasVarName);
                 throw new IllegalArgumentException("No var called '" + clientCertAliasVarName + "' found");
             }

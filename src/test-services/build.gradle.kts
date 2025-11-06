@@ -30,7 +30,7 @@ dependencies {
 tasks.configureEach<Kapt> {
     // ServiceNotImplementingInterface does not implement the service interface for testing purposes,
     // so we disable AutoService verifications
-    annotationProcessorOptionProviders.add(
-        listOf(CommandLineArgumentProvider { listOf("-Averify=false") })
+    annotationProcessorOptionsProviders.add(
+        CommandLineArgumentProvider { listOf("-Averify=false") }
     )
 }

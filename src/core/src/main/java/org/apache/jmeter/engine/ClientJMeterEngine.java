@@ -70,10 +70,8 @@ public class ClientJMeterEngine implements JMeterEngine {
                port,
                RmiUtils.createClientSocketFactory());
         Remote remobj = registry.lookup(name);
-        if (remobj instanceof RemoteJMeterEngine){
-            final RemoteJMeterEngine rje = (RemoteJMeterEngine) remobj;
-            if (remobj instanceof RemoteObject){
-                RemoteObject robj = (RemoteObject) remobj;
+        if (remobj instanceof RemoteJMeterEngine rje){
+            if (remobj instanceof RemoteObject robj){
                 System.out.println("Using remote object: "+robj.getRef().remoteToString()); // NOSONAR
             }
             return rje;
@@ -140,11 +138,8 @@ public class ClientJMeterEngine implements JMeterEngine {
         String methodName="unknown";
         try {
             JMeterContextService.startTest();
-            /*
-             * Add fix for Deadlocks, see:
-             *
-             * See https://bz.apache.org/bugzilla/show_bug.cgi?id=48350
-            */
+            // Add fix for Deadlocks, see:
+            // See https://bz.apache.org/bugzilla/show_bug.cgi?id=48350
             File baseDirRelative = FileServer.getFileServer().getBaseDirRelative();
             String scriptName = FileServer.getFileServer().getScriptName();
             synchronized(LOCK)

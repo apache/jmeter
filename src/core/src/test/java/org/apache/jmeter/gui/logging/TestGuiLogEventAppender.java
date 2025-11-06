@@ -45,7 +45,7 @@ public class TestGuiLogEventAppender {
 
     private static List<String> log4j2LevelErrorMessages = Collections.synchronizedList(new ArrayList<>());
 
-    /*
+    /**
      * Configure logging with GuiLogEventAppender for root logger, and override the handler of GuiLogEventAppender
      * to see if there's any log4j2 AppenderControl level error (e.g, "Recursive call to appender gui-log-event").
      */
@@ -97,7 +97,7 @@ public class TestGuiLogEventAppender {
         log4j2LevelErrorMessages.clear();
     }
 
-    /*
+    /**
      * Make simple logs and see whether there's any log4j2 AppenderControl level error (e.g, "Recursive call to
      * appender gui-log-event").
      * For example, if GuiLogEventAppender meets an exception while accessing GuiPackage class due to static member

@@ -36,7 +36,6 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -45,6 +44,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +111,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         boolean hsp = false;
         log.debug("Status prefix={}, suffix={}, properties={}",
                 STATUS_PREFIX, STATUS_SUFFIX, STATUS_PROPERTIES); //$NON-NLS-1$
-        if (STATUS_PROPERTIES.length() > 0) {
+        if (!STATUS_PROPERTIES.isEmpty()) {
             File f = new File(STATUS_PROPERTIES);
             try (FileInputStream fis = new FileInputStream(f)){
                 STATUS_PROPS.load(fis);
@@ -161,7 +161,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 closeSocket(socketKey); // Bug 44910 - close previous socket (if any)
                 SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
                 con = new Socket(); // NOSONAR socket is either cache in ThreadLocal for reuse and closed at end of thread or closed here
-                if (getPropertyAsString(SO_LINGER,"").length() > 0){
+                if (!getPropertyAsString(SO_LINGER, "").isEmpty()){
                     con.setSoLinger(true, getSoLinger());
                 }
                 con.connect(sockaddr, getConnectTimeout());
@@ -295,7 +295,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     public String getClassname() {
         String clazz = getPropertyAsString(CLASSNAME,"");
-        if (clazz==null || clazz.length()==0){
+        if (StringUtilities.isEmpty(clazz)){
             clazz = JMeterUtils.getPropDefault("tcp.handler", "TCPClientImpl"); //$NON-NLS-1$ $NON-NLS-2$
         }
         return clazz;
@@ -334,7 +334,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         }
         try {
             tcpClient = (TCPClient) javaClass.getDeclaredConstructor().newInstance();
-            if (getPropertyAsString(EOL_BYTE, "").length()>0){
+            if (!getPropertyAsString(EOL_BYTE, "").isEmpty()){
                 tcpClient.setEolByte(getEolByte());
                 log.info("Using eolByte={}", getEolByte());
             }
@@ -445,7 +445,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         }
         boolean isSuccessful = exception == null;
         // Reset the status code if the message contains one
-        if (!StringUtils.isEmpty(readResponse) && STATUS_PREFIX.length() > 0) {
+        if (StringUtilities.isNotEmpty(readResponse) && !STATUS_PREFIX.isEmpty()) {
             int i = readResponse.indexOf(STATUS_PREFIX);
             int j = readResponse.indexOf(STATUS_SUFFIX, i + STATUS_PREFIX.length());
             if (i != -1 && j > i) {

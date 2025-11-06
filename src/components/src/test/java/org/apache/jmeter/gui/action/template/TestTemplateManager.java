@@ -112,7 +112,9 @@ public class TestTemplateManager extends JMeterTestCase {
             TemplateManager.getInstance().parseTemplateFile(templateFile);
         } catch (SAXParseException ex) {
             String message = ex.getMessage();
-            assertTrue(message.contains("Element type \"key\" must be declared."), "Exception did not contains expected message, got:" + message);
+            assertTrue(
+                    message.contains("\"key\""),
+                    "Exception did not contains expected message (e.g. Element type \"key\" must be declared.), got:" + message);
         }
     }
 

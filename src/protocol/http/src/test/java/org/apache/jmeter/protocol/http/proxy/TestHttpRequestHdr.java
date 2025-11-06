@@ -37,6 +37,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.apache.jorphan.util.StringUtilities;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -81,7 +82,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
                 Content-type: %s\r
                 Content-length: %d\r
                 \r
-                %s""".formatted(url, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED, 
+                %s""".formatted(url, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED,
                               getBodyLength(postBody, contentEncoding), postBody);
         s = getSamplerForRequest(url, testPostRequest, contentEncoding);
         assertEquals(HTTPConstants.POST, s.getMethod());
@@ -195,19 +196,19 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     }
 
     @Test
-    public void testEncodedArguments() throws Exception {
+    public static void testEncodedArguments() throws Exception {
         String url = "http://localhost/matrix.html";
         testEncodedArguments(url);
     }
 
 
     @Test
-    public void testEncodedArgumentsIPv6() throws Exception {
+    public static void testEncodedArgumentsIPv6() throws Exception {
         String url = "http://[::1]:8080/matrix.html";
         testEncodedArguments(url);
     }
 
-    private void testEncodedArguments(String url) throws Exception {
+    private static void testEncodedArguments(String url) throws Exception {
         // A HTTP GET request, with encoding not known
         String contentEncoding = "";
         String queryString = "abc%3FSPACE=a+b&space=a%20b&query=What%3F";
@@ -308,16 +309,16 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     }
 
     @Test
-    public void testGetRequestEncodings() throws Exception {
+    public static void testGetRequestEncodings() throws Exception {
         testGetRequestEncodings("http://localhost/matrix.html");
     }
 
     @Test
-    public void testGetRequestEncodingsIPv6() throws Exception {
+    public static void testGetRequestEncodingsIPv6() throws Exception {
         testGetRequestEncodings("http://[::1]:8080/matrix.html");
     }
 
-    private void testGetRequestEncodings(String url) throws Exception {
+    private static void testGetRequestEncodings(String url) throws Exception {
         // A HTTP GET request, with encoding not known
         String contentEncoding = "";
         String param1Value = "yes";
@@ -594,18 +595,18 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertEquals(mimeType, hfa.getMimeType());
     }
 
-    private String createMultipartFormBody(String titleValue, String descriptionValue,
+    private static String createMultipartFormBody(String titleValue, String descriptionValue,
             String contentEncoding, boolean includeExtraHeaders,
             String boundary, String endOfLine) {
-        
+
         String titleHeaders = includeExtraHeaders ? """
                 Content-Type: text/plain; charset=%s%s\
                 Content-Transfer-Encoding: 8bit%s""".formatted(contentEncoding, endOfLine, endOfLine) : "";
-        
+
         String descriptionHeaders = includeExtraHeaders ? """
                 Content-Type: text/plain; charset=%s%s\
                 Content-Transfer-Encoding: 8bit%s""".formatted(contentEncoding, endOfLine, endOfLine) : "";
-        
+
         return """
                 --%s%s\
                 Content-Disposition: form-data; name="title"%s\
@@ -627,7 +628,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
                     boundary, endOfLine);
     }
 
-    private String createMultipartFileUploadBody(String fileField, String fileName,
+    private static String createMultipartFileUploadBody(String fileField, String fileName,
             String fileMimeType, String fileContent, String boundary, String endOfLine) {
         // File upload multipart
         String postBody = "--" + boundary + endOfLine
@@ -640,7 +641,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         return postBody;
     }
 
-    private String createMultipartFormRequest(String url, String postBody, String contentEncoding, String boundary, String endOfLine)
+    private static String createMultipartFormRequest(String url, String postBody, String contentEncoding, String boundary, String endOfLine)
             throws IOException {
         String postRequest = "POST " + url + " HTTP/1.1" + endOfLine
             + "Content-type: "
@@ -652,7 +653,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         return postRequest;
     }
 
-    private HTTPSamplerBase getSamplerForRequest(String url, String request, String contentEncoding)
+    private static HTTPSamplerBase getSamplerForRequest(String url, String request, String contentEncoding)
             throws Exception {
         HttpRequestHdr req = new HttpRequestHdr();
         ByteArrayInputStream bis = null;
@@ -677,7 +678,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         return sampler;
     }
 
-    private void checkArgument(
+    private static void checkArgument(
             HTTPArgument arg,
             String expectedName,
             String expectedValue,
@@ -686,7 +687,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
             boolean expectedEncoded) throws IOException {
         assertEquals(expectedName, arg.getName());
         assertEquals(expectedValue, arg.getValue());
-        if(contentEncoding != null && contentEncoding.length() > 0) {
+        if (StringUtilities.isNotEmpty(contentEncoding)) {
             assertEquals(expectedEncodedValue, arg.getEncodedValue(contentEncoding));
         }
         else {
@@ -696,8 +697,8 @@ public class TestHttpRequestHdr extends JMeterTestCase {
         assertPrimitiveEquals(expectedEncoded, arg.isAlwaysEncoded());
     }
 
-    private int getBodyLength(String postBody, String contentEncoding) throws IOException {
-        if(contentEncoding != null && !contentEncoding.isEmpty()) {
+    private static int getBodyLength(String postBody, String contentEncoding) throws IOException {
+        if (StringUtilities.isNotEmpty(contentEncoding)) {
             return postBody.getBytes(contentEncoding).length;
         }
         else {

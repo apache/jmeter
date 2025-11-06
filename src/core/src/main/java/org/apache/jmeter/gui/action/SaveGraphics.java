@@ -81,8 +81,8 @@ public class SaveGraphics extends AbstractAction {
         if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS)) {
             JMeterGUIComponent component = GuiPackage.getInstance().getCurrentGui();
             // get the JComponent from the visualizer
-            if (component instanceof Printable) {
-                JComponent comp = ((Printable) component).getPrintableComponent();
+            if (component instanceof Printable printable) {
+                JComponent comp = printable.getPrintableComponent();
                 saveImage(comp);
             }
         }

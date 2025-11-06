@@ -35,6 +35,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Class for setting the necessary headers for a POST request, and sending the
@@ -190,7 +191,7 @@ public class PostWriter {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(bos, contentEncoding);
             // Add any parameters
-            for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+            for (JMeterProperty jMeterProperty : sampler.getArguments().getEnabledArguments()) {
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 String parameterName = arg.getName();
                 if (arg.isSkippable(parameterName)) {
@@ -242,7 +243,7 @@ public class PostWriter {
             // Check if the header manager had a content type header
             // This allows the user to specify their own content-type for a POST request
             String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
-            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0;
+            boolean hasContentTypeHeader = StringUtilities.isNotEmpty(contentTypeHeader);
 
             // If there are no arguments, we can send a file as the body of the request
             if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
@@ -251,7 +252,7 @@ public class PostWriter {
                 HTTPFileArg file = files[0];
                 if(!hasContentTypeHeader) {
                     // Allow the mimetype of the file to control the content type
-                    if(file.getMimeType() != null && file.getMimeType().length() > 0) {
+                    if (StringUtilities.isNotEmpty(file.getMimeType())) {
                         connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                     }
                     else {
@@ -287,7 +288,7 @@ public class PostWriter {
                     // TODO: needs a multiple file upload scenario
                     if(!hasContentTypeHeader) {
                         HTTPFileArg file = files.length > 0? files[0] : null;
-                        if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+                        if(file != null && StringUtilities.isNotEmpty(file.getMimeType())) {
                             connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                         }
                         else {
@@ -299,7 +300,7 @@ public class PostWriter {
 
                     // Just append all the parameter values, and use that as the post body
                     StringBuilder postBodyBuffer = new StringBuilder();
-                    for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+                    for (JMeterProperty jMeterProperty : sampler.getArguments().getEnabledArguments()) {
                         HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                         postBodyBuffer.append(arg.getEncodedValue(contentEncoding));
                     }

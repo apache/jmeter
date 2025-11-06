@@ -44,7 +44,6 @@ import javax.mail.internet.MimeUtility;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.SendMailCommand;
@@ -54,9 +53,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jorphan.util.CharUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Sampler-Class for JMeter - builds, starts and interprets the results of the
@@ -304,8 +303,7 @@ public class SmtpSampler extends AbstractSampler {
     private static String getSamplerData(Message message) throws MessagingException, IOException {
         StringBuilder sb = new StringBuilder();
         Object content = message.getContent(); // throws ME
-        if (content instanceof Multipart) {
-            Multipart multipart = (Multipart) content;
+        if (content instanceof Multipart multipart) {
             String contentType = multipart.getContentType();
             ContentType ct = new ContentType(contentType);
             String boundary = ct.getParameter("boundary");
@@ -320,8 +318,7 @@ public class SmtpSampler extends AbstractSampler {
             sb.append(boundary);
             sb.append("--");
             sb.append("\n");
-        } else if (content instanceof BodyPart) {
-            BodyPart bodyPart = (BodyPart) content;
+        } else if (content instanceof BodyPart bodyPart) {
             writeBodyPart(sb, bodyPart); // throws IOE, ME
         } else if (content instanceof String) {
             sb.append(content);
@@ -381,7 +378,7 @@ public class SmtpSampler extends AbstractSampler {
 
     private static String encodeAddress(String address) {
         String trimmedAddress = address.trim();
-        if (!StringUtils.isAsciiPrintable(trimmedAddress)) {
+        if (!isAsciiPrintable(trimmedAddress)) {
             try {
                 final int startOfRealAddress = trimmedAddress.indexOf('<');
                 if (startOfRealAddress >= 0) {
@@ -393,6 +390,25 @@ public class SmtpSampler extends AbstractSampler {
             }
         }
         return trimmedAddress;
+    }
+
+    /**
+     * Checks if the string contains only ASCII printable characters (32-126).
+     *
+     * @param str the string to check
+     * @return true if all characters are ASCII printable, false otherwise
+     */
+    private static boolean isAsciiPrintable(String str) {
+        if (str == null) {
+            return false;
+        }
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (!CharUtils.isAscii(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

@@ -115,7 +115,7 @@ public class XPath2Extractor
             if (isScopeVariable()){
                 String inputString=vars.get(getVariableName());
                 if(inputString != null) {
-                    if(inputString.length()>0) {
+                    if(!inputString.isEmpty()) {
                         getValuesForXPath(getXPathQuery(), matches, matchNumber, inputString);
                     }
                 } else {

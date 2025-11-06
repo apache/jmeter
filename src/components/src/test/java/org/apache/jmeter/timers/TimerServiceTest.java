@@ -17,10 +17,8 @@
 
 package org.apache.jmeter.timers;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Description;
-import org.hamcrest.MatcherAssert;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 public class TimerServiceTest {
@@ -31,48 +29,34 @@ public class TimerServiceTest {
     public void testBigInitialDelayAndDontWait() {
         long now = System.currentTimeMillis();
         long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L, false);
-        MatcherAssert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
-                adjustedDelay, CoreMatchers.is((long) -1));
+        assertEquals(
+                -1L,
+                adjustedDelay,
+                "TimerService should return -1 as delay would lead to a time after end time");
     }
 
     @Test
     public void testBigInitialDelayAndWait() {
         long now = System.currentTimeMillis();
         long adjustedDelay = sut.adjustDelay(Long.MAX_VALUE, now + 1000L);
-        MatcherAssert.assertThat("TimerService should return -1 as delay would lead to a time after end time",
-                adjustedDelay, isAlmost(1000L, 200L));
-    }
-
-    private BaseMatcher<Long> isAlmost(long value, long precision) {
-        return new BaseMatcher<Long>() {
-
-            @Override
-            public boolean matches(Object item) {
-                if (item instanceof Long) {
-                    Long other = (Long) item;
-                    return Math.abs(other - value) < precision;
-                }
-                return false;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("the number is within a precision of " + precision + " near " + value);
-            }
-      };
+        assertEquals(1000.0, adjustedDelay, 200.0, "TimerService should return -1 as delay would lead to a time after end time");
     }
 
     @Test
     public void testSmallInitialDelay() {
         long now = System.currentTimeMillis();
-        MatcherAssert.assertThat("TimerService should not change the delay as the end time is far away",
-                sut.adjustDelay(1000L, now + 20000L), CoreMatchers.is(1000L));
+        assertEquals(
+                1000L,
+                sut.adjustDelay(1000L, now + 20000L),
+                "TimerService should not change the delay as the end time is far away");
     }
 
     @Test
     public void testNegativeEndTime() {
-        MatcherAssert.assertThat("TimerService should not change the delay as the indicated end time is far away",
-                sut.adjustDelay(1000L, -1), CoreMatchers.is(1000L));
+        assertEquals(
+                1000L,
+                sut.adjustDelay(1000L, -1),
+                "TimerService should not change the delay as the indicated end time is far away");
     }
 
 }

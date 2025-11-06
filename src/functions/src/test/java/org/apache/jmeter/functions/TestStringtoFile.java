@@ -183,7 +183,7 @@ public class TestStringtoFile extends JMeterTestCase {
         assertEquals( "testtest", res);
     }
 
-    private Collection<CompoundVariable> functionParams(String... args) {
+    private static Collection<CompoundVariable> functionParams(String... args) {
         return Stream.of(args).map(CompoundVariable::new).collect(Collectors.toList());
     }
 

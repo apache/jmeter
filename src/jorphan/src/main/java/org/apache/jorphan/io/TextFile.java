@@ -157,10 +157,9 @@ public class TextFile extends File {
         if (!super.equals(obj)) {
             return false;
         }
-        if (!(obj instanceof TextFile)) {
+        if (!(obj instanceof TextFile other)) {
             return false;
         }
-        TextFile other = (TextFile) obj;
         if (encoding == null) {
             return other.encoding == null;
         }
