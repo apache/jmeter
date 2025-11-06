@@ -107,12 +107,7 @@ dependencies {
         because("Mean, DescriptiveStatistics")
     }
     implementation("org.apache.commons:commons-text")
-    // For some reason JMeter bundles just tika-core and tika-parsers without transitive
-    // dependencies. So we exclude those
     implementation("org.apache.tika:tika-core") {
-        isTransitive = false
-    }
-    runtimeOnly("org.apache.tika:tika-parsers") {
         isTransitive = false
     }
     implementation("org.apache.xmlgraphics:xmlgraphics-commons")
