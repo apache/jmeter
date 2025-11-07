@@ -92,6 +92,9 @@ dependencies {
     runtimeOnly("commons-codec:commons-codec") {
         because("commons-codec was a dependency in previous JMeter versions, so we keep it for compatibility")
     }
+    runtimeOnly("commons-collections:commons-collections") {
+        because("commons-collections was a dependency in previous JMeter versions, so we keep it for compatibility")
+    }
     runtimeOnly("org.apache.commons:commons-collections4") {
         because("commons-collections4 was a dependency in previous JMeter versions, so we keep it for compatibility")
     }
