@@ -94,9 +94,6 @@ dependencies {
     implementation("org.apache-extras.beanshell:bsh:2.0b6") {
         because("Direct dependency required from BeanShellInterpreter")
     }
-    runtimeOnly("commons-collections:commons-collections") {
-        because("Compatibility for old plugins")
-    }
     implementation("org.jetbrains.lets-plot:lets-plot-batik")
     implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm")
     implementation("org.apache.commons:commons-math3") {
