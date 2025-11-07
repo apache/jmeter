@@ -99,7 +99,6 @@ dependencies {
     }
     implementation("org.jetbrains.lets-plot:lets-plot-batik")
     implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm")
-    implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
     }

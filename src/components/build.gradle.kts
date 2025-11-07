@@ -67,7 +67,6 @@ dependencies {
     implementation("org.apache.httpcomponents:httpcore-nio")
     implementation("org.jsoup:jsoup")
     implementation("net.sf.jtidy:jtidy")
-    implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3")
     implementation("commons-io:commons-io") {
         because("IOUtils")

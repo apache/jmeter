@@ -25,7 +25,6 @@ dependencies {
     api("org.slf4j:slf4j-api")
 
     implementation("commons-io:commons-io")
-    implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3")
     implementation("org.apache.commons:commons-text")
 

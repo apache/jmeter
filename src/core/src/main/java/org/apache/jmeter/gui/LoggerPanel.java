@@ -28,7 +28,6 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 
-import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.jmeter.gui.logging.GuiLogEventListener;
 import org.apache.jmeter.gui.logging.LogEventObject;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -57,7 +56,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
     private static final int LOGGER_PANEL_REFRESH_PERIOD =
             JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500); // $NON-NLS-1$
 
-    private final Queue<String> events;
+    private final Queue<String> events = new ArrayDeque<>();
 
     private volatile boolean logChanged = false;
 
@@ -65,11 +64,6 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
      * Pane for display JMeter log file
      */
     public LoggerPanel() {
-        if (LOGGER_PANEL_MAX_LINES > 0) {
-            events = new CircularFifoQueue<>(LOGGER_PANEL_MAX_LINES);
-        } else {
-            events = new ArrayDeque<>();
-        }
         textArea = init();
     }
 
@@ -113,6 +107,9 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
         String logMessage = logEventObject.toString();
         synchronized (events) {
+            if (LOGGER_PANEL_MAX_LINES > 0 && events.size() >= LOGGER_PANEL_MAX_LINES) {
+                events.remove();
+            }
             events.add(logMessage);
         }
 

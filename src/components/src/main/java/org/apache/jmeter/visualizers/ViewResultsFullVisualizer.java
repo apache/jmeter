@@ -61,7 +61,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
@@ -139,7 +138,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private Object resultsObject = null;
     private TreeSelectionEvent lastSelectionEvent;
     private JCheckBox autoScrollCB;
-    private final Queue<SampleResult> buffer;
+    private final Queue<SampleResult> buffer = new ArrayDeque<>();
+    private final int maxResults;
     private boolean dataChanged;
 
     /**
@@ -147,12 +147,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      */
     public ViewResultsFullVisualizer() {
         super();
-        final int maxResults = JMeterUtils.getPropDefault("view.results.tree.max_results", 500);
-        if (maxResults > 0) {
-            buffer = new CircularFifoQueue<>(maxResults);
-        } else {
-            buffer = new ArrayDeque<>();
-        }
+        this.maxResults = JMeterUtils.getPropDefault("view.results.tree.max_results", 500);
         init();
         new Timer(REFRESH_PERIOD, e -> updateGui()).start();
     }
@@ -161,6 +156,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     @Override
     public void add(final SampleResult sample) {
         synchronized (buffer) {
+            if (maxResults > 0 && buffer.size() >= maxResults) {
+                buffer.remove();
+            }
             buffer.add(sample);
             dataChanged = true;
         }
