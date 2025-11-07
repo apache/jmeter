@@ -196,19 +196,19 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     }
 
     @Test
-    public static void testEncodedArguments() throws Exception {
+    public void testEncodedArguments() throws Exception {
         String url = "http://localhost/matrix.html";
         testEncodedArguments(url);
     }
 
 
     @Test
-    public static void testEncodedArgumentsIPv6() throws Exception {
+    public void testEncodedArgumentsIPv6() throws Exception {
         String url = "http://[::1]:8080/matrix.html";
         testEncodedArguments(url);
     }
 
-    private static void testEncodedArguments(String url) throws Exception {
+    private void testEncodedArguments(String url) throws Exception {
         // A HTTP GET request, with encoding not known
         String contentEncoding = "";
         String queryString = "abc%3FSPACE=a+b&space=a%20b&query=What%3F";
@@ -309,12 +309,12 @@ public class TestHttpRequestHdr extends JMeterTestCase {
     }
 
     @Test
-    public static void testGetRequestEncodings() throws Exception {
+    public void testGetRequestEncodings() throws Exception {
         testGetRequestEncodings("http://localhost/matrix.html");
     }
 
     @Test
-    public static void testGetRequestEncodingsIPv6() throws Exception {
+    public void testGetRequestEncodingsIPv6() throws Exception {
         testGetRequestEncodings("http://[::1]:8080/matrix.html");
     }
 

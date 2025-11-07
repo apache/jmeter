@@ -109,72 +109,72 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public static void itemised_testPostRequest_UrlEncoded(int item) throws Exception {
+    public void itemised_testPostRequest_UrlEncoded(int item) throws Exception {
         testPostRequest_UrlEncoded(HTTP_SAMPLER, ISO_8859_1, item);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public static void itemised_testPostRequest_UrlEncoded3(int item) throws Exception {
+    public void itemised_testPostRequest_UrlEncoded3(int item) throws Exception {
         testPostRequest_UrlEncoded(HTTP_SAMPLER3, US_ASCII, item);
     }
 
     @Test
-    public static void testPostRequest_FormMultipart_0() throws Exception {
+    public void testPostRequest_FormMultipart_0() throws Exception {
         testPostRequest_FormMultipart(HTTP_SAMPLER);
     }
 
     @Test
-    public static void testPostRequest_FormMultipart3() throws Exception {
+    public void testPostRequest_FormMultipart3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
         testPostRequest_FormMultipart(HTTP_SAMPLER3);
     }
 
     @Test
-    public static void testPostRequest_FileUpload() throws Exception {
+    public void testPostRequest_FileUpload() throws Exception {
         testPostRequest_FileUpload(HTTP_SAMPLER);
     }
 
     @Test
-    public static void testPostRequest_FileUpload3() throws Exception {
+    public void testPostRequest_FileUpload3() throws Exception {
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
         testPostRequest_FileUpload(HTTP_SAMPLER3);
     }
 
     @Test
-    public static void testPostRequest_BodyFromParameterValues() throws Exception {
+    public void testPostRequest_BodyFromParameterValues() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER, ISO_8859_1);
     }
 
     @Test
-    public static void testPostRequest_BodyFromParameterValues3() throws Exception {
+    public void testPostRequest_BodyFromParameterValues3() throws Exception {
         testPostRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
     }
 
     @Test
-    public static void testGetRequest() throws Exception {
+    public void testGetRequest() throws Exception {
         testGetRequest(HTTP_SAMPLER);
     }
 
     @Test
-    public static void testGetRequest3() throws Exception {
+    public void testGetRequest3() throws Exception {
         testGetRequest(HTTP_SAMPLER3);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public static void itemised_testGetRequest_Parameters(int item) throws Exception {
+    public void itemised_testGetRequest_Parameters(int item) throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER, item);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-    public static void itemised_testGetRequest_Parameters3(int item) throws Exception {
+    public void itemised_testGetRequest_Parameters3(int item) throws Exception {
         testGetRequest_Parameters(HTTP_SAMPLER3, item);
     }
 
     @Test
-    public static void testPutRequest_BodyFromParameterValues3() throws Exception {
+    public void testPutRequest_BodyFromParameterValues3() throws Exception {
         testPutRequest_BodyFromParameterValues(HTTP_SAMPLER3, US_ASCII);
     }
 
