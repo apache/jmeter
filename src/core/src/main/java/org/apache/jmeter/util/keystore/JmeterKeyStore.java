@@ -34,12 +34,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
@@ -242,7 +242,7 @@ public final class JmeterKeyStore {
         if (data instanceof String s) {
             return s;
         }
-        return Hex.encodeHexString((byte[]) data);
+        return HexFormat.of().formatHex((byte[]) data);
     }
 
     private static String sanGeneralNameIndexToName(Integer index) {

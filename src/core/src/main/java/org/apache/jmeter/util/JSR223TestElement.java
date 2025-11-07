@@ -21,7 +21,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.function.Function;
 
@@ -32,7 +35,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestStateListener;
@@ -306,8 +308,14 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     private void computeScriptMD5(String script) {
         // compute the md5 of the script if needed
-        if(scriptMd5 == null) {
-            scriptMd5 = ScriptCacheKey.ofString(DigestUtils.md5Hex(script));
+        if (scriptMd5 == null) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(script.getBytes(StandardCharsets.UTF_8));
+                scriptMd5 = ScriptCacheKey.ofDigest(md.digest());
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException("MessageDigest.getInstance(MD5) was not found", e);
+            }
         }
     }
 

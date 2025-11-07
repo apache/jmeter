@@ -24,7 +24,6 @@ dependencies {
     testImplementation(testFixtures(projects.src.core))
 
     implementation("org.mozilla:rhino")
-    implementation("commons-codec:commons-codec")
     implementation("org.apache.commons:commons-jexl")
     implementation("org.apache.commons:commons-jexl3")
     implementation("commons-io:commons-io") {
