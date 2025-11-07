@@ -23,12 +23,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.iterators.FilterIterator;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
+import org.apache.jorphan.collections.FilterIterator;
 import org.apiguardian.api.API;
 
 /**

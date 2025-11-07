@@ -36,12 +36,14 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.commons.collections4.map.LinkedMap;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -471,7 +473,8 @@ public final class CSVSaveService {
     }
 
     // Map header names to set() methods
-    private static final LinkedMap<String, Functor> headerLabelMethods = new LinkedMap<>();
+    private static final Map<String, Functor> headerLabelMethods = new LinkedHashMap<>();
+    private static final Map<String, Integer> headerLabelPositions = new HashMap<>();
 
     // These entries must be in the same order as columns are saved/restored.
 
@@ -505,6 +508,10 @@ public final class CSVSaveService {
         headerLabelMethods.put(CSV_HOSTNAME, new Functor("setHostname"));
         headerLabelMethods.put(CSV_IDLETIME, new Functor("setIdleTime"));
         headerLabelMethods.put(CSV_CONNECT_TIME, new Functor("setConnectTime"));
+        int pos = 0;
+        for (String key : headerLabelMethods.keySet()) {
+            headerLabelPositions.put(key, pos++);
+        }
     }
 
     /**
@@ -605,8 +612,8 @@ public final class CSVSaveService {
                 previous = Integer.MAX_VALUE; // they are always last
                 continue;
             }
-            int current = headerLabelMethods.indexOf(label);
-            if (current == -1) {
+            Integer current = headerLabelPositions.get(label);
+            if (current == null) {
                 log.warn("Unknown column name {}", label);
                 return null; // unknown column name
             }
