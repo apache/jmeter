@@ -441,6 +441,10 @@ tasks.yarnSetup {
     mustRunAfter(tasks.withType<AutostyleTask>())
 }
 
+tasks.nodeSetup {
+    mustRunAfter(tasks.withType<AutostyleTask>())
+}
+
 val yarn_install = tasks.named<YarnTask>("yarn_install") {
     workingDir = xdocs
     mustRunAfter(":rat")
