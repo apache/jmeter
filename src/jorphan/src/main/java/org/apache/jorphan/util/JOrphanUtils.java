@@ -27,6 +27,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -403,15 +404,7 @@ public final class JOrphanUtils {
      * @return hex representation of binary input
      */
     public static String baToHexString(byte[] ba) {
-        StringBuilder sb = new StringBuilder(ba.length * 2);
-        for (byte b : ba) {
-            int j = b & 0xff;
-            if (j < 16) {
-                sb.append('0'); // $NON-NLS-1$ add zero padding
-            }
-            sb.append(Integer.toHexString(j));
-        }
-        return sb.toString();
+        return baToHexString(ba, '\0');
     }
 
     /**
@@ -422,18 +415,11 @@ public final class JOrphanUtils {
      * @return hex representation of binary input
      */
     public static String baToHexString(byte[] ba, char separator) {
-        StringBuilder sb = new StringBuilder(ba.length * 2);
-        for (int i = 0; i < ba.length; i++) {
-            if (i > 0 && separator != 0) {
-                sb.append(separator);
-            }
-            int j = ba[i] & 0xff;
-            if (j < 16) {
-                sb.append('0'); // $NON-NLS-1$ add zero padding
-            }
-            sb.append(Integer.toHexString(j));
+        HexFormat format = HexFormat.of();
+        if (separator != 0) {
+            format = format.withDelimiter(Character.toString(separator));
         }
-        return sb.toString();
+        return format.formatHex(ba);
     }
 
     /**

@@ -51,7 +51,6 @@ dependencies {
     implementation("net.minidev:json-smart")
     implementation("net.minidev:accessors-smart")
     implementation("org.apache.commons:commons-pool2")
-    implementation("commons-codec:commons-codec")
     implementation("org.ow2.asm:asm")
     implementation("org.jodd:jodd-log") {
         exclude("ch.qos.logback")

@@ -22,10 +22,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HexFormat;
 import java.util.List;
-import java.util.Locale;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -85,26 +84,18 @@ public class DigestEncodeFunction extends AbstractFunction {
                 md.update(salt.getBytes(StandardCharsets.UTF_8));
             }
             byte[] bytes = md.digest();
-            encodedString = uppercase(Hex.encodeHexString(bytes), values, 3);
+            HexFormat hexFormat = HexFormat.of();
+            if (values.length > 3) {
+                String shouldUpperCase = values[3].execute();
+                if (Boolean.parseBoolean(shouldUpperCase)) {
+                    hexFormat = hexFormat.withUpperCase();
+                }
+            }
+            encodedString = hexFormat.formatHex(bytes);
             addVariableValue(encodedString, values, 4);
         } catch (NoSuchAlgorithmException e) {
             log.error("Error calling {} function with value {}, digest algorithm {}, salt {}, ", KEY, stringToEncode,
                     digestAlgorithm, salt, e);
-        }
-        return encodedString;
-    }
-
-    /**
-     * Upper case value if optional parameter value is true
-     *
-     * @param encodedString
-     * @param index
-     * @return
-     */
-    private static String uppercase(String encodedString, CompoundVariable[] values, int index) {
-        String shouldUpperCase = values.length > index ? values[index].execute() : null;
-        if (Boolean.parseBoolean(shouldUpperCase)) {
-            return encodedString.toUpperCase(Locale.ROOT);
         }
         return encodedString;
     }

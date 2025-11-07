@@ -89,6 +89,10 @@ dependencies {
         api(project(p))
     }
 
+    runtimeOnly("commons-codec:commons-codec") {
+        because("commons-codec was a dependency in previous JMeter versions, so we keep it for compatibility")
+    }
+
     binLicense(project(":src:licenses", "binLicense"))
     srcLicense(project(":src:licenses", "srcLicense"))
     generatorJar(project(":src:generator", "archives"))

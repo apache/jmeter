@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.security.MessageDigest;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
@@ -34,6 +35,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
@@ -49,8 +51,6 @@ import java.util.prefs.Preferences;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.assertions.gui.AssertionGui;
@@ -720,7 +720,7 @@ public class ProxyControl extends GenericController implements NonTestElement {
                             authorization.setURL(computeAuthUrl(result.getUrlAsString()));
                             authorization.setMechanism(mechanism);
                             if(BASIC_AUTH.equals(authType)) {
-                                String authCred = new String(Base64.decodeBase64(authCredentialsBase64), StandardCharsets.UTF_8);
+                                String authCred = new String(Base64.getDecoder().decode(authCredentialsBase64), StandardCharsets.UTF_8);
                                 String[] loginPassword = authCred.split(":"); //$NON-NLS-1$
                                 if(loginPassword.length == 2) {
                                     authorization.setUser(loginPassword[0]);
@@ -785,10 +785,12 @@ public class ProxyControl extends GenericController implements NonTestElement {
                 if (caCert == null) {
                     return new String[]{"Could not find certificate"};
                 }
+                MessageDigest md = MessageDigest.getInstance("SHA-1");
+                md.update(caCert.getEncoded());
                 return new String[]
                         {
                         caCert.getSubjectX500Principal().toString(),
-                        "Fingerprint(SHA1): " + JOrphanUtils.baToHexString(DigestUtils.sha1(caCert.getEncoded()), ' '),
+                        "Fingerprint(SHA1): " + JOrphanUtils.baToHexString(md.digest(), ' '),
                         "Created: "+ caCert.getNotBefore().toString()
                         };
             } catch (GeneralSecurityException e) {
