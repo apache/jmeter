@@ -128,7 +128,7 @@ dependencies {
         api("org.brotli:dec:0.1.2")
         api("org.freemarker:freemarker:2.3.34")
         api("org.jdom:jdom:1.1.3")
-        api("org.jetbrains.lets-plot:lets-plot-batik:4.7.3")
+        api("org.jetbrains.lets-plot:lets-plot-batik:4.8.0")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.11.2")
         api("org.jetbrains:annotations:26.0.2-1")
         api("org.jodd:jodd-core:5.3.0")
