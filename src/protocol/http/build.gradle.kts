@@ -29,6 +29,7 @@ dependencies {
 
     api("com.thoughtworks.xstream:xstream") {
         because("HTTPResultConverter uses XStream in public API")
+        exclude("io.github.x-stream", "mxparser")
     }
 
     compileOnly("javax.activation:javax.activation-api") {

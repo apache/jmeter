@@ -56,7 +56,8 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.DataHolder;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
-import com.thoughtworks.xstream.io.xml.XppDriver;
+import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
@@ -78,8 +79,8 @@ public class SaveService {
     public static final String TEST_CLASS_NAME = "TestClassName"; // $NON-NLS-1$
 
     private static final class XStreamWrapper extends XStream {
-        private XStreamWrapper(ReflectionProvider reflectionProvider) {
-            super(reflectionProvider);
+        private XStreamWrapper(ReflectionProvider reflectionProvider, HierarchicalStreamDriver hierarchicalStreamDriver) {
+            super(reflectionProvider, hierarchicalStreamDriver);
         }
 
         // Override wrapMapper in order to insert the Wrapper in the chain
@@ -110,16 +111,15 @@ public class SaveService {
         }
     }
 
-    private static final XStream JMXSAVER = new XStreamWrapper(new PureJavaReflectionProvider());
-    private static final XStream JTLSAVER = new XStreamWrapper(new PureJavaReflectionProvider());
+    private static final JMeterStaxDriver STAXDRIVER_WITH_HEADER = new JMeterStaxDriver();
+    private static final JMeterStaxDriver STAXDRIVER_SKIP_HEADER = new JMeterStaxDriver(false, true);
+    private static final XStream JMXSAVER = new XStreamWrapper(new PureJavaReflectionProvider(), STAXDRIVER_WITH_HEADER);
+    private static final XStream JTLSAVER = new XStreamWrapper(new PureJavaReflectionProvider(), STAXDRIVER_WITH_HEADER);
     static {
         JTLSAVER.setMode(XStream.NO_REFERENCES); // This is needed to stop XStream keeping copies of each class
         JMeterUtils.setupXStreamSecurityPolicy(JMXSAVER);
         JMeterUtils.setupXStreamSecurityPolicy(JTLSAVER);
     }
-
-    // The XML header, with placeholder for encoding, since that is controlled by property
-    private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"<ph>\"?>"; // $NON-NLS-1$
 
     // Default file name
     private static final String SAVESERVICE_PROPERTIES_FILE = "saveservice.properties"; // $NON-NLS-1$
@@ -299,25 +299,31 @@ public class SaveService {
 
     // Called by Save function
     public static void saveTree(HashTree tree, OutputStream out) throws IOException {
-        // Get the OutputWriter to use
-        OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
-        writeXmlHeader(outputStreamWriter);
-        // Use deprecated method, to avoid duplicating code
         ScriptWrapper wrapper = new ScriptWrapper();
         wrapper.testPlan = tree;
-        JMXSAVER.toXML(wrapper, outputStreamWriter);
-        outputStreamWriter.write('\n');// Ensure terminated properly
-        outputStreamWriter.close();
+
+        if (fileEncoding == null || fileEncoding.isEmpty()) {
+            JMXSAVER.toXML(wrapper, out);
+        } else {
+            // Get the OutputWriter to use
+            try (OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out)) {
+                // Use deprecated method, to avoid duplicating code
+                JMXSAVER.toXML(wrapper, outputStreamWriter);
+                outputStreamWriter.write('\n');// Ensure terminated properly
+            }
+        }
     }
 
     // Used by Test code
     public static void saveElement(Object el, OutputStream out) throws IOException {
         // Get the OutputWriter to use
-        OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
-        writeXmlHeader(outputStreamWriter);
-        // Use deprecated method, to avoid duplicating code
-        JMXSAVER.toXML(el, outputStreamWriter);
-        outputStreamWriter.close();
+        if (fileEncoding == null || fileEncoding.isEmpty()) {
+            JMXSAVER.toXML(el, out);
+        } else {
+            try (OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out)) {
+                JMXSAVER.toXML(el, outputStreamWriter);
+            }
+        }
     }
 
     // Used by Test code
@@ -344,7 +350,7 @@ public class SaveService {
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
         try {
-            JTLSAVER.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
+            JTLSAVER.marshal(evt.getResult(), STAXDRIVER_SKIP_HEADER.createWriter(writer), dh);
         } catch(RuntimeException e) {
             throw new IllegalArgumentException("Failed marshalling:"+(evt.getResult() != null ? showDebuggingInfo(evt.getResult()) : "null"), e);
         }
@@ -411,7 +417,7 @@ public class SaveService {
         dh.put(RESULTCOLLECTOR_HELPER_OBJECT, resultCollectorHelper); // Allow TestResultWrapper to feed back the samples
         // This is effectively the same as saver.fromXML(InputStream) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
-        JTLSAVER.unmarshal(new XppDriver().createReader(reader), null, dh);
+        JTLSAVER.unmarshal(STAXDRIVER_SKIP_HEADER.createReader(reader), null, dh);
         inputStreamReader.close();
     }
 
@@ -502,16 +508,6 @@ public class SaveService {
             log.info("fileEncoding not defined - using JRE default");
             return Charset.defaultCharset();
         }
-    }
-
-    private static void writeXmlHeader(OutputStreamWriter writer) throws IOException {
-        // Write XML header if we have the charset to use for encoding
-        Charset charset = getFileEncodingCharset();
-        // We do not use getEncoding method of Writer, since that returns
-        // the historical name
-        String header = XML_HEADER.replaceAll("<ph>", charset.name());
-        writer.write(header);
-        writer.write('\n');
     }
 
 //  Normal output

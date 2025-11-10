@@ -22,23 +22,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.xml.security.Init;
+import org.apache.xml.security.c14n.Canonicalizer;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.EditList;
+import org.eclipse.jgit.diff.HistogramDiff;
+import org.eclipse.jgit.diff.RawText;
+import org.eclipse.jgit.diff.RawTextComparator;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.FieldSource;
 
 public class TestSaveService extends JMeterTestCase {
 
@@ -83,6 +89,10 @@ public class TestSaveService extends JMeterTestCase {
 
     private static final boolean saveOut = JMeterUtils.getPropDefault("testsaveservice.saveout", false);
 
+    @BeforeAll
+    static void initXmlSecurity() {
+        Init.init();
+    }
 
     @Test
     public void testPROPVERSION() {
@@ -93,120 +103,66 @@ public class TestSaveService extends JMeterTestCase {
         );
     }
 
-    @Test
-    public void testLoadAndSave() throws Exception {
-        boolean failed = false; // Did a test fail?
-
-        for (final String fileName : FILES) {
-            final File testFile = findTestFile("testfiles/" + fileName);
-            final File savedFile = findTestFile("testfiles/Saved" + fileName);
-            failed |= loadAndSave(testFile, fileName, true, savedFile);
-        }
-        for (final String fileName : FILES_LINES) {
-            final File testFile = findTestFile("testfiles/" + fileName);
-            final File savedFile = findTestFile("testfiles/Saved" + fileName);
-            failed |= loadAndSave(testFile, fileName, false, savedFile);
-        }
-        if (failed) // TODO make these separate tests?
-        {
-            fail("One or more failures detected");
-        }
-    }
-
-    private static boolean loadAndSave(File testFile, String fileName, boolean checkSize, File savedFile) throws Exception {
-
-        boolean failed = false;
-
-        final FileStats origStats = getFileStats(testFile);
-        final FileStats savedStats = getFileStats(savedFile);
-
+    @ParameterizedTest
+    @FieldSource({"FILES", "FILES_LINES"})
+    void loadAndSave(String fileName) throws Exception {
+        File testFile = findTestFile("testfiles/" + fileName);
         ByteArrayOutputStream out = new ByteArrayOutputStream(Math.toIntExact(testFile.length()));
-        try {
+        try (out) {
             HashTree tree = SaveService.loadTree(testFile);
             SaveService.saveTree(tree, out);
-        } finally {
-            out.close(); // Make sure all the data is flushed out
         }
+        byte[] resavedXml = out.toByteArray();
+        // Make sure all the data is flushed out
 
-        final FileStats compareStats = savedStats == FileStats.NO_STATS ? origStats : savedStats;
+        // Compare XML content using normalized form for better diff output
+        Path testFilePath = testFile.toPath();
+        Path expectedOutput = testFilePath.resolveSibling(testFilePath.getFileName().toString().replace(".jmx", ".expected.jmx"));
+        Path expectedFilePath = Files.exists(expectedOutput) ? expectedOutput : testFilePath;
 
-        final FileStats outputStats;
-        try (ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
-             Reader insReader = new InputStreamReader(ins, Charset.defaultCharset());
-             BufferedReader bufferedReader = new BufferedReader(insReader)) {
-            outputStats = computeFileStats(bufferedReader);
-        }
-        // We only check the length of the result. Comparing the
-        // actual result (out.toByteArray==original) will usually
-        // fail, because the order of the properties within each
-        // test element may change. Comparing the lengths should be
-        // enough to detect most problem cases...
-        if (checkSize && !compareStats.isSameSize(outputStats) || !compareStats.hasSameLinesCount(outputStats)) {
-            failed = true;
-            System.out.println();
-            System.out.println("Loading file testfiles/" + fileName + " and "
-                    + "saving it back changes its size from " + compareStats.size + " to " + outputStats.size + ".");
-            if (!origStats.hasSameLinesCount(outputStats)) {
-                System.out.println("Number of lines changes from " + compareStats.lines + " to " + outputStats.lines);
+        String expectedXml = normalizeXml(
+                Files.readAllBytes(
+                        expectedFilePath
+                )
+        );
+        String actualXml = normalizeXml(resavedXml);
+
+        if (saveOut) {
+            if (!expectedXml.equals(actualXml)) {
+                Files.write(expectedOutput, resavedXml);
             }
-            if (saveOut) {
-                final File outFile = findTestFile("testfiles/" + fileName + ".out");
-                System.out.println("Write " + outFile);
-                try (FileOutputStream outf = new FileOutputStream(outFile)) {
-                    outf.write(out.toByteArray());
+            return;
+        }
+        assertEquals(
+                expectedXml,
+                actualXml,
+                () -> {
+                    String diff = computeHistogramDiff(expectedXml, actualXml);
+                    StringBuilder message = new StringBuilder();
+                    message.append("JMX file should be the same after load and save. ");
+                    message.append("Comparing with ").append(expectedFilePath).append(". ");
+                    message.append(" (diff is ").append(diff.length()).append(" chars, ")
+                            .append(Math.round(diff.length() * 100.0 / expectedXml.length())).append("% of original)");
+
+                    // Omit diff it is too large
+                    if (diff.length() < expectedXml.length() * 0.8) {
+                        message.append("\nDiff:\n").append(diff);
+                    }
+                    return message.toString();
                 }
-                System.out.println("Wrote " + outFile);
-            }
-        }
-
-        // Note this test will fail if a property is added or
-        // removed to any of the components used in the test
-        // files. The way to solve this is to appropriately change
-        // the test file.
-        return failed;
+        );
     }
 
-    private static FileStats getFileStats(File testFile) throws IOException,
-            FileNotFoundException {
-        if (testFile == null || !testFile.exists()) {
-            return FileStats.NO_STATS;
-        }
-        try (FileInputStream fis = new FileInputStream(testFile);
-             InputStreamReader fileReader = new InputStreamReader(fis, Charset.defaultCharset());
-                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            return computeFileStats(bufferedReader);
-        }
-    }
-
-    /**
-     * Calculate size and line count ignoring EOL and
-     * "jmeterTestPlan" element which may vary because of
-     * different attributes/attribute lengths.
-     */
-    private static FileStats computeFileStats(BufferedReader br) throws IOException {
-        int length = 0;
-        int lines = 0;
-        String line;
-        while ((line = br.readLine()) != null) {
-            lines++;
-            if (!line.startsWith("<jmeterTestPlan")) {
-                length += line.length();
-            }
-        }
-        return new FileStats(length, lines);
-    }
-
-    @Test
-    public void testLoad() throws Exception {
-        for (String fileName : FILES_LOAD_ONLY) {
-            File file = findTestFile("testfiles/" + fileName);
-            try {
-                HashTree tree = SaveService.loadTree(file);
-                assertNotNull(tree);
-            } catch (IllegalArgumentException ex) {
-                ex.addSuppressed(new Throwable("fileName=" + file.getAbsolutePath()));
-                throw ex;
-            }
+    @ParameterizedTest
+    @FieldSource("FILES_LOAD_ONLY")
+    public void testLoad(String fileName) throws Exception {
+        File file = findTestFile("testfiles/" + fileName);
+        try {
+            HashTree tree = SaveService.loadTree(file);
+            assertNotNull(tree);
+        } catch (IllegalArgumentException ex) {
+            ex.addSuppressed(new Throwable("fileName=" + file.getAbsolutePath()));
+            throw ex;
         }
     }
 
@@ -218,29 +174,57 @@ public class TestSaveService extends JMeterTestCase {
         }
     }
 
-    private static class FileStats {
-        int size;
-        int lines;
+    /**
+     * Pattern to match the jmeterTestPlan root element with all its attributes.
+     * These attributes (jmeter version, properties version) change between JMeter versions
+     * and should be ignored when comparing XML content.
+     */
+    private static final Pattern JMETER_TEST_PLAN_PATTERN = Pattern.compile(
+            "<jmeterTestPlan[^>]*>"
+    );
 
-        final static FileStats NO_STATS = new FileStats(-1, -1);
+    /**
+     * Normalizes XML for comparison using W3C Canonical XML (C14N).
+     * This sorts attributes alphabetically and normalizes whitespace.
+     * Also normalizes the jmeterTestPlan root element to ignore version differences.
+     */
+    private static String normalizeXml(byte[] xmlBytes) throws Exception {
+        Canonicalizer c14n = Canonicalizer.getInstance(Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        c14n.canonicalize(xmlBytes, out, true);
 
-        public FileStats(int size, int lines) {
-            this.size = size;
-            this.lines = lines;
-        }
+        // Normalize the jmeterTestPlan element to ignore version-specific attributes
+        String xml = out.toString(StandardCharsets.UTF_8);
+        xml = JMETER_TEST_PLAN_PATTERN.matcher(xml).replaceFirst("<jmeterTestPlan>");
 
-        public boolean isSameSize(FileStats other) {
-            if (other == null) {
-                return false;
+        return xml;
+    }
+
+
+    private static String computeHistogramDiff(String expected, String actual) {
+        return computeHistogramDiff(
+                expected.getBytes(StandardCharsets.UTF_8),
+                actual.getBytes(StandardCharsets.UTF_8)
+        );
+    }
+
+    /**
+     * Computes a histogram diff between expected and actual text, similar to git diff.
+     */
+    private static String computeHistogramDiff(byte[] expected, byte[] actual) {
+        try {
+            RawText expectedText = new RawText(expected);
+            RawText actualText = new RawText(actual);
+
+            EditList edits = new HistogramDiff().diff(RawTextComparator.DEFAULT, expectedText, actualText);
+
+            ByteArrayOutputStream diffOutput = new ByteArrayOutputStream();
+            try (DiffFormatter formatter = new DiffFormatter(diffOutput)) {
+                formatter.format(edits, expectedText, actualText);
             }
-            return size == other.size;
-        }
-
-        public boolean hasSameLinesCount(FileStats other) {
-            if (other == null) {
-                return false;
-            }
-            return lines == other.lines;
+            return diffOutput.toString(StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return "Failed to compute diff: " + e.getMessage();
         }
     }
 }

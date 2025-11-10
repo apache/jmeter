@@ -54,6 +54,7 @@ dependencies {
         api("com.google.errorprone:error_prone_annotations:2.44.0")
         api("com.helger.commons:ph-commons:12.1.0")
         api("com.helger:ph-css:8.1.0")
+        api("com.fasterxml.woodstox:woodstox-core:7.1.0")
         api("com.jayway.jsonpath:json-path:2.10.0")
         api("com.miglayout:miglayout-core:11.4.2")
         api("com.miglayout:miglayout-swing:11.4.2")
@@ -126,6 +127,7 @@ dependencies {
         api("org.bouncycastle:bcprov-jdk18on:1.82")
         api("org.brotli:dec:0.1.2")
         api("org.freemarker:freemarker:2.3.34")
+        api("org.glassfish.jaxb:txw2:4.0.6")
         api("org.jdom:jdom:1.1.3")
         api("org.jetbrains.lets-plot:lets-plot-batik:4.8.0")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.11.2")
@@ -144,6 +146,5 @@ dependencies {
         api("xalan:serializer:2.7.3")
         api("xalan:xalan:2.7.3")
         api("xml-apis:xml-apis:1.4.01")
-        api("xmlpull:xmlpull:1.1.3.1")
     }
 }

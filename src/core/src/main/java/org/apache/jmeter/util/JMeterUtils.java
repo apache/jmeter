@@ -59,6 +59,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.save.JMeterStaxDriver;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
@@ -81,6 +82,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
@@ -1416,8 +1418,8 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * @return {@link XStream} XStream instance following JMeter security policy
      */
-    public static final XStream createXStream() {
-        XStream xstream = new XStream(new PureJavaReflectionProvider());
+    public static XStream createXStream() {
+        XStream xstream = new XStream(new PureJavaReflectionProvider(), new JMeterStaxDriver());
         JMeterUtils.setupXStreamSecurityPolicy(xstream);
         return xstream;
     }
