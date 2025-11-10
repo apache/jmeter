@@ -165,7 +165,10 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
             try {
                 if (SampleResult.TEXT.equals(res.getDataType())){
-                    writer.setValue(new String(res.getResponseData(), res.getDataEncodingWithDefault()));
+                    byte[] responseData = res.getResponseData();
+                    if (responseData != null && responseData.length > 0) {
+                        writer.setValue(new String(responseData, res.getDataEncodingWithDefault()));
+                    }
                 } else {
                     writer.setValue("Non-TEXT response data, cannot record: (" + res.getDataType() + ")");
                 }
@@ -176,10 +179,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             writer.endNode();
         }
         if (save.saveFileName()){
-            writer.startNode(TAG_RESPONSE_FILE);
-            writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
-            writer.setValue(res.getResultFileName());
-            writer.endNode();
+            writeString(writer, TAG_RESPONSE_FILE, res.getResultFileName());
         }
     }
 
@@ -356,7 +356,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         if (value != null) {
             writer.startNode(tag);
             writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
-            writer.setValue(value);
+            if (!value.isEmpty()) {
+                writer.setValue(value);
+            }
             writer.endNode();
         }
     }

@@ -109,7 +109,6 @@
 519087,mail-1.5.0-b01.jar
 120438,miglayout-core-11.4.2.jar
 23287,miglayout-swing-11.4.2.jar
-29680,mxparser-1.2.2.jar
 99796,neo4j-bolt-connection-10.1.0.jar
 320489,neo4j-bolt-connection-netty-10.1.0.jar
 27442,neo4j-bolt-connection-pooled-10.1.0.jar
@@ -149,15 +148,17 @@
 5783933,Saxon-HE-12.9.jar
 283536,serializer-2.7.3.jar
 69908,slf4j-api-2.0.17.jar
+195922,stax2-api-4.2.2.jar
 10192,swing-extensions-laf-support-0.1.3.jar
 2539,swing-extensions-visual-padding-0.1.3.jar
 778543,tika-core-3.2.3.jar
+73265,txw2-4.0.6.jar
 173935,unbescape-1.1.6.RELEASE.jar
+1608803,woodstox-core-7.1.0.jar
 3455761,xalan-2.7.3.jar
 220536,xml-apis-1.4.01.jar
 85686,xml-apis-ext-1.3.04.jar
 686441,xmlgraphics-commons-2.11.jar
-7188,xmlpull-1.1.3.1.jar
 1033122,xmlresolver-5.3.3-data.jar
 167889,xmlresolver-5.3.3.jar
 646504,xstream-1.4.21.jar

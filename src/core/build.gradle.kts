@@ -40,6 +40,8 @@ dependencies {
     }
     api("com.thoughtworks.xstream:xstream") {
         because("XStream in used in public API")
+        // We use StaXDriver, so we exclude xmlpull, see https://x-stream.github.io/download.html#optional-deps
+        exclude("io.github.x-stream", "mxparser")
     }
     api("org.apache.logging.log4j:log4j-1.2-api")
     api("org.apache.logging.log4j:log4j-api")
@@ -80,6 +82,10 @@ dependencies {
         }
     }
 
+    implementation("org.glassfish.jaxb:txw2") {
+        because("IndentingXMLStreamWriter is needed to indent the generated XML")
+    }
+    implementation("com.fasterxml.woodstox:woodstox-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing")
     implementation("com.fasterxml.jackson.core:jackson-annotations")
