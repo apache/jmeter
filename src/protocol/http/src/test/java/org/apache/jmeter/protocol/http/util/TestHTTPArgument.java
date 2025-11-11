@@ -93,4 +93,37 @@ public class TestHTTPArgument {
         assertEquals("", arg.getEncodedName());
         assertEquals("\00\01\07", arg.getEncodedValue());
     }
+
+    @Test
+    public void testMalformedPercentEncoding() throws Exception {
+        // Test case for Bug 6456: Handle malformed percent-encoded strings gracefully
+        // These are real-world cases that can occur when recording web application traffic
+
+        // Case 1: Incomplete hex sequence "%u2" - reported in the issue
+        HTTPArgument arg1 = new HTTPArgument("param", "value%u2", true);
+        // Should preserve the original malformed value instead of throwing IllegalArgumentException
+        assertEquals("param", arg1.getName());
+        assertEquals("value%u2", arg1.getValue());
+
+        // Case 2: Invalid hex character in encoding
+        HTTPArgument arg2 = new HTTPArgument("name", "test%ZZ", true);
+        assertEquals("name", arg2.getName());
+        assertEquals("test%ZZ", arg2.getValue());
+
+        // Case 3: Truncated percent at end of string
+        HTTPArgument arg3 = new HTTPArgument("data", "some%", true);
+        assertEquals("data", arg3.getName());
+        assertEquals("some%", arg3.getValue());
+
+        // Case 4: Percent followed by single hex digit
+        HTTPArgument arg4 = new HTTPArgument("field", "text%2", true);
+        assertEquals("field", arg4.getName());
+        assertEquals("text%2", arg4.getValue());
+
+        // Case 5: Mix of valid and invalid encoding
+        HTTPArgument arg5 = new HTTPArgument("mixed", "hello%20world%u2", true);
+        assertEquals("mixed", arg5.getName());
+        // Valid %20 should decode to space, but %u2 is malformed
+        assertEquals("hello%20world%u2", arg5.getValue());
+    }
 }
