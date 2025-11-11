@@ -161,6 +161,13 @@ public class HTTPArgument extends Argument implements Serializable {
             } catch (UnsupportedEncodingException e) {
                 log.error("{} encoding not supported!", contentEncoding);
                 throw new Error(e.toString(), e);
+            } catch (IllegalArgumentException e) {
+                // Handle malformed percent-encoded strings (e.g., "%u2", "%ZZ", "text%")
+                // This can occur when recording real-world web traffic with encoding bugs
+                // See Bug 6456
+                log.warn("Malformed percent-encoded parameter detected - using original value. " +
+                        "Name: '{}', Value: '{}', Error: {}", name, value, e.getMessage());
+                // Keep the original encoded values as-is
             }
         }
         setName(name);
