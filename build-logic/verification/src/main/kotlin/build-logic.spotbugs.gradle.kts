@@ -27,7 +27,7 @@ plugins {
 
 spotbugs {
     // Below statement is for Renovate Bot since it does not support toolVersion.set("..") pattern yet
-    val toolVersion = "4.8.3"
+    val toolVersion = "4.9.8"
     this.toolVersion.set(toolVersion)
 
     providers.gradleProperty("spotbugs.version")
