@@ -123,12 +123,6 @@
       ]
     },
     {
-      "groupName": "org.checkerframework",
-      "matchPackageNames": [
-        "org.checkerframework{/,}**"
-      ]
-    },
-    {
       "groupName": "org.eclipse.jetty",
       "matchPackageNames": [
         "org.eclipse.jetty{/,}**"

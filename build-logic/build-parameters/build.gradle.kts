@@ -74,10 +74,6 @@ buildParameters {
         defaultValue.set(false)
         description.set("Ignore SpotBugs failures")
     }
-    bool("enableCheckerframework") {
-        defaultValue.set(false)
-        description.set("Run CheckerFramework (nullness) verifications")
-    }
     bool("skipAutostyle") {
         defaultValue.set(false)
         description.set("Skip AutoStyle verifications")
