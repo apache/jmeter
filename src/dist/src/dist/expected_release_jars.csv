@@ -57,7 +57,6 @@
 588267,dnsjava-3.6.3.jar
 20388,error_prone_annotations-2.44.0.jar
 1886604,freemarker-2.3.34.jar
-32359,geronimo-jms_1.1_spec-1.1.1.jar
 8057697,groovy-5.0.2.jar
 20224,groovy-datetime-5.0.2.jar
 12371,groovy-dateutil-5.0.2.jar
@@ -77,6 +76,7 @@
 79195,jackson-annotations-2.20.jar
 593176,jackson-core-2.20.1.jar
 1688480,jackson-databind-2.20.1.jar
+58964,jakarta.jms-api-3.1.0.jar
 78030,javax.activation-1.2.0.jar
 142391,jcharts-0.7.5.jar
 16555,jcl-over-slf4j-1.7.36.jar
