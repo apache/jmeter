@@ -214,7 +214,7 @@ val verifyReleaseDependencies by tasks.registering {
         val libs = deps.asSequence()
             .filter {
                 val compId = it.id.componentIdentifier
-                compId !is ProjectComponentIdentifier || !compId.build.isCurrentBuild
+                compId !is ProjectComponentIdentifier
             }
             .map { it.file.name to it.file.length() }
             .sortedWith(compareBy(caseInsensitive) { it.first })
