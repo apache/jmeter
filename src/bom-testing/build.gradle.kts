@@ -44,9 +44,9 @@ dependencies {
         api("net.bytebuddy:byte-buddy:1.17.8")
         api("nl.jqno.equalsverifier:equalsverifier:4.2.2")
         // activemq-all should not be used as it provides secondary slf4j binding
-        api("org.apache.activemq:activemq-broker:5.16.8")
-        api("org.apache.activemq:activemq-client:5.16.8")
-        api("org.apache.activemq:activemq-spring:5.16.8")
+        api("org.apache.activemq:activemq-broker:6.2.0")
+        api("org.apache.activemq:activemq-client:6.2.0")
+        api("org.apache.activemq:activemq-spring:6.2.0")
         api("org.apache.ftpserver:ftplet-api:1.2.1")
         api("org.apache.ftpserver:ftpserver-core:1.2.1")
         api("org.apache.mina:mina-core:2.2.4")

@@ -72,6 +72,7 @@ dependencies {
         api("dnsjava:dnsjava:3.6.3")
         api("io.burt:jmespath-core:0.6.0")
         api("io.burt:jmespath-jackson:0.6.0")
+        api("jakarta.jms:jakarta.jms-api:3.1.0")
         api("javax.activation:javax.activation-api:1.2.0")
         api("javax.mail:mail:1.5.0-b01")
         api("jcharts:jcharts:0.7.5")
@@ -105,7 +106,6 @@ dependencies {
         api("org.apache.commons:commons-text:1.14.0") {
             because("User might still rely on commons-text")
         }
-        api("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1")
         api("org.apache.httpcomponents.client5:httpclient5:5.5.1")
         api("org.apache.httpcomponents:httpasyncclient:4.1.5")
         api("org.apache.httpcomponents:httpclient:4.5.14")
