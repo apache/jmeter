@@ -17,13 +17,6 @@
       ]
     },
     {
-      "description": "TODO: Caffeine 3.0 requires Java 11",
-      "allowedVersions": "< 3.0",
-      "matchPackageNames": [
-        "com.github.ben-manes.caffeine{/,}**"
-      ]
-    },
-    {
       "groupName": "com.github.vlsi",
       "matchPackageNames": [
         "com.github.vlsi{/,}**"
@@ -76,29 +69,6 @@
       ]
     },
     {
-      "groupName": "com.miglayout",
-      "allowedVersions": "< 11.0",
-      "matchPackageNames": [
-        "com.miglayout{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.ajoberstar.grgit",
-      "description": "TODO: grgit 5.0 requires Java 11",
-      "allowedVersions": "< 5.0",
-      "matchPackageNames": [
-        "org.ajoberstar.grgit{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.apache.activemq",
-      "description": "TODO: activemq 5.17.0 requires Java 11",
-      "allowedVersions": "< 5.17.0",
-      "matchPackageNames": [
-        "org.apache.activemq{/,}**"
-      ]
-    },
-    {
       "groupName": "org.apache.ftpserver",
       "matchPackageNames": [
         "org.apache.ftpserver{/,}**"
@@ -132,14 +102,6 @@
       "groupName": "org.checkerframework",
       "matchPackageNames": [
         "org.checkerframework{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.eclipse.jetty",
-      "description": "wiremock uses jetty 11",
-      "allowedVersions": "< 12.0",
-      "matchPackageNames": [
-        "org.eclipse.jetty{/,}**"
       ]
     },
     {
