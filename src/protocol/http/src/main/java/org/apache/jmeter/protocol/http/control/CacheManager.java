@@ -269,25 +269,19 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 // else expiresDate computed in (expires!=null) condition is used
             }
         }
+        Cache<String, CacheEntry> cache = getCache();
         if (varyHeader != null) {
             if (log.isDebugEnabled()) {
                 log.debug("Set entry into cache for url {} and vary {} ({})", url,
                         varyHeader,
                         varyUrl(url, varyHeader.getKey(), varyHeader.getValue()));
             }
-            getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getKey()));
-            getCache().put(varyUrl(url, varyHeader.getKey(), varyHeader.getValue()), new CacheEntry(lastModified, expiresDate, etag, null));
-        } else {
-            // Makes expiresDate effectively-final
-            Date entryExpiresDate = expiresDate;
-            getCache().get(
-                    url,
-                    key -> {
-                        CacheEntry cacheEntry = new CacheEntry(lastModified, entryExpiresDate, etag, null);
-                        log.debug("Set entry {} into cache for url {}", url, cacheEntry);
-                        return cacheEntry;
-                    }
-            );
+            cache.put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getKey()));
+            cache.put(varyUrl(url, varyHeader.getKey(), varyHeader.getValue()), new CacheEntry(lastModified, expiresDate, etag, null));
+        } else if (cache.getIfPresent(url) == null) {
+            CacheEntry cacheEntry = new CacheEntry(lastModified, expiresDate, etag, null);
+            log.debug("Set entry {} into cache for url {}", url, cacheEntry);
+            cache.put(url, cacheEntry);
         }
     }
 

@@ -47,7 +47,6 @@ import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apiguardian.api.API;
-import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,7 +112,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * however, when element in not shared, then adds overhead as every lock and unlock allocates memory.
      * So in case of cloned-per-thread elements, we use {@link Collections#synchronizedMap(Map)} instead.
      */
-    @GuardedBy("lock")
+    // @GuardedBy("lock")
     private final Map<String, JMeterProperty> propMap =
             lock != null
                     ? new LinkedHashMap<>()
@@ -138,7 +137,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * Holds properties added when isRunningVersion is true
      */
-    @GuardedBy("lock")
+    // @GuardedBy("lock")
     private transient Set<JMeterProperty> temporaryProperties;
 
     private transient boolean runningVersion = false;
