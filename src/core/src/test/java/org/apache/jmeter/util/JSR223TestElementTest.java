@@ -18,26 +18,14 @@
 package org.apache.jmeter.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
 
 public class JSR223TestElementTest {
 
     @SuppressWarnings("serial")
     private JSR223TestElement element = new JSR223TestElement() {
     };
-
-    @Test
-    @DisabledForJreRange(min = JRE.JAVA_15, max = JRE.OTHER, disabledReason = "The default JavaScript engine has been removed in Java 15+")
-    public void testGetScriptEngineJS() throws Exception {
-        element.setScriptLanguage("JavaScript");
-        String languageName = element.getScriptEngine().getFactory().getLanguageName();
-        assertTrue(languageName.contains("Script"),
-                () -> "getFactory().getLanguageName() should contain Script, got " + languageName);
-    }
 
     @Test
     public void testGetScriptEngineDefault() throws Exception {

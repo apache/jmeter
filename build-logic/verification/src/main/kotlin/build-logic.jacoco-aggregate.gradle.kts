@@ -26,7 +26,6 @@ plugins {
 
 val jacocoAggregation by configurations.creating {
     description = "Collects project dependencies for JaCoCo coverage report aggregation"
-    isVisible = false
     isTransitive = true
     isCanBeResolved = false
     isCanBeConsumed = false
