@@ -144,6 +144,6 @@ dependencies {
         api("xalan:serializer:2.7.3")
         api("xalan:xalan:2.7.3")
         api("xml-apis:xml-apis:1.4.01")
-        api("xmlpull:xmlpull:1.1.3.1")
+        api("xmlpull:xmlpull:1.1.3.4a")
     }
 }
