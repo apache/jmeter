@@ -62,17 +62,9 @@ buildParameters {
     string("jdkTestImplementation") {
         description.set("Vendor-specific virtual machine implementation to use testing JMeter (see https://docs.gradle.org/8.0/userguide/toolchains.html#selecting_toolchains_by_virtual_machine_implementation)")
     }
-    bool("spotbugs") {
-        defaultValue.set(false)
-        description.set("Run SpotBugs verifications")
-    }
     bool("sonarqube") {
         defaultValue.set(false)
         description.set("Report verification results to Sonarqube")
-    }
-    bool("ignoreSpotBugsFailures") {
-        defaultValue.set(false)
-        description.set("Ignore SpotBugs failures")
     }
     bool("skipAutostyle") {
         defaultValue.set(false)
