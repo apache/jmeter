@@ -200,13 +200,12 @@ public class RandomDate extends AbstractFunction {
         return dateString;
     }
 
-    private static long pickRandomDay(long startInclusive, long endInclusive) {
-        if (startInclusive == endInclusive) {
+    private static long pickRandomDay(long startInclusive, long endExclusive) {
+        if (startInclusive == endExclusive) {
             return startInclusive;
         }
-        long exclusiveUpperBound = Math.incrementExact(endInclusive);
         return ThreadLocalRandom.current()
-                .nextLong(startInclusive, exclusiveUpperBound);
+                .nextLong(startInclusive, endExclusive);
     }
 
     @SuppressWarnings("JavaTimeDefaultTimeZone")

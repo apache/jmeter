@@ -76,6 +76,11 @@ Summary
     <li><pr>5891</pr>Skip Internet Explorer 6-9 conditional comment processing when fetching resource links</li>
   </ul>
 
+  <h3>Functions</h3>
+  <ul>
+    <li><code>__RandomDate</code> now handles identical start and end dates without throwing an exception while preserving Java-like semantics (start inclusive, end exclusive).</li>
+  </ul>
+
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>

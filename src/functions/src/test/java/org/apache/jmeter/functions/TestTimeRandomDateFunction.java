@@ -69,7 +69,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         LocalDate result = LocalDate.parse(value, formatter);
         LocalDate now = LocalDate.now(ZoneId.systemDefault());
         LocalDate max = LocalDate.parse(endDate, formatter);
-        Assertions.assertTrue(!result.isBefore(now) && !result.isAfter(max));
+        Assertions.assertTrue(!result.isBefore(now) && result.isBefore(max));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         LocalDate result = LocalDate.parse(value, formatter);
         LocalDate now = LocalDate.now(ZoneId.systemDefault());
         LocalDate max = LocalDate.parse(endDate, formatter);
-        Assertions.assertTrue(!result.isBefore(now) && !result.isAfter(max));
+        Assertions.assertTrue(!result.isBefore(now) && result.isBefore(max));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        Assertions.assertTrue(startDate.equals(value) || endDate.equals(value));
+        assertEquals("29 Aug 2111", value);
     }
 
     @Test
@@ -126,7 +126,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        Assertions.assertTrue(startDate.equals(value) || endDate.equals(value));
+        assertEquals("29 mars 2111", value);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        Assertions.assertTrue(startDate.equals(value) || endDate.equals(value));
+        assertEquals("2111-03-29", value);
     }
 
     @Test
@@ -149,22 +149,6 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         value = function.execute(result, null);
         assertEquals(date, value);
         assertEquals(date, vars.get("MY_VAR"));
-    }
-
-    @Test
-    void testEndDateCanBeReturned() throws Exception {
-        String startDate = "2111-03-29";
-        String endDate = "2111-03-30";
-        Collection<CompoundVariable> params = makeParams("yyyy-MM-dd", startDate, endDate, "", "");
-        function.setParameters(params);
-        boolean sawEndDate = false;
-        for (int i = 0; i < 200 && !sawEndDate; i++) {
-            value = function.execute(result, null);
-            if (endDate.equals(value)) {
-                sawEndDate = true;
-            }
-        }
-        Assertions.assertTrue(sawEndDate, "RandomDate never returned the configured end date");
     }
 
     @Test
@@ -188,7 +172,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, null);
         function.setParameters(params);
         value = function.execute(result, null);
-        Assertions.assertTrue(startDate.equals(value) || endDate.equals(value));
+        assertEquals("2111-03-29", value);
     }
 
     @Test
@@ -200,8 +184,8 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "MY_VAR");
         function.setParameters(params);
         value = function.execute(result, null);
-        Assertions.assertTrue(startDate.equals(value) || endDate.equals(value));
-        assertEquals(value, vars.get("MY_VAR"));
+        assertEquals("2111-03-29", value);
+        assertEquals("2111-03-29", vars.get("MY_VAR"));
     }
 
     @Test
