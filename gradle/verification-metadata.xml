@@ -128,6 +128,7 @@
          <trusted-key id="6F538074CCEBF35F28AF9B066A0975F8B1127B83" group="org.jetbrains.kotlin"/>
          <trusted-key id="7186BBF993566D8C2F4F7ED7D945E643368FEF62" group="io.github.eisop"/>
          <trusted-key id="7616EB882DAF57A11477AAF559A252FB1199D873" group="com.google.code.findbugs"/>
+         <trusted-key id="764BE739DDAE10F4473FECF0AEF385ED6CA815AE" group="com.miglayout"/>
          <trusted-key id="7B121B76A7ED6CE6E60AD51784E913A8E3A748C0" group="org.bouncycastle"/>
          <trusted-key id="7B79ADD11F8A779FE90FD3D0893A028475557671" group="com.gradle"/>
          <trusted-key id="7B9751FC3F01F134F476464CD0EB627D4885CED1" group="org.apache.velocity"/>
