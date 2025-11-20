@@ -40,7 +40,7 @@ import java.net.InetAddress
 import java.net.ServerSocket
 import javax.inject.Inject
 
-open class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
+abstract class BatchTest @Inject constructor(objects: ObjectFactory) : JavaExec() {
     companion object {
         const val BATCH_TESTS_GROUP_NAME = "Batch test"
     }
