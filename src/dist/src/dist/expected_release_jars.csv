@@ -107,8 +107,8 @@
 2018265,log4j-core-2.25.2.jar
 30232,log4j-slf4j2-impl-2.25.2.jar
 519087,mail-1.5.0-b01.jar
-106949,miglayout-core-5.3.jar
-22576,miglayout-swing-5.3.jar
+120438,miglayout-core-11.4.2.jar
+23287,miglayout-swing-11.4.2.jar
 29680,mxparser-1.2.2.jar
 99796,neo4j-bolt-connection-10.1.0.jar
 320489,neo4j-bolt-connection-netty-10.1.0.jar
