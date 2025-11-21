@@ -191,7 +191,15 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener, C
      */
     @Override
     public void setValue(Object value) {
-        setAsText((String) value);
+        if (value == null) {
+            setAsText(null);
+            return;
+        }
+        if (value instanceof String literal) {
+            setAsText(literal);
+            return;
+        }
+        throw new IllegalArgumentException("Expected String but got " + value.getClass() + ", value=" + value);
     }
 
     /**

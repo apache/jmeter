@@ -43,6 +43,7 @@ dependencies {
         // We use StaXDriver, so we exclude xmlpull, see https://x-stream.github.io/download.html#optional-deps
         exclude("io.github.x-stream", "mxparser")
     }
+    api("org.jspecify:jspecify")
     api("org.apache.logging.log4j:log4j-1.2-api")
     api("org.apache.logging.log4j:log4j-api")
     api("org.apache.logging.log4j:log4j-core") {

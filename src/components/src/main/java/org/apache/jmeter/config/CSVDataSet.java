@@ -17,11 +17,7 @@
 
 package org.apache.jmeter.config;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
@@ -121,38 +117,15 @@ public class CSVDataSet extends ConfigTestElement
      */
     @Override
     public void setProperty(JMeterProperty property) {
-        if (!(property instanceof StringProperty stringProperty)) {
-            super.setProperty(property);
-            return;
-        }
-
-        final String propName = property.getName();
-        if (!"shareMode".equals(propName)) {
-            super.setProperty(property);
-            return;
-        }
-
-        final String propValue = property.getStringValue();
-        if (propValue.contains(" ")) { // variables are unlikely to contain spaces, so most likely a translation
-            try {
-                final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
-                final ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
-                for (String resKey : CSVDataSetBeanInfo.getShareTags()) {
-                    if (propValue.equals(rb.getString(resKey))) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Converted {}={} to {} using Locale: {}", propName, propValue, resKey, rb.getLocale());
-                        }
-                        stringProperty.setValue(resKey); // reset the value
-                        super.setProperty(property);
-                        return;
-                    }
-                }
-                // This could perhaps be a variable name
-                log.warn("Could not translate {}={} using Locale: {}", propName, propValue, rb.getLocale());
-            } catch (IntrospectionException e) {
-                log.error("Could not find BeanInfo; cannot translate shareMode entries", e);
+        String propName = property.getName();
+        if ("shareMode".equals(propName)) {
+            String enumLabel = GenericTestBeanCustomizer.normalizeEnumStringValue(getClass(), CSVDataSetBeanInfo.ShareMode.class, property);
+            if (enumLabel != null && (!(property instanceof StringProperty) || !enumLabel.equals(property.getStringValue()))) {
+                super.setProperty(propName, enumLabel);
+                return;
             }
         }
+
         super.setProperty(property);
     }
 
