@@ -20,12 +20,18 @@ package org.apache.jmeter.testbeans.gui;
 import java.awt.Component;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 
 import org.apache.jmeter.gui.ClearGui;
+import org.apache.jorphan.util.EnumUtils;
 
 /**
  * This class implements a property editor for String properties based on an enum
@@ -37,26 +43,38 @@ import org.apache.jmeter.gui.ClearGui;
  */
 class EnumEditor extends PropertyEditorSupport implements ClearGui {
 
-    private final JComboBox<String> combo;
+    private final JComboBox<Enum<?>> combo;
 
-    private final DefaultComboBoxModel<String> model;
-
-    private final int defaultIndex;
+    private final Enum<?> defaultValue;
 
     public EnumEditor(final PropertyDescriptor descriptor, final Class<? extends Enum<?>> enumClazz, final ResourceBundle rb) {
-        model = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel<Enum<?>> model = new DefaultComboBoxModel<>();
         combo = new JComboBox<>(model);
         combo.setEditable(false);
-        for(Enum<?> e : enumClazz.getEnumConstants()) {
-            model.addElement((String) rb.getObject(e.toString()));
+        combo.setRenderer(
+                new DefaultListCellRenderer() {
+                    @Override
+                    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                        JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                        Enum<?> enumValue = (Enum<?>) value;
+                        label.setText(rb.getString(EnumUtils.getStringValue(enumValue)));
+                        return label;
+                    }
+                }
+        );
+        List<? extends Enum<?>> values = EnumUtils.values(enumClazz);
+        for(Enum<?> e : values) {
+            model.addElement(e);
         }
         Object def = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
-        if (def instanceof Integer integer) {
-            defaultIndex = integer;
+        if (def instanceof Enum<?> enumValue) {
+            defaultValue = enumValue;
+        } else if (def instanceof Integer index) {
+            defaultValue = values.get(index);
         } else {
-            defaultIndex = 0;
+            defaultValue = values.get(0);
         }
-        combo.setSelectedIndex(defaultIndex);
+        combo.setSelectedItem(defaultValue);
     }
 
     @Override
@@ -71,35 +89,35 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
 
     @Override
     public Object getValue() {
-        return combo.getSelectedIndex();
+        return combo.getSelectedItem();
     }
 
     @Override
-    public String getAsText() {
-        Object value = combo.getSelectedItem();
-        return (String) value;
-    }
-
-    @Override
-    @SuppressWarnings("EnumOrdinal")
     public void setValue(Object value) {
         if (value instanceof Enum<?> anEnum){
-            combo.setSelectedIndex(anEnum.ordinal());
+            combo.setSelectedItem(anEnum);
         } else if (value instanceof Integer integer) {
             combo.setSelectedIndex(integer);
-        } else {
-            combo.setSelectedItem(value);
+        } else if (value instanceof String string) {
+            ComboBoxModel<Enum<?>> model = combo.getModel();
+            for (int i = 0; i < model.getSize(); i++) {
+                Enum<?> element = model.getElementAt(i);
+                if (EnumUtils.getStringValue(element).equals(string)) {
+                    combo.setSelectedItem(element);
+                    return;
+                }
+            }
         }
     }
 
     @Override
     public void setAsText(String value) {
-        combo.setSelectedItem(value);
+        throw new UnsupportedOperationException("Not supported yet. Use enum value rather than text, got " + value);
     }
 
     @Override
     public void clearGui() {
-        combo.setSelectedIndex(defaultIndex);
+        combo.setSelectedItem(defaultValue);
     }
 
 }

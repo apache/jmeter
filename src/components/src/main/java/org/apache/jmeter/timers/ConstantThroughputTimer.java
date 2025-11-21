@@ -17,10 +17,6 @@
 
 package org.apache.jmeter.timers;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -38,8 +34,6 @@ import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.IdentityKey;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class implements a constant throughput timer. A Constant Throughput
@@ -59,7 +53,6 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         final Object MUTEX = new Object();
         long lastScheduledTime = 0;
     }
-    private static final Logger log = LoggerFactory.getLogger(ConstantThroughputTimer.class);
     private static final AtomicLong PREV_TEST_STARTED = new AtomicLong(0L);
 
     private static final double MILLISEC_PER_MIN = 60000.0;
@@ -271,27 +264,12 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     @Override
     @SuppressWarnings("EnumOrdinal")
     public void setProperty(JMeterProperty property) {
-        if (property instanceof StringProperty) {
-            final String pn = property.getName();
-            if (pn.equals("calcMode")) {
-                final Object objectValue = property.getObjectValue();
-                try {
-                    final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
-                    final ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
-                    for(Enum<Mode> e : Mode.CACHED_VALUES) {
-                        final String propName = e.toString();
-                        if (objectValue.equals(rb.getObject(propName))) {
-                            final int tmpMode = e.ordinal();
-                            log.debug("Converted {}={} to mode={} using Locale: {}", pn, objectValue, tmpMode,
-                                    rb.getLocale());
-                            super.setProperty(pn, tmpMode);
-                            return;
-                        }
-                    }
-                    log.warn("Could not convert {}={} using Locale: {}", pn, objectValue, rb.getLocale());
-                } catch (IntrospectionException e) {
-                    log.error("Could not find BeanInfo", e);
-                }
+        String propertyName = property.getName();
+        if (propertyName.equals("calcMode")) {
+            String enumLabel = GenericTestBeanCustomizer.normalizeEnumStringValue(getClass(), Mode.class, property);
+            if (enumLabel != null && (!(property instanceof StringProperty) || !enumLabel.equals(property.getStringValue()))) {
+                super.setProperty(propertyName, enumLabel);
+                return;
             }
         }
         super.setProperty(property);

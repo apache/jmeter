@@ -22,6 +22,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
@@ -29,6 +31,8 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -39,9 +43,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.TestBeanHelper;
+import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.EnumUtils;
+import org.apiguardian.api.API;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -307,6 +319,103 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
         // Initialize the GUI:
         init();
+    }
+
+    /**
+     * Normalizes an enum-valued {@link JMeterProperty} based on the specified class and enum type.
+     *
+     * <p>
+     * The method interprets the property value as an enum value using different strategies
+     * depending on the type of the property (e.g., {@link IntegerProperty}, {@link LongProperty}, {@link StringProperty}).
+     * If the property is valid and maps to an enum value, the method returns a new {@link StringProperty}
+     * representing the normalized enum value. If the property is invalid or cannot be mapped, the method
+     * returns {@code null}.
+     *
+     * @param <T> the type of the enum
+     * @param klass the class containing the enum
+     * @param enumKlass the enum class type
+     * @param property the JMeterProperty to be normalized
+     * @return a StringProperty containing the normalized enum value, or null if the property is invalid or unrecognized
+     */
+    @API(status = API.Status.INTERNAL, since = "6.0.0")
+    public static <T extends Enum<?>> @Nullable JMeterProperty normalizeEnumProperty(
+            Class<?> klass, Class<T> enumKlass, JMeterProperty property) {
+        List<T> values = EnumUtils.values(enumKlass);
+        T value;
+        if (property instanceof IntegerProperty intProperty) {
+            int index = intProperty.getIntValue();
+            if (index >= 0 && index <= values.size()) {
+                value = values.get(index);
+            } else {
+                return null;
+            }
+        } else if (property instanceof LongProperty longProperty) {
+            long index = longProperty.getLongValue();
+            if (index >= 0 && index <= values.size()) {
+                value = values.get((int) index);
+            } else {
+                return null;
+            }
+        } else if (property instanceof StringProperty stringProperty) {
+            String stringValue = stringProperty.getStringValue();
+            if (stringValue == null) {
+                return null;
+            }
+            value = normalizeEnumStringValue(stringValue, klass, enumKlass);
+            if (stringValue.equals(EnumUtils.getStringValue(value))) {
+                // If the input property was good enough, keep it
+                return property;
+            }
+        } else {
+            return null;
+        }
+        return new StringProperty(property.getName(), EnumUtils.getStringValue(value));
+    }
+
+    @API(status = API.Status.INTERNAL, since = "6.0.0")
+    public static <T extends Enum<?>> T normalizeEnumStringValue(String value, Class<?> klass, Class<T> enumKlass) {
+        T enumValue = EnumUtils.valueOf(enumKlass, value);
+        if (enumValue != null) {
+            return enumValue;
+        }
+        return normalizeEnumStringValue(value, klass, EnumUtils.values(enumKlass));
+    }
+
+    private static <T extends Enum<?>> T normalizeEnumStringValue(String value, Class<?> klass, List<T> values) {
+        // Fallback: the value might be localized, thus check the current and root locales
+        String bundleName = null;
+        try {
+            BeanInfo beanInfo = Introspector.getBeanInfo(klass);
+            ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
+            bundleName = rb.getBaseBundleName();
+            T enumValue = findEnumValue(value, rb, values);
+            if (enumValue != null) {
+                return enumValue;
+            }
+            String language = rb.getLocale().getLanguage();
+            log.warn("Could not convert {} using Locale: {}", value, rb.getLocale());
+            if (language.isEmpty()) {
+                return null;
+            }
+        } catch (IntrospectionException e) {
+            log.error("Could not find BeanInfo", e);
+        }
+        // Try again with the Root locale
+        if (bundleName == null) {
+            bundleName = klass.getName() + "Resources";
+        }
+        ResourceBundle rootBundle = ResourceBundle.getBundle(bundleName, Locale.ROOT, klass.getClassLoader());
+        return findEnumValue(value, rootBundle, values);
+    }
+
+    private static <T extends Enum<?>> @Nullable T findEnumValue(String stringValue, ResourceBundle rb, List<T> values) {
+        for (T enumValue : values) {
+            if (stringValue.equals(rb.getObject(enumValue.toString()))) {
+                log.debug("Converted {} to {} using Locale: {}", stringValue, enumValue, rb.getLocale());
+                return enumValue;
+            }
+        }
+        return null;
     }
 
     /**
