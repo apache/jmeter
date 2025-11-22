@@ -193,7 +193,7 @@ public class TestBeanHelper {
                 ! Boolean.TRUE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED))) {
             value=null;
         } else {
-            value = Converter.convert(jprop.getStringValue(), type);
+            value = Converter.convert(jprop, type);
         }
         return value;
     }
