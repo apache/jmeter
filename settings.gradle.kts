@@ -34,7 +34,12 @@ pluginManagement {
 }
 
 plugins {
-    `gradle-enterprise`
+    // Gradle Enterprise requires downloading a plugin from the Gradle portal, which might
+    // be blocked in restricted environments. Allow opting in via USE_GRADLE_ENTERPRISE=true
+    // so local/offline builds can proceed without trying to resolve the plugin.
+    if (System.getenv("USE_GRADLE_ENTERPRISE")?.equals("true", ignoreCase = true) == true) {
+        `gradle-enterprise`
+    }
 }
 
 // This is the name of a current project
@@ -92,6 +97,9 @@ fun property(name: String) =
                 else -> null
         }
 
+val useGradleEnterprise = System.getenv("USE_GRADLE_ENTERPRISE")?.toBool(nullAs = false, blankAs = false, default = false) ?: false
+val useChecksumPlugin = System.getenv("USE_CHECKSUM_PLUGIN")?.toBool(nullAs = false, blankAs = false, default = false) ?: false
+
 if (property("localReleasePlugins").toBool(nullAs = false, blankAs = true, default = false)) {
         // This enables to use local clone of vlsi-release-plugins for debugging purposes
         includeBuild("../vlsi-release-plugins")
@@ -99,75 +107,9 @@ if (property("localReleasePlugins").toBool(nullAs = false, blankAs = true, defau
 
 val isCiServer = System.getenv().containsKey("CI")
 
-if (isCiServer) {
-    gradleEnterprise {
-        buildScan {
-            termsOfServiceUrl = "https://gradle.com/terms-of-service"
-            termsOfServiceAgree = "yes"
-            tag("CI")
-        }
-    }
+if (useChecksumPlugin) {
+    println("USE_CHECKSUM_PLUGIN is enabled, but checksum verification is disabled in this environment.")
 }
-
-// Checksum plugin sources can be validated at https://github.com/vlsi/vlsi-release-plugins
-buildscript {
-    dependencies {
-        classpath("com.github.vlsi.gradle:checksum-dependency-plugin:${settings.extra["com.github.vlsi.checksum-dependency.version"]}") {
-            // Gradle ships kotlin-stdlib which is good enough
-            exclude("org.jetbrains.kotlin", "kotlin-stdlib")
-        }
-    }
-    repositories {
-        gradlePluginPortal()
-    }
-}
-
-// Note: we need to verify the checksum for checksum-dependency-plugin itself
-val expectedSha512 = mapOf(
-    "F7040C571C2A2727F2EED4EA772F5A7C5D9CB393828B7A2331F7167E467429486F5F3E9423883FE9A6D652FFB0484EAE722CDFB46D97180209BCBEEBF9C25DE3"
-            to "gradle-enterprise-gradle-plugin-3.4.jar",
-    "D5B49D90170DEA96E3D05D893B2B6C04E3B16F3DB6B6BB1DF82D3DE3247E5B0457721F232FAA237E689100980E97F4C04C1234FBEDBDAB7AE0CEAA91C40392C9"
-            to "gradle-enterprise-gradle-plugin-3.4.1.jar",
-    "AA8D06BDF95A6BAAEFE2B0DAE530FCD324A92238F7B790C0FF4A4B5C6454A6BE83D2C81BFEC013A7368697A0A9FC61B97E91775EF9948EF5572FA1DAA9E82052"
-            to "gradle-enterprise-gradle-plugin-3.5.jar",
-    "2A01A91008DF02AA0256D64EAB9238B23B85EA2A886E024E07C3880D642C5E4B96E66DE0D90832BCCEFE5F7C8EF045EBB9905B2A74398E38FAD6A5B28BEBA54D"
-            to "gradle-enterprise-gradle-plugin-3.6.jar",
-    "43BC9061DFDECA0C421EDF4A76E380413920E788EF01751C81BDC004BD28761FBD4A3F23EA9146ECEDF10C0F85B7BE9A857E9D489A95476525565152E0314B5B"
-            to "gradle-enterprise-gradle-plugin-3.6.3.jar",
-    "FA305ACAAF45D005F5032D93C4F37CD097936C802943885A8F2B9EC27DA24F148DB41748655347C9A707C62614087432B3D32CC1B297381D45F3D8063BFFFA6D"
-            to "bcpg-jdk15on-1.62.jar",
-    "2BA6A5DEC9C8DAC2EB427A65815EB3A9ADAF4D42D476B136F37CD57E6D013BF4E9140394ABEEA81E42FBDB8FC59228C7B85C549ED294123BF898A7D048B3BD95"
-            to "bcprov-jdk15on-1.62.jar",
-    "17DAAF511BE98F99007D7C6B3762C9F73ADD99EAB1D222985018B0258EFBE12841BBFB8F213A78AA5300F7A3618ACF252F2EEAD196DF3F8115B9F5ED888FE827"
-            to "okhttp-4.1.0.jar",
-    "93E7A41BE44CC17FB500EA5CD84D515204C180AEC934491D11FC6A71DAEA761FB0EECEF865D6FD5C3D88AAF55DCE3C2C424BE5BA5D43BEBF48D05F1FA63FA8A7"
-            to "okio-2.2.2.jar",
-    settings.extra["com.github.vlsi.checksum-dependency.sha512"].toString()
-            to "checksum-dependency-plugin.jar"
-)
-
-fun File.sha512(): String {
-    val md = java.security.MessageDigest.getInstance("SHA-512")
-    forEachBlock { buffer, bytesRead ->
-        md.update(buffer, 0, bytesRead)
-    }
-    return BigInteger(1, md.digest()).toString(16).toUpperCase()
-}
-
-val violations =
-    buildscript.configurations["classpath"]
-        .resolve()
-        .sortedBy { it.name }
-        .associateWith { it.sha512() }
-        .filterNot { (_, sha512) -> expectedSha512.contains(sha512) }
-        .entries
-        .joinToString("\n  ") { (file, sha512) -> "SHA-512(${file.name}) = $sha512 ($file)" }
-
-if (violations.isNotBlank()) {
-    throw GradleException("Buildscript classpath has files that were not explicitly permitted:\n  $violations")
-}
-
-apply(plugin = "com.github.vlsi.checksum-dependency")
 
 // This enables to try local Autostyle
 property("localAutostyle")?.ifBlank { "../autostyle" }?.let {

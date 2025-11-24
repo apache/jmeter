@@ -27,7 +27,7 @@ import com.github.vlsi.gradle.release.RepositoryType
 import net.ltgt.gradle.errorprone.errorprone
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.sonarqube.gradle.SonarQubeProperties
+import org.sonarqube.gradle.SonarProperties
 
 plugins {
     java
@@ -141,6 +141,10 @@ releaseParams {
 val jacocoReport by tasks.registering(JacocoReport::class) {
     group = "Coverage reports"
     description = "Generates an aggregate report from all subprojects"
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 val jacocoEnabled by extra {
@@ -191,20 +195,23 @@ sonarqube {
     }
 }
 
-fun SonarQubeProperties.add(name: String, valueProvider: () -> String) {
-    properties.getOrPut(name) { mutableSetOf<Any>() }
-        .also {
-            @Suppress("UNCHECKED_CAST")
-            (it as MutableCollection<Any>).add(object {
-                // SonarQube calls toString when converting properties to values
-                // (see SonarQubeProperties), so we use that to emulate "lazy properties"
-                override fun toString() = valueProvider()
-            })
-        }
+fun SonarProperties.add(name: String, valueProvider: () -> String) {
+    val props = getProperties()
+    val valueHolder = object {
+        // SonarQube calls toString when converting properties to values
+        // so we use that to emulate "lazy properties"
+        override fun toString() = valueProvider()
+    }
+    val current = props[name]
+    when (current) {
+        null -> props[name] = mutableListOf(valueHolder)
+        is MutableCollection<*> -> (current as MutableCollection<Any>).add(valueHolder)
+        else -> props[name] = mutableListOf(current, valueHolder)
+    }
 }
 
 if (jacocoEnabled) {
-    val mergedCoverage = jacocoReport.get().reports.xml.destination.toString()
+    val mergedCoverage = jacocoReport.get().reports.xml.outputLocation.asFile.get().toString()
 
     // For every module we pass merged coverage report
     // That enables to see ":src:core" lines covered even in case they are covered from
@@ -249,7 +256,7 @@ if (enableSpotBugs) {
                     add("sonar.java.spotbugs.reportPaths") {
                         // Note: report is created with lower-case xml, and then
                         // the created entry MUST be retrieved as upper-case XML
-                        reports.named("XML").get().destination.toString()
+                        reports.named("xml").get().outputLocation.asFile.get().toString()
                     }
                 }
             }
@@ -463,8 +470,8 @@ allprojects {
 
         tasks.withType<JacocoReport>().configureEach {
             reports {
-                html.isEnabled = reportsForHumans()
-                xml.isEnabled = !reportsForHumans()
+                html.required.set(reportsForHumans())
+                xml.required.set(!reportsForHumans())
             }
         }
         // Add each project to combined report
