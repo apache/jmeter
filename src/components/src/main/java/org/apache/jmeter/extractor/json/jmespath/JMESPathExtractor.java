@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.extractor.json.JsonExtractionUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -82,26 +83,28 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         }
 
         try {
-            List<String> resultList = new ArrayList<>();
+            List<Object> resultList = new ArrayList<>();
             Expression<JsonNode> searchExpression = JMESPathCache.getInstance().get(jsonPathExpression);
             for (String response: jsonResponse) {
                 JsonNode actualObj = OBJECT_MAPPER.readValue(response, JsonNode.class);
                 JsonNode result = searchExpression.search(actualObj);
                 if (result.isNull()) {
+                    resultList.add(null);
                     continue;
                 }
                 resultList.addAll(splitJson(result));
             }
+            List<String> finalizedResults = JsonExtractionUtils.finalizeValues(resultList, defaultValue);
             // if more than one value extracted, suffix with "_index"
-            int size = resultList.size();
+            int size = finalizedResults.size();
             if (size > 1) {
-                handleListResult(vars, refName, defaultValue, matchNumber, resultList);
-            } else if (resultList.isEmpty()){
+                handleListResult(vars, refName, defaultValue, matchNumber, finalizedResults);
+            } else if (finalizedResults.isEmpty()){
                 handleNullResult(vars, refName, defaultValue, matchNumber);
                 return;
             } else {
                 // else just one value extracted
-                handleSingleResult(vars, refName, matchNumber, resultList);
+                handleSingleResult(vars, refName, matchNumber, finalizedResults);
             }
             vars.put(refName + REF_MATCH_NR, Integer.toString(size));
         } catch (Exception e) {
@@ -187,8 +190,8 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         return Collections.emptyList();
     }
 
-    public List<String> splitJson(JsonNode jsonNode) throws IOException {
-        List<String> splittedJsonElements = new ArrayList<>();
+    public List<Object> splitJson(JsonNode jsonNode) throws IOException {
+        List<Object> splittedJsonElements = new ArrayList<>();
         if (jsonNode.isArray()) {
             for (JsonNode element : (ArrayNode) jsonNode) {
                 splittedJsonElements.add(writeJsonNode(OBJECT_MAPPER, element));
@@ -199,12 +202,14 @@ public class JMESPathExtractor extends AbstractScopedTestElement
         return splittedJsonElements;
     }
 
-    private static String writeJsonNode(ObjectMapper mapper, JsonNode element) throws JsonProcessingException {
+    private static Object writeJsonNode(ObjectMapper mapper, JsonNode element) throws JsonProcessingException {
+        if (element.isNull()) {
+            return null;
+        }
         if (element.isTextual()) {
             return element.asText();
-        } else {
-            return mapper.writeValueAsString(element);
         }
+        return mapper.writeValueAsString(element);
     }
 
     void clearOldRefVars(JMeterVariables vars, String refName) {
