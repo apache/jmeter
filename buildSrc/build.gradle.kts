@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     `kotlin-dsl` apply false
-    id("com.github.autostyle")
 }
 
 repositories {
@@ -37,29 +36,6 @@ allprojects {
 
 fun Project.applyKotlinProjectConventions() {
     apply(plugin = "org.gradle.kotlin.kotlin-dsl")
-
-    tasks.withType<KotlinCompile> {
-        sourceCompatibility = "unused"
-        targetCompatibility = "unused"
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
-    apply(plugin = "com.github.autostyle")
-    autostyle {
-        kotlin {
-            ktlint {
-                userData(mapOf("disabled_rules" to "import-ordering"))
-            }
-            trimTrailingWhitespace()
-            endWithNewline()
-        }
-        kotlinGradle {
-            ktlint()
-            trimTrailingWhitespace()
-            endWithNewline()
-        }
-    }
 }
 
 dependencies {
