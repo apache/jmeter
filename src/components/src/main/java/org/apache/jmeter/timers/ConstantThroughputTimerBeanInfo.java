@@ -32,14 +32,18 @@ public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
 
         createPropertyGroup("delay",  //$NON-NLS-1$
                 new String[] { ConstantThroughputTimer.THROUGHPUT, //$NON-NLS-1$
-                ConstantThroughputTimer.CALC_MODE }); //$NON-NLS-1$
+                ConstantThroughputTimer.MODE }); //$NON-NLS-1$
 
         PropertyDescriptor p = property(ConstantThroughputTimer.THROUGHPUT); //$NON-NLS-1$
         p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, 0.0);
 
-        p = property(ConstantThroughputTimer.CALC_MODE, ConstantThroughputTimer.Mode.class); //$NON-NLS-1$
-        p.setValue(DEFAULT, ConstantThroughputTimer.Mode.ThisThreadOnly.ordinal());
+        // Hide old parameter that used index (setCalcMode(int); int getCalcMode())
+        p = property(ConstantThroughputTimer.CALC_MODE);
+        p.setHidden(true);
+
+        p = property(ConstantThroughputTimer.MODE, ConstantThroughputTimer.Mode.class); //$NON-NLS-1$
+        p.setValue(DEFAULT, ConstantThroughputTimer.Mode.ThisThreadOnly);
         p.setValue(NOT_UNDEFINED, true); // must be defined
     }
 
