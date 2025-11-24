@@ -39,31 +39,12 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String QUOTED_DATA = "quotedData";          //$NON-NLS-1$
     private static final String SHAREMODE = "shareMode";             //$NON-NLS-1$
 
-    // Access needed from CSVDataSet
-    enum ShareMode {
-        ALL("shareMode.all"),
-        GROUP("shareMode.group"),
-        THREAD("shareMode.thread");
-
-        private final String value;
-
-        ShareMode(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
     private static final String[] SHARE_TAGS = new String[3];
     static final int SHARE_ALL    = 0;
-    static final int SHARE_GROUP  = 1;
-    static final int SHARE_THREAD = 2;
 
     // Store the resource keys
     static {
-        for (ShareMode value : ShareMode.values()) {
+        for (CSVDataSet.ShareMode value : CSVDataSet.ShareMode.values()) {
             @SuppressWarnings("EnumOrdinal")
             int index = value.ordinal();
             SHARE_TAGS[index] = value.toString();
