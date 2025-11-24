@@ -316,27 +316,6 @@ class TestJSONPostProcessor {
         assertEquals("3", vars.get(VAR_NAME + "_matchNr"));
     }
 
-    @Test
-    void testNullValueInAllMatchesUsesDefault() {
-        JMeterContext context = JMeterContextService.getContext();
-        JSONPostProcessor processor = setupProcessor(context, "-1");
-        String data = "[null, \"two\"]";
-        SampleResult result = new SampleResult();
-        result.setResponseData(data.getBytes(StandardCharsets.UTF_8));
-        JMeterVariables vars = new JMeterVariables();
-        context.setVariables(vars);
-        context.setPreviousResult(result);
-
-        processor.setDefaultValues("DEFAULT");
-        processor.setJsonPathExpressions("$[*]");
-        processor.process();
-
-        assertEquals("DEFAULT", vars.get(VAR_NAME + "_1"));
-        assertEquals("two", vars.get(VAR_NAME + "_2"));
-        assertEquals("DEFAULT,two", vars.get(VAR_NAME + "_ALL"));
-        assertEquals("2", vars.get(VAR_NAME + "_matchNr"));
-    }
-
 
     private static JSONPostProcessor setupProcessor(JMeterContext context, String matchNumbers) {
         return setupProcessor(context, matchNumbers, true);
