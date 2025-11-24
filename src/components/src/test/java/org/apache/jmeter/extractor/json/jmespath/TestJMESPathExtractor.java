@@ -274,6 +274,21 @@ class TestJMESPathExtractor {
 
     @ParameterizedTest
     @MethodSource("dataSourceVarOrResponse")
+    void testNullResultUsesDefault(boolean fromVariables) {
+        SampleResult sampleResult = new SampleResult();
+        JMeterVariables vars = new JMeterVariables();
+        JMESPathExtractor processor = setupProcessor(vars, sampleResult, "{\"a\": null}", fromVariables, "1");
+
+        processor.setJmesPathExpression("a");
+        processor.process();
+
+        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
+        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("1"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataSourceVarOrResponse")
     void testEmptySourceData(boolean fromVariables) {
         SampleResult sampleResult = new SampleResult();
         JMeterVariables vars = new JMeterVariables();
