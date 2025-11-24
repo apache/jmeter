@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
 
 import com.github.vlsi.gradle.crlf.CrLfSpec
 import com.github.vlsi.gradle.crlf.LineEndings
@@ -595,7 +596,7 @@ val runGui by tasks.registering(JavaExec::class) {
     dependsOn(createDist)
 
     workingDir = File(project.rootDir, "bin")
-    main = "org.apache.jmeter.NewDriver"
+    mainClass.set("org.apache.jmeter.NewDriver")
     classpath("$rootDir/bin/ApacheJMeter.jar")
     jvmArgs("-Xss256k")
     jvmArgs("-XX:MaxMetaspaceSize=256m")
