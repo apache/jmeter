@@ -104,7 +104,14 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
             // Process template file
             String templatePath = relativePath.toString();
             Template template = configuration.getTemplate(templatePath);
-            Path newPath = target.resolve(PathsKt.getNameWithoutExtension(relativePath));
+            Path newPath = target;
+            // getNameWithoutExtension returns the file name without the parent folder,
+            // so we resolve the parent first and then add the file name without extension
+            Path newRelativeParent = relativePath.getParent();
+            if (newRelativeParent != null) {
+                newPath = newPath.resolve(newRelativeParent);
+            }
+            newPath = newPath.resolve(PathsKt.getNameWithoutExtension(relativePath));
             try (FileOutputStream stream = new FileOutputStream(newPath.toString());
                     Writer writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
                     BufferedWriter bufferedWriter = new BufferedWriter(writer)){
