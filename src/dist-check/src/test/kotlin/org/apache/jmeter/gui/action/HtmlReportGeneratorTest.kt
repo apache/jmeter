@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.util.JMeterUtils
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import org.junit.jupiter.api.io.TempDir
@@ -35,6 +37,22 @@ class HtmlReportGeneratorTest : JMeterTestCase() {
     lateinit var testDirectory: File
 
     data class CheckArgumentsCase(val csvPath: String, val userPropertiesPath: String, val outputDirectoryPath: String, val expected: List<String>)
+
+    /**
+     * Assert that a file exists at the given path relative to a base directory
+     */
+    private fun assertFileExists(baseDir: File, relativePath: String, message: String? = null) {
+        val file = File(baseDir, relativePath)
+        assertTrue(file.exists()) { message ?: "$relativePath should exist" }
+    }
+
+    /**
+     * Assert that a file does NOT exist at the given path relative to a base directory
+     */
+    private fun assertFileNotExists(baseDir: File, relativePath: String, message: String? = null) {
+        val file = File(baseDir, relativePath)
+        assertFalse(file.exists()) { message ?: "$relativePath should NOT exist" }
+    }
 
     companion object {
         /**
@@ -140,5 +158,43 @@ class HtmlReportGeneratorTest : JMeterTestCase() {
         if (firstMessage?.contains(expectedError) != true) {
             fail("First result message should contain '$expectedError', but was '$firstMessage'")
         }
+    }
+
+    @Test
+    fun `report generation creates correct directory structure for HTML and JS files`() {
+        val htmlReportGenerator = HtmlReportGenerator(
+            combine("testfiles", "HTMLReportTestFile.csv"),
+            combine("user.properties"),
+            testDirectory.toString()
+        )
+        htmlReportGenerator.run()
+
+        // Verify directory structure exists
+        assertFileExists(testDirectory, "content")
+        assertFileExists(testDirectory, "content/pages")
+        assertFileExists(testDirectory, "content/js")
+
+        // Verify HTML pages are in correct location (content/pages/)
+        assertFileExists(testDirectory, "content/pages/OverTime.html")
+        assertFileExists(testDirectory, "content/pages/ResponseTimes.html")
+        assertFileExists(testDirectory, "content/pages/Throughput.html")
+        assertFileExists(testDirectory, "content/pages/CustomsGraphs.html")
+
+        // Verify JavaScript files are in correct location (content/js/)
+        assertFileExists(testDirectory, "content/js/dashboard.js")
+        assertFileExists(testDirectory, "content/js/graph.js")
+        assertFileExists(testDirectory, "content/js/dashboard-commons.js")
+        assertFileExists(testDirectory, "content/js/customGraph.js")
+
+        // Verify files are NOT at root level (catches the bug!)
+        assertFileNotExists(testDirectory, "OverTime.html", "OverTime.html should NOT be at root level")
+        assertFileNotExists(testDirectory, "ResponseTimes.html", "ResponseTimes.html should NOT be at root level")
+        assertFileNotExists(testDirectory, "Throughput.html", "Throughput.html should NOT be at root level")
+        assertFileNotExists(testDirectory, "CustomsGraphs.html", "CustomsGraphs.html should NOT be at root level")
+        assertFileNotExists(testDirectory, "dashboard.js", "dashboard.js should NOT be at root level")
+        assertFileNotExists(testDirectory, "graph.js", "graph.js should NOT be at root level")
+
+        // Verify index.html is at root (this should be correct)
+        assertFileExists(testDirectory, "index.html", "index.html should exist at root level")
     }
 }
