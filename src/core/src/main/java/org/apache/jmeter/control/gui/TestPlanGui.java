@@ -57,17 +57,20 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     private final JBooleanPropertyEditor functionalMode =
             new JBooleanPropertyEditor(
                     TestPlanSchema.INSTANCE.getFunctionalMode(),
-                    JMeterUtils.getResString("functional_mode"));
+                    "functional_mode",
+                    JMeterUtils::getResString);
 
     private final JBooleanPropertyEditor serializedMode =
             new JBooleanPropertyEditor(
                     TestPlanSchema.INSTANCE.getSerializeThreadgroups(),
-                    JMeterUtils.getResString("testplan.serialized"));
+                    "testplan.serialized",
+                    JMeterUtils::getResString);
 
     private final JBooleanPropertyEditor tearDownOnShutdown =
             new JBooleanPropertyEditor(
                     TestPlanSchema.INSTANCE.getTearDownOnShutdown(),
-                    JMeterUtils.getResString("teardown_on_shutdown"));
+                    "teardown_on_shutdown",
+                    JMeterUtils::getResString);
 
     /** A panel allowing the user to define variables. */
     private final ArgumentsPanel argsPanel;

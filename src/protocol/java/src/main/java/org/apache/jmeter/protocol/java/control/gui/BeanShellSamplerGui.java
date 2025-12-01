@@ -49,7 +49,8 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
     private final JBooleanPropertyEditor resetInterpreter =
             new JBooleanPropertyEditor(
                     BeanShellSamplerSchema.INSTANCE.getResetInterpreter(),
-                    JMeterUtils.getResString("bsh_script_reset_interpreter"));
+                    "bsh_script_reset_interpreter",
+                    JMeterUtils::getResString);
 
     private final FilePanelEntry filename = new FilePanelEntry(JMeterUtils.getResString("bsh_script_file"),".bsh"); // script file name (if present)
 

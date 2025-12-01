@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Inet4Address;
@@ -28,6 +27,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.jmeter.config.Arguments;
@@ -42,6 +42,8 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.EnumUtils;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for HTTP implementations used by the HTTPSamplerProxy sampler.
@@ -230,12 +232,12 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * @throws UnknownHostException if the hostname/ip for {@link #getIpSource()} could not be resolved or not interface was found for it
      * @throws SocketException if an I/O error occurs
      */
-    @SuppressWarnings("EnumOrdinal")
     protected InetAddress getIpSourceAddress() throws UnknownHostException, SocketException {
         final String ipSource = getIpSource();
         if (!ipSource.isBlank()) {
             Class<? extends InetAddress> ipClass = null;
-            final SourceType sourceType = HTTPSamplerBase.SourceType.values()[testElement.getIpSourceType()];
+            List<SourceType> sourceTypes = EnumUtils.getEnumValues(SourceType.class);
+            final SourceType sourceType = sourceTypes.get(testElement.getIpSourceType());
             switch (sourceType) {
                 case DEVICE -> ipClass = InetAddress.class;
                 case DEVICE_IPV4 -> ipClass = Inet4Address.class;
@@ -428,7 +430,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * Closes the inputStream
      * <p>
      * Invokes
-     * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
+     * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long, String)}
      *
      * @param res
      *            sample to store information about the response into
@@ -436,93 +438,12 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      *            input stream from which to read the response
      * @param responseContentLength
      *            expected input length or zero
-     * @return the response or the MD5 of the response
      * @throws IOException
      *             if reading the result fails
      */
-    protected byte[] readResponse(SampleResult res, InputStream instream,
-            int responseContentLength) throws IOException {
-        return readResponse(res, instream, (long)responseContentLength);
-    }
-    /**
-     * Read response from the input stream, converting to MD5 digest if the
-     * useMD5 property is set.
-     * <p>
-     * For the MD5 case, the result byte count is set to the size of the
-     * original response.
-     * <p>
-     * Closes the inputStream
-     * <p>
-     * Invokes
-     * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
-     *
-     * @param res
-     *            sample to store information about the response into
-     * @param instream
-     *            input stream from which to read the response
-     * @param responseContentLength
-     *            expected input length or zero
-     * @return the response or the MD5 of the response
-     * @throws IOException
-     *             if reading the result fails
-     */
-    protected byte[] readResponse(SampleResult res, InputStream instream,
-            long responseContentLength) throws IOException {
-        return testElement.readResponse(res, instream, responseContentLength);
-    }
-
-    /**
-     * Read response from the input stream, converting to MD5 digest if the
-     * useMD5 property is set.
-     * <p>
-     * For the MD5 case, the result byte count is set to the size of the
-     * original response.
-     * <p>
-     * Closes the inputStream
-     * <p>
-     * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
-     *
-     * @param res
-     *            sample to store information about the response into
-     * @param in
-     *            input stream from which to read the response
-     * @param contentLength
-     *            expected input length or zero
-     * @return the response or the MD5 of the response
-     * @throws IOException
-     *             when reading the result fails
-     * @deprecated use {@link HTTPAbstractImpl#readResponse(SampleResult, BufferedInputStream, long)}
-     */
-    @Deprecated
-    protected byte[] readResponse(SampleResult res, BufferedInputStream in,
-            int contentLength) throws IOException {
-        return testElement.readResponse(res, in, contentLength);
-    }
-
-    /**
-     * Read response from the input stream, converting to MD5 digest if the
-     * useMD5 property is set.
-     * <p>
-     * For the MD5 case, the result byte count is set to the size of the
-     * original response.
-     * <p>
-     * Closes the inputStream
-     * <p>
-     * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
-     *
-     * @param res
-     *            sample to store information about the response into
-     * @param in
-     *            input stream from which to read the response
-     * @param contentLength
-     *            expected input length or zero
-     * @return the response or the MD5 of the response
-     * @throws IOException
-     *             when reading the result fails
-     */
-    protected byte[] readResponse(SampleResult res, BufferedInputStream in,
-            long contentLength) throws IOException {
-        return testElement.readResponse(res, in, contentLength);
+    protected void readResponse(SampleResult res, InputStream instream,
+            long responseContentLength, @Nullable String contentEncoding) throws IOException {
+        testElement.readResponse(res, instream, responseContentLength, contentEncoding);
     }
 
     /**

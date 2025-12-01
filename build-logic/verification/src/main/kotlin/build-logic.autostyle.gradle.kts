@@ -101,7 +101,12 @@ plugins.withId("org.jetbrains.kotlin.jvm") {
         kotlin {
             license()
             trimTrailingWhitespace()
-            ktlint("0.40.0")
+            ktlint("0.40.0") {
+                filter {
+                    // TODO: remove exclusion when update ktlint
+                    exclude("**/org/apache/jorphan/locale/PlainValue.kt")
+                }
+            }
             endWithNewline()
         }
     }
