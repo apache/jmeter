@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.JBooleanPropertyEditor;
+import org.apache.jmeter.gui.JEnumPropertyEditor;
 import org.apache.jmeter.gui.JStringPropertyEditor;
 import org.apache.jmeter.gui.JTextComponentBinding;
 import org.apache.jmeter.gui.TestElementMetadata;
@@ -71,10 +72,13 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             "web_testing_concurrent_download",
             JMeterUtils::getResString);
     private JTextField concurrentPool;
-    private final JBooleanPropertyEditor useMD5 = new JBooleanPropertyEditor(
-            HTTPSamplerBaseSchema.INSTANCE.getStoreAsMD5(),
-            "response_save_as_md5",
-            JMeterUtils::getResString);
+    private final JEnumPropertyEditor<HTTPSamplerBase.ResponseProcessingMode> responseProcessingMode =
+            JEnumPropertyEditor.create(
+                    HTTPSamplerBaseSchema.INSTANCE.getResponseProcessingMode(),
+                    "response_processing_mode",
+                    HTTPSamplerBase.ResponseProcessingMode.class,
+                    JMeterUtils::getResString
+            );
     private final JStringPropertyEditor embeddedAllowRE = new JStringPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getEmbeddedUrlAllowRegex(),
             JMeterUtils::getResString);
@@ -108,7 +112,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
                         retrieveEmbeddedResources,
                         concurrentDwn,
                         new JTextComponentBinding(concurrentPool, schema.getConcurrentDownloadPoolSize()),
-                        useMD5,
+                        responseProcessingMode,
                         embeddedAllowRE,
                         embeddedExcludeRE
                 )
@@ -265,7 +269,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             advancedPanel.add(getProxyServerPanel());
         }
 
-        advancedPanel.add(createOptionalTasksPanel());
+        advancedPanel.add(createResponseProcessingPanel());
         return advancedPanel;
     }
 
@@ -370,15 +374,12 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         return implPanel;
     }
 
-    protected JPanel createOptionalTasksPanel() {
-        // OPTIONAL TASKS
-        final JPanel checkBoxPanel = new VerticalPanel();
-        checkBoxPanel.setBorder(BorderFactory.createTitledBorder(
-                JMeterUtils.getResString("optional_tasks"))); // $NON-NLS-1$
-
-        checkBoxPanel.add(useMD5);
-
-        return checkBoxPanel;
+    protected JPanel createResponseProcessingPanel() {
+        JPanel panel = new JPanel(new MigLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("response_processing_title"))); // $NON-NLS-1$
+        panel.add(responseProcessingMode, "span");
+        return panel;
     }
 
     @SuppressWarnings("EnumOrdinal")
