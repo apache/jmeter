@@ -63,14 +63,17 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     private UrlConfigGui urlConfigGui;
     private final JBooleanPropertyEditor retrieveEmbeddedResources = new JBooleanPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getRetrieveEmbeddedResources(),
-            JMeterUtils.getResString("web_testing_retrieve_images"));
+            "web_testing_retrieve_images",
+            JMeterUtils::getResString);
     private final JBooleanPropertyEditor concurrentDwn = new JBooleanPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getConcurrentDownload(),
-            JMeterUtils.getResString("web_testing_concurrent_download"));
+            "web_testing_concurrent_download",
+            JMeterUtils::getResString);
     private JTextField concurrentPool;
     private final JBooleanPropertyEditor useMD5 = new JBooleanPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getStoreAsMD5(),
-            JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
+            "response_save_as_md5",
+            JMeterUtils::getResString);
     private JTextField embeddedAllowRE; // regular expression used to match against embedded resource URLs to allow
     private JTextField embeddedExcludeRE; // regular expression used to match against embedded resource URLs to exclude
     private JTextField sourceIpAddr; // does not apply to Java implementation

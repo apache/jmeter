@@ -20,9 +20,12 @@ package org.apache.jmeter.gui
 import org.apache.jmeter.testelement.TestElement
 import org.apache.jmeter.testelement.property.BooleanProperty
 import org.apache.jmeter.testelement.schema.BooleanPropertyDescriptor
-import org.apache.jmeter.util.JMeterUtils
 import org.apache.jorphan.gui.JEditableCheckBox
+import org.apache.jorphan.locale.LocalizedString
+import org.apache.jorphan.locale.PlainValue
+import org.apache.jorphan.locale.ResourceLocalizer
 import org.apiguardian.api.API
+import org.jetbrains.annotations.NonNls
 
 /**
  * Provides editor component for boolean properties that accommodate both true/false and expression string.
@@ -31,19 +34,20 @@ import org.apiguardian.api.API
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
 public class JBooleanPropertyEditor(
     private val propertyDescriptor: BooleanPropertyDescriptor<*>,
-    label: String,
-) : JEditableCheckBox(label, DEFAULT_CONFIGURATION), Binding {
+    label: @NonNls String,
+    resourceLocalizer: ResourceLocalizer,
+) : JEditableCheckBox(label, createConfiguration(resourceLocalizer), resourceLocalizer), Binding {
     private companion object {
-        @JvmField
-        val DEFAULT_CONFIGURATION: Configuration = Configuration(
-            startEditing = JMeterUtils.getResString("editable_checkbox.use_expression"),
-            trueValue = "true",
-            falseValue = "false",
-            extraValues = listOf(
-                "\${__P(property_name)}",
-                "\${variable_name}",
+        private fun createConfiguration(resourceLocalizer: ResourceLocalizer) =
+            Configuration(
+                useExpression = LocalizedString("edit_as_expression_action", resourceLocalizer),
+                trueValue = LocalizedString("editable_checkbox.true", resourceLocalizer),
+                falseValue = LocalizedString("editable_checkbox.false", resourceLocalizer),
+                extraValues = listOf(
+                    PlainValue("\${__P(property_name)}"),
+                    PlainValue("\${variable_name}"),
+                )
             )
-        )
     }
 
     public fun reset() {

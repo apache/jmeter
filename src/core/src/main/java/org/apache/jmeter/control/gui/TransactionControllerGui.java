@@ -39,13 +39,15 @@ public class TransactionControllerGui extends AbstractControllerGui {
     private final JBooleanPropertyEditor generateParentSample =
             new JBooleanPropertyEditor(
                     TransactionControllerSchema.INSTANCE.getGenearteParentSample(),
-                    JMeterUtils.getResString("transaction_controller_parent"));
+                    "transaction_controller_parent",
+                    JMeterUtils::getResString);
 
     /** if selected, add duration of timers to total runtime */
     private final JBooleanPropertyEditor includeTimers =
             new JBooleanPropertyEditor(
                     TransactionControllerSchema.INSTANCE.getIncludeTimers(),
-                    JMeterUtils.getResString("transaction_controller_include_timers"));
+                    "transaction_controller_parent",
+                    JMeterUtils::getResString);
 
     /**
      * Create a new TransactionControllerGui instance.
