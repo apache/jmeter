@@ -54,7 +54,7 @@ dependencies {
         api("com.google.errorprone:error_prone_annotations:2.44.0")
         api("com.helger.commons:ph-commons:12.1.0")
         api("com.helger:ph-css:8.1.0")
-        api("com.fasterxml.woodstox:woodstox-core:7.1.0")
+        api("com.fasterxml.woodstox:woodstox-core:7.1.1")
         api("com.jayway.jsonpath:json-path:2.10.0")
         api("com.miglayout:miglayout-core:11.4.2")
         api("com.miglayout:miglayout-swing:11.4.2")
