@@ -92,6 +92,8 @@ public open class JEditableCheckBox(
     public data class Configuration(
         /** Menu item title to "start editing" the checkbox value. */
         val useExpression: LocalizedString,
+        /** Tooltip for "start editing" button. */
+        val useExpressionTooltip: LocalizedString,
         /** The title to be used for "true" value in the checkbox. */
         val trueValue: LocalizedString,
         /** The title to be used for "false" value in the checkbox. */
@@ -133,6 +135,12 @@ public open class JEditableCheckBox(
         labelFor = comboBox
     }
 
+    private val expressionButton = JEllipsisButton().apply {
+        // Tooltip will be set via configuration or use default
+        toolTipText = configuration.useExpressionTooltip.toString()
+        addActionListener(useExpressionAction)
+    }
+
     @Transient
     private var changeEvent: ChangeEvent? = null
 
@@ -143,6 +151,7 @@ public open class JEditableCheckBox(
             Container().apply {
                 layout = FlowLayout(FlowLayout.LEADING, 0, 0)
                 add(checkbox)
+                add(expressionButton)
             },
             CHECKBOX_CARD
         )
@@ -165,6 +174,7 @@ public open class JEditableCheckBox(
         super.setEnabled(enabled)
         checkbox.isEnabled = enabled
         comboBox.isEnabled = enabled
+        expressionButton.isEnabled = enabled
         useExpressionAction.isEnabled = enabled
     }
 
@@ -223,6 +233,7 @@ public open class JEditableCheckBox(
 
     public fun makeSmall() {
         JFactory.small(checkbox)
+        JFactory.small(expressionButton)
         // We do not make combobox small as the expression migh be hard to read
     }
 }

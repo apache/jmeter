@@ -41,6 +41,7 @@ public class JBooleanPropertyEditor(
         private fun createConfiguration(resourceLocalizer: ResourceLocalizer) =
             Configuration(
                 useExpression = LocalizedString("edit_as_expression_action", resourceLocalizer),
+                useExpressionTooltip = LocalizedString("edit_as_expression_tooltip", resourceLocalizer),
                 trueValue = LocalizedString("editable_checkbox.true", resourceLocalizer),
                 falseValue = LocalizedString("editable_checkbox.false", resourceLocalizer),
                 extraValues = listOf(
