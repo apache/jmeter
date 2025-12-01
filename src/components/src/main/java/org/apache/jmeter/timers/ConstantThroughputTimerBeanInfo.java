@@ -26,7 +26,6 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
  */
 public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
 
-    @SuppressWarnings("EnumOrdinal")
     public ConstantThroughputTimerBeanInfo() {
         super(ConstantThroughputTimer.class);
 
