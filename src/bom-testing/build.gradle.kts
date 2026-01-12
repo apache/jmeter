@@ -42,7 +42,7 @@ dependencies {
         api("org.wiremock:wiremock:3.13.1")
         api("io.mockk:mockk:1.14.6")
         api("net.bytebuddy:byte-buddy:1.17.8")
-        api("nl.jqno.equalsverifier:equalsverifier:4.2.4")
+        api("nl.jqno.equalsverifier:equalsverifier:4.3")
         // activemq-all should not be used as it provides secondary slf4j binding
         api("org.apache.activemq:activemq-broker:6.2.0")
         api("org.apache.activemq:activemq-client:6.2.0")
