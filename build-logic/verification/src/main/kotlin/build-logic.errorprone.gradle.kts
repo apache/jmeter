@@ -29,7 +29,7 @@ if (buildParameters.enableErrorprone) {
     apply(plugin = "net.ltgt.errorprone")
 
     dependencies {
-        "errorprone"(platform("com.google.protobuf:protobuf-bom:4.33.1"))
+        "errorprone"(platform("com.google.protobuf:protobuf-bom:4.33.3"))
         "errorprone"("com.google.errorprone:error_prone_core:2.44.0")
         "annotationProcessor"("com.google.guava:guava-beta-checker:1.0")
     }
