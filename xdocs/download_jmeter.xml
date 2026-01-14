@@ -78,6 +78,19 @@
       <a href="https://www.apache.org/dist/jmeter/KEYS">KEYS</a>
       </p>
     </section>
+
+        </section>
+
+    <section name="Getting the Latest Version">
+      <p>
+        The latest stable release of Apache JMeter is always announced on the
+        <a href="https://jmeter.apache.org/download_jmeter.cgi">official download page</a>.
+        You can also track releases on
+        <a href="https://search.maven.org/artifact/org.apache.jmeter/ApacheJMeter">Maven Central</a>
+        or the <a href="https://github.com/apache/jmeter/releases">GitHub releases page</a>.
+      </p>
+    </section>
+
     <section name="Apache JMeter &release; (Requires Java 17+)">
       <subsection name="Binaries" anchor="binaries">
         <table>
