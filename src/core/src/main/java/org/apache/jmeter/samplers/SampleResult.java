@@ -143,6 +143,14 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private static final String NULL_FILENAME = "NULL";
 
+    // Reuse ByteArrayOutputStream instances to reduce memory allocations
+    private static final ThreadLocal<ByteArrayOutputStream> threadLocalBAOS =
+            ThreadLocal.withInitial(ByteArrayOutputStream::new);
+
+    // Reuse Inflater instances to minimize object creation
+    private static final ThreadLocal<Inflater> threadLocalInflater =
+            ThreadLocal.withInitial(() -> new Inflater(true));
+
     static {
         if (START_TIMESTAMP) {
             log.info("Note: Sample TimeStamps are START times");
@@ -285,6 +293,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * Cache for responseData as string to avoid multiple computations
      */
     private transient volatile String responseDataAsString;
+
+    private static final String GZIP_ENCODING = "gzip";
+    private static final String X_GZIP_ENCODING = "x-gzip";
+    private static final String DEFLATE_ENCODING = "deflate";
+    private static final String BROTLI_ENCODING = "br";
 
     public SampleResult() {
         this(USE_NANO_TIME, NANOTHREAD_SLEEP);
@@ -807,13 +820,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         if (contentEncoding != null && responseData.length > 0) {
             try {
                 switch (contentEncoding.toLowerCase(Locale.ROOT)) {
-                    case "gzip":
+                    case GZIP_ENCODING:
                         return decompressGzip(responseData);
-                    case "x-gzip":
+                    case X_GZIP_ENCODING:
                         return decompressGzip(responseData);
-                    case "deflate":
+                    case DEFLATE_ENCODING:
                         return decompressDeflate(responseData);
-                    case "br":
+                    case BROTLI_ENCODING:
                         return decompressBrotli(responseData);
                     default:
                         return responseData;
@@ -1710,7 +1723,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private static byte[] decompressGzip(byte[] in) throws IOException {
         try (GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(in));
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+             ByteArrayOutputStream out = threadLocalBAOS.get()) {
+            out.reset();
             byte[] buf = new byte[8192];
             int len;
             while ((len = gis.read(buf)) > 0) {
@@ -1721,20 +1735,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     }
 
     private static byte[] decompressDeflate(byte[] in) throws IOException {
-        // Try with ZLIB wrapper first
-        try {
-            return decompressWithInflater(in, false);
-        } catch (IOException e) {
-            // If that fails, try with NO_WRAP for raw DEFLATE
-            return decompressWithInflater(in, true);
-        }
-    }
-
-    private static byte[] decompressWithInflater(byte[] in, boolean nowrap) throws IOException {
-        try (InflaterInputStream iis = new InflaterInputStream(
-                new ByteArrayInputStream(in),
-                new Inflater(nowrap));
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+        Inflater inflater = threadLocalInflater.get();
+        inflater.reset();
+        try (InputStream iis = new InflaterInputStream(new ByteArrayInputStream(in), inflater);
+             ByteArrayOutputStream out = threadLocalBAOS.get()) {
+            out.reset();
             byte[] buf = new byte[8192];
             int len;
             while ((len = iis.read(buf)) > 0) {
@@ -1746,7 +1751,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private static byte[] decompressBrotli(byte[] in) throws IOException {
         try (InputStream bis = new org.brotli.dec.BrotliInputStream(new ByteArrayInputStream(in));
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+             ByteArrayOutputStream out = threadLocalBAOS.get()) {
+            out.reset();
             byte[] buf = new byte[8192];
             int len;
             while ((len = bis.read(buf)) > 0) {
