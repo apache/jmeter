@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -69,11 +68,13 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
 import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.ResponseDecoderRegistry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
@@ -82,13 +83,15 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.io.DirectAccessByteArrayOutputStream;
+import org.apache.jorphan.locale.ResourceKeyed;
+import org.apache.jorphan.util.EnumUtils;
 import org.apache.jorphan.util.ExceptionUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Matcher;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -206,6 +209,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final boolean IGNORE_FAILED_EMBEDDED_RESOURCES =
             JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resources", false); // $NON-NLS-1$ // default value: false
 
+    // TODO: replace with responseProcessingMode enum?
     private static final boolean IGNORE_EMBEDDED_RESOURCES_DATA =
             JMeterUtils.getPropDefault("httpsampler.embedded_resources_use_md5", false); // $NON-NLS-1$ // default value: false
 
@@ -377,6 +381,54 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         return displayStrings;
     }
+
+    /**
+     * Enum for response processing modes that control how HTTP response data is handled.
+     * Supports different strategies for storing, discarding, or checksumming responses.
+     *
+     * @since 6.0.0
+     */
+    public enum ResponseProcessingMode implements ResourceKeyed {
+        /**
+         * Store compressed response data, decompress on-demand when accessed.
+         * Default mode for normal operation. Saves memory and supports lazy decompression.
+         */
+        STORE_COMPRESSED("response_processing_store_compressed"), //$NON-NLS-1$
+
+        /**
+         * Fetch response data but discard it immediately.
+         * Useful when you only care about response code/headers, not the body.
+         * Avoids storing large responses in memory.
+         */
+        FETCH_AND_DISCARD("response_processing_fetch_discard"), //$NON-NLS-1$
+
+        /**
+         * Compute MD5 checksum on the compressed response stream.
+         * Stores MD5 hash instead of full response. Useful for validating
+         * that compressed data hasn't been modified in transit.
+         */
+        CHECKSUM_ENCODED_MD5("response_processing_checksum_encoded_md5"), //$NON-NLS-1$
+
+        /**
+         * Compute MD5 checksum on the decompressed response stream.
+         * Stores MD5 hash instead of full response. Uses streaming decompression
+         * to avoid buffering entire response in memory. This is the traditional
+         * "Store as MD5" mode from earlier versions.
+         */
+        CHECKSUM_DECODED_MD5("response_processing_checksum_decoded_md5"); //$NON-NLS-1$
+
+        public final String propertyName;
+
+        ResponseProcessingMode(String propertyName) {
+            this.propertyName = propertyName;
+        }
+
+        @Override
+        public String getResourceKey() {
+            return propertyName;
+        }
+    }
+
     /**
      * Determine if the file should be sent as the entire Content body,
      * i.e. without any additional wrapping.
@@ -640,11 +692,56 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return get(getSchema().getImplementation());
     }
 
-    public boolean useMD5() {
-        return get(getSchema().getStoreAsMD5());
+    /**
+     * Gets the response processing mode for this sampler.
+     * Controls how response data is handled (stored, discarded, or checksummed).
+     *
+     * @return the current response processing mode
+     * @since 6.0.0
+     */
+    public ResponseProcessingMode getResponseProcessingMode() {
+        String value = get(getSchema().getResponseProcessingMode());
+        return EnumUtils.valueOf(ResponseProcessingMode.class, value);
     }
 
+    /**
+     * Sets the response processing mode for this sampler.
+     * Controls how response data is handled (stored, discarded, or checksummed).
+     *
+     * @param mode the response processing mode to set
+     * @since 6.0.0
+     */
+    public void setResponseProcessingMode(ResponseProcessingMode mode) {
+        set(getSchema().getResponseProcessingMode(), mode.getResourceKey());
+    }
+
+    /**
+     * Returns whether this sampler should store response data as MD5 hash.
+     *
+     * @return true if MD5 mode is enabled (CHECKSUM_DECODED_MD5 or CHECKSUM_ENCODED_MD5)
+     * @deprecated Use {@link #getResponseProcessingMode()} instead.
+     *             This method returns true if mode is any checksum mode.
+     */
+    @Deprecated
+    public boolean useMD5() {
+        ResponseProcessingMode mode = getResponseProcessingMode();
+        return mode == ResponseProcessingMode.CHECKSUM_DECODED_MD5;
+    }
+
+    /**
+     * Sets whether this sampler should store response data as MD5 hash.
+     *
+     * @param value true to enable MD5 mode (CHECKSUM_DECODED_MD5),
+     *              false to use default mode (STORE_COMPRESSED)
+     * @deprecated Use {@link #setResponseProcessingMode(ResponseProcessingMode)} instead.
+     *             This method sets mode to CHECKSUM_DECODED_MD5 if true, STORE_COMPRESSED if false.
+     */
+    @Deprecated
     public void setMD5(boolean value) {
+        setResponseProcessingMode(
+                value ? ResponseProcessingMode.CHECKSUM_DECODED_MD5 : ResponseProcessingMode.STORE_COMPRESSED
+        );
+        // Also set old property for backward compatibility with older code
         set(getSchema().getStoreAsMD5(), value);
     }
 
@@ -1914,80 +2011,80 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param sampleResult sample to store information about the response into
      * @param in input stream from which to read the response
      * @param length expected input length or zero
-     * @return the response or the MD5 of the response
      * @throws IOException if reading the result fails
      */
-    public byte[] readResponse(SampleResult sampleResult, InputStream in, long length) throws IOException {
+    public void readResponse(SampleResult sampleResult, InputStream in, long length, @Nullable String contentEncoding) throws IOException {
+        ResponseProcessingMode responseProcessingMode = getResponseProcessingMode();
+        if (responseProcessingMode == ResponseProcessingMode.CHECKSUM_DECODED_MD5) {
+            in = ResponseDecoderRegistry.decodeStream(contentEncoding, in);
+            contentEncoding = null; // already decoded
+        }
 
+        // 8kB is the (max) size to have the latency ('the first packet')
+        byte[] readBuffer = new byte[Math.toIntExact(length > 0 ? Math.min(length, 8192) : 8192)];
+
+        MessageDigest md = null;
         DirectAccessByteArrayOutputStream w = null;
-        try (Closeable ignore = in) { // NOSONAR No try with resource as performance is critical here
-            byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
-            int bufferSize = 32;// Enough for MD5
-
-            MessageDigest md = null;
-            boolean knownResponseLength = length > 0;// may also happen if long value > int.max
-            if (useMD5()) {
+        switch (responseProcessingMode) {
+            case FETCH_AND_DISCARD -> {
+            }
+            case STORE_COMPRESSED -> {
+                w = new DirectAccessByteArrayOutputStream(Math.toIntExact(length > 0 ? Math.min(length, MAX_BUFFER_SIZE) : MAX_BUFFER_SIZE));
+            }
+            case CHECKSUM_DECODED_MD5, CHECKSUM_ENCODED_MD5 -> {
                 try {
                     md = MessageDigest.getInstance("MD5"); //$NON-NLS-1$
                 } catch (NoSuchAlgorithmException e) {
-                    log.error("Should not happen - could not find MD5 digest", e);
-                }
-            } else {
-                if (!knownResponseLength) {
-                    bufferSize = 4 * 1024;
-                } else {
-                    bufferSize = (int) Math.min(MAX_BUFFER_SIZE, length);
+                    throw new IllegalStateException("MD5 digest algorithm not supported", e);
                 }
             }
-
-
-            int bytesReadInBuffer = 0;
-            long totalBytes = 0;
-            boolean first = true;
-            boolean storeInBOS = true;
-            while ((bytesReadInBuffer = in.read(readBuffer)) > -1) {
-                if (first) {
-                    sampleResult.latencyEnd();
-                    first = false;
-                    if (md == null) {
-                        w = new DirectAccessByteArrayOutputStream(knownResponseLength ? bufferSize : 8192);
-                    }
-                }
-
-                if (md == null) {
-                    if(storeInBOS) {
-                        if(MAX_BYTES_TO_STORE_PER_REQUEST <= 0 ||
-                                (totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) ||
-                                JMeterContextService.getContext().isRecording()) {
-                            w.write(readBuffer, 0, bytesReadInBuffer);
-                        } else {
-                            log.debug("Big response, truncating it to {} bytes", MAX_BYTES_TO_STORE_PER_REQUEST);
-                            w.write(readBuffer, 0, (int)(MAX_BYTES_TO_STORE_PER_REQUEST-totalBytes));
-                            storeInBOS = false;
-                        }
-                    }
-                } else {
-                    md.update(readBuffer, 0, bytesReadInBuffer);
-                }
-                totalBytes += bytesReadInBuffer;
-            }
-
-            if (first) { // Bug 46838 - if there was no data, still need to set latency
-                sampleResult.latencyEnd();
-                return new byte[0];
-            }
-
-            if (md == null) {
-                return w.toByteArray();
-            } else {
-                byte[] md5Result = md.digest();
-                sampleResult.setBytes(totalBytes);
-                return JOrphanUtils.baToHexBytes(md5Result);
-            }
-
-        } finally {
-            JOrphanUtils.closeQuietly(w);
         }
+
+        int bytesReadInBuffer;
+        long totalBytes = 0;
+        boolean first = true;
+        boolean storeInBOS = true;
+        while ((bytesReadInBuffer = in.read(readBuffer)) != -1) {
+            if (bytesReadInBuffer == 0) {
+                continue;
+            }
+            if (first) {
+                sampleResult.latencyEnd();
+                first = false;
+            }
+
+            if (md != null) {
+                md.update(readBuffer, 0, bytesReadInBuffer);
+            } else if (storeInBOS && w != null) {
+                if (MAX_BYTES_TO_STORE_PER_REQUEST <= 0 ||
+                        (totalBytes + bytesReadInBuffer <= MAX_BYTES_TO_STORE_PER_REQUEST) ||
+                        JMeterContextService.getContext().isRecording()) {
+                    w.write(readBuffer, 0, bytesReadInBuffer);
+                } else {
+                    log.debug("Big response, truncating it to {} bytes", MAX_BYTES_TO_STORE_PER_REQUEST);
+                    w.write(readBuffer, 0, (int) (MAX_BYTES_TO_STORE_PER_REQUEST - totalBytes));
+                    storeInBOS = false;
+                }
+            }
+            totalBytes += bytesReadInBuffer;
+        }
+
+        if (first) { // Bug 46838 - if there was no data, still need to set latency
+            sampleResult.latencyEnd();
+            sampleResult.setResponseData(new byte[0]);
+            return;
+        }
+
+        byte[] resultBody;
+        if (w != null) {
+            resultBody = w.toByteArray();
+        } else if (md != null) {
+            byte[] md5Result = md.digest();
+            resultBody = JOrphanUtils.baToHexBytes(md5Result);
+        } else {
+            resultBody = new byte[0];
+        }
+        sampleResult.setResponseData(resultBody, contentEncoding);
     }
 
     /**
@@ -2039,6 +2136,23 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         removeProperty(FILE_FIELD);
         removeProperty(FILE_NAME);
         removeProperty(MIMETYPE);
+    }
+
+    @Override
+    public void setProperty(JMeterProperty property) {
+        @SuppressWarnings("deprecation")
+        PropertyDescriptor<?, ?> storeAsMD5 = HTTPSamplerBaseSchema.INSTANCE.getStoreAsMD5();
+        if (property.getName().equals(storeAsMD5.getName())) {
+            if (property instanceof BooleanProperty booleanProperty) {
+                setResponseProcessingMode(
+                        booleanProperty.getBooleanValue() ? ResponseProcessingMode.CHECKSUM_DECODED_MD5 : ResponseProcessingMode.STORE_COMPRESSED
+                );
+            } else {
+                setResponseProcessingMode(ResponseProcessingMode.STORE_COMPRESSED);
+            }
+            // keep usemd5 property for backward compatibility
+        }
+        super.setProperty(property);
     }
 
     /**
@@ -2133,7 +2247,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 CookieManager clonedCookieManager = (CookieManager) cookieManager.clone();
                 this.sampler.setCookieManagerProperty(clonedCookieManager);
             }
-            this.sampler.setMD5(this.sampler.useMD5() || IGNORE_EMBEDDED_RESOURCES_DATA);
+            ResponseProcessingMode responseProcessingMode = base.getResponseProcessingMode();
+            this.sampler.setResponseProcessingMode(
+                    IGNORE_EMBEDDED_RESOURCES_DATA ? ResponseProcessingMode.CHECKSUM_DECODED_MD5 : responseProcessingMode
+            );
             this.jmeterContextOfParentThread = JMeterContextService.getContext();
         }
 
