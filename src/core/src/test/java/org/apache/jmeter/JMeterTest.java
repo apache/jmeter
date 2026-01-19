@@ -48,18 +48,21 @@ class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
     @Test
     void testSuccessWhenJmxExists() throws IOException, ConfigurationException {
         File temp = File.createTempFile("testPlan", ".jmx");
-        String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT\">\n" + "  <hashTree>\n"
-                + "    <TestPlan guiclass=\"TestPlanGui\" testclass=\"TestPlan\" testname=\"Test Plan\" enabled=\"true\">\n"
-                + "      <stringProp name=\"TestPlan.comments\"></stringProp>\n"
-                + "      <boolProp name=\"TestPlan.functional_mode\">false</boolProp>\n"
-                + "      <boolProp name=\"TestPlan.tearDown_on_shutdown\">true</boolProp>\n"
-                + "      <boolProp name=\"TestPlan.serialize_threadgroups\">false</boolProp>\n"
-                + "      <elementProp name=\"TestPlan.user_defined_variables\" elementType=\"Arguments\" guiclass=\"ArgumentsPanel\" "
-                + "testclass=\"Arguments\" testname=\"User Defined Variables\" enabled=\"true\">\n"
-                + "        <collectionProp name=\"Arguments.arguments\"/>\n" + "      </elementProp>\n"
-                + "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp></TestPlan>"
-                + "    <hashTree/></hashTree></jmeterTestPlan>";
+        String testPlan = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2-SNAPSHOT">
+                  <hashTree>
+                    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+                      <stringProp name="TestPlan.comments"></stringProp>
+                      <boolProp name="TestPlan.functional_mode">false</boolProp>
+                      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+                      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+                      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" \
+                testclass="Arguments" testname="User Defined Variables" enabled="true">
+                        <collectionProp name="Arguments.arguments"/>
+                      </elementProp>
+                      <stringProp name="TestPlan.user_define_classpath"></stringProp></TestPlan>\
+                    <hashTree/></hashTree></jmeterTestPlan>""";
         try (FileOutputStream os = new FileOutputStream(temp);
                 Writer fw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
                 BufferedWriter out = new BufferedWriter(fw)) {
@@ -77,33 +80,38 @@ class JMeterTest extends JMeterTestCase implements JMeterSerialTest {
     @Test
     void testFailureWithMissingPlugin() throws IOException {
         File temp = File.createTempFile("testPlan", ".jmx");
-        String testPlan = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.2-SNAPSHOT.20190506\">\n"
-                + "  <hashTree>\n"
-                + "    <TestPlan guiclass=\"TestPlanGui\" testclass=\"TestPlan\" testname=\"Test Plan\" enabled=\"true\">\n"
-                + "      <stringProp name=\"TestPlan.comments\"></stringProp>\n"
-                + "      <boolProp name=\"TestPlan.functional_mode\">false</boolProp>\n"
-                + "      <boolProp name=\"TestPlan.tearDown_on_shutdown\">true</boolProp>\n"
-                + "      <boolProp name=\"TestPlan.serialize_threadgroups\">false</boolProp>\n"
-                + "      <elementProp name=\"TestPlan.user_defined_variables\" elementType=\"Arguments\" "
-                + "guiclass=\"ArgumentsPanel\" testclass=\"Arguments\" testname=\"User Defined Variables\" enabled=\"true\">\n"
-                + "        <collectionProp name=\"Arguments.arguments\"/>\n" + "      </elementProp>\n"
-                + "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp>\n" + "    </TestPlan>\n"
-                + "    <hashTree>\n" + "      <hashTree>\n"
-                + "        <kg.apc.jmeter.samplers.DummySampler guiclass=\"kg.apc.jmeter.samplers.DummySamplerGui\" "
-                + "testclass=\"kg.apc.jmeter.samplers.DummySampler\" testname=\"jp@gc - Dummy Sampler\" enabled=\"true\">\n"
-                + "          <boolProp name=\"WAITING\">true</boolProp>\n"
-                + "          <boolProp name=\"SUCCESFULL\">true</boolProp>\n"
-                + "          <stringProp name=\"RESPONSE_CODE\">200</stringProp>\n"
-                + "          <stringProp name=\"RESPONSE_MESSAGE\">OK</stringProp>\n"
-                + "          <stringProp name=\"REQUEST_DATA\">{&quot;email&quot;:&quot;user1&quot;, &quot;password&quot;:&quot;password1&quot;}；"
-                + "</stringProp>\n"
-                + "          <stringProp name=\"RESPONSE_DATA\">{&quot;successful&quot;: true, &quot;account_id&quot;:&quot;0123456789&quot;}</stringProp>\n"
-                + "          <stringProp name=\"RESPONSE_TIME\">${__Random(50,500)}</stringProp>\n"
-                + "          <stringProp name=\"LATENCY\">${__Random(1,50)}</stringProp>\n"
-                + "          <stringProp name=\"CONNECT\">${__Random(1,5)}</stringProp>\n"
-                + "        </kg.apc.jmeter.samplers.DummySampler></hashTree></hashTree>\n"
-                + "  </hashTree></jmeterTestPlan><hashTree/></hashTree>\n" + "</jmeterTestPlan>";
+        String testPlan = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2-SNAPSHOT.20190506">
+                  <hashTree>
+                    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+                      <stringProp name="TestPlan.comments"></stringProp>
+                      <boolProp name="TestPlan.functional_mode">false</boolProp>
+                      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+                      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+                      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" \
+                guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+                        <collectionProp name="Arguments.arguments"/>
+                      </elementProp>
+                      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+                    </TestPlan>
+                    <hashTree>
+                      <hashTree>
+                        <kg.apc.jmeter.samplers.DummySampler guiclass="kg.apc.jmeter.samplers.DummySamplerGui" \
+                testclass="kg.apc.jmeter.samplers.DummySampler" testname="jp@gc - Dummy Sampler" enabled="true">
+                          <boolProp name="WAITING">true</boolProp>
+                          <boolProp name="SUCCESFULL">true</boolProp>
+                          <stringProp name="RESPONSE_CODE">200</stringProp>
+                          <stringProp name="RESPONSE_MESSAGE">OK</stringProp>
+                          <stringProp name="REQUEST_DATA">{&quot;email&quot;:&quot;user1&quot;, &quot;password&quot;:&quot;password1&quot;}；\
+                </stringProp>
+                          <stringProp name="RESPONSE_DATA">{&quot;successful&quot;: true, &quot;account_id&quot;:&quot;0123456789&quot;}</stringProp>
+                          <stringProp name="RESPONSE_TIME">${__Random(50,500)}</stringProp>
+                          <stringProp name="LATENCY">${__Random(1,50)}</stringProp>
+                          <stringProp name="CONNECT">${__Random(1,5)}</stringProp>
+                        </kg.apc.jmeter.samplers.DummySampler></hashTree></hashTree>
+                  </hashTree></jmeterTestPlan><hashTree/></hashTree>
+                </jmeterTestPlan>""";
         try (FileOutputStream os = new FileOutputStream(temp);
                 Writer fw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
                 BufferedWriter out = new BufferedWriter(fw)) {

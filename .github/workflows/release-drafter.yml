@@ -8,20 +8,46 @@ on:
       - 'release/**'
   # pull_request_target allows PR from forks to access secrets, so please NEVER add pull_request_target
 
+# Declare default permissions as read-only.
+permissions: read-all
+
 jobs:
   update_release_draft:
     # Skip release drafts in forks
-    if: github.repository_owner == 'apache'
+    if: vars.RUN_RELEASE_DRAFTER == 'true'
     name: Update Release Draft
     runs-on: ubuntu-latest
+    permissions:
+      # write permission is required to create a github release
+      contents: write
     steps:
+      - name: Get the current version
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        id: current_version
+        with:
+          # language=javascript
+          script: |
+            const response = await github.rest.repos.getContent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: 'gradle.properties',
+              ref: context.sha
+            });
+            const content = Buffer.from(response.data.content, 'base64').toString();
+            const version = content.match(/^jmeter\.version=(.+)$/m)[1];
+            console.log(`Version is ${version}`);
+            return version;
+
       # Drafts your next Release notes as Pull Requests are merged into "master"
       - name: Update release body draft
-        uses: release-drafter/release-drafter@09c613e259eb8d4e7c81c2cb00618eb5fc4575a7 # v5
+        uses: release-drafter/release-drafter@b1476f6e6eb133afa41ed8589daba6dc69b4d3f5 # v6
         id: prepare_release
         # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
         with:
         #   config-name: my-config.yml
            disable-autolabeler: true
+           publish: false
+           latest: ${{ github.ref_name == github.event.repository.default_branch }}
+           version: ${{ steps.current_version.outputs.result }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -17,7 +17,11 @@
 
 import com.github.vlsi.gradle.dsl.configureEach
 import com.github.vlsi.gradle.properties.dsl.props
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.BaseKapt
+import org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     id("java-library")
@@ -42,15 +46,29 @@ kotlin {
     }
 }
 
-tasks.configureEach<KotlinCompile> {
-    kotlinOptions {
+tasks.configureEach<KotlinJvmCompile> {
+    if (gradle.startParameter.writeDependencyVerifications.isNotEmpty()) {
+        enabled = false
+    }
+    compilerOptions {
         if (!name.startsWith("compileTest")) {
-            apiVersion = "kotlin.api".v
+            apiVersion = KotlinVersion.fromVersion("kotlin.api".v)
         }
-        freeCompilerArgs += "-Xjvm-default=all"
+        freeCompilerArgs.add("-Xjvm-default=all")
         val jdkRelease = buildParameters.targetJavaVersion.toString()
-        freeCompilerArgs += "-Xjdk-release=$jdkRelease"
-        kotlinOptions.jvmTarget = jdkRelease
+        freeCompilerArgs.add("-Xjdk-release=$jdkRelease")
+        jvmTarget = JvmTarget.fromTarget(jdkRelease)
+    }
+}
+
+if (gradle.startParameter.writeDependencyVerifications.isNotEmpty()) {
+    plugins.withId("org.jetbrains.kotlin.kapt") {
+        tasks.configureEach<BaseKapt> {
+            enabled = false
+        }
+        tasks.configureEach<KaptGenerateStubs> {
+            enabled = false
+        }
     }
 }
 

@@ -110,7 +110,7 @@ public class RunTime extends GenericController implements Serializable {
         startTime = 0;
     }
 
-    /*
+    /**
      * This is needed for OnceOnly to work like other Loop Controllers
      */
     @Override

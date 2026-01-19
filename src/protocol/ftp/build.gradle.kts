@@ -23,12 +23,6 @@ dependencies {
     api(projects.src.core)
 
     implementation("commons-net:commons-net")
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
 
     testImplementation(testFixtures(projects.src.core))
 }

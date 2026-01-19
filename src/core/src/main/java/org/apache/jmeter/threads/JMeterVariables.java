@@ -136,8 +136,8 @@ public class JMeterVariables {
      */
     public String get(String key) {
         Object o = variables.get(key);
-        if(o instanceof String) {
-            return (String) o;
+        if (o instanceof String string) {
+            return string;
         } else if (o != null) {
             return o.toString();
         } else {

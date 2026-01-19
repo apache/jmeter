@@ -18,7 +18,6 @@
 package org.apache.jmeter.report.dashboard
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.apache.commons.io.FileUtils
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.util.JMeterUtils
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -29,8 +28,9 @@ import org.junit.jupiter.api.parallel.Isolated
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.copyToRecursively
 
 @Isolated("modifies shared properties")
 class ReportGeneratorTest : JMeterTestCase() {
@@ -45,12 +45,17 @@ class ReportGeneratorTest : JMeterTestCase() {
      * @return combined path as string
      */
     fun combine(vararg paths: String) =
-        Paths.get(JMeterUtils.getJMeterBinDir(), *paths).toString()
+        Path.of(JMeterUtils.getJMeterBinDir(), *paths).toString()
 
     @Test
+    @OptIn(ExperimentalPathApi::class)
     fun `check that report generation succeeds from read-only templates`() {
         val roTemplate = Files.createTempDirectory("report-template-ro")
-        FileUtils.copyDirectoryToDirectory(Path.of(combine("report-template")).toFile(), roTemplate.toFile())
+        Path.of(combine("report-template")).copyToRecursively(
+            roTemplate,
+            followLinks = false,
+            overwrite = true,
+        )
         Files.walk(roTemplate).forEach { p -> p.toFile().setReadOnly() }
         JMeterUtils.setProperty("jmeter.reportgenerator.exporter.html.property.template_dir", roTemplate.absolutePathString())
         val roReport = Files.createTempDirectory("report-from-ro-template")

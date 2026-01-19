@@ -28,8 +28,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
@@ -116,9 +116,9 @@ public class CsvSampleReader implements Closeable{
         }
         boolean usingHeadersInCsv = true;
         if (metadata == null) {
-            Pair<Boolean, SampleMetadata> localMd = readMetadata(separator, useSaveSampleCfg);
-            this.metadata = localMd.getRight();
-            usingHeadersInCsv = localMd.getLeft();
+            Map.Entry<Boolean, SampleMetadata> localMd = readMetadata(separator, useSaveSampleCfg);
+            this.metadata = localMd.getValue();
+            usingHeadersInCsv = localMd.getKey();
         } else {
             this.metadata = metadata;
         }
@@ -135,7 +135,7 @@ public class CsvSampleReader implements Closeable{
         this.lastSampleRead = nextSample();
     }
 
-    private Pair<Boolean, SampleMetadata> readMetadata(char separator, boolean useSaveSampleCfg) {
+    private Map.Entry<Boolean, SampleMetadata> readMetadata(char separator, boolean useSaveSampleCfg) {
         try {
             SampleMetadata result;
             // Read first line
@@ -166,7 +166,7 @@ public class CsvSampleReader implements Closeable{
                 result = new SampleMetaDataParser(separator).parse(line);
                 hasHeaders = true;
             }
-            return Pair.of(hasHeaders, result);
+            return Map.entry(hasHeaders, result);
         } catch (Exception e) {
             throw new SampleException("Could not read metadata !", e);
         }

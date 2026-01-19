@@ -21,9 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.report.core.CsvSampleReader;
 import org.apache.jmeter.report.core.CsvSampleWriter;
 import org.apache.jmeter.report.core.Sample;
@@ -35,6 +35,8 @@ import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.ValueResultData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import kotlin.io.path.PathsKt;
 
 /**
  * The class AbstractOverTimeGraphConsumer provides a base class for over time
@@ -82,13 +84,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
     protected AbstractVersusRequestsGraphConsumer() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#startConsuming
-     * ()
-     */
     @Override
     public void startConsuming() {
         embeddedConsumer.startConsuming();
@@ -105,13 +100,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
         super.startConsuming();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSampleConsumer#setConsumedMetadata
-     * (org.apache.jmeter.report.core.SampleMetadata, int)
-     */
     @Override
     public void setConsumedMetadata(SampleMetadata sampleMetadata, int channel) {
         embeddedConsumer.setConsumedMetadata(sampleMetadata, channel);
@@ -122,13 +110,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
         super.setConsumedMetadata(sampleMetadata, channel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#consume
-     * (org.apache.jmeter.report.core.Sample, int)
-     */
     @Override
     public void consume(Sample sample, int channel) {
         embeddedConsumer.consume(sample, channel);
@@ -138,13 +119,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
         super.consume(sample, channel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#stopConsuming
-     * ()
-     */
     @Override
     public void stopConsuming() {
         embeddedConsumer.stopConsuming();
@@ -154,12 +128,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
         super.stopConsuming();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
-     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
-     */
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(
@@ -182,7 +150,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
              * @param metadata
              *            the metadata
              */
-            public FileInfo(File file, SampleMetadata metadata) {
+            private FileInfo(File file, SampleMetadata metadata) {
                 this.file = file;
                 this.writer = new CsvSampleWriter(file, metadata);
             }
@@ -192,7 +160,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
              *
              * @return the file
              */
-            public File getFile() {
+            private File getFile() {
                 return file;
             }
 
@@ -201,19 +169,19 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
              *
              * @return the sample writer
              */
-            public CsvSampleWriter getWriter() {
+            private CsvSampleWriter getWriter() {
                 return writer;
             }
         }
 
         // Collection of sample builders for channels
-        private final ArrayList<SampleBuilder> builders = new ArrayList<>();
-        private final ArrayList<FileInfo> fileInfos = new ArrayList<>();
+        private final List<SampleBuilder> builders = new ArrayList<>();
+        private final List<FileInfo> fileInfos = new ArrayList<>();
         private final Map<Long, Long> counts = new HashMap<>();
         boolean createdWorkDir = false;
         private final AbstractVersusRequestsGraphConsumer parent;
 
-        public TimeCountConsumer(AbstractVersusRequestsGraphConsumer parent) {
+        private TimeCountConsumer(AbstractVersusRequestsGraphConsumer parent) {
             this.parent = parent;
         }
 
@@ -299,13 +267,6 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             initProducedMetadata();
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see
-         * org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.
-         * jmeter.report.core.Sample, int)
-         */
         @Override
         public void consume(Sample sample, int channel) {
             // Count sample depending on time interval
@@ -356,7 +317,11 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             if (createdWorkDir) {
                 File workingDir = parent.getWorkingDirectory();
                 try {
-                    FileUtils.deleteDirectory(workingDir);
+                    PathsKt.deleteRecursively(workingDir.toPath());
+                    //noinspection ConstantValue
+                    if (false) {
+                        throw new IOException("Make javac happy as deleteRecursively can throw IOException");
+                    }
                 } catch (IOException e) {
                     log.warn("Cannot delete created temporary directory, '{}'", workingDir, e);
                 }

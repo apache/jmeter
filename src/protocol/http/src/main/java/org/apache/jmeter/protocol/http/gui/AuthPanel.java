@@ -333,20 +333,20 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         private static final long serialVersionUID = 4638155137475747946L;
         final AuthManager manager;
 
-        public InnerTableModel() {
+        private InnerTableModel() {
             manager = new AuthManager();
         }
 
-        public void clearData() {
+        private void clearData() {
             manager.clear();
             fireTableDataChanged();
         }
 
-        public void removeRow(int row) {
+        private void removeRow(int row) {
             manager.remove(row);
         }
 
-        public void addNewRow() {
+        private void addNewRow() {
             manager.addAuth();
         }
 
@@ -392,49 +392,30 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         public Object getValueAt(int row, int column) {
             Authorization auth = manager.getAuthObjectAt(row);
 
-            switch (column){
-                case AuthManager.COL_URL:
-                    return auth.getURL();
-                case AuthManager.COL_USERNAME:
-                    return auth.getUser();
-                case AuthManager.COL_PASSWORD:
-                    return auth.getPass();
-                case AuthManager.COL_DOMAIN:
-                    return auth.getDomain();
-                case AuthManager.COL_REALM:
-                    return auth.getRealm();
-                case AuthManager.COL_MECHANISM:
-                    return auth.getMechanism();
-                default:
-                    return null;
-            }
+            return switch (column) {
+                case AuthManager.COL_URL -> auth.getURL();
+                case AuthManager.COL_USERNAME -> auth.getUser();
+                case AuthManager.COL_PASSWORD -> auth.getPass();
+                case AuthManager.COL_DOMAIN -> auth.getDomain();
+                case AuthManager.COL_REALM -> auth.getRealm();
+                case AuthManager.COL_MECHANISM -> auth.getMechanism();
+                default -> null;
+            };
         }
 
         @Override
         public void setValueAt(Object value, int row, int column) {
             Authorization auth = manager.getAuthObjectAt(row);
             log.debug("Setting auth value: {}", value);
-            switch (column){
-                case AuthManager.COL_URL:
-                    auth.setURL((String) value);
-                    break;
-                case AuthManager.COL_USERNAME:
-                    auth.setUser((String) value);
-                    break;
-                case AuthManager.COL_PASSWORD:
-                    auth.setPass((String) value);
-                    break;
-                case AuthManager.COL_DOMAIN:
-                    auth.setDomain((String) value);
-                    break;
-                case AuthManager.COL_REALM:
-                    auth.setRealm((String) value);
-                    break;
-                case AuthManager.COL_MECHANISM:
-                    auth.setMechanism((Mechanism) value);
-                    break;
-                default:
-                    break;
+            switch (column) {
+                case AuthManager.COL_URL -> auth.setURL((String) value);
+                case AuthManager.COL_USERNAME -> auth.setUser((String) value);
+                case AuthManager.COL_PASSWORD -> auth.setPass((String) value);
+                case AuthManager.COL_DOMAIN -> auth.setDomain((String) value);
+                case AuthManager.COL_REALM -> auth.setRealm((String) value);
+                case AuthManager.COL_MECHANISM -> auth.setMechanism((Mechanism) value);
+                default -> {
+                }
             }
         }
     }
@@ -443,18 +424,17 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 
         private static final long serialVersionUID = 6085773573067229265L;
 
-        public MechanismCellEditor() {
+        private MechanismCellEditor() {
             super(new JComboBox<>(Mechanism.values()));
         }
     }
 
     private static class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
         private static final long serialVersionUID = 5169856333827579927L;
-        private final Border myBorder;
 
-        public PasswordCellRenderer() {
+        private PasswordCellRenderer() {
             super();
-            myBorder = new EmptyBorder(1, 2, 1, 2);
+            Border myBorder = new EmptyBorder(1, 2, 1, 2);
             setOpaque(true);
             setBorder(myBorder);
         }

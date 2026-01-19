@@ -36,11 +36,6 @@ public class ElapsedTimeValueSelector extends AbstractGraphValueSelector {
         super(ignoreTransactionController);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see GraphValueSelector#select(String, Sample)
-     */
     @Override
     public Double select(String series, Sample sample) {
         if(isIgnoreTransactionController()) {

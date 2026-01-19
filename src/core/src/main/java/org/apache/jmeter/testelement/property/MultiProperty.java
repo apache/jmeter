@@ -82,8 +82,8 @@ public abstract class MultiProperty extends AbstractProperty implements Iterable
             return;
         }
         log.debug("merging in {}", prop.getClass());
-        if (prop instanceof MultiProperty) {
-            for (JMeterProperty item : (MultiProperty) prop) {
+        if (prop instanceof MultiProperty multiProperty) {
+            for (JMeterProperty item : multiProperty) {
                 addProperty(item);
             }
         } else {

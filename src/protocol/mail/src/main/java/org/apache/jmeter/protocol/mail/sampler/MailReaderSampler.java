@@ -40,7 +40,6 @@ import javax.mail.Store;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.LocalTrustStoreSSLSocketFactory;
@@ -151,9 +150,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         String samplerString = toString();
         parent.setSamplerData(samplerString);
 
-        /*
-         * Perform the sampling
-         */
+        // Perform the sampling
         parent.sampleStart(); // Start timing
         try {
             // Create empty properties
@@ -353,10 +350,10 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
 
         cdata.append(NEW_LINE);
         Object content = message.getContent();
-        if (content instanceof MimeMultipart) {
-            appendMultiPart(child, cdata, (MimeMultipart) content);
-        } else if (content instanceof InputStream){
-            child.setResponseData(IOUtils.toByteArray((InputStream) content));
+        if (content instanceof MimeMultipart mimeMultipart) {
+            appendMultiPart(child, cdata, mimeMultipart);
+        } else if (content instanceof InputStream inputStream){
+            child.setResponseData(inputStream.readAllBytes());
         } else {
             cdata.append(content);
             child.setResponseData(cdata.toString(),child.getDataEncodingNoDefault());
@@ -381,10 +378,10 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             sr.setDataEncoding(RFC_822_DEFAULT_ENCODING);
             sr.setEncodingAndType(contentType);
             sr.sampleStart();
-            if (bodyPartContent instanceof InputStream){
-                sr.setResponseData(IOUtils.toByteArray((InputStream) bodyPartContent));
-            } else if (bodyPartContent instanceof MimeMultipart){
-                appendMultiPart(sr, cdata, (MimeMultipart) bodyPartContent);
+            if (bodyPartContent instanceof InputStream inputStream){
+                sr.setResponseData(inputStream.readAllBytes());
+            } else if (bodyPartContent instanceof MimeMultipart mimeMultipart){
+                appendMultiPart(sr, cdata, mimeMultipart);
             } else {
                 sr.setResponseData(bodyPartContent.toString(),sr.getDataEncodingNoDefault());
             }
@@ -562,7 +559,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
         sb.append(getServerType());
         sb.append("://");
         String name = getUserName();
-        if (name.length() > 0){
+        if (!name.isEmpty()){
             sb.append(name);
             sb.append("@");
         }

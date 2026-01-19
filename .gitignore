@@ -86,3 +86,6 @@ jmeter-fb.*
 hs_err_pid*
 # other jvm related files
 .attach_*
+
+# npm/node dependencies and generated web assets
+/xdocs/node_modules/

@@ -86,14 +86,14 @@ public class SyncTimerTest {
             timer::delay);
     }
 
-    private long timeDelay(SyncTimer timer) {
+    private static long timeDelay(SyncTimer timer) {
         long start = System.currentTimeMillis();
         timer.delay();
         long duration = System.currentTimeMillis() - start;
         return duration;
     }
 
-    private void setupScheduledThread(long schedulerDuration) {
+    private static void setupScheduledThread(long schedulerDuration) {
         ListedHashTree hashTree = new ListedHashTree();
         hashTree.add(new LoopController());
         JMeterThread thread = new JMeterThread(hashTree, null, null);

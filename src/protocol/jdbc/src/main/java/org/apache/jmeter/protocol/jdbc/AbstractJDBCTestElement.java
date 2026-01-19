@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.jdbc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -42,15 +43,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import kotlin.io.TextStreamsKt;
 
 /**
  * A base class for all JDBC test elements handling the basics of a SQL request.
@@ -270,9 +272,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                 updateCount = pstmt.getUpdateCount();
             }
         } while (currentResult || (updateCount != -1));
-        if (out!=null && pstmt instanceof CallableStatement){
+        if (out!=null && pstmt instanceof CallableStatement cs){
             List<Object> outputValues = new ArrayList<>();
-            CallableStatement cs = (CallableStatement) pstmt;
             sb.append("Output variables by position:\n");
             for(int i=0; i < out.length; i++){
                 if (out[i]!=java.sql.Types.NULL){
@@ -282,8 +283,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                     sb.append(i+1);
                     sb.append("] ");
                     sb.append(o);
-                    if( o instanceof java.sql.ResultSet && RS_COUNT_RECORDS.equals(resultSetHandler)) {
-                        sb.append(" ").append(countRows((ResultSet) o)).append(" rows");
+                    if( o instanceof ResultSet resultSet && RS_COUNT_RECORDS.equals(resultSetHandler)) {
+                        sb.append(" ").append(countRows(resultSet)).append(" rows");
                     }
                     sb.append("\n");
                 }
@@ -293,14 +294,14 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
             JMeterVariables jmvars = getThreadContext().getVariables();
                 for(int i = 0; i < varnames.length && i < outputValues.size(); i++) {
                     String name = varnames[i].trim();
-                    if (name.length()>0){ // Save the value in the variable if present
+                    if (!name.isEmpty()){ // Save the value in the variable if present
                         Object o = outputValues.get(i);
-                        if( o instanceof java.sql.ResultSet ) {
-                            putIntoVar(jmvars, name, (java.sql.ResultSet) o);
-                        } else if (o instanceof java.sql.Clob) {
-                            putIntoVar(jmvars, name, (java.sql.Clob) o);
-                        } else if (o instanceof java.sql.Blob) {
-                            putIntoVar(jmvars, name, (java.sql.Blob) o);
+                        if(o instanceof ResultSet resultSet) {
+                            putIntoVar(jmvars, name, resultSet);
+                        } else if (o instanceof Clob clob) {
+                            putIntoVar(jmvars, name, clob);
+                        } else if (o instanceof Blob blob) {
+                            putIntoVar(jmvars, name, blob);
                         }
                         else {
                             jmvars.put(name, o == null ? null : o.toString());
@@ -331,12 +332,12 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                 try (Reader reader = clob.getCharacterStream(0,MAX_RETAIN_SIZE)) {
                     jmvars.put(
                             name,
-                            IOUtils.toString(reader)
+                            TextStreamsKt.readText(reader)
                             + "<result cut off, it is too big>");
                 }
             } else {
                 try (Reader reader = clob.getCharacterStream()) {
-                    jmvars.put(name, IOUtils.toString(reader));
+                    jmvars.put(name, TextStreamsKt.readText(reader));
                 }
             }
         } catch (IOException e) {
@@ -347,20 +348,17 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     private void putIntoVar(final JMeterVariables jmvars, final String name,
             final Blob blob) throws SQLException {
         if (RS_STORE_AS_OBJECT.equals(resultSetHandler)) {
-            try {
-                long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
-                jmvars.putObject(name,
-                        IOUtils.toByteArray(blob.getBinaryStream(0, length)));
-            } catch (IOException e) {
-                log.warn("Could not read BLOB into {} as object.", name, e);
-            }
+            long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
+            jmvars.putObject(name,
+                    blob.getBytes(0, Math.toIntExact(length)));
         } else if (RS_COUNT_RECORDS.equals(resultSetHandler)) {
             jmvars.put(name, blob.length() + " bytes");
         } else {
             try {
                 long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
-                try (InputStream is = blob.getBinaryStream(0, length)) {
-                    jmvars.put(name, IOUtils.toString(is, ENCODING));
+                try (InputStream is = blob.getBinaryStream(0, length);
+                     InputStreamReader reader = new InputStreamReader(is, ENCODING)) {
+                    jmvars.put(name, TextStreamsKt.readText(reader));
                 }
             } catch (IOException e) {
                 log.warn("Can't convert BLOB to String using {}", ENCODING, e);
@@ -386,7 +384,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     }
 
     private int[] setArguments(PreparedStatement pstmt) throws SQLException, IOException {
-        if (getQueryArguments().trim().length()==0) {
+        if (getQueryArguments().isBlank()) {
             return new int[]{};
         }
         String[] arguments = CSVSaveService.csvSplitString(getQueryArguments(), COMMA_CHAR);
@@ -429,57 +427,22 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
 
     private static void setArgument(PreparedStatement pstmt, String argument, int targetSqlType, int index) throws SQLException {
         switch (targetSqlType) {
-        case Types.INTEGER:
-            pstmt.setInt(index, Integer.parseInt(argument));
-            break;
-        case Types.DECIMAL:
-        case Types.NUMERIC:
-            pstmt.setBigDecimal(index, new BigDecimal(argument));
-            break;
-        case Types.DOUBLE:
-        case Types.FLOAT:
-            pstmt.setDouble(index, Double.parseDouble(argument));
-            break;
-        case Types.CHAR:
-        case Types.LONGVARCHAR:
-        case Types.VARCHAR:
-            pstmt.setString(index, argument);
-            break;
-        case Types.BIT:
-        case Types.BOOLEAN:
-            pstmt.setBoolean(index, Boolean.parseBoolean(argument));
-            break;
-        case Types.BIGINT:
-            pstmt.setLong(index, Long.parseLong(argument));
-            break;
-        case Types.DATE:
-            pstmt.setDate(index, Date.valueOf(argument));
-            break;
-        case Types.REAL:
-            pstmt.setFloat(index, Float.parseFloat(argument));
-            break;
-        case Types.TINYINT:
-            pstmt.setByte(index, Byte.parseByte(argument));
-            break;
-        case Types.SMALLINT:
-            pstmt.setShort(index, Short.parseShort(argument));
-            break;
-        case Types.TIMESTAMP:
-            pstmt.setTimestamp(index, Timestamp.valueOf(argument));
-            break;
-        case Types.TIME:
-            pstmt.setTime(index, Time.valueOf(argument));
-            break;
-        case Types.BINARY:
-        case Types.VARBINARY:
-        case Types.LONGVARBINARY:
-            pstmt.setBytes(index, argument.getBytes(StandardCharsets.UTF_8));
-            break;
-        case Types.NULL:
-            pstmt.setNull(index, targetSqlType);
-            break;
-        default:
-            pstmt.setObject(index, argument, targetSqlType);
+            case Types.INTEGER -> pstmt.setInt(index, Integer.parseInt(argument));
+            case Types.DECIMAL, Types.NUMERIC -> pstmt.setBigDecimal(index, new BigDecimal(argument));
+            case Types.DOUBLE, Types.FLOAT -> pstmt.setDouble(index, Double.parseDouble(argument));
+            case Types.CHAR, Types.LONGVARCHAR, Types.VARCHAR -> pstmt.setString(index, argument);
+            case Types.BIT, Types.BOOLEAN -> pstmt.setBoolean(index, Boolean.parseBoolean(argument));
+            case Types.BIGINT -> pstmt.setLong(index, Long.parseLong(argument));
+            case Types.DATE -> pstmt.setDate(index, Date.valueOf(argument));
+            case Types.REAL -> pstmt.setFloat(index, Float.parseFloat(argument));
+            case Types.TINYINT -> pstmt.setByte(index, Byte.parseByte(argument));
+            case Types.SMALLINT -> pstmt.setShort(index, Short.parseShort(argument));
+            case Types.TIMESTAMP -> pstmt.setTimestamp(index, Timestamp.valueOf(argument));
+            case Types.TIME -> pstmt.setTime(index, Time.valueOf(argument));
+            case Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY ->
+                    pstmt.setBytes(index, argument.getBytes(StandardCharsets.UTF_8));
+            case Types.NULL -> pstmt.setNull(index, targetSqlType);
+            default -> pstmt.setObject(index, argument, targetSqlType);
         }
     }
 
@@ -574,7 +537,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
         // Remove any additional values from previous sample
         for (String varName : varNames) {
             String name = varName.trim();
-            if (name.length() > 0 && jmvars != null) {
+            if (!name.isEmpty() && jmvars != null) {
                 final String varCount = name + "_#"; // $NON-NLS-1$
                 // Get the previous count
                 String prevCount = jmvars.get(varCount);
@@ -605,8 +568,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
                 }
                 row.put(meta.getColumnLabel(i), o);
             }
-            if (o instanceof byte[]) {
-                o = new String((byte[]) o, ENCODING);
+            if (o instanceof byte[] bytes) {
+                o = new String(bytes, ENCODING);
             }
             sb.append(o);
             if (i==numColumns){
@@ -616,7 +579,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
             }
             if (i <= varNames.length) { // i starts at 1
                 String name = varNames[i - 1].trim();
-                if (name.length()>0){ // Save the value in the variable if present
+                if (!name.isEmpty()){ // Save the value in the variable if present
                     jmvars.put(name+UNDERSCORE+currentIterationIndex, o == null ? null : o.toString());
                 }
             }
@@ -659,7 +622,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
      */
     public int getIntegerQueryTimeout() {
         int timeout;
-        if(StringUtils.isEmpty(queryTimeout)) {
+        if (StringUtilities.isEmpty(queryTimeout)) {
             return 0;
         } else {
             try {
@@ -690,7 +653,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
      */
     public int getIntegerResultSetMaxRows() {
         int maxrows;
-        if(StringUtils.isEmpty(resultSetMaxRows)) {
+        if (StringUtilities.isEmpty(resultSetMaxRows)) {
             return -1;
         } else {
             try {

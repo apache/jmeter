@@ -21,7 +21,6 @@ import java.util.Collection;
 
 import javax.swing.JPopupMenu;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestElementSchema;
 import org.apiguardian.api.API;
@@ -155,7 +154,8 @@ public interface JMeterGUIComponent extends ClearGui {
      * @param element test element to configure
      */
     default void assignDefaultValues(TestElement element) {
-        element.setName(StringUtils.defaultIfEmpty(getStaticLabel(), null));
+        String label = getStaticLabel();
+        element.setName(label.isEmpty() ? null : label);
         TestElementSchema schema = TestElementSchema.INSTANCE;
         element.set(schema.getGuiClass(), getClass());
         element.set(schema.getTestClass(), element.getClass());
@@ -201,7 +201,8 @@ public interface JMeterGUIComponent extends ClearGui {
         // TODO: should we keep .clear() here? It probably makes it easier to remove all properties before populating
         //   the values from UI, however, it might be inefficient.
         element.clear();
-        element.setName(StringUtils.defaultIfEmpty(getName(), null));
+        String name = getName();
+        element.setName(name.isEmpty() ? null : name);
         TestElementSchema schema = TestElementSchema.INSTANCE;
         element.set(schema.getGuiClass(), getClass());
         element.set(schema.getTestClass(), element.getClass());

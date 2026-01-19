@@ -120,7 +120,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
         resetValue();
 
-        if (guiEditor instanceof ComboStringEditor) {
+        if (guiEditor instanceof ComboStringEditor comboStringEditor) {
             String[] tags = guiEditor.getTags();
 
             // Provide an initial edit value if necessary -- this is a heuristic
@@ -139,7 +139,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
                 v = getAsText();
             }
 
-            ((ComboStringEditor) guiEditor).setInitialEditValue(v);
+            comboStringEditor.setInitialEditValue(v);
         }
 
         guiEditor.addPropertyChangeListener(this);
@@ -260,7 +260,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @return true if text is a String and isExpression(text).
      */
     private static boolean isExpression(Object text) {
-        return text instanceof String && isExpression((String) text);
+        return text instanceof String str && isExpression(str);
     }
 
     /**
@@ -294,7 +294,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
                     try {
                         typeEditor.setAsText(text);
                     } catch (NumberFormatException e) {
-                        if (text.length() == 0){
+                        if (text.isEmpty()){
                             text = "0";//$NON-NLS-1$
                             typeEditor.setAsText(text);
                         } else {
@@ -350,7 +350,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         guiEditor.setValue(text);
     }
 
-    /*
+    /**
      * Fix bug in JVMs that return true/false rather than True/False
      * from the type editor getAsText() method
      */

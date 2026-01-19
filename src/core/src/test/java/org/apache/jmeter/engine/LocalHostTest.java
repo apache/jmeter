@@ -41,12 +41,19 @@ public class LocalHostTest {
     public void testInterfaces() throws Exception {
         String interfaces = Collections
                 .list(NetworkInterface.getNetworkInterfaces()).stream()
-                .map(this::ifaceWithAddresses)
+                .map(LocalHostTest::ifaceWithAddresses)
                 .collect(Collectors.joining(", "));
         perr("Interfaces: {" + interfaces + "}");
         String externInterface = guessExternalIPv4Interface();
         perr("Choose " + externInterface + " to talk to external services");
         String localHost = getLocalHost().getHostAddress();
+        InetAddress lh = InetAddress.getByName(localHost);
+        if (!lh.isSiteLocalAddress() && !lh.isLoopbackAddress()) {
+            // CI/container/cloud setups might resolve to a public/NAT or external DNS,
+            // so we should not check for localHost binding in that case
+            perr("Skipping localHost binding check for non-site-local address: " + localHost);
+            return;
+        }
         boolean localHostIsBound = Collections
                 .list(NetworkInterface.getNetworkInterfaces()).stream()
                 .flatMap(iface -> iface.getInterfaceAddresses().stream())
@@ -73,7 +80,7 @@ public class LocalHostTest {
                         .getInfo();
     }
 
-    private String ifaceWithAddresses(NetworkInterface iface) {
+    private static String ifaceWithAddresses(NetworkInterface iface) {
         return iface + " => ["
                 + iface.getInterfaceAddresses().stream()
                         .map(InterfaceAddress::toString)
@@ -92,7 +99,7 @@ public class LocalHostTest {
         }
     }
 
-    private InetAddress getLocalHost() throws UnknownHostException {
+    private static InetAddress getLocalHost() throws UnknownHostException {
         final String key = "java.rmi.server.hostname";
         String host = System.getProperties().getProperty(key); // $NON-NLS-1$
         perr(key + "=" + host);

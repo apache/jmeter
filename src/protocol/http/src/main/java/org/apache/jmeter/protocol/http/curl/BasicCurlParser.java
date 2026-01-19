@@ -26,6 +26,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,12 +45,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.Cookie;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +126,7 @@ public class BasicCurlParser {
     public static final class Request {
         private boolean compressed;
         private String url;
-        private final List<Pair<String, String>> headers = new ArrayList<>();
+        private final List<Map.Entry<String, String>> headers = new ArrayList<>();
         private String method = "GET";
         private String postData;
         private String interfaceName;
@@ -136,8 +136,8 @@ public class BasicCurlParser {
         private String filepathCookie="";
         private final Authorization authorization = new Authorization();
         private String caCert = "";
-        private final List<Pair<String, ArgumentHolder>> formData = new ArrayList<>();
-        private final List<Pair<String, String>> formStringData = new ArrayList<>();
+        private final List<Map.Entry<String, ArgumentHolder>> formData = new ArrayList<>();
+        private final List<Map.Entry<String, String>> formStringData = new ArrayList<>();
         private final Set<String> dnsServers = new HashSet<>();
         private boolean isKeepAlive = true;
         private double maxTime = -1;
@@ -173,7 +173,7 @@ public class BasicCurlParser {
          * @param value the post data
          */
         public void setPostData(String value) {
-            if (StringUtils.isBlank(this.postData)) {
+            if (StringUtilities.isBlank(this.postData)) {
                 this.postData = value;
             } else {
                 this.postData = this.postData + "&" + value;
@@ -212,9 +212,9 @@ public class BasicCurlParser {
                 return;
             } else {
                 if (UNIQUE_HEADERS.contains(name.toLowerCase(Locale.US))) {
-                    headers.removeIf(p -> p.getLeft().equalsIgnoreCase(name));
+                    headers.removeIf(p -> p.getKey().equalsIgnoreCase(name));
                 }
-                headers.add(Pair.of(name, value));
+                headers.add(new AbstractMap.SimpleEntry<>(name, value));
             }
         }
 
@@ -252,7 +252,7 @@ public class BasicCurlParser {
         /**
          * @return the headers
          */
-        public List<Pair<String, String>> getHeaders() {
+        public List<Map.Entry<String, String>> getHeaders() {
             return Collections.unmodifiableList(this.headers);
         }
 
@@ -287,19 +287,12 @@ public class BasicCurlParser {
         public void setLimitRate(String limitRate) {
             String unit = limitRate.substring(limitRate.length() - 1, limitRate.length()).toLowerCase(Locale.ROOT);
             int value = Integer.parseInt(limitRate.substring(0, limitRate.length() - 1).toLowerCase(Locale.ROOT));
-            switch (unit) {
-            case "k":
-                this.limitRate = value * ONE_KILOBYTE_IN_CPS;
-                break;
-            case "m":
-                this.limitRate = value * ONE_KILOBYTE_IN_CPS * 1000;
-                break;
-            case "g":
-                this.limitRate = value * ONE_KILOBYTE_IN_CPS * 1000000;
-                break;
-            default:
-                break;
-            }
+            this.limitRate = switch (unit) {
+                case "k" -> value * ONE_KILOBYTE_IN_CPS;
+                case "m" -> value * ONE_KILOBYTE_IN_CPS * 1000;
+                case "g" -> value * ONE_KILOBYTE_IN_CPS * 1000000;
+                default -> this.limitRate; // Keep current value if unit is not recognized
+            };
         }
 
         /**
@@ -419,7 +412,7 @@ public class BasicCurlParser {
         /**
          * @return the map of form data
          */
-        public List<Pair<String,String>> getFormStringData() {
+        public List<Map.Entry<String,String>> getFormStringData() {
             return Collections.unmodifiableList(this.formStringData);
         }
 
@@ -428,13 +421,13 @@ public class BasicCurlParser {
          * @param value the value of form data
          */
         public void addFormStringData(String key, String value) {
-            formStringData.add(Pair.of(key, value));
+            formStringData.add(new AbstractMap.SimpleEntry<>(key, value));
         }
 
         /**
          * @return the map of form data
          */
-        public List<Pair<String,ArgumentHolder>> getFormData() {
+        public List<Map.Entry<String,ArgumentHolder>> getFormData() {
             return Collections.unmodifiableList(this.formData);
         }
 
@@ -443,7 +436,7 @@ public class BasicCurlParser {
          * @param value the value of form data
          */
         public void addFormData(String key, ArgumentHolder value) {
-            formData.add(Pair.of(key, value));
+            formData.add(new AbstractMap.SimpleEntry<>(key, value));
         }
 
         /**
@@ -525,9 +518,6 @@ public class BasicCurlParser {
             this.cookies = cookies;
         }
 
-        /* (non-Javadoc)
-         * @see java.lang.Object#toString()
-         */
         @Override
         public String toString() {
             StringBuilder builder = new StringBuilder();
@@ -640,8 +630,9 @@ public class BasicCurlParser {
             "Tells curl to use HTTP negotiate authentication when communicating with the given proxy. ");
     private static final CLOptionDescriptor D_KEEPALIVETILE_OPT = new CLOptionDescriptor("keepalive-time",
             CLOptionDescriptor.ARGUMENT_REQUIRED, KEEPALIVETILE_OPT,
-            " This option sets the  time  a  connection  needs  to  remain  idle  before  sending"
-                    + " keepalive  probes and the time between individual keepalive probes..");
+            """
+                    This option sets the time a connection needs to remain idle before sending \
+                    keepalive probes and the time between individual keepalive probes..""");
     private static final CLOptionDescriptor D_MAX_TIME_OPT = new CLOptionDescriptor("max-time",
             CLOptionDescriptor.ARGUMENT_REQUIRED, MAX_TIME_OPT,
             "Maximum time in seconds that you allow the whole operation to take. ");
@@ -652,8 +643,9 @@ public class BasicCurlParser {
             "Create the necessary local directory hierarchy as needed for output file");
     private static final CLOptionDescriptor D_RAW_OPT = new CLOptionDescriptor("raw",
             CLOptionDescriptor.ARGUMENT_DISALLOWED, RAW_OPT,
-            "When used, it disables all internal HTTP decoding of content or transfer encodings "
-                    + "and instead makes them passed on unaltered raw. ");
+            """
+                    When used, it disables all internal HTTP decoding of content or transfer \
+                    encodings and instead makes them passed on unaltered raw.""");
     private static final CLOptionDescriptor D_INTERFACE_OPT = new CLOptionDescriptor("interface",
             CLOptionDescriptor.ARGUMENT_REQUIRED, INTERFACE_OPT, "Perform an operation using a specified interface");
     private static final CLOptionDescriptor D_DNS_RESOLVER_OPT = new CLOptionDescriptor("resolve",
@@ -833,7 +825,7 @@ public class BasicCurlParser {
      * An empty or null toProcess parameter results in a zero sized array.
      */
     public static String[] translateCommandline(String toProcess) {
-        if (toProcess == null || toProcess.isEmpty()) {
+        if (StringUtilities.isEmpty(toProcess)) {
             //no command? no string
             return new String[0];
         }
@@ -851,40 +843,40 @@ public class BasicCurlParser {
         while (tok.hasMoreTokens()) {
             String nextTok = tok.nextToken();
             switch (state) {
-            case inQuote:
-                if ("\'".equals(nextTok)) {
-                    lastTokenHasBeenQuoted = true;
-                    state = normal;
-                } else {
-                    current.append(nextTok);
-                }
-                break;
-            case inDoubleQuote:
-                if ("\"".equals(nextTok)) {
-                    lastTokenHasBeenQuoted = true;
-                    state = normal;
-                } else {
-                    current.append(nextTok);
-                }
-                break;
-            default:
-                if ("\'".equals(nextTok)) {
-                    state = inQuote;
-                } else if ("\"".equals(nextTok)) {
-                    state = inDoubleQuote;
-                } else if (" ".equals(nextTok)) {
-                    if (lastTokenHasBeenQuoted || current.length() > 0) {
-                        result.add(current.toString());
-                        current.setLength(0);
+                case inQuote -> {
+                    if ("'".equals(nextTok)) {
+                        lastTokenHasBeenQuoted = true;
+                        state = normal;
+                    } else {
+                        current.append(nextTok);
                     }
-                } else {
-                    current.append(nextTok.replaceAll("^\\\\[\\r\\n]", ""));
                 }
-                lastTokenHasBeenQuoted = false;
-                break;
+                case inDoubleQuote -> {
+                    if ("\"".equals(nextTok)) {
+                        lastTokenHasBeenQuoted = true;
+                        state = normal;
+                    } else {
+                        current.append(nextTok);
+                    }
+                }
+                default -> {
+                    if ("'".equals(nextTok)) {
+                        state = inQuote;
+                    } else if ("\"".equals(nextTok)) {
+                        state = inDoubleQuote;
+                    } else if (" ".equals(nextTok)) {
+                        if (lastTokenHasBeenQuoted || !current.isEmpty()) {
+                            result.add(current.toString());
+                            current.setLength(0);
+                        }
+                    } else {
+                        current.append(nextTok.replaceAll("^\\\\[\\r\\n]", ""));
+                    }
+                    lastTokenHasBeenQuoted = false;
+                }
             }
         }
-        if (lastTokenHasBeenQuoted || current.length() > 0) {
+        if (lastTokenHasBeenQuoted || !current.isEmpty()) {
             result.add(current.toString());
         }
         if (state == inQuote || state == inDoubleQuote) {
@@ -915,14 +907,10 @@ public class BasicCurlParser {
     */
    private static void setAuthMechanism(String mechanism, Authorization authorization) {
        switch (mechanism.toLowerCase(Locale.ROOT)) {
-       case "basic":
-           authorization.setMechanism(Mechanism.BASIC);
-           break;
-       case "digest":
-           authorization.setMechanism(Mechanism.DIGEST);
-           break;
-       default:
-           break;
+           case "basic" -> authorization.setMechanism(Mechanism.BASIC);
+           case "digest" -> authorization.setMechanism(Mechanism.DIGEST);
+           default -> {
+           }
        }
    }
 
@@ -1050,7 +1038,7 @@ public class BasicCurlParser {
        File file = new File(filePath.trim());
        if (file.isFile() && file.exists()) {
            try {
-               return FileUtils.readFileToString(file, StandardCharsets.UTF_8.name());
+               return Files.readString(file.toPath());
            } catch (IOException e) {
                LOGGER.error("Failed to read from File {}", filePath, e);
                throw new IllegalArgumentException("Failed to read from File " + filePath);

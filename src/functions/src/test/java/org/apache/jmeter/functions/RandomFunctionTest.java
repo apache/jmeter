@@ -87,7 +87,7 @@ public class RandomFunctionTest extends JMeterTestCase {
         assertEquals(s, varValue);
     }
 
-    private boolean stringOnlyContainsChars(String value, String allowedChars) {
+    private static boolean stringOnlyContainsChars(String value, String allowedChars) {
         Set<Character> allowedCharsAsSet = allowedChars.chars()
                 .mapToObj(i -> (char) i)
                 .collect(Collectors.toCollection(HashSet::new));

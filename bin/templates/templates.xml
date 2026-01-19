@@ -121,29 +121,6 @@
         ]]></description>
     </template>
     <template isTestPlan="true">
-        <name>MongoDB Load Test</name>
-        <fileName>mongodb.jmx</fileName>
-        <description>
-        <![CDATA[<h1>Template showing how to Load Test MongoDB code using MongoDB Java Driver</h1>
-        <h2>JMeter Configuration</h2>
-            <ul>
-                <li>Configure the <b>Server address list</b>, and tune <b>MongoDB options</b> in MongoDB Source Config</li>
-                <li>Modify the JSR223 samples (<b>Insert into testCollection</b> and <b>Count from testCollection</b>) to match your needs</li>
-            </ul>
-        <h2>Mongo Java Driver</h2>
-        <p>
-            MongoDB Source Config configures the connection to MongoDB for you and stores in <b>MongoDB Source</b> the configuration.<br/>
-            You can then access it in any Scripting element using:<br/>
-            <i>com.mongodb.DB db = org.apache.jmeter.protocol.mongodb.config.MongoDBHolder.getDBFromSource("db", "test");<i>
-        </p>
-        <h2>Useful links</h2>
-            <ul>
-                <li><a href="http://docs.mongodb.org/ecosystem/tutorial/getting-started-with-java-driver/#getting-started-with-java-driver" >Getting Started with Java Driver (<i>Making a connection</i> part is already done by MongoDB Source Config)</a></li>
-                <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#MongoDB_Source_Config" >http://jmeter.apache.org/usermanual/component_reference.html#MongoDB_Source_Config</a></li>
-            </ul>
-        ]]></description>
-    </template>
-    <template isTestPlan="true">
         <name>Building a Web Test Plan</name>
         <fileName>/bin/templates/build-web-test-plan.jmx</fileName>
         <description><![CDATA[

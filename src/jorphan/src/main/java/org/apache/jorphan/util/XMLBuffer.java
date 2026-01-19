@@ -94,7 +94,7 @@ public class XMLBuffer{
      * @return this
      */
     public XMLBuffer tag(String tagName, CharSequence content) {
-        if (content.length() == 0) {
+        if (content.isEmpty()) {
             emptyTag(tagName);
         } else {
             startTag(tagName);

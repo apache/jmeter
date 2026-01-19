@@ -27,7 +27,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,23 +44,25 @@ class TestGraphQLRequestParamUtils {
 
     private static final String OPERATION_NAME = "";
 
-    private static final String QUERY =
-            "query($id: ID!) {\n"
-            + "  droid(id: $id) {\n"
-            + "    id\n"
-            + "    name\n"
-            + "    friends {\n"
-            + "      id\n"
-            + "      name\n"
-            + "      appearsIn\n"
-            + "    }\n"
-            + "  }\n"
-            + "}\n";
+    private static final String QUERY = """
+            query($id: ID!) {
+              droid(id: $id) {
+                id
+                name
+                friends {
+                  id
+                  name
+                  appearsIn
+                }
+              }
+            }
+            """;
 
-    private static final String VARIABLES =
-            "{\n"
-            + "  \"id\": \"2001\"\n"
-            + "}\n";
+    private static final String VARIABLES = """
+            {
+              "id": "2001"
+            }
+            """;
 
     private static final String EXPECTED_QUERY_GET_PARAM_VALUE =
             "query($id: ID!) { droid(id: $id) { id name friends { id name appearsIn } } }";
@@ -72,7 +73,7 @@ class TestGraphQLRequestParamUtils {
             "{"
             + "\"operationName\":null,"
             + "\"variables\":" + EXPECTED_VARIABLES_GET_PARAM_VALUE + ","
-            + "\"query\":\"" + StringUtils.replace(QUERY.trim(), "\n", "\\n") + "\""
+            + "\"query\":\"" + (QUERY.trim() == null ? null : QUERY.trim().replace("\n", "\\n")) + "\""
             + "}";
 
     private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()

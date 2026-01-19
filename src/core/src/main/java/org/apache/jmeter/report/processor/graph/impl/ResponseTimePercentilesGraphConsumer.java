@@ -48,23 +48,11 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
         setRenderPercentiles(true);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createKeysSelector()
-     */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
         return sample -> (double) sample.getElapsedTime();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         return Collections.singletonMap(
@@ -75,12 +63,6 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
                         new CountValueSelector(false), false, false));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
-     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
-     */
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         // do nothing

@@ -17,7 +17,9 @@
 
 package org.apache.jmeter.extractor.json.jmespath;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -27,7 +29,6 @@ import org.apache.jmeter.testelement.AbstractScopedTestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -64,17 +65,23 @@ class TestJMESPathExtractor {
         JMESPathExtractor processor = setupProcessor(vars, sampleResult, "[1]", false, "");
         processor.setJmesPathExpression("[*]");
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("1"));
+        assertEquals("1", vars.get(REFERENCE_NAME));
     }
 
     private static Stream<Arguments> dataOneMatch() {
         return Stream.of(
             Arguments.of("[\"one\"]", "[*]", "one", "1"),
             Arguments.of("{\"a\": {\"b\": {\"c\": {\"d\": \"value\"}}}}", "a.b.c.d", "value", "1"),
-            Arguments.of("{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
-                    + "    {\"first\": \"Jacob\", \"last\": \"e\"},\r\n"
-                    + "    {\"first\": \"Jayden\", \"last\": \"f\"},\r\n" + "    {\"missing\": \"different\"}\r\n"
-                    + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}", "people[2]",
+            Arguments.of("""
+                            {\r
+                              "people": [\r
+                                {"first": "James", "last": "d"},\r
+                                {"first": "Jacob", "last": "e"},\r
+                                {"first": "Jayden", "last": "f"},\r
+                                {"missing": "different"}\r
+                              ],\r
+                              "foo": {"bar": "baz"}\r
+                            }""", "people[2]",
                     "{\"first\":\"Jayden\",\"last\":\"f\"}",
                     "1")
         );
@@ -92,29 +99,35 @@ class TestJMESPathExtractor {
         testOneMatchOnAllExtractedValues(false, data, jmesPath, expectedResult, expectedMatchNumber);
     }
 
-    private void testOneMatchOnAllExtractedValues(boolean fromVars, String data, String jmesPath, String expectedResult, String expectedMatchNumber) {
+    private static void testOneMatchOnAllExtractedValues(boolean fromVars, String data, String jmesPath, String expectedResult, String expectedMatchNumber) {
         JMeterVariables vars = new JMeterVariables();
         SampleResult sampleResult = new SampleResult();
         JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "-1");
         processor.setJmesPathExpression(jmesPath);
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(expectedResult));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(expectedMatchNumber));
+        assertNull(vars.get(REFERENCE_NAME));
+        assertEquals(expectedResult, vars.get(REFERENCE_NAME + "_1"));
+        assertEquals(expectedMatchNumber, vars.get(REFERENCE_NAME_MATCH_NUMBER));
 
         processor.clearOldRefVars(vars, REFERENCE_NAME);
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertNull(vars.get(REFERENCE_NAME + "_1"));
+        assertNull(vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
     private static Stream<Arguments> dataMultipleMatches() {
         return Stream.of(
             Arguments.of("[\"one\", \"two\"]", "[*]", new String[] {"one", "two"}, "2"),
             Arguments.of("[\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]", "[0:3]", new String[] {"a", "b","c"}, "3"),
-            Arguments.of("{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\"},\r\n"
-                    + "    {\"first\": \"Jacob\", \"last\": \"e\"},\r\n"
-                    + "    {\"first\": \"Jayden\", \"last\": \"f\"},\r\n" + "    {\"missing\": \"different\"}\r\n"
-                    + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n" + "}", "people[:2].first", new String[] {"James", "Jacob"}, "2")
+            Arguments.of("""
+                    {\r
+                      "people": [\r
+                        {"first": "James", "last": "d"},\r
+                        {"first": "Jacob", "last": "e"},\r
+                        {"first": "Jayden", "last": "f"},\r
+                        {"missing": "different"}\r
+                      ],\r
+                      "foo": {"bar": "baz"}\r
+                    }""", "people[:2].first", new String[] {"James", "Jacob"}, "2")
         );
     }
 
@@ -130,25 +143,30 @@ class TestJMESPathExtractor {
         testMultipleMatchesOnAllExtractedValues(false, data, jmesPath, expectedResults, expectedMatchNumber);
     }
 
-    private void testMultipleMatchesOnAllExtractedValues(boolean fromVars, String data, String jmesPath, String[] expectedResults, String expectedMatchNumber) {
+    private static void testMultipleMatchesOnAllExtractedValues(boolean fromVars, String data, String jmesPath, String[] expectedResults, String expectedMatchNumber) {
         SampleResult sampleResult = new SampleResult();
         JMeterVariables vars = new JMeterVariables();
         JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "-1");
         // test1
         processor.setJmesPathExpression(jmesPath);
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertNull(vars.get(REFERENCE_NAME));
         for (int i = 0; i < expectedResults.length; i++) {
-            assertThat(vars.get(REFERENCE_NAME + "_"+(i+1)), CoreMatchers.is(expectedResults[i]));
+            assertEquals(expectedResults[i], vars.get(REFERENCE_NAME + "_"+(i+1)));
         }
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(expectedMatchNumber));
+        assertEquals(expectedMatchNumber, vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
-    private static final String TEST_DATA = "{\r\n" + "  \"people\": [\r\n" + "    {\"first\": \"James\", \"last\": \"d\", \"age\":10},\r\n"
-            + "    {\"first\": \"Jacob\", \"last\": \"e\", \"age\":20},\r\n"
-            + "    {\"first\": \"Jayden\", \"last\": \"f\", \"age\":30},\r\n"
-            + "    {\"missing\": \"different\"}\r\n" + "  ],\r\n" + "  \"foo\": {\"bar\": \"baz\"}\r\n"
-            + "}";
+    private static final String TEST_DATA = """
+            {\r
+              "people": [\r
+                {"first": "James", "last": "d", "age":10},\r
+                {"first": "Jacob", "last": "e", "age":20},\r
+                {"first": "Jayden", "last": "f", "age":30},\r
+                {"missing": "different"}\r
+              ],\r
+              "foo": {"bar": "baz"}\r
+            }""";
 
     private static Stream<Arguments> dataMatchNumberMoreThanZero() {
         return Stream.of(
@@ -174,16 +192,16 @@ class TestJMESPathExtractor {
         testMatchNumberMoreThanZeroOn1ExtractedValue(false, data, jmesPath, matchNumber, expectedResult, expectedMatchNumber);
     }
 
-    private void testMatchNumberMoreThanZeroOn1ExtractedValue(boolean fromVars, String data, String jmesPath,
-            String matchNumber, String expectedResult, String expectedMatchNumber) {
+    private static void testMatchNumberMoreThanZeroOn1ExtractedValue(boolean fromVars, String data, String jmesPath,
+                                                                     String matchNumber, String expectedResult, String expectedMatchNumber) {
         SampleResult sampleResult = new SampleResult();
         JMeterVariables vars = new JMeterVariables();
         JMESPathExtractor processor = setupProcessor(vars, sampleResult, data, fromVars, "1");
         processor.setMatchNumber(matchNumber);
         processor.setJmesPathExpression(jmesPath);
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(expectedResult));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(expectedMatchNumber));
+        assertEquals(expectedResult, vars.get(REFERENCE_NAME));
+        assertEquals(expectedMatchNumber, vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
     enum AccessMode {
@@ -232,13 +250,13 @@ class TestJMESPathExtractor {
         accessMode.configure(processor);
 
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(resultObject));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(resultCount));
+        assertEquals(resultObject, vars.get(REFERENCE_NAME));
+        assertNull(vars.get(REFERENCE_NAME + "_1"));
+        assertEquals(resultCount, vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
     private static Stream<Arguments> dataSourceVarOrResponse() {
-        return Stream.of(Arguments.of(Boolean.TRUE), Arguments.of(Boolean.FALSE));
+        return Stream.of(Arguments.of(true), Arguments.of(false));
     }
 
     @ParameterizedTest
@@ -250,9 +268,9 @@ class TestJMESPathExtractor {
 
         processor.setJmesPathExpression("a.b.c.d");
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is("value"));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("1"));
+        assertEquals("value", vars.get(REFERENCE_NAME));
+        assertNull(vars.get(REFERENCE_NAME + "_1"));
+        assertEquals("1", vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
     @ParameterizedTest
@@ -264,11 +282,13 @@ class TestJMESPathExtractor {
 
         processor.setJmesPathExpression("[*]");
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME),
-                CoreMatchers.is(CoreMatchers.anyOf(CoreMatchers.is("one"), CoreMatchers.is("two"))));
-        assertThat(vars.get(REFERENCE_NAME + "_1"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME + "_2"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("2"));
+        String varValue = vars.get(REFERENCE_NAME);
+        if (!"one".equals(varValue) && !"two".equals(varValue)) {
+            fail("vars.get(REFERENCE_NAME) should be one or two, got " + varValue);
+        }
+        assertNull(vars.get(REFERENCE_NAME + "_1"));
+        assertNull(vars.get(REFERENCE_NAME + "_2"));
+        assertEquals("2", vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
     @ParameterizedTest
@@ -280,8 +300,8 @@ class TestJMESPathExtractor {
 
         processor.setJmesPathExpression("[*]");
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is(CoreMatchers.nullValue()));
+        assertEquals(DEFAULT_VALUE, vars.get(REFERENCE_NAME));
+        assertNull(vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
     @ParameterizedTest
@@ -293,9 +313,9 @@ class TestJMESPathExtractor {
 
         processor.setJmesPathExpression("$.k");
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
-        assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.nullValue());
+        assertEquals(DEFAULT_VALUE, vars.get(REFERENCE_NAME));
+        assertNull(vars.get(REFERENCE_NAME+ "_1"));
+        assertNull(vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
     @ParameterizedTest
@@ -307,9 +327,9 @@ class TestJMESPathExtractor {
 
         processor.setJmesPathExpression("a.b.c.f");
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
-        assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.is("0"));
+        assertEquals(DEFAULT_VALUE, vars.get(REFERENCE_NAME));
+        assertNull(vars.get(REFERENCE_NAME+ "_1"));
+        assertEquals("0", vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 
     @ParameterizedTest
@@ -321,8 +341,8 @@ class TestJMESPathExtractor {
 
         processor.setJmesPathExpression("a.b");
         processor.process();
-        assertThat(vars.get(REFERENCE_NAME), CoreMatchers.is(DEFAULT_VALUE));
-        assertThat(vars.get(REFERENCE_NAME+ "_1"), CoreMatchers.nullValue());
-        assertThat(vars.get(REFERENCE_NAME_MATCH_NUMBER), CoreMatchers.nullValue());
+        assertEquals(DEFAULT_VALUE, vars.get(REFERENCE_NAME));
+        assertNull(vars.get(REFERENCE_NAME+ "_1"));
+        assertNull(vars.get(REFERENCE_NAME_MATCH_NUMBER));
     }
 }

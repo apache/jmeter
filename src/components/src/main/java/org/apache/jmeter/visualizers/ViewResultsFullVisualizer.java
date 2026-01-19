@@ -61,8 +61,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.apache.commons.collections4.queue.CircularFifoQueue;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
@@ -74,6 +72,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.reflect.LogAndIgnoreServiceLoadExceptionHandler;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.jorphan.util.StringWrap;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -139,7 +138,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private Object resultsObject = null;
     private TreeSelectionEvent lastSelectionEvent;
     private JCheckBox autoScrollCB;
-    private final Queue<SampleResult> buffer;
+    private final Queue<SampleResult> buffer = new ArrayDeque<>();
+    private final int maxResults;
     private boolean dataChanged;
 
     /**
@@ -147,12 +147,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      */
     public ViewResultsFullVisualizer() {
         super();
-        final int maxResults = JMeterUtils.getPropDefault("view.results.tree.max_results", 500);
-        if (maxResults > 0) {
-            buffer = new CircularFifoQueue<>(maxResults);
-        } else {
-            buffer = new ArrayDeque<>();
-        }
+        this.maxResults = JMeterUtils.getPropDefault("view.results.tree.max_results", 500);
         init();
         new Timer(REFRESH_PERIOD, e -> updateGui()).start();
     }
@@ -161,6 +156,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     @Override
     public void add(final SampleResult sample) {
         synchronized (buffer) {
+            if (maxResults > 0 && buffer.size() >= maxResults) {
+                buffer.remove();
+            }
             buffer.add(sample);
             dataChanged = true;
         }
@@ -394,8 +392,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             resultsRender.setSamplerResult(userObject);
             resultsRender.setupTabPane(); // Processes Assertions
             // display a SampleResult
-            if (userObject instanceof SampleResult) {
-                SampleResult sampleResult = (SampleResult) userObject;
+            if (userObject instanceof SampleResult sampleResult) {
                 if (isTextDataType(sampleResult)){
                     resultsRender.renderResult(sampleResult);
                 } else {
@@ -413,8 +410,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      * @return true if sampleResult is text or has empty content type
      */
     protected static boolean isTextDataType(SampleResult sampleResult) {
-        return SampleResult.TEXT.equals(sampleResult.getDataType())
-                || StringUtils.isEmpty(sampleResult.getDataType());
+        String dataType = sampleResult.getDataType();
+        return SampleResult.TEXT.equals(dataType) ||
+                StringUtilities.isEmpty(dataType);
     }
 
     private synchronized Component createLeftPanel() {
@@ -456,7 +454,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
         // if no results render in jmeter.properties, load Standard (default)
         String defaultRenderer = expandToClassname(".RenderAsText"); // $NON-NLS-1$
-        if (VIEWERS_ORDER.length() > 0) {
+        if (!VIEWERS_ORDER.isEmpty()) {
             defaultRenderer = expandToClassname(VIEWERS_ORDER.split(",", 2)[0]);
         }
         ResultRenderer defaultObject = null;
@@ -474,7 +472,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             renderer.setBackgroundColor(getBackground());
             map.put(renderer.getClass().getName(), renderer);
         }
-        if (VIEWERS_ORDER.length() > 0) {
+        if (!VIEWERS_ORDER.isEmpty()) {
             Arrays.stream(VIEWERS_ORDER.split(","))
                     .map(ViewResultsFullVisualizer::expandToClassname)
                     .forEach(key -> {
@@ -546,12 +544,14 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             // they are ready to wait.
             int len = res.getResponseDataAsString().length();
             if (MAX_DISPLAY_SIZE > 0 && len > MAX_DISPLAY_SIZE) {
-                StringBuilder builder = new StringBuilder(MAX_DISPLAY_SIZE + 100);
-                builder.append(JMeterUtils.getResString("view_results_response_too_large_message")) //$NON-NLS-1$
-                    .append(len).append(" > Max: ").append(MAX_DISPLAY_SIZE)
-                    .append(", ").append(JMeterUtils.getResString("view_results_response_partial_message")) // $NON-NLS-1$
-                    .append("\n").append(res.getResponseDataAsString(), 0, MAX_DISPLAY_SIZE).append("\n...");
-                response = builder.toString();
+                response = """
+                        %s%d > Max: %d, %s
+                        %s
+                        ...""".formatted(
+                            JMeterUtils.getResString("view_results_response_too_large_message"), //$NON-NLS-1$
+                            len, MAX_DISPLAY_SIZE,
+                            JMeterUtils.getResString("view_results_response_partial_message"), // $NON-NLS-1$
+                            res.getResponseDataAsString().substring(0, MAX_DISPLAY_SIZE));
             } else {
                 response = res.getResponseDataAsString();
             }
@@ -561,7 +561,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     @API(status = API.Status.INTERNAL, since = "5.5")
     public static String wrapLongLines(String input) {
-        if (input == null || input.isEmpty()) {
+        if (StringUtilities.isEmpty(input)) {
             return input;
         }
         if (SOFT_WRAP_LINE_SIZE > 0 && MAX_LINE_SIZE > 0) {
@@ -581,10 +581,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
             boolean failure = true;
             Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
-            if (userObject instanceof SampleResult) {
-                failure = !((SampleResult) userObject).isSuccessful();
-            } else if (userObject instanceof AssertionResult) {
-                AssertionResult assertion = (AssertionResult) userObject;
+            if (userObject instanceof SampleResult sampleResult) {
+                failure = !sampleResult.isSuccessful();
+            } else if (userObject instanceof AssertionResult assertion) {
                 failure = assertion.isError() || assertion.isFailure();
             }
 

@@ -314,7 +314,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 for (Map.Entry<Double, Aggregator> entry : sortedInfo
                         .entrySet()) {
                     Double value = entry.getKey();
-                    percent += (double) 100 * entry.getValue().getCount()
+                    percent += 100.0 * entry.getValue().getCount()
                             / count;
                     double percentile = (double) rank / 10;
                     while (percentile < percent) {
@@ -334,7 +334,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 for (Map.Entry<Double, Aggregator> entry : sortedInfo
                         .entrySet()) {
                     Double value = entry.getKey();
-                    percent += (double) 100 * entry.getValue().getCount()
+                    percent += 100.0 * entry.getValue().getCount()
                             / count;
                     double percentile = (double) rank / 10;
                     while (percentile < percent) {
@@ -439,12 +439,6 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      */
     protected abstract void initializeExtraResults(MapResultData parentResult);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleConsumer#startConsuming()
-     */
     @Override
     public void startConsuming() {
 
@@ -457,13 +451,6 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         super.startProducing();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleConsumer#consume(org.apache
-     * .jmeter.report.csv.core.Sample, int)
-     */
     @Override
     public void consume(Sample sample, int channel) {
 
@@ -513,18 +500,6 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         super.produce(sample, channel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleConsumer#stopConsuming()
-     */
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.graph.SampleConsumer#stopConsuming()
-     */
     @Override
     public void stopConsuming() {
         super.stopProducing();

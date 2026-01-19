@@ -74,7 +74,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 
     private final JTextField port = new JTextField(20);
 
-    /*
+    /**
      * N.B. These entry indexes MUST agree with the SearchControls SCOPE_LEVELS, i.e.
      *
      * javax.naming.directory.SearchControls.OBJECT_SCOPE, ONELEVEL_SCOPE, SUBTREE_SCOPE

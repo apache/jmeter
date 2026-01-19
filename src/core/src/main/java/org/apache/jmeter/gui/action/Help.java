@@ -77,15 +77,12 @@ public class Help extends AbstractAction {
             JDialog dialog = initHelpWindow();
             dialog.setVisible(true); // set the window visible immediately
 
-            /*
-             * This means that a new page will be shown before rendering is complete,
-             * however the correct location will be displayed.
-             * Attempts to use a "page" PropertyChangeListener to detect when the page
-             * has been loaded failed to work any better.
-             */
+            // This means that a new page will be shown before rendering is complete,
+            // however the correct location will be displayed.
+            // Attempts to use a "page" PropertyChangeListener to detect when the page
+            // has been loaded failed to work any better.
             StringBuilder url=new StringBuilder();
-            if (e.getSource() instanceof String[]) {
-                String[] source = (String[]) e.getSource();
+            if (e.getSource() instanceof String[] source) {
                 url.append(source[0]).append('#').append(source[1]);
             } else {
                 url.append(HELP_COMPONENTS).append('#').append(GuiPackage.getInstance().getTreeListener().getCurrentNode().getDocAnchor());

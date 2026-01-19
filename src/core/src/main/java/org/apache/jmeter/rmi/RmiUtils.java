@@ -23,9 +23,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,12 +84,11 @@ public final class RmiUtils {
             log.info("Disabling SSL for RMI as server.rmi.ssl.disable is set to 'true'");
             return null;
         }
-        if (StringUtils.isBlank(KEYSTORE_FILE)) {
-            Validate.validState(SSL_DISABLED,
+        if (StringUtilities.isBlank(KEYSTORE_FILE)) {
+            throw new IllegalStateException(
                     "No keystore for RMI over SSL specified. Set 'server.rmi.ssl.disable' to true, if this is intentional,"
                     + "if not run create-rmi-keystore.bat/create-rmi-keystore.sh to create a keystore and distribute it on client and servers"
                     + "used for distributed testing.");
-            return null;
         }
         final SSLRMIClientSocketFactory factory = new SSLRMIClientSocketFactory();
         factory.setAlias(KEYSTORE_ALIAS);
@@ -104,10 +102,9 @@ public final class RmiUtils {
             log.info("Disabling SSL for RMI as server.rmi.ssl.disable is set to 'true'");
             return null;
         }
-        if (StringUtils.isBlank(KEYSTORE_FILE)) {
-            Validate.validState(SSL_DISABLED,
+        if (StringUtilities.isBlank(KEYSTORE_FILE)) {
+            throw new IllegalStateException(
                     "No keystore for RMI over SSL specified. Set 'server.rmi.ssl.disable' to true, if this is intentional.");
-            return new RMIServerSocketFactoryImpl(getRmiHost());
         }
         SSLRMIServerSocketFactory factory = new SSLRMIServerSocketFactory(getRmiHost());
         factory.setAlias(KEYSTORE_ALIAS);

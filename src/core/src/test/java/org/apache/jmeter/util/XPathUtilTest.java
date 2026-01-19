@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.util;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,7 +38,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.jmeter.assertions.AssertionResult;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -146,22 +144,25 @@ public class XPathUtilTest {
 
     @Test
     public void testFormatXmlSimple() {
-        assertThat(XPathUtil.formatXml("<one foo='bar'>Test</one>"),
-                CoreMatchers.is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                        + "<one foo=\"bar\">Test</one>" + lineSeparator));
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                        + "<one foo=\"bar\">Test</one>" + lineSeparator,
+                XPathUtil.formatXml("<one foo='bar'>Test</one>"));
     }
 
     @Test
     public void testFormatXmlComplex() {
-        assertThat(
-                XPathUtil.formatXml(
-                        "<one foo='bar'><two/><three><four p=\"1\"/></three>...</one>"),
-                CoreMatchers.is(String.join(lineSeparator, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><one foo=\"bar\">",
+        assertEquals(
+                String.join(
+                        lineSeparator,
+                        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><one foo=\"bar\">",
                         "  <two/>",
                         "  <three>",
                         "    <four p=\"1\"/>",
                         "  </three>...</one>",
-                        "")));
+                        ""),
+                XPathUtil.formatXml(
+                        "<one foo='bar'><two/><three><four p=\"1\"/></three>...</one>"));
     }
 
     @Test
@@ -175,8 +176,7 @@ public class XPathUtilTest {
                     // ignore output
                 }
             }));
-            assertThat("No well formed xml here", CoreMatchers
-                    .is(XPathUtil.formatXml("No well formed xml here")));
+            assertEquals("No well formed xml here", XPathUtil.formatXml("No well formed xml here"));
         } finally {
             System.setErr(origErr);
         }

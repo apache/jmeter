@@ -92,16 +92,15 @@ public abstract class AbstractAction implements Command {
             File f = new File(rc.getFilename());
             if (f.exists()) {
                 switch (actionOnFile) {
-                    case APPEND:
-                        break;
-                    case DELETE:
-                        if (f.delete()) {
-                            break;
-                        } else {
+                    case APPEND -> {
+                    }
+                    case DELETE -> {
+                        if (!f.delete()) {
                             log.error("Could not delete existing file {}", f.getAbsolutePath());
                             return false;
                         }
-                    case ASK:
+                    }
+                    case ASK -> {
                         String[] option = new String[]{JMeterUtils.getResString("concat_result"),
                                 JMeterUtils.getResString("dont_start"), JMeterUtils.getResString("replace_file")};
                         String question = MessageFormat.format(
@@ -133,7 +132,7 @@ public abstract class AbstractAction implements Command {
                                 // Exit without start the test
                                 return false;
                         }
-                        break;
+                    }
                 }
             }
         }
@@ -147,15 +146,13 @@ public abstract class AbstractAction implements Command {
     protected static JFrame getParentFrame(ActionEvent event) {
         JFrame parent = null;
         Object source = event.getSource();
-        if (source instanceof JMenuItem) {
-            JMenuItem item = (JMenuItem) source;
+        if (source instanceof JMenuItem item) {
             Component comp = item.getParent();
-            if (comp instanceof JPopupMenu) {
-                JPopupMenu popup = (JPopupMenu) comp;
+            if (comp instanceof JPopupMenu popup) {
                 comp = popup.getInvoker();
-                Window window = SwingUtilities.windowForComponent((Component) comp);
-                if (window instanceof JFrame) {
-                    parent = (JFrame) window;
+                Window window = SwingUtilities.windowForComponent(comp);
+                if (window instanceof JFrame jFrame) {
+                    parent = jFrame;
                 }
             }
         } else {

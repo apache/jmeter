@@ -75,11 +75,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
      */
     protected BeanShellInterpreter getBeanShellInterpreter() {
         if (isResetInterpreter()) {
-            try {
-                bshInterpreter.reset();
-            } catch (ClassNotFoundException e) {
-                log.error("Cannot reset BeanShell: {}", e.toString()); // NOSONAR last arg would be exception
-            }
+            bshInterpreter.reset();
         }
 
         JMeterContext jmctx = JMeterContextService.getContext();
@@ -101,13 +97,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         parameters=""; // ensure variables are not null
         filename="";
         script="";
-        try {
-            String initFileName = JMeterUtils.getProperty(getInitFileProperty());
-            hasInitFile = initFileName != null;
-            bshInterpreter = new BeanShellInterpreter(initFileName, log);
-        } catch (ClassNotFoundException e) {
-            log.error("Cannot find BeanShell: {}", e.toString()); // NOSONAR last arg would be exception
-        }
+        String initFileName = JMeterUtils.getProperty(getInitFileProperty());
+        hasInitFile = initFileName != null;
+        bshInterpreter = new BeanShellInterpreter(initFileName, log);
     }
 
     protected Object readResolve() {
@@ -166,7 +158,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         bsh.set("bsh.args",//$NON-NLS-1$
                 JOrphanUtils.split(params, " "));//$NON-NLS-1$
 
-        if (fileName.length() == 0) {
+        if (fileName.isEmpty()) {
             String bshScript = getScript();
             if (sampleResult != null) {
                 sampleResult.setSamplerData(bshScript);

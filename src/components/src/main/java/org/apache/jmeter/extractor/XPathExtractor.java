@@ -129,7 +129,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
             if (isScopeVariable()){
                 String inputString=vars.get(getVariableName());
                 if(inputString != null) {
-                    if(inputString.length()>0) {
+                    if(!inputString.isEmpty()) {
                         Document d =  parseResponse(inputString);
                         getValuesForXPath(d,getXPathQuery(), matches, matchNumber);
                     }

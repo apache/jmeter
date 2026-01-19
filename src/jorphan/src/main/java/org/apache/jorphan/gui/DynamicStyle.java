@@ -158,8 +158,8 @@ public class DynamicStyle {
     private void updateComponentTreeUI(Component root, List<Component> components) {
         collectComponents(root, components);
         for (Component component : components) {
-            if (component instanceof JComponent) {
-                updateComponent((JComponent) component);
+            if (component instanceof JComponent jComponent) {
+                updateComponent(jComponent);
             }
             component.invalidate();
         }
@@ -190,8 +190,7 @@ public class DynamicStyle {
             return;
         }
         components.add(root);
-        if (root instanceof JComponent) {
-            JComponent jc = (JComponent) root;
+        if (root instanceof JComponent jc) {
             // Note: updateUI might alter the component tree, so we should call it before
             // we try iterating over the children
             jc.updateUI();
@@ -203,13 +202,13 @@ public class DynamicStyle {
             }
         }
         Component[] children = null;
-        if (root instanceof JMenu) {
+        if (root instanceof JMenu menu) {
             synchronized (root.getTreeLock()) {
-                children = ((JMenu) root).getMenuComponents();
+                children = menu.getMenuComponents();
             }
-        } else if (root instanceof Container) {
+        } else if (root instanceof Container container) {
             synchronized (root.getTreeLock()) {
-                children = ((Container) root).getComponents();
+                children = container.getComponents();
             }
         }
         if (children != null) {
@@ -217,8 +216,7 @@ public class DynamicStyle {
                 collectComponents(child, components);
             }
         }
-        if (root instanceof JTabbedPane) {
-            JTabbedPane tabbedPane = (JTabbedPane) root;
+        if (root instanceof JTabbedPane tabbedPane) {
             int size = tabbedPane.getTabCount();
             for (int i = 0; i < size; i++) {
                 // This is the contents of the tab

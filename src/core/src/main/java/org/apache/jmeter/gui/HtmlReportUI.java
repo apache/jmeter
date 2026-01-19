@@ -159,7 +159,7 @@ public class HtmlReportUI implements ActionListener {
     private class ReportGenerationWorker extends SwingWorker<List<String>, String> {
         private final JButton reportLaunchButton;
 
-        public ReportGenerationWorker(JButton reportLaunchButton) {
+        private ReportGenerationWorker(JButton reportLaunchButton) {
             this.reportLaunchButton = reportLaunchButton;
         }
         @Override
@@ -196,36 +196,32 @@ public class HtmlReportUI implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-        case CREATE_REQUEST:
-            try {
-                reportArea.setText(GENERATING_REPORT_LABEL + "\n");
-                reportLaunchButton.setIcon(runningIcon);
-                new ReportGenerationWorker(reportLaunchButton).execute();
-            } catch (Exception exception) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Error during html report generation: {}", exception.getMessage(), exception);
+            case CREATE_REQUEST -> {
+                try {
+                    reportArea.setText(GENERATING_REPORT_LABEL + "\n");
+                    reportLaunchButton.setIcon(runningIcon);
+                    new ReportGenerationWorker(reportLaunchButton).execute();
+                } catch (Exception exception) {
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("Error during html report generation: {}", exception.getMessage(), exception);
+                    }
+                }
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("CSV file path {}\nuser.properties file path: {}\nOutput directory file path: {}",
+                            csvFilePathTextField.getText(), userPropertiesFilePathTextField.getText(),
+                            outputDirectoryPathTextField.getText());
                 }
             }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("CSV file path {}\nuser.properties file path: {}\nOutput directory file path: {}",
-                        csvFilePathTextField.getText(), userPropertiesFilePathTextField.getText(),
-                        outputDirectoryPathTextField.getText());
-            }
-            break;
-        case BROWSE_USER_PROPERTIES:
-            userPropertiesFilePathTextField.setText(showFileChooser(userPropertiesFileButton.getParent(),
-                    userPropertiesFilePathTextField, false, new String[] { ".properties" }));
-            break;
-        case BROWSE_CSV:
-            csvFilePathTextField.setText(showFileChooser(csvFileButton.getParent(), csvFilePathTextField, false,
-                    new String[] { ".jtl", ".csv" }));
-            break;
-        case BROWSE_OUTPUT:
-            outputDirectoryPathTextField.setText(
+            case BROWSE_USER_PROPERTIES ->
+                    userPropertiesFilePathTextField.setText(showFileChooser(userPropertiesFileButton.getParent(),
+                            userPropertiesFilePathTextField, false, new String[]{".properties"}));
+            case BROWSE_CSV ->
+                    csvFilePathTextField.setText(showFileChooser(csvFileButton.getParent(), csvFilePathTextField, false,
+                            new String[]{".jtl", ".csv"}));
+            case BROWSE_OUTPUT -> outputDirectoryPathTextField.setText(
                     showFileChooser(outputDirectoryButton.getParent(), outputDirectoryPathTextField, true, null));
-            break;
-        default:
-            break;
+            default -> {
+            }
         }
     }
 

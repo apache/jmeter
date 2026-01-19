@@ -26,12 +26,13 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testkit.ResourceLocator;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class XPathConcurrencyTest {
+public class XPathConcurrencyTest extends JMeterTestCase {
     enum ReferenceEquality {
         SAME_OBJECTS, DIFFERENT_OBJECTS
     }

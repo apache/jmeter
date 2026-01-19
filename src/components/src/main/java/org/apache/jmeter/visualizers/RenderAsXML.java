@@ -163,26 +163,23 @@ public class RenderAsXML extends SamplerResultTab
         }
     }
 
-    /*
-     *
+    /**
      * A Dom tree panel for to display response as tree view author <a
      * href="mailto:d.maung@mdl.com">Dave Maung</a>
      * TODO implement to find any nodes in the tree using TreePath.
-     *
      */
     private static class DOMTreePanel extends JPanel implements MouseListener {
 
         private static final long serialVersionUID = 6871690021183779153L;
 
-        private JTree domJTree;
         private ExpandPopupMenu popupMenu;
 
-        public DOMTreePanel(org.w3c.dom.Document document) {
+        private DOMTreePanel(org.w3c.dom.Document document) {
             super(new GridLayout(1, 0));
             try {
                 Node firstElement = getFirstElement(document);
                 DefaultMutableTreeNode top = new XMLDefaultMutableTreeNode(firstElement);
-                domJTree = new JTree(top);
+                JTree domJTree = new JTree(top);
                 domJTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
                 domJTree.setShowsRootHandles(true);
                 domJTree.addMouseListener(this);
@@ -252,7 +249,12 @@ public class RenderAsXML extends SamplerResultTab
                     if (i % maxChar == 0 && i != 0) {
                         strBuf.append(separator);
                     }
-                    strBuf.append(encode(chars[i]));
+                    String encoded = encode(chars[i]);
+                    if (encoded != null) {
+                        strBuf.append(encoded);
+                    } else {
+                        strBuf.append(chars[i]);
+                    }
 
                 }
                 strBuf.append("</b></body></html>"); // $NON-NLS-1$
@@ -261,26 +263,13 @@ public class RenderAsXML extends SamplerResultTab
             }
 
             private static String encode(char c) {
-                String toReturn = String.valueOf(c);
-                switch (c) {
-                    case '<': // $NON-NLS-1$
-                        toReturn = "&lt;"; // $NON-NLS-1$
-                        break;
-                    case '>': // $NON-NLS-1$
-                        toReturn = "&gt;"; // $NON-NLS-1$
-                        break;
-                    case '\'': // $NON-NLS-1$
-                        toReturn = "&apos;"; // $NON-NLS-1$
-                        break;
-                    case '\"': // $NON-NLS-1$
-                        toReturn = "&quot;"; // $NON-NLS-1$
-                        break;
-                    default:
-                        // ignored
-                        break;
-
-                }
-                return toReturn;
+                return switch (c) {
+                    case '<' -> "&lt;"; // $NON-NLS-1$
+                    case '>' -> "&gt;"; // $NON-NLS-1$
+                    case '\'' -> "&apos;"; // $NON-NLS-1$
+                    case '\"' -> "&quot;"; // $NON-NLS-1$
+                    default -> null;
+                };
             }
         }
 

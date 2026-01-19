@@ -65,8 +65,8 @@ public class MapProperty extends MultiProperty {
     /** {@inheritDoc} */
     @Override
     public void setObjectValue(Object v) {
-        if (v instanceof Map<?, ?>) {
-            setMap((Map<?, ?>) v);
+        if (v instanceof Map<?, ?> map) {
+            setMap(map);
         }
     }
 

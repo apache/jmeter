@@ -65,7 +65,7 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
         // no-op
     }
 
-    private org.apache.jmeter.protocol.http.control.Header[] asHeaders(Map<String, List<String>> headers) {
+    private static org.apache.jmeter.protocol.http.control.Header[] asHeaders(Map<String, List<String>> headers) {
         // Java Implementation returns a null header for URL
         return headers.entrySet().stream()
                 .filter(header -> header.getKey() != null)

@@ -17,8 +17,10 @@
 
 package org.apache.jmeter.report.processor.graph.impl;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,16 +67,16 @@ public class CustomGraphConsumerTest {
 
     @Test
     public void testGetters() {
-        assertThat(customGraphConsumer.getTitle(), equalTo("graph title"));
-        assertThat(customGraphConsumer.getXAxis(), equalTo("X axis name"));
-        assertThat(customGraphConsumer.getYAxis(), equalTo("Y axis name"));
-        assertThat(customGraphConsumer.getContentMessage(), equalTo("content message"));
-        assertThat(customGraphConsumer.getSampleVariableName(), equalTo("ulp_lag_ratio"));
-        assertThat(customGraphConsumer.getIsNativeSampleVariableName(), equalTo(false));
+        assertEquals("graph title", customGraphConsumer.getTitle());
+        assertEquals("X axis name", customGraphConsumer.getXAxis());
+        assertEquals("Y axis name", customGraphConsumer.getYAxis());
+        assertEquals("content message", customGraphConsumer.getContentMessage());
+        assertEquals("ulp_lag_ratio", customGraphConsumer.getSampleVariableName());
+        assertFalse(customGraphConsumer.getIsNativeSampleVariableName());
 
         // bytes is one of the native sample variables names
         customGraphConsumer.setSampleVariableName(CSVSaveService.CSV_BYTES);
-        assertThat(customGraphConsumer.getIsNativeSampleVariableName(), equalTo(true));
+        assertTrue(customGraphConsumer.getIsNativeSampleVariableName());
     }
 
     @Test
@@ -87,15 +89,15 @@ public class CustomGraphConsumerTest {
             String key = entrySet.getKey();
 
             if (key.equals("granularity")) {
-                assertThat(testedValue, equalTo("60000"));
+                assertEquals("60000", testedValue);
             } else if (key.equals("X_Axis")) {
-                assertThat(testedValue, equalTo("\"X axis name\""));
+                assertEquals("\"X axis name\"", testedValue);
             } else if (key.equals("Y_Axis")) {
-                assertThat(testedValue, equalTo("\"Y axis name\""));
+                assertEquals("\"Y axis name\"", testedValue);
             } else if (key.equals("sample_Metric_Name")) {
-                assertThat(testedValue, equalTo("\"ulp_lag_ratio\""));
+                assertEquals("\"ulp_lag_ratio\"", testedValue);
             } else if (key.equals("content_Message")) {
-                assertThat(testedValue, equalTo("\"content message\""));
+                assertEquals("\"content message\"", testedValue);
             }
         }
     }
@@ -104,30 +106,30 @@ public class CustomGraphConsumerTest {
     public void testCreateTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
         keysSelector.setSelectBeginTime(false);
-        assertThat(customGraphConsumer.createTimeStampKeysSelector().getGranularity(), equalTo(keysSelector.getGranularity()));
+        assertEquals(keysSelector.getGranularity(), customGraphConsumer.createTimeStampKeysSelector().getGranularity());
     }
 
     @Test
     public void testCreateGroupInfos() {
         // Testing defaults values
-        assertThat(map.containsKey("Generic group"), equalTo(true));
-        assertThat(map.containsKey("foo"), equalTo(false));
-        assertThat(map.get("Generic group").getAggregatorFactory().getClass(),
-                equalTo(org.apache.jmeter.report.processor.MeanAggregatorFactory.class));
+        assertTrue(map.containsKey("Generic group"));
+        assertFalse(map.containsKey("foo"));
+        assertEquals(org.apache.jmeter.report.processor.MeanAggregatorFactory.class,
+                map.get("Generic group").getAggregatorFactory().getClass());
         GroupData groupData = map.get("Generic group").getGroupData();
-        assertThat(groupData.getOverallSeries(), equalTo(null));
-        assertThat(groupData.getSeriesInfo(), equalTo(new HashMap<String, SeriesData>()));
+        assertNull(groupData.getOverallSeries());
+        assertEquals(new HashMap<String, SeriesData>(), groupData.getSeriesInfo());
 
         // Testing native sample variable
         customGraphConsumer.setSampleVariableName("bytes");
         Sample sample = new Sample(0, sampleMetaData, data);
         Double testedValue = map.get("Generic group").getValueSelector().select("bytes", sample);
-        assertThat(testedValue, equalTo(492.0));
+        assertEquals(492.0, testedValue);
 
         // Testing non-native sample variable
         customGraphConsumer.setSampleVariableName("mm-miss");
         testedValue = map.get("Generic group").getValueSelector().select("mm-miss", sample);
-        assertThat(testedValue, equalTo(null));
+        assertNull(testedValue);
 
         // Testing empty data value, the change between data and data2
         // is on the last value that switchs from "null" to ""
@@ -136,7 +138,7 @@ public class CustomGraphConsumerTest {
                 "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", ""};
         sample = new Sample(0, sampleMetaData, data2);
         testedValue = map.get("Generic group").getValueSelector().select("mm-miss", sample);
-        assertThat(testedValue, equalTo(null));
+        assertNull(testedValue);
     }
 
     // Test the exception when the column data is not a Double
@@ -154,11 +156,11 @@ public class CustomGraphConsumerTest {
     public void testSelectMetric() {
         Sample sample = new Sample(0, sampleMetaData, data);
         String testString = map.get("Generic group").getSeriesSelector().select(sample).toString();
-        assertThat(testString, equalTo("[ulp_lag_ratio]"));
+        assertEquals("[ulp_lag_ratio]", testString);
     }
 
     // Create a static SampleMetadataObject
-    private SampleMetadata createTestMetaData() {
+    private static SampleMetadata createTestMetaData() {
         String columnsString = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,success,failureMessage,bytes,sentBytes,"
                 + "grpThreads,allThreads,URL,Latency,IdleTime,Connect,\"stream\",\"aws_region\",\"bitrate\",\"ulp_buffer_fill\",\"ulp_lag_time\","
                 + "\"ulp_play_time\",\"ulp_lag_ratio\",\"lag_ratio_wo_bf\",\"ulp_dwn_time\",\"ulp_hits\",\"ulp_avg_chunk_time\","

@@ -84,9 +84,6 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-     */
     @Override
     public void testIterationStart(LoopIterationEvent event) {
         if (impl != null) {

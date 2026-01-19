@@ -280,7 +280,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
     private class NodesTransferable implements Transferable {
         private final JMeterTreeNode[] nodes;
 
-        public NodesTransferable(JMeterTreeNode[] nodes) {
+        private NodesTransferable(JMeterTreeNode[] nodes) {
             this.nodes = nodes;
         }
 

@@ -279,25 +279,6 @@
             <stringProp name="ConfigTestElement.password"></stringProp>
           </ConfigTestElement>
           <hashTree/>
-          <MongoSourceElement guiclass="TestBeanGUI" testclass="MongoSourceElement" testname="MongoDB Source Config" enabled="true">
-            <boolProp name="autoConnectRetry">false</boolProp>
-            <intProp name="connectTimeout">0</intProp>
-            <stringProp name="connection"></stringProp>
-            <intProp name="connectionsPerHost">10</intProp>
-            <boolProp name="continueOnInsertError">false</boolProp>
-            <boolProp name="fsync">false</boolProp>
-            <longProp name="maxAutoConnectRetryTime">0</longProp>
-            <intProp name="maxWaitTime">120000</intProp>
-            <boolProp name="safe">false</boolProp>
-            <boolProp name="socketKeepAlive">false</boolProp>
-            <intProp name="socketTimeout">0</intProp>
-            <stringProp name="source"></stringProp>
-            <intProp name="threadsAllowedToBlockForConnectionMultiplier">5</intProp>
-            <boolProp name="waitForJournaling">false</boolProp>
-            <intProp name="writeOperationNumberOfServers">0</intProp>
-            <intProp name="writeOperationTimeout">0</intProp>
-          </MongoSourceElement>
-          <hashTree/>
           <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable" enabled="true">
             <stringProp name="maximumValue"></stringProp>
             <stringProp name="minimumValue">1</stringProp>
@@ -719,14 +700,6 @@
             <stringProp name="SMTPSampler.useLocalTrustStore">false</stringProp>
             <stringProp name="SMTPSampler.trustStoreToUse"></stringProp>
           </MailReaderSampler>
-          <hashTree/>
-          <MongoScriptSampler guiclass="TestBeanGUI" testclass="MongoScriptSampler" testname="MongoDB Script" enabled="true">
-            <stringProp name="database"></stringProp>
-            <stringProp name="password"></stringProp>
-            <stringProp name="source"></stringProp>
-            <stringProp name="username"></stringProp>
-            <stringProp name="script"></stringProp>
-          </MongoScriptSampler>
           <hashTree/>
           <SystemSampler guiclass="SystemSamplerGui" testclass="SystemSampler" testname="OS Process Sampler" enabled="true">
             <boolProp name="SystemSampler.checkReturnCode">false</boolProp>

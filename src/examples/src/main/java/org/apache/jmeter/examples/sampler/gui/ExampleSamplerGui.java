@@ -98,7 +98,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
         add(createDataPanel(), BorderLayout.CENTER);
     }
 
-    /*
+    /**
      * Create a data input text field
      *
      * @return the panel for entering the data

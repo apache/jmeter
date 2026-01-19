@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +53,7 @@ class StreamCopier extends Thread {
         final boolean isSystemOutput = os.equals(System.out) || os.equals(System.err);
         try (OutputStream ignored = isSystemOutput ? null : os;
              InputStream ignored1 = is) {
-            IOUtils.copyLarge(is, os);
+            is.transferTo(os);
         } catch (IOException e) {
             log.warn("Error writing stream", e);
         }

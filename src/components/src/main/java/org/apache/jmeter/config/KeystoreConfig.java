@@ -17,13 +17,13 @@
 
 package org.apache.jmeter.config;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JMeterStopTestException;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,13 +67,13 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
     @Override
     public void testStarted(String host) {
         String reuseSSLContext = JMeterUtils.getProperty("https.use.cached.ssl.context");
-        if(StringUtils.isEmpty(reuseSSLContext)||"true".equals(reuseSSLContext)) {
+        if (StringUtilities.isEmpty(reuseSSLContext) || "true".equals(reuseSSLContext)) {
             log.warn("https.use.cached.ssl.context property must be set to false to ensure Multiple Certificates are used");
         }
         int startIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_START_INDEX, 0);
         int endIndexAsInt = JMeterUtils.getPropDefault(KEY_STORE_END_INDEX, -1);
 
-        if(!StringUtils.isEmpty(this.startIndex)) {
+        if(!(this.startIndex == null || this.startIndex.isEmpty())) {
             try {
                 startIndexAsInt = Integer.parseInt(this.startIndex);
             } catch(NumberFormatException e) {
@@ -82,7 +82,7 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
             }
         }
 
-        if(!StringUtils.isEmpty(this.endIndex)) {
+        if(!(this.endIndex == null || this.endIndex.isEmpty())) {
             try {
                 endIndexAsInt = Integer.parseInt(this.endIndex);
             } catch(NumberFormatException e) {

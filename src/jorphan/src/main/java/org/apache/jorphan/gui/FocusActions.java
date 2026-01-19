@@ -56,7 +56,7 @@ class FocusActions {
     }
 
     private static class TransferFocusAction extends AbstractAction {
-        public TransferFocusAction() {
+        private TransferFocusAction() {
             super("Transfer focus forward"); // $NON-NLS-1$
         }
 
@@ -70,7 +70,7 @@ class FocusActions {
     }
 
     private static class TransferFocusBackwardAction extends AbstractAction {
-        public TransferFocusBackwardAction() {
+        private TransferFocusBackwardAction() {
             super("Transfer focus backward"); // $NON-NLS-1$
         }
 

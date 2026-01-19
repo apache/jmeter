@@ -181,10 +181,10 @@ public final class TristateCheckBox extends JCheckBox {
         // Fire ActionEvent
         int modifiers = 0;
         AWTEvent currentEvent = EventQueue.getCurrentEvent();
-        if (currentEvent instanceof InputEvent) {
-            modifiers = ((InputEvent) currentEvent).getModifiers();
-        } else if (currentEvent instanceof ActionEvent) {
-            modifiers = ((ActionEvent) currentEvent).getModifiers();
+        if (currentEvent instanceof InputEvent inputEvent) {
+            modifiers = inputEvent.getModifiers();
+        } else if (currentEvent instanceof ActionEvent actionEvent) {
+            modifiers = actionEvent.getModifiers();
         }
         fireActionPerformed(new ActionEvent(this,
                 ActionEvent.ACTION_PERFORMED, getText(),
@@ -204,7 +204,7 @@ public final class TristateCheckBox extends JCheckBox {
         private final Icon icon;
         private final boolean original;
 
-        public TristateButtonModel(TristateState initial,
+        private TristateButtonModel(TristateState initial,
                 TristateCheckBox tristateCheckBox, boolean original) {
             setState(initial);
             this.tristateCheckBox = tristateCheckBox;
@@ -212,11 +212,11 @@ public final class TristateCheckBox extends JCheckBox {
             this.original = original;
         }
 
-        public void setIndeterminate() {
+        private void setIndeterminate() {
             setState(TristateState.INDETERMINATE);
         }
 
-        public boolean isIndeterminate() {
+        private boolean isIndeterminate() {
             return state == TristateState.INDETERMINATE;
         }
 
@@ -286,7 +286,7 @@ public final class TristateCheckBox extends JCheckBox {
 
         }
 
-        public TristateState getState() {
+        private TristateState getState() {
             return state;
         }
     }
@@ -301,7 +301,7 @@ public final class TristateCheckBox extends JCheckBox {
         private final int iconHeight;
         private final int iconWidth;
 
-        public TristateCheckBoxIcon() {
+        private TristateCheckBoxIcon() {
             // Assume that the UI has not changed since the checkbox was created
             UIDefaults defaults = UIManager.getLookAndFeelDefaults();
             Icon icon = defaults.getIcon("CheckBox.icon");

@@ -17,12 +17,13 @@
 
 package org.apache.jmeter.functions
 
+import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.util.JMeterUtils
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.util.ServiceLoader
 
-class FunctionServicesTest {
+class FunctionServicesTest : JMeterTestCase() {
     @Test
     fun `__counter loads`() {
         val functions = JMeterUtils.loadServicesAndScanJars(

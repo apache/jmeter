@@ -39,12 +39,11 @@ public class RateRenderer extends NumberRenderer{ // NOSONAR 7 parents is OK in 
 
     @Override
     public void setValue(Object value) {
-        if (!(value instanceof Double)) {
+        if (!(value instanceof Double rate)) {
             setText("#N/A");
             return;
         }
-        double rate = (Double) value;
-        if (Double.compare(rate,Double.MAX_VALUE)==0){
+        if (Double.compare(rate, Double.MAX_VALUE) == 0) {
             setText("#N/A");
             return;
         }

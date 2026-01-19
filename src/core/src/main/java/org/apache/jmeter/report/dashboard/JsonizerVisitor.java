@@ -42,13 +42,6 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
     public JsonizerVisitor() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.ResultDataVisitor#visitListResult(
-     * org.apache.jmeter.report.processor.ListResultData)
-     */
     @Override
     public String visitListResult(ListResultData listResult) {
         String result = "";
@@ -63,13 +56,6 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.ResultDataVisitor#visitMapResult(org
-     * .apache.jmeter.report.processor.MapResultData)
-     */
     @Override
     public String visitMapResult(MapResultData mapResult) {
         String result = "";
@@ -83,13 +69,6 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.ResultDataVisitor#visitValueResult
-     * (org.apache.jmeter.report.processor.ValueResultData)
-     */
     @Override
     public String visitValueResult(ValueResultData valueResult) {
         String result = "";

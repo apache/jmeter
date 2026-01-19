@@ -62,8 +62,8 @@ public class VerticalPanel extends JPanel {
             subPanel.add(Box.createVerticalStrut(vgap));
         }
 
-        if (c instanceof JComponent) {
-            ((JComponent) c).setAlignmentX(horizontalAlign);
+        if (c instanceof JComponent jComponent) {
+            jComponent.setAlignmentX(horizontalAlign);
         }
 
         return subPanel.add(c);

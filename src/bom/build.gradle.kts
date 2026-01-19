@@ -23,10 +23,10 @@ description = "A platform that aligns versions of all JMeter components"
 
 dependencies {
     constraints {
-        val publishedProjects: Set<Project> by rootProject.extra
-        val platformProjects: Set<Project> by rootProject.extra
+        val publishedProjects: Set<String> by rootProject.extra
+        val platformProjects: Set<String> by rootProject.extra
         (publishedProjects - platformProjects).forEach {
-            api(it)
+            api(project(it))
         }
     }
 }

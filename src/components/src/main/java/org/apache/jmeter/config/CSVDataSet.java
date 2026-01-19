@@ -17,13 +17,8 @@
 
 package org.apache.jmeter.config;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoConfigMerge;
@@ -34,12 +29,14 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.EnumUtils;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +69,24 @@ import org.slf4j.LoggerFactory;
 @TestElementMetadata(labelResource = "displayName")
 public class CSVDataSet extends ConfigTestElement
     implements TestBean, LoopIterationListener, NoConfigMerge {
+
+    public enum ShareMode {
+        ALL("shareMode.all"),
+        GROUP("shareMode.group"),
+        THREAD("shareMode.thread");
+
+        private final String value;
+
+        ShareMode(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
+
     private static final Logger log = LoggerFactory.getLogger(CSVDataSet.class);
 
     private static final long serialVersionUID = 233L;
@@ -121,38 +136,16 @@ public class CSVDataSet extends ConfigTestElement
      */
     @Override
     public void setProperty(JMeterProperty property) {
-        if (!(property instanceof StringProperty)) {
-            super.setProperty(property);
-            return;
-        }
-
-        final String propName = property.getName();
-        if (!"shareMode".equals(propName)) {
-            super.setProperty(property);
-            return;
-        }
-
-        final String propValue = property.getStringValue();
-        if (propValue.contains(" ")) { // variables are unlikely to contain spaces, so most likely a translation
-            try {
-                final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
-                final ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
-                for (String resKey : CSVDataSetBeanInfo.getShareTags()) {
-                    if (propValue.equals(rb.getString(resKey))) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Converted {}={} to {} using Locale: {}", propName, propValue, resKey, rb.getLocale());
-                        }
-                        ((StringProperty) property).setValue(resKey); // reset the value
-                        super.setProperty(property);
-                        return;
-                    }
-                }
-                // This could perhaps be a variable name
-                log.warn("Could not translate {}={} using Locale: {}", propName, propValue, rb.getLocale());
-            } catch (IntrospectionException e) {
-                log.error("Could not find BeanInfo; cannot translate shareMode entries", e);
+        String propName = property.getName();
+        if ("shareMode".equals(propName)) {
+            JMeterProperty shareMode =
+                    GenericTestBeanCustomizer.normalizeEnumProperty(getClass(), ShareMode.class, property);
+            if (shareMode != null) {
+                super.setProperty(shareMode);
+                return;
             }
         }
+
         super.setProperty(property);
     }
 
@@ -204,7 +197,7 @@ public class CSVDataSet extends ConfigTestElement
         String fileName = getFilename().trim();
         setAlias(context, fileName);
         final String names = getVariableNames();
-        if (StringUtils.isEmpty(names)) {
+        if (StringUtilities.isEmpty(names)) {
             String header = server.reserveFile(fileName, getFileEncoding(), alias, true);
             try {
                 vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
@@ -220,22 +213,16 @@ public class CSVDataSet extends ConfigTestElement
     }
 
     private void setAlias(final JMeterContext context, String alias) {
-        String mode = getShareMode();
-        int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
-        switch(modeInt){
-            case CSVDataSetBeanInfo.SHARE_ALL:
-                this.alias = alias;
-                break;
-            case CSVDataSetBeanInfo.SHARE_GROUP:
-                this.alias = alias + "@" + System.identityHashCode(context.getThreadGroup());
-                break;
-            case CSVDataSetBeanInfo.SHARE_THREAD:
-                this.alias = alias + "@" + System.identityHashCode(context.getThread());
-                break;
-            default:
-                this.alias = alias + "@" + mode; // user-specified key
-                break;
+        ShareMode modeEnum = getShareModeAsEnum();
+        if (modeEnum == null) {
+            this.alias = alias + "@" + getShareMode(); // user-specified key
+            return;
         }
+        this.alias = switch (modeEnum) {
+            case ALL -> alias;
+            case GROUP -> alias + "@" + System.identityHashCode(context.getThreadGroup());
+            case THREAD -> alias + "@" + System.identityHashCode(context.getThread());
+        };
     }
 
     /**
@@ -327,6 +314,14 @@ public class CSVDataSet extends ConfigTestElement
 
     public String getShareMode() {
         return shareMode;
+    }
+
+    @Nullable ShareMode getShareModeAsEnum() {
+        String shareMode = getShareMode();
+        if (shareMode == null) {
+            return null;
+        }
+        return GenericTestBeanCustomizer.normalizeEnumStringValue(shareMode, getClass(), ShareMode.class);
     }
 
     public void setShareMode(String value) {

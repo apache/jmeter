@@ -74,7 +74,7 @@ import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 class TimeServerHandler extends IoHandlerAdapter
 {
 	private static final String EOL = &quot;\n&quot;;
-    Logger log = LoggerFactory.getLogger(TimeServerHandler.class);	
+    Logger log = LoggerFactory.getLogger(TimeServerHandler.class);
     public void exceptionCaught( IoSession session, Throwable cause ) throws Exception
     {
     	   log.error(&quot;Exception occured&quot;, cause);
@@ -85,7 +85,7 @@ class TimeServerHandler extends IoHandlerAdapter
     {
         String str = message.trim().toString();
         log.info(&quot;Received {}&quot;, str);
-        
+
         String[] words = str.split(&quot; &quot;);
         if(words[0].equalsIgnoreCase(&quot;quit&quot;) ) {
             session.close();
@@ -269,10 +269,10 @@ vars.put(&quot;CR&quot;,URLDecoder.decode(&quot;%0A&quot;, &quot;ASCII&quot;)); 
             <stringProp name="cacheKey">e7ac0019-16aa-40b4-b30f-e254c0a75f27</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">import org.apache.commons.codec.binary.Hex;
-Hex hex = new Hex();
-OUT.println(new String(hex.decode(prev.getResponseData())));
-vars.put(&quot;result_decoded&quot;, new String(hex.decode(prev.getResponseData())));</stringProp>
+            <stringProp name="script">import java.util.HexFormat;
+String decoded = new String(HexFormat.of().parseHex(prev.getResponseDataAsString()));
+OUT.println(decoded);
+vars.put(&quot;result_decoded&quot;, decoded);</stringProp>
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
@@ -500,10 +500,10 @@ if (oldResponseMessage != null &amp;&amp; oldResponseMessage.contains(&quot;java
             <stringProp name="cacheKey">e7ac0019-16aa-40b4-b30f-e254c0a75f27</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">import org.apache.commons.codec.binary.Hex;
-Hex hex = new Hex();
-OUT.println(new String(hex.decode(prev.getResponseData())));
-vars.put(&quot;result_decoded&quot;, new String(hex.decode(prev.getResponseData())));</stringProp>
+            <stringProp name="script">import java.util.HexFormat;
+String decoded = new String(HexFormat.of().parseHex(prev.getResponseDataAsString()));
+OUT.println(decoded);
+vars.put(&quot;result_decoded&quot;, decoded);</stringProp>
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223PostProcessor>
           <hashTree/>

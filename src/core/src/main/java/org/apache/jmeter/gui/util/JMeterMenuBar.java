@@ -395,12 +395,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         LangMenuHelper langMenu = new LangMenuHelper(languageMenu);
 
-        /*
-         * Note: the item name is used by ChangeLanguage to create a Locale for
-         * that language, so need to ensure that the language strings are valid
-         * If they exist, use the Locale language constants.
-         * Also, need to ensure that the names are valid resource entries too.
-         */
+        // Note: the item name is used by ChangeLanguage to create a Locale for
+        // that language, so need to ensure that the language strings are valid
+        // If they exist, use the Locale language constants.
+        // Also, need to ensure that the names are valid resource entries too.
 
         Locale currentLocale = JMeterUtils.getLocale();
         String selectedLocale = currentLocale == null ? "" : currentLocale.toString();
@@ -705,8 +703,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                     return;
                 }
             }
-            if (component instanceof JMenu) {
-                final JMenu jMenu = (JMenu) component;
+            if (component instanceof JMenu jMenu) {
                 if (isResource(jMenu.getActionCommand())){
                     jMenu.setText(JMeterUtils.getResString(compName));
                 }

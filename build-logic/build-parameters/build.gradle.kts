@@ -16,8 +16,8 @@
  */
 
 plugins {
-    id("org.gradlex.build-parameters") version "1.4.3"
-    id("com.github.vlsi.gradle-extensions") version "1.90"
+    id("org.gradlex.build-parameters") version "1.4.4"
+    id("com.github.vlsi.gradle-extensions") version "3.0.1"
     id("build-logic.kotlin-dsl-gradle-plugin")
 }
 
@@ -43,7 +43,7 @@ buildParameters {
         description.set("Java version for source and target compatibility")
     }
     integer("jdkBuildVersion") {
-        defaultValue.set(17)
+        defaultValue.set(21)
         mandatory.set(true)
         description.set("JDK version to use for building JMeter. If the value is 0, then the current Java is used. (see https://docs.gradle.org/8.0/userguide/toolchains.html#sec:consuming)")
     }
@@ -62,21 +62,9 @@ buildParameters {
     string("jdkTestImplementation") {
         description.set("Vendor-specific virtual machine implementation to use testing JMeter (see https://docs.gradle.org/8.0/userguide/toolchains.html#selecting_toolchains_by_virtual_machine_implementation)")
     }
-    bool("spotbugs") {
-        defaultValue.set(false)
-        description.set("Run SpotBugs verifications")
-    }
     bool("sonarqube") {
         defaultValue.set(false)
         description.set("Report verification results to Sonarqube")
-    }
-    bool("ignoreSpotBugsFailures") {
-        defaultValue.set(false)
-        description.set("Ignore SpotBugs failures")
-    }
-    bool("enableCheckerframework") {
-        defaultValue.set(false)
-        description.set("Run CheckerFramework (nullness) verifications")
     }
     bool("skipAutostyle") {
         defaultValue.set(false)
@@ -99,8 +87,7 @@ buildParameters {
         description.set("Skip suppressPomMetadataWarningsFor warnings triggered by inability to map test fixtures dependences to Maven pom.xml")
     }
     bool("enableErrorprone") {
-        // By default, disable errorProne in CI so we don't perform the same checks in several jobs
-        defaultValue.set(System.getenv("CI") != "true")
+        defaultValue.set(true)
         description.set("Enable ErrorProne verifications")
     }
     bool("skipJavadoc") {

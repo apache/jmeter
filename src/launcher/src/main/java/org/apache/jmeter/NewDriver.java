@@ -79,7 +79,7 @@ public final class NewDriver {
             }
         } else {// e.g. started from IDE with full classpath
             tmpDir = System.getProperty("jmeter.home", System.getenv("JMETER_HOME"));// Allow override $NON-NLS-1$ $NON-NLS-2$
-            if (tmpDir == null || tmpDir.length() == 0) {
+            if (tmpDir == null || tmpDir.isEmpty()) {
                 File userDir = new File(System.getProperty("user.dir"));// $NON-NLS-1$
                 tmpDir = userDir.getAbsoluteFile().getParent();
             }
@@ -89,10 +89,7 @@ public final class NewDriver {
         }
         JMETER_INSTALLATION_DIRECTORY=tmpDir;
 
-        /*
-         * Does the system support UNC paths? If so, may need to fix them up
-         * later
-         */
+        // Does the system support UNC paths? If so, may need to fix them up later
         boolean usesUNC = OS_NAME_LC.startsWith("windows");// $NON-NLS-1$
 
         // Add standard jar locations to initial classpath
@@ -280,7 +277,7 @@ public final class NewDriver {
         return builder.toString();
     }
 
-    /*
+    /**
      * Set logging related system properties.
      */
     private static void setLoggingProperties(String[] args) {
@@ -318,7 +315,8 @@ public final class NewDriver {
         }
         return false;
     }
-    /*
+
+    /**
      * Find command line argument option value by the id and name.
      */
     private static String getCommandLineArgument(String[] args, int id, String name) {
@@ -343,7 +341,7 @@ public final class NewDriver {
         return value;
     }
 
-    /*
+    /**
      * If the fileName contains at least one set of paired single-quotes, reformat using DateFormat
      */
     private static String replaceDateFormatInFileName(String fileName) {

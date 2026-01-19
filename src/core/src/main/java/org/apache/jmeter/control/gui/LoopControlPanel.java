@@ -123,8 +123,8 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (element instanceof LoopController) {
-            setState(((LoopController) element).getLoopString());
+        if (element instanceof LoopController loopController) {
+            setState(loopController.getLoopString());
         } else {
             setState(1);
         }
@@ -142,11 +142,11 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
     @Override
     public void modifyTestElement(TestElement lc) {
         configureTestElement(lc);
-        if (lc instanceof LoopController) {
-            if (loops.getText().length() > 0) {
-                ((LoopController) lc).setLoops(loops.getText());
+        if (lc instanceof LoopController loopController) {
+            if (!loops.getText().isEmpty()) {
+                loopController.setLoops(loops.getText());
             } else {
-                ((LoopController) lc).setLoops(LoopController.INFINITE_LOOP_COUNT);
+                loopController.setLoops(LoopController.INFINITE_LOOP_COUNT);
             }
         }
     }

@@ -27,9 +27,6 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.GraphConfiguration;
@@ -46,8 +43,10 @@ import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unbescape.html.HtmlEscape;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -94,8 +93,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
      * @param context {@link DataContext}
      */
     private static void addToContext(String key, Object value, DataContext context) {
-        if (value instanceof String) {
-            value = '"' + (String) value + '"';
+        if (value instanceof String s) {
+            value = '"' + s + '"';
         }
         context.put(key, value);
     }
@@ -118,17 +117,10 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
          *
          * @param extraOptions to inject
          */
-        public final void setExtraOptions(SubConfiguration extraOptions) {
+        private void setExtraOptions(SubConfiguration extraOptions) {
             this.extraOptions = extraOptions;
         }
 
-        /*
-         * (non-Javadoc)
-         *
-         * @see org.apache.jmeter.report.dashboard.HtmlTemplateExporter.
-         * ResultCustomizer#customizeResult(org.apache.jmeter.report.processor.
-         * ResultData)
-         */
         @Override
         public ResultData customizeResult(ResultData result) {
             MapResultData customizedResult = new MapResultData();
@@ -162,11 +154,11 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         private boolean excludesControllers;
         private String graphId;
 
-        public final void setExcludesControllers(boolean excludesControllers) {
+        private void setExcludesControllers(boolean excludesControllers) {
             this.excludesControllers = excludesControllers;
         }
 
-        public final void setGraphId(String graphId) {
+        private void setGraphId(String graphId) {
             this.graphId = graphId;
         }
 
@@ -177,7 +169,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
          * @param showControllerSeriesOnly flag to control visibility of controller
          * @param filterPattern to use
          */
-        public EmptyGraphChecker(boolean filtersOnlySampleSeries,
+        private EmptyGraphChecker(boolean filtersOnlySampleSeries,
                 boolean showControllerSeriesOnly, Pattern filterPattern) {
             this.filtersOnlySampleSeries = filtersOnlySampleSeries;
             this.showControllerSeriesOnly = showControllerSeriesOnly;
@@ -208,19 +200,17 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
             // Detect whether none series matches the series filter.
             ResultData seriesResult = findData(AbstractGraphConsumer.RESULT_SERIES, result);
-            if (!(seriesResult instanceof ListResultData)) {
+            if (!(seriesResult instanceof ListResultData seriesList)) {
                 return true;
             }
 
             // Try to find at least one pattern matching
-            ListResultData seriesList = (ListResultData) seriesResult;
             int count = seriesList.getSize();
             int index = 0;
             boolean matches = false;
             while (index < count && !matches) {
                 ResultData currentResult = seriesList.get(index);
-                if (currentResult instanceof MapResultData) {
-                    MapResultData seriesData = (MapResultData) currentResult;
+                if (currentResult instanceof MapResultData seriesData) {
                     String name = findValue(String.class,
                             AbstractGraphConsumer.RESULT_SERIES_NAME,
                             seriesData);
@@ -317,7 +307,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         File outputDir = getPropertyFromConfig(exportCfg, OUTPUT_DIR,
                 new File(JMeterUtils.getJMeterBinDir(), OUTPUT_DIR_NAME_DEFAULT), File.class);
         String globallyDefinedOutputDir = JMeterUtils.getProperty(JMeter.JMETER_REPORT_OUTPUT_DIR_PROPERTY);
-        if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
+        if (StringUtilities.isNotEmpty(globallyDefinedOutputDir)) {
             outputDir = new File(globallyDefinedOutputDir);
         }
 
@@ -337,7 +327,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         // Add the series filter to the context
         final String seriesFilter = exportCfg.getSeriesFilter();
         Pattern filterPattern = null;
-        if (StringUtils.isNotBlank(seriesFilter)) {
+        if (StringUtilities.isNotBlank(seriesFilter)) {
             try {
                 filterPattern = Pattern.compile(seriesFilter);
             } catch (PatternSyntaxException ex) {
@@ -428,8 +418,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                 dataContext);
 
         // Add report title to the context
-        if (StringUtils.isNotEmpty(configuration.getReportTitle())) {
-            dataContext.put(DATA_CTX_REPORT_TITLE, StringEscapeUtils.escapeHtml4(configuration.getReportTitle()));
+        if (StringUtilities.isNotEmpty(configuration.getReportTitle())) {
+            dataContext.put(DATA_CTX_REPORT_TITLE, HtmlEscape.escapeHtml5(configuration.getReportTitle()));
         }
 
         // Add the test file name to the context
@@ -446,7 +436,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             if (log.isInfoEnabled()) {
                 log.info("Report will be generated in: {}, creating folder structure", outputDir.getAbsolutePath());
             }
-            FileUtils.forceMkdir(outputDir);
+            Files.createDirectories(outputDir.toPath());
             TemplateVisitor visitor = new TemplateVisitor(
                     templateDirectory.toPath(),
                     outputDir.toPath(),
@@ -470,8 +460,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             String resultKey, Map<String, Object> storage, DataContext dataContext,
             ResultDataVisitor<T> visitor, ResultCustomizer customizer, ResultChecker checker) {
         Object data = storage.get(resultKey);
-        if (data instanceof ResultData) {
-            ResultData result = (ResultData) data;
+        if (data instanceof ResultData result) {
             if (checker != null) {
                 checker.checkResult(dataContext, result);
             }

@@ -34,7 +34,7 @@ public class TimerService {
      * Initialization On Demand Holder pattern
      */
     private static class TimerServiceHolder {
-        public static final TimerService INSTANCE = new TimerService();
+        private static final TimerService INSTANCE = new TimerService();
     }
 
     /**

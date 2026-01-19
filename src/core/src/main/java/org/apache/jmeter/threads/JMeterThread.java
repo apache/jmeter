@@ -286,17 +286,14 @@ public class JMeterThread implements Runnable, Interruptible {
                             triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
                         } else {
                             switch (threadContext.getTestLogicalAction()) {
-                                case BREAK_CURRENT_LOOP:
-                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::breakOnCurrentLoop);
-                                    break;
-                                case START_NEXT_ITERATION_OF_THREAD:
-                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
-                                    break;
-                                case START_NEXT_ITERATION_OF_CURRENT_LOOP:
-                                    triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnCurrentLoop);
-                                    break;
-                                default:
-                                    break;
+                                case BREAK_CURRENT_LOOP ->
+                                        triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::breakOnCurrentLoop);
+                                case START_NEXT_ITERATION_OF_THREAD ->
+                                        triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnThreadLoop);
+                                case START_NEXT_ITERATION_OF_CURRENT_LOOP ->
+                                        triggerLoopLogicalActionOnParentControllers(sam, threadContext, JMeterThread::continueOnCurrentLoop);
+                                default -> {
+                                }
                             }
                         }
                         threadContext.setTestLogicalAction(TestLogicalAction.CONTINUE);
@@ -359,8 +356,8 @@ public class JMeterThread implements Runnable, Interruptible {
     private void triggerLoopLogicalActionOnParentControllers(Sampler sampler, JMeterContext threadContext,
             Consumer<? super FindTestElementsUpToRootTraverser> consumer) {
         TransactionSampler transactionSampler = null;
-        if (sampler instanceof TransactionSampler) {
-            transactionSampler = (TransactionSampler) sampler;
+        if (sampler instanceof TransactionSampler transSampler) {
+            transactionSampler = transSampler;
         }
 
         Sampler realSampler = findRealSampler(sampler);
@@ -393,11 +390,10 @@ public class JMeterThread implements Runnable, Interruptible {
     private static void continueOnCurrentLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
         List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
         for (Controller parentController : controllersToReinit) {
-            if (parentController instanceof AbstractThreadGroup) {
-                AbstractThreadGroup tg = (AbstractThreadGroup) parentController;
+            if (parentController instanceof AbstractThreadGroup tg) {
                 tg.startNextLoop();
-            } else if (parentController instanceof IteratingController) {
-                ((IteratingController) parentController).startNextLoop();
+            } else if (parentController instanceof IteratingController iterController) {
+                iterController.startNextLoop();
                 break;
             } else {
                 parentController.triggerEndOfLoop();
@@ -413,11 +409,10 @@ public class JMeterThread implements Runnable, Interruptible {
     private static void breakOnCurrentLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
         List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
         for (Controller parentController : controllersToReinit) {
-            if (parentController instanceof AbstractThreadGroup) {
-                AbstractThreadGroup tg = (AbstractThreadGroup) parentController;
+            if (parentController instanceof AbstractThreadGroup tg) {
                 tg.breakThreadLoop();
-            } else if (parentController instanceof IteratingController) {
-                ((IteratingController) parentController).breakLoop();
+            } else if (parentController instanceof IteratingController iterController) {
+                iterController.breakLoop();
                 break;
             } else {
                 parentController.triggerEndOfLoop();
@@ -433,8 +428,7 @@ public class JMeterThread implements Runnable, Interruptible {
     private static void continueOnThreadLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
         List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
         for (Controller parentController : controllersToReinit) {
-            if (parentController instanceof AbstractThreadGroup) {
-                AbstractThreadGroup tg = (AbstractThreadGroup) parentController;
+            if (parentController instanceof AbstractThreadGroup tg) {
                 tg.startNextLoop();
             } else {
                 parentController.triggerEndOfLoop();
@@ -452,8 +446,8 @@ public class JMeterThread implements Runnable, Interruptible {
      */
     private static Sampler findRealSampler(Sampler sampler) {
         Sampler realSampler = sampler;
-        while (realSampler instanceof TransactionSampler) {
-            realSampler = ((TransactionSampler) realSampler).getSubSampler();
+        while (realSampler instanceof TransactionSampler transSampler) {
+            realSampler = transSampler.getSubSampler();
         }
         return realSampler;
     }
@@ -473,8 +467,8 @@ public class JMeterThread implements Runnable, Interruptible {
         // Find the package for the transaction
         SamplePackage transactionPack = null;
         try {
-            if (current instanceof TransactionSampler) {
-                transactionSampler = (TransactionSampler) current;
+            if (current instanceof TransactionSampler transSampler) {
+                transactionSampler = transSampler;
                 transactionPack = compiler.configureTransactionSampler(transactionSampler);
 
                 // Check if the transaction is done
@@ -645,8 +639,8 @@ public class JMeterThread implements Runnable, Interruptible {
         currentSamplerForInterruption = sampler;
         if (!sampleMonitors.isEmpty()) {
             for (SampleMonitor sampleMonitor : sampleMonitors) {
-                if(sampleMonitor instanceof TestElement) {
-                    TestBeanHelper.prepare((TestElement) sampleMonitor);
+                if(sampleMonitor instanceof TestElement testElement) {
+                    TestBeanHelper.prepare(testElement);
                 }
                 sampleMonitor.sampleStarting(sampler);
             }
@@ -748,11 +742,9 @@ public class JMeterThread implements Runnable, Interruptible {
         if (log.isInfoEnabled()) {
             log.info("Thread started: {}", Thread.currentThread().getName());
         }
-        /*
-         * Setting SamplingStarted before the controllers are initialised allows
-         * them to access the running values of functions and variables (however
-         * it does not seem to help with the listeners)
-         */
+        // Setting SamplingStarted before the controllers are initialised allows
+        // them to access the running values of functions and variables (however
+        // it does not seem to help with the listeners)
         threadContext.setSamplingStarted(true);
 
         threadGroupLoopController.initialize();
@@ -799,8 +791,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
         @Override
         public void addNode(Object node, HashTree subTree) {
-            if (node instanceof ThreadListener) {
-                ThreadListener tl = (ThreadListener) node;
+            if (node instanceof ThreadListener tl) {
                 if (isStart) {
                     try {
                         tl.threadStarted();
@@ -847,12 +838,12 @@ public class JMeterThread implements Runnable, Interruptible {
         interruptLock.lock();
         try {
             Sampler samp = currentSamplerForInterruption; // fetch once; must be done under lock
-            if (samp instanceof Interruptible){ // (also protects against null)
+            if (samp instanceof Interruptible interruptible){ // (also protects against null)
                 if (log.isWarnEnabled()) {
                     log.warn("Interrupting: {} sampler: {}", threadName, samp.getName());
                 }
                 try {
-                    boolean found = ((Interruptible)samp).interrupt();
+                    boolean found = interruptible.interrupt();
                     if (!found) {
                         log.warn("No operation pending");
                     }
@@ -906,8 +897,7 @@ public class JMeterThread implements Runnable, Interruptible {
     private static void checkAssertions(List<? extends Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
         for (Assertion assertion : assertions) {
             TestBeanHelper.prepare((TestElement) assertion);
-            if (assertion instanceof AbstractScopedAssertion) {
-                AbstractScopedAssertion scopedAssertion = (AbstractScopedAssertion) assertion;
+            if (assertion instanceof AbstractScopedAssertion scopedAssertion) {
                 String scope = scopedAssertion.fetchScope();
                 if (scopedAssertion.isScopeParent(scope)
                         || scopedAssertion.isScopeAll(scope)
@@ -1050,8 +1040,8 @@ public class JMeterThread implements Runnable, Interruptible {
         threadVars.incIteration();
         for (TestIterationListener listener : testIterationStartListeners) {
             listener.testIterationStart(new LoopIterationEvent(threadGroupLoopController, threadVars.getIteration()));
-            if (listener instanceof TestElement) {
-                ((TestElement) listener).recoverRunningVersion();
+            if (listener instanceof TestElement testElement) {
+                testElement.recoverRunningVersion();
             }
         }
     }

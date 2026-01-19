@@ -48,11 +48,9 @@ class FileKey {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof FileKey)) {
+        if (!(obj instanceof FileKey that)) {
             return false;
         }
-
-        FileKey that = (FileKey) obj;
 
         return Objects.equals(this.filename, that.filename);
 

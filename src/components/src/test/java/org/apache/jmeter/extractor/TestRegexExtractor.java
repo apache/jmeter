@@ -18,7 +18,6 @@
 package org.apache.jmeter.extractor;
 
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,7 +30,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,13 +48,14 @@ public class TestRegexExtractor {
         extractor.setThreadContext(jmctx);
         extractor.setRefName("regVal");
         result = new SampleResult();
-        String data = "<company-xmlext-query-ret><row><value field=\"RetCode\">LIS_OK</value>\n" +
-                "<value field=\"RetCodeExtension\"></value><value field=\"alias\"></value>\n" +
-                "<value field=\"positioncount\"></value><value field=\"invalidpincount\">0</value>\n" +
-                "<value field=\"pinposition1\">1</value><value field=\"pinpositionvalue1\"></value>\n" +
-                "<value field=\"pinposition2\">5</value><value field=\"pinpositionvalue2\"></value>\n" +
-                "<value field=\"pinposition3\">6</value><value field=\"pinpositionvalue3\"></value>\n" +
-                "</row></company-xmlext-query-ret>";
+        String data = """
+                <company-xmlext-query-ret><row><value field="RetCode">LIS_OK</value>
+                <value field="RetCodeExtension"></value><value field="alias"></value>
+                <value field="positioncount"></value><value field="invalidpincount">0</value>
+                <value field="pinposition1">1</value><value field="pinpositionvalue1"></value>
+                <value field="pinposition2">5</value><value field="pinpositionvalue2"></value>
+                <value field="pinposition3">6</value><value field="pinpositionvalue3"></value>
+                </row></company-xmlext-query-ret>""";
         result.setResponseData(data, null);
         result.setResponseHeaders("Header1: Value1\nHeader2: Value2");
         result.setResponseCode("abcd");
@@ -76,9 +75,9 @@ public class TestRegexExtractor {
         extractor.setThreadContext(jmctx);
         extractor.setTemplate("$1$");
         extractor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is("one"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("1"));
+        assertNull(vars.get("varname"));
+        assertEquals("one", vars.get("varname_1"));
+        assertEquals("1", vars.get("varname_matchNr"));
     }
 
     @Test
@@ -91,10 +90,10 @@ public class TestRegexExtractor {
         extractor.setThreadContext(jmctx);
         extractor.setTemplate("$1$");
         extractor.process();
-        assertThat(vars.get("varname"), CoreMatchers.is(CoreMatchers.nullValue()));
-        assertThat(vars.get("varname_1"), CoreMatchers.is("one"));
-        assertThat(vars.get("varname_2"), CoreMatchers.is("two"));
-        assertThat(vars.get("varname_matchNr"), CoreMatchers.is("2"));
+        assertNull(vars.get("varname"));
+        assertEquals("one", vars.get("varname_1"));
+        assertEquals("two", vars.get("varname_2"));
+        assertEquals("2", vars.get("varname_matchNr"));
     }
 
     @Test

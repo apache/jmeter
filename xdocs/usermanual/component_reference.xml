@@ -1930,39 +1930,6 @@ If the timeout expires before the command finishes, JMeter will attempt to kill 
 </properties>
 </component>
 
-<component name="MongoDB Script (DEPRECATED)" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
-<description><p>This sampler lets you send a Request to a MongoDB.</p>
-<p>Before using this you need to set up a
-<complink name="MongoDB Source Config"/> Configuration element
-</p>
-<note>This Element currently uses <code>com.mongodb.DB#eval</code> which takes a global write lock causing a performance impact on the database, see <a href="http://docs.mongodb.org/manual/reference/method/db.eval/"><code>db.eval()</code></a>.
-So it is better to avoid using this element for load testing and use JSR223+Groovy scripting using <apilink href="org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</apilink> instead.
-MongoDB Script is more suitable for functional testing or test setup (setup/teardown threads)</note>
-</description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-        <property name="MongoDB Source" required="Yes">
-        Name of the JMeter variable that the MongoDB connection is bound to.
-        This must agree with the '<code>MongoDB Source</code>' field of a MongoDB Source Config.
-        </property>
-        <property name="Database Name" required="Yes">Database Name, will be used in your script
-        </property>
-        <property name="Username" required="No">
-        </property>
-        <property name="Password" required="No">
-        </property>
-        <property name="Script" required="Yes">
-        Mongo script as it would be used in MongoDB shell
-        </property>
-</properties>
-
-<links>
-        <complink name="MongoDB Source Config"/>
-</links>
-<note>Ensure Variable Name is unique across Test Plan.</note>
-</component>
-
 <a href="#">^</a>
 
 
@@ -4439,93 +4406,6 @@ GUI that they can use while developing new JMeter components.</p>
   <property name="Parameter Value" required="Yes">The value to apply to that parameter.</property>
 </properties>
 
-</component>
-
-
-<component name="MongoDB Source Config (DEPRECATED)" index="&sect-num;.4.20"
-                 width="1233" height="618" screenshot="mongodb-source-config.png">
-    <description>Creates a MongoDB connection (used by <complink name="MongoDB Script"/>Sampler)
-     from the supplied Connection settings. Each thread gets its own connection.
-     The connection configuration name is used by the JDBC Sampler to select the appropriate
-     connection.
-     <p>
-     You can then access <code>com.mongodb.DB</code> object in Beanshell or JSR223 Test Elements through the element <apilink href="org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</apilink>
-     using this code</p>
-
-    <source>
-import com.mongodb.DB;
-import org.apache.jmeter.protocol.mongodb.config.MongoDBHolder;
-DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
-            "value of property Database Name");
-&hellip;
-    </source>
-    </description>
-    <properties>
-        <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
-        <property name="Server Address List" required="Yes">Mongo DB Servers</property>
-        <property name="MongoDB Source" required="Yes">The name of the variable the connection is tied to.
-        <note>Each name must be different. If there are two configuration elements using the same name, only one will be saved.</note>
-        </property>
-
-        <property name="Keep Trying" required="No">
-            If <code>true</code>, the driver will keep trying to connect to the same server in case that the socket cannot be established.<br/>
-            There is maximum amount of time to keep retrying, which is 15s by default.<br/>This can be useful to avoid some exceptions being thrown when a server is down temporarily by blocking the operations.
-            <br/>It can also be useful to smooth the transition to a new primary node (so that a new primary node is elected within the retry time).<br/>
-            <note>Note that when using this flag
-              <ul>
-                <li>for a replica set, the driver will try to connect to the old primary node for that time, instead of failing over to the new one right away </li>
-                <li>this does not prevent exception from being thrown in read/write operations on the socket, which must be handled by application.</li>
-              </ul>
-              Even if this flag is false, the driver already has mechanisms to automatically recreate broken connections and retry the read operations.
-            </note>
-            Default is <code>false</code>.
-        </property>
-        <property name="Maximum connections per host" required="No"></property>
-        <property name="Connection timeout" required="No">
-            The connection timeout in milliseconds.<br/>It is used solely when establishing a new connection <code>Socket.connect(java.net.SocketAddress, int)</code><br/>Default is <code>0</code> and means no timeout.
-        </property>
-        <property name="Maximum retry time" required="No">
-            The maximum amount of time in milliseconds to spend retrying to open connection to the same server.<br/>Default is <code>0</code>, which means to use the default 15s if <code>autoConnectRetry</code> is on.
-        </property>
-        <property name="Maximum wait time" required="No">
-            The maximum wait time in milliseconds that a thread may wait for a connection to become available.<br/>Default is <code>120,000</code>.
-        </property>
-        <property name="Socket timeout" required="No">
-            The socket timeout in milliseconds It is used for I/O socket read and write operations <code>Socket.setSoTimeout(int)</code><br/>Default is <code>0</code> and means no timeout.
-        </property>
-        <property name="Socket keep alive" required="No">
-            This flag controls the socket keep alive feature that keeps a connection alive through firewalls <code>Socket.setKeepAlive(boolean)</code><br/>
-            Default is <code>false</code>.
-        </property>
-        <property name="ThreadsAllowedToBlockForConnectionMultiplier" required="No">
-        This multiplier, multiplied with the connectionsPerHost setting, gives the maximum number of threads that may be waiting for a connection to become available from the pool.<br/>
-        All further threads will get an exception right away.<br/>
-        For example if <code>connectionsPerHost</code> is <code>10</code> and <code>threadsAllowedToBlockForConnectionMultiplier</code> is <code>5</code>, then up to 50 threads can wait for a connection.<br/>
-        Default is <code>5</code>.
-        </property>
-        <property name="Write Concern: Safe" required="No">
-            If <code>true</code> the driver will use a <code>WriteConcern</code> of <code>WriteConcern.SAFE</code> for all operations.<br/>
-            If <code>w</code>, <code>wtimeout</code>, <code>fsync</code> or <code>j</code> are specified, this setting is ignored.<br/>
-            Default is <code>false</code>.
-        </property>
-        <property name="Write Concern: Fsync" required="No">
-            The <code>fsync</code> value of the global <code>WriteConcern</code>.<br/>
-            Default is <code>false</code>.
-        </property>
-        <property name="Write Concern: Wait for Journal" required="No">
-            The <code>j</code> value of the global <code>WriteConcern</code>.<br/>
-            Default is <code>false</code>.
-        </property>
-        <property name="Write Concern: Wait for servers" required="No">
-            The <code>w</code> value of the global <code>WriteConcern</code>.<br/>Default is <code>0</code>.
-        </property>
-        <property name="Write Concern: Wait timeout" required="No">
-            The <code>wtimeout</code> value of the global <code>WriteConcern</code>.<br/>Default is <code>0</code>.
-        </property>
-        <property name="Write Concern: Continue on error" required="No">
-            If batch inserts should continue after the first error
-        </property>
-    </properties>
 </component>
 
 <a href="#">^</a>

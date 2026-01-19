@@ -114,26 +114,13 @@ public class TestActionGui extends AbstractSamplerGui { // NOSONAR Ignore hierar
         }
         action = ta.getAction();
         switch (action) {
-            case TestAction.PAUSE:
-                pauseButton.setSelected(true);
-                break;
-            case TestAction.STOP_NOW:
-                stopNowButton.setSelected(true);
-                break;
-            case TestAction.STOP:
-                stopButton.setSelected(true);
-                break;
-            case TestAction.RESTART_NEXT_LOOP:
-                restartNextThreadLoopButton.setSelected(true);
-                break;
-            case TestAction.START_NEXT_ITERATION_CURRENT_LOOP:
-                startNextIterationOfCurrentLoopButton.setSelected(true);
-                break;
-            case TestAction.BREAK_CURRENT_LOOP:
-                breakLoopButton.setSelected(true);
-                break;
-            default:
-                break;
+            case TestAction.PAUSE -> pauseButton.setSelected(true);
+            case TestAction.STOP_NOW -> stopNowButton.setSelected(true);
+            case TestAction.STOP -> stopButton.setSelected(true);
+            case TestAction.RESTART_NEXT_LOOP -> restartNextThreadLoopButton.setSelected(true);
+            case TestAction.START_NEXT_ITERATION_CURRENT_LOOP -> startNextIterationOfCurrentLoopButton.setSelected(true);
+            case TestAction.BREAK_CURRENT_LOOP -> breakLoopButton.setSelected(true);
+            default -> { /* no action needed */ }
         }
 
         durationField.setText(ta.getDurationAsString());

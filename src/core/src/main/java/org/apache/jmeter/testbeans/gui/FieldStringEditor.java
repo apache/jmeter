@@ -77,8 +77,8 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof String) {
-            setAsText((String) value);
+        if (value instanceof String string) {
+            setAsText(string);
         } else if (value == null) {
             setAsText(null);
         } else {

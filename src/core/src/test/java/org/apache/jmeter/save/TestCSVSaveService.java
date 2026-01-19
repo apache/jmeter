@@ -34,12 +34,12 @@ import org.junit.jupiter.api.Test;
 
 public class TestCSVSaveService extends JMeterTestCase {
 
-    private void checkSplitString(String input, char delim, String[] expected) throws Exception {
+    private static void checkSplitString(String input, char delim, String[] expected) throws Exception {
         String[] out = CSVSaveService.csvSplitString(input, delim);
         checkStrings(expected, out);
     }
 
-    private void checkStrings(String[] expected, String[] out) {
+    private static void checkStrings(String[] expected, String[] out) {
         assertEquals(expected.length, out.length, "Incorrect number of strings returned");
         for(int i = 0; i < out.length; i++){
            assertEquals(expected[i], out[i], "Incorrect entry returned");

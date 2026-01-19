@@ -217,7 +217,7 @@
                                         </li>
                                         <li><a href="#syntheticResponseTimeDistribution" onClick="uncheckAll('choicesSyntheticResponseTimeDistribution');">Hide all samples</a>
                                         </li>
-                                        <li><a href="#syntheticResponseTimeDistribution" onclick="exportToPNG('flotSyntheticResponseTimesDistribution', this);">Save as PNG</a></li>
+                                        <li><a href="#syntheticResponseTimeDistribution" onclick="exportToPNG('flotSyntheticResponseTimeDistribution', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodySyntheticResponseTimeDistribution" aria-expanded="true" aria-controls="bodySyntheticResponseTimeDistribution">
                                         <i class="fa fa-chevron-down"></i>

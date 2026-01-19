@@ -39,14 +39,8 @@ plugins.withId("java-base") {
     if (!buildParameters.skipForbiddenApis) {
         apply(plugin = "build-logic.forbidden-apis")
     }
-    if (buildParameters.enableCheckerframework) {
-        apply(plugin = "build-logic.checkerframework")
-    }
     if (buildParameters.enableErrorprone) {
         apply(plugin = "build-logic.errorprone")
-    }
-    if (buildParameters.spotbugs) {
-        apply(plugin = "build-logic.spotbugs")
     }
     if (buildParameters.coverage) {
         apply(plugin = "build-logic.jacoco")

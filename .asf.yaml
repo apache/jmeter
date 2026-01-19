@@ -8,6 +8,9 @@ github:
     - test
     - java
 
+  dependabot_alerts:  true
+  dependabot_updates: false
+
   enabled_merge_buttons:
     squash: true
     merge:  false

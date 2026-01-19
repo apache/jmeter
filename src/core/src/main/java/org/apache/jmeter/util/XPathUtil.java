@@ -46,9 +46,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.xml.utils.PrefixResolver;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XObject;
@@ -81,9 +80,14 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
  */
 public class XPathUtil {
 
+    /**
+     * Simple record to hold a pair of values for cache keys.
+     */
+    public record XPathCacheKey(String query, String namespaces) {}
+
     private static final Logger log = LoggerFactory.getLogger(XPathUtil.class);
 
-    private static final LoadingCache<ImmutablePair<String, String>, XPathExecutable> XPATH_CACHE;
+    private static final LoadingCache<XPathCacheKey, XPathExecutable> XPATH_CACHE;
     static {
         final int cacheSize = JMeterUtils.getPropDefault(
                 "xpath2query.parser.cache.size", 400);
@@ -419,11 +423,11 @@ public class XPathUtil {
             throws SaxonApiException, FactoryConfigurationError {
 
         // generating the cache key
-        final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
+        final XPathCacheKey key = new XPathCacheKey(xPathQuery, namespaces);
 
         //check the cache
         XPathExecutable xPathExecutable;
-        if(StringUtils.isNotEmpty(xPathQuery)) {
+        if (StringUtilities.isNotEmpty(xPathQuery)) {
             xPathExecutable = XPATH_CACHE.get(key);
         }
         else {
@@ -522,7 +526,7 @@ public class XPathUtil {
             throws XMLStreamException, FactoryConfigurationError{
         List<String[]> res= new ArrayList<>();
         XMLStreamReader reader;
-        if(StringUtils.isNotEmpty(xml)) {
+        if (StringUtilities.isNotEmpty(xml)) {
             reader = XMLInputFactory.newFactory().createXMLStreamReader(new StringReader(xml));
             while (reader.hasNext()) {
                 int event = reader.next();
@@ -621,38 +625,38 @@ public class XPathUtil {
         try {
             XObject xObject = XPathAPI.eval(doc, xPathExpression, getPrefixResolver(doc));
             switch (xObject.getType()) {
-            case XObject.CLASS_NODESET:
-                NodeList nodeList = xObject.nodelist();
-                final int len = (nodeList != null) ? nodeList.getLength() : 0;
-                log.debug("nodeList length {}", len);
-                // length == 0 means nodelist is null
-                if (len == 0) {
-                    log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
-                    result.setFailure(!isNegated);
-                    result.setFailureMessage("No Nodes Matched " + xPathExpression);
-                    return;
-                }
-                if (log.isDebugEnabled() && !isNegated) {
-                    for (int i = 0; i < len; i++) {
-                        log.debug("nodeList[{}]: {}", i, nodeList.item(i));
+                case XObject.CLASS_NODESET -> {
+                    NodeList nodeList = xObject.nodelist();
+                    final int len = (nodeList != null) ? nodeList.getLength() : 0;
+                    log.debug("nodeList length {}", len);
+                    // length == 0 means nodelist is null
+                    if (len == 0) {
+                        log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
+                        result.setFailure(!isNegated);
+                        result.setFailureMessage("No Nodes Matched " + xPathExpression);
+                        return;
+                    }
+                    if (log.isDebugEnabled() && !isNegated) {
+                        for (int i = 0; i < len; i++) {
+                            log.debug("nodeList[{}]: {}", i, nodeList.item(i));
+                        }
+                    }
+                    result.setFailure(isNegated);
+                    if (isNegated) {
+                        result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
                     }
                 }
-                result.setFailure(isNegated);
-                if (isNegated) {
-                    result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
+                case XObject.CLASS_BOOLEAN -> {
+                    boolean resultOfEval = xObject.bool();
+                    result.setFailure(isNegated ? resultOfEval : !resultOfEval);
+                    result.setFailureMessage(isNegated ?
+                            "Nodes Matched for " + xPathExpression
+                            : "No Nodes Matched for " + xPathExpression);
                 }
-                return;
-            case XObject.CLASS_BOOLEAN:
-                boolean resultOfEval = xObject.bool();
-                result.setFailure(isNegated ? resultOfEval : !resultOfEval);
-                result.setFailureMessage(isNegated ?
-                        "Nodes Matched for " + xPathExpression
-                        : "No Nodes Matched for " + xPathExpression);
-                return;
-            default:
-                result.setFailure(true);
-                result.setFailureMessage("Cannot understand: " + xPathExpression);
-                return;
+                default -> {
+                    result.setFailure(true);
+                    result.setFailureMessage("Cannot understand: " + xPathExpression);
+                }
             }
         } catch (TransformerException e) {
             result.setError(true);
@@ -674,10 +678,10 @@ public class XPathUtil {
    public static void computeAssertionResultUsingSaxon(AssertionResult result, String xmlFile, String xPathQuery,
            String namespaces, Boolean isNegated) throws SaxonApiException, FactoryConfigurationError {
        // generating the cache key
-       final ImmutablePair<String, String> key = ImmutablePair.of(xPathQuery, namespaces);
+       final XPathCacheKey key = new XPathCacheKey(xPathQuery, namespaces);
        // check the cache
        XPathExecutable xPathExecutable;
-       if (StringUtils.isNotEmpty(xPathQuery)) {
+       if (StringUtilities.isNotEmpty(xPathQuery)) {
            xPathExecutable = XPATH_CACHE.get(key);
        } else {
            log.warn("Error : {}", JMeterUtils.getResString("xpath2_extractor_empty_query"));

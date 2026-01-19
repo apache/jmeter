@@ -17,8 +17,7 @@
 
 package org.apache.jmeter.extractor;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.apache.jmeter.assertions.AssertionResultExtensionsKt.assertEnFailureMessageContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
@@ -122,8 +120,8 @@ public class TestXPathExtractor {
         extractor.setMatchNumber(0);
         extractor.process();
         assertEquals("1", vars.get(VAL_NAME_NR));
-        assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME)));
-        assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME + "_1")));
+        assertTrue(vars.get(VAL_NAME) != null && !vars.get(VAL_NAME).isEmpty());
+        assertTrue(vars.get(VAL_NAME + "_1") != null && !vars.get(VAL_NAME + "_1").isEmpty());
         assertNull(vars.get(VAL_NAME + "_2"));
         assertNull(vars.get(VAL_NAME + "_3"));
 
@@ -275,17 +273,11 @@ public class TestXPathExtractor {
         assertEquals(1, result.getAssertionResults().length);
         AssertionResult firstResult = result.getAssertionResults()[0];
         assertEquals(extractor.getName(), firstResult.getName());
-        assertThat(
-                "'<' is an invalid character in xpath, so it is expected to be present in the error message",
+        assertContains(
                 firstResult.getFailureMessage(),
-                containsString("<")
-        );
-        if (Locale.getDefault().getLanguage().startsWith(Locale.ENGLISH.getLanguage())) {
-            assertThat(
-                    firstResult.getFailureMessage(),
-                    containsString("A location path was expected, but the following token was encountered")
-            );
-        }
+                "<",
+                "'<' is an invalid character in xpath, so it is expected to be present in the error message");
+        assertEnFailureMessageContains(firstResult, "A location path was expected, but the following token was encountered");
         assertEquals("Default", vars.get(VAL_NAME));
         assertEquals("0", vars.get(VAL_NAME_NR));
     }
@@ -297,8 +289,9 @@ public class TestXPathExtractor {
         extractor.process();
         assertEquals(1, result.getAssertionResults().length);
         assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-        assertThat(result.getAssertionResults()[0].getFailureMessage(),
-                containsString("Content is not allowed in prolog"));
+        assertEnFailureMessageContains(
+            result.getAssertionResults()[0],
+            "Content is not allowed in prolog");
         assertEquals("Default", vars.get(VAL_NAME));
         assertEquals("0", vars.get(VAL_NAME_NR));
     }
@@ -311,10 +304,14 @@ public class TestXPathExtractor {
 
         assertEquals(1, result.getAssertionResults().length);
         assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-        assertThat(result.getAssertionResults()[0].getFailureMessage(),
-                containsString("XML document structures must start and end within the same entity"));
-
+        assertEnFailureMessageContains(
+                result.getAssertionResults()[0],
+                "XML document structures must start and end within the same entity");
         assertEquals("Default", vars.get(VAL_NAME));
         assertEquals("0", vars.get(VAL_NAME_NR));
+    }
+
+    private static void assertContains(String value, String substring, String message) {
+        assertTrue(value.contains(substring), () -> message + ": " + value + " should contain " + substring);
     }
 }

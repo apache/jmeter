@@ -47,7 +47,6 @@ import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apiguardian.api.API;
-import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,7 +112,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      * however, when element in not shared, then adds overhead as every lock and unlock allocates memory.
      * So in case of cloned-per-thread elements, we use {@link Collections#synchronizedMap(Map)} instead.
      */
-    @GuardedBy("lock")
+    // @GuardedBy("lock")
     private final Map<String, JMeterProperty> propMap =
             lock != null
                     ? new LinkedHashMap<>()
@@ -138,7 +137,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     /**
      * Holds properties added when isRunningVersion is true
      */
-    @GuardedBy("lock")
+    // @GuardedBy("lock")
     private transient Set<JMeterProperty> temporaryProperties;
 
     private transient boolean runningVersion = false;
@@ -236,9 +235,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AbstractTestElement) {
+        if (o instanceof AbstractTestElement other) {
             try (ResourceLock ignored = readLock()) {
-                return ((AbstractTestElement) o).propMap.equals(propMap);
+                return other.propMap.equals(propMap);
             }
         } else {
             return false;
@@ -340,10 +339,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         traverser.startProperty(value);
         if (value instanceof TestElementProperty) {
             ((TestElement) value.getObjectValue()).traverse(traverser);
-        } else if (value instanceof CollectionProperty) {
-            traverseCollection((CollectionProperty) value, traverser);
-        } else if (value instanceof MapProperty) {
-            traverseMap((MapProperty) value, traverser);
+        } else if (value instanceof CollectionProperty collectionProperty) {
+            traverseCollection(collectionProperty, traverser);
+        } else if (value instanceof MapProperty mapProperty) {
+            traverseMap(mapProperty, traverser);
         }
         traverser.endProperty(value);
     }
@@ -742,10 +741,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public JMeterContext getThreadContext() {
         if (threadContext == null) {
-            /*
-             * Only samplers have the thread context set up by JMeterThread at
-             * present, so suppress the warning for now
-             */
+            // Only samplers have the thread context set up by JMeterThread at
+            // present, so suppress the warning for now
             threadContext = JMeterContextService.getContext();
         }
         return threadContext;

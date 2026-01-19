@@ -109,8 +109,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
     @Override
     public void modifyTestElement(TestElement el) {
         super.configureTestElement(el);
-        if (el instanceof XPathAssertion) {
-            XPathAssertion assertion = (XPathAssertion) el;
+        if (el instanceof XPathAssertion assertion) {
             saveScopeSettings(assertion);
             assertion.setNegated(xpath.isNegated());
             assertion.setXPathString(xpath.getXPath());

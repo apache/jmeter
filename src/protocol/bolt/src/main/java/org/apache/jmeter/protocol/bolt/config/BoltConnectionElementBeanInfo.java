@@ -36,16 +36,16 @@ public class BoltConnectionElementBeanInfo extends BeanInfoSupport {
         createPropertyGroup("connection", new String[] { "boltUri", "username", "password", "maxConnectionPoolSize" });
 
         PropertyDescriptor propertyDescriptor =  property("boltUri");
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
         propertyDescriptor.setValue(DEFAULT, "bolt://localhost:7687");
         propertyDescriptor = property("username");
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
         propertyDescriptor.setValue(DEFAULT, "neo4j");
         propertyDescriptor = property("password", TypeEditor.PasswordEditor);
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
         propertyDescriptor.setValue(DEFAULT, "");
         propertyDescriptor = property("maxConnectionPoolSize");
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
         propertyDescriptor.setValue(DEFAULT, 100);
 
         if(log.isDebugEnabled()) {

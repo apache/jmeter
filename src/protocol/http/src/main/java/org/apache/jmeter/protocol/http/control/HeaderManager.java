@@ -35,6 +35,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * This class provides an interface to headers file to pass HTTP headers along
@@ -155,7 +156,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    if (line.startsWith("#") || JOrphanUtils.isBlank(line)) {// $NON-NLS-1$
+                    if (line.startsWith("#") || StringUtilities.isBlank(line)) {// $NON-NLS-1$
                         continue;
                     }
                     String[] st = JOrphanUtils.split(line, "\t", " ");// $NON-NLS-1$ $NON-NLS-2$
@@ -284,14 +285,13 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      *             {@link HeaderManager}
      */
     public HeaderManager merge(TestElement element) {
-        if (!(element instanceof HeaderManager)) {
+        if (!(element instanceof HeaderManager other)) {
             throw new IllegalArgumentException("Cannot merge type:" + this.getClass().getName() + " with type:" + element.getClass().getName());
         }
 
         // start off with a merged object as a copy of the local object
         HeaderManager merged = (HeaderManager)this.clone();
 
-        HeaderManager other = (HeaderManager)element;
         // iterate thru each of the other headers
         for (int i = 0; i < other.getHeaders().size(); i++) {
             Header otherHeader = other.get(i);

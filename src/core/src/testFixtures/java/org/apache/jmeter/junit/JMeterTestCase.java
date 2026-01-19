@@ -99,7 +99,7 @@ public abstract class JMeterTestCase {
     // Helper method to find a file
     protected static File findTestFile(String file) {
         File f = new File(file);
-        if (filePrefix.length() > 0 && !f.isAbsolute()) {
+        if (!filePrefix.isEmpty() && !f.isAbsolute()) {
             f = new File(filePrefix, file);// Add the offset
         }
         return f;
@@ -108,7 +108,7 @@ public abstract class JMeterTestCase {
     // Helper method to find a test path
     protected static String findTestPath(String file) {
         File f = new File(file);
-        if (filePrefix.length() > 0 && !f.isAbsolute()) {
+        if (!filePrefix.isEmpty() && !f.isAbsolute()) {
             return filePrefix + file;// Add the offset
         }
         return file;

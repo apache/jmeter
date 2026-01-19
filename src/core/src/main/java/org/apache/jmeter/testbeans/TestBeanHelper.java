@@ -174,24 +174,21 @@ public class TestBeanHelper {
 
     private static Object unwrapProperty(PropertyDescriptor desc, JMeterProperty jprop, Class<?> type) {
         Object value;
-        if(jprop instanceof TestElementProperty)
+        if(jprop instanceof TestElementProperty testElementProperty)
         {
-            TestElement te = ((TestElementProperty)jprop).getElement();
+            TestElement te = testElementProperty.getElement();
             if(te instanceof TestBean)
             {
                 prepare(te);
             }
             value = te;
         }
-        else if(jprop instanceof MultiProperty)
+        else if(jprop instanceof MultiProperty multiProperty)
         {
-            value = unwrapCollection((MultiProperty)jprop,(String)desc.getValue(TableEditor.CLASSNAME));
-        }
-        // value was not provided, and this is allowed
-        else if (jprop instanceof NullProperty &&
-                // use negative condition so missing (null) value is treated as FALSE
-                ! Boolean.TRUE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED))) {
-            value=null;
+            value = unwrapCollection(multiProperty,(String)desc.getValue(TableEditor.CLASSNAME));
+        } else if (jprop instanceof NullProperty) {
+            value = Boolean.TRUE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED))
+                    ? desc.getValue(GenericTestBeanCustomizer.DEFAULT) : null;
         } else {
             value = Converter.convert(jprop.getStringValue(), type);
         }
@@ -200,10 +197,10 @@ public class TestBeanHelper {
 
     private static Object unwrapCollection(MultiProperty prop, String type)
     {
-        if(prop instanceof CollectionProperty)
+        if(prop instanceof CollectionProperty collectionProperty)
         {
             Collection<Object> values = new ArrayList<>();
-            for (JMeterProperty jMeterProperty : prop) {
+            for (JMeterProperty jMeterProperty : collectionProperty) {
                 try {
                     values.add(unwrapProperty(null, jMeterProperty, Class.forName(type)));
                 }

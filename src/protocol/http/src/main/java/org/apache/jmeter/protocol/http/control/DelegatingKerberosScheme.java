@@ -40,8 +40,8 @@ public class DelegatingKerberosScheme extends KerberosScheme {
         final GSSName serverName = manager.createName("HTTP@" + authServer, GSSName.NT_HOSTBASED_SERVICE);
 
         final GSSCredential gssCredential;
-        if (credentials instanceof KerberosCredentials) {
-            gssCredential = ((KerberosCredentials) credentials).getGSSCredential();
+        if (credentials instanceof KerberosCredentials kerberosCredentials) {
+            gssCredential = kerberosCredentials.getGSSCredential();
         } else {
             gssCredential = null;
         }

@@ -25,7 +25,9 @@ import java.util.Properties;
 import org.apache.jmeter.util.JMeterUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
 
+@Isolated("modifies jmeter locale")
 public class TestMailReaderSampler {
 
     @SuppressWarnings("CatchAndPrintStackTrace")

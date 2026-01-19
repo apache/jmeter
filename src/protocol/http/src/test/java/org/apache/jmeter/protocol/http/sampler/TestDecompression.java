@@ -17,6 +17,10 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,9 +30,6 @@ import java.util.function.Consumer;
 
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -38,6 +39,8 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+
+import kotlin.text.StringsKt;
 
 public class TestDecompression {
     enum ClientGzip {
@@ -91,16 +94,19 @@ public class TestDecompression {
             HTTPSampleResult res = http.sample(new URL(server.url("/gzip")), "GET", false, 1);
 
             Assertions.assertAll(
+                    () -> assertEquals(expectedResponse, res.getResponseDataAsString(), "response body"),
                     () -> {
-                        Matcher<String> matcher;
                         if (clientGzip == ClientGzip.NOT_REQUESTED || serverGzip == ServerGzip.NOT_SUPPORTED) {
-                            matcher = Matchers.not(Matchers.containsStringIgnoringCase("Content-Encoding:"));
+                            assertFalse(
+                                    StringsKt.contains(res.getResponseHeaders(), "Content-Encoding:", false),
+                                    () -> "clientGzip is " + clientGzip + ", so Content-Encoding header should NOT be present"
+                            );
                         } else {
-                            matcher = Matchers.containsStringIgnoringCase("Content-Encoding: gzip");
+                            assertTrue(
+                                    StringsKt.contains(res.getResponseHeaders(), "Content-Encoding: gzip", false),
+                                    () -> "clientGzip is " + clientGzip + ", so Content-Encoding: gzip header should be present"
+                            );
                         }
-                        MatcherAssert.assertThat("getResponseHeaders", res.getResponseHeaders(), matcher);
-                    }, () -> {
-                        Assertions.assertEquals(expectedResponse, res.getResponseDataAsString(), "response body");
                     }
             );
         } finally {
@@ -108,7 +114,7 @@ public class TestDecompression {
         }
     }
 
-    private WireMockServer createServer(Consumer<WireMockConfiguration> config) {
+    private static WireMockServer createServer(Consumer<WireMockConfiguration> config) {
         WireMockConfiguration configuration =
                 WireMockConfiguration
                         .wireMockConfig()

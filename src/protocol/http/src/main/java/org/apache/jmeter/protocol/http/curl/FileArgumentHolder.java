@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.commons.lang3.tuple.Pair;
 
 public class FileArgumentHolder implements ArgumentHolder {
     private final String name;
@@ -36,8 +35,8 @@ public class FileArgumentHolder implements ArgumentHolder {
         if (name == null) {
             return new FileArgumentHolder("", Collections.emptyMap());
         }
-        Pair<String, Map<String, String>> parsed = ArgumentHolder.parse(name);
-        return new FileArgumentHolder(parsed.getLeft(), parsed.getRight());
+        Map.Entry<String, Map<String, String>> parsed = ArgumentHolder.parse(name);
+        return new FileArgumentHolder(parsed.getKey(), parsed.getValue());
     }
 
     @Override

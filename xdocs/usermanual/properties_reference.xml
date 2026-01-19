@@ -246,10 +246,6 @@ Defaults to: <code>true</code>
 </property>
 <property name="not_in_menu">
     Components to not display in JMeter GUI (GUI class name or static label).<br/>
-    These elements are deprecated and will be removed in next version:
-    <source>MongoDB Script, MongoDB Source Config</source>
-    Defaults to:
-    <source>org.apache.jmeter.protocol.mongodb.sampler.MongoScriptSampler, org.apache.jmeter.protocol.mongodb.config.MongoSourceElement</source>
 </property>
 <property name="undo.history.size">
     Number of items in undo history.<br/>

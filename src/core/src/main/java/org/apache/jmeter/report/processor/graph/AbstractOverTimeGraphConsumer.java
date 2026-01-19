@@ -67,12 +67,6 @@ public abstract class AbstractOverTimeGraphConsumer extends
      */
     protected abstract TimeStampKeysSelector createTimeStampKeysSelector();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createKeysSelector()
-     */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
         TimeStampKeysSelector keysSelector = createTimeStampKeysSelector();
@@ -80,21 +74,9 @@ public abstract class AbstractOverTimeGraphConsumer extends
         return keysSelector;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected abstract Map<String, GroupInfo> createGroupInfos();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
-     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
-     */
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(

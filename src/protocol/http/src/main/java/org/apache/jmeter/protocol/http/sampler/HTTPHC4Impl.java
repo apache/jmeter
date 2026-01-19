@@ -46,8 +46,6 @@ import java.util.regex.Pattern;
 
 import javax.security.auth.Subject;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.MutableTriple;
 import org.apache.http.Header;
 import org.apache.http.HttpClientConnection;
 import org.apache.http.HttpConnectionMetrics;
@@ -101,7 +99,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.FormBodyPartBuilder;
 import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.MultipartEntityBuilder2;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
@@ -135,6 +133,7 @@ import org.apache.http.protocol.HttpRequestExecutor;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.HttpClientState;
 import org.apache.jmeter.protocol.http.api.auth.DigestParameters;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
@@ -154,13 +153,13 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,7 +195,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         private final Credentials proxyCredentials;
         private final AuthScope proxyAuthScope;
 
-        public ManagedCredentialsProvider(AuthManager authManager, AuthScope proxyAuthScope, Credentials proxyCredentials) {
+        private ManagedCredentialsProvider(AuthManager authManager, AuthScope proxyAuthScope, Credentials proxyCredentials) {
             this.authManager = authManager;
             this.proxyAuthScope = proxyAuthScope;
             this.proxyCredentials = proxyCredentials;
@@ -238,8 +237,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             for (JMeterProperty authProp : authManager.getAuthObjects()) {
                 Object authObject = authProp.getObjectValue();
-                if (authObject instanceof Authorization) {
-                    Authorization auth = (Authorization) authObject;
+                if (authObject instanceof Authorization auth) {
                     if (!authScope.getRealm().equals(auth.getRealm())) {
                         continue;
                     }
@@ -279,7 +277,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HttpClientKey key = (HttpClientKey) localContext.getAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY);
                 AuthScope authScope = null;
                 CredentialsProvider credentialsProvider = localContext.getCredentialsProvider();
-                if (key.hasProxy && !StringUtils.isEmpty(key.proxyUser)) {
+                if (key.hasProxy && !(key.proxyUser == null || key.proxyUser.isEmpty())) {
                     authScope = new AuthScope(key.proxyHost, key.proxyPort);
                     credentials = credentialsProvider.getCredentials(authScope);
                 }
@@ -290,8 +288,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 return;
             }
             URI requestURI = null;
-            if (request instanceof HttpUriRequest) {
-                requestURI = ((HttpUriRequest) request).getURI();
+            if (request instanceof HttpUriRequest httpUriRequest) {
+                requestURI = httpUriRequest.getURI();
             } else {
                 try {
                     requestURI = new URI(request.getRequestLine().getUri());
@@ -373,17 +371,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final class JMeterDefaultHttpClientConnectionOperator extends DefaultHttpClientConnectionOperator {
 
-        public JMeterDefaultHttpClientConnectionOperator(Lookup<ConnectionSocketFactory> socketFactoryRegistry, SchemePortResolver schemePortResolver,
+        private JMeterDefaultHttpClientConnectionOperator(Lookup<ConnectionSocketFactory> socketFactoryRegistry, SchemePortResolver schemePortResolver,
                 DnsResolver dnsResolver) {
             super(socketFactoryRegistry, schemePortResolver, dnsResolver);
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.http.impl.conn.DefaultHttpClientConnectionOperator#connect(
-         *  org.apache.http.conn.ManagedHttpClientConnection, org.apache.http.HttpHost,
-         *      java.net.InetSocketAddress, int, org.apache.http.config.SocketConfig,
-         *      org.apache.http.protocol.HttpContext)
-         */
         @Override
         public void connect(ManagedHttpClientConnection conn, HttpHost host, InetSocketAddress localAddress,
                 int connectTimeout, SocketConfig socketConfig, HttpContext context) throws IOException {
@@ -457,11 +449,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
-    private static final ThreadLocal<Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>
-            HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = new InheritableThreadLocal<Map<HttpClientKey,
-                    MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>>() {
+    private static final ThreadLocal<Map<HttpClientKey, HttpClientState>>
+            HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = new InheritableThreadLocal<>() {
         @Override
-        protected Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> initialValue() {
+        protected Map<HttpClientKey, HttpClientState> initialValue() {
             return new HashMap<>(5);
         }
     };
@@ -538,10 +529,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HttpClientContext clientContext = HttpClientContext.adapt(localContext);
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER, getAuthManager());
         HttpClientKey key = createHttpClientKey(url);
-        MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple;
+        HttpClientState clientState;
         try {
-            triple = setupClient(key, jMeterVariables, clientContext);
-            httpClient = triple.getLeft();
+            clientState = setupClient(key, jMeterVariables, clientContext);
+            httpClient = clientState.getClient();
             URI uri = url.toURI();
             httpRequest = createHttpRequest(uri, method, areFollowingRedirect);
             setupRequest(url, httpRequest, res); // can throw IOException
@@ -569,7 +560,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // perform the sample
             httpResponse =
                     executeRequest(httpClient, httpRequest, localContext, url);
-            saveProxyAuth(triple, localContext);
+            saveProxyAuth(clientState, localContext);
             if (log.isDebugEnabled()) {
                 log.debug("Headers in request before:{}", Arrays.asList(httpRequest.getAllHeaders()));
             }
@@ -694,24 +685,24 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Associate Proxy state to thread
-     * @param triple {@link MutableTriple}
+     * @param clientState {@link HttpClientState}
      * @param localContext {@link HttpContext}
      */
     private static void saveProxyAuth(
-            MutableTriple<CloseableHttpClient, ? super AuthState, PoolingHttpClientConnectionManager> triple,
+            HttpClientState clientState,
             HttpContext localContext) {
-        triple.setMiddle((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
+        clientState.setAuthState((AuthState) localContext.getAttribute(HttpClientContext.PROXY_AUTH_STATE));
     }
 
     /**
-     * Store in localContext Proxy auth state of triple
-     * @param triple {@link MutableTriple} May be null if first request
+     * Store in localContext Proxy auth state of clientState
+     * @param clientState {@link HttpClientState} May be null if first request
      * @param localContext {@link HttpContext}
      */
-    private static void setupProxyAuthState(MutableTriple<CloseableHttpClient, ? extends AuthState, PoolingHttpClientConnectionManager> triple,
+    private static void setupProxyAuthState(HttpClientState clientState,
             HttpContext localContext) {
-        if (triple != null) {
-            AuthState proxyAuthState = triple.getMiddle();
+        if (clientState != null) {
+            AuthState proxyAuthState = clientState.getAuthState();
             localContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, proxyAuthState);
         }
     }
@@ -812,8 +803,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected void handleMethod(String method, HTTPSampleResult result,
             HttpRequestBase httpRequest, HttpContext localContext) throws IOException {
         // Handle the various methods
-        if (httpRequest instanceof HttpEntityEnclosingRequestBase) {
-            String entityBody = setupHttpEntityEnclosingRequestData((HttpEntityEnclosingRequestBase)httpRequest);
+        if (httpRequest instanceof HttpEntityEnclosingRequestBase httpEntityEnclosingRequestBase) {
+            String entityBody = setupHttpEntityEnclosingRequestData(httpEntityEnclosingRequestBase);
             result.setQueryString(entityBody);
         }
     }
@@ -891,7 +882,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
          * @param proxyUser proxy user
          * @param proxyPass proxy password
          */
-        public HttpClientKey(URL url, boolean hasProxy, String proxyScheme, String proxyHost,
+        private HttpClientKey(URL url, boolean hasProxy, String proxyScheme, String proxyHost,
                 int proxyPort, String proxyUser, String proxyPass) {
             // N.B. need to separate protocol from authority otherwise http://server would match https://erver (<= sic, not typo error)
             // could use separate fields, but simpler to combine them
@@ -931,10 +922,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (this == obj) {
                 return true;
             }
-            if (!(obj instanceof HttpClientKey)) {
+            if (!(obj instanceof HttpClientKey other)) {
                 return false;
             }
-            HttpClientKey other = (HttpClientKey) obj;
             if (!Objects.equals(authority, other.authority) ||
                     !Objects.equals(protocol, other.protocol) ||
                     hasProxy != other.hasProxy) {
@@ -978,28 +968,28 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> setupClient(HttpClientKey key, JMeterVariables jMeterVariables,
+    private HttpClientState setupClient(HttpClientKey key, JMeterVariables jMeterVariables,
             HttpClientContext clientContext) throws GeneralSecurityException {
-        Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey =
+        Map<HttpClientKey, HttpClientState> mapHttpClientPerHttpClientKey =
                 HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
         CloseableHttpClient httpClient = null;
-        MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple = null;
+        HttpClientState clientState = null;
         boolean concurrentDwn = this.testElement.isConcurrentDwn();
         Map<String, Object> samplerContext = JMeterContextService.getContext().getSamplerContext();
         if(concurrentDwn) {
-            triple = (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>)
+            clientState = (HttpClientState)
                     samplerContext.get(CONTEXT_ATTRIBUTE_PARENT_SAMPLE_CLIENT_STATE);
         }
-        if (triple == null) {
-            triple = mapHttpClientPerHttpClientKey.get(key);
+        if (clientState == null) {
+            clientState = mapHttpClientPerHttpClientKey.get(key);
         }
 
-        if(triple != null) {
-            httpClient = triple.getLeft();
+        if(clientState != null) {
+            httpClient = clientState.getClient();
         }
-        setupProxyAuthState(triple, clientContext);
-        resetStateIfNeeded(triple, jMeterVariables, clientContext, mapHttpClientPerHttpClientKey);
+        setupProxyAuthState(clientState, clientContext);
+        resetStateIfNeeded(clientState, jMeterVariables, clientContext, mapHttpClientPerHttpClientKey);
 
         if (httpClient == null) { // One-time init for this client
             DnsResolver resolver = this.testElement.getDNSResolver();
@@ -1092,8 +1082,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @{} {}", System.identityHashCode(httpClient), key);
             }
-            triple = MutableTriple.of(httpClient, null, pHCCM);
-            mapHttpClientPerHttpClientKey.put(key, triple); // save the agent for next time round
+            clientState = new HttpClientState(httpClient, pHCCM);
+            mapHttpClientPerHttpClientKey.put(key, clientState); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @{} {}", System.identityHashCode(httpClient),key);
@@ -1101,9 +1091,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         if(concurrentDwn) {
-            samplerContext.put(CONTEXT_ATTRIBUTE_PARENT_SAMPLE_CLIENT_STATE, triple);
+            samplerContext.put(CONTEXT_ATTRIBUTE_PARENT_SAMPLE_CLIENT_STATE, clientState);
         }
-        return triple;
+        return clientState;
     }
 
     protected AuthenticationStrategy getProxyAuthStrategy() {
@@ -1147,23 +1137,23 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * </ul>
      * @param jMeterVariables {@link JMeterVariables}
      * @param clientContext {@link HttpClientContext}
-     * @param mapHttpClientPerHttpClientKey Map of {@link MutableTriple} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
+     * @param mapHttpClientPerHttpClientKey Map of {@link HttpClientState} holding {@link CloseableHttpClient} and {@link PoolingHttpClientConnectionManager}
      */
     private static void resetStateIfNeeded(
-            MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple,
+            HttpClientState clientState,
             JMeterVariables jMeterVariables,
             HttpClientContext clientContext,
-            Map<HttpClientKey, ? extends MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
+            Map<HttpClientKey, ? extends HttpClientState> mapHttpClientPerHttpClientKey) {
         if (resetStateOnThreadGroupIteration.get()) {
             closeCurrentConnections(mapHttpClientPerHttpClientKey);
             clientContext.removeAttribute(HttpClientContext.USER_TOKEN);
             clientContext.removeAttribute(HttpClientContext.PROXY_AUTH_STATE);
-            if (triple != null) {
-                triple.setMiddle(null);
+            if (clientState != null) {
+                clientState.setAuthState(null);
             }
             jMeterVariables.remove(JMETER_VARIABLE_USER_TOKEN);
             ((JsseSSLManager) SSLManager.getInstance()).resetContext();
-            resetStateOnThreadGroupIteration.set(Boolean.FALSE);
+            resetStateOnThreadGroupIteration.set(false);
         }
     }
 
@@ -1171,10 +1161,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param mapHttpClientPerHttpClientKey
      */
     private static void closeCurrentConnections(
-            Map<HttpClientKey, ? extends MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>> mapHttpClientPerHttpClientKey) {
-        for (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple :
+            Map<HttpClientKey, ? extends HttpClientState> mapHttpClientPerHttpClientKey) {
+        for (HttpClientState clientState :
                 mapHttpClientPerHttpClientKey.values()) {
-            PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = triple.getRight();
+            PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = clientState.getConnectionManager();
             poolingHttpClientConnectionManager.closeExpiredConnections();
             poolingHttpClientConnectionManager.closeIdleConnections(1L, TimeUnit.MICROSECONDS);
         }
@@ -1235,7 +1225,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
 
         if (res != null) {
-            if(cookies != null && !cookies.isEmpty()) {
+            if (StringUtilities.isNotEmpty(cookies)) {
                 res.setCookies(cookies);
             } else {
                 // During recording Cookie Manager doesn't handle cookies
@@ -1279,8 +1269,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param header {@link Header}
      */
     private static void writeHeader(StringBuilder headerBuffer, Header header) {
-        if(header instanceof BufferedHeader) {
-            CharArrayBuffer buffer = ((BufferedHeader)header).getBuffer();
+        if(header instanceof BufferedHeader bufferedHeader) {
+            CharArrayBuffer buffer = bufferedHeader.getBuffer();
             headerBuffer.append(buffer.buffer(), 0, buffer.length()).append('\n'); // $NON-NLS-1$
         }
         else {
@@ -1432,7 +1422,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 "<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8);
         private boolean hideFileData;
 
-        public ViewableFileBody(File file, ContentType contentType, Charset charset) {
+        private ViewableFileBody(File file, ContentType contentType, Charset charset) {
             // Note: HttpClient4 does not support encoding the file name, and it always encodes names in IS88
             // See https://issues.apache.org/jira/browse/HTTPCLIENT-293
             super(file, contentType, encodeFilename(file.getName(), charset));
@@ -1486,7 +1476,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         doBrowserCompatibleMultipart, charset, haveContentEncoding);
             }
             // Write the request to our own stream
-            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            MultipartEntityBuilder2 multipartEntityBuilder = MultipartEntityBuilder2.create();
             multipartEntityBuilder.setCharset(charset);
             if (doBrowserCompatibleMultipart) {
                 multipartEntityBuilder.setLaxMode();
@@ -1496,7 +1486,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             // Create the parts
             // Add any parameters
-            for (JMeterProperty jMeterProperty : getArguments()) {
+            for (JMeterProperty jMeterProperty : getArguments().getEnabledArguments()) {
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 String parameterName = arg.getName();
                 if (arg.isSkippable(parameterName)) {
@@ -1535,7 +1525,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Check if the header manager had a content type header
             // This allows the user to specify their own content-type for a POST request
             Header contentTypeHeader = entityEnclosingRequest.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
-            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
+            boolean hasContentTypeHeader = contentTypeHeader != null && StringUtilities.isNotEmpty(contentTypeHeader.getValue());
             // If there are no arguments, we can send a file as the body of the request
             // TODO: needs a multiple file upload scenario
             if(!hasArguments() && getSendFileAsPostBody()) {
@@ -1543,7 +1533,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 HTTPFileArg file = files[0];
                 if(!hasContentTypeHeader) {
                     // Allow the mimetype of the file to control the content type
-                    if(file.getMimeType() != null && file.getMimeType().length() > 0) {
+                    if (StringUtilities.isNotEmpty(file.getMimeType())) {
                         entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                     }
                     else if(ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
@@ -1568,7 +1558,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     // TODO: needs a multiple file upload scenario
                     if(!hasContentTypeHeader) {
                         HTTPFileArg file = files.length > 0? files[0] : null;
-                        if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+                        if(file != null && StringUtilities.isNotEmpty(file.getMimeType())) {
                             entityEnclosingRequest.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                         }
                         else if(ADD_CONTENT_TYPE_TO_POST_IF_MISSING) {
@@ -1578,7 +1568,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
                     // Just append all the parameter values, and use that as the post body
                     StringBuilder postBody = new StringBuilder();
-                    for (JMeterProperty jMeterProperty : getArguments()) {
+                    for (JMeterProperty jMeterProperty : getArguments().getEnabledArguments()) {
                         HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                         postBody.append(arg.getEncodedValue(contentEncoding));
                     }
@@ -1657,7 +1647,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // but just sending the content of nameless parameters
         final HTTPFileArg file = files.length > 0? files[0] : null;
         String contentTypeValue;
-        if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+        if(file != null && StringUtilities.isNotEmpty(file.getMimeType())) {
             contentTypeValue = file.getMimeType();
             entity.setHeader(HEADER_CONTENT_TYPE, contentTypeValue); // we provide the MIME type here
         }
@@ -1721,10 +1711,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private UrlEncodedFormEntity createUrlEncodedFormEntity(final String urlContentEncoding) throws UnsupportedEncodingException {
         // It is a normal request, with parameter names and values
         // Add the parameters
-        PropertyIterator args = getArguments().iterator();
         List<NameValuePair> nvps = new ArrayList<>();
-        while (args.hasNext()) {
-            HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+        for (JMeterProperty jMeterProperty: getArguments().getEnabledArguments()) {
+            HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
             // The HTTPClient always urlencodes both name and value,
             // so if the argument is already encoded, we have to decode
             // it before adding it to the post request
@@ -1782,12 +1771,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static void closeThreadLocalConnections() {
         // Does not need to be synchronised, as all access is from same thread
-        Map<HttpClientKey, MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager>>
+        Map<HttpClientKey, HttpClientState>
             mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         if (mapHttpClientPerHttpClientKey != null ) {
-            for (MutableTriple<CloseableHttpClient, AuthState, PoolingHttpClientConnectionManager> triple : mapHttpClientPerHttpClientKey.values() ) {
-                JOrphanUtils.closeQuietly(triple.getLeft());
-                JOrphanUtils.closeQuietly(triple.getRight());
+            for (HttpClientState clientState : mapHttpClientPerHttpClientKey.values() ) {
+                JOrphanUtils.closeQuietly(clientState.getClient());
+                JOrphanUtils.closeQuietly(clientState.getConnectionManager());
             }
             mapHttpClientPerHttpClientKey.clear();
         }

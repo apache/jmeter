@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.report.processor;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -57,8 +56,7 @@ public class ApdexSummaryConsumer extends
         ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
         Long satisfiedThreshold = thresholdsInfo.getSatisfiedThreshold();
         Long toleratedThreshold = thresholdsInfo.getToleratedThreshold();
-        String keyOrDefault = ObjectUtils.defaultIfNull(
-                key, JMeterUtils.getResString("reportgenerator_summary_total"));
+        String keyOrDefault = (key != null ? key : JMeterUtils.getResString("reportgenerator_summary_total"));
 
         ListResultData result = new ListResultData();
         result.addResult(new ValueResultData(apdex));
@@ -68,26 +66,11 @@ public class ApdexSummaryConsumer extends
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
-     * (org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected String getKeyFromSample(Sample sample) {
         return sample.getName();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
-     * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
-     * org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected void updateData(SummaryInfo info, Sample sample) {
         if(sample.isEmptyController()) {
@@ -146,13 +129,6 @@ public class ApdexSummaryConsumer extends
                 / data.getTotalCount();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
-     * ()
-     */
     @Override
     protected ListResultData createResultTitles() {
         ListResultData titles = new ListResultData();

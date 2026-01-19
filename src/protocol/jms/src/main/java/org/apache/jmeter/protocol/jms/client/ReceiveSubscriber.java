@@ -21,20 +21,22 @@ import java.io.Closeable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import javax.jms.Connection;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
-import javax.jms.Session;
-import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
 import org.apache.jmeter.protocol.jms.Utils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.jms.Connection;
+import jakarta.jms.Destination;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageConsumer;
+import jakarta.jms.MessageListener;
+import jakarta.jms.Session;
+import jakarta.jms.Topic;
 
 /**
  * Generic MessageConsumer class, which has two possible strategies.
@@ -55,7 +57,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
 
     private final MessageConsumer subscriber;
 
-    /*
+    /**
      * We use a LinkedBlockingQueue (rather than a ConcurrentLinkedQueue) because it has a
      * poll-with-wait method that avoids the need to use a polling loop.
      */
@@ -230,7 +232,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
             Context ctx = InitialContextFactory.getContext(useProps,
                     initialContextFactory, providerUrl, useAuth, securityPrincipal, securityCredentials);
             connection = Utils.getConnection(ctx, connfactory);
-            if(!isEmpty(clientId)) {
+            if (StringUtilities.isNotEmpty(clientId)) {
                 connection.setClientID(clientId);
             }
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -272,14 +274,14 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
     private static MessageConsumer createSubscriber(Session session,
             Destination destination, String durableSubscriptionId,
             String jmsSelector) throws JMSException {
-        if (isEmpty(durableSubscriptionId)) {
-            if(isEmpty(jmsSelector)) {
+        if (StringUtilities.isEmpty(durableSubscriptionId)) {
+            if (StringUtilities.isEmpty(jmsSelector)) {
                 return session.createConsumer(destination);
             } else {
                 return session.createConsumer(destination, jmsSelector);
             }
         } else {
-            if(isEmpty(jmsSelector)) {
+            if (StringUtilities.isEmpty(jmsSelector)) {
                 return session.createDurableSubscriber((Topic) destination, durableSubscriptionId);
             } else {
                 return session.createDurableSubscriber((Topic) destination, durableSubscriptionId, jmsSelector, false);
@@ -368,16 +370,5 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
         if (!queue.offer(message)){
             log.warn("Could not add message to queue");
         }
-    }
-
-
-    /**
-     * Checks whether string is empty
-     *
-     * @param s1
-     * @return True if input is null, an empty string, or a white space-only string
-     */
-    private static boolean isEmpty(String s1) {
-        return s1 == null || s1.trim().isEmpty();
     }
 }

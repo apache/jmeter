@@ -580,9 +580,7 @@ public class SmtpPanel extends JPanel {
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.weightx = 0.5;
 
-        /*
-         * Server Settings
-         */
+        // Server Settings
         JPanel panelServerSettings = new VerticalPanel();
         panelServerSettings.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("smtp_server_settings"))); // $NON-NLS-1$
@@ -620,9 +618,7 @@ public class SmtpPanel extends JPanel {
         gridBagConstraintsMain.gridy = 0;
         add(panelServerConfig, gridBagConstraintsMain);
 
-        /*
-         * E-Mail Settings
-         */
+        // E-Mail Settings
         JPanel panelMailSettings = new JPanel(new GridBagLayout());
         panelMailSettings.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("smtp_mail_settings"))); // $NON-NLS-1$
@@ -714,18 +710,13 @@ public class SmtpPanel extends JPanel {
         gridBagConstraintsMain.gridy = 2;
         add(panelAuthSettings, gridBagConstraintsMain);
 
-        /*
-         * Security Settings
-         */
+        // Security Settings
         securitySettingsPanel = new SecuritySettingsPanel();
 
         gridBagConstraintsMain.gridx = 0;
         gridBagConstraintsMain.gridy = 3;
         add(securitySettingsPanel, gridBagConstraintsMain);
 
-        /*
-         * (non-Javadoc) Message Settings
-         */
         JPanel panelMessageSettings = new JPanel(new GridBagLayout());
         panelMessageSettings.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("smtp_message_settings"))); // $NON-NLS-1$
@@ -843,9 +834,7 @@ public class SmtpPanel extends JPanel {
         gridBagConstraintsMain.gridy = 6;
         add(panelMessageSettings, gridBagConstraintsMain);
 
-        /*
-         * Additional Settings
-         */
+        // Additional Settings
         JPanel panelAdditionalSettings = new JPanel(new GridBagLayout());
         panelAdditionalSettings.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("smtp_additional_settings"))); // $NON-NLS-1$
@@ -890,7 +879,7 @@ public class SmtpPanel extends JPanel {
             return;
         }
         final String attachments = tfAttachment.getText().trim();
-        if (attachments.length() > 0) {
+        if (!attachments.isEmpty()) {
             tfAttachment.setText(attachments
                             + SmtpSampler.FILENAME_SEPARATOR
                             + chosen.getAbsolutePath());
@@ -1042,7 +1031,7 @@ public class SmtpPanel extends JPanel {
 
     private void removeHeaderActionPerformed(ActionEvent evt){ // NOSONAR This method is used through lambda
         final Object source = evt.getSource();
-        if(source instanceof JButton){
+        if(source instanceof JButton jButton){
             if(headerFields.size() == 1){
                 headerFieldName.setVisible(false);
                 headerFieldValue.setVisible(false);
@@ -1053,7 +1042,7 @@ public class SmtpPanel extends JPanel {
 
             headerFieldsPanel.remove(nameTF);
             headerFieldsPanel.remove(valueTF);
-            headerFieldsPanel.remove((JButton)source);
+            headerFieldsPanel.remove(jButton);
             validate();
         }
     }

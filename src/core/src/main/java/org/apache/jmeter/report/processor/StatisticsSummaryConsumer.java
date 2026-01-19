@@ -94,14 +94,6 @@ public class StatisticsSummaryConsumer extends
         data.setEndTime(sample.getEndTime());
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#updateData
-     * (org.apache.jmeter.report.processor.AbstractSummaryConsumer.SummaryInfo,
-     * org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected void updateData(SummaryInfo info, Sample sample) {
         SummaryInfo overallInfo = getOverallInfo();
@@ -125,13 +117,6 @@ public class StatisticsSummaryConsumer extends
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createDataResult
-     * (java.lang.String)
-     */
     @Override
     protected ListResultData createDataResult(String key,
             StatisticsSummaryData data) {
@@ -156,25 +141,11 @@ public class StatisticsSummaryConsumer extends
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
-     * (org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected String getKeyFromSample(Sample sample) {
         return sample.getName();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
-     * ()
-     */
     @Override
     protected ListResultData createResultTitles() {
         ListResultData titles = new ListResultData();

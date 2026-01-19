@@ -25,15 +25,7 @@ dependencies {
     api("com.github.ben-manes.caffeine:caffeine") {
         because("MessageRenderer#getValueFromFile(..., caffeine.cache.Cache)")
     }
-    // TODO: technically speaking, jms_1.1_spec should be compileOnly
-    // since we either include a JMS implementation or we can't use JMS at all
-    implementation("org.apache.geronimo.specs:geronimo-jms_1.1_spec")
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
+    api("jakarta.jms:jakarta.jms-api")
     implementation("com.miglayout:miglayout-swing")
 
     testImplementation(testFixtures(projects.src.core))

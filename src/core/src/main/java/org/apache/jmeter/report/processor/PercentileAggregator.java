@@ -54,41 +54,21 @@ public class PercentileAggregator implements Aggregator {
         this.percentileIndex = lastAggregator.percentileIndex;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
-     */
     @Override
     public long getCount() {
         return statistics.getN();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
-     */
     @Override
     public double getResult() {
         return statistics.getPercentile(percentileIndex);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
-     */
     @Override
     public void addValue(double value) {
         statistics.addValue(value);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregator#reset()
-     */
     @Override
     public void reset() {
         statistics.clear();

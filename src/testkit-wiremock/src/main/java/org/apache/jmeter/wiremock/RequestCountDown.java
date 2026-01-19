@@ -19,20 +19,24 @@ package org.apache.jmeter.wiremock;
 
 import java.util.concurrent.CountDownLatch;
 
-import com.github.tomakehurst.wiremock.core.Admin;
 import com.github.tomakehurst.wiremock.extension.Parameters;
-import com.github.tomakehurst.wiremock.extension.PostServeAction;
+import com.github.tomakehurst.wiremock.extension.ServeEventListener;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 
-public class RequestCountDown extends PostServeAction {
+public class RequestCountDown implements ServeEventListener {
     @Override
     public String getName() {
         return "countdown";
     }
 
     @Override
-    public void doAction(ServeEvent serveEvent, Admin admin, Parameters parameters) {
+    public void onEvent(RequestPhase requestPhase, ServeEvent serveEvent, Parameters parameters) {
+        if (requestPhase != RequestPhase.AFTER_COMPLETE) {
+            return;
+        }
         CountDownLatch latch = (CountDownLatch) parameters.get("latch");
-        latch.countDown();
+        if (latch != null) {
+            latch.countDown();
+        }
     }
 }

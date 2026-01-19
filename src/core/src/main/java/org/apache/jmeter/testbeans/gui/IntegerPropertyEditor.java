@@ -32,8 +32,8 @@ public class IntegerPropertyEditor extends PropertyEditorSupport {
 
     @Override
     public void setValue(Object value){
-        if (value instanceof String) {
-            super.setValue(Integer.decode((String) value)); // handles hex as well
+        if (value instanceof String string) {
+            super.setValue(Integer.decode(string)); // handles hex as well
         } else if (value == null || value instanceof Integer) {
             super.setValue(value); // not sure if null is passed in but no harm in setting it
         } else {

@@ -208,7 +208,7 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         }
     }
 
-    private CSVDataSet initCSV(){
+    private static CSVDataSet initCSV(){
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/unit/TestCVSDataSet.csv"));
         csv.setVariableNames("a,b,c");

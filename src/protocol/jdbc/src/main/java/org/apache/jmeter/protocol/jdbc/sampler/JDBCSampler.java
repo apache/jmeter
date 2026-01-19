@@ -21,9 +21,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.gui.TestElementMetadata;
@@ -34,7 +34,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * A sampler which understands JDBC database requests.
@@ -73,7 +73,7 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
 
         try {
             String dataSource = getDataSource();
-            if (JOrphanUtils.isBlank(dataSource)) {
+            if (StringUtilities.isBlank(dataSource)) {
                 throw new IllegalArgumentException("Name for DataSource must not be empty in " + getName());
             }
 
@@ -94,7 +94,7 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
             res.setResponseMessage(ex.toString());
             res.setResponseCode("000");
             res.setResponseData(
-                    ObjectUtils.defaultIfNull(ex.getMessage(), "NO MESSAGE"),
+                    Objects.requireNonNullElse(ex.getMessage(), "NO MESSAGE"),
                     res.getDataEncodingWithDefault());
             res.setSuccessful(false);
         } finally {

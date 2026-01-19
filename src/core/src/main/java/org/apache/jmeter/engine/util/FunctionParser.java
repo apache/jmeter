@@ -72,7 +72,7 @@ class FunctionParser {
                     buffer.append(current[0]);
                 } else if (current[0] == '{' && previous == '$') {// found "${"
                     buffer.deleteCharAt(buffer.length() - 1);
-                    if (buffer.length() > 0) {// save leading text
+                    if (!buffer.isEmpty()) {// save leading text
                         result.add(buffer.toString());
                         buffer.setLength(0);
                     }
@@ -84,7 +84,7 @@ class FunctionParser {
                 }
             }
 
-            if (buffer.length() > 0) {
+            if (!buffer.isEmpty()) {
                 result.add(buffer.toString());
             }
         } catch (IOException e) {
@@ -127,8 +127,8 @@ class FunctionParser {
                 } else if (current[0] == '(' && previous != ' ') {
                     String funcName = buffer.toString();
                     function = CompoundVariable.getNamedFunction(funcName.trim());
-                    if (function instanceof Function) {
-                        ((Function) function).setParameters(parseParams(reader));
+                    if (function instanceof Function function1) {
+                        function1.setParameters(parseParams(reader));
                         if (firstNonSpace(reader, '#') != '}') {
                             reader.reset();// set to start of string
                             char []cb = new char[100];
@@ -136,8 +136,8 @@ class FunctionParser {
                             throw new InvalidVariableException("Expected } after "
                                     + funcName + " function call in " + new String(cb, 0, nbRead));
                         }
-                        if (function instanceof TestStateListener) {
-                            StandardJMeterEngine.register((TestStateListener) function);
+                        if (function instanceof TestStateListener testStateListener) {
+                            StandardJMeterEngine.register(testStateListener);
                         }
                         return function;
                     } else { // Function does not exist, so treat as per missing variable
@@ -145,8 +145,8 @@ class FunctionParser {
                     }
                 } else if (current[0] == '}') {// variable, or function with no parameter list
                     function = CompoundVariable.getNamedFunction(buffer.toString());
-                    if (function instanceof Function){// ensure that setParameters() is called.
-                        ((Function) function).setParameters(new ArrayList<>());
+                    if (function instanceof Function function1){// ensure that setParameters() is called.
+                        function1.setParameters(new ArrayList<>());
                     }
                     buffer.setLength(0);
                     return function;
@@ -211,7 +211,7 @@ class FunctionParser {
                     result.add(param);
                 } else if (current[0] == ')' && functionRecursion == 0 && parenRecursion == 0) {
                     // Detect functionName() so this does not generate empty string as the parameter
-                    if (buffer.length() == 0 && result.isEmpty()){
+                    if (buffer.isEmpty() && result.isEmpty()){
                         return result;
                     }
                     // Normal exit occurs here

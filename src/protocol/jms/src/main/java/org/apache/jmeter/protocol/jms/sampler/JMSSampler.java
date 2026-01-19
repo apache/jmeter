@@ -27,26 +27,10 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.jms.BytesMessage;
-import javax.jms.DeliveryMode;
-import javax.jms.JMSException;
-import javax.jms.MapMessage;
-import javax.jms.Message;
-import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueBrowser;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -61,8 +45,25 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.jms.BytesMessage;
+import jakarta.jms.DeliveryMode;
+import jakarta.jms.JMSException;
+import jakarta.jms.MapMessage;
+import jakarta.jms.Message;
+import jakarta.jms.ObjectMessage;
+import jakarta.jms.Queue;
+import jakarta.jms.QueueBrowser;
+import jakarta.jms.QueueConnection;
+import jakarta.jms.QueueConnectionFactory;
+import jakarta.jms.QueueReceiver;
+import jakarta.jms.QueueSender;
+import jakarta.jms.QueueSession;
+import jakarta.jms.Session;
+import jakarta.jms.TextMessage;
 
 /**
  * This class implements the JMS Point-to-Point sampler
@@ -307,8 +308,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         if (replyMsg == null) {
             res.setResponseMessage("No reply message received");
         } else {
-            if (replyMsg instanceof TextMessage) {
-                res.setResponseData(((TextMessage) replyMsg).getText(), null);
+            if (replyMsg instanceof TextMessage textMessage) {
+                res.setResponseData(textMessage.getText(), null);
             } else {
                 res.setResponseData(replyMsg.toString(), null);
             }
@@ -355,20 +356,17 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private static void extractContent(StringBuilder buffer, StringBuilder propBuffer, Message msg) {
         if (msg != null) {
             try {
-                if (msg instanceof TextMessage) {
-                    buffer.append(((TextMessage) msg).getText());
-                } else if (msg instanceof ObjectMessage) {
-                    ObjectMessage objectMessage = (ObjectMessage) msg;
+                if (msg instanceof TextMessage textMessage) {
+                    buffer.append(textMessage.getText());
+                } else if (msg instanceof ObjectMessage objectMessage) {
                     if (objectMessage.getObject() != null) {
                         buffer.append(objectMessage.getObject().getClass());
                     } else {
                         buffer.append("object is null");
                     }
-                } else if (msg instanceof BytesMessage) {
-                    BytesMessage bytesMessage = (BytesMessage) msg;
+                } else if (msg instanceof BytesMessage bytesMessage) {
                     buffer.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
-                } else if (msg instanceof MapMessage) {
-                    MapMessage mapm = (MapMessage) msg;
+                } else if (msg instanceof MapMessage mapm) {
                     @SuppressWarnings("unchecked") // MapNames are Strings
                     Enumeration<String> enumb = mapm.getMapNames();
                     while (enumb.hasMoreElements()) {
@@ -484,8 +482,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         Object o = getProperty(JMS_PROPERTIES).getObjectValue();
         JMSProperties jmsProperties = null;
         // Backward compatibility with versions <= 2.10
-        if (o instanceof Arguments) {
-            jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments) o);
+        if (o instanceof Arguments arguments) {
+            jmsProperties = Utils.convertArgumentsToJmsProperties(arguments);
         } else {
             jmsProperties = (JMSProperties) o;
         }
@@ -637,13 +635,12 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         try {
             context = getInitialContext();
             Object obj = context.lookup(getQueueConnectionFactory());
-            if (!(obj instanceof QueueConnectionFactory)) {
+            if (!(obj instanceof QueueConnectionFactory factory)) {
                 String msg = "QueueConnectionFactory expected, but got "
                         + (obj != null ? obj.getClass().getName() : "null");
                 LOGGER.error(msg);
                 throw new IllegalStateException(msg);
             }
-            QueueConnectionFactory factory = (QueueConnectionFactory) obj;
             sendQueue = (Queue) context.lookup(getSendQueue());
 
             if (!useTemporyQueue()) {
@@ -702,11 +699,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
     private Context getInitialContext() throws NamingException {
         Hashtable<String, String> table = new Hashtable<>();
 
-        if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
+        if (StringUtilities.isNotBlank(getInitialContextFactory())) {
             LOGGER.debug("Using InitialContext [{}]", getInitialContextFactory());
             table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
         }
-        if (getContextProvider() != null && getContextProvider().trim().length() > 0) {
+        if (StringUtilities.isNotBlank(getContextProvider())) {
             LOGGER.debug("Using Provider [{}]", getContextProvider());
             table.put(Context.PROVIDER_URL, getContextProvider());
         }
@@ -769,7 +766,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private int getTimeoutAsInt() {
         String propAsString = getPropertyAsString(TIMEOUT);
-        if(StringUtils.isEmpty(propAsString)){
+        if (StringUtilities.isEmpty(propAsString)){
             return DEFAULT_TIMEOUT;
         } else {
             return Integer.parseInt(propAsString);
@@ -782,7 +779,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     public String getExpiration() {
         String expiration = getPropertyAsString(JMS_EXPIRATION);
-        if (expiration.length() == 0) {
+        if (expiration.isEmpty()) {
             return Utils.DEFAULT_NO_EXPIRY;
         } else {
             return expiration;
@@ -791,7 +788,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     public String getPriority() {
         String priority = getPropertyAsString(JMS_PRIORITY);
-        if (priority.length() == 0) {
+        if (priority.isEmpty()) {
             return Utils.DEFAULT_PRIORITY_4;
         } else {
             return priority;
@@ -830,7 +827,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
     private boolean useTemporyQueue() {
         String recvQueue = getReceiveQueue();
-        return recvQueue == null || recvQueue.trim().length() == 0;
+        return StringUtilities.isBlank(recvQueue);
     }
 
     public void setArguments(Arguments args) {

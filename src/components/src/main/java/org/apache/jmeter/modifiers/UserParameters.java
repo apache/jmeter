@@ -118,7 +118,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
 
     private CollectionProperty getValues() {
         CollectionProperty threadValues = (CollectionProperty) getProperty(THREAD_VALUES);
-        if (threadValues.size() > 0) {
+        if (!threadValues.isEmpty()) {
             return (CollectionProperty) threadValues.get(getThreadContext().getThreadNum() % threadValues.size());
         }
         return new CollectionProperty("noname", new ArrayList<>());

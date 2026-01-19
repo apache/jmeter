@@ -195,39 +195,18 @@ public class LoadRecentProject extends Load {
      * Get the KeyEvent to use as shortcut key for menu item
      */
     private static int getShortcutKey(int index) {
-        int shortKey = -1;
-        switch(index+1) {
-            case 1:
-                shortKey = KeyEvent.VK_1;
-                break;
-            case 2:
-                shortKey = KeyEvent.VK_2;
-                break;
-            case 3:
-                shortKey = KeyEvent.VK_3;
-                break;
-            case 4:
-                shortKey = KeyEvent.VK_4;
-                break;
-            case 5:
-                shortKey = KeyEvent.VK_5;
-                break;
-            case 6:
-                shortKey = KeyEvent.VK_6;
-                break;
-            case 7:
-                shortKey = KeyEvent.VK_7;
-                break;
-            case 8:
-                shortKey = KeyEvent.VK_8;
-                break;
-            case 9:
-                shortKey = KeyEvent.VK_9;
-                break;
-            default:
-                break;
-        }
-        return shortKey;
+        return switch (index + 1) {
+            case 1 -> KeyEvent.VK_1;
+            case 2 -> KeyEvent.VK_2;
+            case 3 -> KeyEvent.VK_3;
+            case 4 -> KeyEvent.VK_4;
+            case 5 -> KeyEvent.VK_5;
+            case 6 -> KeyEvent.VK_6;
+            case 7 -> KeyEvent.VK_7;
+            case 8 -> KeyEvent.VK_8;
+            case 9 -> KeyEvent.VK_9;
+            default -> -1;
+        };
     }
 
     /**

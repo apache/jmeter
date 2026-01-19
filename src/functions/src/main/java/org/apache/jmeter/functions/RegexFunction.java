@@ -30,6 +30,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -149,7 +150,7 @@ public class RegexFunction extends AbstractFunction {
             textToMatch = previousResult.getResponseDataAsString();
         }
 
-        if (textToMatch == null || textToMatch.isEmpty()) {
+        if (StringUtilities.isEmpty(textToMatch)) {
             return defaultValue;
         }
 
@@ -182,8 +183,8 @@ public class RegexFunction extends AbstractFunction {
         }
 
         if (valueIndex.equals(ALL)) {
-            StringBuilder value = new StringBuilder();
-            Iterator<java.util.regex.MatchResult> it = collectAllMatches.iterator();
+            var value = new StringBuilder();
+            var it = collectAllMatches.iterator();
             boolean first = true;
             while (it.hasNext()) {
                 if (!first) {
@@ -195,7 +196,7 @@ public class RegexFunction extends AbstractFunction {
             }
             return value.toString();
         } else if (valueIndex.equals(RAND)) {
-            java.util.regex.MatchResult result = collectAllMatches.get(
+            var result = collectAllMatches.get(
                     ThreadLocalRandom.current().nextInt(collectAllMatches.size()));
             return generateResult(result, name, tmplt, vars);
         } else {
@@ -313,7 +314,7 @@ public class RegexFunction extends AbstractFunction {
 
     private static String generateResult(MatchResult match, String namep, Object[] template, JMeterVariables vars) {
         saveGroups(match, namep, vars);
-        StringBuilder result = new StringBuilder();
+        var result = new StringBuilder();
         for (Object t : template) {
             if (t instanceof String) {
                 result.append(t);

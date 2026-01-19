@@ -40,41 +40,42 @@ public class ThreadGroupLoad {
 
     @Test
     public void readJmxSavedWithJMeter26() throws IOException {
-        String jmx26 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<jmeterTestPlan version=\"1.2\" properties=\"2.2\">\n" +
-                "  <hashTree>\n" +
-                "    <TestPlan guiclass=\"TestPlanGui\" testclass=\"TestPlan\" testname=\"Test Plan\" enabled=\"true\">\n" +
-                "      <stringProp name=\"TestPlan.comments\"></stringProp>\n" +
-                "      <boolProp name=\"TestPlan.functional_mode\">false</boolProp>\n" +
-                "      <boolProp name=\"TestPlan.serialize_threadgroups\">false</boolProp>\n" +
-                "      <elementProp name=\"TestPlan.user_defined_variables\" elementType=\"Arguments\"" +
-                " guiclass=\"ArgumentsPanel\" testclass=\"Arguments\" testname=\"User Defined Variables\n" +
-                "\" enabled=\"true\">\n" +
-                "        <collectionProp name=\"Arguments.arguments\"/>\n" +
-                "      </elementProp>\n" +
-                "      <stringProp name=\"TestPlan.user_define_classpath\"></stringProp>\n" +
-                "    </TestPlan>\n" +
-                "    <hashTree>\n" +
-                "      <ThreadGroup guiclass=\"ThreadGroupGui\" testclass=\"ThreadGroup\" testname=\"Thread Group\" enabled=\"true\">\n" +
-                "        <stringProp name=\"ThreadGroup.on_sample_error\">continue</stringProp>\n" +
-                "        <elementProp name=\"ThreadGroup.main_controller\" elementType=\"LoopController\"" +
-                " guiclass=\"LoopControlPanel\" testclass=\"LoopController\" testname=\"Loop Control\n" +
-                "ler\" enabled=\"true\">\n" +
-                "          <boolProp name=\"LoopController.continue_forever\">false</boolProp>\n" +
-                "          <stringProp name=\"LoopController.loops\">1</stringProp>\n" +
-                "        </elementProp>\n" +
-                "        <stringProp name=\"ThreadGroup.num_threads\">1</stringProp>\n" +
-                "        <stringProp name=\"ThreadGroup.ramp_time\">1</stringProp>\n" +
-                "        <longProp name=\"ThreadGroup.start_time\">1570221190000</longProp>\n" +
-                "        <longProp name=\"ThreadGroup.end_time\">1570221190000</longProp>\n" +
-                "        <boolProp name=\"ThreadGroup.scheduler\">false</boolProp>\n" +
-                "        <stringProp name=\"ThreadGroup.duration\"></stringProp>\n" +
-                "        <stringProp name=\"ThreadGroup.delay\"></stringProp>\n" +
-                "      </ThreadGroup>\n" +
-                "      <hashTree/>\n" +
-                "    </hashTree>\n" +
-                "  </hashTree>\n" +
-                "</jmeterTestPlan>";
+        String jmx26 = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <jmeterTestPlan version="1.2" properties="2.2">
+                  <hashTree>
+                    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+                      <stringProp name="TestPlan.comments"></stringProp>
+                      <boolProp name="TestPlan.functional_mode">false</boolProp>
+                      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+                      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments"\
+                 guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables
+                " enabled="true">
+                        <collectionProp name="Arguments.arguments"/>
+                      </elementProp>
+                      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+                    </TestPlan>
+                    <hashTree>
+                      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+                        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+                        <elementProp name="ThreadGroup.main_controller" elementType="LoopController"\
+                 guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Control
+                ler" enabled="true">
+                          <boolProp name="LoopController.continue_forever">false</boolProp>
+                          <stringProp name="LoopController.loops">1</stringProp>
+                        </elementProp>
+                        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+                        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+                        <longProp name="ThreadGroup.start_time">1570221190000</longProp>
+                        <longProp name="ThreadGroup.end_time">1570221190000</longProp>
+                        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+                        <stringProp name="ThreadGroup.duration"></stringProp>
+                        <stringProp name="ThreadGroup.delay"></stringProp>
+                      </ThreadGroup>
+                      <hashTree/>
+                    </hashTree>
+                  </hashTree>
+                </jmeterTestPlan>""";
 
         Path jmx = tmpDir.resolve("default_thread_group_2_6.xml");
 
@@ -91,10 +92,12 @@ public class ThreadGroupLoad {
                 "getScheduler: " + tg.getScheduler() + "\n" +
                 "isSameUserOnNextIteration: " + tg.isSameUserOnNextIteration() + "\n";
 
-        Assertions.assertEquals("getName: Thread Group\n" +
-                "getNumThreads: 1\n" +
-                "getRampUp: 1\n" +
-                "getScheduler: false\n" +
-                "isSameUserOnNextIteration: true\n", actual);
+        Assertions.assertEquals("""
+                getName: Thread Group
+                getNumThreads: 1
+                getRampUp: 1
+                getScheduler: false
+                isSameUserOnNextIteration: true
+                """, actual);
     }
 }

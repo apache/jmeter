@@ -95,8 +95,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
     @Override
     public void modifyTestElement(TestElement extractor) {
         super.configureTestElement(extractor);
-        if ( extractor instanceof XPathExtractor){
-            XPathExtractor xpath = (XPathExtractor)extractor;
+        if (extractor instanceof XPathExtractor xpath){
             saveScopeSettings(xpath);
             xpath.setDefaultValue(defaultField.getText());
             xpath.setRefName(refNameField.getText());

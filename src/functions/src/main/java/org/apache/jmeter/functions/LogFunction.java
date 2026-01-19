@@ -86,7 +86,7 @@ public class LogFunction extends AbstractFunction {
         String priorityString;
         if (values.length > 1) { // We have a default
             priorityString = ((CompoundVariable) values[1]).execute();
-            if (priorityString.length() == 0) {
+            if (priorityString.isEmpty()) {
                 priorityString = DEFAULT_PRIORITY;
             }
         } else {
@@ -96,7 +96,7 @@ public class LogFunction extends AbstractFunction {
         Throwable t = null;
         if (values.length > 2) { // Throwable wanted
             String value = ((CompoundVariable) values[2]).execute();
-            if (value.length() > 0) {
+            if (!value.isEmpty()) {
                 t = new Throwable(value);
             }
         }
@@ -119,7 +119,7 @@ public class LogFunction extends AbstractFunction {
         StringBuilder sb = new StringBuilder(80);
         sb.append("Log: ");
         sb.append(tn);
-        if (c.length()>0) {
+        if (!c.isEmpty()) {
             sb.append(' ');
             sb.append(c);
         } else {
@@ -164,21 +164,11 @@ public class LogFunction extends AbstractFunction {
             final String separator = comment.isEmpty() ? DEFAULT_SEPARATOR : comment;
 
             switch (prioLevel) {
-                case ERROR:
-                    logger.error("{} {} {}", threadName, separator, stringToLog, throwable);
-                    break;
-                case WARN:
-                    logger.warn("{} {} {}", threadName, separator, stringToLog, throwable);
-                    break;
-                case INFO:
-                    logger.info("{} {} {}", threadName, separator, stringToLog, throwable);
-                    break;
-                case DEBUG:
-                    logger.debug("{} {} {}", threadName, separator, stringToLog, throwable);
-                    break;
-                case TRACE:
-                    logger.trace("{} {} {}", threadName, separator, stringToLog, throwable);
-                    break;
+                case ERROR -> logger.error("{} {} {}", threadName, separator, stringToLog, throwable);
+                case WARN -> logger.warn("{} {} {}", threadName, separator, stringToLog, throwable);
+                case INFO -> logger.info("{} {} {}", threadName, separator, stringToLog, throwable);
+                case DEBUG -> logger.debug("{} {} {}", threadName, separator, stringToLog, throwable);
+                case TRACE -> logger.trace("{} {} {}", threadName, separator, stringToLog, throwable);
             }
         }
     }

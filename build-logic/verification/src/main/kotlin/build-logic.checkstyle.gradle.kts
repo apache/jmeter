@@ -31,11 +31,17 @@ configurations.checkstyle {
     }
 }
 
+dependencies {
+    constraints {
+        "checkstyle"("org.apache.commons:commons-lang3:3.19.0")
+    }
+}
+
 checkstyle {
     // TOOD: move to /config
     val configDir = File(rootDir, "config/checkstyle")
 
-    toolVersion = "10.12.6"
+    toolVersion = "12.1.1"
     configProperties = mapOf(
         "cache_file" to layout.buildDirectory.dir("checkstyle/cacheFile").get().asFile.relativeTo(configDir)
     )

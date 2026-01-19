@@ -61,15 +61,14 @@ public class Clear extends AbstractAction {
         final String actionCommand = e.getActionCommand();
         if (actionCommand.equals(ActionNames.CLEAR)) {
             JMeterGUIComponent guiComp = guiPackage.getCurrentGui();
-            if (guiComp instanceof Clearable){
-                ((Clearable) guiComp).clearData();
+            if (guiComp instanceof Clearable clearable){
+                clearable.clearData();
             }
         } else {
             guiPackage.getMainFrame().clearData();
             for (JMeterTreeNode node : guiPackage.getTreeModel().getNodesOfType(Clearable.class)) {
                 JMeterGUIComponent guiComp = guiPackage.getGui(node.getTestElement());
-                if (guiComp instanceof Clearable){
-                    Clearable item = (Clearable) guiComp;
+                if (guiComp instanceof Clearable item){
                     try {
                         item.clearData();
                     } catch (Exception ex) {

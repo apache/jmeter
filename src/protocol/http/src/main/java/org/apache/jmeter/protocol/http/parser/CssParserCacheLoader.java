@@ -21,14 +21,12 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.CacheLoader;
-import com.helger.css.ECSSVersion;
 import com.helger.css.decl.CSSDeclaration;
 import com.helger.css.decl.CSSExpressionMemberTermURI;
 import com.helger.css.decl.CSSImportRule;
@@ -42,22 +40,21 @@ import com.helger.css.reader.errorhandler.DoNothingCSSInterpretErrorHandler;
 import com.helger.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 
 public class CssParserCacheLoader implements
-        CacheLoader<Triple<String, URL, Charset>, URLCollection> {
+        CacheLoader<CssParser.CssCacheKey, URLCollection> {
 
     private static final Logger LOG = LoggerFactory.getLogger(CssParserCacheLoader.class);
     private static final boolean IGNORE_ALL_CSS_ERRORS = JMeterUtils
             .getPropDefault("css.parser.ignore_all_css_errors", true);
 
     @Override
-    public URLCollection load(Triple<String, URL, Charset> triple)
+    public URLCollection load(CssParser.CssCacheKey triple)
             throws Exception {
-        final String cssContent = triple.getLeft();
-        final URL baseUrl = triple.getMiddle();
-        final Charset charset = triple.getRight();
+        final String cssContent = triple.cssContents();
+        final URL baseUrl = triple.baseUrl();
+        final Charset charset = triple.charset();
         final CSSReaderSettings readerSettings = new CSSReaderSettings()
                 .setBrowserCompliantMode(true)
                 .setFallbackCharset(charset)
-                .setCSSVersion(ECSSVersion.CSS30)
                 .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
                 .setUseSourceLocation(false)
                 .setCustomExceptionHandler(
@@ -80,7 +77,7 @@ public class CssParserCacheLoader implements
             @Override
             public void onImport(CSSImportRule rule) {
                 final String location = rule.getLocationString();
-                if (!StringUtils.isEmpty(location)) {
+                if (StringUtilities.isNotEmpty(location)) {
                     urls.addURL(location, baseUrl);
                 }
             }

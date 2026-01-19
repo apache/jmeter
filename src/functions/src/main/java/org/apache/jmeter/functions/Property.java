@@ -77,7 +77,7 @@ public class Property extends AbstractFunction {
         String propertyValue = JMeterUtils.getPropDefault(propertyName, propertyDefault);
         if (values.length > 1) {
             String variableName = ((CompoundVariable) values[1]).execute();
-            if (variableName.length() > 0) {// Allow for empty name
+            if (!variableName.isEmpty()) {// Allow for empty name
                 final JMeterVariables variables = getVariables();
                 if (variables != null) {
                     variables.put(variableName, propertyValue);

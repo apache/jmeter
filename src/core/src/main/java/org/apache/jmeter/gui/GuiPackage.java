@@ -432,13 +432,12 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     }
 
     private void updateUi(JMeterGUIComponent comp) {
-        if (!(comp instanceof JComponent)) {
+        if (!(comp instanceof JComponent jc)) {
             return;
         }
-        JComponent jc = (JComponent) comp;
         Object epoch = jc.getClientProperty(LAF_EPOCH);
         int currentLafEpoch = lafEpoch.get();
-        if (epoch instanceof Integer && ((Integer) epoch) < currentLafEpoch) {
+        if (epoch instanceof Integer epochInt && epochInt < currentLafEpoch) {
             JFactory.updateUi(jc);
         }
         jc.putClientProperty(LAF_EPOCH, currentLafEpoch);
@@ -572,12 +571,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *
      * @return the JMeter tree model
      */
-    /*
-     * TODO consider removing this method, and providing method wrappers instead.
-     * This would allow the Gui package to do any additional clearups if required,
-     * as has been done with clearTestPlan()
-    */
     public JMeterTreeModel getTreeModel() {
+        // TODO consider removing this method, and providing method wrappers instead.
+        //   This would allow the Gui package to do any additional clearups if required,
+        //   as has been done with clearTestPlan()
         return treeModel;
     }
 
@@ -910,9 +907,9 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         PropertyIterator it = el.propertyIterator();
         while (it.hasNext()) {
             JMeterProperty obj = it.next();
-            if (obj instanceof TestElementProperty) {
+            if (obj instanceof TestElementProperty jMeterProperties) {
                 ret ^= getTestElementCheckSum(
-                        ((TestElementProperty) obj).getElement());
+                        jMeterProperties.getElement());
             } else {
                 ret ^= obj.getName().hashCode();
                 String stringValue = obj.getStringValue();
@@ -986,8 +983,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @return boolean
      */
     public boolean shouldSaveBeforeRunByPreference() {
-        return Boolean.TRUE.toString().
-                equalsIgnoreCase(PREFS.get(SBR_PREFS_KEY, null));
+        return "true".equalsIgnoreCase(PREFS.get(SBR_PREFS_KEY, null));
     }
 
     /**

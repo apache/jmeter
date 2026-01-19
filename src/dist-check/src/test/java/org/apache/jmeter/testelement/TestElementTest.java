@@ -38,9 +38,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class TestElementTest extends JMeterTestCase {
-    /*
-     * Test TestElements - create the suite
-     */
     public static Collection<Object> testElements() throws Throwable {
         return JMeterTest.getObjects(TestElement.class);
     }
@@ -77,7 +74,7 @@ public class TestElementTest extends JMeterTestCase {
         assertSame(item.getClass(), clonedItem.getClass(), "Cloned element should have the same class");
     }
 
-    private void checkElementAlias(Object item) throws IOException {
+    private static void checkElementAlias(Object item) throws IOException {
         //FIXME do it only once
         Properties nameMap = SaveService.loadProperties();
         assertNotNull(nameMap, "SaveService nameMap (saveservice.properties) should not be null");

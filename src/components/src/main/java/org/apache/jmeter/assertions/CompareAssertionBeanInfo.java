@@ -31,13 +31,13 @@ public class CompareAssertionBeanInfo extends BeanInfoSupport {
         createPropertyGroup("compareChoices", new String[] { "compareContent", "compareTime" }); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
         createPropertyGroup("comparison_filters", new String[]{"stringsToSkip"}); //$NON-NLS-1$ $NON-NLS-2$
         PropertyDescriptor p = property("compareContent"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, true);
+        p.setValue(NOT_EXPRESSION, true);
         p = property("compareTime"); //$NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, -1L);
-        p.setValue(NOT_EXPRESSION, Boolean.FALSE);
+        p.setValue(NOT_EXPRESSION, false);
         p = property("stringsToSkip"); //$NON-NLS-1$
         p.setPropertyEditorClass(TableEditor.class);
         p.setValue(TableEditor.CLASSNAME,SubstitutionElement.class.getName());
@@ -46,9 +46,9 @@ public class CompareAssertionBeanInfo extends BeanInfoSupport {
                 JMeterUtils.getResString("comparison_regex_substitution")}); //$NON-NLS-1$
         p.setValue(TableEditor.OBJECT_PROPERTIES, // These are the names of the get/set methods
                 new String[]{SubstitutionElement.REGEX, SubstitutionElement.SUBSTITUTE});
-        p.setValue(NOT_UNDEFINED,Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED,true);
         p.setValue(DEFAULT, new ArrayList<>());
-        p.setValue(MULTILINE,Boolean.TRUE);
+        p.setValue(MULTILINE,true);
 
     }
 

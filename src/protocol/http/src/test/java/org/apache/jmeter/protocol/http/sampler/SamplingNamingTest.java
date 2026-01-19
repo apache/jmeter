@@ -68,7 +68,7 @@ class SamplingNamingTest extends JMeterTestCase implements JMeterSerialTest {
      * @param implementation HTTP implementation
      * @return array of {@link SampleResult}
      */
-    private SampleResult[] doSample(String implementation) {
+    private static SampleResult[] doSample(String implementation) {
         HTTPSamplerProxy httpSamplerProxy = new HTTPSamplerProxy(implementation);
         httpSamplerProxy.setName(LABEL);
         httpSamplerProxy.setConnectTimeout("15000");

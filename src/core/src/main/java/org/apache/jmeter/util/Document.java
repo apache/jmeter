@@ -75,7 +75,7 @@ public class Document {
             }
         }
 
-        if (response.length() == 0 && document.length > 0) {
+        if (response.isEmpty() && document.length > 0) {
             log.warn("Probably: {}", errMissingTika);// $NON-NLS-1$
             response = errMissingTika;
         }

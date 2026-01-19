@@ -19,9 +19,9 @@ package org.apache.jmeter.visualizers.backend;
 
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.report.utils.MetricUtils;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Object representing an error by a response code and response message
@@ -43,9 +43,10 @@ public class ErrorMetric {
     }
 
     public ErrorMetric(SampleResult result) {
+        // TODO: responseCode is known to be empty here, so condition seems useless
         if (MetricUtils.isSuccessCode(responseCode) ||
-                (StringUtils.isEmpty(responseCode) &&
-                        !StringUtils.isEmpty(result.getFirstAssertionFailureMessage()))) {
+                (StringUtilities.isEmpty(responseCode) &&
+                        StringUtilities.isNotEmpty(result.getFirstAssertionFailureMessage()))) {
             responseCode = MetricUtils.ASSERTION_FAILED;
             responseMessage = result.getFirstAssertionFailureMessage();
         } else {
@@ -69,7 +70,7 @@ public class ErrorMetric {
      * @return the response message, 'none' if the code is empty
      */
     public String getResponseMessage() {
-        if (responseMessage == null || responseMessage.isEmpty()) {
+        if (StringUtilities.isEmpty(responseMessage)) {
             return "None";
         } else {
             return responseMessage.trim();
@@ -78,11 +79,10 @@ public class ErrorMetric {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof ErrorMetric)) {
+        if (!(other instanceof ErrorMetric otherError)) {
             return false;
         }
 
-        ErrorMetric otherError = (ErrorMetric) other;
         return getResponseCode().equalsIgnoreCase(otherError.getResponseCode())
                 && getResponseMessage().equalsIgnoreCase(otherError.getResponseMessage());
 

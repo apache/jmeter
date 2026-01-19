@@ -29,6 +29,7 @@ dependencies {
 
     api("com.thoughtworks.xstream:xstream") {
         because("HTTPResultConverter uses XStream in public API")
+        exclude("io.github.x-stream", "mxparser")
     }
 
     compileOnly("javax.activation:javax.activation-api") {
@@ -36,15 +37,7 @@ dependencies {
     }
 
     implementation("com.github.ben-manes.caffeine:caffeine")
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
-    implementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
-    implementation("org.apache.commons:commons-text") {
-        because("StringEscapeUtils")
-    }
+    implementation("org.unbescape:unbescape")
     implementation("org.jodd:jodd-lagarto") {
         exclude("ch.qos.logback")
         exclude("commons-logging")
@@ -58,9 +51,6 @@ dependencies {
     }
     implementation("org.jsoup:jsoup")
     implementation("oro:oro")
-    runtimeOnly("org.apache.commons:commons-collections4") {
-        because("commons-collections4 was a dependency in previous JMeter versions, so we keep it for compatibility")
-    }
     implementation("commons-net:commons-net")
     implementation("com.helger.commons:ph-commons") {
         // We don't really need to use/distribute jsr305
@@ -78,7 +68,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind")
     testImplementation(testFixtures(projects.src.core))
     testImplementation(testFixtures(projects.src.testkitWiremock))
-    testImplementation("com.github.tomakehurst:wiremock-jre8")
+    testImplementation("org.wiremock:wiremock")
     // For some reason JMeter bundles just tika-core and tika-parsers without transitive
     // dependencies. So we exclude those
     implementation("org.apache.tika:tika-core") {

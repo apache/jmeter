@@ -31,13 +31,6 @@ public class MapResultData implements ResultData {
 
     private final Map<String, ResultData> map = new HashMap<>();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.ResultData#accept(org.apache.jmeter
-     * .report.processor.ResultDataVisitor)
-     */
     @Override
     public <T> T accept(ResultDataVisitor<T> visitor) {
         return visitor.visitMapResult(this);
@@ -87,9 +80,6 @@ public class MapResultData implements ResultData {
         return map.remove(name);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return "MapResultData [map=" + map + "]";

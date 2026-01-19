@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.apache.commons.io.input.CountingInputStream;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -45,6 +44,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.io.CountingInputStream;
 import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,7 +145,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         final HttpURLConnection conn;
         final String proxyHost = getProxyHost();
         final int proxyPort = getProxyPortInt();
-        if (proxyHost.length() > 0 && proxyPort > 0){
+        if (!proxyHost.isEmpty() && proxyPort > 0){
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
             //TODO - how to define proxy authentication for a single connection?
             conn = (HttpURLConnection) u.openConnection(proxy);
@@ -203,7 +203,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         if (res != null) {
             res.setRequestHeaders(getAllHeadersExceptCookie(conn, securityHeaders));
-            if(cookies != null && !cookies.isEmpty()) {
+            if (StringUtilities.isNotEmpty(cookies)) {
                 res.setCookies(cookies);
             } else {
                 // During recording Cookie Manager doesn't handle cookies
@@ -227,7 +227,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *                if an I/O exception occurs
      */
     protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
-        InputStream in;
+        InputStream in = null;
 
         final long contentLength = conn.getContentLength();
         if ((contentLength == 0)
@@ -251,8 +251,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 Throwable cause = e.getCause();
                 if (cause != null){
                     log.error("Cause: {}", cause.toString());
-                    if(cause instanceof Error) {
-                        throw (Error)cause;
+                    if(cause instanceof Error error) {
+                        throw error;
                     }
                 }
             }
@@ -274,9 +274,12 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             in = errorStream;
         }
         // N.B. this closes 'in'
-        byte[] responseData = readResponse(res, in, contentLength);
+        if (in == null) {
+            throw new IOException("Unable to obtain input stream or error stream");
+        }
+        byte[] responseData = super.readResponse(res, in, contentLength);
         if (instream != null) {
-            res.setBodySize(instream.getByteCount());
+            res.setBodySize(instream.getBytesRead());
             instream.close();
         }
         res.setResponseData(responseData, contentEncoding);

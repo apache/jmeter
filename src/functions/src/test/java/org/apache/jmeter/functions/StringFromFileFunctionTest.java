@@ -25,12 +25,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-public class StringFromFileFunctionTest {
+public class StringFromFileFunctionTest extends JMeterTestCase {
     private static Path dir;
 
     @BeforeAll
@@ -138,12 +139,12 @@ public class StringFromFileFunctionTest {
         }
     }
 
-    private void closeFile(StringFromFile sff) {
+    private static void closeFile(StringFromFile sff) {
         sff.testEnded();
     }
 
     // Create the StringFromFile function and set its parameters.
-    private StringFromFile createSFF(Object... params) throws Exception {
+    private static StringFromFile createSFF(Object... params) throws Exception {
         StringFromFile sff = new StringFromFile();
         sff.setParameters(FunctionTestHelper.makeParams(params));
         return sff;

@@ -68,10 +68,9 @@ public class HttpSSLProtocolSocketFactory
 
 
     private static void configureSocket(Socket socket){
-        if (!(socket instanceof SSLSocket)) {
+        if (!(socket instanceof SSLSocket sock)) {
             throw new IllegalArgumentException("Expected SSLSocket");
         }
-        SSLSocket sock = (SSLSocket) socket;
         if (!PROTOCOL_LIST.isEmpty()) {
             try {
                 sock.setEnabledProtocols(protocols);
@@ -115,7 +114,7 @@ public class HttpSSLProtocolSocketFactory
         }
     }
 
-    /*
+    /**
      * Wraps the socket in a slow SSL socket if necessary
      */
     private Socket wrapSocket(Socket sock){

@@ -130,8 +130,8 @@ public class KerningOptimizer {
     public void uninstallKerningListener(JTextComponent textComponent) {
         DisableKerningForLargeTexts kerningListener = null;
         for (PropertyChangeListener listener : textComponent.getPropertyChangeListeners("document")) {
-            if (listener instanceof DisableKerningForLargeTexts) {
-                kerningListener = (DisableKerningForLargeTexts) listener;
+            if (listener instanceof DisableKerningForLargeTexts disableKerningForLargeTexts) {
+                kerningListener = disableKerningForLargeTexts;
             }
         }
         if (kerningListener == null) {

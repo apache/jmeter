@@ -17,13 +17,12 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -35,8 +34,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.config.GraphQLRequestParams;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
@@ -51,6 +48,7 @@ import org.apache.jmeter.protocol.http.util.GraphQLRequestParamUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -138,7 +136,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             log.debug("sampler path = {}", sampler.getPath());
         }
         Arguments arguments = sampler.getArguments();
-        if(arguments.getArgumentCount() == 1 && arguments.getArgument(0).getName().length()==0) {
+        if(arguments.getArgumentCount() == 1 && arguments.getArgument(0).getName().isEmpty()) {
             sampler.setPostBodyRaw(true);
         }
 
@@ -176,9 +174,9 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
         if (params != null) {
             sampler.setProperty(TestElement.GUI_CLASS, GraphQLHTTPSamplerGui.class.getName());
-            sampler.setProperty(GraphQLUrlConfigGui.OPERATION_NAME, defaultIfEmpty(params.getOperationName(), null));
-            sampler.setProperty(GraphQLUrlConfigGui.QUERY, defaultIfEmpty(params.getQuery(), null));
-            sampler.setProperty(GraphQLUrlConfigGui.VARIABLES, defaultIfEmpty(params.getVariables(), null));
+            sampler.setProperty(GraphQLUrlConfigGui.OPERATION_NAME, StringUtilities.trimToNull(params.getOperationName()));
+            sampler.setProperty(GraphQLUrlConfigGui.QUERY, StringUtilities.trimToNull(params.getQuery()));
+            sampler.setProperty(GraphQLUrlConfigGui.VARIABLES, StringUtilities.trimToNull(params.getVariables()));
         }
     }
 
@@ -259,12 +257,12 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 // We also assume this if no content type is present, to be most backwards compatible,
                 // but maybe we should only parse arguments if the content type is as expected
                 sampler.parseArguments(postData.trim(), contentEncoding); //standard name=value postData
-            } else if (postData.length() > 0) {
+            } else if (!postData.isEmpty()) {
                 if (isBinaryContent(contentType)) {
                     try {
                         File tempDir = new File(getBinaryDirectory());
                         File out = File.createTempFile(request.getMethod(), getBinaryFileSuffix(), tempDir);
-                        FileUtils.writeByteArrayToFile(out,request.getRawPostData());
+                        Files.write(out.toPath(), request.getRawPostData());
                         HTTPFileArg [] files = {new HTTPFileArg(out.getPath(),"",contentType)};
                         sampler.setHTTPFiles(files);
                     } catch (IOException e) {
@@ -321,20 +319,11 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
 
     private static final class ErrorDetectionHandler extends DefaultHandler {
         private boolean errorDetected = false;
-        public ErrorDetectionHandler() {
-            super();
-        }
-        /* (non-Javadoc)
-         * @see org.xml.sax.helpers.DefaultHandler#error(org.xml.sax.SAXParseException)
-         */
         @Override
         public void error(SAXParseException e) throws SAXException {
             this.errorDetected = true;
         }
 
-        /* (non-Javadoc)
-         * @see org.xml.sax.helpers.DefaultHandler#fatalError(org.xml.sax.SAXParseException)
-         */
         @Override
         public void fatalError(SAXParseException e) throws SAXException {
             this.errorDetected = true;
@@ -342,7 +331,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
         /**
          * @return the errorDetected
          */
-        public boolean isErrorDetected() {
+        private boolean isErrorDetected() {
             return errorDetected;
         }
     }
@@ -462,7 +451,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                 formEncodings, urlWithoutQuery);
 
         // Set the content encoding
-        if(!StringUtils.isEmpty(contentEncoding)) {
+        if (StringUtilities.isNotEmpty(contentEncoding)) {
             sampler.setContentEncoding(contentEncoding);
         }
     }

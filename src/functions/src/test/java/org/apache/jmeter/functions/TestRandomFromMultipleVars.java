@@ -17,8 +17,14 @@
 
 package org.apache.jmeter.functions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -26,8 +32,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,10 +76,13 @@ public class TestRandomFromMultipleVars extends JMeterTestCase {
         params.add(new CompoundVariable("var1|var2"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        MatcherAssert.assertThat(returnValue,
-                CoreMatchers.anyOf(CoreMatchers.is("var1_value"),
-                        CoreMatchers.is("var2_value1"),
-                        CoreMatchers.is("var2_value2")));
+
+        Set<String> expectedValues = new HashSet<>(
+                Arrays.asList("var1_value", "var2_value1", "var2_value2")
+        );
+        assertTrue(
+                expectedValues.contains(returnValue),
+                () -> returnValue + " should be one of " + expectedValues);
         Assertions.assertNull(vars.get("outputVar"));
     }
 
@@ -87,7 +94,7 @@ public class TestRandomFromMultipleVars extends JMeterTestCase {
         params.add(new CompoundVariable("var1"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assertions.assertEquals("value1", returnValue);
+        assertEquals("value1", returnValue);
         Assertions.assertNull(vars.get("outputVar"));
     }
 
@@ -100,7 +107,7 @@ public class TestRandomFromMultipleVars extends JMeterTestCase {
         params.add(new CompoundVariable("outputVar"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
-        Assertions.assertEquals("value1", returnValue);
-        Assertions.assertEquals("value1", vars.get("outputVar"));
+        assertEquals("value1", returnValue);
+        assertEquals("value1", vars.get("outputVar"));
     }
 }

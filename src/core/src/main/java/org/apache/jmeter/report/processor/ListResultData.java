@@ -30,13 +30,6 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
 
     private final List<ResultData> items = new ArrayList<>();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.ResultData#accept(org.apache.jmeter
-     * .report.processor.ResultDataVisitor)
-     */
     @Override
     public <T> T accept(ResultDataVisitor<T> visitor) {
         return visitor.visitListResult(this);
@@ -81,19 +74,11 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
         return items.size();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Iterable#iterator()
-     */
     @Override
     public Iterator<ResultData> iterator() {
         return items.iterator();
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return "ListResultData [items=" + items + "]";

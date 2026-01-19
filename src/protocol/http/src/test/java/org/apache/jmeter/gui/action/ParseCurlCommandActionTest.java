@@ -80,7 +80,7 @@ public class ParseCurlCommandActionTest {
         testCommentTextStartsWith("curl 'http://jmeter.apache.org/' --cacert '<CA certificate>'", "Please configure the SSL file with CA certificates");
     }
 
-    private void testCommentTextStartsWith(String cmdLine, String expectedComment) {
+    private static void testCommentTextStartsWith(String cmdLine, String expectedComment) {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse(cmdLine);
@@ -88,7 +88,7 @@ public class ParseCurlCommandActionTest {
         assertTrue(comment.trim().startsWith(expectedComment));
     }
 
-    private void testCommentText(String cmdLine, String expectedComment) {
+    private static void testCommentText(String cmdLine, String expectedComment) {
         ParseCurlCommandAction p = new ParseCurlCommandAction();
         BasicCurlParser basicCurlParser = new BasicCurlParser();
         Request request = basicCurlParser.parse(cmdLine);
@@ -123,7 +123,7 @@ public class ParseCurlCommandActionTest {
         assertEquals(2, commands.size());
     }
 
-    private String writeToTempFile(Path dir, String s) throws IOException {
+    private static String writeToTempFile(Path dir, String s) throws IOException {
         return Files.write(dir.resolve("test.txt"), s.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW)
                 .toAbsolutePath()
                 .toString();
@@ -161,7 +161,7 @@ public class ParseCurlCommandActionTest {
         assertThrowsIllegalArgument(() -> p.parseCommands(false, commands));
     }
 
-    private void assertThrowsIllegalArgument(Executable e) {
+    private static void assertThrowsIllegalArgument(Executable e) {
         assertThrows(IllegalArgumentException.class, e);
     }
 
@@ -533,7 +533,7 @@ public class ParseCurlCommandActionTest {
                 "When the Dns servers aren't the same, should add the DnsCacheManager in Http Request");
     }
 
-    private Method getMethodFor(String name, Class<?>...paramsClasses) throws NoSuchMethodException, SecurityException {
+    private static Method getMethodFor(String name, Class<?>... paramsClasses) throws NoSuchMethodException, SecurityException {
         Class<ParseCurlCommandAction> parseCurlCommandAction = ParseCurlCommandAction.class;
         Method method = parseCurlCommandAction.getDeclaredMethod(name, paramsClasses);
         method.setAccessible(true);

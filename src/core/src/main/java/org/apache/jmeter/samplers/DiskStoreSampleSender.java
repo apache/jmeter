@@ -90,9 +90,9 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
                 ObjectInputStream ois = new ObjectInputStream(fis)){
             Object obj;
             while((obj = ois.readObject()) != null) {
-                if (obj instanceof SampleEvent) {
+                if (obj instanceof SampleEvent sampleEvent) {
                     try {
-                        listener.sampleOccurred((SampleEvent) obj);
+                        listener.sampleOccurred(sampleEvent);
                     } catch (RemoteException err) {
                         if (err.getCause() instanceof java.net.ConnectException){
                             throw new JMeterError("Could not return sample",err);

@@ -279,18 +279,11 @@ public class Start extends AbstractAction {
      * @return {@link TreeCloner}
      */
     private static ListedHashTree cloneTree(HashTree testTree, RunMode runMode) {
-        TreeCloner cloner = null;
-        switch (runMode) {
-            case VALIDATION:
-                cloner = createTreeClonerForValidation(false);
-                break;
-            case IGNORING_TIMERS:
-                cloner = new TreeClonerNoTimer(false);
-                break;
-            case AS_IS:
-                cloner = new TreeCloner(false);
-                break;
-        }
+        TreeCloner cloner = switch (runMode) {
+            case VALIDATION -> createTreeClonerForValidation(false);
+            case IGNORING_TIMERS -> new TreeClonerNoTimer(false);
+            case AS_IS -> new TreeCloner(false);
+        };
         testTree.traverse(cloner);
         return cloner.getClonedTree();
     }

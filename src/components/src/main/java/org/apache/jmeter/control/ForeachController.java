@@ -167,7 +167,7 @@ public class ForeachController extends GenericController implements Serializable
             variables.putObject(getReturnVal(), currentVariable);
             if (log.isDebugEnabled()) {
                 log.debug("{} : Found in vars:{}, isDone:{}",
-                        getName(), inputVariable, Boolean.FALSE);
+                        getName(), inputVariable, false);
 
             }
             return false;

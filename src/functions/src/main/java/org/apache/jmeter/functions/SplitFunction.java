@@ -91,7 +91,7 @@ public class SplitFunction extends AbstractFunction {
 
         if (values.length > 2) { // Split string provided
             String newSplitString = ((CompoundVariable) values[2]).execute();
-            splitString = newSplitString.length() > 0 ? newSplitString : splitString;
+            splitString = !newSplitString.isEmpty() ? newSplitString : splitString;
         }
         log.debug("Split {} using {} into {}", stringToSplit, splitString, varNamePrefix);
         String[] parts = JOrphanUtils.split(stringToSplit, splitString, "?");// $NON-NLS-1$

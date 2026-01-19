@@ -63,8 +63,7 @@ public class RegExUserParametersGui extends AbstractPreProcessorGui {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (el instanceof RegExUserParameters){
-            RegExUserParameters re = (RegExUserParameters) el;
+        if (el instanceof RegExUserParameters re){
             paramNamesGrNrField.setText(re.getRegParamNamesGrNr());
             paramValuesGrNrField.setText(re.getRegExParamValuesGrNr());
             refRegExRefNameField.setText(re.getRegExRefName());
@@ -89,8 +88,7 @@ public class RegExUserParametersGui extends AbstractPreProcessorGui {
     @Override
     public void modifyTestElement(TestElement extractor) {
         super.configureTestElement(extractor);
-        if (extractor instanceof RegExUserParameters) {
-            RegExUserParameters regExUserParams = (RegExUserParameters) extractor;
+        if (extractor instanceof RegExUserParameters regExUserParams) {
             regExUserParams.setRegExRefName(refRegExRefNameField.getText());
             regExUserParams.setRegExParamNamesGrNr(paramNamesGrNrField.getText());
             regExUserParams.setRegExParamValuesGrNr(paramValuesGrNrField.getText());

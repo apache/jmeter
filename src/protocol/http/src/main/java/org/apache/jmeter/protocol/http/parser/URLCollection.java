@@ -23,10 +23,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unbescape.xml.XmlEscape;
 
 /**
  * Collection class designed for handling URLs
@@ -76,10 +77,10 @@ public class URLCollection implements Iterable<URL> {
      *         collection
      */
     public boolean addURL(String url, URL baseUrl) {
-        if (url == null || url.length() == 0) {
+        if (StringUtilities.isEmpty(url)) {
             return false;
         }
-        url=StringEscapeUtils.unescapeXml(url);
+        url=XmlEscape.unescapeXml(url);
         boolean b;
         try {
             b = this.add(ConversionUtils.makeRelativeURL(baseUrl, url));
@@ -101,7 +102,7 @@ public class URLCollection implements Iterable<URL> {
         return new UrlIterator(coll.iterator());
     }
 
-    /*
+    /**
      * Private iterator used to unwrap the URL from the URLString class
      */
     private static class UrlIterator implements Iterator<URL> {
@@ -116,7 +117,7 @@ public class URLCollection implements Iterable<URL> {
             return iter.hasNext();
         }
 
-        /*
+        /**
          * Unwraps the URLString class to return the URL
          */
         @Override

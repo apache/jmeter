@@ -141,8 +141,8 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
                 AssertionResult[] results = sr.getAssertionResults();
                 CompareAssertionResult result = null;
                 for (AssertionResult r : results) {
-                    if (r instanceof CompareAssertionResult) {
-                        result = (CompareAssertionResult) r;
+                    if (r instanceof CompareAssertionResult compareAssertionResult) {
+                        result = compareAssertionResult;
                         break;
                     }
                 }

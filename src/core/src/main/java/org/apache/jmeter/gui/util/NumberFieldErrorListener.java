@@ -39,10 +39,10 @@ public class NumberFieldErrorListener extends FocusAdapter {
     public void focusLost(FocusEvent e) {
         Component source = (Component) e.getSource();
         String text = "";
-        if (source instanceof JTextComponent) {
-            text = ((JTextComponent) source).getText();
-        } else if (source instanceof TextComponent) {
-            text = ((TextComponent) source).getText();
+        if (source instanceof JTextComponent jTextComponent) {
+            text = jTextComponent.getText();
+        } else if (source instanceof TextComponent textComponent) {
+            text = textComponent.getText();
         }
         try {
             Integer.parseInt(text);

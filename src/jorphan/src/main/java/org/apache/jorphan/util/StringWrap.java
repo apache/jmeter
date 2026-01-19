@@ -53,7 +53,7 @@ public class StringWrap {
             next = UNINITIALIZED;
         }
 
-        public int getPos() {
+        private int getPos() {
             return pos;
         }
 
@@ -63,7 +63,7 @@ public class StringWrap {
          * @param endWrap the end index of the wrap to consider
          * @return true if the next break is detected within startWrap..endWrap boundaries
          */
-        public boolean advance(int startWrap, int endWrap) {
+        private boolean advance(int startWrap, int endWrap) {
             if (pos == BreakIterator.DONE || pos > endWrap) {
                 return false;
             }

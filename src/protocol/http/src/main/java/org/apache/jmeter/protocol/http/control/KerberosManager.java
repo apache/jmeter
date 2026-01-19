@@ -107,11 +107,9 @@ public class KerberosManager implements Serializable {
         public void handle(Callback[] callbacks) throws IOException,
                 UnsupportedCallbackException {
             for (Callback callback : callbacks) {
-                if (callback instanceof NameCallback && username != null) {
-                    NameCallback nc = (NameCallback) callback;
+                if (callback instanceof NameCallback nc && username != null) {
                     nc.setName(username);
-                } else if (callback instanceof PasswordCallback) {
-                    PasswordCallback pc = (PasswordCallback) callback;
+                } else if (callback instanceof PasswordCallback pc) {
                     pc.setPassword(password.toCharArray());
                 } else {
                     throw new UnsupportedCallbackException( callback,

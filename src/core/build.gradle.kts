@@ -40,7 +40,10 @@ dependencies {
     }
     api("com.thoughtworks.xstream:xstream") {
         because("XStream in used in public API")
+        // We use StaXDriver, so we exclude xmlpull, see https://x-stream.github.io/download.html#optional-deps
+        exclude("io.github.x-stream", "mxparser")
     }
+    api("org.jspecify:jspecify")
     api("org.apache.logging.log4j:log4j-1.2-api")
     api("org.apache.logging.log4j:log4j-api")
     api("org.apache.logging.log4j:log4j-core") {
@@ -49,7 +52,7 @@ dependencies {
     kapt("org.apache.logging.log4j:log4j-core") {
         because("Generates a plugin cache file for GuiLogEventAppender")
     }
-    api("org.apache.logging.log4j:log4j-slf4j-impl") {
+    api("org.apache.logging.log4j:log4j-slf4j2-impl") {
         because("Both log4j and slf4j are included, so it makes sense to just add log4j->slf4j bridge as well")
     }
     api("org.apiguardian:apiguardian-api")
@@ -71,46 +74,40 @@ dependencies {
         because("XPathUtil: throws SaxonApiException")
     }
 
-    runtimeOnly("org.codehaus.groovy:groovy") {
+    runtimeOnly("org.apache.groovy:groovy") {
         because("Groovy is a default JSR232 engine")
     }
     arrayOf("dateutil", "datetime", "jmx", "json", "jsr223", "sql", "templates").forEach {
-        runtimeOnly("org.codehaus.groovy:groovy-$it") {
+        runtimeOnly("org.apache.groovy:groovy-$it") {
             because("Groovy is a default JSR232 engine")
         }
     }
 
+    implementation("org.glassfish.jaxb:txw2") {
+        because("IndentingXMLStreamWriter is needed to indent the generated XML")
+    }
+    implementation("com.fasterxml.woodstox:woodstox-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing")
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.formdev:svgSalamander")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("com.github.weisj:darklaf-core")
     implementation("com.github.weisj:darklaf-theme")
     implementation("com.github.weisj:darklaf-property-loader")
     implementation("com.github.weisj:darklaf-extensions-rsyntaxarea")
     implementation("com.miglayout:miglayout-swing")
-    implementation("commons-codec:commons-codec") {
-        because("DigestUtils")
-    }
-    runtimeOnly("commons-collections:commons-collections") {
-        because("Compatibility for old plugins")
+    implementation("org.apache-extras.beanshell:bsh:2.0b6") {
+        because("Direct dependency required from BeanShellInterpreter")
     }
     implementation("org.jetbrains.lets-plot:lets-plot-batik")
     implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm")
-    implementation("org.apache.commons:commons-collections4")
     implementation("org.apache.commons:commons-math3") {
         because("Mean, DescriptiveStatistics")
     }
-    implementation("org.apache.commons:commons-text")
-    // For some reason JMeter bundles just tika-core and tika-parsers without transitive
-    // dependencies. So we exclude those
+    implementation("org.unbescape:unbescape")
     implementation("org.apache.tika:tika-core") {
-        isTransitive = false
-    }
-    runtimeOnly("org.apache.tika:tika-parsers") {
         isTransitive = false
     }
     implementation("org.apache.xmlgraphics:xmlgraphics-commons")
@@ -120,9 +117,6 @@ dependencies {
     implementation("org.jodd:jodd-props")
     implementation("org.mozilla:rhino")
     implementation("org.slf4j:jcl-over-slf4j")
-    // TODO: JMeter bundles Xerces, however the reason is unknown
-    runtimeOnly("xerces:xercesImpl")
-    runtimeOnly("xml-apis:xml-apis")
 
     testImplementation("commons-net:commons-net")
     testImplementation("io.mockk:mockk")

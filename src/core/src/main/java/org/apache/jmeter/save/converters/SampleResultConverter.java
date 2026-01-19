@@ -165,7 +165,10 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
             try {
                 if (SampleResult.TEXT.equals(res.getDataType())){
-                    writer.setValue(new String(res.getResponseData(), res.getDataEncodingWithDefault()));
+                    byte[] responseData = res.getResponseData();
+                    if (responseData != null && responseData.length > 0) {
+                        writer.setValue(new String(responseData, res.getDataEncodingWithDefault()));
+                    }
                 } else {
                     writer.setValue("Non-TEXT response data, cannot record: (" + res.getDataType() + ")");
                 }
@@ -176,10 +179,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             writer.endNode();
         }
         if (save.saveFileName()){
-            writer.startNode(TAG_RESPONSE_FILE);
-            writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
-            writer.setValue(res.getResultFileName());
-            writer.endNode();
+            writeString(writer, TAG_RESPONSE_FILE, res.getResultFileName());
         }
     }
 
@@ -356,7 +356,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         if (value != null) {
             writer.startNode(tag);
             writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
-            writer.setValue(value);
+            if (!value.isEmpty()) {
+                writer.setValue(value);
+            }
             writer.endNode();
         }
     }
@@ -375,7 +377,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 
         // If we have a file, but no data, then read the file
         String resultFileName = res.getResultFileName();
-        if (resultFileName.length()>0
+        if (!resultFileName.isEmpty()
         &&  res.getResponseData().length == 0) {
             readFile(resultFileName,res);
         }
@@ -393,17 +395,17 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected boolean retrieveItem(HierarchicalStreamReader reader, UnmarshallingContext context, SampleResult res,
             Object subItem) {
         String nodeName = reader.getNodeName();
-        if (subItem instanceof AssertionResult) {
-            res.addAssertionResult((AssertionResult) subItem);
-        } else if (subItem instanceof SampleResult) {
-            res.storeSubResult((SampleResult) subItem, false);
+        if (subItem instanceof AssertionResult assertionResult) {
+            res.addAssertionResult(assertionResult);
+        } else if (subItem instanceof SampleResult sampleResult) {
+            res.storeSubResult(sampleResult, false);
         } else if (nodeName.equals(TAG_RESPONSE_HEADER)) {
             res.setResponseHeaders((String) subItem);
         } else if (nodeName.equals(TAG_REQUEST_HEADER)) {
             res.setRequestHeaders((String) subItem);
         } else if (nodeName.equals(TAG_RESPONSE_DATA)) {
             final String responseData = (String) subItem;
-            if (responseData.length() > 0) {
+            if (!responseData.isEmpty()) {
                 final String dataEncoding = res.getDataEncodingWithDefault();
                 try {
                     res.setResponseData(responseData.getBytes(dataEncoding));

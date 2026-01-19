@@ -27,6 +27,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +82,7 @@ public class HTTPArgument extends Argument implements Serializable {
 
     public boolean isUseEquals() {
         boolean eq = get(getSchema().getUseEquals());
-        if (getMetaData().equals("=") || (getValue() != null && getValue().length() > 0)) {
+        if (getMetaData().equals("=") || StringUtilities.isNotEmpty(getValue())) {
             setUseEquals(true);
             return true;
         }
@@ -160,6 +161,13 @@ public class HTTPArgument extends Argument implements Serializable {
             } catch (UnsupportedEncodingException e) {
                 log.error("{} encoding not supported!", contentEncoding);
                 throw new Error(e.toString(), e);
+            } catch (IllegalArgumentException e) {
+                // Handle malformed percent-encoded strings (e.g., "%u2", "%ZZ", "text%")
+                // This can occur when recording real-world web traffic with encoding bugs
+                // See Bug 6456
+                log.warn("Malformed percent-encoded parameter detected - using original value. " +
+                        "Name: '{}', Value: '{}', Error: {}", name, value, e.getMessage());
+                // Keep the original encoded values as-is
             }
         }
         setName(name);

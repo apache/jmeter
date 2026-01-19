@@ -77,7 +77,7 @@ public class IterationCounter extends AbstractFunction implements ThreadListener
         }
 
         // vars will be null on Test Plan
-        if (vars != null && varName.length() > 0) {
+        if (vars != null && !varName.isEmpty()) {
             vars.put(varName, counterString);
         }
         return counterString;

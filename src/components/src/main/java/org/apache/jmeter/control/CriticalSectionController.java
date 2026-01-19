@@ -20,11 +20,11 @@ package org.apache.jmeter.control;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,7 +124,8 @@ public class CriticalSectionController extends GenericController implements
      */
     @Override
     public Sampler next() {
-        if (StringUtils.isEmpty(getLockName())) {
+        String lockName = getLockName();
+        if (StringUtilities.isEmpty(lockName)) {
             if (log.isWarnEnabled()) {
                 log.warn("Empty lock name in Critical Section Controller: {}", getName());
             }
@@ -140,7 +141,7 @@ public class CriticalSectionController extends GenericController implements
             long endTime = System.currentTimeMillis();
             if (log.isDebugEnabled()) {
                 log.debug("Thread ('{}') acquired lock: '{}' in Critical Section Controller {}  in: {} ms",
-                        Thread.currentThread(), getLockName(), getName(), endTime - startTime);
+                        Thread.currentThread(), lockName, getName(), endTime - startTime);
             }
         }
         return super.next();

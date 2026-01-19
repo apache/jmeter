@@ -18,11 +18,8 @@
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
-import static org.exparity.hamcrest.date.LocalDateMatchers.sameDay;
-import static org.exparity.hamcrest.date.LocalDateTimeMatchers.within;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -31,7 +28,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.time.zone.ZoneRules;
 import java.util.Collection;
 import java.util.Random;
@@ -66,12 +62,19 @@ class TestTimeShiftFunction extends JMeterTestCase {
         function = new TimeShift();
     }
 
+    private static void assertDateEquals(LocalDateTime expected, LocalDateTime actual, Duration delta) {
+        Duration diff = Duration.between(expected, actual);
+        if (diff.abs().compareTo(delta) > 0) {
+            fail(expected + " should be within " + delta + " of " + actual + ", actual diff is " + diff);
+        }
+    }
+
     @Test
     void testDatePlusOneDay() throws Exception {
         Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "2017-01-01", "P1D", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("2017-02-01")));
+        assertEquals("2017-02-01", value);
     }
 
     @Test
@@ -79,7 +82,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "2017-01-01", "P1d", "VAR");
         function.setParameters(params);
         function.execute(result, null);
-        assertThat(vars.get("VAR"), is(equalTo("2017-02-01")));
+        assertEquals("2017-02-01", vars.get("VAR"));
     }
 
     @Test
@@ -87,7 +90,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams("yyyy-dd-MM HH:m", "2017-01-01 12:00", "P+32dT-1H-5m", "VAR");
         function.setParameters(params);
         String value = function.execute(result, null);
-        assertThat(value, is(equalTo("2017-02-02 10:55")));
+        assertEquals("2017-02-02 10:55", value);
     }
 
     @Test
@@ -98,7 +101,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         long resultat = Long.parseLong(value);
         LocalDateTime nowFromFunction = LocalDateTime.ofInstant(Instant.ofEpochMilli(resultat),
                 TimeZone.getDefault().toZoneId());
-        assertThat(nowFromFunction, within(5, ChronoUnit.SECONDS, LocalDateTime.now(ZoneId.systemDefault())));
+        assertDateEquals(LocalDateTime.now(ZoneId.systemDefault()), nowFromFunction, Duration.ofSeconds(5));
     }
 
     @Test
@@ -108,7 +111,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         value = function.execute(result, null);
         LocalDate tomorrow = LocalDate.now(ZoneId.systemDefault()).plusDays(1);
         LocalDate tomorrowFromFunction = LocalDate.parse(value);
-        assertThat(tomorrowFromFunction, sameDay(tomorrow));
+        assertEquals(tomorrow, tomorrowFromFunction);
     }
 
     @Test
@@ -123,7 +126,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         LocalDateTime futureDate = LocalDateTime.now(ZoneId.systemDefault())
                 .plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
-        assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
+        assertDateEquals(futureDate, futureDateFromFunction, Duration.ofSeconds(1));
     }
 
     private static BooleanSupplier dstChangeAhead(String duration) {
@@ -150,7 +153,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss");
         LocalDateTime baseDate = LocalDateTime.parse("2017-12-21 12:00:00", dateFormat);
         LocalDateTime futureDate = baseDate.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
-        assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
+        assertDateEquals(futureDate, futureDateFromFunction, Duration.ofSeconds(1));
     }
 
     @Test
@@ -165,8 +168,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(pattern);
         LocalDateTime baseDate = ZonedDateTime.parse(timeString, dateFormat).toLocalDateTime();
         LocalDateTime futureDate = baseDate.plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
-        assertThat(futureDateFromFunction.toLocalDateTime(), within(1, ChronoUnit.SECONDS, futureDate));
-
+        assertDateEquals(futureDate, futureDateFromFunction.toLocalDateTime(), Duration.ofSeconds(1));
     }
 
     static void main(String[] args) {
@@ -182,7 +184,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         long resultat = Long.parseLong(value);
         LocalDateTime nowFromFunction = LocalDateTime.ofInstant(Instant.ofEpochMilli(resultat),
                 TimeZone.getDefault().toZoneId());
-        assertThat(nowFromFunction, within(5, ChronoUnit.SECONDS, LocalDateTime.now(ZoneId.systemDefault())));
+        assertDateEquals(LocalDateTime.now(ZoneId.systemDefault()), nowFromFunction, Duration.ofSeconds(5));
     }
 
     @Test
@@ -190,7 +192,7 @@ class TestTimeShiftFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams("hjfdjyra:fd", "", "P1D", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("")));
+        assertEquals("", value);
     }
 
     @Test
@@ -203,13 +205,13 @@ class TestTimeShiftFunction extends JMeterTestCase {
         value = function.execute(result, null);
         LocalDateTime randomFutureDate = LocalDateTime.parse(value);
         LocalDateTime checkFutureDate = LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(randomInt);
-        assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate));
+        assertDateEquals(checkFutureDate, randomFutureDate, Duration.ofSeconds(5));
         randomInt = r.ints(1, 60).limit(1).findFirst().getAsInt();
         vars.put("random", String.valueOf(randomInt));
         value = function.execute(result, null);
         randomFutureDate = LocalDateTime.parse(value);
         checkFutureDate = LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(randomInt);
-        assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate));
+        assertDateEquals(checkFutureDate, randomFutureDate, Duration.ofSeconds(5));
     }
 
     @Test
@@ -217,19 +219,19 @@ class TestTimeShiftFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams("yyyy-MMMM-dd", "2017-juillet-01", "P1D", "fr_FR", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("2017-juillet-02")));
+        assertEquals("2017-juillet-02", value);
         params = makeParams("yyyy-MMMM-dd", "2017-July-01", "P1D", "en_EN", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("2017-July-02")));
+        assertEquals("2017-July-02", value);
         params = makeParams("yyyy-MMMM-dd", "2017-julio-01", "P1D", "es_ES", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("2017-julio-02")));
+        assertEquals("2017-julio-02", value);
         params = makeParams("yyyy-MMMM-dd", "2017-Juli-01", "P1D", "de_DE", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("2017-Juli-02")));
+        assertEquals("2017-Juli-02", value);
     }
 
 }

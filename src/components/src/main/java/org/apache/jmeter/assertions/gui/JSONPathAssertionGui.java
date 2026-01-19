@@ -130,8 +130,7 @@ public class JSONPathAssertionGui extends AbstractAssertionGui implements Change
     @Override
     public void modifyTestElement(TestElement element) {
         super.configureTestElement(element);
-        if (element instanceof JSONPathAssertion) {
-            JSONPathAssertion jpAssertion = (JSONPathAssertion) element;
+        if (element instanceof JSONPathAssertion jpAssertion) {
             jpAssertion.setJsonPath(jsonPath.getText());
             jpAssertion.setExpectedValue(jsonValue.getText());
             jpAssertion.setJsonValidationBool(jsonValidation.isSelected());
@@ -144,8 +143,7 @@ public class JSONPathAssertionGui extends AbstractAssertionGui implements Change
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (element instanceof JSONPathAssertion) {
-            JSONPathAssertion jpAssertion = (JSONPathAssertion) element;
+        if (element instanceof JSONPathAssertion jpAssertion) {
             jsonPath.setText(jpAssertion.getJsonPath());
             jsonValue.setText(jpAssertion.getExpectedValue());
             jsonValidation.setSelected(jpAssertion.isJsonValidationBool());

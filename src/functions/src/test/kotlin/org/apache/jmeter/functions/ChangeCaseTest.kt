@@ -18,6 +18,7 @@
 package org.apache.jmeter.functions
 
 import org.apache.jmeter.engine.util.CompoundVariable
+import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.samplers.SampleResult
 import org.apache.jmeter.threads.JMeterContextService
 import org.apache.jmeter.threads.JMeterVariables
@@ -27,7 +28,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.Locale
 
-class ChangeCaseTest {
+class ChangeCaseTest : JMeterTestCase() {
     data class ExecuteCase(val input: String, val mode: String, val output: String)
 
     companion object {

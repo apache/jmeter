@@ -93,8 +93,8 @@ public class HttpMirrorControlGui extends LogicControllerGui
     @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
-        if (el instanceof HttpMirrorControl) {
-            mirrorController = (HttpMirrorControl) el;
+        if (el instanceof HttpMirrorControl httpMirrorControl) {
+            mirrorController = httpMirrorControl;
             mirrorController.setPort(portField.getText());
             mirrorController.setMaxPoolSize(maxPoolSizeField.getText());
             mirrorController.setMaxQueueSize(maxQueueSizeField.getText());

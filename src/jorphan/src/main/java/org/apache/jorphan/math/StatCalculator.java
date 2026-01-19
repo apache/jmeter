@@ -21,8 +21,7 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-
-import org.apache.commons.lang3.mutable.MutableLong;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This class serves as a way to calculate the median, max, min etc. of a list of values.
@@ -34,7 +33,7 @@ import org.apache.commons.lang3.mutable.MutableLong;
 public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     // key is the type to collect (usually long), value = count of entries
-    private final Map<T, MutableLong> valuesMap = new TreeMap<>();
+    private final Map<T, AtomicLong> valuesMap = new TreeMap<>();
     // We use a TreeMap because we need the entries to be sorted
 
     // Running values, updated for each sample
@@ -107,8 +106,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public void addAll(StatCalculator<T> calc) {
-        for(Map.Entry<T, MutableLong> ent : calc.valuesMap.entrySet()) {
-            addEachValue(ent.getKey(), ent.getValue().longValue());
+        for(Map.Entry<T, AtomicLong> ent : calc.valuesMap.entrySet()) {
+            addEachValue(ent.getKey(), ent.getValue().get());
         }
     }
 
@@ -161,8 +160,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         // use Math.round () instead of simple (long) to provide correct value rounding
         long target = Math.round(count * percent);
         try {
-            for (Map.Entry<T, MutableLong> val : valuesMap.entrySet()) {
-                target -= val.getValue().longValue();
+            for (Map.Entry<T, AtomicLong> val : valuesMap.entrySet()) {
+                target -= val.getValue().get();
                 if (target <= 0){
                     return val.getKey();
                 }
@@ -182,10 +181,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     public Map<Number, Number[]> getDistribution() {
         Map<Number, Number[]> items = new HashMap<>();
 
-        for (Map.Entry<T, MutableLong> entry : valuesMap.entrySet()) {
+        for (Map.Entry<T, AtomicLong> entry : valuesMap.entrySet()) {
             Number[] dis = new Number[2];
             dis[0] = entry.getKey();
-            dis[1] = entry.getValue();
+            dis[1] = entry.getValue().get();
             items.put(entry.getKey(), dis);
         }
         return items;
@@ -280,12 +279,12 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     private void updateValueCount(T actualValue, long sampleCount) {
-        MutableLong count = valuesMap.get(actualValue);
+        AtomicLong count = valuesMap.get(actualValue);
         if (count != null) {
-            count.add(sampleCount);
+            count.addAndGet(sampleCount);
         } else {
             // insert new value
-            valuesMap.put(actualValue, new MutableLong(sampleCount));
+            valuesMap.put(actualValue, new AtomicLong(sampleCount));
         }
     }
 }

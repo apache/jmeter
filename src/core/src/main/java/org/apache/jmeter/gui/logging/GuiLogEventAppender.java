@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.logging;
 import java.io.Serializable;
 
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
@@ -56,7 +57,7 @@ public class GuiLogEventAppender extends AbstractAppender {
         if (instance != null) {
             final String serializedString = getStringLayout().toSerializable(logEvent);
 
-            if (serializedString != null && !serializedString.isEmpty()) {
+            if (StringUtilities.isNotEmpty(serializedString)) {
                 LogEventObject logEventObject = new LogEventObject(logEvent, serializedString);
                 instance.getLogEventBus().postEvent(logEventObject);
             }

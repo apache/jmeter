@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -114,10 +113,11 @@ class TestBug60842HtmlParser {
                 StandardCharsets.UTF_8.name());
         List<String> urlNames = c.stream().map(u -> u.toString())
                 .collect(Collectors.toList());
-        assertThat(
+        assertEquals(
+                links.toString(),
+                urlNames.toString(),
                 String.format("Parse with %s the page %s to get %s",
-                        parser.getClass().getSimpleName(), html, links),
-                urlNames, CoreMatchers.is(CoreMatchers.equalTo(links)));
+                        parser.getClass().getSimpleName(), html, links));
     }
 
 }

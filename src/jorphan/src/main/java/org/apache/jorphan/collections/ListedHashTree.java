@@ -207,10 +207,9 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
     /** {@inheritDoc} */
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ListedHashTree)) {
+        if (!(o instanceof ListedHashTree lht)) {
             return false;
         }
-        ListedHashTree lht = (ListedHashTree) o;
         if (!super.equals(lht)) {
             return false;
         }

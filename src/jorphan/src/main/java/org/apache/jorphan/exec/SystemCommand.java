@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Utility class for invoking native system applications
@@ -77,7 +78,7 @@ public class SystemCommand {
     }
 
     private static InputStream checkIn(String stdin) throws FileNotFoundException {
-        String in = JOrphanUtils.nullifyIfEmptyTrimmed(stdin);
+        String in = StringUtilities.trimToNull(stdin);
         if (in == null) {
             return null;
         } else {
@@ -86,7 +87,7 @@ public class SystemCommand {
     }
 
     private static OutputStream checkOut(String path) throws IOException {
-        String in = JOrphanUtils.nullifyIfEmptyTrimmed(path);
+        String in = StringUtilities.trimToNull(path);
         if (in == null) {
             return null;
         } else {

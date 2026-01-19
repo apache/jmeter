@@ -33,7 +33,7 @@ public class PackageTest {
         configure(sampler);
     }
 
-    private void configure(HTTPSamplerBase sampler) throws Exception {
+    private static void configure(HTTPSamplerBase sampler) throws Exception {
         sampler.addArgument("arg1", "val1");
         ConfigTestElement config = (ConfigTestElement) new HttpDefaultsGui().createTestElement();
         config.get(HTTPSamplerBaseSchema.INSTANCE.getArguments()).addArgument(new HTTPArgument(

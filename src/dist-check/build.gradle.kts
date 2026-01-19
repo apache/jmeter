@@ -35,14 +35,14 @@ dependencies {
 
     testImplementation(testFixtures(projects.src.core))
     testImplementation(testFixtures(projects.src.components))
-    testImplementation("org.apache.commons:commons-lang3") {
-        because("StringUtils")
-    }
-    testImplementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
     testImplementation("com.fasterxml.jackson.core:jackson-databind") {
         because("It is used in ReportGeneratorSpec and HtmlReportGeneratorSpec")
+    }
+    testImplementation("org.apache.santuario:xmlsec:4.0.4") {
+        because("XML canonicalization for comparing XML in tests")
+    }
+    testImplementation("org.eclipse.jgit:org.eclipse.jgit:6.10.1.202505221210-r") {
+        because("Histogram diff for readable XML comparison output in tests")
     }
 
     extraTestDependencies(platform(projects.src.bomThirdparty))
@@ -70,7 +70,7 @@ dependencies {
     loggingClasspath("org.apache.logging.log4j:log4j-api")
     loggingClasspath("org.apache.logging.log4j:log4j-core")
     loggingClasspath("org.apache.logging.log4j:log4j-1.2-api")
-    loggingClasspath("org.apache.logging.log4j:log4j-slf4j-impl")
+    loggingClasspath("org.apache.logging.log4j:log4j-slf4j2-impl")
 }
 
 val libOpt = copySpec {

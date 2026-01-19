@@ -94,7 +94,7 @@ public class BackendListener
     // Create unique object as marker for end of queue
     private static final transient SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
 
-    /*
+    /**
      * This is needed for distributed testing where there is 1 instance
      * per server. But we need the total to be shared.
      */
@@ -111,7 +111,7 @@ public class BackendListener
         setArguments(new Arguments());
     }
 
-    /*
+    /**
      * Ensure that the required class variables are cloned,
      * as this is not currently done by the super-implementation.
      */
@@ -205,7 +205,11 @@ public class BackendListener
                         }
                         // try to process as many as possible
                         // The == comparison is not a mistake
-                        while (!(endOfLoop = sampleResult == FINAL_SAMPLE_RESULT) && sampleResult != null) {
+                        while (sampleResult != null) {
+                            endOfLoop = sampleResult == FINAL_SAMPLE_RESULT;
+                            if (endOfLoop) {
+                                break;
+                            }
                             sampleResults.add(sampleResult);
                             if (isDebugEnabled) {
                                 log.debug("Thread: {} polling from queue: {}", Thread.currentThread().getName(),

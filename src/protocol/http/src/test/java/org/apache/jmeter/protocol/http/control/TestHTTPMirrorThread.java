@@ -30,7 +30,6 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -333,7 +332,7 @@ public class TestHTTPMirrorThread extends JMeterTestCase {
         conn.addRequestProperty("X-ResponseLength", "10");
         conn.connect();
         final InputStream inputStream = conn.getInputStream();
-        assertEquals(10, IOUtils.toByteArray(inputStream).length);
+        assertEquals(10, inputStream.readAllBytes().length);
         inputStream.close();
     }
 
@@ -365,7 +364,7 @@ public class TestHTTPMirrorThread extends JMeterTestCase {
     /**
      * Check that the two byte arrays have identical content
      */
-    private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
+    private static void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
                 System.out.println(">>>>>>>>>>>>>>>>>>>> (expected) : length " + expected.length);
@@ -404,7 +403,7 @@ public class TestHTTPMirrorThread extends JMeterTestCase {
         }
     }
 
-    private byte[] getMirroredResponse(byte[] allResponse) {
+    private static byte[] getMirroredResponse(byte[] allResponse) {
         // The response includes the headers from the mirror server,
         // we want to skip those, to only keep the content mirrored.
         // Look for the first CRLFCRLF section

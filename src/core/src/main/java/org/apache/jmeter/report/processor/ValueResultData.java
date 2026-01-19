@@ -41,21 +41,11 @@ public class ValueResultData implements ResultData {
         this.value = value;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.ResultData#accept(org.apache.jmeter
-     * .report.processor.ResultDataVisitor)
-     */
     @Override
     public <T> T accept(ResultDataVisitor<T> visitor) {
         return visitor.visitValueResult(this);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return "ValueResultData [value=" + value + "]";

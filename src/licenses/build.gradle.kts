@@ -104,13 +104,8 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
     // That enables to have "version-independent" MIT license in licenses/slf4j-api, and
     // it would be copied provided the detected license for slf4j-api is MIT.
 
-    overrideLicense("dnsjava:dnsjava:2.1.9") {
+    overrideLicense("dnsjava:dnsjava:3.6.3") {
         expectedLicense = SpdxLicense.BSD_2_Clause
-    }
-
-    overrideLicense("com.formdev:svgSalamander") {
-        // See https://github.com/blackears/svgSalamander/blob/d6b6fe9a8ece7d0e0e7aeb3de82f027a38a6fe25/www/license/license-bsd.txt
-        effectiveLicense = SpdxLicense.BSD_3_Clause
     }
 
     for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {
@@ -153,14 +148,6 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         // Multiple licenses, select explicit one
         expectedLicense = SpdxLicense.Apache_2_0 and SpdxLicense.SAX_PD and SimpleLicense("The W3C License", uri("http://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407/java-binding.zip"))
         effectiveLicense = SpdxLicense.Apache_2_0
-    }
-    for (lib in listOf("hamcrest-core", "hamcrest")) {
-        overrideLicense("org.hamcrest:$lib:2.2") {
-            // https://github.com/hamcrest/JavaHamcrest/issues/264
-            // pom.xml lists "New BSD License", however it is BSD_3
-            expectedLicense = SpdxLicense.BSD_3_Clause
-            licenseFiles = "hamcrest"
-        }
     }
     overrideLicense("net.sf.jtidy:jtidy:r938") {
         expectedLicense = SimpleLicense("Java HTML Tidy License", uri("http://jtidy.svn.sourceforge.net/viewvc/jtidy/trunk/jtidy/LICENSE.txt?revision=95"))

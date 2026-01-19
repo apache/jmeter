@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.report.dashboard;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.processor.MapResultData;
@@ -52,8 +51,7 @@ public abstract class AbstractDataExporter implements DataExporter {
     protected static <T> T findValue(Class<T> clazz, String data, ResultData root) {
         T value = null;
         ResultData result = findData(data, root);
-        if (result instanceof ValueResultData) {
-            ValueResultData valueResult = (ValueResultData) result;
+        if (result instanceof ValueResultData valueResult) {
             Object object = valueResult.getValue();
             if (object != null && clazz.isAssignableFrom(object.getClass())) {
                 value = clazz.cast(object);
@@ -73,22 +71,21 @@ public abstract class AbstractDataExporter implements DataExporter {
      * @return the ResultData matching the data name
      */
     protected static ResultData findData(String data, ResultData root) {
-        String[] pathItems = StringUtils.split(data, '.');
-        if (pathItems == null || !(root instanceof MapResultData)) {
+        String[] pathItems = data.split("\\.");
+        if (pathItems == null || !(root instanceof MapResultData map)) {
             return null;
         }
 
         ResultData result = null;
         int count = pathItems.length;
         int index = 0;
-        MapResultData map = (MapResultData) root;
         while (index < count && result == null) {
             ResultData current = map.getResult(pathItems[index]);
             if (index == count - 1) {
                 result = current;
             } else {
-                if (current instanceof MapResultData) {
-                    map = (MapResultData) current;
+                if (current instanceof MapResultData mapResultData) {
+                    map = mapResultData;
                     index++;
                 }
             }
@@ -96,22 +93,11 @@ public abstract class AbstractDataExporter implements DataExporter {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.dashboard.DataExporter#getName()
-     */
     @Override
     public String getName() {
         return name;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.dashboard.DataExporter#setName(java.lang.String)
-     */
     @Override
     public void setName(String name) {
         this.name = name;

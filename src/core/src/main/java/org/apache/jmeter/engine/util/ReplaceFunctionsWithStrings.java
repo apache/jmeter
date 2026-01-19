@@ -24,7 +24,7 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.StringUtilities;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternCompiler;
@@ -97,7 +97,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
                     log.warn("Malformed pattern: {}", value);
                 }
             } else {
-                input = StringUtilities.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
+                input = JOrphanUtils.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
             }
         }
         return new StringProperty(prop.getName(), input);
@@ -119,7 +119,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
                     log.warn("Malformed pattern: {}", value);
                 }
             } else {
-                input = StringUtilities.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
+                input = JOrphanUtils.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
             }
         }
         return new StringProperty(prop.getName(), input);

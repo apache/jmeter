@@ -28,6 +28,7 @@ import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -163,7 +164,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
         LOG.debug(whoAmI() + "\tConstruct");
     }
 
-    /*
+    /**
      * Utility method to set up all the values
      */
     private void setupValues(JavaSamplerContext context) {
@@ -178,7 +179,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
         success = "OK".equalsIgnoreCase(context.getParameter(SUCCESS_NAME, SUCCESS_DEFAULT));
 
         label = context.getParameter(LABEL_NAME, "");
-        if (label.length() == 0) {
+        if (label.isEmpty()) {
             label = context.getParameter(TestElement.NAME); // default to name of element
         }
 
@@ -279,13 +280,13 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
         results.setResponseMessage(responseMessage);
         results.setSampleLabel(label);
 
-        if (samplerData != null && samplerData.length() > 0) {
+        if (StringUtilities.isNotEmpty(samplerData)) {
             results.setSamplerData(samplerData);
         }
         if(samplerData != null) {
             results.setSentBytes(samplerData.length());
         }
-        if (resultData != null && resultData.length() > 0) {
+        if (StringUtilities.isNotEmpty(resultData)) {
             results.setResponseData(resultData, null);
         }
         results.setDataType(SampleResult.TEXT); // It's always text type even if empty

@@ -76,14 +76,17 @@ import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.ftpserver.ftplet.Authority;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.ArrayList;
-import org.apache.commons.io.FileUtils;
 import org.apache.ftpserver.DataConnectionConfiguration;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
+import kotlin.io.path.PathsKt;
 
-FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/temp/ftp_test&quot;));
-new File(JMeterUtils.getJMeterHome(), &quot;bin/temp/ftp_test&quot;).mkdirs();
+Path ftpTestPath = Path.of(JMeterUtils.getJMeterHome(), &quot;bin/temp/ftp_test&quot;);
+PathsKt.deleteRecursively(ftpTestPath);
+Files.createDirectories(ftpTestPath);
 
 DataConnectionConfigurationFactory dataConnectionConfigurationFactory =
 	new DataConnectionConfigurationFactory();
@@ -244,11 +247,11 @@ props.put(&quot;FTP_SERVER&quot;, server);
           <stringProp name="cacheKey">d09f6f8d-0f86-4cae-b88c-0ad9bd587d31</stringProp>
           <stringProp name="script">import org.apache.ftpserver.FtpServer;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FileUtils;
+import java.nio.file.Path;
+import kotlin.io.path.PathsKt;
 
-
-FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/temp/ftp_test&quot;));
+Path ftpTestPath = Path.of(JMeterUtils.getJMeterHome(), &quot;bin/temp/ftp_test&quot;);
+PathsKt.deleteRecursively(ftpTestPath);
 
 FtpServer server = (FtpServer) props.get(&quot;FTP_SERVER&quot;);
 try {

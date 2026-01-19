@@ -81,13 +81,13 @@ ConfigTestElement, and implement LoopIterationListener.
        properties we want these to be:
 
                p = property("filename");
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+            p.setValue(NOT_UNDEFINED, true);
             p.setValue(DEFAULT, "");
-            p.setValue(NOT_EXPRESSION,Boolean.TRUE);
+            p.setValue(NOT_EXPRESSION,true);
             p = property("variableNames");
-            p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+            p.setValue(NOT_UNDEFINED, true);
             p.setValue(DEFAULT, "");
-            p.setValue(NOT_EXPRESSION,Boolean.TRUE);
+            p.setValue(NOT_EXPRESSION,true);
 
        This essentially creates two properties whose value is not allowed to be null, and whose default
        values are "".  There are several such attributes that can be set for each property.  Here is a

@@ -315,20 +315,20 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener {
 
         private final HeaderManager manager;
 
-        public InnerTableModel(HeaderManager man) {
+        private InnerTableModel(HeaderManager man) {
             manager = man;
         }
 
-        public void clearData() {
+        private void clearData() {
             manager.clear();
             fireTableDataChanged();
         }
 
-        public void removeRow(int row) {
+        private void removeRow(int row) {
             manager.remove(row);
         }
 
-        public void addNewRow() {
+        private void addNewRow() {
             manager.add();
         }
 

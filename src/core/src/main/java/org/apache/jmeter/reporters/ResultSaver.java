@@ -188,7 +188,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
         }
         s.setResultFileName(fileName);// Associate sample with file name
         String variable = getVariableName();
-        if (variable.length() > 0) {
+        if (!variable.isEmpty()) {
             if (num > 0) {
                 variable = variable + num;
             }

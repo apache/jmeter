@@ -32,7 +32,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.UndoHistory;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -42,8 +41,10 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.weisj.darklaf.icons.ThemedSVGIcon;
+import com.github.weisj.darklaf.properties.icons.ThemedSVGIcon;
 import com.github.weisj.darklaf.ui.button.DarkButtonUI;
+
+import kotlin.text.StringsKt;
 
 /**
  * The JMeter main toolbar class
@@ -94,9 +95,8 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     @Override
     protected void addImpl(Component comp, Object constraints, int index) {
         super.addImpl(comp, constraints, index);
-        if (comp instanceof JButton) {
+        if (comp instanceof JButton b) {
             // Ensure buttons added to the toolbar have the same style.
-            JButton b = (JButton) comp;
             b.setFocusable(false);
             if (b.isBorderPainted() && (b.getText() == null || b.getText().isEmpty())) {
                 b.setRolloverEnabled(true);
@@ -159,7 +159,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         if (imageURL == null) {
             throw new IllegalArgumentException("No icon for: " + iconBean.getActionName());
         }
-        if (StringUtils.endsWithIgnoreCase(iconBean.getIconPath(), ".svg")) {
+        if (StringsKt.endsWith(iconBean.getIconPath(), ".svg", true)) {
             return new ThemedSVGIcon(imageURL.toURI(), iconBean.getWidth(), iconBean.getHeight());
         }
         return new ImageIcon(imageURL);
@@ -244,8 +244,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         Component[] components = getComponents();
         Map<String, Boolean> buttonStates = new HashMap<>(components.length);
         for (Component component : components) {
-            if (component instanceof JButton) {
-                JButton button = (JButton) component;
+            if (component instanceof JButton button) {
                 buttonStates.put(button.getActionCommand(), button.isEnabled());
             }
         }
@@ -257,15 +256,15 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      */
     public void initButtonsState() {
         Map<String, Boolean> buttonStates = new HashMap<>();
-        buttonStates.put(ActionNames.ACTION_START, Boolean.TRUE);
-        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS, Boolean.TRUE);
-        buttonStates.put(ActionNames.ACTION_STOP, Boolean.FALSE);
-        buttonStates.put(ActionNames.ACTION_SHUTDOWN, Boolean.FALSE);
-        buttonStates.put(ActionNames.UNDO, Boolean.FALSE);
-        buttonStates.put(ActionNames.REDO, Boolean.FALSE);
-        buttonStates.put(ActionNames.REMOTE_START_ALL, Boolean.TRUE);
-        buttonStates.put(ActionNames.REMOTE_STOP_ALL, Boolean.FALSE);
-        buttonStates.put(ActionNames.REMOTE_SHUT_ALL, Boolean.FALSE);
+        buttonStates.put(ActionNames.ACTION_START, true);
+        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS, true);
+        buttonStates.put(ActionNames.ACTION_STOP, false);
+        buttonStates.put(ActionNames.ACTION_SHUTDOWN, false);
+        buttonStates.put(ActionNames.UNDO, false);
+        buttonStates.put(ActionNames.REDO, false);
+        buttonStates.put(ActionNames.REMOTE_START_ALL, true);
+        buttonStates.put(ActionNames.REMOTE_STOP_ALL, false);
+        buttonStates.put(ActionNames.REMOTE_SHUT_ALL, false);
         updateButtons(buttonStates);
     }
 
@@ -326,8 +325,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         boolean synchronous = false;
         JMeterUtils.runSafe(synchronous, () -> {
             for (Component component : getComponents()) {
-                if (component instanceof JButton) {
-                    JButton button = (JButton) component;
+                if (component instanceof JButton button) {
                     Boolean enabled = buttonStates.get(button.getActionCommand());
                     if (enabled != null) {
                         button.setEnabled(enabled);

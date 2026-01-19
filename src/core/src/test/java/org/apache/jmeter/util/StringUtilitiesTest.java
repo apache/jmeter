@@ -20,6 +20,7 @@ package org.apache.jmeter.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.jorphan.util.JOrphanUtils;
 import org.junit.jupiter.api.Test;
 
 public class StringUtilitiesTest {
@@ -36,7 +37,7 @@ public class StringUtilitiesTest {
         String input = "http://jakarta.apache.org/jmeter/index.html";
         String pattern = "jakarta.apache.org";
         String sub = "${server}";
-        assertEquals("http://${server}/jmeter/index.html", StringUtilities.substitute(input, pattern, sub));
+        assertEquals("http://${server}/jmeter/index.html", JOrphanUtils.substitute(input, pattern, sub));
     }
 
     @Test
@@ -44,7 +45,7 @@ public class StringUtilitiesTest {
         String input = "arg1=param1;param1";
         String pattern = "param1";
         String sub = "${value}";
-        assertEquals("arg1=${value};${value}", StringUtilities.substitute(input, pattern, sub));
+        assertEquals("arg1=${value};${value}", JOrphanUtils.substitute(input, pattern, sub));
     }
 
     @Test
@@ -52,7 +53,7 @@ public class StringUtilitiesTest {
         String input = "jakarta.apache.org";
         String pattern = "jakarta.apache.org";
         String sub = "${server}";
-        assertEquals("${server}", StringUtilities.substitute(input, pattern, sub));
+        assertEquals("${server}", JOrphanUtils.substitute(input, pattern, sub));
     }
 
     @Test
@@ -60,7 +61,7 @@ public class StringUtilitiesTest {
         String input = "//a///b////c";
         String pattern = "//";
         String sub = "/";
-        assertEquals("/a//b//c", StringUtilities.substitute(input, pattern, sub));
+        assertEquals("/a//b//c", JOrphanUtils.substitute(input, pattern, sub));
     }
 
 }

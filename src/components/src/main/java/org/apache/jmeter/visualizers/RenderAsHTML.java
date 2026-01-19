@@ -79,10 +79,8 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
 
         String html = response.substring(htmlIndex);
 
-        /*
-         * To disable downloading and rendering of images and frames, enable the
-         * editor-kit. The Stream property can then be
-         */
+        // To disable downloading and rendering of images and frames, enable the
+        // editor-kit. The Stream property can then be
         // Must be done before setContentType
         results.setEditorKitForContentType(TEXT_HTML, embedded ? defaultHtmlEditor : customisedEditor);
 
@@ -93,14 +91,12 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
             // Must be done after setContentType [Why?]
             results.getDocument().putProperty(Document.StreamDescriptionProperty, res.getURL());
         }
-        /*
-         * Get round problems parsing <META http-equiv='content-type'
-         * content='text/html; charset=utf-8'> See
-         * <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=23315">Bug 23315</a>
-         *
-         * Is this due to a bug in Java?
-         */
-        results.getDocument().putProperty("IgnoreCharsetDirective", Boolean.TRUE); // $NON-NLS-1$
+        // Get round problems parsing <META http-equiv='content-type'
+        // content='text/html; charset=utf-8'> See
+        // <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=23315">Bug 23315</a>
+        //
+        // Is this due to a bug in Java?
+        results.getDocument().putProperty("IgnoreCharsetDirective", true); // $NON-NLS-1$
 
         try {
             results.setText(html); // Bug can generate RTE
@@ -130,7 +126,7 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
         }
 
         private static class LocalHTMLFactory extends javax.swing.text.html.HTMLEditorKit.HTMLFactory {
-            /*
+            /**
              * Provide dummy implementations to suppress download and display of
              * related resources: - FRAMEs - IMAGEs TODO create better dummy
              * displays TODO suppress LINK somehow
@@ -138,8 +134,7 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
             @Override
             public View create(Element elem) {
                 Object o = elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
-                if (o instanceof HTML.Tag) {
-                    HTML.Tag kind = (HTML.Tag) o;
+                if (o instanceof HTML.Tag kind) {
                     if (kind == HTML.Tag.FRAME) {
                         return new ComponentView(elem);
                     } else if (kind == HTML.Tag.IMG) {

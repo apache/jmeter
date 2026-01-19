@@ -24,9 +24,9 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         }
         setCharset(CHARSET);
         String configuredCharset = JMeterUtils.getProperty("tcp.charset");
-        if(StringUtils.isEmpty(configuredCharset)) {
+        if (StringUtilities.isEmpty(configuredCharset)) {
             log.info("Using platform default charset:{}",CHARSET);
         } else {
             log.info("Using charset:{}", configuredCharset);

@@ -924,7 +924,7 @@ public final class ClutilTestCase {
                              "-?=[A] -? [B] -?");
     }
 
-    private void check(String[] args, String canon){
+    private static void check(String[] args, String canon){
         final CLArgsParser parser = new CLArgsParser(args, OPTIONS);
 
         assertNull(parser.getErrorString(), parser.getErrorString());

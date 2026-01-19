@@ -105,22 +105,18 @@ public class PackageTest {
                     int equ = s.indexOf('=');
                     String key = s.substring(0, equ);
                     if (resourcePrefix.equals(MESSAGES)){// Only relevant for messages
-                        /*
-                         * JMeterUtils.getResString() converts space to _ and lowercases
-                         * the key, so make sure all keys pass the test
-                         */
+                        // JMeterUtils.getResString() converts space to _ and lowercases
+                        // the key, so make sure all keys pass the test
                         if (key.contains(" ") || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
                             failures.add("Invalid key for JMeterUtils " + key);
                         }
                     }
                     String val = s.substring(equ + 1);
                     l.add(key); // Store the key
-                    /*
-                     * Now check for invalid message format: if string contains {0}
-                     * and ' there may be a problem, so do a format with dummy
-                     * parameters and check if there is a { in the output. A bit
-                     * crude, but should be enough for now.
-                     */
+                    // Now check for invalid message format: if string contains {0}
+                    // and ' there may be a problem, so do a format with dummy
+                    // parameters and check if there is a { in the output. A bit
+                    // crude, but should be enough for now.
                     if (val.contains("{0}") && val.contains("'")) {
                         String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
                         if (m.contains("{")) {
@@ -141,7 +137,7 @@ public class PackageTest {
     }
 
     // Helper method to construct resource name
-    private String getResName(String lang, String resourcePrefix) {
+    private static String getResName(String lang, String resourcePrefix) {
         if (lang.isEmpty()) {
             return resourcePrefix+".properties";
         } else {
@@ -258,9 +254,9 @@ public class PackageTest {
         }
     }
 
-    /*
+    /**
      * Use a suite to ensure that the default is done first
-    */
+     */
     public static Collection<Arguments> languagesAndPrefixes() {
         Collection<Arguments> res = new ArrayList<>();
         String[] languages = JMeterMenuBar.getLanguages();
@@ -300,8 +296,8 @@ public class PackageTest {
         assertEquals(0, missingLabelsPerBundle.size(), missingLabelsPerBundle.size()+" missing labels, labels missing:"+printLabels(missingLabelsPerBundle));
     }
 
-    private void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle,
-                                          Properties messages, String bundlePath, String language)
+    private static void checkMessagesForLanguage(Map<String, Map<String, String>> missingLabelsPerBundle,
+            Properties messages, String bundlePath, String language)
             throws IOException {
         Properties messagesFr = new Properties();
         String languageBundle = bundlePath+"_"+language+ ".properties";
@@ -340,7 +336,7 @@ public class PackageTest {
         }
     }
 
-    private String printLabels(Map<String, Map<String, String>> missingLabelsPerBundle) {
+    private static String printLabels(Map<String, Map<String, String>> missingLabelsPerBundle) {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, Map<String, String>> entry : missingLabelsPerBundle.entrySet()) {
             builder.append("Missing labels in bundle:")

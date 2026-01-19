@@ -122,7 +122,7 @@ public class SecurityProviderLoaderTest {
         assertEquals(provider, providersAfter[expectedInsertPosition(position, providersAfter)]);
     }
 
-    private int expectedInsertPosition(int position, Provider[] providersAfter) {
+    private static int expectedInsertPosition(int position, Provider[] providersAfter) {
         if (position == 0) {
             return providersAfter.length - 1;
         }

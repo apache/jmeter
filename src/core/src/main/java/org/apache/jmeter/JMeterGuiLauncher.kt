@@ -83,6 +83,7 @@ public object JMeterGuiLauncher {
     }
 
     private suspend fun startGuiInternal(testFile: String?) {
+        JMeterUtils.applyHiDPIOnFonts()
         setupLaF()
         val splash = SplashScreen()
         splash.showScreen()
@@ -92,8 +93,6 @@ public object JMeterGuiLauncher {
             // Allow UI updates
             yield()
         }
-        setProgress(1)
-        JMeterUtils.applyHiDPIOnFonts()
         log.debug("Setup tree")
         setProgress(5)
         val treeModel = JMeterTreeModel()

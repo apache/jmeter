@@ -179,8 +179,8 @@ public class GenericController extends AbstractTestElement implements Controller
             if (currentElement == null) {
                 returnValue = nextIsNull();
             } else {
-                if (currentElement instanceof Sampler) {
-                    returnValue = nextIsASampler((Sampler) currentElement);
+                if (currentElement instanceof Sampler sampler) {
+                    returnValue = nextIsASampler(sampler);
                 } else { // must be a controller
                     returnValue = nextIsAController((Controller) currentElement);
                 }
@@ -376,11 +376,9 @@ public class GenericController extends AbstractTestElement implements Controller
 
     @Override
     public void addIterationListener(LoopIterationListener lis) {
-        /*
-         * A little hack - add each listener to the start of the list - this
-         * ensures that the thread running the show is the first listener and
-         * can modify certain values before other listeners are called.
-         */
+        // A little hack - add each listener to the start of the list - this
+        // ensures that the thread running the show is the first listener and
+        // can modify certain values before other listeners are called.
         iterationListeners.addFirst(lis);
     }
 

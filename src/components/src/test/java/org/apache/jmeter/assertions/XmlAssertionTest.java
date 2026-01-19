@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.apache.jmeter.assertions.AssertionResultExtensionsKt.assertEnFailureMessageContains;
+import static org.apache.jmeter.assertions.AssertionResultExtensionsKt.assertFailureMessageContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,8 +42,11 @@ public class XmlAssertionTest extends JMeterTestCase {
             + "Don't forget me this weekend!</body></note1>";
     private static final String VALID_XML = "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>";
     private static final String NO_XML = "response Data";
-    private static final String UNSECURE_XML = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" + "<!DOCTYPE foo [\n"
-            + "   <!ENTITY xxe SYSTEM \"file:///etc/passwd\" > ]>\n" + "<foo>&xxe;</foo>";
+    private static final String UNSECURE_XML = """
+            <?xml version="1.0" encoding="ISO-8859-1"?>
+            <!DOCTYPE foo [
+               <!ENTITY xxe SYSTEM "file:///etc/passwd" > ]>
+            <foo>&xxe;</foo>""";
 
     @BeforeEach
     public void setUp() {
@@ -59,8 +64,7 @@ public class XmlAssertionTest extends JMeterTestCase {
         result = assertion.getResult(sampleResult);
         assertTrue(result.isFailure());
         assertTrue(result.isError());
-        assertEquals("DOCTYPE is disallowed when the feature \"http://apache.org/xml/features/disallow-doctype-decl\" set to true.",
-                    result.getFailureMessage());
+        assertFailureMessageContains(result, "http://apache.org/xml/features/disallow-doctype-decl");
     }
 
     @Test
@@ -88,6 +92,6 @@ public class XmlAssertionTest extends JMeterTestCase {
         assertTrue(result.isFailure());
         assertTrue(result.isError());
         assertNotNull(result.getFailureMessage());
-        assertTrue(result.getFailureMessage().contains("Content is not allowed in prolog"));
+        assertEnFailureMessageContains(result, "Content is not allowed in prolog");
     }
 }
