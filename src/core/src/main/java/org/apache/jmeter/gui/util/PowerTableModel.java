@@ -55,11 +55,12 @@ public class PowerTableModel extends DefaultTableModel {
     }
 
     public void setRowValues(int row, Object[] values) {
-        if (values.length != model.getHeaderCount()){
+        int valueCount = values.length;
+        if (valueCount != model.getHeaderCount()){
             throw new IllegalArgumentException("Incorrect number of data items");
         }
         model.setCurrentPos(row);
-        for (int i = 0; i < values.length; i++) {
+        for (int i = 0; i < valueCount; i++) {
             model.addColumnValue(model.getHeaders()[i], values[i]);
         }
     }
@@ -110,11 +111,12 @@ public class PowerTableModel extends DefaultTableModel {
 
     @Override
     public void addRow(Object[] data) {
-        if (data.length != model.getHeaderCount()){
+        int dataCount = data.length;
+        if (dataCount != model.getHeaderCount()){
             throw new IllegalArgumentException("Incorrect number of data items");
         }
         model.setCurrentPos(model.size());
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < dataCount; i++) {
             model.addColumnValue(model.getHeaders()[i], data[i]);
         }
     }
@@ -145,7 +147,8 @@ public class PowerTableModel extends DefaultTableModel {
 
     private Object[] createDefaultRow() {
         Object[] rowData = new Object[getColumnCount()];
-        for (int i = 0; i < rowData.length; i++) {
+        int rowDataCount = rowData.length;
+        for (int i = 0; i < rowDataCount; i++) {
             rowData[i] = createDefaultValue(i);
         }
         return rowData;
