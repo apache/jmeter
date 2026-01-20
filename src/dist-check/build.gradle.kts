@@ -41,7 +41,7 @@ dependencies {
     testImplementation("org.apache.santuario:xmlsec:4.0.4") {
         because("XML canonicalization for comparing XML in tests")
     }
-    testImplementation("org.eclipse.jgit:org.eclipse.jgit:6.10.1.202505221210-r") {
+    testImplementation("org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r") {
         because("Histogram diff for readable XML comparison output in tests")
     }
 
