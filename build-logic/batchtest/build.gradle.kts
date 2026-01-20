@@ -21,5 +21,5 @@ plugins {
 
 dependencies {
     implementation("org.ajoberstar.grgit:grgit-gradle:5.3.3")
-    implementation("org.eclipse.jgit:org.eclipse.jgit:6.10.1.202505221210-r")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r")
 }
