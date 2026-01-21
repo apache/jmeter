@@ -116,6 +116,16 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         return clone;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object lightweightClone() {
+        DNSCacheManager clone = (DNSCacheManager) super.lightweightClone();
+        clone.resolver = createResolver();
+        return clone;
+    }
+
     @VisibleForTesting
     Resolver getResolver() {
         return resolver;

@@ -320,8 +320,22 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     @Override
     public Object clone() {
         AccessLogSampler s = (AccessLogSampler) super.clone();
-        if (started && StringUtilities.isNotBlank(filterClassName)) {
+        cloneFilterAndParser(s);
+        return s;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object lightweightClone() {
+        AccessLogSampler s = (AccessLogSampler) super.lightweightClone();
+        cloneFilterAndParser(s);
+        return s;
+    }
+
+    private void cloneFilterAndParser(AccessLogSampler s) {
+        if (started && StringUtilities.isNotBlank(filterClassName)) {
             try {
                 if (TestCloneable.class.isAssignableFrom(Class.forName(filterClassName))) {
                     initFilter();
@@ -340,7 +354,6 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
                 log.warn("Could not clone cloneable filter", e);
             }
         }
-        return s;
     }
 
     /**
