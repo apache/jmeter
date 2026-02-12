@@ -1484,6 +1484,10 @@ JMETER-SERVER</source>
     How often to check for shutdown during ramp-up (milliseconds).<br/>
     Defaults to: <code>1000</code>
 </property>
+<property name="jmeterthread.timer.granularity">
+    How often to check for shutdown during timer delay (milliseconds).<br/>
+    Defaults to: <code>1000</code>
+</property>
 <property name="onload.expandtree">
     Should JMeter expand the tree when loading a test plan?<br/>
     Default value is <code>false</code> since JMeter 2.7<br/>
