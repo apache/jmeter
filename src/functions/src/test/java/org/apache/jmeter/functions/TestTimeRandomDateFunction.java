@@ -69,7 +69,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         LocalDate result = LocalDate.parse(value, formatter);
         LocalDate now = LocalDate.now(ZoneId.systemDefault());
         LocalDate max = LocalDate.parse(endDate, formatter);
-        Assertions.assertTrue(now.isBefore(result) && result.isBefore(max));
+        Assertions.assertTrue(!result.isBefore(now) && result.isBefore(max));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         LocalDate result = LocalDate.parse(value, formatter);
         LocalDate now = LocalDate.now(ZoneId.systemDefault());
         LocalDate max = LocalDate.parse(endDate, formatter);
-        Assertions.assertTrue(now.isBefore(result) && result.isBefore(max));
+        Assertions.assertTrue(!result.isBefore(now) && result.isBefore(max));
     }
 
     @Test
@@ -139,6 +139,16 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         function.setParameters(params);
         value = function.execute(result, null);
         assertEquals("2111-03-29", value);
+    }
+
+    @Test
+    void testSameStartAndEndDateReturnsSameValue() throws Exception {
+        String date = "2111-03-29";
+        Collection<CompoundVariable> params = makeParams("yyyy-MM-dd", date, date, "", "MY_VAR");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        assertEquals(date, value);
+        assertEquals(date, vars.get("MY_VAR"));
     }
 
     @Test
