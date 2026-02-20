@@ -715,7 +715,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 KeyStrokes.CTRL_1, KeyStrokes.CTRL_2, KeyStrokes.CTRL_3,
                 KeyStrokes.CTRL_4, KeyStrokes.CTRL_5, KeyStrokes.CTRL_6,
                 KeyStrokes.CTRL_7, KeyStrokes.CTRL_8, KeyStrokes.CTRL_9,};
-        for (int n = 0; n < keyStrokes.length; n++) {
+        int keyStrokeCount = keyStrokes.length;
+        for (int n = 0; n < keyStrokeCount; n++) {
             treevar.getActionMap().put(ActionNames.QUICK_COMPONENT + String.valueOf(n), quickComponent);
             inputMap.put(keyStrokes[n], ActionNames.QUICK_COMPONENT + String.valueOf(n));
         }
