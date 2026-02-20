@@ -126,7 +126,7 @@ public class StringWrap {
             }
             // Try adding the next line if it does not exceed maxWrap
             int next = nextLineSeparator;
-            if (next != -1 && pos - next <= maxWrap) {
+            if (next != -1 && next - pos <= maxWrap) {
                 // The existing lines do not exceed maxWrap, just reuse them
                 next++; // include newline
                 sb.append(input, pos, next);

@@ -29,6 +29,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class StringWrapTest {
     static Stream<Arguments> data() {
         return Stream.of(
+                arguments(2, 3, "a\nab\nabc\nabcd\nabcde", "a\nab\nabc\nabc|d\nabc|de"),
                 arguments(2, 2, "0123456789", "01|23|45|67|89"),
                 arguments(2, 5, "0123456789", "01234|56789"),
                 arguments(3, 3, "0123456789", "012|345|678|9"),
