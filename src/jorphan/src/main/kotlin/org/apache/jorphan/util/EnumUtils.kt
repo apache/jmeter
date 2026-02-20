@@ -18,6 +18,7 @@
 @file:JvmName("EnumUtils")
 package org.apache.jorphan.util
 
+import org.apache.jorphan.locale.ResourceKeyed
 import org.apiguardian.api.API
 import java.util.Collections.unmodifiableList
 import java.util.Collections.unmodifiableMap
@@ -39,34 +40,30 @@ private val VALUE_MAP = object : ClassValue<Map<String, Enum<*>>>() {
         require(type.isEnum) {
             "Class $type is not an enum"
         }
-        @Suppress("UNCHECKED_CAST")
-        type as Class<Enum<*>>
         return unmodifiableMap(
-            VALUES.get(type).associateBy { it.stringValue }
+            VALUES.get(type).associateBy {
+                (it as ResourceKeyed).resourceKey
+            }
         )
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-@API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
-public fun <T : Enum<*>> values(klass: Class<out T>): List<T> =
-    VALUES.get(klass) as List<T>
-
-@Suppress("UNCHECKED_CAST")
-@API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
-public fun <T : Enum<*>> valueMap(klass: Class<out T>): List<T> =
-    VALUES.get(klass) as List<T>
-
-@Suppress("UNCHECKED_CAST")
-@API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
-public inline fun <reified T : Enum<*>> valueOf(value: String): T? =
-    valueOf(T::class.java, value)
-
-@Suppress("UNCHECKED_CAST")
-@API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
-public fun <T : Enum<*>> valueOf(klass: Class<T>, value: String): T? =
-    VALUE_MAP.get(klass)[value] as T?
-
 @get:API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
-public val Enum<*>.stringValue: String
-    get() = toString()
+public val <T : Enum<*>> Class<out T>.enumValues: List<T>
+    get() = VALUES.get(this) as List<T>
+
+@Suppress("UNCHECKED_CAST")
+@get:API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
+public val <T> Class<out T>.enumValueMap: Map<String, T> where T : Enum<*>, T : ResourceKeyed
+    get() = VALUE_MAP.get(this) as Map<String, T>
+
+@Suppress("UNCHECKED_CAST")
+@API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
+public inline fun <reified T> valueOf(value: String): T? where T : Enum<*>, T : ResourceKeyed =
+    T::class.java.valueOf(value)
+
+@Suppress("UNCHECKED_CAST")
+@API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
+public fun <T> Class<T>.valueOf(value: String): T? where T : Enum<*>, T : ResourceKeyed =
+    enumValueMap[value]

@@ -33,6 +33,7 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.JBooleanPropertyEditor;
+import org.apache.jmeter.gui.JEnumPropertyEditor;
 import org.apache.jmeter.gui.JTextComponentBinding;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -61,14 +62,20 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     private UrlConfigGui urlConfigGui;
     private final JBooleanPropertyEditor retrieveEmbeddedResources = new JBooleanPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getRetrieveEmbeddedResources(),
-            JMeterUtils.getResString("web_testing_retrieve_images"));
+            "web_testing_retrieve_images",
+            JMeterUtils::getResString);
     private final JBooleanPropertyEditor concurrentDwn = new JBooleanPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getConcurrentDownload(),
-            JMeterUtils.getResString("web_testing_concurrent_download"));
+            "web_testing_concurrent_download",
+            JMeterUtils::getResString);
     private JTextField concurrentPool;
-    private final JBooleanPropertyEditor useMD5 = new JBooleanPropertyEditor(
-            HTTPSamplerBaseSchema.INSTANCE.getStoreAsMD5(),
-            JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
+    private final JEnumPropertyEditor<HTTPSamplerBase.ResponseProcessingMode> responseProcessingMode =
+            new JEnumPropertyEditor<>(
+                    HTTPSamplerBaseSchema.INSTANCE.getResponseProcessingMode(),
+                    "response_processing_mode",
+                    HTTPSamplerBase.ResponseProcessingMode.class,
+                    JMeterUtils::getResString
+            );
     private JTextField embeddedAllowRE; // regular expression used to match against embedded resource URLs to allow
     private JTextField embeddedExcludeRE; // regular expression used to match against embedded resource URLs to discard
     private JTextField sourceIpAddr; // does not apply to Java implementation
@@ -91,7 +98,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
                         retrieveEmbeddedResources,
                         concurrentDwn,
                         new JTextComponentBinding(concurrentPool, schema.getConcurrentDownloadPoolSize()),
-                        useMD5,
+                        responseProcessingMode,
                         new JTextComponentBinding(embeddedAllowRE, schema.getEmbeddedUrlAllowRegex()),
                         new JTextComponentBinding(embeddedExcludeRE, schema.getEmbeddedUrlExcludeRegex()),
                         new JTextComponentBinding(sourceIpAddr, schema.getIpSource()),
@@ -188,7 +195,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         advancedPanel.add(createEmbeddedRsrcPanel());
         advancedPanel.add(createSourceAddrPanel());
         advancedPanel.add(getProxyServerPanel());
-        advancedPanel.add(createOptionalTasksPanel());
+        advancedPanel.add(createResponseProcessingPanel());
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.add(JMeterUtils
@@ -294,13 +301,12 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         return sourceAddrPanel;
     }
 
-    protected JPanel createOptionalTasksPanel() {
-        // OPTIONAL TASKS
-        final JPanel checkBoxPanel = new VerticalPanel();
-        checkBoxPanel.setBorder(BorderFactory.createTitledBorder(
-                JMeterUtils.getResString("optional_tasks"))); // $NON-NLS-1$
-        checkBoxPanel.add(useMD5);
-        return checkBoxPanel;
+    protected JPanel createResponseProcessingPanel() {
+        JPanel panel = new JPanel(new MigLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("response_processing_title"))); // $NON-NLS-1$
+        panel.add(responseProcessingMode);
+        return panel;
     }
 
     @Override
