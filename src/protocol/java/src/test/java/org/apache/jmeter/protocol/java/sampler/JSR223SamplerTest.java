@@ -21,14 +21,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class JSR223SamplerTest {
 
-    @Test
-    void sampleWithEndTimeSet() {
+    @ParameterizedTest
+    @ValueSource(strings={"sampleResult", "SampleResult"})
+    void sampleWithEndTimeSet(String sampleResultVariableName) {
         JSR223Sampler sampler = new JSR223Sampler();
         sampler.setName("jsr223Test");
-        sampler.setScript("SampleResult.setEndTime(42); 'OK'");
+        sampler.setScript(sampleResultVariableName + ".setEndTime(42); 'OK'");
         sampler.setScriptLanguage("groovy");
         SampleResult sampleResult = sampler.sample(null);
         assertEquals(42, sampleResult.getEndTime());
