@@ -130,6 +130,7 @@
          <trusted-key id="6CB87B18A453990EAC9453F87D713008CC07E9AD" group="xerces"/>
          <trusted-key id="6E13156C0EE653F0B984663AB95BBD3FA43C4492" group="org.apache"/>
          <trusted-key id="6F538074CCEBF35F28AF9B066A0975F8B1127B83" group="org.jetbrains.kotlin"/>
+         <trusted-key id="6FF955169D698CC09BA7403AC99BFE8CD562EAC1" group="com.github.autostyle"/>
          <trusted-key id="7186BBF993566D8C2F4F7ED7D945E643368FEF62" group="io.github.eisop"/>
          <trusted-key id="7616EB882DAF57A11477AAF559A252FB1199D873" group="com.google.code.findbugs"/>
          <trusted-key id="764BE739DDAE10F4473FECF0AEF385ED6CA815AE" group="com.miglayout"/>

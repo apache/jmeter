@@ -22,7 +22,7 @@ plugins {
 dependencies {
     api(projects.basics)
     api(projects.buildParameters)
-    api("com.github.autostyle:com.github.autostyle.gradle.plugin:4.0")
+    api("com.github.autostyle:com.github.autostyle.gradle.plugin:4.0.1")
     api("com.github.vlsi.ide:com.github.vlsi.ide.gradle.plugin:3.0.1")
     api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:3.0.1")
     api("de.thetaphi.forbiddenapis:de.thetaphi.forbiddenapis.gradle.plugin:3.10")
