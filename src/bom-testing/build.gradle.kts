@@ -40,7 +40,7 @@ dependencies {
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
         api("org.wiremock:wiremock:3.13.1")
-        api("io.mockk:mockk:1.14.7")
+        api("io.mockk:mockk:1.14.9")
         api("net.bytebuddy:byte-buddy:1.17.8")
         api("nl.jqno.equalsverifier:equalsverifier:4.3")
         // activemq-all should not be used as it provides secondary slf4j binding
