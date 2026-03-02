@@ -17,7 +17,7 @@
 
 plugins {
     `embedded-kotlin` apply false
-    id("com.github.autostyle") version "4.0"
+    id("com.github.autostyle") version "4.0.1"
 }
 
 allprojects {
