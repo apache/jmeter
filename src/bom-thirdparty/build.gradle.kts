@@ -70,7 +70,7 @@ dependencies {
         }
         api("commons-logging:commons-logging:1.3.5")
         api("commons-net:commons-net:3.12.0")
-        api("dnsjava:dnsjava:3.6.3")
+        api("dnsjava:dnsjava:3.6.4")
         api("io.burt:jmespath-core:0.6.0")
         api("io.burt:jmespath-jackson:0.6.0")
         api("jakarta.jms:jakarta.jms-api:3.1.0")
