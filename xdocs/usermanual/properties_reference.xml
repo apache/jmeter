@@ -1992,6 +1992,10 @@ JMETER-SERVER</source>
       Defaults to: <code>maximumSize=jsr223.compiled_scripts_cache_size,recordStats</code>.
       Extra details: <a href="https://www.javadoc.io/doc/com.github.ben-manes.caffeine/caffeine/3.1.8/com.github.benmanes.caffeine/com/github/benmanes/caffeine/cache/CaffeineSpec.html">Caffeine spec</a>
     </property>
+  <property name="jsr223.statsReportsTop">
+    Used by JSR-223 elements.<br/>
+    Should usage reports be printed at the end of the run (value > 0) then how many items to display.<br/>
+    Defaults to: <code>statsReportsTop=5</code></property>
 </properties>
 </section>
 

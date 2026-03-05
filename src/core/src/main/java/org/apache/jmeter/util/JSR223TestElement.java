@@ -22,7 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import javax.script.Bindings;
@@ -40,7 +41,6 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,10 +82,25 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     }
 
     /** If JSR223 element has checkbox 'Cache compile' checked then script in ScriptText will be compiled and cached */
-    private String cacheChecked = "";
+    private String cacheKey = "";
 
     /** Used as an unique key for the cache */
     private ScriptCacheKey scriptCacheKey;
+
+    /**
+     * Holders for stats computation
+     */
+    private static final Map<ScriptCacheKey, Long> computeScriptCacheKeyCounts = new ConcurrentHashMap<>();
+    private static final Map<ScriptCacheKey, Double> computeScriptCacheKeyTimes = new ConcurrentHashMap<>();
+    private static final Map<ScriptCacheKey, Long> getCompiledScriptCounts = new ConcurrentHashMap<>();
+    private static final Map<ScriptCacheKey, Double> getCompiledScriptTimes = new ConcurrentHashMap<>();
+    private static final Map<ScriptCacheKey, Double> fullRunTimes = new ConcurrentHashMap<>();
+    private static final Map<ScriptCacheKey, String> keys2Names = new ConcurrentHashMap<>();
+
+    /**
+     * Nanoseconds to milliseconds conversion factor
+     */
+    private static final double ns2ms = 1_000_000.0;
 
     /**
      * Initialization On Demand Holder pattern
@@ -127,7 +142,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     private String getScriptLanguageWithDefault() {
         String lang = getScriptLanguage();
-        if (StringUtilities.isNotEmpty(lang)) {
+        if (lang != null && !lang.isEmpty()) {
             return lang;
         }
         return DEFAULT_SCRIPT_LANGUAGE;
@@ -185,13 +200,13 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         }
         populateBindings(bindings);
         String filename = getFilename();
-        File scriptFile = new File(filename);
         // Hack: bsh-2.0b5.jar BshScriptEngine implements Compilable but throws
         // "java.lang.Error: unimplemented"
         boolean supportsCompilable = scriptEngine instanceof Compilable
                 && !"bsh.engine.BshScriptEngine".equals(scriptEngine.getClass().getName()); // NOSONAR // $NON-NLS-1$
         try {
-            if (StringUtilities.isNotEmpty(filename)) {
+            if (filename != null && !filename.isEmpty()) {
+                File scriptFile = new File(filename);
                 if (!scriptFile.isFile()) {
                     throw new ScriptException("Script file '" + scriptFile.getAbsolutePath()
                             + "' is not a file for JSR223 element named: " + getName());
@@ -211,39 +226,46 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                         return ((Compilable) scriptEngine).compile(fileReader);
                     } catch (IOException | ScriptException e) {
                         if (logger.isDebugEnabled()) {
-                            logger.warn("Cache missed access: for file script: '{}' for element named: '{}'", scriptFile.getAbsolutePath(), getName());
+                            logger.debug("Cache missed access: for file script: '{}' for element named: '{}'", scriptFile.getAbsolutePath(), getName());
                         }
                         throw new ScriptCompilationInvocationTargetException(e);
                     }
                 });
                 return compiledScript.eval(bindings);
             }
+
             String script = getScript();
-            if (StringUtilities.isNotEmpty(script)) {
+            if (script != null && !script.isEmpty()) {
                 if (supportsCompilable) {
-                    if (!ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheChecked)) {
-                        computeScriptCacheKey(script);
-                        CompiledScript compiledScript = getCompiledScript(scriptCacheKey, key -> {
-                            try {
-                                return ((Compilable) scriptEngine).compile(script);
-                            } catch (ScriptException e) {
-                                if (logger.isDebugEnabled()) {
-                                    logger.debug("Cache missed access: failed compile of JSR223 element named: '{}'", getName());
+                    long start = System.nanoTime();
+                    try {
+                        if (!ScriptingBeanInfoSupport.FALSE_AS_STRING.equals(cacheKey)) {
+                            computeScriptCacheKey(script);
+                            CompiledScript compiledScript = getCompiledScript(scriptCacheKey, key -> {
+                                try {
+                                    return ((Compilable) scriptEngine).compile(script);
+                                } catch (ScriptException e) {
+                                    if (logger.isDebugEnabled()) {
+                                        logger.debug("Cache missed access: failed compile of JSR223 element named: '{}'", getName());
+                                    }
+                                    throw new ScriptCompilationInvocationTargetException(e);
                                 }
-                                throw new ScriptCompilationInvocationTargetException(e);
+                            });
+                            return compiledScript.eval(bindings);
+                        } else {
+                            computeScriptCacheKey(script.hashCode());
+                            //simulate a cache miss when JSR223 'Cache compiled script if available' is unchecked to have better view of cache usage
+                            COMPILED_SCRIPT_CACHE.get(scriptCacheKey, k -> {
+                                return null;
+                            });
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Cache missed access: 'Cache compile' is unchecked for JSR223 element named: '{}'", getName());
                             }
-                        });
-                        return compiledScript.eval(bindings);
-                    } else {
-                        computeScriptCacheKey(script.hashCode());
-                        //simulate a cache miss when JSR223 'Cache compiled script if available' is unchecked to have better view of cache usage
-                        var unused = COMPILED_SCRIPT_CACHE.get(scriptCacheKey, k -> {
-                            return null;
-                        });
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Cache missed access: 'Cache compile' is unchecked for JSR223 element named: '{}'", getName());
+                            return scriptEngine.eval(script, bindings);
                         }
-                        return scriptEngine.eval(script, bindings);
+                    } finally {
+                        Double duration = (double) ((System.nanoTime() - start) / ns2ms); //in ms
+                        fullRunTimes.merge(scriptCacheKey, duration, Double::sum);
                     }
                 } else {
                     return scriptEngine.eval(script, bindings);
@@ -265,6 +287,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             T newCacheKey,
             Function<? super ScriptCacheKey, ? extends CompiledScript> compiler
     ) throws IOException, ScriptException {
+        long start = System.nanoTime();
         try {
             CompiledScript compiledScript = COMPILED_SCRIPT_CACHE.get(newCacheKey, compiler);
             if (compiledScript == null) {
@@ -282,6 +305,10 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                 throw (ScriptException) cause;
             }
             throw e;
+        } finally {
+            Double duration = (double) ((System.nanoTime() - start) / ns2ms); //in ms
+            getCompiledScriptCounts.merge(newCacheKey, 1L, Long::sum);
+            getCompiledScriptTimes.merge(newCacheKey, duration, Double::sum);
         }
     }
 
@@ -325,9 +352,17 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * compute MD5 of a script if null
      */
     private void computeScriptCacheKey(String script) {
-        // compute the md5 of the script if needed
-        if (scriptCacheKey == null) {
-            scriptCacheKey = ScriptCacheKey.ofString(DigestUtils.md5Hex(script));
+        long start = System.nanoTime();
+        try {
+            if (scriptCacheKey == null) {
+                // compute the md5 of the script if needed
+                scriptCacheKey = ScriptCacheKey.ofString(DigestUtils.md5Hex(script));
+                keys2Names.put(scriptCacheKey, getName());
+            }
+        } finally {
+            Double duration = (double) ((System.nanoTime() - start) / ns2ms);
+            computeScriptCacheKeyCounts.merge(scriptCacheKey, 1L, Long::sum);
+            computeScriptCacheKeyTimes.merge(scriptCacheKey, duration, Double::sum);
         }
     }
 
@@ -335,8 +370,16 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * compute cache key for a file based script if null
      */
     private void computeScriptCacheKey(File scriptFile) {
-        if (scriptCacheKey == null) {
-            scriptCacheKey = ScriptCacheKey.ofFile(getScriptLanguage(), scriptFile.getAbsolutePath(), scriptFile.lastModified());
+        long start = System.nanoTime();
+        try {
+            if (scriptCacheKey == null) {
+                scriptCacheKey = ScriptCacheKey.ofFile(getScriptLanguage(), scriptFile.getAbsolutePath(), scriptFile.lastModified());
+                keys2Names.put(scriptCacheKey, getName());
+            }
+        } finally {
+            Double duration = (double) ((System.nanoTime() - start) / ns2ms);
+            computeScriptCacheKeyCounts.merge(scriptCacheKey, 1L, Long::sum);
+            computeScriptCacheKeyTimes.merge(scriptCacheKey, duration, Double::sum);
         }
     }
 
@@ -344,8 +387,16 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * compute cache key of a long value if null
      */
     private void computeScriptCacheKey(int reference) {
-        if (scriptCacheKey == null) {
-            scriptCacheKey = ScriptCacheKey.ofString(Integer.toString(reference));
+        long start = System.nanoTime();
+        try {
+            if (scriptCacheKey == null) {
+                scriptCacheKey = ScriptCacheKey.ofString(Integer.toString(reference));
+                keys2Names.put(scriptCacheKey, getName());
+            }
+        } finally {
+            Double duration = (double) ((System.nanoTime() - start) / ns2ms);
+            computeScriptCacheKeyCounts.merge(scriptCacheKey, 1L, Long::sum);
+            computeScriptCacheKeyTimes.merge(scriptCacheKey, duration, Double::sum);
         }
     }
 
@@ -354,14 +405,14 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * @return the cacheChecked
      */
     public String getCacheKey() {
-        return cacheChecked;
+        return cacheKey;
     }
 
     /**
      * @param cacheChecked the cacheChecked to set
      */
     public void setCacheKey(String cacheChecked) {
-        this.cacheChecked = cacheChecked;
+        this.cacheKey = cacheChecked;
     }
 
     /**
@@ -402,7 +453,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         synchronized (lock) {
             if (COMPILED_SCRIPT_CACHE != null) {
                 CacheStats stats = COMPILED_SCRIPT_CACHE.stats();
-                logger.info("JSR223 cached scripts: {}, requestsCount: {} (hitCount: {} + missedCount: {}), (hitRate: {}, missRate: {}), " +
+                logger.info("JSR223 cache stats => scripts: {}, requestsCount: {} (hitCount: {} + missedCount: {}), (hitRate: {}, missRate: {}), " +
                                 "loadCount: {} (loadSuccessCount: {} + loadFailureCount: {}), " +
                                 "evictionCount: {}, evictionWeight: {}, " +
                                 "totalLoadTime: {} ms, averageLoadPenalty: {} ms",
@@ -411,10 +462,24 @@ public abstract class JSR223TestElement extends ScriptingTestElement
                         String.format("%.02f", stats.hitRate()), String.format("%.02f", stats.missRate()),
                         stats.loadCount(), stats.loadSuccessCount(), stats.loadFailureCount(),
                         stats.evictionCount(), stats.evictionWeight(),
-                        String.format("%.02f", (stats.totalLoadTime() / 100000f)), String.format("%.02f", (stats.averageLoadPenalty() / 100000f)));
+                        String.format("%.02f", (stats.totalLoadTime() / ns2ms)), String.format("%.02f", (stats.averageLoadPenalty() / ns2ms)));
                 COMPILED_SCRIPT_CACHE.invalidateAll();
                 COMPILED_SCRIPT_CACHE.cleanUp();
                 COMPILED_SCRIPT_CACHE = null;
+
+                int topLimit = getTopContributorsLimit();
+                if (topLimit > 0) {
+                    logTopContributors(computeScriptCacheKeyCounts, computeScriptCacheKeyTimes, "computeScriptCacheKey");
+                    logTopContributors(getCompiledScriptCounts, getCompiledScriptTimes, "getCompiledScript");
+                    logTopContributors(computeScriptCacheKeyCounts, fullRunTimes, "processFileOrScript");
+                }
+
+                computeScriptCacheKeyCounts.clear();
+                computeScriptCacheKeyTimes.clear();
+                getCompiledScriptCounts.clear();
+                getCompiledScriptTimes.clear();
+                fullRunTimes.clear();
+                keys2Names.clear();
             }
         }
         scriptCacheKey = null;
@@ -427,4 +492,90 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     public void setScriptLanguage(String s) {
         scriptLanguage = s;
     }
+
+    /**
+     * Read configured maximum number of top contributors to report.
+     * Property: jsr223.statsReportsTop (default "5").
+     */
+    private static int getTopContributorsLimit() {
+        String raw = JMeterUtils.getPropDefault("jsr223.statsReportsTop", "5");
+        try {
+            int v = Integer.parseInt(raw.trim());
+            return v < 0 ? 0 : v;
+        } catch (Exception ex) {
+            return 5;
+        }
+    }
+
+    private static void logTopContributors(Map<ScriptCacheKey, Long> counts, Map<ScriptCacheKey, Double> durations, String method) {
+        // Build entries with key, name, count, total and average durations
+        int configuredLimit = getTopContributorsLimit();
+        if (configuredLimit == 0) {
+            return;
+        }
+
+        class Entry {
+            final ScriptCacheKey key;
+            final String name;
+            final long count;
+            final double totalDuration;
+            final double avgDuration;
+
+            Entry(ScriptCacheKey key, String name, long count, double totalDuration) {
+                this.key = key;
+                this.name = name == null ? key.toString() : name;
+                this.count = count;
+                this.totalDuration = totalDuration;
+                this.avgDuration = count == 0 ? 0.0 : (totalDuration / count);
+            }
+        }
+
+        List<Entry> list = new ArrayList<>();
+        for (Map.Entry<ScriptCacheKey, Long> e : counts.entrySet()) {
+            ScriptCacheKey key = e.getKey();
+            long count = e.getValue() == null ? 0L : e.getValue();
+            double total = durations.getOrDefault(key, 0.0);
+            list.add(new Entry(key, keys2Names.get(key), count, total));
+        }
+
+        if (list.isEmpty()) {
+            logger.info("{}: No contributors recorded.", method);
+            return;
+        }
+        int limit = Math.min(configuredLimit, list.size());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Heaviest top %d contributors by their total '%s' execution times (ms)%n", limit, method));
+
+        for (int j = 0; j < 2; j++) {
+            if (j == 0) {
+                list.sort((a, b) -> Double.compare(b.totalDuration, a.totalDuration));
+                sb.append(String.format("%n===> By total duration (ms) <===%n"));
+            } else {
+                list.sort((a, b) -> Double.compare(b.avgDuration, a.avgDuration));
+                sb.append(String.format("%n===> By average duration (ms) <===%n"));
+            }
+            sb.append(String.format(Locale.ROOT, "%-5s %-60s %12s %15s %12s%n", "Rank", "Element name", "Calls", "Duration(ms)", "Avg(ms)"));
+
+            long sumCounts = 0L;
+            double sumTotal = 0.0;
+            for (int i = 0; i < limit; i++) {
+                Entry ent = list.get(i);
+                String totalStr = String.format(Locale.ROOT, "%.3f", ent.totalDuration);
+                String avgStr = String.format(Locale.ROOT, "%.3f", ent.avgDuration);
+                String name = ent.name == null ? ent.key.toString() : ent.name;
+                String displayName = name.length() > 60 ? name.substring(0, 57) + "..." : name;
+                sb.append(String.format(Locale.ROOT, "%-5d %-60s %12d %15s %12s%n", (i + 1), displayName, ent.count, totalStr, avgStr));
+                sumCounts += ent.count;
+                sumTotal += ent.totalDuration;
+            }
+
+            // SUM row for the printed items: show summed count and total duration and averaged avg
+            String sumTotalStr = String.format(Locale.ROOT, "%.3f", sumTotal);
+            String sumAvgStr = String.format(Locale.ROOT, "%.3f", (sumCounts == 0L ? 0.0 : (sumTotal / sumCounts)));
+            sb.append(String.format(Locale.ROOT, "%-5s %-60s %12d %15s %12s%n", "", "Total:", sumCounts, sumTotalStr, sumAvgStr));
+        }
+        logger.info(sb.toString());
+    }
+
 }
