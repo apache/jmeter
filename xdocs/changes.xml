@@ -58,6 +58,7 @@ Summary
 </p>
 <ul>
 <li><a href="#Changes">Changes</a></li>
+<li><a href="#Bug fixes">Bug fixes</a></li>
 </ul>
 
   <ch_section>Changes</ch_section>
@@ -76,6 +77,11 @@ Summary
     <li><pr>5891</pr>Skip Internet Explorer 6-9 conditional comment processing when fetching resource links</li>
   </ul>
 
+  <ch_section>Bug fixes</ch_section>
+  <h3>General</h3>
+  <ul>
+    <li><pr>6654</pr><issue>6611</issue>Support JDK 25 and above for result collectors with empty file names</li>
+  </ul>
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>
