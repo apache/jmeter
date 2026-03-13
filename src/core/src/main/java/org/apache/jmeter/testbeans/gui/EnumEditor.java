@@ -31,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import org.apache.jmeter.gui.ClearGui;
+import org.apache.jorphan.locale.ResourceKeyed;
 import org.apache.jorphan.util.EnumUtils;
 
 /**
@@ -41,14 +42,13 @@ import org.apache.jorphan.util.EnumUtils;
  * The provided GUI is a combo box with an option for each value in the enum.
  * <p>
  */
-class EnumEditor extends PropertyEditorSupport implements ClearGui {
+class EnumEditor<T extends Enum<?> & ResourceKeyed> extends PropertyEditorSupport implements ClearGui {
+    private final JComboBox<T> combo;
 
-    private final JComboBox<Enum<?>> combo;
+    private final T defaultValue;
 
-    private final Enum<?> defaultValue;
-
-    public EnumEditor(final PropertyDescriptor descriptor, final Class<? extends Enum<?>> enumClazz, final ResourceBundle rb) {
-        DefaultComboBoxModel<Enum<?>> model = new DefaultComboBoxModel<>();
+    public EnumEditor(final PropertyDescriptor descriptor, final Class<T> enumClass, final ResourceBundle rb) {
+        DefaultComboBoxModel<T> model = new DefaultComboBoxModel<>();
         combo = new JComboBox<>(model);
         combo.setEditable(false);
         combo.setRenderer(
@@ -56,19 +56,18 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
                     @Override
                     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                         JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                        Enum<?> enumValue = (Enum<?>) value;
-                        label.setText(rb.getString(EnumUtils.getStringValue(enumValue)));
+                        label.setText(rb.getString(enumClass.cast(value).getResourceKey()));
                         return label;
                     }
                 }
         );
-        List<? extends Enum<?>> values = EnumUtils.values(enumClazz);
-        for(Enum<?> e : values) {
+        List<T> values = EnumUtils.getEnumValues(enumClass);
+        for (T e : values) {
             model.addElement(e);
         }
         Object def = descriptor.getValue(GenericTestBeanCustomizer.DEFAULT);
         if (def instanceof Enum<?> enumValue) {
-            defaultValue = enumValue;
+            defaultValue = enumClass.cast(enumValue);
         } else if (def instanceof Integer index) {
             defaultValue = values.get(index);
         } else {
@@ -99,25 +98,24 @@ class EnumEditor extends PropertyEditorSupport implements ClearGui {
         } else if (value instanceof Integer integer) {
             combo.setSelectedIndex(integer);
         } else if (value instanceof String string) {
-            ComboBoxModel<Enum<?>> model = combo.getModel();
-            for (int i = 0; i < model.getSize(); i++) {
-                Enum<?> element = model.getElementAt(i);
-                if (EnumUtils.getStringValue(element).equals(string)) {
-                    combo.setSelectedItem(element);
-                    return;
-                }
-            }
+            setAsText(string);
         }
     }
 
     @Override
     public void setAsText(String value) {
-        throw new UnsupportedOperationException("Not supported yet. Use enum value rather than text, got " + value);
+        ComboBoxModel<T> model = combo.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            T element = model.getElementAt(i);
+            if (value.equals(element.getResourceKey())) {
+                combo.setSelectedItem(element);
+                return;
+            }
+        }
     }
 
     @Override
     public void clearGui() {
         combo.setSelectedItem(defaultValue);
     }
-
 }

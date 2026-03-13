@@ -65,7 +65,8 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private final JBooleanPropertyEditor scheduler =
             new JBooleanPropertyEditor(
                     ThreadGroupSchema.INSTANCE.getUseScheduler(),
-                    JMeterUtils.getResString("scheduler"));
+                    "scheduler",
+                    JMeterUtils::getResString);
 
     private final JTextField duration = new JTextField();
     private final JLabel durationLabel = labelFor(duration, "duration");
@@ -76,7 +77,8 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private final JBooleanPropertyEditor sameUserBox =
             new JBooleanPropertyEditor(
                     AbstractThreadGroupSchema.INSTANCE.getSameUserOnNextIteration(),
-                    JMeterUtils.getResString("threadgroup_same_user"));
+                    "threadgroup_same_user",
+                    JMeterUtils::getResString);
 
     public ThreadGroupGui() {
         this(true);
@@ -199,7 +201,8 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         if (showDelayedStart) {
             delayedStart = new JBooleanPropertyEditor(
                     ThreadGroupSchema.INSTANCE.getDelayedStart(),
-                    JMeterUtils.getResString("delayed_start")); // $NON-NLS-1$
+                    "delayed_start",
+                    JMeterUtils::getResString); // $NON-NLS-1$
             threadPropsPanel.add(delayedStart, "span 2");
         }
         scheduler.addPropertyChangeListener(
