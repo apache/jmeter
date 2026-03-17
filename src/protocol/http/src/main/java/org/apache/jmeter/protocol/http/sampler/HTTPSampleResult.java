@@ -105,25 +105,17 @@ public class HTTPSampleResult extends SampleResult {
      * Determine whether this result is a redirect.
      *
      * <p>
-     * If status is {@code 307}, the request has to be a HTTP method of {@code GET} or
-     * {@code HEAD}, to be considered a redirect. For all other status codes, the
-     * HTTP method will not be checked.
+     * Returns true for status codes: 301, 302, 303, 307 and 308.
+     * 307 and 308 preserve the original request method when followed.
      * </p>
-     * Returns true for: 301, 302, 303, 307 (GET or HEAD) and 308
      *
      * @return true iff res is an HTTP redirect response
      */
     public boolean isRedirect() {
-        /*
-         * Don't redirect the following:
-         * 300 = Multiple choice
-         * 304 = Not Modified
-         * 305 = Use Proxy
-         * 306 = (Unused)
-         */
         final String[] redirectCodes = { HTTPConstants.SC_MOVED_PERMANENTLY,
                 HTTPConstants.SC_MOVED_TEMPORARILY,
                 HTTPConstants.SC_SEE_OTHER,
+                HTTPConstants.SC_TEMPORARY_REDIRECT,
                 HTTPConstants.SC_PERMANENT_REDIRECT };
         String code = getResponseCode();
         for (String redirectCode : redirectCodes) {
@@ -131,13 +123,7 @@ public class HTTPSampleResult extends SampleResult {
                 return true;
             }
         }
-        // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-        // If the 307 status code is received in response to a request other than GET or HEAD,
-        // the user agent MUST NOT automatically redirect the request unless it can be confirmed by the user,
-        // since this might change the conditions under which the request was issued.
-        // See Bug 54119
-        return HTTPConstants.SC_TEMPORARY_REDIRECT.equals(code) &&
-                (HTTPConstants.GET.equals(getHTTPMethod()) || HTTPConstants.HEAD.equals(getHTTPMethod()));
+        return false;
     }
 
     /**

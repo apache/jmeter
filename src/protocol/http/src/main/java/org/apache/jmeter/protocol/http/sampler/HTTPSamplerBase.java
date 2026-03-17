@@ -1669,9 +1669,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // this behaviour.
             location = encodeSpaces(location);
             log.debug("Location after /. and space transforms: {}", location);
-            // Change all but HEAD into GET (Bug 55450)
+            // Compute method based on redirect status code (Bug 55450, RFC 9110)
             String method = lastRes.getHTTPMethod();
-            method = computeMethodForRedirect(method);
+            method = computeMethodForRedirect(method, lastRes.getResponseCode());
 
             try {
                 URL url = ConversionUtils.makeRelativeURL(lastRes.getURL(), location);
@@ -1735,13 +1735,25 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
-     * See <a href="http://tools.ietf.org/html/rfc2616#section-10.3">RFC2616#section-10.3</a>
-     * JMeter conforms currently to HttpClient 4.5.2 supported RFC
-     * TODO Update when migrating to HttpClient 5.X using response code
+     * Compute the HTTP method to use for a redirect response.
+     *
+     * <ul>
+     *   <li>307/308: preserve method</li>
+     *   <li>301/302/303: HEAD stays HEAD, others become GET</li>
+     * </ul>
+     *
      * @param initialMethod the initial HTTP Method
-     * @return the new HTTP Method as per RFC
+     * @param responseCode the current redirect response code
+     * @return the HTTP Method to use for the redirected request
      */
-    private static String computeMethodForRedirect(String initialMethod) {
+    private static String computeMethodForRedirect(String initialMethod, String responseCode) {
+        // 307: RFC 9110 §15.4.8, 308: RFC 7538 §3 / RFC 9110 Errata 7109
+        // 307/308: preserve original method
+        if (HTTPConstants.SC_TEMPORARY_REDIRECT.equals(responseCode)
+                || HTTPConstants.SC_PERMANENT_REDIRECT.equals(responseCode)) {
+            return initialMethod;
+        }
+        // 301/302/303: HEAD stays HEAD, others become GET (Bug 55450)
         if (!HTTPConstants.HEAD.equalsIgnoreCase(initialMethod)) {
             return HTTPConstants.GET;
         }

@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,7 +34,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 
 class TestRedirects {
 
@@ -44,7 +48,7 @@ class TestRedirects {
         Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
             for (int statusCode : Arrays.asList(301, 302, 303, 307, 308)) {
                 for (String method : httpMethods) {
-                    boolean shouldRedirect = statusCode != 307 || ("GET".equals(method) || "HEAD".equals(method));
+                    boolean shouldRedirect = true;
                     res.add(Arguments.of(httpImpl, statusCode, shouldRedirect, method));
                 }
             }
@@ -75,6 +79,101 @@ class TestRedirects {
                 Assertions.assertNull(res.getRedirectLocation());
             }
             Assertions.assertEquals("" + redirectCode, res.getResponseCode());
+        } finally {
+            server.stop();
+        }
+    }
+
+    public static List<Arguments> methodPreservationParams() {
+        List<Arguments> res = new ArrayList<>();
+        // Nested for depth is 2 (max allowed is 1). [NestedForDepth]
+        List<String> httpMethods = Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE");
+        Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
+            for (int statusCode : Arrays.asList(301, 302, 303, 307, 308)) {
+                for (String method : httpMethods) {
+                    String expectedMethod;
+                    if (statusCode == 307 || statusCode == 308) {
+                        expectedMethod = method;
+                    } else if ("HEAD".equals(method)) {
+                        expectedMethod = "HEAD";
+                    } else {
+                        expectedMethod = "GET";
+                    }
+                    res.add(Arguments.of(httpImpl, statusCode, method, expectedMethod));
+                }
+            }
+        });
+        return res;
+    }
+
+    @ParameterizedTest
+    @MethodSource("methodPreservationParams")
+    void testMethodPreservationOnRedirect(String httpImpl, int redirectCode,
+            String originalMethod, String expectedMethod) throws MalformedURLException {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            HTTPSamplerBase http = HTTPSamplerFactory.newInstance(httpImpl);
+            http.setAutoRedirects(false);
+            http.setFollowRedirects(true);
+
+            server.stubFor(any(urlPathEqualTo("/original")).willReturn(
+                    aResponse().withHeader("Location", server.url("/target"))
+                               .withStatus(redirectCode)));
+            server.stubFor(WireMock.request(expectedMethod, urlPathEqualTo("/target"))
+                    .atPriority(1)
+                    .willReturn(aResponse().withStatus(200)));
+            server.stubFor(any(urlPathEqualTo("/target"))
+                    .atPriority(10)
+                    .willReturn(aResponse().withStatus(405)));
+
+            HTTPSampleResult res = http.sample(new URL(server.url("/original")),
+                    originalMethod, false, 1);
+
+            Assertions.assertEquals("200", res.getResponseCode(),
+                    String.format("[%s] %s %d: expected final 200", httpImpl, originalMethod, redirectCode));
+            Assertions.assertEquals(expectedMethod, res.getHTTPMethod(),
+                    String.format("[%s] %s %d: expected method %s", httpImpl, originalMethod, redirectCode, expectedMethod));
+
+            server.verify(1, new RequestPatternBuilder(
+                    RequestMethod.fromString(expectedMethod), urlPathEqualTo("/target")));
+        } finally {
+            server.stop();
+        }
+    }
+
+    public static List<Arguments> redirectChainParams() {
+        return Arrays.stream(HTTPSamplerFactory.getImplementations())
+                .map(Arguments::of)
+                .collect(Collectors.toList());
+    }
+
+    @ParameterizedTest
+    @MethodSource("redirectChainParams")
+    void testRedirectChain307Then301(String httpImpl) throws MalformedURLException {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            HTTPSamplerBase http = HTTPSamplerFactory.newInstance(httpImpl);
+            http.setAutoRedirects(false);
+            http.setFollowRedirects(true);
+
+            // POST /a -> 307 -> POST /b -> 301 -> GET /c
+            server.stubFor(any(urlPathEqualTo("/a")).willReturn(
+                    aResponse().withHeader("Location", server.url("/b")).withStatus(307)));
+            server.stubFor(any(urlPathEqualTo("/b")).willReturn(
+                    aResponse().withHeader("Location", server.url("/c")).withStatus(301)));
+            server.stubFor(any(urlPathEqualTo("/c")).willReturn(
+                    aResponse().withStatus(200)));
+
+            HTTPSampleResult res = http.sample(new URL(server.url("/a")), "POST", false, 1);
+
+            Assertions.assertEquals("200", res.getResponseCode());
+            Assertions.assertEquals("GET", res.getHTTPMethod());
+
+            // /b should receive POST (307 preserves method), /c should receive GET (301 converts)
+            server.verify(1, new RequestPatternBuilder(RequestMethod.POST, urlPathEqualTo("/b")));
+            server.verify(1, new RequestPatternBuilder(RequestMethod.GET, urlPathEqualTo("/c")));
         } finally {
             server.stop();
         }
