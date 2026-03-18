@@ -48,8 +48,7 @@ class TestRedirects {
         Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
             for (int statusCode : Arrays.asList(301, 302, 303, 307, 308)) {
                 for (String method : httpMethods) {
-                    boolean shouldRedirect = true;
-                    res.add(Arguments.of(httpImpl, statusCode, shouldRedirect, method));
+                    res.add(Arguments.of(httpImpl, statusCode, true, method));
                 }
             }
             for (int statusCode : Arrays.asList(300, 304, 305, 306)) {
@@ -91,14 +90,10 @@ class TestRedirects {
         Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
             for (int statusCode : Arrays.asList(301, 302, 303, 307, 308)) {
                 for (String method : httpMethods) {
-                    String expectedMethod;
-                    if (statusCode == 307 || statusCode == 308) {
-                        expectedMethod = method;
-                    } else if ("HEAD".equals(method)) {
-                        expectedMethod = "HEAD";
-                    } else {
-                        expectedMethod = "GET";
-                    }
+                    String expectedMethod = switch (statusCode) {
+                        case 307, 308 -> method;
+                        default -> "HEAD".equals(method) ? "HEAD" : "GET";
+                    };
                     res.add(Arguments.of(httpImpl, statusCode, method, expectedMethod));
                 }
             }
