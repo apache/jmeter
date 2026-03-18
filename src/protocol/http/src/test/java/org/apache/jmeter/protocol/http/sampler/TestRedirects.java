@@ -43,7 +43,6 @@ class TestRedirects {
 
     public static List<Arguments> redirectionParams() {
         List<Arguments> res = new ArrayList<>();
-        // Nested for depth is 2 (max allowed is 1). [NestedForDepth]
         List<String> httpMethods = Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE");
         Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
             for (int statusCode : Arrays.asList(301, 302, 303, 307, 308)) {
@@ -85,7 +84,6 @@ class TestRedirects {
 
     public static List<Arguments> methodPreservationParams() {
         List<Arguments> res = new ArrayList<>();
-        // Nested for depth is 2 (max allowed is 1). [NestedForDepth]
         List<String> httpMethods = Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE");
         Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
             for (int statusCode : Arrays.asList(301, 302, 303, 307, 308)) {
