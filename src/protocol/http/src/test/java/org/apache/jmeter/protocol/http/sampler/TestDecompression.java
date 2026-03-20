@@ -53,7 +53,6 @@ public class TestDecompression {
 
     public static List<Arguments> mockServerParams() {
         List<Arguments> res = new ArrayList<>();
-        // Nested for depth is 2 (max allowed is 1). [NestedForDepth]
         Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
             for (ClientGzip clientGzip : ClientGzip.values()) {
                 for (ServerGzip serverGzip : ServerGzip.values()) {
