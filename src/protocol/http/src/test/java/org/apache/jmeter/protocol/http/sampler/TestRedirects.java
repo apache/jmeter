@@ -44,7 +44,7 @@ class TestRedirects {
     public static List<Arguments> redirectionParams() {
         List<Arguments> res = new ArrayList<>();
         List<String> httpMethods = Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE");
-        Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
+        for (String httpImpl : HTTPSamplerFactory.getImplementations()) {
             for (int statusCode : Arrays.asList(301, 302, 303, 307, 308)) {
                 for (String method : httpMethods) {
                     res.add(Arguments.of(httpImpl, statusCode, true, method));
@@ -55,7 +55,7 @@ class TestRedirects {
                     res.add(Arguments.of(httpImpl, statusCode, false, method));
                 }
             }
-        });
+        }
         return res;
     }
 
@@ -85,7 +85,7 @@ class TestRedirects {
     public static List<Arguments> methodPreservationParams() {
         List<Arguments> res = new ArrayList<>();
         List<String> httpMethods = Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE");
-        Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
+        for (String httpImpl : HTTPSamplerFactory.getImplementations()) {
             for (int statusCode : Arrays.asList(301, 302, 303, 307, 308)) {
                 for (String method : httpMethods) {
                     String expectedMethod = switch (statusCode) {
@@ -95,7 +95,7 @@ class TestRedirects {
                     res.add(Arguments.of(httpImpl, statusCode, method, expectedMethod));
                 }
             }
-        });
+        }
         return res;
     }
 
