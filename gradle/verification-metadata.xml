@@ -211,6 +211,7 @@
          <trusted-key id="EED6202038849B47FEEAD1EC9266326161C26F29" group="net.javacrumbs.json-unit"/>
          <trusted-key id="F254B35617DC255D9344BCFA873A8E86B4372146" group="org.apache"/>
          <trusted-key id="F3184BCD55F4D016E30D4C9BF42E87F9665015C9" group="org.jsoup"/>
+         <trusted-key id="F4DD59C90148BDC52BEB90A4530AA5F25C25011F" group="commons-logging"/>
          <trusted-key id="F5FEBA84EB26C56457B2CF819E31AB27445478DB" group="org.infinispan"/>
          <trusted-key id="FA77DCFEF2EE6EB2DEBEDD2C012579464D01C06A">
             <trusting group="org.codehaus.plexus"/>
@@ -701,6 +702,11 @@
       <component group="org.apache.commons" name="commons-parent" version="9">
          <artifact name="commons-parent-9.pom">
             <pgp value="D196A5E3E70732EEB2E5007F1861C322C56014B2"/>
+         </artifact>
+      </component>
+      <component group="org.apache.commons" name="commons-parent" version="97">
+         <artifact name="commons-parent-97.pom">
+            <pgp value="F4DD59C90148BDC52BEB90A4530AA5F25C25011F"/>
          </artifact>
       </component>
       <component group="org.apache.geronimo.genesis" name="genesis" version="1.2">
