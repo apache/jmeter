@@ -225,7 +225,7 @@ apache-jmeter-X.Y/lib/
 apache-jmeter-X.Y/lib/ext
 apache-jmeter-X.Y/lib/junit
 apache-jmeter-X.Y/licenses
-apache-jmeter-X.Y/printable_docs
+apache-jmeter-X.Y/docs
 </source>
 You can rename the parent directory (i.e. <code>apache-jmeter-X.Y</code>) if you want, but do not change any of the sub-directory names.
 </p>

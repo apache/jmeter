@@ -597,7 +597,7 @@
     <div class="links">
       <div class="title">See also:</div>
       <ul class="links">
-        <xsl:for-each select="link|complink">
+        <xsl:for-each select="link|complink|funclink">
           <li>
             <xsl:choose>
               <xsl:when test="name(.) = 'link'">
@@ -607,6 +607,11 @@
               </xsl:when>
               <xsl:when test="name(.) = 'complink'">
                 <xsl:call-template name="complink">
+                  <xsl:with-param name="name" select="@name" />
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:when test="name(.) = 'funclink'">
+                <xsl:call-template name="funclink">
                   <xsl:with-param name="name" select="@name" />
                 </xsl:call-template>
               </xsl:when>

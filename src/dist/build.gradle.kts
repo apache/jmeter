@@ -59,9 +59,6 @@ inline fun <reified T : Named> AttributeContainer.attribute(attr: Attribute<T>, 
     attribute(attr, objects.named<T>(value))
 
 // isCanBeConsumed = false ==> other modules must not use the configuration as a dependency
-val buildDocs by configurations.creating {
-    isCanBeConsumed = false
-}
 val generatorJar by configurations.creating {
     isCanBeConsumed = false
 }
@@ -109,12 +106,6 @@ dependencies {
     srcLicense(project(":src:licenses", "srcLicense"))
     generatorJar(project(":src:generator", "archives"))
     junitSampleJar(project(":src:protocol:junit-sample"))
-
-    buildDocs(platform(projects.src.bomThirdparty))
-    buildDocs("org.apache.velocity:velocity")
-    buildDocs("commons-lang:commons-lang")
-    buildDocs("org.apache.commons:commons-collections4")
-    buildDocs("org.jdom:jdom")
 }
 
 node {
@@ -338,89 +329,6 @@ val createDist by tasks.registering {
 // source/binary artifacts with the appropriate eol/executable file flags
 val gitProps by rootProject.tasks.existing(FindGitAttributes::class)
 
-fun createAnakiaTask(
-    taskName: String,
-    baseDir: Directory,
-    extension: String = ".html",
-    style: String,
-    velocityProperties: String,
-    projectFile: String,
-    excludes: Array<String>,
-    includes: Array<String>
-): TaskProvider<Task> {
-    val outputDir = layout.buildDirectory.dir("docs/$taskName").get().asFile
-
-    val prepareProps = tasks.register("prepareProperties$taskName") {
-        // AnakiaTask can't use relative paths, and it forbids ../, so we create a dedicated
-        // velocity.properties file that contains absolute path
-        inputs.file(velocityProperties)
-        val outputProps = layout.buildDirectory.file("docProps/$taskName/velocity.properties").get().asFile
-        outputs.file(outputProps)
-        doLast {
-            // Unfortunately, Velocity does not use Java properties format.
-            // For instance, Properties escape : as \:, however Velocity does not understand that.
-            // Thus it tries to use c\:\path\to\workspace which does not work
-            val p = `java.util`.Properties()
-            file(velocityProperties).reader().use {
-                p.load(it)
-            }
-            p["resource.loader"] = "file"
-            p["file.resource.loader.path"] = baseDir.asFile.absolutePath
-            p["file.resource.loader.class"] = "org.apache.velocity.runtime.resource.loader.FileResourceLoader"
-            val specials = Regex("""([,\\])""")
-            val lines = p.entries
-                .map { (it.key as String) + "=" + ((it.value as String).replace(specials, """\\$1""")) }
-                .sorted()
-            file(outputProps).apply {
-                parentFile.run { isDirectory || mkdirs() } || throw IllegalStateException("Unable to create directory $parentFile")
-
-                writer().use {
-                    it.appendLine("# Auto-generated from $velocityProperties to pass absolute path to Velocity")
-                    for (line in lines) {
-                        it.appendLine(line)
-                    }
-                }
-            }
-        }
-    }
-
-    return tasks.register(taskName) {
-        inputs.file("$baseDir/$style").withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("styleDir")
-        inputs.file("$baseDir/$projectFile").withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("projectDir")
-        inputs.files(
-            fileTree(baseDir) {
-                include(*includes)
-                exclude(*excludes)
-            }
-        ).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName("baseDir")
-        inputs.property("extension", extension)
-        outputs.dir(outputDir)
-        outputs.cacheIf { true }
-        dependsOn(prepareProps)
-
-        doLast {
-            ant.withGroovyBuilder {
-                "taskdef"(
-                    "name" to "anakia",
-                    "classname" to "org.apache.velocity.anakia.AnakiaTask",
-                    "classpath" to buildDocs.asPath
-                )
-                "anakia"(
-                    "basedir" to baseDir,
-                    "destdir" to outputDir,
-                    "extension" to extension,
-                    "style" to style,
-                    "projectFile" to projectFile,
-                    "excludes" to excludes.joinToString(" "),
-                    "includes" to includes.joinToString(" "),
-                    "lastModifiedCheck" to "true",
-                    "velocityPropertiesFile" to prepareProps.get().outputs.files.singleFile
-                )
-            }
-        }
-    }
-}
-
 val xdocs = rootProject.layout.projectDirectory.dir("xdocs")
 
 fun CopySpec.docCssAndImages() {
@@ -439,13 +347,34 @@ fun CopySpec.manuals() {
     }
 }
 
-fun CopySpec.printableDocumentation() {
-    into("docs") {
-        docCssAndImages()
+fun CopySpec.docFontsAndCss() {
+    into("fonts") {
+        from(
+            fileTree(xdocs.dir("node_modules/@fontsource/merriweather/files")) {
+                builtBy(yarn_install)
+            }
+        ) {
+            include("*400*normal*.woff2")
+        }
+        from(xdocs.dir("node_modules/@fortawesome/fontawesome-free/webfonts")) {
+            include("fa-brands*.woff2")
+        }
     }
-    into("printable_docs") {
-        from(buildPrintableDoc)
-        manuals()
+    into("css") {
+        from(xdocs.dir("node_modules/@fontsource/merriweather")) {
+            include("400.css")
+            rename { "merriweather.css" }
+            filter {
+                it.replace("./files", "../fonts")
+            }
+        }
+        from(xdocs.dir("node_modules/@fortawesome/fontawesome-free/css")) {
+            include("fontawesome.min.css")
+            include("brands.min.css")
+            filter {
+                it.replace("../webfonts", "../fonts")
+            }
+        }
     }
 }
 
@@ -463,25 +392,6 @@ val yarn_install = tasks.named<YarnTask>("yarn_install") {
     inputs.file(xdocs.file("package.json")).withPropertyName("package_json").withPathSensitivity(PathSensitivity.NONE)
     outputs.file(xdocs.file("yarn.lock")).withPropertyName("yarn.lock")
     outputs.dir(xdocs.dir("node_modules")).withPropertyName("node_modules")
-}
-
-val buildPrintableDoc = createAnakiaTask(
-    "buildPrintableDoc", baseDir = xdocs,
-    style = "stylesheets/site_printable.vsl",
-    velocityProperties = "$xdocs/velocity.properties",
-    projectFile = "stylesheets/printable_project.xml",
-    excludes = arrayOf("**/stylesheets/**", "extending.xml", "extending/*.xml", "node_modules", "package.json", "package-lock.json", "yarn.lock"),
-    includes = arrayOf("**/*.xml")
-)
-
-val previewPrintableDocs by tasks.registering(Copy::class) {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Creates preview of a printable documentation to build/docs/printable_preview"
-    into(layout.buildDirectory.dir("docs/printable_preview"))
-    CrLfSpec().run {
-        gitattributes(gitProps)
-        printableDocumentation()
-    }
 }
 
 val lastEditYear: String by rootProject.extra
@@ -542,34 +452,7 @@ fun CopySpec.siteLayout() {
     from(processSiteXslt)
     docCssAndImages()
     manuals()
-    into("fonts") {
-        from(
-            fileTree(xdocs.dir("node_modules/@fontsource/merriweather/files")) {
-                builtBy(yarn_install)
-            }
-        ) {
-            include("*400*normal*.woff2")
-        }
-        from(xdocs.dir("node_modules/@fortawesome/fontawesome-free/webfonts")) {
-            include("fa-brands*.woff2")
-        }
-    }
-    into("css") {
-        from(xdocs.dir("node_modules/@fontsource/merriweather")) {
-            include("400.css")
-            rename { "merriweather.css" }
-            filter {
-                it.replace("./files", "../fonts")
-            }
-        }
-        from(xdocs.dir("node_modules/@fortawesome/fontawesome-free/css")) {
-            include("fontawesome.min.css")
-            include("brands.min.css")
-            filter {
-                it.replace("../webfonts", "../fonts")
-            }
-        }
-    }
+    docFontsAndCss()
 }
 
 // See https://github.com/gradle/gradle/issues/10960
@@ -628,7 +511,12 @@ fun CrLfSpec.binaryLayout() = copySpec {
                 with(libsExt)
             }
         }
-        printableDocumentation()
+        into("docs") {
+            from(processSiteXslt)
+            docCssAndImages()
+            manuals()
+            docFontsAndCss()
+        }
         into("docs/api") {
             javadocs()
         }
