@@ -20,6 +20,7 @@
 /dist/
 /docs/
 /local/
+# We no longer use printable_docs folder, however, keep it here so everybody else do not acidentally commit it
 /printable_docs/
 /reports/
 /site/

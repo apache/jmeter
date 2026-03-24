@@ -136,8 +136,8 @@ a JMX file onto:
 ## Documentation
 
 The documentation available as of the date of this release is
-also included, in HTML format, in the [printable_docs](printable_docs) directory,
-and it may be browsed starting from the file called [index.html](printable_docs/index.html).
+also included, in HTML format, in the [docs](docs) directory,
+and it may be browsed starting from the file called [index.html](docs/index.html).
 
 ## Reporting a bug/enhancement
 
