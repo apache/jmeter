@@ -42,5 +42,6 @@ tasks.configureEach<Test> {
         value?.let { systemProperty(name, it) }
     }
     passProperty("junit.jupiter.execution.parallel.enabled", "true")
+    passProperty("junit.jupiter.execution.timeout.threaddump.enabled", "true")
     passProperty("junit.jupiter.execution.timeout.default", "2 m")
 }
