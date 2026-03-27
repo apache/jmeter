@@ -1088,6 +1088,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return The URL to be requested by this sampler.
      * @throws MalformedURLException if url is malformed
      */
+    @SuppressWarnings("deprecation")
     public URL getUrl() throws MalformedURLException {
         String path = this.getPath();
         // Hack to allow entire URL to be provided in host field

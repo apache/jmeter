@@ -245,6 +245,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
          * @param authScope information which destination we want to get credentials for
          * @return matching authorization information entry from the AuthManager
          */
+        @SuppressWarnings("deprecation")
         private Authorization getAuthorizationForAuthScope(AuthScope authScope) {
             if (authScope == null) {
                 return null;
@@ -287,6 +288,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final class PreemptiveAuthRequestInterceptor implements HttpRequestInterceptor {
         @Override
+        @SuppressWarnings("deprecation")
         public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
             HttpClientContext localContext = HttpClientContext.adapt(context);
             AuthManager authManager = (AuthManager) localContext.getAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER);
@@ -591,6 +593,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected HTTPSampleResult sample(URL url, String method,
             boolean areFollowingRedirect, int frameDepth) {
@@ -911,6 +914,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return the result of the execution of the httpRequest
      * @throws IOException
      */
+    @SuppressWarnings({"deprecation", "removal"})
     private CloseableHttpResponse executeRequest(final CloseableHttpClient httpClient,
             final HttpRequestBase httpRequest, final HttpContext localContext, final URL url)
             throws IOException {

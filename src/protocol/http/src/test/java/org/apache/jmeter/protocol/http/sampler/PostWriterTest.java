@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -905,7 +906,7 @@ public class PostWriterTest {
         private Map<String, String> properties = new HashMap<>();
 
         public StubURLConnection(String url) throws MalformedURLException {
-            super(new URL(url));
+            super(URI.create(url).toURL());
         }
 
         @Override

@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
@@ -102,14 +103,14 @@ public class TestHC4CookieManager extends JMeterTestCase {
      */
     @Test
     public void testDomainHandling() throws Exception {
-        URL url = new URL("http://jakarta.apache.org/");
+        URL url = URI.create("http://jakarta.apache.org/").toURL();
         man.addCookieFromHeader("test=1;domain=.jakarta.apache.org", url);
         assertNotNull(man.getCookieHeaderForURL(url));
     }
 
     @Test
     public void testAddCookieFromHeaderWithWildcard() throws Exception {
-        URL url = new URL("https://subdomain.bt.com/page");
+        URL url = URI.create("https://subdomain.bt.com/page").toURL();
         String headerLine = "SMTRYNO=1; path=/; domain=.bt.com";
         man.addCookieFromHeader(headerLine, url);
         assertEquals(1, man.getCookieCount());
@@ -125,7 +126,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
         }
 
         // we check that CookieManager returns the cookies for the main domain
-        URL urlMainDomain = new URL("https://www.bt.com/page");
+        URL urlMainDomain = URI.create("https://www.bt.com/page").toURL();
         cookies =
                 cookieHandler.getCookiesForUrl(man.getCookies(), urlMainDomain,
                         CookieManager.ALLOW_VARIABLE_COOKIES);
@@ -139,7 +140,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
 
     @Test
     public void testAddCookieFromHeaderWithNoWildcard() throws Exception {
-        URL url = new URL("https://subdomain.bt.com/page");
+        URL url = URI.create("https://subdomain.bt.com/page").toURL();
         String headerLine = "SMTRYNO=1; path=/";
         man.addCookieFromHeader(headerLine, url);
         assertEquals(1, man.getCookieCount());
@@ -155,7 +156,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
         }
 
         // we check that CookieManager returns the cookies for the main domain
-        URL urlMainDomain = new URL("https://www.bt.com/page");
+        URL urlMainDomain = URI.create("https://www.bt.com/page").toURL();
         cookies =
                 cookieHandler.getCookiesForUrl(man.getCookies(), urlMainDomain,
                         CookieManager.ALLOW_VARIABLE_COOKIES);
@@ -164,13 +165,13 @@ public class TestHC4CookieManager extends JMeterTestCase {
 
     @Test
     public void testAddCookieFromHeaderWithWildcard2() throws Exception {
-        URL url = new URL("https://www.bt.com/page");
+        URL url = URI.create("https://www.bt.com/page").toURL();
         String headerLine = "SMTRYNO=1; path=/; domain=.bt.com";
         man.addCookieFromHeader(headerLine, url);
 
         assertEquals(1, man.getCookieCount());
         HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
-        URL urlSubDomain = new URL("https://subdomain.bt.com/page");
+        URL urlSubDomain = URI.create("https://subdomain.bt.com/page").toURL();
 
         List<org.apache.http.cookie.Cookie> cookies =
                 cookieHandler.getCookiesForUrl(man.getCookies(), urlSubDomain,
@@ -185,14 +186,14 @@ public class TestHC4CookieManager extends JMeterTestCase {
 
     @Test
     public void testBug56358() throws Exception {
-        URL url = new URL("http://remote.com:10008/get/cookie");
+        URL url = URI.create("http://remote.com:10008/get/cookie").toURL();
         String headerLine = "test=value;Max-age=120;path=/;Version=1";
         man.setCookiePolicy(CookieSpecs.STANDARD);
         man.addCookieFromHeader(headerLine, url);
 
         assertEquals(1, man.getCookieCount());
         HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
-        URL urlSameDomainDifferentPort = new URL("http://remote.com:10001/test/me");
+        URL urlSameDomainDifferentPort = URI.create("http://remote.com:10001/test/me").toURL();
 
         List<org.apache.http.cookie.Cookie> cookies =
                 cookieHandler.getCookiesForUrl(man.getCookies(), urlSameDomainDifferentPort,
@@ -207,7 +208,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
 
     @Test
     public void testCrossDomainHandling() throws Exception {
-        URL url = new URL("http://jakarta.apache.org/");
+        URL url = URI.create("http://jakarta.apache.org/").toURL();
         assertEquals(0, man.getCookieCount()); // starts empty
         man.addCookieFromHeader("test=2;domain=.hc.apache.org", url);
         assertEquals(0, man.getCookieCount()); // should not be stored
@@ -221,16 +222,16 @@ public class TestHC4CookieManager extends JMeterTestCase {
      */
     @Test
     public void testSimilarHostNames() throws Exception {
-        URL url = new URL("http://ache.org/");
+        URL url = URI.create("http://ache.org/").toURL();
         man.addCookieFromHeader("test=1", url);
-        url = new URL("http://jakarta.apache.org/");
+        url = URI.create("http://jakarta.apache.org/").toURL();
         assertNull(man.getCookieHeaderForURL(url));
     }
 
     // Test session cookie is returned
     @Test
     public void testSessionCookie() throws Exception {
-        URL url = new URL("http://a.b.c/");
+        URL url = URI.create("http://a.b.c/").toURL();
         man.addCookieFromHeader("test=1", url);
         String s = man.getCookieHeaderForURL(url);
         assertNotNull(s);
@@ -240,7 +241,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     // Bug 2063
     @Test
     public void testCookieWithEquals() throws Exception {
-        URL url = new URL("http://a.b.c/");
+        URL url = URI.create("http://a.b.c/").toURL();
         man.addCookieFromHeader("NSCP_USER_LOGIN1_NEW=SHA=xxxxx", url);
         String s = man.getCookieHeaderForURL(url);
         assertNotNull(s);
@@ -253,7 +254,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     // Test Old cookie is not returned
     @Test
     public void testOldCookie() throws Exception {
-        URL url = new URL("http://a.b.c/");
+        URL url = URI.create("http://a.b.c/").toURL();
         man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-1990 00:00:00 GMT", url);
         String s = man.getCookieHeaderForURL(url);
         assertNull(s);
@@ -262,7 +263,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     // Test New cookie is returned
     @Test
     public void testNewCookie() throws Exception {
-        URL url = new URL("http://a.b.c/");
+        URL url = URI.create("http://a.b.c/").toURL();
         man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-2990 00:00:00 GMT", url);
         assertEquals(1, man.getCookieCount());
         String s = man.getCookieHeaderForURL(url);
@@ -273,7 +274,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     // Test HttpOnly cookie is parsed correctly
     @Test
     public void testHttpOnlyCookie() throws Exception {
-        URL url = new URL("http://a.b.c/");
+        URL url = URI.create("http://a.b.c/").toURL();
         man.addCookieFromHeader(
                 "mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/;"
                         + " Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly",
@@ -287,7 +288,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     // Test Secure cookie is parsed correctly and not transmitted for HTTP
     @Test
     public void testSecureCookieWithHttp() throws Exception {
-        URL url = new URL("http://a.b.c/");
+        URL url = URI.create("http://a.b.c/").toURL();
         man.addCookieFromHeader(
                 "mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/;"
                         + " Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly; secure",
@@ -300,7 +301,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     // Test Secure cookie is parsed correctly and transmitted for HTTPS
     @Test
     public void testSecureCookieWithHttps() throws Exception {
-        URL url = new URL("https://a.b.c/");
+        URL url = URI.create("https://a.b.c/").toURL();
         man.addCookieFromHeader(
                 "mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/;"
                         + " Expires=Tue, 07 Feb 2990 09:13:14 GMT; HttpOnly; secure",
@@ -316,7 +317,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     public void testCookies1() throws Exception {
         man.setCookiePolicy(CookieSpecs.DEFAULT);
         man.testStarted(); // ensure policy is picked up
-        URL url = new URL("http://a.b.c.d/testCookies1");
+        URL url = URI.create("http://a.b.c.d/testCookies1").toURL();
         man.addCookieFromHeader("test1=1; comment=\"how,now\", test2=2; version=1", url);
         assertEquals(2, man.getCookieCount());
         String s = man.getCookieHeaderForURL(url);
@@ -326,7 +327,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
 
     @Test
     public void testCookies2() throws Exception {
-        URL url = new URL("https://a.b.c.d/testCookies2");
+        URL url = URI.create("https://a.b.c.d/testCookies2").toURL();
         //The cookie in question does not have a version attribute mandatory for
         //standard (RFC 2109 and RFC 2965) cookies. Therefore it is parsed as
         //Netscape style cookie in which case comma is not considered a valid
@@ -343,7 +344,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     public void testCookies3() throws Exception {
         man.setCookiePolicy(CookieSpecs.DEFAULT);
         man.testStarted(); // ensure policy is picked up
-        URL url = new URL("https://a.b.c.d/testCookies2");
+        URL url = URI.create("https://a.b.c.d/testCookies2").toURL();
         man.addCookieFromHeader("test1=1;secure, test2=2;secure; version=1", url);
         assertEquals(2, man.getCookieCount());
         String s = man.getCookieHeaderForURL(url);
@@ -354,7 +355,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     // Test duplicate cookie handling
     @Test
     public void testDuplicateCookie() throws Exception {
-        URL url = new URL("http://a.b.c/");
+        URL url = URI.create("http://a.b.c/").toURL();
         man.addCookieFromHeader("test=1", url);
         String s = man.getCookieHeaderForURL(url);
         assertNotNull(s);
@@ -367,7 +368,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
 
     @Test
     public void testDuplicateCookie2() throws Exception {
-        URL url = new URL("http://a.b.c/");
+        URL url = URI.create("http://a.b.c/").toURL();
         man.addCookieFromHeader("test=1", url);
         man.addCookieFromHeader("test2=a", url);
         String s = man.getCookieHeaderForURL(url);
@@ -388,9 +389,9 @@ public class TestHC4CookieManager extends JMeterTestCase {
      */
     @Test
     public void testMissingPath0() throws Exception {
-        URL url = new URL("http://d.e.f/goo.html");
+        URL url = URI.create("http://d.e.f/goo.html").toURL();
         man.addCookieFromHeader("test=moo", url);
-        String s = man.getCookieHeaderForURL(new URL("http://d.e.f/"));
+        String s = man.getCookieHeaderForURL(URI.create("http://d.e.f/").toURL());
         assertNotNull(s);
         assertEquals("test=moo", s);
     }
@@ -401,9 +402,9 @@ public class TestHC4CookieManager extends JMeterTestCase {
      */
     @Test
     public void testMissingPath1() throws Exception {
-        URL url = new URL("http://d.e.f/moo.html");
+        URL url = URI.create("http://d.e.f/moo.html").toURL();
         man.addCookieFromHeader("test=moo", url);
-        String s = man.getCookieHeaderForURL(new URL("http://d.e.f/goo.html"));
+        String s = man.getCookieHeaderForURL(URI.create("http://d.e.f/goo.html").toURL());
         assertNotNull(s);
         assertEquals("test=moo", s);
     }
@@ -413,9 +414,9 @@ public class TestHC4CookieManager extends JMeterTestCase {
      */
     @Test
     public void testRootPath0() throws Exception {
-        URL url = new URL("http://d.e.f/goo.html");
+        URL url = URI.create("http://d.e.f/goo.html").toURL();
         man.addCookieFromHeader("test=moo;path=/", url);
-        String s = man.getCookieHeaderForURL(new URL("http://d.e.f/"));
+        String s = man.getCookieHeaderForURL(URI.create("http://d.e.f/").toURL());
         assertNotNull(s);
         assertEquals("test=moo", s);
     }
@@ -425,9 +426,9 @@ public class TestHC4CookieManager extends JMeterTestCase {
      */
     @Test
     public void testRootPath1() throws Exception {
-        URL url = new URL("http://d.e.f/moo.html");
+        URL url = URI.create("http://d.e.f/moo.html").toURL();
         man.addCookieFromHeader("test=moo;path=/", url);
-        String s = man.getCookieHeaderForURL(new URL("http://d.e.f/goo.html"));
+        String s = man.getCookieHeaderForURL(URI.create("http://d.e.f/goo.html").toURL());
         assertNotNull(s);
         assertEquals("test=moo", s);
     }
@@ -435,32 +436,32 @@ public class TestHC4CookieManager extends JMeterTestCase {
     // Test cookie matching
     @Test
     public void testCookieMatching() throws Exception {
-        URL url = new URL("http://a.b.c:8080/TopDir/fred.jsp");
+        URL url = URI.create("http://a.b.c:8080/TopDir/fred.jsp").toURL();
         man.addCookieFromHeader("ID=abcd; Path=/TopDir", url);
         String s = man.getCookieHeaderForURL(url);
         assertNotNull(s);
         assertEquals("ID=abcd", s);
 
-        url = new URL("http://a.b.c:8080/other.jsp");
+        url = URI.create("http://a.b.c:8080/other.jsp").toURL();
         s = man.getCookieHeaderForURL(url);
         assertNull(s);
 
-        url = new URL("http://a.b.c:8080/TopDir/suub/another.jsp");
+        url = URI.create("http://a.b.c:8080/TopDir/suub/another.jsp").toURL();
         s = man.getCookieHeaderForURL(url);
         assertNotNull(s);
 
-        url = new URL("http://a.b.c:8080/TopDir");
+        url = URI.create("http://a.b.c:8080/TopDir").toURL();
         s = man.getCookieHeaderForURL(url);
         assertNotNull(s);
 
-        url = new URL("http://a.b.d/");
+        url = URI.create("http://a.b.d/").toURL();
         s = man.getCookieHeaderForURL(url);
         assertNull(s);
     }
 
     @Test
     public void testCookieOrdering1() throws Exception {
-        URL url = new URL("http://order.now/sub1/moo.html");
+        URL url = URI.create("http://order.now/sub1/moo.html").toURL();
         man.addCookieFromHeader("test1=moo1;path=/", url);
         // Waiting for https://issues.apache.org/jira/browse/HTTPCLIENT-1705
         man.addCookieFromHeader("test2=moo2;path=/sub1", url);
@@ -477,7 +478,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
 
     @Test
     public void testCookieOrdering2() throws Exception {
-        URL url = new URL("http://order.now/sub1/moo.html");
+        URL url = URI.create("http://order.now/sub1/moo.html").toURL();
         man.addCookieFromHeader("test1=moo1;", url);
         man.addCookieFromHeader("test2=moo2;path=/sub1", url);
         man.addCookieFromHeader("test2=moo3;path=/", url);
@@ -504,7 +505,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     public void testCookiePolicy2109() throws Exception {
         man.setCookiePolicy(org.apache.http.client.params.CookiePolicy.RFC_2109);
         man.testStarted(); // ensure policy is picked up
-        URL url = new URL("http://order.now/sub1/moo.html");
+        URL url = URI.create("http://order.now/sub1/moo.html").toURL();
         man.addCookieFromHeader("test1=moo1;", url);
         man.addCookieFromHeader("test2=moo2;path=/sub1", url);
         man.addCookieFromHeader("test2=moo3;path=/", url);
@@ -531,7 +532,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     public void testCookiePolicyNetscape() throws Exception {
         man.setCookiePolicy(CookieSpecs.NETSCAPE);
         man.testStarted(); // ensure policy is picked up
-        URL url = new URL("http://www.order.now/sub1/moo.html");
+        URL url = URI.create("http://www.order.now/sub1/moo.html").toURL();
         man.addCookieFromHeader("test1=moo1;", url);
         man.addCookieFromHeader("test2=moo2;path=/sub1", url);
         man.addCookieFromHeader("test2=moo3;path=/", url);
@@ -559,7 +560,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
     public void testCookiePolicyIgnore() throws Exception {
         man.setCookiePolicy(CookieSpecs.IGNORE_COOKIES);
         man.testStarted(); // ensure policy is picked up
-        URL url = new URL("http://order.now/sub1/moo.html");
+        URL url = URI.create("http://order.now/sub1/moo.html").toURL();
         man.addCookieFromHeader("test1=moo1;", url);
         man.addCookieFromHeader("test2=moo2;path=/sub1", url);
         man.addCookieFromHeader("test2=moo3;path=/", url);
