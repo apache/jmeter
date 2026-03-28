@@ -1,5 +1,8 @@
 name: CI
 
+# Forks: skip all jobs (secrets, dependency graph, etc. are not fork-friendly).
+# PRs into apache/jmeter still run CI in the base repo, where github.repository is apache/jmeter.
+
 on:
   push:
     branches:
@@ -19,6 +22,7 @@ concurrency:
 
 jobs:
   matrix_prep:
+    if: github.repository == 'apache/jmeter'
     name: Matrix Preparation
     runs-on: ubuntu-latest
     outputs:
@@ -33,6 +37,7 @@ jobs:
           node .github/workflows/matrix.js
 
   test:
+    if: github.repository == 'apache/jmeter'
     needs: matrix_prep
     name: '${{ matrix.name }}'
     runs-on: ${{ matrix.os }}
@@ -89,6 +94,7 @@ jobs:
         DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
 
   errorprone:
+    if: github.repository == 'apache/jmeter'
     name: 'Error Prone (JDK 21)'
     runs-on: ubuntu-latest
     steps:
