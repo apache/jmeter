@@ -66,6 +66,9 @@ dependencies {
     implementation("com.miglayout:miglayout-swing")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("org.brotli:dec") {
+        because("BrotliDecoder for HTTP response decompression")
+    }
     testImplementation(testFixtures(projects.src.core))
     testImplementation(testFixtures(projects.src.testkitWiremock))
     testImplementation("org.wiremock:wiremock")

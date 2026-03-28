@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -585,13 +586,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 res.setEncodingAndType(ct);
             }
             HttpEntity entity = httpResponse.getEntity();
-            if (entity != null) {
+            try (InputStream instream = entity.getContent()) {
                 Header contentEncodingHeader = entity.getContentEncoding();
-                if (contentEncodingHeader != null) {
-                    res.setResponseData(EntityUtils.toByteArray(entity), contentEncodingHeader.getValue());
-                } else {
-                    res.setResponseData(EntityUtils.toByteArray(entity));
-                }
+                String contentEncoding = contentEncodingHeader != null ? contentEncodingHeader.getValue() : null;
+                readResponse(res, instream, entity.getContentLength(), contentEncoding);
             }
 
             res.sampleEnd(); // Done with the sampling proper.

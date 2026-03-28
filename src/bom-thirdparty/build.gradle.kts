@@ -43,7 +43,7 @@ dependencies {
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
-        api("com.fifesoft:rsyntaxtextarea:3.6.1")
+        api("com.fifesoft:rsyntaxtextarea:3.6.0")
         api("com.github.ben-manes.caffeine:caffeine:3.2.3")
         api("com.github.weisj:darklaf-core:3.1.1")
         api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.4.1")
@@ -54,7 +54,7 @@ dependencies {
         api("com.google.errorprone:error_prone_annotations:2.44.0")
         api("com.helger.commons:ph-commons:12.1.0")
         api("com.helger:ph-css:8.1.0")
-        api("com.fasterxml.woodstox:woodstox-core:7.1.1")
+        api("com.fasterxml.woodstox:woodstox-core:7.1.0")
         api("com.jayway.jsonpath:json-path:2.10.0")
         api("com.miglayout:miglayout-core:11.4.2")
         api("com.miglayout:miglayout-swing:11.4.2")

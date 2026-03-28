@@ -80,27 +80,16 @@ public class TreeCloner implements HashTreeTraverser {
      * @return Object node (clone or not)
      */
     protected Object addNodeToTree(Object node) {
-        if (node instanceof TestElement testElement) {
-            if (honourNoThreadClone && node instanceof NoThreadClone) {
-                // Share completely - no clone
-                newTree.add(objects, node);
-                return node;
-            } else if (LIGHTWEIGHT_CLONE_ENABLED
-                    && node instanceof LightweightClone
-                    && testElement instanceof AbstractTestElement abstractTestElement
-                    && !abstractTestElement.hasVariableProperties()) {
-                // Share properties, new instance with fresh transient state
-                // Only use lightweight clone for elements WITHOUT variables
-                // Elements with variables need full cloning for proper per-thread evaluation
-                Object newNode = abstractTestElement.lightweightClone();
-                newTree.add(objects, newNode);
-                return newNode;
-            } else {
-                // Full deep clone
-                Object newNode = testElement.clone();
-                newTree.add(objects, newNode);
-                return newNode;
-            }
+        if ( (node instanceof TestElement testElement) // Check can cast for clone
+           // Don't clone NoThreadClone unless honourNoThreadClone == false
+          && !(honourNoThreadClone && node instanceof NoThreadClone)
+        ) {
+            Object newNode = testElement.clone();
+            newTree.add(objects, newNode);
+            return newNode;
+        } else {
+            newTree.add(objects, node);
+            return node;
         }
         newTree.add(objects, node);
         return node;

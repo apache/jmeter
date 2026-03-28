@@ -17,10 +17,7 @@
 
 package org.apache.jmeter.samplers;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -820,13 +817,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         }
         if (contentEncoding != null && responseData.length > 0) {
             try {
-                return switch (contentEncoding.toLowerCase(Locale.ROOT)) {
-                    case GZIP_ENCODING -> decompressGzip(responseData);
-                    case X_GZIP_ENCODING -> decompressGzip(responseData);
-                    case DEFLATE_ENCODING -> decompressDeflate(responseData);
-                    case BROTLI_ENCODING -> decompressBrotli(responseData);
-                    default -> responseData;
-                };
+                return ResponseDecoderRegistry.decode(contentEncoding, responseData);
             } catch (IOException e) {
                 log.warn("Failed to decompress response data", e);
             }
@@ -1707,54 +1698,13 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     }
 
     /**
-     * Sets the response data and its compression encoding.
+     * Sets the response data and its contentEncoding.
      * @param data The response data
-     * @param encoding The content encoding (e.g. gzip, deflate)
+     * @param contentEncoding The content contentEncoding (e.g. gzip, deflate)
      */
-    public void setResponseData(byte[] data, String encoding) {
+    public void setResponseData(byte[] data, String contentEncoding) {
         responseData = data == null ? EMPTY_BA : data;
-        contentEncoding = encoding;
+        this.contentEncoding = contentEncoding;
         responseDataAsString = null;
-    }
-
-    private static byte[] decompressGzip(byte[] in) throws IOException {
-        try (GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(in));
-             ByteArrayOutputStream out = threadLocalBAOS.get()) {
-            out.reset();
-            byte[] buf = new byte[8192];
-            int len;
-            while ((len = gis.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            return out.toByteArray();
-        }
-    }
-
-    private static byte[] decompressDeflate(byte[] in) throws IOException {
-        Inflater inflater = threadLocalInflater.get();
-        inflater.reset();
-        try (InputStream iis = new InflaterInputStream(new ByteArrayInputStream(in), inflater);
-             ByteArrayOutputStream out = threadLocalBAOS.get()) {
-            out.reset();
-            byte[] buf = new byte[8192];
-            int len;
-            while ((len = iis.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            return out.toByteArray();
-        }
-    }
-
-    private static byte[] decompressBrotli(byte[] in) throws IOException {
-        try (InputStream bis = new org.brotli.dec.BrotliInputStream(new ByteArrayInputStream(in));
-             ByteArrayOutputStream out = threadLocalBAOS.get()) {
-            out.reset();
-            byte[] buf = new byte[8192];
-            int len;
-            while ((len = bis.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            return out.toByteArray();
-        }
     }
 }

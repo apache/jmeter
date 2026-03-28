@@ -320,9 +320,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     @Override
     public Object clone() {
         AccessLogSampler s = (AccessLogSampler) super.clone();
-        cloneFilterAndParser(s);
-        return s;
-    }
+        if (started && StringUtilities.isNotBlank(filterClassName)) {
 
     /**
      * {@inheritDoc}

@@ -218,16 +218,12 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     /**
      * Reads the response from the URL connection.
      *
-     * @param conn
-     *            URL from which to read response
-     * @param res
-     *            {@link SampleResult} to read response into
-     * @return response content
-     * @exception IOException
-     *                if an I/O exception occurs
+     * @param res  {@link SampleResult} to read response into
+     * @param conn URL from which to read response
+     * @throws IOException if an I/O exception occurs
      */
-    protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
-        InputStream in = null;
+    protected void readResponse(SampleResult res, HttpURLConnection conn) throws IOException {
+        InputStream in;
 
         final long contentLength = conn.getContentLength();
         if ((contentLength == 0)
@@ -235,21 +231,19 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             log.info("Content-Length: 0, not reading http-body");
             res.setResponseHeaders(getResponseHeaders(conn));
             res.latencyEnd();
-            return NULL_BA;
+            res.setResponseData(NULL_BA);
+            return;
         }
 
-        // works OK even if ContentEncoding is null
-        String contentEncoding = conn.getContentEncoding();
-        CountingInputStream instream = null;
+        CountingInputStream counterStream = null;
         try {
-            instream = new CountingInputStream(conn.getInputStream());
-            in = instream;
+            counterStream = new CountingInputStream(conn.getInputStream());
+            in = counterStream;
         } catch (IOException e) {
-            if (! (e.getCause() instanceof FileNotFoundException))
-            {
+            if (!(e.getCause() instanceof FileNotFoundException)) {
                 log.error("readResponse: {}", e.toString());
                 Throwable cause = e.getCause();
-                if (cause != null){
+                if (cause != null) {
                     log.error("Cause: {}", cause.toString());
                     if(cause instanceof Error error) {
                         throw error;
@@ -264,7 +258,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 }
                 res.setResponseHeaders(getResponseHeaders(conn));
                 res.latencyEnd();
-                return NULL_BA;
+                res.setResponseData(NULL_BA);
+                return;
             }
 
             if(log.isInfoEnabled()) {
@@ -273,17 +268,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
             in = errorStream;
         }
-        // N.B. this closes 'in'
-        if (in == null) {
-            throw new IOException("Unable to obtain input stream or error stream");
+
+        readResponse(res, in, contentLength, conn.getContentEncoding());
+        if (counterStream != null) {
+            res.setBodySize(counterStream.getBytesRead());
         }
-        byte[] responseData = super.readResponse(res, in, contentLength);
-        if (instream != null) {
-            res.setBodySize(instream.getBytesRead());
-            instream.close();
-        }
-        res.setResponseData(responseData, contentEncoding);
-        return responseData;
     }
 
     /**
@@ -549,15 +538,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 res.setQueryString(putBody);
             }
             // Request sent. Now get the response:
-            byte[] responseData = readResponse(conn, res);
+            readResponse(res, conn);
 
             res.sampleEnd();
             // Done with the sampling proper.
-
-            // Now collect the results into the HTTPSampleResult:
-
-            res.setResponseData(responseData);
-
             int errorLevel = conn.getResponseCode();
             String respMsg = conn.getResponseMessage();
             String hdr=conn.getHeaderField(0);
