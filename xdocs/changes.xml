@@ -71,17 +71,50 @@ Summary
         Timer relative to start of Thread Group instead of the start of the test.</li>
     <li><issue>6357</issue><pr>6358</pr> Ensure writable directories when copying template files while report generation.</li>
     <li><pr>6509</pr><pr>6675</pr> Synchronize recent file menu across multiple JVMs. Contributed by Corneliu C (https://github.com/KingRabbid)</li>
+    <li><pr>6596</pr>Fallback to English locale when loading test plans that use string values for enum properties, so old sample plans load correctly even with non-English locales.</li>
   </ul>
 
   <h3>HTTP Samplers and Test Script Recorder</h3>
   <ul>
     <li><pr>5891</pr>Skip Internet Explorer 6-9 conditional comment processing when fetching resource links</li>
+    <li><issue>5466</issue>Allow enabling or disabling individual HTTP request arguments in the HTTP Sampler UI. Contributed by Pasquale Pochop (github.com/pochopsp)</li>
+    <li><issue>6250</issue>Avoid adding "; charset=" automatically to <code>multipart/form-data</code> requests to align behavior with modern HTTP clients.</li>
+    <li><issue>6080</issue>Preserve the original HTTP method when following 307 and 308 redirects according to the HTTP specification. Contributed by LeeJiWon (github.com/dlwldnjs1009)</li>
+    <li><issue>6267</issue><pr>6268</pr>Add a space between key and value after <code>:</code> in View Results Tree &gt; Sampler result tab for better readability.</li>
+  </ul>
+
+  <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+  <ul>
+    <li><issue>6448</issue>Support trailing empty default values in JSON Extractor so expressions like <code>${VAR:-}</code> are handled correctly. Contributed by Raul Almeida (github.com/ratacolita)</li>
+    <li><pr>6596</pr>Add a schema for ConstantThroughputTimer and use it to ensure required properties are initialized properly.</li>
+  </ul>
+
+  <h3>Non-functional changes</h3>
+  <ul>
+    <li>Update Apache Tika to 3.x from 1.x to use the latest parser engine.</li>
+    <li>Update Saxon-HE to 12.x from 11.x for XSLT and XQuery processing.</li>
+    <li>Update Groovy to 5.x for the Groovy-based scripting environment.</li>
+    <li>Update Bouncy Castle to 1.82 for cryptographic operations.</li>
+    <li>Update json-path to 2.10.0 for JSON query expressions.</li>
+    <li>Update Neo4j Java driver to 6.x for Bolt-based database tests.</li>
+    <li>Update Rhino JavaScript engine to 1.8.0 for JSR-223 JavaScript execution.</li>
+  </ul>
+
+  <h3>UI</h3>
+  <ul>
+    <li><pr>6333</pr>Apply HiDPI mode automatically when setting up the GUI so JMeter looks sharp on high-resolution displays. Contributed by Gabriele Coletta (github.com/gdmg92)</li>
+    <li><pr>6656</pr>Replace the previous feather icon with the new oak leaf in the JMeter logo.</li>
   </ul>
 
   <ch_section>Bug fixes</ch_section>
   <h3>General</h3>
   <ul>
     <li><pr>6654</pr><issue>6611</issue>Support JDK 25 and above for result collectors with empty file names</li>
+    <li>Trim whitespace when parsing numeric JMeter properties so accidental spaces do not silently change configuration values.</li>
+    <li><pr>6372</pr>Fix KeyManager logging when using CLI mode so keystore passwords are not incorrectly reported as missing. Contributed by Patrick Uiterwijk (patrick at puiterwijk.org)</li>
+    <li><issue>5937</issue>Remove deprecated Log4j package scanning and configure plugin metadata processing to improve startup time and avoid deprecation warnings. Contributed by Piotr P. Karwasz (github.com/piotrgithub)</li>
+    <li><pr>6620</pr>Fix report generation paths so dashboard output files are created in the correct location after internal refactoring.</li>
+    <li><bug>6456</bug>Handle malformed percent-encoded URLs gracefully when recording HTTP traffic, logging a warning instead of failing the recording.</li>
   </ul>
  <!--  =================== Thanks =================== -->
 
@@ -89,6 +122,11 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
+  <li>Raul Almeida (github.com/ratacolita)</li>
+  <li>Pasquale Pochop (github.com/pochopsp)</li>
+  <li>Gabriele Coletta (github.com/gdmg92)</li>
+  <li>Patrick Uiterwijk (patrick at puiterwijk.org)</li>
+  <li>Piotr P. Karwasz (github.com/piotrgithub)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
@@ -134,41 +172,24 @@ See  <bugzilla>56357</bugzilla> for details.
 </li>
 
 <li>
-Since Java 11 the JavaScript implementation <a href="https://openjdk.java.net/jeps/335">Nashorn has been deprecated</a>.
-Java will emit the following deprecation warnings, if you are using JavaScript based on Nashorn.
-<source>
-Warning: Nashorn engine is planned to be removed from a future JDK release
-</source>
-To silence these warnings, add <code>-Dnashorn.args=--no-deprecation-warning</code> to your Java arguments.
-That can be achieved by setting the enviroment variable <code>JVM_ARGS</code>
-<source>
-export JVM_ARGS="-Dnashorn.args=--no-deprecation-warning"
-</source>
-</li>
-
-<li>
-With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jeps/372">Nashorn has been removed</a>. To add back a JSR-223 compatible JavaScript engine you have two options:
-  <dl>
-    <dt>Use Mozilla Rhino</dt>
-    <dd>Copy <a href="https://github.com/mozilla/rhino/releases/download/Rhino1_7_14_Release/rhino-engine-1.7.14.jar">rhino-engine-1.7.14.jar</a> into <code>$JMETER_HOME/lib/ext</code>.</dd>
-    <dt>Use OpenJDK Nashorn</dt>
-    <dd>
-      The OpenJDK Nashorn implementation comes as a module. To use it, you will have to download it and add it to the module path. A hacky way to download the version 15.0 (or later) and its dependencies and set the module path is outlined below:
-      <source>
+With Java 15 the JavaScript implementation <a href="https://openjdk.java.net/jeps/372">Nashorn has been removed</a>.
+JMeter now ships with a JSR-223 compatible JavaScript engine by default (Mozilla Rhino 1.8.0),
+so you do not need to download Rhino separately anymore.<br></br>
+If you prefer to use Nashorn instead, you can still add it as a module. One way to download
+version 15.7 (or later) and its dependencies and set the module path is outlined below:
+  <source>
 mkdir lib/modules
 pushd lib/modules
-wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.4/nashorn-core-15.4.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.6/asm-9.6.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.6/asm-commons-9.6.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.6/asm-util-9.6.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.6/asm-tree-9.6.jar
-wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.6/asm-analysis-9.6.jar
+wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.7/nashorn-core-15.7.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm/9.9.1/asm-9.9.1.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.9.1/asm-commons-9.9.1.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.9.1/asm-util-9.9.1.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.9.1/asm-tree-9.9.1.jar
+wget https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.9.1/asm-analysis-9.9.1.jar
 popd
 export JVM_ARGS="--module-path $PWD/lib/modules"
 ./bin/jmeter
-      </source>
-    </dd>
-  </dl>
+  </source>
 </li>
 
 </ul>
