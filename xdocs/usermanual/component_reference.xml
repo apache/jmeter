@@ -4471,11 +4471,11 @@ GUI that they can use while developing new JMeter components.</p>
     The pattern strings are:
     </p>
     <ul>
-    <li><code>Contains</code>, <code>Matches</code>: Perl5-style regular expressions</li>
+    <li><code>Contains</code>, <code>Matches</code>: Java regular expressions</li>
     <li><code>Equals</code>, <code>Substring</code>: plain text, case-sensitive</li>
     </ul>
     <p>
-    A summary of the pattern matching characters can be found at <a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html">ORO Perl5 regular expressions.</a>
+    A summary of the pattern matching characters can be found at <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html">Java regular expressions.</a>
     </p>
     <p>You can also choose whether the strings will be expected
 to <b>match</b> the entire response, or if the response is only expected to <b>contain</b> the
@@ -6902,7 +6902,7 @@ To disable the redirect detection, set the property <code>proxy.redirect.disabli
 </p>
 
 <h4>Includes and Excludes</h4>
-<p>The <b>include and exclude patterns</b> are treated as regular expressions (using Jakarta ORO).
+<p>The <b>include and exclude patterns</b> are treated as regular expressions.
 They will be matched against the host name, port (actual or implied), path and query (if any) of each browser request.
 If the URL you are browsing is <br></br>
 "<code>http://localhost/jmeter/index.html?username=xxxx</code>",<br></br>
@@ -6992,7 +6992,7 @@ place User Defined Variables directly within the HTTP(S) Test Script Recorder to
 If you define the variable <code>WEB</code> with the value <code>www</code>, for example,
 the string <code>www</code> will be replaced by <code>${WEB}</code> wherever it is found.
 To avoid this happening everywhere, set the "<code>Regex Matching</code>" check-box.
-This tells the proxy server to treat values as Regexes (using the perl5 compatible regex matchers provided by ORO).</p>
+This tells the proxy server to treat values as Regexes.</p>
 
 <p>If "<code>Regex Matching</code>" is selected every variable will be compiled into a perl compatible regex enclosed in
 <code>\b(</code> and <code>)\b</code>. That way each match will start and end at a word boundary.</p>
@@ -7015,12 +7015,8 @@ The parens are necessary, since the normally added boundary characters will prev
 <code>$</code> to match.</p>
 
 <p>If you want to match <code>/images</code> at the start of a string only, use the value <code>(^/images)</code>.
-Jakarta ORO also supports zero-width look-ahead, so one can match <code>/images/&hellip;</code>
+Javas Regex implementation also supports zero-width look-ahead, so one can match <code>/images/&hellip;</code>
 but retain the trailing <code>/</code> in the output by using <code>(^/images(?=/))</code>.</p>
-
-<note>
-Note that the current version of Jakarta ORO does not support look-behind - i.e. <code>(?&lt;=&hellip;)</code> or <code>(?&lt;!&hellip;)</code>.
-</note>
 
 <p>Look out for overlapping matchers. For example the value <code>.*</code> as a regex in a variable named
 <code>regex</code> will partly match a previous replaced variable, which will result in something like
