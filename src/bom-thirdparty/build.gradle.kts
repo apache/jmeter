@@ -28,7 +28,7 @@ javaPlatform {
 dependencies {
     api(platform("org.apache.groovy:groovy-bom:5.0.4"))
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"))
-    api(platform("com.fasterxml.jackson:jackson-bom:2.20.1"))
+    api(platform("com.fasterxml.jackson:jackson-bom:2.21.2"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
@@ -43,7 +43,7 @@ dependencies {
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
-        api("com.fifesoft:rsyntaxtextarea:3.6.1")
+        api("com.fifesoft:rsyntaxtextarea:3.6.2")
         api("com.github.ben-manes.caffeine:caffeine:3.2.3")
         api("com.github.weisj:darklaf-core:3.1.1")
         api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.4.1")
@@ -52,8 +52,8 @@ dependencies {
         api("com.google.auto.service:auto-service-annotations:1.1.1")
         api("com.google.auto.service:auto-service:1.1.1")
         api("com.google.errorprone:error_prone_annotations:2.44.0")
-        api("com.helger.commons:ph-commons:12.1.0")
-        api("com.helger:ph-css:8.1.0")
+        api("com.helger.commons:ph-commons:12.1.5")
+        api("com.helger:ph-css:8.1.1")
         api("com.fasterxml.woodstox:woodstox-core:7.1.1")
         api("com.jayway.jsonpath:json-path:2.10.0")
         api("com.miglayout:miglayout-core:11.4.3")
@@ -68,9 +68,9 @@ dependencies {
         api("commons-lang:commons-lang:2.6") {
             because("User might still rely on commons-lang")
         }
-        api("commons-logging:commons-logging:1.3.5")
+        api("commons-logging:commons-logging:1.3.6")
         api("commons-net:commons-net:3.12.0")
-        api("dnsjava:dnsjava:3.6.3")
+        api("dnsjava:dnsjava:3.6.4")
         api("io.burt:jmespath-core:0.6.0")
         api("io.burt:jmespath-jackson:0.6.0")
         api("jakarta.jms:jakarta.jms-api:3.1.0")
@@ -137,7 +137,8 @@ dependencies {
         api("org.jodd:jodd-log:5.1.6")
         api("org.jodd:jodd-props:6.0.2")
         api("org.jsoup:jsoup:1.21.2")
-        api("org.mozilla:rhino:1.8.0")
+        api("org.mozilla:rhino:1.9.1")
+        api("org.mozilla:rhino-engine:1.9.1")
         api("org.neo4j.driver:neo4j-java-driver:6.0.2")
         api("org.slf4j:jcl-over-slf4j:1.7.36")
         api("org.slf4j:slf4j-api:1.7.36")

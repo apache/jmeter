@@ -49,7 +49,7 @@ public class Help extends AbstractAction {
 
     private static final String HELP_DOCS = "file:///"  // $NON-NLS-1$
         + JMeterUtils.getJMeterHome()
-        + "/printable_docs/usermanual/"; // $NON-NLS-1$
+        + "/docs/usermanual/"; // $NON-NLS-1$
 
     private static final String HELP_COMPONENTS = HELP_DOCS + "component_reference.html"; // $NON-NLS-1$
 

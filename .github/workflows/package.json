@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vlsi/github-actions-random-matrix": "2.0.0"
+  }
+}

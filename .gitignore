@@ -20,6 +20,7 @@
 /dist/
 /docs/
 /local/
+# We no longer use printable_docs folder, however, keep it here so everybody else do not acidentally commit it
 /printable_docs/
 /reports/
 /site/
@@ -83,6 +84,7 @@ jmeter-fb.*
 *.iml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+node_modules
 hs_err_pid*
 # other jvm related files
 .attach_*

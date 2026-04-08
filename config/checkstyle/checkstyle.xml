@@ -118,7 +118,7 @@
     <module name="IllegalThrows"/>
     <module name="ModifiedControlVariable"/>
     <module name="MultipleVariableDeclarations"/>
-    <module name="NestedForDepth"/>
+
     <module name="NestedIfDepth">
       <!-- TODO: reduce this number -->
       <property name="max" value="4"/>

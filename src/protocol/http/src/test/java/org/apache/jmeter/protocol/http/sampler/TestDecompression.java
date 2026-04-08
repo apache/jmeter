@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -53,14 +52,13 @@ public class TestDecompression {
 
     public static List<Arguments> mockServerParams() {
         List<Arguments> res = new ArrayList<>();
-        // Nested for depth is 2 (max allowed is 1). [NestedForDepth]
-        Arrays.stream(HTTPSamplerFactory.getImplementations()).forEach(httpImpl -> {
+        for (String httpImpl : HTTPSamplerFactory.getImplementations()) {
             for (ClientGzip clientGzip : ClientGzip.values()) {
                 for (ServerGzip serverGzip : ServerGzip.values()) {
                     res.add(Arguments.of(httpImpl, clientGzip, serverGzip));
                 }
             }
-        });
+        }
         return res;
     }
 

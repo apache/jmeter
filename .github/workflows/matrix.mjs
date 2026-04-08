@@ -1,10 +1,10 @@
 // The script generates a random subset of valid jdk, os, timezone, and other axes.
-// You can preview the results by running "node matrix.js"
+// You can preview the results by running "node matrix.mjs"
 // See https://github.com/vlsi/github-actions-random-matrix
-let fs = require('fs');
-let os = require('os');
-let {MatrixBuilder} = require('./matrix_builder');
-const matrix = new MatrixBuilder();
+import { appendFileSync } from 'fs';
+import { EOL } from 'os';
+import { createGitHubMatrixBuilder } from '@vlsi/github-actions-random-matrix/github';
+const { matrix, random } = createGitHubMatrixBuilder();
 matrix.addAxis({
   name: 'java_distribution',
   values: [
@@ -130,7 +130,7 @@ include.forEach(v => {
       v.oracle_java_website = v.java_version === eaJava ? 'jdk.java.net' : 'oracle.com';
   }
   v.non_ea_java_version = v.java_version === eaJava ? '' : v.java_version;
-  if (v.java_distribution !== 'semeru' && Math.random() > 0.5) {
+  if (v.java_distribution !== 'semeru' && random() > 0.5) {
     // The following options randomize instruction selection in JIT compiler
     // so it might reveal missing synchronization
     v.name += ', stress JIT';
@@ -164,7 +164,7 @@ console.log(include);
 
 let filePath = process.env['GITHUB_OUTPUT'] || '';
 if (filePath) {
-    fs.appendFileSync(filePath, `matrix<<MATRIX_BODY${os.EOL}${JSON.stringify({include})}${os.EOL}MATRIX_BODY${os.EOL}`, {
+    appendFileSync(filePath, `matrix<<MATRIX_BODY${EOL}${JSON.stringify({include})}${EOL}MATRIX_BODY${EOL}`, {
         encoding: 'utf8'
     });
 }

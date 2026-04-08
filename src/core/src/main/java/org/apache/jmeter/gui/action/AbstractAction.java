@@ -89,6 +89,10 @@ public abstract class AbstractAction implements Command {
         SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
         tree.traverse(resultListeners);
         for (ResultCollector rc : resultListeners.getSearchResults()) {
+            if ("".equals(rc.getFilename())) {
+                log.debug("Skip result collector ({}) as it has empty filename", rc.getName());
+                continue;
+            }
             File f = new File(rc.getFilename());
             if (f.exists()) {
                 switch (actionOnFile) {
