@@ -295,6 +295,7 @@ public class ParseCurlCommandAction extends AbstractAction implements MenuCreato
      * @return {@link HTTPSamplerProxy}
      * @throws MalformedURLException
      */
+    @SuppressWarnings("deprecation")
     private HTTPSamplerProxy createSampler(Request request, String commentText) throws MalformedURLException {
         HTTPSamplerProxy httpSampler = (HTTPSamplerProxy) HTTPSamplerFactory
                 .newInstance(HTTPSamplerFactory.DEFAULT_CLASSNAME);
