@@ -19,11 +19,20 @@ package org.apache.jmeter.config;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.engine.util.LightweightClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 
-public class ConfigTestElement extends AbstractTestElement implements Serializable, ConfigElement {
+/**
+ * Base class for configuration elements that can share properties across threads.
+ * <p>
+ * ConfigTestElements implementing {@link LightweightClone} will only use lightweight
+ * cloning if they have no properties containing JMeter variables (${...}) or functions (__()).
+ * This provides significant memory savings for elements like HeaderManager with static data.
+ * </p>
+ */
+public class ConfigTestElement extends AbstractTestElement implements Serializable, ConfigElement, LightweightClone {
     private static final long serialVersionUID = 240L;
 
     public static final String USERNAME = "ConfigTestElement.username";

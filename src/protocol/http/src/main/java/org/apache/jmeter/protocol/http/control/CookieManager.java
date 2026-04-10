@@ -126,6 +126,16 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
         return clone;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Object lightweightClone() {
+        CookieManager clone = (CookieManager) super.lightweightClone();
+        // Copy transient fields that are initialized in testStarted()
+        clone.initialCookies = initialCookies;
+        clone.cookieHandler = cookieHandler;
+        return clone;
+    }
+
     public String getPolicy() {
         return getPropertyAsString(POLICY, DEFAULT_POLICY);
     }

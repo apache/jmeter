@@ -32,7 +32,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.EnumUtils;
+import org.apache.jorphan.locale.ResourceKeyed;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
@@ -70,20 +70,20 @@ import org.slf4j.LoggerFactory;
 public class CSVDataSet extends ConfigTestElement
     implements TestBean, LoopIterationListener, NoConfigMerge {
 
-    public enum ShareMode {
+    public enum ShareMode implements ResourceKeyed {
         ALL("shareMode.all"),
         GROUP("shareMode.group"),
         THREAD("shareMode.thread");
 
-        private final String value;
+        private final String propertyName;
 
-        ShareMode(String value) {
-            this.value = value;
+        ShareMode(String propertyName) {
+            this.propertyName = propertyName;
         }
 
         @Override
-        public String toString() {
-            return value;
+        public String getResourceKey() {
+            return propertyName;
         }
     }
 

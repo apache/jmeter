@@ -115,6 +115,17 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
         return clone;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object lightweightClone() {
+        JavaSampler clone = (JavaSampler) super.lightweightClone();
+        clone.javaClass = this.javaClass;
+        clone.isToBeRegistered = this.isToBeRegistered;
+        return clone;
+    }
+
     private void initClass() {
         String name = getClassname().trim();
         try {

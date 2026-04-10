@@ -12,6 +12,7 @@ permissions: read-all
 
 jobs:
   dependency-submission:
+    if: github.repository == 'apache/jmeter'
     name: Submit dependencies
     runs-on: ubuntu-latest
     permissions:

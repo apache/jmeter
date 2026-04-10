@@ -17,7 +17,13 @@
 
 package org.apache.jorphan.gui
 
+import org.apache.jorphan.locale.ComboBoxValue
+import org.apache.jorphan.locale.LocalizedString
+import org.apache.jorphan.locale.PlainValue
+import org.apache.jorphan.locale.ResourceKeyed
+import org.apache.jorphan.locale.ResourceLocalizer
 import org.apiguardian.api.API
+import org.jetbrains.annotations.NonNls
 import java.awt.Container
 import java.awt.FlowLayout
 import java.awt.event.ActionEvent
@@ -28,7 +34,6 @@ import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JPopupMenu
-import javax.swing.SwingUtilities
 import javax.swing.event.ChangeEvent
 
 /**
@@ -37,8 +42,9 @@ import javax.swing.event.ChangeEvent
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
 public open class JEditableCheckBox(
-    label: String,
-    private val configuration: Configuration
+    label: @NonNls String,
+    private val configuration: Configuration,
+    resourceLocalizer: ResourceLocalizer,
 ) : JPanel() {
     public companion object {
         public const val CHECKBOX_CARD: String = "checkbox"
@@ -82,28 +88,31 @@ public open class JEditableCheckBox(
     /**
      * Supplies the parameters to [JEditableCheckBox].
      */
+    @API(status = API.Status.EXPERIMENTAL, since = "5.6.0")
     public data class Configuration(
         /** Menu item title to "start editing" the checkbox value. */
-        val startEditing: String = "Use Expression",
+        val useExpression: LocalizedString,
+        /** Tooltip for "start editing" button. */
+        val useExpressionTooltip: LocalizedString,
         /** The title to be used for "true" value in the checkbox. */
-        val trueValue: String = "true",
+        val trueValue: LocalizedString,
         /** The title to be used for "false" value in the checkbox. */
-        val falseValue: String = "false",
+        val falseValue: LocalizedString,
         /** Extra values to be added for the combobox. */
-        val extraValues: List<String> = listOf(),
+        val extraValues: List<ComboBoxValue> = listOf(),
     )
 
     private val cards = CardLayoutWithSizeOfCurrentVisibleElement()
 
-    private val useExpressionAction = object : AbstractAction(configuration.startEditing) {
+    private val useExpressionAction = object : AbstractAction(configuration.useExpression.toString()) {
         override fun actionPerformed(e: ActionEvent?) {
             cards.next(this@JEditableCheckBox)
+            comboBox.selectedItem = if (checkbox.isSelected) configuration.trueValue else configuration.falseValue
             comboBox.requestFocusInWindow()
-            fireValueChanged()
         }
     }
 
-    private val checkbox: JCheckBox = JCheckBox(label).apply {
+    private val checkbox: JCheckBox = JCheckBox(resourceLocalizer.localize(label)).apply {
         val cb = this
         componentPopupMenu = JPopupMenu().apply {
             add(useExpressionAction)
@@ -113,35 +122,23 @@ public open class JEditableCheckBox(
         }
     }
 
-    private val comboBox: JComboBox<String> = JComboBox<String>().apply {
+    private val comboBox: JComboBox<ComboBoxValue> = JComboBox<ComboBoxValue>().apply {
         isEditable = true
         configuration.extraValues.forEach {
             addItem(it)
         }
         addItem(configuration.trueValue)
         addItem(configuration.falseValue)
-        addActionListener {
-            val jComboBox = it.source as JComboBox<*>
-            SwingUtilities.invokeLater {
-                if (jComboBox.isPopupVisible) {
-                    fireValueChanged()
-                    return@invokeLater
-                }
-                when (val value = jComboBox.selectedItem as String) {
-                    configuration.trueValue, configuration.falseValue -> {
-                        checkbox.isSelected = value == configuration.trueValue
-                        cards.show(this@JEditableCheckBox, CHECKBOX_CARD)
-                        checkbox.requestFocusInWindow()
-                        fireValueChanged()
-                    }
-                }
-            }
-        }
-        // TODO: trigger value changed when the text is changed
     }
 
-    private val textFieldLabel = JLabel(label).apply {
+    private val textFieldLabel = JLabel(resourceLocalizer.localize(label)).apply {
         labelFor = comboBox
+    }
+
+    private val expressionButton = JEllipsisButton().apply {
+        // Tooltip will be set via configuration or use default
+        toolTipText = configuration.useExpressionTooltip.toString()
+        addActionListener(useExpressionAction)
     }
 
     @Transient
@@ -154,6 +151,7 @@ public open class JEditableCheckBox(
             Container().apply {
                 layout = FlowLayout(FlowLayout.LEADING, 0, 0)
                 add(checkbox)
+                add(expressionButton)
             },
             CHECKBOX_CARD
         )
@@ -176,6 +174,7 @@ public open class JEditableCheckBox(
         super.setEnabled(enabled)
         checkbox.isEnabled = enabled
         comboBox.isEnabled = enabled
+        expressionButton.isEnabled = enabled
         useExpressionAction.isEnabled = enabled
     }
 
@@ -190,19 +189,26 @@ public open class JEditableCheckBox(
     public var value: Value
         get() = when (components.indexOfFirst { it.isVisible }) {
             0 -> if (checkbox.isSelected) Value.Boolean.TRUE else Value.Boolean.FALSE
-            else -> Value.Text(comboBox.selectedItem as String)
+            else ->
+                when (val value = comboBox.selectedItem) {
+                    is ResourceKeyed ->
+                        when (value.resourceKey) {
+                            configuration.trueValue.resourceKey -> Value.Boolean.TRUE
+                            configuration.falseValue.resourceKey -> Value.Boolean.FALSE
+                            else -> Value.Text(value.resourceKey)
+                        }
+                    else -> Value.Text(value?.toString() ?: "")
+                }
         }
         set(value) {
             when (value) {
                 is Value.Boolean -> {
-                    comboBox.selectedItem = ""
                     checkbox.isSelected = value.value
                     cards.show(this, CHECKBOX_CARD)
                 }
 
                 is Value.Text -> {
-                    checkbox.isSelected = false
-                    comboBox.selectedItem = value.value
+                    comboBox.selectedItem = PlainValue(value.value)
                     cards.show(this, EDITABLE_CARD)
                 }
             }
@@ -227,6 +233,7 @@ public open class JEditableCheckBox(
 
     public fun makeSmall() {
         JFactory.small(checkbox)
+        JFactory.small(expressionButton)
         // We do not make combobox small as the expression migh be hard to read
     }
 }
