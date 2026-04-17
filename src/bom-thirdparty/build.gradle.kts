@@ -123,7 +123,7 @@ dependencies {
         api("org.apache.xmlgraphics:xmlgraphics-commons:2.11")
         api("org.apiguardian:apiguardian-api:1.1.2")
         api("org.bouncycastle:bcmail-jdk18on:1.82")
-        api("org.bouncycastle:bcpkix-jdk18on:1.82")
+        api("org.bouncycastle:bcpkix-jdk18on:1.84")
         api("org.bouncycastle:bcprov-jdk18on:1.82")
         api("org.brotli:dec:0.1.2")
         api("org.freemarker:freemarker:2.3.34")
