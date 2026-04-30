@@ -124,7 +124,7 @@ dependencies {
         api("org.apiguardian:apiguardian-api:1.1.2")
         api("org.bouncycastle:bcmail-jdk18on:1.82")
         api("org.bouncycastle:bcpkix-jdk18on:1.82")
-        api("org.bouncycastle:bcprov-jdk18on:1.82")
+        api("org.bouncycastle:bcprov-jdk18on:1.84")
         api("org.brotli:dec:0.1.2")
         api("org.freemarker:freemarker:2.3.34")
         api("org.glassfish.jaxb:txw2:4.0.6")
