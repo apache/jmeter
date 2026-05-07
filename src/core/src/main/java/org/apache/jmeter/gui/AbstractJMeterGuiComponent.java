@@ -40,7 +40,10 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestElementSchema;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.gui.JEditableTextArea;
 import org.apache.jorphan.gui.JFactory;
+import org.apache.jorphan.gui.ResetMode;
+import org.apache.jorphan.locale.LocalizedString;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +84,23 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @SuppressWarnings("DeprecatedIsStillUsed")
     protected NamePanel namePanel;
 
-    private final JTextArea commentField = JFactory.tabMovesFocus(new JTextArea());
+    private final JEditableTextArea commentEditor = createCommentEditor();
+    // The legacy commentField reference still points at the inner JTextArea
+    // so existing setText / getText callers keep working unchanged.
+    private final JTextArea commentField = JFactory.tabMovesFocus(commentEditor.getInnerTextArea());
+
+    private static JEditableTextArea createCommentEditor() {
+        JEditableTextArea editor = new JEditableTextArea(
+                new JEditableTextArea.Configuration(
+                        new ResetMode.Allow(new LocalizedString("reset", JMeterUtils::getResString))));
+        // Comment-field semantics: the gutter lights up while the comment
+        // is non-empty. There is no concept of "explicit empty" for a
+        // comment, so we recompute the modified flag from the live text on
+        // every value change (programmatic loads as well as typing).
+        editor.addPropertyChangeListener(JEditableTextArea.VALUE_PROPERTY,
+                evt -> editor.setModified(!editor.getValue().isEmpty()));
+        return editor;
+    }
 
     /**
      * Stores a collection of property editors, so GuiCompoenent can have default implementations that
@@ -305,7 +324,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         titlePanel.add(labelFor(nameField, "testplan_comments"));
         commentField.setWrapStyleWord(true);
         commentField.setLineWrap(true);
-        titlePanel.add(commentField);
+        titlePanel.add(commentEditor);
 
         // Note: VerticalPanel has a workaround for Box layout which aligns elements, so we can't
         // use trivial JPanel.
