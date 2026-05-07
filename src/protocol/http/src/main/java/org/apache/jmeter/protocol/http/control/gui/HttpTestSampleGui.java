@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.JBooleanPropertyEditor;
+import org.apache.jmeter.gui.JStringPropertyEditor;
 import org.apache.jmeter.gui.JTextComponentBinding;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -74,8 +75,12 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             HTTPSamplerBaseSchema.INSTANCE.getStoreAsMD5(),
             "response_save_as_md5",
             JMeterUtils::getResString);
-    private JTextField embeddedAllowRE; // regular expression used to match against embedded resource URLs to allow
-    private JTextField embeddedExcludeRE; // regular expression used to match against embedded resource URLs to exclude
+    private final JStringPropertyEditor embeddedAllowRE = new JStringPropertyEditor(
+            HTTPSamplerBaseSchema.INSTANCE.getEmbeddedUrlAllowRegex(),
+            JMeterUtils::getResString);
+    private final JStringPropertyEditor embeddedExcludeRE = new JStringPropertyEditor(
+            HTTPSamplerBaseSchema.INSTANCE.getEmbeddedUrlExcludeRegex(),
+            JMeterUtils::getResString);
     private JTextField sourceIpAddr; // does not apply to Java implementation
     private final JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
     private JTextField proxyScheme;
@@ -104,8 +109,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
                         concurrentDwn,
                         new JTextComponentBinding(concurrentPool, schema.getConcurrentDownloadPoolSize()),
                         useMD5,
-                        new JTextComponentBinding(embeddedAllowRE, schema.getEmbeddedUrlAllowRegex()),
-                        new JTextComponentBinding(embeddedExcludeRE, schema.getEmbeddedUrlExcludeRegex())
+                        embeddedAllowRE,
+                        embeddedExcludeRE
                 )
         );
         if (!isAJP) {
@@ -315,29 +320,39 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         concurrentPool.setMinimumSize(new Dimension(10, (int) concurrentPool.getPreferredSize().getHeight()));
         concurrentPool.setMaximumSize(new Dimension(60, (int) concurrentPool.getPreferredSize().getHeight()));
 
-        final JPanel embeddedRsrcPanel = new JPanel(new MigLayout());
+        // Two-column grid: [label][editor grows]. The first row uses
+        // `split 3, span` so its three controls share a single cell and
+        // do not influence the column widths used by the URL rows below
+        // — that way the two URL labels end up in the same column and
+        // their text fields align with each other.
+        final JPanel embeddedRsrcPanel = new JPanel(new MigLayout("", "[][grow,fill]"));
         embeddedRsrcPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_testing_retrieve_title"))); // $NON-NLS-1$
-        embeddedRsrcPanel.add(retrieveEmbeddedResources);
+        embeddedRsrcPanel.add(retrieveEmbeddedResources, "split 3, span");
         embeddedRsrcPanel.add(concurrentDwn);
         embeddedRsrcPanel.add(concurrentPool, "wrap");
 
         // Embedded URL match regex
-        embeddedAllowRE = addTextFieldWithLabel(embeddedRsrcPanel, JMeterUtils.getResString("web_testing_embedded_url_pattern")); // $NON-NLS-1$
+        addEditableTextFieldWithLabel(embeddedRsrcPanel,
+                JMeterUtils.getResString("web_testing_embedded_url_pattern"), // $NON-NLS-1$
+                embeddedAllowRE);
 
         // Embedded URL to not match regex
-        embeddedExcludeRE = addTextFieldWithLabel(embeddedRsrcPanel, JMeterUtils.getResString("web_testing_embedded_url_exclude_pattern")); // $NON-NLS-1$
+        addEditableTextFieldWithLabel(embeddedRsrcPanel,
+                JMeterUtils.getResString("web_testing_embedded_url_exclude_pattern"), // $NON-NLS-1$
+                embeddedExcludeRE);
 
         return embeddedRsrcPanel;
     }
 
-    private static JTextField addTextFieldWithLabel(JPanel panel, String labelText) {
-        JLabel label = new JLabel(labelText); // $NON-NLS-1$
-        JTextField field = new JTextField(100);
-        label.setLabelFor(field);
+    private static void addEditableTextFieldWithLabel(JPanel panel, String labelText, JStringPropertyEditor editor) {
+        JLabel label = new JLabel(labelText);
+        // Wire labelFor to the inner JTextField so screen readers announce
+        // the label when focus enters the editable area.
+        label.setLabelFor(editor.getInnerTextField());
+        editor.getInnerTextField().setColumns(100);
         panel.add(label);
-        panel.add(field, "span");
-        return field;
+        panel.add(editor, "growx, wrap");
     }
 
     /**
