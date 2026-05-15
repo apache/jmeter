@@ -8,12 +8,12 @@ github:
     - test
     - java
 
-  dependabot_alerts:  true
+  dependabot_alerts: true
   dependabot_updates: false
 
   enabled_merge_buttons:
     squash: true
-    merge:  false
+    merge: false
     rebase: true
 
   features:
@@ -21,8 +21,21 @@ github:
     issues: true
     projects: false
 
+  rulesets:
+    - name: "Default Branch Protection"
+      type: branch
+      branches:
+        includes:
+          - "~DEFAULT_BRANCH"
+          - "release/*"
+          - "rel/*"
+        excludes: []
+      bypass_teams:
+        - root
+      restrict_deletion: true
+      restrict_force_push: true
 notifications:
-  commits:      commits@jmeter.apache.org
-  issues:       dev@jmeter.apache.org
+  commits: commits@jmeter.apache.org
+  issues: dev@jmeter.apache.org
   pullrequests: dev@jmeter.apache.org
   jira_options: link label
