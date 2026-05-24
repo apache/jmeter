@@ -52,6 +52,7 @@ public class ApdexSummaryConsumer extends
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected ListResultData createDataResult(String key, ApdexSummaryData data) {
         Double apdex = getApdex(data);
         ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
