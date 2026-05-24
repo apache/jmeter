@@ -38,7 +38,7 @@ dependencies {
         // compilation classpath (e.g. it is used as a transitive by a third-party library)
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
-        api("org.ow2.asm:asm:9.6")
+        api("org.ow2.asm:asm:9.7.1")
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
@@ -87,8 +87,8 @@ dependencies {
         api("org.hamcrest:hamcrest:2.2") {
             because("ApacheJMeter_junit depends on junit4")
         }
-        api("net.minidev:accessors-smart:2.5.0")
-        api("net.minidev:json-smart:2.5.0")
+        api("net.minidev:accessors-smart:2.5.2")
+        api("net.minidev:json-smart:2.5.2")
         api("net.sf.jtidy:jtidy:r938")
         api("net.sf.saxon:Saxon-HE:11.6")
         api("org.apache-extras.beanshell:bsh:2.0b6")
