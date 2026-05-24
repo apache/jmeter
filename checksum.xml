@@ -5,6 +5,7 @@
     <ignored-key id='1d0690e353be126d' />
   </ignored-keys>
   <trusted-keys>
+    <trusted-key id='c668130c58722c9dc1c0fc633f1eb974e7ab9b37' group='biz.aQute.bnd' />
     <trusted-key id='07dbc3c1ab1f4468471656061c8d5ef0df2b70d4' group='cglib' />
     <trusted-key id='60200ac4ae761f1614d6c46766d68daa073be985' group='ch.qos.logback' />
     <trusted-key id='6ead752b3e2b38e8e2236d7ba9321edaa5cb3202' group='ch.randelshofer' />
@@ -86,6 +87,7 @@
     <trusted-key id='0186f8b24c5bc02c94a0e0e486f75e83e1ee085f' group='de.thetaphi' />
     <trusted-key id='1fa37fbe4453c1073e7ef61d6449005f96bc97a3' group='de.undercouch' />
     <trusted-key id='3e1ac64f4e34e290503c90323449ec3ac2efe8aa' group='dnsjava' />
+    <trusted-key id='e06a36f67d8c1bd13f1f278d0ca7139cbc7026f9' group='dnsjava' />
     <trusted-key id='8756c4f765c9ac3cb6b85d62379ce192d401ab61' group='info.picocli' />
     <trusted-key id='aa417737bd805456db3cbdde6601e5c08dccbb96' group='info.picocli' />
     <trusted-key id='c62c0ce2e5c346b2d9bf2d8bb2ca0dfe9ed21c6e' group='io.burt' />
@@ -192,6 +194,7 @@
     <trusted-key id='1fcffe916b6670868fa0ea0391ae1504568ec4dd' group='org.jodd' />
     <trusted-key id='cdcaa216b086a7b603b638c5145d819475314d97' group='org.json' />
     <trusted-key id='f3184bcd55f4d016e30d4c9bf42e87f9665015c9' group='org.jsoup' />
+    <trusted-key id='41cd49b4ef5876f9e9f691dabac30622339994c4' group='org.jspecify' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.jupiter' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.platform' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.vintage' />
@@ -201,6 +204,7 @@
     <trusted-key id='e85aed155021af8a6c6b7a4a7c7d8456294423ba' group='org.objenesis' />
     <trusted-key id='019082bc00e0324e2aef4cf00d3b328562a119a7' group='org.openjdk.jmh' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.opentest4j' />
+    <trusted-key id='eafc1f3b2fced6afd046c7d5734aef3d43509290' group='org.osgi' />
     <trusted-key id='a5bd02b93e7a40482eb1d66a5f69ad087600b22c' group='org.ow2.asm' />
     <trusted-key id='908366594e746bf3c449f5622be5d98f751f4136' group='org.pcollections' />
     <trusted-key id='e0d98c5fd55a8af232290e58dee12b9896f97e34' group='org.pcollections' />
@@ -301,11 +305,17 @@
     <dependency group='net.minidev' module='accessors-smart' version='2.4.8'>
       <sha512>45405C083334B05EFA07572497B9D510CA771AF32CE93D960BE802216A9714FFFF8418384EA48E197D3DFB6EBEC4EC3E610155841E8A257A7FB9A4BD6A1B668F</sha512>
     </dependency>
+    <dependency group='net.minidev' module='accessors-smart' version='2.5.2'>
+      <sha512>3BBD29761622714AC61DBE02B8351188573F819BDABFB4025196A3F1561BFE52CC308AF9208184F7339C66988E7F8AD323C5CD7B0FA8463321B6BB03E4A9181E</sha512>
+    </dependency>
     <dependency group='net.minidev' module='json-smart' version='2.4.7'>
       <sha512>3E9E1EE9A44EA15044B588B06A956AC150A37B63C161BF9B08A60539F5C90EFC7718DEB24FD084F503B68092516AAC3349DBB74049777EA4C6619AC26090A1D</sha512>
     </dependency>
     <dependency group='net.minidev' module='json-smart' version='2.4.8'>
       <sha512>13F4609FE72DF98C81F86D25616E5B0CE1426688AA5A9DD953733FA98A8DEADB87B3E69A77741DC9D31DD4485265D3B9E4EC71D99346E4A7558F2500F3677714</sha512>
+    </dependency>
+    <dependency group='net.minidev' module='json-smart' version='2.5.2'>
+      <sha512>087931C6F254C7E54FF75B6E94983D062B62B68356A988A5ED276819BCB4FAFBAD2F0BBC363E16C8DAA09ED8189241F08EFF6E8E5F5F3DDC770B541D96FC8E2D</sha512>
     </dependency>
     <dependency group='net.sf.ezmorph' module='ezmorph' version='1.0.6'>
       <sha512>16D30BE564723B74F312B4E7D06F349370FB6726B3162778C869CD723ECA2A40C4972C2757B3E107E1820CEC0D70B0BD2B96EFCD466518FC64495F7AEF97967A</sha512>
@@ -402,9 +412,13 @@
     </dependency>
     <dependency group='xerces' module='xercesImpl' version='2.9.1'>
       <sha512>37A13B129F3536A53F2A553151A53997DA6DE7CE4D7231EFEEFD26A68C92BE309666F2EE1F527D3B8C38BC6ADDC9FCCBBDD0D134759FD88667976B0CFF842435</sha512>
+      <sha512>EC2200E5A5A70F5C64744F6413A546F5E4979B3FB1649B02756FF035D36DDE31170EAADC70842230296B60896F04877270C26B40415736299AEF44AC16C5811C</sha512>
     </dependency>
     <dependency group='xml-apis' module='xml-apis-ext' version='1.3.04'>
       <sha512>AC0896B9A3FEA71644330DAEF4ECCB33005B5B7AC1E1D1D73EED2B2A1F4B2282057F3C0F3698B899E1C76B19C09C69BF4CD0EE548427B9BCC676B791DB5C36BC</sha512>
+    </dependency>
+    <dependency group='xml-apis' module='xml-apis' version='1.3.04'>
+      <sha512>1086A52924ADD2406E0B4EC7219A8783AC20E02A32A7A2461EFBF092F0070501F7CADE9C0588907C403352F1A48F80B950E6D40B2E4E3E9EB886E7DB4E97BDEC</sha512>
     </dependency>
     <dependency group='xml-resolver' module='xml-resolver' version='1.2'>
       <sha512>ECA19B8A6B04C279B7982B16F1763CA1D49B0081A8D4CA2B7419F057D22A0EC60795EB4D901C5EB25DD4A733248876AA2F522C17A6144A26C8EDE9FB2F84531A</sha512>

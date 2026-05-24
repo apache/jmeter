@@ -46,6 +46,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 /**
  * Utilities to (de)serialize GraphQL request parameters.
  */
+@SuppressWarnings("deprecation")
 public final class GraphQLRequestParamUtils {
 
     public static final String VARIABLES_FIELD = "variables";

@@ -146,6 +146,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
      * @param comparator Column value comparator.
      * @return <code>this</code>
      */
+    @SuppressWarnings("deprecation")
     public ObjectTableSorter setValueComparator(int column, Comparator<?> comparator) {
         invalidate();
         valueComparators[column] = ObjectUtils.defaultIfNull(comparator, getDefaultComparator(column));
@@ -183,6 +184,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
      *            difference
      * @return <code>this</code>
      */
+    @SuppressWarnings("deprecation")
     public ObjectTableSorter setFallbackComparator(Comparator<Row> comparator) {
         invalidate();
         fallbackComparator = ObjectUtils.defaultIfNull(comparator, Comparator.comparingInt(Row::getIndex));
