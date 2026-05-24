@@ -105,7 +105,7 @@ class TestJMESPathAssertion {
                 Arguments.of(InvertType.USE_NO_INVERT, "{'one': '1'}", "one", ValidationType.USE_VALIDATION,
                         ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "2", ResultType.ERROR,
                         "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at"
-                                + " [Source: (String)\"{'one': '1'}\"; line: 1, column: 3]"),
+                                + " [Source: (String)\"{'one': '1'}\"; line: 1, column: 2]"),
                 Arguments.of(InvertType.USE_NO_INVERT, "{\"one\": \"\"}", "one", ValidationType.USE_VALIDATION,
                         ComparisonType.USE_NO_REXEG, ResultNullity.EXPECT_NOT_NULL, "1", ResultType.FAILURE,
                         "Value expected to be equal to 1"),
