@@ -57,7 +57,7 @@ dependencies {
         api("com.google.errorprone:error_prone_annotations:2.24.0")
         api("com.helger.commons:ph-commons:10.2.5")
         api("com.helger:ph-css:6.5.0")
-        api("com.jayway.jsonpath:json-path:2.8.0")
+        api("com.jayway.jsonpath:json-path:2.9.0")
         api("com.miglayout:miglayout-core:5.3")
         api("com.miglayout:miglayout-swing:5.3")
         api("com.sun.activation:javax.activation:1.2.0")
@@ -135,8 +135,14 @@ dependencies {
         api("org.mongodb:mongo-java-driver:2.14.3")
         api("org.mozilla:rhino:1.7.14.1")
         api("org.neo4j.driver:neo4j-java-driver:4.4.13")
-        api("org.slf4j:jcl-over-slf4j:1.7.36")
-        api("org.slf4j:slf4j-api:1.7.36")
+        api("org.slf4j:jcl-over-slf4j") {
+            version { strictly("1.7.36") }
+            because("log4j-slf4j-impl 2.22.x is built against slf4j 1.x")
+        }
+        api("org.slf4j:slf4j-api") {
+            version { strictly("1.7.36") }
+            because("log4j-slf4j-impl 2.22.x is built against slf4j 1.x")
+        }
         api("oro:oro:2.0.8")
         api("xalan:serializer:2.7.3")
         api("xalan:xalan:2.7.3")
