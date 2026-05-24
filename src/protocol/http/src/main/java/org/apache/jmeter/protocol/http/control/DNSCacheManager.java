@@ -270,7 +270,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             Lookup lookup = new Lookup(host, Type.A);
             lookup.setCache(lookupCache);
             if (timeoutMs > 0) {
-                resolver.setTimeout(timeoutMs / 1000, timeoutMs % 1000);
+                resolver.setTimeout(java.time.Duration.ofMillis(timeoutMs));
             }
             lookup.setResolver(resolver);
             Record[] records = lookup.run();
