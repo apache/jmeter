@@ -5,6 +5,7 @@
     <ignored-key id='1d0690e353be126d' />
   </ignored-keys>
   <trusted-keys>
+    <trusted-key id='c668130c58722c9dc1c0fc633f1eb974e7ab9b37' group='biz.aQute.bnd' />
     <trusted-key id='07dbc3c1ab1f4468471656061c8d5ef0df2b70d4' group='cglib' />
     <trusted-key id='60200ac4ae761f1614d6c46766d68daa073be985' group='ch.qos.logback' />
     <trusted-key id='6ead752b3e2b38e8e2236d7ba9321edaa5cb3202' group='ch.randelshofer' />
@@ -192,6 +193,7 @@
     <trusted-key id='1fcffe916b6670868fa0ea0391ae1504568ec4dd' group='org.jodd' />
     <trusted-key id='cdcaa216b086a7b603b638c5145d819475314d97' group='org.json' />
     <trusted-key id='f3184bcd55f4d016e30d4c9bf42e87f9665015c9' group='org.jsoup' />
+    <trusted-key id='41cd49b4ef5876f9e9f691dabac30622339994c4' group='org.jspecify' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.jupiter' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.platform' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.junit.vintage' />
@@ -201,6 +203,7 @@
     <trusted-key id='e85aed155021af8a6c6b7a4a7c7d8456294423ba' group='org.objenesis' />
     <trusted-key id='019082bc00e0324e2aef4cf00d3b328562a119a7' group='org.openjdk.jmh' />
     <trusted-key id='ff6e2c001948c5f2f38b0cc385911f425ec61b51' group='org.opentest4j' />
+    <trusted-key id='eafc1f3b2fced6afd046c7d5734aef3d43509290' group='org.osgi' />
     <trusted-key id='a5bd02b93e7a40482eb1d66a5f69ad087600b22c' group='org.ow2.asm' />
     <trusted-key id='908366594e746bf3c449f5622be5d98f751f4136' group='org.pcollections' />
     <trusted-key id='e0d98c5fd55a8af232290e58dee12b9896f97e34' group='org.pcollections' />

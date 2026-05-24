@@ -107,10 +107,10 @@ dependencies {
         api("org.apache.httpcomponents:httpcore-nio:4.4.16")
         api("org.apache.httpcomponents:httpcore:4.4.16")
         api("org.apache.httpcomponents:httpmime:4.5.14")
-        api("org.apache.logging.log4j:log4j-1.2-api:2.22.1")
-        api("org.apache.logging.log4j:log4j-api:2.22.1")
-        api("org.apache.logging.log4j:log4j-core:2.22.1")
-        api("org.apache.logging.log4j:log4j-slf4j-impl:2.22.1")
+        api("org.apache.logging.log4j:log4j-1.2-api:2.25.4")
+        api("org.apache.logging.log4j:log4j-api:2.25.4")
+        api("org.apache.logging.log4j:log4j-core:2.25.4")
+        api("org.apache.logging.log4j:log4j-slf4j-impl:2.25.4")
         api("org.apache.rat:apache-rat:0.15")
         api("org.apache.tika:tika-core:1.28.5")
         api("org.apache.tika:tika-parsers:1.28.5")
@@ -137,11 +137,11 @@ dependencies {
         api("org.neo4j.driver:neo4j-java-driver:4.4.13")
         api("org.slf4j:jcl-over-slf4j") {
             version { strictly("1.7.36") }
-            because("log4j-slf4j-impl 2.22.x is built against slf4j 1.x")
+            because("log4j-slf4j-impl 2.25.x is built against slf4j 1.x")
         }
         api("org.slf4j:slf4j-api") {
             version { strictly("1.7.36") }
-            because("log4j-slf4j-impl 2.22.x is built against slf4j 1.x")
+            because("log4j-slf4j-impl 2.25.x is built against slf4j 1.x")
         }
         api("oro:oro:2.0.8")
         api("xalan:serializer:2.7.3")
