@@ -42,6 +42,7 @@ public class RawTextSearcher implements Searcher {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("deprecation")
     public boolean search(List<String> textTokens) {
         return textTokens.stream()
                 .filter(StringUtils::isNotEmpty)
