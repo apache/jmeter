@@ -61,7 +61,7 @@ dependencies {
         api("com.miglayout:miglayout-core:5.3")
         api("com.miglayout:miglayout-swing:5.3")
         api("com.sun.activation:javax.activation:1.2.0")
-        api("com.thoughtworks.xstream:xstream:1.4.20")
+        api("com.thoughtworks.xstream:xstream:1.4.21")
         api("commons-codec:commons-codec:1.16.0")
         api("commons-collections:commons-collections:3.2.2")
         api("commons-io:commons-io:2.15.1")
