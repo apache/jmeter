@@ -56,6 +56,13 @@
       "enabled": false
     },
     {
+      "groupName": "com.gradle",
+      "description": "Develocity and related Gradle Inc. plugins are released together",
+      "matchPackageNames": [
+        "com.gradle{/,}**"
+      ]
+    },
+    {
       "groupName": "com.helger",
       "matchPackageNames": [
         "com.helger{/,}**"
@@ -92,6 +99,18 @@
       ]
     },
     {
+      "groupName": "commons-* (classic)",
+      "description": "Classic Apache Commons artifacts where groupId == artifactId",
+      "matchPackageNames": [
+        "commons-codec{/,}**",
+        "commons-collections{/,}**",
+        "commons-io{/,}**",
+        "commons-lang{/,}**",
+        "commons-logging{/,}**",
+        "commons-net{/,}**"
+      ]
+    },
+    {
       "groupName": "org.ajoberstar.grgit",
       "matchPackageNames": [
         "org.ajoberstar.grgit{/,}**"
@@ -101,6 +120,12 @@
       "groupName": "org.apache.activemq",
       "matchPackageNames": [
         "org.apache.activemq{/,}**"
+      ]
+    },
+    {
+      "groupName": "org.apache.commons",
+      "matchPackageNames": [
+        "org.apache.commons{/,}**"
       ]
     },
     {
@@ -134,9 +159,28 @@
       ]
     },
     {
+      "groupName": "org.bouncycastle",
+      "matchPackageNames": [
+        "org.bouncycastle{/,}**"
+      ]
+    },
+    {
       "groupName": "org.eclipse.jetty",
       "matchPackageNames": [
         "org.eclipse.jetty{/,}**"
+      ]
+    },
+    {
+      "groupName": "org.hamcrest",
+      "matchPackageNames": [
+        "org.hamcrest{/,}**"
+      ]
+    },
+    {
+      "groupName": "org.jetbrains.kotlin",
+      "description": "Kotlin compiler plugins (jvm, kapt, serialization, ...) share a version",
+      "matchPackageNames": [
+        "org.jetbrains.kotlin{/,}**"
       ]
     },
     {
@@ -162,6 +206,14 @@
       "allowedVersions": "< 2.0.0",
       "matchPackageNames": [
         "org.slf4j{/,}**"
+      ]
+    },
+    {
+      "groupName": "xalan/xerces",
+      "description": "Legacy Apache XML stack, rarely updated and goes together",
+      "matchPackageNames": [
+        "xalan{/,}**",
+        "xerces{/,}**"
       ]
     },
     {
