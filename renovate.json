@@ -62,6 +62,17 @@
       ]
     },
     {
+      "groupName": "github official actions",
+      "description": "actions/* and github/* are maintained by GitHub/Microsoft and can be updated together",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "actions/**",
+        "github/**"
+      ]
+    },
+    {
       "groupName": "io.burt",
       "matchPackageNames": [
         "io.burt{/,}**"
