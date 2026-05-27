@@ -132,7 +132,7 @@ JMeter, статьи в блогах, тематические книги), не
 | Loading…                  | Загрузка…              |                                          |
 | Saving…                   | Сохранение…            |                                          |
 | Settings                  | Настройки              |                                          |
-| Preferences               | Настройки              |                                          |
+| Preferences               | Предпочтения           |                                          |
 | Properties                | Свойства               |                                          |
 | Parameters                | Параметры              |                                          |
 | Arguments                 | Аргументы              |                                          |
@@ -179,7 +179,7 @@ JMeter, статьи в блогах, тематические книги), не
 | Not Found                                 | Не найдено                                              |
 | Please confirm                            | Подтвердите действие                                    |
 | Are you sure                              | Вы уверены                                              |
-| Required                                  | Обязательное поле                                       |
+| Required                                  | Обязательное                                            |
 | Optional                                  | Необязательное                                          |
 | Default                                   | По умолчанию                                            |
 
