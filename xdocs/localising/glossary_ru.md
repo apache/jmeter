@@ -31,11 +31,11 @@ JMeter, статьи в блогах, тематические книги), не
 | Aggregate Report                | Сводный отчёт                    |                                                                            |
 | Summary Report                  | Итоговый отчёт                   |                                                                            |
 | Graph Results                   | График результатов               |                                                                            |
-| Assertion                       | Утверждение                      | «Ассершен» — допустимо в неформальном контексте, в UI — «утверждение».     |
-| Response Assertion              | Утверждение по ответу            |                                                                            |
-| Size Assertion                  | Утверждение по размеру           |                                                                            |
-| Duration Assertion              | Утверждение по длительности      |                                                                            |
-| XPath Assertion                 | Утверждение XPath                |                                                                            |
+| Assertion                       | Проверка                         | Так говорят русскоязычные практики JMeter (Habr, Performance-Lab, automated-testing). «Утверждение» — калька, в живой речи редко. |
+| Response Assertion              | Проверка ответа                  |                                                                            |
+| Size Assertion                  | Проверка размера                 |                                                                            |
+| Duration Assertion              | Проверка длительности            |                                                                            |
+| XPath Assertion                 | Проверка XPath                   |                                                                            |
 | Pre Processor / PreProcessor    | Предобработчик                   |                                                                            |
 | Post Processor / PostProcessor  | Постобработчик                   |                                                                            |
 | Timer                           | Таймер                           |                                                                            |
@@ -48,10 +48,10 @@ JMeter, статьи в блогах, тематические книги), не
 | Config Element                  | Элемент конфигурации             |                                                                            |
 | User Defined Variables          | Переменные пользователя          |                                                                            |
 | CSV Data Set Config             | Конфигурация CSV Data Set        | «CSV Data Set» оставляем как есть — это название элемента.                 |
-| HTTP Cookie Manager             | Менеджер HTTP cookie             | `cookie` — оставляем латиницей.                                            |
-| HTTP Cache Manager              | Менеджер HTTP-кэша               | По аналогии: DNS Cache Manager → Менеджер DNS-кэша.                        |
+| HTTP Cookie Manager             | Менеджер HTTP cookie             | `cookie` — оставляем латиницей, без склонения.                             |
+| HTTP Cache Manager              | Менеджер кэша HTTP               | По той же модели: DNS Cache Manager → Менеджер кэша DNS.                   |
 | HTTP Header Manager             | Менеджер HTTP-заголовков         |                                                                            |
-| HTTP Authorization Manager      | Менеджер HTTP-авторизации        |                                                                            |
+| HTTP Authorization Manager      | Менеджер авторизации HTTP        |                                                                            |
 | Workbench                       | Рабочий стол                     |                                                                            |
 | Test Fragment                   | Фрагмент теста                   |                                                                            |
 | Non-Test Elements               | Внетестовые элементы             |                                                                            |
