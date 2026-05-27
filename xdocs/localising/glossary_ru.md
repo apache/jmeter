@@ -48,10 +48,10 @@ JMeter, статьи в блогах, тематические книги), не
 | Config Element                  | Элемент конфигурации             |                                                                            |
 | User Defined Variables          | Переменные пользователя          |                                                                            |
 | CSV Data Set Config             | Конфигурация CSV Data Set        | «CSV Data Set» оставляем как есть — это название элемента.                 |
-| HTTP Cookie Manager             | Менеджер cookie                  | `cookie` — оставляем латиницей.                                            |
-| HTTP Cache Manager              | Менеджер кэша                    |                                                                            |
+| HTTP Cookie Manager             | Менеджер HTTP cookie             | `cookie` — оставляем латиницей.                                            |
+| HTTP Cache Manager              | Менеджер HTTP-кэша               | По аналогии: DNS Cache Manager → Менеджер DNS-кэша.                        |
 | HTTP Header Manager             | Менеджер HTTP-заголовков         |                                                                            |
-| HTTP Authorization Manager      | Менеджер авторизации             |                                                                            |
+| HTTP Authorization Manager      | Менеджер HTTP-авторизации        |                                                                            |
 | Workbench                       | Рабочий стол                     |                                                                            |
 | Test Fragment                   | Фрагмент теста                   |                                                                            |
 | Non-Test Elements               | Внетестовые элементы             |                                                                            |
@@ -83,7 +83,7 @@ JMeter, статьи в блогах, тематические книги), не
 | Percentile / 90% Line     | перцентиль / 90-й перцентиль             |                                                                   |
 | KB/sec                    | КБ/с                                     | Неразрывный пробел внутри числа+единицы не нужен в `.properties`. |
 | Ramp-up                   | разгон                                   | «Ramp-up period» — «период разгона».                              |
-| Loop Count                | число итераций                           |                                                                   |
+| Loop Count                | количество итераций                      | Не «число итераций».                                              |
 | Iterations                | итерации                                 |                                                                   |
 | Think Time                | время на размышление                     | Устоявшийся термин. Альтернативно — «пауза между запросами».      |
 | Workload                  | нагрузочный профиль                      |                                                                   |
