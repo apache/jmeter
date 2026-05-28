@@ -90,9 +90,18 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     private final JTextArea commentField = JFactory.tabMovesFocus(commentEditor.getInnerTextArea());
 
     private static JEditableTextArea createCommentEditor() {
+        // Reset for a comment means "clear it" — the default comment is empty.
+        // Overriding resetToDefault is required: the base implementation is a
+        // no-op, so without this the popup "Reset" item and the backspace
+        // gesture would do nothing.
         JEditableTextArea editor = new JEditableTextArea(
                 new JEditableTextArea.Configuration(
-                        new ResetMode.Allow(new LocalizedString("reset", JMeterUtils::getResString))));
+                        new ResetMode.Allow(new LocalizedString("reset", JMeterUtils::getResString)))) {
+            @Override
+            protected void resetToDefault() {
+                setValue(""); // $NON-NLS-1$
+            }
+        };
         // Comment-field semantics: the gutter lights up while the comment
         // is non-empty. There is no concept of "explicit empty" for a
         // comment, so we recompute the modified flag from the live text on
@@ -228,6 +237,9 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      */
     @Override
     public void configure(TestElement element) {
+        // Drive the name field's modified gutter against the static label,
+        // so a custom name lights the gutter while the default name does not.
+        namePanel.setDefaultName(getStaticLabel());
         setName(element.getName());
         enabled = element.isEnabled();
         commentField.setText(element.getComment());
@@ -247,6 +259,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     }
 
     private void initGui() {
+        namePanel.setDefaultName(getStaticLabel());
         setName(getStaticLabel());
         commentField.setText("");
     }
@@ -319,7 +332,9 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
         JTextField nameField = namePanel.getNameField();
         titlePanel.add(labelFor(nameField, "name"));
-        titlePanel.add(nameField);
+        // Add the gutter-aware editor (not the raw nameField) so the
+        // modified indicator next to the name is shown.
+        titlePanel.add(namePanel.getNameComponent());
 
         titlePanel.add(labelFor(nameField, "testplan_comments"));
         commentField.setWrapStyleWord(true);

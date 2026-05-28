@@ -22,6 +22,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 import java.awt.BorderLayout;
 import java.util.Collection;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -30,6 +31,9 @@ import javax.swing.JTextField;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JEditableTextField;
+import org.apache.jorphan.gui.ResetMode;
+import org.apache.jorphan.locale.LocalizedString;
 import org.apiguardian.api.API;
 
 public class NamePanel extends JPanel implements JMeterGUIComponent {
@@ -37,14 +41,40 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 
     private static final String LABEL_RESOURCE = "root"; // $NON-NLS-1$
 
+    /**
+     * The default name to compare against for the "modified" indicator —
+     * typically the owning component's {@code getStaticLabel()}. When the
+     * name equals this default, the modified gutter stays dark.
+     */
+    private String defaultName = ""; // $NON-NLS-1$
+
+    /** Gutter-aware editor wrapping the name text field. */
+    private final JEditableTextField nameEditor = new JEditableTextField(
+            new JEditableTextField.Configuration(
+                    new ResetMode.Allow(new LocalizedString("reset", JMeterUtils::getResString)))) {
+        @Override
+        protected void resetToDefault() {
+            // Qualify with NamePanel.this: an unqualified setName(...) would
+            // resolve to Component.setName (the Swing component name), not the
+            // name-field setter we want.
+            NamePanel.this.setName(defaultName);
+        }
+    };
+
     /** A text field containing the name. */
-    private final JTextField nameField = new JTextField(15);
+    private final JTextField nameField = nameEditor.getInnerTextField();
 
 
    /**
      * Create a new NamePanel with the default name.
      */
     public NamePanel() {
+        nameField.setColumns(15);
+        // The gutter lights up whenever the name differs from the default
+        // (the owning component's static label). This is recomputed on every
+        // edit and whenever the default changes.
+        nameEditor.addPropertyChangeListener(
+                JEditableTextField.VALUE_PROPERTY, evt -> updateModified());
         _setName(JMeterUtils.getResString(LABEL_RESOURCE));
         init();
     }
@@ -60,12 +90,42 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
         nameLabel.setLabelFor(nameField);
 
         add(nameLabel, BorderLayout.WEST);
-        add(nameField, BorderLayout.CENTER);
+        add(nameEditor, BorderLayout.CENTER);
     }
 
     @API(status = INTERNAL, since = "5.2.0")
     public JTextField getNameField() {
         return nameField;
+    }
+
+    /**
+     * Returns the gutter-aware editor that wraps the name field. Callers that
+     * lay out the name control themselves (e.g.
+     * {@code AbstractJMeterGuiComponent.makeTitlePanel}) must add this
+     * component — not {@link #getNameField()} — so that the modified gutter
+     * is shown.
+     *
+     * @return the editor component to place in a layout
+     */
+    @API(status = INTERNAL, since = "6.0.0")
+    public JComponent getNameComponent() {
+        return nameEditor;
+    }
+
+    /**
+     * Sets the default name used to drive the modified-gutter indicator.
+     * When the displayed name equals this value the gutter stays dark.
+     *
+     * @param defaultName the default name, usually the owning component's static label
+     */
+    @API(status = INTERNAL, since = "6.0.0")
+    public void setDefaultName(String defaultName) {
+        this.defaultName = defaultName != null ? defaultName : ""; // $NON-NLS-1$
+        updateModified();
+    }
+
+    private void updateModified() {
+        nameEditor.setModified(!getName().equals(defaultName));
     }
 
     @Override
