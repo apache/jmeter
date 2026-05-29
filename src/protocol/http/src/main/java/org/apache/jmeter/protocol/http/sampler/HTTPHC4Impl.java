@@ -586,10 +586,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 res.setEncodingAndType(ct);
             }
             HttpEntity entity = httpResponse.getEntity();
-            try (InputStream instream = entity.getContent()) {
-                Header contentEncodingHeader = entity.getContentEncoding();
-                String contentEncoding = contentEncodingHeader != null ? contentEncodingHeader.getValue() : null;
-                readResponse(res, instream, entity.getContentLength(), contentEncoding);
+            if (entity == null) {
+                // No response body (e.g. HEAD request or 304 Not Modified)
+                res.setResponseData(new byte[0]);
+            } else {
+                try (InputStream instream = entity.getContent()) {
+                    Header contentEncodingHeader = entity.getContentEncoding();
+                    String contentEncoding = contentEncodingHeader != null ? contentEncodingHeader.getValue() : null;
+                    readResponse(res, instream, entity.getContentLength(), contentEncoding);
+                }
             }
 
             res.sampleEnd(); // Done with the sampling proper.
