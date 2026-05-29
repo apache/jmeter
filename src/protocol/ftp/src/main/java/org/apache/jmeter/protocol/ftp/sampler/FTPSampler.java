@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -178,7 +179,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
         final String label = getLabel();
         res.setSamplerData(label);
         try {
-            res.setURL(new URL(label));
+            res.setURL(URI.create(label).toURL());
         } catch (MalformedURLException e1) {
             log.warn("Cannot set URL: "+e1.getLocalizedMessage());
         }

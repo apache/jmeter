@@ -490,7 +490,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
     public String getDocAnchor() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle(
                 testBeanClass.getName() + "Resources",  // $NON-NLS-1$
-                new Locale("",""));
+                Locale.ROOT);
 
         String name = resourceBundle.getString("displayName");
         return name.replace(' ', '_');

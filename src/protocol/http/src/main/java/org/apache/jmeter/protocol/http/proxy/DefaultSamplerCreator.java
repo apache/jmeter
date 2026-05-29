@@ -433,6 +433,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * @throws MalformedURLException when no {@link URL} could be built from
      *         <code>sampler</code> and <code>request</code>
      */
+    @SuppressWarnings("deprecation")
     protected void computeContentEncoding(HTTPSamplerBase sampler,
             HttpRequestHdr request, Map<String, String> pageEncodings,
             Map<String, String> formEncodings) throws MalformedURLException {

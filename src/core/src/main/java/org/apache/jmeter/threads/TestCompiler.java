@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -64,6 +65,7 @@ public class TestCompiler implements HashTreeTraverser {
      * Otherwise, the child is added to the parent and the pair is added to the Set.
      */
     private static final Set<ObjectPair> PAIRING = new HashSet<>();
+    private static final ReentrantLock PAIRING_LOCK = new ReentrantLock();
 
     // TODO: replace with ArrayDequeue
     private final LinkedList<TestElement> stack = new LinkedList<>();
@@ -84,9 +86,12 @@ public class TestCompiler implements HashTreeTraverser {
      * test run.
      */
     public static void initialize() {
-        // synch is probably not needed as only called before run starts
-        synchronized (PAIRING) {
+        // lock is probably not needed as only called before run starts
+        PAIRING_LOCK.lock();
+        try {
             PAIRING.clear();
+        } finally {
+            PAIRING_LOCK.unlock();
         }
     }
 
@@ -152,13 +157,16 @@ public class TestCompiler implements HashTreeTraverser {
                     duplicate = !te.addTestElementOnce(child);
                 } else { // this is only possible for 3rd party controllers by default
                     ObjectPair pair = new ObjectPair(child, parent);
-                    synchronized (PAIRING) {// Called from multiple threads
+                    PAIRING_LOCK.lock();
+                    try { // Called from multiple threads
                         if (!PAIRING.contains(pair)) {
                             parent.addTestElement(child);
                             PAIRING.add(pair);
                         } else {
                             duplicate = true;
                         }
+                    } finally {
+                        PAIRING_LOCK.unlock();
                     }
                 }
             }
