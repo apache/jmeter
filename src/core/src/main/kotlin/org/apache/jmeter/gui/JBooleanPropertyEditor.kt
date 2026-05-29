@@ -20,52 +20,104 @@ package org.apache.jmeter.gui
 import org.apache.jmeter.testelement.TestElement
 import org.apache.jmeter.testelement.property.BooleanProperty
 import org.apache.jmeter.testelement.schema.BooleanPropertyDescriptor
-import org.apache.jmeter.util.JMeterUtils
+import org.apache.jorphan.gui.ExpressionMode
 import org.apache.jorphan.gui.JEditableCheckBox
+import org.apache.jorphan.gui.ResetMode
+import org.apache.jorphan.locale.LocalizedString
+import org.apache.jorphan.locale.PlainValue
+import org.apache.jorphan.locale.ResourceLocalizer
 import org.apiguardian.api.API
+import org.jetbrains.annotations.NonNls
 
 /**
- * Provides editor component for boolean properties that accommodate both true/false and expression string.
+ * Provides an editor component for boolean properties that accommodate both true/false and expression string.
  * @since 5.6
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.6")
 public class JBooleanPropertyEditor(
     private val propertyDescriptor: BooleanPropertyDescriptor<*>,
-    label: String,
-) : JEditableCheckBox(label, DEFAULT_CONFIGURATION), Binding {
+    label: @NonNls String,
+    resourceLocalizer: ResourceLocalizer,
+) : JEditableCheckBox(label, createConfiguration(resourceLocalizer), resourceLocalizer), Binding {
     private companion object {
-        @JvmField
-        val DEFAULT_CONFIGURATION: Configuration = Configuration(
-            startEditing = JMeterUtils.getResString("editable_checkbox.use_expression"),
-            trueValue = "true",
-            falseValue = "false",
-            extraValues = listOf(
-                "\${__P(property_name)}",
-                "\${variable_name}",
+        private fun createConfiguration(resourceLocalizer: ResourceLocalizer) =
+            Configuration(
+                expressionMode = ExpressionMode.Allow(
+                    useExpression = LocalizedString("edit_as_expression_action", resourceLocalizer),
+                    useExpressionTooltip = LocalizedString("edit_as_expression_tooltip", resourceLocalizer)
+                ),
+                trueValue = LocalizedString("editable_checkbox.true", resourceLocalizer),
+                falseValue = LocalizedString("editable_checkbox.false", resourceLocalizer),
+                extraValues = listOf(
+                    PlainValue("\${__P(property_name)}"),
+                    PlainValue("\${variable_name}"),
+                ),
+                resetMode = ResetMode.Allow(LocalizedString("reset", resourceLocalizer)),
             )
-        )
+    }
+
+    /**
+     * Suppresses automatic [isModified] updates while the editor is being
+     * driven programmatically (loading from a [TestElement] or being reset).
+     * Without this flag the value-change listener below would lift the
+     * "modified" indicator on every internal mutation.
+     */
+    private var suppressModifiedUpdate: Boolean = false
+
+    init {
+        // Any user-driven value change marks the editor as modified — once
+        // the user touches the control, the value is considered explicit
+        // and stays explicit until reset.
+        addPropertyChangeListener(VALUE_PROPERTY) {
+            if (!suppressModifiedUpdate) {
+                isModified = true
+            }
+        }
     }
 
     public fun reset() {
-        value = Value.of(propertyDescriptor.defaultValue ?: false)
+        suppressModifiedUpdate = true
+        try {
+            value = Value.of(propertyDescriptor.defaultValue ?: false)
+            isModified = false
+        } finally {
+            suppressModifiedUpdate = false
+        }
+    }
+
+    override fun resetToDefault() {
+        reset()
     }
 
     public override fun updateElement(testElement: TestElement) {
+        if (!isModified) {
+            // Not explicitly set — drop the property so the element falls
+            // back to the descriptor's default. Symmetric with updateUi(),
+            // which marks the editor modified iff the property is present.
+            testElement.removeProperty(propertyDescriptor)
+            return
+        }
         when (val value = value) {
-            // For now, UI does not distinguish between "false" and "absent" values,
-            // so we treat "false" as "absent".
-            is Value.Boolean ->
-                testElement[propertyDescriptor] =
-                    value.value.takeIf { it || propertyDescriptor.defaultValue == true }
+            is Value.Boolean -> testElement[propertyDescriptor] = value.value
             is Value.Text -> testElement[propertyDescriptor] = value.value
         }
     }
 
     public override fun updateUi(testElement: TestElement) {
-        value = when (val value = testElement.getPropertyOrNull(propertyDescriptor)) {
-            is BooleanProperty, null -> Value.of(value?.booleanValue ?: propertyDescriptor.defaultValue ?: false)
-            // TODO: should we rather fail in case we detect an unknown property?
-            else -> Value.Text(value.stringValue)
+        suppressModifiedUpdate = true
+        try {
+            val prop = testElement.getPropertyOrNull(propertyDescriptor)
+            value = when (prop) {
+                is BooleanProperty, null -> Value.of(prop?.booleanValue ?: propertyDescriptor.defaultValue ?: false)
+                // TODO: should we rather fail in case we detect an unknown property?
+                else -> Value.Text(prop.stringValue)
+            }
+            // Modified means "the property is stored explicitly on the element";
+            // an absent property means "use the default" and should leave the
+            // gutter dark.
+            isModified = prop != null
+        } finally {
+            suppressModifiedUpdate = false
         }
     }
 }
