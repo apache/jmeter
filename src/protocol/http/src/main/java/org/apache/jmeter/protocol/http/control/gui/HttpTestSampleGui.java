@@ -32,6 +32,8 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.JBooleanPropertyEditor;
+import org.apache.jmeter.gui.JEnumPropertyEditor;
+import org.apache.jmeter.gui.JStringPropertyEditor;
 import org.apache.jmeter.gui.JTextComponentBinding;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -63,16 +65,26 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     private UrlConfigGui urlConfigGui;
     private final JBooleanPropertyEditor retrieveEmbeddedResources = new JBooleanPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getRetrieveEmbeddedResources(),
-            JMeterUtils.getResString("web_testing_retrieve_images"));
+            "web_testing_retrieve_images",
+            JMeterUtils::getResString);
     private final JBooleanPropertyEditor concurrentDwn = new JBooleanPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getConcurrentDownload(),
-            JMeterUtils.getResString("web_testing_concurrent_download"));
+            "web_testing_concurrent_download",
+            JMeterUtils::getResString);
     private JTextField concurrentPool;
-    private final JBooleanPropertyEditor useMD5 = new JBooleanPropertyEditor(
-            HTTPSamplerBaseSchema.INSTANCE.getStoreAsMD5(),
-            JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
-    private JTextField embeddedAllowRE; // regular expression used to match against embedded resource URLs to allow
-    private JTextField embeddedExcludeRE; // regular expression used to match against embedded resource URLs to exclude
+    private final JEnumPropertyEditor<HTTPSamplerBase.ResponseProcessingMode> responseProcessingMode =
+            JEnumPropertyEditor.create(
+                    HTTPSamplerBaseSchema.INSTANCE.getResponseProcessingMode(),
+                    "response_processing_mode",
+                    HTTPSamplerBase.ResponseProcessingMode.class,
+                    JMeterUtils::getResString
+            );
+    private final JStringPropertyEditor embeddedAllowRE = new JStringPropertyEditor(
+            HTTPSamplerBaseSchema.INSTANCE.getEmbeddedUrlAllowRegex(),
+            JMeterUtils::getResString);
+    private final JStringPropertyEditor embeddedExcludeRE = new JStringPropertyEditor(
+            HTTPSamplerBaseSchema.INSTANCE.getEmbeddedUrlExcludeRegex(),
+            JMeterUtils::getResString);
     private JTextField sourceIpAddr; // does not apply to Java implementation
     private final JComboBox<String> sourceIpType = new JComboBox<>(HTTPSamplerBase.getSourceTypeList());
     private JTextField proxyScheme;
@@ -100,9 +112,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
                         retrieveEmbeddedResources,
                         concurrentDwn,
                         new JTextComponentBinding(concurrentPool, schema.getConcurrentDownloadPoolSize()),
-                        useMD5,
-                        new JTextComponentBinding(embeddedAllowRE, schema.getEmbeddedUrlAllowRegex()),
-                        new JTextComponentBinding(embeddedExcludeRE, schema.getEmbeddedUrlExcludeRegex())
+                        responseProcessingMode,
+                        embeddedAllowRE,
+                        embeddedExcludeRE
                 )
         );
         if (!isAJP) {
@@ -257,7 +269,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             advancedPanel.add(getProxyServerPanel());
         }
 
-        advancedPanel.add(createOptionalTasksPanel());
+        advancedPanel.add(createResponseProcessingPanel());
         return advancedPanel;
     }
 
@@ -312,29 +324,39 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         concurrentPool.setMinimumSize(new Dimension(10, (int) concurrentPool.getPreferredSize().getHeight()));
         concurrentPool.setMaximumSize(new Dimension(60, (int) concurrentPool.getPreferredSize().getHeight()));
 
-        final JPanel embeddedRsrcPanel = new JPanel(new MigLayout());
+        // Two-column grid: [label][editor grows]. The first row uses
+        // `split 3, span` so its three controls share a single cell and
+        // do not influence the column widths used by the URL rows below
+        // — that way the two URL labels end up in the same column and
+        // their text fields align with each other.
+        final JPanel embeddedRsrcPanel = new JPanel(new MigLayout("", "[][grow,fill]"));
         embeddedRsrcPanel.setBorder(BorderFactory.createTitledBorder(
                 JMeterUtils.getResString("web_testing_retrieve_title"))); // $NON-NLS-1$
-        embeddedRsrcPanel.add(retrieveEmbeddedResources);
+        embeddedRsrcPanel.add(retrieveEmbeddedResources, "split 3, span");
         embeddedRsrcPanel.add(concurrentDwn);
         embeddedRsrcPanel.add(concurrentPool, "wrap");
 
         // Embedded URL match regex
-        embeddedAllowRE = addTextFieldWithLabel(embeddedRsrcPanel, JMeterUtils.getResString("web_testing_embedded_url_pattern")); // $NON-NLS-1$
+        addEditableTextFieldWithLabel(embeddedRsrcPanel,
+                JMeterUtils.getResString("web_testing_embedded_url_pattern"), // $NON-NLS-1$
+                embeddedAllowRE);
 
         // Embedded URL to not match regex
-        embeddedExcludeRE = addTextFieldWithLabel(embeddedRsrcPanel, JMeterUtils.getResString("web_testing_embedded_url_exclude_pattern")); // $NON-NLS-1$
+        addEditableTextFieldWithLabel(embeddedRsrcPanel,
+                JMeterUtils.getResString("web_testing_embedded_url_exclude_pattern"), // $NON-NLS-1$
+                embeddedExcludeRE);
 
         return embeddedRsrcPanel;
     }
 
-    private static JTextField addTextFieldWithLabel(JPanel panel, String labelText) {
-        JLabel label = new JLabel(labelText); // $NON-NLS-1$
-        JTextField field = new JTextField(100);
-        label.setLabelFor(field);
+    private static void addEditableTextFieldWithLabel(JPanel panel, String labelText, JStringPropertyEditor editor) {
+        JLabel label = new JLabel(labelText);
+        // Wire labelFor to the inner JTextField so screen readers announce
+        // the label when focus enters the editable area.
+        label.setLabelFor(editor.getInnerTextField());
+        editor.getInnerTextField().setColumns(100);
         panel.add(label);
-        panel.add(field, "span");
-        return field;
+        panel.add(editor, "growx, wrap");
     }
 
     /**
@@ -352,15 +374,12 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         return implPanel;
     }
 
-    protected JPanel createOptionalTasksPanel() {
-        // OPTIONAL TASKS
-        final JPanel checkBoxPanel = new VerticalPanel();
-        checkBoxPanel.setBorder(BorderFactory.createTitledBorder(
-                JMeterUtils.getResString("optional_tasks"))); // $NON-NLS-1$
-
-        checkBoxPanel.add(useMD5);
-
-        return checkBoxPanel;
+    protected JPanel createResponseProcessingPanel() {
+        JPanel panel = new JPanel(new MigLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("response_processing_title"))); // $NON-NLS-1$
+        panel.add(responseProcessingMode, "span");
+        return panel;
     }
 
     @SuppressWarnings("EnumOrdinal")

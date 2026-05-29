@@ -61,6 +61,45 @@ controls allow you to configure the behavior of that particular test element.  W
 configured for an element depends on what type of element it is.</p>
 
 <note>The Test Tree itself can be manipulated by dragging and dropping components around the test tree.</note>
+
+<h4>Modified value indicator</h4>
+<p>Some editable controls show a thin coloured strip along their left edge — the
+<i>modified gutter</i>. The strip lights up when the value shown in the control is
+stored explicitly on the test element, and stays dark while the control is using
+its default (the property is absent on the element, so JMeter falls back to the
+descriptor's default or to the value inherited from a parent
+<code>HTTP Request Defaults</code> / similar).</p>
+<p>The indicator lets you tell at a glance which fields you have overridden and
+which are still using their defaults:</p>
+<ul>
+<li>Loading a saved <code>.jmx</code> file lights the gutter only on fields whose
+value is actually written into the file. Untouched fields stay dark, so you can
+spot at a glance which settings the test plan really overrides.</li>
+<li>Editing a value lights the gutter immediately, even if you happen to type back
+the original default — a value you typed is considered explicit until you reset
+it. Saving and re-opening the file preserves this distinction: an explicit value
+that happens to equal the default is still written and still lights the gutter
+on reload.</li>
+<li>The gutter colour follows the current Look-and-Feel accent colour. When the
+control is disabled, the strip is shown in a muted tone.</li>
+</ul>
+
+<h4>Resetting a value to default</h4>
+<p>Right-click on a control whose gutter is lit — the popup menu contains a
+<code>Reset</code> entry. Picking it clears the explicit value, restores the
+default and turns the gutter off. The menu entry is greyed out when there is
+nothing to reset.</p>
+<p>Single-line text fields support a quick keyboard shortcut: when the field is
+empty <em>and</em> the gutter is still lit (because you just cleared a custom
+value), pressing <keycombo><keysym>Backspace</keysym></keycombo> (or
+<keycombo><keysym>Delete</keysym></keycombo>) once more performs the reset.
+In practice, holding <keycombo><keysym>Backspace</keysym></keycombo> until the
+field is empty and then pressing it one more time is enough to roll the field
+back to its default.</p>
+<p>While editing an expression (a value typed in <code>${variable}</code> or
+<code>${__function(...)}</code> form), the same <code>Reset</code> entry is
+available from the popup menu of the expression text editor, so you do not have
+to switch back to the regular control to clear an unwanted override.</p>
 </subsection>
 
 <subsection name="&sect-num;.4 Saving the Test Plan" anchor="saving">

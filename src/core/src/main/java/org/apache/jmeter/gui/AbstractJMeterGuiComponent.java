@@ -40,7 +40,10 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestElementSchema;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.gui.JEditableTextArea;
 import org.apache.jorphan.gui.JFactory;
+import org.apache.jorphan.gui.ResetMode;
+import org.apache.jorphan.locale.LocalizedString;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +84,32 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @SuppressWarnings("DeprecatedIsStillUsed")
     protected NamePanel namePanel;
 
-    private final JTextArea commentField = JFactory.tabMovesFocus(new JTextArea());
+    private final JEditableTextArea commentEditor = createCommentEditor();
+    // The legacy commentField reference still points at the inner JTextArea
+    // so existing setText / getText callers keep working unchanged.
+    private final JTextArea commentField = JFactory.tabMovesFocus(commentEditor.getInnerTextArea());
+
+    private static JEditableTextArea createCommentEditor() {
+        // Reset for a comment means "clear it" — the default comment is empty.
+        // Overriding resetToDefault is required: the base implementation is a
+        // no-op, so without this the popup "Reset" item and the backspace
+        // gesture would do nothing.
+        JEditableTextArea editor = new JEditableTextArea(
+                new JEditableTextArea.Configuration(
+                        new ResetMode.Allow(new LocalizedString("reset", JMeterUtils::getResString)))) {
+            @Override
+            protected void resetToDefault() {
+                setValue(""); // $NON-NLS-1$
+            }
+        };
+        // Comment-field semantics: the gutter lights up while the comment
+        // is non-empty. There is no concept of "explicit empty" for a
+        // comment, so we recompute the modified flag from the live text on
+        // every value change (programmatic loads as well as typing).
+        editor.addPropertyChangeListener(JEditableTextArea.VALUE_PROPERTY,
+                evt -> editor.setModified(!editor.getValue().isEmpty()));
+        return editor;
+    }
 
     /**
      * Stores a collection of property editors, so GuiCompoenent can have default implementations that
@@ -209,6 +237,9 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      */
     @Override
     public void configure(TestElement element) {
+        // Drive the name field's modified gutter against the static label,
+        // so a custom name lights the gutter while the default name does not.
+        namePanel.setDefaultName(getStaticLabel());
         setName(element.getName());
         enabled = element.isEnabled();
         commentField.setText(element.getComment());
@@ -228,6 +259,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     }
 
     private void initGui() {
+        namePanel.setDefaultName(getStaticLabel());
         setName(getStaticLabel());
         commentField.setText("");
     }
@@ -300,12 +332,14 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
         JTextField nameField = namePanel.getNameField();
         titlePanel.add(labelFor(nameField, "name"));
-        titlePanel.add(nameField);
+        // Add the gutter-aware editor (not the raw nameField) so the
+        // modified indicator next to the name is shown.
+        titlePanel.add(namePanel.getNameComponent());
 
         titlePanel.add(labelFor(nameField, "testplan_comments"));
         commentField.setWrapStyleWord(true);
         commentField.setLineWrap(true);
-        titlePanel.add(commentField);
+        titlePanel.add(commentEditor);
 
         // Note: VerticalPanel has a workaround for Box layout which aligns elements, so we can't
         // use trivial JPanel.

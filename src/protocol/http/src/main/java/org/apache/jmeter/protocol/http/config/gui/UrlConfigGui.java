@@ -380,19 +380,22 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
             useKeepAlive = new JBooleanPropertyEditor(
                     HTTPSamplerBaseSchema.INSTANCE.getUseKeepalive(),
-                    JMeterUtils.getResString("use_keepalive"));
+                    "use_keepalive",
+                    JMeterUtils::getResString);
             JFactory.small(useKeepAlive);
             useKeepAlive.setVisible(getUrlConfigDefaults().isUseKeepAliveVisible());
 
             useMultipart = new JBooleanPropertyEditor(
                     HTTPSamplerBaseSchema.INSTANCE.getUseMultipartPost(),
-                    JMeterUtils.getResString("use_multipart_for_http_post")); // $NON-NLS-1$
+                    "use_multipart_for_http_post",
+                    JMeterUtils::getResString);
             JFactory.small(useMultipart);
             useMultipart.setVisible(getUrlConfigDefaults().isUseMultipartVisible());
 
             useBrowserCompatibleMultipartMode = new JBooleanPropertyEditor(
                     HTTPSamplerBaseSchema.INSTANCE.getUseBrowserCompatibleMultipart(),
-                    JMeterUtils.getResString("use_multipart_mode_browser")); // $NON-NLS-1$
+                    "use_multipart_mode_browser",
+                    JMeterUtils::getResString);
             JFactory.small(useBrowserCompatibleMultipartMode);
             useBrowserCompatibleMultipartMode.setVisible(getUrlConfigDefaults().isUseBrowserCompatibleMultipartModeVisible());
         }

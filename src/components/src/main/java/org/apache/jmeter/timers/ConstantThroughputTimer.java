@@ -32,6 +32,7 @@ import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.IdentityKey;
+import org.apache.jorphan.locale.ResourceKeyed;
 import org.apache.jorphan.util.EnumUtils;
 import org.apiguardian.api.API;
 
@@ -71,7 +72,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     /**
      * This enum defines the calculation modes used by the ConstantThroughputTimer.
      */
-    public enum Mode {
+    public enum Mode implements ResourceKeyed {
         ThisThreadOnly("calcMode.1"), // NOSONAR Keep naming for compatibility
         AllActiveThreads("calcMode.2"), // NOSONAR Keep naming for compatibility
         AllActiveThreadsInCurrentThreadGroup("calcMode.3"), // NOSONAR Keep naming for compatibility
@@ -87,6 +88,11 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
         @Override
         public String toString() {
+            return propertyName;
+        }
+
+        @Override
+        public String getResourceKey() {
             return propertyName;
         }
     }
@@ -161,15 +167,13 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     }
 
     @Deprecated
-    @SuppressWarnings("EnumOrdinal")
     public void setCalcMode(int mode) {
-        setMode(EnumUtils.values(Mode.class).get(mode));
+        setMode(EnumUtils.getEnumValues(Mode.class).get(mode));
     }
 
-    @SuppressWarnings("EnumOrdinal")
     @API(status = API.Status.MAINTAINED, since = "6.0.0")
     public void setMode(Mode newMode) {
-        getSchema().getCalcMode().set(this, newMode.toString());
+        getSchema().getCalcMode().set(this, newMode.getResourceKey());
     }
 
     /**
@@ -296,7 +300,6 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * so the conversion only needs to happen once.
      */
     @Override
-    @SuppressWarnings("EnumOrdinal")
     public void setProperty(JMeterProperty property) {
         String propertyName = property.getName();
         if (propertyName.equals("calcMode")) {

@@ -123,8 +123,15 @@ public abstract class HTTPSamplerBaseSchema : TestElementSchema() {
     public val embeddedUrlExcludeRegex: StringPropertyDescriptor<HTTPSamplerBaseSchema>
         by string("HTTPSampler.embedded_url_exclude_re")
 
+    @Deprecated(message = "Use responseProcessingMode instead")
     public val storeAsMD5: BooleanPropertyDescriptor<HTTPSamplerBaseSchema>
         by boolean("HTTPSampler.md5", default = false)
+
+    public val responseProcessingMode: StringPropertyDescriptor<HTTPSamplerBaseSchema>
+        by string(
+        "HTTPSampler.responseProcessingMode",
+        default = HTTPSamplerBase.ResponseProcessingMode.STORE_COMPRESSED.resourceKey
+    )
 
     public val postBodyRaw: BooleanPropertyDescriptor<HTTPSamplerBaseSchema>
         by boolean("HTTPSampler.postBodyRaw", default = false)
