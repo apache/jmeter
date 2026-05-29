@@ -47,7 +47,7 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
         for (CSVDataSet.ShareMode value : CSVDataSet.ShareMode.values()) {
             @SuppressWarnings("EnumOrdinal")
             int index = value.ordinal();
-            SHARE_TAGS[index] = value.toString();
+            SHARE_TAGS[index] = value.getResourceKey();
         }
     }
 
