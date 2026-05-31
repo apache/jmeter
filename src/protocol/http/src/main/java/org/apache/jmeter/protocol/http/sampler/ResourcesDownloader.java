@@ -23,10 +23,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.util.JMeterUtils;
@@ -76,20 +78,142 @@ public class ResourcesDownloader {
     private static final int MIN_POOL_SIZE = 1;
     private static final int MAX_POOL_SIZE = Integer.MAX_VALUE;
 
+    /** Whether to use Java 21 Virtual Threads for resource downloads */
+    private static final boolean VIRTUAL_THREADS_ENABLED =
+            JMeterUtils.getPropDefault("jmeter.threads.virtual.enabled", true); // $NON-NLS-1$
+
+    /** Cached reference to Executors.newThreadPerTaskExecutor() method for Java 21+ virtual thread support */
+    private static final java.lang.invoke.MethodHandle NEW_VIRTUAL_THREAD_EXECUTOR;
+
+    /** Counter for naming virtual threads */
+    private static final AtomicLong VIRTUAL_THREAD_COUNTER = new AtomicLong(0);
+
+    static {
+        java.lang.invoke.MethodHandle newExecutor = null;
+        if (VIRTUAL_THREADS_ENABLED) {
+            try {
+                // Try to get Executors.newThreadPerTaskExecutor(ThreadFactory) method (Java 21+)
+                java.lang.invoke.MethodHandles.Lookup lookup = java.lang.invoke.MethodHandles.lookup();
+
+                // Verify Thread.ofVirtual() exists (Java 21+)
+                Thread.class.getMethod("ofVirtual");
+
+                // Get the newThreadPerTaskExecutor method
+                java.lang.reflect.Method newExecutorMethod = java.util.concurrent.Executors.class
+                        .getMethod("newThreadPerTaskExecutor", java.util.concurrent.ThreadFactory.class);
+                newExecutor = lookup.unreflect(newExecutorMethod);
+
+                LOG.info("Virtual threads support enabled for ResourcesDownloader (Java 21+)");
+            } catch (NoSuchMethodException | IllegalAccessException e) {
+                LOG.warn("Virtual threads requested but not available for ResourcesDownloader (requires Java 21+), " +
+                        "falling back to platform threads");
+            }
+        }
+        NEW_VIRTUAL_THREAD_EXECUTOR = newExecutor;
+    }
+
     private static final ResourcesDownloader INSTANCE = new ResourcesDownloader();
 
     public static ResourcesDownloader getInstance() {
         return INSTANCE;
     }
 
-    private ThreadPoolExecutor concurrentExecutor = null;
+    private ExecutorService concurrentExecutor = null;
+    private final boolean usingVirtualThreads;
 
     private ResourcesDownloader() {
-        init();
+        usingVirtualThreads = initVirtualThreadExecutor();
+        if (!usingVirtualThreads) {
+            initPlatformThreadExecutor();
+        }
     }
 
-    private void init() {
-        LOG.info("Creating ResourcesDownloader with keepalive_inseconds : {}", THREAD_KEEP_ALIVE_TIME);
+    /**
+     * Finds a method in the class hierarchy, including interfaces.
+     * @param clazz the class to search
+     * @param methodName the method name
+     * @param paramTypes the parameter types
+     * @return the method, or null if not found
+     */
+    private static java.lang.reflect.Method findMethodInHierarchy(
+            Class<?> clazz, String methodName, Class<?>... paramTypes) {
+        for (Class<?> c = clazz; c != null; c = c.getSuperclass()) {
+            java.lang.reflect.Method method = findMethodInClassOrInterfaces(c, methodName, paramTypes);
+            if (method != null) {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Finds a method in a class or its interfaces.
+     */
+    private static java.lang.reflect.Method findMethodInClassOrInterfaces(
+            Class<?> clazz, String methodName, Class<?>... paramTypes) {
+        try {
+            return clazz.getMethod(methodName, paramTypes);
+        } catch (NoSuchMethodException ignored) {
+            // Method not found in this class, try interfaces
+            for (Class<?> iface : clazz.getInterfaces()) {
+                try {
+                    return iface.getMethod(methodName, paramTypes);
+                } catch (NoSuchMethodException e) {
+                    LOG.trace("Method {} not found in interface {}", methodName, iface.getName());
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Try to initialize a virtual thread executor (Java 21+).
+     * @return true if virtual threads are enabled and available, false otherwise
+     */
+    private boolean initVirtualThreadExecutor() {
+        if (NEW_VIRTUAL_THREAD_EXECUTOR == null) {
+            return false;
+        }
+        try {
+            // Create a ThreadFactory that creates virtual threads with custom names
+            java.util.concurrent.ThreadFactory virtualFactory = r -> {
+                try {
+                    java.lang.invoke.MethodHandles.Lookup lookup = java.lang.invoke.MethodHandles.lookup();
+                    java.lang.reflect.Method ofVirtualMethod = Thread.class.getMethod("ofVirtual");
+                    Object builder = lookup.unreflect(ofVirtualMethod).invoke();
+
+                    Class<?> builderClass = builder.getClass();
+                    java.lang.reflect.Method nameMethod = findMethodInHierarchy(builderClass, "name", String.class);
+                    if (nameMethod != null) {
+                        builder = lookup.unreflect(nameMethod).invoke(builder,
+                                "ResDownload-vt-" + VIRTUAL_THREAD_COUNTER.incrementAndGet());
+                    }
+
+                    java.lang.reflect.Method unstartedMethod = findMethodInHierarchy(builderClass, "unstarted", Runnable.class);
+                    if (unstartedMethod != null) {
+                        return (Thread) lookup.unreflect(unstartedMethod).invoke(builder, r);
+                    }
+                } catch (Throwable t) {
+                    LOG.warn("Failed to create virtual thread in factory, creating platform thread", t);
+                }
+                // Fallback to platform thread
+                Thread t = new Thread(r);
+                t.setName("ResDownload-" + t.getName());
+                t.setDaemon(true);
+                return t;
+            };
+
+            concurrentExecutor = (ExecutorService) NEW_VIRTUAL_THREAD_EXECUTOR.invoke(virtualFactory);
+            LOG.info("Created ResourcesDownloader with virtual threads");
+            return true;
+        } catch (Throwable t) {
+            LOG.warn("Failed to create virtual thread executor, falling back to platform threads", t);
+            return false;
+        }
+    }
+
+    private void initPlatformThreadExecutor() {
+        LOG.info("Creating ResourcesDownloader with platform threads, keepalive_inseconds : {}", THREAD_KEEP_ALIVE_TIME);
         concurrentExecutor = new ThreadPoolExecutor(
                 MIN_POOL_SIZE, MAX_POOL_SIZE, THREAD_KEEP_ALIVE_TIME, TimeUnit.SECONDS,
                 new SynchronousQueue<>(),
@@ -98,8 +222,7 @@ public class ResourcesDownloader {
                     t.setName("ResDownload-" + t.getName()); //$NON-NLS-1$
                     t.setDaemon(true);
                     return t;
-                }) {
-        };
+                });
     }
 
     /**
@@ -107,13 +230,22 @@ public class ResourcesDownloader {
      * it should be called at the end of a test
      */
     public void shrink() {
-        if (concurrentExecutor.getPoolSize() <= MIN_POOL_SIZE) {
+        // Virtual thread executors don't need shrinking - threads are very lightweight
+        if (usingVirtualThreads) {
+            return;
+        }
+
+        if (!(concurrentExecutor instanceof ThreadPoolExecutor poolExecutor)) {
+            return;
+        }
+
+        if (poolExecutor.getPoolSize() <= MIN_POOL_SIZE) {
             return;
         }
         // drain the queue
-        concurrentExecutor.purge();
+        poolExecutor.purge();
         List<Runnable> drainList = new ArrayList<>();
-        concurrentExecutor.getQueue().drainTo(drainList);
+        poolExecutor.getQueue().drainTo(drainList);
         if (!drainList.isEmpty()) {
             LOG.warn("the pool executor workqueue is not empty size={}", drainList.size());
             for (Runnable runnable : drainList) {
@@ -127,7 +259,7 @@ public class ResourcesDownloader {
 
         // this will force the release of the extra threads that are idle
         // the remaining extra threads will be released with the keepAliveTime of the thread
-        concurrentExecutor.setMaximumPoolSize(MIN_POOL_SIZE);
+        poolExecutor.setMaximumPoolSize(MIN_POOL_SIZE);
 
         // do not immediately restore the MaximumPoolSize as it will block the release of the threads
     }
@@ -151,12 +283,13 @@ public class ResourcesDownloader {
             return submittedTasks;
         }
 
-        // restore MaximumPoolSize original value
-        concurrentExecutor.setMaximumPoolSize(MAX_POOL_SIZE);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("PoolSize={} LargestPoolSize={}",
-                    concurrentExecutor.getPoolSize(), concurrentExecutor.getLargestPoolSize());
+        // restore MaximumPoolSize original value (only for platform thread pools)
+        if (concurrentExecutor instanceof ThreadPoolExecutor poolExecutor) {
+            poolExecutor.setMaximumPoolSize(MAX_POOL_SIZE);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("PoolSize={} LargestPoolSize={}",
+                        poolExecutor.getPoolSize(), poolExecutor.getLargestPoolSize());
+            }
         }
 
         CompletionService<AsynSamplerResultHolder> completionService =

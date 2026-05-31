@@ -13,8 +13,8 @@ permissions: read-all
 
 jobs:
   update_release_draft:
-    # Skip release drafts in forks
-    if: vars.RUN_RELEASE_DRAFTER == 'true'
+    # Skip outside apache/jmeter; on Apache, opt-in via repo variable.
+    if: github.repository == 'apache/jmeter' && vars.RUN_RELEASE_DRAFTER == 'true'
     name: Update Release Draft
     runs-on: ubuntu-latest
     permissions:

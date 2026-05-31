@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.samplers;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -25,9 +26,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.Searchable;
@@ -136,6 +141,14 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private static final String NULL_FILENAME = "NULL";
 
+    // Reuse ByteArrayOutputStream instances to reduce memory allocations
+    private static final ThreadLocal<ByteArrayOutputStream> threadLocalBAOS =
+            ThreadLocal.withInitial(ByteArrayOutputStream::new);
+
+    // Reuse Inflater instances to minimize object creation
+    private static final ThreadLocal<Inflater> threadLocalInflater =
+            ThreadLocal.withInitial(() -> new Inflater(true));
+
     static {
         if (START_TIMESTAMP) {
             log.info("Note: Sample TimeStamps are START times");
@@ -160,6 +173,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private SampleResult parent;
 
     private byte[] responseData = EMPTY_BA;
+
+    private String contentEncoding; // Stores gzip/deflate encoding if response is compressed
 
     private String responseCode = "";// Never return null
 
@@ -218,7 +233,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     // TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
     private String dataEncoding;// (is this really the character set?) e.g.
-                                // ISO-8895-1, UTF-8
+    // ISO-8895-1, UTF-8
 
     private String contentType = ""; // e.g. text/html; charset=utf-8
 
@@ -276,6 +291,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * Cache for responseData as string to avoid multiple computations
      */
     private transient volatile String responseDataAsString;
+
+    private static final String GZIP_ENCODING = "gzip";
+    private static final String X_GZIP_ENCODING = "x-gzip";
+    private static final String DEFLATE_ENCODING = "deflate";
+    private static final String BROTLI_ENCODING = "br";
 
     public SampleResult() {
         this(USE_NANO_TIME, NANOTHREAD_SLEEP);
@@ -792,6 +812,16 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @return the responseData value (cannot be null)
      */
     public byte[] getResponseData() {
+        if (responseData == null) {
+            return EMPTY_BA;
+        }
+        if (contentEncoding != null && responseData.length > 0) {
+            try {
+                return ResponseDecoderRegistry.decode(contentEncoding, responseData);
+            } catch (IOException e) {
+                log.warn("Failed to decompress response data", e);
+            }
+        }
         return responseData;
     }
 
@@ -803,12 +833,12 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public String getResponseDataAsString() {
         try {
             if(responseDataAsString == null) {
-                responseDataAsString= new String(responseData,getDataEncodingWithDefault());
+                responseDataAsString= new String(getResponseData(),getDataEncodingWithDefault());
             }
             return responseDataAsString;
         } catch (UnsupportedEncodingException e) {
             log.warn("Using platform default as {} caused {}", getDataEncodingWithDefault(), e.getLocalizedMessage());
-            return new String(responseData,Charset.defaultCharset()); // N.B. default charset is used deliberately here
+            return new String(getResponseData(),Charset.defaultCharset()); // N.B. default charset is used deliberately here
         }
     }
 
@@ -1665,5 +1695,16 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public void setTestLogicalAction(TestLogicalAction testLogicalAction) {
         this.testLogicalAction = testLogicalAction;
+    }
+
+    /**
+     * Sets the response data and its contentEncoding.
+     * @param data The response data
+     * @param contentEncoding The content contentEncoding (e.g. gzip, deflate)
+     */
+    public void setResponseData(byte[] data, String contentEncoding) {
+        responseData = data == null ? EMPTY_BA : data;
+        this.contentEncoding = contentEncoding;
+        responseDataAsString = null;
     }
 }

@@ -3,6 +3,7 @@ on: [push, pull_request]
 
 jobs:
   validation:
+    if: github.repository == 'apache/jmeter'
     name: "Validation"
     runs-on: ubuntu-latest
     steps:

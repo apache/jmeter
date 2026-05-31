@@ -54,6 +54,48 @@ public class ThreadGroup extends AbstractThreadGroup {
     private static final int RAMPUP_GRANULARITY =
             JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
 
+    /** Whether to use Java 21 Virtual Threads for JMeter threads */
+    private static final boolean VIRTUAL_THREADS_ENABLED =
+            JMeterUtils.getPropDefault("jmeter.threads.virtual.enabled", true); // $NON-NLS-1$
+
+    /** Cached reference to Thread.ofVirtual() method for Java 21+ support, null if not available */
+    private static final java.lang.invoke.MethodHandle VIRTUAL_THREAD_BUILDER;
+
+    /** Cached reference to Thread.Builder.OfVirtual.name() method */
+    private static final java.lang.invoke.MethodHandle VIRTUAL_BUILDER_NAME;
+
+    /** Cached reference to Thread.Builder.OfVirtual.unstarted() method */
+    private static final java.lang.invoke.MethodHandle VIRTUAL_BUILDER_UNSTARTED;
+
+    static {
+        java.lang.invoke.MethodHandle ofVirtual = null;
+        java.lang.invoke.MethodHandle builderName = null;
+        java.lang.invoke.MethodHandle builderUnstarted = null;
+        if (VIRTUAL_THREADS_ENABLED) {
+            try {
+                // Try to get Thread.ofVirtual() method (Java 21+)
+                java.lang.invoke.MethodHandles.Lookup lookup = java.lang.invoke.MethodHandles.lookup();
+                java.lang.reflect.Method ofVirtualMethod = Thread.class.getMethod("ofVirtual");
+                ofVirtual = lookup.unreflect(ofVirtualMethod);
+
+                // Get the builder class and its methods
+                Class<?> builderClass = ofVirtualMethod.getReturnType();
+                java.lang.reflect.Method nameMethod = builderClass.getMethod("name", String.class);
+                builderName = lookup.unreflect(nameMethod);
+
+                java.lang.reflect.Method unstartedMethod = builderClass.getMethod("unstarted", Runnable.class);
+                builderUnstarted = lookup.unreflect(unstartedMethod);
+
+                log.info("Virtual threads support enabled (Java 21+)");
+            } catch (NoSuchMethodException | IllegalAccessException e) {
+                log.warn("Virtual threads requested but not available (requires Java 21+), falling back to platform threads");
+            }
+        }
+        VIRTUAL_THREAD_BUILDER = ofVirtual;
+        VIRTUAL_BUILDER_NAME = builderName;
+        VIRTUAL_BUILDER_UNSTARTED = builderUnstarted;
+    }
+
     //+ JMX entries - do not change the string values
 
     /** Ramp-up time */
@@ -258,6 +300,29 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     /**
+     * Creates a thread (virtual or platform) based on configuration.
+     * When {@code jmeter.threads.virtual.enabled} is true and running on Java 21+,
+     * creates a virtual thread. Otherwise creates a platform thread.
+     *
+     * @param runnable the runnable to execute
+     * @param name the thread name
+     * @return an unstarted Thread
+     */
+    private static Thread createThread(Runnable runnable, String name) {
+        if (VIRTUAL_THREAD_BUILDER != null) {
+            try {
+                // Thread.ofVirtual().name(name).unstarted(runnable)
+                Object builder = VIRTUAL_THREAD_BUILDER.invoke();
+                builder = VIRTUAL_BUILDER_NAME.invoke(builder, name);
+                return (Thread) VIRTUAL_BUILDER_UNSTARTED.invoke(builder, runnable);
+            } catch (Throwable t) {
+                log.warn("Failed to create virtual thread, falling back to platform thread", t);
+            }
+        }
+        return new Thread(runnable, name);
+    }
+
+    /**
      * Start a new {@link JMeterThread} and registers it
      * @param notifier {@link ListenerNotifier}
      * @param threadGroupTree {@link ListedHashTree}
@@ -273,7 +338,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         JMeterThread jmThread = makeThread(engine, this, notifier, groupNumber, threadNum, cloneTree(threadGroupTree), variables);
         scheduleThread(jmThread, now); // set start and end time
         jmThread.setInitialDelay(delay);
-        Thread newThread = new Thread(jmThread, jmThread.getThreadName());
+        Thread newThread = createThread(jmThread, jmThread.getThreadName());
         registerStartedThread(jmThread, newThread);
         newThread.start();
         return jmThread;
@@ -587,8 +652,10 @@ public class ThreadGroup extends AbstractThreadGroup {
                         jmThread.setScheduled(true);
                         jmThread.setEndTime(endtime);
                     }
-                    Thread newThread = new Thread(jmThread, jmThread.getThreadName());
-                    newThread.setDaemon(false); // ThreadStarter is daemon, but we don't want sampler threads to be so too
+                    Thread newThread = createThread(jmThread, jmThread.getThreadName());
+                    if (VIRTUAL_THREAD_BUILDER == null) {
+                        newThread.setDaemon(false); // ThreadStarter is daemon, but we don't want sampler threads to be so too
+                    }
                     registerStartedThread(jmThread, newThread);
                     newThread.start();
                 }

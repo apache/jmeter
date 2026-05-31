@@ -1484,6 +1484,13 @@ JMETER-SERVER</source>
     How often to check for shutdown during ramp-up (milliseconds).<br/>
     Defaults to: <code>1000</code>
 </property>
+<property name="jmeter.threads.virtual.enabled">
+    Enable Java 21 Virtual Threads for JMeter threads.<br/>
+    When enabled, virtual user threads use lightweight virtual threads instead of platform threads.<br/>
+    Benefits: Lower memory per thread, better I/O scalability for high thread counts.<br/>
+    Requires: Java 21+ (automatically falls back to platform threads on older Java versions).<br/>
+    Defaults to: <code>true</code>
+</property>
 <property name="onload.expandtree">
     Should JMeter expand the tree when loading a test plan?<br/>
     Default value is <code>false</code> since JMeter 2.7<br/>

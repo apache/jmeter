@@ -29,10 +29,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.apache.jmeter.engine.util.LightweightClone;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
@@ -142,6 +144,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     private transient boolean runningVersion = false;
 
+    /**
+     * Indicates whether this element's properties are shared with another element.
+     * When true, the propMap is shared and should be treated as read-only.
+     */
+    private transient boolean propertiesShared = false;
+
     // Thread-specific variables saved here to save recalculation
     private transient JMeterContext threadContext = null;
 
@@ -169,6 +177,179 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             return clonedElement;
         } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
             throw new AssertionError(e); // clone should never return null
+        }
+    }
+
+    /**
+     * Creates a lightweight clone that shares properties with this element.
+     * This is more memory-efficient than a full clone for elements that implement
+     * {@link LightweightClone} and don't modify properties during test execution.
+     *
+     * <p>The lightweight clone:
+     * <ul>
+     *   <li>Creates a new instance with default constructor</li>
+     *   <li>Shares the property map with the original element (no deep copy)</li>
+     *   <li>Has fresh transient state (threadContext, threadName, etc.)</li>
+     * </ul>
+     *
+     * @return a lightweight clone of this element
+     * @throws LinkageError if cloning fails due to reflection errors
+     */
+    public Object lightweightClone() {
+        try {
+            AbstractTestElement clone = this.getClass().getDeclaredConstructor().newInstance();
+            // Clear default properties set by constructor
+            clone.clear();
+            // Share property map reference with this element
+            clone.sharePropertiesFrom(this);
+            clone.setRunningVersion(isRunningVersion());
+            return clone;
+        } catch (ReflectiveOperationException e) {
+            throw new LinkageError(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Shares the property map from the source element.
+     * <p>
+     * This method is called only for elements that have NO variable properties
+     * (verified by {@link #hasVariableProperties()} in TreeCloner before calling
+     * {@link #lightweightClone()}). Therefore, it's safe to share property references
+     * directly without cloning - this provides significant memory savings.
+     * </p>
+     * <p>
+     * TestElementProperty is still cloned because nested TestElements may have
+     * transient runtime state that needs to be per-thread.
+     * </p>
+     *
+     * @param source the element to share properties from
+     */
+    void sharePropertiesFrom(AbstractTestElement source) {
+        try (ResourceLock ignored = writeLock()) {
+            // Share property references directly for maximum memory efficiency
+            // This is safe because TreeCloner only calls lightweightClone() for
+            // elements that have no variable properties (hasVariableProperties() == false)
+            for (Map.Entry<String, JMeterProperty> entry : source.propMap.entrySet()) {
+                JMeterProperty prop = entry.getValue();
+                // Only clone TestElementProperty because nested TestElements
+                // may have transient state that needs to be per-thread
+                if (prop instanceof TestElementProperty) {
+                    prop = prop.clone();
+                }
+                // All other properties are shared by reference - same String objects,
+                // same property instances across all threads
+                this.propMap.put(entry.getKey(), prop);
+            }
+            Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
+            if (propMapConcurrent != null) {
+                propMapConcurrent.putAll(this.propMap);
+            }
+        }
+        // Mark as shared to skip recoverRunningVersion and enable copy-on-write
+        this.propertiesShared = true;
+    }
+
+    /**
+     * Returns whether this element's properties are shared with another element.
+     *
+     * @return true if properties are shared (element was created via lightweightClone)
+     */
+    public boolean isPropertiesShared() {
+        return propertiesShared;
+    }
+
+    /**
+     * Checks if this element has any properties containing JMeter variables or functions.
+     * Elements with variable properties should not use lightweight cloning because
+     * the variable evaluation needs per-thread state.
+     *
+     * @return true if any property contains variables (${...}) or functions (__())
+     */
+    public boolean hasVariableProperties() {
+        try (ResourceLock ignored = readLock()) {
+            for (JMeterProperty prop : propMap.values()) {
+                if (propertyHasVariables(prop)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if a single property contains variables or functions.
+     */
+    private static boolean propertyHasVariables(JMeterProperty prop) {
+        // FunctionProperty is created when StringProperty with ${...} is transformed
+        if (prop instanceof FunctionProperty) {
+            return true;
+        }
+        // Check StringProperty for variable patterns (before transformation)
+        if (prop instanceof StringProperty stringProperty) {
+            String value = stringProperty.getStringValue();
+            if (value != null && (value.contains("${") || value.contains("__("))) {
+                return true;
+            }
+        }
+        // Check nested properties in collections
+        if (prop instanceof CollectionProperty collectionProperty) {
+            for (JMeterProperty nested : collectionProperty) {
+                if (propertyHasVariables(nested)) {
+                    return true;
+                }
+            }
+        }
+        // Check nested properties in maps
+        if (prop instanceof MapProperty mapProperty) {
+            PropertyIterator iter = mapProperty.valueIterator();
+            while (iter.hasNext()) {
+                if (propertyHasVariables(iter.next())) {
+                    return true;
+                }
+            }
+        }
+        // Check nested TestElement
+        if (prop instanceof TestElementProperty testElementProperty) {
+            TestElement nested = testElementProperty.getElement();
+            if (nested instanceof AbstractTestElement abstractNested) {
+                if (abstractNested.hasVariableProperties()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Ensures this element has its own copy of properties (copy-on-write).
+     * If properties are currently shared with another element, this method
+     * creates deep clones of all properties before any modification can occur.
+     * <p>
+     * This allows lightweight clones to share properties for memory efficiency,
+     * while still supporting runtime modifications when needed (e.g., when a
+     * Header Manager has a variable like ${updateme} that gets modified).
+     */
+    protected void ensureOwnProperties() {
+        if (!propertiesShared) {
+            return;
+        }
+        try (ResourceLock ignored = writeLock()) {
+            // Double-check after acquiring lock
+            if (!propertiesShared) {
+                return;
+            }
+            // Create deep copies of all properties
+            Map<String, JMeterProperty> newPropMap = new LinkedHashMap<>();
+            for (Map.Entry<String, JMeterProperty> entry : propMap.entrySet()) {
+                newPropMap.put(entry.getKey(), entry.getValue().clone());
+            }
+            propMap.clear();
+            propMap.putAll(newPropMap);
+            if (propMapConcurrent != null) {
+                propMapConcurrent.clear();
+                propMapConcurrent.putAll(propMap);
+            }
+            propertiesShared = false;
         }
     }
 
@@ -221,6 +402,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void removeProperty(String key) {
+        // Copy-on-write: ensure we have our own properties before modifying
+        if (isRunningVersion()) {
+            ensureOwnProperties();
+        }
         try (ResourceLock ignored = writeLock()) {
             propMap.remove(key);
             Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
@@ -425,6 +610,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             propertyToPut = property.clone();
         }
         if (isRunningVersion()) {
+            // Copy-on-write: ensure we have our own properties before modifying
+            ensureOwnProperties();
             setTemporary(propertyToPut);
         } else {
             clearTemporary(property);
@@ -483,6 +670,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     @Override
     public void setProperty(JMeterProperty property) {
         if (isRunningVersion()) {
+            // Copy-on-write: ensure we have our own properties before modifying
+            ensureOwnProperties();
             if (getProperty(property.getName()) instanceof NullProperty) {
                 addProperty(property);
             } else {
@@ -649,6 +838,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
     public void setRunningVersion(boolean runningVersion) {
         try (ResourceLock ignored = writeLock()) {
             this.runningVersion = runningVersion;
+            // Note: Even for shared properties (lightweight clones), we must call
+            // property.setRunningVersion() to ensure variable substitution works.
+            // The property transformation is idempotent and thread-safe.
             PropertyIterator iter = propertyIterator();
             Map<String, JMeterProperty> propMapConcurrent = this.propMapConcurrent;
             while (iter.hasNext()) {
@@ -669,6 +861,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         if (this instanceof NoThreadClone) {
             // The element is shared between threads, so there's nothing to recover
             // See https://github.com/apache/jmeter/issues/5875
+            return;
+        }
+        if (propertiesShared) {
+            // Properties are shared with other elements (lightweight clone),
+            // so there's nothing to recover - the properties are read-only
             return;
         }
         try (ResourceLock ignored = writeLock()) {

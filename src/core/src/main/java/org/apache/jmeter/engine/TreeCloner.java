@@ -20,16 +20,27 @@ package org.apache.jmeter.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.jmeter.engine.util.LightweightClone;
 import org.apache.jmeter.engine.util.NoThreadClone;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.ListedHashTree;
 
 /**
  * Clones the test tree,  skipping test elements that implement {@link NoThreadClone} by default.
+ * Elements implementing {@link LightweightClone} will share properties instead of deep cloning.
  */
 public class TreeCloner implements HashTreeTraverser {
+
+    /**
+     * Property to enable/disable lightweight cloning for LightweightClone elements.
+     * Can be disabled by setting {@code jmeter.clone.lightweight.enabled=false} in jmeter.properties.
+     */
+    private static final boolean LIGHTWEIGHT_CLONE_ENABLED =
+            JMeterUtils.getPropDefault("jmeter.clone.lightweight.enabled", true);
 
     private final ListedHashTree newTree;
 
@@ -80,6 +91,8 @@ public class TreeCloner implements HashTreeTraverser {
             newTree.add(objects, node);
             return node;
         }
+        newTree.add(objects, node);
+        return node;
     }
 
     /**

@@ -43,7 +43,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
-import org.apache.jmeter.JMeter;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -51,6 +50,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.locale.ResourceKeyed;
 import org.apache.jorphan.util.EnumUtils;
 import org.apiguardian.api.API;
 import org.jspecify.annotations.Nullable;
@@ -338,9 +338,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @return a StringProperty containing the normalized enum value, or null if the property is invalid or unrecognized
      */
     @API(status = API.Status.INTERNAL, since = "6.0.0")
-    public static <T extends Enum<?>> @Nullable JMeterProperty normalizeEnumProperty(
+    public static <T extends Enum<?> & ResourceKeyed> @Nullable JMeterProperty normalizeEnumProperty(
             Class<?> klass, Class<T> enumKlass, JMeterProperty property) {
-        List<T> values = EnumUtils.values(enumKlass);
+        List<T> values = EnumUtils.getEnumValues(enumKlass);
         T value;
         if (property instanceof IntegerProperty intProperty) {
             int index = intProperty.getIntValue();
@@ -362,26 +362,26 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 return null;
             }
             value = normalizeEnumStringValue(stringValue, klass, enumKlass);
-            if (stringValue.equals(EnumUtils.getStringValue(value))) {
+            if (stringValue.equals(value.getResourceKey())) {
                 // If the input property was good enough, keep it
                 return property;
             }
         } else {
             return null;
         }
-        return new StringProperty(property.getName(), EnumUtils.getStringValue(value));
+        return new StringProperty(property.getName(), value.getResourceKey());
     }
 
     @API(status = API.Status.INTERNAL, since = "6.0.0")
-    public static <T extends Enum<?>> T normalizeEnumStringValue(String value, Class<?> klass, Class<T> enumKlass) {
+    public static <T extends Enum<?> & ResourceKeyed> T normalizeEnumStringValue(String value, Class<?> klass, Class<T> enumKlass) {
         T enumValue = EnumUtils.valueOf(enumKlass, value);
         if (enumValue != null) {
             return enumValue;
         }
-        return normalizeEnumStringValue(value, klass, EnumUtils.values(enumKlass));
+        return normalizeEnumStringValue(value, klass, EnumUtils.getEnumValues(enumKlass));
     }
 
-    private static <T extends Enum<?>> T normalizeEnumStringValue(String value, Class<?> klass, List<T> values) {
+    private static <T extends Enum<?> & ResourceKeyed> T normalizeEnumStringValue(String value, Class<?> klass, List<T> values) {
         // Fallback: the value might be localized, thus check the current and root locales
         String bundleName = null;
         try {
@@ -408,9 +408,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         return findEnumValue(value, rootBundle, values);
     }
 
-    private static <T extends Enum<?>> @Nullable T findEnumValue(String stringValue, ResourceBundle rb, List<T> values) {
+    private static <T extends Enum<?> & ResourceKeyed> @Nullable T findEnumValue(String stringValue, ResourceBundle rb, List<T> values) {
         for (T enumValue : values) {
-            if (stringValue.equals(rb.getObject(enumValue.toString()))) {
+            if (stringValue.equals(rb.getObject(enumValue.getResourceKey()))) {
                 log.debug("Converted {} to {} using Locale: {}", stringValue, enumValue, rb.getLocale());
                 return enumValue;
             }

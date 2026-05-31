@@ -27,17 +27,21 @@ import org.apache.jmeter.threads.JMeterThread
 import org.apache.jmeter.threads.JMeterThreadMonitor
 import org.apache.jmeter.threads.ListenerNotifier
 import org.apache.jmeter.threads.TestCompilerHelper
+import org.apache.jmeter.util.JMeterUtils
 import org.apache.jorphan.collections.ListedHashTree
 import org.apiguardian.api.API
 import org.slf4j.LoggerFactory
 import java.io.Serializable
 import java.lang.Thread.sleep
+import java.lang.invoke.MethodHandles
 import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
+import java.util.concurrent.ThreadFactory
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.roundToLong
 
@@ -56,6 +60,45 @@ public class OpenModelThreadGroup :
     TestCompilerHelper {
     public companion object {
         private val log = LoggerFactory.getLogger(OpenModelThreadGroup::class.java)
+
+        /** Whether to use Java 21 Virtual Threads */
+        private val VIRTUAL_THREADS_ENABLED =
+            JMeterUtils.getPropDefault("jmeter.threads.virtual.enabled", true)
+
+        /** Counter for naming virtual threads */
+        private val virtualThreadCounter = AtomicLong(0)
+
+        /** Cached MethodHandle for creating virtual thread executor (Java 21+) */
+        private val newVirtualThreadExecutor: java.lang.invoke.MethodHandle? = run {
+            if (!VIRTUAL_THREADS_ENABLED) {
+                return@run null
+            }
+            try {
+                val lookup = MethodHandles.lookup()
+                // Verify Thread.ofVirtual() exists (Java 21+)
+                Thread::class.java.getMethod("ofVirtual")
+                // Get the newThreadPerTaskExecutor method
+                val method = Executors::class.java.getMethod(
+                    "newThreadPerTaskExecutor",
+                    ThreadFactory::class.java
+                )
+                val handle = lookup.unreflect(method)
+                log.info("Virtual threads support enabled for OpenModelThreadGroup (Java 21+)")
+                handle
+            } catch (e: NoSuchMethodException) {
+                log.warn(
+                    "Virtual threads requested but not available for OpenModelThreadGroup " +
+                        "(requires Java 21+), falling back to platform threads"
+                )
+                null
+            } catch (e: IllegalAccessException) {
+                log.warn(
+                    "Virtual threads requested but not available for OpenModelThreadGroup " +
+                        "(requires Java 21+), falling back to platform threads"
+                )
+                null
+            }
+        }
 
         /** Thread group schedule. See [ThreadSchedule]. */
         @Deprecated(
@@ -86,6 +129,82 @@ public class OpenModelThreadGroup :
         private val houseKeepingThreadPool = Executors.newCachedThreadPool()
 
         private const val serialVersionUID: Long = 1L
+
+        /**
+         * Creates an ExecutorService that uses virtual threads on Java 21+,
+         * or falls back to a cached thread pool on older versions.
+         */
+        private fun createExecutorService(): ExecutorService {
+            val executor = newVirtualThreadExecutor
+            if (executor != null) {
+                try {
+                    val factory = ThreadFactory { r ->
+                        createVirtualThread(r, "OpenModel-vt-${virtualThreadCounter.incrementAndGet()}")
+                            ?: Thread(r).apply { name = "OpenModel-$name" }
+                    }
+                    val result = executor.invoke(factory) as ExecutorService
+                    log.debug("Created virtual thread executor for OpenModelThreadGroup")
+                    return result
+                } catch (t: Throwable) {
+                    log.warn("Failed to create virtual thread executor, falling back to cached thread pool", t)
+                }
+            }
+            return Executors.newCachedThreadPool()
+        }
+
+        /**
+         * Creates a virtual thread using reflection (for Java 21+ compatibility).
+         */
+        private fun createVirtualThread(runnable: Runnable, name: String): Thread? {
+            return try {
+                val lookup = MethodHandles.lookup()
+                val ofVirtualMethod = Thread::class.java.getMethod("ofVirtual")
+                var builder = lookup.unreflect(ofVirtualMethod).invoke()
+
+                val builderClass = builder.javaClass
+                val nameMethod = findMethodInHierarchy(builderClass, "name", String::class.java)
+                if (nameMethod != null) {
+                    builder = lookup.unreflect(nameMethod).invoke(builder, name)
+                }
+
+                val unstartedMethod = findMethodInHierarchy(builderClass, "unstarted", Runnable::class.java)
+                if (unstartedMethod != null) {
+                    lookup.unreflect(unstartedMethod).invoke(builder, runnable) as Thread
+                } else {
+                    null
+                }
+            } catch (t: Throwable) {
+                log.trace("Failed to create virtual thread", t)
+                null
+            }
+        }
+
+        /**
+         * Finds a method in the class hierarchy, including interfaces.
+         */
+        private fun findMethodInHierarchy(
+            clazz: Class<*>,
+            methodName: String,
+            vararg paramTypes: Class<*>
+        ): java.lang.reflect.Method? {
+            var c: Class<*>? = clazz
+            while (c != null) {
+                try {
+                    return c.getMethod(methodName, *paramTypes)
+                } catch (ignored: NoSuchMethodException) {
+                    // Try interfaces
+                    for (iface in c.interfaces) {
+                        try {
+                            return iface.getMethod(methodName, *paramTypes)
+                        } catch (e: NoSuchMethodException) {
+                            // Continue searching
+                        }
+                    }
+                }
+                c = c.superclass
+            }
+            return null
+        }
     }
 
     // A thread pool that executes main workload.
@@ -205,7 +324,7 @@ public class OpenModelThreadGroup :
             val rnd = if (seed == 0L) Random() else Random(seed)
             val gen = ThreadScheduleProcessGenerator(rnd, parsedSchedule)
             val testStartTime = this.startTime
-            val executorService = Executors.newCachedThreadPool()
+            val executorService = createExecutorService()
             this.executorService = executorService
             val starter = ThreadsStarter(testStartTime, executorService, activeThreads, gen) { threadNumber ->
                 val clonedTree = cloneTree(threadGroupTree)
