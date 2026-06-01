@@ -81,6 +81,7 @@ Summary
     <li><issue>6250</issue>Avoid adding "; charset=" automatically to <code>multipart/form-data</code> requests to align behavior with modern HTTP clients.</li>
     <li><issue>6080</issue>Preserve the original HTTP method when following 307 and 308 redirects according to the HTTP specification. Contributed by LeeJiWon (github.com/dlwldnjs1009)</li>
     <li><issue>6267</issue><pr>6268</pr>Add a space between key and value after <code>:</code> in View Results Tree &gt; Sampler result tab for better readability.</li>
+    <li><issue>6388</issue><pr>6389</pr>Add a <code>Processing mode</code> option to HTTP Request and HTTP Request Defaults that controls how the response body is handled: store it and decompress it lazily when accessed (the new default), fetch and discard it, or store an MD5 checksum of the compressed or decompressed response. The former "<code>Save response as MD5 hash?</code>" option maps to the decompressed-MD5 mode, and existing test plans are upgraded automatically. Contributed by Joerek van Gaalen (github.com/jgaalen)</li>
   </ul>
 
   <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -123,6 +124,7 @@ Summary
 </p>
 <ul>
   <li>Raul Almeida (github.com/ratacolita)</li>
+  <li>Joerek van Gaalen (github.com/jgaalen)</li>
   <li>Pasquale Pochop (github.com/pochopsp)</li>
   <li>Gabriele Coletta (github.com/gdmg92)</li>
   <li>Patrick Uiterwijk (patrick at puiterwijk.org)</li>

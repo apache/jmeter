@@ -343,10 +343,23 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </property>
-       <property name="Save response as MD5 hash" required="No">
-       If this is selected, then the response is not stored in the sample result.
-       Instead, the 32 character MD5 hash of the data is calculated and stored instead.
-       This is intended for testing large amounts of data.
+       <property name="Processing mode:" required="No">
+       Controls how the response body is handled. The options are:
+       <ul>
+       <li><code>Default</code> - leave the mode unset, so the sampler inherits it from
+           <complink name="HTTP Request Defaults"/> if one is set, and otherwise behaves like
+           <code>Store response (decompress on access)</code>.</li>
+       <li><code>Store response (decompress on access)</code> - store the response as received and
+           decompress it only when the body is read (for example by an assertion, post-processor, or
+           listener). Responses that are never read are never decompressed, which saves CPU and memory.</li>
+       <li><code>Fetch and discard (headers only)</code> - read the response but do not store the body.
+           Use this when you only need the response code and headers.</li>
+       <li><code>Checksum (MD5 of compressed)</code> - store the 32-character MD5 hash of the compressed
+           response instead of the body.</li>
+       <li><code>Checksum (MD5 of decompressed)</code> - store the 32-character MD5 hash of the
+           decompressed response instead of the body. This is the former "<code>Save response as MD5 hash</code>"
+           behaviour, and test plans that used it are upgraded to this mode when loaded.</li>
+       </ul>
        </property>
         <property name="URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
@@ -3947,6 +3960,10 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         If present, this must be a regular expression that is used to filter out any embedded URLs found.
         So if you don't want to download PNG or SVG files from any source, use the expression:
         <code>.*\.(?i:svg|png)</code>
+        </property>
+        <property name="Processing mode:" required="No">
+        Default response-processing mode for HTTP samplers that leave theirs set to <code>Default</code>.
+        See "<code>Processing mode:</code>" under <complink name="HTTP Request"/> for the available modes.
         </property>
 </properties>
 <note>
