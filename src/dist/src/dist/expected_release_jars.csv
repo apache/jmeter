@@ -102,10 +102,10 @@
 675271,kotlinx-datetime-jvm-0.6.2.jar
 996,lets-plot-batik-4.8.0.jar
 996,lets-plot-common-4.8.0.jar
-359213,log4j-1.2-api-2.25.3.jar
-350610,log4j-api-2.25.3.jar
-2018402,log4j-core-2.25.3.jar
-30213,log4j-slf4j2-impl-2.25.3.jar
+359197,log4j-1.2-api-2.26.0.jar
+351126,log4j-api-2.26.0.jar
+2015101,log4j-core-2.26.0.jar
+30211,log4j-slf4j2-impl-2.26.0.jar
 519087,mail-1.5.0-b01.jar
 120556,miglayout-core-11.4.3.jar
 23361,miglayout-swing-11.4.3.jar
