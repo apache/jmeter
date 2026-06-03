@@ -9,35 +9,22 @@
   "schedule": [
     "every 3 weeks on Monday"
   ],
+  "vulnerabilityAlerts": {
+    "description": "Security updates bypass the packageRules grouping below (Renovate resets their groupName), so apply the same groupId grouping to them here.",
+    "groupName": "{{{replace ':.*' '' depName}}} security"
+  },
   "packageRules": [
     {
-      "groupName": "com.fasterxml.jackson.core",
-      "matchPackageNames": [
-        "com.fasterxml.jackson.core{/,}**"
-      ]
-    },
-    {
-      "groupName": "com.github.ben-manes.caffeine",
-      "matchPackageNames": [
-        "com.github.ben-manes.caffeine{/,}**"
-      ]
+      "description": "Group every Maven update by its groupId by default. The more specific rules below run later and override this where a group must span several groupIds, pin a version, or stay disabled.",
+      "matchDatasources": [
+        "maven"
+      ],
+      "groupName": "{{{replace ':.*' '' depName}}}"
     },
     {
       "groupName": "com.github.vlsi",
       "matchPackageNames": [
         "com.github.vlsi{/,}**"
-      ]
-    },
-    {
-      "groupName": "com.github.weisj",
-      "matchPackageNames": [
-        "com.github.weisj{/,}**"
-      ]
-    },
-    {
-      "groupName": "com.google.auto.service",
-      "matchPackageNames": [
-        "com.google.auto.service{/,}**"
       ]
     },
     {
@@ -80,25 +67,6 @@
       ]
     },
     {
-      "groupName": "io.burt",
-      "matchPackageNames": [
-        "io.burt{/,}**"
-      ]
-    },
-    {
-      "groupName": "net.minidev json-smart",
-      "matchPackageNames": [
-        "net.minidev:accessors-smart{/,}**",
-        "net.minidev:json-smart{/,}**"
-      ]
-    },
-    {
-      "groupName": "com.miglayout",
-      "matchPackageNames": [
-        "com.miglayout{/,}**"
-      ]
-    },
-    {
       "groupName": "commons-* (classic)",
       "description": "Classic Apache Commons artifacts where groupId == artifactId",
       "matchPackageNames": [
@@ -111,94 +79,10 @@
       ]
     },
     {
-      "groupName": "org.ajoberstar.grgit",
-      "matchPackageNames": [
-        "org.ajoberstar.grgit{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.apache.activemq",
-      "matchPackageNames": [
-        "org.apache.activemq{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.apache.commons",
-      "matchPackageNames": [
-        "org.apache.commons{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.apache.ftpserver",
-      "matchPackageNames": [
-        "org.apache.ftpserver{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.apache.httpcomponents4",
-      "matchPackageNames": [
-        "org.apache.httpcomponents:{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.apache.httpcomponents5",
-      "matchPackageNames": [
-        "org.apache.httpcomponents.client5:{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.apache.logging.log4j",
-      "matchPackageNames": [
-        "org.apache.logging.log4j{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.apache.tika",
-      "matchPackageNames": [
-        "org.apache.tika{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.bouncycastle",
-      "matchPackageNames": [
-        "org.bouncycastle{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.eclipse.jetty",
-      "matchPackageNames": [
-        "org.eclipse.jetty{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.hamcrest",
-      "matchPackageNames": [
-        "org.hamcrest{/,}**"
-      ]
-    },
-    {
       "groupName": "org.jetbrains.kotlin",
       "description": "Kotlin compiler plugins (jvm, kapt, serialization, ...) share a version",
       "matchPackageNames": [
         "org.jetbrains.kotlin{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.jetbrains.lets-plot",
-      "matchPackageNames": [
-        "org.jetbrains.lets-plot{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.jodd",
-      "matchPackageNames": [
-        "org.jodd{/,}**"
-      ]
-    },
-    {
-      "groupName": "org.openjdk.jmh",
-      "matchPackageNames": [
-        "org.openjdk.jmh{/,}**"
       ]
     },
     {
