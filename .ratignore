@@ -3,6 +3,7 @@ gradle/verification-keyring.keys
 gradle/verification-metadata.xml
 **/.*
 .*/**
+AGENTS.md
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 eclipse.md
@@ -10,6 +11,8 @@ gradle.md
 ISSUE_TEMPLATE.md
 PULL_REQUEST_TEMPLATE.md
 README.md
+SECURITY.md
+THREAT_MODEL.md
 renovate.json
 **/*.jmx
 bin/examples/**
