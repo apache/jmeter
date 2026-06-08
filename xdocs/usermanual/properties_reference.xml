@@ -1434,8 +1434,8 @@ JMETER-SERVER</source>
 <property name="jmeter.regex.engine">
     Ability to switch out the old Oro Regex implementation with the JDK built-in implementation.
     Any value different to <code>oro</code> will disable the Oro implementation and enable the JDK based.
-    <note>We intend to switch the default to the JDK based one in a later version of JMeter.</note>
-    Defaults to: <code>oro</code>
+    <note>We switched the default to the JDK based one in a JMeter 6.0.</note>
+    Defaults to: <code>java</code>
 </property>
 <property name="jmeter.regex.patterncache.size">
     We assist the JDK based Regex implementation by caching Pattern objects. The size of the

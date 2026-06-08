@@ -70,6 +70,7 @@ Summary
     <li><issue>6352</issue> Calculate delays in Open Model Thread Group and Precise Throughput
         Timer relative to start of Thread Group instead of the start of the test.</li>
     <li><issue>6357</issue><pr>6358</pr> Ensure writable directories when copying template files while report generation.</li>
+    <li><issue>6645</issue><pr>6661</pr>Deprecate usage of Oro Regex implementation and switch default Regex implementation to JDK built-in</li>
     <li><pr>6509</pr><pr>6675</pr> Synchronize recent file menu across multiple JVMs. Contributed by Corneliu C (https://github.com/KingRabbid)</li>
     <li><pr>6596</pr>Fallback to English locale when loading test plans that use string values for enum properties, so old sample plans load correctly even with non-English locales.</li>
   </ul>

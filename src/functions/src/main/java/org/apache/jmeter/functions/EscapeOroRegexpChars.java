@@ -20,6 +20,7 @@ package org.apache.jmeter.functions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -33,7 +34,8 @@ import org.slf4j.LoggerFactory;
 import com.google.auto.service.AutoService;
 
 /**
- * Escape ORO meta characters
+ * Escape Regex meta characters
+ *
  * @since 2.9
  */
 @AutoService(Function.class)
@@ -43,6 +45,8 @@ public class EscapeOroRegexpChars extends AbstractFunction {
     private static final List<String> desc = new ArrayList<>();
 
     private static final String KEY = "__escapeOroRegexpChars"; //$NON-NLS-1$
+
+    private final boolean USE_JAVA_REGEX;
 
     static {
         desc.add(JMeterUtils.getResString("value_to_quote_meta")); //$NON-NLS-1$
@@ -62,6 +66,8 @@ public class EscapeOroRegexpChars extends AbstractFunction {
      */
     public EscapeOroRegexpChars() {
         super();
+        USE_JAVA_REGEX = !JMeterUtils.getPropDefault(
+                "jmeter.regex.engine", "oro").equalsIgnoreCase("oro");
     }
 
     /** {@inheritDoc} */
@@ -76,7 +82,7 @@ public class EscapeOroRegexpChars extends AbstractFunction {
             varName = values[PARAM_NAME - 1].execute().trim();
         }
 
-        String escapedValue = Perl5Compiler.quotemeta(valueToEscape);
+        String escapedValue = USE_JAVA_REGEX ? Pattern.quote(valueToEscape) : Perl5Compiler.quotemeta(valueToEscape);
 
         if (!varName.isEmpty()) {
             JMeterVariables vars = getVariables();

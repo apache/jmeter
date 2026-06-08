@@ -148,7 +148,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__changeCase">changeCase</a></td><td>Change case following different modes</td><td>4.0</td></tr>
         <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
-        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by Java regular expression</td><td>2.9</td></tr>
         <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
         <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
@@ -1530,7 +1530,8 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 <component index="&sect-num;.5.32" name="__escapeOroRegexpChars">
 <description>
     <p>
-Function which escapes the ORO Regexp meta characters, it is the equivalent of <code>\Q</code> <code>\E</code> in Java Regexp Engine.
+Function which escapes the Java Regexp meta characters, it is the equivalent of <code>\Q</code> <code>\E</code> in Java Regexp Engine.
+<note>With JMeter 6.0 the quoting changed from Oro to Java internal.</note>
 </p>
 <p>
 For example,<source>${__escapeOroRegexpChars([^&quot;].+?,)}</source>
@@ -1538,7 +1539,7 @@ returns:
 <code>\[\^\&quot;\]\.\+\?</code>.
 </p>
     <p>
-    Uses Perl5Compiler#quotemeta(String) from ORO.
+    Uses java.util.regex.Pattern#quote(String) from JDK.
     </p>
     </description>
 
