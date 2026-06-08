@@ -64,6 +64,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                     "org.apache.jmeter.config.gui.SimpleConfigGui"
             ));
 
+    public static final String PROXY_SERVER_PORT = "TCPSampler.proxy.port"; //$NON-NLS-1$
+
     public static final String SERVER = "TCPSampler.server"; //$NON-NLS-1$
 
     public static final String PORT = "TCPSampler.port"; //$NON-NLS-1$
@@ -348,10 +350,43 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return tcpClient;
     }
 
+    /**
+     * tcp record proxy usage:
+     *
+     * @return sampler result
+     */
+    public SampleResult sample(){
+        return sample(null, true);
+    }
+
+    /**
+     * simple sampler usage;
+     *
+     * @param e
+     *            the Entry (TODO seems to be unused)
+     * @return sampler result
+     */
     @Override
     public SampleResult sample(Entry e)// Entry tends to be ignored ...
     {
-        if (firstSample) { // Do stuff we cannot do as part of threadStarted()
+        return sample(e, firstSample);
+    }
+
+    /**
+     * simple usage:
+     * firstSampleFlag will be same as :
+     * private transient boolean firstSample; // Are we processing the first sample?
+     *
+     * record proxy usage:
+     * firstSampleFlag will be ture;
+     *
+     * @param e ignore
+     * @param firstSampleFlag first sample
+     * @return sampler result
+     */
+    private SampleResult sample(Entry e, boolean firstSampleFlag)// Entry tends to be ignored ...
+    {
+        if (firstSampleFlag) { // Do stuff we cannot do as part of threadStarted()
             initSampling();
             firstSample=false;
         }
