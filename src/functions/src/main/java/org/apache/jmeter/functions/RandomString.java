@@ -71,6 +71,7 @@ public class RandomString extends AbstractFunction {
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("deprecation")
     public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
 

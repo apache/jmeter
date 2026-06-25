@@ -41,6 +41,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
+@SuppressWarnings("deprecation")
 class TestGraphQLRequestParamUtils {
 
     private static final String OPERATION_NAME = "";
