@@ -140,8 +140,9 @@ include.forEach(v => {
   // Gradle does not work in tr_TR locale, so pass locale to test only: https://github.com/gradle/gradle/issues/17361
   jvmArgs.push(`-Duser.country=${v.locale.country}`);
   jvmArgs.push(`-Duser.language=${v.locale.language}`);
-  v.java_distribution = v.java_distribution.value;
-  v.java_vendor = v.java_distribution.vendor;
+  const {value: javaDistribution, vendor: javaVendor} = v.java_distribution;
+  v.java_distribution = javaDistribution;
+  v.java_vendor = javaVendor;
   if (v.java_distribution === 'oracle') {
       v.oracle_java_website = v.java_version === eaJava ? 'jdk.java.net' : 'oracle.com';
   }
