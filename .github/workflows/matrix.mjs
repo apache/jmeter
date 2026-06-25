@@ -5,6 +5,14 @@ import { appendFileSync } from 'fs';
 import { EOL } from 'os';
 import { createGitHubMatrixBuilder } from '@vlsi/github-actions-random-matrix/github';
 const { matrix, random } = createGitHubMatrixBuilder();
+
+// Some of the filter conditions might become unsatisfiable, and by default
+// the matrix would ignore that. That behaviour is useful for PR testing: if you
+// want only a subset, comment out the unwanted axis values and the matrix yields
+// the matching parameters. Un-comment the following line if you add new testing
+// parameters and want to notice accidentally unsatisfiable conditions.
+// matrix.failOnUnsatisfiableFilters(true);
+
 matrix.addAxis({
   name: 'java_distribution',
   values: [
@@ -88,19 +96,27 @@ matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
 matrix.imply({java_distribution: {value: 'oracle'}}, {java_version: v => v === eaJava || v >= 21});
 // TODO: Semeru does not ship Java 21 builds yet
 matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'});
-// Ensure at least one job with "same" hashcode exists
-matrix.generateRow({hash: {value: 'same'}});
-// Ensure at least one Windows and at least one Linux job is present (macOS is almost the same as Linux)
-matrix.generateRow({os: 'windows-latest'});
-// TODO: un-comment when xvfb will be possible
-// matrix.generateRow({os: 'ubuntu-latest'});
-// Ensure there will be at least one job with Java 17
-matrix.generateRow({java_version: "17"});
-// Ensure there will be at least one job with Java 25
-matrix.generateRow({java_version: "25"});
-// Ensure there will be at least one job with Java EA
-// matrix.generateRow({java_version: eaJava});
-const include = matrix.generateRows(process.env.MATRIX_JOBS || 5);
+
+// Drive the whole matrix from one batch of requirements. generateRows guarantees a row for
+// each entry, packs them into as few jobs as it can, and spends the rest of the MATRIX_JOBS
+// budget on pairwise coverage. Unlike a sequence of generateRow() calls, the job count is
+// exactly MATRIX_JOBS and the result no longer depends on the order of the list.
+const include = matrix.generateRows(Number(process.env.MATRIX_JOBS || 5), {
+  require: [
+    // Ensure at least one job with "same" hashcode exists
+    {hash: {value: 'same'}},
+    // Ensure at least one Windows job is present (macOS is almost the same as Linux)
+    {os: 'windows-latest'},
+    // TODO: un-comment when xvfb will be possible
+    // {os: 'ubuntu-latest'},
+    // Ensure there will be at least one job with Java 17
+    {java_version: '17'},
+    // Ensure there will be at least one job with Java 25
+    {java_version: '25'},
+    // Ensure there will be at least one job with Java EA
+    // {java_version: eaJava},
+  ],
+});
 if (include.length === 0) {
   throw new Error('Matrix list is empty');
 }
@@ -160,11 +176,15 @@ include.forEach(v => {
   delete v.hash;
 });
 
-console.log(include);
-
-let filePath = process.env['GITHUB_OUTPUT'] || '';
-if (filePath) {
+if (process.argv.includes('--coverage')) {
+  const coverage = matrix.pairCoverageReport();
+  console.log(`Pair coverage: ${coverage.covered}/${coverage.total} (${coverage.percentage}%), weight coverage ${coverage.weightPercentage}%`);
+} else {
+  console.log(include);
+  let filePath = process.env['GITHUB_OUTPUT'] || '';
+  if (filePath) {
     appendFileSync(filePath, `matrix<<MATRIX_BODY${EOL}${JSON.stringify({include})}${EOL}MATRIX_BODY${EOL}`, {
-        encoding: 'utf8'
+      encoding: 'utf8'
     });
+  }
 }
