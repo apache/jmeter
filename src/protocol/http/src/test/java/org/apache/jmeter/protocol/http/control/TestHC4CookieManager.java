@@ -23,10 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.cookie.ClientCookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
@@ -620,4 +623,45 @@ public class TestHC4CookieManager extends JMeterTestCase {
         assertTrue(man.get(num).getSecure());
         assertEquals(0, man.get(num).getExpires()); // Show that maxlong now saved as 0
     }
+
+    @Test
+    void testMultipleCookiesWithDifferentExpiry() throws Exception {
+        HttpClientContext context = HttpClientContext.create();
+        BasicCookieStore cookieStore = new BasicCookieStore();
+        context.setCookieStore(cookieStore);
+
+        long now = System.currentTimeMillis();
+
+        // Create Cookie A (expires in 5 seconds)
+        org.apache.http.impl.cookie.BasicClientCookie cookieA =
+                new org.apache.http.impl.cookie.BasicClientCookie("cookieA", "valueA");
+        cookieA.setDomain("localhost");
+        cookieA.setPath("/");
+        cookieA.setExpiryDate(new Date(now + 5000));
+        cookieStore.addCookie(cookieA);
+
+        // Create Cookie B (expires in 10 seconds)
+        org.apache.http.impl.cookie.BasicClientCookie cookieB =
+                new org.apache.http.impl.cookie.BasicClientCookie("cookieB", "valueB");
+        cookieB.setDomain("localhost");
+        cookieB.setPath("/");
+        cookieB.setExpiryDate(new Date(now + 10000));
+        cookieStore.addCookie(cookieB);
+
+        // First run: both cookies should be present
+        List<org.apache.http.cookie.Cookie> cookies = cookieStore.getCookies();
+        assertEquals(2, cookies.size(), "Both cookies should be present initially");
+
+        // Simulate time passage (6 seconds)
+        Thread.sleep(6000);
+
+        // Clear expired manually like HC4CookieHandler does
+        Date now1 = new Date();
+        cookieStore.clearExpired(now1);
+
+        List<org.apache.http.cookie.Cookie> validCookies = cookieStore.getCookies();
+        assertEquals(1, validCookies.size(), "Only cookieB should remain after cookieA expiry");
+        assertEquals("cookieB", validCookies.get(0).getName());
+    }
+
 }
