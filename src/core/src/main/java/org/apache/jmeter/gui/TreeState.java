@@ -50,7 +50,8 @@ public interface TreeState {
             int savedSelected = tree.getMinSelectionRow();
             ArrayList<Integer> savedExpanded = new ArrayList<>();
 
-            for (int rowN = 0; rowN < tree.getRowCount(); rowN++) {
+            int treeRowCount = tree.getRowCount();
+            for (int rowN = 0; rowN < treeRowCount; rowN++) {
                 if (tree.isExpanded(rowN)) {
                     savedExpanded.add(rowN);
                 }

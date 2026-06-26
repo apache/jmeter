@@ -160,7 +160,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     public void setTestPlanClasspathArray(String[] text) {
         StringBuilder cat = new StringBuilder();
-        for (int idx=0; idx < text.length; idx++) {
+        int textLength = text.length;
+        for (int idx = 0; idx < textLength; idx++) {
             if (idx > 0) {
                 cat.append(CLASSPATH_SEPARATOR);
             }

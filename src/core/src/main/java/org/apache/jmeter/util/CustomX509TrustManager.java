@@ -54,7 +54,8 @@ public class CustomX509TrustManager implements X509TrustManager
     @Override
     public void checkClientTrusted(X509Certificate[] certificates, String authType) { // NOSONAR JMeter is a pentest and perf testing tool
         if (log.isDebugEnabled() && certificates != null) {
-            for (int i = 0; i < certificates.length; i++) {
+            int certificatesCount = certificates.length;
+            for (int i = 0; i < certificatesCount; i++) {
                 X509Certificate cert = certificates[i];
                 log.debug(
                         """
@@ -82,7 +83,8 @@ public class CustomX509TrustManager implements X509TrustManager
     public void checkServerTrusted(X509Certificate[] certificates,String authType) // NOSONAR JMeter is a pentest and perf testing tool
             throws CertificateException {
         if (log.isDebugEnabled() && certificates != null) {
-            for (int i = 0; i < certificates.length; i++) {
+            int certificatesCount = certificates.length;
+            for (int i = 0; i < certificatesCount; i++) {
                 X509Certificate cert = certificates[i];
                 log.debug(
                         """

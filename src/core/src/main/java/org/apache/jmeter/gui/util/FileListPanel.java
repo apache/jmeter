@@ -164,7 +164,8 @@ public class FileListPanel extends JPanel implements ActionListener {
     public String[] getFiles() {
         GuiUtils.stopTableEditing(files);
         String[] filesArray = new String[tableModel.getRowCount()];
-        for (int idx=0; idx < filesArray.length; idx++) {
+        int fileCount = filesArray.length;
+        for (int idx = 0; idx < fileCount; idx++) {
             filesArray[idx] = (String)tableModel.getValueAt(idx,0);
         }
         return filesArray;
