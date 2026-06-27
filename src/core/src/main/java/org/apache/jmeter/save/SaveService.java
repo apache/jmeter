@@ -455,7 +455,12 @@ public class SaveService {
                 log.error("Problem loading XML: see above.");
                 return null;
             }
-            return wrapper.testPlan;
+            HashTree testPlan = wrapper.testPlan;
+            // Upgrade legacy property values (e.g. HTTPSampler.md5 -> responseProcessingMode) right after
+            // load, so the in-memory tree and any re-save use the current representation. NameUpdater only
+            // renames keys/classes, so value transforms live in TestElementUpgrader services instead.
+            TestElementUpgraders.upgrade(testPlan);
+            return testPlan;
         } catch (CannotResolveClassException | ConversionException | NoClassDefFoundError e) {
             if(file != null) {
                 throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"'. \nCause:\n"+

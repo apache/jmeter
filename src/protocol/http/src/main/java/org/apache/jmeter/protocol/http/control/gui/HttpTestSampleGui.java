@@ -18,12 +18,15 @@
 package org.apache.jmeter.protocol.http.control.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.Arrays;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSplitPane;
@@ -60,6 +63,13 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 242L;
 
+    /**
+     * Sentinel combo item for the "Default" entry. When selected, no explicit
+     * {@code responseProcessingMode} is stored, so the sampler inherits the value from
+     * HTTP Request Defaults or falls back to the schema default.
+     */
+    private static final Object RESPONSE_PROCESSING_DEFAULT = new Object();
+
     private UrlConfigGui urlConfigGui;
     private final JBooleanPropertyEditor retrieveEmbeddedResources = new JBooleanPropertyEditor(
             HTTPSamplerBaseSchema.INSTANCE.getRetrieveEmbeddedResources(),
@@ -68,9 +78,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             HTTPSamplerBaseSchema.INSTANCE.getConcurrentDownload(),
             JMeterUtils.getResString("web_testing_concurrent_download"));
     private JTextField concurrentPool;
-    private final JBooleanPropertyEditor useMD5 = new JBooleanPropertyEditor(
-            HTTPSamplerBaseSchema.INSTANCE.getStoreAsMD5(),
-            JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
+    private final JComboBox<Object> responseProcessingMode = createResponseProcessingModeComboBox();
     private JTextField embeddedAllowRE; // regular expression used to match against embedded resource URLs to allow
     private JTextField embeddedExcludeRE; // regular expression used to match against embedded resource URLs to exclude
     private JTextField sourceIpAddr; // does not apply to Java implementation
@@ -100,7 +108,6 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
                         retrieveEmbeddedResources,
                         concurrentDwn,
                         new JTextComponentBinding(concurrentPool, schema.getConcurrentDownloadPoolSize()),
-                        useMD5,
                         new JTextComponentBinding(embeddedAllowRE, schema.getEmbeddedUrlAllowRegex()),
                         new JTextComponentBinding(embeddedExcludeRE, schema.getEmbeddedUrlExcludeRegex())
                 )
@@ -132,10 +139,33 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
         HTTPSamplerBaseSchema httpSchema = HTTPSamplerBaseSchema.INSTANCE;
         urlConfigGui.configure(element);
+        configureResponseProcessingMode(samplerBase, httpSchema);
         if (!isAJP) {
             sourceIpType.setSelectedIndex(samplerBase.getIpSourceType());
             httpImplementation.setSelectedItem(samplerBase.getString(httpSchema.getImplementation()));
         }
+    }
+
+    /**
+     * Selects the combo entry that matches the element's stored {@code responseProcessingMode}.
+     * Presence is decided from the raw property value, not the schema-default-substituting getter,
+     * so an absent property maps to the "Default" entry.
+     */
+    @SuppressWarnings("deprecation")
+    private void configureResponseProcessingMode(TestElement element, HTTPSamplerBaseSchema schema) {
+        String rawValue = element.getPropertyAsString(schema.getResponseProcessingMode().getName());
+        HTTPSamplerBase.ResponseProcessingMode mode =
+                HTTPSamplerBase.ResponseProcessingMode.fromResourceKey(rawValue);
+        if (mode == null) {
+            // Reflect a legacy md5 property so the combo shows the effective mode for old test plans.
+            String rawMd5 = element.getPropertyAsString(schema.getStoreAsMD5().getName());
+            if (!rawMd5.isEmpty()) {
+                mode = Boolean.parseBoolean(rawMd5)
+                        ? HTTPSamplerBase.ResponseProcessingMode.CHECKSUM_DECODED_MD5
+                        : HTTPSamplerBase.ResponseProcessingMode.STORE_COMPRESSED;
+            }
+        }
+        responseProcessingMode.setSelectedItem(mode != null ? mode : RESPONSE_PROCESSING_DEFAULT);
     }
 
     /**
@@ -169,6 +199,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         final HTTPSamplerBase samplerBase = (HTTPSamplerBase) sampler;
         HTTPSamplerBaseSchema httpSchema = samplerBase.getSchema();
         enableConcurrentDwn();
+        modifyResponseProcessingMode(samplerBase, httpSchema);
         if (!isAJP) {
             String text = sourceIpAddr.getText();
             if (StringUtilities.isNotEmpty(text)) {
@@ -179,6 +210,22 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             String selectedImplementation = String.valueOf(httpImplementation.getSelectedItem());
             samplerBase.set(httpSchema.getImplementation(),
                     StringUtilities.isBlank(selectedImplementation) ? null : selectedImplementation);
+        }
+    }
+
+    /**
+     * Stores the selected {@code responseProcessingMode}, or removes the property when the
+     * "Default" entry is selected so the value can still be inherited from HTTP Request Defaults.
+     */
+    @SuppressWarnings("deprecation")
+    private void modifyResponseProcessingMode(TestElement element, HTTPSamplerBaseSchema schema) {
+        // The combo now owns this setting, so drop the legacy md5 property (migrate it on save).
+        element.removeProperty(schema.getStoreAsMD5());
+        Object selected = responseProcessingMode.getSelectedItem();
+        if (selected instanceof HTTPSamplerBase.ResponseProcessingMode mode) {
+            element.set(schema.getResponseProcessingMode(), mode.getResourceKey());
+        } else {
+            element.removeProperty(schema.getResponseProcessingMode());
         }
     }
 
@@ -257,7 +304,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             advancedPanel.add(getProxyServerPanel());
         }
 
-        advancedPanel.add(createOptionalTasksPanel());
+        advancedPanel.add(createResponseProcessingPanel());
         return advancedPanel;
     }
 
@@ -352,15 +399,43 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         return implPanel;
     }
 
-    protected JPanel createOptionalTasksPanel() {
-        // OPTIONAL TASKS
-        final JPanel checkBoxPanel = new VerticalPanel();
-        checkBoxPanel.setBorder(BorderFactory.createTitledBorder(
-                JMeterUtils.getResString("optional_tasks"))); // $NON-NLS-1$
+    protected JPanel createResponseProcessingPanel() {
+        final JPanel panel = new JPanel(new MigLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(
+                JMeterUtils.getResString("response_processing_title"))); // $NON-NLS-1$
+        JLabel label = new JLabel(JMeterUtils.getResString("response_processing_mode")); // $NON-NLS-1$
+        label.setToolTipText(JMeterUtils.getResString("response_processing_mode_tooltip")); // $NON-NLS-1$
+        label.setLabelFor(responseProcessingMode);
+        panel.add(label);
+        panel.add(responseProcessingMode, "span");
+        return panel;
+    }
 
-        checkBoxPanel.add(useMD5);
-
-        return checkBoxPanel;
+    /**
+     * Builds the response-processing-mode combo: a leading "Default" entry followed by the concrete
+     * {@link HTTPSamplerBase.ResponseProcessingMode} values, rendered with their localised names.
+     */
+    private static JComboBox<Object> createResponseProcessingModeComboBox() {
+        JComboBox<Object> comboBox = new JComboBox<>();
+        comboBox.setToolTipText(JMeterUtils.getResString("response_processing_mode_tooltip")); // $NON-NLS-1$
+        comboBox.addItem(RESPONSE_PROCESSING_DEFAULT);
+        for (HTTPSamplerBase.ResponseProcessingMode mode : HTTPSamplerBase.ResponseProcessingMode.values()) {
+            comboBox.addItem(mode);
+        }
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                String text;
+                if (value instanceof HTTPSamplerBase.ResponseProcessingMode mode) {
+                    text = JMeterUtils.getResString(mode.getResourceKey());
+                } else {
+                    text = JMeterUtils.getResString("response_processing_mode_default"); // $NON-NLS-1$
+                }
+                return super.getListCellRendererComponent(list, text, index, isSelected, cellHasFocus);
+            }
+        });
+        return comboBox;
     }
 
     @SuppressWarnings("EnumOrdinal")

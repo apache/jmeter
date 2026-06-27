@@ -388,7 +388,14 @@ public class JMeterTest extends JMeterTestCase {
         // TODO: support expressions in UrlConfigGui
         IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getFollowRedirects());
         IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getAutoRedirects());
-
+        // responseProcessingMode is a plain combo (like implementation/ipSourceType above), so it
+        // can't round-trip an arbitrary ${...} expression
+        IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getResponseProcessingMode());
+        // storeAsMD5 no longer has a UI control: the responseProcessingMode combo replaces it and
+        // drops the legacy property on save
+        @SuppressWarnings("deprecation")
+        PropertyDescriptor<?, ?> storeAsMD5 = HTTPSamplerBaseSchema.INSTANCE.getStoreAsMD5();
+        IGNORED_PROPERTIES.add(storeAsMD5);
     }
 
     /**
