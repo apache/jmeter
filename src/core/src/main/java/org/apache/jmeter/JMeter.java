@@ -382,7 +382,7 @@ public class JMeter implements JMeterPlugin {
 
             Thread.setDefaultUncaughtExceptionHandler(
                     (Thread t, Throwable e) -> {
-                    if (!(e instanceof ThreadDeath)) {
+                    if (!(e instanceof VirtualMachineError)) {
                         log.error("Uncaught exception in thread {}", t, e);
                         System.err.println("Uncaught Exception " + e + " in thread " + t + ". See log file for details.");//NOSONAR
                     }

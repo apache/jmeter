@@ -222,6 +222,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         return auth.toBasicHeader();
     }
 
+    @SuppressWarnings("deprecation")
     public Authorization getAuthForURL(URL url) {
         if (!isSupportedProtocol(url)) {
             return null;

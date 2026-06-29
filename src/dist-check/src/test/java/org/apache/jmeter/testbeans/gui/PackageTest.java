@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
 public final class PackageTest extends JMeterTestCase {
     private static final Logger log = LoggerFactory.getLogger(PackageTest.class);
 
-    private static final Locale defaultLocale = new Locale("en","");
+    private static final Locale defaultLocale = Locale.of("en");
 
     private BeanInfo beanInfo;
 
@@ -177,13 +177,13 @@ public final class PackageTest extends JMeterTestCase {
             for (String lang : languages) {
                 final String[] language = lang.split("_");
                 if (language.length == 1) {
-                    Locale locale = new Locale(language[0]);
+                    Locale locale = Locale.of(language[0]);
                     if (locale.toString().equals(defaultLocaleId)) {
                         continue;
                     }
                     suite.add(arguments(testBeanClass, locale, defaultBundle));
                 } else if (language.length == 2) {
-                    Locale locale = new Locale(language[0], language[1]);
+                    Locale locale = Locale.of(language[0], language[1]);
                     if (locale.toString().equals(defaultLocaleId)) {
                         continue;
                     }

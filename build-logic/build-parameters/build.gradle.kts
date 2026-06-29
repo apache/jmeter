@@ -38,7 +38,7 @@ buildParameters {
         description.set("Collect test coverage")
     }
     integer("targetJavaVersion") {
-        defaultValue.set(17)
+        defaultValue.set(21)
         mandatory.set(true)
         description.set("Java version for source and target compatibility")
     }
