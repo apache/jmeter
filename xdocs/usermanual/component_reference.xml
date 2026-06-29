@@ -2798,6 +2798,8 @@ response for any sample.  In addition to showing the response, you can see the t
 this response, and some response codes.
 Note that the Request panel only shows the headers added by JMeter.
 It does not show any headers (such as <code>Host</code>) that may be added by the HTTP protocol implementation.
+For HTTP samples the Request panel also provides a <code>cURL</code> tab that renders the request as a
+ready-to-run <code>curl</code> command, so it can be copied to a console or shared with a developer.
 <p>
 There are several ways to view the response, selectable by a drop-down box at the bottom of the left hand panel.</p>
 

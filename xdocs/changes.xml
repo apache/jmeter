@@ -104,6 +104,7 @@ Summary
   <ul>
     <li><pr>6333</pr>Apply HiDPI mode automatically when setting up the GUI so JMeter looks sharp on high-resolution displays. Contributed by Gabriele Coletta (github.com/gdmg92)</li>
     <li><pr>6656</pr>Replace the previous feather icon with the new oak leaf in the JMeter logo.</li>
+    <li><issue>6375</issue>Add a <code>cURL</code> tab to the Request panel in View Results Tree, showing the sampled HTTP request as a ready-to-run <code>curl</code> command that can be copied to a console. Contributed by Oleksandr Poliakov (github.com/poliakov-alex)</li>
   </ul>
 
   <ch_section>Bug fixes</ch_section>
