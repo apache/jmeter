@@ -1009,7 +1009,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             fail("No header and body section found");
         }
         // No body should have been sent
-        assertEquals(bodySent.length(), 0);
+        assertEquals(0, bodySent.length());
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), (String) null, res);
     }
@@ -1056,7 +1056,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
             fail("No header and body section found in: [" + dataSentToMirrorServer + "]");
         }
         // No body should have been sent
-        assertEquals(bodySent.length(), 0);
+        assertEquals(0, bodySent.length());
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), expectedQueryString, res);
     }
