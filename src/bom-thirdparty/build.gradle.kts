@@ -151,7 +151,7 @@ dependencies {
         api("org.jsoup:jsoup:1.17.1")
         api("org.mongodb:mongo-java-driver:2.14.3")
         api("org.mozilla:rhino:1.7.14.1")
-        api("org.neo4j.driver:neo4j-java-driver:4.4.13")
+        api("org.neo4j.driver:neo4j-java-driver:4.4.27")
         api("org.slf4j:jcl-over-slf4j") {
             version { strictly("1.7.36") }
             because("log4j-slf4j-impl 2.25.x is built against slf4j 1.x")
