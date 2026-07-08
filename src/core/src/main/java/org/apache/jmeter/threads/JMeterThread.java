@@ -19,7 +19,9 @@ package org.apache.jmeter.threads;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -91,6 +93,8 @@ public class JMeterThread implements Runnable, Interruptible {
     private final Controller threadGroupLoopController;
 
     private final HashTree testTree;
+
+    private final Map<Sampler, List<Controller>> parentControllersCache = new HashMap<>();
 
     private final TestCompiler compiler;
 
@@ -343,6 +347,20 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
+    private static class CachedPathToRootTraverser extends FindTestElementsUpToRootTraverser {
+        private final List<Controller> controllers;
+
+        CachedPathToRootTraverser(List<Controller> controllers) {
+            super(null);
+            this.controllers = controllers;
+        }
+
+        @Override
+        public List<Controller> getControllersToRoot() {
+            return controllers;
+        }
+    }
+
     /**
      * Trigger break/continue/switch to next thread Loop  depending on consumer implementation
      * @param sampler Sampler Base sampler
@@ -363,8 +381,16 @@ public class JMeterThread implements Runnable, Interruptible {
                     (sampler != null ? sampler.getName() : "null") + ", sampler:" + sampler);
         }
         // Find parent controllers of current sampler
-        FindTestElementsUpToRootTraverser pathToRootTraverser = new FindTestElementsUpToRootTraverser(realSampler);
-        testTree.traverse(pathToRootTraverser);
+        List<Controller> controllers = parentControllersCache.get(realSampler);
+        FindTestElementsUpToRootTraverser pathToRootTraverser;
+        if (controllers == null) {
+            pathToRootTraverser = new FindTestElementsUpToRootTraverser(realSampler);
+            testTree.traverse(pathToRootTraverser);
+            controllers = pathToRootTraverser.getControllersToRoot();
+            parentControllersCache.put(realSampler, controllers);
+        } else {
+            pathToRootTraverser = new CachedPathToRootTraverser(controllers);
+        }
 
         consumer.accept(pathToRootTraverser);
 
