@@ -154,6 +154,7 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
         return button;
     }
 
+    @SuppressWarnings("deprecation")
     private static Icon loadIcon(IconToolbarBean iconBean, String iconPath) throws URISyntaxException {
         final URL imageURL = JMeterUtils.class.getClassLoader().getResource(iconPath);
         if (imageURL == null) {

@@ -54,6 +54,7 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public SampleResult sample(Entry e) {
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());

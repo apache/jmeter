@@ -120,7 +120,7 @@ class DNSCacheManagerTest {
     fun `Valid DNS resolves and caches with custom resolve true`() {
         assumeLocalDnsResolverOK()
         for (dns in VALID_DNS_SERVERS) {
-            sut.addServer(dns)
+            sut.addServer(dns.hostString)
         }
         sut.isCustomResolver = true
         sut.timeoutMs = 5000
@@ -134,7 +134,7 @@ class DNSCacheManagerTest {
     fun `Cache should be used where entries exist`() {
         assumeLocalDnsResolverOK()
         for (dns in VALID_DNS_SERVERS) {
-            sut.addServer(dns)
+            sut.addServer(dns.hostString)
         }
         sut.isCustomResolver = true
         sut.timeoutMs = 5000
