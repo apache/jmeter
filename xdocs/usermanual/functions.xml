@@ -1765,6 +1765,7 @@ However some variables are defined internally by JMeter. These are listed below.
 <li><code>JMeterThread.last_sample_ok</code> - whether or not the last sample was OK - <code>true</code>/<code>false</code>.
 Note: this is updated after PostProcessors and Assertions have been run.
 </li>
+<li><code>__jmv_THREAD_START_TIME_ITERATION</code> - contains the epoch unit milliseconds of the thread start iteration. Call function System.currentTimeMillis()</li>
 <li><code>START</code> variables (see next section)</li>
 </ul>
 </subsection>
