@@ -17,14 +17,14 @@
 
 package org.apache.jmeter.samplers;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 // Extends JMeterTest case because it needs access to JMeter properties
 public class TestSampleSaveConfiguration extends JMeterTestCase {
