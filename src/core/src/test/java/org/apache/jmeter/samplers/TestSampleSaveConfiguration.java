@@ -17,18 +17,14 @@
 
 package org.apache.jmeter.samplers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 // Extends JMeterTest case because it needs access to JMeter properties
 public class TestSampleSaveConfiguration extends JMeterTestCase {
@@ -50,21 +46,21 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         SampleSaveConfiguration cloneA = (SampleSaveConfiguration) a.clone();
         assertNotSame(a, cloneA);
         assertEquals(a, cloneA);
-        assertTrue(a.equals(cloneA));
-        assertTrue(cloneA.equals(a));
+        assertEquals(a, cloneA);
+        assertEquals(cloneA, a);
         assertEquals(a.hashCode(), cloneA.hashCode());
 
         // Change the original
         a.setUrl(true);
-        assertFalse(a.equals(cloneA));
-        assertFalse(cloneA.equals(a));
-        assertFalse(a.hashCode() == cloneA.hashCode());
+        assertNotEquals(a, cloneA);
+        assertNotEquals(cloneA, a);
+        assertNotEquals(a.hashCode(), cloneA.hashCode());
 
         // Change the original back again
         a.setUrl(false);
         assertEquals(a, cloneA);
-        assertTrue(a.equals(cloneA));
-        assertTrue(cloneA.equals(a));
+        assertEquals(a, cloneA);
+        assertEquals(cloneA, a);
         assertEquals(a.hashCode(), cloneA.hashCode());
     }
 
@@ -85,8 +81,8 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
 
         // a and b should be equal
         assertEquals(a, b);
-        assertTrue(a.equals(b));
-        assertTrue(b.equals(a));
+        assertEquals(a, b);
+        assertEquals(b, a);
         assertEquals(a.hashCode(), b.hashCode());
         assertPrimitiveEquals(a.saveUrl(), b.saveUrl());
         assertPrimitiveEquals(a.saveAssertions(), b.saveAssertions());
@@ -95,10 +91,10 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
 
         a.setAssertions(false);
         // a and b should not be equal
-        assertFalse(a.equals(b));
-        assertFalse(b.equals(a));
-        assertFalse(a.hashCode() == b.hashCode());
-        assertFalse(a.saveAssertions() == b.saveAssertions());
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+        assertNotEquals(a.hashCode(), b.hashCode());
+        assertNotEquals(a.saveAssertions(), b.saveAssertions());
     }
 
     @Test
@@ -106,8 +102,8 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(false);
         assertEquals(a.hashCode(), b.hashCode(), "Hash codes should be equal");
-        assertTrue(a.equals(b), "Objects should be equal");
-        assertTrue(b.equals(a), "Objects should be equal");
+        assertEquals(a, b, "Objects should be equal");
+        assertEquals(b, a, "Objects should be equal");
     }
 
     @Test
@@ -115,16 +111,16 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         SampleSaveConfiguration a = new SampleSaveConfiguration(true);
         SampleSaveConfiguration b = new SampleSaveConfiguration(true);
         assertEquals(a.hashCode(), b.hashCode(), "Hash codes should be equal");
-        assertTrue(a.equals(b), "Objects should be equal");
-        assertTrue(b.equals(a), "Objects should be equal");
+        assertEquals(a, b, "Objects should be equal");
+        assertEquals(b, a, "Objects should be equal");
     }
     @Test
     public void testFalseTrue() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(true);
-        assertFalse(a.hashCode() == b.hashCode(), "Hash codes should not be equal");
-        assertFalse(a.equals(b), "Objects should not be equal");
-        assertFalse(b.equals(a), "Objects should not be equal");
+        assertNotEquals(a.hashCode(), b.hashCode(), "Hash codes should not be equal");
+        assertNotEquals(a, b, "Objects should not be equal");
+        assertNotEquals(b, a, "Objects should not be equal");
     }
 
     @Test
@@ -132,27 +128,27 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(false);
         assertEquals(a.hashCode(), b.hashCode(), "Hash codes should be equal");
-        assertTrue(a.equals(b), "Objects should be equal");
-        assertTrue(b.equals(a), "Objects should be equal");
-        assertTrue(a.strictDateFormatter() == null);
-        assertTrue(b.strictDateFormatter() == null);
-        assertTrue(a.threadSafeLenientFormatter() == null);
-        assertTrue(b.threadSafeLenientFormatter() == null);
+        assertEquals(a, b, "Objects should be equal");
+        assertEquals(b, a, "Objects should be equal");
+        assertNull(a.strictDateFormatter());
+        assertNull(b.strictDateFormatter());
+        assertNull(a.threadSafeLenientFormatter());
+        assertNull(b.threadSafeLenientFormatter());
         a.setDateFormat(null);
         b.setDateFormat(null);
         assertEquals(a.hashCode(), b.hashCode(), "Hash codes should be equal");
-        assertTrue(a.equals(b), "Objects should be equal");
-        assertTrue(b.equals(a), "Objects should be equal");
-        assertTrue(a.strictDateFormatter() == null);
-        assertTrue(b.strictDateFormatter() == null);
-        assertTrue(a.threadSafeLenientFormatter() == null);
-        assertTrue(b.threadSafeLenientFormatter() == null);
+        assertEquals(a, b, "Objects should be equal");
+        assertEquals(b, a, "Objects should be equal");
+        assertNull(a.strictDateFormatter());
+        assertNull(b.strictDateFormatter());
+        assertNull(a.threadSafeLenientFormatter());
+        assertNull(b.threadSafeLenientFormatter());
         a.setDateFormat("dd/MM/yyyy");
         b.setDateFormat("dd/MM/yyyy");
         assertEquals(a.hashCode(), b.hashCode(), "Hash codes should be equal");
-        assertTrue(a.equals(b), "Objects should be equal");
-        assertTrue(b.equals(a), "Objects should be equal");
-        assertTrue(a.strictDateFormatter().equals(b.strictDateFormatter()), "Objects should be equal");
+        assertEquals(a, b, "Objects should be equal");
+        assertEquals(b, a, "Objects should be equal");
+        assertEquals(a.strictDateFormatter(), b.strictDateFormatter(), "Objects should be equal");
     }
 
     @Test
