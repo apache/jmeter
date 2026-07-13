@@ -22,12 +22,18 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.test.JMeterSerialTest;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.junit.jupiter.api.AfterEach;
@@ -214,6 +220,51 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         csv.setVariableNames("a,b,c");
         csv.setDelimiter(",");
         return csv;
+    }
+
+    @Test
+    public void testFilenameGetterAfterLoadingTestPlan() throws Exception {
+        Path testPlan = Files.createTempFile("csv-dataset", ".jmx");
+        String jmx = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.6.3\">\n"
+                + "  <hashTree>\n"
+                + "    <TestPlan guiclass=\"TestPlanGui\" testclass=\"TestPlan\" testname=\"Test Plan\">\n"
+                + "      <elementProp name=\"TestPlan.user_defined_variables\" elementType=\"Arguments\" "
+                + "guiclass=\"ArgumentsPanel\" testclass=\"Arguments\" testname=\"User Defined Variables\">\n"
+                + "        <collectionProp name=\"Arguments.arguments\"/>\n"
+                + "      </elementProp>\n"
+                + "    </TestPlan>\n"
+                + "    <hashTree>\n"
+                + "      <CSVDataSet guiclass=\"TestBeanGUI\" testclass=\"CSVDataSet\" testname=\"CSV Data Set Config\">\n"
+                + "        <stringProp name=\"delimiter\">,</stringProp>\n"
+                + "        <stringProp name=\"fileEncoding\">UTF-8</stringProp>\n"
+                + "        <stringProp name=\"filename\">data.csv</stringProp>\n"
+                + "        <boolProp name=\"ignoreFirstLine\">false</boolProp>\n"
+                + "        <boolProp name=\"quotedData\">false</boolProp>\n"
+                + "        <boolProp name=\"recycle\">true</boolProp>\n"
+                + "        <stringProp name=\"shareMode\">shareMode.all</stringProp>\n"
+                + "        <boolProp name=\"stopThread\">false</boolProp>\n"
+                + "        <stringProp name=\"variableNames\"></stringProp>\n"
+                + "      </CSVDataSet>\n"
+                + "      <hashTree/>\n"
+                + "    </hashTree>\n"
+                + "  </hashTree>\n"
+                + "</jmeterTestPlan>\n";
+        Files.write(testPlan, jmx.getBytes(StandardCharsets.UTF_8));
+
+        try {
+            SaveService.loadProperties();
+            HashTree tree = SaveService.loadTree(testPlan.toFile());
+            SearchByClass<CSVDataSet> searcher = new SearchByClass<>(CSVDataSet.class);
+            tree.traverse(searcher);
+
+            assertEquals(1, searcher.getSearchResults().size());
+            CSVDataSet csvDataSet = searcher.getSearchResults().iterator().next();
+            assertEquals("data.csv", csvDataSet.getPropertyAsString("filename"));
+            assertEquals("data.csv", csvDataSet.getFilename());
+        } finally {
+            Files.deleteIfExists(testPlan);
+        }
     }
 
     @Test

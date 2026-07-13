@@ -239,7 +239,11 @@ public class CSVDataSet extends ConfigTestElement
      * @return Returns the filename.
      */
     public String getFilename() {
-        return filename;
+        if (filename != null) {
+            return filename;
+        }
+        JMeterProperty property = getPropertyOrNull("filename");
+        return property == null ? null : property.getStringValue();
     }
 
     /**
