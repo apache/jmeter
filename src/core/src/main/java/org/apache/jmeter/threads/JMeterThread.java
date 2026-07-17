@@ -19,9 +19,7 @@ package org.apache.jmeter.threads;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -93,8 +91,6 @@ public class JMeterThread implements Runnable, Interruptible {
     private final Controller threadGroupLoopController;
 
     private final HashTree testTree;
-
-    private final Map<Sampler, List<Controller>> parentControllersCache = new HashMap<>();
 
     private final TestCompiler compiler;
 
@@ -347,28 +343,14 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
-    private static class CachedPathToRootTraverser extends FindTestElementsUpToRootTraverser {
-        private final List<Controller> controllers;
-
-        CachedPathToRootTraverser(List<Controller> controllers) {
-            super(null);
-            this.controllers = controllers;
-        }
-
-        @Override
-        public List<Controller> getControllersToRoot() {
-            return controllers;
-        }
-    }
-
     /**
      * Trigger break/continue/switch to next thread Loop  depending on consumer implementation
      * @param sampler Sampler Base sampler
      * @param threadContext
-     * @param consumer Consumer that will process the tree of elements up to root node
+     * @param consumer Consumer that will process the parent controllers list
      */
     private void triggerLoopLogicalActionOnParentControllers(Sampler sampler, JMeterContext threadContext,
-            Consumer<? super FindTestElementsUpToRootTraverser> consumer) {
+            Consumer<List<Controller>> consumer) {
         TransactionSampler transactionSampler = null;
         if (sampler instanceof TransactionSampler transSampler) {
             transactionSampler = transSampler;
@@ -380,19 +362,10 @@ public class JMeterThread implements Runnable, Interruptible {
                     "Got null subSampler calling findRealSampler for:" +
                     (sampler != null ? sampler.getName() : "null") + ", sampler:" + sampler);
         }
-        // Find parent controllers of current sampler
-        List<Controller> controllers = parentControllersCache.get(realSampler);
-        FindTestElementsUpToRootTraverser pathToRootTraverser;
-        if (controllers == null) {
-            pathToRootTraverser = new FindTestElementsUpToRootTraverser(realSampler);
-            testTree.traverse(pathToRootTraverser);
-            controllers = pathToRootTraverser.getControllersToRoot();
-            parentControllersCache.put(realSampler, controllers);
-        } else {
-            pathToRootTraverser = new CachedPathToRootTraverser(controllers);
-        }
+        // Reuse controller path already computed by TestCompiler
+        List<Controller> controllers = compiler.getControllersForSampler(realSampler);
 
-        consumer.accept(pathToRootTraverser);
+        consumer.accept(controllers);
 
         // bug 52968
         // When using Start Next Loop option combined to TransactionController.
@@ -407,11 +380,10 @@ public class JMeterThread implements Runnable, Interruptible {
     /**
      * Executes a continue of current loop, equivalent of "continue" in algorithm.
      * As a consequence it ends the first loop it finds on the path to root
-     * @param pathToRootTraverser {@link FindTestElementsUpToRootTraverser}
+     * @param controllers parent controllers from nearest to root
      */
-    private static void continueOnCurrentLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
-        List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
-        for (Controller parentController : controllersToReinit) {
+    private static void continueOnCurrentLoop(List<Controller> controllers) {
+        for (Controller parentController : controllers) {
             if (parentController instanceof AbstractThreadGroup tg) {
                 tg.startNextLoop();
             } else if (parentController instanceof IteratingController iterController) {
@@ -426,11 +398,10 @@ public class JMeterThread implements Runnable, Interruptible {
     /**
      * Executes a break of current loop, equivalent of "break" in algorithm.
      * As a consequence it ends the first loop it finds on the path to root
-     * @param pathToRootTraverser {@link FindTestElementsUpToRootTraverser}
+     * @param controllers parent controllers from nearest to root
      */
-    private static void breakOnCurrentLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
-        List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
-        for (Controller parentController : controllersToReinit) {
+    private static void breakOnCurrentLoop(List<Controller> controllers) {
+        for (Controller parentController : controllers) {
             if (parentController instanceof AbstractThreadGroup tg) {
                 tg.breakThreadLoop();
             } else if (parentController instanceof IteratingController iterController) {
@@ -445,11 +416,10 @@ public class JMeterThread implements Runnable, Interruptible {
     /**
      * Executes a restart of Thread loop, equivalent of "continue" in algorithm but on Thread Loop.
      * As a consequence it ends all loop on the path to root
-     * @param pathToRootTraverser {@link FindTestElementsUpToRootTraverser}
+     * @param controllers parent controllers from nearest to root
      */
-    private static void continueOnThreadLoop(FindTestElementsUpToRootTraverser pathToRootTraverser) {
-        List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
-        for (Controller parentController : controllersToReinit) {
+    private static void continueOnThreadLoop(List<Controller> controllers) {
+        for (Controller parentController : controllers) {
             if (parentController instanceof AbstractThreadGroup tg) {
                 tg.startNextLoop();
             } else {

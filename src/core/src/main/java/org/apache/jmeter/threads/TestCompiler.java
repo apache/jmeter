@@ -115,6 +115,19 @@ public class TestCompiler implements HashTreeTraverser {
     }
 
     /**
+     * Returns the parent controllers for the given sampler without
+     * triggering configuration side effects.
+     *
+     * @param sampler the {@link Sampler} to look up
+     * @return parent controllers from nearest to root, or an empty list
+     *         if the sampler has not been compiled
+     */
+    public List<Controller> getControllersForSampler(Sampler sampler) {
+        SamplePackage pack = samplerConfigMap.get(sampler);
+        return pack != null ? pack.getControllers() : List.of();
+    }
+
+    /**
      * Reset pack to its initial state
      * @param pack the {@link SamplePackage} to reset
      */

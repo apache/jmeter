@@ -226,4 +226,13 @@ public class SamplePackage {
         return configs;
     }
 
+    /**
+     * Returns the parent controllers from nearest to root.
+     *
+     * @return List of {@link Controller}
+     */
+    public List<Controller> getControllers() {
+        return controllers;
+    }
+
 }
