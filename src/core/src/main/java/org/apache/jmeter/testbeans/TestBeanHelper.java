@@ -126,7 +126,7 @@ public class TestBeanHelper {
      * @param el the TestElement to be prepared
      */
     public static void prepare(TestElement el) {
-        if (!(el instanceof TestBean)) {
+        if (!(el instanceof TestBean) || el instanceof PropertyBackedTestBean) {
             return;
         }
         // Avoid allocating array for every method call

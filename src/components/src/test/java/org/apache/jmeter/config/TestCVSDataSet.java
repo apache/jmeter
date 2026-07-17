@@ -18,17 +18,25 @@
 package org.apache.jmeter.config;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.testbeans.TestBeanHelper;
+import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -144,7 +152,7 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/testheader.csv"));
         csv.setDelimiter("|");
-        assertNull(csv.getVariableNames());
+        assertEquals("", csv.getVariableNames());
         csv.iterationStart(null);
         assertNull(threadVars.get("a"));
         assertEquals("a1", threadVars.get("A"));
@@ -166,7 +174,7 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         csv.setFilename(findTestPath("testfiles/testheader.csv"));
         csv.setDelimiter("|");
         csv.setRecycle(true);
-        assertNull(csv.getVariableNames()); // read 1st line
+        assertEquals("", csv.getVariableNames()); // read 1st line
         // read 5 lines + restart to file begin
         csv.iterationStart(null); // line 2
         csv.iterationStart(null); // line 3
@@ -188,7 +196,7 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         csv.setQuotedData(true);
         csv.setRecycle(false);
         csv.setStopThread(true);
-        assertNull(csv.getVariableNames());
+        assertEquals("", csv.getVariableNames());
         csv.iterationStart(null);
         assertNull(threadVars.get("a"));
         assertEquals("a1", threadVars.get("A"));
@@ -223,8 +231,11 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
     }
 
     @Test
-    public void testFilenameGetterAfterLoadingTestPlan() throws Exception {
+    public void testGettersAfterLoadingTestPlan() throws Exception {
         Path testPlan = Files.createTempFile("csv-dataset", ".jmx");
+        Path csvFile = Files.createTempFile("csv-dataset", ".csv");
+        Files.write(csvFile, "ignored\n\"a1\"|\"b1\"|\"c1\"\n".getBytes(StandardCharsets.UTF_8));
+        String csvFileName = csvFile.toString().replace("&", "&amp;");
         String jmx = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.6.3\">\n"
                 + "  <hashTree>\n"
@@ -236,15 +247,15 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
                 + "    </TestPlan>\n"
                 + "    <hashTree>\n"
                 + "      <CSVDataSet guiclass=\"TestBeanGUI\" testclass=\"CSVDataSet\" testname=\"CSV Data Set Config\">\n"
-                + "        <stringProp name=\"delimiter\">,</stringProp>\n"
+                + "        <stringProp name=\"delimiter\">|</stringProp>\n"
                 + "        <stringProp name=\"fileEncoding\">UTF-8</stringProp>\n"
-                + "        <stringProp name=\"filename\">data.csv</stringProp>\n"
-                + "        <boolProp name=\"ignoreFirstLine\">false</boolProp>\n"
-                + "        <boolProp name=\"quotedData\">false</boolProp>\n"
-                + "        <boolProp name=\"recycle\">true</boolProp>\n"
-                + "        <stringProp name=\"shareMode\">shareMode.all</stringProp>\n"
-                + "        <boolProp name=\"stopThread\">false</boolProp>\n"
-                + "        <stringProp name=\"variableNames\"></stringProp>\n"
+                + "        <stringProp name=\"filename\">" + csvFileName + "</stringProp>\n"
+                + "        <boolProp name=\"ignoreFirstLine\">true</boolProp>\n"
+                + "        <boolProp name=\"quotedData\">true</boolProp>\n"
+                + "        <boolProp name=\"recycle\">false</boolProp>\n"
+                + "        <stringProp name=\"shareMode\">shareMode.thread</stringProp>\n"
+                + "        <boolProp name=\"stopThread\">true</boolProp>\n"
+                + "        <stringProp name=\"variableNames\">a,b,c</stringProp>\n"
                 + "      </CSVDataSet>\n"
                 + "      <hashTree/>\n"
                 + "    </hashTree>\n"
@@ -260,11 +271,99 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
 
             assertEquals(1, searcher.getSearchResults().size());
             CSVDataSet csvDataSet = searcher.getSearchResults().iterator().next();
-            assertEquals("data.csv", csvDataSet.getPropertyAsString("filename"));
-            assertEquals("data.csv", csvDataSet.getFilename());
+            assertEquals(csvFile.toString(), csvDataSet.getPropertyAsString("filename"));
+            assertEquals(csvFile.toString(), csvDataSet.getFilename());
+            assertEquals("UTF-8", csvDataSet.getFileEncoding());
+            assertEquals("a,b,c", csvDataSet.getVariableNames());
+            assertEquals("|", csvDataSet.getDelimiter());
+            assertTrue(csvDataSet.getQuotedData());
+            assertFalse(csvDataSet.getRecycle());
+            assertEquals("shareMode.thread", csvDataSet.getShareMode());
+            assertTrue(csvDataSet.getStopThread());
+            assertTrue(csvDataSet.isIgnoreFirstLine());
+
+            csvDataSet.iterationStart(null);
+            assertEquals("a1", threadVars.get("a"));
+            assertEquals("b1", threadVars.get("b"));
+            assertEquals("c1", threadVars.get("c"));
+            assertThrows(JMeterStopThreadException.class, () -> csvDataSet.iterationStart(null));
         } finally {
             Files.deleteIfExists(testPlan);
+            Files.deleteIfExists(csvFile);
         }
+    }
+
+    @Test
+    public void testSetFilenameIsSavedAfterLoadingTestPlan() throws Exception {
+        Path testPlan = Files.createTempFile("csv-dataset", ".jmx");
+        Path savedTestPlan = Files.createTempFile("csv-dataset-saved", ".jmx");
+        String jmx = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<jmeterTestPlan version=\"1.2\" properties=\"5.0\" jmeter=\"5.6.3\">\n"
+                + "  <hashTree>\n"
+                + "    <TestPlan guiclass=\"TestPlanGui\" testclass=\"TestPlan\" testname=\"Test Plan\">\n"
+                + "      <elementProp name=\"TestPlan.user_defined_variables\" elementType=\"Arguments\" "
+                + "guiclass=\"ArgumentsPanel\" testclass=\"Arguments\" testname=\"User Defined Variables\">\n"
+                + "        <collectionProp name=\"Arguments.arguments\"/>\n"
+                + "      </elementProp>\n"
+                + "    </TestPlan>\n"
+                + "    <hashTree>\n"
+                + "      <CSVDataSet guiclass=\"TestBeanGUI\" testclass=\"CSVDataSet\" testname=\"CSV Data Set Config\">\n"
+                + "        <stringProp name=\"filename\">old.csv</stringProp>\n"
+                + "      </CSVDataSet>\n"
+                + "      <hashTree/>\n"
+                + "    </hashTree>\n"
+                + "  </hashTree>\n"
+                + "</jmeterTestPlan>\n";
+        Files.write(testPlan, jmx.getBytes(StandardCharsets.UTF_8));
+
+        try {
+            SaveService.loadProperties();
+            HashTree tree = SaveService.loadTree(testPlan.toFile());
+            CSVDataSet csvDataSet = findCsvDataSet(tree);
+            csvDataSet.setFilename("new.csv");
+
+            try (OutputStream out = Files.newOutputStream(savedTestPlan)) {
+                SaveService.saveTree(tree, out);
+            }
+            HashTree reloadedTree = SaveService.loadTree(savedTestPlan.toFile());
+            CSVDataSet reloadedCsvDataSet = findCsvDataSet(reloadedTree);
+
+            assertEquals("new.csv", reloadedCsvDataSet.getFilename());
+        } finally {
+            Files.deleteIfExists(testPlan);
+            Files.deleteIfExists(savedTestPlan);
+        }
+    }
+
+    @Test
+    public void testSchemaDefaults() {
+        CSVDataSet csvDataSet = new CSVDataSet();
+
+        assertEquals("", csvDataSet.getFilename());
+        assertEquals("", csvDataSet.getFileEncoding());
+        assertEquals("", csvDataSet.getVariableNames());
+        assertEquals(",", csvDataSet.getDelimiter());
+        assertFalse(csvDataSet.getQuotedData());
+        assertTrue(csvDataSet.getRecycle());
+        assertEquals("shareMode.all", csvDataSet.getShareMode());
+        assertFalse(csvDataSet.getStopThread());
+        assertFalse(csvDataSet.isIgnoreFirstLine());
+    }
+
+    @Test
+    public void testFilenameFunctionPropertyReturnsRawValueBeforeRunningVersion() {
+        CSVDataSet csvDataSet = new CSVDataSet();
+        FunctionProperty property = new FunctionProperty(
+                csvDataSet.getSchema().getFilename().getName(), new CompoundVariable("${__P(csv)}"));
+        csvDataSet.setProperty(property);
+
+        assertSame(property, csvDataSet.getProperty(csvDataSet.getSchema().getFilename().getName()));
+        assertEquals("${__P(csv)}", csvDataSet.getFilename());
+
+        TestBeanHelper.prepare(csvDataSet);
+
+        assertSame(property, csvDataSet.getProperty(csvDataSet.getSchema().getFilename().getName()));
+        assertEquals("${__P(csv)}", csvDataSet.getFilename());
     }
 
     @Test
@@ -273,7 +372,7 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         new CSVDataSetBeanInfo(); // needs to be initialised
         CSVDataSet csv0 = initCSV();
         CSVDataSet csv1 = initCSV();
-        assertNull(csv1.getShareMode());
+        assertEquals("shareMode.all", csv1.getShareMode());
         csv1.setShareMode("abc");
         assertEquals("abc", csv1.getShareMode());
         csv1.iterationStart(null);
@@ -289,5 +388,12 @@ public class TestCVSDataSet extends JMeterTestCase implements JMeterSerialTest {
         assertEquals("a1", threadVars.get("a"));
         csv1.iterationStart(null);
         assertEquals("a4", threadVars.get("a"));
+    }
+
+    private static CSVDataSet findCsvDataSet(HashTree tree) {
+        SearchByClass<CSVDataSet> searcher = new SearchByClass<>(CSVDataSet.class);
+        tree.traverse(searcher);
+        assertEquals(1, searcher.getSearchResults().size());
+        return searcher.getSearchResults().iterator().next();
     }
 }

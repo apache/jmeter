@@ -115,6 +115,7 @@ Summary
     <li><issue>5937</issue>Remove deprecated Log4j package scanning and configure plugin metadata processing to improve startup time and avoid deprecation warnings. Contributed by Piotr P. Karwasz (github.com/piotrgithub)</li>
     <li><pr>6620</pr>Fix report generation paths so dashboard output files are created in the correct location after internal refactoring.</li>
     <li><bug>6456</bug>Handle malformed percent-encoded URLs gracefully when recording HTTP traffic, logging a warning instead of failing the recording.</li>
+    <li><pr>6726</pr><issue>6451</issue>Fix CSVDataSet configuration getters returning field defaults right after loading a test plan via <code>SaveService.loadTree()</code>. Contributed by Sadovoi Grigorii (github.com/e345ee)</li>
   </ul>
  <!--  =================== Thanks =================== -->
 
@@ -127,6 +128,7 @@ Summary
   <li>Gabriele Coletta (github.com/gdmg92)</li>
   <li>Patrick Uiterwijk (patrick at puiterwijk.org)</li>
   <li>Piotr P. Karwasz (github.com/piotrgithub)</li>
+  <li>Sadovoi Grigorii (github.com/e345ee)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
