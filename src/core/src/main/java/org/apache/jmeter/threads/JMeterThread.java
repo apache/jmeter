@@ -350,7 +350,7 @@ public class JMeterThread implements Runnable, Interruptible {
      * @param consumer Consumer that will process the parent controllers list
      */
     private void triggerLoopLogicalActionOnParentControllers(Sampler sampler, JMeterContext threadContext,
-            Consumer<List<Controller>> consumer) {
+            Consumer<? super List<Controller>> consumer) {
         TransactionSampler transactionSampler = null;
         if (sampler instanceof TransactionSampler transSampler) {
             transactionSampler = transSampler;
@@ -364,6 +364,9 @@ public class JMeterThread implements Runnable, Interruptible {
         }
         // Reuse controller path already computed by TestCompiler
         List<Controller> controllers = compiler.getControllersForSampler(realSampler);
+        if (controllers.isEmpty()) {
+            log.warn("No parent controllers found for sampler '{}', loop action is skipped", realSampler.getName());
+        }
 
         consumer.accept(controllers);
 
