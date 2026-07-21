@@ -80,7 +80,16 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     public static final String MAX_SIZE = "maxSize";  // $NON-NLS-1$
     //-
 
-    private transient InheritableThreadLocal<Cache<String, CacheEntry>> threadCache;
+    @SuppressWarnings("ThreadLocalUsage") // intentionally using InheritableThreadLocal for per-thread cache
+    private final transient InheritableThreadLocal<Cache<String, CacheEntry>> threadCache =
+            new InheritableThreadLocal<Cache<String, CacheEntry>>(){
+                @Override
+                protected Cache<String, CacheEntry> initialValue() {
+                    return Caffeine.newBuilder()
+                            .maximumSize(getMaxSize())
+                            .build();
+                }
+            };
 
     private transient boolean useExpires; // Cached value
 
@@ -602,15 +611,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private void clearCache() {
         log.debug("Clear cache");
-        // TODO: avoid re-creating the thread local every time, reset its contents instead
-        threadCache = new InheritableThreadLocal<Cache<String, CacheEntry>>(){
-            @Override
-            protected Cache<String, CacheEntry> initialValue() {
-                return Caffeine.newBuilder()
-                        .maximumSize(getMaxSize())
-                        .build();
-            }
-        };
+        threadCache.remove();
     }
 
     /**
