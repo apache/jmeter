@@ -108,11 +108,15 @@ import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * HTTP Sampler using Apache HttpClient 5.x.
  */
 public class HTTPHC5Impl extends HTTPHCAbstractImpl {
+
+    private static final Logger log = LoggerFactory.getLogger(HTTPHC5Impl.class);
 
     private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTP_CLIENTS =
             ThreadLocal.withInitial(HashMap::new);
@@ -435,6 +439,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private void updateResult(ClassicHttpResponse response,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HTTPSampleResult result) throws IOException {
         result.setRequestHeaders(getRequestHeaders(request));
+        result.setSentBytes(calculateSentBytes(request));
         Header contentType = response.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
         if (contentType != null) {
             result.setContentType(contentType.getValue());
@@ -480,6 +485,78 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             }
         }
         return headers.toString();
+    }
+
+    private static long calculateSentBytes(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
+        if (request == null) {
+            return 0;
+        }
+        long sentBytes = 0;
+
+        String method = request.getMethod();
+        String uri = request.getRequestUri();
+        if (uri == null) {
+            uri = "";
+        }
+        org.apache.hc.core5.http.ProtocolVersion version = request.getVersion();
+        String versionStr = version != null ? version.toString() : "HTTP/1.1";
+
+        sentBytes += method.getBytes(Charset.defaultCharset()).length;
+        sentBytes += 1;
+        sentBytes += uri.getBytes(Charset.defaultCharset()).length;
+        sentBytes += 1;
+        sentBytes += versionStr.getBytes(Charset.defaultCharset()).length;
+        sentBytes += 2;
+
+        for (Header header : request.getHeaders()) {
+            String name = header.getName();
+            String value = header.getValue();
+            if (name != null) {
+                sentBytes += name.getBytes(Charset.defaultCharset()).length;
+                sentBytes += 2;
+            }
+            if (value != null) {
+                sentBytes += value.getBytes(Charset.defaultCharset()).length;
+            }
+            sentBytes += 2;
+        }
+        sentBytes += 2;
+
+        HttpEntity entity = request.getEntity();
+        if (entity != null) {
+            long contentLength = entity.getContentLength();
+            if (contentLength >= 0) {
+                sentBytes += contentLength;
+            } else if (entity.isRepeatable()) {
+                CountingOutputStream counter = new CountingOutputStream();
+                try {
+                    entity.writeTo(counter);
+                    sentBytes += counter.getCount();
+                } catch (IOException e) {
+                    log.debug("Exception measuring entity length", e);
+                }
+            }
+        }
+
+        return sentBytes;
+    }
+
+    private static class CountingOutputStream extends java.io.OutputStream {
+        private long count = 0;
+
+        @Override
+        public void write(int b) {
+            count++;
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) {
+            count += len;
+        }
+
+        long getCount() {
+            return count;
+        }
     }
 
     private static String getOnlyCookieFromHeaders(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {

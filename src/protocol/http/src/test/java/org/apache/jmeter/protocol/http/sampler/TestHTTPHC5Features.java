@@ -20,9 +20,11 @@ package org.apache.jmeter.protocol.http.sampler;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -151,6 +153,46 @@ class TestHTTPHC5Features {
 
             assertEquals("200", result.getResponseCode());
             assertEquals("HTTP/1.1", result.getResponseHeaders().substring(0, "HTTP/1.1".length()));
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void setsSentBytesCorrectlyForGetRequest() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/sentBytesGet")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/sentBytesGet")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getSentBytes() > 0, "sentBytes should be greater than 0");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void setsSentBytesCorrectlyForPostRequest() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(post(urlEqualTo("/sentBytesPost")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+            sampler.setPostBodyRaw(true);
+            sampler.addNonEncodedArgument("", "hello world", "");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/sentBytesPost")), HTTPConstants.POST, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getSentBytes() > "hello world".length(), "sentBytes should include request line, headers, and body");
         } finally {
             server.stop();
         }
