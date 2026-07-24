@@ -43,7 +43,6 @@ import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
 import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
 import org.apache.hc.client5.http.auth.AuthScope;
 import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
-import org.apache.hc.client5.http.classic.ExecChain;
 import org.apache.hc.client5.http.classic.ExecChainHandler;
 import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
@@ -230,6 +229,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             }
             if (request != null) {
                 result.setRequestHeaders(getRequestHeaders(request));
+                result.setSentBytes(calculateSentBytes(request));
             }
             return errorResult(e, result);
         } finally {
