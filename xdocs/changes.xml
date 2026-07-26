@@ -116,6 +116,10 @@ Summary
     <li><pr>6620</pr>Fix report generation paths so dashboard output files are created in the correct location after internal refactoring.</li>
     <li><bug>6456</bug>Handle malformed percent-encoded URLs gracefully when recording HTTP traffic, logging a warning instead of failing the recording.</li>
   </ul>
+  <h3>HTTP Samplers and Test Script Recorder</h3>
+  <ul>
+    <li><issue>6457</issue>Suppress spurious <code>Existing CookieManager &hellip; superseded by &hellip;</code> (and analogous <code>CacheManager</code>, <code>AuthManager</code>, <code>DNSCacheManager</code>, <code>KeystoreConfig</code>) warnings that fired on every thread-group iteration after the first one. <code>addTestElement</code> now routes replace-mode managers through their private property setters (mirroring the existing <code>KeystoreConfig</code> path), and the public setters no longer warn when the new value is the same instance as the existing one.</li>
+  </ul>
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>
