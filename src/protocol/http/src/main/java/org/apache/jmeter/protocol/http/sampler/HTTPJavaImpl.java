@@ -34,6 +34,7 @@ import java.net.URLConnection;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -557,6 +558,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
            }
         }
 
+        Map<String, List<String>> requestHeaders = null;
+        Map<String, String> securityHeaders = Collections.emptyMap();
+        byte[] postBodyBytes = null;
+
         try {
             // Sampling proper - establish the connection and read the response:
             // Repeatedly try to connect:
@@ -565,6 +570,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             for (; retry < MAX_CONN_RETRIES; retry++) {
                 try {
                     conn = setupConnection(url, method, res);
+                    requestHeaders = new LinkedHashMap<>(conn.getRequestProperties());
+                    securityHeaders = setConnectionAuthorization(conn, url, getAuthManager());
                     // Attempt the connection:
                     savedConn = conn;
                     conn.connect();
@@ -593,9 +600,15 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (method.equals(HTTPConstants.POST)) {
                 String postBody = sendPostData(conn);
                 res.setQueryString(postBody);
+                if (postBody != null) {
+                    postBodyBytes = getBytes(postBody);
+                }
             } else if (method.equals(HTTPConstants.PUT)) {
                 String putBody = sendPutData(conn);
                 res.setQueryString(putBody);
+                if (putBody != null) {
+                    postBodyBytes = getBytes(putBody);
+                }
             }
             // Request sent. Now get the response:
             byte[] responseData = readResponse(conn, res);
@@ -677,6 +690,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 cacheManager.saveDetails(conn, res);
             }
 
+            res.setSentBytes(calculateSentBytes(url, method, testElement.getHttpVersion(), requestHeaders, securityHeaders, postBodyBytes));
+
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
             log.debug("End : sample");
@@ -685,6 +700,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (res.getEndTime() == 0) {
                 res.sampleEnd();
             }
+            res.setSentBytes(calculateSentBytes(url, method, testElement.getHttpVersion(), requestHeaders, securityHeaders, postBodyBytes));
             savedConn = null; // we don't want interrupt to try disconnection again
             // We don't want to continue using this connection, even if KeepAlive is set
             if (conn != null) { // May not exist
@@ -780,14 +796,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
         }
 
+        CapturingHttpURLConnection capturingConn = null;
+        byte[] requestBodyBytes = new byte[0];
+        Map<String, String> securityHeaders = Collections.emptyMap();
+
         try {
-            CapturingHttpURLConnection capturingConn = new CapturingHttpURLConnection(url, method);
+            capturingConn = new CapturingHttpURLConnection(url, method);
 
             setConnectionHeaders(capturingConn, url, getHeaderManager(), getCacheManager());
             String cookies = setConnectionCookie(capturingConn, url, getCookieManager());
-            Map<String, String> securityHeaders = setConnectionAuthorization(capturingConn, url, getAuthManager());
+            securityHeaders = setConnectionAuthorization(capturingConn, url, getAuthManager());
 
-            byte[] requestBodyBytes = new byte[0];
             if (method.equals(HTTPConstants.POST)) {
                 setPostHeaders(capturingConn);
                 String postBody = sendPostData(capturingConn);
@@ -885,6 +904,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 cacheManager.saveDetails(response, res);
             }
 
+            res.setSentBytes(calculateSentBytes(url, method, "HTTP/2",
+                    capturingConn != null ? capturingConn.getRequestProperties() : null,
+                    securityHeaders, requestBodyBytes));
+
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
             log.debug("End : sampleHttp2");
@@ -893,6 +916,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (res.getEndTime() == 0) {
                 res.sampleEnd();
             }
+            res.setSentBytes(calculateSentBytes(url, method, "HTTP/2",
+                    capturingConn != null ? capturingConn.getRequestProperties() : null,
+                    securityHeaders, requestBodyBytes));
             return errorResult(e, res);
         }
     }
@@ -958,6 +984,130 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 || "Host".equalsIgnoreCase(name) // $NON-NLS-1$
                 || "Expect".equalsIgnoreCase(name) // $NON-NLS-1$
                 || "Upgrade".equalsIgnoreCase(name); // $NON-NLS-1$
+    }
+
+    private static long calculateSentBytes(
+            URL u,
+            String method,
+            String version,
+            Map<String, List<String>> requestHeaders,
+            Map<String, String> securityHeaders,
+            byte[] postBodyBytes) {
+        long sentBytes = 0;
+
+        if (StringUtilities.isBlank(method)) {
+            method = HTTPConstants.GET;
+        }
+
+        String uri = u != null ? u.getFile() : "";
+        if (StringUtilities.isBlank(uri)) {
+            uri = "/"; // $NON-NLS-1$
+        }
+
+        if (StringUtilities.isBlank(version)) {
+            version = HTTPConstants.HTTP_1_1;
+        }
+
+        // Request line: METHOD URI VERSION\r\n
+        sentBytes += method.getBytes(StandardCharsets.UTF_8).length;
+        sentBytes += 1;
+        sentBytes += uri.getBytes(StandardCharsets.UTF_8).length;
+        sentBytes += 1;
+        sentBytes += version.getBytes(StandardCharsets.UTF_8).length;
+        sentBytes += 2;
+
+        // Request headers
+        if (requestHeaders != null) {
+            for (Map.Entry<String, List<String>> entry : requestHeaders.entrySet()) {
+                String key = entry.getKey();
+                if (key != null) {
+                    List<String> values = entry.getValue();
+                    if (values != null) {
+                        for (String val : values) {
+                            sentBytes += key.getBytes(StandardCharsets.UTF_8).length;
+                            sentBytes += 2; // ": "
+                            if (val != null) {
+                                sentBytes += val.getBytes(StandardCharsets.UTF_8).length;
+                            }
+                            sentBytes += 2; // "\r\n"
+                        }
+                    }
+                }
+            }
+        }
+
+        if (securityHeaders != null && !securityHeaders.isEmpty()) {
+            for (Map.Entry<String, String> secEntry : securityHeaders.entrySet()) {
+                String secKey = secEntry.getKey();
+                String secVal = secEntry.getValue();
+                if (secKey != null && !hasHeader(requestHeaders, secKey)) {
+                    sentBytes += secKey.getBytes(StandardCharsets.UTF_8).length;
+                    sentBytes += 2; // ": "
+                    if (secVal != null) {
+                        sentBytes += secVal.getBytes(StandardCharsets.UTF_8).length;
+                    }
+                    sentBytes += 2; // "\r\n"
+                }
+            }
+        }
+
+        // Header/Body separator \r\n
+        sentBytes += 2;
+
+        // Request body
+        if (postBodyBytes != null && postBodyBytes.length > 0) {
+            sentBytes += postBodyBytes.length;
+        } else if (requestHeaders != null) {
+            String contentLengthStr = getHeaderValue(requestHeaders, HTTPConstants.HEADER_CONTENT_LENGTH);
+            if (StringUtilities.isNotEmpty(contentLengthStr)) {
+                try {
+                    sentBytes += Long.parseLong(contentLengthStr);
+                } catch (NumberFormatException e) {
+                    log.debug("Could not parse Content-Length header: {}", contentLengthStr, e);
+                }
+            }
+        }
+
+        return sentBytes;
+    }
+
+    private static boolean hasHeader(Map<String, List<String>> headers, String headerName) {
+        if (headers == null || headerName == null) {
+            return false;
+        }
+        for (String key : headers.keySet()) {
+            if (headerName.equalsIgnoreCase(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String getHeaderValue(Map<String, List<String>> headers, String headerName) {
+        if (headers == null || headerName == null) {
+            return null;
+        }
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            if (headerName.equalsIgnoreCase(entry.getKey())) {
+                List<String> values = entry.getValue();
+                if (values != null && !values.isEmpty()) {
+                    return values.get(0);
+                }
+            }
+        }
+        return null;
+    }
+
+    private byte[] getBytes(String postBody) {
+        String enc = testElement != null ? testElement.getContentEncoding() : null;
+        if (StringUtilities.isBlank(enc)) {
+            enc = StandardCharsets.UTF_8.name();
+        }
+        try {
+            return postBody.getBytes(enc);
+        } catch (Exception e) {
+            return postBody.getBytes(StandardCharsets.UTF_8);
+        }
     }
 
     private HttpClient getHttpClient(URL url) {

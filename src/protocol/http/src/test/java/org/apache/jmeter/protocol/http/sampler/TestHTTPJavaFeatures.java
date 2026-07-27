@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -85,6 +86,86 @@ class TestHTTPJavaFeatures {
                     new URL(server.url("/http2proxy")), HTTPConstants.GET, false, 1);
 
             assertEquals("200", result.getResponseCode());
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void setsSentBytesCorrectlyForGetRequest() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/sentBytesGet")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/sentBytesGet")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getSentBytes() > 0, "sentBytes should be greater than 0");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void setsSentBytesCorrectlyForPostRequest() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(post(urlEqualTo("/sentBytesPost")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+            sampler.setPostBodyRaw(true);
+            sampler.addNonEncodedArgument("", "hello world", "");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/sentBytesPost")), HTTPConstants.POST, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getSentBytes() > "hello world".length(), "sentBytes should include request line, headers, and body");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void setsSentBytesCorrectlyForHttp2GetRequest() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/http2SentBytesGet")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/http2SentBytesGet")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getSentBytes() > 0, "sentBytes should be greater than 0");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void setsSentBytesCorrectlyForHttp2PostRequest() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(post(urlEqualTo("/http2SentBytesPost")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+            sampler.setPostBodyRaw(true);
+            sampler.addNonEncodedArgument("", "hello world http2", "");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/http2SentBytesPost")), HTTPConstants.POST, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getSentBytes() > "hello world http2".length(), "sentBytes should include request line, headers, and body");
         } finally {
             server.stop();
         }
