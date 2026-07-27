@@ -33,10 +33,20 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.hc.client5.http.HttpRoute;
+import org.apache.hc.client5.http.io.ConnectionEndpoint;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.io.LeaseRequest;
+import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
+import org.apache.hc.core5.io.CloseMode;
+import org.apache.hc.core5.util.TimeValue;
+import org.apache.hc.core5.util.Timeout;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.Test;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -257,6 +267,94 @@ class TestHTTPHC5Features {
             sampler.setProxyPass("pass");
 
             assertEquals("200", sampler.sample(new URL(server.url("/proxy")), HTTPConstants.GET, false, 1).getResponseCode());
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void setsConnectTimeForHttp11() throws Exception {
+        SampleResult result = new SampleResult();
+        result.sampleStart();
+        HttpClientContext context = HttpClientContext.create();
+        context.setAttribute(HTTPHC5Impl.CONTEXT_ATTRIBUTE_SAMPLER_RESULT, result);
+        HttpClientConnectionManager connectionManager =
+                new HTTPHC5Impl.ConnectTimeMeasuringConnectionManager(new SlowConnectingConnectionManager(50));
+
+        connectionManager.connect(null, null, context);
+        Thread.sleep(50);
+        result.sampleEnd();
+
+        assertTrue(result.getConnectTime() >= 50,
+                "connectTime should cover the time spent connecting, but was " + result.getConnectTime());
+        assertTrue(result.getConnectTime() <= result.getTime(),
+                "connectTime should not exceed the elapsed time");
+    }
+
+    /** Connection manager that only supports {@code connect} and takes a well-known amount of time for it. */
+    private static final class SlowConnectingConnectionManager implements HttpClientConnectionManager {
+
+        private final long connectDurationMillis;
+
+        SlowConnectingConnectionManager(long connectDurationMillis) {
+            this.connectDurationMillis = connectDurationMillis;
+        }
+
+        @Override
+        public LeaseRequest lease(String id, HttpRoute route, Timeout requestTimeout, Object state) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void release(ConnectionEndpoint endpoint, Object newState, TimeValue validDuration) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void connect(ConnectionEndpoint endpoint, TimeValue connectTimeout, HttpContext context) throws IOException {
+            try {
+                Thread.sleep(connectDurationMillis);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new IOException(e);
+            }
+        }
+
+        @Override
+        public void upgrade(ConnectionEndpoint endpoint, HttpContext context) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void close(CloseMode closeMode) {
+            // nothing to close
+        }
+
+        @Override
+        public void close() {
+            // nothing to close
+        }
+    }
+
+    @Test
+    void setsConnectTimeForHttp2() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/connectTime2")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/connectTime2"), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getConnectTime() > 0,
+                    "connectTime should be greater than 0, but was " + result.getConnectTime());
+            assertTrue(result.getConnectTime() <= result.getTime(),
+                    "connectTime should not exceed the elapsed time");
         } finally {
             server.stop();
         }

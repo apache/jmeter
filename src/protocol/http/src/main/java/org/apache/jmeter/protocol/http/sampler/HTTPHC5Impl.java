@@ -39,6 +39,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.hc.client5.http.HttpRoute;
 import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
 import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
 import org.apache.hc.client5.http.auth.AuthScope;
@@ -63,10 +64,16 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.impl.nio.PoolingAsyncClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.impl.routing.DefaultRoutePlanner;
+import org.apache.hc.client5.http.io.ConnectionEndpoint;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.io.LeaseRequest;
+import org.apache.hc.client5.http.nio.AsyncClientConnectionManager;
+import org.apache.hc.client5.http.nio.AsyncConnectionEndpoint;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
 import org.apache.hc.client5.http.ssl.ClientTlsStrategyBuilder;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.TrustAllStrategy;
+import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
@@ -87,8 +94,12 @@ import org.apache.hc.core5.http.message.BasicHeaderValueParser;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.http.message.ParserCursor;
 import org.apache.hc.core5.http.nio.ssl.TlsStrategy;
+import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
+import org.apache.hc.core5.io.CloseMode;
+import org.apache.hc.core5.reactor.ConnectionInitiator;
 import org.apache.hc.core5.ssl.SSLContexts;
+import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
@@ -99,6 +110,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -117,6 +129,9 @@ import org.slf4j.LoggerFactory;
 public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHC5Impl.class);
+
+    /** Key used to store the current {@link SampleResult} in the {@link HttpClientContext}. */
+    static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
 
     private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTP_CLIENTS =
             ThreadLocal.withInitial(HashMap::new);
@@ -215,6 +230,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             currentRequest = request;
             HttpClientKey clientKey = createHttpClientKey(url);
             HttpClientContext context = createHttpClientContext(url, clientKey, request);
+            context.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, result);
             response = clientKey.httpVersionPolicy != HttpVersionPolicy.FORCE_HTTP_1
                     ? executeHttp2(getHttp2Client(clientKey), request, context)
                     : getClient(clientKey).executeOpen(null, request, context);
@@ -598,7 +614,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                             .setConnectTimeout(Timeout.ofMilliseconds(key.connectTimeout))
                             .build());
         }
-        builder.setConnectionManager(connectionManagerBuilder.build());
+        builder.setConnectionManager(new ConnectTimeMeasuringConnectionManager(connectionManagerBuilder.build()));
         builder.setRoutePlanner(createRoutePlanner(key));
         return builder.disableContentCompression()
                 .addExecInterceptorFirst("response-content-encoding", RESPONSE_CONTENT_ENCODING)
@@ -622,7 +638,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                     .setConnectTimeout(Timeout.ofMilliseconds(key.connectTimeout))
                     .build());
         }
-        builder.setConnectionManager(connectionManagerBuilder.build());
+        builder.setConnectionManager(new ConnectTimeMeasuringAsyncConnectionManager(connectionManagerBuilder.build()));
         CloseableHttpAsyncClient asyncClient = builder.build();
         asyncClient.start();
         return asyncClient;
@@ -767,6 +783,137 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             request.cancel();
         }
         return request != null;
+    }
+
+    private static void recordConnectEnd(HttpContext context) {
+        SampleResult sample = (SampleResult) context.getAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT);
+        if (sample != null) {
+            sample.connectEnd();
+        }
+    }
+
+    /**
+     * Delegating connection manager that records the connect time of the current sample
+     * as soon as the connection to the first hop has been established.
+     */
+    static final class ConnectTimeMeasuringConnectionManager implements HttpClientConnectionManager {
+
+        private final HttpClientConnectionManager delegate;
+
+        ConnectTimeMeasuringConnectionManager(HttpClientConnectionManager delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public LeaseRequest lease(String id, HttpRoute route, Timeout requestTimeout, Object state) {
+            return delegate.lease(id, route, requestTimeout, state);
+        }
+
+        @Override
+        public void release(ConnectionEndpoint endpoint, Object newState, TimeValue validDuration) {
+            delegate.release(endpoint, newState, validDuration);
+        }
+
+        @Override
+        public void connect(ConnectionEndpoint endpoint, TimeValue connectTimeout, HttpContext context) throws IOException {
+            try {
+                delegate.connect(endpoint, connectTimeout, context);
+            } finally {
+                recordConnectEnd(context);
+            }
+        }
+
+        @Override
+        public void upgrade(ConnectionEndpoint endpoint, HttpContext context) throws IOException {
+            delegate.upgrade(endpoint, context);
+        }
+
+        @Override
+        public void close(CloseMode closeMode) {
+            delegate.close(closeMode);
+        }
+
+        @Override
+        public void close() throws IOException {
+            delegate.close();
+        }
+    }
+
+    /**
+     * Delegating asynchronous connection manager that records the connect time of the current
+     * sample as soon as the connection to the first hop has been established.
+     */
+    private static final class ConnectTimeMeasuringAsyncConnectionManager implements AsyncClientConnectionManager {
+
+        private final AsyncClientConnectionManager delegate;
+
+        private ConnectTimeMeasuringAsyncConnectionManager(AsyncClientConnectionManager delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public Future<AsyncConnectionEndpoint> lease(String id, HttpRoute route, Object state, Timeout requestTimeout,
+                FutureCallback<AsyncConnectionEndpoint> callback) {
+            return delegate.lease(id, route, state, requestTimeout, callback);
+        }
+
+        @Override
+        public void release(AsyncConnectionEndpoint endpoint, Object newState, TimeValue validDuration) {
+            delegate.release(endpoint, newState, validDuration);
+        }
+
+        @Override
+        public Future<AsyncConnectionEndpoint> connect(AsyncConnectionEndpoint endpoint,
+                ConnectionInitiator connectionInitiator, Timeout connectTimeout, Object attachment,
+                HttpContext context, FutureCallback<AsyncConnectionEndpoint> callback) {
+            return delegate.connect(endpoint, connectionInitiator, connectTimeout, attachment, context,
+                    new FutureCallback<>() {
+                        @Override
+                        public void completed(AsyncConnectionEndpoint result) {
+                            recordConnectEnd(context);
+                            if (callback != null) {
+                                callback.completed(result);
+                            }
+                        }
+
+                        @Override
+                        public void failed(Exception ex) {
+                            recordConnectEnd(context);
+                            if (callback != null) {
+                                callback.failed(ex);
+                            }
+                        }
+
+                        @Override
+                        public void cancelled() {
+                            recordConnectEnd(context);
+                            if (callback != null) {
+                                callback.cancelled();
+                            }
+                        }
+                    });
+        }
+
+        @Override
+        public void upgrade(AsyncConnectionEndpoint endpoint, Object attachment, HttpContext context) {
+            delegate.upgrade(endpoint, attachment, context);
+        }
+
+        @Override
+        public void upgrade(AsyncConnectionEndpoint endpoint, Object attachment, HttpContext context,
+                FutureCallback<AsyncConnectionEndpoint> callback) {
+            delegate.upgrade(endpoint, attachment, context, callback);
+        }
+
+        @Override
+        public void close(CloseMode closeMode) {
+            delegate.close(closeMode);
+        }
+
+        @Override
+        public void close() throws IOException {
+            delegate.close();
+        }
     }
 
     private static final class HttpClientKey {

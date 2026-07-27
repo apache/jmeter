@@ -589,6 +589,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                     // Attempt the connection:
                     savedConn = conn;
                     conn.connect();
+                    res.connectEnd();
                     break;
                 } catch (BindException e) {
                     if (retry >= MAX_CONN_RETRIES) {

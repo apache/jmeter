@@ -219,6 +219,28 @@ class TestHTTPJavaFeatures {
         }
     }
 
+    @Test
+    void setsConnectTimeForHttp11() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicHttpsPort());
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/connectTime")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/connectTime"), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getConnectTime() > 0,
+                    "connectTime should be greater than 0, but was " + result.getConnectTime());
+            assertTrue(result.getConnectTime() <= result.getTime(),
+                    "connectTime should not exceed the elapsed time");
+        } finally {
+            server.stop();
+        }
+    }
+
     private static HTTPSamplerBase newSampler() {
         return HTTPSamplerFactory.newInstance("Java");
     }
