@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URL;
 
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.junit.jupiter.api.Test;
 
@@ -166,6 +168,52 @@ class TestHTTPJavaFeatures {
 
             assertEquals("200", result.getResponseCode());
             assertTrue(result.getSentBytes() > "hello world http2".length(), "sentBytes should include request line, headers, and body");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void displaysAuthorizationHeaderFromHeaderManagerInHttp11() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/authHttp11")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+            HeaderManager headerManager = new HeaderManager();
+            headerManager.add(new Header("Authorization", "Bearer my-secret-token"));
+            sampler.setHeaderManager(headerManager);
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/authHttp11")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getRequestHeaders().contains("Authorization: Bearer my-secret-token"),
+                    "Request headers should contain Authorization header set in HeaderManager");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void displaysAuthorizationHeaderFromHeaderManagerInHttp2() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/authHttp2")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+            HeaderManager headerManager = new HeaderManager();
+            headerManager.add(new Header("Authorization", "Bearer my-secret-token-http2"));
+            sampler.setHeaderManager(headerManager);
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/authHttp2")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getRequestHeaders().contains("Authorization: Bearer my-secret-token-http2"),
+                    "Request headers should contain Authorization header set in HeaderManager");
         } finally {
             server.stop();
         }

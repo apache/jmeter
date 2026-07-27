@@ -222,10 +222,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         conn.setRequestMethod(method);
-        setConnectionHeaders(conn, u, getHeaderManager(), getCacheManager());
+        Map<String, String> securityHeaders = setConnectionHeaders(conn, u, getHeaderManager(), getCacheManager());
         String cookies = setConnectionCookie(conn, u, getCookieManager());
 
-        Map<String, String> securityHeaders = setConnectionAuthorization(conn, u, getAuthManager());
+        setConnectionAuthorization(conn, u, getAuthManager(), securityHeaders);
 
         if (method.equals(HTTPConstants.POST)) {
             setPostHeaders(conn);
@@ -379,6 +379,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         return cookieHeader;
     }
 
+    private static boolean isSecurityHeader(String name) {
+        return name != null && (HTTPConstants.HEADER_AUTHORIZATION.equalsIgnoreCase(name)
+                || "Proxy-Authorization".equalsIgnoreCase(name));
+    }
+
     /**
      * Extracts all the required headers for that particular URL request and
      * sets them in the <code>HttpURLConnection</code> passed in
@@ -392,11 +397,13 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            the <code>HeaderManager</code> containing all the cookies
      *            for this <code>UrlConfig</code>
      * @param cacheManager the CacheManager (may be null)
+     * @return Map of security headers set from HeaderManager
      */
-    private static void setConnectionHeaders(HttpURLConnection conn, URL u,
+    private static Map<String, String> setConnectionHeaders(HttpURLConnection conn, URL u,
             HeaderManager headerManager, CacheManager cacheManager) {
         // Add all the headers from the HeaderManager
         Header[] arrayOfHeaders = null;
+        Map<String, String> securityHeaders = new LinkedHashMap<>();
         if (headerManager != null) {
             CollectionProperty headers = headerManager.getHeaders();
             if (headers != null) {
@@ -408,12 +415,16 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                     String v = header.getValue();
                     arrayOfHeaders[i++] = header;
                     conn.addRequestProperty(n, v);
+                    if (isSecurityHeader(n)) {
+                        securityHeaders.put(n, v);
+                    }
                 }
             }
         }
         if (cacheManager != null){
             cacheManager.setHeaders(conn, arrayOfHeaders, u);
         }
+        return securityHeaders;
     }
 
     /**
@@ -476,8 +487,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
         if(addSecurityHeaders) {
             for(Map.Entry<String, String> entry : securityHeaders.entrySet()) {
-                hdrs.append(entry.getKey()).append(": ") // $NON-NLS-1$
-                    .append(entry.getValue()).append("\n"); // $NON-NLS-1$
+                if (!hasHeader(requestHeaders, entry.getKey())) {
+                    hdrs.append(entry.getKey()).append(": ") // $NON-NLS-1$
+                        .append(entry.getValue()).append("\n"); // $NON-NLS-1$
+                }
             }
         }
         return hdrs.toString();
@@ -495,9 +508,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param authManager
      *            the <code>AuthManager</code> containing all the cookies for
      *            this <code>UrlConfig</code>
-     * @return String Authorization header value or null if not set
+     * @param securityHeaders
+     *            Map to collect security headers
      */
-    private static Map<String, String> setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager) {
+    private static void setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager, Map<String, String> securityHeaders) {
         if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
@@ -505,10 +519,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 conn.setRequestProperty(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
                 // Java hides request properties so we have to
                 // keep trace of it
-                return Collections.singletonMap(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
+                securityHeaders.put(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
             }
         }
-        return Collections.emptyMap();
     }
 
     /**
@@ -571,7 +584,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 try {
                     conn = setupConnection(url, method, res);
                     requestHeaders = new LinkedHashMap<>(conn.getRequestProperties());
-                    securityHeaders = setConnectionAuthorization(conn, url, getAuthManager());
+                    securityHeaders = setConnectionHeaders(conn, url, getHeaderManager(), getCacheManager());
+                    setConnectionAuthorization(conn, url, getAuthManager(), securityHeaders);
                     // Attempt the connection:
                     savedConn = conn;
                     conn.connect();
@@ -803,9 +817,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         try {
             capturingConn = new CapturingHttpURLConnection(url, method);
 
-            setConnectionHeaders(capturingConn, url, getHeaderManager(), getCacheManager());
+            securityHeaders = setConnectionHeaders(capturingConn, url, getHeaderManager(), getCacheManager());
             String cookies = setConnectionCookie(capturingConn, url, getCookieManager());
-            securityHeaders = setConnectionAuthorization(capturingConn, url, getAuthManager());
+            setConnectionAuthorization(capturingConn, url, getAuthManager(), securityHeaders);
 
             if (method.equals(HTTPConstants.POST)) {
                 setPostHeaders(capturingConn);
