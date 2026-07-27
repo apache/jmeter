@@ -81,6 +81,7 @@ Summary
     <li><issue>6250</issue>Avoid adding "; charset=" automatically to <code>multipart/form-data</code> requests to align behavior with modern HTTP clients.</li>
     <li><issue>6080</issue>Preserve the original HTTP method when following 307 and 308 redirects according to the HTTP specification. Contributed by LeeJiWon (github.com/dlwldnjs1009)</li>
     <li><issue>6267</issue><pr>6268</pr>Add a space between key and value after <code>:</code> in View Results Tree &gt; Sampler result tab for better readability.</li>
+    <li><issue>6375</issue><pr>6736</pr>Add a <code>cURL</code> tab to the Request panel in View Results Tree, showing the sampled HTTP request as a ready-to-run <code>curl</code> command that can be copied to a console or shared with a developer. Contributed by Oleksandr Poliakov (github.com/poliakov-alex)</li>
   </ul>
 
   <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -104,7 +105,6 @@ Summary
   <ul>
     <li><pr>6333</pr>Apply HiDPI mode automatically when setting up the GUI so JMeter looks sharp on high-resolution displays. Contributed by Gabriele Coletta (github.com/gdmg92)</li>
     <li><pr>6656</pr>Replace the previous feather icon with the new oak leaf in the JMeter logo.</li>
-    <li><issue>6375</issue>Add a <code>cURL</code> tab to the Request panel in View Results Tree, showing the sampled HTTP request as a ready-to-run <code>curl</code> command that can be copied to a console. Contributed by Oleksandr Poliakov (github.com/poliakov-alex)</li>
   </ul>
 
   <ch_section>Bug fixes</ch_section>

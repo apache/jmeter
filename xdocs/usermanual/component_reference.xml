@@ -2798,8 +2798,15 @@ response for any sample.  In addition to showing the response, you can see the t
 this response, and some response codes.
 Note that the Request panel only shows the headers added by JMeter.
 It does not show any headers (such as <code>Host</code>) that may be added by the HTTP protocol implementation.
+<p>
 For HTTP samples the Request panel also provides a <code>cURL</code> tab that renders the request as a
 ready-to-run <code>curl</code> command, so it can be copied to a console or shared with a developer.
+The command targets a POSIX-compatible shell (it is not valid <code>cmd.exe</code> or PowerShell syntax).
+It reproduces whatever the sample carried, including <code>Authorization</code> headers, cookies and API keys,
+so treat it as sensitive when sharing. Multipart uploads are rendered as <code>-F</code> form parts using the
+original field and file names; since JMeter does not keep the uploaded bytes, a file is referenced as
+<code>@filename</code>, a placeholder to edit to a real path before running the command. A file sent as the
+whole request body, or a non-repeatable body, cannot be shown at all and is omitted with a note.</p>
 <p>
 There are several ways to view the response, selectable by a drop-down box at the bottom of the left hand panel.</p>
 
