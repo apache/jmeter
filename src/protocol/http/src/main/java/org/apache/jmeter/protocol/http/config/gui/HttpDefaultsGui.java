@@ -79,7 +79,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     private JTextField proxyUser;
     private JPasswordField proxyPass;
     private final JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
-    private final JComboBox<String> httpVersion = new JComboBox<>(new String[] {"", "HTTP/1.1", "HTTP/2"});
+    private final JComboBox<String> httpVersion = new JComboBox<>(new String[] {"HTTP/1.1", "HTTP/2", ""});
     private JTextField connectTimeOut;
     private JTextField responseTimeOut;
 
