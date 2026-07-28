@@ -34,7 +34,11 @@ import java.net.URLConnection;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,10 +47,27 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
 
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLContextSpi;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLEngineResult;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSessionContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
@@ -78,8 +99,15 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private static final String DEFAULT_HTTP_VERSION =
         JMeterUtils.getPropDefault("httpclient.version", HTTPConstants.HTTP_1_1); // $NON-NLS-1$
 
-    private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTP_2_CLIENTS =
+    private static final ThreadLocal<Map<HttpClientKey, Http2Client>> HTTP_2_CLIENTS =
         ThreadLocal.withInitial(HashMap::new);
+
+    /**
+     * Shared daemon thread pool used by the HTTP/2 {@link HttpClient} instances. It allows JMeter to observe
+     * when a connection has been established, since the client only submits tasks once the TCP connection is up.
+     */
+    private static final ExecutorService HTTP_2_EXECUTOR =
+        Executors.newCachedThreadPool(new Http2ThreadFactory());
 
     private static final Logger log = LoggerFactory.getLogger(HTTPJavaImpl.class);
 
@@ -871,10 +899,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 }
             }
 
-            HttpClient client = getHttpClient(url);
+            Http2Client client = getHttpClient(url);
             HttpRequest httpRequest = reqBuilder.build();
 
-            HttpResponse<InputStream> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+            HttpResponse<InputStream> response;
+            ConnectTimeTracker connectTimeTracker = client.connectTimeTracker;
+            connectTimeTracker.sampleStarted(res);
+            try {
+                response = client.httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+            } finally {
+                connectTimeTracker.sampleFinished();
+            }
             res.latencyEnd();
 
             byte[] responseData = readResponse(response, res);
@@ -1125,7 +1160,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
     }
 
-    private HttpClient getHttpClient(URL url) {
+    private Http2Client getHttpClient(URL url) {
         int connectTimeout = getConnectTimeout();
         String proxyHost = getProxyHost();
         int proxyPort = getProxyPortInt();
@@ -1143,6 +1178,14 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             } catch (Exception e) {
                 log.warn("Problem getting SSLContext for HTTP/2 HttpClient: ", e); // $NON-NLS-1$
             }
+            if (sslContext == null) {
+                // Use the default context explicitly, so the connect time of the TLS handshake can be measured
+                try {
+                    sslContext = SSLContext.getDefault();
+                } catch (NoSuchAlgorithmException e) {
+                    log.warn("Problem getting default SSLContext for HTTP/2 HttpClient: ", e); // $NON-NLS-1$
+                }
+            }
         }
 
         HttpClientKey key = new HttpClientKey(connectTimeout, proxyHost, proxyPort,
@@ -1151,9 +1194,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         return HTTP_2_CLIENTS.get().computeIfAbsent(key, HTTPJavaImpl::createHttpClient);
     }
 
-    private static HttpClient createHttpClient(HttpClientKey key) {
+    private static Http2Client createHttpClient(HttpClientKey key) {
+        ConnectTimeTracker connectTimeTracker = new ConnectTimeTracker();
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
+                .executor(new ConnectTimeMeasuringExecutor(connectTimeTracker))
                 .followRedirects(key.autoRedirects ? HttpClient.Redirect.NORMAL : HttpClient.Redirect.NEVER);
 
         if (key.connectTimeout > 0) {
@@ -1177,10 +1222,343 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         if (key.sslContext != null) {
-            builder.sslContext(key.sslContext);
+            builder.sslContext(new ConnectTimeMeasuringSSLContext(key.sslContext, connectTimeTracker));
         }
 
-        return builder.build();
+        return new Http2Client(builder.build(), connectTimeTracker);
+    }
+
+    /**
+     * Holder for an HTTP/2 {@link HttpClient} and the tracker which measures the connect time of its connections.
+     */
+    private static final class Http2Client {
+        private final HttpClient httpClient;
+        private final ConnectTimeTracker connectTimeTracker;
+
+        Http2Client(HttpClient httpClient, ConnectTimeTracker connectTimeTracker) {
+            this.httpClient = httpClient;
+            this.connectTimeTracker = connectTimeTracker;
+        }
+    }
+
+    /**
+     * Records the connect time of the JDK {@link HttpClient} in the current {@link SampleResult}.
+     * <p>
+     * The JDK client does not expose a hook for connection establishment, so two indicators are used:
+     * the client submits its first task to the executor once the TCP connection has been established, and
+     * the wrapped {@code SSLEngine} reports when the TLS handshake has been finished. The TLS handshake
+     * always wins, since it is the more precise and the later event.
+     */
+    static final class ConnectTimeTracker {
+        private volatile SampleResult sampleResult;
+        private volatile boolean connectRecorded;
+        private volatile boolean handshakeRecorded;
+
+        void sampleStarted(SampleResult result) {
+            this.connectRecorded = false;
+            this.handshakeRecorded = false;
+            this.sampleResult = result;
+        }
+
+        void sampleFinished() {
+            this.sampleResult = null;
+        }
+
+        /** Invoked when the TCP connection has been established. */
+        void connectionEstablished() {
+            SampleResult result = sampleResult;
+            if (result != null && !connectRecorded && !handshakeRecorded) {
+                connectRecorded = true;
+                result.connectEnd();
+            }
+        }
+
+        /** Invoked when the TLS handshake has been finished, it overrides the plain TCP connect time. */
+        void handshakeFinished() {
+            SampleResult result = sampleResult;
+            if (result != null && !handshakeRecorded) {
+                handshakeRecorded = true;
+                connectRecorded = true;
+                result.connectEnd();
+            }
+        }
+    }
+
+    /**
+     * Executor which notifies the {@link ConnectTimeTracker} before delegating to the shared thread pool.
+     */
+    private static final class ConnectTimeMeasuringExecutor implements Executor {
+        private final ConnectTimeTracker tracker;
+
+        ConnectTimeMeasuringExecutor(ConnectTimeTracker tracker) {
+            this.tracker = tracker;
+        }
+
+        @Override
+        public void execute(Runnable command) {
+            tracker.connectionEstablished();
+            HTTP_2_EXECUTOR.execute(command);
+        }
+    }
+
+    private static final class Http2ThreadFactory implements ThreadFactory {
+        private final AtomicInteger counter = new AtomicInteger();
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread thread = new Thread(r, "JMeter-HTTP2-" + counter.incrementAndGet()); // $NON-NLS-1$
+            thread.setDaemon(true);
+            return thread;
+        }
+    }
+
+    /**
+     * {@link SSLContext} which creates {@link SSLEngine}s that report the end of the TLS handshake.
+     */
+    static final class ConnectTimeMeasuringSSLContext extends SSLContext {
+        ConnectTimeMeasuringSSLContext(SSLContext delegate, ConnectTimeTracker tracker) {
+            super(new ConnectTimeMeasuringSSLContextSpi(delegate, tracker), delegate.getProvider(),
+                    delegate.getProtocol());
+        }
+    }
+
+    private static final class ConnectTimeMeasuringSSLContextSpi extends SSLContextSpi {
+        private final SSLContext delegate;
+        private final ConnectTimeTracker tracker;
+
+        ConnectTimeMeasuringSSLContextSpi(SSLContext delegate, ConnectTimeTracker tracker) {
+            this.delegate = delegate;
+            this.tracker = tracker;
+        }
+
+        @Override
+        protected void engineInit(KeyManager[] km, TrustManager[] tm, SecureRandom sr) throws KeyManagementException {
+            delegate.init(km, tm, sr);
+        }
+
+        @Override
+        protected SSLSocketFactory engineGetSocketFactory() {
+            return delegate.getSocketFactory();
+        }
+
+        @Override
+        protected SSLServerSocketFactory engineGetServerSocketFactory() {
+            return delegate.getServerSocketFactory();
+        }
+
+        @Override
+        protected SSLEngine engineCreateSSLEngine() {
+            return new ConnectTimeMeasuringSSLEngine(delegate.createSSLEngine(), tracker);
+        }
+
+        @Override
+        protected SSLEngine engineCreateSSLEngine(String host, int port) {
+            return new ConnectTimeMeasuringSSLEngine(delegate.createSSLEngine(host, port), tracker);
+        }
+
+        @Override
+        protected SSLSessionContext engineGetServerSessionContext() {
+            return delegate.getServerSessionContext();
+        }
+
+        @Override
+        protected SSLSessionContext engineGetClientSessionContext() {
+            return delegate.getClientSessionContext();
+        }
+
+        @Override
+        protected SSLParameters engineGetDefaultSSLParameters() {
+            return delegate.getDefaultSSLParameters();
+        }
+
+        @Override
+        protected SSLParameters engineGetSupportedSSLParameters() {
+            return delegate.getSupportedSSLParameters();
+        }
+    }
+
+    /**
+     * {@link SSLEngine} which delegates all calls and notifies the {@link ConnectTimeTracker}
+     * as soon as the TLS handshake has been finished.
+     */
+    static final class ConnectTimeMeasuringSSLEngine extends SSLEngine {
+        private final SSLEngine delegate;
+        private final ConnectTimeTracker tracker;
+
+        ConnectTimeMeasuringSSLEngine(SSLEngine delegate, ConnectTimeTracker tracker) {
+            super(delegate.getPeerHost(), delegate.getPeerPort());
+            this.delegate = delegate;
+            this.tracker = tracker;
+        }
+
+        private void checkHandshakeFinished(SSLEngineResult result) {
+            if (result.getHandshakeStatus() == SSLEngineResult.HandshakeStatus.FINISHED) {
+                tracker.handshakeFinished();
+            }
+        }
+
+        @Override
+        public SSLEngineResult wrap(ByteBuffer[] srcs, int offset, int length, ByteBuffer dst) throws SSLException {
+            SSLEngineResult result = delegate.wrap(srcs, offset, length, dst);
+            checkHandshakeFinished(result);
+            return result;
+        }
+
+        @Override
+        public SSLEngineResult unwrap(ByteBuffer src, ByteBuffer[] dsts, int offset, int length) throws SSLException {
+            SSLEngineResult result = delegate.unwrap(src, dsts, offset, length);
+            checkHandshakeFinished(result);
+            return result;
+        }
+
+        @Override
+        public Runnable getDelegatedTask() {
+            return delegate.getDelegatedTask();
+        }
+
+        @Override
+        public void closeInbound() throws SSLException {
+            delegate.closeInbound();
+        }
+
+        @Override
+        public boolean isInboundDone() {
+            return delegate.isInboundDone();
+        }
+
+        @Override
+        public void closeOutbound() {
+            delegate.closeOutbound();
+        }
+
+        @Override
+        public boolean isOutboundDone() {
+            return delegate.isOutboundDone();
+        }
+
+        @Override
+        public String[] getSupportedCipherSuites() {
+            return delegate.getSupportedCipherSuites();
+        }
+
+        @Override
+        public String[] getEnabledCipherSuites() {
+            return delegate.getEnabledCipherSuites();
+        }
+
+        @Override
+        public void setEnabledCipherSuites(String[] suites) {
+            delegate.setEnabledCipherSuites(suites);
+        }
+
+        @Override
+        public String[] getSupportedProtocols() {
+            return delegate.getSupportedProtocols();
+        }
+
+        @Override
+        public String[] getEnabledProtocols() {
+            return delegate.getEnabledProtocols();
+        }
+
+        @Override
+        public void setEnabledProtocols(String[] protocols) {
+            delegate.setEnabledProtocols(protocols);
+        }
+
+        @Override
+        public SSLSession getSession() {
+            return delegate.getSession();
+        }
+
+        @Override
+        public SSLSession getHandshakeSession() {
+            return delegate.getHandshakeSession();
+        }
+
+        @Override
+        public void beginHandshake() throws SSLException {
+            delegate.beginHandshake();
+        }
+
+        @Override
+        public SSLEngineResult.HandshakeStatus getHandshakeStatus() {
+            return delegate.getHandshakeStatus();
+        }
+
+        @Override
+        public void setUseClientMode(boolean mode) {
+            delegate.setUseClientMode(mode);
+        }
+
+        @Override
+        public boolean getUseClientMode() {
+            return delegate.getUseClientMode();
+        }
+
+        @Override
+        public void setNeedClientAuth(boolean need) {
+            delegate.setNeedClientAuth(need);
+        }
+
+        @Override
+        public boolean getNeedClientAuth() {
+            return delegate.getNeedClientAuth();
+        }
+
+        @Override
+        public void setWantClientAuth(boolean want) {
+            delegate.setWantClientAuth(want);
+        }
+
+        @Override
+        public boolean getWantClientAuth() {
+            return delegate.getWantClientAuth();
+        }
+
+        @Override
+        public void setEnableSessionCreation(boolean flag) {
+            delegate.setEnableSessionCreation(flag);
+        }
+
+        @Override
+        public boolean getEnableSessionCreation() {
+            return delegate.getEnableSessionCreation();
+        }
+
+        @Override
+        public SSLParameters getSSLParameters() {
+            return delegate.getSSLParameters();
+        }
+
+        @Override
+        public void setSSLParameters(SSLParameters params) {
+            delegate.setSSLParameters(params);
+        }
+
+        @Override
+        public String getApplicationProtocol() {
+            return delegate.getApplicationProtocol();
+        }
+
+        @Override
+        public String getHandshakeApplicationProtocol() {
+            return delegate.getHandshakeApplicationProtocol();
+        }
+
+        @Override
+        public void setHandshakeApplicationProtocolSelector(BiFunction<SSLEngine, List<String>, String> selector) {
+            if (selector == null) {
+                delegate.setHandshakeApplicationProtocolSelector(null);
+            } else {
+                delegate.setHandshakeApplicationProtocolSelector((engine, protocols) -> selector.apply(this, protocols));
+            }
+        }
+
+        @Override
+        public BiFunction<SSLEngine, List<String>, String> getHandshakeApplicationProtocolSelector() {
+            return delegate.getHandshakeApplicationProtocolSelector();
+        }
     }
 
     private static class HttpClientKey {

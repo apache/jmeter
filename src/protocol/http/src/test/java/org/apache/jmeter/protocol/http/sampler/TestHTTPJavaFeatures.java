@@ -25,11 +25,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.net.Socket;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509ExtendedTrustManager;
 
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.samplers.SampleResult;
 import org.junit.jupiter.api.Test;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -239,6 +251,110 @@ class TestHTTPJavaFeatures {
         } finally {
             server.stop();
         }
+    }
+
+    @Test
+    void setsConnectTimeForHttp2OverPlainConnection() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/http2ConnectTime")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/http2ConnectTime")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertTrue(result.getConnectTime() > 0,
+                    "connectTime should be greater than 0, but was " + result.getConnectTime());
+            assertTrue(result.getConnectTime() <= result.getTime(),
+                    "connectTime should not exceed the elapsed time");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void setsConnectTimeForHttp2OverTls() throws Exception {
+        WireMockServer server = new WireMockServer(
+                WireMockConfiguration.wireMockConfig().dynamicHttpsPort().http2TlsDisabled(false));
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/http2TlsConnectTime")).willReturn(aResponse().withStatus(200)));
+
+            HTTPJavaImpl.ConnectTimeTracker tracker = new HTTPJavaImpl.ConnectTimeTracker();
+            SSLContext sslContext = trustAllContext();
+            HttpClient client = HttpClient.newBuilder()
+                    .version(HttpClient.Version.HTTP_2)
+                    .sslContext(new HTTPJavaImpl.ConnectTimeMeasuringSSLContext(sslContext, tracker))
+                    .build();
+
+            SampleResult result = new SampleResult();
+            result.sampleStart();
+            tracker.sampleStarted(result);
+            HttpResponse<String> response;
+            try {
+                response = client.send(
+                        HttpRequest.newBuilder(URI.create(
+                                "https://localhost:" + server.httpsPort() + "/http2TlsConnectTime")).build(),
+                        HttpResponse.BodyHandlers.ofString());
+            } finally {
+                tracker.sampleFinished();
+            }
+            result.sampleEnd();
+
+            assertEquals(200, response.statusCode());
+            assertEquals(HttpClient.Version.HTTP_2, response.version());
+            assertTrue(result.getConnectTime() > 0,
+                    "connectTime should be greater than 0, but was " + result.getConnectTime());
+            assertTrue(result.getConnectTime() <= result.getTime(),
+                    "connectTime should not exceed the elapsed time");
+        } finally {
+            server.stop();
+        }
+    }
+
+    private static SSLContext trustAllContext() throws Exception {
+        TrustManager trustAll = new X509ExtendedTrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                // trust everything in the test
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                // trust everything in the test
+            }
+
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType, Socket socket) {
+                // trust everything in the test
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType, Socket socket) {
+                // trust everything in the test
+            }
+
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType, SSLEngine engine) {
+                // trust everything in the test
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType, SSLEngine engine) {
+                // trust everything in the test
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+        };
+        SSLContext context = SSLContext.getInstance("TLS");
+        context.init(null, new TrustManager[] { trustAll }, null);
+        return context;
     }
 
     private static HTTPSamplerBase newSampler() {
