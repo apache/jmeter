@@ -111,6 +111,88 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     private static final Logger log = LoggerFactory.getLogger(HTTPJavaImpl.class);
 
+    /**
+     * HTTP/2 does not transmit a reason phrase (see RFC 9113, section 8.3.2), so the response message is
+     * derived from the status code. The phrases are the ones registered in the IANA HTTP status code registry.
+     */
+    private static final Map<Integer, String> HTTP_REASON_PHRASES = createReasonPhrases();
+
+    private static Map<Integer, String> createReasonPhrases() {
+        Map<Integer, String> phrases = new HashMap<>();
+        phrases.put(100, "Continue"); // $NON-NLS-1$
+        phrases.put(101, "Switching Protocols"); // $NON-NLS-1$
+        phrases.put(102, "Processing"); // $NON-NLS-1$
+        phrases.put(103, "Early Hints"); // $NON-NLS-1$
+        phrases.put(200, "OK"); // $NON-NLS-1$
+        phrases.put(201, "Created"); // $NON-NLS-1$
+        phrases.put(202, "Accepted"); // $NON-NLS-1$
+        phrases.put(203, "Non-Authoritative Information"); // $NON-NLS-1$
+        phrases.put(204, "No Content"); // $NON-NLS-1$
+        phrases.put(205, "Reset Content"); // $NON-NLS-1$
+        phrases.put(206, "Partial Content"); // $NON-NLS-1$
+        phrases.put(207, "Multi-Status"); // $NON-NLS-1$
+        phrases.put(208, "Already Reported"); // $NON-NLS-1$
+        phrases.put(226, "IM Used"); // $NON-NLS-1$
+        phrases.put(300, "Multiple Choices"); // $NON-NLS-1$
+        phrases.put(301, "Moved Permanently"); // $NON-NLS-1$
+        phrases.put(302, "Found"); // $NON-NLS-1$
+        phrases.put(303, "See Other"); // $NON-NLS-1$
+        phrases.put(304, "Not Modified"); // $NON-NLS-1$
+        phrases.put(305, "Use Proxy"); // $NON-NLS-1$
+        phrases.put(307, "Temporary Redirect"); // $NON-NLS-1$
+        phrases.put(308, "Permanent Redirect"); // $NON-NLS-1$
+        phrases.put(400, "Bad Request"); // $NON-NLS-1$
+        phrases.put(401, "Unauthorized"); // $NON-NLS-1$
+        phrases.put(402, "Payment Required"); // $NON-NLS-1$
+        phrases.put(403, "Forbidden"); // $NON-NLS-1$
+        phrases.put(404, "Not Found"); // $NON-NLS-1$
+        phrases.put(405, "Method Not Allowed"); // $NON-NLS-1$
+        phrases.put(406, "Not Acceptable"); // $NON-NLS-1$
+        phrases.put(407, "Proxy Authentication Required"); // $NON-NLS-1$
+        phrases.put(408, "Request Timeout"); // $NON-NLS-1$
+        phrases.put(409, "Conflict"); // $NON-NLS-1$
+        phrases.put(410, "Gone"); // $NON-NLS-1$
+        phrases.put(411, "Length Required"); // $NON-NLS-1$
+        phrases.put(412, "Precondition Failed"); // $NON-NLS-1$
+        phrases.put(413, "Content Too Large"); // $NON-NLS-1$
+        phrases.put(414, "URI Too Long"); // $NON-NLS-1$
+        phrases.put(415, "Unsupported Media Type"); // $NON-NLS-1$
+        phrases.put(416, "Range Not Satisfiable"); // $NON-NLS-1$
+        phrases.put(417, "Expectation Failed"); // $NON-NLS-1$
+        phrases.put(421, "Misdirected Request"); // $NON-NLS-1$
+        phrases.put(422, "Unprocessable Content"); // $NON-NLS-1$
+        phrases.put(423, "Locked"); // $NON-NLS-1$
+        phrases.put(424, "Failed Dependency"); // $NON-NLS-1$
+        phrases.put(425, "Too Early"); // $NON-NLS-1$
+        phrases.put(426, "Upgrade Required"); // $NON-NLS-1$
+        phrases.put(428, "Precondition Required"); // $NON-NLS-1$
+        phrases.put(429, "Too Many Requests"); // $NON-NLS-1$
+        phrases.put(431, "Request Header Fields Too Large"); // $NON-NLS-1$
+        phrases.put(451, "Unavailable For Legal Reasons"); // $NON-NLS-1$
+        phrases.put(500, "Internal Server Error"); // $NON-NLS-1$
+        phrases.put(501, "Not Implemented"); // $NON-NLS-1$
+        phrases.put(502, "Bad Gateway"); // $NON-NLS-1$
+        phrases.put(503, "Service Unavailable"); // $NON-NLS-1$
+        phrases.put(504, "Gateway Timeout"); // $NON-NLS-1$
+        phrases.put(505, "HTTP Version Not Supported"); // $NON-NLS-1$
+        phrases.put(506, "Variant Also Negotiates"); // $NON-NLS-1$
+        phrases.put(507, "Insufficient Storage"); // $NON-NLS-1$
+        phrases.put(508, "Loop Detected"); // $NON-NLS-1$
+        phrases.put(510, "Not Extended"); // $NON-NLS-1$
+        phrases.put(511, "Network Authentication Required"); // $NON-NLS-1$
+        return Collections.unmodifiableMap(phrases);
+    }
+
+    /**
+     * Returns the reason phrase belonging to the given HTTP status code.
+     *
+     * @param statusCode the HTTP status code
+     * @return the registered reason phrase, or an empty string if the status code is unknown
+     */
+    static String getReasonPhrase(int statusCode) {
+        return HTTP_REASON_PHRASES.getOrDefault(statusCode, ""); // $NON-NLS-1$
+    }
+
     static boolean isHttp2(String samplerHttpVersion, String defaultHttpVersion) {
         String httpVersion = StringUtilities.isBlank(samplerHttpVersion) ? defaultHttpVersion : samplerHttpVersion;
         return "HTTP/2".equalsIgnoreCase(httpVersion) || "2".equalsIgnoreCase(httpVersion); // $NON-NLS-1$ $NON-NLS-2$
@@ -921,7 +1003,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             int statusCode = response.statusCode();
             res.setResponseCode(Integer.toString(statusCode));
             res.setSuccessful(isSuccessCode(statusCode));
-            res.setResponseMessage(""); // $NON-NLS-1$
+            res.setResponseMessage(getReasonPhrase(statusCode));
 
             String responseHeaders = getResponseHeaders(response);
             res.setResponseHeaders(responseHeaders);

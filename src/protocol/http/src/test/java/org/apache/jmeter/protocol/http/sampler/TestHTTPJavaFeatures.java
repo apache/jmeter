@@ -86,6 +86,31 @@ class TestHTTPJavaFeatures {
     }
 
     @Test
+    void setsResponseMessageForHttp2() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/http2ResponseMessage")).willReturn(aResponse().withStatus(404)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/http2ResponseMessage")), HTTPConstants.GET, false, 1);
+
+            assertEquals("404", result.getResponseCode());
+            assertEquals("Not Found", result.getResponseMessage());
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void returnsEmptyReasonPhraseForUnknownStatusCode() {
+        assertEquals("OK", HTTPJavaImpl.getReasonPhrase(200));
+        assertEquals("", HTTPJavaImpl.getReasonPhrase(599));
+    }
+
+    @Test
     void usesHttp2WithProxy() throws Exception {
         WireMockServer server = createServer();
         server.start();
