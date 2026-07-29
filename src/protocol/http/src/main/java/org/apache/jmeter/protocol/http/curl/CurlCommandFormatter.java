@@ -48,7 +48,7 @@ public final class CurlCommandFormatter {
     /** Backslash line continuation followed by indentation, for a POSIX shell. */
     private static final String NEWLINE = " \\\n  "; //$NON-NLS-1$
 
-    private static final String ACCEPT_ENCODING = "accept-encoding"; //$NON-NLS-1$
+    private static final String ACCEPT_ENCODING = "Accept-Encoding"; //$NON-NLS-1$
 
     private static final String BOUNDARY = "boundary="; //$NON-NLS-1$
 
@@ -118,7 +118,7 @@ public final class CurlCommandFormatter {
                 if (HTTPConstants.HEADER_CONTENT_TYPE.equalsIgnoreCase(name)) {
                     contentType = value;
                 }
-                if (ACCEPT_ENCODING.equals(lower)) {
+                if (ACCEPT_ENCODING.equalsIgnoreCase(name)) {
                     acceptsEncoding = true;
                 }
                 headers.add(new String[] { name, value });
@@ -131,7 +131,7 @@ public final class CurlCommandFormatter {
                 && contentType.toLowerCase(Locale.ROOT).startsWith(HTTPConstants.MULTIPART_FORM_DATA);
         // Multipart bodies are rebuilt as -F flags; curl then sets its own
         // Content-Type (with its own boundary), so the original one is dropped.
-        List<String> formParts = hasBody && isMultipart ? parseMultipartForm(contentType, body) : List.of();
+        List<String[]> formParts = hasBody && isMultipart ? parseMultipartForm(contentType, body) : List.of();
         boolean emitsForm = !formParts.isEmpty();
         boolean emitsDataRaw = hasBody && !isMultipart && !containsPlaceholder(body);
 
@@ -155,6 +155,10 @@ public final class CurlCommandFormatter {
             if (emitsForm && HTTPConstants.HEADER_CONTENT_TYPE.equalsIgnoreCase(header[0])) {
                 continue;
             }
+            // --compressed (below) makes curl send its own Accept-Encoding, so the explicit one is redundant.
+            if (acceptsEncoding && ACCEPT_ENCODING.equalsIgnoreCase(header[0])) {
+                continue;
+            }
             sb.append(NEWLINE).append("-H ").append(quote(header[0] + ": " + header[1])); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
@@ -170,8 +174,8 @@ public final class CurlCommandFormatter {
         }
 
         if (emitsForm) {
-            for (String part : formParts) {
-                sb.append(NEWLINE).append("-F ").append(quote(part)); //$NON-NLS-1$
+            for (String[] part : formParts) {
+                sb.append(NEWLINE).append(part[0]).append(' ').append(quote(part[1]));
             }
         } else if (emitsDataRaw) {
             sb.append(NEWLINE).append("--data-raw ").append(quote(body)); //$NON-NLS-1$
@@ -194,7 +198,7 @@ public final class CurlCommandFormatter {
      *
      * @return the form parts, or an empty list if the body cannot be parsed
      */
-    private static List<String> parseMultipartForm(String contentType, String body) {
+    private static List<String[]> parseMultipartForm(String contentType, String body) {
         String boundary = extractBoundary(contentType);
         if (StringUtilities.isBlank(boundary)) {
             return List.of();
@@ -205,18 +209,20 @@ public final class CurlCommandFormatter {
         } catch (RuntimeException e) { // NOSONAR malformed body: fall back to the omitted-body note
             return List.of();
         }
-        List<String> parts = new ArrayList<>();
+        List<String[]> parts = new ArrayList<>();
         for (JMeterProperty property : multipart.getArguments()) {
             Argument argument = (Argument) property.getObjectValue();
-            parts.add(argument.getName() + "=" + argument.getValue()); //$NON-NLS-1$
+            // --form-string takes the value verbatim; -F would treat a leading
+            // '@' or '<' in the value as a file reference and misinterpret the field.
+            parts.add(new String[] { "--form-string", argument.getName() + "=" + argument.getValue() }); //$NON-NLS-1$ //$NON-NLS-2$
         }
         for (HTTPFileArg file : multipart.getHTTPFileArgs().asArray()) {
-            StringBuilder part = new StringBuilder();
-            part.append(file.getParamName()).append("=@").append(file.getPath()); //$NON-NLS-1$
+            StringBuilder spec = new StringBuilder();
+            spec.append(file.getParamName()).append("=@").append(file.getPath()); //$NON-NLS-1$
             if (StringUtilities.isNotEmpty(file.getMimeType())) {
-                part.append(";type=").append(file.getMimeType()); //$NON-NLS-1$
+                spec.append(";type=").append(file.getMimeType()); //$NON-NLS-1$
             }
-            parts.add(part.toString());
+            parts.add(new String[] { "-F", spec.toString() }); //$NON-NLS-1$
         }
         return parts;
     }

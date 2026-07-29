@@ -137,11 +137,28 @@ class CurlCommandFormatterTest {
         String curl = CurlCommandFormatter.format(res);
         // The file part is rebuilt with the file name as an editable @placeholder.
         assertTrue(curl.contains("-F 'upload=@report.pdf;type=application/pdf'"), curl);
-        assertTrue(curl.contains("-F 'comment=hello'"), curl);
+        // Regular fields use --form-string so the value is never treated as a file.
+        assertTrue(curl.contains("--form-string 'comment=hello'"), curl);
         // No raw dump of the placeholder, and curl sets its own multipart Content-Type.
         assertFalse(curl.contains("--data-raw"), curl);
         assertFalse(curl.contains("actual file content"), curl);
         assertFalse(curl.contains("-H 'Content-Type: multipart/form-data"), curl);
+    }
+
+    @Test
+    void testMultipartTextFieldWithAtPrefixUsesFormString() throws Exception {
+        HTTPSampleResult res = result("POST", "http://example.com/upload");
+        res.setRequestHeaders("Content-Type: multipart/form-data; boundary=xyz");
+        // A legitimate text field whose value starts with '@' must not be read as a file.
+        res.setQueryString("--xyz\r\n"
+                + "Content-Disposition: form-data; name=\"handle\"\r\n"
+                + "\r\n"
+                + "@someuser\r\n"
+                + "--xyz--\r\n");
+
+        String curl = CurlCommandFormatter.format(res);
+        assertTrue(curl.contains("--form-string 'handle=@someuser'"), curl);
+        assertFalse(curl.contains("-F 'handle=@someuser'"), curl);
     }
 
     @Test
@@ -186,7 +203,8 @@ class CurlCommandFormatterTest {
 
         String curl = CurlCommandFormatter.format(res);
         assertTrue(curl.contains("--compressed"), curl);
-        assertTrue(curl.contains("-H 'Accept-Encoding: gzip, deflate'"), curl);
+        // --compressed makes curl send its own Accept-Encoding, so the explicit one is dropped.
+        assertFalse(curl.contains("-H 'Accept-Encoding"), curl);
     }
 
     @Test
