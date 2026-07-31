@@ -81,6 +81,7 @@ Summary
     <li><issue>6250</issue>Avoid adding "; charset=" automatically to <code>multipart/form-data</code> requests to align behavior with modern HTTP clients.</li>
     <li><issue>6080</issue>Preserve the original HTTP method when following 307 and 308 redirects according to the HTTP specification. Contributed by LeeJiWon (github.com/dlwldnjs1009)</li>
     <li><issue>6267</issue><pr>6268</pr>Add a space between key and value after <code>:</code> in View Results Tree &gt; Sampler result tab for better readability.</li>
+    <li>Multiplex concurrent HTTP/2 requests of the HttpClient5 sampler implementation over a single connection, and make the HTTP/2 protocol settings (HPACK header table size and compression, maximum concurrent streams, flow control window, maximum frame size, server push and h2c prior knowledge) configurable with the new <code>httpclient5.h2.*</code> properties.</li>
   </ul>
 
   <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>

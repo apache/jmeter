@@ -20,6 +20,8 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
@@ -28,13 +30,14 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLContext;
@@ -96,7 +99,9 @@ import org.apache.hc.core5.http.message.ParserCursor;
 import org.apache.hc.core5.http.nio.ssl.TlsStrategy;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
+import org.apache.hc.core5.http2.config.H2Config;
 import org.apache.hc.core5.io.CloseMode;
+import org.apache.hc.core5.pool.PoolConcurrencyPolicy;
 import org.apache.hc.core5.reactor.ConnectionInitiator;
 import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.TimeValue;
@@ -116,6 +121,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -134,10 +140,66 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
 
     private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTP_CLIENTS =
-            ThreadLocal.withInitial(HashMap::new);
+            new InheritableThreadLocal<>() {
+                @Override
+                protected Map<HttpClientKey, CloseableHttpClient> initialValue() {
+                    return new ConcurrentHashMap<>();
+                }
+            };
 
+    /**
+     * HTTP/2 clients are shared with the threads that download embedded resources in parallel,
+     * so that concurrent requests to the same host can be multiplexed over a single connection.
+     */
     private static final ThreadLocal<Map<HttpClientKey, CloseableHttpAsyncClient>> HTTP_2_CLIENTS =
-            ThreadLocal.withInitial(HashMap::new);
+            new InheritableThreadLocal<>() {
+                @Override
+                protected Map<HttpClientKey, CloseableHttpAsyncClient> initialValue() {
+                    return new ConcurrentHashMap<>();
+                }
+            };
+
+    /** Multiplex concurrent message exchanges over a single HTTP/2 connection. */
+    private static final boolean HTTP_2_MULTIPLEXING =
+            JMeterUtils.getPropDefault("httpclient5.h2.multiplexing", true);
+
+    /** Size of the HPACK dynamic header table announced to the server, {@code 0} disables HPACK indexing. */
+    private static final int HTTP_2_HEADER_TABLE_SIZE =
+            JMeterUtils.getPropDefault("httpclient5.h2.header_table_size", H2Config.DEFAULT.getHeaderTableSize());
+
+    /** Whether HPACK compression of the request headers is used. */
+    private static final boolean HTTP_2_HEADER_COMPRESSION =
+            JMeterUtils.getPropDefault("httpclient5.h2.header_compression", true);
+
+    private static final int HTTP_2_MAX_CONCURRENT_STREAMS =
+            JMeterUtils.getPropDefault("httpclient5.h2.max_concurrent_streams", H2Config.DEFAULT.getMaxConcurrentStreams());
+
+    private static final int HTTP_2_INITIAL_WINDOW_SIZE =
+            JMeterUtils.getPropDefault("httpclient5.h2.initial_window_size", H2Config.DEFAULT.getInitialWindowSize());
+
+    private static final int HTTP_2_MAX_FRAME_SIZE =
+            JMeterUtils.getPropDefault("httpclient5.h2.max_frame_size", H2Config.DEFAULT.getMaxFrameSize());
+
+    /**
+     * JMeter has no way of reporting pushed resources, so server push is switched off to avoid
+     * the server wasting bandwidth on responses that are dropped.
+     */
+    private static final boolean HTTP_2_PUSH_ENABLED =
+            JMeterUtils.getPropDefault("httpclient5.h2.push_enabled", false);
+
+    /**
+     * Use HTTP/2 without TLS (h2c with prior knowledge) when HTTP/2 is selected for a {@code http://} URL.
+     * Without prior knowledge such requests silently fall back to HTTP/1.1, as ALPN is unavailable.
+     */
+    private static final boolean HTTP_2_PRIOR_KNOWLEDGE =
+            JMeterUtils.getPropDefault("httpclient5.h2.prior_knowledge", false);
+
+    private static final int HTTP_2_MAX_CONNECTIONS_PER_ROUTE =
+            JMeterUtils.getPropDefault("httpclient5.h2.max_connections_per_route", 6);
+
+    private static final H2Config HTTP_2_CONFIG = createHttp2Config();
+
+    private static final Method MESSAGE_MULTIPLEXING_SETTER = findMessageMultiplexingSetter();
 
     private static final String[] HEADERS_TO_SAVE = {HttpHeaders.CONTENT_LENGTH, HttpHeaders.CONTENT_ENCODING,
             HttpHeaders.CONTENT_MD5};
@@ -203,6 +265,17 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         } catch (GeneralSecurityException e) {
             throw new IllegalStateException("Could not create HTTP/2 TLS strategy", e);
         }
+    }
+
+    static H2Config createHttp2Config() {
+        return H2Config.custom()
+                .setHeaderTableSize(HTTP_2_HEADER_TABLE_SIZE)
+                .setCompressionEnabled(HTTP_2_HEADER_COMPRESSION)
+                .setMaxConcurrentStreams(HTTP_2_MAX_CONCURRENT_STREAMS)
+                .setInitialWindowSize(HTTP_2_INITIAL_WINDOW_SIZE)
+                .setMaxFrameSize(HTTP_2_MAX_FRAME_SIZE)
+                .setPushEnabled(HTTP_2_PUSH_ENABLED)
+                .build();
     }
 
     protected HTTPHC5Impl(HTTPSamplerBase testElement) {
@@ -272,7 +345,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private void setupRequest(URL url, org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
             HTTPSampleResult result, boolean areFollowingRedirect) throws IOException {
-        HttpVersionPolicy httpVersionPolicy = getHttpVersionPolicy(testElement.getHttpVersion(), HTTP_VERSION);
+        HttpVersionPolicy httpVersionPolicy = getHttpVersionPolicy(testElement.getHttpVersion(), HTTP_VERSION,
+                url.getProtocol());
         RequestConfig.Builder config = RequestConfig.custom()
                 .setRedirectsEnabled(getAutoRedirects() && !areFollowingRedirect);
         int responseTimeout = getResponseTimeout();
@@ -622,14 +696,25 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     private static CloseableHttpAsyncClient createHttp2Client(HttpClientKey key) {
+        boolean multiplexing = HTTP_2_MULTIPLEXING && MESSAGE_MULTIPLEXING_SETTER != null;
         HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
                 .disableAutomaticRetries()
+                .setH2Config(HTTP_2_CONFIG)
                 .setRoutePlanner(createRoutePlanner(key));
+        if (multiplexing) {
+            // A connection bound to a user token cannot be shared, and HTTP/2 has no connection scoped state anyway
+            builder.disableConnectionState();
+        }
         PoolingAsyncClientConnectionManagerBuilder connectionManagerBuilder = PoolingAsyncClientConnectionManagerBuilder.create();
         connectionManagerBuilder.setTlsStrategy(HTTP_2_TLS_STRATEGY);
         connectionManagerBuilder.setDefaultTlsConfig(TlsConfig.custom()
                 .setVersionPolicy(key.httpVersionPolicy)
                 .build());
+        if (multiplexing) {
+            enableMessageMultiplexing(connectionManagerBuilder);
+        }
+        connectionManagerBuilder.setPoolConcurrencyPolicy(PoolConcurrencyPolicy.LAX);
+        connectionManagerBuilder.setMaxConnPerRoute(HTTP_2_MAX_CONNECTIONS_PER_ROUTE);
         if (key.dnsCacheManager != null) {
             connectionManagerBuilder.setDnsResolver(createDnsResolver(key.dnsCacheManager));
         }
@@ -642,6 +727,28 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         CloseableHttpAsyncClient asyncClient = builder.build();
         asyncClient.start();
         return asyncClient;
+    }
+
+    /**
+     * Looks up {@code PoolingAsyncClientConnectionManagerBuilder#setMessageMultiplexing(boolean)},
+     * which is only available from HttpClient 5.5 onwards. JMeter still runs with older HttpClient
+     * versions, where HTTP/2 requests just cannot share a connection.
+     */
+    private static Method findMessageMultiplexingSetter() {
+        try {
+            return PoolingAsyncClientConnectionManagerBuilder.class.getMethod("setMessageMultiplexing", boolean.class);
+        } catch (NoSuchMethodException e) {
+            log.info("HTTP/2 message multiplexing is unavailable, HttpClient 5.5 or later is required");
+            return null;
+        }
+    }
+
+    private static void enableMessageMultiplexing(PoolingAsyncClientConnectionManagerBuilder connectionManagerBuilder) {
+        try {
+            MESSAGE_MULTIPLEXING_SETTER.invoke(connectionManagerBuilder, true);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            log.warn("Could not enable HTTP/2 message multiplexing", e);
+        }
     }
 
     @SuppressWarnings("deprecation") // SimpleHttpRequest.copy is required for HttpClient 5.3 compatibility
@@ -658,7 +765,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
         Future<SimpleHttpResponse> responseFuture = client.execute(asyncRequest, context, null);
         try {
-            return createClassicResponse(responseFuture.get(1, java.util.concurrent.TimeUnit.MINUTES));
+            return createClassicResponse(responseFuture.get(getHttp2ExecutionTimeoutMillis(request), TimeUnit.MILLISECONDS));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new IOException("Interrupted while executing HTTP/2 request", e);
@@ -668,6 +775,20 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         } catch (ExecutionException e) {
             throw new IOException("Could not execute HTTP/2 request", e.getCause());
         }
+    }
+
+    /**
+     * The future is only a safety net: HttpClient enforces the configured response timeout itself,
+     * so this waits a little longer than the sampler is willing to wait for the response.
+     */
+    private static long getHttp2ExecutionTimeoutMillis(
+            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
+        RequestConfig requestConfig = request.getConfig();
+        Timeout responseTimeout = requestConfig == null ? null : requestConfig.getResponseTimeout();
+        if (responseTimeout == null || responseTimeout.toMilliseconds() <= 0) {
+            return TimeUnit.MINUTES.toMillis(1);
+        }
+        return responseTimeout.toMilliseconds() + TimeUnit.SECONDS.toMillis(5);
     }
 
     private static ClassicHttpResponse createClassicResponse(SimpleHttpResponse asyncResponse) {
@@ -725,7 +846,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         InetAddress localAddress = getIpSourceAddress();
         boolean useDynamicProxy = isDynamicProxy(proxyHost, proxyPort);
         boolean useStaticProxy = isStaticProxy(url.getHost());
-        HttpVersionPolicy httpVersionPolicy = getHttpVersionPolicy(testElement.getHttpVersion(), HTTP_VERSION);
+        HttpVersionPolicy httpVersionPolicy = getHttpVersionPolicy(testElement.getHttpVersion(), HTTP_VERSION,
+                url.getProtocol());
         if (!useDynamicProxy) {
             proxyScheme = PROXY_SCHEME;
             proxyHost = PROXY_HOST;
@@ -740,6 +862,20 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         String httpVersion = StringUtilities.isBlank(samplerHttpVersion) ? defaultHttpVersion : samplerHttpVersion;
         return "HTTP/2".equals(httpVersion) || "2".equals(httpVersion)
                 ? HttpVersionPolicy.NEGOTIATE : HttpVersionPolicy.FORCE_HTTP_1;
+    }
+
+    /**
+     * Determines the version policy for a request to the given scheme. Plain HTTP does not support
+     * ALPN, so HTTP/2 can only be used over {@code http://} when the client assumes that the server
+     * speaks HTTP/2 (h2c with prior knowledge).
+     */
+    static HttpVersionPolicy getHttpVersionPolicy(String samplerHttpVersion, String defaultHttpVersion, String scheme) {
+        HttpVersionPolicy policy = getHttpVersionPolicy(samplerHttpVersion, defaultHttpVersion);
+        if (policy == HttpVersionPolicy.NEGOTIATE && HTTP_2_PRIOR_KNOWLEDGE
+                && !HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(scheme)) {
+            return HttpVersionPolicy.FORCE_HTTP_2;
+        }
+        return policy;
     }
 
     @Override

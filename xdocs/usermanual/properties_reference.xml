@@ -446,6 +446,48 @@ JMETER-SERVER</source>
     Valid values are <code>HTTP/1.1</code> and <code>HTTP/2</code>.<br/>
     Defaults to: <code>HTTP/1.1</code>
 </property>
+<property name="httpclient5.h2.multiplexing">
+    Multiplex concurrent message exchanges (for example parallel downloads of embedded resources)
+    over a single HTTP/2 connection.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="httpclient5.h2.max_connections_per_route">
+    Maximum number of HTTP/2 connections kept per target host. With multiplexing enabled a single
+    connection usually serves all concurrent requests.<br/>
+    Defaults to: <code>6</code>
+</property>
+<property name="httpclient5.h2.header_table_size">
+    Size in bytes of the HPACK dynamic header table announced to the server.
+    <code>0</code> disables indexing of the headers by the server.<br/>
+    Defaults to: <code>8192</code>
+</property>
+<property name="httpclient5.h2.header_compression">
+    Compress the request headers with HPACK.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="httpclient5.h2.max_concurrent_streams">
+    Maximum number of concurrent streams the client accepts on a single HTTP/2 connection.<br/>
+    Defaults to: <code>250</code>
+</property>
+<property name="httpclient5.h2.initial_window_size">
+    HTTP/2 flow control window in bytes announced per stream.<br/>
+    Defaults to: <code>65535</code>
+</property>
+<property name="httpclient5.h2.max_frame_size">
+    Largest HTTP/2 frame payload in bytes the client is willing to receive.<br/>
+    Defaults to: <code>65536</code>
+</property>
+<property name="httpclient5.h2.push_enabled">
+    Accept HTTP/2 server push. JMeter cannot report pushed resources, so they are dropped,
+    therefore push is disabled by default.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="httpclient5.h2.prior_knowledge">
+    Use HTTP/2 over cleartext (h2c with prior knowledge) when <code>HTTP/2</code> is selected for a
+    <code>http://</code> URL. Without it such requests fall back to HTTP/1.1, because protocol
+    negotiation requires TLS. Only enable it if all plain HTTP targets support h2c.<br/>
+    Defaults to: <code>false</code>
+</property>
 <property name="httpclient.socket.http.cps">
     Set characters per second to a value greater then zero to emulate slow connections.<br/>
     Defaults to: <code>0</code>

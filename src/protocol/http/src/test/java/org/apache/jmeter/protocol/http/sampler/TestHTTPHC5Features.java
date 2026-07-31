@@ -32,6 +32,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.hc.client5.http.HttpRoute;
 import org.apache.hc.client5.http.io.ConnectionEndpoint;
@@ -40,6 +46,7 @@ import org.apache.hc.client5.http.io.LeaseRequest;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
+import org.apache.hc.core5.http2.config.H2Config;
 import org.apache.hc.core5.io.CloseMode;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
@@ -69,6 +76,81 @@ class TestHTTPHC5Features {
     @Test
     void defaultsToHttp11ForUnsupportedHttpVersion() {
         assertEquals(HttpVersionPolicy.FORCE_HTTP_1, HTTPHC5Impl.getHttpVersionPolicy("HTTP/3", "HTTP/2"));
+    }
+
+    @Test
+    void negotiatesHttp2OverTls() {
+        assertEquals(HttpVersionPolicy.NEGOTIATE, HTTPHC5Impl.getHttpVersionPolicy("HTTP/2", "HTTP/1.1", "https"));
+    }
+
+    @Test
+    void doesNotUsePriorKnowledgeForCleartextByDefault() {
+        assertEquals(HttpVersionPolicy.NEGOTIATE, HTTPHC5Impl.getHttpVersionPolicy("HTTP/2", "HTTP/1.1", "http"));
+    }
+
+    @Test
+    void multiplexesConcurrentRequestsOverASingleHttp2Connection() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/multiplexed"))
+                    .willReturn(aResponse().withStatus(200).withFixedDelay(200)));
+            URL url = new URL("https://localhost:" + server.httpsPort() + "/multiplexed");
+            // warm up, so the connection that gets shared by the concurrent samples is already established
+            HTTPSamplerBase warmUpSampler = newSampler();
+            warmUpSampler.setHttpVersion("HTTP/2");
+            assertEquals("200", warmUpSampler.sample(url, HTTPConstants.GET, false, 1).getResponseCode());
+
+            int requests = 4;
+            ExecutorService executor = Executors.newFixedThreadPool(requests);
+            try {
+                List<Future<HTTPSampleResult>> results = new ArrayList<>();
+                for (int i = 0; i < requests; i++) {
+                    results.add(executor.submit(() -> {
+                        HTTPSamplerBase sampler = newSampler();
+                        sampler.setHttpVersion("HTTP/2");
+                        return sampler.sample(url, HTTPConstants.GET, false, 1);
+                    }));
+                }
+                for (Future<HTTPSampleResult> result : results) {
+                    HTTPSampleResult sampleResult = result.get(30, TimeUnit.SECONDS);
+                    assertEquals("200", sampleResult.getResponseCode());
+                    assertEquals("HTTP/2", sampleResult.getResponseHeaders().substring(0, "HTTP/2".length()));
+                }
+            } finally {
+                executor.shutdownNow();
+            }
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void enablesMessageMultiplexingWithoutRequiringHttpClient55() throws Exception {
+        byte[] classBytes;
+        try (InputStream classFile = HTTPHC5Impl.class.getResourceAsStream("HTTPHC5Impl.class")) {
+            classBytes = classFile.readAllBytes();
+        }
+        assertTrue(new String(classBytes, StandardCharsets.ISO_8859_1).contains("setMessageMultiplexing"),
+                "HTTP/2 message multiplexing should be enabled");
+        assertFalse(hasMethodReference(classBytes,
+                "org/apache/hc/client5/http/impl/nio/PoolingAsyncClientConnectionManagerBuilder",
+                "setMessageMultiplexing"),
+                "setMessageMultiplexing was added in HttpClient 5.5 and must not be linked directly");
+    }
+
+    @Test
+    void appliesHttp2ProtocolSettings() {
+        H2Config config = HTTPHC5Impl.createHttp2Config();
+
+        assertEquals(8192, config.getHeaderTableSize(), "HPACK dynamic table size");
+        assertTrue(config.isCompressionEnabled(), "HPACK header compression");
+        assertEquals(250, config.getMaxConcurrentStreams());
+        assertEquals(65535, config.getInitialWindowSize());
+        assertEquals(65536, config.getMaxFrameSize());
+        assertFalse(config.isPushEnabled(), "server push is dropped by JMeter, so it must not be announced");
     }
 
     @Test
