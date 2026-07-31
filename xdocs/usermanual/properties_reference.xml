@@ -488,6 +488,11 @@ JMETER-SERVER</source>
     negotiation requires TLS. Only enable it if all plain HTTP targets support h2c.<br/>
     Defaults to: <code>false</code>
 </property>
+<property name="httpclient5.default_user_agent_disabled">
+    If true, the default HC5 User-Agent (Apache-HttpClient/X.Y.Z (Java/A.B.C)) will not be added.
+    A User-Agent header defined in the test plan is still sent.<br/>
+    Defaults to: <code>false</code>
+</property>
 <property name="httpclient.socket.http.cps">
     Set characters per second to a value greater then zero to emulate slow connections.<br/>
     Defaults to: <code>0</code>

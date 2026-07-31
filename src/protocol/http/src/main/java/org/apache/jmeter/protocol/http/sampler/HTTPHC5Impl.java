@@ -84,6 +84,7 @@ import org.apache.hc.core5.http.HeaderElement;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.HttpRequestInterceptor;
 import org.apache.hc.core5.http.HttpVersion;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.config.Lookup;
@@ -106,6 +107,7 @@ import org.apache.hc.core5.reactor.ConnectionInitiator;
 import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
+import org.apache.hc.core5.util.VersionInfo;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
@@ -196,6 +198,31 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static final int HTTP_2_MAX_CONNECTIONS_PER_ROUTE =
             JMeterUtils.getPropDefault("httpclient5.h2.max_connections_per_route", 6);
+
+    /**
+     * Name of the property that suppresses the {@code User-Agent} header HttpClient sends when the
+     * test plan does not define one itself.
+     */
+    private static final String DISABLE_DEFAULT_UA_PROPERTY = "httpclient5.default_user_agent_disabled";
+
+    /**
+     * {@code User-Agent} JMeter adds to requests without one, so it shows up in the sample result and
+     * is accounted for in the sent bytes, instead of being added invisibly by HttpClient.
+     */
+    private static final String DEFAULT_USER_AGENT = VersionInfo.getSoftwareInfo("Apache-HttpClient",
+            "org.apache.hc.client5", org.apache.hc.client5.http.impl.classic.HttpClientBuilder.class);
+
+    /** Remembers whether the request had a {@code User-Agent} header before HttpClient added its own. */
+    private static final String CONTEXT_ATTRIBUTE_USER_AGENT_PRESENT = "__jmeter.U_A__";
+
+    private static final HttpRequestInterceptor RECORD_USER_AGENT_PRESENCE = (request, entity, context) ->
+            context.setAttribute(CONTEXT_ATTRIBUTE_USER_AGENT_PRESENT, request.containsHeader(HttpHeaders.USER_AGENT));
+
+    private static final HttpRequestInterceptor REMOVE_DEFAULT_USER_AGENT = (request, entity, context) -> {
+        if (!Boolean.TRUE.equals(context.getAttribute(CONTEXT_ATTRIBUTE_USER_AGENT_PRESENT))) {
+            request.removeHeaders(HttpHeaders.USER_AGENT);
+        }
+    };
 
     private static final H2Config HTTP_2_CONFIG = createHttp2Config();
 
@@ -361,6 +388,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             request.setVersion(HttpVersion.HTTP_2);
         }
         setConnectionHeaders(request, getHeaderManager(), httpVersionPolicy);
+        setDefaultUserAgent(request);
         CacheManager cacheManager = getCacheManager();
         if (cacheManager != null) {
             cacheManager.setHeaders(url, request);
@@ -476,6 +504,13 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                 request.addHeader(header.getName(), header.getValue());
             }
         }
+    }
+
+    private static void setDefaultUserAgent(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
+        if (isDefaultUserAgentDisabled() || request.containsHeader(HttpHeaders.USER_AGENT)) {
+            return;
+        }
+        request.setHeader(HttpHeaders.USER_AGENT, DEFAULT_USER_AGENT);
     }
 
     private static String setConnectionCookie(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
@@ -673,8 +708,15 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         return clients.computeIfAbsent(key, HTTPHC5Impl::createHttp2Client);
     }
 
+    private static boolean isDefaultUserAgentDisabled() {
+        return JMeterUtils.getPropDefault(DISABLE_DEFAULT_UA_PROPERTY, false);
+    }
+
     private static CloseableHttpClient createClient(HttpClientKey key) {
         org.apache.hc.client5.http.impl.classic.HttpClientBuilder builder = HttpClients.custom().disableAutomaticRetries();
+        if (isDefaultUserAgentDisabled()) {
+            builder.disableDefaultUserAgent();
+        }
         PoolingHttpClientConnectionManagerBuilder connectionManagerBuilder = PoolingHttpClientConnectionManagerBuilder.create();
         connectionManagerBuilder.setDefaultTlsConfig(TlsConfig.custom()
                 .setVersionPolicy(key.httpVersionPolicy)
@@ -704,6 +746,11 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         if (multiplexing) {
             // A connection bound to a user token cannot be shared, and HTTP/2 has no connection scoped state anyway
             builder.disableConnectionState();
+        }
+        if (isDefaultUserAgentDisabled()) {
+            // HttpAsyncClientBuilder has no disableDefaultUserAgent, so the generated header is dropped again
+            builder.addRequestInterceptorFirst(RECORD_USER_AGENT_PRESENCE);
+            builder.addRequestInterceptorLast(REMOVE_DEFAULT_USER_AGENT);
         }
         PoolingAsyncClientConnectionManagerBuilder connectionManagerBuilder = PoolingAsyncClientConnectionManagerBuilder.create();
         connectionManagerBuilder.setTlsStrategy(HTTP_2_TLS_STRATEGY);
