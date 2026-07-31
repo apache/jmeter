@@ -23,6 +23,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.Socket;
@@ -32,6 +34,15 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
@@ -108,6 +119,141 @@ class TestHTTPJavaFeatures {
     void returnsEmptyReasonPhraseForUnknownStatusCode() {
         assertEquals("OK", HTTPJavaImpl.getReasonPhrase(200));
         assertEquals("", HTTPJavaImpl.getReasonPhrase(599));
+    }
+
+    @Test
+    void mapsHttp2SettingsToJdkSystemProperties() {
+        Properties jmeterProperties = new Properties();
+        jmeterProperties.setProperty("http.java.h2.header_table_size", "8192");
+        jmeterProperties.setProperty("http.java.h2.max_concurrent_streams", "250");
+        jmeterProperties.setProperty("http.java.h2.initial_window_size", "65535");
+        jmeterProperties.setProperty("http.java.h2.connection_window_size", "1048576");
+        jmeterProperties.setProperty("http.java.h2.max_frame_size", "16384");
+        jmeterProperties.setProperty("http.java.h2.keep_alive_timeout", "60");
+        jmeterProperties.setProperty("http.java.h2.push_enabled", "true");
+        Properties systemProperties = new Properties();
+
+        HTTPJavaImpl.applyHttp2SystemProperties(jmeterProperties, systemProperties);
+
+        assertEquals("8192", systemProperties.getProperty("jdk.httpclient.hpack.maxheadertablesize"));
+        assertEquals("250", systemProperties.getProperty("jdk.httpclient.maxstreams"));
+        assertEquals("65535", systemProperties.getProperty("jdk.httpclient.windowsize"));
+        assertEquals("1048576", systemProperties.getProperty("jdk.httpclient.connectionWindowSize"));
+        assertEquals("16384", systemProperties.getProperty("jdk.httpclient.maxframesize"));
+        assertEquals("60", systemProperties.getProperty("jdk.httpclient.keepalive.timeout.h2"));
+        assertEquals("1", systemProperties.getProperty("jdk.httpclient.enablepush"));
+    }
+
+    @Test
+    void disablesServerPushAndKeepsJdkDefaultsWhenNothingIsConfigured() {
+        Properties systemProperties = new Properties();
+
+        HTTPJavaImpl.applyHttp2SystemProperties(new Properties(), systemProperties);
+
+        assertEquals("0", systemProperties.getProperty("jdk.httpclient.enablepush"));
+        assertNull(systemProperties.getProperty("jdk.httpclient.hpack.maxheadertablesize"));
+        assertNull(systemProperties.getProperty("jdk.httpclient.windowsize"));
+    }
+
+    @Test
+    void doesNotOverrideHttp2SettingsGivenOnTheCommandLine() {
+        Properties jmeterProperties = new Properties();
+        jmeterProperties.setProperty("http.java.h2.header_table_size", "8192");
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty("jdk.httpclient.hpack.maxheadertablesize", "4096");
+        systemProperties.setProperty("jdk.httpclient.enablepush", "1");
+
+        HTTPJavaImpl.applyHttp2SystemProperties(jmeterProperties, systemProperties);
+
+        assertEquals("4096", systemProperties.getProperty("jdk.httpclient.hpack.maxheadertablesize"));
+        assertEquals("1", systemProperties.getProperty("jdk.httpclient.enablepush"));
+    }
+
+    @Test
+    void sharesHttp2ClientsBetweenThreadsForMultiplexing() throws Exception {
+        Map<?, ?> clientsOfMainThread = HTTPJavaImpl.getHttp2Clients();
+        AtomicReference<Map<?, ?>> clientsOfOtherThread = new AtomicReference<>();
+
+        Thread thread = new Thread(() -> clientsOfOtherThread.set(HTTPJavaImpl.getHttp2Clients()));
+        thread.start();
+        thread.join();
+
+        assertSame(clientsOfMainThread, clientsOfOtherThread.get(),
+                "HTTP/2 clients should be shared, so concurrent requests are multiplexed over one connection");
+    }
+
+    @Test
+    void multiplexesConcurrentHttp2RequestsOverOneConnection() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/multiplexed"))
+                    .willReturn(aResponse().withStatus(200).withFixedDelay(200).withBody("multiplexed")));
+
+            int requests = 4;
+            ExecutorService executor = Executors.newFixedThreadPool(requests);
+            try {
+                List<Future<HTTPSampleResult>> results = new ArrayList<>();
+                for (int i = 0; i < requests; i++) {
+                    results.add(executor.submit(() -> {
+                        HTTPSamplerBase sampler = newSampler();
+                        sampler.setHttpVersion("HTTP/2");
+                        return sampler.sample(
+                                new URL(server.url("/multiplexed")), HTTPConstants.GET, false, 1);
+                    }));
+                }
+                for (Future<HTTPSampleResult> result : results) {
+                    HTTPSampleResult sampleResult = result.get(60, TimeUnit.SECONDS);
+                    assertEquals("200", sampleResult.getResponseCode());
+                    assertTrue(sampleResult.getResponseHeaders().startsWith("HTTP/2"),
+                            "Response should have been received over HTTP/2, but was "
+                                    + sampleResult.getResponseHeaders());
+                }
+            } finally {
+                executor.shutdownNow();
+            }
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void recordsConnectTimeForEveryMultiplexedSample() throws Exception {
+        HTTPJavaImpl.ConnectTimeTracker tracker = new HTTPJavaImpl.ConnectTimeTracker();
+        SampleResult first = new SampleResult();
+        SampleResult second = new SampleResult();
+        first.sampleStart();
+        second.sampleStart();
+        tracker.sampleStarted(first);
+        tracker.sampleStarted(second);
+
+        Thread.sleep(5);
+        tracker.connectionEstablished();
+        Thread.sleep(5);
+
+        first.sampleEnd();
+        second.sampleEnd();
+        tracker.sampleFinished(first);
+        tracker.sampleFinished(second);
+
+        assertTrue(first.getConnectTime() > 0, "connectTime of the first sample should have been recorded");
+        assertTrue(second.getConnectTime() > 0, "connectTime of the second sample should have been recorded");
+        assertTrue(first.getConnectTime() <= first.getTime());
+        assertTrue(second.getConnectTime() <= second.getTime());
+    }
+
+    @Test
+    void ignoresSamplesWhichAreNoLongerInFlight() {
+        HTTPJavaImpl.ConnectTimeTracker tracker = new HTTPJavaImpl.ConnectTimeTracker();
+        SampleResult result = new SampleResult();
+        result.sampleStart();
+        tracker.sampleStarted(result);
+        tracker.sampleFinished(result);
+
+        tracker.connectionEstablished();
+        result.sampleEnd();
+
+        assertEquals(0, result.getConnectTime());
     }
 
     @Test
@@ -325,7 +471,7 @@ class TestHTTPJavaFeatures {
                                 "https://localhost:" + server.httpsPort() + "/http2TlsConnectTime")).build(),
                         HttpResponse.BodyHandlers.ofString());
             } finally {
-                tracker.sampleFinished();
+                tracker.sampleFinished(result);
             }
             result.sampleEnd();
 

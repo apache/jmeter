@@ -47,6 +47,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -100,7 +102,14 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         JMeterUtils.getPropDefault("httpclient.version", HTTPConstants.HTTP_1_1); // $NON-NLS-1$
 
     private static final ThreadLocal<Map<HttpClientKey, Http2Client>> HTTP_2_CLIENTS =
-        ThreadLocal.withInitial(HashMap::new);
+        ThreadLocal.withInitial(ConcurrentHashMap::new);
+
+    /**
+     * HTTP/2 clients used when multiplexing is enabled. The JDK client sends every exchange of a client
+     * over a single connection per origin, so one shared instance lets the requests of all JMeter threads
+     * and of the threads which download embedded resources in parallel share a connection.
+     */
+    private static final Map<HttpClientKey, Http2Client> SHARED_HTTP_2_CLIENTS = new ConcurrentHashMap<>();
 
     /**
      * Shared daemon thread pool used by the HTTP/2 {@link HttpClient} instances. It allows JMeter to observe
@@ -110,6 +119,81 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         Executors.newCachedThreadPool(new Http2ThreadFactory());
 
     private static final Logger log = LoggerFactory.getLogger(HTTPJavaImpl.class);
+
+    /** Multiplex concurrent HTTP/2 message exchanges over a single connection per origin. */
+    private static final boolean HTTP_2_MULTIPLEXING =
+        JMeterUtils.getPropDefault("http.java.h2.multiplexing", true); // $NON-NLS-1$
+
+    /**
+     * Accept HTTP/2 server push. JMeter has no way of reporting pushed resources, so push is switched off
+     * to avoid the server wasting bandwidth on responses that are dropped.
+     */
+    private static final String HTTP_2_PUSH_ENABLED_PROPERTY = "http.java.h2.push_enabled"; // $NON-NLS-1$
+
+    /** System property the JDK client reads to decide whether it announces {@code SETTINGS_ENABLE_PUSH}. */
+    private static final String JDK_PUSH_ENABLED_PROPERTY = "jdk.httpclient.enablepush"; // $NON-NLS-1$
+
+    /**
+     * Maps the JMeter HTTP/2 properties to the {@code jdk.httpclient.*} system properties, which are the only
+     * way to configure the HTTP/2 protocol settings of the JDK client. They are read whenever a client is
+     * built, so they have to be in place before the first HTTP/2 sample is taken.
+     */
+    private static final Map<String, String> HTTP_2_SYSTEM_PROPERTIES = createHttp2SystemPropertyMapping();
+
+    static {
+        applyHttp2SystemProperties(JMeterUtils.getJMeterProperties(), System.getProperties());
+    }
+
+    private static Map<String, String> createHttp2SystemPropertyMapping() {
+        Map<String, String> mapping = new LinkedHashMap<>();
+        // Size of the HPACK dynamic header table announced to the server, 0 disables HPACK indexing
+        mapping.put("http.java.h2.header_table_size", "jdk.httpclient.hpack.maxheadertablesize"); // $NON-NLS-1$ $NON-NLS-2$
+        // Number of server initiated (pushed) streams the client accepts on a connection
+        mapping.put("http.java.h2.max_concurrent_streams", "jdk.httpclient.maxstreams"); // $NON-NLS-1$ $NON-NLS-2$
+        mapping.put("http.java.h2.initial_window_size", "jdk.httpclient.windowsize"); // $NON-NLS-1$ $NON-NLS-2$
+        mapping.put("http.java.h2.connection_window_size", "jdk.httpclient.connectionWindowSize"); // $NON-NLS-1$ $NON-NLS-2$
+        mapping.put("http.java.h2.max_frame_size", "jdk.httpclient.maxframesize"); // $NON-NLS-1$ $NON-NLS-2$
+        mapping.put("http.java.h2.keep_alive_timeout", "jdk.httpclient.keepalive.timeout.h2"); // $NON-NLS-1$ $NON-NLS-2$
+        return Collections.unmodifiableMap(mapping);
+    }
+
+    /**
+     * Copies the HTTP/2 settings from the JMeter properties to the system properties of the JDK client.
+     * Values which are already defined, for example on the command line, are never overwritten.
+     *
+     * @param jmeterProperties the JMeter properties, may be {@code null} when they have not been loaded
+     * @param systemProperties the system properties to configure
+     */
+    static void applyHttp2SystemProperties(Properties jmeterProperties, Properties systemProperties) {
+        Properties source = jmeterProperties != null ? jmeterProperties : new Properties();
+        for (Map.Entry<String, String> entry : HTTP_2_SYSTEM_PROPERTIES.entrySet()) {
+            String value = source.getProperty(entry.getKey());
+            if (StringUtilities.isNotBlank(value)) {
+                setUnlessDefined(systemProperties, entry.getValue(), value.trim());
+            }
+        }
+        boolean pushEnabled = Boolean.parseBoolean(source.getProperty(HTTP_2_PUSH_ENABLED_PROPERTY, "false")); // $NON-NLS-1$
+        setUnlessDefined(systemProperties, JDK_PUSH_ENABLED_PROPERTY, pushEnabled ? "1" : "0"); // $NON-NLS-1$ $NON-NLS-2$
+    }
+
+    private static void setUnlessDefined(Properties systemProperties, String name, String value) {
+        String current = systemProperties.getProperty(name);
+        if (current == null) {
+            systemProperties.setProperty(name, value);
+        } else if (!current.equals(value)) {
+            log.info("Keeping system property {}={}, it takes precedence over the JMeter property", name, current); // $NON-NLS-1$
+        }
+    }
+
+    /**
+     * Returns the HTTP/2 clients of the current thread, or the shared ones when the exchanges of all threads
+     * should be multiplexed over a single connection.
+     *
+     * @return the map the HTTP/2 clients are cached in
+     */
+    static Map<HttpClientKey, Http2Client> getHttp2Clients() {
+        return HTTP_2_MULTIPLEXING ? SHARED_HTTP_2_CLIENTS : HTTP_2_CLIENTS.get();
+    }
 
     /**
      * HTTP/2 does not transmit a reason phrase (see RFC 9113, section 8.3.2), so the response message is
@@ -990,7 +1074,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             try {
                 response = client.httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
             } finally {
-                connectTimeTracker.sampleFinished();
+                connectTimeTracker.sampleFinished(res);
             }
             res.latencyEnd();
 
@@ -1273,7 +1357,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         HttpClientKey key = new HttpClientKey(connectTimeout, proxyHost, proxyPort,
                 proxyUser, proxyPass, autoRedirects, sslContext);
 
-        return HTTP_2_CLIENTS.get().computeIfAbsent(key, HTTPJavaImpl::createHttpClient);
+        return getHttp2Clients().computeIfAbsent(key, HTTPJavaImpl::createHttpClient);
     }
 
     private static Http2Client createHttpClient(HttpClientKey key) {
@@ -1324,45 +1408,51 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     /**
-     * Records the connect time of the JDK {@link HttpClient} in the current {@link SampleResult}.
+     * Records the connect time of the JDK {@link HttpClient} in the {@link SampleResult}s which are in flight.
      * <p>
      * The JDK client does not expose a hook for connection establishment, so two indicators are used:
      * the client submits its first task to the executor once the TCP connection has been established, and
      * the wrapped {@code SSLEngine} reports when the TLS handshake has been finished. The TLS handshake
      * always wins, since it is the more precise and the later event.
+     * <p>
+     * A multiplexed client is shared by several threads, so more than one sample can be in flight. Since the
+     * connection is established for all of them at once, the connect time is recorded in every sample which
+     * is waiting for it.
      */
     static final class ConnectTimeTracker {
-        private volatile SampleResult sampleResult;
-        private volatile boolean connectRecorded;
-        private volatile boolean handshakeRecorded;
+        private static final Integer NOTHING_RECORDED = 0;
+        private static final Integer CONNECT_RECORDED = 1;
+        private static final Integer HANDSHAKE_RECORDED = 2;
+
+        /** Samples which are currently in flight, together with the connect event recorded for them. */
+        private final Map<SampleResult, Integer> activeSamples = new ConcurrentHashMap<>();
 
         void sampleStarted(SampleResult result) {
-            this.connectRecorded = false;
-            this.handshakeRecorded = false;
-            this.sampleResult = result;
+            activeSamples.put(result, NOTHING_RECORDED);
         }
 
-        void sampleFinished() {
-            this.sampleResult = null;
+        void sampleFinished(SampleResult result) {
+            activeSamples.remove(result);
         }
 
         /** Invoked when the TCP connection has been established. */
         void connectionEstablished() {
-            SampleResult result = sampleResult;
-            if (result != null && !connectRecorded && !handshakeRecorded) {
-                connectRecorded = true;
-                result.connectEnd();
-            }
+            recordConnectEnd(CONNECT_RECORDED);
         }
 
         /** Invoked when the TLS handshake has been finished, it overrides the plain TCP connect time. */
         void handshakeFinished() {
-            SampleResult result = sampleResult;
-            if (result != null && !handshakeRecorded) {
-                handshakeRecorded = true;
-                connectRecorded = true;
+            recordConnectEnd(HANDSHAKE_RECORDED);
+        }
+
+        private void recordConnectEnd(Integer event) {
+            activeSamples.replaceAll((result, recorded) -> {
+                if (recorded.intValue() >= event.intValue()) {
+                    return recorded;
+                }
                 result.connectEnd();
-            }
+                return event;
+            });
         }
     }
 

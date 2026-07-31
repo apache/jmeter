@@ -493,6 +493,53 @@ JMETER-SERVER</source>
     A User-Agent header defined in the test plan is still sent.<br/>
     Defaults to: <code>false</code>
 </property>
+<property name="http.java.h2.multiplexing">
+    Multiplex concurrent message exchanges (for example the requests of different threads or parallel
+    downloads of embedded resources) of the Java sampler implementation over a single HTTP/2
+    connection per origin. Requests which start before the first HTTP/2 connection to a host has been
+    established still open a connection of their own.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="http.java.h2.header_table_size">
+    Size in bytes of the HPACK dynamic header table the Java sampler implementation announces to the
+    server. <code>0</code> disables indexing of the headers by the server. It is applied as the
+    <code>jdk.httpclient.hpack.maxheadertablesize</code> system property.<br/>
+    Defaults to the JDK default: <code>16384</code>
+</property>
+<property name="http.java.h2.max_concurrent_streams">
+    Maximum number of server initiated (pushed) streams the Java sampler implementation accepts on a
+    single HTTP/2 connection. It is applied as the <code>jdk.httpclient.maxstreams</code> system
+    property.<br/>
+    Defaults to the JDK default: <code>100</code> with server push enabled, <code>0</code> otherwise
+</property>
+<property name="http.java.h2.initial_window_size">
+    HTTP/2 flow control window in bytes the Java sampler implementation announces per stream. It is
+    applied as the <code>jdk.httpclient.windowsize</code> system property.<br/>
+    Defaults to the JDK default: <code>16777216</code>
+</property>
+<property name="http.java.h2.connection_window_size">
+    HTTP/2 flow control window in bytes the Java sampler implementation announces for the whole
+    connection, it must not be smaller than the stream window. It is applied as the
+    <code>jdk.httpclient.connectionWindowSize</code> system property.<br/>
+    Defaults to the JDK default: <code>67108864</code>
+</property>
+<property name="http.java.h2.max_frame_size">
+    Largest HTTP/2 frame payload in bytes the Java sampler implementation is willing to receive,
+    between <code>16384</code> and <code>16777215</code>. It is applied as the
+    <code>jdk.httpclient.maxframesize</code> system property.<br/>
+    Defaults to the JDK default: <code>16384</code>
+</property>
+<property name="http.java.h2.keep_alive_timeout">
+    Seconds an idle HTTP/2 connection of the Java sampler implementation is kept in the pool. It is
+    applied as the <code>jdk.httpclient.keepalive.timeout.h2</code> system property.<br/>
+    Defaults to the JDK default: the value of <code>jdk.httpclient.keepalive.timeout</code>
+</property>
+<property name="http.java.h2.push_enabled">
+    Accept HTTP/2 server push in the Java sampler implementation. JMeter cannot report pushed
+    resources, so they are dropped, therefore push is disabled by default. It is applied as the
+    <code>jdk.httpclient.enablepush</code> system property.<br/>
+    Defaults to: <code>false</code>
+</property>
 <property name="httpclient.socket.http.cps">
     Set characters per second to a value greater then zero to emulate slow connections.<br/>
     Defaults to: <code>0</code>
