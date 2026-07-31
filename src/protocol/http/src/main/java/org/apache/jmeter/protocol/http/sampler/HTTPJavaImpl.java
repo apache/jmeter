@@ -101,6 +101,26 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private static final String DEFAULT_HTTP_VERSION =
         JMeterUtils.getPropDefault("httpclient.version", HTTPConstants.HTTP_1_1); // $NON-NLS-1$
 
+    /** Name of the {@code User-Agent} request header. */
+    private static final String HEADER_USER_AGENT = "User-Agent"; // $NON-NLS-1$
+
+    /**
+     * {@code User-Agent} of {@link HttpURLConnection}, which is used for HTTP/1.1. JMeter adds it to the
+     * request itself, so it shows up in the sample result and is accounted for in the sent bytes, instead of
+     * being added invisibly by the JDK.
+     */
+    private static final String HTTP_1_DEFAULT_USER_AGENT = createHttp1DefaultUserAgent();
+
+    /** {@code User-Agent} of {@link HttpClient}, which is used for HTTP/2. */
+    private static final String HTTP_2_DEFAULT_USER_AGENT =
+        "Java-http-client/" + System.getProperty("java.version"); // $NON-NLS-1$
+
+    private static String createHttp1DefaultUserAgent() {
+        String javaAgent = "Java/" + System.getProperty("java.version"); // $NON-NLS-1$
+        String agent = System.getProperty("http.agent"); // $NON-NLS-1$
+        return agent == null ? javaAgent : agent + " " + javaAgent;
+    }
+
     private static final ThreadLocal<Map<HttpClientKey, Http2Client>> HTTP_2_CLIENTS =
         ThreadLocal.withInitial(ConcurrentHashMap::new);
 
@@ -420,6 +440,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         String cookies = setConnectionCookie(conn, u, getCookieManager());
 
         setConnectionAuthorization(conn, u, getAuthManager(), securityHeaders);
+        setDefaultUserAgent(conn, HTTP_1_DEFAULT_USER_AGENT);
 
         if (method.equals(HTTPConstants.POST)) {
             setPostHeaders(conn);
@@ -688,6 +709,19 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
         }
         return hdrs.toString();
+    }
+
+    /**
+     * Adds the {@code User-Agent} the JDK would add on its own, so it is visible in the sample result and
+     * counted in the sent bytes. Nothing is added when the test plan defines a {@code User-Agent} itself.
+     *
+     * @param conn connection the header is added to
+     * @param defaultUserAgent {@code User-Agent} used when the request has none
+     */
+    private static void setDefaultUserAgent(HttpURLConnection conn, String defaultUserAgent) {
+        if (conn.getRequestProperty(HEADER_USER_AGENT) == null) {
+            conn.setRequestProperty(HEADER_USER_AGENT, defaultUserAgent);
+        }
     }
 
     /**
@@ -1015,6 +1049,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             securityHeaders = setConnectionHeaders(capturingConn, url, getHeaderManager(), getCacheManager());
             String cookies = setConnectionCookie(capturingConn, url, getCookieManager());
             setConnectionAuthorization(capturingConn, url, getAuthManager(), securityHeaders);
+            setDefaultUserAgent(capturingConn, HTTP_2_DEFAULT_USER_AGENT);
 
             if (method.equals(HTTPConstants.POST)) {
                 setPostHeaders(capturingConn);
