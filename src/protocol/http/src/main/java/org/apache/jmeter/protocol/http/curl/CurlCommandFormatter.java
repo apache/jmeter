@@ -26,6 +26,7 @@ import java.util.Set;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
+import org.apache.jmeter.protocol.http.sampler.PostWriter;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -76,8 +77,8 @@ public final class CurlCommandFormatter {
      * @see org.apache.jmeter.protocol.http.sampler.PostWriter
      */
     private static final String[] BODY_PLACEHOLDERS = {
-            "<actual file content, not shown here>", //$NON-NLS-1$
-            "<Entity was not repeatable, cannot view what was sent>" //$NON-NLS-1$
+            PostWriter.FILE_CONTENT_PLACEHOLDER,
+            PostWriter.NON_REPEATABLE_ENTITY_PLACEHOLDER
     };
 
     private CurlCommandFormatter() {

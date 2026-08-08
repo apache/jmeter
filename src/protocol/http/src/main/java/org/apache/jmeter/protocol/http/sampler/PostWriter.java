@@ -56,6 +56,19 @@ public class PostWriter {
 
     public static final String ENCODING = StandardCharsets.UTF_8.name();
 
+    /**
+     * Placeholder written into the rendered request body in place of the actual
+     * file content, which JMeter does not keep (shown in the View Results Tree).
+     */
+    public static final String FILE_CONTENT_PLACEHOLDER = "<actual file content, not shown here>"; // $NON-NLS-1$
+
+    /**
+     * Placeholder written into the rendered request body when the entity is not
+     * repeatable and the bytes that were sent cannot be shown.
+     */
+    public static final String NON_REPEATABLE_ENTITY_PLACEHOLDER =
+            "<Entity was not repeatable, cannot view what was sent>"; // $NON-NLS-1$
+
     /** The form data that is going to be sent as url encoded */
     protected byte[] formDataUrlEncoded;
     /** The form data that is going to be sent in post body */
@@ -134,7 +147,7 @@ public class PostWriter {
                 // Write the actual file content
                 writeFileToStream(file.getPath(), out);
                 // We just add placeholder text for file content
-                postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
+                postedBody.append(FILE_CONTENT_PLACEHOLDER);
                 out.write(CRLF);
                 postedBody.append(CRLF_STRING);
             }
@@ -158,7 +171,7 @@ public class PostWriter {
                 out.close();
 
                 // We just add placeholder text for file content
-                postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
+                postedBody.append(FILE_CONTENT_PLACEHOLDER);
             }
             else if (formDataUrlEncoded != null){ // may be null for PUT
                 // In an application/x-www-form-urlencoded request, we only support
