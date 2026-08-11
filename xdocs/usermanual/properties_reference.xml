@@ -446,6 +446,14 @@ JMETER-SERVER</source>
     Valid values are <code>HTTP/1.1</code> and <code>HTTP/2</code>.<br/>
     Defaults to: <code>HTTP/1.1</code>
 </property>
+<property name="httpclient5.validate_after_inactivity">
+    Milliseconds of inactivity after which a pooled connection of the HttpClient5 sampler
+    implementation is re-validated before it is reused, using an HTTP/2 <code>PING</code> or a stale
+    check for HTTP/1.1. <code>-1</code> disables the check. Without it a connection the server closed
+    while the thread was idle is reused as it is and fails the sample, as JMeter deliberately does not
+    retry requests.<br/>
+    Defaults to: <code>2000</code>
+</property>
 <property name="httpclient5.h2.multiplexing">
     Multiplex concurrent message exchanges (for example parallel downloads of embedded resources)
     over a single HTTP/2 connection.<br/>

@@ -201,6 +201,17 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             JMeterUtils.getPropDefault("httpclient5.h2.max_connections_per_route", 6);
 
     /**
+     * Milliseconds of inactivity after which a pooled connection is re-validated before it is used
+     * again, {@code -1} disables the check. JMeter keeps a client per thread and reuses its
+     * connections across iterations, so a connection the server (or an idle timeout of a load
+     * balancer) closed in between would otherwise be handed out as-is and fail the next sample.
+     * HttpClient leaves this undefined by default, which skips the check altogether, and the
+     * automatic retries that would hide such a failure are deliberately disabled.
+     */
+    private static final long VALIDATE_AFTER_INACTIVITY =
+            JMeterUtils.getPropDefault("httpclient5.validate_after_inactivity", 2000L);
+
+    /**
      * Name of the property that suppresses the {@code User-Agent} header HttpClient sends when the
      * test plan does not define one itself.
      */
@@ -749,12 +760,12 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         if (key.dnsCacheManager != null) {
             connectionManagerBuilder.setDnsResolver(createDnsResolver(key.dnsCacheManager));
         }
+        ConnectionConfig.Builder connectionConfig = ConnectionConfig.custom()
+                .setValidateAfterInactivity(TimeValue.ofMilliseconds(VALIDATE_AFTER_INACTIVITY));
         if (key.connectTimeout > 0) {
-            connectionManagerBuilder
-                    .setDefaultConnectionConfig(ConnectionConfig.custom()
-                            .setConnectTimeout(Timeout.ofMilliseconds(key.connectTimeout))
-                            .build());
+            connectionConfig.setConnectTimeout(Timeout.ofMilliseconds(key.connectTimeout));
         }
+        connectionManagerBuilder.setDefaultConnectionConfig(connectionConfig.build());
         builder.setConnectionManager(new ConnectTimeMeasuringConnectionManager(connectionManagerBuilder.build()));
         builder.setRoutePlanner(createRoutePlanner(key));
         return builder.disableContentCompression()
@@ -794,11 +805,16 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         if (key.dnsCacheManager != null) {
             connectionManagerBuilder.setDnsResolver(createDnsResolver(key.dnsCacheManager));
         }
+        // Without this an HTTP/2 connection is leased straight out of the pool, and a connection the
+        // server closed while the thread was idle only shows up when the request is written to it,
+        // which fails the sample with a ConnectionClosedException. The check sends an HTTP/2 PING
+        // and replaces the connection if the peer does not answer.
+        ConnectionConfig.Builder connectionConfig = ConnectionConfig.custom()
+                .setValidateAfterInactivity(TimeValue.ofMilliseconds(VALIDATE_AFTER_INACTIVITY));
         if (key.connectTimeout > 0) {
-            connectionManagerBuilder.setDefaultConnectionConfig(ConnectionConfig.custom()
-                    .setConnectTimeout(Timeout.ofMilliseconds(key.connectTimeout))
-                    .build());
+            connectionConfig.setConnectTimeout(Timeout.ofMilliseconds(key.connectTimeout));
         }
+        connectionManagerBuilder.setDefaultConnectionConfig(connectionConfig.build());
         builder.setConnectionManager(new ConnectTimeMeasuringAsyncConnectionManager(connectionManagerBuilder.build()));
         CloseableHttpAsyncClient asyncClient = builder.build();
         asyncClient.start();

@@ -27,9 +27,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -38,6 +43,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.hc.client5.http.HttpRoute;
 import org.apache.hc.client5.http.io.ConnectionEndpoint;
@@ -54,6 +60,8 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.junit.jupiter.api.Test;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -439,6 +447,195 @@ class TestHTTPHC5Features {
                     "connectTime should not exceed the elapsed time");
         } finally {
             server.stop();
+        }
+    }
+
+    /**
+     * A pooled HTTP/2 connection that the server dropped while the thread was idle must not be handed
+     * out as it is. What triggers this is the idle gap between two samples, not the number of requests,
+     * so the test waits out {@code httpclient5.validate_after_inactivity} between the two samples and
+     * only then lets the connection die, while the client still believes it is usable.
+     *
+     * <p>Without the re-validation the second request is written to that connection and the sample
+     * fails with {@code ConnectionClosedException}, which is what
+     * {@link #doesNotRevalidatePooledHttp2ConnectionWithoutAnIdleGap()} pins down.
+     */
+    @Test
+    void revalidatesPooledHttp2ConnectionAfterIdleGap() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        server.start();
+        try (ConnectionDroppingRelay relay = new ConnectionDroppingRelay(server.httpsPort())) {
+            server.stubFor(get(urlEqualTo("/idle")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+            sampler.setResponseTimeout("30000");
+            URL url = new URL("https://localhost:" + relay.getPort() + "/idle");
+
+            assertEquals("200", sampler.sample(url, HTTPConstants.GET, false, 1).getResponseCode());
+
+            Thread.sleep(validateAfterInactivityMillis() + 500);
+            relay.dropConnectionOnNextRequest();
+
+            // the same sampler on the same thread, so the cached HTTP/2 client and its pool are reused
+            HTTPSampleResult result = sampler.sample(url, HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode(),
+                    "the stale pooled connection should have been replaced, but the sample failed with "
+                            + result.getResponseMessage());
+            assertEquals(2, relay.getAcceptedConnections(),
+                    "the stale connection should have been discarded and replaced by a new one");
+        } finally {
+            server.stop();
+        }
+    }
+
+    /**
+     * Counterpart of {@link #revalidatesPooledHttp2ConnectionAfterIdleGap()} which documents the
+     * behaviour the re-validation fixes: without an idle gap the connection is leased without being
+     * checked, so the request itself runs into the connection the server has already given up on.
+     */
+    @Test
+    void doesNotRevalidatePooledHttp2ConnectionWithoutAnIdleGap() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        server.start();
+        try (ConnectionDroppingRelay relay = new ConnectionDroppingRelay(server.httpsPort())) {
+            server.stubFor(get(urlEqualTo("/busy")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+            sampler.setResponseTimeout("30000");
+            URL url = new URL("https://localhost:" + relay.getPort() + "/busy");
+
+            assertEquals("200", sampler.sample(url, HTTPConstants.GET, false, 1).getResponseCode());
+            relay.dropConnectionOnNextRequest();
+
+            HTTPSampleResult result = sampler.sample(url, HTTPConstants.GET, false, 1);
+
+            assertFalse(result.isSuccessful(),
+                    "a connection reused within the validation interval is not checked, so the request "
+                            + "is expected to run into the dropped connection");
+        } finally {
+            server.stop();
+        }
+    }
+
+    private static long validateAfterInactivityMillis() {
+        return JMeterUtils.getPropDefault("httpclient5.validate_after_inactivity", 2000L);
+    }
+
+    /**
+     * Relays TCP traffic to a backend server and can drop a single relayed connection as soon as the
+     * client writes to it again, which is how an idle connection closed by the server (or by a load
+     * balancer) looks to a client that has not noticed the close yet. New connections are relayed as
+     * usual, so the backend stays reachable.
+     */
+    private static final class ConnectionDroppingRelay implements Closeable {
+
+        private final ServerSocket serverSocket;
+        private final int backendPort;
+        private final ExecutorService executor = Executors.newCachedThreadPool(runnable -> {
+            Thread thread = new Thread(runnable, "relay");
+            thread.setDaemon(true);
+            return thread;
+        });
+        private final AtomicInteger acceptedConnections = new AtomicInteger();
+        private volatile RelayedConnection currentConnection;
+
+        ConnectionDroppingRelay(int backendPort) throws IOException {
+            this.backendPort = backendPort;
+            this.serverSocket = new ServerSocket(0, 0, InetAddress.getLoopbackAddress());
+            executor.execute(this::acceptConnections);
+        }
+
+        int getPort() {
+            return serverSocket.getLocalPort();
+        }
+
+        int getAcceptedConnections() {
+            return acceptedConnections.get();
+        }
+
+        void dropConnectionOnNextRequest() {
+            RelayedConnection connection = currentConnection;
+            if (connection == null) {
+                throw new IllegalStateException("No connection has been relayed yet");
+            }
+            connection.doomed = true;
+        }
+
+        private void acceptConnections() {
+            while (!serverSocket.isClosed()) {
+                RelayedConnection connection;
+                try {
+                    Socket client = serverSocket.accept();
+                    connection = new RelayedConnection(client,
+                            new Socket(InetAddress.getLoopbackAddress(), backendPort));
+                } catch (IOException e) {
+                    return;
+                }
+                acceptedConnections.incrementAndGet();
+                currentConnection = connection;
+                executor.execute(connection::relayRequests);
+                executor.execute(connection::relayResponses);
+            }
+        }
+
+        @Override
+        public void close() throws IOException {
+            serverSocket.close();
+            executor.shutdownNow();
+        }
+    }
+
+    private static final class RelayedConnection {
+
+        private final Socket client;
+        private final Socket backend;
+        private volatile boolean doomed;
+
+        RelayedConnection(Socket client, Socket backend) {
+            this.client = client;
+            this.backend = backend;
+        }
+
+        void relayRequests() {
+            try {
+                InputStream input = client.getInputStream();
+                OutputStream output = backend.getOutputStream();
+                byte[] buffer = new byte[8192];
+                int read;
+                while ((read = input.read(buffer)) != -1 && !doomed) {
+                    output.write(buffer, 0, read);
+                    output.flush();
+                }
+            } catch (IOException ignored) { // NOSONAR the connection is closed below in any case
+                // the peer went away, which ends the relaying just as well
+            }
+            close();
+        }
+
+        void relayResponses() {
+            try {
+                InputStream input = backend.getInputStream();
+                OutputStream output = client.getOutputStream();
+                byte[] buffer = new byte[8192];
+                int read;
+                while ((read = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, read);
+                    output.flush();
+                }
+            } catch (IOException ignored) { // NOSONAR the connection is closed below in any case
+                // the peer went away, which ends the relaying just as well
+            }
+            close();
+        }
+
+        private void close() {
+            JOrphanUtils.closeQuietly(client);
+            JOrphanUtils.closeQuietly(backend);
         }
     }
 
