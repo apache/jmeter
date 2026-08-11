@@ -51,7 +51,6 @@ import org.apache.hc.client5.http.classic.ExecChainHandler;
 import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.config.TlsConfig;
-import org.apache.hc.client5.http.entity.BrotliInputStreamFactory;
 import org.apache.hc.client5.http.entity.DecompressingEntity;
 import org.apache.hc.client5.http.entity.DeflateInputStreamFactory;
 import org.apache.hc.client5.http.entity.GZIPInputStreamFactory;
@@ -74,6 +73,7 @@ import org.apache.hc.client5.http.nio.AsyncClientConnectionManager;
 import org.apache.hc.client5.http.nio.AsyncConnectionEndpoint;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
 import org.apache.hc.client5.http.ssl.ClientTlsStrategyBuilder;
+import org.apache.hc.client5.http.ssl.HostnameVerificationPolicy;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.concurrent.FutureCallback;
@@ -128,6 +128,7 @@ import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
+import org.brotli.dec.BrotliInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -231,8 +232,16 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final String[] HEADERS_TO_SAVE = {HttpHeaders.CONTENT_LENGTH, HttpHeaders.CONTENT_ENCODING,
             HttpHeaders.CONTENT_MD5};
 
+    // HttpClient 5.6 switched BrotliInputStreamFactory to the optional brotli4j library, so decode "br"
+    // with the org.brotli:dec library JMeter ships, like HTTPHC4Impl does.
+    @SuppressWarnings("deprecation")
+    private static final InputStreamFactory BROTLI = BrotliInputStream::new;
+
+    // The InputStreamFactory-based decoders are deprecated in favour of the @Internal ContentCodecRegistry,
+    // so keep using them until a public replacement is available.
+    @SuppressWarnings("deprecation")
     private static final Lookup<InputStreamFactory> CONTENT_DECODERS = RegistryBuilder.<InputStreamFactory>create()
-            .register("br", BrotliInputStreamFactory.getInstance())
+            .register("br", BROTLI)
             .register("gzip", GZIPInputStreamFactory.getInstance())
             .register("x-gzip", GZIPInputStreamFactory.getInstance())
             .register("deflate", DeflateInputStreamFactory.getInstance())
@@ -240,6 +249,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static final TlsStrategy HTTP_2_TLS_STRATEGY = createHttp2TlsStrategy();
 
+    @SuppressWarnings("deprecation") // DecompressingEntity is superseded by the @Internal ContentCodecRegistry
     private static final ExecChainHandler RESPONSE_CONTENT_ENCODING = (request, scope, chain) -> {
         HttpClientContext context = scope.clientContext;
         RequestConfig requestConfig = context.getRequestConfig();
@@ -281,14 +291,17 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private volatile org.apache.hc.client5.http.classic.methods.HttpUriRequestBase currentRequest;
 
-    @SuppressWarnings("deprecation") // buildAsync is unavailable before HttpClient 5.5
     private static TlsStrategy createHttp2TlsStrategy() {
         try {
             SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build();
             return ClientTlsStrategyBuilder.create()
                     .setSslContext(sslContext)
+                    // Leave hostname verification to the no-op verifier below. Without CLIENT the policy would
+                    // default to BOTH, and the JSSE built-in endpoint identification would reject the
+                    // self-signed certificates JMeter deliberately accepts when testing.
+                    .setHostVerificationPolicy(HostnameVerificationPolicy.CLIENT)
                     .setHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                    .build();
+                    .buildAsync();
         } catch (GeneralSecurityException e) {
             throw new IllegalStateException("Could not create HTTP/2 TLS strategy", e);
         }
