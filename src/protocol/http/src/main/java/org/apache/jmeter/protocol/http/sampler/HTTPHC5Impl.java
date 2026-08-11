@@ -249,7 +249,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static final TlsStrategy HTTP_2_TLS_STRATEGY = createHttp2TlsStrategy();
 
-    @SuppressWarnings("deprecation") // DecompressingEntity is superseded by the @Internal ContentCodecRegistry
     private static final ExecChainHandler RESPONSE_CONTENT_ENCODING = (request, scope, chain) -> {
         HttpClientContext context = scope.clientContext;
         RequestConfig requestConfig = context.getRequestConfig();
@@ -257,9 +256,22 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             requestConfig = RequestConfig.DEFAULT;
         }
         ClassicHttpResponse response = chain.proceed(request, scope);
+        if (!requestConfig.isContentCompressionEnabled()) {
+            return response;
+        }
+        return decompressResponse(response);
+    };
+
+    /**
+     * Decodes the response body while keeping the {@code Content-Encoding}, {@code Content-Length} and
+     * {@code Content-MD5} headers, so the sample result still reports what the server actually sent.
+     * JMeter therefore disables the transparent decompression of HttpClient, which drops those headers,
+     * and decodes the response itself for both the HTTP/1.1 and the HTTP/2 transport.
+     */
+    @SuppressWarnings("deprecation") // DecompressingEntity is superseded by the @Internal ContentCodecRegistry
+    private static ClassicHttpResponse decompressResponse(ClassicHttpResponse response) {
         HttpEntity entity = response.getEntity();
-        if (!requestConfig.isContentCompressionEnabled() || entity == null || entity.getContentLength() == 0
-                || entity.getContentEncoding() == null) {
+        if (entity == null || entity.getContentLength() == 0 || entity.getContentEncoding() == null) {
             return response;
         }
 
@@ -287,7 +299,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             }
         }
         return response;
-    };
+    }
 
     private volatile org.apache.hc.client5.http.classic.methods.HttpUriRequestBase currentRequest;
 
@@ -754,6 +766,10 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         boolean multiplexing = HTTP_2_MULTIPLEXING && MESSAGE_MULTIPLEXING_SETTER != null;
         HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
                 .disableAutomaticRetries()
+                // HttpClient 5.6 added transparent content compression to the async transport. JMeter decodes
+                // the response itself, so the HTTP/2 sampler reports the same headers as the HTTP/1.1 one and
+                // does not depend on the optional codec libraries HttpClient detects on the classpath.
+                .disableContentCompression()
                 .setH2Config(HTTP_2_CONFIG)
                 .setRoutePlanner(createRoutePlanner(key));
         if (multiplexing) {
@@ -860,9 +876,11 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
         byte[] responseBody = asyncResponse.getBodyBytes();
         if (responseBody != null) {
-            response.setEntity(new ByteArrayEntity(responseBody, asyncResponse.getContentType()));
+            response.setEntity(new ByteArrayEntity(responseBody, asyncResponse.getContentType(),
+                    asyncResponse.getFirstHeader(HttpHeaders.CONTENT_ENCODING) == null ? null
+                            : asyncResponse.getFirstHeader(HttpHeaders.CONTENT_ENCODING).getValue()));
         }
-        return response;
+        return decompressResponse(response);
     }
 
     private static DefaultRoutePlanner createRoutePlanner(HttpClientKey key) {
