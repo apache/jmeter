@@ -29,7 +29,11 @@ import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
+import java.security.Principal;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,11 +45,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLContext;
+import javax.security.auth.Subject;
 
+import org.apache.hc.client5.http.DnsResolver;
 import org.apache.hc.client5.http.HttpRoute;
+import org.apache.hc.client5.http.SystemDefaultDnsResolver;
 import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
 import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
+import org.apache.hc.client5.http.auth.AuthSchemeFactory;
 import org.apache.hc.client5.http.auth.AuthScope;
+import org.apache.hc.client5.http.auth.Credentials;
+import org.apache.hc.client5.http.auth.CredentialsProvider;
+import org.apache.hc.client5.http.auth.KerberosConfig;
+import org.apache.hc.client5.http.auth.KerberosCredentials;
+import org.apache.hc.client5.http.auth.StandardAuthScheme;
 import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
 import org.apache.hc.client5.http.classic.ExecChainHandler;
 import org.apache.hc.client5.http.config.ConnectionConfig;
@@ -61,6 +74,11 @@ import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
 import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
+import org.apache.hc.client5.http.impl.auth.BasicSchemeFactory;
+import org.apache.hc.client5.http.impl.auth.BearerSchemeFactory;
+import org.apache.hc.client5.http.impl.auth.DigestSchemeFactory;
+import org.apache.hc.client5.http.impl.auth.KerberosSchemeFactory;
+import org.apache.hc.client5.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
@@ -129,6 +147,10 @@ import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
 import org.brotli.dec.BrotliInputStream;
+import org.ietf.jgss.GSSCredential;
+import org.ietf.jgss.GSSException;
+import org.ietf.jgss.GSSManager;
+import org.ietf.jgss.Oid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -237,6 +259,43 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     };
 
     private static final H2Config HTTP_2_CONFIG = createHttp2Config();
+
+    /**
+     * Request that the Kerberos credentials of the JMeter user are delegated to the server, so
+     * that it can act on behalf of the user, see the {@code kerberos.spnego.delegate_cred}
+     * property.
+     */
+    private static final boolean KERBEROS_DELEGATE_CRED =
+            JMeterUtils.getPropDefault("kerberos.spnego.delegate_cred", false);
+
+    /**
+     * HttpClient 5 only offers {@code Bearer}, {@code Digest} and {@code Basic} by default, so the
+     * negotiation based schemes have to be requested explicitly for a Kerberos authorization.
+     */
+    @SuppressWarnings("deprecation") // The GSS based auth schemes of HttpClient 5 have no replacement yet
+    private static final List<String> KERBEROS_PREFERRED_AUTH_SCHEMES =
+            List.of(StandardAuthScheme.SPNEGO, StandardAuthScheme.KERBEROS);
+
+    private static final Oid SPNEGO_OID = createOid("1.3.6.1.5.5.2");
+
+    private static final Oid KERBEROS_OID = createOid("1.2.840.113554.1.2.2");
+
+    /**
+     * Credentials without a principal, telling the negotiation based auth schemes to use the
+     * credentials of the JAAS {@link Subject} the request is executed with.
+     */
+    private static final Credentials USE_JAAS_CREDENTIALS = new Credentials() {
+        @Override
+        public Principal getUserPrincipal() {
+            return null;
+        }
+
+        @Override
+        @SuppressWarnings("deprecation") // Credentials.getPassword is deprecated, but has to be implemented
+        public char[] getPassword() {
+            return new char[0];
+        }
+    };
 
     private static final Method MESSAGE_MULTIPLEXING_SETTER = findMessageMultiplexingSetter();
 
@@ -367,9 +426,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             HttpClientKey clientKey = createHttpClientKey(url);
             HttpClientContext context = createHttpClientContext(url, clientKey, request);
             context.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, result);
-            response = clientKey.httpVersionPolicy != HttpVersionPolicy.FORCE_HTTP_1
-                    ? executeHttp2(getHttp2Client(clientKey), request, context)
-                    : getClient(clientKey).executeOpen(null, request, context);
+            response = executeRequest(url, clientKey, request, context);
             result.sampleEnd();
             currentRequest = null;
 
@@ -404,6 +461,37 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static org.apache.hc.client5.http.classic.methods.HttpUriRequestBase createRequest(URI uri, String method) {
         return new org.apache.hc.client5.http.classic.methods.HttpUriRequestBase(method, uri);
+    }
+
+    /**
+     * Executes the request under the JAAS {@link Subject} of the {@link AuthManager}, if the URL is
+     * covered by a Kerberos authorization, so that the auth scheme can use its credentials.
+     */
+    private ClassicHttpResponse executeRequest(URL url, HttpClientKey clientKey,
+            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HttpClientContext context)
+            throws IOException {
+        Subject subject = getSubjectForUrl(url);
+        if (subject == null) {
+            return doExecuteRequest(clientKey, request, context);
+        }
+        try {
+            return Subject.doAs(subject, (PrivilegedExceptionAction<ClassicHttpResponse>) () ->
+                    doExecuteRequest(clientKey, request, context));
+        } catch (PrivilegedActionException e) {
+            Exception cause = e.getException();
+            if (cause instanceof IOException ioException) {
+                throw ioException;
+            }
+            throw new IOException("Could not execute the request with subject " + subject, cause);
+        }
+    }
+
+    private static ClassicHttpResponse doExecuteRequest(HttpClientKey clientKey,
+            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HttpClientContext context)
+            throws IOException {
+        return clientKey.httpVersionPolicy != HttpVersionPolicy.FORCE_HTTP_1
+                ? executeHttp2(getHttp2Client(clientKey), request, context)
+                : getClient(clientKey).executeOpen(null, request, context);
     }
 
     private void setupRequest(URL url, org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
@@ -561,28 +649,152 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         return cookies;
     }
 
-    private HttpClientContext createHttpClientContext(URL url, HttpClientKey key,
+    HttpClientContext createHttpClientContext(URL url, HttpClientKey key,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
         HttpClientContext context = HttpClientContext.create();
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        configureTargetCredentials(url, request, credentialsProvider);
+        Authorization authorization = getAuthorizationForUrl(url);
+        configureTargetCredentials(url, request, credentialsProvider, authorization);
         configureProxyCredentials(key, credentialsProvider);
-        context.setCredentialsProvider(credentialsProvider);
+        if (isKerberos(authorization)) {
+            configureKerberos(url, request, context, credentialsProvider);
+        } else {
+            context.setCredentialsProvider(credentialsProvider);
+        }
         return context;
     }
 
-    private void configureTargetCredentials(URL url,
-            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
-            BasicCredentialsProvider credentialsProvider) {
+    private Authorization getAuthorizationForUrl(URL url) {
         AuthManager authManager = getAuthManager();
-        Authorization authorization = authManager == null ? null : authManager.getAuthForURL(url);
-        if (authorization == null) {
+        return authManager == null ? null : authManager.getAuthForURL(url);
+    }
+
+    private static boolean isKerberos(Authorization authorization) {
+        return authorization != null && AuthManager.Mechanism.KERBEROS.equals(authorization.getMechanism());
+    }
+
+    private static void configureTargetCredentials(URL url,
+            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
+            BasicCredentialsProvider credentialsProvider, Authorization authorization) {
+        if (authorization == null || isKerberos(authorization)) {
+            // The credentials of a Kerberos authorization are used to log in to the KDC, they must
+            // not be sent to the server
             return;
         }
         credentialsProvider.setCredentials(new AuthScope(url.getHost(), getPort(url)),
                 new UsernamePasswordCredentials(authorization.getUser(), authorization.getPass().toCharArray()));
         if (AuthManager.Mechanism.BASIC.equals(authorization.getMechanism())) {
             request.setHeader(HttpHeaders.AUTHORIZATION, authorization.toBasicHeader());
+        }
+    }
+
+    /**
+     * Sets up the {@code Negotiate} and {@code Kerberos} auth schemes for a single request, as
+     * HttpClient 5 neither registers them nor prefers them by default. The credentials are taken
+     * from the JAAS {@link Subject} the {@link AuthManager} logged the user in with.
+     */
+    @SuppressWarnings("deprecation") // The GSS based auth schemes of HttpClient 5 have no replacement yet
+    private void configureKerberos(URL url,
+            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
+            HttpClientContext context, CredentialsProvider credentialsProvider) {
+        KerberosConfig kerberosConfig = KerberosConfig.custom()
+                .setStripPort(isStripPort(url))
+                .setUseCanonicalHostname(AuthManager.USE_CANONICAL_HOST_NAME)
+                .setRequestDelegCreds(KERBEROS_DELEGATE_CRED
+                        ? KerberosConfig.Option.ENABLE : KerberosConfig.Option.DEFAULT)
+                .build();
+        DnsResolver dnsResolver = SystemDefaultDnsResolver.INSTANCE;
+        context.setAuthSchemeRegistry(RegistryBuilder.<AuthSchemeFactory>create()
+                .register(StandardAuthScheme.BASIC, BasicSchemeFactory.INSTANCE)
+                .register(StandardAuthScheme.DIGEST, DigestSchemeFactory.INSTANCE)
+                .register(StandardAuthScheme.BEARER, BearerSchemeFactory.INSTANCE)
+                .register(StandardAuthScheme.SPNEGO, new SPNegoSchemeFactory(kerberosConfig, dnsResolver))
+                .register(StandardAuthScheme.KERBEROS, new KerberosSchemeFactory(kerberosConfig, dnsResolver))
+                .build());
+        context.setCredentialsProvider(
+                new KerberosCredentialsProvider(getSubjectForUrl(url), credentialsProvider));
+        RequestConfig requestConfig = request.getConfig() == null ? RequestConfig.DEFAULT : request.getConfig();
+        request.setConfig(RequestConfig.copy(requestConfig)
+                .setTargetPreferredAuthSchemes(KERBEROS_PREFERRED_AUTH_SCHEMES)
+                .build());
+    }
+
+    /**
+     * IE and Firefox always strip the port from the URL before they construct the SPN, see the
+     * {@code kerberos.spnego.strip_port} property.
+     */
+    private static boolean isStripPort(URL url) {
+        if (AuthManager.STRIP_PORT) {
+            return true;
+        }
+        int port = url.getPort();
+        return port == HTTPConstants.DEFAULT_HTTP_PORT || port == HTTPConstants.DEFAULT_HTTPS_PORT;
+    }
+
+    private Subject getSubjectForUrl(URL url) {
+        AuthManager authManager = getAuthManager();
+        return authManager == null ? null : authManager.getSubjectForUrl(url);
+    }
+
+    private static Oid createOid(String oid) {
+        try {
+            return new Oid(oid);
+        } catch (GSSException e) {
+            log.warn("Could not create OID {}", oid, e);
+            return null;
+        }
+    }
+
+    /**
+     * Provides the GSS credentials of a JAAS {@link Subject} to the negotiation based auth schemes.
+     * The HTTP/2 transport builds the token on an I/O reactor thread, which is not covered by the
+     * {@link Subject#doAs(Subject, PrivilegedExceptionAction)} the HTTP/1.1 request is executed
+     * with, so the credentials have to be passed to HttpClient explicitly.
+     */
+    private static final class KerberosCredentialsProvider implements CredentialsProvider {
+
+        private final Subject subject;
+        private final CredentialsProvider delegate;
+        private final Map<String, Credentials> credentialsCache = new HashMap<>();
+
+        private KerberosCredentialsProvider(Subject subject, CredentialsProvider delegate) {
+            this.subject = subject;
+            this.delegate = delegate;
+        }
+
+        @Override
+        @SuppressWarnings("deprecation") // The GSS based auth schemes of HttpClient 5 have no replacement yet
+        public Credentials getCredentials(AuthScope authScope, HttpContext context) {
+            String schemeName = authScope == null ? null : authScope.getSchemeName();
+            if (StandardAuthScheme.SPNEGO.equalsIgnoreCase(schemeName)) {
+                return getKerberosCredentials(schemeName, SPNEGO_OID);
+            }
+            if (StandardAuthScheme.KERBEROS.equalsIgnoreCase(schemeName)) {
+                return getKerberosCredentials(schemeName, KERBEROS_OID);
+            }
+            return delegate.getCredentials(authScope, context);
+        }
+
+        private Credentials getKerberosCredentials(String schemeName, Oid oid) {
+            return credentialsCache.computeIfAbsent(schemeName, name -> createKerberosCredentials(oid));
+        }
+
+        @SuppressWarnings("deprecation") // KerberosCredentials is deprecated without a replacement
+        private Credentials createKerberosCredentials(Oid oid) {
+            if (subject == null || oid == null) {
+                return USE_JAAS_CREDENTIALS;
+            }
+            try {
+                GSSCredential gssCredential = Subject.doAs(subject,
+                        (PrivilegedExceptionAction<GSSCredential>) () -> GSSManager.getInstance()
+                                .createCredential(null, GSSCredential.DEFAULT_LIFETIME, oid,
+                                        GSSCredential.INITIATE_ONLY));
+                return new KerberosCredentials(gssCredential);
+            } catch (PrivilegedActionException e) {
+                log.warn("Could not obtain the GSS credentials of subject {}, "
+                        + "falling back to the credentials of the current context", subject, e.getException());
+                return USE_JAAS_CREDENTIALS;
+            }
         }
     }
 
@@ -929,7 +1141,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         };
     }
 
-    private HttpClientKey createHttpClientKey(URL url) throws IOException {
+    HttpClientKey createHttpClientKey(URL url) throws IOException {
         String proxyScheme = getProxyScheme();
         String proxyHost = getProxyHost();
         int proxyPort = getProxyPortInt();
@@ -1146,7 +1358,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private static final class HttpClientKey {
+    static final class HttpClientKey {
         private final String protocol;
         private final String authority;
         private final boolean hasProxy;

@@ -3723,7 +3723,7 @@ information for the user named, "<code>jmeter</code>".</property>
 <dl>
 <dt>Java</dt><dd><code>BASIC</code></dd>
 <dt>HttpClient 4</dt><dd><code>BASIC</code>, <code>DIGEST</code> and <code>Kerberos</code></dd>
-<dt>HttpClient 5</dt><dd><code>BASIC</code> and <code>DIGEST</code></dd>
+<dt>HttpClient 5</dt><dd><code>BASIC</code>, <code>DIGEST</code> and <code>Kerberos</code></dd>
 </dl>
 </property>
 </properties>

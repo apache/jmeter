@@ -24,6 +24,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -46,10 +48,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.hc.client5.http.HttpRoute;
+import org.apache.hc.client5.http.auth.AuthSchemeFactory;
+import org.apache.hc.client5.http.auth.AuthScope;
+import org.apache.hc.client5.http.auth.StandardAuthScheme;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 import org.apache.hc.client5.http.io.ConnectionEndpoint;
 import org.apache.hc.client5.http.io.HttpClientConnectionManager;
 import org.apache.hc.client5.http.io.LeaseRequest;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.config.Lookup;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
 import org.apache.hc.core5.http2.config.H2Config;
@@ -338,6 +346,51 @@ class TestHTTPHC5Features {
         } finally {
             server.stop();
         }
+    }
+
+    @Test
+    @SuppressWarnings("deprecation") // The GSS based auth schemes of HttpClient 5 have no replacement yet
+    void sendsNegotiateCredentialsForKerberosAuthorization() throws Exception {
+        AuthManager authManager = new AuthManager();
+        authManager.set(-1, "http://kerberos.example.invalid/", "user", "pass", "", "", AuthManager.Mechanism.KERBEROS);
+        HTTPSamplerBase sampler = newSampler();
+        sampler.setAuthManager(authManager);
+        HTTPHC5Impl implementation = new HTTPHC5Impl(sampler);
+        URL url = new URL("http://kerberos.example.invalid/protected");
+        HttpUriRequestBase request = new HttpUriRequestBase(HTTPConstants.GET, url.toURI());
+
+        HttpClientContext context =
+                implementation.createHttpClientContext(url, implementation.createHttpClientKey(url), request);
+
+        Lookup<AuthSchemeFactory> authSchemes = context.getAuthSchemeRegistry();
+        assertNotNull(authSchemes, "the Kerberos auth schemes have to be registered for the request");
+        assertNotNull(authSchemes.lookup(StandardAuthScheme.SPNEGO), "Negotiate has to be supported");
+        assertNotNull(authSchemes.lookup(StandardAuthScheme.KERBEROS), "Kerberos has to be supported");
+        assertEquals(List.of(StandardAuthScheme.SPNEGO, StandardAuthScheme.KERBEROS),
+                new ArrayList<>(request.getConfig().getTargetPreferredAuthSchemes()),
+                "HttpClient 5 only prefers Bearer, Digest and Basic by default");
+        assertNotNull(context.getCredentialsProvider().getCredentials(
+                        new AuthScope(null, "kerberos.example.invalid", 80, null, StandardAuthScheme.SPNEGO), context),
+                "the Negotiate scheme needs credentials to authenticate with");
+        assertFalse(request.containsHeader(HttpHeaders.AUTHORIZATION),
+                "the credentials of a Kerberos authorization are only used to log in to the KDC");
+    }
+
+    @Test
+    void keepsDefaultAuthSchemesWithoutKerberosAuthorization() throws Exception {
+        AuthManager authManager = new AuthManager();
+        authManager.set(-1, "http://basic.example.invalid/", "user", "pass", "", "", AuthManager.Mechanism.BASIC);
+        HTTPSamplerBase sampler = newSampler();
+        sampler.setAuthManager(authManager);
+        HTTPHC5Impl implementation = new HTTPHC5Impl(sampler);
+        URL url = new URL("http://basic.example.invalid/protected");
+        HttpUriRequestBase request = new HttpUriRequestBase(HTTPConstants.GET, url.toURI());
+
+        HttpClientContext context =
+                implementation.createHttpClientContext(url, implementation.createHttpClientKey(url), request);
+
+        assertNull(context.getAuthSchemeRegistry(), "the client should use its default auth schemes");
+        assertNull(request.getConfig(), "the request configuration should be left alone");
     }
 
     @Test
