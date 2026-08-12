@@ -81,10 +81,14 @@ Summary
     <li><issue>6250</issue>Avoid adding "; charset=" automatically to <code>multipart/form-data</code> requests to align behavior with modern HTTP clients.</li>
     <li><issue>6080</issue>Preserve the original HTTP method when following 307 and 308 redirects according to the HTTP specification. Contributed by LeeJiWon (github.com/dlwldnjs1009)</li>
     <li><issue>6267</issue><pr>6268</pr>Add a space between key and value after <code>:</code> in View Results Tree &gt; Sampler result tab for better readability.</li>
-    <li>Multiplex concurrent HTTP/2 requests of the HttpClient5 sampler implementation over a single connection, and make the HTTP/2 protocol settings (HPACK header table size and compression, maximum concurrent streams, flow control window, maximum frame size, server push and h2c prior knowledge) configurable with the new <code>httpclient5.h2.*</code> properties.</li>
-    <li>Multiplex concurrent HTTP/2 requests of the Java sampler implementation over a single connection, and make the HTTP/2 protocol settings (HPACK header table size, maximum concurrent streams, flow control windows, maximum frame size, connection keep alive and server push) configurable with the new <code>http.java.h2.*</code> properties.</li>
-    <li>Add the default <code>User-Agent</code> header of the HttpClient5 sampler implementation to the request itself, so it shows up in the sample result and in the sent bytes, and allow suppressing it with the new <code>httpclient5.default_user_agent_disabled</code> property, like <code>httpclient4.default_user_agent_disabled</code> does for HttpClient4.</li>
-    <li>Add the default <code>User-Agent</code> header of the Java sampler implementation (<code>Java/A.B.C</code> for HTTP/1.1 and <code>Java-http-client/A.B.C</code> for HTTP/2) to the request itself, so the header the JDK sends anyway shows up in the sample result and in the sent bytes.</li>
+  </ul>
+
+  <p>HTTP/2 support for the HttpClient5 and Java sampler implementations:</p>
+  <ul>
+    <li><pr>6742</pr>Multiplex concurrent HTTP/2 requests of the HttpClient5 sampler implementation over a single connection, and make the HTTP/2 protocol settings (HPACK header table size and compression, maximum concurrent streams, flow control window, maximum frame size, server push and h2c prior knowledge) configurable with the new <code>httpclient5.h2.*</code> properties. Pooled connections are re-validated after the period of inactivity configured with the new <code>httpclient5.validate_after_inactivity</code> property, so a connection the server closed in between two samples is replaced instead of failing the next sample.</li>
+    <li><pr>6742</pr>Multiplex concurrent HTTP/2 requests of the Java sampler implementation over a single connection, and make the HTTP/2 protocol settings (HPACK header table size, maximum concurrent streams, flow control windows, maximum frame size, connection keep alive and server push) configurable with the new <code>http.java.h2.*</code> properties.</li>
+    <li><pr>6742</pr>Add the default <code>User-Agent</code> header of the HttpClient5 sampler implementation to the request itself, so it shows up in the sample result and in the sent bytes, and allow suppressing it with the new <code>httpclient5.default_user_agent_disabled</code> property, like <code>httpclient4.default_user_agent_disabled</code> does for HttpClient4.</li>
+    <li><pr>6742</pr>Add the default <code>User-Agent</code> header of the Java sampler implementation (<code>Java/A.B.C</code> for HTTP/1.1 and <code>Java-http-client/A.B.C</code> for HTTP/2) to the request itself, so the header the JDK sends anyway shows up in the sample result and in the sent bytes.</li>
   </ul>
 
   <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -102,7 +106,7 @@ Summary
     <li>Update json-path to 2.10.0 for JSON query expressions.</li>
     <li>Update Neo4j Java driver to 6.x for Bolt-based database tests.</li>
     <li>Update Rhino JavaScript engine to 1.8.0 for JSR-223 JavaScript execution.</li>
-    <li>Update Apache HttpClient 5 to 5.6.4 and Apache HttpCore 5 to 5.4.3, which corrects the application of SSL parameters in the async TLS upgrade method used by the HttpClient5 sampler implementation for HTTP/2.</li>
+    <li><pr>6742</pr>Update Apache HttpClient 5 to 5.6.4 and Apache HttpCore 5 to 5.4.3, which corrects the application of SSL parameters in the async TLS upgrade method used by the HttpClient5 sampler implementation for HTTP/2.</li>
   </ul>
 
   <h3>UI</h3>
@@ -122,10 +126,6 @@ Summary
     <li><bug>6456</bug>Handle malformed percent-encoded URLs gracefully when recording HTTP traffic, logging a warning instead of failing the recording.</li>
   </ul>
 
-  <h3>HTTP Samplers and Test Script Recorder</h3>
-  <ul>
-    <li>Re-validate pooled connections of the HttpClient5 sampler implementation after they have been idle, so a connection the server closed in between two samples is replaced instead of failing the next sample with <code>Could not execute HTTP/2 request</code>. The period of inactivity can be configured with the new <code>httpclient5.validate_after_inactivity</code> property.</li>
-  </ul>
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>
@@ -137,6 +137,7 @@ Summary
   <li>Gabriele Coletta (github.com/gdmg92)</li>
   <li>Patrick Uiterwijk (patrick at puiterwijk.org)</li>
   <li>Piotr P. Karwasz (github.com/piotrgithub)</li>
+  <li>Andreas Lind (github.com/andreaslind01)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>
