@@ -42,4 +42,20 @@ public class TestHTTPSamplerFactory {
     void unknownImplementationIsRejected() {
         assertThrows(IllegalArgumentException.class, () -> HTTPSamplerFactory.newInstance("HttpClient6"));
     }
+
+    @Test
+    void httpVersionsMatchTheCapabilitiesOfTheImplementation() {
+        assertEquals(Arrays.asList("", "HTTP/1.1"),
+                Arrays.asList(HTTPSamplerFactory.getHttpVersions("HttpClient4")));
+        assertEquals(Arrays.asList("", "HTTP/1.1", "HTTP/2"),
+                Arrays.asList(HTTPSamplerFactory.getHttpVersions("Java")));
+        assertEquals(Arrays.asList("", "HTTP/1.1", "HTTP/2", "HTTP/2 Strict"),
+                Arrays.asList(HTTPSamplerFactory.getHttpVersions("HttpClient5")));
+    }
+
+    @Test
+    void httpVersionsOfBlankImplementationAreTheOnesOfTheDefaultImplementation() {
+        assertEquals(Arrays.asList(HTTPSamplerFactory.getHttpVersions(HTTPSamplerFactory.DEFAULT_CLASSNAME)),
+                Arrays.asList(HTTPSamplerFactory.getHttpVersions("")));
+    }
 }

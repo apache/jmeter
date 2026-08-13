@@ -105,6 +105,18 @@ class TestHTTPHC5Features {
     }
 
     @Test
+    void requiresHttp2ForStrictHttp2RegardlessOfScheme() {
+        assertEquals(HttpVersionPolicy.FORCE_HTTP_2,
+                HTTPHC5Impl.getHttpVersionPolicy("HTTP/2 Strict", "HTTP/1.1"));
+        assertEquals(HttpVersionPolicy.FORCE_HTTP_2,
+                HTTPHC5Impl.getHttpVersionPolicy("HTTP/2 Strict", "HTTP/1.1", "https"));
+        assertEquals(HttpVersionPolicy.FORCE_HTTP_2,
+                HTTPHC5Impl.getHttpVersionPolicy("HTTP/2 Strict", "HTTP/1.1", "http"));
+        assertEquals(HttpVersionPolicy.FORCE_HTTP_2,
+                HTTPHC5Impl.getHttpVersionPolicy("", "HTTP/2 Strict", "https"));
+    }
+
+    @Test
     void multiplexesConcurrentRequestsOverASingleHttp2Connection() throws Exception {
         WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
                 .dynamicHttpsPort()

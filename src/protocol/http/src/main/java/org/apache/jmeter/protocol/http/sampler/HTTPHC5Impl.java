@@ -1166,14 +1166,18 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     static HttpVersionPolicy getHttpVersionPolicy(String samplerHttpVersion, String defaultHttpVersion) {
         String httpVersion = StringUtilities.isBlank(samplerHttpVersion) ? defaultHttpVersion : samplerHttpVersion;
-        return "HTTP/2".equals(httpVersion) || "2".equals(httpVersion)
+        if (HTTPConstants.HTTP_VERSION_2_STRICT.equalsIgnoreCase(httpVersion)) {
+            return HttpVersionPolicy.FORCE_HTTP_2;
+        }
+        return HTTPConstants.HTTP_VERSION_2.equals(httpVersion) || "2".equals(httpVersion)
                 ? HttpVersionPolicy.NEGOTIATE : HttpVersionPolicy.FORCE_HTTP_1;
     }
 
     /**
      * Determines the version policy for a request to the given scheme. Plain HTTP does not support
      * ALPN, so HTTP/2 can only be used over {@code http://} when the client assumes that the server
-     * speaks HTTP/2 (h2c with prior knowledge).
+     * speaks HTTP/2 (h2c with prior knowledge). {@code HTTP/2 Strict} keeps its policy for every
+     * scheme, as it requires HTTP/2 either way.
      */
     static HttpVersionPolicy getHttpVersionPolicy(String samplerHttpVersion, String defaultHttpVersion, String scheme) {
         HttpVersionPolicy policy = getHttpVersionPolicy(samplerHttpVersion, defaultHttpVersion);

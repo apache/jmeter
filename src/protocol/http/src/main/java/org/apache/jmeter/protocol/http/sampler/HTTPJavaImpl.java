@@ -299,7 +299,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     static boolean isHttp2(String samplerHttpVersion, String defaultHttpVersion) {
         String httpVersion = StringUtilities.isBlank(samplerHttpVersion) ? defaultHttpVersion : samplerHttpVersion;
-        return "HTTP/2".equalsIgnoreCase(httpVersion) || "2".equalsIgnoreCase(httpVersion); // $NON-NLS-1$ $NON-NLS-2$
+        // java.net.http.HttpClient always negotiates, so a strict HTTP/2 request is negotiated as well
+        return HTTPConstants.HTTP_VERSION_2.equalsIgnoreCase(httpVersion) || "2".equalsIgnoreCase(httpVersion)
+                || HTTPConstants.HTTP_VERSION_2_STRICT.equalsIgnoreCase(httpVersion); // $NON-NLS-1$
     }
 
     private boolean isHttp2() {

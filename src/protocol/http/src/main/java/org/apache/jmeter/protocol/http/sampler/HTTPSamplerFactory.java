@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.StringUtilities;
 
@@ -86,6 +87,30 @@ public final class HTTPSamplerFactory {
 
     public static String[] getImplementations(){
         return new String[]{IMPL_HTTP_CLIENT4, IMPL_HTTP_CLIENT5, IMPL_JAVA};
+    }
+
+    /**
+     * Returns the HTTP versions the given implementation can actually use, starting with the empty
+     * value which leaves the choice to the {@code httpclient.version} property. Implementations
+     * which ignore the HTTP version of the sampler do not offer HTTP/2 at all, so a combination
+     * that would be silently dropped cannot be selected in the first place.
+     *
+     * @param implementation implementation name, an empty value refers to the default implementation
+     * @return the selectable values of the {@code HTTPSampler.httpVersion} property
+     */
+    public static String[] getHttpVersions(String implementation) {
+        String impl = StringUtilities.isBlank(implementation) ? DEFAULT_CLASSNAME : implementation;
+        if (IMPL_HTTP_CLIENT5.equals(impl)) {
+            // HttpClient 5 is the only implementation which can require HTTP/2 for the connection
+            return new String[]{"", HTTPConstants.HTTP_VERSION_1_1, HTTPConstants.HTTP_VERSION_2,
+                    HTTPConstants.HTTP_VERSION_2_STRICT};
+        }
+        if (IMPL_JAVA.equals(impl) || HTTP_SAMPLER_JAVA.equals(impl)) {
+            // java.net.http.HttpClient always negotiates, it has no API to insist on HTTP/2
+            return new String[]{"", HTTPConstants.HTTP_VERSION_1_1, HTTPConstants.HTTP_VERSION_2};
+        }
+        // HttpClient4 (and its aliases) never read the HTTP version of the sampler
+        return new String[]{"", HTTPConstants.HTTP_VERSION_1_1};
     }
 
     public static HTTPAbstractImpl getImplementation(String impl, HTTPSamplerBase base){

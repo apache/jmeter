@@ -37,6 +37,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
+import org.apache.jmeter.protocol.http.gui.HttpVersionComboBox;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
@@ -81,7 +82,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     private JTextField proxyUser;
     private JPasswordField proxyPass;
     private final JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
-    private final JComboBox<String> httpVersion = new JComboBox<>(new String[] {"HTTP/1.1", "HTTP/2", ""});
+    private final HttpVersionComboBox httpVersion = new HttpVersionComboBox();
     private JTextField connectTimeOut;
     private JTextField responseTimeOut;
 
@@ -136,6 +137,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         if (!isAJP) {
             sourceIpType.setSelectedIndex(samplerBase.getIpSourceType());
             httpImplementation.setSelectedItem(samplerBase.getString(httpSchema.getImplementation()));
+            httpVersion.setImplementation(samplerBase.getString(httpSchema.getImplementation()));
             httpVersion.setSelectedItem(samplerBase.getHttpVersion());
         }
     }
@@ -355,6 +357,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         httpImplementation.addItem("");// $NON-NLS-1$
         implPanel.add(httpImplementation);
         implPanel.add(new JLabel(JMeterUtils.getResString("http_version"))); // $NON-NLS-1$
+        httpVersion.bindToImplementation(httpImplementation);
         implPanel.add(httpVersion);
         return implPanel;
     }

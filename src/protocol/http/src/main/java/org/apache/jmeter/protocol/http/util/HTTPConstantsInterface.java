@@ -33,6 +33,18 @@ public interface HTTPConstantsInterface { // CHECKSTYLE IGNORE InterfaceIsType
     String DEFAULT_HTTP_PORT_STRING = "80"; // $NON-NLS-1$
     String PROTOCOL_HTTP = "http"; // $NON-NLS-1$
     String PROTOCOL_HTTPS = "https"; // $NON-NLS-1$
+    /** Value of the sampler {@code HTTPSampler.httpVersion} property which forces HTTP/1.1. */
+    String HTTP_VERSION_1_1 = "HTTP/1.1"; // $NON-NLS-1$
+    /**
+     * Value of the sampler {@code HTTPSampler.httpVersion} property which uses HTTP/2 if the server
+     * agrees to it, falling back to HTTP/1.1 otherwise.
+     */
+    String HTTP_VERSION_2 = "HTTP/2"; // $NON-NLS-1$
+    /**
+     * Value of the sampler {@code HTTPSampler.httpVersion} property which requires HTTP/2, so a
+     * server that does not support it fails the sample instead of being used with HTTP/1.1.
+     */
+    String HTTP_VERSION_2_STRICT = "HTTP/2 Strict"; // $NON-NLS-1$
     String HEAD = "HEAD"; // $NON-NLS-1$
     String POST = "POST"; // $NON-NLS-1$
     String PUT = "PUT"; // $NON-NLS-1$

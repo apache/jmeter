@@ -443,7 +443,8 @@ JMETER-SERVER</source>
 </property>
 <property name="httpclient.version">
     Set the default HTTP version for HttpClient5 and Java samplers with an empty HTTP Version value.<br/>
-    Valid values are <code>HTTP/1.1</code> and <code>HTTP/2</code>.<br/>
+    Valid values are <code>HTTP/1.1</code>, <code>HTTP/2</code> and, for HttpClient5 only,
+    <code>HTTP/2 Strict</code>.<br/>
     Defaults to: <code>HTTP/1.1</code>
 </property>
 <property name="httpclient5.validate_after_inactivity">
