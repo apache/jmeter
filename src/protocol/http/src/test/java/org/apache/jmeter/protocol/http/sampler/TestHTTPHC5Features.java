@@ -406,6 +406,76 @@ class TestHTTPHC5Features {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // The GSS based auth schemes of HttpClient 5 have no replacement yet
+    void negotiatesWithAProxyThatHasNoCredentialsConfigured() throws Exception {
+        HTTPSamplerBase sampler = newSampler();
+        sampler.setProxyHost("proxy.example.invalid");
+        sampler.setProxyPortInt("8080");
+        HTTPHC5Impl implementation = new HTTPHC5Impl(sampler);
+        URL url = new URL("http://target.example.invalid/resource");
+        HttpUriRequestBase request = new HttpUriRequestBase(HTTPConstants.GET, url.toURI());
+
+        HttpClientContext context =
+                implementation.createHttpClientContext(url, implementation.createHttpClientKey(url), request);
+
+        Lookup<AuthSchemeFactory> authSchemes = context.getAuthSchemeRegistry();
+        assertNotNull(authSchemes, "the Kerberos auth schemes have to be registered for the request");
+        assertNotNull(authSchemes.lookup(StandardAuthScheme.SPNEGO), "Negotiate has to be supported");
+        assertEquals(List.of(StandardAuthScheme.SPNEGO, StandardAuthScheme.KERBEROS, StandardAuthScheme.BEARER,
+                        StandardAuthScheme.DIGEST, StandardAuthScheme.BASIC),
+                new ArrayList<>(request.getConfig().getProxyPreferredAuthSchemes()),
+                "a proxy challenging with Negotiate has to be answered with a Kerberos token");
+        assertNull(request.getConfig().getTargetPreferredAuthSchemes(),
+                "the target is not covered by a Kerberos authorization");
+        assertNotNull(context.getCredentialsProvider().getCredentials(
+                        new AuthScope(null, "proxy.example.invalid", 8080, null, StandardAuthScheme.SPNEGO), context),
+                "the Negotiate scheme needs credentials to authenticate with");
+    }
+
+    @Test
+    @SuppressWarnings("deprecation") // The GSS based auth schemes of HttpClient 5 have no replacement yet
+    void negotiatesWithAProxyCoveredByAKerberosAuthorization() throws Exception {
+        AuthManager authManager = new AuthManager();
+        authManager.set(-1, "http://proxy.example.invalid:8080", "user", "pass", "", "",
+                AuthManager.Mechanism.KERBEROS);
+        HTTPSamplerBase sampler = newSampler();
+        sampler.setAuthManager(authManager);
+        sampler.setProxyHost("proxy.example.invalid");
+        sampler.setProxyPortInt("8080");
+        sampler.setProxyUser("user");
+        sampler.setProxyPass("pass");
+        HTTPHC5Impl implementation = new HTTPHC5Impl(sampler);
+        URL url = new URL("http://target.example.invalid/resource");
+        HttpUriRequestBase request = new HttpUriRequestBase(HTTPConstants.GET, url.toURI());
+
+        HttpClientContext context =
+                implementation.createHttpClientContext(url, implementation.createHttpClientKey(url), request);
+
+        assertNotNull(context.getAuthSchemeRegistry(), "the Kerberos auth schemes have to be registered");
+        assertEquals(StandardAuthScheme.SPNEGO,
+                new ArrayList<>(request.getConfig().getProxyPreferredAuthSchemes()).get(0),
+                "a Kerberos authorization for the proxy has to be preferred over the password based schemes");
+    }
+
+    @Test
+    void keepsDefaultAuthSchemesForAProxyWithCredentials() throws Exception {
+        HTTPSamplerBase sampler = newSampler();
+        sampler.setProxyHost("proxy.example.invalid");
+        sampler.setProxyPortInt("8080");
+        sampler.setProxyUser("user");
+        sampler.setProxyPass("pass");
+        HTTPHC5Impl implementation = new HTTPHC5Impl(sampler);
+        URL url = new URL("http://target.example.invalid/resource");
+        HttpUriRequestBase request = new HttpUriRequestBase(HTTPConstants.GET, url.toURI());
+
+        HttpClientContext context =
+                implementation.createHttpClientContext(url, implementation.createHttpClientKey(url), request);
+
+        assertNull(context.getAuthSchemeRegistry(), "the client should use its default auth schemes");
+        assertNull(request.getConfig(), "the request configuration should be left alone");
+    }
+
+    @Test
     void authenticatesWithConfiguredProxyCredentials() throws Exception {
         WireMockServer server = createServer();
         server.start();

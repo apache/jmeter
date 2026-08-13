@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -276,6 +277,16 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final List<String> KERBEROS_PREFERRED_AUTH_SCHEMES =
             List.of(StandardAuthScheme.SPNEGO, StandardAuthScheme.KERBEROS);
 
+    /**
+     * Auth schemes offered to a proxy that can be authenticated with Kerberos. Unlike the target
+     * schemes these keep the password based schemes as a fallback, so that a proxy which offers
+     * {@code Negotiate} next to {@code Basic} or {@code Digest} can still be used.
+     */
+    @SuppressWarnings("deprecation") // The GSS based auth schemes of HttpClient 5 have no replacement yet
+    private static final List<String> KERBEROS_PROXY_PREFERRED_AUTH_SCHEMES =
+            List.of(StandardAuthScheme.SPNEGO, StandardAuthScheme.KERBEROS, StandardAuthScheme.BEARER,
+                    StandardAuthScheme.DIGEST, StandardAuthScheme.BASIC);
+
     private static final Oid SPNEGO_OID = createOid("1.3.6.1.5.5.2");
 
     private static final Oid KERBEROS_OID = createOid("1.2.840.113554.1.2.2");
@@ -464,13 +475,17 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Executes the request under the JAAS {@link Subject} of the {@link AuthManager}, if the URL is
-     * covered by a Kerberos authorization, so that the auth scheme can use its credentials.
+     * Executes the request under the JAAS {@link Subject} of the {@link AuthManager}, if the URL or
+     * the proxy is covered by a Kerberos authorization, so that the auth scheme can use its
+     * credentials.
      */
     private ClassicHttpResponse executeRequest(URL url, HttpClientKey clientKey,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HttpClientContext context)
             throws IOException {
         Subject subject = getSubjectForUrl(url);
+        if (subject == null) {
+            subject = getSubjectForProxy(clientKey);
+        }
         if (subject == null) {
             return doExecuteRequest(clientKey, request, context);
         }
@@ -656,8 +671,10 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         Authorization authorization = getAuthorizationForUrl(url);
         configureTargetCredentials(url, request, credentialsProvider, authorization);
         configureProxyCredentials(key, credentialsProvider);
-        if (isKerberos(authorization)) {
-            configureKerberos(url, request, context, credentialsProvider);
+        boolean kerberosTarget = isKerberos(authorization);
+        boolean kerberosProxy = isKerberosProxy(key);
+        if (kerberosTarget || kerberosProxy) {
+            configureKerberos(url, key, request, context, credentialsProvider, kerberosTarget, kerberosProxy);
         } else {
             context.setCredentialsProvider(credentialsProvider);
         }
@@ -666,7 +683,34 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private Authorization getAuthorizationForUrl(URL url) {
         AuthManager authManager = getAuthManager();
-        return authManager == null ? null : authManager.getAuthForURL(url);
+        return authManager == null || url == null ? null : authManager.getAuthForURL(url);
+    }
+
+    /**
+     * A proxy is authenticated with Kerberos, if the {@link AuthManager} holds a Kerberos
+     * authorization for it, or if it has no credentials configured at all. Enterprise proxies
+     * commonly challenge with {@code Proxy-Authenticate: Negotiate}, which can only be answered
+     * with the Kerberos ticket of the JMeter user, as JMeter has no place to configure proxy
+     * credentials for a negotiation based scheme.
+     */
+    private boolean isKerberosProxy(HttpClientKey key) {
+        if (!key.hasProxy) {
+            return false;
+        }
+        return StringUtilities.isEmpty(key.proxyUser) || isKerberos(getAuthorizationForUrl(getProxyUrl(key)));
+    }
+
+    private static URL getProxyUrl(HttpClientKey key) {
+        if (!key.hasProxy) {
+            return null;
+        }
+        String scheme = StringUtilities.isEmpty(key.proxyScheme) ? HTTPConstants.PROTOCOL_HTTP : key.proxyScheme;
+        try {
+            return new URL(scheme, key.proxyHost, key.proxyPort, "");
+        } catch (MalformedURLException e) {
+            log.debug("Could not build a URL for proxy {}://{}:{}", scheme, key.proxyHost, key.proxyPort, e);
+            return null;
+        }
     }
 
     private static boolean isKerberos(Authorization authorization) {
@@ -691,12 +735,15 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     /**
      * Sets up the {@code Negotiate} and {@code Kerberos} auth schemes for a single request, as
      * HttpClient 5 neither registers them nor prefers them by default. The credentials are taken
-     * from the JAAS {@link Subject} the {@link AuthManager} logged the user in with.
+     * from the JAAS {@link Subject} the {@link AuthManager} logged the user in with. The schemes
+     * are set up for the target, for the proxy, or for both, depending on which of them is
+     * covered by a Kerberos authorization.
      */
     @SuppressWarnings("deprecation") // The GSS based auth schemes of HttpClient 5 have no replacement yet
-    private void configureKerberos(URL url,
+    private void configureKerberos(URL url, HttpClientKey key,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
-            HttpClientContext context, CredentialsProvider credentialsProvider) {
+            HttpClientContext context, CredentialsProvider credentialsProvider,
+            boolean kerberosTarget, boolean kerberosProxy) {
         KerberosConfig kerberosConfig = KerberosConfig.custom()
                 .setStripPort(isStripPort(url))
                 .setUseCanonicalHostname(AuthManager.USE_CANONICAL_HOST_NAME)
@@ -711,12 +758,24 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                 .register(StandardAuthScheme.SPNEGO, new SPNegoSchemeFactory(kerberosConfig, dnsResolver))
                 .register(StandardAuthScheme.KERBEROS, new KerberosSchemeFactory(kerberosConfig, dnsResolver))
                 .build());
-        context.setCredentialsProvider(
-                new KerberosCredentialsProvider(getSubjectForUrl(url), credentialsProvider));
+        context.setCredentialsProvider(new KerberosCredentialsProvider(
+                kerberosTarget ? getSubjectForUrl(url) : null,
+                kerberosProxy ? getProxyHost(key) : null,
+                kerberosProxy ? getSubjectForProxy(key) : null,
+                credentialsProvider));
         RequestConfig requestConfig = request.getConfig() == null ? RequestConfig.DEFAULT : request.getConfig();
-        request.setConfig(RequestConfig.copy(requestConfig)
-                .setTargetPreferredAuthSchemes(KERBEROS_PREFERRED_AUTH_SCHEMES)
-                .build());
+        RequestConfig.Builder builder = RequestConfig.copy(requestConfig);
+        if (kerberosTarget) {
+            builder.setTargetPreferredAuthSchemes(KERBEROS_PREFERRED_AUTH_SCHEMES);
+        }
+        if (kerberosProxy) {
+            builder.setProxyPreferredAuthSchemes(KERBEROS_PROXY_PREFERRED_AUTH_SCHEMES);
+        }
+        request.setConfig(builder.build());
+    }
+
+    private static HttpHost getProxyHost(HttpClientKey key) {
+        return key.hasProxy ? new HttpHost(key.proxyScheme, key.proxyHost, key.proxyPort) : null;
     }
 
     /**
@@ -733,7 +792,11 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private Subject getSubjectForUrl(URL url) {
         AuthManager authManager = getAuthManager();
-        return authManager == null ? null : authManager.getSubjectForUrl(url);
+        return authManager == null || url == null ? null : authManager.getSubjectForUrl(url);
+    }
+
+    private Subject getSubjectForProxy(HttpClientKey key) {
+        return getSubjectForUrl(getProxyUrl(key));
     }
 
     private static Oid createOid(String oid) {
@@ -753,12 +816,17 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
      */
     private static final class KerberosCredentialsProvider implements CredentialsProvider {
 
-        private final Subject subject;
+        private final Subject targetSubject;
+        private final HttpHost proxy;
+        private final Subject proxySubject;
         private final CredentialsProvider delegate;
         private final Map<String, Credentials> credentialsCache = new HashMap<>();
 
-        private KerberosCredentialsProvider(Subject subject, CredentialsProvider delegate) {
-            this.subject = subject;
+        private KerberosCredentialsProvider(Subject targetSubject, HttpHost proxy, Subject proxySubject,
+                CredentialsProvider delegate) {
+            this.targetSubject = targetSubject;
+            this.proxy = proxy;
+            this.proxySubject = proxySubject;
             this.delegate = delegate;
         }
 
@@ -767,20 +835,28 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         public Credentials getCredentials(AuthScope authScope, HttpContext context) {
             String schemeName = authScope == null ? null : authScope.getSchemeName();
             if (StandardAuthScheme.SPNEGO.equalsIgnoreCase(schemeName)) {
-                return getKerberosCredentials(schemeName, SPNEGO_OID);
+                return getKerberosCredentials(schemeName, SPNEGO_OID, authScope);
             }
             if (StandardAuthScheme.KERBEROS.equalsIgnoreCase(schemeName)) {
-                return getKerberosCredentials(schemeName, KERBEROS_OID);
+                return getKerberosCredentials(schemeName, KERBEROS_OID, authScope);
             }
             return delegate.getCredentials(authScope, context);
         }
 
-        private Credentials getKerberosCredentials(String schemeName, Oid oid) {
-            return credentialsCache.computeIfAbsent(schemeName, name -> createKerberosCredentials(oid));
+        private Credentials getKerberosCredentials(String schemeName, Oid oid, AuthScope authScope) {
+            boolean forProxy = isProxy(authScope);
+            Subject subject = forProxy ? proxySubject : targetSubject;
+            return credentialsCache.computeIfAbsent(schemeName + (forProxy ? "@proxy" : "@target"),
+                    name -> createKerberosCredentials(subject, oid));
+        }
+
+        private boolean isProxy(AuthScope authScope) {
+            return proxy != null && proxy.getHostName().equalsIgnoreCase(authScope.getHost())
+                    && (authScope.getPort() <= 0 || authScope.getPort() == proxy.getPort());
         }
 
         @SuppressWarnings("deprecation") // KerberosCredentials is deprecated without a replacement
-        private Credentials createKerberosCredentials(Oid oid) {
+        private static Credentials createKerberosCredentials(Subject subject, Oid oid) {
             if (subject == null || oid == null) {
                 return USE_JAAS_CREDENTIALS;
             }
@@ -1115,7 +1191,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         return new DefaultRoutePlanner(null) {
             @Override
             protected HttpHost determineProxy(HttpHost target, org.apache.hc.core5.http.protocol.HttpContext context) {
-                return key.hasProxy ? new HttpHost(key.proxyScheme, key.proxyHost, key.proxyPort) : null;
+                return getProxyHost(key);
             }
 
             @Override
