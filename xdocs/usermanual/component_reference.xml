@@ -214,7 +214,7 @@ https.default.protocol=SSLv3
         <a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
         for additional configuration steps.</p>
 </description>
-<figure width="951" height="548" image="http-request-advanced-tab.png">HTTP Request Advanced config fields</figure>
+<figure width="950" height="391" image="http-request-advanced-tab.png">HTTP Request Advanced config fields</figure>
 <figure width="950" height="618" image="graphql-http-request.png">Screenshot of Control-Panel of GraphQL HTTP Request</figure>
 <figure width="950" height="618" image="graphql-http-request-vars.png">Variables field for GraphQL HTTP Request</figure>
 
@@ -3913,7 +3913,7 @@ this field value from the HTTP Request Defaults element.</p>
 All port values are treated equally; a sampler that does not specify a port will use the HTTP Request Defaults port, if one is provided.
 </note>
 </description>
-<figure width="881" height="256" image="http-config/http-request-defaults-advanced-tab.png">HTTP Request Advanced config fields</figure>
+<figure width="950" height="391" image="http-config/http-request-defaults-advanced-tab.png">HTTP Request Advanced config fields</figure>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
