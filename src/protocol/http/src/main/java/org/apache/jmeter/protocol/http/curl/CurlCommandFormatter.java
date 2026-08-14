@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.PostWriter;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -52,6 +52,9 @@ public final class CurlCommandFormatter {
     private static final String ACCEPT_ENCODING = "Accept-Encoding"; //$NON-NLS-1$
 
     private static final String BOUNDARY = "boundary="; //$NON-NLS-1$
+
+    /** {@code HTTPArgument} defaults a part's content type to this; see HTTPArgumentSchema. */
+    private static final String DEFAULT_FIELD_CONTENT_TYPE = "text/plain"; //$NON-NLS-1$
 
     /**
      * Headers that must not be reproduced in the curl command: curl generates
@@ -152,25 +155,30 @@ public final class CurlCommandFormatter {
             sb.append(NEWLINE).append(quote(url.toString()));
         }
 
+        boolean hasCookieHeader = false;
         for (String[] header : headers) {
             if (emitsForm && HTTPConstants.HEADER_CONTENT_TYPE.equalsIgnoreCase(header[0])) {
                 continue;
             }
-            // --compressed (below) makes curl send its own Accept-Encoding, so the explicit one is redundant.
-            if (acceptsEncoding && ACCEPT_ENCODING.equalsIgnoreCase(header[0])) {
-                continue;
+            if (HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(header[0])) {
+                hasCookieHeader = true;
             }
             sb.append(NEWLINE).append("-H ").append(quote(header[0] + ": " + header[1])); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        // HttpClient disables automatic decompression, so Accept-Encoding is only
-        // present when explicitly set; --compressed makes curl decode the response.
+        // HttpClient disables automatic decompression, so Accept-Encoding is only present
+        // when explicitly set. --compressed makes curl decode the response; it is kept
+        // alongside the explicit header rather than replacing it, because curl otherwise
+        // negotiates its own build-dependent encoding list the test plan never asked for.
         if (acceptsEncoding) {
             sb.append(NEWLINE).append("--compressed"); //$NON-NLS-1$
         }
 
+        // Cookies normally arrive through getCookies(), but AjpSampler can also leave a
+        // Cookie header in the list; curl lets the header win and silently drops -b, so
+        // only add -b when no Cookie header was emitted.
         String cookies = sampleResult.getCookies();
-        if (StringUtilities.isNotEmpty(cookies)) {
+        if (!hasCookieHeader && StringUtilities.isNotEmpty(cookies)) {
             sb.append(NEWLINE).append("-b ").append(quote(cookies)); //$NON-NLS-1$
         }
 
@@ -201,7 +209,10 @@ public final class CurlCommandFormatter {
      */
     private static List<String[]> parseMultipartForm(String contentType, String body) {
         String boundary = extractBoundary(contentType);
-        if (StringUtilities.isBlank(boundary)) {
+        // A quoted boundary is unquoted above; but if the header boundary and the body
+        // disagree, MultipartUrlConfig would treat the whole body as one field and emit
+        // garbage, so require the delimiter to be present and fall back to the note otherwise.
+        if (StringUtilities.isBlank(boundary) || !body.contains("--" + boundary)) { //$NON-NLS-1$
             return List.of();
         }
         MultipartUrlConfig multipart = new MultipartUrlConfig(boundary);
@@ -212,27 +223,56 @@ public final class CurlCommandFormatter {
         }
         List<String[]> parts = new ArrayList<>();
         for (JMeterProperty property : multipart.getArguments()) {
-            Argument argument = (Argument) property.getObjectValue();
-            // --form-string takes the value verbatim; -F would treat a leading
-            // '@' or '<' in the value as a file reference and misinterpret the field.
-            parts.add(new String[] { "--form-string", argument.getName() + "=" + argument.getValue() }); //$NON-NLS-1$ //$NON-NLS-2$
+            parts.add(formField((HTTPArgument) property.getObjectValue()));
         }
         for (HTTPFileArg file : multipart.getHTTPFileArgs().asArray()) {
-            StringBuilder spec = new StringBuilder();
-            spec.append(file.getParamName()).append("=@").append(file.getPath()); //$NON-NLS-1$
-            if (StringUtilities.isNotEmpty(file.getMimeType())) {
-                spec.append(";type=").append(file.getMimeType()); //$NON-NLS-1$
-            }
-            parts.add(new String[] { "-F", spec.toString() }); //$NON-NLS-1$
+            parts.add(fileField(file));
         }
         return parts;
     }
 
     /**
-     * @return the {@code boundary} value of a multipart content type, or
-     *         {@code null} if it is absent
+     * A multipart text field. {@code --form-string} keeps the value verbatim (curl would
+     * otherwise read a leading {@code @} or {@code <} as a file reference), but it cannot
+     * carry a per-part content type; {@code -F} can, so it is used when the value is safe
+     * for it (no {@code @}/{@code <} prefix and no {@code ;} that curl would read as an
+     * option separator).
      */
-    private static String extractBoundary(String contentType) {
+    private static String[] formField(HTTPArgument argument) {
+        String value = argument.getValue() == null ? "" : argument.getValue(); //$NON-NLS-1$
+        String type = argument.getContentType();
+        // HTTPArgument defaults content_type to text/plain, which is indistinguishable from
+        // a part that carried none; only a non-default type is worth reproducing.
+        boolean hasType = StringUtilities.isNotEmpty(type) && !DEFAULT_FIELD_CONTENT_TYPE.equalsIgnoreCase(type);
+        boolean safeForF = hasType
+                && !value.startsWith("@") && !value.startsWith("<") && value.indexOf(';') < 0; //$NON-NLS-1$ //$NON-NLS-2$
+        if (safeForF) {
+            return new String[] { "-F", argument.getName() + "=" + value + ";type=" + type }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        }
+        return new String[] { "--form-string", argument.getName() + "=" + value }; //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    /**
+     * A multipart file part. The file name is double-quoted inside the spec so that a name
+     * containing {@code ;} or {@code ,} is not parsed by curl as an option separator; the
+     * bytes are not kept by JMeter, so the name is a placeholder to edit to a real path.
+     */
+    private static String[] fileField(HTTPFileArg file) {
+        StringBuilder spec = new StringBuilder();
+        spec.append(file.getParamName()).append("=@\"").append(file.getPath()).append('"'); //$NON-NLS-1$
+        if (StringUtilities.isNotEmpty(file.getMimeType())) {
+            spec.append(";type=").append(file.getMimeType()); //$NON-NLS-1$
+        }
+        return new String[] { "-F", spec.toString() }; //$NON-NLS-1$
+    }
+
+    /**
+     * Extract the {@code boundary} value of a multipart content type, unquoted.
+     *
+     * @param contentType a {@code Content-Type} header value
+     * @return the boundary, or {@code null} if it is absent
+     */
+    public static String extractBoundary(String contentType) {
         int index = contentType.toLowerCase(Locale.ROOT).indexOf(BOUNDARY);
         if (index < 0) {
             return null;
@@ -242,7 +282,13 @@ public final class CurlCommandFormatter {
         if (semicolon >= 0) {
             boundary = boundary.substring(0, semicolon);
         }
-        return boundary.trim();
+        boundary = boundary.trim();
+        // RFC 2046 allows the boundary to be quoted; MultipartUrlConfig expects it unquoted.
+        if (boundary.length() >= 2 && boundary.charAt(0) == '"'
+                && boundary.charAt(boundary.length() - 1) == '"') {
+            boundary = boundary.substring(1, boundary.length() - 1);
+        }
+        return boundary;
     }
 
     private static boolean containsPlaceholder(String body) {

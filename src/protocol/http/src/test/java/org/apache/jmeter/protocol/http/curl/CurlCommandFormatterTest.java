@@ -135,8 +135,8 @@ class CurlCommandFormatterTest {
                 + "--xyz--\r\n");
 
         String curl = CurlCommandFormatter.format(res);
-        // The file part is rebuilt with the file name as an editable @placeholder.
-        assertTrue(curl.contains("-F 'upload=@report.pdf;type=application/pdf'"), curl);
+        // The file part is rebuilt with the file name as an editable, double-quoted @placeholder.
+        assertTrue(curl.contains("-F 'upload=@\"report.pdf\";type=application/pdf'"), curl);
         // Regular fields use --form-string so the value is never treated as a file.
         assertTrue(curl.contains("--form-string 'comment=hello'"), curl);
         // No raw dump of the placeholder, and curl sets its own multipart Content-Type.
@@ -203,8 +203,9 @@ class CurlCommandFormatterTest {
 
         String curl = CurlCommandFormatter.format(res);
         assertTrue(curl.contains("--compressed"), curl);
-        // --compressed makes curl send its own Accept-Encoding, so the explicit one is dropped.
-        assertFalse(curl.contains("-H 'Accept-Encoding"), curl);
+        // The explicit header is kept alongside --compressed so the request is unchanged
+        // (curl would otherwise negotiate its own build-dependent encoding list).
+        assertTrue(curl.contains("-H 'Accept-Encoding: gzip, deflate'"), curl);
     }
 
     @Test
@@ -253,5 +254,114 @@ class CurlCommandFormatterTest {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
         assertEquals(List.of("text/html", "application/json"), accept);
+    }
+
+    private static HTTPSampleResult multipart(String boundaryHeader, String body) throws MalformedURLException {
+        HTTPSampleResult res = result("POST", "http://example.com/upload");
+        res.setRequestHeaders("Content-Type: multipart/form-data; boundary=" + boundaryHeader);
+        res.setQueryString(body);
+        return res;
+    }
+
+    @Test
+    void testQuotedBoundaryIsUnquotedAndParsed() throws Exception {
+        // RFC 2046 allows a quoted boundary; it must still parse, not swallow the trailer.
+        HTTPSampleResult res = multipart("\"xyz\"",
+                "--xyz\r\nContent-Disposition: form-data; name=\"a\"\r\n\r\nb\r\n--xyz--\r\n");
+
+        String curl = CurlCommandFormatter.format(res);
+        assertTrue(curl.contains("--form-string 'a=b'"), curl);
+        assertFalse(curl.contains("--xyz--"), curl);
+    }
+
+    @Test
+    void testBoundaryDisagreeingWithBodyFallsBackToNote() throws Exception {
+        HTTPSampleResult res = multipart("nomatch",
+                "--other\r\nContent-Disposition: form-data; name=\"a\"\r\n\r\nb\r\n--other--\r\n");
+
+        String curl = CurlCommandFormatter.format(res);
+        assertFalse(curl.contains("--form-string"), curl);
+        assertFalse(curl.contains("-F "), curl);
+        assertTrue(curl.contains("\n# "), curl);
+    }
+
+    @Test
+    void testFileNameWithSemicolonOrCommaIsDoubleQuoted() throws Exception {
+        HTTPSampleResult res = multipart("xyz",
+                "--xyz\r\nContent-Disposition: form-data; name=\"up\"; filename=\"a;b,c.txt\"\r\n"
+                        + "Content-Type: text/plain\r\n\r\n<actual file content, not shown here>\r\n--xyz--\r\n");
+
+        assertTrue(CurlCommandFormatter.format(res).contains("-F 'up=@\"a;b,c.txt\";type=text/plain'"),
+                CurlCommandFormatter.format(res));
+    }
+
+    @Test
+    void testMultipartFieldContentTypeIsPreservedViaF() throws Exception {
+        HTTPSampleResult res = multipart("xyz",
+                "--xyz\r\nContent-Disposition: form-data; name=\"meta\"\r\n"
+                        + "Content-Type: application/json\r\n\r\n{\"a\":1}\r\n--xyz--\r\n");
+
+        assertTrue(CurlCommandFormatter.format(res).contains("-F 'meta={\"a\":1};type=application/json'"),
+                CurlCommandFormatter.format(res));
+    }
+
+    @Test
+    void testMultipartFieldWithTypeButUnsafeValueFallsBackToFormString() throws Exception {
+        // A content type is set, but the value would be read as a file by -F, so the
+        // verbatim --form-string wins and the (now unrepresentable) type is dropped.
+        HTTPSampleResult res = multipart("xyz",
+                "--xyz\r\nContent-Disposition: form-data; name=\"meta\"\r\n"
+                        + "Content-Type: application/json\r\n\r\n@ref\r\n--xyz--\r\n");
+
+        String curl = CurlCommandFormatter.format(res);
+        assertTrue(curl.contains("--form-string 'meta=@ref'"), curl);
+        assertFalse(curl.contains("-F 'meta="), curl);
+    }
+
+    @Test
+    void testCookieHeaderSuppressesDashB() throws Exception {
+        // AjpSampler can leave a Cookie header while getCookies() is also filled; curl lets
+        // the header win, so -b must not be emitted or its cookies would be silently dropped.
+        HTTPSampleResult res = result("GET", "http://example.com/");
+        res.setRequestHeaders("Cookie: a=1");
+        res.setCookies("b=2");
+
+        String curl = CurlCommandFormatter.format(res);
+        assertTrue(curl.contains("-H 'Cookie: a=1'"), curl);
+        assertFalse(curl.contains("-b "), curl);
+    }
+
+    @Test
+    void testRoundTripHead() throws Exception {
+        HTTPSampleResult res = result("HEAD", "http://example.com/");
+
+        BasicCurlParser.Request parsed = new BasicCurlParser().parse(CurlCommandFormatter.format(res));
+        assertEquals("HEAD", parsed.getMethod());
+        assertEquals("http://example.com/", parsed.getUrl());
+    }
+
+    @Test
+    void testRoundTripCompressed() throws Exception {
+        HTTPSampleResult res = result("GET", "http://example.com/");
+        res.setRequestHeaders("Accept-Encoding: gzip, deflate");
+
+        BasicCurlParser.Request parsed = new BasicCurlParser().parse(CurlCommandFormatter.format(res));
+        assertTrue(parsed.isCompressed());
+        assertTrue(parsed.getHeaders().stream().anyMatch(e -> "Accept-Encoding".equals(e.getKey())));
+    }
+
+    @Test
+    void testRoundTripMultipartFieldAndFile() throws Exception {
+        HTTPSampleResult res = multipart("xyz",
+                "--xyz\r\nContent-Disposition: form-data; name=\"comment\"\r\n\r\nhello\r\n"
+                        + "--xyz\r\nContent-Disposition: form-data; name=\"upload\"; filename=\"report.pdf\"\r\n"
+                        + "Content-Type: application/pdf\r\n\r\n<actual file content, not shown here>\r\n--xyz--\r\n");
+
+        BasicCurlParser.Request parsed = new BasicCurlParser().parse(CurlCommandFormatter.format(res));
+        assertEquals("POST", parsed.getMethod());
+        assertTrue(parsed.getFormStringData().stream()
+                .anyMatch(e -> "comment".equals(e.getKey()) && "hello".equals(e.getValue())),
+                parsed.getFormStringData().toString());
+        assertFalse(parsed.getFormData().isEmpty());
     }
 }
