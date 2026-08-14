@@ -300,8 +300,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     static boolean isHttp2(String samplerHttpVersion, String defaultHttpVersion) {
         String httpVersion = StringUtilities.isBlank(samplerHttpVersion) ? defaultHttpVersion : samplerHttpVersion;
         // java.net.http.HttpClient always negotiates, so a strict HTTP/2 request is negotiated as well
-        return HTTPConstants.HTTP_VERSION_2.equalsIgnoreCase(httpVersion) || "2".equalsIgnoreCase(httpVersion)
-                || HTTPConstants.HTTP_VERSION_2_STRICT.equalsIgnoreCase(httpVersion); // $NON-NLS-1$
+        return HTTPConstants.HTTP_VERSION_2.equalsIgnoreCase(httpVersion)
+                || HTTPConstants.HTTP_VERSION_2_STRICT.equalsIgnoreCase(httpVersion);
     }
 
     private boolean isHttp2() {
@@ -1157,7 +1157,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 cacheManager.saveDetails(response, res);
             }
 
-            res.setSentBytes(calculateSentBytes(url, method, "HTTP/2",
+            res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_2,
                     capturingConn != null ? capturingConn.getRequestProperties() : null,
                     securityHeaders, requestBodyBytes));
 
@@ -1169,7 +1169,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (res.getEndTime() == 0) {
                 res.sampleEnd();
             }
-            res.setSentBytes(calculateSentBytes(url, method, "HTTP/2",
+            res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_2,
                     capturingConn != null ? capturingConn.getRequestProperties() : null,
                     securityHeaders, requestBodyBytes));
             return errorResult(e, res);
@@ -1209,7 +1209,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     private static String getResponseHeaders(HttpResponse<?> response) {
         StringBuilder headerBuf = new StringBuilder();
-        String versionStr = (response.version() == HttpClient.Version.HTTP_2) ? "HTTP/2" : "HTTP/1.1"; // $NON-NLS-1$ $NON-NLS-2$
+        String versionStr = (response.version() == HttpClient.Version.HTTP_2)
+                ? HTTPConstants.HTTP_2 : HTTPConstants.HTTP_1_1;
         headerBuf.append(versionStr).append(" ").append(response.statusCode()).append("\n"); // $NON-NLS-1$ $NON-NLS-2$
 
         response.headers().map().forEach((key, values) -> {

@@ -35,11 +35,17 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
  * implementation supports. The items are the values stored in the {@code HTTPSampler.httpVersion}
  * property, the rendering spells out how HTTP/2 is applied.
  *
- * @since 5.7
+ * @since 6.0
  */
 public class HttpVersionComboBox extends JComboBox<String> {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Label of {@link HTTPConstants#HTTP_VERSION_2}, spelled out as HTTP/2 falls back to HTTP/1.1
+     * when the server does not support it.
+     */
+    private static final String HTTP_VERSION_2_LABEL = "HTTP/2 Negotiate"; // $NON-NLS-1$
 
     public HttpVersionComboBox() {
         super(HTTPSamplerFactory.getHttpVersions(""));
@@ -56,8 +62,7 @@ public class HttpVersionComboBox extends JComboBox<String> {
 
     private static Object getLabel(Object value) {
         if (HTTPConstants.HTTP_VERSION_2.equals(value)) {
-            // Spelled out, as HTTP/2 falls back to HTTP/1.1 when the server does not support it
-            return "HTTP/2 Negotiate";
+            return HTTP_VERSION_2_LABEL;
         }
         return value;
     }

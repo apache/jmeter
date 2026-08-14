@@ -250,6 +250,10 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     /** Remembers whether the request had a {@code User-Agent} header before HttpClient added its own. */
     private static final String CONTEXT_ATTRIBUTE_USER_AGENT_PRESENT = "__jmeter.U_A__";
 
+    /** Shown instead of the request body when the entity cannot be read a second time. */
+    private static final String NON_REPEATABLE_ENTITY_PREVIEW =
+            "<Entity was not repeatable, cannot view what was sent>"; // $NON-NLS-1$
+
     private static final HttpRequestInterceptor RECORD_USER_AGENT_PRESENCE = (request, entity, context) ->
             context.setAttribute(CONTEXT_ATTRIBUTE_USER_AGENT_PRESENT, request.containsHeader(HttpHeaders.USER_AGENT));
 
@@ -618,7 +622,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static String getEntityPreview(HttpEntity entity, String contentEncoding) throws IOException {
         if (!entity.isRepeatable()) {
-            return "<Entity was not repeatable, cannot view what was sent>";
+            return NON_REPEATABLE_ENTITY_PREVIEW;
         }
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         entity.writeTo(output);
@@ -948,7 +952,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             uri = "";
         }
         org.apache.hc.core5.http.ProtocolVersion version = request.getVersion();
-        String versionStr = version != null ? version.toString() : "HTTP/1.1";
+        String versionStr = version != null ? version.toString() : HTTPConstants.HTTP_VERSION_1_1;
 
         sentBytes += method.getBytes(Charset.defaultCharset()).length;
         sentBytes += 1;
@@ -1245,7 +1249,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         if (HTTPConstants.HTTP_VERSION_2_STRICT.equalsIgnoreCase(httpVersion)) {
             return HttpVersionPolicy.FORCE_HTTP_2;
         }
-        return HTTPConstants.HTTP_VERSION_2.equals(httpVersion) || "2".equals(httpVersion)
+        return HTTPConstants.HTTP_VERSION_2.equals(httpVersion)
                 ? HttpVersionPolicy.NEGOTIATE : HttpVersionPolicy.FORCE_HTTP_1;
     }
 

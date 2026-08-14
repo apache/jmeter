@@ -74,6 +74,8 @@ public interface HTTPConstantsInterface { // CHECKSTYLE IGNORE InterfaceIsType
     String TRANSFER_ENCODING = "transfer-encoding"; // $NON-NLS-1$
     String HEADER_CONTENT_ENCODING = "content-encoding"; // $NON-NLS-1$
     String HTTP_1_1 = "HTTP/1.1"; // $NON-NLS-1$
+    /** Protocol version as it appears on the wire and in the request/response headers of a sample. */
+    String HTTP_2 = "HTTP/2"; // $NON-NLS-1$
     String HEADER_SET_COOKIE = "set-cookie"; // $NON-NLS-1$
     // Brotli compression not supported yet by HC4 4.5.2 , but to be added
     String ENCODING_BROTLI = "br"; // $NON-NLS-1$
