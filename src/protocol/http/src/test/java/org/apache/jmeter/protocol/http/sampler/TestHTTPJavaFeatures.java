@@ -137,6 +137,37 @@ class TestHTTPJavaFeatures {
     }
 
     @Test
+    void countsUploadedFileInSentBytesOverHttp11() throws Exception {
+        WireMockServer server = createServer();
+        Path upload = Files.createTempFile("jmeter-http1-upload-", ".bin");
+        try {
+            Files.write(upload, new byte[1_000_000]);
+            server.start();
+            server.stubFor(post(urlEqualTo("/upload")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion(HTTPConstants.HTTP_1_1);
+            sampler.setMethod(HTTPConstants.POST);
+            sampler.setDoMultipart(true);
+            sampler.setHTTPFiles(new HTTPFileArg[] {
+                    new HTTPFileArg(upload.toString(), "upload", "application/octet-stream") });
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/upload")), HTTPConstants.POST, false, 1);
+
+            assertEquals("200", result.getResponseCode(), result.getResponseMessage());
+            assertTrue(result.getSentBytes() > 1_000_000,
+                    () -> "the whole file should have been sent, but only " + result.getSentBytes() + " bytes were");
+            // The request view must not hold the file contents, otherwise a large upload is in heap twice
+            assertTrue(result.getQueryString().contains("<actual file content, not shown here>"),
+                    () -> "file contents should be omitted from the request view: " + result.getQueryString());
+            server.verify(postRequestedFor(urlEqualTo("/upload")));
+        } finally {
+            Files.deleteIfExists(upload);
+            server.stop();
+        }
+    }
+
+    @Test
     void interruptsPendingHttp2Request() throws Exception {
         WireMockServer server = createServer();
         server.start();

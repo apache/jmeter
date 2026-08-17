@@ -862,7 +862,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         Map<String, List<String>> requestHeaders = null;
         Map<String, String> securityHeaders = Collections.emptyMap();
-        byte[] postBodyBytes = null;
+        long postBodyLength = -1;
 
         try {
             // Sampling proper - establish the connection and read the response:
@@ -901,18 +901,16 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 throw new BindException();
             }
             // Nice, we've got a connection. Finish sending the request:
-            if (method.equals(HTTPConstants.POST)) {
-                String postBody = sendPostData(conn);
-                res.setQueryString(postBody);
-                if (postBody != null) {
-                    postBodyBytes = getBytes(postBody);
-                }
-            } else if (method.equals(HTTPConstants.PUT)) {
-                String putBody = sendPutData(conn);
-                res.setQueryString(putBody);
-                if (putBody != null) {
-                    postBodyBytes = getBytes(putBody);
-                }
+            if (method.equals(HTTPConstants.POST) || method.equals(HTTPConstants.PUT)) {
+                // The returned body is only a display representation (file contents are replaced with
+                // a placeholder), so the bytes actually written to the connection are counted instead
+                CountingOutputHttpURLConnection countingConn = new CountingOutputHttpURLConnection(conn);
+                String body = method.equals(HTTPConstants.POST)
+                        ? sendPostData(countingConn)
+                        : sendPutData(countingConn);
+                res.setQueryString(body);
+                postBodyLength = countingConn.getBytesWritten();
+                addMissingContentLengthHeader(requestHeaders, postBodyLength);
             }
             // Request sent. Now get the response:
             byte[] responseData = readResponse(conn, res);
@@ -994,7 +992,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 cacheManager.saveDetails(conn, res);
             }
 
-            res.setSentBytes(calculateSentBytes(url, method, testElement.getHttpVersion(), requestHeaders, securityHeaders, postBodyBytes));
+            res.setSentBytes(calculateSentBytes(url, method, testElement.getHttpVersion(), requestHeaders, securityHeaders, postBodyLength));
 
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
@@ -1004,7 +1002,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (res.getEndTime() == 0) {
                 res.sampleEnd();
             }
-            res.setSentBytes(calculateSentBytes(url, method, testElement.getHttpVersion(), requestHeaders, securityHeaders, postBodyBytes));
+            res.setSentBytes(calculateSentBytes(url, method, testElement.getHttpVersion(), requestHeaders, securityHeaders, postBodyLength));
             savedConn = null; // we don't want interrupt to try disconnection again
             // We don't want to continue using this connection, even if KeepAlive is set
             if (conn != null) { // May not exist
@@ -1316,15 +1314,22 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 || "Upgrade".equalsIgnoreCase(name); // $NON-NLS-1$
     }
 
-    private static long calculateSentBytes(
-            URL u,
-            String method,
-            String version,
-            Map<String, List<String>> requestHeaders,
-            Map<String, String> securityHeaders,
-            byte[] postBodyBytes) {
-        return calculateSentBytes(u, method, version, requestHeaders, securityHeaders,
-                postBodyBytes == null ? -1 : postBodyBytes.length);
+    /**
+     * Adds the {@code Content-Length} header to the captured request headers when it is missing.
+     * <p>
+     * {@link HttpURLConnection} silently drops restricted headers such as {@code Content-Length} from
+     * {@link HttpURLConnection#getRequestProperties()}, even though it does send them on the wire.
+     *
+     * @param requestHeaders headers captured from the connection, may be {@code null}
+     * @param bodyLength number of bytes written to the request body, or {@code -1} if unknown
+     */
+    private static void addMissingContentLengthHeader(Map<String, List<String>> requestHeaders, long bodyLength) {
+        if (requestHeaders == null || bodyLength < 0
+                || hasHeader(requestHeaders, HTTPConstants.HEADER_CONTENT_LENGTH)) {
+            return;
+        }
+        requestHeaders.put(HTTPConstants.HEADER_CONTENT_LENGTH,
+                Collections.singletonList(Long.toString(bodyLength)));
     }
 
     private static long calculateSentBytes(
@@ -1437,18 +1442,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
         }
         return null;
-    }
-
-    private byte[] getBytes(String postBody) {
-        String enc = testElement != null ? testElement.getContentEncoding() : null;
-        if (StringUtilities.isBlank(enc)) {
-            enc = StandardCharsets.UTF_8.name();
-        }
-        try {
-            return postBody.getBytes(enc);
-        } catch (Exception e) {
-            return postBody.getBytes(StandardCharsets.UTF_8);
-        }
     }
 
     Http2Client getHttpClient(URL url) {
