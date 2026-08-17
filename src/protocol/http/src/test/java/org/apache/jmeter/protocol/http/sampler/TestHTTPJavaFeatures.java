@@ -25,6 +25,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,6 +38,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -55,6 +57,8 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JsseSSLManager;
+import org.apache.jmeter.util.SSLManager;
 import org.junit.jupiter.api.Test;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -511,8 +515,58 @@ class TestHTTPJavaFeatures {
         }
     }
 
-    private static SSLContext trustAllContext() throws Exception {
-        TrustManager trustAll = new X509ExtendedTrustManager() {
+    @Test
+    void doesNotCacheAnAdditionalHttp2ClientWhenTheSslContextIsReset() throws Exception {
+        HTTPSamplerBase sampler = newSampler();
+        sampler.setHttpVersion("HTTP/2");
+        HTTPJavaImpl impl = new HTTPJavaImpl(sampler);
+        Map<?, ?> clients = HTTPJavaImpl.getHttp2Clients();
+        URL url = new URL("https://localhost:1234/http2SslReset");
+        try {
+            JsseSSLManager sslManager = (JsseSSLManager) SSLManager.getInstance();
+            HTTPJavaImpl.Http2Client first = impl.getHttpClient(url);
+            Map<Object, Object> clientsAfterFirstSample = new HashMap<>(clients);
+            SSLContext contextOfFirstSample = sslManager.getContext();
+
+            // Happens on every thread group iteration when "same user on next iteration" is switched off
+            sslManager.resetContext();
+            HTTPJavaImpl.Http2Client second = impl.getHttpClient(url);
+
+            assertNotSame(contextOfFirstSample, sslManager.getContext(),
+                    "resetContext() should hand out a new SSLContext, otherwise the test proves nothing");
+            assertFalse(clientsAfterFirstSample.isEmpty(), "an HTTP/2 client should have been cached");
+            assertSame(first, second, "the cached HTTP/2 client should be reused after the SSLContext was reset");
+            assertEquals(clientsAfterFirstSample, new HashMap<Object, Object>(clients),
+                    "a new SSLContext must not add another HttpClient to the cache, that would leak clients");
+        } finally {
+            impl.testEnded();
+        }
+    }
+
+    @Test
+    void closesSharedHttp2ClientsWhenTheTestEnds() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        HTTPSamplerBase sampler = newSampler();
+        try {
+            server.stubFor(get(urlEqualTo("/http2TestEnded")).willReturn(aResponse().withStatus(200)));
+            sampler.setHttpVersion("HTTP/2");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/http2TestEnded")), HTTPConstants.GET, false, 1);
+            assertEquals("200", result.getResponseCode());
+            assertFalse(HTTPJavaImpl.getHttp2Clients().isEmpty(), "the sample should have cached an HTTP/2 client");
+
+            sampler.testEnded();
+
+            assertTrue(HTTPJavaImpl.getHttp2Clients().isEmpty(),
+                    "HTTP/2 clients should be released when the test ends");
+        } finally {
+            server.stop();
+        }
+    }
+
+    private static SSLContext trustAllContext() throws Exception {        TrustManager trustAll = new X509ExtendedTrustManager() {
             @Override
             public void checkClientTrusted(X509Certificate[] chain, String authType) {
                 // trust everything in the test

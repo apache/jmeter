@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.Authenticator;
 import java.net.BindException;
 import java.net.HttpURLConnection;
@@ -54,6 +55,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
@@ -149,14 +151,12 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      */
     private static final Map<HttpClientKey, Http2Client> SHARED_HTTP_2_CLIENTS = new ConcurrentHashMap<>();
 
-    /**
-     * Shared daemon thread pool used by the HTTP/2 {@link HttpClient} instances. It allows JMeter to observe
-     * when a connection has been established, since the client only submits tasks once the TCP connection is up.
-     */
-    private static final ExecutorService HTTP_2_EXECUTOR =
-        Executors.newCachedThreadPool(new Http2ThreadFactory());
+    private static final AtomicReference<ExecutorService> HTTP_2_EXECUTOR = new AtomicReference<>();
 
     private static final Logger log = LoggerFactory.getLogger(HTTPJavaImpl.class);
+
+    // Available since Java 21; on older JVMs the client is released once it is no longer referenced.
+    private static final Method HTTP_CLIENT_SHUTDOWN = findHttpClientShutdownMethod();
 
     /** Multiplex concurrent HTTP/2 message exchanges over a single connection per origin. */
     private static final boolean HTTP_2_MULTIPLEXING =
@@ -223,14 +223,69 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
     }
 
-    /**
-     * Returns the HTTP/2 clients of the current thread, or the shared ones when the exchanges of all threads
-     * should be multiplexed over a single connection.
-     *
-     * @return the map the HTTP/2 clients are cached in
-     */
     static Map<HttpClientKey, Http2Client> getHttp2Clients() {
         return HTTP_2_MULTIPLEXING ? SHARED_HTTP_2_CLIENTS : HTTP_2_CLIENTS.get();
+    }
+
+    /** Returns the thread pool of the HTTP/2 clients, it is created when the first client needs it. */
+    private static ExecutorService http2Executor() {
+        ExecutorService executor = HTTP_2_EXECUTOR.get();
+        if (executor != null) {
+            return executor;
+        }
+        ExecutorService created = Executors.newCachedThreadPool(new Http2ThreadFactory());
+        if (HTTP_2_EXECUTOR.compareAndSet(null, created)) {
+            return created;
+        }
+        created.shutdownNow();
+        return HTTP_2_EXECUTOR.get();
+    }
+
+    private static Method findHttpClientShutdownMethod() {
+        for (String name : new String[] { "shutdownNow", "close" }) { // $NON-NLS-1$ $NON-NLS-2$
+            try {
+                return HttpClient.class.getMethod(name);
+            } catch (NoSuchMethodException e) { // NOSONAR Java 17 cannot close an HttpClient explicitly
+                log.debug("HttpClient has no {}() method", name); // $NON-NLS-1$
+            }
+        }
+        return null;
+    }
+
+    /** Releases the resources of the client, in particular its selector thread and its connections. */
+    private static void closeQuietly(Http2Client client) {
+        if (client == null || HTTP_CLIENT_SHUTDOWN == null) {
+            return;
+        }
+        try {
+            HTTP_CLIENT_SHUTDOWN.invoke(client.httpClient);
+        } catch (Exception e) { // NOSONAR closing must never fail a sample
+            log.debug("Problem closing HTTP/2 HttpClient", e); // $NON-NLS-1$
+        }
+    }
+
+    private static void closeHttp2Clients(Map<HttpClientKey, Http2Client> clients) {
+        synchronized (clients) {
+            for (Http2Client client : clients.values()) {
+                closeQuietly(client);
+            }
+            clients.clear();
+        }
+    }
+
+    @Override
+    protected void threadFinished() {
+        closeHttp2Clients(HTTP_2_CLIENTS.get());
+        HTTP_2_CLIENTS.remove();
+    }
+
+    @Override
+    protected void testEnded() {
+        closeHttp2Clients(SHARED_HTTP_2_CLIENTS);
+        ExecutorService executor = HTTP_2_EXECUTOR.getAndSet(null);
+        if (executor != null) {
+            executor.shutdown();
+        }
     }
 
     /**
@@ -1382,7 +1437,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
     }
 
-    private Http2Client getHttpClient(URL url) {
+    Http2Client getHttpClient(URL url) {
         int connectTimeout = getConnectTimeout();
         String proxyHost = getProxyHost();
         int proxyPort = getProxyPortInt();
@@ -1411,12 +1466,29 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         HttpClientKey key = new HttpClientKey(connectTimeout, proxyHost, proxyPort,
-                proxyUser, proxyPass, autoRedirects, sslContext);
+                proxyUser, proxyPass, autoRedirects, sslContext != null);
 
-        return getHttp2Clients().computeIfAbsent(key, HTTPJavaImpl::createHttpClient);
+        Map<HttpClientKey, Http2Client> clients = getHttp2Clients();
+        Http2Client client = clients.get(key);
+        if (client != null && (HTTP_2_MULTIPLEXING || client.usesSslContext(sslContext))) {
+            // The SSLContext must not be part of the key, it does not implement equals(), and JMeter hands out
+            // a new instance per thread and after every reset, which would make the cache grow without bound.
+            // When the clients are shared, the SSLContext of the first caller is kept, so all threads keep on
+            // multiplexing their exchanges over the same connection.
+            return client;
+        }
+        synchronized (clients) {
+            client = clients.get(key);
+            if (client != null && (HTTP_2_MULTIPLEXING || client.usesSslContext(sslContext))) {
+                return client;
+            }
+            Http2Client created = createHttpClient(key, sslContext);
+            closeQuietly(clients.put(key, created));
+            return created;
+        }
     }
 
-    private static Http2Client createHttpClient(HttpClientKey key) {
+    private static Http2Client createHttpClient(HttpClientKey key, SSLContext sslContext) {
         ConnectTimeTracker connectTimeTracker = new ConnectTimeTracker();
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
@@ -1443,23 +1515,29 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
         }
 
-        if (key.sslContext != null) {
-            builder.sslContext(new ConnectTimeMeasuringSSLContext(key.sslContext, connectTimeTracker));
+        if (sslContext != null) {
+            builder.sslContext(new ConnectTimeMeasuringSSLContext(sslContext, connectTimeTracker));
         }
 
-        return new Http2Client(builder.build(), connectTimeTracker);
+        return new Http2Client(builder.build(), connectTimeTracker, sslContext);
     }
 
     /**
      * Holder for an HTTP/2 {@link HttpClient} and the tracker which measures the connect time of its connections.
      */
-    private static final class Http2Client {
+    static final class Http2Client {
         private final HttpClient httpClient;
         private final ConnectTimeTracker connectTimeTracker;
+        private final SSLContext sslContext;
 
-        Http2Client(HttpClient httpClient, ConnectTimeTracker connectTimeTracker) {
+        Http2Client(HttpClient httpClient, ConnectTimeTracker connectTimeTracker, SSLContext sslContext) {
             this.httpClient = httpClient;
             this.connectTimeTracker = connectTimeTracker;
+            this.sslContext = sslContext;
+        }
+
+        boolean usesSslContext(SSLContext other) {
+            return sslContext == other;
         }
     }
 
@@ -1525,7 +1603,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         @Override
         public void execute(Runnable command) {
             tracker.connectionEstablished();
-            HTTP_2_EXECUTOR.execute(command);
+            http2Executor().execute(command);
         }
     }
 
@@ -1796,18 +1874,18 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         private final String proxyUser;
         private final String proxyPass;
         private final boolean autoRedirects;
-        private final SSLContext sslContext;
+        private final boolean secure;
 
         HttpClientKey(int connectTimeout, String proxyHost, int proxyPort,
                       String proxyUser, String proxyPass, boolean autoRedirects,
-                      SSLContext sslContext) {
+                      boolean secure) {
             this.connectTimeout = connectTimeout;
             this.proxyHost = proxyHost;
             this.proxyPort = proxyPort;
             this.proxyUser = proxyUser;
             this.proxyPass = proxyPass;
             this.autoRedirects = autoRedirects;
-            this.sslContext = sslContext;
+            this.secure = secure;
         }
 
         @Override
@@ -1821,15 +1899,15 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             return connectTimeout == that.connectTimeout
                     && proxyPort == that.proxyPort
                     && autoRedirects == that.autoRedirects
+                    && secure == that.secure
                     && Objects.equals(proxyHost, that.proxyHost)
                     && Objects.equals(proxyUser, that.proxyUser)
-                    && Objects.equals(proxyPass, that.proxyPass)
-                    && Objects.equals(sslContext, that.sslContext);
+                    && Objects.equals(proxyPass, that.proxyPass);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(connectTimeout, proxyHost, proxyPort, proxyUser, proxyPass, autoRedirects, sslContext);
+            return Objects.hash(connectTimeout, proxyHost, proxyPort, proxyUser, proxyPass, autoRedirects, secure);
         }
     }
 

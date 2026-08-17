@@ -103,6 +103,10 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     protected void threadFinished() {
     }
 
+    // Allows HTTPSamplerProxy to call testEnded; subclasses can override if necessary
+    protected void testEnded() {
+    }
+
     // Allows HTTPSamplerProxy to call notifyFirstSampleAfterLoopRestart; subclasses can override if necessary
     protected void notifyFirstSampleAfterLoopRestart() {
     }
