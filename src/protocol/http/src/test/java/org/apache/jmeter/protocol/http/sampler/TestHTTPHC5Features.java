@@ -219,6 +219,28 @@ class TestHTTPHC5Features {
     }
 
     @Test
+    void recordsHttp2LatencyBeforeDribbledResponseBodyCompletes() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/http2dribbled"))
+                    .willReturn(aResponse().withStatus(200).withBody(new byte[10_000]).withChunkedDribbleDelay(5, 500)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/http2dribbled"), HTTPConstants.GET, false, 1);
+
+            assertTrue(result.getTime() - result.getLatency() >= 250,
+                    "HTTP/2 latency should exclude the dribbled response body");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
     void fallsBackToHttp11WhenServerDoesNotSupportHttp2() throws Exception {
         WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
                 .dynamicHttpsPort()
@@ -273,6 +295,26 @@ class TestHTTPHC5Features {
 
             assertEquals("200", result.getResponseCode());
             assertEquals("HTTP/1.1", result.getResponseHeaders().substring(0, "HTTP/1.1".length()));
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void latencyDoesNotExceedElapsedTimeWhenResponseBodyIsDribbled() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/dribbled"))
+                    .willReturn(aResponse().withStatus(200).withBody(new byte[10_000]).withChunkedDribbleDelay(5, 500)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/dribbled")), HTTPConstants.GET, false, 1);
+
+            assertTrue(result.getLatency() <= result.getTime(),
+                    "latency should not exceed elapsed time");
         } finally {
             server.stop();
         }

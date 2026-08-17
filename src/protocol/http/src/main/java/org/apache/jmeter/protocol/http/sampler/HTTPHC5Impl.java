@@ -28,6 +28,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.Principal;
@@ -53,6 +54,8 @@ import org.apache.hc.client5.http.HttpRoute;
 import org.apache.hc.client5.http.SystemDefaultDnsResolver;
 import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
 import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
+import org.apache.hc.client5.http.async.methods.SimpleRequestProducer;
+import org.apache.hc.client5.http.async.methods.SimpleResponseConsumer;
 import org.apache.hc.client5.http.auth.AuthSchemeFactory;
 import org.apache.hc.client5.http.auth.AuthScope;
 import org.apache.hc.client5.http.auth.Credentials;
@@ -98,12 +101,15 @@ import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.EntityDetails;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HeaderElement;
 import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
+import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.core5.http.HttpVersion;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.config.Lookup;
@@ -116,6 +122,8 @@ import org.apache.hc.core5.http.message.BasicClassicHttpResponse;
 import org.apache.hc.core5.http.message.BasicHeaderValueParser;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.http.message.ParserCursor;
+import org.apache.hc.core5.http.nio.AsyncResponseConsumer;
+import org.apache.hc.core5.http.nio.CapacityChannel;
 import org.apache.hc.core5.http.nio.ssl.TlsStrategy;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
@@ -164,6 +172,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     /** Key used to store the current {@link SampleResult} in the {@link HttpClientContext}. */
     static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
+    private static final String CONTEXT_ATTRIBUTE_RESPONSE_LATENCY = "__jmeter.S_R_LATENCY__"; //$NON-NLS-1$
 
     private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTP_CLIENTS =
             new InheritableThreadLocal<>() {
@@ -442,6 +451,11 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             HttpClientContext context = createHttpClientContext(url, clientKey, request);
             context.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, result);
             response = executeRequest(url, clientKey, request, context);
+            readResponse(response, result);
+            Long responseLatency = (Long) context.getAttribute(CONTEXT_ATTRIBUTE_RESPONSE_LATENCY);
+            if (responseLatency != null) {
+                result.setLatency(responseLatency);
+            }
             result.sampleEnd();
             currentRequest = null;
 
@@ -889,29 +903,30 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         return url.getPort() == -1 ? url.getDefaultPort() : url.getPort();
     }
 
-    private void updateResult(ClassicHttpResponse response,
-            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HTTPSampleResult result) throws IOException {
-        result.setRequestHeaders(getRequestHeaders(request));
-        result.setSentBytes(calculateSentBytes(request));
+    private void readResponse(ClassicHttpResponse response, HTTPSampleResult result) throws IOException {
         Header contentType = response.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
         if (contentType != null) {
             result.setContentType(contentType.getValue());
             result.setEncodingAndType(contentType.getValue());
         }
         HttpEntity entity = response.getEntity();
-        long bodySize = 0;
         if (entity != null) {
             byte[] body = readResponse(result, entity.getContent(), entity.getContentLength());
             result.setResponseData(body);
-            bodySize = body.length;
+            result.setBodySize((long) body.length);
         }
+    }
+
+    private void updateResult(ClassicHttpResponse response,
+            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HTTPSampleResult result) {
+        result.setRequestHeaders(getRequestHeaders(request));
+        result.setSentBytes(calculateSentBytes(request));
         int statusCode = response.getCode();
         result.setResponseCode(Integer.toString(statusCode));
         result.setResponseMessage(response.getReasonPhrase());
         result.setSuccessful(isSuccessCode(statusCode));
         result.setResponseHeaders(getResponseHeaders(response));
         result.setHeadersSize(result.getResponseHeaders().length());
-        result.setBodySize(bodySize);
         if (result.isRedirect()) {
             Header location = response.getFirstHeader(HTTPConstants.HEADER_LOCATION);
             if (location != null) {
@@ -1147,7 +1162,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                     requestEntity.getContentType() == null ? ContentType.DEFAULT_BINARY
                             : ContentType.parse(requestEntity.getContentType()));
         }
-        Future<SimpleHttpResponse> responseFuture = client.execute(asyncRequest, context, null);
+        Future<SimpleHttpResponse> responseFuture = client.execute(SimpleRequestProducer.create(asyncRequest),
+                new LatencyMeasuringResponseConsumer(), context, null);
         try {
             return createClassicResponse(responseFuture.get(getHttp2ExecutionTimeoutMillis(request), TimeUnit.MILLISECONDS));
         } catch (InterruptedException e) {
@@ -1189,6 +1205,54 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                             : asyncResponse.getFirstHeader(HttpHeaders.CONTENT_ENCODING).getValue()));
         }
         return decompressResponse(response);
+    }
+
+    /**
+     * Captures HTTP/2 latency when the final response headers arrive. The response body is buffered
+     * asynchronously, so its later copy through {@link HTTPSamplerBase#readResponse} must not replace this value.
+     */
+    private static final class LatencyMeasuringResponseConsumer implements AsyncResponseConsumer<SimpleHttpResponse> {
+
+        private final SimpleResponseConsumer delegate = SimpleResponseConsumer.create();
+
+        @Override
+        public void consumeResponse(HttpResponse response, EntityDetails entityDetails, HttpContext context,
+                FutureCallback<SimpleHttpResponse> resultCallback) throws HttpException, IOException {
+            SampleResult sampleResult = (SampleResult) context.getAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT);
+            sampleResult.latencyEnd();
+            context.setAttribute(CONTEXT_ATTRIBUTE_RESPONSE_LATENCY, sampleResult.getLatency());
+            delegate.consumeResponse(response, entityDetails, context, resultCallback);
+        }
+
+        @Override
+        public void informationResponse(HttpResponse response, HttpContext context) throws HttpException, IOException {
+            delegate.informationResponse(response, context);
+        }
+
+        @Override
+        public void updateCapacity(CapacityChannel capacityChannel) throws IOException {
+            delegate.updateCapacity(capacityChannel);
+        }
+
+        @Override
+        public void consume(ByteBuffer src) throws IOException {
+            delegate.consume(src);
+        }
+
+        @Override
+        public void streamEnd(List<? extends Header> trailers) throws HttpException, IOException {
+            delegate.streamEnd(trailers);
+        }
+
+        @Override
+        public void failed(Exception cause) {
+            delegate.failed(cause);
+        }
+
+        @Override
+        public void releaseResources() {
+            delegate.releaseResources();
+        }
     }
 
     private static DefaultRoutePlanner createRoutePlanner(HttpClientKey key) {
