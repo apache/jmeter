@@ -34,12 +34,9 @@ import java.net.URLConnection;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,28 +48,15 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
 
-import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLContextSpi;
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.SSLEngineResult;
-import javax.net.ssl.SSLException;
-import javax.net.ssl.SSLParameters;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSessionContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
@@ -1188,7 +1172,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             HttpRequest httpRequest = reqBuilder.build();
             HttpResponse<InputStream> response;
             ConnectTimeTracker connectTimeTracker = client.connectTimeTracker;
-            connectTimeTracker.sampleStarted(res);
+            connectTimeTracker.sampleStarted(res, ConnectTimeTracker.origin(url));
             try {
                 CompletableFuture<HttpResponse<InputStream>> responseFuture =
                         client.httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
@@ -1522,7 +1506,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         ConnectTimeTracker connectTimeTracker = new ConnectTimeTracker();
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
-                .executor(new ConnectTimeMeasuringExecutor(connectTimeTracker))
+                .executor(http2Executor())
                 .followRedirects(key.autoRedirects ? HttpClient.Redirect.NORMAL : HttpClient.Redirect.NEVER);
 
         if (key.connectTimeout > 0) {
@@ -1546,7 +1530,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         if (sslContext != null) {
-            builder.sslContext(new ConnectTimeMeasuringSSLContext(sslContext, connectTimeTracker));
+            builder.sslContext(new ConnectTimeTracker.MeasuringSSLContext(sslContext, connectTimeTracker));
         }
 
         return new Http2Client(builder.build(), connectTimeTracker, sslContext);
@@ -1571,72 +1555,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
     }
 
-    /**
-     * Records the connect time of the JDK {@link HttpClient} in the {@link SampleResult}s which are in flight.
-     * <p>
-     * The JDK client does not expose a hook for connection establishment, so two indicators are used:
-     * the client submits its first task to the executor once the TCP connection has been established, and
-     * the wrapped {@code SSLEngine} reports when the TLS handshake has been finished. The TLS handshake
-     * always wins, since it is the more precise and the later event.
-     * <p>
-     * A multiplexed client is shared by several threads, so more than one sample can be in flight. Since the
-     * connection is established for all of them at once, the connect time is recorded in every sample which
-     * is waiting for it.
-     */
-    static final class ConnectTimeTracker {
-        private static final Integer NOTHING_RECORDED = 0;
-        private static final Integer CONNECT_RECORDED = 1;
-        private static final Integer HANDSHAKE_RECORDED = 2;
-
-        /** Samples which are currently in flight, together with the connect event recorded for them. */
-        private final Map<SampleResult, Integer> activeSamples = new ConcurrentHashMap<>();
-
-        void sampleStarted(SampleResult result) {
-            activeSamples.put(result, NOTHING_RECORDED);
-        }
-
-        void sampleFinished(SampleResult result) {
-            activeSamples.remove(result);
-        }
-
-        /** Invoked when the TCP connection has been established. */
-        void connectionEstablished() {
-            recordConnectEnd(CONNECT_RECORDED);
-        }
-
-        /** Invoked when the TLS handshake has been finished, it overrides the plain TCP connect time. */
-        void handshakeFinished() {
-            recordConnectEnd(HANDSHAKE_RECORDED);
-        }
-
-        private void recordConnectEnd(Integer event) {
-            activeSamples.replaceAll((result, recorded) -> {
-                if (recorded.intValue() >= event.intValue()) {
-                    return recorded;
-                }
-                result.connectEnd();
-                return event;
-            });
-        }
-    }
-
-    /**
-     * Executor which notifies the {@link ConnectTimeTracker} before delegating to the shared thread pool.
-     */
-    private static final class ConnectTimeMeasuringExecutor implements Executor {
-        private final ConnectTimeTracker tracker;
-
-        ConnectTimeMeasuringExecutor(ConnectTimeTracker tracker) {
-            this.tracker = tracker;
-        }
-
-        @Override
-        public void execute(Runnable command) {
-            tracker.connectionEstablished();
-            http2Executor().execute(command);
-        }
-    }
-
     private static final class Http2ThreadFactory implements ThreadFactory {
         private final AtomicInteger counter = new AtomicInteger();
 
@@ -1645,255 +1563,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             Thread thread = new Thread(r, "JMeter-HTTP2-" + counter.incrementAndGet()); // $NON-NLS-1$
             thread.setDaemon(true);
             return thread;
-        }
-    }
-
-    /**
-     * {@link SSLContext} which creates {@link SSLEngine}s that report the end of the TLS handshake.
-     */
-    static final class ConnectTimeMeasuringSSLContext extends SSLContext {
-        ConnectTimeMeasuringSSLContext(SSLContext delegate, ConnectTimeTracker tracker) {
-            super(new ConnectTimeMeasuringSSLContextSpi(delegate, tracker), delegate.getProvider(),
-                    delegate.getProtocol());
-        }
-    }
-
-    private static final class ConnectTimeMeasuringSSLContextSpi extends SSLContextSpi {
-        private final SSLContext delegate;
-        private final ConnectTimeTracker tracker;
-
-        ConnectTimeMeasuringSSLContextSpi(SSLContext delegate, ConnectTimeTracker tracker) {
-            this.delegate = delegate;
-            this.tracker = tracker;
-        }
-
-        @Override
-        protected void engineInit(KeyManager[] km, TrustManager[] tm, SecureRandom sr) throws KeyManagementException {
-            delegate.init(km, tm, sr);
-        }
-
-        @Override
-        protected SSLSocketFactory engineGetSocketFactory() {
-            return delegate.getSocketFactory();
-        }
-
-        @Override
-        protected SSLServerSocketFactory engineGetServerSocketFactory() {
-            return delegate.getServerSocketFactory();
-        }
-
-        @Override
-        protected SSLEngine engineCreateSSLEngine() {
-            return new ConnectTimeMeasuringSSLEngine(delegate.createSSLEngine(), tracker);
-        }
-
-        @Override
-        protected SSLEngine engineCreateSSLEngine(String host, int port) {
-            return new ConnectTimeMeasuringSSLEngine(delegate.createSSLEngine(host, port), tracker);
-        }
-
-        @Override
-        protected SSLSessionContext engineGetServerSessionContext() {
-            return delegate.getServerSessionContext();
-        }
-
-        @Override
-        protected SSLSessionContext engineGetClientSessionContext() {
-            return delegate.getClientSessionContext();
-        }
-
-        @Override
-        protected SSLParameters engineGetDefaultSSLParameters() {
-            return delegate.getDefaultSSLParameters();
-        }
-
-        @Override
-        protected SSLParameters engineGetSupportedSSLParameters() {
-            return delegate.getSupportedSSLParameters();
-        }
-    }
-
-    /**
-     * {@link SSLEngine} which delegates all calls and notifies the {@link ConnectTimeTracker}
-     * as soon as the TLS handshake has been finished.
-     */
-    static final class ConnectTimeMeasuringSSLEngine extends SSLEngine {
-        private final SSLEngine delegate;
-        private final ConnectTimeTracker tracker;
-
-        ConnectTimeMeasuringSSLEngine(SSLEngine delegate, ConnectTimeTracker tracker) {
-            super(delegate.getPeerHost(), delegate.getPeerPort());
-            this.delegate = delegate;
-            this.tracker = tracker;
-        }
-
-        private void checkHandshakeFinished(SSLEngineResult result) {
-            if (result.getHandshakeStatus() == SSLEngineResult.HandshakeStatus.FINISHED) {
-                tracker.handshakeFinished();
-            }
-        }
-
-        @Override
-        public SSLEngineResult wrap(ByteBuffer[] srcs, int offset, int length, ByteBuffer dst) throws SSLException {
-            SSLEngineResult result = delegate.wrap(srcs, offset, length, dst);
-            checkHandshakeFinished(result);
-            return result;
-        }
-
-        @Override
-        public SSLEngineResult unwrap(ByteBuffer src, ByteBuffer[] dsts, int offset, int length) throws SSLException {
-            SSLEngineResult result = delegate.unwrap(src, dsts, offset, length);
-            checkHandshakeFinished(result);
-            return result;
-        }
-
-        @Override
-        public Runnable getDelegatedTask() {
-            return delegate.getDelegatedTask();
-        }
-
-        @Override
-        public void closeInbound() throws SSLException {
-            delegate.closeInbound();
-        }
-
-        @Override
-        public boolean isInboundDone() {
-            return delegate.isInboundDone();
-        }
-
-        @Override
-        public void closeOutbound() {
-            delegate.closeOutbound();
-        }
-
-        @Override
-        public boolean isOutboundDone() {
-            return delegate.isOutboundDone();
-        }
-
-        @Override
-        public String[] getSupportedCipherSuites() {
-            return delegate.getSupportedCipherSuites();
-        }
-
-        @Override
-        public String[] getEnabledCipherSuites() {
-            return delegate.getEnabledCipherSuites();
-        }
-
-        @Override
-        public void setEnabledCipherSuites(String[] suites) {
-            delegate.setEnabledCipherSuites(suites);
-        }
-
-        @Override
-        public String[] getSupportedProtocols() {
-            return delegate.getSupportedProtocols();
-        }
-
-        @Override
-        public String[] getEnabledProtocols() {
-            return delegate.getEnabledProtocols();
-        }
-
-        @Override
-        public void setEnabledProtocols(String[] protocols) {
-            delegate.setEnabledProtocols(protocols);
-        }
-
-        @Override
-        public SSLSession getSession() {
-            return delegate.getSession();
-        }
-
-        @Override
-        public SSLSession getHandshakeSession() {
-            return delegate.getHandshakeSession();
-        }
-
-        @Override
-        public void beginHandshake() throws SSLException {
-            delegate.beginHandshake();
-        }
-
-        @Override
-        public SSLEngineResult.HandshakeStatus getHandshakeStatus() {
-            return delegate.getHandshakeStatus();
-        }
-
-        @Override
-        public void setUseClientMode(boolean mode) {
-            delegate.setUseClientMode(mode);
-        }
-
-        @Override
-        public boolean getUseClientMode() {
-            return delegate.getUseClientMode();
-        }
-
-        @Override
-        public void setNeedClientAuth(boolean need) {
-            delegate.setNeedClientAuth(need);
-        }
-
-        @Override
-        public boolean getNeedClientAuth() {
-            return delegate.getNeedClientAuth();
-        }
-
-        @Override
-        public void setWantClientAuth(boolean want) {
-            delegate.setWantClientAuth(want);
-        }
-
-        @Override
-        public boolean getWantClientAuth() {
-            return delegate.getWantClientAuth();
-        }
-
-        @Override
-        public void setEnableSessionCreation(boolean flag) {
-            delegate.setEnableSessionCreation(flag);
-        }
-
-        @Override
-        public boolean getEnableSessionCreation() {
-            return delegate.getEnableSessionCreation();
-        }
-
-        @Override
-        public SSLParameters getSSLParameters() {
-            return delegate.getSSLParameters();
-        }
-
-        @Override
-        public void setSSLParameters(SSLParameters params) {
-            delegate.setSSLParameters(params);
-        }
-
-        @Override
-        public String getApplicationProtocol() {
-            return delegate.getApplicationProtocol();
-        }
-
-        @Override
-        public String getHandshakeApplicationProtocol() {
-            return delegate.getHandshakeApplicationProtocol();
-        }
-
-        @Override
-        public void setHandshakeApplicationProtocolSelector(BiFunction<SSLEngine, List<String>, String> selector) {
-            if (selector == null) {
-                delegate.setHandshakeApplicationProtocolSelector(null);
-            } else {
-                delegate.setHandshakeApplicationProtocolSelector((engine, protocols) -> selector.apply(this, protocols));
-            }
-        }
-
-        @Override
-        public BiFunction<SSLEngine, List<String>, String> getHandshakeApplicationProtocolSelector() {
-            return delegate.getHandshakeApplicationProtocolSelector();
         }
     }
 
