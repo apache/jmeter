@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
@@ -53,6 +54,7 @@ import javax.security.auth.Subject;
 
 import org.apache.hc.client5.http.DnsResolver;
 import org.apache.hc.client5.http.HttpRoute;
+import org.apache.hc.client5.http.RouteInfo;
 import org.apache.hc.client5.http.SystemDefaultDnsResolver;
 import org.apache.hc.client5.http.async.methods.AbstractBinResponseConsumer;
 import org.apache.hc.client5.http.auth.AuthSchemeFactory;
@@ -94,10 +96,12 @@ import org.apache.hc.client5.http.io.LeaseRequest;
 import org.apache.hc.client5.http.nio.AsyncClientConnectionManager;
 import org.apache.hc.client5.http.nio.AsyncConnectionEndpoint;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.client5.http.protocol.RedirectLocations;
 import org.apache.hc.client5.http.ssl.ClientTlsStrategyBuilder;
 import org.apache.hc.client5.http.ssl.HostnameVerificationPolicy;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
+import org.apache.hc.client5.http.utils.URIUtils;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
@@ -512,6 +516,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             currentRequest = null;
 
             updateResult(response, request, result);
+            updateUrlAfterAutoRedirects(url, context, result);
             if (cacheManager != null) {
                 cacheManager.saveDetails(response, result);
             }
@@ -1031,9 +1036,33 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         result.setHeadersSize(result.getResponseHeaders().length());
         if (result.isRedirect()) {
             Header location = response.getFirstHeader(HTTPConstants.HEADER_LOCATION);
-            if (location != null) {
-                result.setRedirectLocation(location.getValue());
+            if (location == null) { // HTTP protocol violation, but avoids NPE
+                throw new IllegalArgumentException(
+                        "Missing location header in redirect for " + request.getMethod() + " " + request.getRequestUri());
             }
+            result.setRedirectLocation(location.getValue());
+        }
+    }
+
+    /**
+     * When HttpClient followed the redirects on its own, the sampled URL is the one of the last
+     * request, not the one the sampler started with. The cookie and the cache manager as well as the
+     * listeners need the effective URL.
+     */
+    private void updateUrlAfterAutoRedirects(URL url, HttpClientContext context, HTTPSampleResult result) {
+        if (!getAutoRedirects()) {
+            return;
+        }
+        RedirectLocations redirectLocations = context.getRedirectLocations();
+        if (redirectLocations == null || redirectLocations.size() == 0) {
+            return;
+        }
+        RouteInfo route = context.getHttpRoute();
+        HttpHost target = route != null ? route.getTargetHost() : null;
+        try {
+            result.setURL(URIUtils.resolve(url.toURI(), target, redirectLocations.getAll()).toURL());
+        } catch (URISyntaxException | MalformedURLException e) {
+            log.warn("Could not resolve the effective URL after redirects for {}", url, e);
         }
     }
 

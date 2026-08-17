@@ -70,6 +70,7 @@ import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
+import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
@@ -552,6 +553,73 @@ class TestHTTPHC5Features {
 
             server.verify(1, getRequestedFor(urlEqualTo("/cache"))
                     .withHeader("If-None-Match", WireMock.equalTo("cache-tag")));
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void updatesSampleUrlAfterAutomaticRedirect() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/start")).willReturn(
+                    aResponse().withStatus(302).withHeader(HTTPConstants.HEADER_LOCATION, "/target/page")));
+            server.stubFor(get(urlEqualTo("/target/page")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setAutoRedirects(true);
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/start")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertEquals(server.url("/target/page"), result.getUrlAsString());
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void storesCookiesOfTheRedirectTargetAgainstTheRedirectUrl() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/login")).willReturn(
+                    aResponse().withStatus(302).withHeader(HTTPConstants.HEADER_LOCATION, "/session/page")));
+            server.stubFor(get(urlEqualTo("/session/page")).willReturn(
+                    aResponse().withStatus(200).withHeader(HTTPConstants.HEADER_SET_COOKIE, "sid=42")));
+            CookieManager cookieManager = new CookieManager();
+            cookieManager.testStarted();
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setCookieManager(cookieManager);
+            sampler.setAutoRedirects(true);
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/login")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            // the default path of the cookie is derived from the URL it was received from
+            assertEquals("sid=42", cookieManager.getCookieHeaderForURL(new URL(server.url("/session/page"))));
+            assertNull(cookieManager.getCookieHeaderForURL(new URL(server.url("/elsewhere"))));
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void failsRedirectWithoutLocationHeader() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/noLocation")).willReturn(aResponse().withStatus(302)));
+            HTTPSamplerBase sampler = newSampler();
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/noLocation")), HTTPConstants.GET, false, 1);
+
+            assertFalse(result.isSuccessful());
+            assertTrue(result.getResponseCode().contains(IllegalArgumentException.class.getName()),
+                    "Expected an IllegalArgumentException, but got " + result.getResponseCode());
         } finally {
             server.stop();
         }
