@@ -18,7 +18,9 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -374,6 +376,29 @@ class TestHTTPJavaFeatures {
             assertEquals("200", result.getResponseCode());
             assertTrue(result.getRequestHeaders().contains("Authorization: Bearer my-secret-token"),
                     "Request headers should contain Authorization header set in HeaderManager");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void sendsHeaderManagerHeaderOnceForHttp11() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/headerOnce")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+            HeaderManager headerManager = new HeaderManager();
+            headerManager.add(new Header("Accept", "application/json"));
+            sampler.setHeaderManager(headerManager);
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/headerOnce")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            server.verify(1, getRequestedFor(urlEqualTo("/headerOnce"))
+                    .withHeader("Accept", equalTo("application/json")));
         } finally {
             server.stop();
         }

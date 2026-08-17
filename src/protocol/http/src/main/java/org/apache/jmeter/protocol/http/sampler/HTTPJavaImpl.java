@@ -95,6 +95,24 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class HTTPJavaImpl extends HTTPAbstractImpl {
+    protected static final class ConnectionSetup {
+        private final HttpURLConnection connection;
+        private final Map<String, String> securityHeaders;
+
+        ConnectionSetup(HttpURLConnection connection, Map<String, String> securityHeaders) {
+            this.connection = connection;
+            this.securityHeaders = securityHeaders;
+        }
+
+        public HttpURLConnection getConnection() {
+            return connection;
+        }
+
+        public Map<String, String> getSecurityHeaders() {
+            return securityHeaders;
+        }
+    }
+
     private static final boolean OBEY_CONTENT_LENGTH =
         JMeterUtils.getPropDefault("httpsampler.obey_contentlength", false); // $NON-NLS-1$
 
@@ -376,11 +394,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            GET, POST etc
      * @param res
      *            sample result to save request infos to
-     * @return <code>HttpURLConnection</code> ready for .connect
+     * @return connection and security headers ready for .connect
      * @exception IOException
      *                if an I/O Exception occurs
      */
-    protected HttpURLConnection setupConnection(URL u, String method, HTTPSampleResult res) throws IOException {
+    protected ConnectionSetup setupConnection(URL u, String method, HTTPSampleResult res) throws IOException {
         SSLManager sslmgr = null;
         if (HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
             try {
@@ -461,7 +479,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
         }
 
-        return conn;
+        return new ConnectionSetup(conn, securityHeaders);
     }
 
     /**
@@ -812,10 +830,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             // Start with -1 so tries at least once, and retries at most MAX_CONN_RETRIES times
             for (; retry < MAX_CONN_RETRIES; retry++) {
                 try {
-                    conn = setupConnection(url, method, res);
+                    ConnectionSetup connectionSetup = setupConnection(url, method, res);
+                    conn = connectionSetup.getConnection();
                     requestHeaders = new LinkedHashMap<>(conn.getRequestProperties());
-                    securityHeaders = setConnectionHeaders(conn, url, getHeaderManager(), getCacheManager());
-                    setConnectionAuthorization(conn, url, getAuthManager(), securityHeaders);
+                    securityHeaders = connectionSetup.getSecurityHeaders();
                     // Attempt the connection:
                     savedConn = conn;
                     conn.connect();
