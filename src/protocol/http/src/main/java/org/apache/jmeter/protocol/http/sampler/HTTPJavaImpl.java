@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -395,6 +396,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private transient PostWriter postOrPutWriter;
 
     private volatile HttpURLConnection savedConn;
+    private volatile CompletableFuture<HttpResponse<InputStream>> currentResponseFuture;
 
     protected HTTPJavaImpl(HTTPSamplerBase base) {
         super(base);
@@ -1087,11 +1089,16 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     @Override
     public boolean interrupt() {
         HttpURLConnection conn = savedConn;
+        CompletableFuture<HttpResponse<InputStream>> responseFuture = currentResponseFuture;
+        savedConn = null;
+        currentResponseFuture = null;
         if (conn != null) {
-            savedConn = null;
             conn.disconnect();
         }
-        return conn != null;
+        if (responseFuture != null) {
+            responseFuture.cancel(true);
+        }
+        return conn != null || responseFuture != null;
     }
 
     private HTTPSampleResult sampleHttp2(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
@@ -1099,33 +1106,26 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             log.debug("Start : sampleHttp2 {}, method {}, followingRedirect {}, depth {}",
                     url, method, areFollowingRedirect, frameDepth);
         }
-
         HTTPSampleResult res = new HTTPSampleResult();
         configureSampleLabel(res, url);
         res.setURL(url);
         res.setHTTPMethod(method);
-
         res.sampleStart();
-
         final CacheManager cacheManager = getCacheManager();
         if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method)) {
             if (cacheManager.inCache(url, getHeaders(getHeaderManager()))) {
                 return updateSampleResultForResourceInCache(res);
             }
         }
-
         CapturingHttpURLConnection capturingConn = null;
         byte[] requestBodyBytes = new byte[0];
         Map<String, String> securityHeaders = Collections.emptyMap();
-
         try {
             capturingConn = new CapturingHttpURLConnection(url, method);
-
             securityHeaders = setConnectionHeaders(capturingConn, url, getHeaderManager(), getCacheManager());
             String cookies = setConnectionCookie(capturingConn, url, getCookieManager());
             setConnectionAuthorization(capturingConn, url, getAuthManager(), securityHeaders);
             setDefaultUserAgent(capturingConn, HTTP_2_DEFAULT_USER_AGENT);
-
             if (method.equals(HTTPConstants.POST)) {
                 setPostHeaders(capturingConn);
                 String postBody = sendPostData(capturingConn);
@@ -1137,17 +1137,14 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 res.setQueryString(putBody);
                 requestBodyBytes = capturingConn.getCapturedBytes();
             }
-
             res.setRequestHeaders(getAllHeadersExceptCookie(capturingConn, securityHeaders));
             if (StringUtilities.isNotEmpty(cookies)) {
                 res.setCookies(cookies);
             } else {
                 res.setCookies(getOnlyCookieFromHeaders(capturingConn, securityHeaders));
             }
-
             URI uri = url.toURI();
             HttpRequest.Builder reqBuilder = HttpRequest.newBuilder(uri);
-
             if (method.equalsIgnoreCase(HTTPConstants.POST) || method.equalsIgnoreCase(HTTPConstants.PUT)
                     || method.equalsIgnoreCase(HTTPConstants.PATCH)) {
                 reqBuilder.method(method, HttpRequest.BodyPublishers.ofByteArray(requestBodyBytes));
@@ -1158,12 +1155,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             } else {
                 reqBuilder.method(method, HttpRequest.BodyPublishers.noBody());
             }
-
             int rto = getResponseTimeout();
             if (rto > 0) {
                 reqBuilder.timeout(Duration.ofMillis(rto));
             }
-
             Map<String, List<String>> props = capturingConn.getRequestProperties();
             for (Map.Entry<String, List<String>> entry : props.entrySet()) {
                 String headerName = entry.getKey();
@@ -1174,15 +1169,24 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                     reqBuilder.header(headerName, value);
                 }
             }
-
             Http2Client client = getHttpClient(url);
             HttpRequest httpRequest = reqBuilder.build();
-
             HttpResponse<InputStream> response;
             ConnectTimeTracker connectTimeTracker = client.connectTimeTracker;
             connectTimeTracker.sampleStarted(res);
             try {
-                response = client.httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+                CompletableFuture<HttpResponse<InputStream>> responseFuture =
+                        client.httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+                currentResponseFuture = responseFuture;
+                try {
+                    response = responseFuture.get();
+                } catch (InterruptedException e) {
+                    responseFuture.cancel(true);
+                    Thread.currentThread().interrupt();
+                    throw e;
+                } finally {
+                    currentResponseFuture = null;
+                }
             } finally {
                 connectTimeTracker.sampleFinished(res);
             }
@@ -1193,21 +1197,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             res.sampleEnd();
 
             res.setResponseData(responseData);
-
             int statusCode = response.statusCode();
             res.setResponseCode(Integer.toString(statusCode));
             res.setSuccessful(isSuccessCode(statusCode));
             res.setResponseMessage(getReasonPhrase(statusCode));
-
             String responseHeaders = getResponseHeaders(response);
             res.setResponseHeaders(responseHeaders);
-
             String ct = response.headers().firstValue(HTTPConstants.HEADER_CONTENT_TYPE).orElse(null);
             if (ct != null) {
                 res.setContentType(ct);
                 res.setEncodingAndType(ct);
             }
-
             if (res.isRedirect()) {
                 String location = response.headers().firstValue(HTTPConstants.HEADER_LOCATION).orElse(null);
                 if (location != null) {

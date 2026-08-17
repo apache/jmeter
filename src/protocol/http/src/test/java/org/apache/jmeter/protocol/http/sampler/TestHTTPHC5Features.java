@@ -219,6 +219,39 @@ class TestHTTPHC5Features {
     }
 
     @Test
+    void interruptsPendingHttp2Request() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        server.start();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            server.stubFor(get(urlEqualTo("/interrupted")).willReturn(aResponse().withFixedDelay(10_000)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+            HTTPHC5Impl implementation = new HTTPHC5Impl(sampler);
+
+            Future<?> sample = executor.submit(() -> implementation.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/interrupted"),
+                    HTTPConstants.GET, false, 1));
+
+            boolean interrupted = false;
+            for (int attempt = 0; attempt < 100 && !interrupted; attempt++) {
+                interrupted = implementation.interrupt();
+                if (!interrupted) {
+                    Thread.sleep(10);
+                }
+            }
+
+            assertTrue(interrupted, "the HTTP/2 response future should be cancellable");
+            sample.get(5, TimeUnit.SECONDS);
+        } finally {
+            executor.shutdownNow();
+            server.stop();
+        }
+    }
+
+    @Test
     void recordsHttp2LatencyBeforeDribbledResponseBodyCompletes() throws Exception {
         WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
                 .dynamicHttpsPort()

@@ -43,8 +43,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLContext;
 import javax.security.auth.Subject;
@@ -402,6 +400,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     private volatile org.apache.hc.client5.http.classic.methods.HttpUriRequestBase currentRequest;
+    private volatile Future<SimpleHttpResponse> currentResponseFuture;
+    private volatile boolean interruptRequested;
 
     private static ClientTlsStrategyBuilder createTlsStrategyBuilder() {
         try {
@@ -466,6 +466,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                 }
             }
 
+            interruptRequested = false;
             currentRequest = request;
             HttpClientKey clientKey = createHttpClientKey(url);
             HttpClientContext context = createHttpClientContext(url, clientKey, request);
@@ -539,7 +540,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private static ClassicHttpResponse doExecuteRequest(HttpClientKey clientKey,
+    private ClassicHttpResponse doExecuteRequest(HttpClientKey clientKey,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HttpClientContext context)
             throws IOException {
         return clientKey.httpVersionPolicy != HttpVersionPolicy.FORCE_HTTP_1
@@ -1172,7 +1173,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     @SuppressWarnings("deprecation") // SimpleHttpRequest.copy is required for HttpClient 5.3 compatibility
-    private static ClassicHttpResponse executeHttp2(CloseableHttpAsyncClient client,
+    private ClassicHttpResponse executeHttp2(CloseableHttpAsyncClient client,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HttpClientContext context)
             throws IOException {
         SimpleHttpRequest asyncRequest = SimpleHttpRequest.copy(request);
@@ -1185,31 +1186,21 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
         Future<SimpleHttpResponse> responseFuture = client.execute(SimpleRequestProducer.create(asyncRequest),
                 new LatencyMeasuringResponseConsumer(), context, null);
+        currentResponseFuture = responseFuture;
+        if (interruptRequested) {
+            responseFuture.cancel(true);
+        }
         try {
-            return createClassicResponse(responseFuture.get(getHttp2ExecutionTimeoutMillis(request), TimeUnit.MILLISECONDS));
+            return createClassicResponse(responseFuture.get());
         } catch (InterruptedException e) {
+            responseFuture.cancel(true);
             Thread.currentThread().interrupt();
             throw new IOException("Interrupted while executing HTTP/2 request", e);
-        } catch (TimeoutException e) {
-            responseFuture.cancel(true);
-            throw new IOException("Timed out while executing HTTP/2 request", e);
         } catch (ExecutionException e) {
             throw new IOException("Could not execute HTTP/2 request", e.getCause());
+        } finally {
+            currentResponseFuture = null;
         }
-    }
-
-    /**
-     * The future is only a safety net: HttpClient enforces the configured response timeout itself,
-     * so this waits a little longer than the sampler is willing to wait for the response.
-     */
-    private static long getHttp2ExecutionTimeoutMillis(
-            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
-        RequestConfig requestConfig = request.getConfig();
-        Timeout responseTimeout = requestConfig == null ? null : requestConfig.getResponseTimeout();
-        if (responseTimeout == null || responseTimeout.toMilliseconds() <= 0) {
-            return TimeUnit.MINUTES.toMillis(1);
-        }
-        return responseTimeout.toMilliseconds() + TimeUnit.SECONDS.toMillis(5);
     }
 
     private static ClassicHttpResponse createClassicResponse(SimpleHttpResponse asyncResponse) {
@@ -1389,11 +1380,19 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     @Override
     public boolean interrupt() {
         org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request = currentRequest;
+        Future<SimpleHttpResponse> responseFuture = currentResponseFuture;
+        if (request != null || responseFuture != null) {
+            interruptRequested = true;
+        }
+        currentRequest = null;
+        currentResponseFuture = null;
         if (request != null) {
-            currentRequest = null;
             request.cancel();
         }
-        return request != null;
+        if (responseFuture != null) {
+            responseFuture.cancel(true);
+        }
+        return request != null || responseFuture != null;
     }
 
     private static void recordConnectEnd(HttpContext context) {
