@@ -69,8 +69,11 @@
 2403,hamcrest-core-3.0.jar
 181512,httpasyncclient-4.1.5.jar
 785639,httpclient-4.5.14.jar
+1057058,httpclient5-5.6.4.jar
 327891,httpcore-4.4.16.jar
 368896,httpcore-nio-4.4.16.jar
+955121,httpcore5-5.4.3.jar
+263675,httpcore5-h2-5.4.3.jar
 41727,httpmime-4.5.14.jar
 82104,jackson-annotations-2.21.jar
 595531,jackson-core-2.21.2.jar
