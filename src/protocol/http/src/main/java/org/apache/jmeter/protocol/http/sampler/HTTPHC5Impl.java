@@ -119,6 +119,7 @@ import org.apache.hc.core5.http.config.Lookup;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.http.io.entity.FileEntity;
+import org.apache.hc.core5.http.io.entity.HttpEntityWrapper;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicClassicHttpResponse;
 import org.apache.hc.core5.http.message.BasicHeaderValueParser;
@@ -155,6 +156,7 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
+import org.apache.jorphan.io.CountingInputStream;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
 import org.brotli.dec.BrotliInputStream;
@@ -176,6 +178,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
     private static final String CONTEXT_ATTRIBUTE_RESPONSE_LATENCY = "__jmeter.S_R_LATENCY__"; //$NON-NLS-1$
     private static final String CONTEXT_ATTRIBUTE_RESPONSE_BODY_SIZE = "__jmeter.S_R_BODY_SIZE__"; //$NON-NLS-1$
+    private static final String CONTEXT_ATTRIBUTE_RESPONSE_BODY_COUNTER = "__jmeter.S_R_BODY_COUNTER__"; //$NON-NLS-1$
 
     private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTP_CLIENTS =
             new InheritableThreadLocal<>() {
@@ -382,7 +385,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         if (!requestConfig.isContentCompressionEnabled()) {
             return response;
         }
-        return decompressResponse(response);
+        return decompressResponse(response, context);
     };
 
     /**
@@ -392,7 +395,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
      * and decodes the response itself for both the HTTP/1.1 and the HTTP/2 transport.
      */
     @SuppressWarnings("deprecation") // DecompressingEntity is superseded by the @Internal ContentCodecRegistry
-    private static ClassicHttpResponse decompressResponse(ClassicHttpResponse response) {
+    private static ClassicHttpResponse decompressResponse(ClassicHttpResponse response, HttpContext context) {
         HttpEntity entity = response.getEntity();
         if (entity == null || entity.getContentLength() == 0) {
             return response;
@@ -415,9 +418,16 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
         HeaderElement[] codecs = BasicHeaderValueParser.INSTANCE.parseElements(contentEncoding,
                 new ParserCursor(0, contentEncoding.length()));
+        CountingEntity countingEntity = new CountingEntity(entity);
+        boolean decompressing = false;
         for (HeaderElement codec : codecs) {
             InputStreamFactory decoderFactory = CONTENT_DECODERS.lookup(codec.getName().toLowerCase(Locale.ROOT));
             if (decoderFactory != null) {
+                if (!decompressing) {
+                    response.setEntity(countingEntity);
+                    context.setAttribute(CONTEXT_ATTRIBUTE_RESPONSE_BODY_COUNTER, countingEntity);
+                    decompressing = true;
+                }
                 response.setEntity(new DecompressingEntity(response.getEntity(), decoderFactory));
                 response.removeHeaders(HttpHeaders.CONTENT_LENGTH);
                 response.removeHeaders(HttpHeaders.CONTENT_ENCODING);
@@ -1018,9 +1028,14 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             byte[] body = readResponse(result, entity.getContent(), entity.getContentLength());
             result.setResponseData(body);
             // The HTTP/2 transport counts the body while it streams it, so a truncated response
-            // still reports the number of bytes the server actually sent
+            // still reports the number of bytes the server actually sent. For HTTP/1.1 a compressed
+            // body is counted before it is decoded, so the reported size is the one that crossed the
+            // wire, like HTTPHC4Impl and HTTPJavaImpl report it
             Long bodySize = (Long) context.getAttribute(CONTEXT_ATTRIBUTE_RESPONSE_BODY_SIZE);
-            result.setBodySize(bodySize != null ? bodySize : (long) body.length);
+            CountingEntity bodyCounter =
+                    (CountingEntity) context.getAttribute(CONTEXT_ATTRIBUTE_RESPONSE_BODY_COUNTER);
+            result.setBodySize(bodySize != null ? bodySize
+                    : bodyCounter != null ? bodyCounter.getBytesRead() : (long) body.length);
         }
     }
 
@@ -1033,7 +1048,15 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         result.setResponseMessage(response.getReasonPhrase());
         result.setSuccessful(isSuccessCode(statusCode));
         result.setResponseHeaders(getResponseHeaders(response));
-        result.setHeadersSize(result.getResponseHeaders().length());
+        // Approximated the way HTTPHC4Impl does it, so both implementations report the same size:
+        // the condensed headers (without \r), a \r per header, a \r for the status line and the
+        // final \r\n before the body
+        long headerBytes =
+                (long) result.getResponseHeaders().length()
+                + response.getHeaders().length
+                + 1L
+                + 2L;
+        result.setHeadersSize((int) headerBytes);
         if (result.isRedirect()) {
             Header location = response.getFirstHeader(HTTPConstants.HEADER_LOCATION);
             if (location == null) { // HTTP protocol violation, but avoids NPE
@@ -1496,12 +1519,30 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             }
             // The body may have been truncated, so report what the server actually sent
             context.setAttribute(CONTEXT_ATTRIBUTE_RESPONSE_BODY_SIZE, totalBodyBytes);
-            return decompressResponse(response);
+            return decompressResponse(response, context);
         }
 
         @Override
         public void releaseResources() {
             body = null;
+        }
+    }
+
+    private static final class CountingEntity extends HttpEntityWrapper {
+        private CountingInputStream inputStream;
+
+        private CountingEntity(HttpEntity entity) {
+            super(entity);
+        }
+
+        @Override
+        public CountingInputStream getContent() throws IOException {
+            inputStream = new CountingInputStream(super.getContent());
+            return inputStream;
+        }
+
+        private long getBytesRead() {
+            return inputStream == null ? 0 : inputStream.getBytesRead();
         }
     }
 

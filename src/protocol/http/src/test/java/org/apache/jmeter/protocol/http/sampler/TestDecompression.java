@@ -21,11 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.net.MalformedURLException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -62,14 +65,65 @@ public class TestDecompression {
         return res;
     }
 
+    public static List<Arguments> implementations() {
+        List<Arguments> res = new ArrayList<>();
+        for (String httpImpl : HTTPSamplerFactory.getImplementations()) {
+            res.add(Arguments.of(httpImpl));
+        }
+        return res;
+    }
+
+    /**
+     * A compressed response must be accounted for with the bytes that crossed the wire, not with the
+     * size of the decoded body, otherwise switching the implementation of a plan changes the reported
+     * bytes and any bandwidth SLA by the compression ratio.
+     */
+    @ParameterizedTest
+    @MethodSource("implementations")
+    public void reportsCompressedSizeForHighlyCompressibleBody(String httpImpl) throws IOException {
+        WireMockServer server = createServer(c -> c.gzipDisabled(true));
+        server.start();
+        try {
+            String expectedResponse = "a".repeat(400 * 1024);
+            byte[] responseBody = encodedResponse(expectedResponse, ClientGzip.REQUESTED, ServerGzip.SUPPORTED);
+            Assertions.assertTrue(responseBody.length * 20L < expectedResponse.length(),
+                    () -> "the gzipped body of " + responseBody.length
+                            + " bytes should be far smaller than the decoded " + expectedResponse.length());
+
+            HTTPSamplerBase http = HTTPSamplerFactory.newInstance(httpImpl);
+            HeaderManager hm = new HeaderManager();
+            hm.add(new Header("Accept-Encoding", "gzip"));
+            http.setHeaderManager(hm);
+            server.stubFor(WireMock.get("/gzip")
+                    .withHeader("Accept-Encoding", WireMock.equalTo("gzip"))
+                    .willReturn(WireMock.aResponse()
+                            .withBody(responseBody)
+                            .withHeader("Content-Type", "text/plain;charset=utf-8")
+                            .withHeader("Content-Length", Long.toString(responseBody.length))
+                            .withHeader("Content-Encoding", "gzip")));
+
+            HTTPSampleResult res = http.sample(new URL(server.url("/gzip")), "GET", false, 1);
+
+            Assertions.assertAll(
+                    () -> assertEquals(expectedResponse, res.getResponseDataAsString(), "decoded response body"),
+                    () -> assertEquals(responseBody.length, res.getBodySizeAsLong(), "wire body size"),
+                    () -> assertEquals(responseBody.length + res.getHeadersSize(), res.getBytesAsLong(),
+                            "wire response bytes")
+            );
+        } finally {
+            server.stop();
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("mockServerParams")
-    public void mockServer(String httpImpl, ClientGzip clientGzip, ServerGzip serverGzip) throws MalformedURLException {
-        WireMockServer server = createServer(c -> c.gzipDisabled(serverGzip == ServerGzip.NOT_SUPPORTED));
+    public void mockServer(String httpImpl, ClientGzip clientGzip, ServerGzip serverGzip) throws IOException {
+        WireMockServer server = createServer(c -> c.gzipDisabled(true));
         server.start();
         try {
             HTTPSamplerBase http = HTTPSamplerFactory.newInstance(httpImpl);
             String expectedResponse = "Hello, 丈, \uD83D\uDE03, and नि";
+            byte[] responseBody = encodedResponse(expectedResponse, clientGzip, serverGzip);
             HeaderManager hm = new HeaderManager();
             if (clientGzip == ClientGzip.REQUESTED) {
                 hm.add(new Header("Accept-Encoding", "gzip"));
@@ -80,19 +134,21 @@ public class TestDecompression {
             if (clientGzip == ClientGzip.REQUESTED) {
                 mappingBuilder = mappingBuilder.withHeader("Accept-Encoding", WireMock.equalTo("gzip"));
             }
-            server.stubFor(
-                    mappingBuilder
-                            .willReturn(
-                                    WireMock.aResponse()
-                                            .withBody(expectedResponse)
-                                            .withHeader("Content-Type", "text/plain;charset=utf-8")
-                            )
-            );
+            var response = WireMock.aResponse()
+                    .withBody(responseBody)
+                    .withHeader("Content-Type", "text/plain;charset=utf-8")
+                    .withHeader("Content-Length", Long.toString(responseBody.length));
+            if (clientGzip == ClientGzip.REQUESTED && serverGzip == ServerGzip.SUPPORTED) {
+                response.withHeader("Content-Encoding", "gzip");
+            }
+            server.stubFor(mappingBuilder.willReturn(response));
 
             HTTPSampleResult res = http.sample(new URL(server.url("/gzip")), "GET", false, 1);
 
             Assertions.assertAll(
                     () -> assertEquals(expectedResponse, res.getResponseDataAsString(), "response body"),
+                    () -> assertEquals(responseBody.length + res.getHeadersSize(), res.getBytesAsLong(),
+                            "wire response bytes"),
                     () -> {
                         if (clientGzip == ClientGzip.NOT_REQUESTED || serverGzip == ServerGzip.NOT_SUPPORTED) {
                             assertFalse(
@@ -128,16 +184,17 @@ public class TestDecompression {
      */
     @ParameterizedTest
     @MethodSource("http2Params")
-    public void http2(ClientGzip clientGzip, ServerGzip serverGzip) throws MalformedURLException {
+    public void http2(ClientGzip clientGzip, ServerGzip serverGzip) throws IOException {
         WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
                 .dynamicHttpsPort()
                 .http2TlsDisabled(false)
-                .gzipDisabled(serverGzip == ServerGzip.NOT_SUPPORTED));
+                .gzipDisabled(true));
         server.start();
         try {
             HTTPSamplerBase http = HTTPSamplerFactory.newInstance(HTTPSamplerFactory.IMPL_HTTP_CLIENT5);
             http.setHttpVersion("HTTP/2");
             String expectedResponse = "Hello, 丈, \uD83D\uDE03, and नि";
+            byte[] responseBody = encodedResponse(expectedResponse, clientGzip, serverGzip);
             HeaderManager hm = new HeaderManager();
             if (clientGzip == ClientGzip.REQUESTED) {
                 hm.add(new Header("Accept-Encoding", "gzip"));
@@ -148,20 +205,22 @@ public class TestDecompression {
             if (clientGzip == ClientGzip.REQUESTED) {
                 mappingBuilder = mappingBuilder.withHeader("Accept-Encoding", WireMock.equalTo("gzip"));
             }
-            server.stubFor(
-                    mappingBuilder
-                            .willReturn(
-                                    WireMock.aResponse()
-                                            .withBody(expectedResponse)
-                                            .withHeader("Content-Type", "text/plain;charset=utf-8")
-                            )
-            );
+            var response = WireMock.aResponse()
+                    .withBody(responseBody)
+                    .withHeader("Content-Type", "text/plain;charset=utf-8")
+                    .withHeader("Content-Length", Long.toString(responseBody.length));
+            if (clientGzip == ClientGzip.REQUESTED && serverGzip == ServerGzip.SUPPORTED) {
+                response.withHeader("Content-Encoding", "gzip");
+            }
+            server.stubFor(mappingBuilder.willReturn(response));
 
             HTTPSampleResult res = http.sample(
                     new URL("https://localhost:" + server.httpsPort() + "/gzip"), "GET", false, 1);
 
             Assertions.assertAll(
                     () -> assertEquals(expectedResponse, res.getResponseDataAsString(), "response body"),
+                    () -> assertEquals(responseBody.length + res.getHeadersSize(), res.getBytesAsLong(),
+                            "wire response bytes"),
                     () -> {
                         // HTTP/2 header names are lower case, so compare them ignoring case
                         if (clientGzip == ClientGzip.NOT_REQUESTED || serverGzip == ServerGzip.NOT_SUPPORTED) {
@@ -189,5 +248,18 @@ public class TestDecompression {
                         .dynamicPort();
         config.accept(configuration);
         return new WireMockServer(configuration);
+    }
+
+    private static byte[] encodedResponse(String response, ClientGzip clientGzip, ServerGzip serverGzip)
+            throws IOException {
+        byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
+        if (clientGzip == ClientGzip.NOT_REQUESTED || serverGzip == ServerGzip.NOT_SUPPORTED) {
+            return bytes;
+        }
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzip = new GZIPOutputStream(output)) {
+            gzip.write(bytes);
+        }
+        return output.toByteArray();
     }
 }
