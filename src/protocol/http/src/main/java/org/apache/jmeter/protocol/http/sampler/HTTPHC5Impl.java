@@ -97,7 +97,7 @@ import org.apache.hc.client5.http.protocol.HttpClientContext;
 import org.apache.hc.client5.http.ssl.ClientTlsStrategyBuilder;
 import org.apache.hc.client5.http.ssl.HostnameVerificationPolicy;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
-import org.apache.hc.client5.http.ssl.TrustAllStrategy;
+import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
@@ -131,7 +131,6 @@ import org.apache.hc.core5.http2.config.H2Config;
 import org.apache.hc.core5.io.CloseMode;
 import org.apache.hc.core5.pool.PoolConcurrencyPolicy;
 import org.apache.hc.core5.reactor.ConnectionInitiator;
-import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import org.apache.hc.core5.util.VersionInfo;
@@ -326,6 +325,15 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final String[] HEADERS_TO_SAVE = {HttpHeaders.CONTENT_LENGTH, HttpHeaders.CONTENT_ENCODING,
             HttpHeaders.CONTENT_MD5};
 
+    private static final String[] SOCKET_PROTOCOL_ARRAY =
+            JMeterUtils.getArrayPropDefault("https.socket.protocols", null);
+
+    private static final String[] SOCKET_CIPHER_ARRAY =
+            JMeterUtils.getArrayPropDefault("https.socket.ciphers", null);
+
+    private static final String[] CIPHER_SUITE_ARRAY =
+            JMeterUtils.getArrayPropDefault("https.cipherSuites", SOCKET_CIPHER_ARRAY);
+
     // HttpClient 5.6 switched BrotliInputStreamFactory to the optional brotli4j library, so decode "br"
     // with the org.brotli:dec library JMeter ships, like HTTPHC4Impl does.
     @SuppressWarnings("deprecation")
@@ -340,8 +348,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             .register("x-gzip", GZIPInputStreamFactory.getInstance())
             .register("deflate", DeflateInputStreamFactory.getInstance())
             .build();
-
-    private static final TlsStrategy HTTP_2_TLS_STRATEGY = createHttp2TlsStrategy();
 
     private static final ExecChainHandler RESPONSE_CONTENT_ENCODING = (request, scope, chain) -> {
         HttpClientContext context = scope.clientContext;
@@ -397,20 +403,34 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private volatile org.apache.hc.client5.http.classic.methods.HttpUriRequestBase currentRequest;
 
-    private static TlsStrategy createHttp2TlsStrategy() {
+    private static ClientTlsStrategyBuilder createTlsStrategyBuilder() {
         try {
-            SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build();
-            return ClientTlsStrategyBuilder.create()
+            SSLContext sslContext = ((JsseSSLManager) SSLManager.getInstance()).getContext();
+            ClientTlsStrategyBuilder builder = ClientTlsStrategyBuilder.create()
                     .setSslContext(sslContext)
                     // Leave hostname verification to the no-op verifier below. Without CLIENT the policy would
                     // default to BOTH, and the JSSE built-in endpoint identification would reject the
                     // self-signed certificates JMeter deliberately accepts when testing.
                     .setHostVerificationPolicy(HostnameVerificationPolicy.CLIENT)
-                    .setHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                    .buildAsync();
+                    .setHostnameVerifier(NoopHostnameVerifier.INSTANCE);
+            if (SOCKET_PROTOCOL_ARRAY != null) {
+                builder.setTlsVersions(SOCKET_PROTOCOL_ARRAY);
+            }
+            if (CIPHER_SUITE_ARRAY != null) {
+                builder.setCiphers(CIPHER_SUITE_ARRAY);
+            }
+            return builder;
         } catch (GeneralSecurityException e) {
-            throw new IllegalStateException("Could not create HTTP/2 TLS strategy", e);
+            throw new IllegalStateException("Could not create TLS strategy", e);
         }
+    }
+
+    private static TlsSocketStrategy createTlsSocketStrategy() {
+        return createTlsStrategyBuilder().buildClassic();
+    }
+
+    private static TlsStrategy createTlsStrategy() {
+        return createTlsStrategyBuilder().buildAsync();
     }
 
     static H2Config createHttp2Config() {
@@ -1061,6 +1081,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             builder.disableDefaultUserAgent();
         }
         PoolingHttpClientConnectionManagerBuilder connectionManagerBuilder = PoolingHttpClientConnectionManagerBuilder.create();
+        connectionManagerBuilder.setTlsSocketStrategy(createTlsSocketStrategy());
         connectionManagerBuilder.setDefaultTlsConfig(TlsConfig.custom()
                 .setVersionPolicy(key.httpVersionPolicy)
                 .build());
@@ -1100,7 +1121,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             builder.addRequestInterceptorLast(REMOVE_DEFAULT_USER_AGENT);
         }
         PoolingAsyncClientConnectionManagerBuilder connectionManagerBuilder = PoolingAsyncClientConnectionManagerBuilder.create();
-        connectionManagerBuilder.setTlsStrategy(HTTP_2_TLS_STRATEGY);
+        connectionManagerBuilder.setTlsStrategy(createTlsStrategy());
         connectionManagerBuilder.setDefaultTlsConfig(TlsConfig.custom()
                 .setVersionPolicy(key.httpVersionPolicy)
                 .build());

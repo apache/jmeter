@@ -301,6 +301,26 @@ class TestHTTPHC5Features {
     }
 
     @Test
+    void usesJMeterSslContextForHttp11() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(true));
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/https11")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/https11"), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertEquals("HTTP/1.1", result.getResponseHeaders().substring(0, "HTTP/1.1".length()));
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
     void latencyDoesNotExceedElapsedTimeWhenResponseBodyIsDribbled() throws Exception {
         WireMockServer server = createServer();
         server.start();
