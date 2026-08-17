@@ -479,8 +479,12 @@ JMETER-SERVER</source>
     Defaults to: <code>250</code>
 </property>
 <property name="httpclient5.h2.initial_window_size">
-    HTTP/2 flow control window in bytes announced per stream.<br/>
-    Defaults to: <code>65535</code>
+    HTTP/2 flow control window in bytes announced per stream. It caps how many bytes the server may
+    send before it has to wait for a window update, so the throughput of a single response cannot
+    exceed this window divided by the round trip time. The HTTP/2 default of <code>65535</code>
+    throttles downloads over links with any noticeable latency, therefore JMeter announces the same
+    window as the Java sampler implementation.<br/>
+    Defaults to: <code>16777216</code>
 </property>
 <property name="httpclient5.h2.max_frame_size">
     Largest HTTP/2 frame payload in bytes the client is willing to receive.<br/>

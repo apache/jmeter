@@ -21,7 +21,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,6 +41,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -67,6 +71,7 @@ import org.apache.hc.core5.util.Timeout;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -176,7 +181,8 @@ class TestHTTPHC5Features {
         assertEquals(8192, config.getHeaderTableSize(), "HPACK dynamic table size");
         assertTrue(config.isCompressionEnabled(), "HPACK header compression");
         assertEquals(250, config.getMaxConcurrentStreams());
-        assertEquals(65535, config.getInitialWindowSize());
+        assertEquals(16 * 1024 * 1024, config.getInitialWindowSize(),
+                "the 64 kB default of HTTP/2 throttles a download to that window per round trip");
         assertEquals(65536, config.getMaxFrameSize());
         assertFalse(config.isPushEnabled(), "server push is dropped by JMeter, so it must not be announced");
     }
@@ -213,6 +219,123 @@ class TestHTTPHC5Features {
 
             assertEquals("200", result.getResponseCode());
             assertEquals("HTTP/2", result.getResponseHeaders().substring(0, "HTTP/2".length()));
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void uploadsMultipartFileOverHttp2WithoutBufferingItInMemory() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        Path upload = Files.createTempFile("jmeter-http2-upload-", ".bin");
+        try {
+            Files.write(upload, new byte[1_000_000]);
+            server.start();
+            server.stubFor(post(urlEqualTo("/upload")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+            sampler.setMethod(HTTPConstants.POST);
+            sampler.setDoMultipart(true);
+            sampler.setHTTPFiles(new HTTPFileArg[] {
+                    new HTTPFileArg(upload.toString(), "upload", "application/octet-stream") });
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/upload"), HTTPConstants.POST, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertEquals("HTTP/2", result.getResponseHeaders().substring(0, "HTTP/2".length()));
+            assertTrue(result.getSentBytes() > 1_000_000,
+                    () -> "the whole file should have been sent, but only " + result.getSentBytes() + " bytes were");
+            // The request view must not hold the file contents, otherwise a large upload is in heap twice
+            assertTrue(result.getQueryString().contains("<actual file content, not shown here>"),
+                    () -> "file contents should be omitted from the request view: " + result.getQueryString());
+            assertTrue(result.getQueryString().length() < 10_000,
+                    () -> "request view should not contain the file, but is "
+                            + result.getQueryString().length() + " characters long");
+            server.verify(postRequestedFor(urlEqualTo("/upload")));
+        } finally {
+            Files.deleteIfExists(upload);
+            server.stop();
+        }
+    }
+
+    @Test
+    void resendsSpilledHttp2RequestBodyOnRedirect() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        Path upload = Files.createTempFile("jmeter-http2-upload-", ".bin");
+        try {
+            Files.write(upload, new byte[1_000_000]);
+            server.start();
+            server.stubFor(post(urlEqualTo("/redirect")).willReturn(
+                    aResponse().withStatus(307).withHeader(HTTPConstants.HEADER_LOCATION, "/upload")));
+            server.stubFor(post(urlEqualTo("/upload")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+            sampler.setMethod(HTTPConstants.POST);
+            sampler.setAutoRedirects(true);
+            sampler.setDoMultipart(true);
+            sampler.setHTTPFiles(new HTTPFileArg[] {
+                    new HTTPFileArg(upload.toString(), "upload", "application/octet-stream") });
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/redirect"), HTTPConstants.POST, false, 1);
+
+            assertEquals("200", result.getResponseCode(), result.getResponseMessage());
+            server.verify(postRequestedFor(urlEqualTo("/upload")));
+        } finally {
+            Files.deleteIfExists(upload);
+            server.stop();
+        }
+    }
+
+    @Test
+    void readsHttp2ResponseWithoutContentTypeHeader() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        try {
+            server.start();
+            server.stubFor(get(urlEqualTo("/no-content-type"))
+                    .willReturn(aResponse().withStatus(200).withBody("no content type here")));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/no-content-type"),
+                    HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertEquals("no content type here", result.getResponseDataAsString());
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void readsHttp2ResponseThatIsLargerThanTheInMemoryBuffer() throws Exception {
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        try {
+            server.start();
+            byte[] body = new byte[2_000_000];
+            for (int i = 0; i < body.length; i++) {
+                body[i] = (byte) i;
+            }
+            server.stubFor(get(urlEqualTo("/large")).willReturn(aResponse().withStatus(200).withBody(body)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL("https://localhost:" + server.httpsPort() + "/large"), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertArrayEquals(body, result.getResponseData());
+            assertEquals(body.length, result.getBodySizeAsLong());
         } finally {
             server.stop();
         }

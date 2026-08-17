@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +36,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -1117,11 +1117,13 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 return updateSampleResultForResourceInCache(res);
             }
         }
-        CapturingHttpURLConnection capturingConn = null;
-        byte[] requestBodyBytes = new byte[0];
+        Http2CapturingHttpURLConnection capturingConn = null;
+        Path requestBody = null;
+        byte[] postBodyBytes = null;
+        long requestBodyLength = -1;
         Map<String, String> securityHeaders = Collections.emptyMap();
         try {
-            capturingConn = new CapturingHttpURLConnection(url, method);
+            capturingConn = new Http2CapturingHttpURLConnection(url, method);
             securityHeaders = setConnectionHeaders(capturingConn, url, getHeaderManager(), getCacheManager());
             String cookies = setConnectionCookie(capturingConn, url, getCookieManager());
             setConnectionAuthorization(capturingConn, url, getAuthManager(), securityHeaders);
@@ -1130,12 +1132,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 setPostHeaders(capturingConn);
                 String postBody = sendPostData(capturingConn);
                 res.setQueryString(postBody);
-                requestBodyBytes = capturingConn.getCapturedBytes();
             } else if (method.equals(HTTPConstants.PUT)) {
                 setPutHeaders(capturingConn);
                 String putBody = sendPutData(capturingConn);
                 res.setQueryString(putBody);
-                requestBodyBytes = capturingConn.getCapturedBytes();
+            }
+            capturingConn.finishCapture();
+            requestBodyLength = capturingConn.getCapturedBodyLength();
+            if (capturingConn.isSpilled()) {
+                requestBody = capturingConn.getCapturedBody();
+            } else {
+                postBodyBytes = capturingConn.getCapturedByteArray();
             }
             res.setRequestHeaders(getAllHeadersExceptCookie(capturingConn, securityHeaders));
             if (StringUtilities.isNotEmpty(cookies)) {
@@ -1147,7 +1154,15 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             HttpRequest.Builder reqBuilder = HttpRequest.newBuilder(uri);
             if (method.equalsIgnoreCase(HTTPConstants.POST) || method.equalsIgnoreCase(HTTPConstants.PUT)
                     || method.equalsIgnoreCase(HTTPConstants.PATCH)) {
-                reqBuilder.method(method, HttpRequest.BodyPublishers.ofByteArray(requestBodyBytes));
+                HttpRequest.BodyPublisher publisher;
+                if (requestBody != null) {
+                    publisher = HttpRequest.BodyPublishers.ofFile(requestBody);
+                } else if (postBodyBytes != null) {
+                    publisher = HttpRequest.BodyPublishers.ofByteArray(postBodyBytes);
+                } else {
+                    publisher = HttpRequest.BodyPublishers.noBody();
+                }
+                reqBuilder.method(method, publisher);
             } else if (method.equalsIgnoreCase(HTTPConstants.GET)) {
                 reqBuilder.GET();
             } else if (method.equalsIgnoreCase(HTTPConstants.DELETE)) {
@@ -1232,7 +1247,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
             res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_2,
                     capturingConn != null ? capturingConn.getRequestProperties() : null,
-                    securityHeaders, requestBodyBytes));
+                    securityHeaders, requestBodyLength));
 
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
@@ -1244,8 +1259,12 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
             res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_2,
                     capturingConn != null ? capturingConn.getRequestProperties() : null,
-                    securityHeaders, requestBodyBytes));
+                    securityHeaders, requestBodyLength));
             return errorResult(e, res);
+        } finally {
+            if (capturingConn != null) {
+                capturingConn.deleteCapturedBody();
+            }
         }
     }
 
@@ -1320,6 +1339,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             Map<String, List<String>> requestHeaders,
             Map<String, String> securityHeaders,
             byte[] postBodyBytes) {
+        return calculateSentBytes(u, method, version, requestHeaders, securityHeaders,
+                postBodyBytes == null ? -1 : postBodyBytes.length);
+    }
+
+    private static long calculateSentBytes(
+            URL u,
+            String method,
+            String version,
+            Map<String, List<String>> requestHeaders,
+            Map<String, String> securityHeaders,
+            long postBodyLength) {
         long sentBytes = 0;
 
         if (StringUtilities.isBlank(method)) {
@@ -1382,8 +1412,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         sentBytes += 2;
 
         // Request body
-        if (postBodyBytes != null && postBodyBytes.length > 0) {
-            sentBytes += postBodyBytes.length;
+        if (postBodyLength >= 0) {
+            sentBytes += postBodyLength;
         } else if (requestHeaders != null) {
             String contentLengthStr = getHeaderValue(requestHeaders, HTTPConstants.HEADER_CONTENT_LENGTH);
             if (StringUtilities.isNotEmpty(contentLengthStr)) {
@@ -1911,90 +1941,4 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
     }
 
-    private static class CapturingHttpURLConnection extends HttpURLConnection {
-        private final Map<String, List<String>> requestProperties = new LinkedHashMap<>();
-        private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        CapturingHttpURLConnection(URL url, String method) {
-            super(url);
-            this.method = method;
-        }
-
-        @Override
-        public void setRequestProperty(String key, String value) {
-            if (key == null) {
-                return;
-            }
-            List<String> list = new ArrayList<>();
-            list.add(value);
-            requestProperties.put(key, list);
-        }
-
-        @Override
-        public void addRequestProperty(String key, String value) {
-            if (key == null) {
-                return;
-            }
-            requestProperties.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
-        }
-
-        @Override
-        public String getRequestProperty(String key) {
-            if (key == null) {
-                return null;
-            }
-            List<String> values = requestProperties.get(key);
-            if (values == null || values.isEmpty()) {
-                for (Map.Entry<String, List<String>> entry : requestProperties.entrySet()) {
-                    if (key.equalsIgnoreCase(entry.getKey())) {
-                        values = entry.getValue();
-                        break;
-                    }
-                }
-            }
-            return (values != null && !values.isEmpty()) ? values.get(0) : null;
-        }
-
-        @Override
-        public Map<String, List<String>> getRequestProperties() {
-            return Collections.unmodifiableMap(requestProperties);
-        }
-
-        @Override
-        public java.io.OutputStream getOutputStream() throws IOException {
-            return outputStream;
-        }
-
-        byte[] getCapturedBytes() {
-            return outputStream.toByteArray();
-        }
-
-        @Override
-        public void connect() throws IOException {
-        }
-
-        @Override
-        public void disconnect() {
-        }
-
-        @Override
-        public boolean usingProxy() {
-            return false;
-        }
-
-        @Override
-        public String getHeaderField(int n) {
-            return null;
-        }
-
-        @Override
-        public String getHeaderFieldKey(int n) {
-            return null;
-        }
-
-        @Override
-        public String getHeaderField(String name) {
-            return null;
-        }
-    }
 }

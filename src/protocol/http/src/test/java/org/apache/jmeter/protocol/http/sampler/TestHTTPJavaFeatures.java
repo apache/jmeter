@@ -22,6 +22,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -36,6 +37,8 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +59,7 @@ import javax.net.ssl.X509ExtendedTrustManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
@@ -95,9 +99,40 @@ class TestHTTPJavaFeatures {
             HTTPSampleResult result = sampler.sample(
                     new URL(server.url("/http2")), HTTPConstants.GET, false, 1);
 
-            assertEquals("200", result.getResponseCode());
+            assertEquals("200", result.getResponseCode(), result.getResponseMessage());
             assertEquals("HTTP/2", result.getResponseHeaders().substring(0, "HTTP/2".length()));
         } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void uploadsMultipartFileOverHttp2() throws Exception {
+        WireMockServer server = createServer();
+        Path upload = Files.createTempFile("jmeter-http2-upload-", ".bin");
+        try {
+            Files.write(upload, new byte[1_000_000]);
+            server.start();
+            server.stubFor(post(urlEqualTo("/upload")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/2");
+            sampler.setMethod(HTTPConstants.POST);
+            sampler.setDoMultipart(true);
+            sampler.setHTTPFiles(new HTTPFileArg[] {
+                    new HTTPFileArg(upload.toString(), "upload", "application/octet-stream") });
+
+            HTTPSampleResult result = sampler.sample(
+                    new URL(server.url("/upload")), HTTPConstants.POST, false, 1);
+
+            assertEquals("200", result.getResponseCode(), result.getResponseMessage());
+            assertTrue(result.getSentBytes() > 1_000_000,
+                    () -> "the whole file should have been sent, but only " + result.getSentBytes() + " bytes were");
+            // The request view must not hold the file contents, otherwise a large upload is in heap twice
+            assertTrue(result.getQueryString().contains("<actual file content, not shown here>"),
+                    () -> "file contents should be omitted from the request view: " + result.getQueryString());
+            server.verify(postRequestedFor(urlEqualTo("/upload")));
+        } finally {
+            Files.deleteIfExists(upload);
             server.stop();
         }
     }

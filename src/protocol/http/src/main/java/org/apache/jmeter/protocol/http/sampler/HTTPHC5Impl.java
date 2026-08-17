@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -30,6 +31,9 @@ import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.security.Principal;
 import java.security.PrivilegedActionException;
@@ -50,10 +54,7 @@ import javax.security.auth.Subject;
 import org.apache.hc.client5.http.DnsResolver;
 import org.apache.hc.client5.http.HttpRoute;
 import org.apache.hc.client5.http.SystemDefaultDnsResolver;
-import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
-import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
-import org.apache.hc.client5.http.async.methods.SimpleRequestProducer;
-import org.apache.hc.client5.http.async.methods.SimpleResponseConsumer;
+import org.apache.hc.client5.http.async.methods.AbstractBinResponseConsumer;
 import org.apache.hc.client5.http.auth.AuthSchemeFactory;
 import org.apache.hc.client5.http.auth.AuthScope;
 import org.apache.hc.client5.http.auth.Credentials;
@@ -71,6 +72,7 @@ import org.apache.hc.client5.http.entity.DeflateInputStreamFactory;
 import org.apache.hc.client5.http.entity.GZIPInputStreamFactory;
 import org.apache.hc.client5.http.entity.InputStreamFactory;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.client5.http.entity.mime.FileBody;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder;
@@ -99,7 +101,6 @@ import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.EntityDetails;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HeaderElement;
 import org.apache.hc.core5.http.HttpEntity;
@@ -113,16 +114,16 @@ import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.config.Lookup;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.FileEntity;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicClassicHttpResponse;
 import org.apache.hc.core5.http.message.BasicHeaderValueParser;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.http.message.ParserCursor;
-import org.apache.hc.core5.http.nio.AsyncResponseConsumer;
-import org.apache.hc.core5.http.nio.CapacityChannel;
+import org.apache.hc.core5.http.nio.entity.BasicAsyncEntityProducer;
+import org.apache.hc.core5.http.nio.entity.FileEntityProducer;
 import org.apache.hc.core5.http.nio.ssl.TlsStrategy;
+import org.apache.hc.core5.http.nio.support.BasicRequestProducer;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
 import org.apache.hc.core5.http2.config.H2Config;
@@ -170,6 +171,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     /** Key used to store the current {@link SampleResult} in the {@link HttpClientContext}. */
     static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
     private static final String CONTEXT_ATTRIBUTE_RESPONSE_LATENCY = "__jmeter.S_R_LATENCY__"; //$NON-NLS-1$
+    private static final String CONTEXT_ATTRIBUTE_RESPONSE_BODY_SIZE = "__jmeter.S_R_BODY_SIZE__"; //$NON-NLS-1$
 
     private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTP_CLIENTS =
             new InheritableThreadLocal<>() {
@@ -206,8 +208,18 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final int HTTP_2_MAX_CONCURRENT_STREAMS =
             JMeterUtils.getPropDefault("httpclient5.h2.max_concurrent_streams", H2Config.DEFAULT.getMaxConcurrentStreams());
 
+    /**
+     * HTTP/2 flow control window announced per stream. It caps how many bytes the server may send
+     * before it has to wait for a window update, so the throughput of a single response can never
+     * exceed this window divided by the round trip time. The default of HttpClient is the 64 kB the
+     * HTTP/2 specification mandates, which throttles a download over a link with any noticeable
+     * latency to a fraction of the available bandwidth. JMeter therefore announces the same 16 MB
+     * the JDK client uses by default, see {@code http.java.h2.initial_window_size}. The window is
+     * only a promise to the server, the body is consumed as it arrives and not buffered up to this
+     * size.
+     */
     private static final int HTTP_2_INITIAL_WINDOW_SIZE =
-            JMeterUtils.getPropDefault("httpclient5.h2.initial_window_size", H2Config.DEFAULT.getInitialWindowSize());
+            JMeterUtils.getPropDefault("httpclient5.h2.initial_window_size", 16 * 1024 * 1024);
 
     private static final int HTTP_2_MAX_FRAME_SIZE =
             JMeterUtils.getPropDefault("httpclient5.h2.max_frame_size", H2Config.DEFAULT.getMaxFrameSize());
@@ -228,6 +240,15 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static final int HTTP_2_MAX_CONNECTIONS_PER_ROUTE =
             JMeterUtils.getPropDefault("httpclient5.h2.max_connections_per_route", 6);
+
+    /**
+     * Number of bytes of an HTTP/2 request body that are buffered in memory before the body is
+     * spilled to a temporary file. Keeping the common small bodies in heap avoids a temporary file
+     * per sample, while a larger body is streamed from disk so that a big upload is never
+     * materialized as a byte array.
+     */
+    private static final int HTTP_2_BODY_SPILL_THRESHOLD =
+            JMeterUtils.getPropDefault("httpclient5.h2.body_spill_threshold", 256 * 1024);
 
     /**
      * Milliseconds of inactivity after which a pooled connection is re-validated before it is used
@@ -369,7 +390,18 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     @SuppressWarnings("deprecation") // DecompressingEntity is superseded by the @Internal ContentCodecRegistry
     private static ClassicHttpResponse decompressResponse(ClassicHttpResponse response) {
         HttpEntity entity = response.getEntity();
-        if (entity == null || entity.getContentLength() == 0 || entity.getContentEncoding() == null) {
+        if (entity == null || entity.getContentLength() == 0) {
+            return response;
+        }
+
+        String contentEncoding = entity.getContentEncoding();
+        if (contentEncoding == null) {
+            Header encodingHeader = response.getFirstHeader(HttpHeaders.CONTENT_ENCODING);
+            if (encodingHeader != null) {
+                contentEncoding = encodingHeader.getValue();
+            }
+        }
+        if (contentEncoding == null) {
             return response;
         }
 
@@ -377,7 +409,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         for (int i = 0; i < HEADERS_TO_SAVE.length; i++) {
             headersToSave[i] = response.getHeaders(HEADERS_TO_SAVE[i]);
         }
-        String contentEncoding = entity.getContentEncoding();
         HeaderElement[] codecs = BasicHeaderValueParser.INSTANCE.parseElements(contentEncoding,
                 new ParserCursor(0, contentEncoding.length()));
         for (HeaderElement codec : codecs) {
@@ -400,7 +431,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     private volatile org.apache.hc.client5.http.classic.methods.HttpUriRequestBase currentRequest;
-    private volatile Future<SimpleHttpResponse> currentResponseFuture;
+    private volatile Future<?> currentResponseFuture;
     private volatile boolean interruptRequested;
 
     private static ClientTlsStrategyBuilder createTlsStrategyBuilder() {
@@ -472,7 +503,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             HttpClientContext context = createHttpClientContext(url, clientKey, request);
             context.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, result);
             response = executeRequest(url, clientKey, request, context);
-            readResponse(response, result);
+            readResponse(response, result, context);
             Long responseLatency = (Long) context.getAttribute(CONTEXT_ATTRIBUTE_RESPONSE_LATENCY);
             if (responseLatency != null) {
                 result.setLatency(responseLatency);
@@ -605,20 +636,23 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                     builder.addTextBody(argument.getName(), argument.getValue(), contentType);
                 }
             }
+            List<ViewableFileBody> fileBodies = new ArrayList<>(files.length);
             for (HTTPFileArg file : files) {
                 File resolvedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
                 ContentType contentType = StringUtilities.isNotEmpty(file.getMimeType())
                         ? ContentType.parse(file.getMimeType()) : ContentType.DEFAULT_BINARY;
-                builder.addBinaryBody(file.getParamName(), resolvedFile, contentType, file.getName());
+                ViewableFileBody fileBody = new ViewableFileBody(resolvedFile, contentType, file.getName());
+                fileBodies.add(fileBody);
+                builder.addPart(file.getParamName(), fileBody);
             }
             entity = builder.build();
-            requestData = getEntityPreview(entity, contentEncoding);
+            requestData = getMultipartPreview(entity, contentEncoding, fileBodies);
         } else if (!hasArguments() && getSendFileAsPostBody()) {
             HTTPFileArg file = files[0];
             if (request.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE) == null && StringUtilities.isNotEmpty(file.getMimeType())) {
                 request.setHeader(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
             }
-            entity = new FileEntity(FileServer.getFileServer().getResolvedFile(file.getPath()), null);
+            entity = new PathEntity(FileServer.getFileServer().getResolvedFile(file.getPath()), null);
             requestData = "<actual file content, not shown here>";
         } else if (getSendParameterValuesAsPostBody()) {
             StringBuilder body = new StringBuilder();
@@ -662,6 +696,49 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         entity.writeTo(output);
         return output.toString(contentEncoding);
+    }
+
+    /**
+     * Renders the multipart body for the sample result with the file contents replaced by a
+     * placeholder, so that uploading a large file does not have to be held in memory just to be
+     * shown in the request view.
+     */
+    private static String getMultipartPreview(HttpEntity entity, String contentEncoding,
+            List<ViewableFileBody> fileBodies) throws IOException {
+        for (ViewableFileBody fileBody : fileBodies) {
+            fileBody.hideFileData = true;
+        }
+        try {
+            return getEntityPreview(entity, contentEncoding);
+        } finally {
+            for (ViewableFileBody fileBody : fileBodies) {
+                fileBody.hideFileData = false;
+            }
+        }
+    }
+
+    /**
+     * File part of a multipart body that can write a placeholder instead of the file contents,
+     * so the body can be rendered for the sample result without reading the file into memory.
+     */
+    private static final class ViewableFileBody extends FileBody {
+        private static final byte[] CONTENTS_OMITTED =
+                "<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8); // $NON-NLS-1$
+
+        private boolean hideFileData;
+
+        private ViewableFileBody(File file, ContentType contentType, String filename) {
+            super(file, contentType, filename);
+        }
+
+        @Override
+        public void writeTo(OutputStream out) throws IOException {
+            if (hideFileData) {
+                out.write(CONTENTS_OMITTED);
+            } else {
+                super.writeTo(out);
+            }
+        }
     }
 
     private static void setConnectionHeaders(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
@@ -924,7 +1001,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         return url.getPort() == -1 ? url.getDefaultPort() : url.getPort();
     }
 
-    private void readResponse(ClassicHttpResponse response, HTTPSampleResult result) throws IOException {
+    private void readResponse(ClassicHttpResponse response, HTTPSampleResult result, HttpContext context)
+            throws IOException {
         Header contentType = response.getFirstHeader(HTTPConstants.HEADER_CONTENT_TYPE);
         if (contentType != null) {
             result.setContentType(contentType.getValue());
@@ -934,7 +1012,10 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         if (entity != null) {
             byte[] body = readResponse(result, entity.getContent(), entity.getContentLength());
             result.setResponseData(body);
-            result.setBodySize((long) body.length);
+            // The HTTP/2 transport counts the body while it streams it, so a truncated response
+            // still reports the number of bytes the server actually sent
+            Long bodySize = (Long) context.getAttribute(CONTEXT_ATTRIBUTE_RESPONSE_BODY_SIZE);
+            result.setBodySize(bodySize != null ? bodySize : (long) body.length);
         }
     }
 
@@ -1172,98 +1253,254 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    @SuppressWarnings("deprecation") // SimpleHttpRequest.copy is required for HttpClient 5.3 compatibility
     private ClassicHttpResponse executeHttp2(CloseableHttpAsyncClient client,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HttpClientContext context)
             throws IOException {
-        SimpleHttpRequest asyncRequest = SimpleHttpRequest.copy(request);
-        asyncRequest.setConfig(request.getConfig());
-        HttpEntity requestEntity = request.getEntity();
-        if (requestEntity != null) {
-            asyncRequest.setBody(EntityUtils.toByteArray(requestEntity),
-                    requestEntity.getContentType() == null ? ContentType.DEFAULT_BINARY
-                            : ContentType.parse(requestEntity.getContentType()));
-        }
-        Future<SimpleHttpResponse> responseFuture = client.execute(SimpleRequestProducer.create(asyncRequest),
-                new LatencyMeasuringResponseConsumer(), context, null);
-        currentResponseFuture = responseFuture;
-        if (interruptRequested) {
-            responseFuture.cancel(true);
-        }
+        RequestBody requestBody = createRequestBody(request);
         try {
-            return createClassicResponse(responseFuture.get());
-        } catch (InterruptedException e) {
-            responseFuture.cancel(true);
-            Thread.currentThread().interrupt();
-            throw new IOException("Interrupted while executing HTTP/2 request", e);
-        } catch (ExecutionException e) {
-            throw new IOException("Could not execute HTTP/2 request", e.getCause());
+            Future<ClassicHttpResponse> responseFuture = client.execute(requestBody.producer,
+                    new LatencyMeasuringResponseConsumer(
+                            (SampleResult) context.getAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT), context,
+                            getMaxBytesToStore()),
+                    context, null);
+            currentResponseFuture = responseFuture;
+            if (interruptRequested) {
+                responseFuture.cancel(true);
+            }
+            try {
+                return responseFuture.get();
+            } catch (InterruptedException e) {
+                responseFuture.cancel(true);
+                Thread.currentThread().interrupt();
+                throw new IOException("Interrupted while executing HTTP/2 request", e);
+            } catch (ExecutionException e) {
+                throw new IOException("Could not execute HTTP/2 request", e.getCause());
+            } finally {
+                currentResponseFuture = null;
+            }
         } finally {
-            currentResponseFuture = null;
+            // The exchange, including any redirect HttpClient followed itself, is over by now, so
+            // the spilled request body is not needed anymore
+            deleteQuietly(requestBody.temporaryFile);
         }
-    }
-
-    private static ClassicHttpResponse createClassicResponse(SimpleHttpResponse asyncResponse) {
-        BasicClassicHttpResponse response = new BasicClassicHttpResponse(asyncResponse.getCode(),
-                asyncResponse.getReasonPhrase());
-        response.setVersion(asyncResponse.getVersion());
-        for (Header header : asyncResponse.getHeaders()) {
-            response.addHeader(header);
-        }
-        byte[] responseBody = asyncResponse.getBodyBytes();
-        if (responseBody != null) {
-            response.setEntity(new ByteArrayEntity(responseBody, asyncResponse.getContentType(),
-                    asyncResponse.getFirstHeader(HttpHeaders.CONTENT_ENCODING) == null ? null
-                            : asyncResponse.getFirstHeader(HttpHeaders.CONTENT_ENCODING).getValue()));
-        }
-        return decompressResponse(response);
     }
 
     /**
-     * Captures HTTP/2 latency when the final response headers arrive. The response body is buffered
-     * asynchronously, so its later copy through {@link HTTPSamplerBase#readResponse} must not replace this value.
+     * Number of response body bytes worth keeping, {@code 0} meaning all of them. This has to be
+     * determined on the sampler thread, as the recording flag lives in a thread local the HTTP/2
+     * I/O reactor threads do not see. Truncation is also given up when an MD5 digest is requested,
+     * because that is computed over the whole body.
      */
-    private static final class LatencyMeasuringResponseConsumer implements AsyncResponseConsumer<SimpleHttpResponse> {
+    private long getMaxBytesToStore() {
+        if (testElement.useMD5() || JMeterContextService.getContext().isRecording()) {
+            return 0;
+        }
+        return Math.max(0, HTTPSamplerBase.getMaxBytesToStorePerRequest());
+    }
 
-        private final SimpleResponseConsumer delegate = SimpleResponseConsumer.create();
+    /** A request body producer together with the temporary file it streams from, if any. */
+    private static final class RequestBody {
+        private final BasicRequestProducer producer;
+        private final Path temporaryFile;
+
+        private RequestBody(BasicRequestProducer producer, Path temporaryFile) {
+            this.producer = producer;
+            this.temporaryFile = temporaryFile;
+        }
+    }
+
+    /**
+     * Builds the producer that streams the request body to the server. A file that is sent as the
+     * body is streamed straight from disk, other bodies are buffered in memory and only spilled to
+     * a temporary file when they exceed {@link #HTTP_2_BODY_SPILL_THRESHOLD}, so that a large
+     * upload is never materialized as a byte array.
+     */
+    private static RequestBody createRequestBody(
+            org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) throws IOException {
+        HttpEntity entity = request.getEntity();
+        if (entity == null) {
+            return new RequestBody(new BasicRequestProducer(request, null), null);
+        }
+
+        // A null content type leaves the Content-Type header to the request, like the HTTP/1.1 transport does
+        ContentType contentType = entity.getContentType() == null ? null
+                : ContentType.parse(entity.getContentType());
+        if (entity instanceof PathEntity pathEntity) {
+            return new RequestBody(
+                    new BasicRequestProducer(request, new FileEntityProducer(pathEntity.getFile(), contentType)), null);
+        }
+
+        SpillOutputStream spillOutput =
+                new SpillOutputStream(HTTP_2_BODY_SPILL_THRESHOLD, "jmeter-http2-request-", ".tmp");
+        try {
+            entity.writeTo(spillOutput);
+            spillOutput.close();
+            if (spillOutput.isSpilled()) {
+                Path temporaryFile = spillOutput.getTempFile();
+                return new RequestBody(new BasicRequestProducer(request,
+                        new FileEntityProducer(temporaryFile.toFile(), contentType)), temporaryFile);
+            }
+            return new RequestBody(new BasicRequestProducer(request,
+                    new BasicAsyncEntityProducer(spillOutput.toByteArray(), contentType)), null);
+        } catch (IOException e) {
+            spillOutput.releaseResources();
+            throw e;
+        }
+    }
+
+    /**
+     * Streams the HTTP/2 response body and captures the latency when the final response headers
+     * arrive.
+     * <p>
+     * The body has to be buffered until the exchange is complete, because the asynchronous
+     * transport hands it to the sampler thread as a whole. When
+     * {@code httpsampler.max_bytes_to_store_per_request} limits what is kept, the body is truncated
+     * right here, so the bytes beyond the limit are counted and dropped instead of being buffered
+     * only for {@link HTTPSamplerBase#readResponse} to discard them. That gives the same peak heap
+     * usage as the HTTP/1.1 transport, which reads and truncates the body as it arrives.
+     */
+    private static final class LatencyMeasuringResponseConsumer extends AbstractBinResponseConsumer<ClassicHttpResponse> {
+        /** Buffer size used when the size of the body is unknown. */
+        private static final int DEFAULT_BUFFER_SIZE = 8 * 1024;
+        /**
+         * Upper bound for the buffer that is allocated upfront from the announced content length,
+         * so that a bogus or hostile {@code Content-Length} cannot exhaust the heap before a single
+         * byte of the body has been received. A larger body grows the buffer as it arrives.
+         */
+        private static final int MAX_INITIAL_BUFFER_SIZE = 16 * 1024 * 1024;
+
+        private final SampleResult sampleResult;
+        private final HttpContext context;
+        /** Bytes to keep of the body, {@code 0} keeps all of them. */
+        private final long maxBytesToStore;
+        private BasicClassicHttpResponse response;
+        private ByteArrayOutputStream body;
+        private ContentType contentType;
+        private long storeLimit;
+        private long totalBodyBytes;
+
+        private LatencyMeasuringResponseConsumer(SampleResult sampleResult, HttpContext context,
+                long maxBytesToStore) {
+            this.sampleResult = sampleResult;
+            this.context = context;
+            this.maxBytesToStore = maxBytesToStore;
+        }
 
         @Override
-        public void consumeResponse(HttpResponse response, EntityDetails entityDetails, HttpContext context,
-                FutureCallback<SimpleHttpResponse> resultCallback) throws HttpException, IOException {
-            SampleResult sampleResult = (SampleResult) context.getAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT);
+        protected void start(HttpResponse response, ContentType contentType) throws HttpException, IOException {
             sampleResult.latencyEnd();
             context.setAttribute(CONTEXT_ATTRIBUTE_RESPONSE_LATENCY, sampleResult.getLatency());
-            delegate.consumeResponse(response, entityDetails, context, resultCallback);
+            this.response = new BasicClassicHttpResponse(response.getCode(), response.getReasonPhrase());
+            this.response.setVersion(response.getVersion());
+            for (Header header : response.getHeaders()) {
+                this.response.addHeader(header);
+            }
+            this.contentType = contentType;
+            // An encoded body has to be kept in full, as it can only be decoded from its first byte on
+            storeLimit = response.containsHeader(HttpHeaders.CONTENT_ENCODING) ? 0 : maxBytesToStore;
+            // The body is buffered whether or not the server sent a Content-Type header, as a
+            // response without one still has to be reported with its body
+            body = new ByteArrayOutputStream(initialBufferSize(response));
+        }
+
+        /**
+         * Size of the buffer the body is collected in, derived from the announced content length
+         * and the number of bytes that are kept of it, to avoid repeatedly growing and copying the
+         * buffer while a large body is received.
+         */
+        private int initialBufferSize(HttpResponse response) {
+            long expected = -1;
+            String contentLength = getHeaderValue(response, HttpHeaders.CONTENT_LENGTH);
+            if (contentLength != null) {
+                try {
+                    expected = Long.parseLong(contentLength.trim());
+                } catch (NumberFormatException e) {
+                    log.debug("Ignoring malformed Content-Length header {}", contentLength);
+                }
+            }
+            if (storeLimit > 0) {
+                expected = expected < 0 ? storeLimit : Math.min(expected, storeLimit);
+            }
+            if (expected <= DEFAULT_BUFFER_SIZE) {
+                return DEFAULT_BUFFER_SIZE;
+            }
+            return (int) Math.min(expected, MAX_INITIAL_BUFFER_SIZE);
+        }
+
+        /**
+         * Amount of data the consumer accepts before the flow control window is replenished. This
+         * is the HTTP/2 window the connection was configured with, as the body is streamed straight
+         * into the buffer and a smaller increment would only throttle large downloads.
+         */
+        @Override
+        protected int capacityIncrement() {
+            return HTTP_2_INITIAL_WINDOW_SIZE;
         }
 
         @Override
-        public void informationResponse(HttpResponse response, HttpContext context) throws HttpException, IOException {
-            delegate.informationResponse(response, context);
+        protected void data(ByteBuffer src, boolean endOfStream) throws IOException {
+            int available = src.remaining();
+            totalBodyBytes += available;
+            int toStore = available;
+            if (storeLimit > 0) {
+                long remainingCapacity = storeLimit - (totalBodyBytes - available);
+                toStore = (int) Math.max(0, Math.min(available, remainingCapacity));
+            }
+            if (body != null && toStore > 0) {
+                if (src.hasArray()) {
+                    body.write(src.array(), src.arrayOffset() + src.position(), toStore);
+                } else {
+                    byte[] bytes = new byte[toStore];
+                    src.duplicate().get(bytes);
+                    body.write(bytes, 0, toStore);
+                }
+            }
+            src.position(src.limit());
         }
 
         @Override
-        public void updateCapacity(CapacityChannel capacityChannel) throws IOException {
-            delegate.updateCapacity(capacityChannel);
-        }
-
-        @Override
-        public void consume(ByteBuffer src) throws IOException {
-            delegate.consume(src);
-        }
-
-        @Override
-        public void streamEnd(List<? extends Header> trailers) throws HttpException, IOException {
-            delegate.streamEnd(trailers);
-        }
-
-        @Override
-        public void failed(Exception cause) {
-            delegate.failed(cause);
+        protected ClassicHttpResponse buildResult() {
+            if (body != null) {
+                response.setEntity(new ByteArrayEntity(body.toByteArray(), contentType,
+                        getHeaderValue(response, HttpHeaders.CONTENT_ENCODING)));
+                body = null;
+            }
+            // The body may have been truncated, so report what the server actually sent
+            context.setAttribute(CONTEXT_ATTRIBUTE_RESPONSE_BODY_SIZE, totalBodyBytes);
+            return decompressResponse(response);
         }
 
         @Override
         public void releaseResources() {
-            delegate.releaseResources();
+            body = null;
+        }
+    }
+
+    private static class PathEntity extends FileEntity {
+        private final File file;
+
+        PathEntity(File file, ContentType contentType) {
+            super(file, contentType);
+            this.file = file;
+        }
+
+        File getFile() {
+            return file;
+        }
+    }
+
+    private static String getHeaderValue(HttpResponse response, String name) {
+        Header header = response.getFirstHeader(name);
+        return header == null ? null : header.getValue();
+    }
+
+    private static void deleteQuietly(Path file) {
+        if (file != null) {
+            try {
+                Files.deleteIfExists(file);
+            } catch (IOException e) {
+                log.warn("Could not delete temporary HTTP/2 body file {}", file, e);
+            }
         }
     }
 
@@ -1380,7 +1617,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     @Override
     public boolean interrupt() {
         org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request = currentRequest;
-        Future<SimpleHttpResponse> responseFuture = currentResponseFuture;
+        Future<?> responseFuture = currentResponseFuture;
         if (request != null || responseFuture != null) {
             interruptRequested = true;
         }
