@@ -246,14 +246,25 @@ class TestHTTPJavaFeatures {
     }
 
     @Test
-    void disablesServerPushAndKeepsJdkDefaultsWhenNothingIsConfigured() {
+    void keepsJdkDefaultsWhenNothingIsConfigured() {
         Properties systemProperties = new Properties();
 
         HTTPJavaImpl.applyHttp2SystemProperties(new Properties(), systemProperties);
 
-        assertEquals("0", systemProperties.getProperty("jdk.httpclient.enablepush"));
+        assertNull(systemProperties.getProperty("jdk.httpclient.enablepush"));
         assertNull(systemProperties.getProperty("jdk.httpclient.hpack.maxheadertablesize"));
         assertNull(systemProperties.getProperty("jdk.httpclient.windowsize"));
+    }
+
+    @Test
+    void disablesServerPushWhenConfigured() {
+        Properties jmeterProperties = new Properties();
+        jmeterProperties.setProperty("http.java.h2.push_enabled", "false");
+        Properties systemProperties = new Properties();
+
+        HTTPJavaImpl.applyHttp2SystemProperties(jmeterProperties, systemProperties);
+
+        assertEquals("0", systemProperties.getProperty("jdk.httpclient.enablepush"));
     }
 
     @Test

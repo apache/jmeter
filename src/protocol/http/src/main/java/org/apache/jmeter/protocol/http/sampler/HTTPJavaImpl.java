@@ -163,9 +163,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      */
     private static final Map<String, String> HTTP_2_SYSTEM_PROPERTIES = createHttp2SystemPropertyMapping();
 
-    static {
-        applyHttp2SystemProperties(JMeterUtils.getJMeterProperties(), System.getProperties());
-    }
+    private static volatile boolean http2SystemPropertiesApplied;
 
     private static Map<String, String> createHttp2SystemPropertyMapping() {
         Map<String, String> mapping = new LinkedHashMap<>();
@@ -178,6 +176,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         mapping.put("http.java.h2.max_frame_size", "jdk.httpclient.maxframesize"); // $NON-NLS-1$ $NON-NLS-2$
         mapping.put("http.java.h2.keep_alive_timeout", "jdk.httpclient.keepalive.timeout.h2"); // $NON-NLS-1$ $NON-NLS-2$
         return Collections.unmodifiableMap(mapping);
+    }
+
+    private static void applyHttp2SystemPropertiesLazily() {
+        if (!http2SystemPropertiesApplied) {
+            synchronized (HTTPJavaImpl.class) {
+                if (!http2SystemPropertiesApplied) {
+                    applyHttp2SystemProperties(JMeterUtils.getJMeterProperties(), System.getProperties());
+                    http2SystemPropertiesApplied = true;
+                }
+            }
+        }
     }
 
     /**
@@ -195,8 +204,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 setUnlessDefined(systemProperties, entry.getValue(), value.trim());
             }
         }
-        boolean pushEnabled = Boolean.parseBoolean(source.getProperty(HTTP_2_PUSH_ENABLED_PROPERTY, "false")); // $NON-NLS-1$
-        setUnlessDefined(systemProperties, JDK_PUSH_ENABLED_PROPERTY, pushEnabled ? "1" : "0"); // $NON-NLS-1$ $NON-NLS-2$
+        String pushProperty = source.getProperty(HTTP_2_PUSH_ENABLED_PROPERTY);
+        if (StringUtilities.isNotBlank(pushProperty)) {
+            boolean pushEnabled = Boolean.parseBoolean(pushProperty.trim());
+            setUnlessDefined(systemProperties, JDK_PUSH_ENABLED_PROPERTY, pushEnabled ? "1" : "0"); // $NON-NLS-1$ $NON-NLS-2$
+        }
     }
 
     private static void setUnlessDefined(Properties systemProperties, String name, String value) {
@@ -1496,6 +1508,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     private static Http2Client createHttpClient(HttpClientKey key, SSLContext sslContext) {
+        applyHttp2SystemPropertiesLazily();
         ConnectTimeTracker connectTimeTracker = new ConnectTimeTracker();
         HttpClient.Builder builder = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
