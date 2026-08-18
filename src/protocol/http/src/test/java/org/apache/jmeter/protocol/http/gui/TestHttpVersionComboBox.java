@@ -22,13 +22,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.util.JMeterUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TestHttpVersionComboBox {
+
+    @BeforeAll
+    static void setUp() {
+        JMeterUtils.setLocale(Locale.ENGLISH);
+    }
 
     private static JComboBox<String> implementationComboBox() {
         JComboBox<String> implementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
@@ -109,5 +120,13 @@ public class TestHttpVersionComboBox {
         httpVersion.setImplementation("HttpClient4");
         assertEquals(Arrays.asList("", "HTTP/1.1"), items(httpVersion));
         assertEquals("", httpVersion.getSelectedItem());
+    }
+
+    @Test
+    void rendersHttp2AsNegotiate() {
+        HttpVersionComboBox httpVersion = new HttpVersionComboBox();
+        ListCellRenderer<? super String> renderer = httpVersion.getRenderer();
+        JLabel label = (JLabel) renderer.getListCellRendererComponent(new JList<>(), "HTTP/2", 0, false, false);
+        assertEquals("HTTP/2 Negotiate", label.getText());
     }
 }

@@ -29,6 +29,7 @@ import javax.swing.JList;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Combo box for the HTTP version of a sampler, offering only the versions the selected
@@ -40,12 +41,6 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 public class HttpVersionComboBox extends JComboBox<String> {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Label of {@link HTTPConstants#HTTP_VERSION_2}, spelled out as HTTP/2 falls back to HTTP/1.1
-     * when the server does not support it.
-     */
-    private static final String HTTP_VERSION_2_LABEL = "HTTP/2 Negotiate"; // $NON-NLS-1$
 
     public HttpVersionComboBox() {
         super(HTTPSamplerFactory.getHttpVersions(""));
@@ -60,9 +55,13 @@ public class HttpVersionComboBox extends JComboBox<String> {
         });
     }
 
+    /**
+     * Label of {@link HTTPConstants#HTTP_VERSION_2}, spelled out as HTTP/2 falls back to HTTP/1.1
+     * when the server does not support it.
+     */
     private static Object getLabel(Object value) {
         if (HTTPConstants.HTTP_VERSION_2.equals(value)) {
-            return HTTP_VERSION_2_LABEL;
+            return JMeterUtils.getResString("http_version_2_negotiate"); // $NON-NLS-1$
         }
         return value;
     }
