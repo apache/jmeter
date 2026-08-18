@@ -1635,16 +1635,21 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     /** Closes the clients of the current thread, which releases their connections and I/O threads. */
     static void closeThreadLocalClients() {
+        // The maps are shared with the threads which download embedded resources, and those threads are
+        // pooled, so they are emptied before the clients are closed to make sure a thread which serves
+        // another JMeter thread later on builds a client of its own instead of using a closed one.
         Map<HttpClientKey, CloseableHttpClient> clients = HTTP_CLIENTS.get();
-        for (CloseableHttpClient client : clients.values()) {
-            JOrphanUtils.closeQuietly(client);
-        }
+        List<CloseableHttpClient> closing = new ArrayList<>(clients.values());
         clients.clear();
-        Map<HttpClientKey, CloseableHttpAsyncClient> http2Clients = HTTP_2_CLIENTS.get();
-        for (CloseableHttpAsyncClient client : http2Clients.values()) {
+        for (CloseableHttpClient client : closing) {
             JOrphanUtils.closeQuietly(client);
         }
+        Map<HttpClientKey, CloseableHttpAsyncClient> http2Clients = HTTP_2_CLIENTS.get();
+        List<CloseableHttpAsyncClient> closingHttp2Clients = new ArrayList<>(http2Clients.values());
         http2Clients.clear();
+        for (CloseableHttpAsyncClient client : closingHttp2Clients) {
+            JOrphanUtils.closeQuietly(client);
+        }
     }
 
     @Override
