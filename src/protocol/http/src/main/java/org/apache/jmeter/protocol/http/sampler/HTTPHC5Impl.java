@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,12 +38,14 @@ import java.security.Principal;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -150,6 +153,7 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -180,25 +184,26 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final String CONTEXT_ATTRIBUTE_RESPONSE_BODY_SIZE = "__jmeter.S_R_BODY_SIZE__"; //$NON-NLS-1$
     private static final String CONTEXT_ATTRIBUTE_RESPONSE_BODY_COUNTER = "__jmeter.S_R_BODY_COUNTER__"; //$NON-NLS-1$
 
-    private static final ThreadLocal<Map<HttpClientKey, CloseableHttpClient>> HTTP_CLIENTS =
-            new InheritableThreadLocal<>() {
-                @Override
-                protected Map<HttpClientKey, CloseableHttpClient> initialValue() {
-                    return new ConcurrentHashMap<>();
-                }
-            };
+    /**
+     * Clients of every JMeter thread, looked up by the {@link JMeterContext} of that thread instead
+     * of by the thread itself. The threads that download embedded resources in parallel are pooled
+     * and shared by all JMeter threads, and they adopt the context of the JMeter thread they are
+     * working for, so looking the clients up by context hands them the clients of that thread. That
+     * shares a connection between a sample and its embedded resources, which lets HTTP/2 multiplex
+     * them, and it keeps a JMeter thread from closing clients another one is still using.
+     *
+     * <p>The keys are weak, so that a context whose clients are never closed explicitly, like the
+     * one of a thread of the HTTP(S) Test Script Recorder, does not keep the entry alive forever.
+     */
+    private static final Map<JMeterContext, Map<HttpClientKey, CloseableHttpClient>> HTTP_CLIENTS =
+            Collections.synchronizedMap(new WeakHashMap<>());
 
     /**
-     * HTTP/2 clients are shared with the threads that download embedded resources in parallel,
-     * so that concurrent requests to the same host can be multiplexed over a single connection.
+     * HTTP/2 clients of every JMeter thread, see {@link #HTTP_CLIENTS} for how they are shared with
+     * the threads that download embedded resources in parallel.
      */
-    private static final ThreadLocal<Map<HttpClientKey, CloseableHttpAsyncClient>> HTTP_2_CLIENTS =
-            new InheritableThreadLocal<>() {
-                @Override
-                protected Map<HttpClientKey, CloseableHttpAsyncClient> initialValue() {
-                    return new ConcurrentHashMap<>();
-                }
-            };
+    private static final Map<JMeterContext, Map<HttpClientKey, CloseableHttpAsyncClient>> HTTP_2_CLIENTS =
+            Collections.synchronizedMap(new WeakHashMap<>());
 
     /** Multiplex concurrent message exchanges over a single HTTP/2 connection. */
     private static final boolean HTTP_2_MULTIPLEXING =
@@ -1181,12 +1186,14 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     private static CloseableHttpClient getClient(HttpClientKey key) {
-        Map<HttpClientKey, CloseableHttpClient> clients = HTTP_CLIENTS.get();
+        Map<HttpClientKey, CloseableHttpClient> clients =
+                HTTP_CLIENTS.computeIfAbsent(JMeterContextService.getContext(), context -> new ConcurrentHashMap<>());
         return clients.computeIfAbsent(key, HTTPHC5Impl::createClient);
     }
 
     private static CloseableHttpAsyncClient getHttp2Client(HttpClientKey key) {
-        Map<HttpClientKey, CloseableHttpAsyncClient> clients = HTTP_2_CLIENTS.get();
+        Map<HttpClientKey, CloseableHttpAsyncClient> clients =
+                HTTP_2_CLIENTS.computeIfAbsent(JMeterContextService.getContext(), context -> new ConcurrentHashMap<>());
         return clients.computeIfAbsent(key, HTTPHC5Impl::createHttp2Client);
     }
 
@@ -1622,7 +1629,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static void resetStateIfNeeded() {
         if (resetStateOnThreadGroupIteration.get()) {
-            closeThreadLocalClients();
+            closeClientsOfCurrentThread();
             ((JsseSSLManager) SSLManager.getInstance()).resetContext();
             resetStateOnThreadGroupIteration.set(false);
         }
@@ -1630,24 +1637,24 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     @Override
     protected void threadFinished() {
-        closeThreadLocalClients();
+        closeClientsOfCurrentThread();
     }
 
     /** Closes the clients of the current thread, which releases their connections and I/O threads. */
-    static void closeThreadLocalClients() {
-        // The maps are shared with the threads which download embedded resources, and those threads are
-        // pooled, so they are emptied before the clients are closed to make sure a thread which serves
-        // another JMeter thread later on builds a client of its own instead of using a closed one.
-        Map<HttpClientKey, CloseableHttpClient> clients = HTTP_CLIENTS.get();
-        List<CloseableHttpClient> closing = new ArrayList<>(clients.values());
-        clients.clear();
-        for (CloseableHttpClient client : closing) {
-            JOrphanUtils.closeQuietly(client);
+    static void closeClientsOfCurrentThread() {
+        // Only the clients of this JMeter thread are dropped. The threads which download embedded
+        // resources borrow them while they work for this thread, and they are done by the time the
+        // sample returns, so no client is closed while a request is still using it.
+        JMeterContext context = JMeterContextService.getContext();
+        closeQuietly(HTTP_CLIENTS.remove(context));
+        closeQuietly(HTTP_2_CLIENTS.remove(context));
+    }
+
+    private static void closeQuietly(Map<HttpClientKey, ? extends Closeable> clients) {
+        if (clients == null) {
+            return;
         }
-        Map<HttpClientKey, CloseableHttpAsyncClient> http2Clients = HTTP_2_CLIENTS.get();
-        List<CloseableHttpAsyncClient> closingHttp2Clients = new ArrayList<>(http2Clients.values());
-        http2Clients.clear();
-        for (CloseableHttpAsyncClient client : closingHttp2Clients) {
+        for (Closeable client : new ArrayList<>(clients.values())) {
             JOrphanUtils.closeQuietly(client);
         }
     }

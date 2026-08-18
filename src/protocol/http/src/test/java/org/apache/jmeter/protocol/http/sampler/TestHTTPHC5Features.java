@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -67,9 +69,12 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,7 +89,7 @@ class TestHTTPHC5Features {
     @AfterEach
     void closeClientsOfThisThread() {
         // the clients are cached per thread and keep their connections and I/O reactor threads alive
-        HTTPHC5Impl.closeThreadLocalClients();
+        HTTPHC5Impl.closeClientsOfCurrentThread();
     }
 
     @Test
@@ -149,7 +154,11 @@ class TestHTTPHC5Features {
             assertEquals(1, relay.getAcceptedConnections(), "the warm up should have opened one connection");
 
             int requests = 4;
+            // the threads which download embedded resources adopt the JMeterContext of the JMeter
+            // thread they work for, which is how they end up using its client
+            JMeterContext jmeterThreadContext = JMeterContextService.getContext();
             Callable<HTTPSampleResult> sample = () -> {
+                JMeterContextService.replaceContext(jmeterThreadContext);
                 HTTPSamplerBase sampler = newSampler();
                 sampler.setHttpVersion("HTTP/2");
                 return sampler.sample(url, HTTPConstants.GET, false, 1);
@@ -177,6 +186,84 @@ class TestHTTPHC5Features {
                             + "instead of opening a connection each");
         } finally {
             server.stop();
+        }
+    }
+
+    /**
+     * The threads which download embedded resources in parallel are pooled and shared by all JMeter
+     * threads, so they must use the clients of the JMeter thread they are working for. Otherwise
+     * they keep the clients of the thread that happened to create them, and a request is executed
+     * on a client another JMeter thread closes at its iteration boundary, which fails the sample
+     * with an {@link IOException} or leaves it waiting for a response that never arrives.
+     */
+    @Test
+    @org.junit.jupiter.api.Timeout(120)
+    void downloadsEmbeddedResourcesWhileOtherThreadsCloseTheirClients() throws Exception {
+        HTTPSamplerBase.registerParser("text/html", LagartoBasedHtmlParser.class.getName());
+        WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
+                .dynamicHttpsPort()
+                .http2TlsDisabled(false));
+        server.start();
+        List<String> failures = new CopyOnWriteArrayList<>();
+        try {
+            StringBuilder html = new StringBuilder("<html><body>");
+            for (int i = 0; i < 12; i++) {
+                html.append("<img src='image").append(i).append(".png'>");
+                server.stubFor(get(urlEqualTo("/image" + i + ".png"))
+                        .willReturn(aResponse().withStatus(200).withFixedDelay(30).withBody("image" + i)));
+            }
+            server.stubFor(get(urlEqualTo("/index.html")).willReturn(aResponse().withStatus(200)
+                    .withHeader("Content-Type", "text/html").withBody(html.append("</body></html>").toString())));
+            URL url = new URL("https://localhost:" + server.httpsPort() + "/index.html");
+
+            CountDownLatch start = new CountDownLatch(1);
+            List<Thread> jmeterThreads = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                Thread jmeterThread = new Thread(() -> {
+                    try {
+                        start.await();
+                        for (int iteration = 0; iteration < 10; iteration++) {
+                            HTTPSamplerBase sampler = newSampler();
+                            sampler.setHttpVersion("HTTP/2");
+                            sampler.setImageParser(true);
+                            sampler.setConcurrentDwn(true);
+                            sampler.setConcurrentPool("6");
+                            sampler.setRunningVersion(true);
+
+                            HTTPSampleResult result = sampler.sample(url, HTTPConstants.GET, false, 0);
+
+                            collectFailures(result, failures);
+                            // the clients are dropped at every thread group iteration by default
+                            HTTPHC5Impl.closeClientsOfCurrentThread();
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                });
+                jmeterThreads.add(jmeterThread);
+                jmeterThread.start();
+            }
+            start.countDown();
+            for (Thread jmeterThread : jmeterThreads) {
+                jmeterThread.join();
+            }
+        } finally {
+            server.stop();
+        }
+        assertEquals(List.of(), failures.stream().distinct().toList(),
+                "the embedded resources of a thread must not be affected by the clients of another one");
+    }
+
+    private static void collectFailures(HTTPSampleResult result, List<String> failures) {
+        if (!"200".equals(result.getResponseCode())) {
+            failures.add(result.getUrlAsString() + " -> " + result.getResponseCode() + " "
+                    + result.getResponseMessage());
+        }
+        for (SampleResult subResult : result.getSubResults()) {
+            if (!"200".equals(subResult.getResponseCode())) {
+                failures.add(subResult.getUrlAsString() + " -> " + subResult.getResponseCode() + " "
+                        + subResult.getResponseMessage());
+            }
         }
     }
 

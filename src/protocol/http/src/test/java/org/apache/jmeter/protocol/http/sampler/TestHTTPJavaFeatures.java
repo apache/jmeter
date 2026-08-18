@@ -70,6 +70,8 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.junit.jupiter.api.AfterEach;
@@ -83,7 +85,7 @@ class TestHTTPJavaFeatures {
     @AfterEach
     void closeHttp2Clients() {
         // the HTTP/2 clients keep their connections and their selector thread alive until they are closed
-        HTTPJavaImpl.closeThreadLocalHttp2Clients();
+        HTTPJavaImpl.closeHttp2ClientsOfCurrentThread();
         HTTPJavaImpl.releaseSharedHttp2Resources();
     }
 
@@ -301,16 +303,19 @@ class TestHTTPJavaFeatures {
 
     @Test
     void sharesHttp2ClientsWithTheThreadsDownloadingEmbeddedResources() throws Exception {
-        // JMeter threads are started by a thread which never samples itself, so they do not inherit a map
-        HTTPJavaImpl.closeThreadLocalHttp2Clients();
         AtomicReference<Map<?, ?>> clientsOfFirstThread = new AtomicReference<>();
         AtomicReference<Map<?, ?>> clientsOfSecondThread = new AtomicReference<>();
         AtomicReference<Map<?, ?>> clientsOfResourceDownloader = new AtomicReference<>();
 
         Thread firstThread = new Thread(() -> {
             clientsOfFirstThread.set(HTTPJavaImpl.getHttp2Clients());
-            // the embedded resources are downloaded by threads the JMeter thread creates
-            Thread downloader = new Thread(() -> clientsOfResourceDownloader.set(HTTPJavaImpl.getHttp2Clients()));
+            // the embedded resources are downloaded by pooled threads which adopt the context of the
+            // JMeter thread they are working for, see HTTPSamplerBase.ASyncSample
+            JMeterContext contextOfFirstThread = JMeterContextService.getContext();
+            Thread downloader = new Thread(() -> {
+                JMeterContextService.replaceContext(contextOfFirstThread);
+                clientsOfResourceDownloader.set(HTTPJavaImpl.getHttp2Clients());
+            });
             downloader.start();
             try {
                 downloader.join();
@@ -345,12 +350,15 @@ class TestHTTPJavaFeatures {
             assertEquals(1, relay.getAcceptedConnections(), "the warm up should have opened one connection");
 
             int requests = 4;
+            JMeterContext jmeterThreadContext = JMeterContextService.getContext();
             Callable<HTTPSampleResult> sample = () -> {
+                // the threads which download embedded resources adopt the context of the JMeter thread
+                JMeterContextService.replaceContext(jmeterThreadContext);
                 HTTPSamplerBase sampler = newSampler();
                 sampler.setHttpVersion("HTTP/2");
                 return sampler.sample(url, HTTPConstants.GET, false, 1);
             };
-            // the threads are created by this thread, like the ones which download embedded resources
+            // the threads are pooled, like the ones which download embedded resources
             ExecutorService executor = Executors.newFixedThreadPool(requests);
             try {
                 List<Future<HTTPSampleResult>> results = new ArrayList<>();

@@ -35,10 +35,12 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import javax.security.auth.Subject;
@@ -155,6 +157,7 @@ import org.apache.jmeter.protocol.http.util.SlowHCPlainConnectionSocketFactory;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -509,15 +512,23 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     };
 
     /**
-     * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
+     * Clients of every JMeter thread, one per {@link HttpClientKey}, looked up by the
+     * {@link JMeterContext} of that thread instead of by the thread itself. The threads which
+     * download embedded resources in parallel are pooled and shared by all JMeter threads, and they
+     * adopt the context of the JMeter thread they are working for, so looking the clients up by
+     * context hands them the clients of that thread and keeps a JMeter thread from closing or
+     * resetting clients another one is still using.
+     *
+     * <p>The keys are weak, so that a context whose clients are never closed explicitly, like the
+     * one of a thread of the HTTP(S) Test Script Recorder, does not keep the entry alive forever.
      */
-    private static final ThreadLocal<Map<HttpClientKey, HttpClientState>>
-            HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = new InheritableThreadLocal<>() {
-        @Override
-        protected Map<HttpClientKey, HttpClientState> initialValue() {
-            return new HashMap<>(5);
-        }
-    };
+    private static final Map<JMeterContext, Map<HttpClientKey, HttpClientState>>
+            HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = Collections.synchronizedMap(new WeakHashMap<>());
+
+    private static Map<HttpClientKey, HttpClientState> getClientsOfCurrentThread() {
+        return HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.computeIfAbsent(
+                JMeterContextService.getContext(), context -> new ConcurrentHashMap<>(5));
+    }
 
     /**
      * CONNECTION_SOCKET_FACTORY changes if we want to simulate Slow connection
@@ -1041,8 +1052,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private HttpClientState setupClient(HttpClientKey key, JMeterVariables jMeterVariables,
             HttpClientContext clientContext) throws GeneralSecurityException {
-        Map<HttpClientKey, HttpClientState> mapHttpClientPerHttpClientKey =
-                HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+        Map<HttpClientKey, HttpClientState> mapHttpClientPerHttpClientKey = getClientsOfCurrentThread();
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_CLIENT_KEY, key);
         CloseableHttpClient httpClient = null;
         HttpClientState clientState = null;
@@ -1777,13 +1787,18 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     @Override
     protected void threadFinished() {
         log.debug("Thread Finished");
-        closeThreadLocalConnections();
+        closeClientsOfCurrentThread();
     }
 
-    private static void closeThreadLocalConnections() {
-        // Does not need to be synchronised, as all access is from same thread
-        Map<HttpClientKey, HttpClientState>
-            mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
+    /**
+     * Closes the clients of the current JMeter thread. Only the clients of this JMeter thread are
+     * dropped. The threads which download embedded resources borrow them while they work for this
+     * thread, and they are done by the time the sample returns, so no client is closed while a
+     * request is still using it.
+     */
+    private static void closeClientsOfCurrentThread() {
+        Map<HttpClientKey, HttpClientState> mapHttpClientPerHttpClientKey =
+                HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.remove(JMeterContextService.getContext());
         if (mapHttpClientPerHttpClientKey != null ) {
             for (HttpClientState clientState : mapHttpClientPerHttpClientKey.values() ) {
                 JOrphanUtils.closeQuietly(clientState.getClient());

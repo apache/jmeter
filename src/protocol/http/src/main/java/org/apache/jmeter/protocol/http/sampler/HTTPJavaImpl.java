@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -68,6 +69,8 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
@@ -126,18 +129,22 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     /**
-     * HTTP/2 clients of a JMeter thread. The JDK client sends every exchange of a client over a single
-     * connection per origin, so one client per JMeter thread multiplexes the requests of that thread and
-     * of the threads which download its embedded resources over one connection, while every JMeter thread
-     * still uses a connection of its own, like a real user would.
+     * HTTP/2 clients of every JMeter thread, looked up by the {@link JMeterContext} of that thread
+     * instead of by the thread itself. The JDK client sends every exchange of a client over a single
+     * connection per origin, so one client per JMeter thread multiplexes the requests of that thread
+     * and of the threads which download its embedded resources over one connection, while every
+     * JMeter thread still uses a connection of its own, like a real user would.
+     *
+     * <p>The threads which download embedded resources in parallel are pooled and shared by all
+     * JMeter threads, and they adopt the context of the JMeter thread they are working for, so
+     * looking the clients up by context hands them the clients of that thread and keeps a JMeter
+     * thread from closing clients another one is still using.
+     *
+     * <p>The keys are weak, so that a context whose clients are never closed explicitly, like the
+     * one of a thread of the HTTP(S) Test Script Recorder, does not keep the entry alive forever.
      */
-    private static final ThreadLocal<Map<HttpClientKey, Http2Client>> HTTP_2_CLIENTS =
-        new InheritableThreadLocal<>() {
-            @Override
-            protected Map<HttpClientKey, Http2Client> initialValue() {
-                return new ConcurrentHashMap<>();
-            }
-        };
+    private static final Map<JMeterContext, Map<HttpClientKey, Http2Client>> HTTP_2_CLIENTS =
+            Collections.synchronizedMap(new WeakHashMap<>());
 
     /**
      * HTTP/2 clients used when the connections are shared between the JMeter threads. One instance for all
@@ -235,7 +242,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     static Map<HttpClientKey, Http2Client> getHttp2Clients() {
-        return SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS ? SHARED_HTTP_2_CLIENTS : HTTP_2_CLIENTS.get();
+        if (SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS) {
+            return SHARED_HTTP_2_CLIENTS;
+        }
+        return HTTP_2_CLIENTS.computeIfAbsent(JMeterContextService.getContext(),
+                context -> new ConcurrentHashMap<>());
     }
 
     /** Returns the thread pool of the HTTP/2 clients, it is created when the first client needs it. */
@@ -276,11 +287,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     private static void closeHttp2Clients(Map<HttpClientKey, Http2Client> clients) {
+        if (clients == null) {
+            return;
+        }
         synchronized (clients) {
             List<Http2Client> closing = new ArrayList<>(clients.values());
-            // The map is shared with the threads which download embedded resources, and those threads are
-            // pooled, so it is emptied before the clients are closed to make sure a thread which serves
-            // another JMeter thread later on builds a client of its own instead of using a closed one.
             clients.clear();
             for (Http2Client client : closing) {
                 closeQuietly(client);
@@ -290,13 +301,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     @Override
     protected void threadFinished() {
-        closeThreadLocalHttp2Clients();
+        closeHttp2ClientsOfCurrentThread();
     }
 
-    /** Closes the HTTP/2 clients of the current JMeter thread, which releases their connections. */
-    static void closeThreadLocalHttp2Clients() {
-        closeHttp2Clients(HTTP_2_CLIENTS.get());
-        HTTP_2_CLIENTS.remove();
+    /**
+     * Closes the HTTP/2 clients of the current JMeter thread, which releases their connections. Only
+     * the clients of this JMeter thread are dropped. The threads which download embedded resources
+     * borrow them while they work for this thread, and they are done by the time the sample returns,
+     * so no client is closed while a request is still using it.
+     */
+    static void closeHttp2ClientsOfCurrentThread() {
+        closeHttp2Clients(HTTP_2_CLIENTS.remove(JMeterContextService.getContext()));
     }
 
     @Override

@@ -135,6 +135,11 @@ Summary
     <li><pr>6742</pr>Count single byte writes in <code>CountingOutputStream</code> as well, so the SMTP Sampler does not under-report the size of the messages it sends.</li>
   </ul>
 
+  <h3>HTTP Samplers and Test Script Recorder</h3>
+  <ul>
+    <li><pr>6742</pr>Keep the HTTP clients of a thread from being used, and closed, by another thread when embedded resources are downloaded in parallel. The threads which perform those downloads are pooled and shared by all threads, so they used to keep the clients of whichever thread happened to create them, which made samples fail with errors such as <code>Non HTTP response code: java.io.IOException</code>, <code>Socket closed</code> or <code>Connection pool shut down</code> as soon as that thread finished or started a new iteration. The clients are now looked up by the context of the thread the download is performed for, in the HttpClient4, HttpClient5 and Java sampler implementations.</li>
+  </ul>
+
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>
