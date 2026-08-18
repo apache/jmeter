@@ -787,6 +787,33 @@ class TestHTTPJavaFeatures {
     }
 
     @Test
+    void keepsTheHttp2ClientOfItsThreadWhileEmbeddedResourcesAreDownloaded() throws Exception {
+        HTTPSamplerBase sampler = newSampler();
+        sampler.setHttpVersion("HTTP/2");
+        HTTPJavaImpl impl = new HTTPJavaImpl(sampler);
+        URL url = new URL("https://localhost:1234/http2ParallelDownload");
+        try {
+            Object clientOfSample = impl.getHttpClient(url);
+            // the embedded resources are downloaded by pooled threads which adopt the context of the
+            // JMeter thread they are working for, but get an SSLContext of their own from the SSLManager
+            JMeterContext contextOfSample = JMeterContextService.getContext();
+            AtomicReference<Object> clientOfDownloader = new AtomicReference<>();
+            Thread downloader = new Thread(() -> {
+                JMeterContextService.replaceContext(contextOfSample);
+                clientOfDownloader.set(impl.getHttpClient(url));
+            });
+            downloader.start();
+            downloader.join();
+
+            assertSame(clientOfSample, clientOfDownloader.get(),
+                    "a downloader must not replace the client of its sample, that would shut it down while in use");
+        } finally {
+            impl.threadFinished();
+            impl.testEnded();
+        }
+    }
+
+    @Test
     void closesHttp2ClientsWhenTheThreadFinishes() throws Exception {
         WireMockServer server = createServer();
         server.start();

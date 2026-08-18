@@ -143,7 +143,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * <p>The keys are weak, so that a context whose clients are never closed explicitly, like the
      * one of a thread of the HTTP(S) Test Script Recorder, does not keep the entry alive forever.
      */
-    private static final Map<JMeterContext, Map<HttpClientKey, Http2Client>> HTTP_2_CLIENTS =
+    private static final Map<JMeterContext, Http2ClientCache> HTTP_2_CLIENTS =
             Collections.synchronizedMap(new WeakHashMap<>());
 
     /**
@@ -245,8 +245,29 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         if (SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS) {
             return SHARED_HTTP_2_CLIENTS;
         }
+        return http2ClientCache().clients;
+    }
+
+    private static Http2ClientCache http2ClientCache() {
         return HTTP_2_CLIENTS.computeIfAbsent(JMeterContextService.getContext(),
-                context -> new ConcurrentHashMap<>());
+                context -> new Http2ClientCache());
+    }
+
+    /**
+     * The clients of one JMeter thread, together with the thread that owns them. Only the owner
+     * replaces a client, because {@link JsseSSLManager} hands out an {@link SSLContext} per thread:
+     * the pooled threads which download embedded resources therefore always see an SSLContext other
+     * than the one the client was built with, and would keep replacing the client of the JMeter
+     * thread they work for, shutting it down while its sample and the sibling downloads are still
+     * using it, which fails them with {@code java.io.IOException: shutdownNow}.
+     */
+    private static final class Http2ClientCache {
+        private final Thread owner = Thread.currentThread();
+        private final Map<HttpClientKey, Http2Client> clients = new ConcurrentHashMap<>();
+
+        private boolean isOwnedByCurrentThread() {
+            return owner == Thread.currentThread();
+        }
     }
 
     /** Returns the thread pool of the HTTP/2 clients, it is created when the first client needs it. */
@@ -311,7 +332,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * so no client is closed while a request is still using it.
      */
     static void closeHttp2ClientsOfCurrentThread() {
-        closeHttp2Clients(HTTP_2_CLIENTS.remove(JMeterContextService.getContext()));
+        Http2ClientCache cache = HTTP_2_CLIENTS.remove(JMeterContextService.getContext());
+        closeHttp2Clients(cache == null ? null : cache.clients);
     }
 
     @Override
@@ -1515,8 +1537,13 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 proxyUser, proxyPass, autoRedirects, sslContext != null);
 
         Map<HttpClientKey, Http2Client> clients = getHttp2Clients();
+        // Only the JMeter thread that owns the clients replaces one when its SSLContext was reset.
+        // A thread which downloads embedded resources has an SSLContext of its own, which never is
+        // the one of the client, so it has to keep the client of the JMeter thread it works for.
+        boolean keepCachedClient = SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS
+                || !http2ClientCache().isOwnedByCurrentThread();
         Http2Client client = clients.get(key);
-        if (client != null && (SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS || client.usesSslContext(sslContext))) {
+        if (client != null && (keepCachedClient || client.usesSslContext(sslContext))) {
             // The SSLContext must not be part of the key, it does not implement equals(), and JMeter hands out
             // a new instance per thread and after every reset, which would make the cache grow without bound.
             // When the clients are shared, the SSLContext of the first caller is kept, so all threads keep on
@@ -1525,7 +1552,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
         synchronized (clients) {
             client = clients.get(key);
-            if (client != null && (SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS || client.usesSslContext(sslContext))) {
+            if (client != null && (keepCachedClient || client.usesSslContext(sslContext))) {
                 return client;
             }
             Http2Client created = createHttpClient(key, sslContext);

@@ -138,6 +138,7 @@ Summary
   <h3>HTTP Samplers and Test Script Recorder</h3>
   <ul>
     <li><pr>6742</pr>Keep the HTTP clients of a thread from being used, and closed, by another thread when embedded resources are downloaded in parallel. The threads which perform those downloads are pooled and shared by all threads, so they used to keep the clients of whichever thread happened to create them, which made samples fail with errors such as <code>Non HTTP response code: java.io.IOException</code>, <code>Socket closed</code> or <code>Connection pool shut down</code> as soon as that thread finished or started a new iteration. The clients are now looked up by the context of the thread the download is performed for, in the HttpClient4, HttpClient5 and Java sampler implementations.</li>
+    <li><pr>6742</pr>Keep a thread which downloads embedded resources in parallel from replacing the HTTP/2 client of the Java sampler implementation. JMeter hands out an <code>SSLContext</code> per thread, so such a download used to consider the client of the thread it works for outdated, and shut it down while its sample and the sibling downloads were still using it, which failed them with <code>Non HTTP response code: java.util.concurrent.ExecutionException</code> and <code>java.io.IOException: shutdownNow</code>. Only the thread which owns a client replaces it now.</li>
   </ul>
 
  <!--  =================== Thanks =================== -->
