@@ -141,8 +141,8 @@ Latency is set to the time it takes to login.
           <dl>
             <dt><code>Java</code></dt><dd>uses the HTTP implementation provided by the JVM.
             This has some limitations in comparison with the HttpClient implementations - see below.</dd>
-            <dt><code>HTTPClient4</code></dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
-            <dt><code>HTTPClient5</code></dt><dd>uses Apache HttpComponents HttpClient 5.x.</dd>
+            <dt><code>HttpClient4</code></dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
+            <dt><code>HttpClient5</code></dt><dd>uses Apache HttpComponents HttpClient 5.x.</dd>
             <dt>Blank Value</dt><dd>does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on <code>jmeter.httpsampler</code> property defined in <code>jmeter.properties</code></dd>
           </dl>
         </dd>
@@ -3631,7 +3631,7 @@ By default, a Graphite implementation is provided.
 <component name="DNS Cache Manager" index="&sect-num;.4.3"  width="712" height="387" screenshot="dns-cache-manager.png">
     <note>DNS Cache Manager is designed for using in the root of Thread Group or Test Plan. Do not place it as child element of particular HTTP Sampler
     </note>
-    <note>DNS Cache Manager works only with HTTP requests using HTTPClient4 or HTTPClient5 implementation.</note>
+    <note>DNS Cache Manager works only with HTTP requests using HttpClient4 or HttpClient5 implementation.</note>
     <description><p>The DNS Cache Manager element allows to test applications, which have several servers behind load balancers (CDN, etc.),
     when user receives content from different IP's. By default JMeter uses JVM DNS cache. That's why
     only one server from the cluster receives load. DNS Cache Manager resolves names for each thread separately each iteration and
@@ -3657,7 +3657,7 @@ By default, a Graphite implementation is provided.
     <p>The IP address for the test server will be looked up by using the custom DNS resolver. When none is given, the
     system DNS resolver will be used.
     </p>
-    <p>Now you can use <code>www.example.com</code> in your HTTPClient4 or HTTPClient5 samplers and the requests will be made against
+    <p>Now you can use <code>www.example.com</code> in your HttpClient4 or HttpClient5 samplers and the requests will be made against
     <code>a123.another.example.org</code> with all headers set to <code>www.example.com</code>.
     </p>
     </example>
@@ -3924,6 +3924,13 @@ All port values are treated equally; a sampler that does not specify a port will
         <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient4</code>, <code>HttpClient5</code>.
         If not specified the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the <code>Java</code> implementation is used.</property>
+        <property name="HTTP Version" required="No">The HTTP versions offered depend on the selected implementation:
+        <code>HttpClient5</code> supports <code>HTTP/1.1</code>, <code>HTTP/2 Negotiate</code> (stored as <code>HTTP/2</code>,
+        falls back to HTTP/1.1 when the server does not offer HTTP/2) and <code>HTTP/2 Strict</code> (stored as
+        <code>HTTP/2 Strict</code>, requires HTTP/2, so the request fails when the server does not support it),
+        <code>Java</code> supports <code>HTTP/1.1</code> and <code>HTTP/2 Negotiate</code>, and <code>HttpClient4</code>
+        supports <code>HTTP/1.1</code> only. An empty value uses the <code>httpclient.version</code> property, which
+        defaults to <code>HTTP/1.1</code>.</property>
         <property name="Protocol" required="No"><code>HTTP</code> or <code>HTTPS</code>.</property>
         <property name="Content encoding" required="No">The encoding to be used for the request.</property>
         <property name="Path" required="No">The path to resource (for example, <code>/servlets/myServlet</code>). If the

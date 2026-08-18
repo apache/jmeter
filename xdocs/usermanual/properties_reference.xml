@@ -622,7 +622,7 @@ JMETER-SERVER</source>
 </source>
 </description>
 </section>
-<section name="&sect-num;.13 Apache HttpComponents HTTPClient configuration (HTTPClient4)" anchor="httpclient4">
+<section name="&sect-num;.13 Apache HttpComponents HttpClient configuration (HttpClient4)" anchor="httpclient4">
 <properties>
 <property name="hc.parameters.file">
     Define a properties file for overriding Apache HttpClient parameters.<br/>

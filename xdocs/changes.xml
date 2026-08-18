@@ -81,6 +81,8 @@ Summary
     <li><issue>6250</issue>Avoid adding "; charset=" automatically to <code>multipart/form-data</code> requests to align behavior with modern HTTP clients.</li>
     <li><issue>6080</issue>Preserve the original HTTP method when following 307 and 308 redirects according to the HTTP specification. Contributed by LeeJiWon (github.com/dlwldnjs1009)</li>
     <li><issue>6267</issue><pr>6268</pr>Add a space between key and value after <code>:</code> in View Results Tree &gt; Sampler result tab for better readability.</li>
+    <li><pr>6742</pr>Add the new <code>HttpClient5</code> sampler implementation, which is based on Apache HttpComponents HttpClient 5.x and can be selected in the <code>Implementation</code> combo box of the HTTP Request sampler and the HTTP Request Defaults, or with the <code>jmeter.httpsampler</code> property. It supports the features of the existing <code>HttpClient4</code> implementation (cookie, cache, header and authorization management, proxies, client certificates, WebDav methods, DNS Cache Manager, connection reuse and retries) and adds HTTP/2 support.</li>
+    <li><pr>6742</pr>Add the <code>HTTP Version</code> combo box (property <code>HTTPSampler.httpVersion</code>) to the HTTP Request sampler and the HTTP Request Defaults, so the HTTP version can be selected per sampler instead of only globally with the <code>httpclient.version</code> property. An empty value keeps using that property, which now defaults to <code>HTTP/1.1</code>.</li>
   </ul>
 
   <p>HTTP/2 support for the HttpClient5 and Java sampler implementations:</p>
