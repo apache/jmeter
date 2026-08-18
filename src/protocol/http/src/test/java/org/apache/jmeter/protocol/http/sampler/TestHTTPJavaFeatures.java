@@ -31,11 +31,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
+import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.cert.X509Certificate;
@@ -43,15 +49,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509ExtendedTrustManager;
 
@@ -749,6 +758,111 @@ class TestHTTPJavaFeatures {
         } finally {
             server.stop();
         }
+    }
+
+    @Test
+    void closesResponseBodyStreamWhenReadingResponse() throws Exception {
+        HTTPSamplerBase sampler = newSampler();
+        HTTPJavaImpl impl = new HTTPJavaImpl(sampler);
+        AtomicBoolean closed = new AtomicBoolean(false);
+        InputStream bodyStream = new ByteArrayInputStream("response body".getBytes(StandardCharsets.UTF_8)) {
+            @Override
+            public void close() throws IOException {
+                closed.set(true);
+                super.close();
+            }
+        };
+
+        HttpResponse<InputStream> response = createStubResponse(bodyStream, Map.of("Content-Length", List.of("13")));
+
+        SampleResult result = new SampleResult();
+        result.sampleStart();
+        byte[] responseData = impl.readResponse(response, result);
+
+        assertEquals("response body", new String(responseData, StandardCharsets.UTF_8));
+        assertTrue(closed.get(), "response body stream should be closed");
+    }
+
+    @Test
+    void closesResponseBodyStreamWhenContentLengthIsZero() throws Exception {
+        HTTPSamplerBase sampler = newSampler();
+        HTTPJavaImpl impl = new HTTPJavaImpl(sampler);
+        AtomicBoolean closed = new AtomicBoolean(false);
+        InputStream bodyStream = new ByteArrayInputStream(new byte[0]) {
+            @Override
+            public void close() throws IOException {
+                closed.set(true);
+                super.close();
+            }
+        };
+
+        HttpResponse<InputStream> response = createStubResponse(bodyStream, Map.of("Content-Length", List.of("0")));
+
+        SampleResult result = new SampleResult();
+        result.sampleStart();
+        byte[] responseData = impl.readResponse(response, result);
+
+        assertEquals(0, responseData.length);
+        assertTrue(closed.get(), "response body stream should be closed by try-with-resources");
+    }
+
+    @Test
+    void returnsEmptyByteArrayWhenResponseBodyIsNull() throws Exception {
+        HTTPSamplerBase sampler = newSampler();
+        HTTPJavaImpl impl = new HTTPJavaImpl(sampler);
+
+        HttpResponse<InputStream> response = createStubResponse(null, Map.of());
+
+        SampleResult result = new SampleResult();
+        result.sampleStart();
+        byte[] responseData = impl.readResponse(response, result);
+
+        assertEquals(0, responseData.length);
+    }
+
+    private static HttpResponse<InputStream> createStubResponse(
+            InputStream bodyStream, Map<String, List<String>> headerMap) {
+        return new HttpResponse<>() {
+            @Override
+            public int statusCode() {
+                return 200;
+            }
+
+            @Override
+            public HttpRequest request() {
+                return null;
+            }
+
+            @Override
+            public Optional<HttpResponse<InputStream>> previousResponse() {
+                return Optional.empty();
+            }
+
+            @Override
+            public HttpHeaders headers() {
+                return HttpHeaders.of(headerMap, (k, v) -> true);
+            }
+
+            @Override
+            public InputStream body() {
+                return bodyStream;
+            }
+
+            @Override
+            public Optional<SSLSession> sslSession() {
+                return Optional.empty();
+            }
+
+            @Override
+            public URI uri() {
+                return URI.create("http://localhost/");
+            }
+
+            @Override
+            public HttpClient.Version version() {
+                return HttpClient.Version.HTTP_2;
+            }
+        };
     }
 
     private static SSLContext trustAllContext() throws Exception {        TrustManager trustAll = new X509ExtendedTrustManager() {
