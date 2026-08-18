@@ -623,7 +623,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         res.sampleStart();
 
         final CacheManager cacheManager = getCacheManager();
-        if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method) && cacheManager.inCache(url, httpRequest.getAllHeaders())) {
+        if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method)
+                && cacheManager.inCache(url, cacheRequestHeaders(httpRequest))) {
             return updateSampleResultForResourceInCache(res);
         }
         CloseableHttpResponse httpResponse = null;
@@ -717,7 +718,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Save cache information
             if (cacheManager != null){
-                cacheManager.saveDetails(httpResponse, res);
+                cacheManager.saveDetails(cacheResponseHeaders(httpResponse), res);
             }
 
             // Follow redirects and download page resources if appropriate:
@@ -1378,8 +1379,39 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected static void setConnectionHeaders(HttpRequestBase request, URL url, HeaderManager headerManager, CacheManager cacheManager) {
         setConnectionHeaders(headerManager, url, name -> true, request::addHeader);
         if (cacheManager != null) {
-            cacheManager.setHeaders(url, request);
+            cacheManager.setHeaders(url, cacheRequestHeaders(request));
         }
+    }
+
+    /**
+     * Adapts the headers of an HttpClient 4 request to the client neutral view used by
+     * {@link CacheManager}.
+     *
+     * @param request request to adapt
+     * @return view of the request headers that also allows adding conditional headers
+     */
+    private static CacheManager.RequestHeaderSink cacheRequestHeaders(HttpRequestBase request) {
+        return CacheManager.requestHeaderSink(
+                action -> {
+                    for (Header header : request.getAllHeaders()) {
+                        action.accept(header.getName(), header.getValue());
+                    }
+                },
+                request::setHeader);
+    }
+
+    /**
+     * Adapts the headers of an HttpClient 4 response to the client neutral view used by
+     * {@link CacheManager}.
+     *
+     * @param response response to adapt
+     * @return view of the response headers
+     */
+    private static CacheManager.ResponseHeaderSource cacheResponseHeaders(HttpResponse response) {
+        return name -> {
+            Header header = response.getLastHeader(name);
+            return header != null ? header.getValue() : null;
+        };
     }
 
     /**

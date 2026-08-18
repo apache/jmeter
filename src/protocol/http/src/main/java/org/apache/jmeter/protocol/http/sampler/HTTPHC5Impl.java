@@ -109,6 +109,7 @@ import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpException;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.core5.http.HttpVersion;
@@ -515,7 +516,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
             CacheManager cacheManager = getCacheManager();
             if (cacheManager != null && HTTPConstants.GET.equalsIgnoreCase(method)) {
-                if (cacheManager.inCache(url, request.getHeaders())) {
+                if (cacheManager.inCache(url, cacheRequestHeaders(request))) {
                     return updateSampleResultForResourceInCache(result);
                 }
             }
@@ -537,7 +538,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             updateResult(response, request, result);
             updateUrlAfterAutoRedirects(url, context, result);
             if (cacheManager != null) {
-                cacheManager.saveDetails(response, result);
+                cacheManager.saveDetails(cacheResponseHeaders(response), result);
             }
             saveConnectionCookies(response, result.getURL(), getCookieManager());
             return resultProcessing(areFollowingRedirect, frameDepth, result);
@@ -624,7 +625,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         setDefaultUserAgent(request);
         CacheManager cacheManager = getCacheManager();
         if (cacheManager != null) {
-            cacheManager.setHeaders(url, request);
+            cacheManager.setHeaders(url, cacheRequestHeaders(request));
         }
 
         String cookies = setConnectionCookie(url, getCookieManager(), request::setHeader);
@@ -641,6 +642,37 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static boolean canHaveBody(String method) {
         return !HTTPConstants.HEAD.equals(method) && !HTTPConstants.TRACE.equals(method);
+    }
+
+    /**
+     * Adapts the headers of an HttpClient 5 request to the client neutral view used by
+     * {@link CacheManager}.
+     *
+     * @param request request to adapt
+     * @return view of the request headers that also allows adding conditional headers
+     */
+    private static CacheManager.RequestHeaderSink cacheRequestHeaders(HttpRequest request) {
+        return CacheManager.requestHeaderSink(
+                action -> {
+                    for (Header header : request.getHeaders()) {
+                        action.accept(header.getName(), header.getValue());
+                    }
+                },
+                request::setHeader);
+    }
+
+    /**
+     * Adapts the headers of an HttpClient 5 response to the client neutral view used by
+     * {@link CacheManager}.
+     *
+     * @param response response to adapt
+     * @return view of the response headers
+     */
+    private static CacheManager.ResponseHeaderSource cacheResponseHeaders(HttpResponse response) {
+        return name -> {
+            Header header = response.getFirstHeader(name);
+            return header != null ? header.getValue() : null;
+        };
     }
 
     private String setupRequestEntity(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) throws IOException {

@@ -114,6 +114,7 @@ Summary
     <li>Update Neo4j Java driver to 6.x for Bolt-based database tests.</li>
     <li>Update Rhino JavaScript engine to 1.8.0 for JSR-223 JavaScript execution.</li>
     <li><pr>6742</pr>Update Apache HttpClient 5 to 5.6.4 and Apache HttpCore 5 to 5.4.3, which corrects the application of SSL parameters in the async TLS upgrade method used by the HttpClient5 sampler implementation for HTTP/2.</li>
+    <li><pr>6742</pr>Give the <code>Cache Manager</code> a single HTTP client neutral API: <code>saveDetails(CacheManager.ResponseHeaderSource, HTTPSampleResult)</code>, <code>inCache(URL, CacheManager.RequestHeaderSource)</code> and <code>setHeaders(URL, CacheManager.RequestHeaderSink)</code> replace the per implementation overloads, so the <code>Vary</code> and cache control handling exists once and the config element does not depend on a specific HTTP client library. The sampler implementations adapt their requests and responses to those interfaces. The methods taking Apache HttpClient 4 types are deprecated and delegate to the new ones.</li>
   </ul>
 
   <h3>UI</h3>

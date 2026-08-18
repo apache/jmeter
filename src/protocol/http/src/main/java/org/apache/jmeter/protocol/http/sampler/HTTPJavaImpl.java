@@ -1240,7 +1240,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             saveConnectionCookies(response, url, getCookieManager());
 
             if (cacheManager != null) {
-                cacheManager.saveDetails(response, res);
+                cacheManager.saveDetails(
+                        name -> response.headers().firstValue(name).orElse(null), res);
             }
 
             res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_VERSION_2,
