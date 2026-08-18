@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.anyRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
@@ -30,26 +31,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.Closeable;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.hc.client5.http.HttpRoute;
 import org.apache.hc.client5.http.auth.AuthSchemeFactory;
@@ -74,15 +68,22 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.http.HttpHeader;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 
 class TestHTTPHC5Features {
+
+    @AfterEach
+    void closeClientsOfThisThread() {
+        // the clients are cached per thread and keep their connections and I/O reactor threads alive
+        HTTPHC5Impl.closeThreadLocalClients();
+    }
 
     @Test
     void usesHttpClientVersionWhenSamplerVersionIsEmpty() {
@@ -128,25 +129,31 @@ class TestHTTPHC5Features {
                 .dynamicHttpsPort()
                 .http2TlsDisabled(false));
         server.start();
-        try {
+        try (TcpRelay relay = new TcpRelay(server.httpsPort())) {
             server.stubFor(get(urlEqualTo("/multiplexed"))
                     .willReturn(aResponse().withStatus(200).withFixedDelay(200)));
-            URL url = new URL("https://localhost:" + server.httpsPort() + "/multiplexed");
+            URL url = new URL("https://localhost:" + relay.getPort() + "/multiplexed");
             // warm up, so the connection that gets shared by the concurrent samples is already established
             HTTPSamplerBase warmUpSampler = newSampler();
             warmUpSampler.setHttpVersion("HTTP/2");
             assertEquals("200", warmUpSampler.sample(url, HTTPConstants.GET, false, 1).getResponseCode());
+            assertEquals(1, relay.getAcceptedConnections(), "the warm up should have opened one connection");
 
             int requests = 4;
+            Callable<HTTPSampleResult> sample = () -> {
+                HTTPSamplerBase sampler = newSampler();
+                sampler.setHttpVersion("HTTP/2");
+                return sampler.sample(url, HTTPConstants.GET, false, 1);
+            };
             ExecutorService executor = Executors.newFixedThreadPool(requests);
             try {
                 List<Future<HTTPSampleResult>> results = new ArrayList<>();
-                for (int i = 0; i < requests; i++) {
-                    results.add(executor.submit(() -> {
-                        HTTPSamplerBase sampler = newSampler();
-                        sampler.setHttpVersion("HTTP/2");
-                        return sampler.sample(url, HTTPConstants.GET, false, 1);
-                    }));
+                results.add(executor.submit(sample));
+                // let the first sample lease the pooled connection before the others ask for one,
+                // otherwise they race for it and the pool opens a second connection
+                Thread.sleep(50);
+                for (int i = 1; i < requests; i++) {
+                    results.add(executor.submit(sample));
                 }
                 for (Future<HTTPSampleResult> result : results) {
                     HTTPSampleResult sampleResult = result.get(30, TimeUnit.SECONDS);
@@ -156,52 +163,55 @@ class TestHTTPHC5Features {
             } finally {
                 executor.shutdownNow();
             }
+            assertEquals(1, relay.getAcceptedConnections(),
+                    "the concurrent samples should have been multiplexed over the established connection "
+                            + "instead of opening a connection each");
         } finally {
             server.stop();
         }
     }
 
     @Test
-    void enablesMessageMultiplexingWithoutRequiringHttpClient55() throws Exception {
-        byte[] classBytes;
-        try (InputStream classFile = HTTPHC5Impl.class.getResourceAsStream("HTTPHC5Impl.class")) {
-            classBytes = classFile.readAllBytes();
-        }
-        assertTrue(new String(classBytes, StandardCharsets.ISO_8859_1).contains("setMessageMultiplexing"),
-                "HTTP/2 message multiplexing should be enabled");
-        assertFalse(hasMethodReference(classBytes,
-                "org/apache/hc/client5/http/impl/nio/PoolingAsyncClientConnectionManagerBuilder",
-                "setMessageMultiplexing"),
-                "setMessageMultiplexing was added in HttpClient 5.5 and must not be linked directly");
-    }
-
-    @Test
     void appliesHttp2ProtocolSettings() {
         H2Config config = HTTPHC5Impl.createHttp2Config();
 
-        assertEquals(8192, config.getHeaderTableSize(), "HPACK dynamic table size");
         assertTrue(config.isCompressionEnabled(), "HPACK header compression");
-        assertEquals(250, config.getMaxConcurrentStreams());
-        assertEquals(16 * 1024 * 1024, config.getInitialWindowSize(),
+        assertEquals(HTTPHC5Impl.DEFAULT_HTTP_2_INITIAL_WINDOW_SIZE, config.getInitialWindowSize(),
                 "the 64 kB default of HTTP/2 throttles a download to that window per round trip");
-        assertEquals(65536, config.getMaxFrameSize());
         assertFalse(config.isPushEnabled(), "server push is dropped by JMeter, so it must not be announced");
+        // the settings JMeter has no opinion on are left at the defaults of HttpClient
+        assertEquals(H2Config.DEFAULT.getHeaderTableSize(), config.getHeaderTableSize());
+        assertEquals(H2Config.DEFAULT.getMaxConcurrentStreams(), config.getMaxConcurrentStreams());
+        assertEquals(H2Config.DEFAULT.getMaxFrameSize(), config.getMaxFrameSize());
     }
 
     @Test
-    void doesNotRequireProtocolUpgradeConfiguration() throws Exception {
-        try (InputStream classFile = HTTPHC5Impl.class.getResourceAsStream("HTTPHC5Impl.class")) {
-            assertFalse(new String(classFile.readAllBytes(), StandardCharsets.ISO_8859_1)
-                    .contains("setProtocolUpgradeEnabled"));
-        }
+    void overridesHttp2ProtocolSettingsWithJMeterProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("httpclient5.h2.header_table_size", "4096");
+        properties.setProperty("httpclient5.h2.header_compression", "false");
+        properties.setProperty("httpclient5.h2.max_concurrent_streams", "42");
+        properties.setProperty("httpclient5.h2.initial_window_size", "131072");
+        properties.setProperty("httpclient5.h2.max_frame_size", "32768");
+        properties.setProperty("httpclient5.h2.push_enabled", "true");
+
+        H2Config config = HTTPHC5Impl.createHttp2Config(properties);
+
+        assertEquals(4096, config.getHeaderTableSize());
+        assertFalse(config.isCompressionEnabled());
+        assertEquals(42, config.getMaxConcurrentStreams());
+        assertEquals(131072, config.getInitialWindowSize());
+        assertEquals(32768, config.getMaxFrameSize());
+        assertTrue(config.isPushEnabled());
     }
 
     @Test
-    void doesNotRequireHttpAsyncClassicAdapter() throws Exception {
-        try (InputStream classFile = HTTPHC5Impl.class.getResourceAsStream("HTTPHC5Impl.class")) {
-            assertFalse(hasMethodReference(classFile.readAllBytes(),
-                    "org/apache/hc/client5/http/impl/async/HttpAsyncClients", "classic"));
-        }
+    void keepsHttp2ProtocolSettingsWhenAPropertyIsNotANumber() {
+        Properties properties = new Properties();
+        properties.setProperty("httpclient5.h2.initial_window_size", "not a number");
+
+        assertEquals(HTTPHC5Impl.DEFAULT_HTTP_2_INITIAL_WINDOW_SIZE,
+                HTTPHC5Impl.createHttp2Config(properties).getInitialWindowSize());
     }
 
     @Test
@@ -510,7 +520,8 @@ class TestHTTPHC5Features {
                     new URL(server.url("/sentBytesGet")), HTTPConstants.GET, false, 1);
 
             assertEquals("200", result.getResponseCode());
-            assertTrue(result.getSentBytes() > 0, "sentBytes should be greater than 0");
+            assertEquals(wireSize(singleRequest(server, "/sentBytesGet")), result.getSentBytes(),
+                    "sentBytes should be the number of bytes the server received");
         } finally {
             server.stop();
         }
@@ -531,10 +542,35 @@ class TestHTTPHC5Features {
                     new URL(server.url("/sentBytesPost")), HTTPConstants.POST, false, 1);
 
             assertEquals("200", result.getResponseCode());
-            assertTrue(result.getSentBytes() > "hello world".length(), "sentBytes should include request line, headers, and body");
+            LoggedRequest request = singleRequest(server, "/sentBytesPost");
+            assertArrayEquals("hello world".getBytes(StandardCharsets.UTF_8), request.getBody());
+            assertEquals(wireSize(request), result.getSentBytes(),
+                    "sentBytes should cover the request line, the headers and the body");
         } finally {
             server.stop();
         }
+    }
+
+    /** Returns the only request the server received for the given path. */
+    private static LoggedRequest singleRequest(WireMockServer server, String path) {
+        List<LoggedRequest> requests = server.findAll(anyRequestedFor(urlEqualTo(path)));
+        assertEquals(1, requests.size(), () -> "expected exactly one request for " + path + ", got " + requests);
+        return requests.get(0);
+    }
+
+    /** Number of bytes the given request occupies on an HTTP/1.1 connection. */
+    private static long wireSize(LoggedRequest request) {
+        StringBuilder head = new StringBuilder()
+                .append(request.getMethod().getName()).append(' ')
+                .append(request.getUrl()).append(' ')
+                .append(HTTPConstants.HTTP_VERSION_1_1).append("\r\n");
+        for (HttpHeader header : request.getHeaders().all()) {
+            for (String value : header.values()) {
+                head.append(header.key()).append(": ").append(value).append("\r\n");
+            }
+        }
+        head.append("\r\n");
+        return head.toString().getBytes(StandardCharsets.ISO_8859_1).length + request.getBody().length;
     }
 
     @Test
@@ -793,7 +829,6 @@ class TestHTTPHC5Features {
                 new HTTPHC5Impl.ConnectTimeMeasuringConnectionManager(new SlowConnectingConnectionManager(50));
 
         connectionManager.connect(null, null, context);
-        Thread.sleep(50);
         result.sampleEnd();
 
         assertTrue(result.getConnectTime() >= 50,
@@ -883,11 +918,14 @@ class TestHTTPHC5Features {
      */
     @Test
     void revalidatesPooledHttp2ConnectionAfterIdleGap() throws Exception {
+        long validateAfterInactivity = 250;
+        long configuredValidateAfterInactivity = HTTPHC5Impl.validateAfterInactivityMillis;
+        HTTPHC5Impl.validateAfterInactivityMillis = validateAfterInactivity;
         WireMockServer server = new WireMockServer(WireMockConfiguration.wireMockConfig()
                 .dynamicHttpsPort()
                 .http2TlsDisabled(false));
         server.start();
-        try (ConnectionDroppingRelay relay = new ConnectionDroppingRelay(server.httpsPort())) {
+        try (TcpRelay relay = new TcpRelay(server.httpsPort())) {
             server.stubFor(get(urlEqualTo("/idle")).willReturn(aResponse().withStatus(200)));
             HTTPSamplerBase sampler = newSampler();
             sampler.setHttpVersion("HTTP/2");
@@ -896,7 +934,7 @@ class TestHTTPHC5Features {
 
             assertEquals("200", sampler.sample(url, HTTPConstants.GET, false, 1).getResponseCode());
 
-            Thread.sleep(validateAfterInactivityMillis() + 500);
+            Thread.sleep(validateAfterInactivity * 2);
             relay.dropConnectionOnNextRequest();
 
             // the same sampler on the same thread, so the cached HTTP/2 client and its pool are reused
@@ -908,6 +946,7 @@ class TestHTTPHC5Features {
             assertEquals(2, relay.getAcceptedConnections(),
                     "the stale connection should have been discarded and replaced by a new one");
         } finally {
+            HTTPHC5Impl.validateAfterInactivityMillis = configuredValidateAfterInactivity;
             server.stop();
         }
     }
@@ -923,7 +962,7 @@ class TestHTTPHC5Features {
                 .dynamicHttpsPort()
                 .http2TlsDisabled(false));
         server.start();
-        try (ConnectionDroppingRelay relay = new ConnectionDroppingRelay(server.httpsPort())) {
+        try (TcpRelay relay = new TcpRelay(server.httpsPort())) {
             server.stubFor(get(urlEqualTo("/busy")).willReturn(aResponse().withStatus(200)));
             HTTPSamplerBase sampler = newSampler();
             sampler.setHttpVersion("HTTP/2");
@@ -943,195 +982,11 @@ class TestHTTPHC5Features {
         }
     }
 
-    private static long validateAfterInactivityMillis() {
-        return JMeterUtils.getPropDefault("httpclient5.validate_after_inactivity", 2000L);
-    }
-
-    /**
-     * Relays TCP traffic to a backend server and can drop a single relayed connection as soon as the
-     * client writes to it again, which is how an idle connection closed by the server (or by a load
-     * balancer) looks to a client that has not noticed the close yet. New connections are relayed as
-     * usual, so the backend stays reachable.
-     */
-    private static final class ConnectionDroppingRelay implements Closeable {
-
-        private final ServerSocket serverSocket;
-        private final int backendPort;
-        private final ExecutorService executor = Executors.newCachedThreadPool(runnable -> {
-            Thread thread = new Thread(runnable, "relay");
-            thread.setDaemon(true);
-            return thread;
-        });
-        private final AtomicInteger acceptedConnections = new AtomicInteger();
-        private volatile RelayedConnection currentConnection;
-
-        ConnectionDroppingRelay(int backendPort) throws IOException {
-            this.backendPort = backendPort;
-            this.serverSocket = new ServerSocket(0, 0, InetAddress.getLoopbackAddress());
-            executor.execute(this::acceptConnections);
-        }
-
-        int getPort() {
-            return serverSocket.getLocalPort();
-        }
-
-        int getAcceptedConnections() {
-            return acceptedConnections.get();
-        }
-
-        void dropConnectionOnNextRequest() {
-            RelayedConnection connection = currentConnection;
-            if (connection == null) {
-                throw new IllegalStateException("No connection has been relayed yet");
-            }
-            connection.doomed = true;
-        }
-
-        private void acceptConnections() {
-            while (!serverSocket.isClosed()) {
-                RelayedConnection connection;
-                try {
-                    Socket client = serverSocket.accept();
-                    connection = new RelayedConnection(client,
-                            new Socket(InetAddress.getLoopbackAddress(), backendPort));
-                } catch (IOException e) {
-                    return;
-                }
-                acceptedConnections.incrementAndGet();
-                currentConnection = connection;
-                executor.execute(connection::relayRequests);
-                executor.execute(connection::relayResponses);
-            }
-        }
-
-        @Override
-        public void close() throws IOException {
-            serverSocket.close();
-            executor.shutdownNow();
-        }
-    }
-
-    private static final class RelayedConnection {
-
-        private final Socket client;
-        private final Socket backend;
-        private volatile boolean doomed;
-
-        RelayedConnection(Socket client, Socket backend) {
-            this.client = client;
-            this.backend = backend;
-        }
-
-        void relayRequests() {
-            try {
-                InputStream input = client.getInputStream();
-                OutputStream output = backend.getOutputStream();
-                byte[] buffer = new byte[8192];
-                int read;
-                while ((read = input.read(buffer)) != -1 && !doomed) {
-                    output.write(buffer, 0, read);
-                    output.flush();
-                }
-            } catch (IOException ignored) { // NOSONAR the connection is closed below in any case
-                // the peer went away, which ends the relaying just as well
-            }
-            close();
-        }
-
-        void relayResponses() {
-            try {
-                InputStream input = backend.getInputStream();
-                OutputStream output = client.getOutputStream();
-                byte[] buffer = new byte[8192];
-                int read;
-                while ((read = input.read(buffer)) != -1) {
-                    output.write(buffer, 0, read);
-                    output.flush();
-                }
-            } catch (IOException ignored) { // NOSONAR the connection is closed below in any case
-                // the peer went away, which ends the relaying just as well
-            }
-            close();
-        }
-
-        private void close() {
-            JOrphanUtils.closeQuietly(client);
-            JOrphanUtils.closeQuietly(backend);
-        }
-    }
-
     private static HTTPSamplerBase newSampler() {
         return HTTPSamplerFactory.newInstance("HttpClient5");
     }
 
     private static WireMockServer createServer() {
         return new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
-    }
-
-    private static boolean hasMethodReference(byte[] classBytes, String className, String methodName) throws IOException {
-        try (DataInputStream input = new DataInputStream(new ByteArrayInputStream(classBytes))) {
-            input.readInt();
-            input.readUnsignedShort();
-            input.readUnsignedShort();
-            int constantPoolCount = input.readUnsignedShort();
-            int[] tags = new int[constantPoolCount];
-            int[] firstReferences = new int[constantPoolCount];
-            int[] secondReferences = new int[constantPoolCount];
-            String[] utf8Values = new String[constantPoolCount];
-            int i = 1;
-            while (i < constantPoolCount) {
-                tags[i] = input.readUnsignedByte();
-                switch (tags[i]) {
-                case 1:
-                    utf8Values[i] = input.readUTF();
-                    break;
-                case 3:
-                case 4:
-                    input.readInt();
-                    break;
-                case 5:
-                case 6:
-                    input.readLong();
-                    i++;
-                    break;
-                case 7:
-                case 8:
-                case 16:
-                case 19:
-                case 20:
-                    firstReferences[i] = input.readUnsignedShort();
-                    break;
-                case 9:
-                case 10:
-                case 11:
-                case 12:
-                case 17:
-                case 18:
-                    firstReferences[i] = input.readUnsignedShort();
-                    secondReferences[i] = input.readUnsignedShort();
-                    break;
-                case 15:
-                    input.readUnsignedByte();
-                    firstReferences[i] = input.readUnsignedShort();
-                    break;
-                default:
-                    throw new IOException("Unknown class-file constant-pool tag " + tags[i]);
-                }
-                i++;
-            }
-            for (int methodReferenceIndex = 1; methodReferenceIndex < constantPoolCount; methodReferenceIndex++) {
-                if (tags[methodReferenceIndex] != 10) {
-                    continue;
-                }
-                int classIndex = firstReferences[methodReferenceIndex];
-                int nameAndTypeIndex = secondReferences[methodReferenceIndex];
-                String referencedClass = utf8Values[firstReferences[classIndex]];
-                String referencedMethod = utf8Values[firstReferences[nameAndTypeIndex]];
-                if (className.equals(referencedClass) && methodName.equals(referencedMethod)) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 }

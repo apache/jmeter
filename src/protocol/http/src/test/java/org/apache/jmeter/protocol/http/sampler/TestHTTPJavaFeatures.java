@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -71,12 +72,19 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 
 class TestHTTPJavaFeatures {
+
+    @AfterEach
+    void closeSharedClients() {
+        // the HTTP/2 clients are shared between all threads and keep their connections and selector alive
+        HTTPJavaImpl.releaseSharedHttp2Resources();
+    }
 
     @Test
     void usesHttpClientVersionWhenSamplerVersionIsEmpty() {
@@ -307,21 +315,31 @@ class TestHTTPJavaFeatures {
     void multiplexesConcurrentHttp2RequestsOverOneConnection() throws Exception {
         WireMockServer server = createServer();
         server.start();
-        try {
+        try (TcpRelay relay = new TcpRelay(server.port())) {
             server.stubFor(get(urlEqualTo("/multiplexed"))
                     .willReturn(aResponse().withStatus(200).withFixedDelay(200).withBody("multiplexed")));
+            URL url = new URL("http://localhost:" + relay.getPort() + "/multiplexed");
+            // warm up, so the connection that gets shared by the concurrent samples is already established
+            HTTPSamplerBase warmUpSampler = newSampler();
+            warmUpSampler.setHttpVersion("HTTP/2");
+            assertEquals("200", warmUpSampler.sample(url, HTTPConstants.GET, false, 1).getResponseCode());
+            assertEquals(1, relay.getAcceptedConnections(), "the warm up should have opened one connection");
 
             int requests = 4;
+            Callable<HTTPSampleResult> sample = () -> {
+                HTTPSamplerBase sampler = newSampler();
+                sampler.setHttpVersion("HTTP/2");
+                return sampler.sample(url, HTTPConstants.GET, false, 1);
+            };
             ExecutorService executor = Executors.newFixedThreadPool(requests);
             try {
                 List<Future<HTTPSampleResult>> results = new ArrayList<>();
-                for (int i = 0; i < requests; i++) {
-                    results.add(executor.submit(() -> {
-                        HTTPSamplerBase sampler = newSampler();
-                        sampler.setHttpVersion("HTTP/2");
-                        return sampler.sample(
-                                new URL(server.url("/multiplexed")), HTTPConstants.GET, false, 1);
-                    }));
+                results.add(executor.submit(sample));
+                // let the first sample claim the established connection before the others ask for one,
+                // otherwise they race for it and the client opens a second connection
+                Thread.sleep(50);
+                for (int i = 1; i < requests; i++) {
+                    results.add(executor.submit(sample));
                 }
                 for (Future<HTTPSampleResult> result : results) {
                     HTTPSampleResult sampleResult = result.get(60, TimeUnit.SECONDS);
@@ -333,6 +351,9 @@ class TestHTTPJavaFeatures {
             } finally {
                 executor.shutdownNow();
             }
+            assertEquals(1, relay.getAcceptedConnections(),
+                    "the concurrent samples should have been multiplexed over the established connection "
+                            + "instead of opening a connection each");
         } finally {
             server.stop();
         }

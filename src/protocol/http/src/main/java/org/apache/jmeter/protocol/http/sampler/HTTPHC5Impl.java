@@ -21,8 +21,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -45,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -133,6 +132,7 @@ import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
 import org.apache.hc.core5.http2.config.H2Config;
 import org.apache.hc.core5.io.CloseMode;
+import org.apache.hc.core5.net.URIAuthority;
 import org.apache.hc.core5.pool.PoolConcurrencyPolicy;
 import org.apache.hc.core5.reactor.ConnectionInitiator;
 import org.apache.hc.core5.util.TimeValue;
@@ -204,39 +204,17 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final boolean HTTP_2_MULTIPLEXING =
             JMeterUtils.getPropDefault("httpclient5.h2.multiplexing", true);
 
-    /** Size of the HPACK dynamic header table announced to the server, {@code 0} disables HPACK indexing. */
-    private static final int HTTP_2_HEADER_TABLE_SIZE =
-            JMeterUtils.getPropDefault("httpclient5.h2.header_table_size", H2Config.DEFAULT.getHeaderTableSize());
-
-    /** Whether HPACK compression of the request headers is used. */
-    private static final boolean HTTP_2_HEADER_COMPRESSION =
-            JMeterUtils.getPropDefault("httpclient5.h2.header_compression", true);
-
-    private static final int HTTP_2_MAX_CONCURRENT_STREAMS =
-            JMeterUtils.getPropDefault("httpclient5.h2.max_concurrent_streams", H2Config.DEFAULT.getMaxConcurrentStreams());
-
     /**
-     * HTTP/2 flow control window announced per stream. It caps how many bytes the server may send
-     * before it has to wait for a window update, so the throughput of a single response can never
-     * exceed this window divided by the round trip time. The default of HttpClient is the 64 kB the
-     * HTTP/2 specification mandates, which throttles a download over a link with any noticeable
-     * latency to a fraction of the available bandwidth. JMeter therefore announces the same 16 MB
-     * the JDK client uses by default, see {@code http.java.h2.initial_window_size}. The window is
-     * only a promise to the server, the body is consumed as it arrives and not buffered up to this
-     * size.
+     * HTTP/2 flow control window announced per stream when the {@code httpclient5.h2.initial_window_size}
+     * property does not say otherwise. It caps how many bytes the server may send before it has to wait
+     * for a window update, so the throughput of a single response can never exceed this window divided by
+     * the round trip time. The default of HttpClient is the 64 kB the HTTP/2 specification mandates, which
+     * throttles a download over a link with any noticeable latency to a fraction of the available
+     * bandwidth. JMeter therefore announces the same 16 MB the JDK client uses by default, see
+     * {@code http.java.h2.initial_window_size}. The window is only a promise to the server, the body is
+     * consumed as it arrives and not buffered up to this size.
      */
-    private static final int HTTP_2_INITIAL_WINDOW_SIZE =
-            JMeterUtils.getPropDefault("httpclient5.h2.initial_window_size", 16 * 1024 * 1024);
-
-    private static final int HTTP_2_MAX_FRAME_SIZE =
-            JMeterUtils.getPropDefault("httpclient5.h2.max_frame_size", H2Config.DEFAULT.getMaxFrameSize());
-
-    /**
-     * JMeter has no way of reporting pushed resources, so server push is switched off to avoid
-     * the server wasting bandwidth on responses that are dropped.
-     */
-    private static final boolean HTTP_2_PUSH_ENABLED =
-            JMeterUtils.getPropDefault("httpclient5.h2.push_enabled", false);
+    static final int DEFAULT_HTTP_2_INITIAL_WINDOW_SIZE = 16 * 1024 * 1024;
 
     /**
      * Use HTTP/2 without TLS (h2c with prior knowledge) when HTTP/2 is selected for a {@code http://} URL.
@@ -257,15 +235,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final int HTTP_2_BODY_SPILL_THRESHOLD =
             JMeterUtils.getPropDefault("httpclient5.h2.body_spill_threshold", 256 * 1024);
 
-    /**
-     * Milliseconds of inactivity after which a pooled connection is re-validated before it is used
-     * again, {@code -1} disables the check. JMeter keeps a client per thread and reuses its
-     * connections across iterations, so a connection the server (or an idle timeout of a load
-     * balancer) closed in between would otherwise be handed out as-is and fail the next sample.
-     * HttpClient leaves this undefined by default, which skips the check altogether, and the
-     * automatic retries that would hide such a failure are deliberately disabled.
-     */
-    private static final long VALIDATE_AFTER_INACTIVITY =
+    /** Milliseconds of inactivity after which a pooled connection is re-validated, visible for testing. */
+    static long validateAfterInactivityMillis =
             JMeterUtils.getPropDefault("httpclient5.validate_after_inactivity", 2000L);
 
     /**
@@ -345,8 +316,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             return new char[0];
         }
     };
-
-    private static final Method MESSAGE_MULTIPLEXING_SETTER = findMessageMultiplexingSetter();
 
     private static final String[] HEADERS_TO_SAVE = {HttpHeaders.CONTENT_LENGTH, HttpHeaders.CONTENT_ENCODING,
             HttpHeaders.CONTENT_MD5};
@@ -479,14 +448,55 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     static H2Config createHttp2Config() {
+        return createHttp2Config(JMeterUtils.getJMeterProperties());
+    }
+
+    static H2Config createHttp2Config(Properties properties) {
         return H2Config.custom()
-                .setHeaderTableSize(HTTP_2_HEADER_TABLE_SIZE)
-                .setCompressionEnabled(HTTP_2_HEADER_COMPRESSION)
-                .setMaxConcurrentStreams(HTTP_2_MAX_CONCURRENT_STREAMS)
-                .setInitialWindowSize(HTTP_2_INITIAL_WINDOW_SIZE)
-                .setMaxFrameSize(HTTP_2_MAX_FRAME_SIZE)
-                .setPushEnabled(HTTP_2_PUSH_ENABLED)
+                // size of the HPACK dynamic header table announced to the server, 0 disables HPACK indexing
+                .setHeaderTableSize(intProperty(properties, "httpclient5.h2.header_table_size",
+                        H2Config.DEFAULT.getHeaderTableSize()))
+                .setCompressionEnabled(booleanProperty(properties, "httpclient5.h2.header_compression", true))
+                .setMaxConcurrentStreams(intProperty(properties, "httpclient5.h2.max_concurrent_streams",
+                        H2Config.DEFAULT.getMaxConcurrentStreams()))
+                .setInitialWindowSize(intProperty(properties, "httpclient5.h2.initial_window_size",
+                        DEFAULT_HTTP_2_INITIAL_WINDOW_SIZE))
+                .setMaxFrameSize(intProperty(properties, "httpclient5.h2.max_frame_size",
+                        H2Config.DEFAULT.getMaxFrameSize()))
+                // JMeter has no way of reporting pushed resources, so server push is switched off to avoid
+                // the server wasting bandwidth on responses that are dropped
+                .setPushEnabled(booleanProperty(properties, "httpclient5.h2.push_enabled", false))
                 .build();
+    }
+
+    private static int intProperty(Properties properties, String name, int defaultValue) {
+        String value = properties != null ? properties.getProperty(name) : null;
+        if (value == null || value.isBlank()) {
+            return defaultValue;
+        }
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException e) {
+            log.warn("Ignoring property {}, {} is not a number", name, value);
+            return defaultValue;
+        }
+    }
+
+    private static boolean booleanProperty(Properties properties, String name, boolean defaultValue) {
+        String value = properties != null ? properties.getProperty(name) : null;
+        return value == null || value.isBlank() ? defaultValue : Boolean.parseBoolean(value.trim());
+    }
+
+    /**
+     * Time of inactivity after which a pooled connection is re-validated before it is used again,
+     * a negative value disables the check. JMeter keeps a client per thread and reuses its
+     * connections across iterations, so a connection the server (or an idle timeout of a load
+     * balancer) closed in between would otherwise be handed out as-is and fail the next sample.
+     * HttpClient leaves this undefined by default, which skips the check altogether, and the
+     * automatic retries that would hide such a failure are deliberately disabled.
+     */
+    private static TimeValue validateAfterInactivity() {
+        return TimeValue.ofMilliseconds(validateAfterInactivityMillis);
     }
 
     protected HTTPHC5Impl(HTTPSamplerBase testElement) {
@@ -1113,35 +1123,17 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         if (request == null) {
             return 0;
         }
-        long sentBytes = 0;
-
-        String method = request.getMethod();
-        String uri = request.getRequestUri();
-        if (uri == null) {
-            uri = "";
-        }
+        String uri = request.getRequestUri() != null ? request.getRequestUri() : "";
         org.apache.hc.core5.http.ProtocolVersion version = request.getVersion();
         String versionStr = version != null ? version.toString() : HTTPConstants.HTTP_VERSION_1_1;
-
-        sentBytes += method.getBytes(Charset.defaultCharset()).length;
-        sentBytes += 1;
-        sentBytes += uri.getBytes(Charset.defaultCharset()).length;
-        sentBytes += 1;
-        sentBytes += versionStr.getBytes(Charset.defaultCharset()).length;
-        sentBytes += 2;
+        // the request line, with a space between its three parts and the CRLF that terminates it
+        long sentBytes = length(request.getMethod()) + 1 + length(uri) + 1 + length(versionStr) + 2;
 
         for (Header header : request.getHeaders()) {
-            String name = header.getName();
-            String value = header.getValue();
-            if (name != null) {
-                sentBytes += name.getBytes(Charset.defaultCharset()).length;
-                sentBytes += 2;
-            }
-            if (value != null) {
-                sentBytes += value.getBytes(Charset.defaultCharset()).length;
-            }
-            sentBytes += 2;
+            sentBytes += headerLength(header.getName(), header.getValue());
         }
+        sentBytes += implicitHeaderLength(request);
+        // the empty line that separates the headers from the body
         sentBytes += 2;
 
         HttpEntity entity = request.getEntity();
@@ -1161,6 +1153,47 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
 
         return sentBytes;
+    }
+
+    /**
+     * Length of the headers the protocol layer adds when it writes the request, so that they are
+     * accounted for although they are not part of the request object JMeter built.
+     */
+    private static long implicitHeaderLength(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
+        long length = 0;
+        URIAuthority authority = request.getAuthority();
+        if (authority != null && !request.containsHeader(HttpHeaders.HOST)) {
+            length += headerLength(HttpHeaders.HOST, authority.toString());
+        }
+        HttpEntity entity = request.getEntity();
+        if (entity == null) {
+            return length;
+        }
+        if (entity.getContentType() != null && !request.containsHeader(HttpHeaders.CONTENT_TYPE)) {
+            length += headerLength(HttpHeaders.CONTENT_TYPE, entity.getContentType());
+        }
+        if (entity.getContentEncoding() != null && !request.containsHeader(HttpHeaders.CONTENT_ENCODING)) {
+            length += headerLength(HttpHeaders.CONTENT_ENCODING, entity.getContentEncoding());
+        }
+        if (request.containsHeader(HttpHeaders.CONTENT_LENGTH) || request.containsHeader(HttpHeaders.TRANSFER_ENCODING)) {
+            return length;
+        }
+        long contentLength = entity.getContentLength();
+        if (contentLength >= 0) {
+            length += headerLength(HttpHeaders.CONTENT_LENGTH, Long.toString(contentLength));
+        } else if (entity.isChunked()) {
+            length += headerLength(HttpHeaders.TRANSFER_ENCODING, "chunked");
+        }
+        return length;
+    }
+
+    /** Length of a header line, that is {@code name: value} and the CRLF that terminates it. */
+    private static long headerLength(String name, String value) {
+        return length(name) + 2 + length(value) + 2;
+    }
+
+    private static long length(String text) {
+        return text == null ? 0 : text.getBytes(StandardCharsets.ISO_8859_1).length;
     }
 
     private static class CountingOutputStream extends java.io.OutputStream {
@@ -1223,7 +1256,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             connectionManagerBuilder.setDnsResolver(createDnsResolver(key.dnsCacheManager));
         }
         ConnectionConfig.Builder connectionConfig = ConnectionConfig.custom()
-                .setValidateAfterInactivity(TimeValue.ofMilliseconds(VALIDATE_AFTER_INACTIVITY));
+                .setValidateAfterInactivity(validateAfterInactivity());
         if (key.connectTimeout > 0) {
             connectionConfig.setConnectTimeout(Timeout.ofMilliseconds(key.connectTimeout));
         }
@@ -1236,7 +1269,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     private static CloseableHttpAsyncClient createHttp2Client(HttpClientKey key) {
-        boolean multiplexing = HTTP_2_MULTIPLEXING && MESSAGE_MULTIPLEXING_SETTER != null;
         HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
                 .disableAutomaticRetries()
                 // HttpClient 5.6 added transparent content compression to the async transport. JMeter decodes
@@ -1245,7 +1277,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                 .disableContentCompression()
                 .setH2Config(HTTP_2_CONFIG)
                 .setRoutePlanner(createRoutePlanner(key));
-        if (multiplexing) {
+        if (HTTP_2_MULTIPLEXING) {
             // A connection bound to a user token cannot be shared, and HTTP/2 has no connection scoped state anyway
             builder.disableConnectionState();
         }
@@ -1259,8 +1291,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         connectionManagerBuilder.setDefaultTlsConfig(TlsConfig.custom()
                 .setVersionPolicy(key.httpVersionPolicy)
                 .build());
-        if (multiplexing) {
-            enableMessageMultiplexing(connectionManagerBuilder);
+        if (HTTP_2_MULTIPLEXING) {
+            connectionManagerBuilder.setMessageMultiplexing(true);
         }
         connectionManagerBuilder.setPoolConcurrencyPolicy(PoolConcurrencyPolicy.LAX);
         connectionManagerBuilder.setMaxConnPerRoute(HTTP_2_MAX_CONNECTIONS_PER_ROUTE);
@@ -1272,7 +1304,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         // which fails the sample with a ConnectionClosedException. The check sends an HTTP/2 PING
         // and replaces the connection if the peer does not answer.
         ConnectionConfig.Builder connectionConfig = ConnectionConfig.custom()
-                .setValidateAfterInactivity(TimeValue.ofMilliseconds(VALIDATE_AFTER_INACTIVITY));
+                .setValidateAfterInactivity(validateAfterInactivity());
         if (key.connectTimeout > 0) {
             connectionConfig.setConnectTimeout(Timeout.ofMilliseconds(key.connectTimeout));
         }
@@ -1281,28 +1313,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         CloseableHttpAsyncClient asyncClient = builder.build();
         asyncClient.start();
         return asyncClient;
-    }
-
-    /**
-     * Looks up {@code PoolingAsyncClientConnectionManagerBuilder#setMessageMultiplexing(boolean)},
-     * which is only available from HttpClient 5.5 onwards. JMeter still runs with older HttpClient
-     * versions, where HTTP/2 requests just cannot share a connection.
-     */
-    private static Method findMessageMultiplexingSetter() {
-        try {
-            return PoolingAsyncClientConnectionManagerBuilder.class.getMethod("setMessageMultiplexing", boolean.class);
-        } catch (NoSuchMethodException e) {
-            log.info("HTTP/2 message multiplexing is unavailable, HttpClient 5.5 or later is required");
-            return null;
-        }
-    }
-
-    private static void enableMessageMultiplexing(PoolingAsyncClientConnectionManagerBuilder connectionManagerBuilder) {
-        try {
-            MESSAGE_MULTIPLEXING_SETTER.invoke(connectionManagerBuilder, true);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            log.warn("Could not enable HTTP/2 message multiplexing", e);
-        }
     }
 
     private ClassicHttpResponse executeHttp2(CloseableHttpAsyncClient client,
@@ -1486,7 +1496,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
          */
         @Override
         protected int capacityIncrement() {
-            return HTTP_2_INITIAL_WINDOW_SIZE;
+            return HTTP_2_CONFIG.getInitialWindowSize();
         }
 
         @Override
@@ -1671,7 +1681,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         closeThreadLocalClients();
     }
 
-    private static void closeThreadLocalClients() {
+    /** Closes the clients of the current thread, which releases their connections and I/O threads. */
+    static void closeThreadLocalClients() {
         Map<HttpClientKey, CloseableHttpClient> clients = HTTP_CLIENTS.get();
         for (CloseableHttpClient client : clients.values()) {
             JOrphanUtils.closeQuietly(client);

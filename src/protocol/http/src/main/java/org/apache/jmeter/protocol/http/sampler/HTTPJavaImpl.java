@@ -278,6 +278,11 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     @Override
     protected void testEnded() {
+        releaseSharedHttp2Resources();
+    }
+
+    /** Closes the clients shared by all threads and shuts down the thread pool they use. */
+    static void releaseSharedHttp2Resources() {
         closeHttp2Clients(SHARED_HTTP_2_CLIENTS);
         ExecutorService executor = HTTP_2_EXECUTOR.getAndSet(null);
         if (executor != null) {
