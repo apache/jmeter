@@ -180,10 +180,10 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             } else {
                 samplerBase.removeProperty(httpSchema.getIpSourceType());
             }
-            String selectedImplementation = String.valueOf(httpImplementation.getSelectedItem());
+            String selectedImplementation = (String) httpImplementation.getSelectedItem();
             samplerBase.set(httpSchema.getImplementation(),
                     StringUtilities.isBlank(selectedImplementation) ? null : selectedImplementation);
-            String selectedHttpVersion = String.valueOf(httpVersion.getSelectedItem());
+            String selectedHttpVersion = (String) httpVersion.getSelectedItem();
             samplerBase.set(httpSchema.getHttpVersion(),
                     StringUtilities.isBlank(selectedHttpVersion) ? null : selectedHttpVersion);
         }
@@ -400,6 +400,10 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     public void clearGui() {
         super.clearGui();
         urlConfigGui.clear();
+        if (!isAJP) {
+            httpImplementation.setSelectedItem("");
+            httpVersion.setSelectedItem("");
+        }
     }
 
     private void enableConcurrentDwn() {

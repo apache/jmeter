@@ -153,14 +153,20 @@ public class HttpDefaultsGui extends AbstractConfigGui {
             config.removeProperty(httpSchema.getIpSourceType());
         }
 
-        config.set(httpSchema.getImplementation(), String.valueOf(httpImplementation.getSelectedItem()));
-        config.set(httpSchema.getHttpVersion(), String.valueOf(httpVersion.getSelectedItem()));
+        String selectedImplementation = (String) httpImplementation.getSelectedItem();
+        config.set(httpSchema.getImplementation(),
+                StringUtilities.isBlank(selectedImplementation) ? null : selectedImplementation);
+        String selectedHttpVersion = (String) httpVersion.getSelectedItem();
+        config.set(httpSchema.getHttpVersion(),
+                StringUtilities.isBlank(selectedHttpVersion) ? null : selectedHttpVersion);
     }
 
     @Override
     public void clearGui() {
         super.clearGui();
         urlConfigGui.clear();
+        httpImplementation.setSelectedItem("");
+        httpVersion.setSelectedItem("");
     }
 
     @Override
