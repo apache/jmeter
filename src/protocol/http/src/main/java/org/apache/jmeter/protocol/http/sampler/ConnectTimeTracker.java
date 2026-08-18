@@ -57,9 +57,10 @@ import org.apache.jmeter.samplers.SampleResult;
  * and a sample which is served by an already established connection keeps a connect time of {@code 0}.
  * Plain text connections carry no {@code SSLEngine}, so their connect time cannot be measured at all.
  * <p>
- * When multiplexing is enabled, a client is shared by all JMeter threads, so the measurement happens on
- * the client threads, but the value is only written to the {@link SampleResult} by the thread which owns
- * the sample.
+ * A client is shared by a JMeter thread and the threads which download its embedded resources, and by all
+ * JMeter threads when {@code http.java.h2.share_connections_between_threads} is enabled, so the measurement
+ * happens on the client threads, but the value is only written to the {@link SampleResult} by the thread
+ * which owns the sample.
  */
 final class ConnectTimeTracker {
 

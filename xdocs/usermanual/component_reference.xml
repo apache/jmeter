@@ -251,7 +251,15 @@ https.default.protocol=SSLv3
         <code>HTTP/2 Strict</code>, requires HTTP/2, so the request fails when the server does not support it),
         <code>Java</code> supports <code>HTTP/1.1</code> and <code>HTTP/2 Negotiate</code>, and <code>HttpClient4</code>
         supports <code>HTTP/1.1</code> only. An empty value uses the <code>httpclient.version</code> property, which
-        defaults to <code>HTTP/1.1</code>.</property>
+        defaults to <code>HTTP/1.1</code>.
+        <p>With HTTP/2 a thread multiplexes its concurrent requests, for example the parallel downloads of
+        embedded resources, over a single connection per host, but the connections are not shared between
+        threads, so a test with <code>N</code> threads still opens <code>N</code> connections like
+        <code>N</code> real users would. Setting the
+        <code>http.java.h2.share_connections_between_threads</code> property makes the <code>Java</code>
+        implementation drive all threads over one connection per host, which saves connections and threads,
+        but the test then no longer measures connection level effects such as the congestion window, the cost
+        of the TLS handshake or per connection limits of the server.</p></property>
         <property name="Protocol" required="No"><code>HTTP</code>, <code>HTTPS</code> or <code>FILE</code>. Default: <code>HTTP</code></property>
         <property name="Method" required="Yes"><code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>TRACE</code>,
           <code>OPTIONS</code>, <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code> (not supported for
@@ -3930,7 +3938,15 @@ All port values are treated equally; a sampler that does not specify a port will
         <code>HTTP/2 Strict</code>, requires HTTP/2, so the request fails when the server does not support it),
         <code>Java</code> supports <code>HTTP/1.1</code> and <code>HTTP/2 Negotiate</code>, and <code>HttpClient4</code>
         supports <code>HTTP/1.1</code> only. An empty value uses the <code>httpclient.version</code> property, which
-        defaults to <code>HTTP/1.1</code>.</property>
+        defaults to <code>HTTP/1.1</code>.
+        <p>With HTTP/2 a thread multiplexes its concurrent requests, for example the parallel downloads of
+        embedded resources, over a single connection per host, but the connections are not shared between
+        threads, so a test with <code>N</code> threads still opens <code>N</code> connections like
+        <code>N</code> real users would. Setting the
+        <code>http.java.h2.share_connections_between_threads</code> property makes the <code>Java</code>
+        implementation drive all threads over one connection per host, which saves connections and threads,
+        but the test then no longer measures connection level effects such as the congestion window, the cost
+        of the TLS handshake or per connection limits of the server.</p></property>
         <property name="Protocol" required="No"><code>HTTP</code> or <code>HTTPS</code>.</property>
         <property name="Content encoding" required="No">The encoding to be used for the request.</property>
         <property name="Path" required="No">The path to resource (for example, <code>/servlets/myServlet</code>). If the

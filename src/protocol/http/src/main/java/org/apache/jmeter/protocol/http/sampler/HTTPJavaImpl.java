@@ -125,13 +125,24 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         return agent == null ? javaAgent : agent + " " + javaAgent;
     }
 
+    /**
+     * HTTP/2 clients of a JMeter thread. The JDK client sends every exchange of a client over a single
+     * connection per origin, so one client per JMeter thread multiplexes the requests of that thread and
+     * of the threads which download its embedded resources over one connection, while every JMeter thread
+     * still uses a connection of its own, like a real user would.
+     */
     private static final ThreadLocal<Map<HttpClientKey, Http2Client>> HTTP_2_CLIENTS =
-        ThreadLocal.withInitial(ConcurrentHashMap::new);
+        new InheritableThreadLocal<>() {
+            @Override
+            protected Map<HttpClientKey, Http2Client> initialValue() {
+                return new ConcurrentHashMap<>();
+            }
+        };
 
     /**
-     * HTTP/2 clients used when multiplexing is enabled. The JDK client sends every exchange of a client
-     * over a single connection per origin, so one shared instance lets the requests of all JMeter threads
-     * and of the threads which download embedded resources in parallel share a connection.
+     * HTTP/2 clients used when the connections are shared between the JMeter threads. One instance for all
+     * threads means the whole test plan is driven over a single connection per origin, which saves resources
+     * but hides connection level effects such as the congestion window or per connection server limits.
      */
     private static final Map<HttpClientKey, Http2Client> SHARED_HTTP_2_CLIENTS = new ConcurrentHashMap<>();
 
@@ -142,9 +153,13 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     // Available since Java 21; on older JVMs the client is released once it is no longer referenced.
     private static final Method HTTP_CLIENT_SHUTDOWN = findHttpClientShutdownMethod();
 
-    /** Multiplex concurrent HTTP/2 message exchanges over a single connection per origin. */
-    private static final boolean HTTP_2_MULTIPLEXING =
-        JMeterUtils.getPropDefault("http.java.h2.multiplexing", true); // $NON-NLS-1$
+    /**
+     * Multiplex the HTTP/2 message exchanges of all JMeter threads over a single connection per origin,
+     * instead of giving every thread a connection of its own. It is disabled by default, as sharing one
+     * connection between the virtual users changes what the test measures.
+     */
+    private static final boolean SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS =
+        JMeterUtils.getPropDefault("http.java.h2.share_connections_between_threads", false); // $NON-NLS-1$
 
     /**
      * Accept HTTP/2 server push. JMeter has no way of reporting pushed resources, so push is switched off
@@ -220,7 +235,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     static Map<HttpClientKey, Http2Client> getHttp2Clients() {
-        return HTTP_2_MULTIPLEXING ? SHARED_HTTP_2_CLIENTS : HTTP_2_CLIENTS.get();
+        return SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS ? SHARED_HTTP_2_CLIENTS : HTTP_2_CLIENTS.get();
     }
 
     /** Returns the thread pool of the HTTP/2 clients, it is created when the first client needs it. */
@@ -262,15 +277,24 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     private static void closeHttp2Clients(Map<HttpClientKey, Http2Client> clients) {
         synchronized (clients) {
-            for (Http2Client client : clients.values()) {
+            List<Http2Client> closing = new ArrayList<>(clients.values());
+            // The map is shared with the threads which download embedded resources, and those threads are
+            // pooled, so it is emptied before the clients are closed to make sure a thread which serves
+            // another JMeter thread later on builds a client of its own instead of using a closed one.
+            clients.clear();
+            for (Http2Client client : closing) {
                 closeQuietly(client);
             }
-            clients.clear();
         }
     }
 
     @Override
     protected void threadFinished() {
+        closeThreadLocalHttp2Clients();
+    }
+
+    /** Closes the HTTP/2 clients of the current JMeter thread, which releases their connections. */
+    static void closeThreadLocalHttp2Clients() {
         closeHttp2Clients(HTTP_2_CLIENTS.get());
         HTTP_2_CLIENTS.remove();
     }
@@ -1477,7 +1501,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         Map<HttpClientKey, Http2Client> clients = getHttp2Clients();
         Http2Client client = clients.get(key);
-        if (client != null && (HTTP_2_MULTIPLEXING || client.usesSslContext(sslContext))) {
+        if (client != null && (SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS || client.usesSslContext(sslContext))) {
             // The SSLContext must not be part of the key, it does not implement equals(), and JMeter hands out
             // a new instance per thread and after every reset, which would make the cache grow without bound.
             // When the clients are shared, the SSLContext of the first caller is kept, so all threads keep on
@@ -1486,7 +1510,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
         synchronized (clients) {
             client = clients.get(key);
-            if (client != null && (HTTP_2_MULTIPLEXING || client.usesSslContext(sslContext))) {
+            if (client != null && (SHARE_HTTP_2_CONNECTIONS_BETWEEN_THREADS || client.usesSslContext(sslContext))) {
                 return client;
             }
             Http2Client created = createHttpClient(key, sslContext);

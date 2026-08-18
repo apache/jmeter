@@ -81,8 +81,9 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 class TestHTTPJavaFeatures {
 
     @AfterEach
-    void closeSharedClients() {
-        // the HTTP/2 clients are shared between all threads and keep their connections and selector alive
+    void closeHttp2Clients() {
+        // the HTTP/2 clients keep their connections and their selector thread alive until they are closed
+        HTTPJavaImpl.closeThreadLocalHttp2Clients();
         HTTPJavaImpl.releaseSharedHttp2Resources();
     }
 
@@ -299,20 +300,38 @@ class TestHTTPJavaFeatures {
     }
 
     @Test
-    void sharesHttp2ClientsBetweenThreadsForMultiplexing() throws Exception {
-        Map<?, ?> clientsOfMainThread = HTTPJavaImpl.getHttp2Clients();
-        AtomicReference<Map<?, ?>> clientsOfOtherThread = new AtomicReference<>();
+    void sharesHttp2ClientsWithTheThreadsDownloadingEmbeddedResources() throws Exception {
+        // JMeter threads are started by a thread which never samples itself, so they do not inherit a map
+        HTTPJavaImpl.closeThreadLocalHttp2Clients();
+        AtomicReference<Map<?, ?>> clientsOfFirstThread = new AtomicReference<>();
+        AtomicReference<Map<?, ?>> clientsOfSecondThread = new AtomicReference<>();
+        AtomicReference<Map<?, ?>> clientsOfResourceDownloader = new AtomicReference<>();
 
-        Thread thread = new Thread(() -> clientsOfOtherThread.set(HTTPJavaImpl.getHttp2Clients()));
-        thread.start();
-        thread.join();
+        Thread firstThread = new Thread(() -> {
+            clientsOfFirstThread.set(HTTPJavaImpl.getHttp2Clients());
+            // the embedded resources are downloaded by threads the JMeter thread creates
+            Thread downloader = new Thread(() -> clientsOfResourceDownloader.set(HTTPJavaImpl.getHttp2Clients()));
+            downloader.start();
+            try {
+                downloader.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        Thread secondThread = new Thread(() -> clientsOfSecondThread.set(HTTPJavaImpl.getHttp2Clients()));
+        firstThread.start();
+        secondThread.start();
+        firstThread.join();
+        secondThread.join();
 
-        assertSame(clientsOfMainThread, clientsOfOtherThread.get(),
-                "HTTP/2 clients should be shared, so concurrent requests are multiplexed over one connection");
+        assertSame(clientsOfFirstThread.get(), clientsOfResourceDownloader.get(),
+                "the downloads of embedded resources should be multiplexed over the connection of their thread");
+        assertNotSame(clientsOfFirstThread.get(), clientsOfSecondThread.get(),
+                "every JMeter thread should use a connection of its own, like a real user would");
     }
 
     @Test
-    void multiplexesConcurrentHttp2RequestsOverOneConnection() throws Exception {
+    void multiplexesConcurrentHttp2RequestsOfOneThreadOverOneConnection() throws Exception {
         WireMockServer server = createServer();
         server.start();
         try (TcpRelay relay = new TcpRelay(server.port())) {
@@ -331,6 +350,7 @@ class TestHTTPJavaFeatures {
                 sampler.setHttpVersion("HTTP/2");
                 return sampler.sample(url, HTTPConstants.GET, false, 1);
             };
+            // the threads are created by this thread, like the ones which download embedded resources
             ExecutorService executor = Executors.newFixedThreadPool(requests);
             try {
                 List<Future<HTTPSampleResult>> results = new ArrayList<>();
@@ -739,27 +759,27 @@ class TestHTTPJavaFeatures {
         URL url = new URL("https://localhost:1234/http2SslReset");
         try {
             JsseSSLManager sslManager = (JsseSSLManager) SSLManager.getInstance();
-            HTTPJavaImpl.Http2Client first = impl.getHttpClient(url);
+            impl.getHttpClient(url);
             Map<Object, Object> clientsAfterFirstSample = new HashMap<>(clients);
             SSLContext contextOfFirstSample = sslManager.getContext();
 
             // Happens on every thread group iteration when "same user on next iteration" is switched off
             sslManager.resetContext();
-            HTTPJavaImpl.Http2Client second = impl.getHttpClient(url);
+            impl.getHttpClient(url);
 
             assertNotSame(contextOfFirstSample, sslManager.getContext(),
                     "resetContext() should hand out a new SSLContext, otherwise the test proves nothing");
             assertFalse(clientsAfterFirstSample.isEmpty(), "an HTTP/2 client should have been cached");
-            assertSame(first, second, "the cached HTTP/2 client should be reused after the SSLContext was reset");
-            assertEquals(clientsAfterFirstSample, new HashMap<Object, Object>(clients),
+            assertEquals(clientsAfterFirstSample.keySet(), new HashMap<Object, Object>(clients).keySet(),
                     "a new SSLContext must not add another HttpClient to the cache, that would leak clients");
         } finally {
+            impl.threadFinished();
             impl.testEnded();
         }
     }
 
     @Test
-    void closesSharedHttp2ClientsWhenTheTestEnds() throws Exception {
+    void closesHttp2ClientsWhenTheThreadFinishes() throws Exception {
         WireMockServer server = createServer();
         server.start();
         HTTPSamplerBase sampler = newSampler();
@@ -772,10 +792,10 @@ class TestHTTPJavaFeatures {
             assertEquals("200", result.getResponseCode());
             assertFalse(HTTPJavaImpl.getHttp2Clients().isEmpty(), "the sample should have cached an HTTP/2 client");
 
-            sampler.testEnded();
+            sampler.threadFinished();
 
             assertTrue(HTTPJavaImpl.getHttp2Clients().isEmpty(),
-                    "HTTP/2 clients should be released when the test ends");
+                    "HTTP/2 clients should be released when the thread finishes");
         } finally {
             server.stop();
         }
