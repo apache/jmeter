@@ -160,7 +160,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
 
-    public static final String HTTP_VERSION = "HTTPSampler.httpVersion"; // $NON-NLS-1$
+    public static final String HTTP_VERSION = HTTPSamplerBaseSchema.INSTANCE.getHttpVersion().getName();
 
     public static final String PATH = "HTTPSampler.path"; // $NON-NLS-1$
 

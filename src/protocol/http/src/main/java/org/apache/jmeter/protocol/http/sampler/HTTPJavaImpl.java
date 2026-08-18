@@ -1244,7 +1244,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 cacheManager.saveDetails(response, res);
             }
 
-            res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_2,
+            res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_VERSION_2,
                     capturingConn != null ? capturingConn.getRequestProperties() : null,
                     securityHeaders, requestBodyLength));
 
@@ -1256,7 +1256,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (res.getEndTime() == 0) {
                 res.sampleEnd();
             }
-            res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_2,
+            res.setSentBytes(calculateSentBytes(url, method, HTTPConstants.HTTP_VERSION_2,
                     capturingConn != null ? capturingConn.getRequestProperties() : null,
                     securityHeaders, requestBodyLength));
             return errorResult(e, res);
@@ -1302,7 +1302,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private static String getResponseHeaders(HttpResponse<?> response) {
         StringBuilder headerBuf = new StringBuilder();
         String versionStr = (response.version() == HttpClient.Version.HTTP_2)
-                ? HTTPConstants.HTTP_2 : HTTPConstants.HTTP_1_1;
+                ? HTTPConstants.HTTP_VERSION_2 : HTTPConstants.HTTP_VERSION_1_1;
         headerBuf.append(versionStr).append(" ").append(response.statusCode()).append("\n"); // $NON-NLS-1$ $NON-NLS-2$
 
         response.headers().map().forEach((key, values) -> {

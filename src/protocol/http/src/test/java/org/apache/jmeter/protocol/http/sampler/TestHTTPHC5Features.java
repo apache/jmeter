@@ -97,6 +97,13 @@ class TestHTTPHC5Features {
     }
 
     @Test
+    void matchesHttpVersionIgnoringCase() {
+        assertEquals(HttpVersionPolicy.NEGOTIATE, HTTPHC5Impl.getHttpVersionPolicy("http/2", "HTTP/1.1"));
+        assertEquals(HttpVersionPolicy.NEGOTIATE, HTTPHC5Impl.getHttpVersionPolicy("", "http/2"));
+        assertEquals(HttpVersionPolicy.FORCE_HTTP_2, HTTPHC5Impl.getHttpVersionPolicy("http/2 strict", "HTTP/1.1"));
+    }
+
+    @Test
     void defaultsToHttp11ForUnsupportedHttpVersion() {
         assertEquals(HttpVersionPolicy.FORCE_HTTP_1, HTTPHC5Impl.getHttpVersionPolicy("HTTP/3", "HTTP/2"));
     }

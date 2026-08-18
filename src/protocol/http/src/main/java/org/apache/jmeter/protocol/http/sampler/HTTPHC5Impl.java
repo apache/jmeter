@@ -606,7 +606,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private void setupRequest(URL url, org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
             HTTPSampleResult result, boolean areFollowingRedirect) throws IOException {
-        HttpVersionPolicy httpVersionPolicy = getHttpVersionPolicy(testElement.getHttpVersion(), HTTP_VERSION,
+        HttpVersionPolicy httpVersionPolicy = getHttpVersionPolicy(testElement.getHttpVersion(), DEFAULT_HTTP_VERSION,
                 url.getProtocol());
         RequestConfig.Builder config = RequestConfig.custom()
                 .setRedirectsEnabled(getAutoRedirects() && !areFollowingRedirect);
@@ -1625,7 +1625,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         InetAddress localAddress = getIpSourceAddress();
         boolean useDynamicProxy = isDynamicProxy(proxyHost, proxyPort);
         boolean useStaticProxy = isStaticProxy(url.getHost());
-        HttpVersionPolicy httpVersionPolicy = getHttpVersionPolicy(testElement.getHttpVersion(), HTTP_VERSION,
+        HttpVersionPolicy httpVersionPolicy = getHttpVersionPolicy(testElement.getHttpVersion(), DEFAULT_HTTP_VERSION,
                 url.getProtocol());
         if (!useDynamicProxy) {
             proxyScheme = PROXY_SCHEME;
@@ -1642,7 +1642,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         if (HTTPConstants.HTTP_VERSION_2_STRICT.equalsIgnoreCase(httpVersion)) {
             return HttpVersionPolicy.FORCE_HTTP_2;
         }
-        return HTTPConstants.HTTP_VERSION_2.equals(httpVersion)
+        return HTTPConstants.HTTP_VERSION_2.equalsIgnoreCase(httpVersion)
                 ? HttpVersionPolicy.NEGOTIATE : HttpVersionPolicy.FORCE_HTTP_1;
     }
 

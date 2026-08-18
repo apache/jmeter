@@ -77,7 +77,8 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected static final boolean USE_LOOPBACK = JMeterUtils.getPropDefault("httpclient.loopback", false);
 
-    protected static final String HTTP_VERSION = JMeterUtils.getPropDefault("httpclient.version", "1.1");
+    /** Default value of the sampler {@code HTTPSampler.httpVersion} property, see {@code httpclient.version}. */
+    protected static final String DEFAULT_HTTP_VERSION = JMeterUtils.getPropDefault("httpclient.version", "1.1");
 
     // -1 means not defined
     protected static final int SO_TIMEOUT = JMeterUtils.getPropDefault("httpclient.timeout", -1);
