@@ -103,8 +103,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     private static final boolean OBEY_CONTENT_LENGTH =
         JMeterUtils.getPropDefault("httpsampler.obey_contentlength", false); // $NON-NLS-1$
 
-    private static final String DEFAULT_HTTP_VERSION =
-        JMeterUtils.getPropDefault("httpclient.version", HTTPConstants.HTTP_1_1); // $NON-NLS-1$
+    private static final String DEFAULT_HTTP_VERSION = readDefaultHttpVersion();
 
     /** Name of the {@code User-Agent} request header. */
     private static final String HEADER_USER_AGENT = "User-Agent"; // $NON-NLS-1$

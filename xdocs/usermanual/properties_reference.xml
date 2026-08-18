@@ -444,7 +444,11 @@ JMETER-SERVER</source>
 <property name="httpclient.version">
     Set the default HTTP version for HttpClient5 and Java samplers with an empty HTTP Version value.<br/>
     Valid values are <code>HTTP/1.1</code>, <code>HTTP/2</code> and, for HttpClient5 only,
-    <code>HTTP/2 Strict</code>.<br/>
+    <code>HTTP/2 Strict</code>. The legacy values <code>1.0</code> and <code>1.1</code> are still
+    accepted and both select <code>HTTP/1.1</code> for these samplers.<br/>
+    The AJP sampler only reads this property to choose the HTTP version of its request line: the
+    legacy value <code>1.0</code> (or <code>HTTP/1.0</code>) announces <code>HTTP/1.0</code>, every
+    other value announces <code>HTTP/1.1</code>.<br/>
     Defaults to: <code>HTTP/1.1</code>
 </property>
 <property name="httpclient5.validate_after_inactivity">
