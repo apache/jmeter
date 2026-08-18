@@ -1356,8 +1356,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             Map<String, List<String>> requestHeaders,
             Map<String, String> securityHeaders,
             long postBodyLength) {
-        long sentBytes = 0;
-
         if (StringUtilities.isBlank(method)) {
             method = HTTPConstants.GET;
         }
@@ -1372,12 +1370,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         // Request line: METHOD URI VERSION\r\n
-        sentBytes += method.getBytes(StandardCharsets.UTF_8).length;
-        sentBytes += 1;
-        sentBytes += uri.getBytes(StandardCharsets.UTF_8).length;
-        sentBytes += 1;
-        sentBytes += version.getBytes(StandardCharsets.UTF_8).length;
-        sentBytes += 2;
+        long sentBytes = HTTPMessageSizes.requestLineLength(method, uri, version);
 
         // Request headers
         if (requestHeaders != null) {
@@ -1387,12 +1380,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                     List<String> values = entry.getValue();
                     if (values != null) {
                         for (String val : values) {
-                            sentBytes += key.getBytes(StandardCharsets.UTF_8).length;
-                            sentBytes += 2; // ": "
-                            if (val != null) {
-                                sentBytes += val.getBytes(StandardCharsets.UTF_8).length;
-                            }
-                            sentBytes += 2; // "\r\n"
+                            sentBytes += HTTPMessageSizes.headerLength(key, val);
                         }
                     }
                 }
@@ -1402,20 +1390,14 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         if (securityHeaders != null && !securityHeaders.isEmpty()) {
             for (Map.Entry<String, String> secEntry : securityHeaders.entrySet()) {
                 String secKey = secEntry.getKey();
-                String secVal = secEntry.getValue();
                 if (secKey != null && !hasHeader(requestHeaders, secKey)) {
-                    sentBytes += secKey.getBytes(StandardCharsets.UTF_8).length;
-                    sentBytes += 2; // ": "
-                    if (secVal != null) {
-                        sentBytes += secVal.getBytes(StandardCharsets.UTF_8).length;
-                    }
-                    sentBytes += 2; // "\r\n"
+                    sentBytes += HTTPMessageSizes.headerLength(secKey, secEntry.getValue());
                 }
             }
         }
 
         // Header/Body separator \r\n
-        sentBytes += 2;
+        sentBytes += HTTPMessageSizes.EMPTY_LINE;
 
         // Request body
         if (postBodyLength >= 0) {

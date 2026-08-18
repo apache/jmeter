@@ -26,7 +26,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -149,7 +148,6 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
-import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -157,6 +155,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.io.CountingInputStream;
+import org.apache.jorphan.io.CountingOutputStream;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
 import org.brotli.dec.BrotliInputStream;
@@ -621,18 +620,18 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         } else if (httpVersionPolicy == HttpVersionPolicy.FORCE_HTTP_2) {
             request.setVersion(HttpVersion.HTTP_2);
         }
-        setConnectionHeaders(request, getHeaderManager(), httpVersionPolicy);
+        setConnectionHeaders(request, url, getHeaderManager(), httpVersionPolicy);
         setDefaultUserAgent(request);
         CacheManager cacheManager = getCacheManager();
         if (cacheManager != null) {
             cacheManager.setHeaders(url, request);
         }
 
-        String cookies = setConnectionCookie(request, url, getCookieManager());
+        String cookies = setConnectionCookie(url, getCookieManager(), request::setHeader);
         if (StringUtilities.isNotEmpty(cookies)) {
             result.setCookies(cookies);
         } else {
-            result.setCookies(getOnlyCookieFromHeaders(request));
+            result.setCookies(getOnlyCookieFromHeaders(headersOf(request)));
         }
 
         if (canHaveBody(request.getMethod())) {
@@ -698,19 +697,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private List<NameValuePair> createNameValuePairs(String contentEncoding) throws IOException {
         List<NameValuePair> pairs = new ArrayList<>();
-        for (JMeterProperty property : getArguments().getEnabledArguments()) {
-            HTTPArgument argument = (HTTPArgument) property.getObjectValue();
-            String name = argument.getName();
-            if (argument.isSkippable(name)) {
-                continue;
-            }
-            String value = argument.getValue();
-            if (!argument.isAlwaysEncoded()) {
-                name = URLDecoder.decode(name, contentEncoding);
-                value = URLDecoder.decode(value, contentEncoding);
-            }
-            pairs.add(new BasicNameValuePair(name, value));
-        }
+        forEachFormParameter(contentEncoding, (name, value) -> pairs.add(new BasicNameValuePair(name, value)));
         return pairs;
     }
 
@@ -767,23 +754,27 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     }
 
     private static void setConnectionHeaders(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
-            HeaderManager headerManager, HttpVersionPolicy httpVersionPolicy) {
-        if (headerManager == null) {
-            return;
-        }
-        CollectionProperty headers = headerManager.getHeaders();
-        if (headers == null) {
-            return;
-        }
-        for (JMeterProperty property : headers) {
-            org.apache.jmeter.protocol.http.control.Header header =
-                    (org.apache.jmeter.protocol.http.control.Header) property.getObjectValue();
-            if (!HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(header.getName())
-                    && (httpVersionPolicy == HttpVersionPolicy.FORCE_HTTP_1
-                    || !HTTPConstants.HEADER_CONNECTION.equalsIgnoreCase(header.getName()))) {
-                request.addHeader(header.getName(), header.getValue());
+            URL url, HeaderManager headerManager, HttpVersionPolicy httpVersionPolicy) {
+        // HTTP/2 has no Connection header, the request has to be sent without it
+        setConnectionHeaders(headerManager, url,
+                name -> httpVersionPolicy == HttpVersionPolicy.FORCE_HTTP_1
+                        || !HTTPConstants.HEADER_CONNECTION.equalsIgnoreCase(name),
+                request::addHeader);
+    }
+
+    /**
+     * Adapts the headers of a request or a response to the representation the helpers of
+     * {@link HTTPHCAbstractImpl} work on.
+     *
+     * @param message request or response
+     * @return the headers of the message
+     */
+    private static HeaderIterable headersOf(org.apache.hc.core5.http.MessageHeaders message) {
+        return action -> {
+            for (Header header : message.getHeaders()) {
+                action.accept(header.getName(), header.getValue());
             }
-        }
+        };
     }
 
     private static void setDefaultUserAgent(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
@@ -791,18 +782,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             return;
         }
         request.setHeader(HttpHeaders.USER_AGENT, DEFAULT_USER_AGENT);
-    }
-
-    private static String setConnectionCookie(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request,
-            URL url, CookieManager cookieManager) {
-        if (cookieManager == null) {
-            return null;
-        }
-        String cookies = cookieManager.getCookieHeaderForURL(url);
-        if (cookies != null) {
-            request.setHeader(HTTPConstants.HEADER_COOKIE, cookies);
-        }
-        return cookies;
     }
 
     HttpClientContext createHttpClientContext(URL url, HttpClientKey key,
@@ -886,7 +865,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             HttpClientContext context, CredentialsProvider credentialsProvider,
             boolean kerberosTarget, boolean kerberosProxy) {
         KerberosConfig kerberosConfig = KerberosConfig.custom()
-                .setStripPort(isStripPort(url))
+                .setStripPort(AuthManager.isStripPort(url))
                 .setUseCanonicalHostname(AuthManager.USE_CANONICAL_HOST_NAME)
                 .setRequestDelegCreds(KERBEROS_DELEGATE_CRED
                         ? KerberosConfig.Option.ENABLE : KerberosConfig.Option.DEFAULT)
@@ -917,18 +896,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static HttpHost getProxyHost(HttpClientKey key) {
         return key.hasProxy ? new HttpHost(key.proxyScheme, key.proxyHost, key.proxyPort) : null;
-    }
-
-    /**
-     * IE and Firefox always strip the port from the URL before they construct the SPN, see the
-     * {@code kerberos.spnego.strip_port} property.
-     */
-    private static boolean isStripPort(URL url) {
-        if (AuthManager.STRIP_PORT) {
-            return true;
-        }
-        int port = url.getPort();
-        return port == HTTPConstants.DEFAULT_HTTP_PORT || port == HTTPConstants.DEFAULT_HTTPS_PORT;
     }
 
     private Subject getSubjectForUrl(URL url) {
@@ -1103,20 +1070,12 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         StringBuilder headers = new StringBuilder();
         headers.append(response.getVersion()).append(' ').append(response.getCode()).append(' ')
                 .append(response.getReasonPhrase()).append('\n');
-        for (Header header : response.getHeaders()) {
-            headers.append(header.getName()).append(": ").append(header.getValue()).append('\n');
-        }
+        headers.append(formatHeaders(headersOf(response), name -> true));
         return headers.toString();
     }
 
     private static String getRequestHeaders(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
-        StringBuilder headers = new StringBuilder();
-        for (Header header : request.getHeaders()) {
-            if (ALL_EXCEPT_COOKIE.test(header.getName())) {
-                headers.append(header.getName()).append(": ").append(header.getValue()).append('\n');
-            }
-        }
-        return headers.toString();
+        return formatHeaders(headersOf(request), ALL_EXCEPT_COOKIE);
     }
 
     private static long calculateSentBytes(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
@@ -1126,15 +1085,13 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         String uri = request.getRequestUri() != null ? request.getRequestUri() : "";
         org.apache.hc.core5.http.ProtocolVersion version = request.getVersion();
         String versionStr = version != null ? version.toString() : HTTPConstants.HTTP_VERSION_1_1;
-        // the request line, with a space between its three parts and the CRLF that terminates it
-        long sentBytes = length(request.getMethod()) + 1 + length(uri) + 1 + length(versionStr) + 2;
+        long sentBytes = HTTPMessageSizes.requestLineLength(request.getMethod(), uri, versionStr);
 
         for (Header header : request.getHeaders()) {
-            sentBytes += headerLength(header.getName(), header.getValue());
+            sentBytes += HTTPMessageSizes.headerLength(header.getName(), header.getValue());
         }
         sentBytes += implicitHeaderLength(request);
-        // the empty line that separates the headers from the body
-        sentBytes += 2;
+        sentBytes += HTTPMessageSizes.EMPTY_LINE;
 
         HttpEntity entity = request.getEntity();
         if (entity != null) {
@@ -1142,10 +1099,10 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             if (contentLength >= 0) {
                 sentBytes += contentLength;
             } else if (entity.isRepeatable()) {
-                CountingOutputStream counter = new CountingOutputStream();
+                CountingOutputStream counter = new CountingOutputStream(OutputStream.nullOutputStream());
                 try {
                     entity.writeTo(counter);
-                    sentBytes += counter.getCount();
+                    sentBytes += counter.getBytesWritten();
                 } catch (IOException e) {
                     log.debug("Exception measuring entity length", e);
                 }
@@ -1163,69 +1120,32 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         long length = 0;
         URIAuthority authority = request.getAuthority();
         if (authority != null && !request.containsHeader(HttpHeaders.HOST)) {
-            length += headerLength(HttpHeaders.HOST, authority.toString());
+            length += HTTPMessageSizes.headerLength(HttpHeaders.HOST, authority.toString());
         }
         HttpEntity entity = request.getEntity();
         if (entity == null) {
             return length;
         }
         if (entity.getContentType() != null && !request.containsHeader(HttpHeaders.CONTENT_TYPE)) {
-            length += headerLength(HttpHeaders.CONTENT_TYPE, entity.getContentType());
+            length += HTTPMessageSizes.headerLength(HttpHeaders.CONTENT_TYPE, entity.getContentType());
         }
         if (entity.getContentEncoding() != null && !request.containsHeader(HttpHeaders.CONTENT_ENCODING)) {
-            length += headerLength(HttpHeaders.CONTENT_ENCODING, entity.getContentEncoding());
+            length += HTTPMessageSizes.headerLength(HttpHeaders.CONTENT_ENCODING, entity.getContentEncoding());
         }
         if (request.containsHeader(HttpHeaders.CONTENT_LENGTH) || request.containsHeader(HttpHeaders.TRANSFER_ENCODING)) {
             return length;
         }
         long contentLength = entity.getContentLength();
         if (contentLength >= 0) {
-            length += headerLength(HttpHeaders.CONTENT_LENGTH, Long.toString(contentLength));
+            length += HTTPMessageSizes.headerLength(HttpHeaders.CONTENT_LENGTH, Long.toString(contentLength));
         } else if (entity.isChunked()) {
-            length += headerLength(HttpHeaders.TRANSFER_ENCODING, "chunked");
+            length += HTTPMessageSizes.headerLength(HttpHeaders.TRANSFER_ENCODING, "chunked");
         }
         return length;
     }
 
-    /** Length of a header line, that is {@code name: value} and the CRLF that terminates it. */
-    private static long headerLength(String name, String value) {
-        return length(name) + 2 + length(value) + 2;
-    }
-
-    private static long length(String text) {
-        return text == null ? 0 : text.getBytes(StandardCharsets.ISO_8859_1).length;
-    }
-
-    private static class CountingOutputStream extends java.io.OutputStream {
-        private long count = 0;
-
-        @Override
-        public void write(int b) {
-            count++;
-        }
-
-        @Override
-        public void write(byte[] b, int off, int len) {
-            count += len;
-        }
-
-        long getCount() {
-            return count;
-        }
-    }
-
-    private static String getOnlyCookieFromHeaders(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
-        Header cookie = request.getFirstHeader(HTTPConstants.HEADER_COOKIE);
-        return cookie == null ? "" : cookie.getValue();
-    }
-
     private static void saveConnectionCookies(ClassicHttpResponse response, URL url, CookieManager cookieManager) {
-        if (cookieManager == null) {
-            return;
-        }
-        for (Header header : response.getHeaders(HTTPConstants.HEADER_SET_COOKIE)) {
-            cookieManager.addCookieFromHeader(header.getValue(), url);
-        }
+        saveConnectionCookies(headersOf(response), url, cookieManager);
     }
 
     private static CloseableHttpClient getClient(HttpClientKey key) {

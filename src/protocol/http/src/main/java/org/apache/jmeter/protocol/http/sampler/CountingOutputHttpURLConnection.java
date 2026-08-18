@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,6 +24,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.jorphan.io.CountingOutputStream;
 
 /**
  * Delegating {@link HttpURLConnection} that counts the bytes actually written to the request body.
@@ -46,7 +47,7 @@ final class CountingOutputHttpURLConnection extends HttpURLConnection {
      * @return the number of bytes written to the request body, or {@code -1} if the body was never opened
      */
     long getBytesWritten() {
-        return countingOutput == null ? -1 : countingOutput.getCount();
+        return countingOutput == null ? -1 : countingOutput.getBytesWritten();
     }
 
     @Override
@@ -145,32 +146,5 @@ final class CountingOutputHttpURLConnection extends HttpURLConnection {
     @Override
     public boolean usingProxy() {
         return delegate.usingProxy();
-    }
-
-    /**
-     * Counts the bytes written to the wrapped stream.
-     */
-    private static final class CountingOutputStream extends FilterOutputStream {
-        private long count;
-
-        CountingOutputStream(OutputStream out) {
-            super(out);
-        }
-
-        long getCount() {
-            return count;
-        }
-
-        @Override
-        public void write(int b) throws IOException {
-            out.write(b);
-            count++;
-        }
-
-        @Override
-        public void write(byte[] b, int off, int len) throws IOException {
-            out.write(b, off, len);
-            count += len;
-        }
     }
 }

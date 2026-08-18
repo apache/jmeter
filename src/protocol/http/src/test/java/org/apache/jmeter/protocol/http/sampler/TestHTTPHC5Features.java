@@ -65,6 +65,8 @@ import org.apache.hc.core5.util.Timeout;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
@@ -984,6 +986,51 @@ class TestHTTPHC5Features {
             assertFalse(result.isSuccessful(),
                     "a connection reused within the validation interval is not checked, so the request "
                             + "is expected to run into the dropped connection");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void sendsHostHeaderOfTheHeaderManagerWithoutItsDefaultPort() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/host")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+            HeaderManager headerManager = new HeaderManager();
+            headerManager.add(new Header(HTTPConstants.HEADER_HOST, "example.com:80"));
+            sampler.setHeaderManager(headerManager);
+
+            HTTPSampleResult result = sampler.sample(new URL(server.url("/host")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertEquals("example.com",
+                    singleRequest(server, "/host").getHeader(HTTPConstants.HEADER_HOST),
+                    "the default port should be stripped from the Host header, like HttpClient4 does");
+        } finally {
+            server.stop();
+        }
+    }
+
+    @Test
+    void keepsANonDefaultPortOfTheHostHeaderOfTheHeaderManager() throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            server.stubFor(get(urlEqualTo("/host")).willReturn(aResponse().withStatus(200)));
+            HTTPSamplerBase sampler = newSampler();
+            sampler.setHttpVersion("HTTP/1.1");
+            HeaderManager headerManager = new HeaderManager();
+            headerManager.add(new Header(HTTPConstants.HEADER_HOST, "example.com:8080"));
+            sampler.setHeaderManager(headerManager);
+
+            HTTPSampleResult result = sampler.sample(new URL(server.url("/host")), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode());
+            assertEquals("example.com:8080",
+                    singleRequest(server, "/host").getHeader(HTTPConstants.HEADER_HOST));
         } finally {
             server.stop();
         }

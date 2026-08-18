@@ -28,7 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -41,8 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 import javax.security.auth.Subject;
 
@@ -52,6 +49,7 @@ import org.apache.http.HttpConnectionMetrics;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpMessage;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
@@ -156,7 +154,6 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.SlowHCPlainConnectionSocketFactory;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
-import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -425,8 +422,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /** Preemptive Basic Auth */
     private static final boolean BASIC_AUTH_PREEMPTIVE = JMeterUtils.getPropDefault("httpclient4.auth.preemptive", true);
-
-    private static final Pattern PORT_PATTERN = Pattern.compile("\\d+"); // only used in .matches(), no need for anchors
 
     @SuppressWarnings("UnnecessaryAnonymousClass")
     private static final ConnectionKeepAliveStrategy IDLE_STRATEGY = new DefaultConnectionKeepAliveStrategy(){
@@ -1367,14 +1362,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * May be null
      */
     protected String setConnectionCookie(HttpRequest request, URL url, CookieManager cookieManager) {
-        String cookieHeader = null;
-        if (cookieManager != null) {
-            cookieHeader = cookieManager.getCookieHeaderForURL(url);
-            if (cookieHeader != null) {
-                request.setHeader(HTTPConstants.HEADER_COOKIE, cookieHeader);
-            }
-        }
-        return cookieHeader;
+        return setConnectionCookie(url, cookieManager, request::setHeader);
     }
 
     /**
@@ -1388,59 +1376,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param cacheManager  the CacheManager (may be null)
      */
     protected static void setConnectionHeaders(HttpRequestBase request, URL url, HeaderManager headerManager, CacheManager cacheManager) {
-        if (headerManager != null) {
-            CollectionProperty headers = headerManager.getHeaders();
-            if (headers != null) {
-                for (JMeterProperty jMeterProperty : headers) {
-                    org.apache.jmeter.protocol.http.control.Header header
-                            = (org.apache.jmeter.protocol.http.control.Header)
-                            jMeterProperty.getObjectValue();
-                    String headerName = header.getName();
-                    // Don't allow override of Content-Length
-                    if (!HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(headerName)) {
-                        String headerValue = header.getValue();
-                        if (HTTPConstants.HEADER_HOST.equalsIgnoreCase(headerName)) {
-                            int port = getPortFromHostHeader(headerValue, url.getPort());
-                            // remove any port specification
-                            headerValue = headerValue.replaceFirst(":\\d+$", ""); // $NON-NLS-1$ $NON-NLS-2$
-                            if (port != -1 && port == url.getDefaultPort()) {
-                                port = -1; // no need to specify the port if it is the default
-                            }
-                            if(port == -1) {
-                                request.addHeader(HEADER_HOST, headerValue);
-                            } else {
-                                request.addHeader(HEADER_HOST, headerValue+":"+port);
-                            }
-                        } else {
-                            request.addHeader(headerName, headerValue);
-                        }
-                    }
-                }
-            }
-        }
+        setConnectionHeaders(headerManager, url, name -> true, request::addHeader);
         if (cacheManager != null) {
             cacheManager.setHeaders(url, request);
         }
-    }
-
-    /**
-     * Get port from the value of the Host header, or return the given
-     * defaultValue
-     *
-     * @param hostHeaderValue value of the http Host header
-     * @param defaultValue    value to be used, when no port could be extracted from
-     *                        hostHeaderValue
-     * @return integer representing the port for the host header
-     */
-    private static int getPortFromHostHeader(String hostHeaderValue, int defaultValue) {
-        String[] hostParts = hostHeaderValue.split(":");
-        if (hostParts.length > 1) {
-            String portString = hostParts[hostParts.length - 1];
-            if (PORT_PATTERN.matcher(portString).matches()) {
-                return Integer.parseInt(portString);
-            }
-        }
-        return defaultValue;
     }
 
     /**
@@ -1450,7 +1389,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return the headers as a string
      */
     private static String getAllHeadersExceptCookie(HttpRequest method) {
-        return getFromHeadersMatchingPredicate(method, ALL_EXCEPT_COOKIE);
+        return formatHeaders(headersOf(method), ALL_EXCEPT_COOKIE);
     }
 
     /**
@@ -1460,35 +1399,25 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return the headers as a string
      */
     private static String getOnlyCookieFromHeaders(HttpRequest method) {
-        String cookieHeader= getFromHeadersMatchingPredicate(method, ONLY_COOKIE).trim();
-        if(!cookieHeader.isEmpty()) {
-            return cookieHeader.substring(HTTPConstants.HEADER_COOKIE_IN_REQUEST.length()).trim();
-        }
-        return "";
+        return getOnlyCookieFromHeaders(headersOf(method));
     }
 
-
     /**
-     * Get only cookies from request headers for the <code>HttpRequest</code>
+     * Adapts the headers of a request or a response to the representation the helpers of
+     * {@link HTTPHCAbstractImpl} work on.
      *
-     * @param method <code>HttpMethod</code> which represents the request
-     * @return the headers as a string
+     * @param message request or response, may be {@code null}
+     * @return the headers of the message
      */
-    private static String getFromHeadersMatchingPredicate(HttpRequest method, Predicate<? super String> predicate) {
-        if(method != null) {
-            // Get all the request headers
-            StringBuilder hdrs = new StringBuilder(150);
-            Header[] requestHeaders = method.getAllHeaders();
-            for (Header requestHeader : requestHeaders) {
-                // Get header if it matches predicate
-                if (predicate.test(requestHeader.getName())) {
-                    writeHeader(hdrs, requestHeader);
-                }
+    private static HeaderIterable headersOf(HttpMessage message) {
+        return action -> {
+            if (message == null) {
+                return;
             }
-
-            return hdrs.toString();
-        }
-        return ""; ////$NON-NLS-1$
+            for (Header header : message.getAllHeaders()) {
+                action.accept(header.getName(), header.getValue());
+            }
+        };
     }
 
     // Helper class so we can generate request data without dumping entire file contents
@@ -1785,39 +1714,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     private UrlEncodedFormEntity createUrlEncodedFormEntity(final String urlContentEncoding) throws UnsupportedEncodingException {
         // It is a normal request, with parameter names and values
-        // Add the parameters
+        // Add the parameters, the HttpClient will urlencode them
         List<NameValuePair> nvps = new ArrayList<>();
-        for (JMeterProperty jMeterProperty: getArguments().getEnabledArguments()) {
-            HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
-            // The HTTPClient always urlencodes both name and value,
-            // so if the argument is already encoded, we have to decode
-            // it before adding it to the post request
-            String parameterName = arg.getName();
-            if (arg.isSkippable(parameterName)) {
-                continue;
-            }
-            String parameterValue = arg.getValue();
-            if (!arg.isAlwaysEncoded()) {
-                // The value is already encoded by the user
-                // Must decode the value now, so that when the
-                // httpclient encodes it, we end up with the same value
-                // as the user had entered.
-                parameterName = URLDecoder.decode(parameterName, urlContentEncoding);
-                parameterValue = URLDecoder.decode(parameterValue, urlContentEncoding);
-            }
-            // Add the parameter, httpclient will urlencode it
-            nvps.add(new BasicNameValuePair(parameterName, parameterValue));
-        }
+        forEachFormParameter(urlContentEncoding, (name, value) -> nvps.add(new BasicNameValuePair(name, value)));
         return new UrlEncodedFormEntity(nvps, urlContentEncoding);
     }
 
     private static void saveConnectionCookies(HttpResponse method, URL u, CookieManager cookieManager) {
-        if (cookieManager != null) {
-            Header[] hdrs = method.getHeaders(HTTPConstants.HEADER_SET_COOKIE);
-            for (Header hdr : hdrs) {
-                cookieManager.addCookieFromHeader(hdr.getValue(),u);
-            }
-        }
+        saveConnectionCookies(headersOf(method), u, cookieManager);
     }
 
     @Override
