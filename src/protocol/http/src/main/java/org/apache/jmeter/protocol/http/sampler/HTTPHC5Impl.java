@@ -215,9 +215,9 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
      * for a window update, so the throughput of a single response can never exceed this window divided by
      * the round trip time. The default of HttpClient is the 64 kB the HTTP/2 specification mandates, which
      * throttles a download over a link with any noticeable latency to a fraction of the available
-     * bandwidth. JMeter therefore announces the same 16 MB the JDK client uses by default, see
-     * {@code http.java.h2.initial_window_size}. The window is only a promise to the server, the body is
-     * consumed as it arrives and not buffered up to this size.
+     * bandwidth. JMeter therefore announces the same 16 MB the JDK client uses by default. The window
+     * is only a promise to the server, the body is consumed as it arrives and not buffered up to this
+     * size.
      */
     static final int DEFAULT_HTTP_2_INITIAL_WINDOW_SIZE = 16 * 1024 * 1024;
 

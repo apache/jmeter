@@ -105,11 +105,7 @@ public final class HTTPSamplerFactory {
             return new String[]{"", HTTPConstants.HTTP_VERSION_1_1, HTTPConstants.HTTP_VERSION_2,
                     HTTPConstants.HTTP_VERSION_2_STRICT};
         }
-        if (IMPL_JAVA.equals(impl) || HTTP_SAMPLER_JAVA.equals(impl)) {
-            // java.net.http.HttpClient always negotiates, it has no API to insist on HTTP/2
-            return new String[]{"", HTTPConstants.HTTP_VERSION_1_1, HTTPConstants.HTTP_VERSION_2};
-        }
-        // HttpClient4 (and its aliases) never read the HTTP version of the sampler
+        // HttpClient4 and Java (and their aliases) never read the HTTP version of the sampler
         return new String[]{"", HTTPConstants.HTTP_VERSION_1_1};
     }
 

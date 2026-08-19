@@ -47,7 +47,7 @@ public class TestHTTPSamplerFactory {
     void httpVersionsMatchTheCapabilitiesOfTheImplementation() {
         assertEquals(Arrays.asList("", "HTTP/1.1"),
                 Arrays.asList(HTTPSamplerFactory.getHttpVersions("HttpClient4")));
-        assertEquals(Arrays.asList("", "HTTP/1.1", "HTTP/2"),
+        assertEquals(Arrays.asList("", "HTTP/1.1"),
                 Arrays.asList(HTTPSamplerFactory.getHttpVersions("Java")));
         assertEquals(Arrays.asList("", "HTTP/1.1", "HTTP/2", "HTTP/2 Strict"),
                 Arrays.asList(HTTPSamplerFactory.getHttpVersions("HttpClient5")));

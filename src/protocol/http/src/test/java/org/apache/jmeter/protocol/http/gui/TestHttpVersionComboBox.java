@@ -65,7 +65,7 @@ public class TestHttpVersionComboBox {
         assertEquals(Arrays.asList("", "HTTP/1.1", "HTTP/2", "HTTP/2 Strict"), items(httpVersion));
 
         implementation.setSelectedItem("Java");
-        assertEquals(Arrays.asList("", "HTTP/1.1", "HTTP/2"), items(httpVersion));
+        assertEquals(Arrays.asList("", "HTTP/1.1"), items(httpVersion));
 
         implementation.setSelectedItem("HttpClient4");
         assertEquals(Arrays.asList("", "HTTP/1.1"), items(httpVersion));
@@ -78,10 +78,10 @@ public class TestHttpVersionComboBox {
         httpVersion.bindToImplementation(implementation);
 
         implementation.setSelectedItem("HttpClient5");
-        httpVersion.setSelectedItem("HTTP/2");
+        httpVersion.setSelectedItem("HTTP/1.1");
         implementation.setSelectedItem("Java");
 
-        assertEquals("HTTP/2", httpVersion.getSelectedItem());
+        assertEquals("HTTP/1.1", httpVersion.getSelectedItem());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class TestHttpVersionComboBox {
         httpVersion.bindToImplementation(implementation);
 
         implementation.setSelectedItem("HttpClient5");
-        httpVersion.setSelectedItem("HTTP/2 Strict");
+        httpVersion.setSelectedItem("HTTP/2");
         implementation.setSelectedItem("Java");
 
         assertEquals("", httpVersion.getSelectedItem());

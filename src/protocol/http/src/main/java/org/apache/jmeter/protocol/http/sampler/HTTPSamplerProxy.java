@@ -77,14 +77,6 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
     }
 
     @Override
-    public void testEnded() {
-        super.testEnded();
-        if (impl != null) {
-            impl.testEnded(); // Forward to sampler, so it can release resources shared by all threads
-        }
-    }
-
-    @Override
     public boolean interrupt() {
         if (impl != null) {
             return impl.interrupt(); // Forward to sampler

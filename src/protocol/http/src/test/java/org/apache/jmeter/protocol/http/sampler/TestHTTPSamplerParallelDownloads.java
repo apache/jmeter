@@ -105,7 +105,6 @@ class TestHTTPSamplerParallelDownloads {
         "HttpClient5, HTTP/1.1, http",
         "HttpClient5, HTTP/2,   https",
         "Java,        HTTP/1.1, http",
-        "Java,        HTTP/2,   http",
     })
     @Timeout(120)
     void downloadsEmbeddedResourcesWhileAnotherThreadClosesItsClients(

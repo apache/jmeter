@@ -442,10 +442,11 @@ JMETER-SERVER</source>
     Defaults to: <code>0</code>
 </property>
 <property name="httpclient.version">
-    Set the default HTTP version for HttpClient5 and Java samplers with an empty HTTP Version value.<br/>
-    Valid values are <code>HTTP/1.1</code>, <code>HTTP/2</code> and, for HttpClient5 only,
-    <code>HTTP/2 Strict</code>. The legacy values <code>1.0</code> and <code>1.1</code> are still
-    accepted and both select <code>HTTP/1.1</code> for these samplers.<br/>
+    Set the default HTTP version for HttpClient5 samplers with an empty HTTP Version value.<br/>
+    Valid values are <code>HTTP/1.1</code>, <code>HTTP/2</code> and <code>HTTP/2 Strict</code>.
+    The legacy values <code>1.0</code> and <code>1.1</code> are still accepted and both select
+    <code>HTTP/1.1</code> for these samplers. The HttpClient4 and Java samplers always use
+    <code>HTTP/1.1</code>.<br/>
     The AJP sampler only reads this property to choose the HTTP version of its request line: the
     legacy value <code>1.0</code> (or <code>HTTP/1.0</code>) announces <code>HTTP/1.0</code>, every
     other value announces <code>HTTP/1.1</code>.<br/>
@@ -487,8 +488,8 @@ JMETER-SERVER</source>
     HTTP/2 flow control window in bytes announced per stream. It caps how many bytes the server may
     send before it has to wait for a window update, so the throughput of a single response cannot
     exceed this window divided by the round trip time. The HTTP/2 default of <code>65535</code>
-    throttles downloads over links with any noticeable latency, therefore JMeter announces the same
-    window as the Java sampler implementation.<br/>
+    throttles downloads over links with any noticeable latency, therefore JMeter announces a larger
+    window.<br/>
     Defaults to: <code>16777216</code>
 </property>
 <property name="httpclient5.h2.max_frame_size">
@@ -509,56 +510,6 @@ JMETER-SERVER</source>
 <property name="httpclient5.default_user_agent_disabled">
     If true, the default HC5 User-Agent (Apache-HttpClient/X.Y.Z (Java/A.B.C)) will not be added.
     A User-Agent header defined in the test plan is still sent.<br/>
-    Defaults to: <code>false</code>
-</property>
-<property name="http.java.h2.share_connections_between_threads">
-    Multiplex the HTTP/2 message exchanges of all JMeter threads of the Java sampler implementation
-    over a single connection per origin, instead of giving every thread a connection of its own. It
-    saves connections and threads, but a test which drives all virtual users over one connection no
-    longer measures connection level effects such as the congestion window, the cost of the TLS
-    handshake or per connection limits of the server, therefore it is disabled by default. The
-    requests of a single thread, including the parallel downloads of its embedded resources, are
-    multiplexed over one connection either way.<br/>
-    Defaults to: <code>false</code>
-</property>
-<property name="http.java.h2.header_table_size">
-    Size in bytes of the HPACK dynamic header table the Java sampler implementation announces to the
-    server. <code>0</code> disables indexing of the headers by the server. It is applied as the
-    <code>jdk.httpclient.hpack.maxheadertablesize</code> system property.<br/>
-    Defaults to the JDK default: <code>16384</code>
-</property>
-<property name="http.java.h2.max_concurrent_streams">
-    Maximum number of server initiated (pushed) streams the Java sampler implementation accepts on a
-    single HTTP/2 connection. It is applied as the <code>jdk.httpclient.maxstreams</code> system
-    property.<br/>
-    Defaults to the JDK default: <code>100</code> with server push enabled, <code>0</code> otherwise
-</property>
-<property name="http.java.h2.initial_window_size">
-    HTTP/2 flow control window in bytes the Java sampler implementation announces per stream. It is
-    applied as the <code>jdk.httpclient.windowsize</code> system property.<br/>
-    Defaults to the JDK default: <code>16777216</code>
-</property>
-<property name="http.java.h2.connection_window_size">
-    HTTP/2 flow control window in bytes the Java sampler implementation announces for the whole
-    connection, it must not be smaller than the stream window. It is applied as the
-    <code>jdk.httpclient.connectionWindowSize</code> system property.<br/>
-    Defaults to the JDK default: <code>67108864</code>
-</property>
-<property name="http.java.h2.max_frame_size">
-    Largest HTTP/2 frame payload in bytes the Java sampler implementation is willing to receive,
-    between <code>16384</code> and <code>16777215</code>. It is applied as the
-    <code>jdk.httpclient.maxframesize</code> system property.<br/>
-    Defaults to the JDK default: <code>16384</code>
-</property>
-<property name="http.java.h2.keep_alive_timeout">
-    Seconds an idle HTTP/2 connection of the Java sampler implementation is kept in the pool. It is
-    applied as the <code>jdk.httpclient.keepalive.timeout.h2</code> system property.<br/>
-    Defaults to the JDK default: the value of <code>jdk.httpclient.keepalive.timeout</code>
-</property>
-<property name="http.java.h2.push_enabled">
-    Accept HTTP/2 server push in the Java sampler implementation. JMeter cannot report pushed
-    resources, so they are dropped, therefore push is disabled by default. It is applied as the
-    <code>jdk.httpclient.enablepush</code> system property.<br/>
     Defaults to: <code>false</code>
 </property>
 <property name="httpclient.socket.http.cps">

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests the handling of the {@code httpclient.version} property, which selects HTTP versions such
- * as {@code HTTP/2} for the HttpClient5 and Java samplers, but historically only took the values
+ * as {@code HTTP/2} for the HttpClient5 sampler, but historically only took the values
  * {@code 1.0} and {@code 1.1}, which the AJP sampler still understands.
  */
 class TestHttpVersionProperty extends JMeterTestCase implements JMeterSerialTest {
