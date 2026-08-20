@@ -1123,6 +1123,22 @@ class TestHTTPHC5Features {
         }
     }
 
+    @Test
+    void reportsSmallElapsedTimeWhenSetupRequestFails() throws Exception {
+        HTTPSamplerBase sampler = newSampler();
+        sampler.setContentEncoding("invalid-charset-name-12345");
+        sampler.addNonEncodedArgument("key", "value", "=");
+        sampler.setMethod(HTTPConstants.POST);
+
+        HTTPSampleResult result = sampler.sample(new URL("http://localhost:12345/"), HTTPConstants.POST, false, 1);
+
+        assertFalse(result.isSuccessful());
+        assertTrue(result.getStartTime() > 0, "Start time should be set");
+        assertTrue(result.getEndTime() >= result.getStartTime(), "End time should be >= start time");
+        assertTrue(result.getTime() >= 0 && result.getTime() < 10000,
+                "Elapsed time should be small, but was " + result.getTime());
+    }
+
     private static HTTPSamplerBase newSampler() {
         return HTTPSamplerFactory.newInstance("HttpClient5");
     }

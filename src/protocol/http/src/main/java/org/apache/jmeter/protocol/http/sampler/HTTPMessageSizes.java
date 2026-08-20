@@ -20,8 +20,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Sizes of the parts of an HTTP/1.1 request, shared by the sampler implementations so that all of
- * them report the same number of sent bytes for the same request.
+ * Sizes of the parts of an HTTP/1.1 request.
  * <p>
  * The lengths are the ones the message has on the wire, where the request line and the headers are
  * encoded with ISO-8859-1, one byte per character.

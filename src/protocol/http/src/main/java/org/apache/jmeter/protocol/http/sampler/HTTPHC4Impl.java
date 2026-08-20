@@ -940,7 +940,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Holder class for all fields that define an HttpClient instance;
-     * used as the key to the ThreadLocal map of HttpClient instances.
+     * used as the key to the map of HttpClient instances.
      */
     private static final class HttpClientKey {
 
