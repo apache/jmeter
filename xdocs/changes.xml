@@ -91,7 +91,7 @@ Summary
 
   <h3>Non-functional changes</h3>
   <ul>
-    <li>Update Apache Tika to 3.x from 1.x to use the latest parser engine.</li>
+    <li>Update Apache Tika to 4.x from 1.x to use the latest parser engine.</li>
     <li>Update Saxon-HE to 12.x from 11.x for XSLT and XQuery processing.</li>
     <li>Update Groovy to 5.x for the Groovy-based scripting environment.</li>
     <li>Update Bouncy Castle to 1.82 for cryptographic operations.</li>
