@@ -385,6 +385,7 @@ public class JMeterTest extends JMeterTestCase {
         // TODO: support expressions?
         IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getIpSourceType());
         IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getImplementation());
+        IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getHttpVersion());
         // TODO: support expressions in UrlConfigGui
         IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getFollowRedirects());
         IGNORED_PROPERTIES.add(HTTPSamplerBaseSchema.INSTANCE.getAutoRedirects());

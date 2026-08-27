@@ -81,6 +81,19 @@ Summary
     <li><issue>6250</issue>Avoid adding "; charset=" automatically to <code>multipart/form-data</code> requests to align behavior with modern HTTP clients.</li>
     <li><issue>6080</issue>Preserve the original HTTP method when following 307 and 308 redirects according to the HTTP specification. Contributed by LeeJiWon (github.com/dlwldnjs1009)</li>
     <li><issue>6267</issue><pr>6268</pr>Add a space between key and value after <code>:</code> in View Results Tree &gt; Sampler result tab for better readability.</li>
+    <li><pr>6742</pr>Add the new <code>HttpClient5</code> sampler implementation, which is based on Apache HttpComponents HttpClient 5.x and can be selected in the <code>Implementation</code> combo box of the HTTP Request sampler and the HTTP Request Defaults, or with the <code>jmeter.httpsampler</code> property. It supports the features of the existing <code>HttpClient4</code> implementation (cookie, cache, header and authorization management, proxies, client certificates, WebDav methods, DNS Cache Manager, connection reuse and retries) and adds HTTP/2 support.</li>
+    <li><pr>6742</pr>Add the <code>HTTP Version</code> combo box (property <code>HTTPSampler.httpVersion</code>) to the HTTP Request sampler and the HTTP Request Defaults, so the HTTP version can be selected per sampler instead of only globally with the <code>httpclient.version</code> property. An empty value keeps using that property, which now defaults to <code>HTTP/1.1</code>.</li>
+    <li><pr>6742</pr>Send a <code>Host</code> header of the HTTP Header Manager without its port when that port is the default one of the URL in the <code>HttpClient5</code> sampler implementation, as the <code>HttpClient4</code> implementation does.</li>
+  </ul>
+
+  <p>HTTP/2 support for the HttpClient5 sampler implementation:</p>
+  <ul>
+    <li><pr>6742</pr>Multiplex concurrent HTTP/2 requests of a thread of the HttpClient5 sampler implementation, for example the parallel downloads of embedded resources, over a single connection, and make the HTTP/2 protocol settings (HPACK header table size and compression, maximum concurrent streams, flow control window, maximum frame size, server push and h2c prior knowledge) configurable with the new <code>httpclient5.h2.*</code> properties. Pooled connections are re-validated after the period of inactivity configured with the new <code>httpclient5.validate_after_inactivity</code> property, so a connection the server closed in between two samples is replaced instead of failing the next sample.</li>
+    <li><pr>6742</pr>Add the default <code>User-Agent</code> header of the HttpClient5 sampler implementation to the request itself, so it shows up in the sample result and in the sent bytes, and allow suppressing it with the new <code>httpclient5.default_user_agent_disabled</code> property, like <code>httpclient4.default_user_agent_disabled</code> does for HttpClient4.</li>
+    <li><pr>6742</pr>Support the Kerberos mechanism of the HTTP Authorization Manager in the HttpClient5 sampler implementation. HttpClient 5 neither registers the <code>Negotiate</code> and <code>Kerberos</code> auth schemes nor prefers them by default, so they are now set up per request, and the request is executed with the JAAS subject the Authorization Manager logged the user in with. The <code>kerberos.spnego.strip_port</code>, <code>kerberos.spnego.use_canonical_host_name</code> and <code>kerberos.spnego.delegate_cred</code> properties are honoured as with HttpClient4.</li>
+    <li><pr>6742</pr>Answer a <code>Proxy-Authenticate: Negotiate</code> (SPNEGO/Kerberos) challenge of an enterprise proxy in the HttpClient5 sampler implementation, instead of failing the sample with <code>407 Proxy Authentication Required</code>. The negotiation based auth schemes are now offered to a proxy which has no user name configured, or which is covered by a Kerberos entry of the HTTP Authorization Manager, while a proxy with a configured user name keeps using the password based schemes.</li>
+    <li><pr>6742</pr>Offer only the HTTP versions the selected implementation can use in the <code>HTTP Version</code> combo box of the HTTP Request sampler and the HTTP Request Defaults: HttpClient4 and Java offer <code>HTTP/1.1</code> only, as they ignore the HTTP version, and HttpClient5 additionally offers <code>HTTP/2 Negotiate</code> and the new <code>HTTP/2 Strict</code> value, which only offers <code>h2</code> during protocol negotiation, so a server without HTTP/2 support fails the sample instead of being used with HTTP/1.1.</li>
+    <li><pr>6742</pr>Accept the legacy values <code>1.0</code> and <code>1.1</code> of the <code>httpclient.version</code> property, which now takes the HTTP versions <code>HTTP/1.1</code>, <code>HTTP/2</code> and <code>HTTP/2 Strict</code>, so an existing configuration keeps selecting HTTP/1.1 for the HttpClient5 sampler implementation. The AJP sampler still announces <code>HTTP/1.0</code> in its request line for the legacy value <code>1.0</code>, and now for <code>HTTP/1.0</code> as well.</li>
   </ul>
 
   <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -98,6 +111,8 @@ Summary
     <li>Update json-path to 2.10.0 for JSON query expressions.</li>
     <li>Update Neo4j Java driver to 6.x for Bolt-based database tests.</li>
     <li>Update Rhino JavaScript engine to 1.8.0 for JSR-223 JavaScript execution.</li>
+    <li><pr>6742</pr>Update Apache HttpClient 5 to 5.6.4 and Apache HttpCore 5 to 5.4.3, which corrects the application of SSL parameters in the async TLS upgrade method used by the HttpClient5 sampler implementation for HTTP/2.</li>
+    <li><pr>6742</pr>Give the <code>Cache Manager</code> a single HTTP client neutral API: <code>saveDetails(CacheManager.ResponseHeaderSource, HTTPSampleResult)</code>, <code>inCache(URL, CacheManager.RequestHeaderSource)</code> and <code>setHeaders(URL, CacheManager.RequestHeaderSink)</code> replace the per implementation overloads, so the <code>Vary</code> and cache control handling exists once and the config element does not depend on a specific HTTP client library. The sampler implementations adapt their requests and responses to those interfaces. The methods taking Apache HttpClient 4 types are deprecated and delegate to the new ones.</li>
   </ul>
 
   <h3>UI</h3>
@@ -115,7 +130,14 @@ Summary
     <li><issue>5937</issue>Remove deprecated Log4j package scanning and configure plugin metadata processing to improve startup time and avoid deprecation warnings. Contributed by Piotr P. Karwasz (github.com/piotrgithub)</li>
     <li><pr>6620</pr>Fix report generation paths so dashboard output files are created in the correct location after internal refactoring.</li>
     <li><bug>6456</bug>Handle malformed percent-encoded URLs gracefully when recording HTTP traffic, logging a warning instead of failing the recording.</li>
+    <li><pr>6742</pr>Count single byte writes in <code>CountingOutputStream</code> as well, so the SMTP Sampler does not under-report the size of the messages it sends.</li>
   </ul>
+
+  <h3>HTTP Samplers and Test Script Recorder</h3>
+  <ul>
+    <li><pr>6742</pr>Keep the HTTP clients of a thread from being used, and closed, by another thread when embedded resources are downloaded in parallel. The threads which perform those downloads are pooled and shared by all threads, so they used to keep the clients of whichever thread happened to create them, which made samples fail with errors such as <code>Non HTTP response code: java.io.IOException</code>, <code>Socket closed</code> or <code>Connection pool shut down</code> as soon as that thread finished or started a new iteration. The clients are now looked up by the context of the thread the download is performed for, in the HttpClient4 and HttpClient5 sampler implementations.</li>
+  </ul>
+
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>
@@ -127,6 +149,7 @@ Summary
   <li>Gabriele Coletta (github.com/gdmg92)</li>
   <li>Patrick Uiterwijk (patrick at puiterwijk.org)</li>
   <li>Piotr P. Karwasz (github.com/piotrgithub)</li>
+  <li>Andreas Lind (github.com/andreaslind01)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter.</p>
 <ul>

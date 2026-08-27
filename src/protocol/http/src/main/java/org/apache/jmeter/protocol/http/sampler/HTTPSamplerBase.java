@@ -160,6 +160,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
 
+    public static final String HTTP_VERSION = HTTPSamplerBaseSchema.INSTANCE.getHttpVersion().getName();
+
     public static final String PATH = "HTTPSampler.path"; // $NON-NLS-1$
 
     public static final String FOLLOW_REDIRECTS = HTTPSamplerBaseSchema.INSTANCE.getFollowRedirects().getName();
@@ -199,6 +201,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static final int MAX_BYTES_TO_STORE_PER_REQUEST =
             JMeterUtils.getPropDefault("httpsampler.max_bytes_to_store_per_request", 0); // $NON-NLS-1$ // default value: 0 don't truncate
+
+    /**
+     * Maximum number of bytes of a response body that are kept in the sample result, {@code 0}
+     * meaning that the body is stored in full. Transports that read the body themselves can use
+     * this to stop buffering early, instead of materializing a body that
+     * {@link #readResponse(SampleResult, InputStream, long)} would truncate anyway.
+     *
+     * @return the configured limit in bytes
+     */
+    static int getMaxBytesToStorePerRequest() {
+        return MAX_BYTES_TO_STORE_PER_REQUEST;
+    }
 
     private static final int MAX_BUFFER_SIZE =
             JMeterUtils.getPropDefault("httpsampler.max_buffer_size", 65 * 1024); // $NON-NLS-1$
@@ -638,6 +652,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public String getImplementation() {
         return get(getSchema().getImplementation());
+    }
+
+    public void setHttpVersion(String value) {
+        set(getSchema().getHttpVersion(), value);
+    }
+
+    public String getHttpVersion() {
+        return get(getSchema().getHttpVersion());
     }
 
     public boolean useMD5() {
