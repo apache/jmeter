@@ -93,7 +93,7 @@ Summary
   <ul>
     <li>Update Apache Tika to 4.x from 1.x to use the latest parser engine.</li>
     <li>Update Saxon-HE to 12.x from 11.x for XSLT and XQuery processing.</li>
-    <li>Update Groovy to 5.x for the Groovy-based scripting environment.</li>
+    <li>Update Groovy to 5.1.1 for the Groovy-based scripting environment.</li>
     <li>Update Bouncy Castle to 1.82 for cryptographic operations.</li>
     <li>Update json-path to 2.10.0 for JSON query expressions.</li>
     <li>Update Neo4j Java driver to 6.x for Bolt-based database tests.</li>
