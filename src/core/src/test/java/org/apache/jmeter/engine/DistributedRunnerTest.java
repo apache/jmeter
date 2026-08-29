@@ -52,7 +52,7 @@ public class DistributedRunnerTest {
         } catch (IOException ex) {
             ex.printStackTrace(System.err);
         }
-        JMeterUtils.setLocale(new Locale("ignoreResources"));
+        JMeterUtils.setLocale(Locale.of("ignoreResources"));
     }
 
     @Test

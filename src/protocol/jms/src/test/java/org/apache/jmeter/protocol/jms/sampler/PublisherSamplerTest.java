@@ -36,7 +36,7 @@ public class PublisherSamplerTest {
 
     @BeforeEach
     public void initJMeter() {
-        JMeterUtils.setLocale(new Locale("ignoreResources"));
+        JMeterUtils.setLocale(Locale.of("ignoreResources"));
     }
 
     @AfterEach
