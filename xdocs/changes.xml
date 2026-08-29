@@ -104,6 +104,7 @@ Summary
   <ul>
     <li><pr>6333</pr>Apply HiDPI mode automatically when setting up the GUI so JMeter looks sharp on high-resolution displays. Contributed by Gabriele Coletta (github.com/gdmg92)</li>
     <li><pr>6656</pr>Replace the previous feather icon with the new oak leaf in the JMeter logo.</li>
+    <li>Add Russian (ru) translation for the GUI: register the locale in <code>JMeterMenuBar</code> and provide <code>messages_ru.properties</code> and per-component bundles. A translator glossary lives under <code>xdocs/localising/glossary_ru.md</code>.</li>
   </ul>
 
   <ch_section>Bug fixes</ch_section>
