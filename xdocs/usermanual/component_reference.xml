@@ -6435,6 +6435,10 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
 
             <dt><code>rate(10) random_arrivals(1 min) pause(2 sec) random_arrivals(1 min)</code></dt>
             <dd>run with constant load of ten requests per second during one minute, then make two second pause, then resume the load of ten requests per second for one minute</dd>
+
+            <dt><code>concurrency(100) rate(10/sec) random_arrivals(1 min)</code></dt>
+            <dd>ten requests per second for one minute, with at most one hundred threads running at the same time.
+                If the server is slow and the arrivals would need more than one hundred threads, the extra arrivals wait for a free thread.</dd>
         </dl>
     </p>
     <p>The following commands are available:
@@ -6443,6 +6447,19 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
             <dd>configures target load rate.
                 The following time units are supported: <code>ms</code>, <code>sec</code>, <code>min</code>, <code>hour</code>, <code>day</code>.
                 You can omit time unit in case the rate is 0: <code>rate(0)</code>
+            </dd>
+
+            <dt><code>concurrency(&lt;number&gt;)</code></dt>
+            <dd>limits the number of threads that run at the same time to the given positive integer.
+                The limit applies to the arrivals that follow the step, so an arrival that would exceed the limit waits for a
+                running thread to finish instead of starting a new one. Like <code>rate</code>, the limit is positional, so you can raise or lower it
+                during the test: <code>concurrency(100) rate(10/sec) random_arrivals(10 min) concurrency(200) random_arrivals(10 min)</code>
+                caps the load at one hundred threads for the first ten minutes and two hundred for the next ten.
+                <br/>The limit serves two purposes: it protects JMeter from running out of memory when the server responds slower than
+                arrivals are scheduled, and it models a system with a hard concurrency limit, such as a connection pool of a fixed size.
+                <br/>When the limit is saturated, JMeter no longer follows the open model: the achieved rate drops below the target rate,
+                which the reports show as fewer samples than requested. Arrivals that still have no free thread when the schedule ends are dropped.
+                To reach the target rate, raise the limit or reduce the rate.
             </dd>
 
             <dt><code>random_arrivals(&lt;number&gt; sec)</code></dt>
@@ -6484,6 +6501,10 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
         after all <code>arrivals</code> and <code>pause</code> intervals.
         If you want to let the threads complete safely, consider adding <code>pause(5 min)</code> at the end of the schedule.
         That will add five minutes for the threads to continue.
+    </p>
+    <p>Set the <code>openmodel.max_concurrency</code> property to cap the number of threads for every Open Model Thread Group
+        that does not set its own <code>concurrency(...)</code>. It is a safety net against running out of memory. The default is
+        unlimited, and a <code>concurrency(...)</code> step in the schedule overrides it.
     </p>
     <p>There are no special functions for generating the load profile in a loop, however, the default JMeter templating functions
         can be helpful for generating the schedule.
