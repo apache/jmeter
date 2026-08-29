@@ -1,5 +1,5 @@
 label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
-BSS_startFtpServer,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+BSS_startFtpServer,200,OK,Setup Thread Group 1-1,text,true,1,1,1,0
 FTP Request-get-binary,200,OK,TG-FTP 1-1,,true,1,1,1,0
 FTP Request-get-text,200,OK,TG-FTP 1-1,text,true,1,1,1,0
 FTP Request-put-text,200,OK,TG-FTP 1-1,,true,1,1,1,0

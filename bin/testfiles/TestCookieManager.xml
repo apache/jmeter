@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testResults version="1.2">
-<sample s="true" lb="JSS_startMirror" rc="200" tn="setUp Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="JSS_startMirror" rc="200" tn="Setup Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
 <httpSample s="true" lb="HTTP-Request-HC4" rc="200" tn="TG-ManagedCookieHC4 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Response Assertion</name>
