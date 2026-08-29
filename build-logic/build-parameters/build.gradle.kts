@@ -82,6 +82,10 @@ buildParameters {
         defaultValue.set(true)
         description.set("Skip forbidden-apis verifications")
     }
+    bool("skipOpenrewrite") {
+        defaultValue.set(true)
+        description.set("Skip OpenRewrite code cleanup (rewriteRun/rewriteDryRun). Enabled off by default until the recipe artifacts are added to gradle/verification-metadata.xml")
+    }
     bool("suppressPomMetadataWarnings") {
         defaultValue.set(true)
         description.set("Skip suppressPomMetadataWarningsFor warnings triggered by inability to map test fixtures dependences to Maven pom.xml")
