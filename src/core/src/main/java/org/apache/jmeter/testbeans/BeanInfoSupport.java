@@ -245,7 +245,8 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
      */
     protected void createPropertyGroup(String group, String[] names) {
         String name;
-        for (int i = 0; i < names.length; i++) { // i is used below
+        int namesLength = names.length;
+        for (int i = 0; i < namesLength; i++) { // i is used below
             name = names[i];
             log.debug("Getting property for: {}", name);
             PropertyDescriptor p = property(name);

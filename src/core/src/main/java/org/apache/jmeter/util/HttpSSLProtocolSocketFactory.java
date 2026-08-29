@@ -96,7 +96,8 @@ public class HttpSSLProtocolSocketFactory
 
     private static String join(String[] strings) {
         StringBuilder sb = new StringBuilder();
-        for (int i=0;i<strings.length;i++){
+        int stringsCount = strings.length;
+        for (int i = 0; i< stringsCount; i++){
             if (i>0) {
                 sb.append(' ');
             }
