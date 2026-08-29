@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.http.control;
 
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -228,7 +229,14 @@ public class HC4CookieHandler implements CookieHandler {
         CookieOrigin cookieOrigin = new CookieOrigin(host, port, path, secure);
 
         List<org.apache.http.cookie.Cookie> cookiesValid = new ArrayList<>();
+        // #6428 Cookies must not be sent after they reached their expiry time.
+        // The cookie specs used here do not check the expiry date in match(),
+        // so expired cookies have to be filtered out explicitly.
+        Date now = Date.from(Instant.now());
         for (org.apache.http.cookie.Cookie cookie : cookies) {
+            if (cookie.isExpired(now)) {
+                continue;
+            }
             if (cookieSpec.match(cookie, cookieOrigin)) {
                 cookiesValid.add(cookie);
             }

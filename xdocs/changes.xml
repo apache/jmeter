@@ -109,6 +109,7 @@ Summary
   <ch_section>Bug fixes</ch_section>
   <h3>General</h3>
   <ul>
+    <li><issue>6428</issue>HTTP Cookie Manager kept sending cookies after they reached their expiry time.</li>
     <li><pr>6654</pr><issue>6611</issue>Support JDK 25 and above for result collectors with empty file names</li>
     <li>Trim whitespace when parsing numeric JMeter properties so accidental spaces do not silently change configuration values.</li>
     <li><pr>6372</pr>Fix KeyManager logging when using CLI mode so keystore passwords are not incorrectly reported as missing. Contributed by Patrick Uiterwijk (patrick at puiterwijk.org)</li>
