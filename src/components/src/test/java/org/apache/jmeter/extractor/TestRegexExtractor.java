@@ -479,4 +479,72 @@ public class TestRegexExtractor {
         final String found = vars.get("regVal");
         assertTrue(found.equals("ONE") || found.equals("TWO"));
     }
+
+    // Tests for #6240: failing extractions must not create exceptions while
+    // cleaning up the group variables
+
+    @Test
+    public void testNoMatchOnFreshVariablesAppliesDefault() {
+        extractor.setRegex("nonexistent-(\\d+)");
+        extractor.setTemplate("$1$");
+        extractor.setDefaultValue("NOTFOUND");
+        extractor.setMatchNumber(1);
+        extractor.process();
+        assertEquals("NOTFOUND", vars.get("regVal"));
+        // No group variables may be left behind
+        assertNull(vars.get("regVal_g"));
+        assertNull(vars.get("regVal_g0"));
+        assertNull(vars.get("regVal_g1"));
+        assertNull(vars.get("regVal_matchNr"));
+    }
+
+    @Test
+    public void testNoMatchCleansUpPreviousGroupVariables() {
+        extractor.setRegex("RetCode\">(\\w+)<");
+        extractor.setTemplate("$1$");
+        extractor.setMatchNumber(1);
+        extractor.process();
+        assertEquals("LIS_OK", vars.get("regVal"));
+        assertEquals("1", vars.get("regVal_g"));
+        assertEquals("LIS_OK", vars.get("regVal_g1"));
+
+        // Now fail the extraction: previous group variables must be cleaned up
+        extractor.setRegex("nonexistent-(\\d+)");
+        extractor.setDefaultValue("NOTFOUND");
+        extractor.process();
+        assertEquals("NOTFOUND", vars.get("regVal"));
+        assertNull(vars.get("regVal_g"));
+        assertNull(vars.get("regVal_g0"));
+        assertNull(vars.get("regVal_g1"));
+    }
+
+    @Test
+    public void testNoMatchWithTamperedGroupCountVariable() {
+        vars.put("regVal_g", "not-a-number");
+        vars.put("regVal_g0", "stale");
+        extractor.setRegex("nonexistent-(\\d+)");
+        extractor.setTemplate("$1$");
+        extractor.setDefaultValue("NOTFOUND");
+        extractor.setMatchNumber(1);
+        extractor.process();
+        assertEquals("NOTFOUND", vars.get("regVal"));
+        assertNull(vars.get("regVal_g"));
+        assertNull(vars.get("regVal_g0"));
+    }
+
+    @Test
+    public void testAllMatchesWithTamperedMatchNumberVariable() {
+        vars.put("regVal_matchNr", "not-a-number");
+        vars.put("content", "one, two, 3, 45");
+        extractor.setRegex("(\\d+)");
+        extractor.setTemplate("$1$");
+        extractor.setMatchNumber(-1);
+        extractor.setScopeVariable("content");
+        extractor.process();
+        // The tampered counter must not break the extraction
+        assertEquals("2", vars.get("regVal_matchNr"));
+        assertEquals("3", vars.get("regVal_1"));
+        assertEquals("45", vars.get("regVal_2"));
+        assertNull(vars.get("regVal_3"));
+    }
 }
