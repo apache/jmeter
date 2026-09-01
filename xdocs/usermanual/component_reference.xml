@@ -3847,6 +3847,12 @@ This means that cross-domain cookies are not stored.
 If you have bugged behaviour or want Cross-Domain cookies to be used, define the JMeter property "<code>CookieManager.check.cookies=false</code>".
 </p>
 <p>
+Cookies that reached their expiry time are no longer sent with requests.
+Be aware that long-running tests, such as endurance tests that outlive a cookie's expiry time,
+will no longer send the cookie once it has expired. This can lead to authentication or session
+errors, so such test plans must handle re-authentication or session refresh.
+</p>
+<p>
 Received Cookies can be stored as JMeter thread variables.
 To save cookies as variables, define the property "<code>CookieManager.save.cookies=true</code>".
 Also, cookies names are prefixed with "<code>COOKIE_</code>" before they are stored (this avoids accidental corruption of local variables)
