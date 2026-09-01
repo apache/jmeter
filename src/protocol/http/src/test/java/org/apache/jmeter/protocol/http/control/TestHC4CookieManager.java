@@ -259,6 +259,27 @@ public class TestHC4CookieManager extends JMeterTestCase {
         assertNull(s);
     }
 
+    // Test cookie that was valid when received is not sent anymore
+    // once its expiry time has passed (#6428)
+    @Test
+    public void testCookieExpiredAfterReceptionIsNotSent() throws Exception {
+        URL url = new URL("http://a.b.c/");
+        man.addCookieFromHeader("test=1; expires=Wed, 01-Jan-2099 00:00:00 GMT", url);
+        assertEquals(1, man.getCookieCount());
+        assertEquals("test=1", man.getCookieHeaderForURL(url));
+        // Simulate the passing of time: the cookie is expired by now
+        man.get(0).setExpires(System.currentTimeMillis() / 1000L - 3600L);
+        assertNull(man.getCookieHeaderForURL(url), "expired cookie must not be sent");
+    }
+
+    // Test session cookie (no expiry date) is still sent
+    @Test
+    public void testSessionCookieWithoutExpiryIsStillSent() throws Exception {
+        URL url = new URL("http://a.b.c/");
+        man.addCookieFromHeader("test=1", url);
+        assertEquals("test=1", man.getCookieHeaderForURL(url));
+    }
+
     // Test New cookie is returned
     @Test
     public void testNewCookie() throws Exception {

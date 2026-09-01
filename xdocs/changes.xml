@@ -58,7 +58,18 @@ Summary
 </p>
 <ul>
 <li><a href="#Changes">Changes</a></li>
+<li><a href="#Incompatible changes">Incompatible changes</a></li>
 <li><a href="#Bug fixes">Bug fixes</a></li>
+</ul>
+
+<!-- =================== Incompatible changes =================== -->
+
+<ch_section>Incompatible changes</ch_section>
+<ul>
+  <li><issue>6428</issue>HTTP Cookie Manager no longer sends cookies after they reached their expiry time.
+  Previously, expired cookies kept being sent indefinitely. Long-running tests that outlive a cookie's
+  expiry time may experience authentication or session failures and must handle re-authentication
+  or session refresh.</li>
 </ul>
 
   <ch_section>Changes</ch_section>
