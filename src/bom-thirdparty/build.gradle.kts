@@ -146,7 +146,6 @@ dependencies {
         api("xalan:serializer:2.7.3")
         api("xalan:xalan:2.7.3")
         api("xml-apis:xml-apis:1.4.01")
-        api("xmlpull:xmlpull:1.1.3.1")
         //FlatLaf: https://www.formdev.com/flatlaf/native-libraries/#gradle
         val flatlafVersion = "3.7.2"
         api("com.formdev:flatlaf:${flatlafVersion}" )
