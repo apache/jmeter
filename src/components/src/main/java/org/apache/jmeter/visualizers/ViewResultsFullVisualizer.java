@@ -150,7 +150,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private ResultRenderer resultsRender = null;
     private Object resultsObject = null;
     private TreeSelectionEvent lastSelectionEvent;
-    private JCheckBox autoScrollCB, scrollStopCB;
+    private JCheckBox autoScrollCB;
+    private JCheckBox scrollStopCB;
     private final Queue<SampleResult> buffer = new ArrayDeque<>();
     private final int maxResults;
     private boolean dataChanged;
