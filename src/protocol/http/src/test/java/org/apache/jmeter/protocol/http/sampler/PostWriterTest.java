@@ -94,8 +94,8 @@ public class PostWriterTest {
         }
     }
 
-    /*
-     * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
+    /**
+     * Test method for org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending a request which contains both formdata and file content
      */
     @Test
@@ -159,7 +159,7 @@ public class PostWriterTest {
         connection.disconnect();
     }
 
-    /*
+    /**
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending a HTTPSampler with form parameters, and only
      * the filename of a file.
@@ -204,7 +204,7 @@ public class PostWriterTest {
         connection.disconnect();
     }
 
-    /*
+    /**
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending file content as the only content of the post body
      */
@@ -258,7 +258,7 @@ public class PostWriterTest {
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
     }
 
-    /*
+    /**
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending only a file multipart.
      */
@@ -313,7 +313,7 @@ public class PostWriterTest {
         connection.disconnect();
     }
 
-    /*
+    /**
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending only a formdata, as a multipart/form-data request.
      */
@@ -413,7 +413,7 @@ public class PostWriterTest {
         connection.disconnect();
     }
 
-    /*
+    /**
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending only a formdata, as urlencoded data
      */
@@ -594,7 +594,7 @@ public class PostWriterTest {
         connection.disconnect();
     }
 
-    /*
+    /**
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.setHeaders(URLConnection, HTTPSampler)'
      */
     @Test
@@ -607,7 +607,7 @@ public class PostWriterTest {
         checkContentTypeMultipart(connection, PostWriter.BOUNDARY);
     }
 
-    /*
+    /**
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.setHeaders(URLConnection, HTTPSampler)'
      */
     @Test
@@ -622,7 +622,7 @@ public class PostWriterTest {
     }
 
     /** setup commons parts of HTTPSampler with a no filename. */
-    private void setupNoFilename(HTTPSampler httpSampler) {
+    private static void setupNoFilename(HTTPSampler httpSampler) {
         setupFilepart(httpSampler, "upload", null, "application/octet-stream");
     }
 
@@ -630,20 +630,20 @@ public class PostWriterTest {
         setupFilepart(httpSampler, "upload", temporaryFile, "text/plain");
     }
 
-    private void setupFilepart(HTTPSampler httpSampler, String fileField, File file, String mimeType) {
+    private static void setupFilepart(HTTPSampler httpSampler, String fileField, File file, String mimeType) {
         HTTPFileArg[] hfa = {new HTTPFileArg(file == null ? "" : file.getAbsolutePath(), fileField, mimeType)};
         httpSampler.setHTTPFiles(hfa);
     }
 
-    private void setupFormData(HTTPSampler httpSampler) {
+    private static void setupFormData(HTTPSampler httpSampler) {
         setupFormData(httpSampler, "mytitle", "mydescription");
     }
 
-    private void setupFormData(HTTPSampler httpSampler, String titleValue, String descriptionValue) {
+    private static void setupFormData(HTTPSampler httpSampler, String titleValue, String descriptionValue) {
         setupFormData(httpSampler, false, titleValue, descriptionValue);
     }
 
-    private void setupFormData(HTTPSampler httpSampler, boolean isEncoded, String titleValue, String descriptionValue) {
+    private static void setupFormData(HTTPSampler httpSampler, boolean isEncoded, String titleValue, String descriptionValue) {
         Arguments args = new Arguments();
         HTTPArgument argument1 = new HTTPArgument("title", titleValue, isEncoded);
         HTTPArgument argument2 = new HTTPArgument("description", descriptionValue, isEncoded);
@@ -709,7 +709,7 @@ public class PostWriterTest {
      *
      * @param lastMultipart true if this is the last multipart in the request
      */
-    private byte[] createExpectedFormdataOutput(
+    private static byte[] createExpectedFormdataOutput(
             String boundaryString,
             String contentEncoding,
             String titleField,
@@ -787,7 +787,7 @@ public class PostWriterTest {
      *
      * @param lastMultipart true if this is the last multipart in the request
      */
-    private byte[] createExpectedFilepartOutput(
+    private static byte[] createExpectedFilepartOutput(
             String boundaryString,
             String fileField,
             File file,
@@ -835,7 +835,7 @@ public class PostWriterTest {
     /**
      * Check that the two byte arrays have identical content
      */
-    private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
+    private static void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
                 System.out.println(new String(expected,UTF_8));
@@ -864,7 +864,7 @@ public class PostWriterTest {
     /**
      * Check that the two byte arrays different content
      */
-    private void checkArraysHaveDifferentContent(byte[] expected, byte[] actual) {
+    private static void checkArraysHaveDifferentContent(byte[] expected, byte[] actual) {
         if(expected != null && actual != null) {
             if(expected.length == actual.length) {
                 boolean allSame = true;
@@ -884,15 +884,15 @@ public class PostWriterTest {
         }
     }
 
-    private void checkContentTypeMultipart(HttpURLConnection conn, String boundaryString) {
+    private static void checkContentTypeMultipart(HttpURLConnection conn, String boundaryString) {
         assertEquals("multipart/form-data; boundary=" + boundaryString, conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 
-    private void checkNoContentType(HttpURLConnection conn) {
+    private static void checkNoContentType(HttpURLConnection conn) {
         assertNull(conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 
-    private void checkContentLength(HttpURLConnection conn, int length) {
+    private static void checkContentLength(HttpURLConnection conn, int length) {
         assertEquals(Integer.toString(length), conn.getRequestProperty(HTTPConstants.HEADER_CONTENT_LENGTH));
     }
 

@@ -85,11 +85,6 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         this.managersInUse = managersInUse;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.protocol.http.util.accesslog.LogFilter#excPattern(java.lang.String)
-     */
     protected boolean hasExcPattern(String text) {
         return false;
     }

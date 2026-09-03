@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -35,6 +34,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContext.TestLogicalAction;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.timers.TimerService;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,7 +143,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
     private void pause(String timeInMillis) {
         long millis;
         try {
-            if (!StringUtils.isEmpty(timeInMillis)) {
+            if (StringUtilities.isNotEmpty(timeInMillis)) {
                 millis = Long.parseLong(timeInMillis);
             } else {
                 log.warn("Duration value is empty, defaulting to 0");

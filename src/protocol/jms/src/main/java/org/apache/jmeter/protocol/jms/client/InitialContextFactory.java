@@ -24,7 +24,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class InitialContextFactory {
             props.setProperty(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
             props.setProperty(Context.PROVIDER_URL, providerUrl);
             if (useAuth && securityPrincipal != null && securityCredentials != null
-                    && securityPrincipal.length() > 0 && securityCredentials.length() > 0) {
+                    && !securityPrincipal.isEmpty() && !securityCredentials.isEmpty()) {
                 props.setProperty(Context.SECURITY_PRINCIPAL, securityPrincipal);
                 props.setProperty(Context.SECURITY_CREDENTIALS, securityCredentials);
                 log.info("authentication properties set");
@@ -105,11 +105,11 @@ public class InitialContextFactory {
        builder.append("#");
        builder.append(providerUrl);
        builder.append("#");
-       if(!StringUtils.isEmpty(securityPrincipal)) {
+       if (StringUtilities.isNotEmpty(securityPrincipal)) {
            builder.append(securityPrincipal);
            builder.append("#");
        }
-       if(!StringUtils.isEmpty(securityCredentials)) {
+       if (StringUtilities.isNotEmpty(securityCredentials)) {
            builder.append(securityCredentials);
        }
        return builder.toString();

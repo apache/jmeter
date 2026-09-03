@@ -130,8 +130,8 @@ public class TableSample implements Serializable, Comparable<TableSample> {
 
     @Override
     public boolean equals(Object o){
-        return (o instanceof TableSample) &&
-                (this.compareTo((TableSample) o) == 0);
+        return (o instanceof TableSample tableSample) &&
+                (this.compareTo(tableSample) == 0);
     }
 
     @Override

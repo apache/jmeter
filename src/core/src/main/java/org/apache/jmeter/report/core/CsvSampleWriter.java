@@ -21,8 +21,6 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import org.apache.commons.lang3.CharUtils;
-import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.save.CSVSaveService;
 
 /**
@@ -117,7 +115,9 @@ public class CsvSampleWriter extends AbstractSampleWriter {
      * header information will be written in the middle of the file.
      */
     public void writeHeader() {
-        Validate.validState(writer != null, "No writer set! Call setWriter() first!");
+        if (writer == null) {
+            throw new IllegalStateException("No writer set! Call setWriter() first!");
+        }
         StringBuilder row = new StringBuilder();
         for (int i = 0; i < columnCount; i++) {
             row.append(metadata.getColumnName(i));
@@ -130,10 +130,12 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     @Override
     public long write(Sample sample) {
-        Validate.validState(writer != null, "No writer set! Call setWriter() first!");
+        if (writer == null) {
+            throw new IllegalStateException("No writer set! Call setWriter() first!");
+        }
         StringBuilder row = new StringBuilder();
         char[] specials = new char[] { separator,
-                CSVSaveService.QUOTING_CHAR, CharUtils.CR, CharUtils.LF };
+                CSVSaveService.QUOTING_CHAR, '\r', '\n' };
         for (int i = 0; i < columnCount; i++) {
             String data = sample.getData(i);
             row.append(CSVSaveService.quoteDelimiters(data, specials))

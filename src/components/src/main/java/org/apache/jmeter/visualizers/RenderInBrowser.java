@@ -151,9 +151,6 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
         return JMeterUtils.getResString("view_results_render_browser"); // $NON-NLS-1$
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.SamplerResultTab#clearData()
-     */
     @Override
     public void clearData() {
         super.clearData();

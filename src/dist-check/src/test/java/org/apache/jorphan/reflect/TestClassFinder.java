@@ -21,14 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.logging.log4j.LoggingException;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,10 +34,10 @@ public class TestClassFinder {
 
     private String[] libDirs;
 
-    private String getJMeterHome() throws Exception {
+    private static String getJMeterHome() throws Exception {
         JMeterTestUtils.setupJMeterHome();
         String path = JMeterUtils.getJMeterHome() + "/lib";
-        return Paths.get(path).toRealPath().toString();
+        return Path.of(path).toRealPath().toString();
     }
 
     @BeforeEach
@@ -53,7 +51,9 @@ public class TestClassFinder {
         List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(
                 libDirs,
                 new Class<?>[] { Exception.class });
-        MatcherAssert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
+        assertTrue(
+                findClassesThatExtend.contains(LoggingException.class.getName()),
+                () -> "findClassesThatExtend(.., Exception.class) should contain LoggingException, got " + findClassesThatExtend);
     }
 
     @Test
@@ -74,7 +74,9 @@ public class TestClassFinder {
                 new Class<?>[] { Exception.class },
                 false);
         assertTrue(findClassesThatExtend.stream().noneMatch(s -> s.contains("$")));
-        MatcherAssert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
+        assertTrue(
+                findClassesThatExtend.contains(LoggingException.class.getName()),
+                () -> "findClassesThatExtend(.., Exception.class) should contain LoggingException, got " + findClassesThatExtend);
     }
 
     @Test

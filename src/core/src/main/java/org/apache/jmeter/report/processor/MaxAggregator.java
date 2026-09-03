@@ -27,42 +27,22 @@ public class MaxAggregator implements Aggregator {
     private long count = 0L;
     private double value = Double.MIN_VALUE;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregator#getCount()
-     */
     @Override
     public long getCount() {
         return count;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregator#getResult()
-     */
     @Override
     public double getResult() {
         return value;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregator#addValue(double)
-     */
     @Override
     public void addValue(double value) {
         this.value = Math.max(this.value, value);
         count++;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregator#reset()
-     */
     @Override
     public void reset() {
         count = 0L;

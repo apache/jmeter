@@ -52,9 +52,6 @@ public class Copy extends AbstractAction {
         commands.add(ActionNames.COPY);
     }
 
-    /*
-     * @see org.apache.jmeter.gui.action.Command#getActionNames()
-     */
     @Override
     public Set<String> getActionNames() {
         return commands;

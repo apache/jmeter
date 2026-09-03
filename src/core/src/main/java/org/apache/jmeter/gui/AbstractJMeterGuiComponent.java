@@ -35,7 +35,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestElementSchema;
@@ -260,7 +259,8 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      */
     @API(status = DEPRECATED, since = "5.6.3")
     protected void configureTestElement(TestElement mc) {
-        mc.setName(StringUtils.defaultIfEmpty(getName(), null));
+        String name = getName();
+        mc.setName(name.isEmpty() ? null : name);
         TestElementSchema schema = TestElementSchema.INSTANCE;
         mc.set(schema.getGuiClass(), getClass());
         mc.set(schema.getTestClass(), mc.getClass());
@@ -279,10 +279,11 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         // JMeter removes disabled elements early from the tree, so configuration elements
         // with enabled=false (~HTTP Request Defaults) can't unexpectedly override the regular ones
         // like HTTP Request.
-        mc.set(TestElementSchema.INSTANCE.getEnabled(), enabled ? null : Boolean.FALSE);
+        mc.set(TestElementSchema.INSTANCE.getEnabled(), enabled ? null : false);
         // Note: we can't use editors for "comments" as getComments() is not a final method, so plugins might
         // override it and provide a different implementation.
-        mc.setComment(StringUtils.defaultIfEmpty(getComment(), null));
+        String comment = getComment();
+        mc.setComment(comment.isEmpty() ? null : comment);
     }
 
     /**

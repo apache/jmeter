@@ -17,8 +17,8 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 
 /**
  * Executor for (pseudo) synchronous communication. <br>

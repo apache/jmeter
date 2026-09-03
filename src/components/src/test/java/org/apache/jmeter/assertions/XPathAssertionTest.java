@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.apache.jmeter.assertions.AssertionResultExtensionsKt.assertEnFailureMessageContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -67,7 +68,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         result.setResponseData(data, null);
     }
 
-    private ByteArrayOutputStream readBA(String name) throws IOException {
+    private static ByteArrayOutputStream readBA(String name) throws IOException {
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(findTestFile(name)));
         ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
         int len = 0;
@@ -79,7 +80,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         return baos;
     }
 
-    private byte[] readFile(String name) throws IOException {
+    private static byte[] readFile(String name) throws IOException {
         return readBA(name).toByteArray();
     }
 
@@ -271,7 +272,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         AssertionResult res = assertion.getResult(result);
         testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
         testLog.debug("failure message: {}", res.getFailureMessage());
-        assertTrue(res.getFailureMessage().indexOf("Premature end of file") > 0);
+        assertEnFailureMessageContains(res, "Premature end of file");
         assertTrue(res.isError(), "Should be an error");
         assertFalse(res.isFailure(), "Should not be a failure");
     }

@@ -92,13 +92,6 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         return metrics;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
-     * addMetric(long, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public void addMetric(long timestamp, String contextName, String metricName, String metricValue) {
         String name = prefix + contextName + "." + metricName;
@@ -107,9 +100,6 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#writeAndSendMetrics()
-     */
     @Override
     public void writeAndSendMetrics() {
         final List<MetricTuple> currentMetrics;
@@ -157,9 +147,6 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#destroy()
-     */
     @Override
     public void destroy() {
         socketOutputStreamPool.close();

@@ -25,7 +25,7 @@ import java.beans.PropertyEditorSupport;
 public class BooleanPropertyEditor extends PropertyEditorSupport {
 
     // These are the mixed-case values as returned by the RI JVM boolean property editor
-    // However, they are different from the lower-case values returned by e.g. Boolean.FALSE.toString()
+    // However, they are different from the lower-case values returned by e.g. false.toString()
     private static final String FALSE = "False"; // $NON-NLS-1$
     private static final String TRUE  = "True";  // $NON-NLS-1$
 
@@ -35,7 +35,7 @@ public class BooleanPropertyEditor extends PropertyEditorSupport {
     @Override
     public String getAsText() {
         Object value = getValue();
-        return value instanceof Boolean ?  toString((Boolean) value) : null;
+        return value instanceof Boolean aBoolean ?  toString(aBoolean) : null;
     }
 
     private static String toString(Boolean value) {
@@ -49,8 +49,8 @@ public class BooleanPropertyEditor extends PropertyEditorSupport {
 
     @Override
     public void setValue(Object value){
-        if (value instanceof String) {
-            super.setValue(Boolean.valueOf((String) value));
+        if (value instanceof String string) {
+            super.setValue(Boolean.valueOf(string));
         } else if (value == null || value instanceof Boolean) {
             super.setValue(value); // not sure if null is passed in but no harm in setting it
         } else {

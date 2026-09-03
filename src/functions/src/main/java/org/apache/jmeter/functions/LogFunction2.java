@@ -79,7 +79,7 @@ public class LogFunction2 extends AbstractFunction {
         String priorityString;
         if (values.length > 1) { // We have a default
             priorityString = ((CompoundVariable) values[1]).execute();
-            if (priorityString.length() == 0) {
+            if (priorityString.isEmpty()) {
                 priorityString = DEFAULT_PRIORITY;
             }
         } else {

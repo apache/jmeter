@@ -48,8 +48,8 @@ public abstract class NumberProperty extends AbstractProperty {
 
     @Override
     public void setObjectValue(Object v) {
-        if (v instanceof Number) {
-            setNumberValue((Number) v);
+        if (v instanceof Number number) {
+            setNumberValue(number);
         } else {
             try {
                 setNumberValue(v.toString());

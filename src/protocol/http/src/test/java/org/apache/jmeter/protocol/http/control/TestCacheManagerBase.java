@@ -201,7 +201,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
                         new Header(varyHeaderOne, "another value") });
     }
 
-    private String asString(Header[] headers) {
+    private static String asString(Header[] headers) {
         StringBuilder result = new StringBuilder();
         for (Header header: headers) {
             result.append(header.getName()).append(": ").append(header.getValue()).append("\n");

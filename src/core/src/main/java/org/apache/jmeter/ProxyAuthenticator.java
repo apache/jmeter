@@ -55,12 +55,9 @@ public class ProxyAuthenticator extends Authenticator {
      */
     @Override
     protected PasswordAuthentication getPasswordAuthentication() {
-        switch (getRequestorType()){
-            case PROXY:
-                return new PasswordAuthentication(userName, password);
-            case SERVER:
-                break;
-        }
-        return null;
+        return switch (getRequestorType()) {
+            case PROXY -> new PasswordAuthentication(userName, password);
+            case SERVER -> null;
+        };
     }
 }

@@ -142,7 +142,7 @@ public abstract class SSLManager {
                  log.info("Total of {} aliases loaded OK from PKCS11", keyStore.getAliasCount());
               } else {
                  File initStore = new File(fileName);
-                 if (fileName.length() > 0 && initStore.exists()) {
+                 if (!fileName.isEmpty() && initStore.exists()) {
                      retryLoadKeys(initStore, true);
                      if (log.isInfoEnabled()) {
                          log.info("Total of {} aliases loaded OK from keystore {}",

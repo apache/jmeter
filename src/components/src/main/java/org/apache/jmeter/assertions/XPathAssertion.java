@@ -24,7 +24,6 @@ import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedAssertion;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -32,6 +31,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -80,7 +80,7 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
         try {
             if (isScopeVariable()){
                 String inputString=getThreadContext().getVariables().get(getVariableName());
-                if (!StringUtils.isEmpty(inputString)) {
+                if (StringUtilities.isNotEmpty(inputString)) {
                     responseData = inputString.getBytes(StandardCharsets.UTF_8);
                 }
             } else {

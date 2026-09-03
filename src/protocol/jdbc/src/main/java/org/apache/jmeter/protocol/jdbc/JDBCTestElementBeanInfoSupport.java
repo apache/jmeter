@@ -48,25 +48,25 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
                 });
 
         PropertyDescriptor p = property("dataSource"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("queryArguments"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("queryArgumentsTypes"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("variableNames"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("resultSetHandler"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, AbstractJDBCTestElement.RS_STORE_AS_STRING);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
+        p.setValue(NOT_OTHER, true);
         p.setValue(TAGS,new String[]{
                 AbstractJDBCTestElement.RS_STORE_AS_STRING,
                 AbstractJDBCTestElement.RS_STORE_AS_OBJECT,
@@ -74,21 +74,21 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
                 });
 
         p = property("resultVariable"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("queryTimeout"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
 
         p = property("resultSetMaxRows"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
 
         p = property("queryType"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, AbstractJDBCTestElement.SELECT);
-        p.setValue(NOT_OTHER,Boolean.TRUE);
+        p.setValue(NOT_OTHER,true);
         p.setValue(TAGS,new String[]{
                 AbstractJDBCTestElement.SELECT,
                 AbstractJDBCTestElement.UPDATE,
@@ -102,7 +102,7 @@ public abstract class JDBCTestElementBeanInfoSupport extends BeanInfoSupport {
                 });
 
         p = property("query", TypeEditor.TextAreaEditor); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
         p.setValue(TEXT_LANGUAGE, "sql");  // $NON-NLS-1$
 

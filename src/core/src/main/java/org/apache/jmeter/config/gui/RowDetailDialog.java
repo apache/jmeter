@@ -184,8 +184,8 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
         if (column > 0 || columnCount == 1) {
             if (tableModel.getColumnClass(column).equals(Boolean.class)) {
                 JCheckBox checkBox = new JCheckBox();
-                if (value instanceof Boolean) {
-                    checkBox.setSelected((Boolean) value);
+                if (value instanceof Boolean b) {
+                    checkBox.setSelected(b);
                 }
                 checkBox.addItemListener(this);
                 dataComponents.add(checkBox);
@@ -193,8 +193,8 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
             } else {
                 JSyntaxTextArea dataArea = JSyntaxTextArea
                         .getInstance(linesPerTextArea, 80);
-                if (value instanceof String) {
-                    dataArea.setInitialText((String) value);
+                if (value instanceof String s) {
+                    dataArea.setInitialText(s);
                 }
                 dataArea.getDocument().addDocumentListener(this);
                 dataComponents.add(dataArea);
@@ -202,8 +202,8 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
             }
         } else {
             final JTextField nameTF = new JTextField("");
-            if (value instanceof String) {
-                nameTF.setText((String) value);
+            if (value instanceof String s) {
+                nameTF.setText(s);
             }
             nameTF.getDocument().addDocumentListener(this);
             dataComponents.add(nameTF);
@@ -245,14 +245,13 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
     private void setValues(int selectedRow) {
         for (int i = 0; i < tableModel.getColumnCount(); i++) {
             final JComponent component = dataComponents.get(i);
-            if (component instanceof JTextComponent) {
-                JTextComponent dataArea = (JTextComponent) component;
+            if (component instanceof JTextComponent dataArea) {
                 dataArea.setText((String) tableModel.getValueAt(selectedRow, i));
                 if (dataArea instanceof JSyntaxTextArea) {
                     dataArea.setCaretPosition(0);
                 }
-            } else if (component instanceof JCheckBox) {
-                ((JCheckBox) component).setSelected((Boolean) tableModel.getValueAt(selectedRow, i));
+            } else if (component instanceof JCheckBox jCheckBox) {
+                jCheckBox.setSelected((Boolean) tableModel.getValueAt(selectedRow, i));
             }
         }
         textChanged = false;
@@ -265,10 +264,10 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
     protected void doUpdate(ActionEvent actionEvent) {
         for (int i = 0; i < tableModel.getColumnCount(); i++) {
             final JComponent component = dataComponents.get(i);
-            if (component instanceof JTextComponent) {
-                tableModel.setValueAt(((JTextComponent) component).getText(), selectedRow, i);
-            } else if (component instanceof JCheckBox) {
-                tableModel.setValueAt(((JCheckBox) component).isSelected(), selectedRow, i);
+            if (component instanceof JTextComponent jTextComponent) {
+                tableModel.setValueAt(jTextComponent.getText(), selectedRow, i);
+            } else if (component instanceof JCheckBox jCheckBox) {
+                tableModel.setValueAt(jCheckBox.isSelected(), selectedRow, i);
             }
         }
         // Change Cancel label to Close

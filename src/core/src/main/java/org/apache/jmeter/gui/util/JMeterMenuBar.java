@@ -39,6 +39,8 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
@@ -395,12 +397,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         LangMenuHelper langMenu = new LangMenuHelper(languageMenu);
 
-        /*
-         * Note: the item name is used by ChangeLanguage to create a Locale for
-         * that language, so need to ensure that the language strings are valid
-         * If they exist, use the Locale language constants.
-         * Also, need to ensure that the names are valid resource entries too.
-         */
+        // Note: the item name is used by ChangeLanguage to create a Locale for
+        // that language, so need to ensure that the language strings are valid
+        // If they exist, use the Locale language constants.
+        // Also, need to ensure that the names are valid resource entries too.
 
         Locale currentLocale = JMeterUtils.getLocale();
         String selectedLocale = currentLocale == null ? "" : currentLocale.toString();
@@ -531,6 +531,30 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         fileLoadRecentFiles = LoadRecentProject.getRecentFileMenuItems();
         fileLoadRecentFiles.forEach(jc -> recentFilesOpen.add(jc));
         recentFilesOpen.setEnabled(LoadRecentProject.hasVisibleMenuItem(fileLoadRecentFiles));
+
+        // Add menu listener to refresh recent files when menu is selected
+        recentFilesOpen.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                // Clear existing recent files from menu
+                recentFilesOpen.removeAll();
+
+                // Reload recent files
+                fileLoadRecentFiles = LoadRecentProject.getRecentFileMenuItems();
+                fileLoadRecentFiles.forEach(jc -> recentFilesOpen.add(jc));
+                recentFilesOpen.setEnabled(LoadRecentProject.hasVisibleMenuItem(fileLoadRecentFiles));
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+                // Not needed
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+                // Not needed
+            }
+        });
 
         addPluginsMenuItems(fileMenu, menuCreators, MENU_LOCATION.FILE);
 
@@ -705,8 +729,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                     return;
                 }
             }
-            if (component instanceof JMenu) {
-                final JMenu jMenu = (JMenu) component;
+            if (component instanceof JMenu jMenu) {
                 if (isResource(jMenu.getActionCommand())){
                     jMenu.setText(JMeterUtils.getResString(compName));
                 }

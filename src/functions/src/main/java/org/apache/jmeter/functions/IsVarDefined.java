@@ -58,7 +58,7 @@ public class IsVarDefined extends AbstractFunction {
             String variableValue = jMeterVariables.get(variableName);
             return Boolean.toString(variableValue != null);
         } else {
-            return Boolean.FALSE.toString();
+            return "false";
         }
     }
 

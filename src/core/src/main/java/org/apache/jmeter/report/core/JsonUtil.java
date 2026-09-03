@@ -19,8 +19,6 @@ package org.apache.jmeter.report.core;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * The class JsonUtil provides helper functions to generate Json.
  *
@@ -36,7 +34,7 @@ public final class JsonUtil {
      * @return the json string
      */
     public static String toJsonArray(final String... array) {
-        return '[' + StringUtils.join(array, ", ") + ']';
+        return '[' + String.join(", ", array) + ']';
     }
 
     /**
@@ -55,7 +53,7 @@ public final class JsonUtil {
                 array[index] = '"' + entry.getKey() + "\": " + entry.getValue();
                 index++;
             }
-            result += StringUtils.join(array, ", ");
+            result += String.join(", ", array);
         }
         return result + "}";
     }

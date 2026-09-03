@@ -20,8 +20,8 @@ package org.apache.jmeter.util;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jorphan.util.JMeterException;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +72,7 @@ public class BeanShellInterpreter {
                 log.warn("Can't set logger variable", e);
             }
         }
-        if (StringUtils.isNotBlank(initFile)) {
+        if (StringUtilities.isNotBlank(initFile)) {
             String fileToUse=initFile;
             // Check file so we can distinguish file error from script error
             File in = new File(fileToUse);

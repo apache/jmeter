@@ -158,7 +158,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         bsh.set("bsh.args",//$NON-NLS-1$
                 JOrphanUtils.split(params, " "));//$NON-NLS-1$
 
-        if (fileName.length() == 0) {
+        if (fileName.isEmpty()) {
             String bshScript = getScript();
             if (sampleResult != null) {
                 sampleResult.setSamplerData(bshScript);

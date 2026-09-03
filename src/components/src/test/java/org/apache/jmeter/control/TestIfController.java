@@ -172,7 +172,7 @@ class TestIfController extends JMeterTestCase {
             assertEquals(order[counter], sampler.getName());
             counter++;
         }
-        assertEquals(counter, 6);
+        assertEquals(6, counter);
     }
 
     @Test
@@ -200,7 +200,7 @@ class TestIfController extends JMeterTestCase {
             assertEquals(order[counter], sampler.getName());
             counter++;
         }
-        assertEquals(counter, 6);
+        assertEquals(6, counter);
     }
 
 
@@ -237,7 +237,7 @@ class TestIfController extends JMeterTestCase {
             assertEquals(order[counter], sampler.getName());
             counter++;
         }
-        assertEquals(counter, 6);
+        assertEquals(6, counter);
     }
 
     /**
@@ -276,7 +276,7 @@ class TestIfController extends JMeterTestCase {
             assertEquals(order[counter], sampler.getName());
             counter++;
         }
-        assertEquals(counter, 6);
+        assertEquals(6, counter);
     }
 
     @Test

@@ -225,7 +225,7 @@ apache-jmeter-X.Y/lib/
 apache-jmeter-X.Y/lib/ext
 apache-jmeter-X.Y/lib/junit
 apache-jmeter-X.Y/licenses
-apache-jmeter-X.Y/printable_docs
+apache-jmeter-X.Y/docs
 </source>
 You can rename the parent directory (i.e. <code>apache-jmeter-X.Y</code>) if you want, but do not change any of the sub-directory names.
 </p>
@@ -517,6 +517,7 @@ To do so, use the following options:</p>
 <dl>
 <dt><code>-D[prop_name]=[value]</code></dt><dd>defines a java system property value.</dd>
 <dt><code>-J[prop_name]=[value]</code></dt><dd>defines a local JMeter property.</dd>
+<dt><code>-q[propertyfile]</code></dt><dd>additional JMeter property file</dd>
 <dt><code>-G[prop_name]=[value]</code></dt><dd>defines a JMeter property to be sent to all remote servers.</dd>
 <dt><code>-G[propertyfile]</code></dt><dd>defines a file containing JMeter properties to be sent to all remote servers.</dd>
 <dt><code>-L[category]=[priority]</code></dt><dd>overrides a logging setting, setting a particular category to the given priority level.</dd>
@@ -851,8 +852,7 @@ If set to <code>0</code> (default value), then JMeter does not print non-termina
     <property name="ssl.provider">You can specify the class for your SSL
     implementation if you don't want to use the built-in Java implementation.
     </property>
-    <property name="xml.parser">You can specify an implementation as your XML
-    parser. The default value is: <code>org.apache.xerces.parsers.SAXParser</code></property>
+    <property name="xml.parser">You can specify an implementation as your XML parser.</property>
   <property name="remote_hosts">Comma-delimited list of remote JMeter hosts (or <code>host:port</code> if required).
     If you are running JMeter in a distributed environment, list the machines where
   you have JMeter remote servers running.  This will allow you to control those

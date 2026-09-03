@@ -239,7 +239,7 @@ public class JavaSamplerContext {
      * Returns {@link JMeterVariables} for the current thread.
      * @return {@link JMeterVariables} for the current thread.
      */
-    public final JMeterVariables getJMeterVariables() {
+    public static JMeterVariables getJMeterVariables() {
         return JMeterContextService.getContext().getVariables();
     }
 
@@ -247,7 +247,7 @@ public class JavaSamplerContext {
      * Returns JMeter properties.
      * @return {@link Properties} JMeter properties
      */
-    public final Properties getJMeterProperties() {
+    public static Properties getJMeterProperties() {
         return JMeterUtils.getJMeterProperties();
     }
 

@@ -44,34 +44,34 @@ public class RandomVariableConfigBeanInfo extends BeanInfoSupport {
         createPropertyGroup(VARIABLE_GROUP, new String[] { VARIABLE_NAME, OUTPUT_FORMAT, });
 
         p = property(VARIABLE_NAME);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property(OUTPUT_FORMAT);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         createPropertyGroup(RANDOM_GROUP,
         new String[] { MINIMUM_VALUE, MAXIMUM_VALUE, RANDOM_SEED, });
 
         p = property(MINIMUM_VALUE);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "1"); // $NON-NLS-1$
 
         p = property(MAXIMUM_VALUE);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property(RANDOM_SEED);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         createPropertyGroup(OPTIONS_GROUP, new String[] { PER_THREAD, });
 
         p = property(PER_THREAD);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_OTHER, true);
+        p.setValue(DEFAULT, false);
     }
 }

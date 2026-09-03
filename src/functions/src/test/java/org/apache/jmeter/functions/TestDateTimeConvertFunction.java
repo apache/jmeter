@@ -123,7 +123,7 @@ class TestDateTimeConvertFunction extends JMeterTestCase implements JMeterSerial
         params.add(new CompoundVariable("yyyy-MM-dd"));
         params.add(new CompoundVariable("abcd"));
         dateConvert.setParameters(params);
-        Assertions.assertEquals(dateConvert.execute(result, null), "");
+        Assertions.assertEquals("", dateConvert.execute(result, null));
     }
 
     @Test
@@ -132,6 +132,6 @@ class TestDateTimeConvertFunction extends JMeterTestCase implements JMeterSerial
         params.add(new CompoundVariable("yyyy-MM-dd"));
         params.add(new CompoundVariable("dd-MM-yyyy HH:mm:ss"));
         dateConvert.setParameters(params);
-        Assertions.assertEquals(dateConvert.execute(result, null), "");
+        Assertions.assertEquals("", dateConvert.execute(result, null));
     }
 }

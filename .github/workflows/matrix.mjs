@@ -1,0 +1,191 @@
+// The script generates a random subset of valid jdk, os, timezone, and other axes.
+// You can preview the results by running "node matrix.mjs"
+// See https://github.com/vlsi/github-actions-random-matrix
+import { appendFileSync } from 'fs';
+import { EOL } from 'os';
+import { createGitHubMatrixBuilder } from '@vlsi/github-actions-random-matrix/github';
+const { matrix, random } = createGitHubMatrixBuilder();
+
+// Some of the filter conditions might become unsatisfiable, and by default
+// the matrix would ignore that. That behaviour is useful for PR testing: if you
+// want only a subset, comment out the unwanted axis values and the matrix yields
+// the matching parameters. Un-comment the following line if you add new testing
+// parameters and want to notice accidentally unsatisfiable conditions.
+// matrix.failOnUnsatisfiableFilters(true);
+
+matrix.addAxis({
+  name: 'java_distribution',
+  values: [
+    {value: 'corretto', vendor: 'amazon', weight: 1},
+    {value: 'liberica', vendor: 'bellsoft', weight: 1},
+    {value: 'microsoft', vendor: 'microsoft', weight: 1},
+    {value: 'oracle', vendor: 'oracle', weight: 1},
+    // There are issues running Semeru JDK with Gradle 8.5
+    // See https://github.com/gradle/gradle/issues/27273
+    // {value: 'semeru', vendor: 'ibm', weight: 4},
+    {value: 'temurin', vendor: 'eclipse', weight: 1},
+    {value: 'zulu', vendor: 'azul', weight: 1},
+  ]
+});
+
+const eaJava = '22';
+
+matrix.addAxis({
+  name: 'java_version',
+  // Strings allow versions like 18-ea
+  values: [
+    '17',
+    '21',
+    '25',
+    eaJava,
+  ]
+});
+
+matrix.addAxis({
+  name: 'tz',
+  values: [
+    'America/New_York',
+    'Pacific/Chatham',
+    'UTC'
+  ]
+});
+
+matrix.addAxis({
+  name: 'os',
+  title: x => x.replace('-latest', ''),
+  values: [
+    // TODO: X11 is not available. Un-comment when https://github.com/burrunan/gradle-cache-action/issues/48 is resolved
+    // 'ubuntu-latest',
+    'windows-latest',
+    'macos-latest'
+  ]
+});
+
+// Test cases when Object#hashCode produces the same results
+// It allows capturing cases when the code uses hashCode as a unique identifier
+matrix.addAxis({
+  name: 'hash',
+  values: [
+    {value: 'regular', title: '', weight: 42},
+    {value: 'same', title: 'same hashcode', weight: 1}
+  ]
+});
+matrix.addAxis({
+  name: 'locale',
+  title: x => x.language + '_' + x.country,
+  values: [
+    {language: 'de', country: 'DE'},
+    {language: 'fr', country: 'FR'},
+    // TODO: fix :src:dist-check:batchBUG_62847
+    // Fails with "ERROR o.a.j.u.JMeterUtils: Could not find resources for 'ru_EN'"
+    // {language: 'ru', country: 'RU'},
+    {language: 'tr', country: 'TR'},
+  ]
+});
+
+matrix.setNamePattern(['java_version', 'java_distribution', 'hash', 'os', 'tz', 'locale']);
+
+// Semeru uses OpenJ9 jit which has no option for making hash codes the same
+matrix.exclude({java_distribution: {value: 'semeru'}, hash: {value: 'same'}});
+// MacOS and Oracle Java does not work currently. No JAVA_HOME_${VERSION}_x64 set and thus no java found
+matrix.exclude({os: 'macos-latest', java_distribution: {value: 'oracle'}})
+// Ignore builds with JAVA EA for now, see https://github.com/apache/jmeter/issues/6114
+matrix.exclude({java_version: eaJava})
+matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
+// Oracle JDK is only supported for JDK 21 and later
+matrix.imply({java_distribution: {value: 'oracle'}}, {java_version: v => v === eaJava || v >= 21});
+// TODO: Semeru does not ship Java 21 builds yet
+matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'});
+
+// Drive the whole matrix from one batch of requirements. generateRows guarantees a row for
+// each entry, packs them into as few jobs as it can, and spends the rest of the MATRIX_JOBS
+// budget on pairwise coverage. Unlike a sequence of generateRow() calls, the job count is
+// exactly MATRIX_JOBS and the result no longer depends on the order of the list.
+const include = matrix.generateRows(Number(process.env.MATRIX_JOBS || 5), {
+  require: [
+    // Ensure at least one job with "same" hashcode exists
+    {hash: {value: 'same'}},
+    // Ensure at least one Windows job is present (macOS is almost the same as Linux)
+    {os: 'windows-latest'},
+    // TODO: un-comment when xvfb will be possible
+    // {os: 'ubuntu-latest'},
+    // Ensure there will be at least one job with Java 17
+    {java_version: '17'},
+    // Ensure there will be at least one job with Java 25
+    {java_version: '25'},
+    // Ensure there will be at least one job with Java EA
+    // {java_version: eaJava},
+  ],
+});
+if (include.length === 0) {
+  throw new Error('Matrix list is empty');
+}
+include.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+include.forEach(v => {
+  // Pass locale via Gradle arguments in case it won't be inherited from _JAVA_OPTIONS
+  // In fact, _JAVA_OPTIONS is non-standard and might be ignored by some JVMs
+  let gradleArgs = [
+    `-Duser.country=${v.locale.country}`,
+    `-Duser.language=${v.locale.language}`,
+  ];
+  v.extraGradleArgs = gradleArgs.join(' ');
+});
+include.forEach(v => {
+  let jvmArgs = [];
+  // Extra JVM arguments passed to test execution
+  let testJvmArgs = [];
+  if (v.hash.value === 'same') {
+    testJvmArgs.push('-XX:+UnlockExperimentalVMOptions', '-XX:hashCode=2');
+  }
+  // Gradle does not work in tr_TR locale, so pass locale to test only: https://github.com/gradle/gradle/issues/17361
+  jvmArgs.push(`-Duser.country=${v.locale.country}`);
+  jvmArgs.push(`-Duser.language=${v.locale.language}`);
+  const {value: javaDistribution, vendor: javaVendor} = v.java_distribution;
+  v.java_distribution = javaDistribution;
+  v.java_vendor = javaVendor;
+  if (v.java_distribution === 'oracle') {
+      v.oracle_java_website = v.java_version === eaJava ? 'jdk.java.net' : 'oracle.com';
+  }
+  v.non_ea_java_version = v.java_version === eaJava ? '' : v.java_version;
+  if (v.java_distribution !== 'semeru' && random() > 0.5) {
+    // The following options randomize instruction selection in JIT compiler
+    // so it might reveal missing synchronization
+    v.name += ', stress JIT';
+    v.testDisableCaching = 'JIT randomization should not be cached';
+    jvmArgs.push('-XX:+UnlockDiagnosticVMOptions');
+    if (v.java_version >= 8) {
+      // Randomize instruction scheduling in GCM
+      // share/opto/c2_globals.hpp
+      jvmArgs.push('-XX:+StressGCM');
+      // Randomize instruction scheduling in LCM
+      // share/opto/c2_globals.hpp
+      jvmArgs.push('-XX:+StressLCM');
+    }
+    if (v.java_version >= 16) {
+      // Randomize worklist traversal in IGVN
+      // share/opto/c2_globals.hpp
+      jvmArgs.push('-XX:+StressIGVN');
+    }
+    if (v.java_version >= 17) {
+      // Randomize worklist traversal in CCP
+      // share/opto/c2_globals.hpp
+      jvmArgs.push('-XX:+StressCCP');
+    }
+  }
+  v.extraJvmArgs = jvmArgs.join(' ');
+  v.testExtraJvmArgs = testJvmArgs.join(' ::: ');
+  delete v.hash;
+});
+
+if (process.argv.includes('--coverage')) {
+  const coverage = matrix.pairCoverageReport();
+  console.log(`Pair coverage: ${coverage.covered}/${coverage.total} (${coverage.percentage}%), weight coverage ${coverage.weightPercentage}%`);
+} else {
+  console.log(include);
+  let filePath = process.env['GITHUB_OUTPUT'] || '';
+  if (filePath) {
+    appendFileSync(filePath, `matrix<<MATRIX_BODY${EOL}${JSON.stringify({include})}${EOL}MATRIX_BODY${EOL}`, {
+      encoding: 'utf8'
+    });
+  }
+}

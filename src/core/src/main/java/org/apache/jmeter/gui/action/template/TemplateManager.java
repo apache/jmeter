@@ -28,8 +28,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -91,7 +91,7 @@ public class TemplateManager {
 
         final String[] templateFiles = TEMPLATE_FILES.split(",");
         for (String templateFile : templateFiles) {
-            if(!StringUtils.isEmpty(templateFile)) {
+            if (StringUtilities.isNotEmpty(templateFile)) {
                 final File file = new File(JMeterUtils.getJMeterHome(), templateFile);
                 try {
                     if(file.exists() && file.canRead()) {

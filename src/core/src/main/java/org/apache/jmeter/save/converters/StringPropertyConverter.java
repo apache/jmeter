@@ -48,7 +48,10 @@ public class StringPropertyConverter implements Converter {
     public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
         StringProperty prop = (StringProperty) obj;
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
-        writer.setValue(ConversionHelp.encode(prop.getStringValue()));
+        String encoded = ConversionHelp.encode(prop.getStringValue());
+        if (encoded != null && !encoded.isEmpty()) {
+            writer.setValue(encoded);
+        }
     }
 
     /** {@inheritDoc} */

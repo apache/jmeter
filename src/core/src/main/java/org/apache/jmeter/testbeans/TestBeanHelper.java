@@ -186,12 +186,9 @@ public class TestBeanHelper {
         else if(jprop instanceof MultiProperty multiProperty)
         {
             value = unwrapCollection(multiProperty,(String)desc.getValue(TableEditor.CLASSNAME));
-        }
-        // value was not provided, and this is allowed
-        else if (jprop instanceof NullProperty &&
-                // use negative condition so missing (null) value is treated as FALSE
-                ! Boolean.TRUE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED))) {
-            value=null;
+        } else if (jprop instanceof NullProperty) {
+            value = Boolean.TRUE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED))
+                    ? desc.getValue(GenericTestBeanCustomizer.DEFAULT) : null;
         } else {
             value = Converter.convert(jprop.getStringValue(), type);
         }

@@ -28,6 +28,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,19 +61,18 @@ public class RegExUserParameters extends AbstractTestElement implements Serializ
             log.debug("{} Running up named: {}", Thread.currentThread().getName(), getName());//$NON-NLS-1$
         }
         Sampler entry = getThreadContext().getCurrentSampler();
-        if (!(entry instanceof HTTPSamplerBase)) {
+        if (!(entry instanceof HTTPSamplerBase sampler)) {
             return;
         }
 
         Map<String, String> paramMap = buildParamsMap();
-        if(paramMap == null || paramMap.isEmpty()){
+        if (paramMap == null || paramMap.isEmpty()){
             log.info(
                     "RegExUserParameters element: {} => Referenced RegExp was not found, no parameter will be changed",
                     getName());
             return;
         }
 
-        HTTPSamplerBase sampler = (HTTPSamplerBase) entry;
         for (JMeterProperty jMeterProperty : sampler.getArguments()) {
             Argument arg = (Argument) jMeterProperty.getObjectValue();
             String oldValue = arg.getValue();

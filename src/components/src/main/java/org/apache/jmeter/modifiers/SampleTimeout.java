@@ -116,10 +116,9 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
         if (timeout <= 0) {
             return;
         }
-        if (!(samp instanceof Interruptible)) { // may be applied to a whole test
+        if (!(samp instanceof Interruptible sampler)) { // may be applied to a whole test
             return; // Cannot time out in this case
         }
-        final Interruptible sampler = (Interruptible) samp;
 
         Callable<Object> call = () -> {
             long start = System.nanoTime();

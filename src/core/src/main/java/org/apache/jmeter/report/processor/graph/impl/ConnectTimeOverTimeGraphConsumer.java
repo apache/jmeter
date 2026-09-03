@@ -39,13 +39,6 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
     private static final boolean CONNECT_TIME_SAVED =
             JMeterUtils.getPropDefault("jmeter.save.saveservice.connect_time", true); //$NON-NLS-1$
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #createTimeStampKeysSelector()
-     */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
@@ -53,12 +46,6 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
         return keysSelector;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         if (!CONNECT_TIME_SAVED) {

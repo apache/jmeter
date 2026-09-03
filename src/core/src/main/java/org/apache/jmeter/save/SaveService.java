@@ -37,16 +37,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.util.ExceptionUtils;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,8 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.DataHolder;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
-import com.thoughtworks.xstream.io.xml.XppDriver;
+import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
@@ -78,8 +79,8 @@ public class SaveService {
     public static final String TEST_CLASS_NAME = "TestClassName"; // $NON-NLS-1$
 
     private static final class XStreamWrapper extends XStream {
-        private XStreamWrapper(ReflectionProvider reflectionProvider) {
-            super(reflectionProvider);
+        private XStreamWrapper(ReflectionProvider reflectionProvider, HierarchicalStreamDriver hierarchicalStreamDriver) {
+            super(reflectionProvider, hierarchicalStreamDriver);
         }
 
         // Override wrapMapper in order to insert the Wrapper in the chain
@@ -110,16 +111,15 @@ public class SaveService {
         }
     }
 
-    private static final XStream JMXSAVER = new XStreamWrapper(new PureJavaReflectionProvider());
-    private static final XStream JTLSAVER = new XStreamWrapper(new PureJavaReflectionProvider());
+    private static final JMeterStaxDriver STAXDRIVER_WITH_HEADER = new JMeterStaxDriver();
+    private static final JMeterStaxDriver STAXDRIVER_SKIP_HEADER = new JMeterStaxDriver(false, true);
+    private static final XStream JMXSAVER = new XStreamWrapper(new PureJavaReflectionProvider(), STAXDRIVER_WITH_HEADER);
+    private static final XStream JTLSAVER = new XStreamWrapper(new PureJavaReflectionProvider(), STAXDRIVER_WITH_HEADER);
     static {
         JTLSAVER.setMode(XStream.NO_REFERENCES); // This is needed to stop XStream keeping copies of each class
         JMeterUtils.setupXStreamSecurityPolicy(JMXSAVER);
         JMeterUtils.setupXStreamSecurityPolicy(JTLSAVER);
     }
-
-    // The XML header, with placeholder for encoding, since that is controlled by property
-    private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"<ph>\"?>"; // $NON-NLS-1$
 
     // Default file name
     private static final String SAVESERVICE_PROPERTIES_FILE = "saveservice.properties"; // $NON-NLS-1$
@@ -180,7 +180,7 @@ public class SaveService {
 
     private static File getSaveServiceFile() {
         String saveServiceProps = JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,SAVESERVICE_PROPERTIES_FILE); //$NON-NLS-1$
-        if (saveServiceProps.length() > 0){ //$NON-NLS-1$
+        if (!saveServiceProps.isEmpty()){ //$NON-NLS-1$
             return JMeterUtils.findFile(saveServiceProps);
         }
         throw new IllegalStateException("Could not find file configured in saveservice_properties property set to:"+saveServiceProps);
@@ -299,25 +299,31 @@ public class SaveService {
 
     // Called by Save function
     public static void saveTree(HashTree tree, OutputStream out) throws IOException {
-        // Get the OutputWriter to use
-        OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
-        writeXmlHeader(outputStreamWriter);
-        // Use deprecated method, to avoid duplicating code
         ScriptWrapper wrapper = new ScriptWrapper();
         wrapper.testPlan = tree;
-        JMXSAVER.toXML(wrapper, outputStreamWriter);
-        outputStreamWriter.write('\n');// Ensure terminated properly
-        outputStreamWriter.close();
+
+        if (fileEncoding == null || fileEncoding.isEmpty()) {
+            JMXSAVER.toXML(wrapper, out);
+        } else {
+            // Get the OutputWriter to use
+            try (OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out)) {
+                // Use deprecated method, to avoid duplicating code
+                JMXSAVER.toXML(wrapper, outputStreamWriter);
+                outputStreamWriter.write('\n');// Ensure terminated properly
+            }
+        }
     }
 
     // Used by Test code
     public static void saveElement(Object el, OutputStream out) throws IOException {
         // Get the OutputWriter to use
-        OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
-        writeXmlHeader(outputStreamWriter);
-        // Use deprecated method, to avoid duplicating code
-        JMXSAVER.toXML(el, outputStreamWriter);
-        outputStreamWriter.close();
+        if (fileEncoding == null || fileEncoding.isEmpty()) {
+            JMXSAVER.toXML(el, out);
+        } else {
+            try (OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out)) {
+                JMXSAVER.toXML(el, outputStreamWriter);
+            }
+        }
     }
 
     // Used by Test code
@@ -344,7 +350,7 @@ public class SaveService {
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
         try {
-            JTLSAVER.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
+            JTLSAVER.marshal(evt.getResult(), STAXDRIVER_SKIP_HEADER.createWriter(writer), dh);
         } catch(RuntimeException e) {
             throw new IllegalArgumentException("Failed marshalling:"+(evt.getResult() != null ? showDebuggingInfo(evt.getResult()) : "null"), e);
         }
@@ -358,7 +364,7 @@ public class SaveService {
      */
     private static String showDebuggingInfo(SampleResult result) {
         try {
-            return "class:"+result.getClass()+",content:"+ToStringBuilder.reflectionToString(result);
+            return "class:"+result.getClass()+",content:"+result.toString();
         } catch(Exception e) {
             return "Exception occurred creating debug from event, message:"+e.getMessage();
         }
@@ -411,7 +417,7 @@ public class SaveService {
         dh.put(RESULTCOLLECTOR_HELPER_OBJECT, resultCollectorHelper); // Allow TestResultWrapper to feed back the samples
         // This is effectively the same as saver.fromXML(InputStream) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
-        JTLSAVER.unmarshal(new XppDriver().createReader(reader), null, dh);
+        JTLSAVER.unmarshal(STAXDRIVER_SKIP_HEADER.createReader(reader), null, dh);
         inputStreamReader.close();
     }
 
@@ -461,6 +467,7 @@ public class SaveService {
         }
 
     }
+
     private static InputStreamReader getInputStreamReader(InputStream inStream) {
         // Check if we have a encoding to use from properties
         Charset charset = getFileEncodingCharset();
@@ -481,7 +488,7 @@ public class SaveService {
      */
     // Used by ResultCollector when creating output files
     public static String getFileEncoding(String dflt){
-        if(fileEncoding != null && fileEncoding.length() > 0) {
+        if (StringUtilities.isNotEmpty(fileEncoding)) {
             return fileEncoding;
         }
         else {
@@ -492,7 +499,7 @@ public class SaveService {
     // @NotNull
     private static Charset getFileEncodingCharset() {
         // Check if we have a encoding to use from properties
-        if(fileEncoding != null && fileEncoding.length() > 0) {
+        if (StringUtilities.isNotEmpty(fileEncoding)) {
             return Charset.forName(fileEncoding);
         }
         else {
@@ -501,16 +508,6 @@ public class SaveService {
             log.info("fileEncoding not defined - using JRE default");
             return Charset.defaultCharset();
         }
-    }
-
-    private static void writeXmlHeader(OutputStreamWriter writer) throws IOException {
-        // Write XML header if we have the charset to use for encoding
-        Charset charset = getFileEncodingCharset();
-        // We do not use getEncoding method of Writer, since that returns
-        // the historical name
-        String header = XML_HEADER.replaceAll("<ph>", charset.name());
-        writer.write(header);
-        writer.write('\n');
     }
 
 //  Normal output

@@ -92,8 +92,8 @@ public class JSONManager {
         if (obj instanceof Map) {
             return new JSONObject((Map<String, ?>) obj).toJSONString();
         }
-        if (obj instanceof JSONArray) {
-            return ((JSONArray)obj).toJSONString();
+        if (obj instanceof JSONArray objects) {
+            return objects.toJSONString();
         }
         return obj == null ? null : obj.toString();
     }

@@ -70,13 +70,6 @@ public class StatusSeriesSelector extends AbstractSeriesSelector {
         this.successLabel = successLabel;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.SampleSelector#select(org.apache
-     * .jmeter.report.csv.core.Sample)
-     */
     @Override
     public Iterable<String> select(Sample sample) {
         String label = sample.getSuccess() ? successLabel : failureLabel;

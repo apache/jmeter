@@ -23,6 +23,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,12 +34,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +97,7 @@ public class StringToFile extends AbstractFunction {
         Charset charset = StandardCharsets.UTF_8;
         if (values.length == 4) {
             String charsetParamValue = ((CompoundVariable) values[3]).execute();
-            if (StringUtils.isNotEmpty(charsetParamValue)) {
+            if (StringUtilities.isNotEmpty(charsetParamValue)) {
                 charset = Charset.forName(charsetParamValue);
             }
         }
@@ -112,7 +113,13 @@ public class StringToFile extends AbstractFunction {
             File fileParent = file.getParentFile();
             if (fileParent == null || (fileParent.exists() && fileParent.isDirectory() && fileParent.canWrite())) {
                 try {
-                    FileUtils.writeStringToFile(file, content, charset, append);
+                    Files.writeString(
+                            file.toPath(),
+                            content,
+                            charset,
+                            StandardOpenOption.CREATE,
+                            append ? StandardOpenOption.APPEND : StandardOpenOption.TRUNCATE_EXISTING
+                    );
                 } catch (IllegalArgumentException e) {
                     log.error("The file {} can't be written to", file, e);
                     return false;

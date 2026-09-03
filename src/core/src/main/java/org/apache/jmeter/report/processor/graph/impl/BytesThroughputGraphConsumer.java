@@ -41,13 +41,6 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
     private static final String RECEIVED_BYTES_SERIES_LABEL = "Bytes received per second";
     private static final String SENT_BYTES_SERIES_LABEL = "Bytes sent per second";
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #createTimeStampKeysSelector()
-     */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
@@ -55,12 +48,6 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
         return keysSelector;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         AbstractSeriesSelector seriesSelector = new AbstractSeriesSelector() {

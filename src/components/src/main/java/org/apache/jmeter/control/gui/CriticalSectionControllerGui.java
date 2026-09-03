@@ -90,8 +90,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (element instanceof CriticalSectionController) {
-            CriticalSectionController controller = (CriticalSectionController) element;
+        if (element instanceof CriticalSectionController controller) {
             tfLockName.setText(controller.getLockName());
         }
 
@@ -113,8 +112,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
     @Override
     public void modifyTestElement(TestElement controller) {
         configureTestElement(controller);
-        if (controller instanceof CriticalSectionController) {
-            CriticalSectionController csController = (CriticalSectionController) controller;
+        if (controller instanceof CriticalSectionController csController) {
             csController.setLockName(tfLockName.getText());
         }
     }

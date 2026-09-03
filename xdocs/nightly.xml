@@ -46,7 +46,7 @@
     <p>These are located at:
     <ul>
     <li><a href="https://ci-builds.apache.org/job/JMeter/job/JMeter-trunk/lastSuccessfulBuild/artifact/src/dist/build/distributions/">Last Successful Jenkins build for JMeter-trunk</a></li>
-    <li><a href="http://ci.apache.org/projects/jmeter/nightlies/">Buildbot nightly builds for JMeter-trunk</a></li>
+    <li><a href="https://nightlies.apache.org/jmeter/nightlies/">Buildbot nightly builds for JMeter-trunk</a></li>
     <li><a href="https://repository.apache.org/content/repositories/snapshots/org/apache/jmeter/">Maven Snapshots (Buildbot nightly builds)</a></li>
     </ul>
     </p>

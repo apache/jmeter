@@ -74,21 +74,14 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         }
 
         public boolean evaluate(long actual, long expected) {
-            switch (this) {
-                case EQUAL:
-                    return actual == expected;
-                case NOTEQUAL:
-                    return actual != expected;
-                case GREATERTHAN:
-                    return actual > expected;
-                case LESSTHAN:
-                    return actual < expected;
-                case GREATERTHANEQUAL:
-                    return actual >= expected;
-                case LESSTHANEQUAL:
-                    return actual <= expected;
-            }
-            throw new IllegalStateException("Unexpected value: " + this);
+            return switch (this) {
+                case EQUAL -> actual == expected;
+                case NOTEQUAL -> actual != expected;
+                case GREATERTHAN -> actual > expected;
+                case LESSTHAN -> actual < expected;
+                case GREATERTHANEQUAL -> actual >= expected;
+                case LESSTHANEQUAL -> actual <= expected;
+            };
         }
     }
 
@@ -166,7 +159,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         }
         // is the Sample the correct size?
         final String msg = compareSize(resultSize);
-        if (msg.length() > 0) {
+        if (!msg.isEmpty()) {
             result.setFailure(true);
             Object[] arguments = {resultSize, msg, Long.valueOf(getAllowedSize()) };
             String message = MessageFormat.format(

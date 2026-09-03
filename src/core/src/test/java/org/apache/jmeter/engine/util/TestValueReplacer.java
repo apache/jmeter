@@ -127,7 +127,7 @@ public class TestValueReplacer extends JMeterTestCase {
         assertEquals("toto@${domainMatcher}", replaceWord("(005)", "toto@005"));
     }
 
-    private String replaceWord(String matchRegex, String testData) throws Exception {
+    private static String replaceWord(String matchRegex, String testData) throws Exception {
         TestPlan plan = new TestPlan();
         plan.addParameter("domainMatcher", matchRegex);
         ValueReplacer replacer = new ValueReplacer(plan);
@@ -160,7 +160,7 @@ public class TestValueReplacer extends JMeterTestCase {
         assertEquals(input, element.getPropertyAsString("domain"));
     }
 
-    /*
+    /**
      * This test should be compared with the one above.
      * Here, the string contains a valid variable reference, so all
      * backslashes are also processed.

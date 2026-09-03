@@ -67,9 +67,9 @@ public class UrlConfigTest extends JMeterTestCase {
     public void testOverRide() {
         JMeterProperty jmp = partialConfig.getProperty(HTTPSamplerBase.DOMAIN);
         assertInstanceOf(NullProperty.class, jmp);
-        assertEquals(jmp, new NullProperty(HTTPSamplerBase.DOMAIN));
+        assertEquals(new NullProperty(HTTPSamplerBase.DOMAIN), jmp);
         partialConfig.addTestElement(defaultConfig);
-        assertEquals(partialConfig.getPropertyAsString(HTTPSamplerBase.DOMAIN), "www.xerox.com");
-        assertEquals(partialConfig.getPropertyAsString(HTTPSamplerBase.PATH), "main.jsp");
+        assertEquals("www.xerox.com", partialConfig.getPropertyAsString(HTTPSamplerBase.DOMAIN));
+        assertEquals("main.jsp", partialConfig.getPropertyAsString(HTTPSamplerBase.PATH));
     }
 }

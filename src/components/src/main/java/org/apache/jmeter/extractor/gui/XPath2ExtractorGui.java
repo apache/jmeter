@@ -89,8 +89,7 @@ public class XPath2ExtractorGui extends AbstractPostProcessorGui{ // NOSONAR Ign
     @Override
     public void modifyTestElement(TestElement extractor) {
         super.configureTestElement(extractor);
-        if (extractor instanceof XPath2Extractor) {
-            XPath2Extractor xpath = (XPath2Extractor) extractor;
+        if (extractor instanceof XPath2Extractor xpath) {
             saveScopeSettings(xpath);
             xpath.setDefaultValue(defaultField.getText());
             xpath.setRefName(refNameField.getText());

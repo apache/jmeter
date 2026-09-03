@@ -45,13 +45,6 @@ public class TimeRateAggregatorFactory extends AbstractAggregatorFactory {
         this.granularity = granularity;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.core.AbstractAggregatorFactory#createAggregator
-     * ()
-     */
     @Override
     protected Aggregator createAggregator() {
         TimeRateAggregator aggregator = new TimeRateAggregator();

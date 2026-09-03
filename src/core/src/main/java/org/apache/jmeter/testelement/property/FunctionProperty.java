@@ -54,8 +54,8 @@ public class FunctionProperty extends AbstractProperty {
 
     @Override
     public void setObjectValue(Object v) {
-        if (v instanceof CompoundVariable && !isRunningVersion()) {
-            function = (CompoundVariable) v;
+        if (v instanceof CompoundVariable compoundVariable && !isRunningVersion()) {
+            function = compoundVariable;
         } else {
             overrideValue = v.toString();
         }

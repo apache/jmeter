@@ -153,7 +153,6 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertTrue(a.equals(b), "Objects should be equal");
         assertTrue(b.equals(a), "Objects should be equal");
         assertTrue(a.strictDateFormatter().equals(b.strictDateFormatter()), "Objects should be equal");
-        assertTrue(a.threadSafeLenientFormatter().equals(b.threadSafeLenientFormatter()), "Objects should be equal");
     }
 
     @Test

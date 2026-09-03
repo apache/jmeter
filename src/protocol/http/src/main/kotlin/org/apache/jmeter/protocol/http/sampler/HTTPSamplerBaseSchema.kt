@@ -79,7 +79,7 @@ public abstract class HTTPSamplerBaseSchema : TestElementSchema() {
     public val path: StringPropertyDescriptor<HTTPSamplerBaseSchema>
         by string("HTTPSampler.path")
 
-    public val proxy: HTTPSamplerProxyParamsSchema<HTTPSamplerBaseSchema> by HTTPSamplerProxyParamsSchema()
+    public val proxy: HTTPSamplerProxyParamsSchema<HTTPSamplerBaseSchema> by HTTPSamplerProxyParamsSchema<HTTPSamplerBaseSchema>()
 
     public val contentEncoding: StringPropertyDescriptor<HTTPSamplerBaseSchema>
         by string("HTTPSampler.contentEncoding", default = StandardCharsets.UTF_8.name())

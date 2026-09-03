@@ -40,9 +40,6 @@ public class Duplicate extends AbstractAction {
         commands.add(ActionNames.DUPLICATE);
     }
 
-    /*
-     * @see org.apache.jmeter.gui.action.Command#getActionNames()
-     */
     @Override
     public Set<String> getActionNames() {
         return commands;

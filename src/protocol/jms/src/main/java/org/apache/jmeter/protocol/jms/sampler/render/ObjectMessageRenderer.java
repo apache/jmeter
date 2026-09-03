@@ -91,7 +91,7 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
     /** Try to determine encoding based on XML prolog, if none <code>null</code> is returned. **/
     protected String findEncoding(String filename) {
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        factory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+        factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
         try (FileInputStream input = new FileInputStream(filename)) {
             XMLStreamReader reader = factory.createXMLStreamReader(input);
             return reader.getEncoding();

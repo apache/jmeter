@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.config;
 import java.io.Serializable;
 import java.util.regex.Matcher;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HeaderElement;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
@@ -30,6 +29,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
@@ -113,7 +113,7 @@ public class MultipartUrlConfig implements Serializable {
         Arguments myArgs = getArguments();
         // The value is not encoded
         HTTPArgument arg = new HTTPArgument(name, value, false);
-        if(!StringUtils.isEmpty(contentType)) {
+        if (StringUtilities.isNotEmpty(contentType)) {
             int indexOfSemiColon = contentType.indexOf(';');
             if(indexOfSemiColon > 0) {
                 arg.setContentType(contentType.substring(0, indexOfSemiColon));
@@ -157,7 +157,7 @@ public class MultipartUrlConfig implements Serializable {
                         path = getParameterValue(element, "filename", null);
                     }
                 }
-                if (path != null && !path.isEmpty()) {
+                if (StringUtilities.isNotEmpty(path)) {
                     // Set the values retrieved for the file upload
                     files.addHTTPFileArg(path, name, contentType);
                 } else {

@@ -338,7 +338,7 @@ public class ResponseAssertionTest {
             thread.start();
         }
         latch.await();
-        assertEquals(failed.get(), 0);
+        assertEquals(0, failed.get());
     }
 
     class TestThread extends Thread {

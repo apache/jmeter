@@ -39,38 +39,18 @@ public abstract class AbstractAggregatorFactory implements AggregatorFactory {
 
     protected abstract Aggregator createAggregator();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregatorFactory#
-     * createValueAggregator(double)
-     */
     @Override
     public final Aggregator createValueAggregator() {
         return createAggregator();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.core.GraphAggregatorFactory#createKeyAggregator
-     * ()
-     */
     @Override
     public final Aggregator createKeyAggregator() {
         return createAggregator();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.core.GraphAggregatorFactory#
-     * createAggregatedKeyValueAggregator()
-     */
     @Override
     public final Aggregator createAggregatedKeyValueAggregator() {
         return createAggregator();
     }
-
 }

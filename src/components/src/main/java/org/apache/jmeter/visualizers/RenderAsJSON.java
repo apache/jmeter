@@ -19,7 +19,6 @@ package org.apache.jmeter.visualizers;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -70,11 +69,11 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
         try {
             Object o = new JSONParser(JSONParser.DEFAULT_PERMISSIVE_MODE)
                     .parse(json);
-            if (o instanceof JSONObject) {
-                return ((JSONObject) o)
+            if (o instanceof JSONObject jsonObject) {
+                return jsonObject
                         .toJSONString(new PrettyJSONStyle(tabSeparator));
-            } else if (o instanceof JSONArray) {
-                return ((JSONArray) o)
+            } else if (o instanceof JSONArray objects) {
+                return objects
                         .toJSONString(new PrettyJSONStyle(tabSeparator));
             }
         } catch (ParseException e) {
@@ -91,15 +90,17 @@ public class RenderAsJSON extends SamplerResultTab implements ResultRenderer {
 
     private static class PrettyJSONStyle extends JSONStyle {
         private int level = 0;
-        private String indentString = TAB_SEPARATOR;
+        private final String indentString;
 
-        public PrettyJSONStyle(String indentString) {
+        private PrettyJSONStyle(String indentString) {
             this.indentString = indentString;
         }
 
         private void indent(Appendable out) throws IOException {
             out.append('\n');
-            out.append(StringUtils.repeat(indentString, level));
+            for (int i = 0; i < level; i++) {
+                 out.append(indentString);
+            }
         }
 
         @Override

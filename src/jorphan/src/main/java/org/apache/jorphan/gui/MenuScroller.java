@@ -609,7 +609,7 @@ public class MenuScroller {
 
         private static final long serialVersionUID = 1;
 
-        public MenuScrollTimer(final int increment, int interval) {
+        private MenuScrollTimer(final int increment, int interval) {
             // Replacing with lambda causes
             // ClassFormatError: Illegal field name "org.apache.jorphan.gui.MenuScroller$this"
             // in class org/apache/jorphan/gui/MenuScroller$MenuScrollTimer
@@ -631,14 +631,14 @@ public class MenuScroller {
 
         private final MenuScrollTimer timer;
 
-        public MenuScrollItem(MenuIcon icon, int increment) {
+        private MenuScrollItem(MenuIcon icon, int increment) {
             setIcon(icon);
             setDisabledIcon(icon);
             timer = new MenuScrollTimer(increment, interval);
             addChangeListener(this);
         }
 
-        public void setInterval(int interval) {
+        private void setInterval(int interval) {
             timer.setDelay(interval);
         }
 

@@ -180,8 +180,8 @@ public class Sample implements Serializable, Comparable<Sample> {
 
     @Override
     public boolean equals(Object o){
-        return (o instanceof Sample) &&
-                (this.compareTo((Sample) o) == 0);
+        return (o instanceof Sample sample) &&
+                (this.compareTo(sample) == 0);
     }
 
     @Override

@@ -66,7 +66,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
                 // Don't save empty comments - except for the TestPlan (to maintain compatibility)
                    if (!(
                            TestElement.COMMENTS.equals(jmp.getName())
-                           && jmp.getStringValue().length()==0
+                           && jmp.getStringValue().isEmpty()
                            && !el.getClass().equals(TestPlan.class)
                        ))
                    {

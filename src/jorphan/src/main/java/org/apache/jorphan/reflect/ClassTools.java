@@ -21,7 +21,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.jorphan.util.JMeterException;
 
 /**
@@ -40,7 +39,7 @@ public class ClassTools {
     public static Object construct(String className) throws JMeterException {
         Object instance = null;
         try {
-            instance = ClassUtils.getClass(className).getDeclaredConstructor().newInstance();
+            instance = Class.forName(className).getDeclaredConstructor().newInstance();
         } catch (IllegalArgumentException | ReflectiveOperationException | SecurityException e) {
             throw new JMeterException(e);
         }
@@ -58,7 +57,7 @@ public class ClassTools {
     {
         Object instance = null;
         try {
-            Class<?> clazz = ClassUtils.getClass(className);
+            Class<?> clazz = Class.forName(className);
             Constructor<?> constructor = clazz.getConstructor(Integer.TYPE);
             instance = constructor.newInstance(parameter);
         } catch (ClassNotFoundException | InvocationTargetException
@@ -112,7 +111,7 @@ public class ClassTools {
     {
         Method m;
         try {
-            m = ClassUtils.getPublicMethod(instance.getClass(), methodName, new Class [] {});
+            m = instance.getClass().getMethod(methodName);
             m.invoke(instance, (Object [])null);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new JMeterException(e);

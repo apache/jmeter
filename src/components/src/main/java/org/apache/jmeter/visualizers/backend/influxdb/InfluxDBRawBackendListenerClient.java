@@ -21,11 +21,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.backend.BackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
+import org.apache.jorphan.util.StringUtilities;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,12 +135,32 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
         boolean isError = sampleResult.getErrorCount() != 0;
         String status = isError ? TAG_KO : TAG_OK;
         // remove surrounding quotes and spaces from sample label
-        String label = StringUtils.strip(sampleResult.getSampleLabel(), "\" ");
+        String label = StringUtilities.strip(sampleResult.getSampleLabel(), "\" ");
         String transaction = AbstractInfluxdbMetricsSender.tagToStringValue(label);
-        String threadName = StringUtils.deleteWhitespace(sampleResult.getThreadName());
+        String threadName = deleteWhitespace(sampleResult.getThreadName());
         return "status=" + status
                 + ",transaction=" + transaction
                 + ",threadName=" + threadName;
+    }
+
+    /**
+     * Deletes all whitespace from a string.
+     *
+     * @param str the string to remove whitespace from, may be null
+     * @return the string without whitespace, or null if input was null
+     */
+    private static String deleteWhitespace(String str) {
+        if (str == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder(str.length());
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (!Character.isWhitespace(c)) {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 
     @VisibleForTesting

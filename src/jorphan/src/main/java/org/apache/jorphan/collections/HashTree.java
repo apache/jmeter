@@ -921,13 +921,12 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
         if (!(o instanceof HashTree hashTree)) {
             return false;
         }
-        HashTree oo = (HashTree) o;
-        if (oo.size() != this.size()) {
+        if (hashTree.size() != this.size()) {
             return false;
         }
         // data.equals(oo.data); uses reference identity for keys
         for (Entry<Object, HashTree> entry : data.entrySet()) {
-            HashTree otherValue = oo.data.get(entry.getKey());
+            HashTree otherValue = hashTree.data.get(entry.getKey());
             if (!entry.getValue().equals(otherValue)) {
                 return false;
             }
@@ -1057,11 +1056,11 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
         private HashTree result;
 
-        public TreeSearcher(Object t) {
+        private TreeSearcher(Object t) {
             target = t;
         }
 
-        public HashTree getResult() {
+        private HashTree getResult() {
             return result;
         }
 

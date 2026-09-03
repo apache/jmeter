@@ -244,7 +244,7 @@ Unchecked will mean no java-object attributes will be returned.
 <i>(Optional)</i> Dereference aliases. Checked will mean it will follow references, Unchecked says it will not.
 </li>
 <li>
-<i>(Optional)</i> Parse the search results?. Checked will mean it gets all results in response data, Unchecked says it will not.
+<i>(Optional)</i> Parse the search results. Checked will mean it gets all results in response data, Unchecked says it will not.
 </li>
 </ol>
 </p>

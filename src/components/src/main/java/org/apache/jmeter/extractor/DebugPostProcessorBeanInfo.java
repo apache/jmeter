@@ -29,28 +29,28 @@ public class DebugPostProcessorBeanInfo extends BeanInfoSupport {
         PropertyDescriptor p;
 
         p = property("displaySamplerProperties");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_OTHER, true);
+        p.setValue(DEFAULT, true);
 
         p = property("displayJMeterVariables");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_OTHER, true);
+        p.setValue(DEFAULT, true);
 
         p = property("displayJMeterProperties");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_OTHER, true);
+        p.setValue(DEFAULT, false);
 
         p = property("displaySystemProperties");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(NOT_EXPRESSION, true);
+        p.setValue(NOT_OTHER, true);
+        p.setValue(DEFAULT, false);
     }
 
 }

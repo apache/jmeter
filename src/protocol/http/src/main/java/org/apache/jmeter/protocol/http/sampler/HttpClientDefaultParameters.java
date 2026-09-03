@@ -45,8 +45,8 @@ public class HttpClientDefaultParameters {
 
     // Helper class (callback) for applying parameter definitions
     private static abstract class GenericHttpParams {
-        public abstract void setParameter(String name, Object value);
-        public abstract void setVersion(String name, String value) throws Exception;
+        abstract void setParameter(String name, Object value);
+        abstract void setVersion(String name, String value) throws Exception;
     }
 
     /**

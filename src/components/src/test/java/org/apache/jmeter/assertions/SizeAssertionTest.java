@@ -37,7 +37,11 @@ public class SizeAssertionTest extends JMeterTestCase {
     private SampleResult sample0;
     private SampleResult sample1;
     private AssertionResult result;
-    private final String data1 = "response Data\n" + "line 2\n\nEOF";
+    private final String data1 = """
+            response Data
+            line 2
+
+            EOF""";
     private final int data1Len = data1.length();
 
     @BeforeEach

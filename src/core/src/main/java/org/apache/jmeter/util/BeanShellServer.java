@@ -84,7 +84,7 @@ public class BeanShellServer implements Runnable {
             setObj.invoke(instance, "t", this );//$NON-NLS-1$
             setInt.invoke(instance, "portnum", serverport);//$NON-NLS-1$
 
-            if (serverfile.length() > 0) {
+            if (!serverfile.isEmpty()) {
                 try {
                     source.invoke(instance, serverfile);
                 } catch (InvocationTargetException ite) {
@@ -93,8 +93,8 @@ public class BeanShellServer implements Runnable {
                         log.warn("Could not source, {}. {}", serverfile,
                                 (cause != null) ? cause.toString() : ite.toString());
                     }
-                    if (cause instanceof Error) {
-                        throw (Error) cause;
+                    if (cause instanceof Error error) {
+                        throw error;
                     }
                 }
             }

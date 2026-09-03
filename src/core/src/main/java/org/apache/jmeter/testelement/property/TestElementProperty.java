@@ -72,8 +72,8 @@ public class TestElementProperty extends MultiProperty {
      */
     @Override
     public void setObjectValue(Object v) {
-        if (v instanceof TestElement) {
-            value = (TestElement) v;
+        if (v instanceof TestElement testElement) {
+            value = testElement;
         }
     }
 

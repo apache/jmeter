@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.xml.utils.PrefixResolver;
 import org.apache.xml.utils.PrefixResolverDefault;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class PropertiesBasedPrefixResolver extends PrefixResolverDefault {
     private static final Map<String, String> NAMESPACE_MAP = new HashMap<>();
     static {
         String pathToNamespaceConfig = JMeterUtils.getPropDefault(XPATH_NAMESPACE_CONFIG, "");
-        if(!StringUtils.isEmpty(pathToNamespaceConfig)) {
+        if (StringUtilities.isNotEmpty(pathToNamespaceConfig)) {
             Properties properties = new Properties();
             InputStream inputStream = null;
             try {

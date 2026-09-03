@@ -122,7 +122,7 @@ public class IfController extends GenericController implements Serializable, Thr
      * Initialization On Demand Holder pattern
      */
     private static class LazyHolder {
-        public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
+        private static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
 
     /**
@@ -189,17 +189,11 @@ public class IfController extends GenericController implements Serializable, Thr
      */
     private static boolean computeResultFromString(
             String condition, String resultStr) throws Exception {
-        boolean result;
-        switch(resultStr) {
-            case "false":
-                result = false;
-                break;
-            case "true":
-                result = true;
-                break;
-            default:
-                throw new Exception(" BAD CONDITION :: " + condition + " :: expected true or false");
-        }
+        boolean result = switch (resultStr) {
+            case "false" -> false;
+            case "true" -> true;
+            default -> throw new Exception(" BAD CONDITION :: " + condition + " :: expected true or false");
+        };
         log.debug("    >> evaluate Condition -  [{}] results is  [{}]", condition, result);
         return result;
     }

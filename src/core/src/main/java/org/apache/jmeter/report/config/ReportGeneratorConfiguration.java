@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +99,7 @@ public class ReportGeneratorConfiguration {
     // Required graph properties
     // Exclude controllers
     public static final String GRAPH_KEY_EXCLUDE_CONTROLLERS = "exclude_controllers";
-    public static final Boolean GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT = Boolean.FALSE;
+    public static final Boolean GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT = false;
 
     // Title
     public static final String GRAPH_KEY_TITLE = "title";
@@ -108,7 +108,7 @@ public class ReportGeneratorConfiguration {
     // Required exporter properties
     // Filters only sample series ?
     public static final String EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES = "filters_only_sample_series";
-    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = Boolean.TRUE;
+    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = true;
 
     // Series filter
     public static final String EXPORTER_KEY_SERIES_FILTER = "series_filter";
@@ -116,7 +116,7 @@ public class ReportGeneratorConfiguration {
 
     // Show controllers only
     public static final String EXPORTER_KEY_SHOW_CONTROLLERS_ONLY = "show_controllers_only";
-    public static final Boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = Boolean.FALSE;
+    public static final Boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = false;
 
     // Optional exporter properties
     public static final String EXPORTER_KEY_GRAPH_EXTRA_OPTIONS = "graph_options";
@@ -645,7 +645,7 @@ public class ReportGeneratorConfiguration {
         final boolean ignoreTCFromTop5ErrorsBySampler = getRequiredProperty(
                 props,
                 REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER,
-                Boolean.TRUE,
+                true,
                 Boolean.class);
         configuration.setIgnoreTCFromTop5ErrorsBySampler(ignoreTCFromTop5ErrorsBySampler);
 
@@ -666,13 +666,13 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_END_DATE, String.class);
 
         String rangeDateFormat = getOptionalProperty(props, REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT, String.class);
-        if (StringUtils.isEmpty(rangeDateFormat)) {
+        if (StringUtilities.isEmpty(rangeDateFormat)) {
             rangeDateFormat = RANGE_DATE_FORMAT_DEFAULT;
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat(rangeDateFormat, Locale.ENGLISH);
 
         try {
-            if(!StringUtils.isEmpty(startDateValue)) {
+            if (StringUtilities.isNotEmpty(startDateValue)) {
                 reportStartDate = dateFormat.parse(startDateValue);
                 configuration.setStartDate(reportStartDate);
             }
@@ -681,7 +681,7 @@ public class ReportGeneratorConfiguration {
                     startDateValue, rangeDateFormat, e);
         }
         try {
-            if(!StringUtils.isEmpty(endDateValue)) {
+            if (StringUtilities.isNotEmpty(endDateValue)) {
                 reportEndDate = dateFormat.parse(endDateValue);
                 configuration.setEndDate(reportEndDate);
             }
@@ -728,8 +728,7 @@ public class ReportGeneratorConfiguration {
      */
     public static Map<String, Long[]> getApdexPerTransactionParts(String apdexPerTransaction) {
         Map <String, Long[]> specificApdexes = new HashMap<>();
-        if (StringUtils.isEmpty(apdexPerTransaction) ||
-                apdexPerTransaction.trim().length() == 0) {
+        if (StringUtilities.isBlank(apdexPerTransaction)) {
             log.info("apdex_per_transaction is empty, not APDEX per transaction customization");
         } else {
             // data looks like : sample(\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000
@@ -771,7 +770,7 @@ public class ReportGeneratorConfiguration {
      * @return the filteredSamplesPattern
      */
     public Pattern getFilteredSamplesPattern() {
-        if(StringUtils.isEmpty(sampleFilter)) {
+        if (StringUtilities.isEmpty(sampleFilter)) {
             return null;
         }
         if(filteredSamplesPattern == null) {

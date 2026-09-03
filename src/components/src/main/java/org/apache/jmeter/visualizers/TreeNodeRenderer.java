@@ -57,9 +57,9 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
             boolean leaf, int row, boolean focus) {
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
         Object obj = ((DefaultMutableTreeNode) value).getUserObject();
-        if(obj instanceof SampleResult)
+        if(obj instanceof SampleResult sampleResult)
         {
-            if (!((SampleResult) obj).isSuccessful()) {
+            if (!sampleResult.isSuccessful()) {
                 this.setForeground(UIManager.getColor(JMeterUIDefaults.LABEL_ERROR_FOREGROUND));
                 this.setIcon(imageFailure);
             } else {

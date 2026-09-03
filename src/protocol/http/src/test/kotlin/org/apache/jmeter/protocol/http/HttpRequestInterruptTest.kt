@@ -65,7 +65,7 @@ class HttpRequestInterruptTest : JMeterTestCase() {
         }
 
         assertEquals(5, events.size) { "5 events expected, got $events" }
-        if (events.any { it.result.isSuccessful || it.result.isResponseCodeOK || it.result.time < 500 }) {
+        if (events.any { it.result.isSuccessful || it.result.isResponseCodeOK || (it.result.time + it.result.connectTime) < 500 }) {
             fail(
                 "All events should be failing, and they should take more than 500ms since the requests " +
                     "should have been cancelled after 1sec. Results are: $events"

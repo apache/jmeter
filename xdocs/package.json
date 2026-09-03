@@ -1,0 +1,13 @@
+{
+  "name": "jmeter-docs",
+  "version": "1.0.0",
+  "description": "Web fonts for Apache JMeter documentation",
+  "private": true,
+  "scripts": {
+    "convert:properties": "node tools/convert-properties.js"
+  },
+  "dependencies": {
+    "@fontsource/merriweather": "^5.1.0",
+    "@fortawesome/fontawesome-free": "^7.0.0"
+  }
+}

@@ -26,6 +26,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Class for setting the necessary headers for a PUT request, and sending the
@@ -50,7 +51,7 @@ public class PutWriter extends PostWriter {
         // Check if the header manager had a content type header
         // This allows the user to specify their own content-type for a PUT request
         String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
-        boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0;
+        boolean hasContentTypeHeader = StringUtilities.isNotEmpty(contentTypeHeader);
 
         HTTPFileArg[] files = sampler.getHTTPFiles();
 
@@ -61,7 +62,7 @@ public class PutWriter extends PostWriter {
             hasPutBody = true;
             if(!hasContentTypeHeader) {
                 // Allow the mimetype of the file to control the content type
-                if(file.getMimeType().length() > 0) {
+                if(!file.getMimeType().isEmpty()) {
                     connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                 }
             }
@@ -75,7 +76,7 @@ public class PutWriter extends PostWriter {
             // Allow the mimetype of the file to control the content type
             // This is not obvious in GUI if you are not uploading any files,
             // but just sending the content of nameless parameters
-            if(!hasContentTypeHeader && files.length == 1 && files[0].getMimeType().length() > 0) {
+            if(!hasContentTypeHeader && files.length == 1 && !files[0].getMimeType().isEmpty()) {
                 connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, files[0].getMimeType());
             }
 
@@ -84,7 +85,7 @@ public class PutWriter extends PostWriter {
 
             // Just append all the parameter values, and use that as the put body
             StringBuilder putBodyBuffer = new StringBuilder();
-             for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+             for (JMeterProperty jMeterProperty : sampler.getArguments().getEnabledArguments()) {
                  HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                  putBodyBuffer.append(arg.getEncodedValue(contentEncoding));
              }

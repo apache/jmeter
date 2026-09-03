@@ -26,8 +26,7 @@ import javax.swing.JTree;
 import javax.swing.border.Border;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Class to render the test tree - sets the enabled/disabled versions of the icons
@@ -37,7 +36,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
 
     private static final int DEFAULT_LENGTH = 15;
 
-    private static final String BLANK = StringUtils.repeat(' ', DEFAULT_LENGTH);
+    private static final String BLANK = " ".repeat(DEFAULT_LENGTH);
 
     private static final Border RED_BORDER = BorderFactory.createLineBorder(Color.red);
     private static final Border BLUE_BORDER = BorderFactory.createLineBorder(Color.blue);
@@ -49,7 +48,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
             boolean leaf, int row, boolean p_hasFocus) {
         JMeterTreeNode node = (JMeterTreeNode) value;
         super.getTreeCellRendererComponent(tree,
-                JOrphanUtils.isBlank(node.getName()) ? BLANK : node.getName(),
+                StringUtilities.isBlank(node.getName()) ? BLANK : node.getName(),
                         sel, expanded, leaf, row, p_hasFocus);
         boolean enabled = node.isEnabled();
         ImageIcon ic = node.getIcon(enabled);

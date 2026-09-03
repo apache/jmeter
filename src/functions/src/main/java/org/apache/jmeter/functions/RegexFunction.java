@@ -30,6 +30,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -149,7 +150,7 @@ public class RegexFunction extends AbstractFunction {
             textToMatch = previousResult.getResponseDataAsString();
         }
 
-        if (textToMatch == null || textToMatch.isEmpty()) {
+        if (StringUtilities.isEmpty(textToMatch)) {
             return defaultValue;
         }
 

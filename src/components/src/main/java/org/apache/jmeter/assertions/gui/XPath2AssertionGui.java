@@ -101,8 +101,7 @@ public class XPath2AssertionGui extends AbstractAssertionGui { // $NOSONAR
     @Override
     public void modifyTestElement(TestElement el) {
         super.configureTestElement(el);
-        if (el instanceof XPath2Assertion) {
-            XPath2Assertion assertion = (XPath2Assertion) el;
+        if (el instanceof XPath2Assertion assertion) {
             saveScopeSettings(assertion);
             assertion.setNegated(xpath.isNegated());
             assertion.setXPathString(xpath.getXPath());

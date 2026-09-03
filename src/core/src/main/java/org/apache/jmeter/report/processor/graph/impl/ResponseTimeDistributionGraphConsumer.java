@@ -57,12 +57,6 @@ public class ResponseTimeDistributionGraphConsumer extends
         this.granularity = granularity;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createKeysSelector()
-     */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
         return sample -> {
@@ -71,12 +65,6 @@ public class ResponseTimeDistributionGraphConsumer extends
         };
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         return Collections.singletonMap(
@@ -87,12 +75,6 @@ public class ResponseTimeDistributionGraphConsumer extends
                         new CountValueSelector(false), false, false));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
-     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
-     */
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(

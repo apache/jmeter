@@ -86,8 +86,8 @@ Latency is set to the time it takes to login.
         <property name="Local File:" required="Yes, if uploading (*)">File to upload, or destination for downloads (defaults to remote file name).</property>
         <property name="Local File Contents:" required="Yes, if uploading (*)">Provides the contents for the upload, overrides the Local File property.</property>
         <property name="get(RETR) / put(STOR)" required="Yes">Whether to retrieve or upload a file.</property>
-        <property name="Use Binary mode?" required="Yes">Check this to use Binary mode (default ASCII)</property>
-        <property name="Save File in Response?" required="Yes, if downloading">
+        <property name="Use Binary mode" required="Yes">Check this to use Binary mode (default ASCII)</property>
+        <property name="Save File in Response" required="Yes, if downloading">
         Whether to store contents of retrieved file in response data.
         If the mode is ASCII, then the contents will be visible in the <complink name="View Results Tree"/>.
         </property>
@@ -343,7 +343,7 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </property>
-       <property name="Save response as MD5 hash?" required="No">
+       <property name="Save response as MD5 hash" required="No">
        If this is selected, then the response is not stored in the sample result.
        Instead, the 32 character MD5 hash of the data is calculated and stored instead.
        This is intended for testing large amounts of data.
@@ -911,7 +911,7 @@ This will not have any impact on existing Test plans.
          <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
          <property name="Return object" required="No">Whether the object will be returned (<code>true</code>) or not (<code>false</code>). Default=<code>false</code></property>
          <property name="Dereference aliases" required="No">If <code>true</code>, it will dereference aliases, if <code>false</code>, it will not follow them (default=<code>false</code>)</property>
-         <property name="Parse the search results?" required="No">If <code>true</code>, the search results will be added to the response data. If <code>false</code>, a marker - whether results where found or not - will be added to the response data.</property>
+         <property name="Parse the search results" required="No">If <code>true</code>, the search results will be added to the response data. If <code>false</code>, a marker - whether results where found or not - will be added to the response data.</property>
        </properties>
      </dd>
      <dt><b>Modification test</b></dt>
@@ -1414,7 +1414,7 @@ Currently the only way to changes these is via the <apilink href="org/apache/jme
     <dt><code>Standard charsets</code>:</dt><dd>The specified encoding (valid or not) is used for reading the file and processing variables</dd>
   </dl>
   </property>
-  <property name="Use non-persistent delivery mode?" required="No">
+  <property name="Use non-persistent delivery mode" required="No">
       Whether to set <code>DeliveryMode.NON_PERSISTENT</code> (defaults to <code>false</code>)
   </property>
   <property name="JMS Properties" required="No">
@@ -1518,7 +1518,7 @@ The following table shows some values which may be useful when configuring JMS:
   This is best suited to Topic subscriptions.</dd>
   </dl>
   </property>
-  <property name="Stop between samples?" required="Yes">
+  <property name="Stop between samples" required="Yes">
   If selected, then JMeter calls <code>Connection.stop()</code> at the end of each sample (and calls <code>start()</code> before each sample).
   This may be useful in some cases where multiple samples/threads have connections to the same queue.
   If not selected, JMeter calls <code>Connection.start()</code> at the start of the thread, and does not call <code>stop()</code> until the end of the thread.
@@ -1629,7 +1629,7 @@ The following table shows some values which may be useful when configuring JMS:
       The priority level of the message. There are ten priority levels from <code>0</code> (lowest) to <code>9</code> (highest).
       If you do not specify a priority level, the default level is <code>4</code>.
   </property>
-  <property name="Use non-persistent delivery mode?" required="Yes">
+  <property name="Use non-persistent delivery mode" required="Yes">
       Whether to set <code>DeliveryMode.NON_PERSISTENT</code>.
   </property>
   <property name="Content" required="No">
@@ -1877,7 +1877,7 @@ Note: If the message body is not empty, and there is at least one attached file,
 <property name="Attach files" required="">Files to be attached to the message.</property>
 <property name="Send .eml" required="">If set, the <code>.eml</code> file will be sent instead of the entries in the <code>Subject</code>, <code>Message</code>, and <code>Attach file(s)</code> fields</property>
 <property name="Calculate message size" required="">Calculates the message size and stores it in the sample result.</property>
-<property name="Enable debug logging?" required="">If set, then the "<code>mail.debug</code>" property is set to "<code>true</code>"</property>
+<property name="Enable debug logging" required="">If set, then the "<code>mail.debug</code>" property is set to "<code>true</code>"</property>
 </properties>
 </component>
 
@@ -1928,39 +1928,6 @@ If omitted, output is captured and returned as the response data.</property>
 If the timeout expires before the command finishes, JMeter will attempt to kill the OS process.
 </property>
 </properties>
-</component>
-
-<component name="MongoDB Script (DEPRECATED)" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
-<description><p>This sampler lets you send a Request to a MongoDB.</p>
-<p>Before using this you need to set up a
-<complink name="MongoDB Source Config"/> Configuration element
-</p>
-<note>This Element currently uses <code>com.mongodb.DB#eval</code> which takes a global write lock causing a performance impact on the database, see <a href="http://docs.mongodb.org/manual/reference/method/db.eval/"><code>db.eval()</code></a>.
-So it is better to avoid using this element for load testing and use JSR223+Groovy scripting using <apilink href="org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</apilink> instead.
-MongoDB Script is more suitable for functional testing or test setup (setup/teardown threads)</note>
-</description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-        <property name="MongoDB Source" required="Yes">
-        Name of the JMeter variable that the MongoDB connection is bound to.
-        This must agree with the '<code>MongoDB Source</code>' field of a MongoDB Source Config.
-        </property>
-        <property name="Database Name" required="Yes">Database Name, will be used in your script
-        </property>
-        <property name="Username" required="No">
-        </property>
-        <property name="Password" required="No">
-        </property>
-        <property name="Script" required="Yes">
-        Mongo script as it would be used in MongoDB shell
-        </property>
-</properties>
-
-<links>
-        <complink name="MongoDB Source Config"/>
-</links>
-<note>Ensure Variable Name is unique across Test Plan.</note>
 </component>
 
 <a href="#">^</a>
@@ -2267,7 +2234,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         By default, the condition is evaluated only once on initial entry, but you have the option to have it evaluated for every runnable element contained in the controller.
         </p>
         <p>
-        The best option (default one) is to check <code>Interpret Condition as Variable Expression?</code>, then in the condition field you have 2 options:
+        The best option (default one) is to check <code>Interpret Condition as Variable Expression</code>, then in the condition field you have 2 options:
         <ul>
             <li>Option 1: Use a variable that contains <code>true</code> or <code>false</code>
             <note>If you want to test if last sample was successful, you can use <code>${JMeterThread.last_sample_ok}</code>
@@ -2290,7 +2257,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         <source>"${myVar}" != "\${myVar}"</source>
         to test if a variable is defined and is not null.
         </note>
-        If you uncheck <code>Interpret Condition as Variable Expression?</code>, <code>If Controller</code> will internally use javascript to evaluate the condition
+        If you uncheck <code>Interpret Condition as Variable Expression</code>, <code>If Controller</code> will internally use javascript to evaluate the condition
         which has a performance penalty that can be very big and make your test less scalable.
         <figure width="819" height="265" image="if_controller_javascript.png">If Controller using javascript</figure>
     </description>
@@ -2298,7 +2265,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
     <property name="Condition (default JavaScript)" required="Yes">By default the condition is interpreted as <b>JavaScript</b> code that returns "<code>true</code>" or "<code>false</code>",
     but this can be overridden (see below)</property>
-    <property name="Interpret Condition as Variable Expression?" required="Yes">If this is selected, then the condition must be an expression that evaluates to "<code>true</code>" (case is ignored).
+    <property name="Interpret Condition as Variable Expression" required="Yes">If this is selected, then the condition must be an expression that evaluates to "<code>true</code>" (case is ignored).
     For example, <code>${FOUND}</code> or <code>${__jexl3(${VAR} &gt; 100)}</code>.
     Unlike the JavaScript case, the condition is only checked to see if it matches "<code>true</code>" (case is ignored).
     <note>Checking this and using <code><funclink name="__jexl3"/></code> or <code><funclink name="__groovy"/></code> function in Condition is advised for performances</note>
@@ -2942,7 +2909,7 @@ The "<code>Test</code>" button allows the user to apply the Boundary Extractor q
 will be displayed in the lower panel.<br/>
 </td></tr>
 </table>
-<p><code>Scroll automatically?</code> option permit to have last node display in tree selection</p>
+<p><code>Scroll automatically</code> option permit to have last node display in tree selection</p>
 <note>Starting with version 3.2 the number of entries in the View is restricted to the value of the
 property <code>view.results.tree.max_results</code> which defaults to <code>500</code> entries. The old
 behaviour can be restored by setting the property to <code>0</code>. Beware, that this might consume
@@ -3019,7 +2986,7 @@ Starting with JMeter 2.12, you can configure the 3 percentile values you want to
 </note>
 <ul>
 <li><code>Label</code> - The label of the sample.
-If "<code>Include group name in label?</code>" is selected, then the name of the thread group is added as a prefix.
+If "<code>Include group name in label</code>" is selected, then the name of the thread group is added as a prefix.
 This allows identical labels from different thread groups to be collated separately if required.
 </li>
 <li><code># Samples</code> - The number of samples with the same label</li>
@@ -3058,7 +3025,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 Like the <complink name="View Results Tree"/>, this visualizer uses a lot of memory.
 <p>
 By default, it only displays the main (parent) samples; it does not display the sub-samples (child samples).
-JMeter has a "<code>Child Samples?</code>" check-box.
+JMeter has a "<code>Child Samples</code>" check-box.
 If this is selected, then the sub-samples are displayed instead of the main samples.
 </p>
 </description>
@@ -3092,9 +3059,9 @@ the graph as a PNG file.</description>
         <li><code>Rectangles color:</code> Click on right color rectangle open a popup dialog to choose a custom color for column.</li>
         <li><code>Foreground color</code> Allow to change the value text color.</li>
         <li><code>Value font:</code> Allow to define font settings for the text.</li>
-        <li><code>Draw outlines bar?</code> To draw or not the border line on bar chart</li>
-        <li><code>Show number grouping?</code> Show or not the number grouping in Y Axis labels.</li>
-        <li><code>Value labels vertical?</code> Change orientation for value label. (Default is horizontal)</li>
+        <li><code>Draw outlines bar</code> To draw or not the border line on bar chart</li>
+        <li><code>Show number grouping</code> Show or not the number grouping in Y Axis labels.</li>
+        <li><code>Value labels vertical</code> Change orientation for value label. (Default is horizontal)</li>
         <li><code>Column label selection:</code> Filter by result label. A regular expression can be used, example: <code>.*Transaction.*</code>
         <br></br>Before display the graph, click on <code>Apply filter</code> button to refresh internal data.</li>
         </ul>
@@ -3230,7 +3197,7 @@ the Report.
 </p>
 <ul>
 <li><code>Label</code> - The label of the sample.
-If "<code>Include group name in label?</code>" is selected, then the name of the thread group is added as a prefix.
+If "<code>Include group name in label</code>" is selected, then the name of the thread group is added as a prefix.
 This allows identical labels from different thread groups to be collated separately if required.
 </li>
 <li><code># Samples</code> - The number of samples with the same label</li>
@@ -3736,7 +3703,7 @@ These can be set up using a <complink name="CSV Data Set Config"/> Element (for 
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
-        <property name="Clear auth on each iteration?" required="Yes">Used by Kerberos authentication. If checked, authentication will be done on each iteration of Main Thread Group loop even if it has already been done in a previous one.
+        <property name="Clear auth on each iteration" required="Yes">Used by Kerberos authentication. If checked, authentication will be done on each iteration of Main Thread Group loop even if it has already been done in a previous one.
         This is usually useful if each main thread group iteration represents behaviour of one Virtual User.
         </property>
   <property name="Base URL" required="Yes">A partial or complete URL that matches one or more HTTP Request URLs.  As an example,
@@ -4439,93 +4406,6 @@ GUI that they can use while developing new JMeter components.</p>
   <property name="Parameter Value" required="Yes">The value to apply to that parameter.</property>
 </properties>
 
-</component>
-
-
-<component name="MongoDB Source Config (DEPRECATED)" index="&sect-num;.4.20"
-                 width="1233" height="618" screenshot="mongodb-source-config.png">
-    <description>Creates a MongoDB connection (used by <complink name="MongoDB Script"/>Sampler)
-     from the supplied Connection settings. Each thread gets its own connection.
-     The connection configuration name is used by the JDBC Sampler to select the appropriate
-     connection.
-     <p>
-     You can then access <code>com.mongodb.DB</code> object in Beanshell or JSR223 Test Elements through the element <apilink href="org/apache/jmeter/protocol/mongodb/config/MongoDBHolder.html">MongoDBHolder</apilink>
-     using this code</p>
-
-    <source>
-import com.mongodb.DB;
-import org.apache.jmeter.protocol.mongodb.config.MongoDBHolder;
-DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
-            "value of property Database Name");
-&hellip;
-    </source>
-    </description>
-    <properties>
-        <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
-        <property name="Server Address List" required="Yes">Mongo DB Servers</property>
-        <property name="MongoDB Source" required="Yes">The name of the variable the connection is tied to.
-        <note>Each name must be different. If there are two configuration elements using the same name, only one will be saved.</note>
-        </property>
-
-        <property name="Keep Trying" required="No">
-            If <code>true</code>, the driver will keep trying to connect to the same server in case that the socket cannot be established.<br/>
-            There is maximum amount of time to keep retrying, which is 15s by default.<br/>This can be useful to avoid some exceptions being thrown when a server is down temporarily by blocking the operations.
-            <br/>It can also be useful to smooth the transition to a new primary node (so that a new primary node is elected within the retry time).<br/>
-            <note>Note that when using this flag
-              <ul>
-                <li>for a replica set, the driver will try to connect to the old primary node for that time, instead of failing over to the new one right away </li>
-                <li>this does not prevent exception from being thrown in read/write operations on the socket, which must be handled by application.</li>
-              </ul>
-              Even if this flag is false, the driver already has mechanisms to automatically recreate broken connections and retry the read operations.
-            </note>
-            Default is <code>false</code>.
-        </property>
-        <property name="Maximum connections per host" required="No"></property>
-        <property name="Connection timeout" required="No">
-            The connection timeout in milliseconds.<br/>It is used solely when establishing a new connection <code>Socket.connect(java.net.SocketAddress, int)</code><br/>Default is <code>0</code> and means no timeout.
-        </property>
-        <property name="Maximum retry time" required="No">
-            The maximum amount of time in milliseconds to spend retrying to open connection to the same server.<br/>Default is <code>0</code>, which means to use the default 15s if <code>autoConnectRetry</code> is on.
-        </property>
-        <property name="Maximum wait time" required="No">
-            The maximum wait time in milliseconds that a thread may wait for a connection to become available.<br/>Default is <code>120,000</code>.
-        </property>
-        <property name="Socket timeout" required="No">
-            The socket timeout in milliseconds It is used for I/O socket read and write operations <code>Socket.setSoTimeout(int)</code><br/>Default is <code>0</code> and means no timeout.
-        </property>
-        <property name="Socket keep alive" required="No">
-            This flag controls the socket keep alive feature that keeps a connection alive through firewalls <code>Socket.setKeepAlive(boolean)</code><br/>
-            Default is <code>false</code>.
-        </property>
-        <property name="ThreadsAllowedToBlockForConnectionMultiplier" required="No">
-        This multiplier, multiplied with the connectionsPerHost setting, gives the maximum number of threads that may be waiting for a connection to become available from the pool.<br/>
-        All further threads will get an exception right away.<br/>
-        For example if <code>connectionsPerHost</code> is <code>10</code> and <code>threadsAllowedToBlockForConnectionMultiplier</code> is <code>5</code>, then up to 50 threads can wait for a connection.<br/>
-        Default is <code>5</code>.
-        </property>
-        <property name="Write Concern: Safe" required="No">
-            If <code>true</code> the driver will use a <code>WriteConcern</code> of <code>WriteConcern.SAFE</code> for all operations.<br/>
-            If <code>w</code>, <code>wtimeout</code>, <code>fsync</code> or <code>j</code> are specified, this setting is ignored.<br/>
-            Default is <code>false</code>.
-        </property>
-        <property name="Write Concern: Fsync" required="No">
-            The <code>fsync</code> value of the global <code>WriteConcern</code>.<br/>
-            Default is <code>false</code>.
-        </property>
-        <property name="Write Concern: Wait for Journal" required="No">
-            The <code>j</code> value of the global <code>WriteConcern</code>.<br/>
-            Default is <code>false</code>.
-        </property>
-        <property name="Write Concern: Wait for servers" required="No">
-            The <code>w</code> value of the global <code>WriteConcern</code>.<br/>Default is <code>0</code>.
-        </property>
-        <property name="Write Concern: Wait timeout" required="No">
-            The <code>wtimeout</code> value of the global <code>WriteConcern</code>.<br/>Default is <code>0</code>.
-        </property>
-        <property name="Write Concern: Continue on error" required="No">
-            If batch inserts should continue after the first error
-        </property>
-    </properties>
 </component>
 
 <a href="#">^</a>
@@ -5555,7 +5435,7 @@ Clever users will even determine that this modifier can be used to grab values t
         a semi-colon plus the session id parameter.  Check this box if that is so.</property>
         <property name="Do not use equals in path extension" required="No">Some web apps rewrite URLs without using an &quot;<code>=</code>&quot; sign between the parameter name and value (such as Intershop Enfinity).</property>
         <property name="Do not use questionmark in path extension" required="No">Prevents the query string to end up in the path extension (such as Intershop Enfinity).</property>
-        <property name="Cache Session Id?" required="Yes">
+        <property name="Cache Session Id" required="Yes">
         Should the value of the session Id be saved for later use when the session Id is not present?
         </property>
         <property name="URL Encode" required="No">
@@ -6031,7 +5911,7 @@ extracting the node as text or attribute value and store the result into the giv
         </ul>
         XPath matching is applied to all qualifying samples in turn, and all the matching results will be returned.
        </property>
-    <property name="Return entire XPath fragment instead of text content?" required="Yes">
+    <property name="Return entire XPath fragment instead of text content" required="Yes">
     If selected, the fragment will be returned rather than the text content.<br></br>
     For example <code>//title</code> would return "<code>&lt;title&gt;Apache JMeter&lt;/title&gt;</code>" rather than "<code>Apache JMeter</code>".<br></br>
     In this case, <code>//title/text()</code> would return "<code>Apache JMeter</code>".
@@ -6102,7 +5982,7 @@ extracting the node as text or attribute value and store the result into the giv
     <property name="Validate XML"   required="If Tidy is not selected">Check the document against its schema.</property>
     <property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
     <property name="Fetch External DTDs"  required="If Tidy is not selected">If selected, external DTDs are fetched.</property>
-    <property name="Return entire XPath fragment instead of text content?" required="Yes">
+    <property name="Return entire XPath fragment instead of text content" required="Yes">
     If selected, the fragment will be returned rather than the text content.<br></br>
     For example <code>//title</code> would return "<code>&lt;title&gt;Apache JMeter&lt;/title&gt;</code>" rather than "<code>Apache JMeter</code>".<br></br>
     In this case, <code>//title/text()</code> would return "<code>Apache JMeter</code>".

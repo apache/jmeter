@@ -22,8 +22,8 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -38,7 +38,7 @@ import org.jsoup.select.NodeVisitor;
  */
 public class JsoupBasedHtmlParser extends HTMLParser {
 
-    /*
+    /**
      * A dummy class to pass the pointer of URL.
      */
     private static class URLPointer {
@@ -57,7 +57,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
          * @param baseUrl base url to extract possibly missing information from urls found in <code>urls</code>
          * @param urls collection of urls to consider
          */
-        public JMeterNodeVisitor(final URLPointer baseUrl, URLCollection urls) {
+        private JMeterNodeVisitor(final URLPointer baseUrl, URLCollection urls) {
             this.urls = urls;
             this.baseUrl = baseUrl;
         }
@@ -72,10 +72,9 @@ public class JsoupBasedHtmlParser extends HTMLParser {
 
         @Override
         public void head(Node node, int depth) {
-            if (!(node instanceof Element)) {
+            if (!(node instanceof Element tag)) {
                 return;
             }
-            Element tag = (Element) node;
             String tagName = tag.tagName().toLowerCase(Locale.ROOT);
             if (tagName.equals(TAG_BODY)) {
                 extractAttribute(tag, ATT_BACKGROUND);
@@ -84,7 +83,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             } else if (tagName.equals(TAG_BASE)) {
                 String baseref = tag.attr(ATT_HREF);
                 try {
-                    if (!StringUtils.isEmpty(baseref))// Bugzilla 30713
+                    if (StringUtilities.isNotEmpty(baseref))// Bugzilla 30713
                     {
                         baseUrl.url = ConversionUtils.makeRelativeURL(baseUrl.url, baseref);
                     }
@@ -97,12 +96,12 @@ public class JsoupBasedHtmlParser extends HTMLParser {
                 CharSequence codebase = tag.attr(ATT_CODEBASE);
                 CharSequence archive = tag.attr(ATT_ARCHIVE);
                 CharSequence code = tag.attr(ATT_CODE);
-                if (StringUtils.isNotBlank(codebase)) {
+                if (StringUtilities.isNotBlank(codebase)) {
                     String result;
-                    if (StringUtils.isNotBlank(archive)) {
-                        result = codebase.toString() + "/" + archive;
+                    if (StringUtilities.isNotBlank(archive)) {
+                        result = codebase + "/" + archive;
                     } else {
-                        result = codebase.toString() + "/" + code;
+                        result = codebase + "/" + code;
                     }
                     urls.addURL(normalizeUrlValue(result), baseUrl.url);
                 } else {

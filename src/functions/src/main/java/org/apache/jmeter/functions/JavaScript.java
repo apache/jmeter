@@ -56,7 +56,7 @@ public class JavaScript extends AbstractFunction {
      * Initialization On Demand Holder pattern
      */
     private static class LazyHolder {
-        public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
+        private static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
 
     private final boolean useRhinoEngine =

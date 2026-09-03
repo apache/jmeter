@@ -335,7 +335,7 @@ public class Converter {
                 return (char) intValue.intValue();
             } else {
                 String s = o.toString();
-                if (s.length() > 0) {
+                if (!s.isEmpty()) {
                     return o.toString().charAt(0);
                 }
                 return defaultValue;

@@ -42,7 +42,7 @@ then you'll need to do a bit of extra work to test your site.</p>
 received from the server and retrieve the unique session ID.  Use the appropriate <complink name="HTTP URL Re-writing Modifier"/>
 to accomplish this.  Simply enter the name of your session ID parameter into the modifier, and it
 will find it and add it to each request.  If the request already has a value, it will be replaced.
-If "Cache Session Id?" is checked, then the last found session id will be saved,
+If "Cache Session Id" is checked, then the last found session id will be saved,
 and will be used if the previous HTTP sample does not contain a session id.
 </p>
 

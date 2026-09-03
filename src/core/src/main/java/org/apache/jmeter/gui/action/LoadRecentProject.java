@@ -27,12 +27,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.auto.service.AutoService;
 
@@ -47,6 +51,7 @@ public class LoadRecentProject extends Load {
     /** The number of menu items used for recent files */
     private static final int NUMBER_OF_MENU_ITEMS = 9;
     private static final Set<String> commands = new HashSet<>();
+    private static final Logger log = LoggerFactory.getLogger(LoadRecentProject.class);
 
     static {
         commands.add(ActionNames.OPEN_RECENT);
@@ -89,6 +94,11 @@ public class LoadRecentProject extends Load {
      * @return a List of JMenuItem, representing recent files. JMenuItem may not be visible
      */
     public static List<JComponent> getRecentFileMenuItems() {
+        try {
+            prefs.sync();
+        } catch (BackingStoreException e) {
+            log.warn("Unable to sync preferences for recent files", e);
+        }
         List<JComponent> menuItems = new ArrayList<>();
         // Get the preference for the recent files
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
@@ -195,39 +205,18 @@ public class LoadRecentProject extends Load {
      * Get the KeyEvent to use as shortcut key for menu item
      */
     private static int getShortcutKey(int index) {
-        int shortKey = -1;
-        switch(index+1) {
-            case 1:
-                shortKey = KeyEvent.VK_1;
-                break;
-            case 2:
-                shortKey = KeyEvent.VK_2;
-                break;
-            case 3:
-                shortKey = KeyEvent.VK_3;
-                break;
-            case 4:
-                shortKey = KeyEvent.VK_4;
-                break;
-            case 5:
-                shortKey = KeyEvent.VK_5;
-                break;
-            case 6:
-                shortKey = KeyEvent.VK_6;
-                break;
-            case 7:
-                shortKey = KeyEvent.VK_7;
-                break;
-            case 8:
-                shortKey = KeyEvent.VK_8;
-                break;
-            case 9:
-                shortKey = KeyEvent.VK_9;
-                break;
-            default:
-                break;
-        }
-        return shortKey;
+        return switch (index + 1) {
+            case 1 -> KeyEvent.VK_1;
+            case 2 -> KeyEvent.VK_2;
+            case 3 -> KeyEvent.VK_3;
+            case 4 -> KeyEvent.VK_4;
+            case 5 -> KeyEvent.VK_5;
+            case 6 -> KeyEvent.VK_6;
+            case 7 -> KeyEvent.VK_7;
+            case 8 -> KeyEvent.VK_8;
+            case 9 -> KeyEvent.VK_9;
+            default -> -1;
+        };
     }
 
     /**
@@ -244,6 +233,11 @@ public class LoadRecentProject extends Load {
      */
     private static void setRecentFile(int index, String fileName) {
         prefs.put(USER_PREFS_KEY + index, fileName);
+        try {
+            prefs.flush();
+        } catch (BackingStoreException e) {
+            log.warn("Unable to flush preferences for recent files", e);
+        }
     }
 
     private static void removeRecentFile(int index) {

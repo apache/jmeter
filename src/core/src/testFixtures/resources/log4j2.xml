@@ -16,7 +16,7 @@
   ~ limitations under the License.
   -->
 
-<Configuration status="WARN" packages="org.apache.jmeter.gui.logging">
+<Configuration status="WARN">
 
   <Appenders>
 

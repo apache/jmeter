@@ -69,11 +69,11 @@ public class TreeCloner implements HashTreeTraverser {
      * @return Object node (clone or not)
      */
     protected Object addNodeToTree(Object node) {
-        if ( (node instanceof TestElement) // Check can cast for clone
+        if ( (node instanceof TestElement testElement) // Check can cast for clone
            // Don't clone NoThreadClone unless honourNoThreadClone == false
           && !(honourNoThreadClone && node instanceof NoThreadClone)
         ) {
-            Object newNode = ((TestElement) node).clone();
+            Object newNode = testElement.clone();
             newTree.add(objects, newNode);
             return newNode;
         } else {

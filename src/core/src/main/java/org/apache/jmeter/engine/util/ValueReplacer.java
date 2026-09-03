@@ -171,8 +171,7 @@ public class ValueReplacer {
             } else if (val instanceof NumberProperty) {
                 val = transform.transform(val);
                 log.debug("Replacement result: {}", val);
-            } else if (val instanceof MultiProperty) {
-                MultiProperty multiVal = (MultiProperty) val;
+            } else if (val instanceof MultiProperty multiVal) {
                 Collection<JMeterProperty> newValues = replaceValues(multiVal.iterator(), transform);
                 multiVal.clear();
                 for (JMeterProperty jmp : newValues) {

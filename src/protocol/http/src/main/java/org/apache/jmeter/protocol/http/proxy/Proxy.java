@@ -19,15 +19,14 @@ package org.apache.jmeter.protocol.http.proxy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -52,6 +51,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.ExceptionUtils;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -339,35 +339,30 @@ public class Proxy extends Thread {
         }
         final String hashAlias;
         final String keyAlias;
-        switch(ProxyControl.KEYSTORE_MODE) {
-        case DYNAMIC_KEYSTORE:
-            try {
-                keyStore = target.getKeyStore(); // pick up any recent changes from other threads
-                String alias = getDomainMatch(keyStore, host);
-                if (alias == null) {
-                    hashAlias = host;
-                    keyAlias = host;
-                    keyStore = target.updateKeyStore(port, keyAlias);
-                } else if (alias.equals(host)) { // the host has a key already
-                    hashAlias = host;
-                    keyAlias = host;
-                } else { // the host matches a domain; use its key
-                    hashAlias = alias;
-                    keyAlias = alias;
+        switch (ProxyControl.KEYSTORE_MODE) {
+            case DYNAMIC_KEYSTORE -> {
+                try {
+                    keyStore = target.getKeyStore(); // pick up any recent changes from other threads
+                    String alias = getDomainMatch(keyStore, host);
+                    if (alias == null) {
+                        hashAlias = host;
+                        keyAlias = host;
+                        keyStore = target.updateKeyStore(port, keyAlias);
+                    } else if (alias.equals(host)) { // the host has a key already
+                        hashAlias = host;
+                        keyAlias = host;
+                    } else { // the host matches a domain; use its key
+                        hashAlias = alias;
+                        keyAlias = alias;
+                    }
+                } catch (IOException | GeneralSecurityException e) {
+                    log.error("{} Problem with keystore", port, e);
+                    return null;
                 }
-            } catch (IOException | GeneralSecurityException e) {
-                log.error("{} Problem with keystore", port, e);
-                return null;
             }
-            break;
-        case JMETER_KEYSTORE:
-            hashAlias = keyAlias = ProxyControl.JMETER_SERVER_ALIAS;
-            break;
-        case USER_KEYSTORE:
-            hashAlias = keyAlias = ProxyControl.CERT_ALIAS;
-            break;
-        default:
-            throw new IllegalStateException("Impossible case: " + ProxyControl.KEYSTORE_MODE);
+            case JMETER_KEYSTORE -> hashAlias = keyAlias = ProxyControl.JMETER_SERVER_ALIAS;
+            case USER_KEYSTORE -> hashAlias = keyAlias = ProxyControl.CERT_ALIAS;
+            default -> throw new IllegalStateException("Impossible case: " + ProxyControl.KEYSTORE_MODE);
         }
         synchronized (HOST2SSL_SOCK_FAC) {
             final SSLSocketFactory sslSocketFactory = HOST2SSL_SOCK_FAC.get(hashAlias);
@@ -486,9 +481,8 @@ public class Proxy extends Thread {
     private static SampleResult generateErrorResult(SampleResult result, HttpRequestHdr request, Exception e, String msg) {
         if (result == null) {
             result = new SampleResult();
-            ByteArrayOutputStream text = new ByteArrayOutputStream(200);
-            e.printStackTrace(new PrintStream(text)); // NOSONAR we store the Stacktrace in the result
-            result.setResponseData(text.toByteArray());
+            result.setResponseData(ExceptionUtils.getStackTraceAsBytes(e, StandardCharsets.UTF_8));
+            result.setDataEncoding(StandardCharsets.UTF_8.name());
             result.setSamplerData(request.getFirstLine());
             result.setSampleLabel(request.getUrl());
         }

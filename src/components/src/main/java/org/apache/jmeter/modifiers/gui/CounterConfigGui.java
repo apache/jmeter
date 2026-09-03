@@ -72,8 +72,7 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
      */
     @Override
     public void modifyTestElement(TestElement c) {
-        if (c instanceof CounterConfig) {
-            CounterConfig config = (CounterConfig) c;
+        if (c instanceof CounterConfig config) {
             config.setStart(startField.getText());
             config.setEnd(endField.getText());
             config.setIncrement(incrField.getText());
