@@ -186,9 +186,6 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
         prefixHTTPSampleName.requestFocusInWindow();
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.Dialog#setVisible(boolean)
-     */
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
@@ -202,8 +199,7 @@ public class RecorderDialog extends JDialog implements ItemListener, KeyListener
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (e.getSource() instanceof JComboBox) {
-            JComboBox<?> combo = (JComboBox<?>) e.getSource();
+        if (e.getSource() instanceof JComboBox<?> combo) {
             if(ProxyControlGui.HTTP_SAMPLER_NAMING_MODE.equals(combo.getName())){
                 recorderGui.setHTTPSampleNamingMode(httpSampleNamingMode.getSelectedIndex());
                 sampleNameFormat.setEnabled(httpSampleNamingMode.getSelectedIndex() == 3);

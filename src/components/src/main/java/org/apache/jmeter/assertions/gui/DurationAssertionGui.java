@@ -68,8 +68,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
     @Override
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
-        if (el instanceof DurationAssertion) {
-            DurationAssertion assertion = (DurationAssertion) el;
+        if (el instanceof DurationAssertion assertion) {
             assertion.setProperty(DurationAssertion.DURATION_KEY,duration.getText());
             saveScopeSettings(assertion);
         }
@@ -88,8 +87,7 @@ public class DurationAssertionGui extends AbstractAssertionGui {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (el instanceof DurationAssertion){
-            DurationAssertion da = (DurationAssertion) el;
+        if (el instanceof DurationAssertion da){
             duration.setText(da.getPropertyAsString(DurationAssertion.DURATION_KEY));
             showScopeSettings(da);
         }

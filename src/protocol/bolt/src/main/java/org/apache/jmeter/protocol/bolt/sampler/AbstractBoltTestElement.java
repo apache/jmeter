@@ -19,9 +19,8 @@ package org.apache.jmeter.protocol.bolt.sampler;
 
 import java.time.Duration;
 
-import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jorphan.util.StringUtilities;
 import org.neo4j.driver.AccessMode;
 import org.neo4j.driver.SessionConfig;
 import org.neo4j.driver.TransactionConfig;
@@ -51,8 +50,11 @@ public abstract class AbstractBoltTestElement extends AbstractTestElement {
     }
 
     public void setAccessMode(String accessMode) {
-        if (EnumUtils.isValidEnum(AccessMode.class, accessMode)) {
+        try {
+            AccessMode.valueOf(accessMode);
             this.accessMode = accessMode;
+        } catch (IllegalArgumentException ignored) {
+            // ignore
         }
     }
 
@@ -93,7 +95,7 @@ public abstract class AbstractBoltTestElement extends AbstractTestElement {
         SessionConfig.Builder sessionConfigBuilder = SessionConfig.builder()
                 .withDefaultAccessMode(Enum.valueOf(AccessMode.class, getAccessMode()));
 
-        if (StringUtils.isNotBlank(database)) {
+        if (StringUtilities.isNotBlank(database)) {
             sessionConfigBuilder.withDatabase(database);
         }
 

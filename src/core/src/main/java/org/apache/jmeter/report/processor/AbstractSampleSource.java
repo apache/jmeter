@@ -33,63 +33,25 @@ public abstract class AbstractSampleSource implements SampleSource {
     protected AbstractSampleSource() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Runnable#run()
-     */
     @Override
     public abstract void run();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.SampleSource#getSampleContext()
-     */
     @Override
     public SampleContext getSampleContext() {
         return sampleContext;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.SampleSource#setSampleContext(org.
-     * apache.jmeter.report.processor.SampleContext)
-     */
     @Override
     public void setSampleContext(SampleContext sampleContext) {
         this.sampleContext = sampleContext;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.SampleSource#addSampleConsumers(java
-     * .util.List)
-     */
     @Override
     public abstract void setSampleConsumers(List<SampleConsumer> consumers);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.SampleSource#addSampleConsumer(org
-     * .apache.jmeter.report.processor.SampleConsumer)
-     */
     @Override
     public abstract void addSampleConsumer(SampleConsumer consumer);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.SampleSource#removeSampleConsumer(
-     * org.apache.jmeter.report.processor.SampleConsumer)
-     */
     @Override
     public abstract void removeSampleConsumer(SampleConsumer consumer);
 

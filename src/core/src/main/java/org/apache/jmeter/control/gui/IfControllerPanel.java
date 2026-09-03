@@ -116,8 +116,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (element instanceof IfController) {
-            IfController ifController = (IfController) element;
+        if (element instanceof IfController ifController) {
             theCondition.setText(ifController.getCondition());
             evaluateAll.setSelected(ifController.isEvaluateAll());
             useExpression.setSelected(ifController.isUseExpression());
@@ -141,8 +140,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ChangeLi
     @Override
     public void modifyTestElement(TestElement controller) {
         configureTestElement(controller);
-        if (controller instanceof IfController) {
-            IfController ifController = (IfController) controller;
+        if (controller instanceof IfController ifController) {
             ifController.setCondition(theCondition.getText());
             ifController.setEvaluateAll(evaluateAll.isSelected());
             ifController.setUseExpression(useExpression.isSelected());

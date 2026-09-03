@@ -17,12 +17,12 @@
 
 package org.apache.jmeter.protocol.http.curl;
 
+import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang3.tuple.Pair;
 
 public interface ArgumentHolder {
 
@@ -38,7 +38,7 @@ public interface ArgumentHolder {
         return getMetadata().containsKey("type");
     }
 
-    static Pair<String, Map<String, String>> parse(String name) {
+    static Map.Entry<String, Map<String, String>> parse(String name) {
         if (name.contains(";")) {
             String[] parts = name.split(";");
             String realName = parts[0];
@@ -47,9 +47,9 @@ public interface ArgumentHolder {
                 String[] typeParts = parts[i].split("\\s*=\\s*", 2);
                 metadata.put(typeParts[0].toLowerCase(Locale.US), typeParts[1]);
             }
-            return Pair.of(realName, metadata);
+            return new AbstractMap.SimpleEntry<>(realName, metadata);
         } else {
-            return Pair.of(name, Collections.emptyMap());
+            return new AbstractMap.SimpleEntry<>(name, Collections.emptyMap());
         }
     }
 }

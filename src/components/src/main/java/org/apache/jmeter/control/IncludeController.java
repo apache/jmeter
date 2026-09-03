@@ -30,6 +30,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,7 +129,7 @@ public class IncludeController extends GenericController implements ReplaceableC
         // only try to load the JMX test plan if there is one
         final String includePath = getIncludePath();
         HashTree tree = null;
-        if (includePath != null && includePath.length() > 0) {
+        if (StringUtilities.isNotEmpty(includePath)) {
             String fileName=PREFIX+includePath;
             try {
                 File file = new File(fileName.trim());

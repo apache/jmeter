@@ -73,7 +73,7 @@ class TestAlphaNumericKeyComparator {
         assertEquals(1, compareHigherFirst);
     }
 
-    private Map.Entry<Object, Object> entry(final String key) {
+    private static Map.Entry<Object, Object> entry(final String key) {
         return new Map.Entry<Object, Object>() {
 
             @Override

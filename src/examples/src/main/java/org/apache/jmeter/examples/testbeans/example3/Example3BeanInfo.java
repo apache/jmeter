@@ -26,22 +26,22 @@ public class Example3BeanInfo extends BeanInfoSupport {
 
     private PropertyDescriptor getprop(String name) {
         final PropertyDescriptor property = property(name);
-        property.setValue(NOT_UNDEFINED, Boolean.FALSE); // Ensure it is not flagged as 'unconfigured'
+        property.setValue(NOT_UNDEFINED, false); // Ensure it is not flagged as 'unconfigured'
         return property;
     }
 
     private PropertyDescriptor getprop(String name, Object deflt) {
         PropertyDescriptor p = property(name);
         p.setValue(DEFAULT, deflt);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         return p;
     }
 
     public Example3BeanInfo() {
         super(Example3.class);
-        getprop("mybool", Boolean.TRUE); // Must use defaults for primitive types
+        getprop("mybool", true); // Must use defaults for primitive types
         getprop("myBoolean1");
-        getprop("myBoolean2", Boolean.TRUE);
+        getprop("myBoolean2", true);
         getprop("myInt", 77); // Must use defaults for primitive types
         getprop("myInteger1");
         getprop("myInteger2", 123);

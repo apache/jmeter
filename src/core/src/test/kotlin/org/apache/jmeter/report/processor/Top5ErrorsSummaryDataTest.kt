@@ -52,7 +52,7 @@ class Top5ErrorsSummaryDataTest {
         val input = listOf("A", "B", "C", "D", "E", "F")
         input.forEach { sut.registerError(it) }
         assertArrayEquals(
-            input.take(5).map { arrayOf(it, 1L) }.toTypedArray(),
+            input.take(5).map { arrayOf<Any>(it, 1L) }.toTypedArray(),
             sut.getTop5ErrorsMetrics(),
             "registerErrors $input, then call getTop5ErrorsMetrics"
         )
@@ -64,9 +64,9 @@ class Top5ErrorsSummaryDataTest {
         input.forEach { sut.registerError(it) }
         assertArrayEquals(
             arrayOf(
-                arrayOf("A", 3L),
-                arrayOf("B", 2L),
-                arrayOf("C", 1L)
+                arrayOf<Any>("A", 3L),
+                arrayOf<Any>("B", 2L),
+                arrayOf<Any>("C", 1L)
             ),
             sut.top5ErrorsMetrics,
             "registerErrors $input, then call getTop5ErrorsMetrics"

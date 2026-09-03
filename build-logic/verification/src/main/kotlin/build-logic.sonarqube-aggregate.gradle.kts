@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-import com.github.spotbugs.snom.SpotBugsTask
 import jacoco.JacocoAggregateReportSpec
 
 plugins {
@@ -64,29 +63,6 @@ plugins.withId("build-params.jacoco-aggregation") {
                 properties {
                     property("sonar.coverage.jacoco.xmlReportPaths", mergedCoverage)
                 }
-            }
-        }
-    }
-}
-
-subprojects {
-    plugins.withId("com.github.spotbugs") {
-        val spotBugTasks = tasks.withType<SpotBugsTask>().matching {
-            // We don't send spotbugs for test classes
-            !it.name.endsWith("Test")
-        }
-        sonarTask {
-            dependsOn(spotBugTasks)
-        }
-        sonar {
-            properties {
-                property(
-                    "sonar.java.spotbugs.reportPaths",
-                    spotBugTasks.asSequence()
-                        .map {
-                            it.reports.named("XML").get().outputLocation.asFile.get()
-                        }
-                )
             }
         }
     }

@@ -29,6 +29,7 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,7 +124,7 @@ public class CounterConfig extends AbstractTestElement
     // Use format to create number; if it fails, use the default
     private String formatNumber(long value){
         String format = getFormat();
-        if (format != null && format.length() > 0) {
+        if (StringUtilities.isNotEmpty(format)) {
             try {
                 DecimalFormat myFormatter = new DecimalFormat(format);
                 return myFormatter.format(value);

@@ -17,15 +17,15 @@
 
 package org.apache.jmeter.threads;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -47,12 +47,12 @@ public class TestUnmodifiableJMeterVariables {
 
     @Test
     public void testGetThreadName() {
-        assertThat(unmodifiables.getThreadName(), CoreMatchers.is(vars.getThreadName()));
+        assertEquals(vars.getThreadName(), unmodifiables.getThreadName());
     }
 
     @Test
     public void testGetIteration() {
-        assertThat(unmodifiables.getIteration(), CoreMatchers.is(vars.getIteration()));
+        assertEquals(vars.getIteration(), unmodifiables.getIteration());
     }
 
     @Test
@@ -92,23 +92,23 @@ public class TestUnmodifiableJMeterVariables {
 
     @Test
     public void testGet() {
-        assertThat(unmodifiables.get(MY_KEY), CoreMatchers.is(vars.get(MY_KEY)));
+        assertEquals(vars.get(MY_KEY), unmodifiables.get(MY_KEY));
     }
 
     @Test
     public void testGetObject() {
-        assertThat(unmodifiables.getObject(MY_OBJECT_KEY), CoreMatchers.is(vars.getObject(MY_OBJECT_KEY)));
+        assertEquals(vars.getObject(MY_OBJECT_KEY), unmodifiables.getObject(MY_OBJECT_KEY));
     }
 
     @Test
     public void testGetIteratorIsUnmodifable() {
         Iterator<Map.Entry<String, Object>> iterator = unmodifiables.getIterator();
-        assertThat(iterator.hasNext(), CoreMatchers.is(true));
+        assertTrue(iterator.hasNext());
         iterator.next();
         assertThrowsUnsupportedOperation(iterator::remove);
     }
 
-    private void assertThrowsUnsupportedOperation(Executable executable) {
+    private static void assertThrowsUnsupportedOperation(Executable executable) {
         assertThrows(
                 UnsupportedOperationException.class,
                 executable
@@ -117,10 +117,10 @@ public class TestUnmodifiableJMeterVariables {
 
     @Test
     public void testGetIterator() {
-        assertThat(iteratorToMap(unmodifiables.getIterator()), CoreMatchers.is(iteratorToMap(vars.getIterator())));
+        assertEquals(iteratorToMap(vars.getIterator()), iteratorToMap(unmodifiables.getIterator()));
     }
 
-    private <K, V> Map<K, V> iteratorToMap(Iterator<Map.Entry<K, V>> it) {
+    private static <K, V> Map<K, V> iteratorToMap(Iterator<Map.Entry<K, V>> it) {
         Map<K, V> result = new HashMap<>();
         while (it.hasNext()) {
             Map.Entry<K, V> entry = it.next();
@@ -131,29 +131,29 @@ public class TestUnmodifiableJMeterVariables {
 
     @Test
     public void testEntrySet() {
-        assertThat(unmodifiables.entrySet(), CoreMatchers.is(vars.entrySet()));
+        assertEquals(vars.entrySet(), unmodifiables.entrySet());
     }
 
     @Test
     public void testEqualsObjectSymmetry() {
         UnmodifiableJMeterVariables otherUnmodifiables = new UnmodifiableJMeterVariables(vars);
-        assertThat(unmodifiables, CoreMatchers.is(otherUnmodifiables));
-        assertThat(otherUnmodifiables, CoreMatchers.is(unmodifiables));
+        assertEquals(otherUnmodifiables, unmodifiables);
+        assertEquals(unmodifiables, otherUnmodifiables);
     }
 
     @Test
     public void testEqualsObjectReflexivity() {
-        assertThat(unmodifiables, CoreMatchers.is(unmodifiables));
+        assertEquals(unmodifiables, unmodifiables);
     }
 
     @Test
     public void testEqualsObjectWithJMeterVariables() {
-        assertThat(unmodifiables.equals(vars), CoreMatchers.is(vars.equals(unmodifiables)));
+        assertEquals(vars.equals(unmodifiables), unmodifiables.equals(vars));
     }
 
     @Test
     public void testHashCode() {
         UnmodifiableJMeterVariables otherUnmodifiables = new UnmodifiableJMeterVariables(vars);
-        assertThat(unmodifiables.hashCode(), CoreMatchers.is(otherUnmodifiables.hashCode()));
+        assertEquals(otherUnmodifiables.hashCode(), unmodifiables.hashCode());
     }
 }

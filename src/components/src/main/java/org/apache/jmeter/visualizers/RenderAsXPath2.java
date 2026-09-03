@@ -36,14 +36,14 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.extractor.XPath2Extractor;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.XPathUtil;
+import org.apache.jorphan.util.ExceptionUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +103,7 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         String xmlDataFieldText = xmlDataField.getText();
-        if (StringUtils.isEmpty(xmlDataFieldText)) {
+        if (StringUtilities.isEmpty(xmlDataFieldText)) {
             return;
         }
         if (XPATH_TESTER_COMMAND.equals(command)) {
@@ -121,8 +121,8 @@ public class RenderAsXPath2 implements ResultRenderer, ActionListener {
      * @param textToParse
      */
     private void executeAndShowXPathTester(String textToParse, XPath2Extractor extractor) {
-        if (textToParse != null && textToParse.length() > 0
-                && this.xpathExpressionField.getText().length() > 0) {
+        if (StringUtilities.isNotEmpty(textToParse)
+                && !this.xpathExpressionField.getText().isEmpty()) {
             this.xpathResultField.setText(process(textToParse, extractor));
             this.xpathResultField.setCaretPosition(0); // go to first line
         }

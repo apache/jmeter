@@ -3,6 +3,7 @@ gradle/verification-keyring.keys
 gradle/verification-metadata.xml
 **/.*
 .*/**
+AGENTS.md
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 eclipse.md
@@ -10,6 +11,8 @@ gradle.md
 ISSUE_TEMPLATE.md
 PULL_REQUEST_TEMPLATE.md
 README.md
+SECURITY.md
+THREAT_MODEL.md
 renovate.json
 **/*.jmx
 bin/examples/**
@@ -26,7 +29,6 @@ lib/aareadme.txt
 lib/opt/README.txt
 src/licenses/licenses/*/CC0-1.0.txt
 #local/**
-#printable_docs/**
 #reports/**
 src/launcher/src/main/resources/org/apache/jmeter/jmeter_as_ascii_art.txt
 src/core/src/main/resources/org/apache/jmeter/help.txt
@@ -36,6 +38,10 @@ test/resources/**
 #**/*.log
 **/download_jmeter.cgi
 xdocs/extending/HTML_REPORT_README.TXT
+xdocs/node_modules/**
+xdocs/package.json
+xdocs/package-lock.json
+xdocs/yarn.lock
 # Rat should automatically detect below files as binary, however it fails
 **/*.sxi
 **/*.sxw

@@ -178,7 +178,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         securitySettingsPanel.modifyTestElement(te);
     }
 
-    /*
+    /**
      * Helper method to set up the GUI screen
      */
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)

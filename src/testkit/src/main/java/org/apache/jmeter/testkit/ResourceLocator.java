@@ -20,7 +20,6 @@ package org.apache.jmeter.testkit;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public interface ResourceLocator {
     default String getResource(String path) {
@@ -54,7 +53,7 @@ public interface ResourceLocator {
         }
         Path nioPath;
         try {
-            nioPath = Paths.get(url.toURI());
+            nioPath = Path.of(url.toURI());
         } catch (URISyntaxException e) {
             throw new IllegalStateException(e);
         }

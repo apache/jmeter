@@ -53,11 +53,11 @@ class Synchronizer {
         if (failure == null) {
             return;
         }
-        if (failure instanceof RuntimeException) {
-            throw (RuntimeException) failure;
+        if (failure instanceof RuntimeException runtimeException) {
+            throw runtimeException;
         }
-        if (failure instanceof Error) {
-            throw (Error) failure;
+        if (failure instanceof Error error) {
+            throw error;
         }
         throw new RuntimeException("wrap", failure) {
             @Override

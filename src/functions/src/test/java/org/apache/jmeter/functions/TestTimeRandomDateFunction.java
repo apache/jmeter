@@ -18,9 +18,7 @@
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -80,7 +78,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "", endDate, "", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        Assertions.assertEquals(10, value.length());
+        assertEquals(10, value.length());
     }
 
     @Test
@@ -104,7 +102,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, "", endDate, "", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        Assertions.assertEquals(8, value.length());
+        assertEquals(8, value.length());
     }
 
     @Test
@@ -116,7 +114,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("29 Aug 2111")));
+        assertEquals("29 Aug 2111", value);
     }
 
     @Test
@@ -128,7 +126,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("29 mars 2111")));
+        assertEquals("29 mars 2111", value);
     }
 
     @Test
@@ -140,7 +138,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("2111-03-29")));
+        assertEquals("2111-03-29", value);
     }
 
     @Test
@@ -152,7 +150,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("")));
+        assertEquals("", value);
     }
 
     @Test
@@ -164,7 +162,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, null);
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("2111-03-29")));
+        assertEquals("2111-03-29", value);
     }
 
     @Test
@@ -176,8 +174,8 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "MY_VAR");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("2111-03-29")));
-        assertThat(vars.get("MY_VAR"), is(equalTo("2111-03-29")));
+        assertEquals("2111-03-29", value);
+        assertEquals("2111-03-29", vars.get("MY_VAR"));
     }
 
     @Test
@@ -189,7 +187,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("")));
+        assertEquals("", value);
     }
 
     @Test
@@ -201,7 +199,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("")));
+        assertEquals("", value);
     }
 
     @Test
@@ -213,6 +211,6 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         Collection<CompoundVariable> params = makeParams(formatDate, startDate, endDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertThat(value, is(equalTo("")));
+        assertEquals("", value);
     }
 }

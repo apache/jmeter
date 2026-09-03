@@ -117,8 +117,7 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
         Object value = JsonPath.read(jsonString, getJsonPath());
 
         if (!isJsonValidationBool()) {
-            if (value instanceof JSONArray) {
-                JSONArray arrayValue = (JSONArray) value;
+            if (value instanceof JSONArray arrayValue) {
                 if (arrayValue.isEmpty() && !JsonPath.isPathDefinite(getJsonPath())) {
                     throw new IllegalStateException(String.format("JSONPath '%s' is indefinite and the extracted Value is an empty Array." +
                             " Please use an assertion value, to be sure to get a correct result. Expected value was '%s'", getJsonPath(), getExpectedValue()));
@@ -127,8 +126,8 @@ public class JSONPathAssertion extends AbstractTestElement implements Serializab
             return;
         }
 
-        if (value instanceof JSONArray) {
-            if (arrayMatched((JSONArray) value)) {
+        if (value instanceof JSONArray objects) {
+            if (arrayMatched(objects)) {
                 return;
             }
         } else {

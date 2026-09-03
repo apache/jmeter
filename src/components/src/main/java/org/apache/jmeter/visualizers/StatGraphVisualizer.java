@@ -24,10 +24,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
+import java.io.Writer;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.MessageFormat;
@@ -64,7 +63,6 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -337,7 +335,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
 
     private static String[] keys(Map<String, ?> map) {
-        return map.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+        return map.keySet().toArray(new String[0]);
     }
 
     /**
@@ -591,20 +589,20 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         if (!dynamicGraphSize.isSelected()) {
             String wstr = graphWidth.getText();
             String hstr = graphHeight.getText();
-            if (wstr.length() != 0) {
+            if (!wstr.isEmpty()) {
                 width = Integer.parseInt(wstr);
             }
-            if (hstr.length() != 0) {
+            if (!hstr.isEmpty()) {
                 height = Integer.parseInt(hstr);
             }
         }
 
-        if (lstr.length() == 0) {
+        if (lstr.isEmpty()) {
             lstr = "20";//$NON-NLS-1$
         }
         int maxLength = Integer.parseInt(lstr);
         String yAxisStr = maxValueYAxisLabel.getText();
-        int maxYAxisScale = yAxisStr.length() == 0 ? 0 : Integer.parseInt(yAxisStr);
+        int maxYAxisScale = yAxisStr.isEmpty() ? 0 : Integer.parseInt(yAxisStr);
 
         graphPanel.setData(this.getData());
         graphPanel.setTitle(graphTitle.getText());
@@ -732,8 +730,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             if (chooser == null) {
                 return;
             }
-            try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
-                    OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))){
+            try (Writer writer = Files.newBufferedWriter(chooser.getSelectedFile().toPath())){
                 CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),
                         writer,
                         saveHeaders.isSelected() ? getLabels(COLUMNS, getColumnsMsgParameters()) : null);
@@ -777,19 +774,18 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         // Not 'else if' because forceReloadData
         if (eventSource == applyFilterBtn || forceReloadData) {
             if (columnSelection.isSelected() && columnMatchLabel.getText() != null
-                    && columnMatchLabel.getText().length() > 0) {
+                    && !columnMatchLabel.getText().isEmpty()) {
                 pattern = createPattern(columnMatchLabel.getText());
             } else if (forceReloadData) {
                 pattern = null;
             }
-            if (getFile() != null && getFile().length() > 0) {
+            if (getFile() != null && !getFile().isEmpty()) {
                 clearData();
                 FilePanel filePanel = (FilePanel) getFilePanel();
                 filePanel.actionPerformed(event);
             }
-        } else if (eventSource instanceof JButton) {
+        } else if (eventSource instanceof JButton btn) {
             // Changing color for column
-            JButton btn = (JButton) eventSource;
             if (btn.getName() != null) {
                 try {
                     BarGraph bar = eltList.get(Integer.parseInt(btn.getName()));

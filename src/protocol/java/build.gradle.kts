@@ -22,13 +22,6 @@ plugins {
 dependencies {
     api(projects.src.core)
 
-    implementation("org.apache.commons:commons-lang3") {
-        because("ArrayUtils")
-    }
-    implementation("commons-io:commons-io") {
-        because("IOUtils")
-    }
-
     testImplementation(testFixtures(projects.src.core))
     testImplementation(projects.src.functions) {
         because("We need __counter function for tests")

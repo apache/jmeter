@@ -17,14 +17,14 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.jms.QueueRequestor;
-import javax.jms.QueueSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.Queue;
+import jakarta.jms.QueueRequestor;
+import jakarta.jms.QueueSession;
 
 /**
  * Request/reply executor with a temporary reply queue. <br>

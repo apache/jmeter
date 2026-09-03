@@ -37,11 +37,11 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
@@ -98,7 +98,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         String xmlDataFieldText = regexpDataField.getText();
-        if (StringUtils.isNotEmpty(xmlDataFieldText) && REGEXP_TESTER_COMMAND.equals(command)) {
+        if (StringUtilities.isNotEmpty(xmlDataFieldText) && REGEXP_TESTER_COMMAND.equals(command)) {
             executeAndShowRegexpTester(xmlDataFieldText);
         }
     }
@@ -108,7 +108,7 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
      * @param textToParse
      */
     private void executeAndShowRegexpTester(String textToParse) {
-        if (textToParse != null && !textToParse.isEmpty()
+        if (StringUtilities.isNotEmpty(textToParse)
                 && !this.regexpField.getText().isEmpty()) {
             this.regexpResultField.setText(process(textToParse));
             this.regexpResultField.setCaretPosition(0); // go to first line

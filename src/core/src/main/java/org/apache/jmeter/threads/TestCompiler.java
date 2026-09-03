@@ -282,7 +282,7 @@ public class TestCompiler implements HashTreeTraverser {
         private final TestElement child;
         private final TestElement parent;
 
-        public ObjectPair(TestElement child, TestElement parent) {
+        private ObjectPair(TestElement child, TestElement parent) {
             this.child = child;
             this.parent = parent;
         }

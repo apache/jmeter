@@ -17,6 +17,11 @@
 
 package org.apache.jmeter.util;
 
+import org.apache.jorphan.util.JOrphanUtils;
+import org.apiguardian.api.API;
+
+@Deprecated
+@API(since = "6.0.0", status = API.Status.DEPRECATED)
 public final class StringUtilities {
 
     /**
@@ -36,17 +41,9 @@ public final class StringUtilities {
      * @param sub - replacement
      * @return the updated string
      */
+    @Deprecated
+    @API(since = "6.0.0", status = API.Status.DEPRECATED)
     public static String substitute(final String input, final String pattern, final String sub) {
-        StringBuilder ret = new StringBuilder(input.length());
-        int start = 0;
-        int index = -1;
-        final int length = pattern.length();
-        while ((index = input.indexOf(pattern, start)) >= start) {
-            ret.append(input.substring(start, index));
-            ret.append(sub);
-            start = index + length;
-        }
-        ret.append(input.substring(start));
-        return ret.toString();
+        return JOrphanUtils.substitute(input, pattern, sub);
     }
 }

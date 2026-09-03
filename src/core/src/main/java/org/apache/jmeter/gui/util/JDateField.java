@@ -46,7 +46,7 @@ public class JDateField extends JTextField {
     // Datefields are not thread-safe
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); // $NON-NLS-1$
 
-    /*
+    /**
      * The following array must agree with dateFormat
      *
      * It is used to translate the positions in the buffer to the values used by
@@ -122,7 +122,7 @@ public class JDateField extends JTextField {
         }
     }
 
-    /*
+    /**
      * Convert position in buffer to Calendar type Assumes that pos >=0 (which
      * is true for getCaretPosition())
      */
@@ -147,7 +147,7 @@ public class JDateField extends JTextField {
         return c;
     }
 
-    /*
+    /**
      * Update the current field. The addend is only expected to be +1/-1, but
      * other values will work. N.B. the roll() method only supports changes by a
      * single unit - up or down

@@ -24,6 +24,7 @@ import org.apache.jmeter.testbeans.gui.FileEditor;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
 
@@ -38,17 +39,16 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String QUOTED_DATA = "quotedData";          //$NON-NLS-1$
     private static final String SHAREMODE = "shareMode";             //$NON-NLS-1$
 
-    // Access needed from CSVDataSet
     private static final String[] SHARE_TAGS = new String[3];
     static final int SHARE_ALL    = 0;
-    static final int SHARE_GROUP  = 1;
-    static final int SHARE_THREAD = 2;
 
     // Store the resource keys
     static {
-        SHARE_TAGS[SHARE_ALL]    = "shareMode.all"; //$NON-NLS-1$
-        SHARE_TAGS[SHARE_GROUP]  = "shareMode.group"; //$NON-NLS-1$
-        SHARE_TAGS[SHARE_THREAD] = "shareMode.thread"; //$NON-NLS-1$
+        for (CSVDataSet.ShareMode value : CSVDataSet.ShareMode.values()) {
+            @SuppressWarnings("EnumOrdinal")
+            int index = value.ordinal();
+            SHARE_TAGS[index] = value.toString();
+        }
     }
 
     public CSVDataSetBeanInfo() {
@@ -60,53 +60,53 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
                         RECYCLE, STOPTHREAD, SHAREMODE });
 
         PropertyDescriptor p = property(FILENAME);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");        //$NON-NLS-1$
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, true);
         p.setPropertyEditorClass(FileEditor.class);
 
         p = property(FILE_ENCODING, TypeEditor.ComboStringEditor);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");        //$NON-NLS-1$
         p.setValue(TAGS, getListFileEncoding());
 
         p = property(VARIABLE_NAMES);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");        //$NON-NLS-1$
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, true);
 
         p = property(IGNORE_FIRST_LINE);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
 
         p = property(DELIMITER);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ",");        //$NON-NLS-1$
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, true);
 
         p = property(QUOTED_DATA);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
 
         p = property(RECYCLE);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, true);
 
         p = property(STOPTHREAD);
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
 
         p = property(SHAREMODE, TypeEditor.ComboStringEditor);
         p.setValue(RESOURCE_BUNDLE, getBeanDescriptor().getValue(RESOURCE_BUNDLE));
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, SHARE_TAGS[SHARE_ALL]);
-        p.setValue(NOT_OTHER, Boolean.FALSE);
-        p.setValue(NOT_EXPRESSION, Boolean.FALSE);
+        p.setValue(NOT_OTHER, false);
+        p.setValue(NOT_EXPRESSION, false);
         p.setValue(TAGS, SHARE_TAGS);
     }
 
     public static int getShareModeAsInt(String mode) {
-        if (mode == null || mode.length() == 0){
+        if (StringUtilities.isEmpty(mode)){
             return SHARE_ALL; // default (e.g. if test plan does not have definition)
         }
         for (int i = 0; i < SHARE_TAGS.length; i++) {

@@ -57,12 +57,14 @@ public class CustomX509TrustManager implements X509TrustManager
             for (int i = 0; i < certificates.length; i++) {
                 X509Certificate cert = certificates[i];
                 log.debug(
-                        " Client certificate {}:\n"
-                        + "  Subject DN: {}\n"
-                        + "  Signature Algorithm: {}\n"
-                        + "  Valid from: {}\n"
-                        + "  Valid until: {}\n"
-                        + "  Issuer: {}",
+                        """
+                        Client certificate {}:
+                          Subject DN: {}
+                          Signature Algorithm: {}
+                          Valid from: {}
+                          Valid until: {}
+                          Issuer: {}\
+                        """,
                         i + 1,
                         cert.getSubjectX500Principal(),
                         cert.getSigAlgName(),
@@ -83,12 +85,14 @@ public class CustomX509TrustManager implements X509TrustManager
             for (int i = 0; i < certificates.length; i++) {
                 X509Certificate cert = certificates[i];
                 log.debug(
-                        " Server certificate {}:\n"
-                        + "  Subject DN: {}\n"
-                        + "  Signature Algorithm: {}\n"
-                        + "  Valid from: {}\n"
-                        + "  Valid until: {}\n"
-                        + "  Issuer: {}",
+                        """
+                        Server certificate {}:
+                          Subject DN: {}
+                          Signature Algorithm: {}
+                          Valid from: {}
+                          Valid until: {}
+                          Issuer: {}\
+                        """,
                         i + 1,
                         cert.getSubjectX500Principal(),
                         cert.getSigAlgName(),

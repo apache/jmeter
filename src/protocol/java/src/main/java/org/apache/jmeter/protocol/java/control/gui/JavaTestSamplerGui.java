@@ -91,9 +91,6 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
         javaPanel.configure(el);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#clearGui()
-     */
     @Override
     public void clearGui() {
         super.clearGui();

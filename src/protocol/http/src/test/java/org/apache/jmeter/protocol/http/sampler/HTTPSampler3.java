@@ -46,9 +46,6 @@ class HTTPSampler3 extends HTTPSamplerBase implements Interruptible {
         return hc.sample(u, method, areFollowingRedirect, depth);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-     */
     @Override
     public void testIterationStart(LoopIterationEvent event) {
         hc.notifyFirstSampleAfterLoopRestart();

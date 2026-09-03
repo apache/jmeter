@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractScopedTestElement;
@@ -34,7 +33,7 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -226,7 +225,7 @@ public class JSONPostProcessor
             if (previousResult != null) {
                 List<String> results = getSampleList(previousResult).stream()
                         .map(SampleResult::getResponseDataAsString)
-                        .filter(StringUtils::isNotBlank)
+                        .filter(StringUtilities::isNotBlank)
                         .collect(Collectors.toList());
                 if (log.isDebugEnabled()) {
                     log.debug("JSON Extractor {} working on Responses: {}", getName(), results);
@@ -304,7 +303,7 @@ public class JSONPostProcessor
 
         String matchNumbersAsString = getMatchNumbers();
         int[] result = new int[arraySize];
-        if (JOrphanUtils.isBlank(matchNumbersAsString)) {
+        if (StringUtilities.isBlank(matchNumbersAsString)) {
             Arrays.fill(result, 0);
         } else {
             String[] matchNumbersAsStringArray =

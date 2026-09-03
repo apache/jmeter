@@ -282,6 +282,6 @@ public class TestXPath2Extractor {
         jmc.setPreviousResult(null);
         extractor.setXPathQuery("/book/preface");
         extractor.process();
-        assertEquals(null, vars.get(VAL_NAME));
+        assertNull(vars.get(VAL_NAME));
     }
 }

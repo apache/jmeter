@@ -36,7 +36,6 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.TextBoxDialoger.TextBoxDoubleClick;
@@ -53,6 +52,7 @@ import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,9 +145,6 @@ public class RequestViewHTTP implements RequestView {
                         String.class, String.class }, false);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#init()
-     */
     @Override
     public void init() {
         paneParsed = new JPanel(new BorderLayout(0, 5));
@@ -156,9 +153,6 @@ public class RequestViewHTTP implements RequestView {
         paneParsed.add(searchTextExtension.getSearchToolBar(), BorderLayout.NORTH);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#clearData()
-     */
     @Override
     public void clearData() {
         requestModel.clearData();
@@ -166,15 +160,11 @@ public class RequestViewHTTP implements RequestView {
         headersModel.clearData(); // clear results table before filling
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#setSamplerResult(java.lang.Object)
-     */
     @Override
     public void setSamplerResult(Object objectResult) {
 
         this.searchTextExtension.resetTextToFind();
-        if (objectResult instanceof HTTPSampleResult) {
-            HTTPSampleResult sampleResult = (HTTPSampleResult) objectResult;
+        if (objectResult instanceof HTTPSampleResult sampleResult) {
 
             // Display with same order HTTP protocol
             requestModel.addRow(new RowResult(
@@ -208,14 +198,14 @@ public class RequestViewHTTP implements RequestView {
 
                 // Concatenate query post if exists
                 String queryPost = sampleResult.getQueryString();
-                if (!isMultipart && StringUtils.isNotBlank(queryPost)) {
-                    if (queryGet.length() > 0) {
+                if (!isMultipart && StringUtilities.isNotBlank(queryPost)) {
+                    if (!queryGet.isEmpty()) {
                         queryGet += PARAM_CONCATENATE;
                     }
                     queryGet += queryPost;
                 }
 
-                if (StringUtils.isNotBlank(queryGet)) {
+                if (StringUtilities.isNotBlank(queryGet)) {
                     Set<Map.Entry<String, String[]>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
                     for (Map.Entry<String, String[]> entry : keys) {
                         for (String value : entry.getValue()) {
@@ -224,7 +214,7 @@ public class RequestViewHTTP implements RequestView {
                     }
                 }
 
-                if(isMultipart && StringUtils.isNotBlank(queryPost)) {
+                if (isMultipart && StringUtilities.isNotBlank(queryPost)) {
                     String contentType = lhm.get(HTTPConstants.HEADER_CONTENT_TYPE);
                     String boundaryString = extractBoundary(contentType);
                     MultipartUrlConfig urlconfig = new MultipartUrlConfig(boundaryString);
@@ -239,7 +229,7 @@ public class RequestViewHTTP implements RequestView {
 
             // Display cookie in headers table (same location on http protocol)
             String cookie = sampleResult.getCookies();
-            if (cookie != null && cookie.length() > 0) {
+            if (StringUtilities.isNotEmpty(cookie)) {
                 headersModel.addRow(new RowResult(
                         JMeterUtils.getParsedLabel("view_results_table_request_http_cookie"), //$NON-NLS-1$
                         sampleResult.getCookies()));
@@ -336,7 +326,7 @@ public class RequestViewHTTP implements RequestView {
      *            query will be returned.
      */
     public static String decodeQuery(String query) {
-        if (query != null && query.length() > 0) {
+        if (StringUtilities.isNotEmpty(query)) {
             try {
                 return URLDecoder.decode(query, CHARSET_DECODE); // better  ISO-8859-1 than UTF-8
             } catch (IllegalArgumentException | UnsupportedEncodingException e) {
@@ -415,9 +405,6 @@ public class RequestViewHTTP implements RequestView {
         column.setPreferredWidth(160);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.visualizers.request.RequestView#getLabel()
-     */
     @Override
     public String getLabel() {
         return JMeterUtils.getResString(KEY_LABEL);
@@ -447,8 +434,8 @@ public class RequestViewHTTP implements RequestView {
                 for (int i = lastPosition+1; i < tableParams.getRowCount(); i++) {
                     for (int j = 0; j < COLUMNS_PARAMS.length; j++) {
                         Object o = tableParams.getModel().getValueAt(i, j);
-                        if(o instanceof String) {
-                            Matcher matcher = pattern.matcher((String) o);
+                        if(o instanceof String s) {
+                            Matcher matcher = pattern.matcher(s);
                             if (matcher.find()) {
                                 found =  true;
                                 tableParams.setRowSelectionInterval(i, i);

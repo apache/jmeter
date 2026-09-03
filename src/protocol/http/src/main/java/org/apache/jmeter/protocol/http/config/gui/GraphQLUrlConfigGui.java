@@ -17,15 +17,12 @@
 
 package org.apache.jmeter.protocol.http.config.gui;
 
-import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
-
 import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -39,6 +36,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Extending {@link UrlConfigGui}, GraphQL over HTTP Request configuration GUI, providing more convenient UI elements
@@ -95,9 +93,11 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         final GraphQLRequestParams params = new GraphQLRequestParams(operationNameText.getText(),
                 queryContent.getText(), variablesContent.getText());
 
-        element.setProperty(OPERATION_NAME, defaultIfEmpty(params.getOperationName(), null));
-        element.setProperty(QUERY, defaultIfEmpty(params.getQuery(), null));
-        element.setProperty(VARIABLES, defaultIfEmpty(params.getVariables(), null));
+        String operationName = params.getOperationName();
+        element.setProperty(OPERATION_NAME, StringUtilities.trimToNull(operationName));
+        element.setProperty(QUERY, StringUtilities.trimToNull(params.getQuery()));
+        String variables = params.getVariables();
+        element.setProperty(VARIABLES, StringUtilities.trimToNull(variables));
         element.setProperty(HTTPSamplerBase.POST_BODY_RAW, !HTTPConstants.GET.equals(method));
 
         final Arguments args;
@@ -105,16 +105,16 @@ public class GraphQLUrlConfigGui extends UrlConfigGui {
         if (HTTPConstants.GET.equals(method)) {
             args = createHTTPArgumentsTestElement();
 
-            if (StringUtils.isNotBlank(params.getOperationName())) {
-                args.addArgument(createHTTPArgument("operationName", params.getOperationName().trim(), true));
+            if (StringUtilities.isNotBlank(operationName)) {
+                args.addArgument(createHTTPArgument("operationName", operationName.trim(), true));
             }
 
             args.addArgument(createHTTPArgument("query",
                     GraphQLRequestParamUtils.queryToGetParamValue(params.getQuery()), true));
 
-            if (StringUtils.isNotBlank(params.getVariables())) {
+            if (StringUtilities.isNotBlank(variables)) {
                 final String variablesParamValue = GraphQLRequestParamUtils
-                        .variablesToGetParamValue(params.getVariables());
+                        .variablesToGetParamValue(variables);
                 if (variablesParamValue != null) {
                     args.addArgument(createHTTPArgument("variables", variablesParamValue, true));
                 }

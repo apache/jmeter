@@ -34,7 +34,7 @@ public class JMESPathCache {
     private static final class JMESPathCacheLoader implements CacheLoader<String, Expression<JsonNode>> {
         final JmesPath<JsonNode> runtime;
 
-        public JMESPathCacheLoader() {
+        private JMESPathCacheLoader() {
             runtime = new JacksonRuntime(
                     new RuntimeConfiguration.Builder().withFunctionRegistry(FunctionRegistry.defaultRegistry()).build());
         }
@@ -57,7 +57,7 @@ public class JMESPathCache {
      * Initialization On Demand Holder pattern
      */
     private static class JMESPathCacheHolder {
-        public static final JMESPathCache INSTANCE = new JMESPathCache();
+        private static final JMESPathCache INSTANCE = new JMESPathCache();
     }
 
     /**

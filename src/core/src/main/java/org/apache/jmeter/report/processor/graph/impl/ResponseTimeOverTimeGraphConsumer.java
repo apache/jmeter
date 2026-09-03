@@ -37,13 +37,6 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 public class ResponseTimeOverTimeGraphConsumer extends
         AbstractOverTimeGraphConsumer {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
-     * #createTimeStampKeysSelector()
-     */
     @Override
     protected TimeStampKeysSelector createTimeStampKeysSelector() {
         TimeStampKeysSelector keysSelector = new TimeStampKeysSelector();
@@ -51,12 +44,6 @@ public class ResponseTimeOverTimeGraphConsumer extends
         return keysSelector;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         return Collections.singletonMap(

@@ -21,22 +21,23 @@ import java.io.Closeable;
 import java.io.Serializable;
 import java.util.Map;
 
-import javax.jms.BytesMessage;
-import javax.jms.Connection;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MapMessage;
-import javax.jms.Message;
-import javax.jms.MessageProducer;
-import javax.jms.ObjectMessage;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
 import org.apache.jmeter.protocol.jms.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.jms.BytesMessage;
+import jakarta.jms.Connection;
+import jakarta.jms.Destination;
+import jakarta.jms.JMSException;
+import jakarta.jms.MapMessage;
+import jakarta.jms.Message;
+import jakarta.jms.MessageProducer;
+import jakarta.jms.ObjectMessage;
+import jakarta.jms.Session;
+import jakarta.jms.TextMessage;
 
 public class Publisher implements Closeable {
 

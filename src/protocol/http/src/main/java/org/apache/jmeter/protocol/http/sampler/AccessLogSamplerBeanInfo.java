@@ -59,18 +59,18 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
         PropertyDescriptor p;
 
         p = property("parserClassName");
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, AccessLogSampler.DEFAULT_CLASS);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_OTHER, true);
+        p.setValue(NOT_EXPRESSION, true);
 
         log.debug("found parsers: {}", LOG_PARSER_CLASSES);
         p.setValue(TAGS, LOG_PARSER_CLASSES.toArray(new String[0]));
 
         p = property("filterClassName"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.FALSE);
+        p.setValue(NOT_UNDEFINED, false);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, true);
         String[] classes = JMeterUtils.loadServicesAndScanJars(
                         Filter.class,
                         ServiceLoader.load(Filter.class),
@@ -83,27 +83,27 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
         p.setValue(TAGS, classes);
 
         p = property("logFile"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
         p.setPropertyEditorClass(FileEditor.class);
 
         p = property("domain"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "");
 
         p = property("protocol"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, "http"); // $NON-NLS-1$
-        p.setValue(DEFAULT_NOT_SAVED, Boolean.TRUE);
+        p.setValue(DEFAULT_NOT_SAVED, true);
 
         p = property("portString"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
         p = property("imageParsing"); // $NON-NLS-1$
-        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, Boolean.FALSE);
-        p.setValue(NOT_OTHER, Boolean.TRUE);
+        p.setValue(NOT_UNDEFINED, true);
+        p.setValue(DEFAULT, false);
+        p.setValue(NOT_OTHER, true);
         log.debug("Got to end of access log sampler bean info init");
     }
 

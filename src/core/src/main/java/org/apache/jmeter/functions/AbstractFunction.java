@@ -19,13 +19,13 @@ package org.apache.jmeter.functions;
 
 import java.util.Collection;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Provides common methods for all functions
@@ -154,7 +154,7 @@ public abstract class AbstractFunction implements Function {
     protected final void addVariableValue(String value, CompoundVariable[] values, int index) {
         if (values.length > index) {
             String variableName = values[index].execute().trim();
-            if (StringUtils.isNotEmpty(variableName)) {
+            if (StringUtilities.isNotEmpty(variableName)) {
                 JMeterVariables vars = getVariables();
                 if (vars != null) {
                     vars.put(variableName, value);

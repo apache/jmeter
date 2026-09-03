@@ -93,8 +93,8 @@ public class FindTestElementsUpToRootTraverser implements HashTreeTraverser {
         Deque<TestElement> stackLocalCopy = new ArrayDeque<>(stack);
         while(!stackLocalCopy.isEmpty()) {
             TestElement te = stackLocalCopy.getLast();
-            if(te instanceof Controller) {
-                result.add((Controller)te);
+            if (te instanceof Controller controller) {
+                result.add(controller);
             }
             stackLocalCopy.removeLast();
         }

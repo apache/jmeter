@@ -36,23 +36,11 @@ import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
  */
 public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createKeysSelector()
-     */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
         return sample -> (double) sample.getAllThreads();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#
-     * createGroupInfos()
-     */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
         return Collections.singletonMap(
@@ -63,12 +51,6 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
                         new ElapsedTimeValueSelector(false), false, true));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#
-     * initializeExtraResults(org.apache.jmeter.report.processor.MapResultData)
-     */
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         // do nothing

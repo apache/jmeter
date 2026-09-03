@@ -19,7 +19,9 @@ package org.apache.jmeter.gui.action;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
+
+import kotlin.text.StringsKt;
 
 /**
  * Searcher implementation that searches text as is
@@ -44,8 +46,8 @@ public class RawTextSearcher implements Searcher {
     @Override
     public boolean search(List<String> textTokens) {
         return textTokens.stream()
-                .filter(StringUtils::isNotEmpty)
-                .anyMatch(token -> caseSensitive ? token.contains(textToSearch) : StringUtils.containsAnyIgnoreCase(token, textToSearch));
+                .filter(StringUtilities::isNotEmpty)
+                .anyMatch(token -> StringsKt.contains(token, textToSearch, !caseSensitive));
     }
 
     @Override

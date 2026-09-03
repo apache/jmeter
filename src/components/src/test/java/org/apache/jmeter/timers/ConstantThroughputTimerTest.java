@@ -34,7 +34,10 @@ class ConstantThroughputTimerTest {
     @Test
     void testTimer1() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
-        assertEquals(0, timer.getCalcMode());// Assume this thread only
+        @SuppressWarnings("deprecation")
+        int calcMode = timer.getCalcMode();
+        assertEquals(0, calcMode);// Assume this thread only
+        assertEquals(ConstantThroughputTimer.Mode.ThisThreadOnly, timer.getMode());// Assume this thread only
         timer.setThroughput(60.0);// 1 per second
         long start = System.currentTimeMillis();
         long delay = timer.delay(); // Initialise
@@ -64,7 +67,9 @@ class ConstantThroughputTimerTest {
     @Test
     void testTimer2() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
-        assertEquals(0, timer.getCalcMode());// Assume this thread only
+        @SuppressWarnings("deprecation")
+        int calcMode = timer.getCalcMode();
+        assertEquals(0, calcMode);// Assume this thread only
         timer.setThroughput(60.0);// 1 per second
         assertEquals(1000, timer.calculateCurrentTarget(0)); // Should delay for 1 second
         timer.setThroughput(60000.0);// 1 per milli-second
@@ -75,7 +80,10 @@ class ConstantThroughputTimerTest {
     void testTimer3() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
         timer.setMode(ConstantThroughputTimer.Mode.AllActiveThreads); //$NON-NLS-1$ - all threads
-        assertEquals(1, timer.getCalcMode());// All threads
+        @SuppressWarnings("deprecation")
+        int calcMode = timer.getCalcMode();
+        assertEquals(1, calcMode);// All threads
+        assertEquals(ConstantThroughputTimer.Mode.AllActiveThreads, timer.getMode());// All threads
         for(int i=1; i<=10; i++){
             TestJMeterContextService.incrNumberOfThreads();
         }

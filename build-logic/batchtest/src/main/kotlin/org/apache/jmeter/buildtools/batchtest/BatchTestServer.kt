@@ -25,11 +25,9 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.property
+import org.gradle.process.ExecOperations
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import java.io.File
 import java.net.ConnectException
-import java.net.InetAddress
-import java.net.ServerSocket
 import java.net.Socket
 import java.time.Duration
 import java.util.concurrent.Executors
@@ -37,7 +35,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
-open class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTest(objects) {
+abstract class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTest(objects) {
     private val executor =
         Executors.newFixedThreadPool(project.gradle.startParameter.maxWorkerCount)
 
@@ -53,22 +51,20 @@ open class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTe
     val startupTimeout = objects.property<Duration>()
         .convention(Duration.ofSeconds(15))
 
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
     private fun deleteWorkfiles() {
         project.delete(serverLogFile)
     }
 
-    private fun getFreePort(): Int =
-        ServerSocket(0).use {
-            return it.localPort
-        }
-
     private fun waitForPort(host: String, port: Int, timeout: Duration): Boolean {
-        val deadline = System.nanoTime() + timeout.toNanos()
-        while (System.nanoTime() < deadline) {
+        val start = System.nanoTime()
+        while (System.nanoTime() - start <  timeout.toNanos()) {
             try {
                 Socket(host, port).close()
                 return true
-            } catch (e: ConnectException) {
+            } catch (_: ConnectException) {
                 /* ignore */
                 Thread.sleep(50)
             }
@@ -86,7 +82,7 @@ open class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTe
 
         val client = this
         val serverPort = getFreePort()
-        val serverHost = InetAddress.getLocalHost().canonicalHostName
+        val serverHost = getServerHost()
         args("-R$serverHost:$serverPort")
         val jacoco = extensions.findByType<JacocoTaskExtension>()
         // The extension might not exist, so don't fail if so
@@ -106,8 +102,8 @@ open class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTe
             jvmarg
         }
         val server = executor.submit {
-            project.javaexec {
-                workingDir = File(project.rootDir, "bin")
+            execOperations.javaexec {
+                workingDir = serverWorkingDir.get().asFile
                 mainClass.set("org.apache.jmeter.NewDriver")
                 classpath(client.classpath)
                 standardOutput = System.out.writer().withPrefix("[server] ")
@@ -124,7 +120,7 @@ open class BatchTestServer @Inject constructor(objects: ObjectFactory) : BatchTe
                 systemProperty("user.region", userRegion.get())
                 systemProperty("user.country", userCountry.get())
 
-                args("-pjmeter.properties")
+                args("-p${jmeterProperties.get().asFile.name}")
                 args("-q", batchProperties.get())
                 args("-i", log4jXml.get())
                 args("-j", serverLogFile.get())

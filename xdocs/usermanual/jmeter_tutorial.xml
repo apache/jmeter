@@ -854,14 +854,14 @@ createPropertyGroup("csv_data",
         Then, we need to define what kind of properties we want these to be:
 <source>
 p = property("filename");
-p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+p.setValue(NOT_UNDEFINED, true);
 p.setValue(DEFAULT, "");
-p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+p.setValue(NOT_EXPRESSION, true);
 
 p = property("variableNames");
-p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+p.setValue(NOT_UNDEFINED, true);
 p.setValue(DEFAULT, "");
-p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+p.setValue(NOT_EXPRESSION, true);
 </source>
         This essentially creates two properties whose value is not allowed to be <code>null</code>, and
         whose default values are <code>""</code>. There are several such attributes that can be set for each

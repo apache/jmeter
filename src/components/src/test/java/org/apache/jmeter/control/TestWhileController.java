@@ -50,7 +50,7 @@ public class TestWhileController extends JMeterTestCase {
         jmvars.put(JMeterThread.LAST_SAMPLE_OK, Boolean.toString(status));
     }
 
-    private void setRunning(TestElement el) {
+    private static void setRunning(TestElement el) {
         PropertyIterator pi = el.propertyIterator();
         while (pi.hasNext()) {
             pi.next().setRunningVersion(true);
@@ -58,7 +58,7 @@ public class TestWhileController extends JMeterTestCase {
     }
 
     // Get next sample and its name
-    private String nextName(GenericController c) {
+    private static String nextName(GenericController c) {
         Sampler s = c.next();
         if (s == null) {
             return null;
@@ -154,7 +154,7 @@ public class TestWhileController extends JMeterTestCase {
         assertNull(nextName(controller));
     }
 
-    /*
+    /**
      * Generic Controller
      * - before
      * - While Controller ${VAR}

@@ -109,9 +109,7 @@ public class TextComponentUI {
     public static void uninstallUndo(JTextComponent component) {
         List<PropertyChangeListener> listenersToRemove = new ArrayList<>();
         for (PropertyChangeListener listener : component.getPropertyChangeListeners("document")) {
-            if (listener instanceof AddUndoableEditListenerPropertyChangeListener) {
-                AddUndoableEditListenerPropertyChangeListener v =
-                        (AddUndoableEditListenerPropertyChangeListener) listener;
+            if (listener instanceof AddUndoableEditListenerPropertyChangeListener v) {
                 listenersToRemove.add(v);
 
                 UndoManager undoManager = v.getUndoManager();

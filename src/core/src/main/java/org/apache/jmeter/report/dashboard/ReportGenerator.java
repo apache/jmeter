@@ -28,7 +28,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.GraphConfiguration;
@@ -61,6 +60,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import kotlin.io.path.PathsKt;
 
 /**
  * The class ReportGenerator provides a way to generate all the templated files
@@ -300,7 +301,11 @@ public class ReportGenerator {
     private static void removeTempDir(File tmpDir, boolean tmpDirCreated) {
         if (tmpDirCreated) {
             try {
-                FileUtils.deleteDirectory(tmpDir);
+                PathsKt.deleteRecursively(tmpDir.toPath());
+                //noinspection ConstantValue
+                if (false) {
+                    throw new IOException("Make javac happy as deleteRecursively can throw IOException");
+                }
             } catch (IOException ex) {
                 log.warn("Cannot delete created temporary directory, '{}'.", tmpDir, ex);
             }

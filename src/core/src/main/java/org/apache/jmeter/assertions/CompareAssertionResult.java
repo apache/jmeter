@@ -63,11 +63,11 @@ public class CompareAssertionResult extends AssertionResult {
         private String baseResult;
         private String secondaryResult;
 
-        public ResultHolder()
+        private ResultHolder()
         {
         }
 
-        public void addToBaseResult(String r)
+        private void addToBaseResult(String r)
         {
             if(baseResult == null)
             {
@@ -79,7 +79,7 @@ public class CompareAssertionResult extends AssertionResult {
             }
         }
 
-        public void addToSecondaryResult(String r)
+        private void addToSecondaryResult(String r)
         {
             if(secondaryResult == null)
             {

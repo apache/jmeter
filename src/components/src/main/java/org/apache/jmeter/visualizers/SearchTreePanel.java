@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.RawTextSearcher;
@@ -43,6 +42,7 @@ import org.apache.jmeter.gui.action.Searcher;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.utils.Colors;
 import org.apache.jorphan.gui.JFactory;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,7 +165,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
      */
     private boolean doSearch() {
         String wordToSearch = searchTF.getText();
-        if (StringUtils.isEmpty(wordToSearch)) {
+        if (StringUtilities.isEmpty(wordToSearch)) {
             return false;
         }
         Searcher searcher = isRegexpCB.isSelected() ?
@@ -184,8 +184,8 @@ public class SearchTreePanel extends JPanel implements ActionListener {
 
         try {
             Searchable searchable;
-            if(userObject instanceof Searchable) {
-                searchable = (Searchable) userObject;
+            if(userObject instanceof Searchable searchable1) {
+                searchable = searchable1;
             } else {
                 return false;
             }

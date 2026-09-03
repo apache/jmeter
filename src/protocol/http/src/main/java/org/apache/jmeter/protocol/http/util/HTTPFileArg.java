@@ -22,15 +22,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.testelement.schema.PropertyDescriptor;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.tika.Tika;
-import org.apache.tika.config.TikaConfig;
-import org.apache.tika.exception.TikaException;
-import org.xml.sax.SAXException;
 
 /**
  * Class representing a file parameter for http upload.
@@ -46,7 +43,7 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
     /** temporary storage area for the body header. */
     private String header;
 
-    private static final Tika tika = createTika();
+    private static final Tika tika = new Tika();
 
     /**
      * Constructor for an empty HTTPFileArg object
@@ -87,21 +84,12 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
         setMimeType(detectMimeType(path, mimetype));
     }
 
-    private static Tika createTika() {
-        try {
-            return new Tika(new TikaConfig(HTTPFileArg.class.getClassLoader()
-                    .getResourceAsStream("org/apache/jmeter/protocol/http/gui/action/tika-config.xml")));
-        } catch (TikaException | IOException | SAXException e) {
-            return new Tika();
-        }
-    }
-
     private static String detectMimeType(String path, String mimetype) {
-        if (StringUtils.isNotBlank(mimetype)) {
+        if (StringUtilities.isNotBlank(mimetype)) {
             return mimetype;
         }
         mimetype = Objects.toString(mimetype, "");
-        if (StringUtils.isBlank(path)) {
+        if (StringUtilities.isBlank(path)) {
             return mimetype;
         }
         File file = new File(path);
@@ -266,9 +254,9 @@ public class HTTPFileArg extends AbstractTestElement implements Serializable {
      * @return true if Path, name or mimetype fields are not the empty string
      */
     public boolean isNotEmpty() {
-        return getPath().length() > 0
-            || getParamName().length() > 0
-            || getMimeType().length() > 0; // TODO should we allow mimetype only?
+        return !getPath().isEmpty()
+            || !getParamName().isEmpty()
+            || !getMimeType().isEmpty(); // TODO should we allow mimetype only?
     }
 
 }

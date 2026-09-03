@@ -58,7 +58,7 @@ public class SamplerName extends AbstractFunction {
             JMeterVariables vars = getVariables();
             if (vars != null) {// May be null if function is used on TestPlan
                 String varName = ((CompoundVariable) values[0]).execute().trim();
-                if (varName.length() > 0) {
+                if (!varName.isEmpty()) {
                     vars.put(varName, name);
                 }
             }

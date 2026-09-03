@@ -116,8 +116,9 @@ public class TestHTTPFileArgs {
         files.addHTTPFileArg("file1");
         files.addHTTPFileArg("file2.jpg");
         files.addHTTPFileArg("file3.jar");
-        assertEquals("path:'file1'|param:''|mimetype:'application/octet-stream'\n"
-                    +"path:'file2.jpg'|param:''|mimetype:'image/jpeg'\n"
-                    +"path:'file3.jar'|param:''|mimetype:'application/java-archive'", files.toString());
+        assertEquals("""
+                path:'file1'|param:''|mimetype:'application/octet-stream'
+                path:'file2.jpg'|param:''|mimetype:'image/jpeg'
+                path:'file3.jar'|param:''|mimetype:'application/java-archive'""", files.toString());
     }
 }

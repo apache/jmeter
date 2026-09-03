@@ -17,7 +17,7 @@
 
 package org.apache.jmeter.report.utils;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * @since 5.0
@@ -41,7 +41,7 @@ public class MetricUtils {
      * @return whether in range 200-399 or not
      */
     public static boolean isSuccessCode(String codeAsString) {
-        if (StringUtils.isNumeric(codeAsString)) {
+        if (StringUtilities.isNumeric(codeAsString)) {
             try {
                 int code = Integer.parseInt(codeAsString);
                 return isSuccessCode(code);

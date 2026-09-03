@@ -76,7 +76,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     // at any one time so it is not guaranteed to work ...
     private static volatile StandardJMeterEngine engine;
 
-    /*
+    /**
      * Allow functions etc to register for testStopped notification.
      * Only used by the function parser so far.
      * The list is merged with the testListeners and then cleared.
@@ -363,7 +363,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         /**
          * set the shared engine to null
          */
-        private void resetSingletonEngine() {
+        private static void resetSingletonEngine() {
             StandardJMeterEngine.engine = null; // NOSONAR We cannot make the method static here
         }
 
@@ -402,9 +402,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         log.info("Running the test!");
         running = true;
 
-        /*
-         * Ensure that the sample variables are correctly initialised for each run.
-         */
+        // Ensure that the sample variables are correctly initialised for each run.
         SampleEvent.initSampleVariables();
 
         JMeterContextService.startTest();
@@ -416,10 +414,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterUtils.reportErrorToUser("Error occurred compiling the tree: - see log file", e);
             return; // no point continuing
         }
-        /*
-         * Notification of test listeners needs to happen after function
-         * replacement, but before setting RunningVersion to true.
-         */
+        // Notification of test listeners needs to happen after function
+        // replacement, but before setting RunningVersion to true.
         var testListeners = new SearchByClass<>(TestStateListener.class); // TL - S&E
         test.traverse(testListeners);
 
@@ -479,11 +475,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
         groups.clear(); // The groups have all completed now
 
-        /*
-         * Here's where the test really starts. Run a Full GC now: it's no harm
-         * at all (just delays test start by a tiny amount) and hitting one too
-         * early in the test can impair results for short tests.
-         */
+        // Here's where the test really starts. Run a Full GC now: it's no harm
+        // at all (just delays test start by a tiny amount) and hitting one too
+        // early in the test can impair results for short tests.
         JMeterUtils.helpGC();
 
         JMeterContextService.getContext().setSamplingStarted(true);

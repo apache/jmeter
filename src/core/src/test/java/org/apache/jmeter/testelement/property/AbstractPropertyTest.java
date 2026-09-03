@@ -17,7 +17,9 @@
 
 package org.apache.jmeter.testelement.property;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -69,15 +70,15 @@ public class AbstractPropertyTest {
     public void testNormalizeListWithEmptyList() {
         Collection<JMeterProperty> emptyCollection = Collections.emptyList();
         Collection<JMeterProperty> newCollection = dummyProperty.normalizeList(emptyCollection);
-        assertThat(newCollection, CoreMatchers.equalTo(emptyCollection));
+        assertEquals(emptyCollection, newCollection);
     }
 
     @Test
     public void testNormalizeListWithEmptyArrayList() {
         Collection<JMeterProperty> emptyCollection = new ArrayList<>();
         Collection<JMeterProperty> newCollection = dummyProperty.normalizeList(emptyCollection);
-        assertThat(newCollection, CoreMatchers.not(CoreMatchers.sameInstance(emptyCollection)));
-        assertThat(newCollection, CoreMatchers.equalTo(emptyCollection));
+        assertNotSame(emptyCollection, newCollection);
+        assertEquals(emptyCollection, newCollection);
     }
 
     @Test
@@ -85,23 +86,23 @@ public class AbstractPropertyTest {
         List<JMeterProperty> filledCollection = new ArrayList<>();
         filledCollection.add(new StringProperty("key", "value"));
         Collection<JMeterProperty> newCollection = dummyProperty.normalizeList(filledCollection);
-        assertThat(newCollection, CoreMatchers.not(CoreMatchers.sameInstance(filledCollection)));
-        assertThat(newCollection, CoreMatchers.equalTo(filledCollection));
+        assertNotSame(filledCollection, newCollection);
+        assertEquals(filledCollection, newCollection);
     }
 
     @Test
     public void testNormalizeListWithEmptyMap() {
         Map<String, JMeterProperty> emptyCollection = Collections.emptyMap();
         Map<String, JMeterProperty> newCollection = dummyProperty.normalizeMap(emptyCollection);
-        assertThat(newCollection, CoreMatchers.nullValue());
+        assertNull(newCollection);
     }
 
     @Test
     public void testNormalizeMapWithEmptyHashMap() {
         Map<String, JMeterProperty> emptyCollection = new HashMap<>();
         Map<String, JMeterProperty> newCollection = dummyProperty.normalizeMap(emptyCollection);
-        assertThat(newCollection, CoreMatchers.not(CoreMatchers.sameInstance(emptyCollection)));
-        assertThat(newCollection, CoreMatchers.equalTo(emptyCollection));
+        assertNotSame(emptyCollection, newCollection);
+        assertEquals(emptyCollection, newCollection);
     }
 
     @Test
@@ -109,7 +110,7 @@ public class AbstractPropertyTest {
         Map<String, JMeterProperty> filledCollection = new HashMap<>();
         filledCollection.put("someKey", new StringProperty("key", "value"));
         Map<String, JMeterProperty> newCollection = dummyProperty.normalizeMap(filledCollection);
-        assertThat(newCollection, CoreMatchers.not(CoreMatchers.sameInstance(filledCollection)));
-        assertThat(newCollection, CoreMatchers.equalTo(filledCollection));
+        assertNotSame(filledCollection, newCollection);
+        assertEquals(filledCollection, newCollection);
     }
 }

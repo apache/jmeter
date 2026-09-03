@@ -19,9 +19,9 @@ package org.apache.jmeter.protocol.http.proxy;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -61,7 +61,7 @@ public class FormCharSetFinder {
         Elements forms = document.select("form");
         for (Element element : forms) {
             String action = element.attr("action");
-            if (!StringUtils.isEmpty(action)) {
+            if (StringUtilities.isNotEmpty(action)) {
                 // We use the page encoding where the form resides, as the
                 // default encoding for the form
                 String formCharSet = pageEncoding;

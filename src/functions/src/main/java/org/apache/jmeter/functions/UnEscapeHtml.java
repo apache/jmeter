@@ -22,11 +22,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
+import org.unbescape.html.HtmlEscape;
 
 import com.google.auto.service.AutoService;
 
@@ -41,7 +41,7 @@ import com.google.auto.service.AutoService;
  * If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
  * e.g. "&amp;gt;&amp;zzzz;x" will become "&gt;&amp;zzzz;x".
  * </p>
- * @see StringEscapeUtils#unescapeHtml4(String)
+ * @see HtmlEscape#unescapeHtml(String)
  * @since 2.3.3
  */
 @AutoService(Function.class)
@@ -66,7 +66,7 @@ public class UnEscapeHtml extends AbstractFunction {
             throws InvalidVariableException {
 
         String escapedString = ((CompoundVariable) values[0]).execute();
-        return StringEscapeUtils.unescapeHtml4(escapedString);
+        return HtmlEscape.unescapeHtml(escapedString);
 
     }
 

@@ -17,7 +17,6 @@
 
 package org.apache.jmeter.report.core;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +27,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -65,8 +63,7 @@ public class CsvSampleReaderTest extends JMeterTestCase {
     @Test
     public void testGetMetadata() {
         try (CsvSampleReader reader = new CsvSampleReader(tempCsv, metadata)) {
-            assertThat(reader.getMetadata().toString(),
-                    CoreMatchers.is(metadata.toString()));
+            assertEquals(metadata.toString(), reader.getMetadata().toString());
         }
     }
 
@@ -76,8 +73,7 @@ public class CsvSampleReaderTest extends JMeterTestCase {
             for (long i = 0; i < NR_ROWS; i++) {
                 Sample expected = new SampleBuilder(metadata).add(i)
                         .add("a" + i).build();
-                assertThat(reader.readSample().toString(),
-                        CoreMatchers.is(expected.toString()));
+                assertEquals(expected.toString(), reader.readSample().toString());
             }
         }
     }
@@ -88,8 +84,7 @@ public class CsvSampleReaderTest extends JMeterTestCase {
             for (long i = 0; i < NR_ROWS; i++) {
                 Sample expected = new SampleBuilder(metadata).add(i)
                         .add("a" + i).build();
-                assertThat(reader.peek().toString(),
-                        CoreMatchers.is(expected.toString()));
+                assertEquals(expected.toString(), reader.peek().toString());
                 reader.readSample();
             }
         }

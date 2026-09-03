@@ -29,10 +29,12 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.Isolated
 import org.junit.jupiter.api.parallel.ResourceLock
 import org.junit.jupiter.api.parallel.Resources
 import java.util.Locale
 
+@Isolated("modifies jmeter locale")
 @ResourceLock(value = Resources.LOCALE)
 class HttpSamplerPrintDslTest : JMeterTestCase() {
     companion object {

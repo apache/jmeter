@@ -76,8 +76,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (el instanceof RegexExtractor){
-            RegexExtractor re = (RegexExtractor) el;
+        if (el instanceof RegexExtractor re){
             showScopeSettings(re, true);
             useHeaders.setSelected(re.useHeaders());
             useRequestHeaders.setSelected(re.useRequestHeaders());
@@ -114,8 +113,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     @Override
     public void modifyTestElement(TestElement extractor) {
         super.configureTestElement(extractor);
-        if (extractor instanceof RegexExtractor) {
-            RegexExtractor regex = (RegexExtractor) extractor;
+        if (extractor instanceof RegexExtractor regex) {
             saveScopeSettings(regex);
             regex.setUseField(group.getSelection().getActionCommand());
             regex.setRefName(refNameField.getText());

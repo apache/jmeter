@@ -246,8 +246,8 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
          * @see #shouldSelectCell
          */
         public boolean isCellEditable(EventObject anEvent) {
-            if (anEvent instanceof MouseEvent) {
-                return ((MouseEvent) anEvent).getClickCount() >= clickCountToStart;
+            if (anEvent instanceof MouseEvent mouseEvent) {
+                return mouseEvent.getClickCount() >= clickCountToStart;
             }
             return true;
         }

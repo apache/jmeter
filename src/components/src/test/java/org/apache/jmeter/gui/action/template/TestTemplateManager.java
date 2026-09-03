@@ -28,7 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 
@@ -64,7 +64,7 @@ public class TestTemplateManager extends JMeterTestCase {
 
     private File getFileFromResource(String resourceName) {
         try {
-            return Paths.get(this.getClass().getResource(resourceName).toURI()).toFile();
+            return Path.of(this.getClass().getResource(resourceName).toURI()).toFile();
         } catch (URISyntaxException e) {
             throw new RuntimeException("Can't read resource " + resourceName, e);
         }
@@ -112,7 +112,9 @@ public class TestTemplateManager extends JMeterTestCase {
             TemplateManager.getInstance().parseTemplateFile(templateFile);
         } catch (SAXParseException ex) {
             String message = ex.getMessage();
-            assertTrue(message.contains("Element type \"key\" must be declared."), "Exception did not contains expected message, got:" + message);
+            assertTrue(
+                    message.contains("\"key\""),
+                    "Exception did not contains expected message (e.g. Element type \"key\" must be declared.), got:" + message);
         }
     }
 

@@ -52,7 +52,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
         JMeterUtils.getPropDefault("proxy.binary.directory",// $NON-NLS-1$
                 System.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.fileType=binary
 
-    /*
+    /**
      * Optionally number the requests
      */
     private static final boolean NUMBER_REQUESTS =
@@ -64,7 +64,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     static {
         String binaries = JMeterUtils.getPropDefault("proxy.binary.types", // $NON-NLS-1$
                 "application/x-amf,application/x-java-serialized-object,binary/octet-stream"); // $NON-NLS-1$
-        if (binaries.length() > 0){
+        if (!binaries.isEmpty()){
             StringTokenizer s = new StringTokenizer(binaries,"|, ");// $NON-NLS-1$
             while (s.hasMoreTokens()){
                 BINARY_CONTENT_TYPES.add(s.nextToken());

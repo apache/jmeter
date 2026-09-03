@@ -27,15 +27,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.RandomStringGenerator;
+import org.apache.jorphan.text.RandomStringGenerator;
+import org.apiguardian.api.API;
+
+import kotlin.io.path.PathsKt;
 
 /**
  * This class contains frequently-used static utility methods.
@@ -403,15 +405,7 @@ public final class JOrphanUtils {
      * @return hex representation of binary input
      */
     public static String baToHexString(byte[] ba) {
-        StringBuilder sb = new StringBuilder(ba.length * 2);
-        for (byte b : ba) {
-            int j = b & 0xff;
-            if (j < 16) {
-                sb.append('0'); // $NON-NLS-1$ add zero padding
-            }
-            sb.append(Integer.toHexString(j));
-        }
-        return sb.toString();
+        return baToHexString(ba, '\0');
     }
 
     /**
@@ -422,18 +416,11 @@ public final class JOrphanUtils {
      * @return hex representation of binary input
      */
     public static String baToHexString(byte[] ba, char separator) {
-        StringBuilder sb = new StringBuilder(ba.length * 2);
-        for (int i = 0; i < ba.length; i++) {
-            if (i > 0 && separator != 0) {
-                sb.append(separator);
-            }
-            int j = ba[i] & 0xff;
-            if (j < 16) {
-                sb.append('0'); // $NON-NLS-1$ add zero padding
-            }
-            sb.append(Integer.toHexString(j));
+        HexFormat format = HexFormat.of();
+        if (separator != 0) {
+            format = format.withDelimiter(Character.toString(separator));
         }
-        return sb.toString();
+        return format.formatHex(ba);
     }
 
     /**
@@ -517,16 +504,12 @@ public final class JOrphanUtils {
      *
      * @param input String
      * @return trimmed input or {@code null}
+     * @deprecated use {@link StringUtilities#trimToNull(String)}
      */
+    @Deprecated
+    @API(since = "6.0.0", status = API.Status.DEPRECATED)
     public static String nullifyIfEmptyTrimmed(final String input) {
-        if (input == null) {
-            return null;
-        }
-        String trimmed = input.trim();
-        if (trimmed.length() == 0) {
-            return null;
-        }
-        return trimmed;
+        return StringUtilities.trimToNull(input);
     }
 
     /**
@@ -534,9 +517,12 @@ public final class JOrphanUtils {
      *
      * @param value Value
      * @return {@code true} if the String is not empty (""), not {@code null} and not whitespace only.
+     * @deprecated use {@link StringUtilities#isBlank(CharSequence)}
      */
+    @Deprecated
+    @API(since = "6.0.0", status = API.Status.DEPRECATED)
     public static boolean isBlank(final String value) {
-        return StringUtils.isBlank(value);
+        return StringUtilities.isBlank(value);
     }
 
     /**
@@ -651,7 +637,11 @@ public final class JOrphanUtils {
                 if (listedFiles != null && listedFiles.length > 0) {
                     if (deleteFolderIfExists) {
                         try {
-                            FileUtils.deleteDirectory(folder);
+                            PathsKt.deleteRecursively(folder.toPath());
+                            //noinspection ConstantValue
+                            if (false) {
+                                throw new IOException("Make javac happy as deleteRecursively can throw IOException");
+                            }
                         } catch (IOException ex) {
                             throw new IllegalArgumentException("Cannot write to '" + folder.getAbsolutePath()
                                     + "' as folder is not empty and cleanup failed with error:" + ex.getMessage(), ex);
@@ -719,7 +709,7 @@ public final class JOrphanUtils {
      * @return number of matches that were replaced
      */
     public static int replaceValue(String regex, String replaceBy, boolean caseSensitive, String value, Consumer<? super String> setter) {
-        if (StringUtils.isBlank(value)) {
+        if (StringUtilities.isBlank(value)) {
             return 0;
         }
         Object[] result = replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
@@ -760,11 +750,7 @@ public final class JOrphanUtils {
      * @return String random password
      */
     public static String generateRandomAlphanumericPassword(int length) {
-        char[][] pairs = {{'a', 'z'}, {'A', 'Z'}, {'0', '9'}};
-        RandomStringGenerator pwdGenerator = new RandomStringGenerator.Builder()
-                .usingRandom(LazySecureRandom.INSTANCE::nextInt)
-                .withinRange(pairs)
-                .build();
+        RandomStringGenerator pwdGenerator = RandomStringGenerator.alphanumeric(LazySecureRandom.INSTANCE);
         return pwdGenerator.generate(length);
     }
 }

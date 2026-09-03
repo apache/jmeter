@@ -76,13 +76,6 @@ public class Top5ErrorsBySamplerConsumer extends
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createDataResult
-     * (java.lang.String)
-     */
     @Override
     protected ListResultData createDataResult(String key, Top5ErrorsSummaryData data) {
         ListResultData result = new ListResultData();
@@ -110,25 +103,11 @@ public class Top5ErrorsBySamplerConsumer extends
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#getKeyFromSample
-     * (org.apache.jmeter.report.core.Sample)
-     */
     @Override
     protected String getKeyFromSample(Sample sample) {
         return sample.getName();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.AbstractSummaryConsumer#createResultTitles
-     * ()
-     */
     @Override
     protected ListResultData createResultTitles() {
         ListResultData titles = new ListResultData();

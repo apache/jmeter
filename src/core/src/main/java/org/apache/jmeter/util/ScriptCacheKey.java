@@ -17,6 +17,8 @@
 
 package org.apache.jmeter.util;
 
+import java.util.Arrays;
+import java.util.HexFormat;
 import java.util.Objects;
 
 interface ScriptCacheKey {
@@ -25,8 +27,8 @@ interface ScriptCacheKey {
      * @param key cache key
      * @return cache key
      */
-    static ScriptCacheKey ofString(String key) {
-        return new StringScriptCacheKey(key);
+    static ScriptCacheKey ofDigest(byte[] key) {
+        return new DigestScriptCacheKey(key);
     }
 
     /**
@@ -40,11 +42,11 @@ interface ScriptCacheKey {
         return new FileScriptCacheKey(language, absolutePath, lastModified);
     }
 
-    final class StringScriptCacheKey implements ScriptCacheKey {
-        final String contents;
+    final class DigestScriptCacheKey implements ScriptCacheKey {
+        final byte[] digest;
 
-        StringScriptCacheKey(String contents) {
-            this.contents = contents;
+        DigestScriptCacheKey(byte[] digest) {
+            this.digest = digest;
         }
 
         @Override
@@ -55,19 +57,19 @@ interface ScriptCacheKey {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            StringScriptCacheKey that = (StringScriptCacheKey) o;
-            return Objects.equals(contents, that.contents);
+            DigestScriptCacheKey that = (DigestScriptCacheKey) o;
+            return Arrays.equals(digest, that.digest);
         }
 
         @Override
         public int hashCode() {
-            return contents.hashCode();
+            return Arrays.hashCode(digest);
         }
 
         @Override
         public String toString() {
             return "StringScriptCacheKey{" +
-                    "contents='" + contents + '\'' +
+                    "contents='" + HexFormat.of().formatHex(digest) + '\'' +
                     '}';
         }
     }

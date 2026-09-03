@@ -38,20 +38,20 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
         createPropertyGroup("options", new String[] { "accessMode","database", "txTimeout"});
 
         PropertyDescriptor propertyDescriptor = property("cypher", TypeEditor.TextAreaEditor);
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
         propertyDescriptor.setValue(DEFAULT, "");
 
         propertyDescriptor = property("params", TypeEditor.TextAreaEditor);
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
         propertyDescriptor.setValue(DEFAULT, "{\"paramName\":\"paramValue\"}");
 
         propertyDescriptor = property("recordQueryResults");
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        propertyDescriptor.setValue(DEFAULT, Boolean.FALSE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
+        propertyDescriptor.setValue(DEFAULT, false);
 
         propertyDescriptor = property("accessMode", TypeEditor.ComboStringEditor);
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        propertyDescriptor.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
+        propertyDescriptor.setValue(NOT_EXPRESSION, true);
         propertyDescriptor.setValue(DEFAULT, AccessMode.WRITE.toString());
         propertyDescriptor.setValue(TAGS, getListAccessModes());
 
@@ -59,7 +59,7 @@ public abstract class BoltTestElementBeanInfoSupport extends BeanInfoSupport {
         propertyDescriptor.setValue(DEFAULT, "neo4j");
 
         propertyDescriptor = property("txTimeout");
-        propertyDescriptor.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        propertyDescriptor.setValue(NOT_UNDEFINED, true);
         propertyDescriptor.setValue(DEFAULT, 60);
     }
 

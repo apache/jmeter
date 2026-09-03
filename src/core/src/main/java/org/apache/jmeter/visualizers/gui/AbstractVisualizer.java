@@ -261,8 +261,7 @@ public abstract class AbstractVisualizer
     @Override
     public void modifyTestElement(TestElement c) {
         configureTestElement((AbstractListenerElement) c);
-        if (c instanceof ResultCollector) {
-            ResultCollector rc = (ResultCollector) c;
+        if (c instanceof ResultCollector rc) {
             rc.setErrorLogging(errorLogging.isSelected());
             rc.setSuccessOnlyLogging(successOnlyLogging.isSelected());
             rc.setFilename(getFile());

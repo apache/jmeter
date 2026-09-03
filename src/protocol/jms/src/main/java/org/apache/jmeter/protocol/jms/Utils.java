@@ -21,13 +21,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
 
-import javax.jms.Connection;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
@@ -35,6 +28,14 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.jms.Connection;
+import jakarta.jms.Destination;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageConsumer;
+import jakarta.jms.MessageProducer;
+import jakarta.jms.Session;
 
 /**
  * Utility methods for JMS protocol.
@@ -146,8 +147,8 @@ public final class Utils {
      */
     public static Destination lookupDestination(Context context, String name) throws NamingException {
         Object o = context.lookup(name);
-        if (o instanceof Destination){
-            return (Destination) o;
+        if (o instanceof Destination destination) {
+            return destination;
         }
         throw new NamingException("Found: "+name+"; expected Destination, but was: "+(o!=null ? o.getClass().getName() : "null"));
     }
@@ -195,23 +196,23 @@ public final class Utils {
      *             when lookup in context fails
      */
     public static Connection getConnection(Context ctx, String factoryName) throws JMSException, NamingException {
-        Object objfac = null;
+        Object objfac;
         try {
             objfac = ctx.lookup(factoryName);
         } catch (NoClassDefFoundError e) {
-            throw new NamingException("Lookup failed: "+e.toString());
+            throw new NamingException("Lookup failed: " + e);
         }
-        if (objfac instanceof javax.jms.ConnectionFactory) {
+        if (objfac instanceof jakarta.jms.ConnectionFactory connectionFactory) {
             String username = getFromEnvironment(ctx, Context.SECURITY_PRINCIPAL);
             if(username != null) {
                 String password = getFromEnvironment(ctx, Context.SECURITY_CREDENTIALS);
-                return ((javax.jms.ConnectionFactory) objfac).createConnection(username, password);
+                return connectionFactory.createConnection(username, password);
             }
             else {
-                return ((javax.jms.ConnectionFactory) objfac).createConnection();
+                return connectionFactory.createConnection();
             }
         }
-        throw new NamingException("Expected javax.jms.ConnectionFactory, found "+(objfac != null ? objfac.getClass().getName(): "null"));
+        throw new NamingException("Expected jakarta.jms.ConnectionFactory, found "+(objfac != null ? objfac.getClass().getName(): "null"));
     }
 
     /**

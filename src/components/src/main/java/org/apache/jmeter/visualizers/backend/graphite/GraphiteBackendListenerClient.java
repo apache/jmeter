@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -41,6 +40,7 @@ import org.apache.jmeter.visualizers.backend.BackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
 import org.apache.jmeter.visualizers.backend.UserMetric;
+import org.apache.jorphan.util.StringUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -313,7 +313,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         allPercentiles = new HashMap<>(percentilesStringArray.length);
         Arrays.stream(percentilesStringArray)
                 .map(String::trim)
-                .filter(StringUtils::isNotEmpty)
+                .filter(StringUtilities::isNotEmpty)
                 .forEach(this::initPercentileMaps);
         Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
         this.graphiteMetricsManager = (GraphiteMetricsSender) clazz.getDeclaredConstructor().newInstance();

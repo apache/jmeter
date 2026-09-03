@@ -89,8 +89,8 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (element instanceof RunTime) {
-            setState(((RunTime) element).getRuntimeString());
+        if (element instanceof RunTime runTime) {
+            setState(runTime.getRuntimeString());
         } else {
             setState(1);
         }
@@ -108,11 +108,11 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
     @Override
     public void modifyTestElement(TestElement lc) {
         configureTestElement(lc);
-        if (lc instanceof RunTime) {
-            if (seconds.getText().length() > 0) {
-                ((RunTime) lc).setRuntime(seconds.getText());
+        if (lc instanceof RunTime runTime) {
+            if (!seconds.getText().isEmpty()) {
+                runTime.setRuntime(seconds.getText());
             } else {
-                ((RunTime) lc).setRuntime(0);
+                runTime.setRuntime(0);
             }
         }
     }

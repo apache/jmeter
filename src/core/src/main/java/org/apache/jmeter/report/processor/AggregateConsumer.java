@@ -71,11 +71,6 @@ public class AggregateConsumer extends AbstractSampleConsumer {
         this.selector = selector;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.SampleConsumer#startConsuming()
-     */
     @Override
     public void startConsuming() {
         // Broadcast metadata to consumes for each channel
@@ -87,24 +82,12 @@ public class AggregateConsumer extends AbstractSampleConsumer {
         super.startProducing();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.apache.jmeter.report.processor.SampleConsumer#consume(org.apache.
-     * jmeter.report.core.Sample, int)
-     */
     @Override
     public void consume(Sample sample, int channel) {
         aggregator.addValue(selector.select(sample));
         super.produce(sample, channel);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.SampleConsumer#stopConsuming()
-     */
     @Override
     public void stopConsuming() {
         setDataToContext(getName(), new ValueResultData(aggregator.getResult()));

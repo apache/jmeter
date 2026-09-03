@@ -251,8 +251,8 @@ public abstract class SamplerResultTab implements ResultRenderer {
         this.clearData();
         StyledDocument statsDoc = stats.getStyledDocument();
         try {
-            if (userObject instanceof SampleResult) {
-                sampleResult = (SampleResult) userObject;
+            if (userObject instanceof SampleResult sampleResult1) {
+                sampleResult = sampleResult1;
                 // We are displaying a SampleResult
                 setupTabPaneForSampleResult();
                 requestPanel.setSamplerResult(sampleResult);
@@ -326,20 +326,12 @@ public abstract class SamplerResultTab implements ResultRenderer {
                     }
                 }
 
-                Style style = null;
-                switch (responseLevel) {
-                case 3:
-                    style = statsDoc.getStyle(STYLE_REDIRECT);
-                    break;
-                case 4:
-                    style = statsDoc.getStyle(STYLE_CLIENT_ERROR);
-                    break;
-                case 5:
-                    style = statsDoc.getStyle(STYLE_SERVER_ERROR);
-                    break;
-                default: // quieten Findbugs
-                    break; // default - do nothing
-                }
+                Style style = switch (responseLevel) {
+                    case 3 -> statsDoc.getStyle(STYLE_REDIRECT);
+                    case 4 -> statsDoc.getStyle(STYLE_CLIENT_ERROR);
+                    case 5 -> statsDoc.getStyle(STYLE_SERVER_ERROR);
+                    default -> null;
+                };
 
                 statsBuff.append(JMeterUtils.getResString("view_results_response_code")).append(responseCode).append(NL); //$NON-NLS-1$
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), style);
@@ -434,8 +426,8 @@ public abstract class SamplerResultTab implements ResultRenderer {
                     searchTextExtension.resetTextToFind();
                 }
 
-            } else if (userObject instanceof AssertionResult) {
-                assertionResult = (AssertionResult) userObject;
+            } else if (userObject instanceof AssertionResult result) {
+                assertionResult = result;
 
                 // We are displaying an AssertionResult
                 setupTabPaneForAssertionResult();

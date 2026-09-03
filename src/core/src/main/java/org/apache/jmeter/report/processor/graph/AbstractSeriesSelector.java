@@ -19,7 +19,8 @@ package org.apache.jmeter.report.processor.graph;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
+
 
 /**
  * The class AbstractSeriesSelector provide an abstract base class for
@@ -49,12 +50,6 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
         this.allowsControllerDiscrimination = allowsControllerDiscrimination;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.apache.jmeter.report.processor.graph.GraphSeriesSelector#
-     * supportsControllersDiscrimination()
-     */
     @Override
     public final boolean allowsControllersDiscrimination() {
         return allowsControllerDiscrimination;
@@ -66,6 +61,6 @@ public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
      * @return input or default value wrapped in a list
      */
     protected Iterable<String> withDefaultIfEmpty(String value, String defaultValue) {
-        return Arrays.asList(StringUtils.defaultIfBlank(value, defaultValue));
+        return Arrays.asList(StringUtilities.isBlank(value) ? defaultValue : value);
     }
 }

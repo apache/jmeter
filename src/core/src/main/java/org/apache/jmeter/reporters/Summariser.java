@@ -85,7 +85,7 @@ public class Summariser extends AbstractTestElement
                     "summariser.ignore_transaction_controller_sample_result", //$NON-NLS-1$
                     true);
 
-    /*
+    /**
      * Ensure that a report is not skipped if we are slightly late in checking
      * the time.
      */
@@ -96,14 +96,14 @@ public class Summariser extends AbstractTestElement
      */
     private static final Object LOCK = new Object();
 
-    /*
+    /**
      * This map allows summarisers with the same name to contribute to the same totals.
      */
     private static final Map<String, Totals> ACCUMULATORS = new ConcurrentHashMap<>();
 
     private static int instanceCount; // number of active tests
 
-    /*
+    /**
      * Cached copy of Totals for this instance.
      * The variables do not need to be synchronised,
      * as they are not shared between threads
@@ -114,7 +114,7 @@ public class Summariser extends AbstractTestElement
     // Name of the accumulator. Set up by testStarted().
     private transient String myName;
 
-    /*
+    /**
      * Constructor is initially called once for each occurrence in the test plan.
      * For GUI, several more instances are created.
      * Then clear is called at start of test.
@@ -140,9 +140,8 @@ public class Summariser extends AbstractTestElement
         setName(name);
     }
 
-    /*
+    /**
      * Contains the items needed to collect stats for a summariser
-     *
      */
     private static class Totals {
 
@@ -182,11 +181,9 @@ public class Summariser extends AbstractTestElement
         SummariserRunningSample myTotal = null;
         boolean reportNow = false;
 
-        /*
-         * Have we reached the reporting boundary?
-         * Need to allow for a margin of error, otherwise can miss the slot.
-         * Also need to check we've not hit the window already
-         */
+        // Have we reached the reporting boundary?
+        // Need to allow for a margin of error, otherwise can miss the slot.
+        // Also need to check we've not hit the window already
 
         synchronized (myTotals) {
             if (s != null) {

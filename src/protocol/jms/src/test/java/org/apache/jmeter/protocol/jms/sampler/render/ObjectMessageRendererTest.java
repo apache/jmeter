@@ -48,7 +48,7 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         assertObject(object, "Doe");
     }
 
-   private void assertObject(Serializable object, String name) {
+   private static void assertObject(Serializable object, String name) {
        assertNotNull(object, "object");
        assertEquals(Person.class, object.getClass(), "object.class");
        Person p = (Person) object;
@@ -99,7 +99,7 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         assertEquals(content, convertLineEndingsToSystem(firstCachedValue), "cache");
     }
 
-    private String convertLineEndingsToSystem(Object firstCachedValue) {
+    private static String convertLineEndingsToSystem(Object firstCachedValue) {
         return firstCachedValue.toString().replaceAll("[\r\n]+", "\n");
     }
 }

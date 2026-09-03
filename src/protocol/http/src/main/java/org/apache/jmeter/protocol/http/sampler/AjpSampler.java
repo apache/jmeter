@@ -279,7 +279,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                 setString(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                 StringBuilder sb = new StringBuilder();
                 boolean first = true;
-                for (JMeterProperty arg : getArguments()) {
+                for (JMeterProperty arg : getArguments().getEnabledArguments()) {
                     if (first) {
                         first = false;
                     } else {

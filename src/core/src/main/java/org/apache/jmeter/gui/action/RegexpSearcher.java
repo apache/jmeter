@@ -20,7 +20,7 @@ package org.apache.jmeter.gui.action;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
 
 /**
  * Regexp search implementation
@@ -52,7 +52,7 @@ public class RegexpSearcher implements Searcher {
             pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
         }
         return textTokens.stream()
-                .filter(token -> !StringUtils.isEmpty(token))
+                .filter(StringUtilities::isNotEmpty)
                 .anyMatch(token -> pattern.matcher(token).find());
     }
 

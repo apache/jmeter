@@ -56,7 +56,7 @@ public class ConversionHelp {
     private static final String ATT_TE_NAME      = "testname"; //$NON-NLS-1$
 
 
-    /*
+    /**
      * These must be set before reading/writing the XML. Rather a hack, but
      * saves changing all the method calls to include an extra variable.
      *
@@ -155,7 +155,7 @@ public class ConversionHelp {
 
     private static void saveClass(TestElement el, HierarchicalStreamWriter writer, String prop){
         String clazz=el.getPropertyAsString(prop);
-        if (clazz.length()>0) {
+        if (!clazz.isEmpty()) {
             writer.addAttribute(propertyToAttribute.get(prop),SaveService.classToAlias(clazz));
         }
     }
@@ -175,7 +175,7 @@ public class ConversionHelp {
     private static void saveItem(TestElement el, HierarchicalStreamWriter writer, String prop,
             boolean encode){
         String item=el.getPropertyAsString(prop);
-        if (item.length() > 0) {
+        if (!item.isEmpty()) {
             if (encode) {
                 item=ConversionHelp.encode(item);
             }
@@ -250,7 +250,7 @@ public class ConversionHelp {
         String testClass = (String) context.get(SaveService.TEST_CLASS_NAME);
         final String newName = NameUpdater.getCurrentName(name, testClass);
         // Delete any properties whose name converts to the empty string
-        if (name.length() != 0 && newName.length()==0) {
+        if (!name.isEmpty() && newName.isEmpty()) {
             return null;
         }
         return newName;
