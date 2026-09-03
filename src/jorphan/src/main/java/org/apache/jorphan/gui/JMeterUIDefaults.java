@@ -103,13 +103,12 @@ public class JMeterUIDefaults {
     @API(since = "5.3", status = API.Status.INTERNAL)
     public void install() {
         DynamicStyle.onLaFChange(() -> {
-            log.info("LAF changed, updating JMeter-specific properties"); // $NON-NLS-1$
+            log.info("LAF changed, updating JMeter-specific properties, scale: {}", scale); // $NON-NLS-1$
             // We put JMeter-specific properties into getLookAndFeelDefaults,
             // so the properties are removed when LaF is changed
             UIDefaults defaults = UIManager.getLookAndFeelDefaults();
 
-            if (Math.abs(scale - 1.0f) > 0.01f) {
-                log.info("Applying scale factor: {}", scale); // $NON-NLS-1$
+            if (Math.abs(scale - 1.0f) > 0.1f) {
                 scaleFonts(defaults);
                 scaleIntProperties(defaults, scale);
                 // We don't want to make controls extra big, so we damp the scaling factors
@@ -183,7 +182,7 @@ public class JMeterUIDefaults {
             Font f = d.getFont(font);
             float height;
             if (f == null) {
-                height = 16 * scale;
+                height = 14 * scale;
             } else {
                 //Canvas c = new Canvas();
                 //height = c.getFontMetrics(f).getHeight();
@@ -224,7 +223,7 @@ public class JMeterUIDefaults {
                 return;
             }
         }
-        // For other LaFs just update all the font resources.
+        // For other LAFs just update all the font resources.
         // Note: there might be derived fonts (e.g. javax.swing.UIDefaults.ActiveValue)
         // that compute their value based on another UIDefaults
         // So we update fonts in two loops: first we remember the actual fonts, then we update them

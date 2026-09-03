@@ -1507,13 +1507,17 @@ JMETER-SERVER</source>
     Set to zero to disable undo feature in JSyntaxTextArea.<br/>
     Defaults to: <code>50</code>
 </property>
-  <property name="jsyntaxtextarea.highlight">
-    Set to false to disable word highlight in JSyntaxTextArea.<br/>
-    Defaults to: <code>true</code>
-  </property>
+<property name="jsyntaxtextarea.highlight">
+  Set to false to disable word highlight in JSyntaxTextArea.<br/>
+  Defaults to: <code>true</code>
+</property>
+<property name="jsyntaxtextarea.tabsize">
+  Set to how many spaces on TAB character have.<br/>
+  Defaults to: <code>4</code>
+</property>
 <property name="jsyntaxtextarea.font.family">
     Change the font on the (JSyntax) Text Areas. (Useful for HiDPI screens).<br/>
-    Defaults to empty value, which means platform default monospaced font
+    Defaults to empty value, which means platform default monospaced font.
 </property>
 <property name="jsyntaxtextarea.font.size">
     Change the size of the (JSyntax) Text Areas. Will be used only,

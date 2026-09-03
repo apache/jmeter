@@ -84,10 +84,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             jSyntaxTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
             jSyntaxTextArea.setCodeFoldingEnabled(false);
             jSyntaxTextArea.setAntiAliasingEnabled(true);
-            jSyntaxTextArea.setEditable(false);
-            jSyntaxTextArea.setLineWrap(false);
             jSyntaxTextArea.setLanguage("text");
-            jSyntaxTextArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
             areaScrollPane = JTextScrollPane.getInstance(jSyntaxTextArea);
             jTextArea = jSyntaxTextArea;
         } else {
@@ -95,6 +92,9 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             jTextArea =  new JTextArea(15, 80);
             areaScrollPane = new JScrollPane(jTextArea);
         }
+        jTextArea.setEditable(false);
+        jTextArea.setLineWrap(false);
+        jTextArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
 
         areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         areaScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);

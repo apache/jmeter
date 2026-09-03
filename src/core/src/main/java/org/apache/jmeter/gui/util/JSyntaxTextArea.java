@@ -69,6 +69,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", null);
     private static final int USER_FONT_SIZE = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", -1);
     private static final boolean HIGHLIGHT_OCCURRENCES = JMeterUtils.getPropDefault("jsyntaxtextarea.highlight", true);
+    private static final int TAB_SIZE = JMeterUtils.getPropDefault("jsyntaxtextarea.tabsize", 4);
 
     private static final HierarchyListener GUTTER_THEME_PATCHER = e -> {
         if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0
@@ -158,9 +159,9 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         if (USER_FONT_FAMILY != null) {
             baseFont = JMeterUIDefaults.createFont(USER_FONT_FAMILY, Font.PLAIN, USER_FONT_SIZE > 0 ? USER_FONT_SIZE : 12);
         } else {
-            baseFont = jSyntaxTextArea.getFont();
+            baseFont = JMeterUIDefaults.createFont(jSyntaxTextArea.getFont().getFamily(), Font.PLAIN, USER_FONT_SIZE > 0 ? USER_FONT_SIZE : 12);
         }
-        if (Math.abs(scale - 1.0f) > 0.01) {
+        if (Math.abs(scale - 1.0f) > 0.1) {
             baseFont = baseFont.deriveFont(baseFont.getSize2D() * scale);
         }
 
@@ -204,6 +205,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
                 jSyntaxTextArea.setBackground(color);
             }
         }
+        jSyntaxTextArea.revalidate();
     }
 
     /**
@@ -285,6 +287,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         super.setLineWrap(LINE_WRAP);
         super.setWrapStyleWord(WRAP_STYLE_WORD);
         super.setMarkOccurrences(HIGHLIGHT_OCCURRENCES);
+        super.setTabSize(TAB_SIZE);
         this.disableUndo = disableUndo;
 
         // Add component listener to handle window resizing
