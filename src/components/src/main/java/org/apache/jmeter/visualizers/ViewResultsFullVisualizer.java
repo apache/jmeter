@@ -122,7 +122,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
 
     //default scroll checkbox status
-    private static final boolean SCROLL_CHECKBOX = JMeterUtils.getPropDefault("view.results.tree.autoscroll", false);
+    private static final boolean SCROLL_CHECKBOX = JMeterUtils.getPropDefault("view.results.tree.autoscroll", true);
 
     //default uncheck if failed scroll checkbox status
     private static final boolean SCROLL_STOP_CHECKBOX = JMeterUtils.getPropDefault("view.results.tree.autostop", true);
@@ -154,7 +154,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private JCheckBox autoScrollCB, scrollStopCB;
     private final Queue<SampleResult> buffer;
     private boolean dataChanged;
-    private SampleResult failedSampler;
 
     /**
      * Constructor
@@ -177,8 +176,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         synchronized (buffer) {
             buffer.add(sample);
             dataChanged = true;
-            if (!sample.isSuccessful() && failedSampler == null)
-                failedSampler = sample;
+            if (!"true".equals(System.getProperty("java.awt.headless"))) {
+                if (!sample.isSuccessful() && autoScrollCB.isSelected() && scrollStopCB.isSelected())
+                    autoScrollCB.setSelected(false);
+            }
         }
     }
 
@@ -186,7 +187,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      * Update the visualizer with new data.
      */
     private void updateGui() {
-        int failedSamplerPosition = 0;
         TreePath selectedPath = null;
         Object oldSelectedElement;
         Set<Object> oldExpandedElements;
@@ -201,19 +201,20 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             oldSelectedElement = getSelectedObject();
             root.removeAllChildren();
             for (SampleResult sampler: buffer) {
+                SampleResult res = sampler;
                 // Add sample
-                DefaultMutableTreeNode currNode = new SearchableTreeNode(sampler, treeModel);
+                DefaultMutableTreeNode currNode = new SearchableTreeNode(res, treeModel);
                 treeModel.insertNodeInto(currNode, root, root.getChildCount());
                 List<TreeNode> path = new ArrayList<>(Arrays.asList(root, currNode));
                 selectedPath = checkExpandedOrSelected(path,
-                        sampler, oldSelectedElement,
+                        res, oldSelectedElement,
                         oldExpandedElements, newExpandedPaths, selectedPath);
-                TreePath potentialSelection = addSubResults(currNode, sampler, path, oldSelectedElement, oldExpandedElements, newExpandedPaths);
+                TreePath potentialSelection = addSubResults(currNode, res, path, oldSelectedElement, oldExpandedElements, newExpandedPaths);
                 if (potentialSelection != null) {
                     selectedPath = potentialSelection;
                 }
                 // Add any assertion that failed as children of the sample node
-                AssertionResult[] assertionResults = sampler.getAssertionResults();
+                AssertionResult[] assertionResults = res.getAssertionResults();
                 int assertionIndex = currNode.getChildCount();
                 for (AssertionResult assertionResult : assertionResults) {
                     if (assertionResult.isFailure() || assertionResult.isError()) {
@@ -226,8 +227,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                     }
                 }
 
-                if (sampler == failedSampler)
-                    failedSamplerPosition = root.getChildCount() - 1;
             }
             treeModel.nodeStructureChanged(root);
             dataChanged = false;
@@ -242,12 +241,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
 
         if (autoScrollCB.isSelected() && root.getChildCount() > 1) {
-            int pos = (scrollStopCB.isSelected() && failedSampler != null) ? failedSamplerPosition : root.getChildCount() - 1;
-            jTree.scrollPathToVisible(new TreePath(new Object[] { root, treeModel.getChild(root, pos) }));
+            jTree.scrollPathToVisible(new TreePath(new Object[] { root,
+                    treeModel.getChild(root, root.getChildCount() - 1) }));
         }
-        //if session not running, reset the error reference
-        if (!JMeterUtils.isTestRunning())
-            failedSampler = null;
     }
 
     private Object getSelectedObject() {
@@ -353,7 +349,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         resultsRender.clearData();
         resultsObject = null;
-        failedSampler = null;
+        autoScrollCB.setSelected(SCROLL_CHECKBOX);
+        scrollStopCB.setSelected(SCROLL_STOP_CHECKBOX);
     }
 
     /** {@inheritDoc} */
@@ -517,11 +514,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         bottomPanel.add(autoScrollCB);
 
         // Add autoscroll checkbox
-        scrollStopCB = new JCheckBox(JMeterUtils.getResString("view_results_autostop")); // $NON-NLS-1$
+        scrollStopCB = new JCheckBox(JMeterUtils.getResString("view_results_scrollstop")); // $NON-NLS-1$
         scrollStopCB.setSelected(SCROLL_STOP_CHECKBOX);
         scrollStopCB.addItemListener(this);
         bottomPanel.add(scrollStopCB);
-        autoScrollCB.doClick(); // to set the initial state of scrollStopCB
 
         leftPane.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -705,10 +701,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      */
     @Override
     public void itemStateChanged(ItemEvent e) {
-        Object source = e.getItemSelectable();
-        if (source == autoScrollCB) {
-            scrollStopCB.setEnabled(autoScrollCB.isSelected());
-        }
+        // NOOP state is held by component
     }
 
     @Override

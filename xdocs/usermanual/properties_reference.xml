@@ -1558,7 +1558,7 @@ JMETER-SERVER</source>
 </property>
   <property name="view.results.tree.autoscroll">
     Set to <code>true</code> to enable by default the checkbox for auto scrolling.<br/>
-    Defaults to: <code>false</code>
+    Defaults to: <code>true</code>
   </property>
   <property name="view.results.tree.autostop">
     Set to <code>true</code> to enable by default the checkbox for stop auto scrolling on 1st error.<br/>
