@@ -127,7 +127,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private static final boolean SCROLL_STOP_CHECKBOX = JMeterUtils.getPropDefault("view.results.tree.autostop", true);
 
     // default tree scroll width
-    private static final int SCROLL_WIDTH = JMeterUtils.getPropDefault("view.results.tree.width", 250); // $NON-NLS-1$
+    private static final int SCROLL_WIDTH = JMeterUtils.getPropDefault("view.results.tree.width", 300); // $NON-NLS-1$
 
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
@@ -175,8 +175,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             buffer.add(sample);
             dataChanged = true;
             if (!"true".equals(System.getProperty("java.awt.headless"))) {
-                if (!sample.isSuccessful() && autoScrollCB.isSelected() && scrollStopCB.isSelected())
+                if (!sample.isSuccessful() && autoScrollCB.isSelected() && scrollStopCB.isSelected()) {
                     autoScrollCB.setSelected(false);
+                }
             }
         }
     }
@@ -414,8 +415,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             // Add Show Current Node button to the tab pane
             if (rightSide.getTabCount() > 0) {
                 Component firstTab = rightSide.getComponentAt(0);
-                if (firstTab instanceof JPanel) {
-                    JPanel samplerResultTab = (JPanel) firstTab;
+                if (firstTab instanceof JPanel samplerResultTab) {
+                    samplerResultTab = (JPanel) firstTab;
                     // Add button at the top of the sampler result panel
                     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                     JButton nodeInfoButton = new JButton(JMeterUtils.getResString("show_current_node")); // $NON-NLS-1$
@@ -487,7 +488,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         jTree.setRootVisible(false);
         jTree.setShowsRootHandles(true);
         JScrollPane treePane = new JScrollPane(jTree);
-        treePane.setPreferredSize(new Dimension(SCROLL_WIDTH, 300));
 
         VerticalPanel leftPane = new VerticalPanel();
 
