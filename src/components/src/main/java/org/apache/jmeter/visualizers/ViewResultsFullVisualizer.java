@@ -21,6 +21,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -43,8 +45,10 @@ import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -116,6 +120,15 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private static final String VIEWERS_ORDER =
             JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
 
+    //default scroll checkbox status
+    private static final boolean SCROLL_CHECKBOX = JMeterUtils.getPropDefault("view.results.tree.autoscroll", true);
+
+    //default uncheck if failed scroll checkbox status
+    private static final boolean SCROLL_STOP_CHECKBOX = JMeterUtils.getPropDefault("view.results.tree.autostop", true);
+
+    // default tree scroll width
+    private static final int SCROLL_WIDTH = JMeterUtils.getPropDefault("view.results.tree.width", 300); // $NON-NLS-1$
+
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
@@ -138,6 +151,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private Object resultsObject = null;
     private TreeSelectionEvent lastSelectionEvent;
     private JCheckBox autoScrollCB;
+    private JCheckBox scrollStopCB;
     private final Queue<SampleResult> buffer = new ArrayDeque<>();
     private final int maxResults;
     private boolean dataChanged;
@@ -161,6 +175,11 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             }
             buffer.add(sample);
             dataChanged = true;
+            if (!"true".equals(System.getProperty("java.awt.headless"))) {
+                if (!sample.isSuccessful() && autoScrollCB.isSelected() && scrollStopCB.isSelected()) {
+                    autoScrollCB.setSelected(false);
+                }
+            }
         }
     }
 
@@ -219,6 +238,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         if (selectedPath != null) {
             jTree.setSelectionPath(selectedPath);
         }
+
         if (autoScrollCB.isSelected() && root.getChildCount() > 1) {
             jTree.scrollPathToVisible(new TreePath(new Object[] { root,
                     treeModel.getChild(root, root.getChildCount() - 1) }));
@@ -328,6 +348,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         }
         resultsRender.clearData();
         resultsObject = null;
+        autoScrollCB.setSelected(SCROLL_CHECKBOX);
+        scrollStopCB.setSelected(SCROLL_STOP_CHECKBOX);
     }
 
     /** {@inheritDoc} */
@@ -390,6 +412,44 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             }
             Object userObject = node.getUserObject();
             resultsRender.setSamplerResult(userObject);
+
+            // Add Show Current Node button to the tab pane
+            if (rightSide.getTabCount() > 0) {
+                Component firstTab = rightSide.getComponentAt(0);
+                if (firstTab instanceof JPanel samplerResultTab) {
+                    samplerResultTab = (JPanel) firstTab;
+                    // Add button at the top of the sampler result panel
+                    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                    JButton nodeInfoButton = new JButton(JMeterUtils.getResString("show_current_node")); // $NON-NLS-1$
+                    nodeInfoButton.addActionListener(e2 -> {
+                        // Get the currently selected node when button is clicked
+                        DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+                        if (currentNode != null) {
+                            TreePath path = new TreePath(currentNode.getPath());
+                            // First expand the path to make sure all parent nodes are visible
+                            jTree.expandPath(path);
+                            // Get the bounds before scrolling
+                            Rectangle bounds = jTree.getPathBounds(path);
+                            if (bounds != null) {
+                                // Get the visible rectangle
+                                Rectangle visible = jTree.getVisibleRect();
+                                // Calculate the new viewport position to center the node
+                                int centerY = Math.max(0, bounds.y - (visible.height - bounds.height) / 2);
+                                // Create rectangle that will center the node
+                                Rectangle scrollTo = new Rectangle(0, centerY, 1, visible.height);
+                                jTree.scrollRectToVisible(scrollTo);
+                                // Ensure the node is selected and visible
+                                jTree.setSelectionPath(path);
+                                jTree.repaint();
+                            }
+                        }
+                    });
+                    buttonPanel.add(nodeInfoButton);
+                    samplerResultTab.add(buttonPanel, BorderLayout.NORTH);
+                    samplerResultTab.revalidate();
+                }
+            }
+
             resultsRender.setupTabPane(); // Processes Assertions
             // display a SampleResult
             if (userObject instanceof SampleResult sampleResult) {
@@ -429,15 +489,40 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         jTree.setRootVisible(false);
         jTree.setShowsRootHandles(true);
         JScrollPane treePane = new JScrollPane(jTree);
-        treePane.setPreferredSize(new Dimension(200, 300));
 
         VerticalPanel leftPane = new VerticalPanel();
-        leftPane.add(treePane, BorderLayout.CENTER);
-        leftPane.add(createComboRender(), BorderLayout.NORTH);
+
+        // Add controls panel at the top
+        JPanel controlsPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        controlsPane.add(createComboRender());
+        leftPane.add(controlsPane, BorderLayout.NORTH);
+
+        // Add tree panel in the center with proper sizing
+        JPanel treePanel = new JPanel(new BorderLayout());
+        treePanel.add(treePane, BorderLayout.CENTER);
+        leftPane.add(treePanel, BorderLayout.CENTER);
+
+        // Create bottom panel with checkbox
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+
+        // Add autoscroll checkbox
         autoScrollCB = new JCheckBox(JMeterUtils.getResString("view_results_autoscroll")); // $NON-NLS-1$
-        autoScrollCB.setSelected(false);
+        autoScrollCB.setSelected(SCROLL_CHECKBOX);
         autoScrollCB.addItemListener(this);
-        leftPane.add(autoScrollCB, BorderLayout.SOUTH);
+        bottomPanel.add(autoScrollCB);
+
+        // Add autoscroll checkbox
+        scrollStopCB = new JCheckBox(JMeterUtils.getResString("view_results_scrollstop")); // $NON-NLS-1$
+        scrollStopCB.setSelected(SCROLL_STOP_CHECKBOX);
+        scrollStopCB.addItemListener(this);
+        bottomPanel.add(scrollStopCB);
+
+        leftPane.add(bottomPanel, BorderLayout.SOUTH);
+
+        // Ensure the left pane maintains its size during window resizing
+        leftPane.setMinimumSize(new Dimension(SCROLL_WIDTH, 0));
+        leftPane.setPreferredSize(new Dimension(SCROLL_WIDTH, 0));
+
         return leftPane;
     }
 
@@ -614,5 +699,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
         // NOOP state is held by component
+    }
+
+    @Override
+    public String[] getFileExts() {
+        return new String[] { ".jtl" };
     }
 }
