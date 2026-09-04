@@ -43,7 +43,7 @@ dependencies {
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
-        api("com.fifesoft:rsyntaxtextarea:3.6.2")
+        api("com.fifesoft:rsyntaxtextarea:4.0.1")
         api("com.github.ben-manes.caffeine:caffeine:3.2.3")
         api("com.github.weisj:darklaf-core:3.1.1")
         api("com.github.weisj:darklaf-extensions-rsyntaxarea:0.4.1")
@@ -146,5 +146,17 @@ dependencies {
         api("xalan:serializer:2.7.3")
         api("xalan:xalan:2.7.3")
         api("xml-apis:xml-apis:1.4.01")
+        //FlatLaf: https://www.formdev.com/flatlaf/native-libraries/#gradle
+        val flatlafVersion = "3.7.2"
+        api("com.formdev:flatlaf:${flatlafVersion}" )
+        api("com.formdev:flatlaf:${flatlafVersion}:linux-x86_64@so")
+        api("com.formdev:flatlaf:${flatlafVersion}:macos-x86_64@dylib")
+        api("com.formdev:flatlaf:${flatlafVersion}:windows-x86_64@dll")
+        api("com.formdev:flatlaf-intellij-themes:${flatlafVersion}")
+        api("com.formdev:flatlaf-extras:${flatlafVersion}")
+        api("com.formdev:flatlaf-fonts-inter:4.1")
+        api("com.formdev:flatlaf-fonts-jetbrains-mono:2.304")
+        api("com.formdev:flatlaf-fonts-roboto:2.137")
+        api("com.formdev:flatlaf-fonts-roboto-mono:3.000")
     }
 }
