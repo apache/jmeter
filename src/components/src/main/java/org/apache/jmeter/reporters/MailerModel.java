@@ -281,7 +281,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @param from
      *            the sender of the mail as shown in the mail-client.
      * @param vEmails
-     *            all receivers of the mail. The receivers are seperated by
+     *            all receivers of the mail. The receivers are separated by
      *            commas.
      * @param subject
      *            the subject of the mail.
@@ -305,7 +305,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @param from
      *            the sender of the mail as shown in the mail-client.
      * @param vEmails
-     *            all receivers of the mail. The receivers are seperated by
+     *            all receivers of the mail. The receivers are separated by
      *            commas.
      * @param subject
      *            the subject of the mail.

@@ -511,7 +511,7 @@ public class ReportGenerator {
     }
 
     /**
-     * @return Consumer that compute the begining date of the test
+     * @return Consumer that compute the beginning date of the test
      */
     private static AggregateConsumer createBeginDateConsumer() {
         AggregateConsumer beginDateConsumer = new AggregateConsumer(

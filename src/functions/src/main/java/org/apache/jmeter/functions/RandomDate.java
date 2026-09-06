@@ -50,7 +50,7 @@ import com.google.auto.service.AutoService;
  * <ul>
  *  <li>Time format @see <a href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a>
  *      (optional - defaults to yyyy-MM-dd)</li>
- *  <li>Start date formated as first param (optional - defaults to now)</li>
+ *  <li>Start date formatted as first param (optional - defaults to now)</li>
  *  <li>End date</li>
  *  <li>Locale for the format (optional)</li>
  *  <li>variable name (optional)</li>
