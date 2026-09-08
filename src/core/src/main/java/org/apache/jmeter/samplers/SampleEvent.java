@@ -233,7 +233,8 @@ public class SampleEvent implements Serializable {
         sb.append(", isTransactionSampleEvent=").append(isTransactionSampleEvent);
         if (values != null && values.length > 0) {
             sb.append("values=[");
-            for (int i = 0; i < variableNames.length; i++) {
+            int variableNameCount = variableNames.length;
+            for (int i = 0; i < variableNameCount; i++) {
                 if (i > 0) {
                     sb.append(", ");
                 }

@@ -90,7 +90,8 @@ public class Top5ErrorsBySamplerConsumer extends
             Object[][] top5 = data.getTop5ErrorsMetrics();
 
             int numberOfValues = 0;
-            for (int i = 0; i < top5.length; i++) {
+            int top5Count = top5.length;
+            for (int i = 0; i < top5Count; i++) {
                 result.addResult(new ValueResultData(top5[i][0]));
                 result.addResult(new ValueResultData(top5[i][1]));
                 numberOfValues++;
