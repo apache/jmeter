@@ -80,6 +80,10 @@ public class JMeterThread implements Runnable, Interruptible {
     private static final int RAMPUP_GRANULARITY =
             JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
 
+    /** How often to check for shutdown during timer delay, default 1000ms */
+    private static final int TIMER_GRANULARITY =
+            JMeterUtils.getPropDefault("jmeterthread.timer.granularity", 1000); // $NON-NLS-1$
+
     private static final float TIMER_FACTOR = JMeterUtils.getPropDefault("timer.factor", 1.0f);
 
     private static final TimerService TIMER_SERVICE = TimerService.getInstance();
@@ -998,21 +1002,36 @@ public class JMeterThread implements Runnable, Interruptible {
             totalDelay += delay;
         }
         if (totalDelay > 0) {
-            try {
-                if (scheduler) {
-                    // We reduce pause to ensure end of test is not delayed by a sleep ending after test scheduled end
-                    // See Bug 60049
-                    totalDelay = TIMER_SERVICE.adjustDelay(totalDelay, endTime, false);
-                    if (totalDelay < 0) {
-                        log.debug("The delay would be longer than the scheduled period, so stop thread now.");
-                        running = false;
-                        return;
-                    }
+            if (scheduler) {
+                // We reduce pause to ensure end of test is not delayed by a sleep ending after test scheduled end
+                // See Bug 60049
+                totalDelay = TIMER_SERVICE.adjustDelay(totalDelay, endTime, false);
+                if (totalDelay < 0) {
+                    log.debug("The delay would be longer than the scheduled period, so stop thread now.");
+                    running = false;
+                    return;
                 }
-                TimeUnit.MILLISECONDS.sleep(totalDelay);
-            } catch (InterruptedException e) {
-                log.warn("The delay timer was interrupted - probably did not wait as long as intended.");
-                Thread.currentThread().interrupt();
+            }
+            // Use granular sleeps to allow quick response to shutdown
+            long start = System.currentTimeMillis();
+            long end = start + totalDelay;
+            long now;
+            long pause = TIMER_GRANULARITY;
+            while (running && (now = System.currentTimeMillis()) < end) {
+                long togo = end - now;
+                if (togo < pause) {
+                    pause = togo;
+                }
+                try {
+                    TimeUnit.MILLISECONDS.sleep(pause);
+                } catch (InterruptedException e) {
+                    if (running) { // NOSONAR running may have been changed from another thread
+                        log.warn("The delay timer was interrupted - Loss of delay for {} was {}ms out of {}ms",
+                                threadName, System.currentTimeMillis() - start, totalDelay);
+                    }
+                    Thread.currentThread().interrupt();
+                    break;
+                }
             }
         }
     }
