@@ -17,7 +17,7 @@ rem limitations under the License.
 rem
 
 rem   ===============================================================
-rem   Enviroment variables
+rem   Environment variables
 rem   SERVER_PORT (optional) - define the rmiregistry and server port
 rem
 rem   JVM_ARGS - Java flags - these are handled by jmeter.bat
