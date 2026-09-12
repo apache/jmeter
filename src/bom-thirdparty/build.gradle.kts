@@ -113,7 +113,7 @@ dependencies {
         api("org.apache.httpcomponents:httpcore:4.4.16")
         api("org.apache.httpcomponents:httpmime:4.5.14")
         api("org.apache.logging.log4j:log4j-1.2-api:2.26.0")
-        api("org.apache.logging.log4j:log4j-api:2.26.0")
+        api("org.apache.logging.log4j:log4j-api:2.26.1")
         api("org.apache.logging.log4j:log4j-core:2.26.0")
         api("org.apache.logging.log4j:log4j-slf4j2-impl:2.26.0")
         api("org.apache.rat:apache-rat:0.17")
