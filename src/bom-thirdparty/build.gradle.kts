@@ -106,7 +106,7 @@ dependencies {
         api("org.apache.commons:commons-text:1.14.0") {
             because("User might still rely on commons-text")
         }
-        api("org.apache.httpcomponents.client5:httpclient5:5.5.1")
+        api("org.apache.httpcomponents.client5:httpclient5:5.6.3")
         api("org.apache.httpcomponents:httpasyncclient:4.1.5")
         api("org.apache.httpcomponents:httpclient:4.5.14")
         api("org.apache.httpcomponents:httpcore-nio:4.4.16")
