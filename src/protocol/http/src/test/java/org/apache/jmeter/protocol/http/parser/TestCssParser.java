@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -74,8 +75,7 @@ public class TestCssParser extends JMeterTestCase {
             throws LinkExtractorParseException, MalformedURLException {
         List<URL> result = new ArrayList<>();
         Iterator<URL> urlIterator = parser.getEmbeddedResourceURLs(
-                "Mozilla", css.getBytes(StandardCharsets.UTF_8), new URL(
-                        "http://example.org/"), StandardCharsets.UTF_8
+                "Mozilla", css.getBytes(StandardCharsets.UTF_8), URI.create("http://example.org/").toURL(), StandardCharsets.UTF_8
                         .displayName());
         urlIterator.forEachRemaining(result::add);
         return result;

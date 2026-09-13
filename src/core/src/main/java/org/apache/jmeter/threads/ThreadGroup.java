@@ -22,6 +22,7 @@ import java.io.ObjectInputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.gui.GUIMenuSortOrder;
@@ -77,7 +78,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     // List of active threads
     private final ConcurrentHashMap<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
 
-    private transient Object addThreadLock = new Object();
+    private transient ReentrantLock addThreadLock = new ReentrantLock();
 
     /** Is test (still) running? */
     private volatile boolean running = false;
@@ -230,9 +231,9 @@ public class ThreadGroup extends AbstractThreadGroup {
         log.info("Starting thread group... number={} threads={} ramp-up={} delayedStart={}", groupNumber,
                 numThreads, rampUpPeriodInSeconds, delayedStartup);
         if (delayedStartup) {
-            threadStarter = new Thread(new ThreadStarter(notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
-            threadStarter.setDaemon(true);
-            threadStarter.start();
+            threadStarter = Thread.ofVirtual()
+                    .name(getName() + "-ThreadStarter")
+                    .start(new ThreadStarter(notifier, threadGroupTree, engine));
             // N.B. we don't wait for the thread to complete, as that would prevent parallel TGs
         } else {
             final JMeterVariables variables = JMeterContextService.getContext().getVariables();
@@ -248,7 +249,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                             (perThreadDelayInMillis - timeElapsedToStartLastThread));
                 }
                 if (log.isDebugEnabled()) {
-                    log.debug("Computed delayForNextThreadInMillis:{} for thread:{}", delayForNextThreadInMillis, Thread.currentThread().getId());
+                    log.debug("Computed delayForNextThreadInMillis:{} for thread:{}", delayForNextThreadInMillis, Thread.currentThread().threadId());
                 }
                 lastThreadStartInMillis = nowInMillis;
                 startNewThread(notifier, threadGroupTree, engine, threadNum, variables, nowInMillis, Math.max(0, delayForNextThreadInMillis));
@@ -273,9 +274,10 @@ public class ThreadGroup extends AbstractThreadGroup {
         JMeterThread jmThread = makeThread(engine, this, notifier, groupNumber, threadNum, cloneTree(threadGroupTree), variables);
         scheduleThread(jmThread, now); // set start and end time
         jmThread.setInitialDelay(delay);
-        Thread newThread = new Thread(jmThread, jmThread.getThreadName());
+        Thread newThread = Thread.ofVirtual()
+                .name(jmThread.getThreadName())
+                .start(jmThread);
         registerStartedThread(jmThread, newThread);
-        newThread.start();
         return jmThread;
     }
 
@@ -284,7 +286,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        addThreadLock = new Object();
+        addThreadLock = new ReentrantLock();
     }
 
     /**
@@ -297,15 +299,17 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     @Override
-    @SuppressWarnings("SynchronizeOnNonFinalField")
     public JMeterThread addNewThread(int delay, StandardJMeterEngine engine) {
         long now = System.currentTimeMillis();
         JMeterContext context = JMeterContextService.getContext();
         JMeterThread newJmThread;
         int numThreads;
-        synchronized (addThreadLock) {
+        addThreadLock.lock();
+        try {
             numThreads = getNumThreads();
             setNumThreads(numThreads + 1);
+        } finally {
+            addThreadLock.unlock();
         }
         newJmThread = startNewThread(notifier, threadGroupTree, engine, numThreads, context.getVariables(), now, delay);
         JMeterContextService.addTotalThreads( 1 );
@@ -587,10 +591,10 @@ public class ThreadGroup extends AbstractThreadGroup {
                         jmThread.setScheduled(true);
                         jmThread.setEndTime(endtime);
                     }
-                    Thread newThread = new Thread(jmThread, jmThread.getThreadName());
-                    newThread.setDaemon(false); // ThreadStarter is daemon, but we don't want sampler threads to be so too
+                    Thread newThread = Thread.ofVirtual()
+                            .name(jmThread.getThreadName())
+                            .start(jmThread);
                     registerStartedThread(jmThread, newThread);
-                    newThread.start();
                 }
             } catch (Exception ex) {
                 log.error("An error occurred scheduling delay start of threads for Thread Group: {}", getName(), ex);

@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.IdentityHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.IteratingController;
@@ -50,6 +51,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
 
     // Only create the map if it is required
     private final transient IdentityHashMap<TestElement, Object> children = new IdentityHashMap<>();
+    private final transient ReentrantLock childrenLock = new ReentrantLock();
 
     private static final Object DUMMY = new Object();
 
@@ -166,11 +168,14 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
      */
     @Override
     public final boolean addTestElementOnce(TestElement child){
-        synchronized (children) {
+        childrenLock.lock();
+        try {
             if (children.putIfAbsent(child, DUMMY) == null) {
                 addTestElement(child);
                 return true;
             }
+        } finally {
+            childrenLock.unlock();
         }
         return false;
     }

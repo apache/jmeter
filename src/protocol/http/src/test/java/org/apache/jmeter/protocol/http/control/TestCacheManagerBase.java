@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -61,7 +62,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     public void setUp() throws Exception {
         this.cacheManager = new CacheManager();
         this.currentTimeInGMT = makeDate(Instant.now());
-        this.url = new URL(LOCAL_HOST);
+        this.url = URI.create(LOCAL_HOST).toURL();
 
         this.sampleResultOK = getSampleResultWithSpecifiedResponseCode("200");
     }

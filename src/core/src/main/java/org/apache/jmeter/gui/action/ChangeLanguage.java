@@ -53,9 +53,9 @@ public class ChangeLanguage extends AbstractActionWithNoRunningTest {
 
         int sep = locale.indexOf('_');
         if (sep > 0) {
-            loc = new Locale(locale.substring(0, sep), locale.substring(sep + 1));
+            loc = Locale.of(locale.substring(0, sep), locale.substring(sep + 1));
         } else {
-            loc = new Locale(locale, "");
+            loc = Locale.of(locale);
         }
         log.debug("Changing locale to {}", loc);
         try {

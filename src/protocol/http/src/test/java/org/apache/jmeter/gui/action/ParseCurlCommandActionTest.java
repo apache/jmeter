@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -246,7 +247,7 @@ public class ParseCurlCommandActionTest {
         request = basicCurlParser.parse(
                 "curl -X PUT \"https://www.example.com:123/12345?param1=value1&param2=value2\" -H  \"accept: */*\" -H  \"X-XSRF-TOKEN: 1234\"");
         httpSampler = (HTTPSamplerProxy) method.invoke(p, request, "");
-        assertEquals(new URL("https://www.example.com:123/12345?param1=value1&param2=value2"), httpSampler.getUrl());
+        assertEquals(URI.create("https://www.example.com:123/12345?param1=value1&param2=value2").toURL(), httpSampler.getUrl());
         assertEquals(123, httpSampler.getPort());
         assertEquals("www.example.com", httpSampler.getDomain());
         assertEquals("/12345?param1=value1&param2=value2", httpSampler.getPath());

@@ -19,6 +19,7 @@ package org.apache.jmeter.threads;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -39,6 +40,7 @@ public final class JMeterContextService {
 
     private static final AtomicInteger TOTAL_THREADS = new AtomicInteger();
 
+    private static final ReentrantLock TEST_LIFECYCLE_LOCK = new ReentrantLock();
     private static UnmodifiableJMeterVariables variables;
 
 
@@ -81,11 +83,16 @@ public final class JMeterContextService {
      * Zeroes numberOfActiveThreads.
      * Saves current time in a field and in the JMeter property "TESTSTART.MS"
      */
-    public static synchronized void startTest() {
-        if (testStart.get() == 0) {
-            NUMBER_OF_ACTIVE_THREADS.set(0);
-            testStart.set(System.currentTimeMillis());
-            JMeterUtils.setProperty("TESTSTART.MS", Long.toString(testStart.get()));// $NON-NLS-1$
+    public static void startTest() {
+        TEST_LIFECYCLE_LOCK.lock();
+        try {
+            if (testStart.get() == 0) {
+                NUMBER_OF_ACTIVE_THREADS.set(0);
+                testStart.set(System.currentTimeMillis());
+                JMeterUtils.setProperty("TESTSTART.MS", Long.toString(testStart.get()));// $NON-NLS-1$
+            }
+        } finally {
+            TEST_LIFECYCLE_LOCK.unlock();
         }
     }
 
@@ -122,9 +129,14 @@ public final class JMeterContextService {
      * Called by MainFrame#testEnded().
      * Clears start time field.
      */
-    public static synchronized void endTest() {
-        testStart.set(0);
-        resetClientSideVariables();
+    public static void endTest() {
+        TEST_LIFECYCLE_LOCK.lock();
+        try {
+            testStart.set(0);
+            resetClientSideVariables();
+        } finally {
+            TEST_LIFECYCLE_LOCK.unlock();
+        }
     }
 
     public static long getTestStartTime() {

@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -172,7 +173,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         result.setDataType("7");
         result.setSuccessful(true);
         result.setBytes(8L);
-        result.setURL(new URL("https://jmeter.apache.org"));
+        result.setURL(URI.create("https://jmeter.apache.org").toURL());
         result.setSentBytes(9);
         result.setGroupThreads(10);
         result.setAllThreads(11);

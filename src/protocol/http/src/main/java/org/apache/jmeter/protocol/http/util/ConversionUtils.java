@@ -186,6 +186,7 @@ public class ConversionUtils {
      * @throws MalformedURLException when the given <code>URL</code> is malformed
      * @see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=46690">Bug 46690 - handling of 302 redirects with invalid relative paths</a>
      */
+    @SuppressWarnings("deprecation")
     public static URL makeRelativeURL(URL baseURL, String location) throws MalformedURLException{
         URL initial = new URL(baseURL,location);
 
@@ -209,6 +210,7 @@ public class ConversionUtils {
      * @return String cleaned up url
      * @throws Exception when given <code>url</code> leads to a malformed URL or URI
      */
+    @SuppressWarnings("deprecation")
     public static String escapeIllegalURLCharacters(String url) throws Exception{
         String decodeUrl = URLDecoder.decode(url,StandardCharsets.UTF_8.name());
         URL urlString = new URL(decodeUrl);
