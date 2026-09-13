@@ -95,6 +95,7 @@
             <trusting group="io.projectreactor"/>
             <trusting group="org.springframework"/>
          </trusted-key>
+         <trusted-key id="4AC55A85D30C3499A3219500B7E2662A7640A051" group="com.formdev"/>
          <trusted-key id="4BDE772C338BA540E1057D0C8EA48D105232855D" group="com.github.jknack"/>
          <trusted-key id="4C5F68D09D42BA7FAC888DF9A929EA2321FDBF8F">
             <trusting group="net.sf.saxon"/>

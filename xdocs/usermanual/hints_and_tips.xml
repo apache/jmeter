@@ -129,7 +129,7 @@ will match any component that contains test in searchable elements of the compon
     <p>Additionally you can increase the font size of the text areas in some elements like JSR223 sampler by changing theses properties:</p>
     <dl>
       <dt><code>jsyntaxtextarea.font.family</code></dt>
-      <dd>set to <code>Hack</code> to activate and to change the font and their size</dd>
+      <dd>change the font type, for example: <code>Monospaced</code> or <code>Noto Mono</code> or <code>Inter Medium</code> or other system/JDK supported font.</dd>
       <dt><code>jsyntaxtextarea.font.size</code></dt>
       <dd>set to a greater value, like <code>28</code> (Suggested value for HiDPI)</dd>
     </dl>
