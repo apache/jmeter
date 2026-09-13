@@ -41,8 +41,8 @@ a summary of the pattern matching characters</a>
 There is also documentation on an older incarnation of the product at
 <a href="http://www.savarese.org/oro/docs/OROMatcher/index.html">OROMatcher User's guide</a>, which might prove useful.
 </p>
-<note>With JMeter version 5.5 the Regex implementation can be switched from Oro to the JDK based one by setting
-the JMeter property <code>jmeter.regex.engine</code> to some value different than <code>oro</code>.</note>
+<note>With JMeter version 6.0 the Regex implementation switched from Oro to the JDK based one by setting
+the JMeter property <code>jmeter.regex.engine</code>. You can switch it back by setting the value to <code>oro</code>.</note>
 <p>
 The pattern matching is very similar to the pattern matching in Perl.
 A full installation of Perl will include plenty of documentation on regular expressions - look for <code>perlrequick</code>,
@@ -193,7 +193,8 @@ Here is a list of the meta characters and their meaning (please check the ORO do
 <note>
 Please note that ORO does not support the <code>\Q</code> and <code>\E</code> meta-characters.
 [In other RE engines, these can be used to quote a portion of an RE so that the meta-characters stand for themselves.]
-You can use function  to do the equivalent, see <a href="functions.html#__escapeOroRegexpChars">${__escapeOroRegexpChars(valueToEscape)}</a>.
+You can use a function to do the equivalent, see <a href="functions.html#__escapeOroRegexpChars">${__escapeOroRegexpChars(valueToEscape)}</a>.
+Only applies, if you switch back to Oro.
 </note>
 <p>
 The following Perl5 extended regular expressions are supported by ORO.
@@ -222,8 +223,10 @@ of the input, <code>s</code> enables single line treatment of the input, and <co
 <subsection name="&sect-num;.5 Placement of modifiers" anchor="placement">
 <p>
 Modifiers can be placed anywhere in the regex, and apply from that point onwards.
-[A bug in ORO means that they cannot be used at the very end of the regex.
-However they would have no effect there anyway.]
+<note>
+A bug in ORO means that they cannot be used at the very end of the regex.
+However they would have no effect there anyway. Only applies, when you switch back to Oro
+</note>
 </p>
 <p>
 The single-line <code>(?s)</code> and multi-line <code>(?m)</code> modifiers are normally placed at the start of the regex.
