@@ -70,6 +70,24 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         return port + offset;
     }
 
+    private void updateGuiThreadCounts() {
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        if (guiPackage != null) { // check there is a GUI
+            guiPackage.getMainFrame().updateCounts();
+        }
+    }
+    
+    private void notifyThreadCountChanged(boolean increased) {
+        int threadCount = JMeterContextService.getNumberOfThreads();
+        for (RemoteThreadsLifeCycleListener listener : listeners) {
+            if (increased) {
+                listener.threadNumberIncreased(threadCount);
+            } else {
+                listener.threadNumberDecreased(threadCount);
+            }
+        }
+    }
+
     /**
      *
      * @see RemoteThreadsListener#threadStarted()
@@ -77,24 +95,14 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
     @Override
     public void threadStarted() {
         JMeterContextService.incrNumberOfThreads();
-        GuiPackage gp =GuiPackage.getInstance();
-        if (gp != null) {// check there is a GUI
-            gp.getMainFrame().updateCounts();
-        }
-        for (RemoteThreadsLifeCycleListener listener : listeners) {
-            listener.threadNumberIncreased(JMeterContextService.getNumberOfThreads());
-        }
+        updateGuiThreadCounts();
+        notifyThreadCountChanged(true);
     }
 
     @Override
     public void threadFinished() {
         JMeterContextService.decrNumberOfThreads();
-        GuiPackage gp =GuiPackage.getInstance();
-        if (gp != null) {// check there is a GUI
-            gp.getMainFrame().updateCounts();
-        }
-        for (RemoteThreadsLifeCycleListener listener : listeners) {
-            listener.threadNumberDecreased(JMeterContextService.getNumberOfThreads());
-        }
-    }
+        updateGuiThreadCounts();
+        notifyThreadCountChanged(false);
+    }   
 }
