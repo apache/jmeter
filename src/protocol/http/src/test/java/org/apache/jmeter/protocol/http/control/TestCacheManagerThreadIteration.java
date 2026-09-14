@@ -397,4 +397,19 @@ public class TestCacheManagerThreadIteration {
         assertTrue(this.cacheManager.inCache(url, headers), "After iteration, should find valid entry");
     }
 
+    @Test
+    public void testClearCacheReusesThreadLocalInstance() throws Exception {
+        Field threadLocalField = CacheManager.class.getDeclaredField("threadCache");
+        threadLocalField.setAccessible(true);
+        Object initialThreadLocal = threadLocalField.get(this.cacheManager);
+        assertNotNull(initialThreadLocal, "ThreadLocal instance should be initialized");
+
+        for (int i = 0; i < 100; i++) {
+            this.cacheManager.clear();
+            Object currentThreadLocal = threadLocalField.get(this.cacheManager);
+            assertSame(initialThreadLocal, currentThreadLocal,
+                    "ThreadLocal instance should be reused across clear calls (iteration " + i + ")");
+        }
+    }
+
 }
