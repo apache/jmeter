@@ -959,18 +959,29 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private static void runPostProcessors(List<? extends PostProcessor> extractors) {
         for (PostProcessor ex : extractors) {
-            TestBeanHelper.prepare((TestElement) ex);
-            ex.process();
+            try {
+                if (log.isDebugEnabled()) {
+                    log.debug("Running postprocessor: {}", ((AbstractTestElement) ex).getName());
+                }
+                TestBeanHelper.prepare((TestElement) ex);
+                ex.process();
+            } catch (Exception | JMeterError e) {
+                log.error("Error processing PostProcessor: {}", ((AbstractTestElement) ex).getName(), e);
+            }
         }
     }
 
     private static void runPreProcessors(List<? extends PreProcessor> preProcessors) {
         for (PreProcessor ex : preProcessors) {
-            if (log.isDebugEnabled()) {
-                log.debug("Running preprocessor: {}", ((AbstractTestElement) ex).getName());
+            try {
+                if (log.isDebugEnabled()) {
+                    log.debug("Running preprocessor: {}", ((AbstractTestElement) ex).getName());
+                }
+                TestBeanHelper.prepare((TestElement) ex);
+                ex.process();
+            } catch (Exception | JMeterError e) {
+                log.error("Error processing PreProcessor: {}", ((AbstractTestElement) ex).getName(), e);
             }
-            TestBeanHelper.prepare((TestElement) ex);
-            ex.process();
         }
     }
 
