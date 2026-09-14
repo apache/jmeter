@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import org.apiguardian.api.API;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.Controller;
@@ -112,6 +113,20 @@ public class TestCompiler implements HashTreeTraverser {
         SamplePackage pack = transactionControllerConfigMap.get(controller);
         pack.setSampler(transactionSampler);
         return pack;
+    }
+
+    /**
+     * Returns the parent controllers for the given sampler without
+     * triggering configuration side effects.
+     *
+     * @param sampler the {@link Sampler} to look up
+     * @return parent controllers from nearest to root, or an empty list
+     *         if the sampler has not been compiled
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
+    public List<Controller> getControllersForSampler(Sampler sampler) {
+        SamplePackage pack = samplerConfigMap.get(sampler);
+        return pack != null ? pack.getControllers() : List.of();
     }
 
     /**
