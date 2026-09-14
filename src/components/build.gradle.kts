@@ -35,7 +35,7 @@ dependencies {
         )
     }
 
-    api("javax.mail:mail") {
+    api("com.sun.mail:javax.mail") {
         exclude("javax.activation", "activation")
     }
     // There's no javax.activation:activation:1.2.0, so we use com.sun...
