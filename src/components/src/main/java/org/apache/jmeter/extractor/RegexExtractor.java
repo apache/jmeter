@@ -130,11 +130,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             String prevString = vars.get(refName + REF_MATCH_NR);
             if (prevString != null) {
                 vars.remove(refName + REF_MATCH_NR);// ensure old value is not left defined
-                try {
-                    prevCount = Integer.parseInt(prevString);
-                } catch (NumberFormatException nfe) {
-                    log.warn("Could not parse number: '{}'", prevString);
-                }
+                prevCount = parseIntOrDefault(prevString, 0);
             }
             int matchCount=0;// Number of refName_n variable sets to keep
             try {
@@ -188,11 +184,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             String prevString = vars.get(refName + REF_MATCH_NR);
             if (prevString != null) {
                 vars.remove(refName + REF_MATCH_NR);// ensure old value is not left defined
-                try {
-                    prevCount = Integer.parseInt(prevString);
-                } catch (NumberFormatException nfe) {
-                    log.warn("Could not parse number: '{}'", prevString);
-                }
+                prevCount = parseIntOrDefault(prevString, 0);
             }
             int matchCount=0;// Number of refName_n variable sets to keep
             try {
@@ -355,11 +347,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         String prevString=vars.get(buf.toString());
         int previous=0;
         if (prevString!=null){
-            try {
-                previous=Integer.parseInt(prevString);
-            } catch (NumberFormatException nfe) {
-                log.warn("Could not parse number: '{}'.", prevString);
-            }
+            previous=parseIntOrDefault(prevString, 0);
         }
         //Note: match.groups() includes group 0
         final int groups = match.groups();
@@ -384,11 +372,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         String prevString=vars.get(buf.toString());
         int previous=0;
         if (prevString!=null){
-            try {
-                previous=Integer.parseInt(prevString);
-            } catch (NumberFormatException nfe) {
-                log.warn("Could not parse number: '{}'.", prevString);
-            }
+            previous=parseIntOrDefault(prevString, 0);
         }
         //Note: match.groups() includes group 0, groupCount() not
         final int groups = match.groupCount() + 1;
@@ -410,18 +394,54 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * basename_gn, where n=0...# of groups<br/>
      * basename_g = number of groups (apart from g0)
      */
+    /**
+     * Parses the given string as a signed decimal integer without relying on
+     * exceptions, so the hot path of failing extractions does not pay for
+     * exception creation (see issue #6240).
+     *
+     * @param s            string to parse, may be null, empty or not a number
+     * @param defaultValue value to return when the string cannot be parsed
+     * @return the parsed value, or {@code defaultValue} if the string is null,
+     *         empty, not a signed decimal number, or overflows an {@code int}
+     */
+    private static int parseIntOrDefault(String s, int defaultValue) {
+        if (s != null && !s.isEmpty() && isSignedDigits(s)) {
+            try {
+                return Integer.parseInt(s);
+            } catch (NumberFormatException overflow) {
+                // Digit string longer than the int range, fall through to the default
+            }
+        }
+        if (s != null && !s.isEmpty()) {
+            log.warn("Could not parse number: '{}'", s);
+        }
+        return defaultValue;
+    }
+
+    private static boolean isSignedDigits(String s) {
+        char first = s.charAt(0);
+        int start = first == '-' || first == '+' ? 1 : 0;
+        if (start == s.length()) {
+            return false;
+        }
+        for (int i = start; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static void removeGroups(JMeterVariables vars, String basename) {
         StringBuilder buf = new StringBuilder();
         buf.append(basename);
         buf.append("_g"); // $NON-NLS-1$
         int pfxlen=buf.length();
         // How many groups are there?
-        int groups;
-        try {
-            groups=Integer.parseInt(vars.get(buf.toString()));
-        } catch (NumberFormatException e) {
-            groups=0;
-        }
+        // The group-count variable is absent whenever no match has succeeded
+        // yet, so parsing must cope with null without creating exceptions (#6240)
+        int groups = parseIntOrDefault(vars.get(buf.toString()), 0);
         vars.remove(buf.toString());// Remove the group count
         for (int i = 0; i <= groups; i++) {
             buf.append(i);
