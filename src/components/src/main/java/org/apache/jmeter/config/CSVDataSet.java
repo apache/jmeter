@@ -26,9 +26,12 @@ import org.apache.jmeter.gui.GUIMenuSortOrder;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.testbeans.PropertyBackedTestBean;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.testelement.schema.PropertiesAccessor;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
@@ -68,7 +71,7 @@ import org.slf4j.LoggerFactory;
 @GUIMenuSortOrder(1)
 @TestElementMetadata(labelResource = "displayName")
 public class CSVDataSet extends ConfigTestElement
-    implements TestBean, LoopIterationListener, NoConfigMerge {
+    implements TestBean, PropertyBackedTestBean, LoopIterationListener, NoConfigMerge {
 
     public enum ShareMode {
         ALL("shareMode.all"),
@@ -94,33 +97,20 @@ public class CSVDataSet extends ConfigTestElement
     private static final String EOFVALUE = // value to return at EOF
         JMeterUtils.getPropDefault("csvdataset.eofstring", "<EOF>"); //$NON-NLS-1$ //$NON-NLS-2$
 
-    private transient String filename;
-
-    private transient String fileEncoding;
-
-    private transient String variableNames;
-
-    private transient String delimiter;
-
-    private transient boolean quoted;
-
-    private transient boolean recycle = true;
-
-    private transient boolean stopThread;
-
     private transient String[] vars;
 
     private transient String alias;
 
-    private transient String shareMode;
-
     private boolean firstLineIsNames = false;
 
-    private boolean ignoreFirstLine = false;
+    @Override
+    public CSVDataSetSchema getSchema() {
+        return CSVDataSetSchema.INSTANCE;
+    }
 
-    private Object readResolve(){
-        recycle = true;
-        return this;
+    @Override
+    public PropertiesAccessor<? extends CSVDataSet, ? extends CSVDataSetSchema> getProps() {
+        return new PropertiesAccessor<>(this, getSchema());
     }
 
     /**
@@ -137,7 +127,14 @@ public class CSVDataSet extends ConfigTestElement
     @Override
     public void setProperty(JMeterProperty property) {
         String propName = property.getName();
-        if ("shareMode".equals(propName)) {
+        if (getSchema().getShareMode().getName().equals(propName)) {
+            if (property instanceof StringProperty stringProperty) {
+                String stringValue = stringProperty.getStringValue();
+                if (stringValue == null || !stringValue.contains(" ")) {
+                    super.setProperty(property);
+                    return;
+                }
+            }
             JMeterProperty shareMode =
                     GenericTestBeanCustomizer.normalizeEnumProperty(getClass(), ShareMode.class, property);
             if (shareMode != null) {
@@ -164,6 +161,8 @@ public class CSVDataSet extends ConfigTestElement
             initVars(server, context, delim);
         }
 
+        boolean recycle = getRecycle();
+        boolean ignoreFirstLine = isIgnoreFirstLine();
         // TODO: fetch this once as per vars above?
         JMeterVariables threadVars = context.getVariables();
         String[] lineValues = {};
@@ -206,7 +205,7 @@ public class CSVDataSet extends ConfigTestElement
                 throw new IllegalArgumentException("Could not split CSV header line from file:" + fileName,e);
             }
         } else {
-            server.reserveFile(fileName, getFileEncoding(), alias, ignoreFirstLine);
+            server.reserveFile(fileName, getFileEncoding(), alias, isIgnoreFirstLine());
             vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
         }
         trimVarNames(vars);
@@ -239,7 +238,7 @@ public class CSVDataSet extends ConfigTestElement
      * @return Returns the filename.
      */
     public String getFilename() {
-        return filename;
+        return get(getSchema().getFilename());
     }
 
     /**
@@ -247,14 +246,14 @@ public class CSVDataSet extends ConfigTestElement
      *            The filename to set.
      */
     public void setFilename(String filename) {
-        this.filename = filename;
+        set(getSchema().getFilename(), filename);
     }
 
     /**
      * @return Returns the file encoding.
      */
     public String getFileEncoding() {
-        return fileEncoding;
+        return get(getSchema().getFileEncoding());
     }
 
     /**
@@ -262,14 +261,14 @@ public class CSVDataSet extends ConfigTestElement
      *            The fileEncoding to set.
      */
     public void setFileEncoding(String fileEncoding) {
-        this.fileEncoding = fileEncoding;
+        set(getSchema().getFileEncoding(), fileEncoding);
     }
 
     /**
      * @return Returns the variableNames.
      */
     public String getVariableNames() {
-        return variableNames;
+        return get(getSchema().getVariableNames());
     }
 
     /**
@@ -277,43 +276,43 @@ public class CSVDataSet extends ConfigTestElement
      *            The variableNames to set.
      */
     public void setVariableNames(String variableNames) {
-        this.variableNames = variableNames;
+        set(getSchema().getVariableNames(), variableNames);
     }
 
     public String getDelimiter() {
-        return delimiter;
+        return get(getSchema().getDelimiter());
     }
 
     public void setDelimiter(String delimiter) {
-        this.delimiter = delimiter;
+        set(getSchema().getDelimiter(), delimiter);
     }
 
     public boolean getQuotedData() {
-        return quoted;
+        return get(getSchema().getQuotedData());
     }
 
     public void setQuotedData(boolean quoted) {
-        this.quoted = quoted;
+        set(getSchema().getQuotedData(), quoted);
     }
 
     public boolean getRecycle() {
-        return recycle;
+        return get(getSchema().getRecycle());
     }
 
     public void setRecycle(boolean recycle) {
-        this.recycle = recycle;
+        set(getSchema().getRecycle(), recycle);
     }
 
     public boolean getStopThread() {
-        return stopThread;
+        return get(getSchema().getStopThread());
     }
 
     public void setStopThread(boolean value) {
-        this.stopThread = value;
+        set(getSchema().getStopThread(), value);
     }
 
     public String getShareMode() {
-        return shareMode;
+        return get(getSchema().getShareMode());
     }
 
     @Nullable ShareMode getShareModeAsEnum() {
@@ -325,20 +324,20 @@ public class CSVDataSet extends ConfigTestElement
     }
 
     public void setShareMode(String value) {
-        this.shareMode = value;
+        set(getSchema().getShareMode(), value);
     }
 
     /**
      * @return the ignoreFirstLine
      */
     public boolean isIgnoreFirstLine() {
-        return ignoreFirstLine;
+        return get(getSchema().getIgnoreFirstLine());
     }
 
     /**
      * @param ignoreFirstLine the ignoreFirstLine to set
      */
     public void setIgnoreFirstLine(boolean ignoreFirstLine) {
-        this.ignoreFirstLine = ignoreFirstLine;
+        set(getSchema().getIgnoreFirstLine(), ignoreFirstLine);
     }
 }

@@ -28,16 +28,7 @@ import org.apache.jorphan.util.StringUtilities;
 
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
 
-    // These names must agree case-wise with the variable and property names
-    private static final String FILENAME = "filename";               //$NON-NLS-1$
-    private static final String FILE_ENCODING = "fileEncoding";      //$NON-NLS-1$
-    private static final String VARIABLE_NAMES = "variableNames";    //$NON-NLS-1$
-    private static final String IGNORE_FIRST_LINE = "ignoreFirstLine";    //$NON-NLS-1$
-    private static final String DELIMITER = "delimiter";             //$NON-NLS-1$
-    private static final String RECYCLE = "recycle";                 //$NON-NLS-1$
-    private static final String STOPTHREAD = "stopThread";           //$NON-NLS-1$
-    private static final String QUOTED_DATA = "quotedData";          //$NON-NLS-1$
-    private static final String SHAREMODE = "shareMode";             //$NON-NLS-1$
+    private static final CSVDataSetSchema SCHEMA = CSVDataSetSchema.INSTANCE;
 
     private static final String[] SHARE_TAGS = new String[3];
     static final int SHARE_ALL    = 0;
@@ -55,51 +46,53 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
         super(CSVDataSet.class);
 
         createPropertyGroup("csv_data",             //$NON-NLS-1$
-                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES,
-                        IGNORE_FIRST_LINE, DELIMITER, QUOTED_DATA,
-                        RECYCLE, STOPTHREAD, SHAREMODE });
+                new String[] { SCHEMA.getFilename().getName(), SCHEMA.getFileEncoding().getName(),
+                        SCHEMA.getVariableNames().getName(), SCHEMA.getIgnoreFirstLine().getName(),
+                        SCHEMA.getDelimiter().getName(), SCHEMA.getQuotedData().getName(),
+                        SCHEMA.getRecycle().getName(), SCHEMA.getStopThread().getName(),
+                        SCHEMA.getShareMode().getName() });
 
-        PropertyDescriptor p = property(FILENAME);
+        PropertyDescriptor p = property(SCHEMA.getFilename().getName());
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, "");        //$NON-NLS-1$
+        p.setValue(DEFAULT, SCHEMA.getFilename().getDefaultValue());
         p.setValue(NOT_EXPRESSION, true);
         p.setPropertyEditorClass(FileEditor.class);
 
-        p = property(FILE_ENCODING, TypeEditor.ComboStringEditor);
+        p = property(SCHEMA.getFileEncoding().getName(), TypeEditor.ComboStringEditor);
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, "");        //$NON-NLS-1$
+        p.setValue(DEFAULT, SCHEMA.getFileEncoding().getDefaultValue());
         p.setValue(TAGS, getListFileEncoding());
 
-        p = property(VARIABLE_NAMES);
+        p = property(SCHEMA.getVariableNames().getName());
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, "");        //$NON-NLS-1$
+        p.setValue(DEFAULT, SCHEMA.getVariableNames().getDefaultValue());
         p.setValue(NOT_EXPRESSION, true);
 
-        p = property(IGNORE_FIRST_LINE);
+        p = property(SCHEMA.getIgnoreFirstLine().getName());
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, false);
+        p.setValue(DEFAULT, SCHEMA.getIgnoreFirstLine().getDefaultValue());
 
-        p = property(DELIMITER);
+        p = property(SCHEMA.getDelimiter().getName());
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, ",");        //$NON-NLS-1$
+        p.setValue(DEFAULT, SCHEMA.getDelimiter().getDefaultValue());
         p.setValue(NOT_EXPRESSION, true);
 
-        p = property(QUOTED_DATA);
+        p = property(SCHEMA.getQuotedData().getName());
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, false);
+        p.setValue(DEFAULT, SCHEMA.getQuotedData().getDefaultValue());
 
-        p = property(RECYCLE);
+        p = property(SCHEMA.getRecycle().getName());
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, true);
+        p.setValue(DEFAULT, SCHEMA.getRecycle().getDefaultValue());
 
-        p = property(STOPTHREAD);
+        p = property(SCHEMA.getStopThread().getName());
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, false);
+        p.setValue(DEFAULT, SCHEMA.getStopThread().getDefaultValue());
 
-        p = property(SHAREMODE, TypeEditor.ComboStringEditor);
+        p = property(SCHEMA.getShareMode().getName(), TypeEditor.ComboStringEditor);
         p.setValue(RESOURCE_BUNDLE, getBeanDescriptor().getValue(RESOURCE_BUNDLE));
         p.setValue(NOT_UNDEFINED, true);
-        p.setValue(DEFAULT, SHARE_TAGS[SHARE_ALL]);
+        p.setValue(DEFAULT, SCHEMA.getShareMode().getDefaultValue());
         p.setValue(NOT_OTHER, false);
         p.setValue(NOT_EXPRESSION, false);
         p.setValue(TAGS, SHARE_TAGS);
