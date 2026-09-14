@@ -282,7 +282,7 @@ ul.tree li:last-child {
     </xsl:choose>
     </b>
     [
-    <xsl:for-each select='collectionProp[@name="Asserion.test_strings"]/stringProp'>
+    <xsl:for-each select='collectionProp[@name="Assertion.test_strings"]/stringProp'>
       "<xsl:value-of select='.'/>"
       <xsl:if test="position() != last()">,</xsl:if>
    </xsl:for-each>
