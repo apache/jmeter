@@ -64,7 +64,12 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     private static final String REQUEST_HEADERS = "Assertion.request_headers"; // $NON-NLS-1$
     private static final String REQUEST_DATA = "Assertion.request_data"; // $NON-NLS-1$
     private static final String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
-    private static final String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
+    private static final String TEST_STRINGS = "Assertion.test_strings"; // $NON-NLS-1$
+    /**
+     * Misspelled historical name of {@link #TEST_STRINGS}, it was used by JMeter versions up to and including 5.6.3.
+     * It is still read to keep test plans saved by those versions working.
+     */
+    private static final String LEGACY_TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
     private static final String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
     private static final String CUSTOM_MESSAGE = "Assertion.custom_message"; // $NON-NLS-1$
 
@@ -216,6 +221,17 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             return CONTAINS;
         }
         return type.getIntValue();
+    }
+
+    @Override
+    public void setProperty(JMeterProperty property) {
+        if (LEGACY_TEST_STRINGS.equals(property.getName())) {
+            // Migrate the test patterns that were saved under the misspelled
+            // property name by JMeter versions up to and including 5.6.3, so that
+            // test plans saved by those versions keep working (see issue #6289)
+            property.setName(TEST_STRINGS);
+        }
+        super.setProperty(property);
     }
 
     public CollectionProperty getTestStrings() {

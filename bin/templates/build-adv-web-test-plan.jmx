@@ -143,7 +143,7 @@
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="605898121">&lt;title&gt;Apache JMeter - Apache JMeter&amp;trade;&lt;/title&gt;</stringProp>
             </collectionProp>
             <stringProp name="TestPlan.comments">We check page contains some text</stringProp>
@@ -191,7 +191,7 @@
           </GaussianRandomTimer>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-420601512">&lt;title&gt;Apache JMeter - Changes&lt;/title&gt;</stringProp>
             </collectionProp>
             <stringProp name="TestPlan.comments">We check page contains some text</stringProp>
@@ -250,7 +250,7 @@
           </GaussianRandomTimer>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1440480625">This is &lt;b&gt;ASF Bugzilla&lt;/b&gt;: the Apache Software Foundation bug system</stringProp>
             </collectionProp>
             <stringProp name="TestPlan.comments">We check page contains some text</stringProp>
