@@ -442,8 +442,75 @@ JMETER-SERVER</source>
     Defaults to: <code>0</code>
 </property>
 <property name="httpclient.version">
-    Set the http version.<br/>
-    Defaults to: <code>1.1</code> (or use the parameter <code>http.protocol.version</code>)
+    Set the default HTTP version for HttpClient5 samplers with an empty HTTP Version value.<br/>
+    Valid values are <code>HTTP/1.1</code>, <code>HTTP/2</code> and <code>HTTP/2 Strict</code>.
+    The legacy values <code>1.0</code> and <code>1.1</code> are still accepted and both select
+    <code>HTTP/1.1</code> for these samplers. The HttpClient4 and Java samplers always use
+    <code>HTTP/1.1</code>.<br/>
+    The AJP sampler only reads this property to choose the HTTP version of its request line: the
+    legacy value <code>1.0</code> (or <code>HTTP/1.0</code>) announces <code>HTTP/1.0</code>, every
+    other value announces <code>HTTP/1.1</code>.<br/>
+    Defaults to: <code>HTTP/1.1</code>
+</property>
+<property name="httpclient5.validate_after_inactivity">
+    Milliseconds of inactivity after which a pooled connection of the HttpClient5 sampler
+    implementation is re-validated before it is reused, using an HTTP/2 <code>PING</code> or a stale
+    check for HTTP/1.1. <code>-1</code> disables the check. Without it a connection the server closed
+    while the thread was idle is reused as it is and fails the sample, as JMeter deliberately does not
+    retry requests.<br/>
+    Defaults to: <code>2000</code>
+</property>
+<property name="httpclient5.h2.multiplexing">
+    Multiplex concurrent message exchanges (for example parallel downloads of embedded resources)
+    over a single HTTP/2 connection. The connections are not shared between threads, every JMeter
+    thread uses connections of its own.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="httpclient5.h2.max_connections_per_route">
+    Maximum number of HTTP/2 connections kept per target host. With multiplexing enabled a single
+    connection usually serves all concurrent requests.<br/>
+    Defaults to: <code>6</code>
+</property>
+<property name="httpclient5.h2.header_table_size">
+    Size in bytes of the HPACK dynamic header table announced to the server.
+    <code>0</code> disables indexing of the headers by the server.<br/>
+    Defaults to: <code>8192</code>
+</property>
+<property name="httpclient5.h2.header_compression">
+    Compress the request headers with HPACK.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="httpclient5.h2.max_concurrent_streams">
+    Maximum number of concurrent streams the client accepts on a single HTTP/2 connection.<br/>
+    Defaults to: <code>250</code>
+</property>
+<property name="httpclient5.h2.initial_window_size">
+    HTTP/2 flow control window in bytes announced per stream. It caps how many bytes the server may
+    send before it has to wait for a window update, so the throughput of a single response cannot
+    exceed this window divided by the round trip time. The HTTP/2 default of <code>65535</code>
+    throttles downloads over links with any noticeable latency, therefore JMeter announces a larger
+    window.<br/>
+    Defaults to: <code>16777216</code>
+</property>
+<property name="httpclient5.h2.max_frame_size">
+    Largest HTTP/2 frame payload in bytes the client is willing to receive.<br/>
+    Defaults to: <code>65536</code>
+</property>
+<property name="httpclient5.h2.push_enabled">
+    Accept HTTP/2 server push. JMeter cannot report pushed resources, so they are dropped,
+    therefore push is disabled by default.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="httpclient5.h2.prior_knowledge">
+    Use HTTP/2 over cleartext (h2c with prior knowledge) when <code>HTTP/2</code> is selected for a
+    <code>http://</code> URL. Without it such requests fall back to HTTP/1.1, because protocol
+    negotiation requires TLS. Only enable it if all plain HTTP targets support h2c.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="httpclient5.default_user_agent_disabled">
+    If true, the default HC5 User-Agent (Apache-HttpClient/X.Y.Z (Java/A.B.C)) will not be added.
+    A User-Agent header defined in the test plan is still sent.<br/>
+    Defaults to: <code>false</code>
 </property>
 <property name="httpclient.socket.http.cps">
     Set characters per second to a value greater then zero to emulate slow connections.<br/>
@@ -510,7 +577,7 @@ JMETER-SERVER</source>
 </source>
 </description>
 </section>
-<section name="&sect-num;.13 Apache HttpComponents HTTPClient configuration (HTTPClient4)" anchor="httpclient4">
+<section name="&sect-num;.13 Apache HttpComponents HttpClient configuration (HttpClient4)" anchor="httpclient4">
 <properties>
 <property name="hc.parameters.file">
     Define a properties file for overriding Apache HttpClient parameters.<br/>
@@ -796,6 +863,8 @@ JMETER-SERVER</source>
         <dt><code>HTTPSampler2</code></dt>
         <dt><code>HttpClient4</code></dt>
         <dd>Use Apache HTTPClient version 4</dd>
+        <dt><code>HttpClient5</code></dt>
+        <dd>Use Apache HTTPClient version 5</dd>
     </dl>
     Defaults to: <code>HttpClient4</code>
 </property>

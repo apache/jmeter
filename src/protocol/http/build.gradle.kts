@@ -61,6 +61,11 @@ dependencies {
         exclude("com.google.code.findbugs", "jsr305")
     }
     implementation("dnsjava:dnsjava")
+    implementation("org.apache.httpcomponents.client5:httpclient5")
+    implementation("org.apache.httpcomponents.core5:httpcore5")
+    implementation("org.apache.httpcomponents.core5:httpcore5-h2") {
+        because("HTTPHC5Impl uses H2Config and HttpVersionPolicy from org.apache.hc.core5.http2")
+    }
     implementation("org.apache.httpcomponents:httpmime")
     implementation("org.apache.httpcomponents:httpcore")
     implementation("org.brotli:dec")

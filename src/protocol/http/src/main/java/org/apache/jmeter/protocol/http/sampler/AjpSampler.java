@@ -58,6 +58,9 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     private static final char NEWLINE = '\n';
     private static final String COLON_SPACE = ": ";//$NON-NLS-1$
 
+    /** HTTP version sent to the AJP connector when the {@code httpclient.version} property requests HTTP/1.0. */
+    private static final String HTTP_1_0 = "HTTP/1.0";//$NON-NLS-1$
+
     /**
      *  Translates integer codes to request header names
      */
@@ -177,8 +180,8 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         } else {
             setByte((byte)2);
         }
-        if(JMeterUtils.getPropDefault("httpclient.version","1.1").equals("1.0")) {//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-            setString("HTTP/1.0");//$NON-NLS-1$
+        if (isHttp10(JMeterUtils.getPropDefault("httpclient.version", HTTPConstants.HTTP_VERSION_1_1))) {//$NON-NLS-1$
+            setString(HTTP_1_0);
         } else {
             setString(HTTPConstants.HTTP_1_1);
         }
@@ -198,6 +201,19 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             setString(query);
         }
         setByte((byte)0xff); // More general attributes not supported
+    }
+
+    /**
+     * Tells whether the {@code httpclient.version} property requests HTTP/1.0 for the AJP sampler.
+     * Both the legacy spelling {@code 1.0} and the {@code HTTP/1.0} spelling of the HTTP version
+     * values used by the other samplers are accepted.
+     *
+     * @param httpVersion value of the {@code httpclient.version} property
+     * @return {@code true} if the request line should announce HTTP/1.0
+     */
+    static boolean isHttp10(String httpVersion) {
+        String version = httpVersion == null ? "" : httpVersion.trim();
+        return "1.0".equals(version) || HTTP_1_0.equalsIgnoreCase(version);//$NON-NLS-1$
     }
 
     private int getHeaderSize(String method, URL url) {

@@ -26,8 +26,6 @@ import java.io.OutputStream
  * count the total number of bytes written. The byte count can be accessed through
  * the [bytesWritten] property. The original [OutputStream]'s functionality
  * (such as writing, flushing, and closing) is preserved.
- *
- * The byte count is incremented only for the `write` operations that accept a byte array.
  */
 public class CountingOutputStream(private val output: OutputStream) : OutputStream() {
     public var bytesWritten: Long = 0
@@ -35,6 +33,7 @@ public class CountingOutputStream(private val output: OutputStream) : OutputStre
 
     override fun write(b: Int) {
         output.write(b)
+        bytesWritten++
     }
 
     override fun write(b: ByteArray, off: Int, len: Int) {

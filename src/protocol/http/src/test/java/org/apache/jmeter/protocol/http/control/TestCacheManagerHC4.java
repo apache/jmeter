@@ -234,6 +234,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void cacheResult(HTTPSampleResult result, boolean hasCachingHeaders) {
         if (hasCachingHeaders) {
             this.cacheManager.saveDetails(httpResponse, result);
@@ -248,6 +249,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void setRequestHeaders() {
         this.cacheManager.setHeaders(this.url, this.httpMethod);
     }

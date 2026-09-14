@@ -37,6 +37,7 @@ import org.apache.jmeter.gui.JTextComponentBinding;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.protocol.http.gui.HttpVersionComboBox;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
@@ -79,6 +80,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
     private JTextField proxyUser;
     private JPasswordField proxyPass;
     private final JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
+    private final HttpVersionComboBox httpVersion = new HttpVersionComboBox();
     private JTextField connectTimeOut;
     private JTextField responseTimeOut;
 
@@ -151,13 +153,20 @@ public class HttpDefaultsGui extends AbstractConfigGui {
             config.removeProperty(httpSchema.getIpSourceType());
         }
 
-        config.set(httpSchema.getImplementation(), String.valueOf(httpImplementation.getSelectedItem()));
+        String selectedImplementation = (String) httpImplementation.getSelectedItem();
+        config.set(httpSchema.getImplementation(),
+                StringUtilities.isBlank(selectedImplementation) ? null : selectedImplementation);
+        String selectedHttpVersion = (String) httpVersion.getSelectedItem();
+        config.set(httpSchema.getHttpVersion(),
+                StringUtilities.isBlank(selectedHttpVersion) ? null : selectedHttpVersion);
     }
 
     @Override
     public void clearGui() {
         super.clearGui();
         urlConfigGui.clear();
+        httpImplementation.setSelectedItem("");
+        httpVersion.setSelectedItem("");
     }
 
     @Override
@@ -169,6 +178,8 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         HTTPSamplerBaseSchema httpSchema = HTTPSamplerBaseSchema.INSTANCE;
         sourceIpType.setSelectedIndex(samplerBase.get(httpSchema.getIpSourceType()));
         httpImplementation.setSelectedItem(samplerBase.getString(httpSchema.getImplementation()));
+        httpVersion.setImplementation(samplerBase.getString(httpSchema.getImplementation()));
+        httpVersion.setSelectedItem(samplerBase.getString(httpSchema.getHttpVersion()));
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -329,6 +340,9 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         implPanel.add(new JLabel(JMeterUtils.getResString("http_implementation"))); // $NON-NLS-1$
         httpImplementation.addItem("");// $NON-NLS-1$
         implPanel.add(httpImplementation);
+        implPanel.add(new JLabel(JMeterUtils.getResString("http_version"))); // $NON-NLS-1$
+        httpVersion.bindToImplementation(httpImplementation);
+        implPanel.add(httpVersion);
         return implPanel;
     }
 

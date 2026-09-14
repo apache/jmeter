@@ -503,7 +503,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @param url to be checked
      * @return <code>true</code> when port should omitted in SPN
      */
-    private static boolean isStripPort(URL url) {
+    public static boolean isStripPort(URL url) {
         if (STRIP_PORT) {
             return true;
         }
