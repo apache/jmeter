@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+import com.github.autostyle.gradle.AutostyleTask
 import org.gradle.kotlin.dsl.apply
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
@@ -24,6 +25,14 @@ plugins {
 
 if (!buildParameters.skipAutostyle) {
     apply(plugin = "build-logic.autostyle")
+}
+
+// The OpenRewrite Gradle plugin applies its recipes to allprojects when it is
+// applied to the root project, so the workaround is to avoid applying it to the root.
+val skipOpenrewrite = project == rootProject || buildParameters.skipOpenrewrite
+
+if (!skipOpenrewrite) {
+    apply(plugin = "build-logic.openrewrite")
 }
 
 val skipCheckstyle = buildParameters.skipCheckstyle || run {
@@ -55,12 +64,45 @@ if (!skipCheckstyle && !buildParameters.skipAutostyle) {
     }
 }
 
-if (!buildParameters.skipAutostyle || !skipCheckstyle || !buildParameters.skipForbiddenApis) {
+// OpenRewrite fixes many warnings, so it should run before the other verifications
+if (!skipOpenrewrite) {
+    if (!buildParameters.skipAutostyle) {
+        tasks.withType<AutostyleTask>().configureEach {
+            mustRunAfter("rewriteRun", "rewriteDryRun")
+        }
+    }
+    if (!skipCheckstyle) {
+        tasks.withType<Checkstyle>().configureEach {
+            mustRunAfter("rewriteRun", "rewriteDryRun")
+        }
+    }
+}
+
+if (!buildParameters.skipAutostyle || !skipCheckstyle || !buildParameters.skipForbiddenApis || !skipOpenrewrite) {
     tasks.register("style") {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
         description = "Formats code (license header, import order, whitespace at end of line, ...) and executes Checkstyle verifications"
+        if (!skipOpenrewrite) {
+            dependsOn("rewriteRun")
+        }
         if (!buildParameters.skipAutostyle) {
             dependsOn("autostyleApply")
+        }
+        if (!skipCheckstyle) {
+            dependsOn("checkstyleAll")
+        }
+        if (!buildParameters.skipForbiddenApis) {
+            dependsOn("forbiddenApis")
+        }
+    }
+    tasks.register("styleCheck") {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = "Reports code style violations (license header, import order, whitespace at end of line, ...)"
+        if (!skipOpenrewrite) {
+            dependsOn("rewriteDryRun")
+        }
+        if (!buildParameters.skipAutostyle) {
+            dependsOn("autostyleCheck")
         }
         if (!skipCheckstyle) {
             dependsOn("checkstyleAll")

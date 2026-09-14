@@ -20,13 +20,13 @@ plugins {
 }
 
 dependencies {
-    api(projects.buildParameters)
-    api(projects.verification)
-    api("me.champeau.jmh:me.champeau.jmh.gradle.plugin:0.7.3")
-    api("com.github.vlsi.crlf:com.github.vlsi.crlf.gradle.plugin:3.0.1")
-    api("com.github.vlsi.gradle-extensions:com.github.vlsi.gradle-extensions.gradle.plugin:3.0.1")
-    api("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.2.21")
-    api("org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin:2.2.21")
-    api("org.jetbrains.dokka-javadoc:org.jetbrains.dokka-javadoc.gradle.plugin:2.1.0")
-    api(projects.openrewrite)
+    // The OpenRewrite libraries are needed only to COMPILE the worker: at runtime the worker
+    // runs in an isolated process and gets rewrite-core/java/kotlin plus the recipe modules
+    // from the project's `openrewrite` configuration. Keeping them compileOnly avoids pulling
+    // OpenRewrite (and ClassGraph) onto the Gradle build-logic classpath.
+    compileOnly(platform("org.openrewrite.recipe:rewrite-recipe-bom:3.34.0"))
+    compileOnly("org.openrewrite:rewrite-core")
+    compileOnly("org.openrewrite:rewrite-java")
+    compileOnly("org.openrewrite:rewrite-kotlin")
+    compileOnly("org.openrewrite:rewrite-xml")
 }
