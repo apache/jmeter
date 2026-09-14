@@ -730,15 +730,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     @Override
     public void addTestElement(TestElement el) {
         if (el instanceof CookieManager cookieManager) {
-            setCookieManager(cookieManager);
+            // Route through the private property setter to skip the "superseded by" warning:
+            // addTestElement is invoked on every thread-group iteration by TestCompiler,
+            // and the config element is the same instance as the one already attached,
+            // so the warning would always fire spuriously. Users still get the warning
+            // when they explicitly call setCookieManager with a different instance.
+            setCookieManagerProperty(cookieManager);
         } else if (el instanceof CacheManager cacheManager) {
-            setCacheManager(cacheManager);
+            setCacheManagerProperty(cacheManager);
         } else if (el instanceof HeaderManager headerManager) {
             setHeaderManager(headerManager);
         } else if (el instanceof AuthManager authManager) {
-            setAuthManager(authManager);
+            setAuthManagerProperty(authManager);
         } else if (el instanceof DNSCacheManager dnsCacheManager) {
-            setDNSResolver(dnsCacheManager);
+            setDNSResolverProperty(dnsCacheManager);
         } else if (el instanceof KeystoreConfig keystoreConfig) {
             setKeystoreConfigProperty(keystoreConfig);
         }  else {
@@ -923,13 +928,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return get(getSchema().getPostBodyRaw());
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public void setAuthManager(AuthManager value) {
         AuthManager mgr = getAuthManager();
-        if (mgr != null) {
+        if (mgr != null && mgr != value) {
             if(log.isWarnEnabled()) {
                 log.warn("Existing AuthManager {} superseded by {}", mgr.getName(), value.getName());
             }
         }
+        setAuthManagerProperty(value);
+    }
+
+    // private method to allow AsyncSample and addTestElement to reset the value without performing checks
+    private void setAuthManagerProperty(AuthManager value) {
         set(getSchema().getAuthManager(), value);
     }
 
@@ -961,9 +972,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         set(getSchema().getCookieManager(), value);;
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public void setCookieManager(CookieManager value) {
         CookieManager mgr = getCookieManager();
-        if (mgr != null) {
+        if (mgr != null && mgr != value) {
             if(log.isWarnEnabled()) {
                 log.warn("Existing CookieManager {} superseded by {}", mgr.getName(), value.getName());
             }
@@ -983,9 +995,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         set(getSchema().getKeystoreConfig(), value);
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public void setKeystoreConfig(KeystoreConfig value) {
         KeystoreConfig mgr = getKeystoreConfig();
-        if (mgr != null && log.isWarnEnabled()) {
+        if (mgr != null && mgr != value && log.isWarnEnabled()) {
             log.warn("Existing KeystoreConfig {} superseded by {}", mgr.getName(), value.getName());
         }
         setKeystoreConfigProperty(value);
@@ -995,9 +1008,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getOrNull(getSchema().getKeystoreConfig());
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public void setCacheManager(CacheManager value) {
         CacheManager mgr = getCacheManager();
-        if (mgr != null) {
+        if (mgr != null && mgr != value) {
             if(log.isWarnEnabled()) {
                 log.warn("Existing CacheManager {} superseded by {}", mgr.getName(), value.getName());
             }
@@ -1013,13 +1027,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getOrNull(getSchema().getDnsCacheManager());
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public void setDNSResolver(DNSCacheManager cacheManager) {
         DNSCacheManager mgr = getDNSResolver();
-        if (mgr != null) {
+        if (mgr != null && mgr != cacheManager) {
             if(log.isWarnEnabled()) {
                 log.warn("Existing DNSCacheManager {} superseded by {}", mgr.getName(), cacheManager.getName());
             }
         }
+        setDNSResolverProperty(cacheManager);
+    }
+
+    // private method to allow addTestElement to reset the value without performing checks
+    private void setDNSResolverProperty(DNSCacheManager cacheManager) {
         set(getSchema().getDnsCacheManager(), cacheManager);
     }
 
