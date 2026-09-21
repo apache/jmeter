@@ -110,16 +110,41 @@ public class JMeterTreeModel extends DefaultTreeModel {
      *             <code>subTree</code>
      */
     public HashTree addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException {
+        return addSubTree(subTree, current, false);
+    }
+
+    /**
+     * Adds the sub tree at the given node. Returns a boolean indicating whether
+     * the added sub tree was a full test plan.
+     *
+     * @param subTree
+     *            The {@link HashTree} which is to be inserted into
+     *            <code>current</code>
+     * @param current
+     *            The node in which the <code>subTree</code> is to be inserted.
+     *            Will be overridden, when an instance of {@link TestPlan}
+     * @param merging
+     *            If {@code true}, the name of the existing {@link TestPlan} is
+     *            preserved and not replaced by the name from the loaded file.
+     * @return newly created sub tree now found at <code>current</code>
+     * @throws IllegalUserActionException
+     *             when <code>current</code> is not an instance of
+     *             {@link AbstractConfigGui} and no instance of {@link TestPlan}
+     *             <code>subTree</code>
+     */
+    public HashTree addSubTree(HashTree subTree, JMeterTreeNode current, boolean merging) throws IllegalUserActionException {
         for (Object o : subTree.list()) {
             TestElement item = (TestElement) o;
             if (item instanceof TestPlan tp) {
                 current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
                 final TestPlan userObject = (TestPlan) current.getUserObject();
                 userObject.addTestElement(item);
-                userObject.setName(item.getName());
+                if (!merging) {
+                    userObject.setName(item.getName());
+                }
                 userObject.setFunctionalMode(tp.isFunctionalMode());
                 userObject.setSerialized(tp.isSerialized());
-                addSubTree(subTree.getTree(item), current);
+                addSubTree(subTree.getTree(item), current, merging);
             } else if (isWorkbench(item)) {
                 //Move item from WorkBench to TestPlan
                 HashTree workbenchTree = subTree.getTree(item);

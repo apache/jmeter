@@ -551,7 +551,25 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *             if a subtree cannot be added to the currently selected node
      */
     public HashTree addSubTree(HashTree subTree) throws IllegalUserActionException {
-        HashTree hashTree = treeModel.addSubTree(subTree, treeListener.getCurrentNode());
+        return addSubTree(subTree, false);
+    }
+
+    /**
+     * Add a subtree to the currently selected node.
+     *
+     * @param subTree
+     *            the subtree to add.
+     * @param merging
+     *            if {@code true}, the existing Test Plan name is preserved and
+     *            not replaced by the name from the loaded file.
+     *
+     * @return the resulting subtree starting with the currently selected node
+     *
+     * @throws IllegalUserActionException
+     *             if a subtree cannot be added to the currently selected node
+     */
+    public HashTree addSubTree(HashTree subTree, boolean merging) throws IllegalUserActionException {
+        HashTree hashTree = treeModel.addSubTree(subTree, treeListener.getCurrentNode(), merging);
         undoHistory.clear();
         undoHistory.add(this.treeModel, "Loaded tree");
         return hashTree;
