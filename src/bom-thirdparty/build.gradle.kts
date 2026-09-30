@@ -135,7 +135,7 @@ dependencies {
         api("org.jodd:jodd-lagarto:6.0.6")
         api("org.jodd:jodd-log:5.1.6")
         api("org.jodd:jodd-props:6.0.2")
-        api("org.jsoup:jsoup:1.21.2")
+        api("org.jsoup:jsoup:1.23.1")
         api("org.mozilla:rhino:1.9.1")
         api("org.mozilla:rhino-engine:1.9.1")
         api("org.neo4j.driver:neo4j-java-driver:6.0.2")
