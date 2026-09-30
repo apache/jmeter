@@ -1,5 +1,5 @@
 label,responseCode,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
-JSS_startMirror,200,setUp Thread Group 1-1,text,true,1,1,1,0
+JSS_startMirror,200,Setup Thread Group 1-1,text,true,1,1,1,0
 HTTP-Request-HC4,200,TG-ManagedCookieHC4 1-1,text,true,1,1,1,0
 HTTPS-Request-HC4,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,TG-ManagedCookieHC4 1-1,text,true,1,1,1,0
 HTTP-Request-Java,200,TG-ManagedCookieJava 2-1,text,true,1,1,1,0
