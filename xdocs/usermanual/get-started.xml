@@ -37,7 +37,7 @@ Then you can either choose to record the application from a browser, or native a
 You can use for that the menu <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Templates...</guimenuitem><guimenuitem>Recording</guimenuitem></menuchoice><br/>
 </p>
 <p>
-Note you can also manually build your plan. Ensure you read this <a href="test_plan.html">documentation</a> to understand major concepts.
+Note you can also manually build your plan. Ensure you read this <a href="test_plan.html">documentation</a> to understand major concepts. You can also re-use existing HAR recording, Postman collection or SoapUI project to have a base file to build on it full scenario - see converters in JMeter extras directory for more details.
 </p>
 You will also debug it using one of these options:
 <ul>
