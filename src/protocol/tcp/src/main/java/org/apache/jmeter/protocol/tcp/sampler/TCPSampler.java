@@ -504,7 +504,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             try {
                 con.close();
             } catch (IOException e) {
-                log.warn("Error closing socket {}", e); //$NON-NLS-1$
+                log.warn("Error closing socket", e); //$NON-NLS-1$
             }
         }
     }
