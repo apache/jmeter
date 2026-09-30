@@ -27,6 +27,7 @@ import org.apache.jmeter.threads.JMeterThread
 import org.apache.jmeter.threads.JMeterThreadMonitor
 import org.apache.jmeter.threads.ListenerNotifier
 import org.apache.jmeter.threads.TestCompilerHelper
+import org.apache.jmeter.util.JMeterUtils
 import org.apache.jorphan.collections.ListedHashTree
 import org.apiguardian.api.API
 import org.slf4j.LoggerFactory
@@ -43,8 +44,9 @@ import kotlin.math.roundToLong
 
 /**
  * The thread group that emulates open model.
- * Currently, threads are created on demand, every thread exists after completion,
- * and the maximum number of threads is not limited.
+ * Threads are created on demand, and every thread exits after completion.
+ * The number of concurrent threads is unlimited by default, however, it can be capped with a
+ * `concurrency(...)` step in the schedule or with the `openmodel.max_concurrency` property.
  */
 @GUIMenuSortOrder(1)
 @API(status = API.Status.EXPERIMENTAL, since = "5.5")
@@ -85,6 +87,12 @@ public class OpenModelThreadGroup :
          */
         private val houseKeepingThreadPool = Executors.newCachedThreadPool()
 
+        /**
+         * Installation-wide hard cap on the number of concurrent threads, applied even when the
+         * schedule has no `concurrency(...)` step. Values below one mean unlimited (the default).
+         */
+        public const val MAX_CONCURRENCY_PROPERTY: String = "openmodel.max_concurrency"
+
         private const val serialVersionUID: Long = 1L
     }
 
@@ -95,6 +103,9 @@ public class OpenModelThreadGroup :
 
     private val threadStarterFuture = AtomicReference<Future<*>?>()
     private val activeThreads = ConcurrentHashMap<JMeterThread, Future<*>>()
+
+    // Caps the number of concurrent threads. Created on test start.
+    private val concurrencyGate = AtomicReference<ConcurrencyGate?>()
 
     override val schema: OpenModelThreadGroupSchema
         get() = OpenModelThreadGroupSchema
@@ -123,6 +134,7 @@ public class OpenModelThreadGroup :
         private val executorService: ExecutorService,
         private val activeThreads: MutableMap<JMeterThread, Future<*>>,
         private val gen: ThreadScheduleProcessGenerator,
+        private val concurrencyGate: ConcurrencyGate,
         private val jmeterThreadFactory: (threadNumber: Int) -> JMeterThread,
     ) : Runnable {
         override fun run() {
@@ -140,6 +152,12 @@ public class OpenModelThreadGroup :
                         sleep(nextDelay)
                     }
                 }
+                // Reserve a thread slot before cloning the test plan, so a capped arrival waits
+                // for a free thread instead of allocating a clone that would run out of memory.
+                if (!concurrencyGate.acquire(endTime)) {
+                    // The schedule window ended while waiting for a free thread, so stop launching.
+                    break
+                }
                 val jmeterThread = jmeterThreadFactory(threadNumber++)
                 jmeterThread.endTime = endTime
                 activeThreads[jmeterThread] = executorService.submit {
@@ -147,6 +165,7 @@ public class OpenModelThreadGroup :
                     jmeterThread.run()
                 }
             }
+            logConcurrencySummary()
             // If test schedule ends with a pause, then we need to wait for it
             val timeLeft = endTime - System.currentTimeMillis()
             if (timeLeft > 0) {
@@ -183,6 +202,20 @@ public class OpenModelThreadGroup :
             executorService.shutdownNow()
             log.info("Thread starting done")
         }
+
+        private fun logConcurrencySummary() {
+            val delayed = concurrencyGate.delayedArrivals
+            val dropped = concurrencyGate.droppedArrivals
+            if (delayed == 0L && dropped == 0L) {
+                return
+            }
+            log.warn(
+                "Concurrency limit affected the load: {} arrival(s) delayed (total {} ms, max {} ms)," +
+                    " {} arrival(s) dropped after the schedule ended." +
+                    " The achieved rate was below the target rate; raise concurrency(...) to reach it.",
+                delayed, concurrencyGate.totalDelayMillis, concurrencyGate.maxDelayMillis, dropped
+            )
+        }
     }
 
     override fun recoverRunningVersion() {
@@ -207,7 +240,11 @@ public class OpenModelThreadGroup :
             val testStartTime = this.startTime
             val executorService = Executors.newCachedThreadPool()
             this.executorService = executorService
-            val starter = ThreadsStarter(testStartTime, executorService, activeThreads, gen) { threadNumber ->
+            val hardLimit = JMeterUtils.getPropDefault(MAX_CONCURRENCY_PROPERTY, 0)
+                .let { if (it <= 0) Int.MAX_VALUE else it }
+            val gate = ConcurrencyGate(ConcurrencyLimit.of(parsedSchedule), hardLimit, testStartTime)
+            concurrencyGate.set(gate)
+            val starter = ThreadsStarter(testStartTime, executorService, activeThreads, gen, gate) { threadNumber ->
                 val clonedTree = cloneTree(threadGroupTree)
                 makeThread(engine, this, notifier, threadGroupIndex, threadNumber, clonedTree, variables)
             }
@@ -226,6 +263,10 @@ public class OpenModelThreadGroup :
 
     override fun threadFinished(thread: JMeterThread?) {
         activeThreads.remove(thread)
+        // Every launched thread reserved a slot in the gate before it started and calls
+        // threadFinished exactly once, so release here regardless of the activeThreads state:
+        // a fast thread may finish before the starter records it in activeThreads.
+        concurrencyGate.get()?.release()
     }
 
     override fun addNewThread(delay: Int, engine: StandardJMeterEngine?): JMeterThread {
@@ -237,6 +278,14 @@ public class OpenModelThreadGroup :
     }
 
     override fun numberOfActiveThreads(): Int = activeThreads.size
+
+    /** Number of arrivals that had to wait for a free thread because of the concurrency limit. */
+    @API(status = API.Status.EXPERIMENTAL, since = "6.0")
+    public fun getDelayedArrivals(): Long = concurrencyGate.get()?.delayedArrivals ?: 0
+
+    /** Number of arrivals dropped because the schedule ended before a thread became free. */
+    @API(status = API.Status.EXPERIMENTAL, since = "6.0")
+    public fun getDroppedArrivals(): Long = concurrencyGate.get()?.droppedArrivals ?: 0
 
     override fun verifyThreadsStopped(): Boolean =
         executorService?.awaitTermination(0, TimeUnit.SECONDS) != false
