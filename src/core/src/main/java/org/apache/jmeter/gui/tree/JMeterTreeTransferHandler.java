@@ -76,10 +76,11 @@ public class JMeterTreeTransferHandler extends TransferHandler {
             sortTreePathByRow(paths, tree);
 
             // if child and a parent are selected : only keep the parent
-            boolean[] toRemove = new boolean[paths.length];
-            int size = paths.length;
-            for (int i = 0; i < paths.length; i++) {
-                for (int j = 0; j < paths.length; j++) {
+            int pathCount = paths.length;
+            boolean[] toRemove = new boolean[pathCount];
+            int size = pathCount;
+            for (int i = 0; i < pathCount; i++) {
+                for (int j = 0; j < pathCount; j++) {
                     if(i!=j && ((JMeterTreeNode)paths[i].getLastPathComponent()).isNodeAncestor((JMeterTreeNode)paths[j].getLastPathComponent())) {
                         toRemove[i] = true;
                         size--;
@@ -91,7 +92,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
             // remove unneeded nodes
             JMeterTreeNode[] nodes = new JMeterTreeNode[size];
             size = 0;
-            for (int i = 0; i < paths.length; i++) {
+            for (int i = 0; i < pathCount; i++) {
                 if(!toRemove[i]) {
                     JMeterTreeNode node = (JMeterTreeNode) paths[i].getLastPathComponent();
                     nodes[size++] = node;

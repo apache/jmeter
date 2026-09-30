@@ -322,7 +322,8 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 
                     model.addRow(clazz.getDeclaredConstructor().newInstance());
 
-                    for (int i=0; i < columns.length; i++) {
+                    int columnsCount = columns.length;
+                    for (int i = 0; i < columnsCount; i++) {
                         model.setValueAt(columns[i], model.getRowCount() - 1, i);
                     }
                 }
@@ -392,9 +393,10 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             GuiUtils.cancelEditing(table);
 
             int[] rowsSelected = table.getSelectedRows();
-            if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
+            int selectedRowsCount = rowsSelected.length;
+            if (selectedRowsCount > 0 && rowsSelected[selectedRowsCount - 1] < table.getRowCount() - 1) {
                 table.clearSelection();
-                for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                for (int i = selectedRowsCount - 1; i >= 0; i--) {
                     int rowSelected = rowsSelected[i];
                     model.moveRow(rowSelected, rowSelected + 1, rowSelected + 1);
                 }

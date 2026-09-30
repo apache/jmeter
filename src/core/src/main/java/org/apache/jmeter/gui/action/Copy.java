@@ -95,9 +95,10 @@ public class Copy extends AbstractAction {
      */
     static JMeterTreeNode[] keepOnlyAncestors(JMeterTreeNode[] currentNodes) {
         List<JMeterTreeNode> nodes = new ArrayList<>();
-        for (int i = 0; i < currentNodes.length; i++) {
+        int currentNodesCount = currentNodes.length;
+        for (int i = 0; i < currentNodesCount; i++) {
             boolean exclude = false;
-            for (int j = 0; j < currentNodes.length; j++) {
+            for (int j = 0; j < currentNodesCount; j++) {
                 if(i!=j && currentNodes[i].isNodeAncestor(currentNodes[j])) {
                     exclude = true;
                     break;
@@ -127,8 +128,9 @@ public class Copy extends AbstractAction {
     }
 
     public static JMeterTreeNode[] cloneTreeNodes(JMeterTreeNode[] nodes) {
-        JMeterTreeNode[] treeNodes = new JMeterTreeNode[nodes.length];
-        for (int i = 0; i < nodes.length; i++) {
+        int nodesCount = nodes.length;
+        JMeterTreeNode[] treeNodes = new JMeterTreeNode[nodesCount];
+        for (int i = 0; i < nodesCount; i++) {
             treeNodes[i] = cloneTreeNode(nodes[i]);
         }
         return treeNodes;

@@ -120,7 +120,8 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
         String[] colors = new String[]{
                 SATISFIED_COLOR, TOLERATED_COLOR, UNTOLERATED_COLOR, FAILED_COLOR
         };
-        for (int i = 0; i < seriesLabels.length; i++) {
+        int seriesCount = seriesLabels.length;
+        for (int i = 0; i < seriesCount; i++) {
             ListResultData array = new ListResultData();
             array.addResult(new ValueResultData(i));
             array.addResult(new ValueResultData(seriesLabels[i]));
@@ -132,7 +133,8 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
 
     private void initializeSeries(MapResultData parentResult, String[] series, String[] colors) {
         ListResultData listResultData = (ListResultData) parentResult.getResult("series");
-        for (int i = 0; i < series.length; i++) {
+        int seriesCount = series.length;
+        for (int i = 0; i < seriesCount; i++) {
             listResultData.addResult(create(series[i], colors[i]));
         }
     }
