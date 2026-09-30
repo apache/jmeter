@@ -56,6 +56,14 @@
       ]
     },
     {
+      "allowedVersions": "< 2.0.0",
+      "description": "jakarta.mail 2.x renames the javax.mail packages to jakarta.mail, so JMeter stays on 1.6.x",
+      "groupName": "com.sun.mail",
+      "matchPackageNames": [
+        "com.sun.mail:jakarta.mail"
+      ]
+    },
+    {
       "groupName": "github official actions",
       "description": "actions/* and github/* are maintained by GitHub/Microsoft and can be updated together",
       "matchManagers": [

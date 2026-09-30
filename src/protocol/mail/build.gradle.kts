@@ -22,8 +22,11 @@ plugins {
 dependencies {
     api(projects.src.core)
 
-    api("javax.mail:mail") {
-        exclude("javax.activation", "activation")
+    api("com.sun.mail:jakarta.mail") {
+        // jakarta.mail 1.6.x keeps the javax.mail namespace, however, it
+        // transitively pulls jakarta.activation that duplicates the
+        // javax.activation classes we already get from com.sun.activation:javax.activation
+        exclude("com.sun.activation", "jakarta.activation")
     }
     // There's no javax.activation:activation:1.2.0, so we use com.sun...
     runtimeOnly("com.sun.activation:javax.activation")

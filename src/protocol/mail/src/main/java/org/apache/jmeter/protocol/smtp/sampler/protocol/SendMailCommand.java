@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +35,17 @@ import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
+import javax.mail.internet.ContentDisposition;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.ParameterList;
 import javax.net.ssl.SSLContext;
 
 import org.apache.jmeter.config.Argument;
@@ -193,9 +198,9 @@ public class SendMailCommand {
                 body.setText(mailBody);
                 multipart.addBodyPart(body);
                 for (File f : attachments) {
-                    BodyPart attach = new MimeBodyPart();
-                    attach.setFileName(f.getName());
+                    MimeBodyPart attach = new MimeBodyPart();
                     attach.setDataHandler(new DataHandler(new FileDataSource(f.getAbsolutePath())));
+                    setAttachmentFileName(attach, f.getName());
                     multipart.addBodyPart(attach);
                 }
                 message.setContent(multipart);
@@ -239,6 +244,55 @@ public class SendMailCommand {
             message.setHeader(argument.getName(), argument.getValue());
         }
         return message;
+    }
+
+    /**
+     * Sets the attachment file name in the filename parameter of the
+     * {@code Content-Disposition} header and in the name parameter of the
+     * {@code Content-Type} header, encoded as UTF-8 according to RFC 2231.
+     * <p>
+     * {@link MimeBodyPart#setFileName(String)} encodes the parameters with
+     * {@code MimeUtility.getDefaultMIMECharset()}, which falls back to the default
+     * charset of the JVM (for example {@code windows-1252} on Windows). Characters
+     * that are not representable in that charset are replaced with {@code ?}, so
+     * recipients see a mangled file name. Encoding the parameters with UTF-8
+     * explicitly keeps the file name intact regardless of the platform charset.
+     * </p>
+     *
+     * @param attachment
+     *            body part carrying the attachment
+     * @param fileName
+     *            file name of the attachment
+     * @throws MessagingException
+     *             when the headers can not be updated
+     */
+    private static void setAttachmentFileName(MimeBodyPart attachment, String fileName) throws MessagingException {
+        String disposition = attachment.getHeader("Content-Disposition", null);
+        ContentDisposition contentDisposition = new ContentDisposition(disposition == null ? Part.ATTACHMENT : disposition);
+        ParameterList parameters = contentDisposition.getParameterList();
+        if (parameters == null) {
+            parameters = new ParameterList();
+            contentDisposition.setParameterList(parameters);
+        }
+        parameters.set("filename", fileName, StandardCharsets.UTF_8.name());
+        attachment.setHeader("Content-Disposition", contentDisposition.toString());
+
+        // The name parameter of Content-Type repeats the file name for legacy
+        // mail clients, so it must be encoded as well
+        String contentType = attachment.getHeader("Content-Type", null);
+        if (contentType == null && attachment.getDataHandler() != null) {
+            contentType = attachment.getDataHandler().getContentType();
+        }
+        if (contentType != null) {
+            ContentType type = new ContentType(contentType);
+            parameters = type.getParameterList();
+            if (parameters == null) {
+                parameters = new ParameterList();
+                type.setParameterList(parameters);
+            }
+            parameters.set("name", fileName, StandardCharsets.UTF_8.name());
+            attachment.setHeader("Content-Type", type.toString());
+        }
     }
 
     private void configureCertificateTrust(Properties props) throws IOException {

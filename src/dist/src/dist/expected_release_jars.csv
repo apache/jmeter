@@ -76,6 +76,7 @@
 595531,jackson-core-2.21.2.jar
 1701926,jackson-databind-2.21.2.jar
 58964,jakarta.jms-api-3.1.0.jar
+677319,jakarta.mail-1.6.8.jar
 78030,javax.activation-1.2.0.jar
 142391,jcharts-0.7.5.jar
 16555,jcl-over-slf4j-1.7.36.jar
@@ -106,7 +107,6 @@
 351126,log4j-api-2.26.0.jar
 2015101,log4j-core-2.26.0.jar
 30211,log4j-slf4j2-impl-2.26.0.jar
-519087,mail-1.5.0-b01.jar
 120556,miglayout-core-11.4.3.jar
 23361,miglayout-swing-11.4.3.jar
 99796,neo4j-bolt-connection-10.1.0.jar
