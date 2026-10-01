@@ -26,7 +26,7 @@ javaPlatform {
 }
 
 dependencies {
-    api(platform("org.junit:junit-bom:6.0.1"))
+    api(platform("org.junit:junit-bom:6.1.3"))
     api(platform("org.springframework:spring-framework-bom:7.0.9"))
     api(platform("org.eclipse.jetty:jetty-bom:11.0.26"))
 
@@ -41,8 +41,8 @@ dependencies {
         // to make runtime classpath consistent with the compile one.
         api("org.wiremock:wiremock:3.13.2")
         api("io.mockk:mockk:1.14.11")
-        api("net.bytebuddy:byte-buddy:1.17.8")
-        api("nl.jqno.equalsverifier:equalsverifier:4.3")
+        api("net.bytebuddy:byte-buddy:1.18.14")
+        api("nl.jqno.equalsverifier:equalsverifier:4.5.2")
         // activemq-all should not be used as it provides secondary slf4j binding
         api("org.apache.activemq:activemq-broker:6.2.6")
         api("org.apache.activemq:activemq-client:6.2.6")
@@ -54,7 +54,7 @@ dependencies {
         api("org.hamcrest:hamcrest-library:3.0")
         api("org.hamcrest:hamcrest:3.0")
         api("org.hsqldb:hsqldb:2.7.4")
-        api("org.objenesis:objenesis:3.4")
+        api("org.objenesis:objenesis:3.6")
         api("org.openjdk.jmh:jmh-core:1.37")
         api("org.openjdk.jmh:jmh-generator-annprocess:1.37")
     }
