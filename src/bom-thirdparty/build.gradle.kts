@@ -28,7 +28,7 @@ javaPlatform {
 dependencies {
     api(platform("org.apache.groovy:groovy-bom:5.1.3"))
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"))
-    api(platform("com.fasterxml.jackson:jackson-bom:2.21.2"))
+    api(platform("com.fasterxml.jackson:jackson-bom:2.22.3"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
