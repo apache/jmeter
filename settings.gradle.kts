@@ -141,7 +141,7 @@ develocity {
 buildscript {
     dependencies {
         // Remove when Autostyle updates jgit dependency
-        classpath("org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:7.8.0.202609011348-r")
     }
     repositories {
         gradlePluginPortal()
