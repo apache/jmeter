@@ -147,7 +147,7 @@
 1647024,rhino-1.9.1.jar
 15019,rhino-engine-1.9.1.jar
 1353037,rsyntaxtextarea-4.0.1.jar
-5793277,Saxon-HE-12.10.jar
+6241783,Saxon-HE-13.0.jar
 283536,serializer-2.7.3.jar
 69982,slf4j-api-2.0.18.jar
 194273,stax2-api-4.3.1.jar
@@ -161,6 +161,6 @@
 220536,xml-apis-1.4.01.jar
 85686,xml-apis-ext-1.3.04.jar
 686441,xmlgraphics-commons-2.11.jar
-1033122,xmlresolver-5.3.3-data.jar
-167889,xmlresolver-5.3.3.jar
+1033132,xmlresolver-6.0.23-data.jar
+156557,xmlresolver-6.0.23.jar
 646504,xstream-1.4.21.jar
