@@ -1,40 +1,47 @@
 # See https://github.com/release-drafter/release-drafter#configuration-options
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'rel/v$RESOLVED_VERSION'
-exclude-labels:
-  - 'skip-changelog'
 categories:
+  - type: 'pre-exclude'
+    when:
+      label: 'skip-changelog'
   - title: '🚀 Features'
-    labels:
-      - 'feature'
-      - 'enhancement'
+    when:
+      labels:
+        - 'feature'
+        - 'enhancement'
   - title: '🐛 Bug Fixes'
-    labels:
-      - 'fix'
-      - 'bugfix'
-      - 'bug'
-      - 'defect'
+    when:
+      labels:
+        - 'fix'
+        - 'bugfix'
+        - 'bug'
+        - 'defect'
   - title: '📝 Documentation'
-    labels:
-      - 'documentation'
+    when:
+      label: 'documentation'
   - title: '🧰 Maintenance'
-    label: 'chore'
+    when:
+      label: 'chore'
   - title: '⬆️ Dependencies'
     collapse-after: 8
-    labels:
-      - 'dependencies'
+    when:
+      label: 'dependencies'
+  - type: 'version-resolver'
+    semver-increment: 'major'
+    when:
+      label: 'major'
+  - type: 'version-resolver'
+    semver-increment: 'minor'
+    when:
+      label: 'minor'
+  - type: 'version-resolver'
+    semver-increment: 'patch'
+    when:
+      label: 'patch'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 version-resolver:
-  major:
-    labels:
-      - 'major'
-  minor:
-    labels:
-      - 'minor'
-  patch:
-    labels:
-      - 'patch'
   default: patch
 template: |
   ## Changes
