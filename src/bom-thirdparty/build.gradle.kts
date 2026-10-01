@@ -52,24 +52,24 @@ dependencies {
         api("com.google.auto.service:auto-service-annotations:1.1.1")
         api("com.google.auto.service:auto-service:1.1.1")
         api("com.google.errorprone:error_prone_annotations:2.44.0")
-        api("com.helger.commons:ph-commons:12.1.5")
-        api("com.helger:ph-css:8.1.1")
+        api("com.helger.commons:ph-commons:12.5.0")
+        api("com.helger:ph-css:8.2.2")
         api("com.fasterxml.woodstox:woodstox-core:7.3.0")
         api("com.jayway.jsonpath:json-path:2.10.0")
         api("com.miglayout:miglayout-core:11.4.3")
         api("com.miglayout:miglayout-swing:11.4.3")
         api("com.sun.activation:javax.activation:1.2.0")
         api("com.thoughtworks.xstream:xstream:1.4.21")
-        api("commons-codec:commons-codec:1.20.0")
+        api("commons-codec:commons-codec:1.22.1")
         api("commons-collections:commons-collections:3.2.2")
-        api("commons-io:commons-io:2.21.0") {
+        api("commons-io:commons-io:2.22.0") {
             because("User might still rely on commons-io")
         }
         api("commons-lang:commons-lang:2.6") {
             because("User might still rely on commons-lang")
         }
-        api("commons-logging:commons-logging:1.3.6")
-        api("commons-net:commons-net:3.12.0")
+        api("commons-logging:commons-logging:1.4.0")
+        api("commons-net:commons-net:3.13.0")
         api("dnsjava:dnsjava:3.6.5")
         api("io.burt:jmespath-core:0.6.0")
         api("io.burt:jmespath-jackson:0.6.0")

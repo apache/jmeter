@@ -223,7 +223,9 @@
          <trusted-key id="F4DD59C90148BDC52BEB90A4530AA5F25C25011F">
             <trusting group="commons-codec" name="commons-codec" version="1.22.0"/>
             <trusting group="commons-codec" name="commons-codec" version="1.22.1"/>
+            <trusting group="commons-io"/>
             <trusting group="commons-logging"/>
+            <trusting group="commons-net"/>
             <trusting group="org.apache.commons"/>
          </trusted-key>
          <trusted-key id="F5FEBA84EB26C56457B2CF819E31AB27445478DB" group="org.infinispan"/>
