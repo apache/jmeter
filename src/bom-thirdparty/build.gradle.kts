@@ -126,7 +126,7 @@ dependencies {
         api("org.bouncycastle:bcprov-jdk18on:1.86")
         api("org.brotli:dec:0.1.2")
         api("org.freemarker:freemarker:2.3.35")
-        api("org.glassfish.jaxb:txw2:4.0.6")
+        api("org.glassfish.jaxb:txw2:4.0.9")
         api("org.jdom:jdom:1.1.3")
         api("org.jetbrains.lets-plot:lets-plot-batik:4.8.0")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.11.2")
