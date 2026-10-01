@@ -60,16 +60,16 @@ dependencies {
         api("com.miglayout:miglayout-swing:11.4.3")
         api("com.sun.activation:javax.activation:1.2.0")
         api("com.thoughtworks.xstream:xstream:1.4.21")
-        api("commons-codec:commons-codec:1.20.0")
+        api("commons-codec:commons-codec:1.22.1")
         api("commons-collections:commons-collections:3.2.2")
-        api("commons-io:commons-io:2.21.0") {
+        api("commons-io:commons-io:2.22.0") {
             because("User might still rely on commons-io")
         }
         api("commons-lang:commons-lang:2.6") {
             because("User might still rely on commons-lang")
         }
-        api("commons-logging:commons-logging:1.3.6")
-        api("commons-net:commons-net:3.12.0")
+        api("commons-logging:commons-logging:1.4.0")
+        api("commons-net:commons-net:3.13.0")
         api("dnsjava:dnsjava:3.6.5")
         api("io.burt:jmespath-core:0.6.0")
         api("io.burt:jmespath-jackson:0.6.0")
