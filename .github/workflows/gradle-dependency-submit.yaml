@@ -28,4 +28,8 @@ jobs:
         java-version: 21
         server-id: central
     - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@0723195856401067f7a2779048b490ace7a47d7c # v5
+      uses: gradle/actions/dependency-submission@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      with:
+        # Use the open-source cache implementation; the default 'enhanced' provider
+        # loads the proprietary gradle-actions-caching component (gradle/actions v6+)
+        cache-provider: basic
