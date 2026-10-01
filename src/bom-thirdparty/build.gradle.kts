@@ -55,7 +55,7 @@ dependencies {
         api("com.helger.commons:ph-commons:12.1.5")
         api("com.helger:ph-css:8.1.1")
         api("com.fasterxml.woodstox:woodstox-core:7.3.0")
-        api("com.jayway.jsonpath:json-path:2.10.0")
+        api("com.jayway.jsonpath:json-path:3.0.0")
         api("com.miglayout:miglayout-core:11.4.3")
         api("com.miglayout:miglayout-swing:11.4.3")
         api("com.sun.activation:javax.activation:1.2.0")
