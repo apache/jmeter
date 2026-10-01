@@ -138,7 +138,7 @@ dependencies {
         api("org.jsoup:jsoup:1.23.2")
         api("org.mozilla:rhino:1.9.1")
         api("org.mozilla:rhino-engine:1.9.1")
-        api("org.neo4j.driver:neo4j-java-driver:6.0.2")
+        api("org.neo4j.driver:neo4j-java-driver:6.3.0")
         api("org.slf4j:jcl-over-slf4j:1.7.36")
         api("org.slf4j:slf4j-api:1.7.36")
         api("org.unbescape:unbescape:1.1.6.RELEASE")
