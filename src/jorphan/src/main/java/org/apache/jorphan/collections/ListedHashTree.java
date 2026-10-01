@@ -119,6 +119,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("ReferenceEquality") // keys are compared by identity, see Bug 50898
     public void replaceKey(Object currentKey, Object newKey) {
         HashTree tree = getTree(currentKey);
         data.remove(currentKey);
@@ -179,6 +180,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("ReferenceEquality") // keys are compared by identity, see Bug 50898
     public HashTree remove(Object key) {
         if (data.containsKey(key)) {
             order.removeIf(x -> x == key);
@@ -206,6 +208,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("ReferenceEquality") // keys are compared by identity, consistent with hashCode()
     public boolean equals(Object o) {
         if (!(o instanceof ListedHashTree lht)) {
             return false;

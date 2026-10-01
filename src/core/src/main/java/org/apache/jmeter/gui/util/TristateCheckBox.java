@@ -192,7 +192,7 @@ public final class TristateCheckBox extends JCheckBox {
     }
 
     //Convenience cast
-    public TristateButtonModel getTristateModel() {
+    private TristateButtonModel getTristateModel() {
         return (TristateButtonModel) super.getModel();
     }
 

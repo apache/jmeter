@@ -110,9 +110,6 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         JRootPane rootPane = new JRootPane();
         // Hide Window on ESC
         Action escapeAction = new AbstractAction("ESCAPE") { //$NON-NLS-1$
-            /**
-             *
-             */
             private static final long serialVersionUID = -6543764044868772971L;
 
             @Override

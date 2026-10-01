@@ -238,16 +238,6 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
     }
 
     /**
-     * Retrieves reference to JavaSamplerClient.
-     *
-     * Convenience method used to check for null reference without actually
-     * creating a JavaSamplerClient
-     *
-     * @return reference to JavaSamplerClient NOTUSED private JavaSamplerClient
-     *         retrieveJavaClient() { return javaClient; }
-     */
-
-    /**
      * Generate a String identifier of this instance for debugging purposes.
      *
      * @return a String identifier for this sampler instance

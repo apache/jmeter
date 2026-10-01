@@ -30,7 +30,7 @@ if (buildParameters.enableErrorprone) {
 
     dependencies {
         "errorprone"(platform("com.google.protobuf:protobuf-bom:4.36.2"))
-        "errorprone"("com.google.errorprone:error_prone_core:2.44.0")
+        "errorprone"("com.google.errorprone:error_prone_core:2.50.0")
         "annotationProcessor"("com.google.guava:guava-beta-checker:1.0")
     }
 
@@ -79,6 +79,12 @@ if (buildParameters.enableErrorprone) {
                     "MissingSummary",
                     "StringSplitter",
                     "BanJNDI",
+                    // Error Prone 2.50 reports ~100 hits, many of them intentional
+                    // identity comparisons of TestElements (see ListedHashTree)
+                    "ReferenceEquality",
+                    // Error Prone 2.50 reports ~77 charset-name APIs that should
+                    // use the Charset overloads
+                    "JdkObsolete",
                 )
             }
         }

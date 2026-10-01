@@ -45,9 +45,6 @@ public class EscapeDialog extends JDialog {
     protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();
         Action escapeAction = new AbstractAction("ESCAPE") {
-            /**
-             *
-             */
             private static final long serialVersionUID = 2208129319916921772L;
 
             @Override

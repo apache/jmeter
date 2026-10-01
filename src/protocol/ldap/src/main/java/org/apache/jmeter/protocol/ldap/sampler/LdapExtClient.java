@@ -72,7 +72,7 @@ public class LdapExtClient {
      *            flag whether ssl should be used
      * @param trustAll flag whether we should trust all certificates
      * @return newly created {@link DirContext}
-     * @exception NamingException
+     * @throws NamingException
      *                when creating the {@link DirContext} fails
      */
     @SuppressWarnings("JdkObsolete")

@@ -105,10 +105,6 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     /**
      * Defines the implementation that is assumed when the JMX file does not contain an entry for it
      * MUST NOT BE CHANGED otherwise JMX files will not be correctly interpreted
-     * <p>
-     * The default implementation for new CookieManager elements is defined by
-     * {@link org.apache.jmeter.protocol.http.gui.CookiePanel#DEFAULT_IMPLEMENTATION CookiePanel#DEFAULT_IMPLEMENTATION}
-     *
      */
     private static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
 
