@@ -17,7 +17,7 @@
 
 pluginManagement {
     plugins {
-        id("com.github.vlsi.stage-vote-release") version "3.0.2"
+        id("com.github.vlsi.stage-vote-release") version "4.0.0"
         id("com.github.node-gradle.node") version "7.1.0"
     }
 }
