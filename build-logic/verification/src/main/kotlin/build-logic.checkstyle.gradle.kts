@@ -33,7 +33,7 @@ configurations.checkstyle {
 
 dependencies {
     constraints {
-        "checkstyle"("org.apache.commons:commons-lang3:3.19.0")
+        "checkstyle"("org.apache.commons:commons-lang3:3.21.0")
     }
 }
 
