@@ -39,4 +39,3 @@ include("jvm")
 include("publishing")
 include("root-build")
 include("verification")
-
