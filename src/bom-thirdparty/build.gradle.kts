@@ -39,7 +39,7 @@ dependencies {
         // compilation classpath (e.g. it is used as a transitive by a third-party library)
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
-        api("org.ow2.asm:asm:9.9")
+        api("org.ow2.asm:asm:9.10.1")
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
