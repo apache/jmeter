@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@fontsource/merriweather@^5.1.0":
-  version "5.2.11"
-  resolved "https://registry.npmjs.org/@fontsource/merriweather/-/merriweather-5.2.11.tgz"
-  integrity sha512-ZiIMeUh5iT8d73o6xlSF8GKgjV5pgiFrufYc5jZTVAfExtWKqM2vQHnsqXSFMv4ELhAcjt6Vf+5T3oVGXhAizQ==
+"@fontsource/merriweather@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/merriweather/-/merriweather-5.3.0.tgz#6b3e916dc3250def1664e1b123a99487d383e91c"
+  integrity sha512-9LpPsNTYzRALj468Uj1K9Usl5eXk991L/kKmcpdWbTF1na9NfMyAXMgUABlMReViU1MYBz9kJ8jEzEOtX9qGDg==
 
 "@fortawesome/fontawesome-free@^7.0.0":
   version "7.1.0"
