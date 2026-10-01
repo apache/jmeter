@@ -94,16 +94,16 @@ dependencies {
         api("net.sf.jtidy:jtidy:r938")
         api("net.sf.saxon:Saxon-HE:12.9")
         api("org.apache-extras.beanshell:bsh:2.0b6")
-        api("org.apache.commons:commons-collections4:4.5.0")
-        api("org.apache.commons:commons-dbcp2:2.9.0")
-        api("org.apache.commons:commons-jexl3:3.5.0")
+        api("org.apache.commons:commons-collections4:4.6.0")
+        api("org.apache.commons:commons-dbcp2:2.14.0")
+        api("org.apache.commons:commons-jexl3:3.7.0")
         api("org.apache.commons:commons-jexl:2.1.1")
-        api("org.apache.commons:commons-lang3:3.19.0") {
+        api("org.apache.commons:commons-lang3:3.21.0") {
             because("User might still rely on commons-lang3")
         }
         api("org.apache.commons:commons-math3:3.6.1")
-        api("org.apache.commons:commons-pool2:2.12.1")
-        api("org.apache.commons:commons-text:1.14.0") {
+        api("org.apache.commons:commons-pool2:2.13.1")
+        api("org.apache.commons:commons-text:1.15.0") {
             because("User might still rely on commons-text")
         }
         api("org.apache.httpcomponents.client5:httpclient5:5.6.4")
