@@ -158,7 +158,6 @@
          <trusted-key id="91C1853D74CF92824410E2ECE5571A87348DCAFB" group="org.apache.activemq"/>
          <trusted-key id="98465301A4939C0279F2E847D89D05374952262B" group="org.jetbrains.dokka"/>
          <trusted-key id="9857C388D7D1D9D031274CD0A5DEF5A76F94A471" group="^com[.]github[.]spotbugs($|([.].*))" regex="true"/>
-         <trusted-key id="9A4555C237785CA8A6DC1FE58799AF90C06EFBBD" group="org.jdom"/>
          <trusted-key id="A1483F88BA771993AB609C43590C2310CEE1C9BE" group="jakarta.jms"/>
          <trusted-key id="A413F67D71BEEC23ADD0CE0ACB43338E060CF9FA" group="org.jacoco"/>
          <trusted-key id="A48FADE54FA56B93FE66EC17A05EBEE656F3E01B" group="org.apache.geronimo.genesis"/>
