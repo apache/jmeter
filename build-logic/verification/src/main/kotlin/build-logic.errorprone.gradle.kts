@@ -37,10 +37,10 @@ if (buildParameters.enableErrorprone) {
     tasks.configureEach<JavaCompile> {
         if ("Test" in name) {
             // Ignore warnings in test code
-            options.errorprone.isEnabled.set(false)
+            options.errorprone.enabled.set(false)
         } else {
             // Errorprone requires Java 11+
-            options.errorprone.isEnabled.set(
+            options.errorprone.enabled.set(
                 javaCompiler.map { it.metadata.languageVersion.canCompileOrRun(11) }
             )
             options.compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
