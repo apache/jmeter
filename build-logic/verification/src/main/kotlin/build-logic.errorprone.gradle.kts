@@ -30,7 +30,7 @@ if (buildParameters.enableErrorprone) {
 
     dependencies {
         "errorprone"(platform("com.google.protobuf:protobuf-bom:4.36.2"))
-        "errorprone"("com.google.errorprone:error_prone_core:2.44.0")
+        "errorprone"("com.google.errorprone:error_prone_core:2.50.0")
         "annotationProcessor"("com.google.guava:guava-beta-checker:1.0")
     }
 
