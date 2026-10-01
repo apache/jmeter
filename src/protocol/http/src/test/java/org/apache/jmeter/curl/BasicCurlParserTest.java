@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +32,7 @@ import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.curl.ArgumentHolder;
@@ -40,6 +42,9 @@ import org.apache.jmeter.protocol.http.curl.StringArgumentHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class BasicCurlParserTest {
 
@@ -770,4 +775,142 @@ public class BasicCurlParserTest {
         assertTrue(BasicCurlParser.isValidCookie("a=b;c=d"), "The string should be cookies");
         assertFalse(BasicCurlParser.isValidCookie("test.txt"), "A filename is not a valid cookie");
     }
+
+    /**
+     * A single quote inside a value can be written using the POSIX idiom
+     * {@code 'tes'\''t'}: close the single-quoted region, escape the single
+     * quote with a backslash outside quotes, then reopen single-quoting.
+     */
+    @Test
+    public void testEscapedSingleQuoteInData() {
+        // Shell representation: --data 'tes'\''t'
+        // In Java string: 'tes'\'t'  (close quote, backslash+quote outside, reopen quote)
+        String curl = " curl -X POST \"localhost.com\" --data 'tes'\\''t'";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(curl);
+        assertEquals("tes't", request.getPostData(),
+                "POSIX single-quote idiom 'tes'\\''t' should produce tes't");
+    }
+
+    /**
+     * Escaped double-quote inside a double-quoted --data value must not cause
+     * "unbalanced quotes" and must be included literally in the post data.
+     * Reproduces https://github.com/apache/jmeter/issues/6374
+     */
+    @Test
+    public void testEscapedDoubleQuoteInData() {
+        // Shell representation: --data "tes\"t"
+        String curl = " curl -X POST \"localhost.com\" --data \"tes\\\"t\"";
+        BasicCurlParser basicCurlParser = new BasicCurlParser();
+        BasicCurlParser.Request request = basicCurlParser.parse(curl);
+        assertEquals("tes\"t", request.getPostData(),
+                "Escaped double-quote inside double-quoted data should be preserved");
+    }
+
+    static Stream<Arguments> translateCommandlineCases() {
+        return Stream.of(
+            // Plain unquoted tokens split on spaces
+            // bash: printf "%s\n" curl -X POST http://example.com
+            //   → curl / -X / POST / http://example.com
+            of("plain unquoted tokens",
+                "curl -X POST http://example.com",
+                new String[]{"curl", "-X", "POST", "http://example.com"}),
+
+            // Single-quoted token: quotes stripped, content verbatim
+            // bash: printf "%s\n" curl 'hello world'  → curl / hello world
+            of("single-quoted token with space",
+                "curl 'hello world'",
+                new String[]{"curl", "hello world"}),
+
+            // Double-quoted token: quotes stripped, content verbatim
+            // bash: printf "%s\n" curl "hello world"  → curl / hello world
+            of("double-quoted token with space",
+                "curl \"hello world\"",
+                new String[]{"curl", "hello world"}),
+
+            // POSIX idiom for single quote inside single-quoted string: 'tes'\''t'
+            // bash: printf "%s\n" 'tes'\''t'  → tes't
+            of("single quote via POSIX idiom 'tes'\\''t'",
+                "'tes'\\''t'",
+                new String[]{"tes't"}),
+
+            // Escaped double-quote inside double-quoted string
+            // bash: printf "%s\n" "tes\"t"  → tes"t
+            of("escaped double-quote inside double quotes",
+                "\"tes\\\"t\"",
+                new String[]{"tes\"t"}),
+
+            // Multiple POSIX single-quote idioms in one token
+            // bash: printf "%s\n" 'it'\''s a test'\''s value'  → it's a test's value
+            of("multiple single quotes via POSIX idiom",
+                "'it'\\''s a test'\\''s value'",
+                new String[]{"it's a test's value"}),
+
+            // Backslash + LF line continuation outside quotes
+            // bash: printf "%s\n" curl \<LF>-d 'hey'  → curl / -d / hey
+            of("backslash-LF line continuation",
+                "curl \\\n-d 'hey'",
+                new String[]{"curl", "-d", "hey"}),
+
+            // Backslash + CRLF outside quotes: only \<LF> is a line continuation.
+            // \<CR> escapes the CR (appending it to the current token); the following
+            // <LF> is not a token separator in this tokenizer, so it is also appended.
+            // Result: the second token is "\r\n-d" (CR + LF + "-d" run together).
+            of("backslash-CRLF: only LF continuation is supported; CR and LF are appended",
+                "curl \\\r\n-d 'hey'",
+                new String[]{"curl", "\r\n-d", "hey"}),
+
+            // Backslash inside single quotes is literal; 'C:\dir\' is a complete
+            // single-quoted string containing C:\dir\
+            // bash: set -- curl -d 'C:\dir\'; echo $#  → 3 tokens: curl / -d / C:\dir\
+            of("backslash before closing single quote is literal inside single quotes",
+                "curl -d 'C:\\dir\\'",
+                new String[]{"curl", "-d", "C:\\dir\\"}),
+
+            // Inside double quotes, \\ → single backslash; closing " is unescaped
+            // bash: printf "%s\n" curl -d "C:\\dir\\" http://x  → curl / -d / C:\dir\ / http://x
+            of("escaped backslashes inside double quotes",
+                "curl -d \"C:\\\\dir\\\\\" http://x",
+                new String[]{"curl", "-d", "C:\\dir\\", "http://x"}),
+
+            // Inside double quotes, \\ → single backslash
+            // bash: printf "%s\n" "a\\b"  → a\b
+            of("double-quoted escaped backslash yields single backslash",
+                "\"a\\\\b\"",
+                new String[]{"a\\b"})
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("translateCommandlineCases")
+    public void testTranslateCommandline(String name, String input, String[] expected) {
+        String[] result = BasicCurlParser.translateCommandline(input);
+        assertEquals(expected.length, result.length, "token count for: " + input);
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], result[i], "token[" + i + "] for: " + input);
+        }
+    }
+
+    /** Empty input returns an empty array. */
+    @Test
+    public void testTranslateCommandlineEmptyInput() {
+        assertEquals(0, BasicCurlParser.translateCommandline("").length);
+    }
+
+    /** Unbalanced double quotes throw IllegalArgumentException. */
+    @Test
+    public void testTranslateCommandlineUnbalancedDoubleQuotesThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> BasicCurlParser.translateCommandline("curl \"unclosed"),
+                "Unbalanced double quotes must throw");
+    }
+
+    /** Unbalanced single quotes throw IllegalArgumentException. */
+    @Test
+    public void testTranslateCommandlineUnbalancedSingleQuotesThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> BasicCurlParser.translateCommandline("curl 'unclosed"),
+                "Unbalanced single quotes must throw");
+    }
+
 }
