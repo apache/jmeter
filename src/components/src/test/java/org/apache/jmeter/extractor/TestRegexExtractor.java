@@ -125,6 +125,15 @@ public class TestRegexExtractor {
         assertEquals("value", vars.get("regVal"));
     }
 
+    /**
+     * An empty Match No. is treated as 0.
+     */
+    @Test
+    public void testEmptyMatchNumber() {
+        extractor.setMatchNumber("");
+        assertEquals(0, extractor.getMatchNumber(), "getMatchNumber() for an empty Match No.");
+    }
+
     @Test
     public void testVariableExtraction() {
         extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");

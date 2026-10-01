@@ -5739,11 +5739,12 @@ generate the template string, and store the result into the given variable name.
         <property name="Template" required="Yes">The template used to create a string from the matches found.  This is an arbitrary string
         with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '<code>$1$</code>' to refer to
         group <code>1</code>, '<code>$2$</code>' to refer to group <code>2</code>, etc. <code>$0$</code> refers to whatever the entire expression matches.</property>
-        <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The regular expression may match multiple times.
+        <property name="Match No. (0 for Random)" required="No">Indicates which match to use.  The regular expression may match multiple times.
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
                 <li>A positive number N means to select the n<sup>th</sup> match.</li>
                 <li> Negative numbers are used in conjunction with the <complink name="ForEach Controller"/> - see below.</li>
+                <li>An empty field is treated as <code>0</code>.</li>
             </ul>
         </property>
         <property name="Default Value" required="No, but recommended">
@@ -5853,11 +5854,12 @@ extracting the node as text or attribute value and store the result into the giv
             If empty this is the equivalent of <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Element.html#text%28%29">Element#text()</a> function for JSoup if not value is set for attribute.
             <figure width="825" height="275" image="css_extractor_noattr.png">CSS Extractor with no attribute set</figure>
         </property>
-        <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The CSS/JQuery selector may match multiple times.
+        <property name="Match No. (0 for Random)" required="No">Indicates which match to use.  The CSS/JQuery selector may match multiple times.
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
                 <li>A positive number <code>N</code> means to select the n<sup>th</sup> match.</li>
                 <li> Negative numbers are used in conjunction with the <complink name="ForEach Controller"/> - see below.</li>
+                <li>An empty field is treated as <code>0</code>.</li>
             </ul>
         </property>
         <property name="Default Value" required="No, but recommended">
@@ -6307,11 +6309,12 @@ generate the template string, and store the result into the given variable name.
         <property name="Name of created variable" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as <code>[refname]_g#</code>, where <code>[refname]</code> is the string you entered as the reference name, and <code>#</code> is the group number, where group <code>0</code> is the entire match, group <code>1</code> is the match from the first set of parentheses, etc.</property>
         <property name="Left Boundary" required="No">Left boundary of value to find</property>
         <property name="Right Boundary" required="No">Right boundary of value to find</property>
-        <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The boundaries may match multiple times.
+        <property name="Match No. (0 for Random)" required="No">Indicates which match to use.  The boundaries may match multiple times.
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
                 <li>A positive number N means to select the n<sup>th</sup> match.</li>
                 <li> Negative numbers are used in conjunction with the <complink name="ForEach Controller"/> - see below.</li>
+                <li>An empty field is treated as <code>0</code>.</li>
             </ul>
         </property>
         <property name="Default Value" required="No, but recommended">
