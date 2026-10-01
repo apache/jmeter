@@ -28,7 +28,7 @@ javaPlatform {
 dependencies {
     api(platform("org.apache.groovy:groovy-bom:5.1.3"))
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"))
-    api(platform("com.fasterxml.jackson:jackson-bom:2.21.2"))
+    api(platform("com.fasterxml.jackson:jackson-bom:2.22.3"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
@@ -39,7 +39,7 @@ dependencies {
         // compilation classpath (e.g. it is used as a transitive by a third-party library)
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
-        api("org.ow2.asm:asm:9.9")
+        api("org.ow2.asm:asm:9.10.1")
 
         api("bsf:bsf:2.4.0")
         api("cglib:cglib-nodep:3.3.0")
@@ -54,7 +54,7 @@ dependencies {
         api("com.google.errorprone:error_prone_annotations:2.44.0")
         api("com.helger.commons:ph-commons:12.1.5")
         api("com.helger:ph-css:8.1.1")
-        api("com.fasterxml.woodstox:woodstox-core:7.1.1")
+        api("com.fasterxml.woodstox:woodstox-core:7.3.0")
         api("com.jayway.jsonpath:json-path:2.10.0")
         api("com.miglayout:miglayout-core:11.4.3")
         api("com.miglayout:miglayout-swing:11.4.3")
@@ -92,7 +92,7 @@ dependencies {
         api("net.minidev:accessors-smart:2.6.0")
         api("net.minidev:json-smart:2.6.0")
         api("net.sf.jtidy:jtidy:r938")
-        api("net.sf.saxon:Saxon-HE:12.9")
+        api("net.sf.saxon:Saxon-HE:12.10")
         api("org.apache-extras.beanshell:bsh:2.0b6")
         api("org.apache.commons:commons-collections4:4.5.0")
         api("org.apache.commons:commons-dbcp2:2.9.0")
@@ -130,7 +130,7 @@ dependencies {
         api("org.jdom:jdom:1.1.3")
         api("org.jetbrains.lets-plot:lets-plot-batik:4.8.0")
         api("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.11.2")
-        api("org.jetbrains:annotations:26.0.2-1")
+        api("org.jetbrains:annotations:26.1.0")
         api("org.jodd:jodd-core:5.3.0")
         api("org.jodd:jodd-lagarto:6.0.6")
         api("org.jodd:jodd-log:5.1.6")
@@ -138,7 +138,7 @@ dependencies {
         api("org.jsoup:jsoup:1.23.2")
         api("org.mozilla:rhino:1.9.1")
         api("org.mozilla:rhino-engine:1.9.1")
-        api("org.neo4j.driver:neo4j-java-driver:6.0.2")
+        api("org.neo4j.driver:neo4j-java-driver:6.3.0")
         api("org.slf4j:jcl-over-slf4j:1.7.36")
         api("org.slf4j:slf4j-api:1.7.36")
         api("org.unbescape:unbescape:1.1.6.RELEASE")
