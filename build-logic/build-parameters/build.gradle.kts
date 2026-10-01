@@ -17,7 +17,7 @@
 
 plugins {
     id("org.gradlex.build-parameters") version "1.4.5"
-    id("com.github.vlsi.gradle-extensions") version "3.0.1"
+    id("com.github.vlsi.gradle-extensions") version "3.0.2"
     id("build-logic.kotlin-dsl-gradle-plugin")
 }
 
