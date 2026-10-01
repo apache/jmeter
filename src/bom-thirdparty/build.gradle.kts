@@ -26,7 +26,7 @@ javaPlatform {
 }
 
 dependencies {
-    api(platform("org.apache.groovy:groovy-bom:5.1.3"))
+    api(platform("org.apache.groovy:groovy-bom:6.0.0"))
     api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"))
     api(platform("com.fasterxml.jackson:jackson-bom:2.21.2"))
 
