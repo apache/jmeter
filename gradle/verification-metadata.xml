@@ -42,6 +42,7 @@
          <trusted-key id="124DAC8350968EC2A8260584EE8ECBBBC188FD5D" group="org.ajoberstar.grgit"/>
          <trusted-key id="12D16069219C90212A974D119AE296FD02E9F65B" group="org.apache.commons"/>
          <trusted-key id="13AC2213964ABE1D1C147C0E1939A2520BAB1D90" group="org.freemarker"/>
+         <trusted-key id="1452F35849B50750F6A3BBB4B54011358B352F85" group="org.hibernate.search" name="hibernate-search-bom"/>
          <trusted-key id="147B691A19097624902F4EA9689CBE64F4BC997F" group="org.mockito"/>
          <trusted-key id="160A7A9CF46221A56B06AD64461A804F2609FD89" group="com.github.shyiko.klob"/>
          <trusted-key id="184454FAD8697760F3E00D2E4A51A45B944FFD51" group="org.apache.tika"/>
@@ -135,8 +136,9 @@
          <trusted-key id="6E7F910017655622A899639EE7D88DB8427DE651" group="org.testcontainers"/>
          <trusted-key id="6F538074CCEBF35F28AF9B066A0975F8B1127B83" group="org.jetbrains.kotlin"/>
          <trusted-key id="6FF955169D698CC09BA7403AC99BFE8CD562EAC1" group="com.github.autostyle"/>
-         <trusted-key id="716EE302674CDBB2E660E1B44DB5EA09F2E3C800" group="org.eclipse.jetty"/>
+         <trusted-key id="716EE302674CDBB2E660E1B44DB5EA09F2E3C800" group="^org[.]eclipse[.]jetty($|([.].*))" regex="true"/>
          <trusted-key id="7186BBF993566D8C2F4F7ED7D945E643368FEF62" group="io.github.eisop"/>
+         <trusted-key id="7464550A61C90BA385FC97A76D9567281201E5E3" group="jakarta.servlet"/>
          <trusted-key id="7616EB882DAF57A11477AAF559A252FB1199D873" group="com.google.code.findbugs"/>
          <trusted-key id="764BE739DDAE10F4473FECF0AEF385ED6CA815AE" group="com.miglayout"/>
          <trusted-key id="7B121B76A7ED6CE6E60AD51784E913A8E3A748C0" group="org.bouncycastle"/>

@@ -79,6 +79,13 @@
       ]
     },
     {
+      "groupName": "org.eclipse.jetty",
+      "description": "jetty-bom and jetty-ee10-bom must stay on the same version (WireMock runs on wiremock-jetty12)",
+      "matchPackageNames": [
+        "org.eclipse.jetty{/,}**"
+      ]
+    },
+    {
       "groupName": "org.jetbrains.kotlin",
       "description": "Kotlin compiler plugins (jvm, kapt, serialization, ...) share a version",
       "matchPackageNames": [

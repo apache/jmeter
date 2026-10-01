@@ -28,7 +28,8 @@ javaPlatform {
 dependencies {
     api(platform("org.junit:junit-bom:6.1.3"))
     api(platform("org.springframework:spring-framework-bom:7.0.9"))
-    api(platform("org.eclipse.jetty:jetty-bom:11.0.26"))
+    api(platform("org.eclipse.jetty:jetty-bom:12.1.13"))
+    api(platform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.13"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
@@ -39,7 +40,7 @@ dependencies {
         // compilation classpath (e.g. it is used as a transitive by a third-party library)
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
-        api("org.wiremock:wiremock:3.13.2")
+        api("org.wiremock:wiremock-jetty12:3.13.2")
         api("io.mockk:mockk:1.14.11")
         api("net.bytebuddy:byte-buddy:1.18.14")
         api("nl.jqno.equalsverifier:equalsverifier:4.5.2")
