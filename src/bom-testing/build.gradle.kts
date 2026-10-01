@@ -39,7 +39,7 @@ dependencies {
         // compilation classpath (e.g. it is used as a transitive by a third-party library)
         // then it should be declared as "api" here since we use useCompileClasspathVersions
         // to make runtime classpath consistent with the compile one.
-        api("org.wiremock:wiremock:3.13.1")
+        api("org.wiremock:wiremock:3.13.2")
         api("io.mockk:mockk:1.14.11")
         api("net.bytebuddy:byte-buddy:1.17.8")
         api("nl.jqno.equalsverifier:equalsverifier:4.3")
