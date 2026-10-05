@@ -34,6 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JFactory;
 import org.apache.jorphan.gui.JMeterUIDefaults;
 import org.apache.jorphan.gui.ui.TextComponentUI;
+import org.apache.jorphan.util.StringWrap;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -292,6 +293,30 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             undoManager.setLimit(MAX_UNDOS);
         }
         return undoManager;
+    }
+
+    // Default limited to 110K
+    private static final int MAX_LINE_SIZE =
+            JMeterUtils.getPropDefault("view.results.tree.max_line_size", 110_000); // $NON-NLS-1$
+
+    // Limit the soft wrap to 100K (hard limit divided by 1.1)
+    private static final int SOFT_WRAP_LINE_SIZE =
+            JMeterUtils.getPropDefault("view.results.tree.soft_wrap_line_size", (int) (MAX_LINE_SIZE / 1.1f)); // $NON-NLS-1$
+
+    private static String wrapLongLines(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        if (SOFT_WRAP_LINE_SIZE > 0 && MAX_LINE_SIZE > 0) {
+            StringWrap stringWrap = new StringWrap(SOFT_WRAP_LINE_SIZE, MAX_LINE_SIZE);
+            return stringWrap.wrap(input, "\n");
+        }
+        return input;
+    }
+
+    @Override
+    public void setText(String t) {
+        super.setText(wrapLongLines(t));
     }
 
     /**
