@@ -326,8 +326,6 @@ public class JMeterThread implements Runnable, Interruptible {
             }
         } catch (Exception | JMeterError e) {
             log.error("Test failed!", e);
-        } catch (ThreadDeath e) {
-            throw e; // Must not ignore this one
         } finally {
             currentSamplerForInterruption = null; // prevent any further interrupts
             interruptLock.lock();  // make sure current interrupt is finished, prevent another starting yet

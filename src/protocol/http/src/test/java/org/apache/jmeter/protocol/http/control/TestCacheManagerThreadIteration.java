@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Instant;
@@ -221,7 +222,7 @@ public class TestCacheManagerThreadIteration {
     public void setUp() throws Exception {
         this.cacheManager = new CacheManager();
         this.currentTimeInGMT = makeDate(Instant.now());
-        this.url = new URL(LOCAL_HOST);
+        this.url = URI.create(LOCAL_HOST).toURL();
         this.sampleResultOK = getSampleResultWithSpecifiedResponseCode("200");
         this.httpMethod = new HttpPostStub();
         this.httpResponse = new HttpResponseStub();
