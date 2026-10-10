@@ -1185,7 +1185,7 @@ To benefit from this feature:
     </li>
 </ul>
 Cache size is controlled by the following JMeter property (<code>jmeter.properties</code>):
-<source>jsr223.compiled_scripts_cache_size=100</source>
+  <source>jsr223.compiled_scripts_cache_size=100</source> or via a more complex cache setup using the <source>jsr223.compiled_scripts_cache_spec</source>
 <note>Unlike the <complink name="BeanShell Sampler" />, the interpreter is not saved between invocations.</note>
 <note>
 JSR223 Test Elements using Script file or Script text + checked <code>Cache compiled script if available</code> are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
