@@ -18,31 +18,46 @@
 package org.apache.jmeter.functions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.gui.action.AbstractAction;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Test the function __escapeOroRegexpCars
+ *
+ * To prepare for removal of Oro, we changed the behavior of the function
+ * to use Oro or JDKs internal Regex implementation based on the JMeter property
+ * {@code jmeter.regex.engine}
+ *
+ * Those two implementations have a slightly different way of escaping, so
+ * test both here, until we got rid of Oro.
+ */
 public class TestEscapeOroRegexpChars extends JMeterTestCase {
 
-    private AbstractFunction function;
     private SampleResult result;
     private Collection<CompoundVariable> params;
     private JMeterVariables vars;
-    private JMeterContext jmctx;
 
     @BeforeEach
     void setUp() {
-        function = new EscapeOroRegexpChars();
         result = new SampleResult();
-        jmctx = JMeterContextService.getContext();
+        JMeterContext jmctx = JMeterContextService.getContext();
         String data = "The quick brown fox";
         result.setResponseData(data, null);
         vars = new JMeterVariables();
@@ -53,48 +68,53 @@ public class TestEscapeOroRegexpChars extends JMeterTestCase {
 
     @Test
     void testParameterCount() throws Exception {
-        checkInvalidParameterCounts(function, 1, 2);
+        checkInvalidParameterCounts(new EscapeOroRegexpChars(), 1, 2);
     }
 
-    @Test
-    void testNOEscape() throws Exception {
-        params.add(new CompoundVariable("toto1titi"));
+    static Collection<Arguments> functionAndParams() {
+        var testValuesPerImplementation = Map.of(
+                "oro", Map.of(
+                    "toto1titi", "toto1titi",
+                        "toto titi", "toto\\ titi",
+                        "toto(.+?)titi", "toto\\(\\.\\+\\?\\)titi",
+                        "[^\"].+?","\\[\\^\\\"\\]\\.\\+\\?"
+                    ),
+                "java", Map.of(
+                        "toto1titi", "\\Qtoto1titi\\E",
+                        "toto titi", "\\Qtoto titi\\E",
+                        "toto(.+?)titi", "\\Qtoto(.+?)titi\\E",
+                        "[^\"].+?", "\\Q[^\"].+?\\E"
+                    )
+        );
+        Collection<Arguments> args = new ArrayList<>();
+        for (var implementation: testValuesPerImplementation.entrySet()) {
+            JMeterUtils.setProperty("jmeter.regex.engine", implementation.getKey());
+            AbstractFunction function = new EscapeOroRegexpChars();
+            for (var testValues: implementation.getValue().entrySet()) {
+                args.add(Arguments.of(function, testValues.getKey(), testValues.getValue()));
+            }
+        }
+        return args;
+    }
+
+    @ParameterizedTest
+    @MethodSource("functionAndParams")
+    void testEscaping(AbstractFunction function, String value, String expected) throws Exception {
+        params.add(new CompoundVariable(value));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        Assertions.assertEquals("toto1titi", ret);
+        Assertions.assertEquals(expected, ret);
     }
 
-    @Test
-    void testEscapeSpace() throws Exception {
-        params.add(new CompoundVariable("toto1 titi"));
-        function.setParameters(params);
-        String ret = function.execute(result, null);
-        Assertions.assertEquals("toto1\\ titi", ret);
-    }
-
-    @Test
-    void testEscape() throws Exception {
-        params.add(new CompoundVariable("toto(.+?)titi"));
-        function.setParameters(params);
-        String ret = function.execute(result, null);
-        Assertions.assertEquals("toto\\(\\.\\+\\?\\)titi", ret);
-    }
-
-    @Test
-    void testEscapeWithVars() throws Exception {
-        params.add(new CompoundVariable("toto(.+?)titi"));
+    @ParameterizedTest
+    @MethodSource("functionAndParams")
+    void testEscapingWithVar(AbstractFunction function, String value, String expected) throws Exception {
+        params.add(new CompoundVariable(value));
         params.add(new CompoundVariable("exportedVar"));
         function.setParameters(params);
         String ret = function.execute(result, null);
-        Assertions.assertEquals("toto\\(\\.\\+\\?\\)titi", ret);
-        Assertions.assertEquals("toto\\(\\.\\+\\?\\)titi", vars.get("exportedVar"));
+        Assertions.assertEquals(expected, ret);
+        Assertions.assertEquals(expected, vars.get("exportedVar"));
     }
 
-    @Test
-    void testEscape2() throws Exception {
-        params.add(new CompoundVariable("[^\"].+?"));
-        function.setParameters(params);
-        String ret = function.execute(result, null);
-        Assertions.assertEquals("\\[\\^\\\"\\]\\.\\+\\?", ret);
-    }
 }
