@@ -698,7 +698,7 @@
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Assertions" enabled="true"/>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings"/>
+            <collectionProp name="Assertion.test_strings"/>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <stringProp name="Assertion.assume_success">false</stringProp>
             <intProp name="Assertion.test_type">2</intProp>

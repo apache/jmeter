@@ -182,7 +182,7 @@ vars.put(&quot;CR&quot;,URLDecoder.decode(&quot;%0A&quot;, &quot;ASCII&quot;)); 
         </TCPSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_time" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1168273790">${__time(dd/MM/yyyy HH:mm,)}</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -207,7 +207,7 @@ vars.put(&quot;CR&quot;,URLDecoder.decode(&quot;%0A&quot;, &quot;ASCII&quot;)); 
         </TCPSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RC_500" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="52469">500</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -216,7 +216,7 @@ vars.put(&quot;CR&quot;,URLDecoder.decode(&quot;%0A&quot;, &quot;ASCII&quot;)); 
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ReadException" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1515665865">org.apache.jmeter.protocol.tcp.sampler.ReadException</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -277,7 +277,7 @@ vars.put(&quot;result_decoded&quot;, decoded);</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_time" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1168273790">${__time(dd/MM/yyyy HH:mm,)}</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -303,7 +303,7 @@ vars.put(&quot;result_decoded&quot;, decoded);</stringProp>
         </TCPSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RC_500" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="52469">500</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -312,7 +312,7 @@ vars.put(&quot;result_decoded&quot;, decoded);</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ReadException" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1515665865">org.apache.jmeter.protocol.tcp.sampler.ReadException</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -362,7 +362,7 @@ vars.put(&quot;result_decoded&quot;, decoded);</stringProp>
         </TCPSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RC_500" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="52469">500</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -372,7 +372,7 @@ vars.put(&quot;result_decoded&quot;, decoded);</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ConnectException" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="2118305654">java.net.ConnectException: Connection refused</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -415,7 +415,7 @@ if (oldResponseMessage != null &amp;&amp; oldResponseMessage.contains(&quot;java
         </TCPSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RC_500" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="52469">500</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -425,7 +425,7 @@ if (oldResponseMessage != null &amp;&amp; oldResponseMessage.contains(&quot;java
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_UnknownHostException" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1613728243">java.net.UnknownHostException: localhostXXXX</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -449,7 +449,7 @@ if (oldResponseMessage != null &amp;&amp; oldResponseMessage.contains(&quot;java
         </TCPSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RC_500" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="52469">500</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -459,7 +459,7 @@ if (oldResponseMessage != null &amp;&amp; oldResponseMessage.contains(&quot;java
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_no_protocol_handler" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-715322569">Protocol handler not found</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -508,7 +508,7 @@ vars.put(&quot;result_decoded&quot;, decoded);</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1168273790">${__time(dd/MM/yyyy HH:mm,)}</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
