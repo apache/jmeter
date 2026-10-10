@@ -64,7 +64,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     private static final String REQUEST_HEADERS = "Assertion.request_headers"; // $NON-NLS-1$
     private static final String REQUEST_DATA = "Assertion.request_data"; // $NON-NLS-1$
     private static final String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
-    private static final String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
+    private static final String TEST_STRINGS = "Assertion.test_strings"; // $NON-NLS-1$
+    private static final String TEST_STRINGS_LEGACY = "Asserion.test_strings"; // $NON-NLS-1$
     private static final String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
     private static final String CUSTOM_MESSAGE = "Assertion.custom_message"; // $NON-NLS-1$
 
@@ -219,7 +220,19 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     }
 
     public CollectionProperty getTestStrings() {
-        return (CollectionProperty) getProperty(TEST_STRINGS);
+        CollectionProperty result = (CollectionProperty) getProperty(TEST_STRINGS);
+        if (result instanceof NullProperty) {
+            CollectionProperty legacy = (CollectionProperty) getProperty(TEST_STRINGS_LEGACY);
+            if (legacy instanceof NullProperty) {
+                return new CollectionProperty(TEST_STRINGS, new ArrayList<String>());
+            }
+            // Migrate the legacy (misspelled) property so it is persisted under the correctly spelled name
+            CollectionProperty migrated = new CollectionProperty(TEST_STRINGS, legacy);
+            setProperty(migrated);
+            removeProperty(TEST_STRINGS_LEGACY);
+            return migrated;
+        }
+        return result;
     }
 
     public boolean isEqualsType() {
