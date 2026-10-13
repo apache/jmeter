@@ -44,9 +44,11 @@ import org.slf4j.LoggerFactory;
  * Redirect strategy of {@link HTTPHC5Impl} for the redirects HttpClient follows on its own, when
  * "Redirect Automatically" is selected.
  * <p>
- * HttpClient sends every hop with the headers of the initial request. Its default strategy therefore
- * refuses to follow a redirect to another origin when they include a {@code Cookie} or an
- * {@code Authorization} header, so as not to leak them, and returns the redirect as the response.
+ * HttpClient sends every hop with the headers of the initial request, except when the hop changes the
+ * method (301/302 after POST, 303 after any non-GET), where it builds a GET with no headers at all.
+ * Its default strategy refuses to follow a redirect to another origin when the hop includes a
+ * {@code Cookie} or an {@code Authorization} header, so as not to leak them, and returns the redirect
+ * as the response.
  * JMeter sets both headers itself, from the Cookie and the Authorization Manager, so a redirect to an
  * identity provider, for example, would end the sample. Instead, each hop is sent with what the
  * managers hold for its own URL, the way a sample of "Follow Redirects" would be:
@@ -57,6 +59,8 @@ import org.slf4j.LoggerFactory;
  * and those of an entry with the BASIC mechanism are sent pre-emptively, see {@link HC5Authentication}.</li>
  * <li>A {@code Cookie} or {@code Authorization} header of the Header Manager is only sent to the origin
  * of the sampled URL, and only where the managers do not replace it, as for the initial request.</li>
+ * <li>Other Header Manager headers are re-applied when HttpClient does not copy them, except that a
+ * {@code Host} override is only kept for the sampled origin.</li>
  * </ul>
  */
 final class AutoRedirectStrategy extends DefaultRedirectStrategy {
@@ -110,6 +114,8 @@ final class AutoRedirectStrategy extends DefaultRedirectStrategy {
         private final AuthManager authManager;
         private final List<String> headerManagerCookies = new ArrayList<>();
         private final List<String> headerManagerAuthorizations = new ArrayList<>();
+        /** Header Manager headers other than Cookie and Authorization, as name-value pairs. */
+        private final List<String[]> headerManagerGeneral = new ArrayList<>();
         private final BasicCredentialsProvider credentials;
         /** URL the response being redirected was received from. */
         private URL currentUrl;
@@ -122,10 +128,16 @@ final class AutoRedirectStrategy extends DefaultRedirectStrategy {
             this.authManager = authManager;
             this.credentials = credentials;
             HTTPHCAbstractImpl.setConnectionHeaders(headerManager, url,
-                    name -> HttpHeaders.COOKIE.equalsIgnoreCase(name)
-                            || HttpHeaders.AUTHORIZATION.equalsIgnoreCase(name),
-                    (name, value) -> (HttpHeaders.COOKIE.equalsIgnoreCase(name)
-                            ? headerManagerCookies : headerManagerAuthorizations).add(value));
+                    name -> true,
+                    (name, value) -> {
+                        if (HttpHeaders.COOKIE.equalsIgnoreCase(name)) {
+                            headerManagerCookies.add(value);
+                        } else if (HttpHeaders.AUTHORIZATION.equalsIgnoreCase(name)) {
+                            headerManagerAuthorizations.add(value);
+                        } else {
+                            headerManagerGeneral.add(new String[]{name, value});
+                        }
+                    });
         }
 
         /**
@@ -165,6 +177,20 @@ final class AutoRedirectStrategy extends DefaultRedirectStrategy {
                 HC5Authentication.preemptBasic(context, url, request, authorization);
             } else if (sampledOrigin) {
                 headerManagerAuthorizations.forEach(value -> request.addHeader(HttpHeaders.AUTHORIZATION, value));
+            }
+
+            // For method-changing redirects (301/302 after POST, 303 after non-GET), HttpClient
+            // builds a GET with no headers, losing the Header Manager headers the initial request
+            // carried. Re-apply them so that Accept, User-Agent, and custom headers survive.
+            for (String[] header : headerManagerGeneral) {
+                if (request.containsHeader(header[0])) {
+                    continue;
+                }
+                // Host is specific to the sampled origin. Let HttpClient generate it for another origin.
+                if (HttpHeaders.HOST.equalsIgnoreCase(header[0]) && !sampledOrigin) {
+                    continue;
+                }
+                request.addHeader(header[0], header[1]);
             }
             currentUrl = url;
         }

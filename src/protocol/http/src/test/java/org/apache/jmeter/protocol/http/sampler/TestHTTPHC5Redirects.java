@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.anyRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -176,6 +177,78 @@ class TestHTTPHC5Redirects {
             for (LoggedRequest request : requests) {
                 assertEquals("", cookies(request), "no cookie must be sent without a Cookie Manager");
             }
+        } finally {
+            server.stop();
+        }
+    }
+
+    /**
+     * POST → 302 → GET: HttpClient changes the method and builds a GET with no headers. The Header Manager
+     * headers must survive the redirect, except Cookie and Authorization which are handled by their managers.
+     */
+    @ParameterizedTest
+    @CsvSource({"HTTP/1.1, http", "HTTP/2, https"})
+    void postRedirectGetPreservesHeaderManagerHeaders(String httpVersion, String scheme) throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            String base = origin(server, scheme, "localhost");
+            server.stubFor(post(urlEqualTo("/login")).willReturn(aResponse().withStatus(302)
+                    .withHeader(HTTPConstants.HEADER_LOCATION, base + "/home")));
+            server.stubFor(get(urlEqualTo("/home")).willReturn(aResponse().withStatus(200)));
+            HeaderManager headerManager = new HeaderManager();
+            headerManager.add(new Header("X-Custom", "value1"));
+            headerManager.add(new Header("Accept", "application/json"));
+            HTTPSamplerBase sampler = newSampler(httpVersion);
+            sampler.setHeaderManager(headerManager);
+
+            HTTPSampleResult result = sampler.sample(new URL(base + "/login"), HTTPConstants.POST, false, 1);
+
+            assertEquals("200", result.getResponseCode(), result::getResponseMessage);
+            LoggedRequest home = singleRequest(server, "/home");
+            assertEquals("value1", home.getHeader("X-Custom"),
+                    "Header Manager X-Custom header must survive a POST → 302 → GET redirect");
+            assertEquals("application/json", home.getHeader("Accept"),
+                    "Header Manager Accept header must survive a POST → 302 → GET redirect");
+        } finally {
+            server.stop();
+        }
+    }
+
+    /**
+     * A Header Manager {@code Authorization} header must not be sent to a different origin on redirect,
+     * to prevent credential leaking.
+     */
+    @ParameterizedTest
+    @CsvSource({"HTTP/1.1, http", "HTTP/2, https"})
+    void headerManagerAuthorizationIsNotSentToAnotherOrigin(String httpVersion, String scheme) throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            String app = origin(server, scheme, "localhost");
+            String other = origin(server, scheme, "127.0.0.1");
+            server.stubFor(get(urlEqualTo("/start")).willReturn(aResponse().withStatus(302)
+                    .withHeader(HTTPConstants.HEADER_LOCATION, other + "/external")));
+            server.stubFor(get(urlEqualTo("/external")).willReturn(aResponse().withStatus(200)));
+            HeaderManager headerManager = new HeaderManager();
+            headerManager.add(new Header(HTTPConstants.HEADER_AUTHORIZATION, "Bearer my-token"));
+            headerManager.add(new Header("X-Test", "kept"));
+            HTTPSamplerBase sampler = newSampler(httpVersion);
+            sampler.setHeaderManager(headerManager);
+
+            HTTPSampleResult result = sampler.sample(new URL(app + "/start"), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode(), result::getResponseMessage);
+            LoggedRequest start = singleRequest(server, "/start");
+            assertEquals("Bearer my-token", start.getHeader(HTTPConstants.HEADER_AUTHORIZATION),
+                    "the Authorization header must be sent to the sampled origin");
+            assertEquals("kept", start.getHeader("X-Test"));
+
+            LoggedRequest external = singleRequest(server, "/external");
+            assertFalse(external.containsHeader(HTTPConstants.HEADER_AUTHORIZATION),
+                    "the Header Manager Authorization must not be sent to a different origin");
+            assertEquals("kept", external.getHeader("X-Test"),
+                    "non-sensitive Header Manager headers must still be sent to a different origin");
         } finally {
             server.stop();
         }
