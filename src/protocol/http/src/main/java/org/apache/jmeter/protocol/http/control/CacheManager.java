@@ -602,15 +602,18 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private void clearCache() {
         log.debug("Clear cache");
-        // TODO: avoid re-creating the thread local every time, reset its contents instead
-        threadCache = new InheritableThreadLocal<Cache<String, CacheEntry>>(){
-            @Override
-            protected Cache<String, CacheEntry> initialValue() {
-                return Caffeine.newBuilder()
-                        .maximumSize(getMaxSize())
-                        .build();
-            }
-        };
+        if (threadCache == null) {
+            threadCache = new InheritableThreadLocal<Cache<String, CacheEntry>>(){
+                @Override
+                protected Cache<String, CacheEntry> initialValue() {
+                    return Caffeine.newBuilder()
+                            .maximumSize(getMaxSize())
+                            .build();
+                }
+            };
+        } else {
+            threadCache.remove();
+        }
     }
 
     /**
