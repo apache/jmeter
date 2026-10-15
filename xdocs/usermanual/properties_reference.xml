@@ -471,6 +471,11 @@ JMETER-SERVER</source>
     connection usually serves all concurrent requests.<br/>
     Defaults to: <code>6</code>
 </property>
+<property name="httpclient5.h2.body_spill_threshold">
+    Number of bytes of an HTTP/2 request body buffered in memory before it is spilled to a temporary
+    file.<br/>
+    Defaults to: <code>262144</code>
+</property>
 <property name="httpclient5.h2.header_table_size">
     Size in bytes of the HPACK dynamic header table announced to the server.
     <code>0</code> disables indexing of the headers by the server.<br/>
