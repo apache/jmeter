@@ -30,6 +30,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509ExtendedKeyManager;
@@ -381,6 +382,22 @@ public class JsseSSLManager extends SSLManager {
                 log.debug("Client alias: '{}'", alias);
             }
             return alias;
+        }
+
+        /**
+         * Select the alias to authenticate as for a connection that performs the
+         * TLS handshake with an {@link SSLEngine}, like an asynchronous HTTP
+         * client does. The alias is chosen like for a socket, see
+         * {@link #chooseClientAlias(String[], Principal[], Socket)}. Such a client
+         * usually runs the handshake on its own I/O threads, so these have to
+         * share the {@link org.apache.jmeter.threads.JMeterContext} of the JMeter
+         * thread they work for, for the alias variable to be resolved.
+         *
+         * @see javax.net.ssl.X509ExtendedKeyManager#chooseEngineClientAlias(String[], Principal[], SSLEngine)
+         */
+        @Override
+        public String chooseEngineClientAlias(String[] keyType, Principal[] issuers, SSLEngine engine) {
+            return chooseClientAlias(keyType, issuers, null);
         }
 
         /**
