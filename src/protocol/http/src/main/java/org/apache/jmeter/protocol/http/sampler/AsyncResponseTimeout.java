@@ -153,7 +153,9 @@ final class AsyncResponseTimeout {
             long remainingNanos = remainingNanos(timeoutNanos);
             if (remainingNanos <= 0) {
                 // HttpClient discards the connection of a cancelled exchange, which also fails the
-                // requests multiplexed over it, just like it does when a sample is interrupted
+                // requests multiplexed over it, just like it does when a sample is interrupted. It
+                // discards the connection of any failed exchange and offers no way to reset only
+                // the stream, see the HTTP Version of the HTTP Request in component_reference.xml
                 if (responseFuture.cancel(true)) {
                     throw new SocketTimeoutException("Response timeout of " + timeout.toMilliseconds()
                             + " ms exceeded while waiting for the server");

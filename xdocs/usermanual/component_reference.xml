@@ -254,7 +254,12 @@ https.default.protocol=SSLv3
         <p>With HTTP/2 a thread multiplexes its concurrent requests, for example the parallel downloads of
         embedded resources, over a single connection per host, but the connections are not shared between
         threads, so a test with <code>N</code> threads still opens <code>N</code> connections like
-        <code>N</code> real users would.</p></property>
+        <code>N</code> real users would.</p>
+        <p>When a request over such a shared connection exceeds the <b>Response Timeout</b> or is interrupted,
+        HttpClient closes the whole connection, so the other requests the thread has in flight over it, like
+        the remaining parallel downloads, fail as well. Over HTTP/1.1 only the request concerned fails. Set the
+        property <code>httpclient5.h2.multiplexing</code> to <code>false</code> to give each concurrent request
+        an HTTP/2 connection of its own, up to <code>httpclient5.h2.max_connections_per_route</code> per host.</p></property>
         <property name="Protocol" required="No"><code>HTTP</code>, <code>HTTPS</code> or <code>FILE</code>. Default: <code>HTTP</code></property>
         <property name="Method" required="Yes"><code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>TRACE</code>,
           <code>OPTIONS</code>, <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code> (not supported for
@@ -3958,7 +3963,12 @@ All port values are treated equally; a sampler that does not specify a port will
         <p>With HTTP/2 a thread multiplexes its concurrent requests, for example the parallel downloads of
         embedded resources, over a single connection per host, but the connections are not shared between
         threads, so a test with <code>N</code> threads still opens <code>N</code> connections like
-        <code>N</code> real users would.</p></property>
+        <code>N</code> real users would.</p>
+        <p>When a request over such a shared connection exceeds the <b>Response Timeout</b> or is interrupted,
+        HttpClient closes the whole connection, so the other requests the thread has in flight over it, like
+        the remaining parallel downloads, fail as well. Over HTTP/1.1 only the request concerned fails. Set the
+        property <code>httpclient5.h2.multiplexing</code> to <code>false</code> to give each concurrent request
+        an HTTP/2 connection of its own, up to <code>httpclient5.h2.max_connections_per_route</code> per host.</p></property>
         <property name="Protocol" required="No"><code>HTTP</code> or <code>HTTPS</code>.</property>
         <property name="Content encoding" required="No">The encoding to be used for the request.</property>
         <property name="Path" required="No">The path to resource (for example, <code>/servlets/myServlet</code>). If the

@@ -463,7 +463,9 @@ JMETER-SERVER</source>
 <property name="httpclient5.h2.multiplexing">
     Multiplex concurrent message exchanges (for example parallel downloads of embedded resources)
     over a single HTTP/2 connection. The connections are not shared between threads, every JMeter
-    thread uses connections of its own.<br/>
+    thread uses connections of its own. A request which exceeds its response timeout or is interrupted
+    closes the shared connection, which fails the other requests in flight over it as well. Set to
+    <code>false</code> to give each concurrent request a connection of its own.<br/>
     Defaults to: <code>true</code>
 </property>
 <property name="httpclient5.h2.max_connections_per_route">
