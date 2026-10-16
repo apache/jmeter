@@ -255,6 +255,12 @@ https.default.protocol=SSLv3
         embedded resources, over a single connection per host, but the connections are not shared between
         threads, so a test with <code>N</code> threads still opens <code>N</code> connections like
         <code>N</code> real users would.</p>
+        <p>The HTTP/2 client of a thread serves all of its requests with a single I/O thread. While HttpClient
+        works on that thread, for example on the TLS handshake of a new connection, on the answer to an
+        authentication challenge such as SPNEGO or NTLM, or on applying the Cookie and Authorization Manager to
+        a redirect it follows by itself, the other requests the thread has in flight, like the remaining
+        parallel downloads, wait. This is negligible in normal use, but a slow Kerberos KDC, for example,
+        delays them all.</p>
         <p>When a request over such a shared connection exceeds the <b>Response Timeout</b> or is interrupted,
         HttpClient closes the whole connection, so the other requests the thread has in flight over it, like
         the remaining parallel downloads, fail as well. Over HTTP/1.1 only the request concerned fails. Set the
@@ -3971,6 +3977,12 @@ All port values are treated equally; a sampler that does not specify a port will
         embedded resources, over a single connection per host, but the connections are not shared between
         threads, so a test with <code>N</code> threads still opens <code>N</code> connections like
         <code>N</code> real users would.</p>
+        <p>The HTTP/2 client of a thread serves all of its requests with a single I/O thread. While HttpClient
+        works on that thread, for example on the TLS handshake of a new connection, on the answer to an
+        authentication challenge such as SPNEGO or NTLM, or on applying the Cookie and Authorization Manager to
+        a redirect it follows by itself, the other requests the thread has in flight, like the remaining
+        parallel downloads, wait. This is negligible in normal use, but a slow Kerberos KDC, for example,
+        delays them all.</p>
         <p>When a request over such a shared connection exceeds the <b>Response Timeout</b> or is interrupted,
         HttpClient closes the whole connection, so the other requests the thread has in flight over it, like
         the remaining parallel downloads, fail as well. Over HTTP/1.1 only the request concerned fails. Set the

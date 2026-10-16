@@ -1239,7 +1239,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                 .setTargetAuthenticationStrategy(HC5Authentication.STRATEGY)
                 .setProxyAuthenticationStrategy(HC5Authentication.STRATEGY)
                 // A JMeter thread only has a few requests in flight, which a single I/O thread serves
-                // easily, whereas HttpClient would start one per processor for every client
+                // easily, whereas HttpClient would start one per processor for every client. Work done on
+                // it, like TLS handshakes, auth challenges or AutoRedirectStrategy, holds up the others.
                 .setIOReactorConfig(IOReactorConfig.custom().setIoThreadCount(1).build())
                 .setThreadFactory(threadsSharingContext(jmeterContext));
         AsyncResponseTimeout.install(builder);
