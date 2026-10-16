@@ -230,6 +230,12 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final boolean HTTP_2_PRIOR_KNOWLEDGE =
             JMeterUtils.getPropDefault("httpclient5.h2.prior_knowledge", false);
 
+    /**
+     * Connections per host of the HTTP/2 client. Unlike {@link HC5ClassicClient#allowConnectionsPerRoute(int)}
+     * this maximum is not raised to the parallel downloads, as HttpClient only shares an HTTP/2 connection
+     * once it is open, so a burst of downloads to a host would open that many HTTP/2 connections. A server
+     * that negotiates HTTP/1.1 through ALPN therefore needs the property raised.
+     */
     private static final int HTTP_2_MAX_CONNECTIONS_PER_ROUTE =
             JMeterUtils.getPropDefault("httpclient5.h2.max_connections_per_route", 6);
 

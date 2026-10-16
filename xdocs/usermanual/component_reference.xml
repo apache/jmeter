@@ -375,7 +375,14 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <code>.*\.(?i:svg|png)</code>
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
-        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
+        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.
+        <p>With the <code>HttpClient5</code> implementation and HTTP/2 selected as <b>HTTP Version</b>, at most
+        <code>httpclient5.h2.max_connections_per_route</code> (default <code>6</code>) connections are opened per host.
+        Downloads beyond that limit wait for a connection, and the wait counts in their elapsed time, unless they are
+        multiplexed over an HTTP/2 connection to that host which is already open. So when the server negotiates
+        HTTP/1.1 instead of HTTP/2, or when <code>httpclient5.h2.multiplexing</code> is <code>false</code>, set the
+        property to at least the pool size. With <code>HTTP/1.1</code> selected, <code>HttpClient5</code> allows as many
+        connections per host as the pool size by itself.</p></property>
         <property name="Source address type" required="No">
         <i>[Only for HTTP Request with HTTPClient implementation]</i> <br></br>
         To distinguish the source address value, select the type of these:
@@ -3991,7 +3998,14 @@ All port values are treated equally; a sampler that does not specify a port will
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
-        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
+        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.
+        <p>With the <code>HttpClient5</code> implementation and HTTP/2 selected as <b>HTTP Version</b>, at most
+        <code>httpclient5.h2.max_connections_per_route</code> (default <code>6</code>) connections are opened per host.
+        Downloads beyond that limit wait for a connection, and the wait counts in their elapsed time, unless they are
+        multiplexed over an HTTP/2 connection to that host which is already open. So when the server negotiates
+        HTTP/1.1 instead of HTTP/2, or when <code>httpclient5.h2.multiplexing</code> is <code>false</code>, set the
+        property to at least the pool size. With <code>HTTP/1.1</code> selected, <code>HttpClient5</code> allows as many
+        connections per host as the pool size by itself.</p></property>
         <property name="URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
         So if you only want to download embedded resources from <code>http://example.invalid/</code>, use the expression:

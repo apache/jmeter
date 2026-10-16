@@ -469,8 +469,13 @@ JMETER-SERVER</source>
     Defaults to: <code>true</code>
 </property>
 <property name="httpclient5.h2.max_connections_per_route">
-    Maximum number of HTTP/2 connections kept per target host. With multiplexing enabled a single
-    connection usually serves all concurrent requests.<br/>
+    Maximum number of connections kept per target host by the client that the HttpClient5
+    implementation uses when HTTP/2 is selected. With multiplexing enabled a single connection
+    usually serves all concurrent requests. When the server negotiates HTTP/1.1 instead, or
+    multiplexing is disabled, every concurrent request needs a connection of its own, and the requests
+    beyond this limit wait for one, which counts in their elapsed time. Set it to at least the number of
+    parallel downloads of embedded resources then, as unlike with HTTP/1.1 selected, the limit is not
+    raised to that number automatically.<br/>
     Defaults to: <code>6</code>
 </property>
 <property name="httpclient5.h2.body_spill_threshold">
