@@ -25,6 +25,7 @@ import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apiguardian.api.API;
 
 /**
  * Holds context for a thread.
@@ -52,6 +53,7 @@ public class JMeterContext {
     private int threadNum;
     private TestLogicalAction testLogicalAction = TestLogicalAction.CONTINUE;
     private final ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<>(5);
+    private final ConcurrentHashMap<String, Object> threadState = new ConcurrentHashMap<>(5);
     private boolean recording;
 
     JMeterContext() {
@@ -279,6 +281,23 @@ public class JMeterContext {
      */
     public Map<String, Object> getSamplerContext() {
         return samplerContext;
+    }
+
+    /**
+     * State kept for the whole lifetime of the thread, like the clients a sampler reuses from one
+     * sample to the next. Unlike {@link #getSamplerContext()}, it is neither cleaned after each
+     * sample nor by {@link #clear()}, so that
+     * {@link org.apache.jmeter.testelement.ThreadListener#threadFinished()}, which runs after the
+     * context has been cleared, can still release what it holds. It goes away with the context.
+     * <p>
+     * The threads which download embedded resources in parallel adopt the context of the JMeter
+     * thread they work for, so the map is thread-safe.
+     *
+     * @return state of the thread, keyed by names unique to the component which uses them
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
+    public Map<String, Object> getThreadState() {
+        return threadState;
     }
 
     /**

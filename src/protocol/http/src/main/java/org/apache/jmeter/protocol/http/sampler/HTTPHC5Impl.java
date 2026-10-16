@@ -39,14 +39,12 @@ import java.security.Principal;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -187,25 +185,25 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final String CONTEXT_ATTRIBUTE_PREEMPTIVE_AUTHORIZATION = "__jmeter.PREEMPTIVE_AUTH__"; //$NON-NLS-1$
 
     /**
-     * Clients of every JMeter thread, looked up by the {@link JMeterContext} of that thread instead
-     * of by the thread itself. The threads that download embedded resources in parallel are pooled
-     * and shared by all JMeter threads, and they adopt the context of the JMeter thread they are
-     * working for, so looking the clients up by context hands them the clients of that thread. That
-     * shares a connection between a sample and its embedded resources, which lets HTTP/2 multiplex
-     * them, and it keeps a JMeter thread from closing clients another one is still using.
+     * Name of the {@link JMeterContext#getThreadState() thread state} entry which holds the clients
+     * of a JMeter thread. They are looked up by the {@link JMeterContext} of that thread instead of
+     * by the thread itself. The threads that download embedded resources in parallel are pooled and
+     * shared by all JMeter threads, and they adopt the context of the JMeter thread they are working
+     * for, so looking the clients up by context hands them the clients of that thread. That shares a
+     * connection between a sample and its embedded resources, which lets HTTP/2 multiplex them, and
+     * it keeps a JMeter thread from closing clients another one is still using.
      *
-     * <p>The keys are weak, so that a context whose clients are never closed explicitly, like the
-     * one of a thread of the HTTP(S) Test Script Recorder, does not keep the entry alive forever.
+     * <p>The clients go away with the context, so the ones of a context which never closes them
+     * explicitly, like the one of a thread of the HTTP(S) Test Script Recorder, are not kept forever.
      */
-    private static final Map<JMeterContext, Map<HttpClientKey, HC5ClassicClient>> HTTP_CLIENTS =
-            Collections.synchronizedMap(new WeakHashMap<>());
+    private static final String THREAD_STATE_CLIENTS = "__jmeter.HC5_CLIENTS__"; //$NON-NLS-1$
 
     /**
-     * HTTP/2 clients of every JMeter thread, see {@link #HTTP_CLIENTS} for how they are shared with
-     * the threads that download embedded resources in parallel.
+     * Name of the {@link JMeterContext#getThreadState() thread state} entry which holds the HTTP/2
+     * clients of a JMeter thread, see {@link #THREAD_STATE_CLIENTS} for how they are shared with the
+     * threads that download embedded resources in parallel.
      */
-    private static final Map<JMeterContext, Map<HttpClientKey, CloseableHttpAsyncClient>> HTTP_2_CLIENTS =
-            Collections.synchronizedMap(new WeakHashMap<>());
+    private static final String THREAD_STATE_HTTP_2_CLIENTS = "__jmeter.HC5_HTTP_2_CLIENTS__"; //$NON-NLS-1$
 
     /** Multiplex concurrent message exchanges over a single HTTP/2 connection. */
     private static final boolean HTTP_2_MULTIPLEXING =
@@ -1254,15 +1252,21 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static HC5ClassicClient getClient(HttpClientKey key) {
         Map<HttpClientKey, HC5ClassicClient> clients =
-                HTTP_CLIENTS.computeIfAbsent(JMeterContextService.getContext(), context -> new ConcurrentHashMap<>());
+                clientsOfCurrentThread(JMeterContextService.getContext(), THREAD_STATE_CLIENTS);
         return clients.computeIfAbsent(key, HTTPHC5Impl::createClient);
     }
 
     private static CloseableHttpAsyncClient getHttp2Client(HttpClientKey key) {
         JMeterContext jmeterContext = JMeterContextService.getContext();
         Map<HttpClientKey, CloseableHttpAsyncClient> clients =
-                HTTP_2_CLIENTS.computeIfAbsent(jmeterContext, context -> new ConcurrentHashMap<>());
+                clientsOfCurrentThread(jmeterContext, THREAD_STATE_HTTP_2_CLIENTS);
         return clients.computeIfAbsent(key.forAnyOrigin(), k -> createHttp2Client(k, jmeterContext));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <C> Map<HttpClientKey, C> clientsOfCurrentThread(JMeterContext jmeterContext, String name) {
+        return (Map<HttpClientKey, C>) jmeterContext.getThreadState()
+                .computeIfAbsent(name, n -> new ConcurrentHashMap<HttpClientKey, C>());
     }
 
     private static boolean isDefaultUserAgentDisabled() {
@@ -1756,12 +1760,14 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         // Only the clients of this JMeter thread are dropped. The threads which download embedded
         // resources borrow them while they work for this thread, and they are done by the time the
         // sample returns, so no client is closed while a request is still using it.
-        JMeterContext context = JMeterContextService.getContext();
-        closeQuietly(HTTP_CLIENTS.remove(context));
-        closeQuietly(HTTP_2_CLIENTS.remove(context));
+        Map<String, Object> threadState = JMeterContextService.getContext().getThreadState();
+        closeQuietly(threadState.remove(THREAD_STATE_CLIENTS));
+        closeQuietly(threadState.remove(THREAD_STATE_HTTP_2_CLIENTS));
     }
 
-    private static void closeQuietly(Map<HttpClientKey, ? extends Closeable> clients) {
+    @SuppressWarnings("unchecked")
+    private static void closeQuietly(Object threadStateClients) {
+        Map<HttpClientKey, ? extends Closeable> clients = (Map<HttpClientKey, ? extends Closeable>) threadStateClients;
         if (clients == null) {
             return;
         }
