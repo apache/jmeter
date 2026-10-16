@@ -172,6 +172,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * HTTP Sampler using Apache HttpClient 5.x.
+ *
+ * @since 6.0
  */
 public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
@@ -1186,7 +1188,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         }
         String uri = request.getRequestUri() != null ? request.getRequestUri() : "";
         org.apache.hc.core5.http.ProtocolVersion version = request.getVersion();
-        String versionStr = version != null ? version.toString() : HTTPConstants.HTTP_VERSION_1_1;
+        String versionStr = version != null ? version.toString() : HTTPConstants.HTTP_1_1;
         long sentBytes = HTTPMessageSizes.requestLineLength(request.getMethod(), uri, versionStr);
 
         for (Header header : request.getHeaders()) {

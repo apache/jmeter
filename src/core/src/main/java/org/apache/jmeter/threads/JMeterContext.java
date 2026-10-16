@@ -294,6 +294,7 @@ public class JMeterContext {
      * thread they work for, so the map is thread-safe.
      *
      * @return state of the thread, keyed by names unique to the component which uses them
+     * @since 6.0
      */
     @API(status = API.Status.EXPERIMENTAL, since = "6.0.0")
     public Map<String, Object> getThreadState() {

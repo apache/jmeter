@@ -180,7 +180,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
         } else {
             setByte((byte)2);
         }
-        if (isHttp10(JMeterUtils.getPropDefault("httpclient.version", HTTPConstants.HTTP_VERSION_1_1))) {//$NON-NLS-1$
+        if (isHttp10(JMeterUtils.getPropDefault("httpclient.version", HTTPConstants.HTTP_1_1))) {//$NON-NLS-1$
             setString(HTTP_1_0);
         } else {
             setString(HTTPConstants.HTTP_1_1);

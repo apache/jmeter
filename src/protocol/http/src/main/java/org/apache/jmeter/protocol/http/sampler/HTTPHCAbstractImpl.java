@@ -90,7 +90,20 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected static final boolean USE_LOOPBACK = JMeterUtils.getPropDefault("httpclient.loopback", false);
 
-    /** Default value of the sampler {@code HTTPSampler.httpVersion} property, see {@code httpclient.version}. */
+    /**
+     * Raw value of the {@code httpclient.version} property, defaulting to {@code 1.1}.
+     *
+     * @deprecated use {@link #DEFAULT_HTTP_VERSION}, which maps the legacy values {@code 1.0} and
+     *             {@code 1.1} to {@code HTTP/1.1}
+     */
+    @Deprecated
+    protected static final String HTTP_VERSION = JMeterUtils.getPropDefault(HTTP_VERSION_PROPERTY, "1.1");
+
+    /**
+     * Default value of the sampler {@code HTTPSampler.httpVersion} property, see {@code httpclient.version}.
+     *
+     * @since 6.0
+     */
     protected static final String DEFAULT_HTTP_VERSION = readDefaultHttpVersion();
 
     // -1 means not defined
@@ -206,6 +219,8 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     /**
      * Iterates the headers of a request or a response, so that the helpers below can be shared by
      * the HttpClient implementations although they represent a header with different types.
+     *
+     * @since 6.0
      */
     @FunctionalInterface
     protected interface HeaderIterable {
@@ -223,6 +238,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @param headers   headers of the request or the response
      * @param predicate selects the headers to render by name
      * @return the headers as a string, one per line
+     * @since 6.0
      */
     protected static String formatHeaders(HeaderIterable headers, Predicate<? super String> predicate) {
         StringBuilder result = new StringBuilder(150);
@@ -242,6 +258,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @param cookieManager holds the cookies, may be {@code null}
      * @param setHeader     sets a header of the request, replacing an existing one of that name
      * @return the value of the {@code Cookie} header, {@code null} if there is none
+     * @since 6.0
      */
     protected static String setConnectionCookie(URL url, CookieManager cookieManager,
             BiConsumer<String, String> setHeader) {
@@ -262,6 +279,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @param headers headers of the request
      * @return the value of the {@code Cookie} header, the values of several such headers joined the
      *         way a single header would hold them, or an empty string if the request has none
+     * @since 6.0
      */
     protected static String getOnlyCookieFromHeaders(HeaderIterable headers) {
         StringBuilder cookies = new StringBuilder();
@@ -282,6 +300,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @param headers       headers of the response
      * @param url           URL the response was received from
      * @param cookieManager stores the cookies, may be {@code null}
+     * @since 6.0
      */
     protected static void saveConnectionCookies(HeaderIterable headers, URL url, CookieManager cookieManager) {
         if (cookieManager == null) {
@@ -303,6 +322,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @param url           URL of the request, used to normalize the {@code Host} header
      * @param isAllowed     additional filter of the implementation, by header name
      * @param addHeader     adds a header to the request, keeping the ones already set
+     * @since 6.0
      */
     protected static void setConnectionHeaders(HeaderManager headerManager, URL url,
             Predicate<? super String> isAllowed, BiConsumer<String, String> addHeader) {
@@ -374,6 +394,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @param contentEncoding encoding of the request body
      * @param consumer        called with the name and the value of every parameter
      * @throws UnsupportedEncodingException when the content encoding is not supported
+     * @since 6.0
      */
     protected void forEachFormParameter(String contentEncoding, BiConsumer<String, String> consumer)
             throws UnsupportedEncodingException {

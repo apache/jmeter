@@ -87,6 +87,11 @@ public abstract class HTTPSamplerBaseSchema : TestElementSchema() {
     public val implementation: StringPropertyDescriptor<HTTPSamplerBaseSchema>
         by string("HTTPSampler.implementation")
 
+    /**
+     * HTTP version of the sampler, see [HTTPSamplerBase.setHttpVersion].
+     *
+     * @since 6.0
+     */
     public val httpVersion: StringPropertyDescriptor<HTTPSamplerBaseSchema>
         by string("HTTPSampler.httpVersion")
 

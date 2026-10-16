@@ -917,7 +917,7 @@ class TestHTTPHC5Features {
         StringBuilder head = new StringBuilder()
                 .append(request.getMethod().getName()).append(' ')
                 .append(request.getUrl()).append(' ')
-                .append(HTTPConstants.HTTP_VERSION_1_1).append("\r\n");
+                .append(HTTPConstants.HTTP_1_1).append("\r\n");
         for (HttpHeader header : request.getHeaders().all()) {
             for (String value : header.values()) {
                 head.append(header.key()).append(": ").append(value).append("\r\n");

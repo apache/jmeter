@@ -160,6 +160,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
 
+    /**
+     * Name of the property which selects the HTTP version of the sampler, see
+     * {@link #setHttpVersion(String)}.
+     *
+     * @since 6.0
+     */
     public static final String HTTP_VERSION = HTTPSamplerBaseSchema.INSTANCE.getHttpVersion().getName();
 
     public static final String PATH = "HTTPSampler.path"; // $NON-NLS-1$
@@ -654,10 +660,22 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return get(getSchema().getImplementation());
     }
 
+    /**
+     * Sets the HTTP version to use, one of {@link HTTPConstants#HTTP_1_1},
+     * {@link HTTPConstants#HTTP_VERSION_2} or {@link HTTPConstants#HTTP_VERSION_2_STRICT}. An empty
+     * value uses the {@code httpclient.version} property instead.
+     *
+     * @param value the HTTP version
+     * @since 6.0
+     */
     public void setHttpVersion(String value) {
         set(getSchema().getHttpVersion(), value);
     }
 
+    /**
+     * @return the HTTP version to use, see {@link #setHttpVersion(String)}
+     * @since 6.0
+     */
     public String getHttpVersion() {
         return get(getSchema().getHttpVersion());
     }

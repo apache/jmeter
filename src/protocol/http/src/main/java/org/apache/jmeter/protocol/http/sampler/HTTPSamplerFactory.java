@@ -39,6 +39,11 @@ public final class HTTPSamplerFactory {
     //+ JMX implementation attribute values (also displayed in GUI) - do not change
     public static final String IMPL_HTTP_CLIENT4 = "HttpClient4";  // $NON-NLS-1$
 
+    /**
+     * Use Apache HttpClient 5 HTTP implementation
+     *
+     * @since 6.0
+     */
     public static final String IMPL_HTTP_CLIENT5 = "HttpClient5";  // $NON-NLS-1$
 
     public static final String IMPL_HTTP_CLIENT3_1 = "HttpClient3.1"; // $NON-NLS-1$
@@ -97,16 +102,17 @@ public final class HTTPSamplerFactory {
      *
      * @param implementation implementation name, an empty value refers to the default implementation
      * @return the selectable values of the {@code HTTPSampler.httpVersion} property
+     * @since 6.0
      */
     public static String[] getHttpVersions(String implementation) {
         String impl = StringUtilities.isBlank(implementation) ? DEFAULT_CLASSNAME : implementation;
         if (IMPL_HTTP_CLIENT5.equals(impl)) {
             // HttpClient 5 is the only implementation which can require HTTP/2 for the connection
-            return new String[]{"", HTTPConstants.HTTP_VERSION_1_1, HTTPConstants.HTTP_VERSION_2,
+            return new String[]{"", HTTPConstants.HTTP_1_1, HTTPConstants.HTTP_VERSION_2,
                     HTTPConstants.HTTP_VERSION_2_STRICT};
         }
         // HttpClient4 and Java (and their aliases) never read the HTTP version of the sampler
-        return new String[]{"", HTTPConstants.HTTP_VERSION_1_1};
+        return new String[]{"", HTTPConstants.HTTP_1_1};
     }
 
     public static HTTPAbstractImpl getImplementation(String impl, HTTPSamplerBase base){

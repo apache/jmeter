@@ -81,7 +81,11 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     private static final String RETURN_CUSTOM_STATUS_CODE =
             JMeterUtils.getProperty("RETURN_CUSTOM_STATUS.code");//$NON-NLS-1$
 
-    /** Name of the property which sets the default HTTP version of the samplers. */
+    /**
+     * Name of the property which sets the default HTTP version of the samplers.
+     *
+     * @since 6.0
+     */
     protected static final String HTTP_VERSION_PROPERTY = "httpclient.version"; // $NON-NLS-1$
 
     protected static final Predicate<String> ALL_EXCEPT_COOKIE = s -> !HTTPConstants.HEADER_COOKIE.equalsIgnoreCase(s);
@@ -101,10 +105,11 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      *
      * @return the value of the property, normalized by {@link #normalizeHttpVersion(String)},
      *         defaulting to {@code HTTP/1.1}
+     * @since 6.0
      */
     protected static String readDefaultHttpVersion() {
         return normalizeHttpVersion(
-                JMeterUtils.getPropDefault(HTTP_VERSION_PROPERTY, HTTPConstants.HTTP_VERSION_1_1));
+                JMeterUtils.getPropDefault(HTTP_VERSION_PROPERTY, HTTPConstants.HTTP_1_1));
     }
 
     /**
@@ -118,7 +123,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     static String normalizeHttpVersion(String httpVersion) {
         String version = httpVersion == null ? "" : httpVersion.trim();
         if ("1.0".equals(version) || "1.1".equals(version)) { // $NON-NLS-1$ $NON-NLS-2$
-            return HTTPConstants.HTTP_VERSION_1_1;
+            return HTTPConstants.HTTP_1_1;
         }
         return version;
     }
