@@ -42,6 +42,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.http.HttpHeader;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 
 /**
@@ -254,6 +255,51 @@ class TestHTTPHC5Redirects {
         }
     }
 
+    /**
+     * The result reports the request of the last hop the way the server received it, not the one the
+     * sampler started with, whose cookies and credentials are those of another origin.
+     */
+    @ParameterizedTest
+    @CsvSource({"HTTP/1.1, http", "HTTP/2, https"})
+    void reportsTheRequestOfTheLastHop(String httpVersion, String scheme) throws Exception {
+        WireMockServer server = createServer();
+        server.start();
+        try {
+            String app = origin(server, scheme, "localhost");
+            String idp = origin(server, scheme, "127.0.0.1");
+            server.stubFor(get(urlEqualTo("/app/start")).willReturn(aResponse().withStatus(302)
+                    .withHeader(HTTPConstants.HEADER_LOCATION, idp + "/idp/login")));
+            server.stubFor(get(urlEqualTo("/idp/login")).willReturn(aResponse().withStatus(200)));
+            CookieManager cookieManager = new CookieManager();
+            cookieManager.testStarted();
+            cookieManager.addCookieFromHeader("app-session=1; Path=/", new URL(app + "/"));
+            cookieManager.addCookieFromHeader("idp-remembered=1; Path=/", new URL(idp + "/"));
+            AuthManager authManager = new AuthManager();
+            authManager.set(-1, app + "/", "appuser", "apppass", "", "", AuthManager.Mechanism.BASIC);
+            authManager.set(-1, idp + "/", "idpuser", "idppass", "", "", AuthManager.Mechanism.BASIC);
+            HTTPSamplerBase sampler = newSampler(httpVersion);
+            sampler.setCookieManager(cookieManager);
+            sampler.setAuthManager(authManager);
+
+            HTTPSampleResult result = sampler.sample(new URL(app + "/app/start"), HTTPConstants.GET, false, 1);
+
+            assertEquals("200", result.getResponseCode(), result::getResponseMessage);
+            LoggedRequest login = singleRequest(server, "/idp/login");
+            assertEquals(cookies(login), result.getCookies(),
+                    "the cookies of the last hop should be reported, not those of the sampled URL");
+            String requestHeaders = result.getRequestHeaders();
+            assertTrue(requestHeaders.contains(
+                            HTTPConstants.HEADER_AUTHORIZATION + ": " + basic("idpuser", "idppass") + "\n"),
+                    () -> "the credentials of the last hop should be reported, got " + requestHeaders);
+            assertFalse(requestHeaders.contains(basic("appuser", "apppass")), requestHeaders);
+            if (HTTPConstants.HTTP_1_1.equals(httpVersion)) {
+                assertEquals(wireSize(login), result.getSentBytes(), "sentBytes should be those of the last hop");
+            }
+        } finally {
+            server.stop();
+        }
+    }
+
     private static HTTPSamplerBase newSampler(String httpVersion) {
         HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HttpClient5");
         sampler.setHttpVersion(httpVersion);
@@ -290,5 +336,20 @@ class TestHTTPHC5Redirects {
     private static String basic(String user, String password) {
         return "Basic " + Base64.getEncoder()
                 .encodeToString((user + ":" + password).getBytes(StandardCharsets.ISO_8859_1));
+    }
+
+    /** Number of bytes the given request occupies on an HTTP/1.1 connection. */
+    private static long wireSize(LoggedRequest request) {
+        StringBuilder head = new StringBuilder()
+                .append(request.getMethod().getName()).append(' ')
+                .append(request.getUrl()).append(' ')
+                .append(HTTPConstants.HTTP_1_1).append("\r\n");
+        for (HttpHeader header : request.getHeaders().all()) {
+            for (String value : header.values()) {
+                head.append(header.key()).append(": ").append(value).append("\r\n");
+            }
+        }
+        head.append("\r\n");
+        return head.toString().getBytes(StandardCharsets.ISO_8859_1).length + request.getBody().length;
     }
 }

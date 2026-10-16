@@ -132,7 +132,6 @@ import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.http2.HttpVersionPolicy;
 import org.apache.hc.core5.http2.config.H2Config;
 import org.apache.hc.core5.io.CloseMode;
-import org.apache.hc.core5.net.URIAuthority;
 import org.apache.hc.core5.pool.PoolConcurrencyPolicy;
 import org.apache.hc.core5.reactor.ConnectionInitiator;
 import org.apache.hc.core5.reactor.IOReactorConfig;
@@ -159,7 +158,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.io.CountingInputStream;
-import org.apache.jorphan.io.CountingOutputStream;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.util.StringUtilities;
 import org.brotli.dec.BrotliInputStream;
@@ -184,7 +182,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
     private static final String CONTEXT_ATTRIBUTE_RESPONSE_LATENCY = "__jmeter.S_R_LATENCY__"; //$NON-NLS-1$
     private static final String CONTEXT_ATTRIBUTE_RESPONSE_BODY_SIZE = "__jmeter.S_R_BODY_SIZE__"; //$NON-NLS-1$
     private static final String CONTEXT_ATTRIBUTE_RESPONSE_BODY_COUNTER = "__jmeter.S_R_BODY_COUNTER__"; //$NON-NLS-1$
-    private static final String CONTEXT_ATTRIBUTE_PREEMPTIVE_AUTHORIZATION = "__jmeter.PREEMPTIVE_AUTH__"; //$NON-NLS-1$
 
     /**
      * Name of the {@link JMeterContext#getThreadState() thread state} entry which holds the clients
@@ -564,7 +561,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             currentRequest = null;
 
             updateResult(response, request, result);
-            reportPreemptiveAuthorization(context, result);
+            HC5SentRequest.report(request, context, result);
             updateUrlAfterAutoRedirects(url, context, result);
             if (cacheManager != null) {
                 cacheManager.saveDetails(cacheResponseHeaders(response), result);
@@ -579,9 +576,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                 result.sampleEnd();
             }
             if (request != null) {
-                result.setRequestHeaders(getRequestHeaders(request));
-                result.setSentBytes(calculateSentBytes(request));
-                reportPreemptiveAuthorization(context, result);
+                HC5SentRequest.report(request, context, result);
             }
             return errorResult(e, result);
         } finally {
@@ -864,7 +859,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
      * @param message request or response
      * @return the headers of the message
      */
-    private static HeaderIterable headersOf(org.apache.hc.core5.http.MessageHeaders message) {
+    static HeaderIterable headersOf(org.apache.hc.core5.http.MessageHeaders message) {
         return action -> {
             for (Header header : message.getHeaders()) {
                 action.accept(header.getName(), header.getValue());
@@ -951,22 +946,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             request.removeHeaders(HttpHeaders.AUTHORIZATION);
             String preemptiveAuthorization = HC5Authentication.preemptBasic(context, url, request, authorization);
             if (preemptiveAuthorization != null) {
-                context.setAttribute(CONTEXT_ATTRIBUTE_PREEMPTIVE_AUTHORIZATION, preemptiveAuthorization);
+                HC5SentRequest.rememberPreemptiveAuthorization(context, preemptiveAuthorization);
             }
-        }
-    }
-
-    /**
-     * Reports the {@code Authorization} header HttpClient sent pre-emptively with the request, as it is
-     * not part of the request JMeter built. It is not added to that request, as HttpClient reads it
-     * again whenever it answers a challenge.
-     */
-    private static void reportPreemptiveAuthorization(HttpContext context, HTTPSampleResult result) {
-        String header = context == null ? null
-                : (String) context.getAttribute(CONTEXT_ATTRIBUTE_PREEMPTIVE_AUTHORIZATION);
-        if (header != null) {
-            result.setRequestHeaders(result.getRequestHeaders() + HttpHeaders.AUTHORIZATION + ": " + header + "\n");
-            result.setSentBytes(result.getSentBytes() + HTTPMessageSizes.headerLength(HttpHeaders.AUTHORIZATION, header));
         }
     }
 
@@ -1128,8 +1109,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private void updateResult(ClassicHttpResponse response,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request, HTTPSampleResult result) {
-        result.setRequestHeaders(getRequestHeaders(request));
-        result.setSentBytes(calculateSentBytes(request));
         int statusCode = response.getCode();
         result.setResponseCode(Integer.toString(statusCode));
         result.setResponseMessage(response.getReasonPhrase());
@@ -1182,76 +1161,6 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                 .append(response.getReasonPhrase()).append('\n');
         headers.append(formatHeaders(headersOf(response), name -> true));
         return headers.toString();
-    }
-
-    private static String getRequestHeaders(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
-        return formatHeaders(headersOf(request), ALL_EXCEPT_COOKIE);
-    }
-
-    private static long calculateSentBytes(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
-        if (request == null) {
-            return 0;
-        }
-        String uri = request.getRequestUri() != null ? request.getRequestUri() : "";
-        org.apache.hc.core5.http.ProtocolVersion version = request.getVersion();
-        String versionStr = version != null ? version.toString() : HTTPConstants.HTTP_1_1;
-        long sentBytes = HTTPMessageSizes.requestLineLength(request.getMethod(), uri, versionStr);
-
-        for (Header header : request.getHeaders()) {
-            sentBytes += HTTPMessageSizes.headerLength(header.getName(), header.getValue());
-        }
-        sentBytes += implicitHeaderLength(request);
-        sentBytes += HTTPMessageSizes.EMPTY_LINE;
-
-        HttpEntity entity = request.getEntity();
-        if (entity != null) {
-            long contentLength = entity.getContentLength();
-            if (contentLength >= 0) {
-                sentBytes += contentLength;
-            } else if (entity.isRepeatable()) {
-                CountingOutputStream counter = new CountingOutputStream(OutputStream.nullOutputStream());
-                try {
-                    entity.writeTo(counter);
-                    sentBytes += counter.getBytesWritten();
-                } catch (IOException e) {
-                    log.debug("Exception measuring entity length", e);
-                }
-            }
-        }
-
-        return sentBytes;
-    }
-
-    /**
-     * Length of the headers the protocol layer adds when it writes the request, so that they are
-     * accounted for although they are not part of the request object JMeter built.
-     */
-    private static long implicitHeaderLength(org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
-        long length = 0;
-        URIAuthority authority = request.getAuthority();
-        if (authority != null && !request.containsHeader(HttpHeaders.HOST)) {
-            length += HTTPMessageSizes.headerLength(HttpHeaders.HOST, authority.toString());
-        }
-        HttpEntity entity = request.getEntity();
-        if (entity == null) {
-            return length;
-        }
-        if (entity.getContentType() != null && !request.containsHeader(HttpHeaders.CONTENT_TYPE)) {
-            length += HTTPMessageSizes.headerLength(HttpHeaders.CONTENT_TYPE, entity.getContentType());
-        }
-        if (entity.getContentEncoding() != null && !request.containsHeader(HttpHeaders.CONTENT_ENCODING)) {
-            length += HTTPMessageSizes.headerLength(HttpHeaders.CONTENT_ENCODING, entity.getContentEncoding());
-        }
-        if (request.containsHeader(HttpHeaders.CONTENT_LENGTH) || request.containsHeader(HttpHeaders.TRANSFER_ENCODING)) {
-            return length;
-        }
-        long contentLength = entity.getContentLength();
-        if (contentLength >= 0) {
-            length += HTTPMessageSizes.headerLength(HttpHeaders.CONTENT_LENGTH, Long.toString(contentLength));
-        } else if (entity.isChunked()) {
-            length += HTTPMessageSizes.headerLength(HttpHeaders.TRANSFER_ENCODING, "chunked");
-        }
-        return length;
     }
 
     private static void saveConnectionCookies(ClassicHttpResponse response, URL url, CookieManager cookieManager) {
