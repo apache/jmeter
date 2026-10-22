@@ -29,18 +29,18 @@ if (buildParameters.enableErrorprone) {
     apply(plugin = "net.ltgt.errorprone")
 
     dependencies {
-        "errorprone"(platform("com.google.protobuf:protobuf-bom:4.33.5"))
-        "errorprone"("com.google.errorprone:error_prone_core:2.44.0")
+        "errorprone"(platform("com.google.protobuf:protobuf-bom:4.36.2"))
+        "errorprone"("com.google.errorprone:error_prone_core:2.50.0")
         "annotationProcessor"("com.google.guava:guava-beta-checker:1.0")
     }
 
     tasks.configureEach<JavaCompile> {
         if ("Test" in name) {
             // Ignore warnings in test code
-            options.errorprone.isEnabled.set(false)
+            options.errorprone.enabled.set(false)
         } else {
             // Errorprone requires Java 11+
-            options.errorprone.isEnabled.set(
+            options.errorprone.enabled.set(
                 javaCompiler.map { it.metadata.languageVersion.canCompileOrRun(11) }
             )
             options.compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
@@ -79,6 +79,12 @@ if (buildParameters.enableErrorprone) {
                     "MissingSummary",
                     "StringSplitter",
                     "BanJNDI",
+                    // Error Prone 2.50 reports ~100 hits, many of them intentional
+                    // identity comparisons of TestElements (see ListedHashTree)
+                    "ReferenceEquality",
+                    // Error Prone 2.50 reports ~77 charset-name APIs that should
+                    // use the Charset overloads
+                    "JdkObsolete",
                 )
             }
         }

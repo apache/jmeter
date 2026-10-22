@@ -281,7 +281,7 @@ public abstract class Logger
      *
      * @param subCategory the subcategory of this logger
      * @return the new logger
-     * @exception IllegalArgumentException if subCategory has an empty element name
+     * @throws IllegalArgumentException if subCategory has an empty element name
      */
     public abstract Logger getChildLogger( final String subCategory );
 }

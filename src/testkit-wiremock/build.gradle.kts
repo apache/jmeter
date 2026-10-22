@@ -22,7 +22,7 @@ plugins {
 
 dependencies {
     api(platform(projects.src.bomTesting))
-    api("org.wiremock:wiremock")
+    api("org.wiremock:wiremock-jetty12")
     api("org.junit.jupiter:junit-jupiter-api")
 }
 

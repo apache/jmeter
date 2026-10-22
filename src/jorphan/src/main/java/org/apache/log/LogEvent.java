@@ -190,7 +190,7 @@ public final class LogEvent
      * Helper method that replaces deserialized priority with correct singleton.
      *
      * @return the singleton version of object
-     * @exception ObjectStreamException if an error occurs
+     * @throws ObjectStreamException if an error occurs
      */
     private Object readResolve()
         throws ObjectStreamException

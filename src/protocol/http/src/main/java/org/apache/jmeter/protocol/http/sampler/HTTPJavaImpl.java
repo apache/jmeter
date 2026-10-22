@@ -85,7 +85,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *
      * @param conn
      *            <code>URLConnection</code> to set headers on
-     * @exception IOException
+     * @throws IOException
      *                if an I/O exception occurs
      */
     protected void setPostHeaders(URLConnection conn) throws IOException {
@@ -105,7 +105,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param connection
      *            <code>URLConnection</code> where POST data should be sent
      * @return a String show what was posted. Will not contain actual file upload content
-     * @exception IOException
+     * @throws IOException
      *                if an I/O exception occurs
      */
     protected String sendPostData(URLConnection connection) throws IOException {
@@ -130,7 +130,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param res
      *            sample result to save request infos to
      * @return <code>HttpURLConnection</code> ready for .connect
-     * @exception IOException
+     * @throws IOException
      *                if an I/O Exception occurs
      */
     protected HttpURLConnection setupConnection(URL u, String method, HTTPSampleResult res) throws IOException {
@@ -224,7 +224,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param res
      *            {@link SampleResult} to read response into
      * @return response content
-     * @exception IOException
+     * @throws IOException
      *                if an I/O exception occurs
      */
     protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {

@@ -7,7 +7,7 @@
     "convert:properties": "node tools/convert-properties.js"
   },
   "dependencies": {
-    "@fontsource/merriweather": "^5.1.0",
-    "@fortawesome/fontawesome-free": "^7.0.0"
+    "@fontsource/merriweather": "^5.3.0",
+    "@fortawesome/fontawesome-free": "^7.3.1"
   }
 }

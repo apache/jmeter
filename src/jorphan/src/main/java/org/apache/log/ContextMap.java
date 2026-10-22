@@ -219,18 +219,6 @@ public final class ContextMap
     }
 
     /**
-     * Retrieve keys of entries into context map.
-     *
-     * @return the keys of items in context
-     */
-    /*
-    public String[] getKeys()
-    {
-        return (String[])m_map.keySet().toArray( new String[ 0 ] );
-    }
-    */
-
-    /**
      * Get the number of contexts in map.
      *
      * @return the number of contexts in map

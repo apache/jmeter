@@ -17,14 +17,14 @@
 
 pluginManagement {
     plugins {
-        id("com.github.vlsi.stage-vote-release") version "3.0.1"
+        id("com.github.vlsi.stage-vote-release") version "3.0.2"
         id("com.github.node-gradle.node") version "7.1.0"
     }
 }
 
 plugins {
-    id("com.gradle.develocity") version "4.2.2"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.4.0"
+    id("com.gradle.develocity") version "4.6.0"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.8.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
@@ -141,7 +141,7 @@ develocity {
 buildscript {
     dependencies {
         // Remove when Autostyle updates jgit dependency
-        classpath("org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:7.8.0.202609011348-r")
     }
     repositories {
         gradlePluginPortal()
