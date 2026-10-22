@@ -289,9 +289,9 @@ public final class MenuFactory {
         }
 
         addSeparator(menu);
-        menu.add(makeMenuItemRes("open", ActionNames.OPEN));// $NON-NLS-1$
-        menu.add(makeMenuItemRes("menu_merge", ActionNames.MERGE));// $NON-NLS-1$
-        menu.add(makeMenuItemRes("save_as", ActionNames.SAVE_AS));// $NON-NLS-1$
+        // Note: Open and Merge are intentionally omitted here; they are file-level
+        // actions that already appear in the File menu bar and must not be duplicated
+        // in the node right-click / Edit menu (see GitHub issue #6633).
         if(addSaveTestFragmentMenu) {
             menu.add(makeMenuItemRes("save_as_test_fragment", // $NON-NLS-1$
                     ActionNames.SAVE_AS_TEST_FRAGMENT));
