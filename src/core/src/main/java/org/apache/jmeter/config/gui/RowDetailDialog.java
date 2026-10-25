@@ -243,7 +243,8 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
      * @param selectedRow Selected row
      */
     private void setValues(int selectedRow) {
-        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+        int columnCount = tableModel.getColumnCount();
+        for (int i = 0; i < columnCount; i++) {
             final JComponent component = dataComponents.get(i);
             if (component instanceof JTextComponent dataArea) {
                 dataArea.setText((String) tableModel.getValueAt(selectedRow, i));
@@ -262,7 +263,8 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
      * @param actionEvent the event that led to this call
      */
     protected void doUpdate(ActionEvent actionEvent) {
-        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+        int columnCount = tableModel.getColumnCount();
+        for (int i = 0; i < columnCount; i++) {
             final JComponent component = dataComponents.get(i);
             if (component instanceof JTextComponent jTextComponent) {
                 tableModel.setValueAt(jTextComponent.getText(), selectedRow, i);
