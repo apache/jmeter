@@ -198,6 +198,10 @@ public class ForeachController extends GenericController implements Serializable
     // Prevent entry if nothing to do
     @Override
     public Sampler next() {
+        int startIndex = getStartIndex();
+        if (loopCount < startIndex) {
+            loopCount = startIndex;
+        }
         updateIterationIndex(getName(), loopCount);
         try {
             if (breakLoop || emptyList()) {
