@@ -24,7 +24,7 @@
         </elementProp>
         <longProp name="ThreadGroup.end_time">1172922900000</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">10</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">20</stringProp>
         <stringProp name="TestPlan.comments">N.B. The ramp-up period is set so that the first thread will finish before the second.
 This is to ensure the test output is predictable, whilst still allowing testing of unshared counter etc</stringProp>
       </ThreadGroup>
@@ -316,7 +316,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <bytes>true</bytes>
                 <url>true</url>
                 <fileName>true</fileName>
-                <threadCounts>true</threadCounts>
+                <threadCounts>false</threadCounts>
                 <sampleCount>true</sampleCount>
               </value>
             </objProp>
@@ -352,7 +352,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <bytes>true</bytes>
                 <url>true</url>
                 <fileName>true</fileName>
-                <threadCounts>true</threadCounts>
+                <threadCounts>false</threadCounts>
                 <sampleCount>true</sampleCount>
               </value>
             </objProp>
@@ -793,7 +793,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <assertionsResultsToSave>0</assertionsResultsToSave>
               <bytes>true</bytes>
               <url>true</url>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -829,7 +829,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -865,7 +865,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -1181,7 +1181,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -1525,7 +1525,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -1561,7 +1561,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -1748,7 +1748,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -1784,7 +1784,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -1884,7 +1884,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -1920,7 +1920,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -2031,7 +2031,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -2067,7 +2067,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -2128,7 +2128,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -2164,7 +2164,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -2263,7 +2263,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
@@ -2299,7 +2299,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <bytes>true</bytes>
               <url>true</url>
               <fileName>true</fileName>
-              <threadCounts>true</threadCounts>
+              <threadCounts>false</threadCounts>
               <sampleCount>true</sampleCount>
             </value>
           </objProp>
