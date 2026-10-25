@@ -31,4 +31,10 @@ class CollectionPropertyTest {
             "CollectionProperty should contain the same elements as in the input"
         )
     }
+
+    @Test
+    fun `preserves integer element type`() {
+        val prop = CollectionProperty("property_name", listOf(1))
+        Assertions.assertEquals(IntegerProperty::class.java, prop.get(0).javaClass)
+    }
 }
