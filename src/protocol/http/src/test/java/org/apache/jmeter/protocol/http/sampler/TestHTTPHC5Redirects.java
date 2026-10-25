@@ -200,6 +200,8 @@ class TestHTTPHC5Redirects {
             HeaderManager headerManager = new HeaderManager();
             headerManager.add(new Header("X-Custom", "value1"));
             headerManager.add(new Header("Accept", "application/json"));
+            headerManager.add(new Header("X-Foo", "first"));
+            headerManager.add(new Header("x-foo", "second"));
             HTTPSamplerBase sampler = newSampler(httpVersion);
             sampler.setHeaderManager(headerManager);
 
@@ -211,6 +213,8 @@ class TestHTTPHC5Redirects {
                     "Header Manager X-Custom header must survive a POST → 302 → GET redirect");
             assertEquals("application/json", home.getHeader("Accept"),
                     "Header Manager Accept header must survive a POST → 302 → GET redirect");
+            assertEquals(List.of("first", "second"), home.getHeaders().getHeader("X-Foo").values(),
+                    "all Header Manager values of the same name must survive a POST → 302 → GET redirect");
         } finally {
             server.stop();
         }

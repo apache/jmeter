@@ -21,8 +21,10 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
 import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
@@ -182,8 +184,12 @@ final class AutoRedirectStrategy extends DefaultRedirectStrategy {
             // For method-changing redirects (301/302 after POST, 303 after non-GET), HttpClient
             // builds a GET with no headers, losing the Header Manager headers the initial request
             // carried. Re-apply them so that Accept, User-Agent, and custom headers survive.
+            Set<String> present = new HashSet<>();
+            for (Header header : request.getHeaders()) {
+                present.add(header.getName().toLowerCase(Locale.ROOT));
+            }
             for (String[] header : headerManagerGeneral) {
-                if (request.containsHeader(header[0])) {
+                if (present.contains(header[0].toLowerCase(Locale.ROOT))) {
                     continue;
                 }
                 // Host is specific to the sampled origin. Let HttpClient generate it for another origin.
