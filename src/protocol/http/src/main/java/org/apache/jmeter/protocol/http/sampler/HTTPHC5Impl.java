@@ -192,8 +192,9 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
      * connection between a sample and its embedded resources, which lets HTTP/2 multiplex them, and
      * it keeps a JMeter thread from closing clients another one is still using.
      *
-     * <p>The clients go away with the context, so the ones of a context which never closes them
-     * explicitly, like the one of a thread of the HTTP(S) Test Script Recorder, are not kept forever.
+     * <p>The clients are closed when their owning JMeter thread finishes. This explicit cleanup is
+     * important for HTTP/2: its I/O threads share the context, so they can keep the context and its
+     * clients reachable until {@link #closeClientsOfCurrentThread()} closes them.
      */
     private static final String THREAD_STATE_CLIENTS = "__jmeter.HC5_CLIENTS__"; //$NON-NLS-1$
 
