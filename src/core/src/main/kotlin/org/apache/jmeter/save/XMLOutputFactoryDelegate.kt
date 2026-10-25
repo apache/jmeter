@@ -19,7 +19,10 @@ package org.apache.jmeter.save
 
 import com.sun.xml.txw2.output.IndentingXMLStreamWriter
 import java.io.OutputStream
+import java.io.OutputStreamWriter
 import java.io.Writer
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import javax.xml.stream.XMLEventWriter
 import javax.xml.stream.XMLOutputFactory
 import javax.xml.stream.XMLStreamWriter
@@ -46,9 +49,12 @@ public class XMLOutputFactoryDelegate(
     // Methods that wrap with XMLStreamWriterSkipHeader
 
     private fun XMLStreamWriter.applyXmlStreamWriterConfiguration(): XMLStreamWriter {
-        var result = this
+        // Shield illegal characters before indentation, so both text and
+        // attributes are rewritten. The filter sits under Woodstox and emits
+        // the character reference.
+        var result: XMLStreamWriter = XmlCharRefStreamWriter(this)
         if (indent) {
-            result = IndentingXMLStreamWriter(this)
+            result = IndentingXMLStreamWriter(result)
         }
         if (!xmlHeader) {
             result = XMLStreamWriterSkipHeader(result)
@@ -57,18 +63,27 @@ public class XMLOutputFactoryDelegate(
     }
 
     override fun createXMLStreamWriter(stream: Writer): XMLStreamWriter {
-        return delegate.createXMLStreamWriter(stream).applyXmlStreamWriterConfiguration()
+        return delegate.createXMLStreamWriter(XmlCharRefFilterWriter(stream))
+            .applyXmlStreamWriterConfiguration()
     }
 
     override fun createXMLStreamWriter(stream: OutputStream): XMLStreamWriter {
-        return delegate.createXMLStreamWriter(stream).applyXmlStreamWriterConfiguration()
+        return createXMLStreamWriter(OutputStreamWriter(stream, StandardCharsets.UTF_8))
     }
 
     override fun createXMLStreamWriter(
         stream: OutputStream,
         encoding: String?
     ): XMLStreamWriter {
-        return delegate.createXMLStreamWriter(stream, encoding).applyXmlStreamWriterConfiguration()
+        val charset = charsetOrUtf8(encoding)
+        return createXMLStreamWriter(OutputStreamWriter(stream, charset))
+    }
+
+    private fun charsetOrUtf8(encoding: String?): Charset {
+        if (encoding.isNullOrEmpty()) {
+            return StandardCharsets.UTF_8
+        }
+        return Charset.forName(encoding)
     }
 
     override fun createXMLStreamWriter(result: Result): XMLStreamWriter {
