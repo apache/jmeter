@@ -53,7 +53,8 @@ However, it might be useful to perform a "clean" build:
       # Expected checksums are stored in /checksum.properties file
       # Actual checksums are stored in /build/checksum/computed.checksum.properties
 
-      # Update expected dependencies after updating a dependency version
+      # Update src/dist/src/dist/expected_release_artifacts.txt after adding or removing a dependency,
+      # or when the release outgrows total-size-limit. A version update that keeps the same modules needs no change
       gw -PupdateExpectedJars check
 
 ## Static checks
