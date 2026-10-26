@@ -28,8 +28,8 @@ javaPlatform {
 dependencies {
     api(platform("org.junit:junit-bom:6.1.3"))
     api(platform("org.springframework:spring-framework-bom:7.0.9"))
-    api(platform("org.eclipse.jetty:jetty-bom:12.1.13"))
-    api(platform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.13"))
+    api(platform("org.eclipse.jetty:jetty-bom:12.1.14"))
+    api(platform("org.eclipse.jetty.ee10:jetty-ee10-bom:12.1.14"))
 
     constraints {
         // api means "the dependency is for both compilation and runtime"
