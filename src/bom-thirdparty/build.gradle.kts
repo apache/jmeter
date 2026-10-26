@@ -119,7 +119,7 @@ dependencies {
         api("org.apache.rat:apache-rat:0.18")
         api("org.apache.tika:tika-core:4.1.0")
         api("org.apache.velocity:velocity:1.7")
-        api("org.apache.xmlgraphics:xmlgraphics-commons:2.11")
+        api("org.apache.xmlgraphics:xmlgraphics-commons:2.12")
         api("org.apiguardian:apiguardian-api:1.1.2")
         api("org.bouncycastle:bcmail-jdk18on:1.86")
         api("org.bouncycastle:bcpkix-jdk18on:1.86")
