@@ -40,6 +40,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.TextBoxDialoger.TextBoxDoubleClick;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
+import org.apache.jmeter.protocol.http.curl.CurlCommandFormatter;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -216,7 +217,7 @@ public class RequestViewHTTP implements RequestView {
 
                 if (isMultipart && StringUtilities.isNotBlank(queryPost)) {
                     String contentType = lhm.get(HTTPConstants.HEADER_CONTENT_TYPE);
-                    String boundaryString = extractBoundary(contentType);
+                    String boundaryString = CurlCommandFormatter.extractBoundary(contentType);
                     MultipartUrlConfig urlconfig = new MultipartUrlConfig(boundaryString);
                     urlconfig.parseArguments(queryPost);
 
@@ -241,22 +242,6 @@ public class RequestViewHTTP implements RequestView {
             requestModel.addRow(new RowResult("", //$NON-NLS-1$
                     JMeterUtils.getResString("view_results_table_request_http_nohttp"))); //$NON-NLS-1$
         }
-    }
-
-    /**
-     * Extract the multipart boundary
-     * @param contentType the content type header
-     * @return  the boundary string
-     */
-    private static String extractBoundary(String contentType) {
-        // Get the boundary string for the multiparts from the content type
-        String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());
-        //TODO check in the RFC if other char can be used as separator
-        String[] split = boundaryString.split(";");
-        if(split.length > 1) {
-            boundaryString = split[0];
-        }
-        return boundaryString;
     }
 
     /**

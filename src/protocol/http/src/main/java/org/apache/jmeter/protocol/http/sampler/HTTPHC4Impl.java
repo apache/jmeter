@@ -1494,7 +1494,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // Helper class so we can generate request data without dumping entire file contents
     private static class ViewableFileBody extends FileBody {
         private static final byte[] CONTENTS_OMITTED =
-                "<actual file content, not shown here>".getBytes(StandardCharsets.UTF_8);
+                PostWriter.FILE_CONTENT_PLACEHOLDER.getBytes(StandardCharsets.UTF_8);
         private boolean hideFileData;
 
         private ViewableFileBody(File file, ContentType contentType, Charset charset) {
@@ -1619,7 +1619,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 entityEnclosingRequest.setEntity(fileRequestEntity);
 
                 // We just add placeholder text for file content
-                postedBody.append("<actual file content, not shown here>");
+                postedBody.append(PostWriter.FILE_CONTENT_PLACEHOLDER);
             } else {
                 // In a post request which is not multipart, we only support
                 // parameters, no file upload is allowed
@@ -1693,7 +1693,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     : contentEncoding));
             bos.close();
         } else {
-            postedBody.append("<Entity was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
+            postedBody.append(PostWriter.NON_REPEATABLE_ENTITY_PLACEHOLDER);
         }
     }
 
