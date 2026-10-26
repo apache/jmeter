@@ -23,7 +23,6 @@ import com.github.vlsi.gradle.git.FindGitAttributes
 import com.github.vlsi.gradle.git.dsl.gitignore
 import com.github.vlsi.gradle.properties.dsl.props
 import org.gradle.api.internal.TaskOutputsInternal
-import kotlin.math.absoluteValue
 
 plugins {
     id("build-logic.build-params")
@@ -179,97 +178,132 @@ val populateLibs by tasks.registering {
     }
 }
 
-val updateExpectedJars by props(default = gradle.startParameter.writeDependencyVerifications.isNotEmpty())
+val updateExpectedJars by props()
+
+// -PupdateExpectedJars sets total-size-limit to the current total size plus this headroom,
+// so a dependency update can grow the release a little without touching the expected file.
+val releaseJarsSizeHeadroom = 5L * 1024 * 1024
 
 val verifyReleaseDependencies by tasks.registering {
-    description = "Verifies if binary release archive contains the expected set of external jars"
+    description = "Verifies the set of external modules and the total size of external jars in the binary release"
     group = LifecycleBasePlugin.VERIFICATION_GROUP
 
-    dependsOn(configurations.runtimeClasspath)
-    val expectedLibs = file("src/dist/expected_release_jars.csv")
-    inputs.file(expectedLibs)
+    val expectedFile = file("src/dist/expected_release_artifacts.txt")
+    val projectPath = project.path
+    inputs.file(expectedFile)
+    inputs.files(configurations.runtimeClasspath)
     inputs.property("updateExpectedJars", updateExpectedJars)
-    val actualLibs = layout.buildDirectory.file("dist/expected_release_jars.csv")
-    outputs.file(actualLibs)
-    val ignoreJarsMismatch = version.toString().endsWith("-SNAPSHOT")
-    if (ignoreJarsMismatch || updateExpectedJars) {
-        // The task does not fail in case of -SNAPSHOT version, so we make the task never UP-TO-DATE
-        // in that case. Otherwise, the task never executes on the second request, even if the user runs with
-        // -PupdateExpectedJars
+    val actualJars = layout.buildDirectory.file("dist/release_jars.csv")
+    outputs.file(actualJars)
+    if (updateExpectedJars) {
+        // Otherwise the update does nothing when the previous run passed with the same inputs
         outputs.upToDateWhen { false }
     }
     doLast {
-        val caseInsensitive: Comparator<String> = compareBy(String.CASE_INSENSITIVE_ORDER, { it })
+        val caseInsensitive = String.CASE_INSENSITIVE_ORDER.thenBy { it }
+        val expectedPath = expectedFile.relativeTo(rootDir)
+        val actualFile = actualJars.get().asFile
+        val actualPath = actualFile.relativeTo(rootDir)
 
-        val deps = configurations.runtimeClasspath.get().resolvedConfiguration.resolvedArtifacts
-        val libs = deps.asSequence()
-            .filter {
-                val compId = it.id.componentIdentifier
-                compId !is ProjectComponentIdentifier
+        val artifacts = configurations.runtimeClasspath.get().resolvedConfiguration.resolvedArtifacts
+            .filter { it.id.componentIdentifier !is ProjectComponentIdentifier }
+        val jarsByModule = artifacts
+            .groupBy {
+                // Coordinates without the version, so a version update keeps the expected file intact
+                val id = it.id.componentIdentifier as? ModuleComponentIdentifier
+                    ?: throw GradleException("${it.file.name} in runtimeClasspath comes from ${it.id.componentIdentifier.displayName}, but only modules from a repository and JMeter projects are expected")
+                buildString {
+                    append(id.moduleIdentifier)
+                    it.classifier?.let { classifier -> append(':').append(classifier) }
+                    if (it.extension != "jar") {
+                        append('@').append(it.extension)
+                    }
+                }
             }
-            .map { it.file.name to it.file.length() }
-            .sortedWith(compareBy(caseInsensitive) { it.first })
-            .associate { it }
+            .toSortedMap(caseInsensitive)
+        val totalSize = artifacts.sumOf { it.file.length() }
 
-        val expected = expectedLibs.readLines().asSequence()
-            .filter { "," in it }
-            .map {
-                val (length, name) = it.split(",", limit = 2)
-                name to length.toLong()
-            }
-            .associate { it }
+        actualFile.writeText(
+            artifacts.sortedWith(compareBy(caseInsensitive) { it.file.name })
+                .joinToString("\n", postfix = "\n") { "${it.file.length()},${it.file.name}" }
+        )
 
-        if (libs == expected) {
+        // The expected file lists modules, not jars, so a second jar of a listed module would go unnoticed
+        val ambiguous = jarsByModule.filterValues { it.size > 1 }
+        if (ambiguous.isNotEmpty()) {
+            throw GradleException(
+                "Each module in $expectedPath must resolve to a single jar, but these resolve to several: " +
+                    ambiguous.entries.joinToString("; ") { (module, files) -> "$module (${files.joinToString { it.file.name }})" }
+            )
+        }
+
+        val sizeLimitPrefix = "total-size-limit="
+        val expectedLines = expectedFile.readLines()
+            .map { it.trim() }
+            .filter { it.isNotEmpty() && !it.startsWith("#") }
+        val existingSizeLimit = expectedLines.singleOrNull { it.startsWith(sizeLimitPrefix) }
+            ?.removePrefix(sizeLimitPrefix)?.toLongOrNull()
+
+        val mib = 1024L * 1024
+        if (updateExpectedJars) {
+            val sizeLimit = (totalSize + releaseJarsSizeHeadroom + mib - 1) / mib * mib
+            println("Updating $expectedPath")
+            expectedFile.writeText(
+                listOf(
+                    "# External modules in the binary release, and the upper bound for the total size of their jars in bytes.",
+                    "# $path fails when a module is added or removed, or when the jars outgrow total-size-limit.",
+                    "# Regenerate this file with ./gradlew $path -PupdateExpectedJars",
+                    "# The regenerated limit is the current total size plus ${releaseJarsSizeHeadroom / mib} MiB, rounded up to a whole MiB.",
+                    "$sizeLimitPrefix$sizeLimit",
+                ).plus(jarsByModule.keys).joinToString("\n", postfix = "\n")
+            )
             return@doLast
         }
 
-        val sb = StringBuilder()
-        sb.append("External dependencies differ (you could update ${expectedLibs.relativeTo(rootDir)} if you run $path -PupdateExpectedJars):")
+        val sizeLimit = existingSizeLimit
+            ?: throw GradleException("$expectedPath must have exactly one $sizeLimitPrefix<bytes> line")
+        val expectedModules = expectedLines.filterNot { it.startsWith(sizeLimitPrefix) }.toSet()
 
-        val sizeBefore = expected.values.sum()
-        val sizeAfter = libs.values.sum()
-        if (sizeBefore != sizeAfter) {
-            sb.append("\n  $sizeBefore => $sizeAfter bytes")
-            sb.append(" (${if (sizeAfter > sizeBefore) "+" else "-"}${(sizeAfter - sizeBefore).absoluteValue} byte")
-            if ((sizeAfter - sizeBefore).absoluteValue > 1) {
-                sb.append("s")
-            }
-            sb.append(")")
+        val added = jarsByModule.keys - expectedModules
+        val removed = expectedModules.sortedWith(caseInsensitive) - jarsByModule.keys
+        if (added.isEmpty() && removed.isEmpty() && totalSize <= sizeLimit) {
+            return@doLast
         }
-        if (libs.size != expected.size) {
-            sb.append("\n  ${expected.size} => ${libs.size} files")
-            sb.append(" (${if (libs.size > expected.size) "+" else "-"}${(libs.size - expected.size).absoluteValue})")
-        }
-        sb.appendLine()
-        for (dep in (libs.keys + expected.keys).sortedWith(caseInsensitive)) {
-            val old = expected[dep]
-            val new = libs[dep]
-            if (old == new) {
-                continue
+
+        throw GradleException(
+            buildString {
+                append("The external jars of the binary release do not match $expectedPath.")
+                append(" The check catches dependencies that enter the release unnoticed, often transitively, and unexpected growth of the release.")
+                if (added.isNotEmpty()) {
+                    append("\n\nModules that are in the release but not in $expectedPath:")
+                    for (module in added) {
+                        val file = jarsByModule.getValue(module).single().file
+                        append("\n  + $module (${file.name}, ${file.length()} bytes)")
+                    }
+                    append("\nTo see which dependency brings a module in, run")
+                    append(" ./gradlew $projectPath:dependencyInsight --configuration runtimeClasspath --dependency <group:artifact>")
+                }
+                if (removed.isNotEmpty()) {
+                    append("\n\nModules that are in $expectedPath but no longer in the release:")
+                    for (module in removed) {
+                        append("\n  - $module")
+                    }
+                }
+                if (totalSize > sizeLimit) {
+                    append("\n\nThe total size of external jars is $totalSize bytes (${totalSize / mib} MiB),")
+                    append(" which exceeds $sizeLimitPrefix$sizeLimit (${sizeLimit / mib} MiB) in $expectedPath by ${totalSize - sizeLimit} bytes.")
+                    append("\nTo find which jars grew, compare $actualPath with the same file built from the base branch. The largest jars now:")
+                    for (jar in artifacts.sortedByDescending { it.file.length() }.take(10)) {
+                        append("\n  ${jar.file.length().toString().padStart(9)} ${jar.file.name}")
+                    }
+                }
+                append("\n\nIf the change is intended, run ./gradlew $path -PupdateExpectedJars and commit $expectedPath.")
+                append(" The update lists the current modules and sets total-size-limit to the current size plus ${releaseJarsSizeHeadroom / mib} MiB.")
+                append(" Name the added or removed modules and the size growth in the pull request description, with the dependency update that caused them.")
+                append("\nIf the change is not intended, exclude the module or revert the dependency update that brought it in.")
+                append("\nThe full list of jars with their sizes is in $actualPath")
             }
-            sb.append("\n")
-            if (old != null) {
-                sb.append("-").append(old.toString().padStart(8))
-            } else {
-                sb.append("+").append(new.toString().padStart(8))
-            }
-            sb.append(" ").append(dep)
-        }
-        val newline = System.getProperty("line.separator")
-        val actualLibsFile = actualLibs.get().asFile
-        actualLibsFile.writeText(
-            libs.map { "${it.value},${it.key}" }.joinToString(newline, postfix = newline)
         )
-        if (updateExpectedJars) {
-            println("Updating ${expectedLibs.relativeTo(rootDir)}")
-            actualLibsFile.copyTo(expectedLibs, overwrite = true)
-        } else if (ignoreJarsMismatch) {
-            // Renovate requires self-hosted runner for executing postUpgradeTasks,
-            // so we can't make Renovate to update expected_release_jars.csv at the moment
-            logger.lifecycle(sb.toString())
-        } else {
-            throw GradleException(sb.toString())
-        }
     }
 }
 
