@@ -59,10 +59,13 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
         DEFAULT_ARGS.put("influxdbUrl", "http://host_to_change:8086/write?db=jmeter");
         DEFAULT_ARGS.put("influxdbToken", "");
         DEFAULT_ARGS.put("measurement", DEFAULT_MEASUREMENT);
+        DEFAULT_ARGS.put("enabled", "${__P(InfluxdbBackendListener.enabled, true)}");
     }
 
     private InfluxdbMetricsSender influxDBMetricsManager;
     private String measurement;
+
+    private boolean listenerIsEnabled;
 
     public InfluxDBRawBackendListenerClient() {
         // default constructor
@@ -89,45 +92,49 @@ public class InfluxDBRawBackendListenerClient implements BackendListenerClient {
 
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
-        initInfluxDBMetricsManager(context);
-        measurement = context.getParameter("measurement", DEFAULT_MEASUREMENT);
+        listenerIsEnabled = Boolean.parseBoolean(context.getParameter("enabled", "true"));
+        log.info("{} will send metrics: {}", this.getClass().getSimpleName(), listenerIsEnabled);
+
+        if (listenerIsEnabled) {
+            influxDBMetricsManager = Class
+                    .forName(context.getParameter("influxdbMetricsSender"))
+                    .asSubclass(InfluxdbMetricsSender.class)
+                    .getDeclaredConstructor()
+                    .newInstance();
+
+            influxDBMetricsManager.setup(
+                    context.getParameter("influxdbUrl"),
+                    context.getParameter("influxdbToken"));
+
+            measurement = context.getParameter("measurement", DEFAULT_MEASUREMENT);
+        }
     }
 
-    private void initInfluxDBMetricsManager(BackendListenerContext context) throws Exception {
-        influxDBMetricsManager = Class
-                .forName(context.getParameter("influxdbMetricsSender"))
-                .asSubclass(InfluxdbMetricsSender.class)
-                .getDeclaredConstructor()
-                .newInstance();
-
-        influxDBMetricsManager.setup(
-                context.getParameter("influxdbUrl"),
-                context.getParameter("influxdbToken"));
-    }
 
     @Override
     public void teardownTest(BackendListenerContext context) {
-        influxDBMetricsManager.destroy();
+        if (influxDBMetricsManager != null) {
+            influxDBMetricsManager.destroy();
+        }
     }
 
     @Override
-    public void handleSampleResults(
-            List<SampleResult> sampleResults, BackendListenerContext context) {
-        log.debug("Handling {} sample results", sampleResults.size());
-        synchronized (LOCK) {
-            for (SampleResult sampleResult : sampleResults) {
-                addMetricFromSampleResult(sampleResult);
+    public void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context) {
+        if (listenerIsEnabled) {
+            log.debug("Handling {} sample results", sampleResults.size());
+            synchronized (LOCK) {
+                for (SampleResult sampleResult : sampleResults) {
+                    addMetricFromSampleResult(sampleResult);
+                }
+                influxDBMetricsManager.writeAndSendMetrics();
             }
-            influxDBMetricsManager.writeAndSendMetrics();
         }
     }
 
     private void addMetricFromSampleResult(SampleResult sampleResult) {
         String tags = "," + createTags(sampleResult);
         String fields = createFields(sampleResult);
-        long timestamp = sampleResult.getTimeStamp();
-
-        influxDBMetricsManager.addMetric(measurement, tags, fields, timestamp);
+        influxDBMetricsManager.addMetric(measurement, tags, fields, sampleResult.getTimeStamp());
     }
 
     @VisibleForTesting
