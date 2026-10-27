@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,7 @@ public class TestDecompression {
                             )
             );
 
-            HTTPSampleResult res = http.sample(new URL(server.url("/gzip")), "GET", false, 1);
+            HTTPSampleResult res = http.sample(URI.create(server.url("/gzip")).toURL(), "GET", false, 1);
 
             Assertions.assertAll(
                     () -> assertEquals(expectedResponse, res.getResponseDataAsString(), "response body"),

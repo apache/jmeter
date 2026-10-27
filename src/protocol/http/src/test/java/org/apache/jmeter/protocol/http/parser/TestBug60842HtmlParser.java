@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.http.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -109,7 +110,7 @@ class TestBug60842HtmlParser {
         final ArrayList<URLString> c = new ArrayList<>();
         parser.getEmbeddedResourceURLs("Mozilla",
                 html.getBytes(StandardCharsets.UTF_8),
-                new URL("http://example.org"), new URLCollection(c),
+                URI.create("http://example.org").toURL(), new URLCollection(c),
                 StandardCharsets.UTF_8.name());
         List<String> urlNames = c.stream().map(u -> u.toString())
                 .collect(Collectors.toList());

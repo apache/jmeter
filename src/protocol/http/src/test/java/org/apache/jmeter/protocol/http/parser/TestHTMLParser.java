@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -318,7 +319,7 @@ public class TestHTMLParser extends JMeterTestCase {
     }
 
 
-    @SuppressWarnings("URLEqualsHashCode")
+    @SuppressWarnings({"URLEqualsHashCode", "deprecation"})
     private static void filetest(HTMLParser p, String file, String url, String resultFile, Collection<URLString> c,
             boolean orderMatters, // Does the order matter?
             String userAgent)
@@ -327,11 +328,12 @@ public class TestHTMLParser extends JMeterTestCase {
         String fname = file.substring(file.indexOf('/')+1);
         log.debug("file   {}", file);
         byte[] buffer = getInputStream(file).readAllBytes();
+        URL baseUrl = new URL(url);
         Iterator<URL> result;
         if (c == null) {
-            result = p.getEmbeddedResourceURLs(userAgent, buffer, new URL(url), System.getProperty("file.encoding"));
+            result = p.getEmbeddedResourceURLs(userAgent, buffer, baseUrl, System.getProperty("file.encoding"));
         } else {
-            result = p.getEmbeddedResourceURLs(userAgent, buffer, new URL(url), c,System.getProperty("file.encoding"));
+            result = p.getEmbeddedResourceURLs(userAgent, buffer, baseUrl, c,System.getProperty("file.encoding"));
         }
         List<String> actual = Lists.newArrayList(Iterators.transform(result, Object::toString));
         // TODO: Exact ordering is only required for some tests; change the

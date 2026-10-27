@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -55,7 +56,7 @@ public class ResponseAssertionTest {
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(sample);
         sample.setResponseData("response Data\nline 2\n\nEOF", null);
-        sample.setURL(new URL("http://localhost/Sampler/Data/"));
+        sample.setURL(URI.create("http://localhost/Sampler/Data/").toURL());
         sample.setResponseCode("401");
         sample.setResponseHeaders("X-Header: abcd");
         sample.setRequestHeaders("X-reqHeader: cdef");

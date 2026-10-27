@@ -30,11 +30,11 @@ import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -92,19 +92,17 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     /** Whether to call System.exit(0) unconditionally at end of non-GUI test */
     private static final boolean SYSTEM_EXIT_FORCED = JMeterUtils.getPropDefault("jmeterengine.force.system.exit", false);
 
-    private static final AtomicInteger THREAD_COUNTER = new AtomicInteger(0);
-
     /**
      * Executor service to execute management tasks like "start test", "stop test".
-     * The use of {@link ExecutorService} allows propagating the exception from the threads.
-     * Thread keepalive time is set to 1 second, so threads are released early,
-     * so the application can shut down faster.
+     * Uses platform threads to keep the JVM alive while tests run
+     * (virtual threads are daemon threads and would allow premature JVM exit).
      */
     private static final ExecutorService EXECUTOR_SERVICE =
-            new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-                    1L, TimeUnit.SECONDS,
-                    new java.util.concurrent.SynchronousQueue<>(),
-                    (runnable) -> new Thread(runnable, "StandardJMeterEngine-" + THREAD_COUNTER.incrementAndGet()));
+            Executors.newThreadPerTaskExecutor(
+                    Thread.ofPlatform().name("StandardJMeterEngine-", 1).factory());
+
+    private static final ReentrantLock REGISTER_LOCK = new ReentrantLock();
+    private final ReentrantLock stopTestLock = new ReentrantLock();
 
     private volatile Future<?> runningTest;
 
@@ -156,8 +154,13 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    public static synchronized void register(TestStateListener tl) {
-        testList.add(tl);
+    public static void register(TestStateListener tl) {
+        REGISTER_LOCK.lock();
+        try {
+            testList.add(tl);
+        } finally {
+            REGISTER_LOCK.unlock();
+        }
     }
 
     public static boolean stopThread(String threadName) {
@@ -296,14 +299,19 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
      * Stop Test Now
      */
     @Override
-    public synchronized void stopTest() {
+    public void stopTest() {
         stopTest(true);
     }
 
     @Override
     @SuppressWarnings("FutureReturnValueIgnored")
-    public synchronized void stopTest(boolean now) {
-        EXECUTOR_SERVICE.submit(new StopTest(now));
+    public void stopTest(boolean now) {
+        stopTestLock.lock();
+        try {
+            EXECUTOR_SERVICE.submit(new StopTest(now));
+        } finally {
+            stopTestLock.unlock();
+        }
     }
 
     private class StopTest implements Runnable {

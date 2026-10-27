@@ -388,7 +388,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     @Override
     public String getDocAnchor() {
         // Ensure we use default bundle
-        String label =  JMeterUtils.getResString(getLabelResource(), new Locale("",""));
+        String label =  JMeterUtils.getResString(getLabelResource(), Locale.ROOT);
         return label.replace(' ', '_');
     }
 
