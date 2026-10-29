@@ -141,7 +141,8 @@ Latency is set to the time it takes to login.
           <dl>
             <dt><code>Java</code></dt><dd>uses the HTTP implementation provided by the JVM.
             This has some limitations in comparison with the HttpClient implementations - see below.</dd>
-            <dt><code>HTTPClient4</code></dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
+            <dt><code>HttpClient4</code></dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
+            <dt><code>HttpClient5</code></dt><dd>uses Apache HttpComponents HttpClient 5.x.</dd>
             <dt>Blank Value</dt><dd>does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on <code>jmeter.httpsampler</code> property defined in <code>jmeter.properties</code></dd>
           </dl>
         </dd>
@@ -213,7 +214,7 @@ https.default.protocol=SSLv3
         <a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
         for additional configuration steps.</p>
 </description>
-<figure width="951" height="548" image="http-request-advanced-tab.png">HTTP Request Advanced config fields</figure>
+<figure width="950" height="391" image="http-request-advanced-tab.png">HTTP Request Advanced config fields</figure>
 <figure width="950" height="618" image="graphql-http-request.png">Screenshot of Control-Panel of GraphQL HTTP Request</figure>
 <figure width="950" height="618" image="graphql-http-request-vars.png">Variables field for GraphQL HTTP Request</figure>
 
@@ -241,13 +242,34 @@ https.default.protocol=SSLv3
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
         <property name="Password" required="No">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</property>
-        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient4</code>.
+        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient4</code>, <code>HttpClient5</code>.
         If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the HttpClient4 implementation is used.</property>
+        <property name="HTTP Version" required="No">The HTTP versions offered depend on the selected implementation:
+        <code>HttpClient5</code> supports <code>HTTP/1.1</code>, <code>HTTP/2 Negotiate</code> (stored as <code>HTTP/2</code>,
+        falls back to HTTP/1.1 when the server does not offer HTTP/2) and <code>HTTP/2 Strict</code> (stored as
+        <code>HTTP/2 Strict</code>, requires HTTP/2, so the request fails when the server does not support it),
+        while <code>HttpClient4</code> and <code>Java</code> support <code>HTTP/1.1</code> only.
+        An empty value uses the <code>httpclient.version</code> property, which defaults to <code>HTTP/1.1</code>.
+        <p>With HTTP/2 a thread multiplexes its concurrent requests, for example the parallel downloads of
+        embedded resources, over a single connection per host, but the connections are not shared between
+        threads, so a test with <code>N</code> threads still opens <code>N</code> connections like
+        <code>N</code> real users would.</p>
+        <p>The HTTP/2 client of a thread serves all of its requests with a single I/O thread. While HttpClient
+        works on that thread, for example on the TLS handshake of a new connection, on the answer to an
+        authentication challenge such as SPNEGO or NTLM, or on applying the Cookie and Authorization Manager to
+        a redirect it follows by itself, the other requests the thread has in flight, like the remaining
+        parallel downloads, wait. This is negligible in normal use, but a slow Kerberos KDC, for example,
+        delays them all.</p>
+        <p>When a request over such a shared connection exceeds the <b>Response Timeout</b> or is interrupted,
+        HttpClient closes the whole connection, so the other requests the thread has in flight over it, like
+        the remaining parallel downloads, fail as well. Over HTTP/1.1 only the request concerned fails. Set the
+        property <code>httpclient5.h2.multiplexing</code> to <code>false</code> to give each concurrent request
+        an HTTP/2 connection of its own, up to <code>httpclient5.h2.max_connections_per_route</code> per host.</p></property>
         <property name="Protocol" required="No"><code>HTTP</code>, <code>HTTPS</code> or <code>FILE</code>. Default: <code>HTTP</code></property>
         <property name="Method" required="Yes"><code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>TRACE</code>,
           <code>OPTIONS</code>, <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code> (not supported for
-          <code>JAVA</code> implementation). With <code>HttpClient4</code>, the following methods related to WebDav are
+          <code>JAVA</code> implementation). With <code>HttpClient4</code> or <code>HttpClient5</code>, the following methods related to WebDav are
           also allowed: <code>COPY</code>, <code>LOCK</code>, <code>MKCOL</code>, <code>MOVE</code>,
           <code>PROPFIND</code>, <code>PROPPATCH</code>, <code>UNLOCK</code>, <code>REPORT</code>, <code>MKCALENDAR</code>,
           <code>SEARCH</code>.
@@ -359,7 +381,14 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <code>.*\.(?i:svg|png)</code>
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
-        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
+        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.
+        <p>With the <code>HttpClient5</code> implementation and HTTP/2 selected as <b>HTTP Version</b>, at most
+        <code>httpclient5.h2.max_connections_per_route</code> (default <code>6</code>) connections are opened per host.
+        Downloads beyond that limit wait for a connection, and the wait counts in their elapsed time, unless they are
+        multiplexed over an HTTP/2 connection to that host which is already open. So when the server negotiates
+        HTTP/1.1 instead of HTTP/2, or when <code>httpclient5.h2.multiplexing</code> is <code>false</code>, set the
+        property to at least the pool size. With <code>HTTP/1.1</code> selected, <code>HttpClient5</code> allows as many
+        connections per host as the pool size by itself.</p></property>
         <property name="Source address type" required="No">
         <i>[Only for HTTP Request with HTTPClient implementation]</i> <br></br>
         To distinguish the source address value, select the type of these:
@@ -403,6 +432,13 @@ rather than <code>www.example.co.uk</code>, it will not get the correct cookies.
 Likewise, Headers are sent for the initial request, and won't be sent for the redirect.
 This is generally only a problem for manually created test plans,
 as a test plan created using a recorder would continue from the redirected URL.
+<br/>
+The <code>HttpClient5</code> implementation sends each redirect with the cookies the
+<complink name="HTTP Cookie Manager"/> holds for the URL of the redirect, and keeps the cookies the redirects set,
+like the samples of "<code>Follow Redirects</code>" are handled. The credentials of the
+<complink name="HTTP Authorization Manager"/> are likewise the ones for the URL of the redirect, and a
+<code>Cookie</code> or <code>Authorization</code> header of the <complink name="HTTP Header Manager"/> is only sent
+to the host of the initial URL.
 </note>
 <p>
 <b>Parameter Handling:</b><br></br>
@@ -484,7 +520,7 @@ so the value may be greater than the number of bytes in the response content.
 </p>
 <p>
 <b>Retry handling</b><br></br>
-By default retry has been set to 0 for both HttpClient4 and Java implementations, meaning no retry is attempted.<br/>
+By default retry has been set to 0 for HttpClient4, HttpClient5 and Java implementations, meaning no retry is attempted.<br/>
 For HttpClient4, the retry count can be overridden by setting the relevant JMeter property, for example:
 
 <source>
@@ -3623,7 +3659,7 @@ By default, a Graphite implementation is provided.
 <component name="DNS Cache Manager" index="&sect-num;.4.3"  width="712" height="387" screenshot="dns-cache-manager.png">
     <note>DNS Cache Manager is designed for using in the root of Thread Group or Test Plan. Do not place it as child element of particular HTTP Sampler
     </note>
-    <note>DNS Cache Manager works only with HTTP requests using HTTPClient4 implementation.</note>
+    <note>DNS Cache Manager works only with HTTP requests using HttpClient4 or HttpClient5 implementation.</note>
     <description><p>The DNS Cache Manager element allows to test applications, which have several servers behind load balancers (CDN, etc.),
     when user receives content from different IP's. By default JMeter uses JVM DNS cache. That's why
     only one server from the cluster receives load. DNS Cache Manager resolves names for each thread separately each iteration and
@@ -3649,7 +3685,7 @@ By default, a Graphite implementation is provided.
     <p>The IP address for the test server will be looked up by using the custom DNS resolver. When none is given, the
     system DNS resolver will be used.
     </p>
-    <p>Now you can use <code>www.example.com</code> in your HTTPClient4 samplers and the requests will be made against
+    <p>Now you can use <code>www.example.com</code> in your HttpClient4 or HttpClient5 samplers and the requests will be made against
     <code>a123.another.example.org</code> with all headers set to <code>www.example.com</code>.
     </p>
     </example>
@@ -3683,14 +3719,14 @@ transmits the login information when it encounters this type of page.</p>
 The Authorization headers may not be shown in the Tree View Listener "<code>Request</code>" tab.
 The Java implementation does pre-emptive authentication, but it does not
 return the Authorization header when JMeter fetches the headers.
-The HttpComponents (HC 4.5.X) implementation defaults to pre-emptive since 3.2 and the header will be shown.
-To disable this, set the values as below, in which case authentication will only be performed in response to a challenge.
+The HttpComponents HC 4.5.X and HC 5.X implementations use pre-emptive Basic authentication and the header will be shown.
+To disable this for HttpClient4, set the value below, in which case authentication will only be performed in response to a challenge.
 </p>
 <p>
 In the file <code>jmeter.properties</code> set <code>httpclient4.auth.preemptive=false</code>
 </p>
 <note>
-Note: the above settings only apply to the HttpClient sampler.
+Note: the above setting applies only to HttpClient4.
 </note>
 <note>
 When looking for a match against a URL, JMeter checks each entry in turn, and stops when it finds the first match.
@@ -3719,11 +3755,21 @@ information for the user named, "<code>jmeter</code>".</property>
 <dl>
 <dt>Java</dt><dd><code>BASIC</code></dd>
 <dt>HttpClient 4</dt><dd><code>BASIC</code>, <code>DIGEST</code> and <code>Kerberos</code></dd>
+<dt>HttpClient 5</dt><dd><code>BASIC</code>, <code>DIGEST</code> and <code>Kerberos</code></dd>
 </dl>
 </property>
 </properties>
 <note>
 The Realm only applies to the HttpClient sampler.
+</note>
+<note>
+With the HttpClient 4 and HttpClient 5 implementations, a server that asks for <code>NTLM</code> is answered with the
+<code>Username</code>, <code>Password</code> and <code>Domain</code> of the entry, whatever its <code>Mechanism</code>,
+unless it is <code>Kerberos</code>. A proxy that asks for <code>NTLM</code> is answered with the proxy user of the sampler
+and the domain of the <code>http.proxyDomain</code> property. The <code>BASIC</code> mechanism sends the credentials
+pre-emptively, and a challenge for another scheme, like <code>NTLM</code> or <code>DIGEST</code>, is still answered.
+<code>NTLM</code> authenticates the connection rather than the request, which HTTP/2 does not allow, so select
+<code>HTTP/1.1</code> as HTTP version of the HttpClient 5 implementation for a server that asks for it.
 </note>
 <br></br>
 <b>Kerberos Configuration:</b>
@@ -3910,7 +3956,7 @@ this field value from the HTTP Request Defaults element.</p>
 All port values are treated equally; a sampler that does not specify a port will use the HTTP Request Defaults port, if one is provided.
 </note>
 </description>
-<figure width="881" height="256" image="http-config/http-request-defaults-advanced-tab.png">HTTP Request Advanced config fields</figure>
+<figure width="950" height="391" image="http-config/http-request-defaults-advanced-tab.png">HTTP Request Advanced config fields</figure>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
@@ -3918,9 +3964,30 @@ All port values are treated equally; a sampler that does not specify a port will
         <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
-        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient4</code>.
+        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient4</code>, <code>HttpClient5</code>.
         If not specified the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the <code>Java</code> implementation is used.</property>
+        <property name="HTTP Version" required="No">The HTTP versions offered depend on the selected implementation:
+        <code>HttpClient5</code> supports <code>HTTP/1.1</code>, <code>HTTP/2 Negotiate</code> (stored as <code>HTTP/2</code>,
+        falls back to HTTP/1.1 when the server does not offer HTTP/2) and <code>HTTP/2 Strict</code> (stored as
+        <code>HTTP/2 Strict</code>, requires HTTP/2, so the request fails when the server does not support it),
+        while <code>HttpClient4</code> and <code>Java</code> support <code>HTTP/1.1</code> only.
+        An empty value uses the <code>httpclient.version</code> property, which defaults to <code>HTTP/1.1</code>.
+        <p>With HTTP/2 a thread multiplexes its concurrent requests, for example the parallel downloads of
+        embedded resources, over a single connection per host, but the connections are not shared between
+        threads, so a test with <code>N</code> threads still opens <code>N</code> connections like
+        <code>N</code> real users would.</p>
+        <p>The HTTP/2 client of a thread serves all of its requests with a single I/O thread. While HttpClient
+        works on that thread, for example on the TLS handshake of a new connection, on the answer to an
+        authentication challenge such as SPNEGO or NTLM, or on applying the Cookie and Authorization Manager to
+        a redirect it follows by itself, the other requests the thread has in flight, like the remaining
+        parallel downloads, wait. This is negligible in normal use, but a slow Kerberos KDC, for example,
+        delays them all.</p>
+        <p>When a request over such a shared connection exceeds the <b>Response Timeout</b> or is interrupted,
+        HttpClient closes the whole connection, so the other requests the thread has in flight over it, like
+        the remaining parallel downloads, fail as well. Over HTTP/1.1 only the request concerned fails. Set the
+        property <code>httpclient5.h2.multiplexing</code> to <code>false</code> to give each concurrent request
+        an HTTP/2 connection of its own, up to <code>httpclient5.h2.max_connections_per_route</code> per host.</p></property>
         <property name="Protocol" required="No"><code>HTTP</code> or <code>HTTPS</code>.</property>
         <property name="Content encoding" required="No">The encoding to be used for the request.</property>
         <property name="Path" required="No">The path to resource (for example, <code>/servlets/myServlet</code>). If the
@@ -3943,7 +4010,14 @@ All port values are treated equally; a sampler that does not specify a port will
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         </property>
         <property name="Use concurrent pool" required="No">Use a pool of concurrent connections to get embedded resources.</property>
-        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.</property>
+        <property name="Size" required="No">Pool size for concurrent connections used to get embedded resources.
+        <p>With the <code>HttpClient5</code> implementation and HTTP/2 selected as <b>HTTP Version</b>, at most
+        <code>httpclient5.h2.max_connections_per_route</code> (default <code>6</code>) connections are opened per host.
+        Downloads beyond that limit wait for a connection, and the wait counts in their elapsed time, unless they are
+        multiplexed over an HTTP/2 connection to that host which is already open. So when the server negotiates
+        HTTP/1.1 instead of HTTP/2, or when <code>httpclient5.h2.multiplexing</code> is <code>false</code>, set the
+        property to at least the pool size. With <code>HTTP/1.1</code> selected, <code>HttpClient5</code> allows as many
+        connections per host as the pool size by itself.</p></property>
         <property name="URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
         So if you only want to download embedded resources from <code>http://example.invalid/</code>, use the expression:

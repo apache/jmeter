@@ -253,6 +253,7 @@ public class TestCacheManagerThreadIteration {
                 lastModified);
     }
 
+    @SuppressWarnings("deprecation")
     protected void cacheResult(HTTPSampleResult result) {
         this.cacheManager.saveDetails(httpResponse, result);
     }
@@ -261,6 +262,7 @@ public class TestCacheManagerThreadIteration {
         this.httpMethod.addHeader(new BasicHeader(requestHeader, value));
     }
 
+    @SuppressWarnings("deprecation")
     protected void setRequestHeaders() {
         this.cacheManager.setHeaders(this.url, this.httpMethod);
     }
@@ -278,6 +280,7 @@ public class TestCacheManagerThreadIteration {
         return getThreadCache().getIfPresent(url);
     }
     @Test
+    @SuppressWarnings("deprecation")
     public void testCacheControlCleared() throws Exception {
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
@@ -321,6 +324,7 @@ public class TestCacheManagerThreadIteration {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testCacheManagerWhenThreadIterationIsANewUser() throws Exception {
         //Controlled by ThreadGroup
         jmvars.putObject(SAME_USER, false);
@@ -360,6 +364,7 @@ public class TestCacheManagerThreadIteration {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testCacheManagerWhenThreadIterationIsSameUser() throws Exception {
         // Controlled by ThreadGroup
         jmvars.putObject(SAME_USER, true);

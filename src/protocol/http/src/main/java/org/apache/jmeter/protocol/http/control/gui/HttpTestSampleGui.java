@@ -37,6 +37,7 @@ import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
+import org.apache.jmeter.protocol.http.gui.HttpVersionComboBox;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBaseSchema;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
@@ -81,6 +82,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     private JTextField proxyUser;
     private JPasswordField proxyPass;
     private final JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
+    private final HttpVersionComboBox httpVersion = new HttpVersionComboBox();
     private JTextField connectTimeOut;
     private JTextField responseTimeOut;
 
@@ -135,6 +137,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         if (!isAJP) {
             sourceIpType.setSelectedIndex(samplerBase.getIpSourceType());
             httpImplementation.setSelectedItem(samplerBase.getString(httpSchema.getImplementation()));
+            httpVersion.setImplementation(samplerBase.getString(httpSchema.getImplementation()));
+            httpVersion.setSelectedItem(samplerBase.getHttpVersion());
         }
     }
 
@@ -176,9 +180,12 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             } else {
                 samplerBase.removeProperty(httpSchema.getIpSourceType());
             }
-            String selectedImplementation = String.valueOf(httpImplementation.getSelectedItem());
+            String selectedImplementation = (String) httpImplementation.getSelectedItem();
             samplerBase.set(httpSchema.getImplementation(),
                     StringUtilities.isBlank(selectedImplementation) ? null : selectedImplementation);
+            String selectedHttpVersion = (String) httpVersion.getSelectedItem();
+            samplerBase.set(httpSchema.getHttpVersion(),
+                    StringUtilities.isBlank(selectedHttpVersion) ? null : selectedHttpVersion);
         }
     }
 
@@ -349,6 +356,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         implPanel.add(new JLabel(JMeterUtils.getResString("http_implementation"))); // $NON-NLS-1$
         httpImplementation.addItem("");// $NON-NLS-1$
         implPanel.add(httpImplementation);
+        implPanel.add(new JLabel(JMeterUtils.getResString("http_version"))); // $NON-NLS-1$
+        httpVersion.bindToImplementation(httpImplementation);
+        implPanel.add(httpVersion);
         return implPanel;
     }
 
@@ -390,6 +400,10 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     public void clearGui() {
         super.clearGui();
         urlConfigGui.clear();
+        if (!isAJP) {
+            httpImplementation.setSelectedItem("");
+            httpVersion.setSelectedItem("");
+        }
     }
 
     private void enableConcurrentDwn() {
