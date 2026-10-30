@@ -672,7 +672,7 @@ the comma after <code>7</code> is escaped.</note>
 <properties>
         <property name="Time format" required="No">Format string for DateTimeFormatter (default <code>yyyy-MM-dd</code>)</property>
         <property name="Start date" required="No">The start date, the default is <em>now</em></property>
-        <property name="End date" required="Yes">The end date</property>
+        <property name="End date" required="Yes">The end date (exclusive). Add one day if you need the specified date to appear in the output.</property>
         <property name="Locale to use for format" required="No">
         The string format of a locale. The language code must be lowercase. The country code must be uppercase. The separator must be an underscore, e.g. <code>en_EN</code>.
         See <a href="http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html">http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html</a>.
@@ -682,7 +682,7 @@ the comma after <code>7</code> is escaped.</note>
 </properties>
 
 <p>Examples:
-<source>${__RandomDate(,,2050-07-08,,)}</source> will return a random date between <em>now</em> and <code>2050-07-08</code>. For example <code>2039-06-21</code><br/>
+<source>${__RandomDate(,,2050-07-08,,)}</source> will return a random date between <em>now</em> (inclusive) and <code>2050-07-08</code> (exclusive). For example <code>2039-06-21</code><br/>
 <source>${__RandomDate(dd MM yyyy,,08 07 2050,,)}</source> will return a random date with a custom format like <code>04 03 2034</code><br/>
 </p>
 </component>
