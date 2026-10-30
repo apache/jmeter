@@ -51,7 +51,7 @@ dependencies {
         api("com.github.weisj:darklaf-theme:3.1.1")
         api("com.google.auto.service:auto-service-annotations:1.1.1")
         api("com.google.auto.service:auto-service:1.1.1")
-        api("com.google.errorprone:error_prone_annotations:2.50.0")
+        api("com.google.errorprone:error_prone_annotations:2.51.0")
         api("com.helger.commons:ph-commons:12.5.2")
         api("com.helger:ph-css:8.2.3")
         api("com.fasterxml.woodstox:woodstox-core:7.3.0")
