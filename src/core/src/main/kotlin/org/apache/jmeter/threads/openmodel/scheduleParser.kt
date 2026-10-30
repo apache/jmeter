@@ -36,6 +36,9 @@ import kotlin.jvm.Throws
  *
  * rate(1/sec) rate(2/sec) arrivals(1 min) rate(3/sec) rate(4/sec) arrivals(2 min) rate(5/sec)...
  *   means 2/sec..3/sec during 1min, then 4/sec..5/sec during 2min
+ *
+ * concurrency(10) rate(2/sec) arrivals(1 min) concurrency(20) arrivals(2 min)
+ *   means at most 10 concurrent threads during the first minute, and at most 20 during the next two
  */
 @API(status = API.Status.EXPERIMENTAL, since = "5.5")
 public interface ThreadSchedule {
@@ -82,6 +85,16 @@ public sealed interface ThreadScheduleStep {
     @API(status = API.Status.EXPERIMENTAL, since = "5.5")
     public data class RateStep(val rate: Double) : ThreadScheduleStep {
         override fun toString(): String = "Rate(${FORMAT.format(rate)})"
+    }
+
+    /**
+     * Limits the number of threads that execute the test plan at the same time.
+     * The limit applies to the arrivals that follow the step, so the arrivals that would exceed
+     * the limit wait for a free thread rather than start immediately.
+     */
+    @API(status = API.Status.EXPERIMENTAL, since = "6.0")
+    public data class ConcurrencyStep(val limit: Int) : ThreadScheduleStep {
+        override fun toString(): String = "Concurrency($limit)"
     }
 
     @API(status = API.Status.EXPERIMENTAL, since = "5.5")
@@ -131,10 +144,11 @@ internal class ScheduleParser(private val schedule: String) {
             }
             // Variable is needed for formatting: https://youtrack.jetbrains.com/issue/KTIJ-19984
             val step = parseRate()
+                ?: parseConcurrency()
                 ?: parseArrivals("random_arrivals", ArrivalType.RANDOM)
                 ?: parseArrivals("even_arrivals", ArrivalType.EVEN)
                 ?: throwParseException(
-                    "Unexpected input (expecting rate, random_arrivals, even_arrivals, or pause)"
+                    "Unexpected input (expecting rate, concurrency, random_arrivals, even_arrivals, or pause)"
                 )
             steps += step
             if (step is ThreadScheduleStep.RateStep) {
@@ -172,6 +186,21 @@ internal class ScheduleParser(private val schedule: String) {
         }
         consume(Tokenizer.CloseParenthesisToken)
         return ThreadScheduleStep.RateStep(rateValue / timeUnit.asSeconds)
+    }
+
+    private fun parseConcurrency(): ThreadScheduleStep? {
+        if (!token?.image.equals("concurrency", ignoreCase = true)) {
+            return null
+        }
+        pos += 1
+        consume(Tokenizer.OpenParenthesisToken)
+        val limit = consume<Tokenizer.NumberToken>("integer number for concurrency")
+        val limitValue = limit.image.toDouble()
+        if (limitValue < 1 || limitValue != Math.floor(limitValue)) {
+            throwParseException("concurrency must be a positive integer, got ${limit.image}")
+        }
+        consume(Tokenizer.CloseParenthesisToken)
+        return ThreadScheduleStep.ConcurrencyStep(limitValue.toInt())
     }
 
     private fun parseArrivals(functionName: String, type: ArrivalType): ThreadScheduleStep? {
