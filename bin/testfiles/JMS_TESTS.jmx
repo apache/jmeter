@@ -134,10 +134,12 @@ def thread = Thread.start {
 	try {
 		Session session =
 		      con.createSession(false, Session.AUTO_ACKNOWLEDGE);  // non-transacted session (more)
-		MessageConsumer consumer = session.createConsumer(dest);
-		consumer.setMessageListener(new MyMessageListener(session));
+		// Start the connection before creating the consumer: the request may already be
+		// waiting in the queue, and ActiveMQ warns when it dispatches to a stopped connection
 		log.info(&quot;Starting connection to &quot;+Parameters);
 		con.start();                                             // start the connection (more)
+		MessageConsumer consumer = session.createConsumer(dest);
+		consumer.setMessageListener(new MyMessageListener(session));
 		Thread.sleep(15000);
 		session.close();
 		log.info(&quot;Closed session&quot;);
