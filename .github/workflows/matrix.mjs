@@ -92,9 +92,10 @@ matrix.exclude({os: 'macos-latest', java_distribution: {value: 'oracle'}})
 // Ignore builds with JAVA EA for now, see https://github.com/apache/jmeter/issues/6114
 matrix.exclude({java_version: eaJava})
 matrix.imply({java_version: eaJava}, {java_distribution: {value: 'oracle'}})
-// oracle.com only serves "latest" builds for JDK 25 and later: JDK 17 and 21 are no longer
-// available under the no-fee license, so download.oracle.com/java/21/latest returns 404
-matrix.imply({java_distribution: {value: 'oracle'}}, {java_version: v => v === eaJava || v >= 25});
+// download.oracle.com serves Oracle JDK 17 and later. When the free updates for a release end, Oracle removes it from
+// /latest/, and actions/setup-java falls back to /archive/jdk-<major>, the first GA build of the release (17.0.0,
+// 21.0.0), so this line needs no update.
+matrix.imply({java_distribution: {value: 'oracle'}}, {java_version: v => v === eaJava || v >= 17});
 // TODO: Semeru does not ship Java 21 builds yet
 matrix.exclude({java_distribution: {value: 'semeru'}, java_version: '21'});
 
@@ -144,8 +145,11 @@ include.forEach(v => {
   const {value: javaDistribution, vendor: javaVendor} = v.java_distribution;
   v.java_distribution = javaDistribution;
   v.java_vendor = javaVendor;
-  if (v.java_distribution === 'oracle') {
-      v.oracle_java_website = v.java_version === eaJava ? 'jdk.java.net' : 'oracle.com';
+  // oracle-actions/setup-java is used for the EA build only. With the default version: latest it downloads a GA
+  // release from /latest/ alone and fails once Oracle removes the release from there, so GA Oracle JDK comes from
+  // actions/setup-java instead.
+  if (v.java_version === eaJava) {
+      v.oracle_java_website = 'jdk.java.net';
   }
   v.non_ea_java_version = v.java_version === eaJava ? '' : v.java_version;
   if (v.java_distribution !== 'semeru' && random() > 0.5) {
