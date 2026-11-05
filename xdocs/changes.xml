@@ -163,6 +163,11 @@ Summary
     <li><pr>6742</pr>Keep the HTTP clients of a thread from being used, and closed, by another thread when embedded resources are downloaded in parallel. The threads which perform those downloads are pooled and shared by all threads, so they used to keep the clients of whichever thread happened to create them, which made samples fail with errors such as <code>Non HTTP response code: java.io.IOException</code>, <code>Socket closed</code> or <code>Connection pool shut down</code> as soon as that thread finished or started a new iteration. The clients are now looked up by the context of the thread the download is performed for, in the HttpClient4 and HttpClient5 sampler implementations.</li>
   </ul>
 
+  <h3>Functions</h3>
+  <ul>
+    <li><code>__RandomDate</code> now handles identical start and end dates without throwing an exception while preserving Java-like semantics (start inclusive, end exclusive).</li>
+  </ul>
+
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>

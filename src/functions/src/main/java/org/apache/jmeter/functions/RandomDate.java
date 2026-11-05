@@ -189,7 +189,7 @@ public class RandomDate extends AbstractFunction {
         if (localEndDate < localStartDate) {
             log.error("End Date '{}' must be greater than Start Date '{}'", dateEnd, dateStart); // $NON-NLS-1$
         } else {
-            long randomDay = ThreadLocalRandom.current().nextLong(localStartDate, localEndDate);
+            long randomDay = pickRandomDay(localStartDate, localEndDate);
             try {
                 dateString = LocalDate.ofEpochDay(randomDay).format(formatter);
             } catch (DateTimeParseException | NumberFormatException ex) {
@@ -198,6 +198,14 @@ public class RandomDate extends AbstractFunction {
             addVariableValue(dateString, values, 4);
         }
         return dateString;
+    }
+
+    private static long pickRandomDay(long startInclusive, long endExclusive) {
+        if (startInclusive == endExclusive) {
+            return startInclusive;
+        }
+        return ThreadLocalRandom.current()
+                .nextLong(startInclusive, endExclusive);
     }
 
     @SuppressWarnings("JavaTimeDefaultTimeZone")
