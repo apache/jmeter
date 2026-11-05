@@ -383,6 +383,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         lang.add(Locale.SIMPLIFIED_CHINESE.toString()); // zh_CN
         lang.add(Locale.TRADITIONAL_CHINESE.toString()); // zh_TW
         lang.add(Locale.KOREAN.toString()); // ko
+        lang.add("ru"); // $NON-NLS-1$
         final String addedLocales = JMeterUtils.getProperty("locales.add");
         if (addedLocales != null) {
             Arrays.stream(addedLocales.split(","))
