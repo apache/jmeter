@@ -46,6 +46,15 @@ class ThreadScheduleTest {
             Case(
                 "rate(0 per min) even_arrivals(30 min) rate(50 per min) random_arrivals(4 min) rate(200 per min) random_arrivals(10 sec)",
                 "[Rate(0), Arrivals(type=EVEN, duration=1800), Rate(0.8), Arrivals(type=RANDOM, duration=240), Rate(3.3), Arrivals(type=RANDOM, duration=10)]"
+            ),
+            Case("concurrency(10)", "[Concurrency(10)]"),
+            Case(
+                "concurrency(10) rate(5/sec) random_arrivals(1 min)",
+                "[Concurrency(10), Rate(5), Arrivals(type=RANDOM, duration=60)]"
+            ),
+            Case(
+                "CONCURRENCY(10) rate(5/sec) random_arrivals(1 min) concurrency(20) random_arrivals(2 min)",
+                "[Concurrency(10), Rate(5), Arrivals(type=RANDOM, duration=60), Concurrency(20), Arrivals(type=RANDOM, duration=120)]"
             )
         )
     }
