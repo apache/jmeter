@@ -266,7 +266,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
                         HTTPFileArg [] files = {new HTTPFileArg(out.getPath(),"",contentType)};
                         sampler.setHTTPFiles(files);
                     } catch (IOException e) {
-                        log.warn("Could not create binary file: {}", e);
+                        log.warn("Could not create binary file", e);
                     }
                 } else {
                     // Just put the whole postbody as the value of a parameter
