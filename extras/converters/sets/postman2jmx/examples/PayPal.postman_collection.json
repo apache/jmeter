@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "0b5de1b5-ad5b-4bba-933a-e0ea62366543",
+		"name": "PayPal REST Identity - V1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authorization URL",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{paypal_identity_domain}}/webapps/auth/protocol/openidconnect/v1/authorize?client_id={{rest_app_client_id}}&redirect_uri={{rest_app_redirect}}&scope={{OAuth_scopes}}&response_type=code",
+					"protocol": "https",
+					"host": [
+						"{{paypal_identity_domain}}"
+					],
+					"path": [
+						"webapps",
+						"auth",
+						"protocol",
+						"openidconnect",
+						"v1",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "{{rest_app_client_id}}"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{rest_app_redirect}}"
+						},
+						{
+							"key": "scope",
+							"value": "{{OAuth_scopes}}"
+						},
+						{
+							"key": "response_type",
+							"value": "code"
+						}
+					]
+				},
+				"description": "Use this call to generate the link that you redirect the USER to grant permission to your application"
+			},
+			"response": []
+		},
+		{
+			"name": "Grant token from code",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QWZ3bm9CQ1VKblM2Q0hpaUpjUk1iZ0JXd2huQlM3VnhjelAtdHVpNnlUWmZnc0ZKUWNxRFF3Vld5MWV5OkVJWEgzQkNPVjZJLXZVb0VvX1dJVXJha1dJUkd2RlBHSllOUGdTQ2xIZ3c0b2tvYmFGNTRMV29WeVZTaw=="
+					}
+				],
+				"url": {
+					"raw": "https://{{paypal_api_domain}}/v1/identity/openidconnect/tokenservice?grant_type=code&code=&scope={{OAuth_scopes}}",
+					"protocol": "https",
+					"host": [
+						"{{paypal_api_domain}}"
+					],
+					"path": [
+						"v1",
+						"identity",
+						"openidconnect",
+						"tokenservice"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "code"
+						},
+						{
+							"key": "code",
+							"value": ""
+						},
+						{
+							"key": "scope",
+							"value": "{{OAuth_scopes}}"
+						}
+					]
+				},
+				"description": "Use a to get a new refresh token for the MIS scope."
+			},
+			"response": []
+		},
+		{
+			"name": "Get user information",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{OAuth_access_token}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{paypal_api_domain}}/v1/identity/openidconnect/userinfo/?schema=openid",
+					"protocol": "https",
+					"host": [
+						"{{paypal_api_domain}}"
+					],
+					"path": [
+						"v1",
+						"identity",
+						"openidconnect",
+						"userinfo",
+						""
+					],
+					"query": [
+						{
+							"key": "schema",
+							"value": "openid"
+						}
+					]
+				},
+				"description": "Use this call to retrieve user profile attributes."
+			},
+			"response": []
+		},
+		{
+			"name": "Merchant Account - Payment Status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer A015FeSasan0ihIz9iKBRRc8IXkMHaFLB66TVa76zo.gvKI"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://{{paypal_api_domain}}/retail/merchant/v1/status",
+					"protocol": "https",
+					"host": [
+						"{{paypal_api_domain}}"
+					],
+					"path": [
+						"retail",
+						"merchant",
+						"v1",
+						"status"
+					]
+				},
+				"description": "Get information on the payment status of the merchant account associated with the access token."
+			},
+			"response": []
+		},
+		{
+			"name": "Grant token from refresh token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QWZ3bm9CQ1VKblM2Q0hpaUpjUk1iZ0JXd2huQlM3VnhjelAtdHVpNnlUWmZnc0ZKUWNxRFF3Vld5MWV5OkVJWEgzQkNPVjZJLXZVb0VvX1dJVXJha1dJUkd2RlBHSllOUGdTQ2xIZ3c0b2tvYmFGNTRMV29WeVZTaw=="
+					}
+				],
+				"url": {
+					"raw": "https://{{paypal_api_domain}}/v1/identity/openidconnect/tokenservice?grant_type=refresh_token&refresh_token={{OAuth_refresh_token}}&scope=https://uri.paypal.com/services/paypalhere",
+					"protocol": "https",
+					"host": [
+						"{{paypal_api_domain}}"
+					],
+					"path": [
+						"v1",
+						"identity",
+						"openidconnect",
+						"tokenservice"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{OAuth_refresh_token}}"
+						},
+						{
+							"key": "scope",
+							"value": "https://uri.paypal.com/services/paypalhere"
+						}
+					]
+				},
+				"description": "Use a refresh token to get a new access token for the MIS scope."
+			},
+			"response": []
+		},
+		{
+			"name": "Validate Access Token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://{{paypal_identity_domain}}/webapps/auth/protocol/openidconnect/v1/validatetoken?access_token={{OAuth_access_token}}",
+					"protocol": "https",
+					"host": [
+						"{{paypal_identity_domain}}"
+					],
+					"path": [
+						"webapps",
+						"auth",
+						"protocol",
+						"openidconnect",
+						"v1",
+						"validatetoken"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{OAuth_access_token}}"
+						}
+					]
+				},
+				"description": "Use this call to retrieve the scopes it is enabled for."
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Access Token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QWY2akxCQ3d6LWtJVUxxTjBfNjNQcGRvOEJPdUE5Ulp6YTVrdU1pZlp4N1d0RUFJcWcyN05kcEgwcjFyOkVGNTgxQkNMUzFfZUVnOWNSaVJCNFhUX0FzS3NsTncxeVhTd082S2FQOXlTemtfbjFicFNoY3RSazlpNg=="
+					}
+				],
+				"url": {
+					"raw": "https://{{paypal_api_domain}}/v1/identity/openidconnect/tokenservice?grant_type=refresh_token&refresh_token=d_ZxSTHUtg6slWVPkVikZ67JRdtLw69Y0oCo4koJNGnUsxuBCnZUA7Pd9__E_IXtykW4j2zhAbekiOO24Rq7klDlkSDvdCDulOWiu1g8RxC2DOCvMXq9B3f-S3w&scope={{OAuth_scopes}}",
+					"protocol": "https",
+					"host": [
+						"{{paypal_api_domain}}"
+					],
+					"path": [
+						"v1",
+						"identity",
+						"openidconnect",
+						"tokenservice"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token"
+						},
+						{
+							"key": "refresh_token",
+							"value": "d_ZxSTHUtg6slWVPkVikZ67JRdtLw69Y0oCo4koJNGnUsxuBCnZUA7Pd9__E_IXtykW4j2zhAbekiOO24Rq7klDlkSDvdCDulOWiu1g8RxC2DOCvMXq9B3f-S3w"
+						},
+						{
+							"key": "scope",
+							"value": "{{OAuth_scopes}}"
+						}
+					]
+				},
+				"description": "refresh from refresh token"
+			},
+			"response": []
+		},
+		{
+			"name": "Get 1st Party Access Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QVV0a2lwaXVRdmhmc3pHSXdGa3N3Q2NVN1JWZUhudTF6S1F4Qlhkd3M5SWZ0MDNCTnloV3NNRzR0aWJVcHluUFNlUW1WS0J2ZkFERXFyWG86RUJRQTFzSUo2MWgzMExPRWFmZF82VE9xc2NGSHpfX3BiYVBBckY4S2hxQU9HaE1pdUM4WWlXLUdpOXh2eVJwZ2xONi1oTzFGdEwtMkEzUnM="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{paypal_api_domain}}/v1/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"{{paypal_api_domain}}"
+					],
+					"path": [
+						"v1",
+						"oauth2",
+						"token"
+					]
+				},
+				"description": "Use this call to an access token for the PayPal Account related to the Client Id and Secret."
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
