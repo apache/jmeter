@@ -252,6 +252,14 @@ public class TransactionController extends GenericController implements SampleLi
     public void triggerEndOfLoop() {
         if(!isGenerateParentSample()) {
             if (res != null) {
+                // See BUG 55816 / GitHub issue #6496
+                // When the thread is stopped mid-transaction (e.g. during ramp-down),
+                // we must account for the time elapsed since the last child sample ended
+                // as pause/idle time, so it is not counted in the transaction elapsed time.
+                if (!isIncludeTimers()) {
+                    long processingTimeOfLastChild = res.currentTimeInMillis() - prevEndTime;
+                    pauseTime += processingTimeOfLastChild;
+                }
                 res.setIdleTime(pauseTime + res.getIdleTime());
                 res.sampleEnd();
                 res.setSuccessful(TRUE.equals(JMeterContextService.getContext().getVariables().get(JMeterThread.LAST_SAMPLE_OK)));

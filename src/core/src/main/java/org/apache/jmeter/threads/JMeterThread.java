@@ -526,6 +526,12 @@ public class JMeterThread implements Runnable, Interruptible {
                 && transactionResult == null
                 && transactionSampler != null
                 && transactionPack != null) {
+            // Thread was stopped mid-transaction (e.g. during ramp-down).
+            // Ensure setTransactionDone() is called so that elapsed time and idle time
+            // are correctly computed (see GitHub issue #6496 / Bug 55816).
+            if (!transactionSampler.isTransactionDone()) {
+                transactionSampler.setTransactionDone();
+            }
             transactionResult = doEndTransactionSampler(transactionSampler, parent, transactionPack, threadContext);
         }
 
