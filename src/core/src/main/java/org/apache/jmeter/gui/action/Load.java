@@ -198,7 +198,7 @@ public class Load extends AbstractActionWithNoRunningTest {
                 }
             }
         }
-        final HashTree newTree = guiInstance.addSubTree(tree);
+        final HashTree newTree = guiInstance.addSubTree(tree, merging);
         guiInstance.updateCurrentGui();
         guiInstance.getMainFrame().getTree().setSelectionPath(
                 new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
