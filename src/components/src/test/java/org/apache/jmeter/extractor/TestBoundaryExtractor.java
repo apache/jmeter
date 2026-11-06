@@ -18,7 +18,11 @@
 package org.apache.jmeter.extractor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Set;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
@@ -107,5 +111,49 @@ public class TestBoundaryExtractor {
         assertNull(vars.get("varname"), "Non indexed variable name should be null");
         assertEquals("on", vars.get("varname_1"), "First match is incorrect");
         assertEquals("1", vars.get("varname_matchNr"), "MatchNumber is incorrect");
+    }
+
+    /**
+     * matchNumber=0 means the result must be one of the available matches.
+     */
+    @Test
+    public void testMatchNumberZeroMultipleMatches() {
+        vars.put("content", "left-A-right left-B-right left-C-right");
+        extractor.setLeftBoundary("left-");
+        extractor.setRightBoundary("-right");
+        extractor.setMatchNumber(0);
+        extractor.setRefName("varname");
+        extractor.setScopeVariable("content");
+        extractor.setThreadContext(jmctx);
+        extractor.process();
+        String found = vars.get("varname");
+        assertTrue(Set.of("A", "B", "C").contains(found),
+                "matchNumber=0 result '" + found + "' should be one of the available matches");
+        assertNull(vars.get("varname_matchNr"),
+                "matchNr variable should not be set for matchNumber=0");
+    }
+
+    /**
+     * An empty Match No. is treated as 0.
+     */
+    @Test
+    public void testEmptyMatchNumber() {
+        // Deterministic check: getMatchNumber() must return 0 for an empty field.
+        extractor.setMatchNumber("");
+        assertEquals(0, extractor.getMatchNumber(), "getMatchNumber() for an empty Match No.");
+
+        // Behavioural check: empty field behaves like 0, not like -1.
+        // With matchNumber=0 the non-indexed variable is set and the indexed
+        // variables (_1, _matchNr) are not.
+        vars.put("content", "left-A-right left-B-right left-C-right");
+        extractor.setLeftBoundary("left-");
+        extractor.setRightBoundary("-right");
+        extractor.setRefName("varname");
+        extractor.setScopeVariable("content");
+        extractor.setThreadContext(jmctx);
+        extractor.process();
+        assertNotNull(vars.get("varname"), "varname should be set");
+        assertNull(vars.get("varname_1"), "varname_1 should not be set for matchNumber=0");
+        assertNull(vars.get("varname_matchNr"), "varname_matchNr should not be set for matchNumber=0");
     }
 }
