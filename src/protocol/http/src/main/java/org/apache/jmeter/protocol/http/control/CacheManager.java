@@ -111,8 +111,8 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * Holder for storing cache details.
      * Perhaps add original response later?
      */
+    // package-protected to allow access by unit-test cases
     static class CacheEntry {
-        // The class is package-protected to allow access by unit-test cases
         private final String lastModified;
         private final String etag;
         private final Date expires;
@@ -163,6 +163,9 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return varyHeader;
         }
 
+        /** (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
         @Override
         public String toString() {
             return "CacheEntry [lastModified=" + lastModified + ", etag=" + etag + ", expires=" + expires
