@@ -29,6 +29,8 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
 import org.junit.jupiter.api.Test;
@@ -46,7 +48,9 @@ class TestJMeterThread {
         @Override
         public SampleResult sample(Entry e) {
             called = true;
-            return null;
+            SampleResult res = new SampleResult();
+            res.setSampleLabel(getName());
+            return res;
         }
 
         @Override
@@ -166,6 +170,114 @@ class TestJMeterThread {
         // the duration of this test plan should currently be around zero seconds,
         // but it is allowed to take up to maxDuration amount of time
         assertTrue(duration <= maxDuration, "Test plan should not run for longer than duration");
+    }
+
+    @Test
+    void testPostProcessorExceptionHandling() {
+        JMeterContextService.getContext().setVariables(new JMeterVariables());
+
+        HashTree testTree = new HashTree();
+        LoopController samplerController = new LoopController();
+        samplerController.setLoops(1);
+        samplerController.setContinueForever(false);
+        samplerController.setEnabled(true);
+
+        DummySampler dummySampler = createSampler();
+        DummyPostProcessor failingPostProcessor = new DummyPostProcessor(true);
+        DummyPostProcessor secondPostProcessor = new DummyPostProcessor(false);
+
+        HashTree samplerControllerTree = testTree.add(samplerController);
+        HashTree samplerTree = samplerControllerTree.add(dummySampler);
+        samplerTree.add(failingPostProcessor);
+        samplerTree.add(secondPostProcessor);
+
+        ThreadGroup threadGroup = new ThreadGroup();
+        threadGroup.setNumThreads(1);
+
+        JMeterThread jMeterThread = new JMeterThread(testTree, threadGroup, null);
+        jMeterThread.setThreadGroup(threadGroup);
+        jMeterThread.run();
+
+        assertTrue(dummySampler.isCalled(), "Sampler should be executed");
+        assertTrue(failingPostProcessor.isCalled(), "Failing post processor should be executed");
+        assertTrue(secondPostProcessor.isCalled(), "Second post processor should still be executed after exception in first");
+    }
+
+    @Test
+    void testPreProcessorExceptionHandling() {
+        JMeterContextService.getContext().setVariables(new JMeterVariables());
+
+        HashTree testTree = new HashTree();
+        LoopController samplerController = new LoopController();
+        samplerController.setLoops(1);
+        samplerController.setContinueForever(false);
+        samplerController.setEnabled(true);
+
+        DummySampler dummySampler = createSampler();
+        DummyPreProcessor failingPreProcessor = new DummyPreProcessor(true);
+        DummyPreProcessor secondPreProcessor = new DummyPreProcessor(false);
+
+        HashTree samplerControllerTree2 = testTree.add(samplerController);
+        HashTree samplerTree2 = samplerControllerTree2.add(dummySampler);
+        samplerTree2.add(failingPreProcessor);
+        samplerTree2.add(secondPreProcessor);
+
+        ThreadGroup threadGroup = new ThreadGroup();
+        threadGroup.setNumThreads(1);
+
+        JMeterThread jMeterThread = new JMeterThread(testTree, threadGroup, null);
+        jMeterThread.setThreadGroup(threadGroup);
+        jMeterThread.run();
+
+        assertTrue(failingPreProcessor.isCalled(), "Failing pre processor should be executed");
+        assertTrue(secondPreProcessor.isCalled(), "Second pre processor should still be executed after exception in first");
+        assertTrue(dummySampler.isCalled(), "Sampler should still be executed after preprocessor exception");
+    }
+
+    private static class DummyPostProcessor extends AbstractTestElement implements PostProcessor {
+        private static final long serialVersionUID = 1L;
+        private final boolean shouldThrow;
+        private boolean called = false;
+
+        public DummyPostProcessor(boolean shouldThrow) {
+            this.shouldThrow = shouldThrow;
+            setEnabled(true);
+        }
+
+        @Override
+        public void process() {
+            called = true;
+            if (shouldThrow) {
+                throw new RuntimeException("PostProcessor test exception");
+            }
+        }
+
+        public boolean isCalled() {
+            return called;
+        }
+    }
+
+    private static class DummyPreProcessor extends AbstractTestElement implements PreProcessor {
+        private static final long serialVersionUID = 1L;
+        private final boolean shouldThrow;
+        private boolean called = false;
+
+        public DummyPreProcessor(boolean shouldThrow) {
+            this.shouldThrow = shouldThrow;
+            setEnabled(true);
+        }
+
+        @Override
+        public void process() {
+            called = true;
+            if (shouldThrow) {
+                throw new RuntimeException("PreProcessor test exception");
+            }
+        }
+
+        public boolean isCalled() {
+            return called;
+        }
     }
 
     private static LoopController createLoopController() {
