@@ -396,7 +396,7 @@ public abstract class AbstractProperty implements JMeterProperty {
     protected JMeterProperty convertObject(Object item) {
         JMeterProperty prop = makeProperty(item);
         if (prop == null) {
-            prop = getBlankProperty();
+            prop = getBlankProperty(item);
             prop.setName(Integer.toString(item.hashCode()));
             prop.setObjectValue(item);
         }

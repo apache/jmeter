@@ -38,10 +38,12 @@ public class MapPropertyTest {
         assertEquals(NullProperty.class, props.getPropertyType());
     }
 
-    public void testGetPropertyTypeOfStringElements() {
+    @Test
+    public void testGetPropertyTypeOfIntegerElements() {
         Map<String, Integer> numberMap = new HashMap<>();
         numberMap.put("One", 1);
         MapProperty props = new MapProperty("foo", numberMap);
+        assertEquals(IntegerProperty.class, props.get("One").getClass());
         assertEquals(IntegerProperty.class, props.getPropertyType());
     }
 }
