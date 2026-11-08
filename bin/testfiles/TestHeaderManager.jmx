@@ -103,7 +103,7 @@
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="483200697">Header1: val1_0\b
 </stringProp>
               <stringProp name="-1411296938">Header2: val2_0_overriden\b</stringProp>
@@ -155,7 +155,7 @@
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-2062621902">Header1: val1_1\b</stringProp>
               <stringProp name="-1704699945">Header2: val2_1_overriden\b</stringProp>
               <stringProp name="1139229176">Header4: val4_1\b</stringProp>
@@ -169,7 +169,7 @@
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoOtherHeader" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1611083136">Header1: val1\b</stringProp>
               <stringProp name="876430658">Header2: val2\b</stringProp>
             </collectionProp>
@@ -216,7 +216,7 @@
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1611083136">Header1: val1\b</stringProp>
               <stringProp name="876430658">Header2: val2\b</stringProp>
               <stringProp name="-931022844">Header3: val3\b</stringProp>
@@ -228,7 +228,7 @@
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoOtherHeader" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1835006169">Header4</stringProp>
               <stringProp name="-1835006168">Header5</stringProp>
             </collectionProp>
@@ -241,7 +241,7 @@
         </hashTree>
       </hashTree>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
+        <collectionProp name="Assertion.test_strings">
           <stringProp name="894172713">Connection: keep-alive</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>

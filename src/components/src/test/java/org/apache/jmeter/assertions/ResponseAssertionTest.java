@@ -19,6 +19,7 @@ package org.apache.jmeter.assertions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -26,10 +27,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -374,5 +379,54 @@ public class ResponseAssertionTest {
                 latch.countDown();
             }
         }
+    }
+
+    private static final String CORRECT_TEST_STRINGS_NAME = "Assertion.test_strings";
+    private static final String MISSPELLED_TEST_STRINGS_NAME = "Asserion.test_strings";
+
+    @Test
+    public void testPatternsAreStoredUnderCorrectPropertyName() {
+        ResponseAssertion responseAssertion = new ResponseAssertion();
+        responseAssertion.addTestString("pattern");
+        CollectionProperty testStrings = responseAssertion.getTestStrings();
+        assertEquals(1, testStrings.size());
+        assertEquals("pattern", testStrings.iterator().next().getStringValue());
+        // The patterns must be stored under the correctly spelled name
+        assertEquals(CORRECT_TEST_STRINGS_NAME, testStrings.getName());
+        // ... and not under the misspelled one
+        assertInstanceOf(NullProperty.class, responseAssertion.getProperty(MISSPELLED_TEST_STRINGS_NAME));
+    }
+
+    @Test
+    public void testPatternsSavedWithMisspelledPropertyNameAreMigrated() {
+        ResponseAssertion responseAssertion = new ResponseAssertion();
+        // Simulate a test plan saved by JMeter versions up to and including 5.6.3,
+        // which stored the patterns under the misspelled property name
+        CollectionProperty legacy = new CollectionProperty(MISSPELLED_TEST_STRINGS_NAME, new ArrayList<>());
+        legacy.addProperty(new StringProperty("legacy", "legacy pattern"));
+        responseAssertion.setProperty(legacy);
+
+        CollectionProperty testStrings = responseAssertion.getTestStrings();
+        assertEquals(1, testStrings.size());
+        assertEquals("legacy pattern", testStrings.iterator().next().getStringValue());
+        // The patterns must have been migrated to the correctly spelled name
+        assertEquals(CORRECT_TEST_STRINGS_NAME, testStrings.getName());
+        // ... and the legacy property must have been removed, so that re-saved
+        // test plans use the correct name only
+        assertInstanceOf(NullProperty.class, responseAssertion.getProperty(MISSPELLED_TEST_STRINGS_NAME));
+    }
+
+    @Test
+    public void testPatternsAreAddedToMigratedValues() {
+        ResponseAssertion responseAssertion = new ResponseAssertion();
+        CollectionProperty legacy = new CollectionProperty(MISSPELLED_TEST_STRINGS_NAME, new ArrayList<>());
+        legacy.addProperty(new StringProperty("legacy", "legacy pattern"));
+        responseAssertion.setProperty(legacy);
+
+        responseAssertion.addTestString("new pattern");
+
+        CollectionProperty testStrings = responseAssertion.getTestStrings();
+        assertEquals(2, testStrings.size());
+        assertEquals(CORRECT_TEST_STRINGS_NAME, testStrings.getName());
     }
 }

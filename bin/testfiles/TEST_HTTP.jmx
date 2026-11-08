@@ -76,7 +76,7 @@ mirrorServer.start();</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1492901334">GET /test HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
@@ -89,7 +89,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-88801152">Content-Length:</stringProp>
               <stringProp name="-644619860">Content-Type:</stringProp>
             </collectionProp>
@@ -129,7 +129,7 @@ mirrorServer.start();</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-88801152">Content-Length:</stringProp>
               <stringProp name="-644619860">Content-Type:</stringProp>
             </collectionProp>
@@ -140,7 +140,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="70454">GET</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
@@ -182,7 +182,7 @@ mirrorServer.start();</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-88801152">Content-Length:</stringProp>
               <stringProp name="-644619860">Content-Type:</stringProp>
             </collectionProp>
@@ -193,7 +193,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="70454">GET</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
@@ -240,7 +240,7 @@ mirrorServer.start();</stringProp>
           </HTTPSamplerProxy>
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ContentLength" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="224767426">Content-Length: 13</stringProp>
                 <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
                 <stringProp name="-644619860">Content-Type:</stringProp>
@@ -252,7 +252,7 @@ mirrorServer.start();</stringProp>
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="1492901334">GET /test HTTP/1.1</stringProp>
                 <stringProp name="894172713">Connection: keep-alive</stringProp>
                 <stringProp name="2117109222">Host: localhost:8081</stringProp>
@@ -340,7 +340,7 @@ mirrorServer.start();</stringProp>
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Gzip" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
@@ -350,7 +350,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-88801152">Content-Length:</stringProp>
               <stringProp name="-644619860">Content-Type:</stringProp>
             </collectionProp>
@@ -361,7 +361,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="2111395962">Example Domain</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -391,7 +391,7 @@ mirrorServer.start();</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoGZIP_IN_RESPONSE" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="256417959">Content-Encoding: gzip</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
@@ -401,7 +401,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-88801152">Content-Length:</stringProp>
               <stringProp name="-644619860">Content-Type:</stringProp>
             </collectionProp>
@@ -412,7 +412,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoGzip_IN_REQUEST" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
@@ -422,7 +422,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="2111395962">Example Domain</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -499,7 +499,7 @@ mirrorServer.start();</stringProp>
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Gzip" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
@@ -509,7 +509,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-88801152">Content-Length:</stringProp>
               <stringProp name="-644619860">Content-Type:</stringProp>
             </collectionProp>
@@ -571,7 +571,7 @@ mirrorServer.start();</stringProp>
             </HeaderManager>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Gzip" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
@@ -581,7 +581,7 @@ mirrorServer.start();</stringProp>
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="-88801152">Content-Length:</stringProp>
                 <stringProp name="-644619860">Content-Type:</stringProp>
               </collectionProp>
@@ -637,7 +637,7 @@ mirrorServer.start();</stringProp>
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1714160472">Exceeded maximum number of redirects</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -647,7 +647,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-88801152">Content-Length:</stringProp>
               <stringProp name="-644619860">Content-Type:</stringProp>
             </collectionProp>
@@ -695,7 +695,7 @@ mirrorServer.start();</stringProp>
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1075402381">Non HTTP response message</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -772,7 +772,7 @@ mirrorServer.start();</stringProp>
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
@@ -833,7 +833,7 @@ mirrorServer.start();</stringProp>
           </RegexExtractor>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
@@ -908,7 +908,7 @@ mirrorServer.start();</stringProp>
           </RegexExtractor>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
@@ -987,7 +987,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </RegexExtractor>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
@@ -1003,7 +1003,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1049865380">nv_contentType</stringProp>
               <stringProp name="1947100436">text/plain; charset=UTF-8</stringProp>
             </collectionProp>
@@ -1063,7 +1063,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </RegexExtractor>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
@@ -1121,7 +1121,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_not_present" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
               <stringProp name="-1500123463">Content-Disposition: form-data; name=&quot;fileName&quot;; filename=&quot;user.properties&quot;</stringProp>
               <stringProp name="1533831720">Content-Transfer-Encoding: binary</stringProp>
@@ -1134,7 +1134,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1439390532">Sample user.properties file</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
               <stringProp name="-1351522793">User-Agent:</stringProp>
@@ -1146,7 +1146,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
@@ -1201,7 +1201,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_not_present" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
               <stringProp name="-1500123463">Content-Disposition: form-data; name=&quot;fileName&quot;; filename=&quot;user.properties&quot;</stringProp>
               <stringProp name="1533831720">Content-Transfer-Encoding: binary</stringProp>
@@ -1215,7 +1215,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1439390532">Sample user.properties file</stringProp>
               <stringProp name="-1351522793">User-Agent:</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
@@ -1227,7 +1227,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
@@ -1282,7 +1282,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_not_present" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
               <stringProp name="-1500123463">Content-Disposition: form-data; name=&quot;fileName&quot;; filename=&quot;user.properties&quot;</stringProp>
               <stringProp name="1533831720">Content-Transfer-Encoding: binary</stringProp>
@@ -1295,7 +1295,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1439390532">Sample user.properties file</stringProp>
               <stringProp name="1737626343">PUT /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
@@ -1308,7 +1308,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
@@ -1361,7 +1361,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </HeaderManager>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_not_present" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
               <stringProp name="-1500123463">Content-Disposition: form-data; name=&quot;fileName&quot;; filename=&quot;user.properties&quot;</stringProp>
               <stringProp name="1533831720">Content-Transfer-Encoding: binary</stringProp>
@@ -1374,7 +1374,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1737626343">PUT /test?name0=value0 HTTP/1.1</stringProp>
               <stringProp name="-1294586556">Body of Put</stringProp>
               <stringProp name="-1351522793">User-Agent:</stringProp>
@@ -1386,7 +1386,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
@@ -1442,7 +1442,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             </HeaderManager>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_not_present" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
                 <stringProp name="-1500123463">Content-Disposition: form-data; name=&quot;fileName&quot;; filename=&quot;user.properties&quot;</stringProp>
                 <stringProp name="1533831720">Content-Transfer-Encoding: binary</stringProp>
@@ -1456,7 +1456,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="1737626343">PUT /test?name0=value0 HTTP/1.1</stringProp>
                 <stringProp name="2117109222">Host: localhost:8081</stringProp>
                 <stringProp name="-1351522793">User-Agent:</stringProp>
@@ -1468,7 +1468,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="894172713">Connection: keep-alive</stringProp>
                 <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               </collectionProp>
@@ -1523,7 +1523,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             </HeaderManager>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_not_present" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
                 <stringProp name="-1500123463">Content-Disposition: form-data; name=&quot;fileName&quot;; filename=&quot;user.properties&quot;</stringProp>
                 <stringProp name="1533831720">Content-Transfer-Encoding: binary</stringProp>
@@ -1537,7 +1537,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_response_contains" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="1737626343">PUT /test?name0=value0 HTTP/1.1</stringProp>
                 <stringProp name="2117109222">Host: localhost:8081</stringProp>
                 <stringProp name="-1351522793">User-Agent:</stringProp>
@@ -1550,7 +1550,7 @@ if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
             </ResponseAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="894172713">Connection: keep-alive</stringProp>
                 <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               </collectionProp>

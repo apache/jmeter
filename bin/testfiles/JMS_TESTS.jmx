@@ -100,7 +100,7 @@ try {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="2603186">Test</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -178,7 +178,7 @@ class MyMessageListener implements MessageListener {
         </JSR223Sampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1700117006">Started Message Consumer</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -209,7 +209,7 @@ class MyMessageListener implements MessageListener {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1806444283">Reply to:Test</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -244,7 +244,7 @@ class MyMessageListener implements MessageListener {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="620675290">Test-with-customer-correlationId</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -285,7 +285,7 @@ class MyMessageListener implements MessageListener {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1882001775">No reply message received</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -326,7 +326,7 @@ class MyMessageListener implements MessageListener {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="451718395">Test-with-customer-correlationId-and-jms-properties-matching-selector</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -361,7 +361,7 @@ class MyMessageListener implements MessageListener {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1549895784">Oneway request has no response data</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -426,7 +426,7 @@ finally {
         </JSR223Sampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-487953317">Received : Test-send-only</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -462,7 +462,7 @@ finally {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1549895784">Oneway request has no response data</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -510,7 +510,7 @@ finally {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1029016402">requestQueue5 has 1 messages</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -540,7 +540,7 @@ finally {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1086280699">Test-send-only-for-count-and-read</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -576,7 +576,7 @@ finally {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1549895784">Oneway request has no response data</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -620,7 +620,7 @@ finally {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="2008037952">requestQueue6: 1 message(s) removed</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -656,7 +656,7 @@ finally {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1343037074">requestQueue6 has 0 messages</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -687,7 +687,7 @@ finally {
         </JMSSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_noMessage" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1882001775">No reply message received</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -761,7 +761,7 @@ finally {
         </PublisherSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1719216023">1 messages published</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -786,7 +786,7 @@ finally {
         </SubscriberSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1506174364">1 message(s) received successfully of 1 expected</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -795,7 +795,7 @@ finally {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-2063475679">Test Topic</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -804,7 +804,7 @@ finally {
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="812041149">Properties:
 prop1	value1
 propBoolean	true
@@ -884,7 +884,7 @@ propFloat	1.2</stringProp>
         </PublisherSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1719216023">1 messages published</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -924,7 +924,7 @@ propFloat	1.2</stringProp>
         </SubscriberSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="51512">404</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -964,7 +964,7 @@ propFloat	1.2</stringProp>
         </SubscriberSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-2063475679">Test Topic</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -1039,7 +1039,7 @@ propFloat	1.2</stringProp>
         </PublisherSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1719216023">1 messages published</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -1079,7 +1079,7 @@ propFloat	1.2</stringProp>
         </SubscriberSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="51512">404</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -1119,7 +1119,7 @@ propFloat	1.2</stringProp>
         </SubscriberSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-2063475679">Test Topic</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -1194,7 +1194,7 @@ propFloat	1.2</stringProp>
         </PublisherSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1719216023">1 messages published</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -1235,7 +1235,7 @@ propFloat	1.2</stringProp>
         </SubscriberSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1154304067">Test Durable Topic Message</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -1310,7 +1310,7 @@ propFloat	1.2</stringProp>
         </PublisherSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-1719216023">1 messages published</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
@@ -1339,7 +1339,7 @@ propFloat	1.2</stringProp>
         </SubscriberSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="51512">404</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -1367,7 +1367,7 @@ propFloat	1.2</stringProp>
         </SubscriberSampler>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="-2063475679">Test Topic</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>

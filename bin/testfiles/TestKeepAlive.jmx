@@ -107,7 +107,7 @@ JMeterUtils.setProperty(&quot;httpclient4.time_to_live&quot;, ttl.toString());</
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ResHeaders_Close" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1984252372">Connection: close</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
@@ -117,7 +117,7 @@ JMeterUtils.setProperty(&quot;httpclient4.time_to_live&quot;, ttl.toString());</
           </ResponseAssertion>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ReqHeaders_Close" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="1984252372">Connection: close</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
@@ -149,7 +149,7 @@ JMeterUtils.setProperty(&quot;httpclient4.time_to_live&quot;, ttl.toString());</
           </HTTPSamplerProxy>
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max100" enabled="true">
-              <collectionProp name="Asserion.test_strings">
+              <collectionProp name="Assertion.test_strings">
                 <stringProp name="803114368">Keep-Alive: timeout=30, max=100</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
@@ -209,7 +209,7 @@ vars.put(&quot;thirdPause&quot;,thirdPause.toString());</stringProp>
             </HTTPSamplerProxy>
             <hashTree>
               <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max99" enabled="true">
-                <collectionProp name="Asserion.test_strings">
+                <collectionProp name="Assertion.test_strings">
                   <stringProp name="-1636660815">Keep-Alive: timeout=30, max=99</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
@@ -250,7 +250,7 @@ vars.put(&quot;thirdPause&quot;,thirdPause.toString());</stringProp>
             </HTTPSamplerProxy>
             <hashTree>
               <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max98" enabled="true">
-                <collectionProp name="Asserion.test_strings">
+                <collectionProp name="Assertion.test_strings">
                   <stringProp name="-1636660816">Keep-Alive: timeout=30, max=98</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
@@ -291,7 +291,7 @@ vars.put(&quot;thirdPause&quot;,thirdPause.toString());</stringProp>
             </HTTPSamplerProxy>
             <hashTree>
               <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max97" enabled="true">
-                <collectionProp name="Asserion.test_strings">
+                <collectionProp name="Assertion.test_strings">
                   <stringProp name="-1636660817">Keep-Alive: timeout=30, max=97</stringProp>
                 </collectionProp>
                 <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
@@ -332,7 +332,7 @@ vars.put(&quot;thirdPause&quot;,thirdPause.toString());</stringProp>
             </HTTPSamplerProxy>
             <hashTree>
               <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max100" enabled="true">
-                <collectionProp name="Asserion.test_strings">
+                <collectionProp name="Assertion.test_strings">
                   <stringProp name="803114368">Keep-Alive: timeout=30, max=100</stringProp>
                 </collectionProp>
                 <stringProp name="TestPlan.comments">Connection has exceeded its TTL</stringProp>
@@ -374,7 +374,7 @@ vars.put(&quot;thirdPause&quot;,thirdPause.toString());</stringProp>
             </HTTPSamplerProxy>
             <hashTree>
               <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max100" enabled="true">
-                <collectionProp name="Asserion.test_strings">
+                <collectionProp name="Assertion.test_strings">
                   <stringProp name="803114368">Keep-Alive: timeout=30, max=100</stringProp>
                 </collectionProp>
                 <stringProp name="TestPlan.comments">Connection has exceeded its TTL</stringProp>
@@ -387,7 +387,7 @@ vars.put(&quot;thirdPause&quot;,thirdPause.toString());</stringProp>
             </hashTree>
           </hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_keepAlive" enabled="true">
-            <collectionProp name="Asserion.test_strings">
+            <collectionProp name="Assertion.test_strings">
               <stringProp name="894172713">Connection: keep-alive</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
