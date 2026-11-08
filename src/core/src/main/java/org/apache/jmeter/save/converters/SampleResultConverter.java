@@ -335,7 +335,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             if (save.saveHostname()){
                 writer.addAttribute(ATT_HOSTNAME, event.getHostname());
             }
-            for (int i = 0; i < SampleEvent.getVarCount(); i++){
+            int sampleVarCount = SampleEvent.getVarCount();
+            for (int i = 0; i < sampleVarCount; i++){
                writer.addAttribute(SampleEvent.getVarName(i), ConversionHelp.encode(event.getVarValue(i)));
             }
         }

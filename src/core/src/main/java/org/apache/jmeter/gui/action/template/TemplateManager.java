@@ -177,7 +177,8 @@ public class TemplateManager {
         document.getDocumentElement().normalize();
         Map<String, Template> templates = new TreeMap<>();
         NodeList templateNodes = document.getElementsByTagName("template");
-        for (int i = 0; i < templateNodes.getLength(); i++) {
+        int nodeCount = templateNodes.getLength();
+        for (int i = 0; i < nodeCount; i++) {
             Node node = templateNodes.item(i);
             parseTemplateNode(templates, node);
         }
@@ -212,7 +213,8 @@ public class TemplateManager {
 
     private static Map<String, String> parseParameterNodes(NodeList parameterNodes) {
         Map<String, String> parametersMap = new HashMap<>();
-        for (int i = 0; i < parameterNodes.getLength(); i++) {
+        int nodeCount = parameterNodes.getLength();
+        for (int i = 0; i < nodeCount; i++) {
             Element element =  (Element) parameterNodes.item(i);
             parametersMap.put(element.getAttribute("key"), element.getAttribute("defaultValue"));
         }

@@ -68,13 +68,14 @@ public class CollapseExpand extends AbstractAction {
         boolean collapse=ActionNames.COLLAPSE_ALL.equals(e.getActionCommand());
         GuiPackage guiInstance = GuiPackage.getInstance();
         JTree jTree = guiInstance.getMainFrame().getTree();
+        int treeRowCount = jTree.getRowCount();
         if (collapse) {
-            for (int i = jTree.getRowCount() - 1; i >= 0; i--) {
+            for (int i = treeRowCount - 1; i >= 0; i--) {
                 jTree.collapseRow(i);
             }
             return;
         }
-        for(int i = 0; i < jTree.getRowCount(); i++) {
+        for(int i = 0; i < treeRowCount; i++) {
             jTree.expandRow(i);
         }
     }
