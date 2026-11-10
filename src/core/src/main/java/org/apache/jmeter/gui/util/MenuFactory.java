@@ -382,6 +382,10 @@ public final class MenuFactory {
                 JMeterUtils.getResString("change_controller"),// $NON-NLS-1$
                 ActionNames.CHANGE_CONTROLLER));
 
+        pop.add(makeMenus(new String[]{CONTROLLERS},
+                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
+                ActionNames.ADD_PARENT));
+
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
@@ -414,6 +418,9 @@ public final class MenuFactory {
         pop.add(makeMenus(new String[]{SAMPLERS},
                 JMeterUtils.getResString("change_sampler"),// $NON-NLS-1$
                 ActionNames.CHANGE_SAMPLER));
+        pop.add(makeMenus(new String[]{CONTROLLERS},
+                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
+                ActionNames.ADD_PARENT));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;

@@ -21,7 +21,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.util.StringUtilities;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
@@ -35,7 +35,7 @@ public final class ChangeElement {
 
     private static void updateElement(AbstractTestElement newElement, GuiPackage guiPackage, JMeterTreeNode currentNode) {
         AbstractTestElement currentElement = (AbstractTestElement) currentNode.getUserObject();
-        if (StringUtils.isNotBlank(currentElement.getName())) {
+        if (StringUtilities.isNotBlank(currentElement.getName())) {
             newElement.setName(currentElement.getName());
         }
 

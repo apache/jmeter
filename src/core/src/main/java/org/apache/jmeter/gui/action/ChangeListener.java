@@ -28,6 +28,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.ChangeElement;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.visualizers.Visualizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,7 @@ public class ChangeListener extends AbstractAction {
         String name = ((Component) e.getSource()).getName();
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        if (!(currentNode.getUserObject() instanceof TestElement)) {
+        if (!(currentNode.getUserObject() instanceof Visualizer)) {
             Toolkit.getDefaultToolkit().beep();
             return;
         }
