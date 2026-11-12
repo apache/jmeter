@@ -67,6 +67,7 @@ public interface HTTPConstantsInterface { // CHECKSTYLE IGNORE InterfaceIsType
     String REPORT = "REPORT"; // $NON-NLS-1$
     String MKCALENDAR = "MKCALENDAR"; // $NON-NLS-1$
     String SEARCH = "SEARCH"; // $NON-NLS-1$
+    String QUERY = "QUERY"; // $NON-NLS-1$
     String HEADER_AUTHORIZATION = "Authorization"; // $NON-NLS-1$
     String HEADER_COOKIE = "Cookie"; // $NON-NLS-1$
     String HEADER_COOKIE_IN_REQUEST = "Cookie:"; // $NON-NLS-1$

@@ -254,7 +254,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             HTTPConstants.UNLOCK,
             HTTPConstants.REPORT,
             HTTPConstants.MKCALENDAR,
-            HTTPConstants.SEARCH
+            HTTPConstants.SEARCH,
+            HTTPConstants.QUERY
         ));
         String userDefinedMethods = JMeterUtils.getPropDefault(
                 "httpsampler.user_defined_methods", "");
