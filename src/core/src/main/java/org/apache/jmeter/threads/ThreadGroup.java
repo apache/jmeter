@@ -273,7 +273,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         JMeterThread jmThread = makeThread(engine, this, notifier, groupNumber, threadNum, cloneTree(threadGroupTree), variables);
         scheduleThread(jmThread, now); // set start and end time
         jmThread.setInitialDelay(delay);
-        Thread newThread = new Thread(jmThread, jmThread.getThreadName());
+        Thread newThread = JMeterThreadFactory.newThread(jmThread, jmThread.getThreadName());
         registerStartedThread(jmThread, newThread);
         newThread.start();
         return jmThread;
@@ -587,8 +587,13 @@ public class ThreadGroup extends AbstractThreadGroup {
                         jmThread.setScheduled(true);
                         jmThread.setEndTime(endtime);
                     }
-                    Thread newThread = new Thread(jmThread, jmThread.getThreadName());
-                    newThread.setDaemon(false); // ThreadStarter is daemon, but we don't want sampler threads to be so too
+                    Thread newThread = JMeterThreadFactory.newThread(jmThread, jmThread.getThreadName());
+                    // Virtual threads are always daemon threads, and setDaemon(false) is not legal for them.
+                    // The engine waits for user threads explicitly (see waitThreadsStopped), so it does not
+                    // rely on user threads being non-daemon to keep the JVM alive.
+                    if (!JMeterThreadFactory.isVirtual(newThread)) {
+                        newThread.setDaemon(false); // ThreadStarter is daemon, but we don't want sampler threads to be so too
+                    }
                     registerStartedThread(jmThread, newThread);
                     newThread.start();
                 }
