@@ -55,10 +55,7 @@ in <a href="https://github.com/apache/jmeter/blob/master/gradle.md">gradle.md</a
 
     <ul>
         <li>Open the build.gradle.kts file with IntelliJ IDEA and choose "Open as Project"</li>
-        <li>Make sure "Create separate module per source set" is selected</li>
-        <li>Make sure "Use default gradle wrapper" is selected</li>
-        <li>In the "File already exists" dialogue, choose "Yes" to overwrite</li>
-        <li>In the "Open Project" dialogue, choose "Delete Existing Project and Import"</li>
+        <li>IntelliJ IDEA will import the Gradle project automatically — just wait for the Gradle sync to finish</li>
     </ul>
 
 <h3>Compiling and packaging JMeter using Eclipse</h3>
