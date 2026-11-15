@@ -566,6 +566,7 @@ public class XPathUtil {
      * @param document XML Document
      * @return {@link PrefixResolver}
      */
+    @SuppressWarnings("removal") // Used until the Xalan implementation is replaced
     private static PrefixResolver getPrefixResolver(Document document) {
         return new PropertiesBasedPrefixResolver(document.getDocumentElement());
     }
@@ -592,6 +593,7 @@ public class XPathUtil {
      * @param namespaces String series of prefix/namespace values separateur by line break
      * @return {@link PrefixResolver}
      */
+    @SuppressWarnings("removal") // Used until the Xalan implementation is replaced
     private static PrefixResolver getPrefixResolverForXPath2(Document document,String namespaces) {
         return new PropertiesBasedPrefixResolverForXpath2(document.getDocumentElement(),namespaces);
     }
