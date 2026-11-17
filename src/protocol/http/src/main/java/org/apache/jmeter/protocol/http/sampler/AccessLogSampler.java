@@ -262,6 +262,22 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         super.setImageParser(imageParsing);
     }
 
+
+    /**
+     * @return Returns the keepAlive.
+     */
+    @Override
+    public boolean getUseKeepAlive() {
+        return super.getUseKeepAlive();
+    }
+
+    // Declared here so the TestBean property descriptor can discover the setter.
+    @SuppressWarnings("RedundantOverride")
+    @Override
+    public void setUseKeepAlive(boolean useKeepAlive) {
+        super.setUseKeepAlive(useKeepAlive);
+    }
+
     /**
      * @return Returns the port.
      */
