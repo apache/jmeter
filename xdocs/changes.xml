@@ -156,6 +156,7 @@ Summary
     <li><bug>6456</bug>Handle malformed percent-encoded URLs gracefully when recording HTTP traffic, logging a warning instead of failing the recording.</li>
     <li><pr>6742</pr>Count single byte writes in <code>CountingOutputStream</code> as well, so the SMTP Sampler does not under-report the size of the messages it sends.</li>
     <li><pr>6742</pr>Present the client certificate of the JMeter key store also on TLS connections that perform the handshake with an <code>SSLEngine</code>, like those of asynchronous HTTP clients, which the HttpClient5 sampler implementation uses for HTTP/2. So far it was only presented on socket based connections.</li>
+    <li><pr>5937</pr>Deprecate Xalan for removal. Contributed by Ori Marko (github.com/orimarko)</li>
   </ul>
 
   <h3>HTTP Samplers and Test Script Recorder</h3>
