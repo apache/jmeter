@@ -17,8 +17,6 @@
 
 package org.apache.jmeter.threads.openmodel
 
-import java.time.Duration
-
 import org.apache.jmeter.engine.StandardJMeterEngine
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.reporters.ResultCollector
@@ -31,9 +29,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
-
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.Duration
 
 class KotlinDslRunTest : JMeterTestCase(), JMeterSerialTest {
 
