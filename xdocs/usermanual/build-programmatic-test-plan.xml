@@ -179,7 +179,19 @@ val root = testTree { // (1)
         </ul>
       </p>
     </section>
+    <section name="Running a test plan" anchor="running_test_plan">
+      <p>
+        The <code>testTree { ... }</code> function builds a test plan tree
+        but does not execute it. To run the plan, configure a
+        <code>StandardJMeterEngine</code> with the tree and start the test.
+      </p>
 
+      <p>
+        A <code>ResultCollector</code> can be added to the plan to write
+        sample results to a JTL file. Wait for the test to finish before
+        reading the results.
+      </p>
+    </section>
     <section name="Extending Kotlin DSL" anchor="extending_treebuilder_kotlin_dsl">
       <p>As you use the DSL for test plan generation, you might want to factor out the common patterns.
       For instance, imagine you want factor out <code>Thread Group</code> creation so it always has a <code>Summariser</code> element.</p>
