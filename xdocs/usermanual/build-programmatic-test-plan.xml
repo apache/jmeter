@@ -179,6 +179,40 @@ val root = testTree { // (1)
         </ul>
       </p>
     </section>
+    <section name="Running a test plan" anchor="running_test_plan">
+      <p>
+        The <code>testTree { ... }</code> function builds a test plan tree
+        but does not execute it. To run the plan, configure a
+        <code>StandardJMeterEngine</code> with the tree and start the test.
+      </p>
+
+      <p>
+        A <code>ResultCollector</code> can be added to the plan to write
+        sample results to a JTL file. Wait for the test to finish before
+        reading the results.
+      </p>
+      <source>
+        val tree = testTree {
+          TestPlan::class {
+              ResultCollector::class {
+              filename = "target/results.jtl"
+              }
+              OpenModelThreadGroup::class {
+              name = "Thread Group"
+              // 5 requests within 100 ms, then a pause so all the threads can finish
+              scheduleString = "rate(50 / sec) random_arrivals(100 ms) pause(2 s)"
+              DebugSampler::class {
+                  name = "Kotlin DSL sample"
+                }
+              }
+          }
+        }
+        StandardJMeterEngine().apply {
+          configure(tree)
+          runTest()
+          awaitTermination(Duration.ofSeconds(10))
+        }</source>
+    </section>
 
     <section name="Extending Kotlin DSL" anchor="extending_treebuilder_kotlin_dsl">
       <p>As you use the DSL for test plan generation, you might want to factor out the common patterns.
