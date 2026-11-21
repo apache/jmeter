@@ -37,58 +37,57 @@ import org.junit.jupiter.params.provider.ValueSource;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 
-
 @WireMockTest
 class TestHttpQuery extends JMeterTestCase {
 
-        private static HTTPSamplerProxy querySampler(String impl, WireMockRuntimeInfo server) {
-            HTTPSamplerProxy sampler = new HTTPSamplerProxy(impl);
-            sampler.setProtocol("http");
-            sampler.setDomain("localhost");
-            sampler.setPort(server.getHttpPort());
-            sampler.setPath("/search");
-            sampler.setMethod(HTTPConstants.QUERY);
-            sampler.setConnectTimeout("5000");
-            sampler.setResponseTimeout("5000");
-            return sampler;
-        }
+    private static HTTPSamplerProxy querySampler(String impl, WireMockRuntimeInfo server) {
+        HTTPSamplerProxy sampler = new HTTPSamplerProxy(impl);
+        sampler.setProtocol("http");
+        sampler.setDomain("localhost");
+        sampler.setPort(server.getHttpPort());
+        sampler.setPath("/search");
+        sampler.setMethod(HTTPConstants.QUERY);
+        sampler.setConnectTimeout("5000");
+        sampler.setResponseTimeout("5000");
+        return sampler;
+    }
 
-        @Test
-        void queryIsOfferedInMethodList() {
-            assertTrue(Arrays.asList(HTTPSamplerBase.getValidMethodsAsArray()).contains(HTTPConstants.QUERY));
-        }
+    @Test
+    void queryIsOfferedInMethodList() {
+        assertTrue(Arrays.asList(HTTPSamplerBase.getValidMethodsAsArray()).contains(HTTPConstants.QUERY));
+    }
 
-        @ParameterizedTest
-        @ValueSource(strings = {HTTPSamplerFactory.IMPL_HTTP_CLIENT4, HTTPSamplerFactory.IMPL_HTTP_CLIENT5})
-        void querySendsRawBody(String impl, WireMockRuntimeInfo server) {
-            server.getWireMock().register(request("QUERY", urlEqualTo("/search"))
-                    .willReturn(aResponse().withStatus(200).withBody("OK")));
-            HTTPSamplerProxy sampler = querySampler(impl, server);
-            sampler.setPostBodyRaw(true);
-            sampler.addNonEncodedArgument("", "{\"q\":\"jmeter\"}", "");
-            SampleResult res = sampler.sample();
-            assertTrue(res.isSuccessful(), res.getResponseMessage());
-            server.getWireMock().verifyThat(1, requestedFor("QUERY", urlEqualTo("/search"))
-                    .withRequestBody(equalTo("{\"q\":\"jmeter\"}")));
-        }
+    @ParameterizedTest
+    @ValueSource(strings = {HTTPSamplerFactory.IMPL_HTTP_CLIENT4, HTTPSamplerFactory.IMPL_HTTP_CLIENT5})
+    void querySendsRawBody(String impl, WireMockRuntimeInfo server) {
+        server.getWireMock().register(request("QUERY", urlEqualTo("/search"))
+                .willReturn(aResponse().withStatus(200).withBody("OK")));
+        HTTPSamplerProxy sampler = querySampler(impl, server);
+        sampler.setPostBodyRaw(true);
+        sampler.addNonEncodedArgument("", "{\"q\":\"jmeter\"}", "");
+        SampleResult res = sampler.sample();
+        assertTrue(res.isSuccessful(), res.getResponseMessage());
+        server.getWireMock().verifyThat(1, requestedFor("QUERY", urlEqualTo("/search"))
+                .withRequestBody(equalTo("{\"q\":\"jmeter\"}")));
+    }
 
-        @ParameterizedTest
-        @ValueSource(strings = {HTTPSamplerFactory.IMPL_HTTP_CLIENT4, HTTPSamplerFactory.IMPL_HTTP_CLIENT5})
-        void querySendsFormParameters(String impl, WireMockRuntimeInfo server) {
-            server.getWireMock().register(request("QUERY", urlEqualTo("/search"))
-                    .willReturn(aResponse().withStatus(200)));
-            HTTPSamplerProxy sampler = querySampler(impl, server);
-            sampler.addArgument("a", "1");
-            sampler.addArgument("b", "x y");
-            SampleResult res = sampler.sample();
-            assertTrue(res.isSuccessful(), res.getResponseMessage());
-            server.getWireMock().verifyThat(1, requestedFor("QUERY", urlEqualTo("/search"))
-                    .withRequestBody(equalTo("a=1&b=x+y")));
-        }
+    @ParameterizedTest
+    @ValueSource(strings = {HTTPSamplerFactory.IMPL_HTTP_CLIENT4, HTTPSamplerFactory.IMPL_HTTP_CLIENT5})
+    void querySendsFormParameters(String impl, WireMockRuntimeInfo server) {
+        server.getWireMock().register(request("QUERY", urlEqualTo("/search"))
+                .willReturn(aResponse().withStatus(200)));
+        HTTPSamplerProxy sampler = querySampler(impl, server);
+        sampler.addArgument("a", "1");
+        sampler.addArgument("b", "x y");
+        SampleResult res = sampler.sample();
+        assertTrue(res.isSuccessful(), res.getResponseMessage());
+        server.getWireMock().verifyThat(1, requestedFor("QUERY", urlEqualTo("/search"))
+                .withRequestBody(equalTo("a=1&b=x+y")));
+    }
 
-        @Test
-        void javaImplementationRejectsQuery(WireMockRuntimeInfo server) {
-            SampleResult res = querySampler(HTTPSamplerFactory.IMPL_JAVA, server).sample();
-            assertFalse(res.isSuccessful());
-        }
+    @Test
+    void javaImplementationRejectsQuery(WireMockRuntimeInfo server) {
+        SampleResult res = querySampler(HTTPSamplerFactory.IMPL_JAVA, server).sample();
+        assertFalse(res.isSuccessful());
+    }
 }
