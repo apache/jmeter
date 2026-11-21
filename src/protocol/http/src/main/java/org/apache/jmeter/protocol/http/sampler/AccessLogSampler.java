@@ -278,10 +278,10 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         super.setImageParser(imageParsing);
     }
 
-
     /**
-     * @return Returns the keepAlive.
+     * @return whether keep-alive is enabled
      */
+    @SuppressWarnings("RedundantOverride")
     @Override
     public boolean getUseKeepAlive() {
         return super.getUseKeepAlive();

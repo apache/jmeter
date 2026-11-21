@@ -21,6 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
+import com.github.tomakehurst.wiremock.client.WireMock.matching
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
@@ -52,17 +53,18 @@ class AccessLogSamplerTest : JMeterTestCase() {
 
     @ParameterizedTest
     @CsvSource(
-        "Java,true,keep-alive",
-        "Java,false,close",
-        "HttpClient4,true,keep-alive",
-        "HttpClient4,false,close",
-        "HttpClient5,true,keep-alive",
-        "HttpClient5,false,close",
+        "Java,true,keep-alive,Java/.*",
+        "Java,false,close,Java/.*",
+        "HttpClient4,true,keep-alive,Apache-HttpClient/4.*",
+        "HttpClient4,false,close,Apache-HttpClient/4.*",
+        "HttpClient5,true,keep-alive,Apache-HttpClient/5.*",
+        "HttpClient5,false,close,Apache-HttpClient/5.*",
     )
     fun `selected implementation honors keep alive`(
         implementation: String,
         keepAlive: Boolean,
         expectedConnection: String,
+        expectedUserAgent: String,
         server: WireMockRuntimeInfo,
     ) {
         val sampler = createSampler(server).apply {
@@ -71,8 +73,9 @@ class AccessLogSamplerTest : JMeterTestCase() {
         }
 
         try {
-            assertSamplesAndConnectionHeaders(sampler, server, expectedConnection)
+            assertSamplesAndConnectionHeaders(sampler, server, expectedConnection, expectedUserAgent)
         } finally {
+            sampler.threadFinished()
             sampler.testEnded()
         }
     }
@@ -82,8 +85,9 @@ class AccessLogSamplerTest : JMeterTestCase() {
         val sampler = createSampler(server)
 
         try {
-            assertSamplesAndConnectionHeaders(sampler, server, "close")
+            assertSamplesAndConnectionHeaders(sampler, server, "close", "Java/.*")
         } finally {
+            sampler.threadFinished()
             sampler.testEnded()
         }
     }
@@ -111,15 +115,20 @@ class AccessLogSamplerTest : JMeterTestCase() {
         sampler: AccessLogSampler,
         server: WireMockRuntimeInfo,
         expectedConnection: String,
+        expectedUserAgent: String,
     ) {
         assertTrue(sampler.sampleWithParser().isSuccessful)
         assertTrue(sampler.sampleWithParser().isSuccessful)
 
         server.wireMock.verifyThat(
-            getRequestedFor(urlEqualTo("/one")).withHeader("Connection", equalTo(expectedConnection)),
+            getRequestedFor(urlEqualTo("/one"))
+                .withHeader("Connection", equalTo(expectedConnection))
+                .withHeader("User-Agent", matching(expectedUserAgent)),
         )
         server.wireMock.verifyThat(
-            getRequestedFor(urlEqualTo("/two")).withHeader("Connection", equalTo(expectedConnection)),
+            getRequestedFor(urlEqualTo("/two"))
+                .withHeader("Connection", equalTo(expectedConnection))
+                .withHeader("User-Agent", matching(expectedUserAgent)),
         )
     }
 }

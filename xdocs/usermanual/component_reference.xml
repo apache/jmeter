@@ -1041,6 +1041,8 @@ for all the methods. For an example of how to implement either interface, refer 
 </properties>
 <p>The default is the Java implementation with keep-alive disabled, preserving the sampler's previous behavior.
 HttpClient4 and HttpClient5 use per-thread connection management; HttpClient5 also supports HTTP/2.</p>
+<p>An empty <code>Implementation</code> value selects <code>Java</code> for this sampler; it does not use the global
+<code>jmeter.httpsampler</code> default used by the HTTP Request sampler.</p>
 <p>
 The <code>TCLogParser</code> processes the access log independently for each thread.
 The <code>SharedTCLogParser</code> and <code>OrderPreservingLogParser</code> share access to the file,
