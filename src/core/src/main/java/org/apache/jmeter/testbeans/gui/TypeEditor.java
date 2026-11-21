@@ -48,6 +48,12 @@ public enum TypeEditor {
             return new TextAreaEditor(descriptor);
         }
     },
+    JSR223TextAreaEditor {
+        @Override
+        PropertyEditor getInstance(PropertyDescriptor descriptor) {
+            return new JSR223TextAreaEditor(descriptor);
+        }
+    },
     ComboStringEditor { // NOSONAR Keep naming for compatibility
         @Override
         PropertyEditor getInstance(PropertyDescriptor descriptor) {

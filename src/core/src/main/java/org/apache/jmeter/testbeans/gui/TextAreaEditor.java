@@ -26,6 +26,7 @@ import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
 import java.util.Locale;
 
+import org.apache.jmeter.gui.util.JSR223Completion;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 
@@ -81,7 +82,15 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *            to be used for the editor. Must not be <code>null</code>
      */
     public TextAreaEditor(PropertyDescriptor descriptor) {
+        this(descriptor, false);
+    }
+
+    protected TextAreaEditor(PropertyDescriptor descriptor, boolean enableCodeCompletion) {
         textUI = JSyntaxTextArea.getInstance(10, 60);
+        if (enableCodeCompletion) {
+            JSR223Completion.install(textUI, Boolean.TRUE.equals(
+                    descriptor.getValue(JSR223Completion.SAMPLE_RESULT_BINDING)));
+        }
         textUI.setLanguage((String) descriptor.getValue(GenericTestBeanCustomizer.TEXT_LANGUAGE));
         scroller = JTextScrollPane.getInstance(textUI, true);
         init();
