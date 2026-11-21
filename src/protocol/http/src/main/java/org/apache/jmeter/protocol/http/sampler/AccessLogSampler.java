@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.net.URL;
+
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.TestElementMetadata;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
@@ -73,6 +76,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 
     /* private members used by class */
     private transient LogParser parser = null;
+    private transient HTTPAbstractImpl impl;
 
     private String logFile;
     private String parserClassName;
@@ -230,6 +234,18 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         this.filterClassName = filterClassName;
     }
 
+    @SuppressWarnings("RedundantOverride")
+    @Override
+    public String getImplementation() {
+        return super.getImplementation();
+    }
+
+    @SuppressWarnings("RedundantOverride")
+    @Override
+    public void setImplementation(String implementation) {
+        super.setImplementation(implementation);
+    }
+
     /**
      * @return Returns the domain.
      */
@@ -276,6 +292,18 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     @Override
     public void setUseKeepAlive(boolean useKeepAlive) {
         super.setUseKeepAlive(useKeepAlive);
+    }
+
+    @Override
+    protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int depth) {
+        String implementation = getImplementation();
+        if (StringUtilities.isBlank(implementation) || HTTPSamplerFactory.IMPL_JAVA.equals(implementation)) {
+            return super.sample(url, method, areFollowingRedirect, depth);
+        }
+        if (impl == null) {
+            impl = HTTPSamplerFactory.getImplementation(implementation, this);
+        }
+        return impl.sample(url, method, areFollowingRedirect, depth);
     }
 
     /**
@@ -386,11 +414,26 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      */
     @Override
     public void threadFinished() {
+        if (impl != null) {
+            impl.threadFinished();
+        }
         if(parser instanceof ThreadListener listener) {
             listener.threadFinished();
         }
         if(filter instanceof ThreadListener threadListener) {
             threadListener.threadFinished();
+        }
+    }
+
+    @Override
+    public boolean interrupt() {
+        return impl != null ? impl.interrupt() : super.interrupt();
+    }
+
+    @Override
+    public void testIterationStart(LoopIterationEvent event) {
+        if (impl != null) {
+            impl.notifyFirstSampleAfterLoopRestart();
         }
     }
 }

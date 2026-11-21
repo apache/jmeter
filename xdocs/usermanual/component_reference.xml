@@ -1010,18 +1010,11 @@ are two interfaces you have to implement:</p>
 <li><code>org.apache.jmeter.protocol.http.util.accesslog.LogParser</code></li>
 <li><code>org.apache.jmeter.protocol.http.util.accesslog.Generator</code></li>
 </ul>
-<p>The current implementation of AccessLogSampler uses the generator to create a new
-HTTPSampler. The servername, port and get images are set by AccessLogSampler. Next,
-the parser is called with integer <code>1</code>, telling it to parse one entry. After that,
-<code>HTTPSampler.sample()</code> is called to make the request.</p>
+<p>For each sample, the parser reads one log entry and configures the request on the
+Access Log Sampler. The sampler then sends the request using the selected HTTP implementation.</p>
 <source>
-samp = (HTTPSampler) GENERATOR.generateRequest();
-samp.setDomain(this.getDomain());
-samp.setPort(this.getPort());
-samp.setImageParser(this.isImageParser());
-PARSER.parse(1);
-res = samp.sample();
-res.setSampleLabel(samp.toString());
+PARSER.parseAndConfigure(1, accessLogSampler);
+res = accessLogSampler.sample();
 </source>
 The required methods in <code>LogParser</code> are:
 <ul>
@@ -1040,10 +1033,14 @@ for all the methods. For an example of how to implement either interface, refer 
         <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
         <property name="Protocol" required="No (defaults to http">Scheme</property>
         <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
+        <property name="Implementation" required="No (defaults to Java)"><code>Java</code>, <code>HttpClient4</code>, or <code>HttpClient5</code>.</property>
+        <property name="Use Keep-Alive" required="No (defaults to false)">Use persistent HTTP connections when supported by the selected implementation.</property>
         <property name="Log parser class" required="Yes (default provided)">The log parser class is responsible for parsing the logs.</property>
         <property name="Filter" required="No">The filter class is used to filter out certain lines.</property>
         <property name="Location of log file" required="Yes">The location of the access log file.</property>
 </properties>
+<p>The default is the Java implementation with keep-alive disabled, preserving the sampler's previous behavior.
+HttpClient4 and HttpClient5 use per-thread connection management; HttpClient5 also supports HTTP/2.</p>
 <p>
 The <code>TCLogParser</code> processes the access log independently for each thread.
 The <code>SharedTCLogParser</code> and <code>OrderPreservingLogParser</code> share access to the file,
