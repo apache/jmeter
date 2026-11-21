@@ -28,6 +28,7 @@ extras/Test.jtl
 lib/aareadme.txt
 lib/opt/README.txt
 src/licenses/licenses/*/CC0-1.0.txt
+src/licenses/licenses/autocomplete/LICENSE.md
 #local/**
 #reports/**
 src/launcher/src/main/resources/org/apache/jmeter/jmeter_as_ascii_art.txt
