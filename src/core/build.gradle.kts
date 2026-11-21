@@ -35,6 +35,9 @@ dependencies {
     api("com.fifesoft:rsyntaxtextarea") {
         because("JSyntaxTextArea extends RSyntaxTextArea")
     }
+    api("com.fifesoft:autocomplete") {
+        because("JSR223 script editors provide code completion")
+    }
     api("net.sf.jtidy:jtidy") {
         because("public static Tidy XPathUtil#makeTidyParser()")
     }

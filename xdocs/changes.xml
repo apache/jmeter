@@ -86,6 +86,7 @@ Summary
     <li><issue>6357</issue><pr>6358</pr> Ensure writable directories when copying template files while report generation.</li>
     <li><pr>6509</pr><pr>6675</pr> Synchronize recent file menu across multiple JVMs. Contributed by Corneliu C (https://github.com/KingRabbid)</li>
     <li><pr>6596</pr>Fallback to English locale when loading test plans that use string values for enum properties, so old sample plans load correctly even with non-English locales.</li>
+    <li><issue>4540</issue>Provide Ctrl+Space code completion for JMeter bindings in JSR223 script editors.</li>
   </ul>
 
   <h3>HTTP Samplers and Test Script Recorder</h3>

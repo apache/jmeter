@@ -22,7 +22,7 @@ import org.apache.jmeter.util.JSR223BeanInfoSupport;
 public class JSR223AssertionBeanInfo extends JSR223BeanInfoSupport {
 
     public JSR223AssertionBeanInfo() {
-        super(JSR223Assertion.class);
+        super(JSR223Assertion.class, true);
     }
 
 }

@@ -22,6 +22,6 @@ import org.apache.jmeter.util.JSR223BeanInfoSupport;
 public class JSR223SamplerBeanInfo extends JSR223BeanInfoSupport {
 
     public JSR223SamplerBeanInfo() {
-        super(JSR223Sampler.class);
+        super(JSR223Sampler.class, true);
     }
 }

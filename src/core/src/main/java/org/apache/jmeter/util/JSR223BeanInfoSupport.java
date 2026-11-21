@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 
+import org.apache.jmeter.gui.util.JSR223Completion;
 import org.apache.jmeter.testbeans.TestBean;
 
 /**
@@ -83,7 +84,14 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
     };
 
     protected JSR223BeanInfoSupport(Class<? extends TestBean> beanClass) {
+        this(beanClass, false);
+    }
+
+    protected JSR223BeanInfoSupport(Class<? extends TestBean> beanClass, boolean hasSampleResultBinding) {
         super(beanClass, LANGUAGE_TAGS, NAME_BUNDLE);
+        if (hasSampleResultBinding) {
+            property("script").setValue(JSR223Completion.SAMPLE_RESULT_BINDING, true);
+        }
     }
 
     /**

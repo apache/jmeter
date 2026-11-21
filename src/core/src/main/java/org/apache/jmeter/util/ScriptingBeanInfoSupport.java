@@ -30,7 +30,9 @@ import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.FileEditor;
+import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testbeans.gui.TextAreaEditor;
+import org.apache.jmeter.testbeans.gui.TypeEditor;
 
 /**
  * Parent class to define common GUI parameters for BSF and JSR223 test elements
@@ -116,7 +118,11 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         p = property("script"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, true);
         p.setValue(DEFAULT, ""); // $NON-NLS-1$
-        p.setPropertyEditorClass(TextAreaEditor.class);
+        if (JSR223TestElement.class.isAssignableFrom(beanClass)) {
+            p.setValue(GenericTestBeanCustomizer.GUITYPE, TypeEditor.JSR223TextAreaEditor);
+        } else {
+            p.setPropertyEditorClass(TextAreaEditor.class);
+        }
 
         createPropertyGroup("scripting", // $NON-NLS-1$
                 new String[] { "script" }); // $NON-NLS-1$

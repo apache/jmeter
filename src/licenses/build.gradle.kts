@@ -108,6 +108,11 @@ val gatherBinaryLicenses by tasks.registering(GatherLicenseTask::class) {
         expectedLicense = SpdxLicense.BSD_2_Clause
     }
 
+    overrideLicense("com.fifesoft:autocomplete") {
+        expectedLicense = SpdxLicense.BSD_3_Clause
+        licenseFiles = "autocomplete"
+    }
+
     for (mig in listOf("com.miglayout:miglayout-core", "com.miglayout:miglayout-swing")) {
         overrideLicense(mig) {
             expectedLicense = SimpleLicense("BSD", uri("http://www.debian.org/misc/bsd.license"))
