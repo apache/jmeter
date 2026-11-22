@@ -4,7 +4,7 @@ An Open Source Java application designed to measure performance and load test ap
 
 By The Apache Software Foundation
 
-[![Build Status](https://api.travis-ci.com/apache/jmeter.svg?branch=master)](https://travis-ci.com/apache/jmeter/)
+[![CI](https://github.com/apache/jmeter/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/apache/jmeter/actions/workflows/main.yml)
 [![codecov](https://codecov.io/gh/apache/jmeter/branch/master/graph/badge.svg)](https://codecov.io/gh/apache/jmeter)
 [![License](https://img.shields.io/:license-apache-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Stack Overflow](https://img.shields.io/:stack%20overflow-jmeter-brightgreen.svg)](https://stackoverflow.com/questions/tagged/jmeter)
@@ -179,8 +179,8 @@ JMeter is built using Gradle, and it uses [Gradle's Toolchains for JVM projects]
 for provisioning JDKs. It means the code would search for the needed JDKs locally, or download them
 if they are not found.
 
-By default, the code would use JDK 17 for build purposes, however it would set the target release to 8,
-so the resulting artifacts would be compatible with Java 8.
+By default, the code uses JDK 21 for build purposes, and sets the target release to 17,
+so the resulting artifacts are compatible with Java 17.
 
 The following command builds and tests JMeter:
 
@@ -188,8 +188,8 @@ The following command builds and tests JMeter:
 ./gradlew build
 ```
 
-If you want to use a custom JDK for building you can set `-PjdkBuildVersion=11`,
-and you can select `-PjdkTestVersion=21` if you want to use a different JDK for testing.
+If you want to use a custom JDK for building you can set `-PjdkBuildVersion=17`,
+and you can select `-PjdkTestVersion=25` if you want to use a different JDK for testing.
 
 You can list the available build parameters by executing
 
