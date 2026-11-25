@@ -55,7 +55,7 @@ However, it might be useful to perform a "clean" build:
 
       # Update src/dist/src/dist/expected_release_artifacts.txt after adding or removing a dependency,
       # or when the release outgrows total-size-limit. A version update that keeps the same modules needs no change
-      gw -PupdateExpectedJars check
+      gw :src:dist:verifyReleaseDependencies -PupdateExpectedJars
 
 ## Static checks
 

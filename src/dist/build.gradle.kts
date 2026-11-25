@@ -238,11 +238,6 @@ val verifyReleaseDependencies by tasks.registering {
         }
 
         val sizeLimitPrefix = "total-size-limit="
-        val expectedLines = expectedFile.readLines()
-            .map { it.trim() }
-            .filter { it.isNotEmpty() && !it.startsWith("#") }
-        val existingSizeLimit = expectedLines.singleOrNull { it.startsWith(sizeLimitPrefix) }
-            ?.removePrefix(sizeLimitPrefix)?.toLongOrNull()
 
         val mib = 1024L * 1024
         if (updateExpectedJars) {
@@ -260,7 +255,11 @@ val verifyReleaseDependencies by tasks.registering {
             return@doLast
         }
 
-        val sizeLimit = existingSizeLimit
+        val expectedLines = expectedFile.readLines()
+            .map { it.trim() }
+            .filter { it.isNotEmpty() && !it.startsWith("#") }
+        val sizeLimit = expectedLines.singleOrNull { it.startsWith(sizeLimitPrefix) }
+            ?.removePrefix(sizeLimitPrefix)?.toLongOrNull()
             ?: throw GradleException("$expectedPath must have exactly one $sizeLimitPrefix<bytes> line")
         val expectedModules = expectedLines.filterNot { it.startsWith(sizeLimitPrefix) }.toSet()
 
