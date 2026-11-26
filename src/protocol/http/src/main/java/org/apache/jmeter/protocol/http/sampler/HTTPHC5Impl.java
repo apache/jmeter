@@ -101,6 +101,7 @@ import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
 import org.apache.hc.client5.http.utils.URIUtils;
 import org.apache.hc.core5.concurrent.DefaultThreadFactory;
 import org.apache.hc.core5.concurrent.FutureCallback;
+import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
@@ -116,6 +117,9 @@ import org.apache.hc.core5.http.HttpVersion;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.config.Lookup;
 import org.apache.hc.core5.http.config.RegistryBuilder;
+import org.apache.hc.core5.http.impl.io.HttpRequestExecutor;
+import org.apache.hc.core5.http.io.HttpClientConnection;
+import org.apache.hc.core5.http.io.HttpResponseInformationCallback;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.http.io.entity.FileEntity;
 import org.apache.hc.core5.http.io.entity.HttpEntityWrapper;
@@ -176,6 +180,16 @@ import org.slf4j.LoggerFactory;
 public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHC5Impl.class);
+
+    private static final HttpRequestExecutor REQUEST_EXECUTOR = new HttpRequestExecutor() {
+        @Override
+        public ClassicHttpResponse execute(ClassicHttpRequest request, HttpClientConnection conn,
+                HttpResponseInformationCallback informationCallback,
+                HttpContext context) throws IOException, HttpException {
+            setConnectHeaders(request, context);
+            return super.execute(request, conn, informationCallback, context);
+        }
+    };
 
     /** Key used to store the current {@link SampleResult} in the {@link HttpClientContext}. */
     static final String CONTEXT_ATTRIBUTE_SAMPLER_RESULT = "__jmeter.S_R__"; //$NON-NLS-1$
@@ -551,6 +565,8 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
             interruptRequested = false;
             currentRequest = request;
             context = createHttpClientContext(url, clientKey, request);
+            context.setAttribute(CONTEXT_ATTRIBUTE_HEADER_MANAGER, getHeaderManager());
+            context.setAttribute(CONTEXT_ATTRIBUTE_URL, url);
             context.setAttribute(CONTEXT_ATTRIBUTE_SAMPLER_RESULT, result);
             response = executeRequest(url, clientKey, executor, request, context);
             readResponse(response, result, context);
@@ -875,6 +891,12 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
         request.setHeader(HttpHeaders.USER_AGENT, DEFAULT_USER_AGENT);
     }
 
+    private static void setConnectHeaders(HttpRequest request, HttpContext context) {
+        if (HTTPConstants.CONNECT.equalsIgnoreCase(request.getMethod())) {
+            setConnectHeaders(context::getAttribute, request::setHeader, request::addHeader);
+        }
+    }
+
     HttpClientContext createHttpClientContext(URL url, HttpClientKey key,
             org.apache.hc.client5.http.classic.methods.HttpUriRequestBase request) {
         HttpClientContext context = HttpClientContext.create();
@@ -1193,6 +1215,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
 
     private static HC5ClassicClient createClient(HttpClientKey key) {
         org.apache.hc.client5.http.impl.classic.HttpClientBuilder builder = HttpClients.custom().disableAutomaticRetries();
+        builder.setRequestExecutor(REQUEST_EXECUTOR);
         if (isDefaultUserAgentDisabled()) {
             builder.disableDefaultUserAgent();
         }
@@ -1243,6 +1266,7 @@ public class HTTPHC5Impl extends HTTPHCAbstractImpl {
                 // easily, whereas HttpClient would start one per processor for every client. Work done on
                 // it, like TLS handshakes, auth challenges or AutoRedirectStrategy, holds up the others.
                 .setIOReactorConfig(IOReactorConfig.custom().setIoThreadCount(1).build())
+                .addRequestInterceptorLast((request, entity, context) -> setConnectHeaders(request, context))
                 .setThreadFactory(threadsSharingContext(jmeterContext));
         AsyncResponseTimeout.install(builder);
         if (HTTP_2_MULTIPLEXING) {

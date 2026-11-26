@@ -27,7 +27,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -51,6 +53,9 @@ import org.slf4j.LoggerFactory;
  * but which need to be explicitly configured in HttpClient implementations.
  */
 public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
+
+    protected static final String CONTEXT_ATTRIBUTE_HEADER_MANAGER = "__jmeter.HEADER_MANAGER__"; //$NON-NLS-1$
+    protected static final String CONTEXT_ATTRIBUTE_URL = "__jmeter.URL__"; //$NON-NLS-1$
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHCAbstractImpl.class);
 
@@ -346,6 +351,20 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
                 addHeader.accept(headerName, header.getValue());
             }
         }
+    }
+
+    protected static void setConnectHeaders(Function<String, Object> contextAttribute,
+            BiConsumer<String, String> setHeader, BiConsumer<String, String> addHeader) {
+        HeaderManager headerManager = (HeaderManager) contextAttribute.apply(CONTEXT_ATTRIBUTE_HEADER_MANAGER);
+        URL url = (URL) contextAttribute.apply(CONTEXT_ATTRIBUTE_URL);
+        Set<String> addedHeaders = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        setConnectionHeaders(headerManager, url, name -> true, (name, value) -> {
+            if (addedHeaders.add(name)) {
+                setHeader.accept(name, value);
+            } else {
+                addHeader.accept(name, value);
+            }
+        });
     }
 
     /**

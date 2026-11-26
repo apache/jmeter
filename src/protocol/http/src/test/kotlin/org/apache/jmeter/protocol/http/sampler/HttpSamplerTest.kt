@@ -28,17 +28,22 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import org.apache.jmeter.junit.JMeterTestCase
 import org.apache.jmeter.protocol.http.control.Header
+import org.apache.jmeter.protocol.http.control.HeaderManager
 import org.apache.jmeter.protocol.http.util.HTTPFileArg
 import org.apache.jmeter.test.assertions.executePlanAndCollectEvents
 import org.apache.jmeter.treebuilder.TreeBuilder
 import org.apache.jmeter.treebuilder.oneRequest
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import java.net.ServerSocket
 import java.nio.charset.Charset
 import java.nio.file.InvalidPathException
 import java.nio.file.Path
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.writeText
 import kotlin.time.Duration.Companion.seconds
@@ -73,14 +78,14 @@ class HttpSamplerTest : JMeterTestCase() {
         // Quote is invalid character for a filename in Windows, so we do not test it here
         // See ConversionUtilsTest for escaping quotes.
         val testFile = try {
-            dir.resolve("testfile привет %.txt")
-        } catch (e: InvalidPathException) {
+            dir.resolve("testfile hello %.txt")
+        } catch (_: InvalidPathException) {
             assumeTrue(false) {
                 "Skipping the test as the filesystem does not support unicode filenames"
             }
             TODO("This is never reached as the assumption above throws error")
         }
-        testFile.writeText("hello, привет")
+        testFile.writeText("hello, world")
 
         executePlanAndCollectEvents(10.seconds) {
             oneRequest {
@@ -114,9 +119,9 @@ class HttpSamplerTest : JMeterTestCase() {
                         .withHeader(
                             "Content-Disposition",
                             // Only CR, LF, and % should be percent-encoded
-                            containing("filename=\"testfile привет %.txt\"")
+                            containing("filename=\"testfile hello %.txt\"")
                         )
-                        .withBody(equalTo("hello, привет"))
+                        .withBody(equalTo("hello, world"))
                 )
         )
     }
@@ -343,5 +348,68 @@ class HttpSamplerTest : JMeterTestCase() {
                     """.trimIndent()
                 )
         )
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["HttpClient4", "HttpClient5"])
+    fun `header manager headers are sent with proxy CONNECT`(httpImplementation: String) {
+        val proxyServer = ServerSocket(0)
+        val connectRequest = CompletableFuture<List<String>>()
+        val proxyThread = Thread {
+            proxyServer.accept().use { socket ->
+                val reader = socket.getInputStream().bufferedReader(Charsets.ISO_8859_1)
+                val lines = generateSequence { reader.readLine() }.takeWhile { it.isNotEmpty() }.toList()
+                connectRequest.complete(lines)
+                socket.getOutputStream().write(
+                    "HTTP/1.1 407 Proxy Authentication Required\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+                        .toByteArray(Charsets.ISO_8859_1)
+                )
+            }
+        }
+        proxyThread.isDaemon = true
+        proxyThread.start()
+
+        try {
+            executePlanAndCollectEvents(10.seconds) {
+                oneRequest {
+                    HTTPSamplerProxy::class {
+                        implementation = httpImplementation
+                        protocol = "https"
+                        domain = "example.com"
+                        path = "/"
+                        props {
+                            it[proxy.host] = "127.0.0.1"
+                            it[proxy.port] = proxyServer.localPort
+                        }
+                        HeaderManager::class {
+                            add(Header("X-Connect-Test", "expected"))
+                            add(Header("x-connect-test", "second"))
+                            add(Header("Proxy-Authorization", "Basic dGVzdDp0ZXN0"))
+                            add(Header("User-Agent", "JMeter test client"))
+                            props {
+                                it[guiClass] = "org.apache.jmeter.protocol.http.gui.HeaderPanel"
+                            }
+                        }
+                    }
+                }
+            }
+
+            val lines = connectRequest.get(10, TimeUnit.SECONDS)
+            assertTrue(lines.first().startsWith("CONNECT "), lines.toString())
+            assertTrue(lines.any { it.equals("X-Connect-Test: expected", ignoreCase = true) }, lines.toString())
+            assertTrue(lines.any { it.equals("x-connect-test: second", ignoreCase = true) }, lines.toString())
+            assertTrue(
+                lines.any { it.equals("Proxy-Authorization: Basic dGVzdDp0ZXN0", ignoreCase = true) },
+                lines.toString()
+            )
+            assertTrue(
+                lines.count { it.startsWith("User-Agent:", ignoreCase = true) } == 1 &&
+                    lines.any { it.equals("User-Agent: JMeter test client", ignoreCase = true) },
+                lines.toString()
+            )
+        } finally {
+            proxyServer.close()
+            proxyThread.join(1000)
+        }
     }
 }

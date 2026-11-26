@@ -448,6 +448,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 final HttpRequest request,
                 final HttpClientConnection conn,
                 final HttpContext context) throws IOException, HttpException {
+            if (HTTPConstants.CONNECT.equalsIgnoreCase(request.getRequestLine().getMethod())) {
+                setConnectHeaders(context::getAttribute, request::setHeader, request::addHeader);
+            }
             HttpResponse response = super.doSendRequest(request, conn, context);
             HttpConnectionMetrics metrics = conn.getMetrics();
             long sentBytesCount = metrics.getSentBytesCount();
@@ -613,6 +616,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HttpContext localContext = new BasicHttpContext();
         HttpClientContext clientContext = HttpClientContext.adapt(localContext);
         clientContext.setAttribute(CONTEXT_ATTRIBUTE_AUTH_MANAGER, getAuthManager());
+        localContext.setAttribute(CONTEXT_ATTRIBUTE_HEADER_MANAGER, getHeaderManager());
+        localContext.setAttribute(CONTEXT_ATTRIBUTE_URL, url);
         HttpClientKey key = createHttpClientKey(url);
         HttpClientState clientState;
         try {

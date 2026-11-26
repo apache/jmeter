@@ -90,6 +90,7 @@ Summary
 
   <h3>HTTP Samplers and Test Script Recorder</h3>
   <ul>
+    <li><issue>6314</issue>Send headers from the HTTP Header Manager with the <code>CONNECT</code> request when using HttpClient4 or HttpClient5 through a proxy.</li>
     <li><pr>5891</pr>Skip Internet Explorer 6-9 conditional comment processing when fetching resource links</li>
     <li><issue>5466</issue>Allow enabling or disabling individual HTTP request arguments in the HTTP Sampler UI. Contributed by Pasquale Pochop (github.com/pochopsp)</li>
     <li><issue>6250</issue>Avoid adding "; charset=" automatically to <code>multipart/form-data</code> requests to align behavior with modern HTTP clients.</li>
