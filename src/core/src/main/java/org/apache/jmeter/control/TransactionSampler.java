@@ -119,7 +119,7 @@ public class TransactionSampler extends AbstractSampler {
         totalConnectTime += res.getConnectTime();
     }
 
-    protected void setTransactionDone() {
+    public void setTransactionDone() {
         this.transactionDone = true;
         // Set the overall status for the transaction sample
         // TODO: improve, e.g. by adding counts to the SampleResult class
