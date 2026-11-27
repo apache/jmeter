@@ -22,6 +22,10 @@ bin/testfiles/**
 build-local.properties
 extras/*.txt
 extras/*.json
+extras/skills/jmeter/*.md
+extras/skills/jmeter/assets/*.md
+extras/skills/jmeter/evals/evals.json
+extras/skills/jmeter/references/*.md
 extras/Test.html
 extras/Test.jtl
 **/images/**
