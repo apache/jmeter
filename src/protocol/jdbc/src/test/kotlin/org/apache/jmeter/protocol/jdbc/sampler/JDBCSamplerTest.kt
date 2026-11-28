@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.jdbc.sampler
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyOrder
 import org.apache.jmeter.config.ConfigTestElement
 import org.apache.jmeter.config.gui.SimpleConfigGui
@@ -91,7 +92,7 @@ class JDBCSamplerTest {
         }
 
         sut.query = "SELECT"
-        sut.resultSetMaxRows = "10"
+        sut.maxRows = "10"
         val response = sut.executeForTest(conn, sample)
 
         verifyOrder {
@@ -109,6 +110,41 @@ class JDBCSamplerTest {
             // conn.close() // closed by JDBCSampler
         }
         assertArrayEquals(byteArrayOf(), response, "response")
+    }
+
+    @Test
+    fun `Limit ResultSet does not configure JDBC max rows`() {
+        val meta = mockk<ResultSetMetaData> {
+            every { columnCount } returns 0
+        }
+        val rs = mockk<ResultSet> {
+            every { metaData } returns meta
+            every { next() } returns true
+            justRun { close() }
+        }
+        val stmt = mockk<Statement> {
+            every { executeQuery(any()) } returns rs
+            justRun { queryTimeout = any() }
+            justRun { maxRows = any() }
+            justRun { close() }
+        }
+        val conn = mockk<Connection> {
+            every { createStatement() } returns stmt
+        }
+        val sample = mockk<SampleResult> {
+            justRun { latencyEnd() }
+        }
+
+        sut.query = "SELECT"
+        sut.resultSetMaxRows = "1"
+        sut.executeForTest(conn, sample)
+
+        verifyOrder {
+            stmt.queryTimeout = 0
+            stmt.executeQuery(any())
+        }
+        verify(exactly = 1) { rs.next() }
+        verify(exactly = 0) { stmt.maxRows = any() }
     }
 
     @Test

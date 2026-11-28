@@ -129,6 +129,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     private String resultVariable = ""; // $NON-NLS-1$
     private String queryTimeout = ""; // $NON-NLS-1$
     private String resultSetMaxRows = ""; // $NON-NLS-1$
+    private String maxRows = ""; // $NON-NLS-1$
 
     private static final int MAX_RETAIN_SIZE = JMeterUtils.getPropDefault("jdbcsampler.max_retain_result_size", 64 * 1024);
 
@@ -241,9 +242,9 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
     }
 
     private void configureMaxRows(Statement stmt) throws SQLException {
-        int maxRows = getIntegerResultSetMaxRows();
+        int maxRows = getIntegerMaxRows();
         if (maxRows >= 0) {
-           stmt.setMaxRows(maxRows);
+            stmt.setMaxRows(maxRows);
         }
     }
 
@@ -677,6 +678,34 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement {
      */
     public void setResultSetMaxRows(String resultSetMaxRows) {
         this.resultSetMaxRows = resultSetMaxRows;
+    }
+
+    /**
+     * @return the integer representation of maxRows
+     */
+    public int getIntegerMaxRows() {
+        if (StringUtilities.isEmpty(maxRows)) {
+            return -1;
+        }
+        try {
+            return Integer.parseInt(maxRows);
+        } catch (NumberFormatException nfe) {
+            return -1;
+        }
+    }
+
+    /**
+     * @return the maxRows
+     */
+    public String getMaxRows() {
+        return maxRows;
+    }
+
+    /**
+     * @param maxRows maximum number of rows for the JDBC statement
+     */
+    public void setMaxRows(String maxRows) {
+        this.maxRows = maxRows;
     }
 
     public String getQuery() {
