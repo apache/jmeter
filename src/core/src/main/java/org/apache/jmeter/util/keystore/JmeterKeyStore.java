@@ -257,7 +257,8 @@ public final class JmeterKeyStore {
 
     private static X509Certificate[] toX509Certificates(Certificate[] chain) {
         X509Certificate[] x509certs = new X509Certificate[chain.length];
-        for (int i = 0; i < x509certs.length; i++) {
+        int certificatesCount = x509certs.length;
+        for (int i = 0; i < certificatesCount; i++) {
             x509certs[i] = (X509Certificate) chain[i];
         }
         return x509certs;

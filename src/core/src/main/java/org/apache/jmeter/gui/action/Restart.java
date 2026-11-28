@@ -180,7 +180,8 @@ public class Restart extends AbstractActionWithNoRunningTest implements MenuCrea
     private static void processRemainingArgs(List<? super String> processArgs, String[] mainCommand) {
         boolean paramValue = false;
         StringBuilder partialParamValue = new StringBuilder();
-        for (int i = 1; i < mainCommand.length; i++) {
+        int commandCount = mainCommand.length;
+        for (int i = 1; i < commandCount; i++) {
             String currentPart = mainCommand[i];
             if (paramValue) {
                 if (currentPart.startsWith("-")) {

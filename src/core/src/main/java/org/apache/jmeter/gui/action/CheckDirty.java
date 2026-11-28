@@ -98,7 +98,8 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
             JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
             removeMode = true;
             try {
-                for (int i = nodes.length - 1; i >= 0; i--) {
+                int selectedNodesCount = nodes.length;
+                for (int i = selectedNodesCount - 1; i >= 0; i--) {
                     guiPackage.getTreeModel().getCurrentSubTree(nodes[i]).traverse(this);
                 }
             } finally {
