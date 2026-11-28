@@ -1,0 +1,89 @@
+<html>
+<head>
+<script src="../../libs/utils.helpers.js"></script>
+<script src="../../libs/xml.helpers.js"></script>
+<script src="../../libs/jmeter.helpers.js"></script>
+<script src="../../libs/jmeter.elements.js"></script>
+<script src="soapui2jmx.js"></script>
+<script>
+function handleOutput(input){
+ document.getElementById('outputLog').innerText=input[0];
+
+ var blob = new Blob([input[1]], {type: 'text/plain'});
+ if(window.navigator.msSaveOrOpenBlob) {
+  window.navigator.msSaveBlob(blob, filename);
+ }else{
+  var elem = window.document.createElement('a');
+  elem.href = window.URL.createObjectURL(blob);
+  elem.download = 'jmeter.script.jmx';
+  document.body.appendChild(elem);
+  alert('Your file [jmeter.script.jmx] will be downloaded');
+  elem.click();
+  document.body.removeChild(elem);
+ }
+}
+</script>
+
+</head>
+
+<body>
+
+<style>
+  #progress_bar {
+    margin: 10px 0;
+    padding: 3px;
+    border: 1px solid #000;
+    font-size: 14px;
+    clear: both;
+    opacity: 0;
+    -moz-transition: opacity 1s linear;
+    -o-transition: opacity 1s linear;
+    -webkit-transition: opacity 1s linear;
+  }
+  #progress_bar.loading {
+    opacity: 1.0;
+  }
+  #progress_bar .percent {
+    background-color: #99ccff;
+    height: auto;
+    width: 0;
+  }
+ 
+  input[type=file] {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 500px;
+  }
+
+</style>
+
+<input type="file" id="files" name="file" />
+<br/><button onclick="abortRead();">Cancel read</button>
+<div id="progress_bar"><div class="percent">0%</div></div>
+
+<script>
+window.onload = function() {
+        var fileInput = document.getElementById('files');
+
+        fileInput.addEventListener('change', function(e) {
+            var file = fileInput.files[0];
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+             handleOutput(soapui2jmx(reader.result));
+            }
+            reader.readAsText(file);
+        });
+}
+</script>
+
+
+<hr/>
+<div>
+ Processing log<br>
+ <pre id="outputLog"></pre>
+</div>
+
+</body>
+</html>

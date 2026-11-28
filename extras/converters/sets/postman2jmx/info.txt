@@ -1,0 +1,1 @@
+Only v2 is supported. If you have v1 postman collection, convert it to v2 as described in postman documentation.
