@@ -1,5 +1,5 @@
 label,responseCode,responseMessage,threadName,dataType,success
-JSS_setCPS,200,OK,setUp Thread Group 1-1,text,true
+JSS_setCPS,200,OK,Setup Thread Group 1-1,text,true
 ApacheJMeter-HP-NonSecure,206,Partial Content,Thread Group 1-1,text,true
 ApacheJMeter-HP-Secure,206,Partial Content,Thread Group 1-1,text,true
 HTTPS-SNI-without-timeout,206,Partial Content,Thread Group 1-1,text,true
