@@ -190,7 +190,7 @@ public class TestBeanHelper {
             value = Boolean.TRUE.equals(desc.getValue(GenericTestBeanCustomizer.NOT_UNDEFINED))
                     ? desc.getValue(GenericTestBeanCustomizer.DEFAULT) : null;
         } else {
-            value = Converter.convert(jprop.getStringValue(), type);
+            value = Converter.convert(jprop, type);
         }
         return value;
     }
