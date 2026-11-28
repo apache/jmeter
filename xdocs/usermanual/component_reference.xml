@@ -542,13 +542,13 @@ You may encounter the following error: <code>java.security.cert.CertificateExcep
  if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
  algorithm using MD2 (like <code>md2WithRSAEncryption</code>) or with a SSL certificate with a size lower than 1024 bits.
 </p><p>
-This error is related to increased security in Java 8.
+This error is related to increased security in Java 8 and later.
 </p><p>
 To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
 the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.
 </p><p>
 This property is in this file:</p>
-<source>JAVA_HOME/jre/lib/security/java.security</source>
+<source>JAVA_HOME/conf/security/java.security</source>
 <p>See  <bugzilla>56357</bugzilla> for details.
 </p>
 <links>
@@ -6767,7 +6767,7 @@ the browser. Effectively JMeter has to pretend to be the target server.
 <p>
 JMeter will generate its own certificate(s).
 These are generated with a validity period defined by the property <code>proxy.cert.validity</code>, default 7 days, and random passwords.
-If JMeter detects that it is running under Java 8 or later, it will generate certificates for each target server as necessary (dynamic mode)
+By default, JMeter generates certificates for each target server as necessary (dynamic mode)
 unless the following property is defined: <code>proxy.cert.dynamic_keys=false</code>.
 When using dynamic mode, the certificate will be for the correct host name, and will be signed by a JMeter-generated CA certificate.
 By default, this CA certificate won't be trusted by the browser, however it can be installed as a trusted certificate.
@@ -6839,7 +6839,7 @@ This setting will also be needed when running the generated test plan.
 <a name="install_cert"/>
 <h4>Installing the JMeter CA certificate for HTTPS recording</h4>
 <p>
-As mentioned above, when run under Java 8, JMeter can generate certificates for each server.
+As mentioned above, JMeter can generate certificates for each server.
 For this to work smoothly, the root CA signing certificate used by JMeter needs to be trusted by the browser.
 The first time that the recorder is started, it will generate the certificates if necessary.
 The root CA certificate is exported into a file with the name <code>ApacheJMeterTemporaryRootCA</code> in the current launch directory.
