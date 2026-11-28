@@ -27,7 +27,9 @@ import org.w3c.dom.Node;
 /**
  * {@link PrefixResolver} implementation that loads prefix configuration from
  * jmeter property xpath.namespace.config
+ * @deprecated This Xalan-based class is scheduled for removal.
  */
+@Deprecated(since = "6.0", forRemoval = true)
 public class PropertiesBasedPrefixResolverForXpath2 extends PrefixResolverDefault {
     private final Map<String, String> namespaceMap = new HashMap<>();
 

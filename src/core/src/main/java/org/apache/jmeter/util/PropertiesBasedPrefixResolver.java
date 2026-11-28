@@ -36,7 +36,9 @@ import org.w3c.dom.Node;
 
 /**
  * {@link PrefixResolver} implementation that loads prefix configuration from jmeter property xpath.namespace.config
+ * @deprecated This Xalan-based class is scheduled for removal.
  */
+@Deprecated(since = "6.0", forRemoval = true)
 public class PropertiesBasedPrefixResolver extends PrefixResolverDefault {
     private static final Logger log = LoggerFactory.getLogger(PropertiesBasedPrefixResolver.class);
     private static final String XPATH_NAMESPACE_CONFIG = "xpath.namespace.config";
