@@ -3695,7 +3695,7 @@ By default, a Graphite implementation is provided.
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
     <property name="Clear cache each Iteration" required="No">If selected, DNS cache of every  Thread is cleared each time new iteration is started.</property>
     <property name="Use system DNS resolver" required="N/A">System DNS resolver will be used. For correct work edit
-       <code>$JAVA_HOME/jre/lib/security/java.security</code> and add <code>networkaddress.cache.ttl=0</code>
+       <code>$JAVA_HOME/conf/security/java.security</code> and add <code>networkaddress.cache.ttl=0</code>
     </property>
     <property name="Use custom DNS resolver" required="N/A">Custom DNS resolver (from dnsjava library) will be used.</property>
     <property name="Hostname or IP address" required="No">List of DNS servers to use. If empty, network configuration DNS will used.</property>

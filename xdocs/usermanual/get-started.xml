@@ -361,8 +361,7 @@ Other jars (such as JDBC, JMS implementations and any other support libraries ne
 should be placed in the <code>lib</code> directory - not the <code>lib/ext</code> directory,
 or added to <code>user.classpath</code>.</p>
 <note>JMeter will only find <code>.jar</code> files, not <code>.zip</code>.</note>
-<p>You can also install utility Jar files in <code>$JAVA_HOME/jre/lib/ext</code>, or you can set the
-property <code>user.classpath</code> in <code>jmeter.properties</code></p>
+<p>You can also set the property <code>user.classpath</code> in <code>jmeter.properties</code></p>
 <p>Note that setting the <code>CLASSPATH</code> environment variable will have no effect.
 This is because JMeter is started with "<code>java -jar</code>",
 and the java command silently ignores the <code>CLASSPATH</code> variable, and the <code>-classpath</code>/<code>-cp</code>
