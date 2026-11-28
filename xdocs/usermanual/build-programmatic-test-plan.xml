@@ -184,22 +184,52 @@ val root = testTree { // (1)
         The <code>testTree { ... }</code> function builds a test plan tree
         but does not execute it. To run the plan, configure a
         <code>StandardJMeterEngine</code> with the tree and start the test.
+        A standalone program must first load JMeter properties with
+        <code>JMeterUtils.loadJMeterProperties</code>; the engine reads its
+        settings from a <code>jmeter.properties</code> file. Use the
+        <code>bin/jmeter.properties</code> file from a JMeter distribution or
+        provide your own file.
       </p>
 
       <p>
         A <code>ResultCollector</code> can be added to the plan to write
-        sample results to a JTL file. Wait for the test to finish before
-        reading the results.
+        sample results to a JTL file. A relative filename is resolved against
+        the program's working directory, and results are appended if the file
+        already exists. Wait for the test to finish before reading the results.
+        The timeout passed to <code>awaitTermination</code> must exceed the
+        plan's run time. If it expires, <code>TimeoutException</code> is thrown
+        but the test keeps running; call <code>stopTest()</code> to stop it.
+      </p>
+
+      <p>
+        This example uses <code>OpenModelThreadGroup</code> because its schedule
+        produces five samples. The earlier classic <code>ThreadGroup</code>
+        example illustrates tree construction only; to produce samples, a
+        classic thread group also needs a positive thread count and a
+        <code>LoopController</code> with at least one iteration.
       </p>
       <source>
+import org.apache.jmeter.engine.StandardJMeterEngine
+import org.apache.jmeter.reporters.ResultCollector
+import org.apache.jmeter.sampler.DebugSampler
+import org.apache.jmeter.testelement.TestPlan
+import org.apache.jmeter.threads.openmodel.OpenModelThreadGroup
+import org.apache.jmeter.treebuilder.dsl.testTree
+import org.apache.jmeter.util.JMeterUtils
+import java.nio.file.Path
+import java.time.Duration
+
+JMeterUtils.loadJMeterProperties("/path/to/apache-jmeter/bin/jmeter.properties")
+
+val jtlFile = Path.of("target/results.jtl")
 val tree = testTree {
     TestPlan::class {
         ResultCollector::class {
-            filename = "target/results.jtl"
+            filename = jtlFile.toString()
         }
         OpenModelThreadGroup::class {
             name = "Thread Group"
-            // 5 requests within 100 ms, then a pause so all the threads can finish
+            // 5 samples within 100 ms, then a pause so all the threads can finish
             scheduleString = "rate(50 / sec) random_arrivals(100 ms) pause(2 s)"
             DebugSampler::class {
                 name = "Kotlin DSL sample"
@@ -208,10 +238,16 @@ val tree = testTree {
     }
 }
 
-StandardJMeterEngine().apply {
-    configure(tree)
-    runTest()
-    awaitTermination(Duration.ofSeconds(10))
+val engine = StandardJMeterEngine()
+engine.configure(tree)
+engine.runTest()
+try {
+    engine.awaitTermination(Duration.ofSeconds(10))
+} finally {
+    if (engine.isActive) {
+        engine.stopTest()
+        engine.awaitTermination(Duration.ofSeconds(10))
+    }
 }</source>
     </section>
 
