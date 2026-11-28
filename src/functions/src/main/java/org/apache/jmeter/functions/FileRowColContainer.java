@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -50,7 +51,7 @@ public class FileRowColContainer {
                 ","); // $NON-NLS-1$
 
     /** Keeping track of which row is next to be read. */
-    private int nextRow;
+    private final AtomicInteger nextRow;
 
     /** Delimiter for this file */
     private final String delimiter;
@@ -59,7 +60,7 @@ public class FileRowColContainer {
         log.debug("FRCC({},{})", file, delim);
         fileName = file;
         delimiter = delim;
-        nextRow = 0;
+        nextRow = new AtomicInteger(0);
         fileData = new ArrayList<>();
         load();
     }
@@ -68,7 +69,7 @@ public class FileRowColContainer {
         log.debug("FRCC({})[{}]", file, DELIMITER);
         fileName = file;
         delimiter = DELIMITER;
-        nextRow = 0;
+        nextRow = new AtomicInteger(0);
         fileData = new ArrayList<>();
         load();
     }
@@ -119,13 +120,18 @@ public class FileRowColContainer {
      *
      */
     public int nextRow() {
-        int row = nextRow;
-        nextRow++;
-        if (nextRow >= fileData.size()) {// 0-based
-            nextRow = 0;
+        int size = fileData.size();
+        if (size == 0) {
+            throw new IllegalStateException("CSV file " + fileName + " has no data rows");
         }
-        log.debug("Row: {}", row);
-        return row;
+        while (true) {
+            int current = nextRow.get();
+            int next = (current + 1) % size;
+            if (nextRow.compareAndSet(current, next)) {
+                log.debug("Row: {}", current);
+                return current;
+            }
+        }
     }
 
     /**
