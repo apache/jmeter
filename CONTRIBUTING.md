@@ -34,13 +34,11 @@ You might find useful Gradle commands in [gradle.md](gradle.md)
 
 ### <a name="intellij"></a>IntelliJ IDEA
 
-You require IntelliJ 2018.3.1 or newer.
+You need a recent IntelliJ IDEA version that supports JDK 17 and the Gradle version used by JMeter.
 
 1. Open the build.gradle.kts file with IntelliJ IDEA and choose `Open as Project`
-1. Make sure `Create separate module per source set` is selected
-1. Make sure `Use default gradle wrapper` is selected
-1. In the `File already exists` dialogue, choose `Yes` to overwrite
-1. In the `Open Project` dialogue, choose `Delete Existing Project and Import`
+1. IntelliJ IDEA imports the Gradle project automatically; wait for the Gradle sync to finish
+1. If the sync fails, make sure the Gradle JVM (Settings, Build Tools, Gradle) points to JDK 17 or newer
 
 ### Eclipse
 

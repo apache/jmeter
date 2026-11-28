@@ -51,14 +51,12 @@ in <a href="https://github.com/apache/jmeter/blob/master/gradle.md">gradle.md</a
 </p>
 
 <h3>Opening project via IntelliJ IDEA</h3>
-    <p>You require IntelliJ 2018.3.1 or newer.</p>
+    <p>You need a recent IntelliJ IDEA version that supports JDK 17 and the Gradle version used by JMeter.</p>
 
     <ul>
         <li>Open the build.gradle.kts file with IntelliJ IDEA and choose "Open as Project"</li>
-        <li>Make sure "Create separate module per source set" is selected</li>
-        <li>Make sure "Use default gradle wrapper" is selected</li>
-        <li>In the "File already exists" dialogue, choose "Yes" to overwrite</li>
-        <li>In the "Open Project" dialogue, choose "Delete Existing Project and Import"</li>
+        <li>IntelliJ IDEA imports the Gradle project automatically; wait for the Gradle sync to finish</li>
+        <li>If the sync fails, make sure the Gradle JVM (Settings, Build Tools, Gradle) points to JDK 17 or newer</li>
     </ul>
 
 <h3>Compiling and packaging JMeter using Eclipse</h3>
