@@ -98,6 +98,8 @@ internal class ThreadScheduleProcessGenerator(
                     arrivalStep = step
                     break
                 }
+                // Concurrency is enforced by ConcurrencyGate, so the arrivals generator ignores it
+                is ThreadScheduleStep.ConcurrencyStep -> Unit
             }
         }
 

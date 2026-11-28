@@ -81,8 +81,9 @@ public class OpenModelThreadGroupGui : AbstractThreadGroupGui() {
 
     private fun createPanel() =
         JPanel(MigLayout("fillx, wrap1", "[fill, grow]")).apply {
-            add(labelFor(scheduleStringEditor, "openmodelthreadgroup_schedule_string"), "grow 0, split 6")
+            add(labelFor(scheduleStringEditor, "openmodelthreadgroup_schedule_string"), "grow 0, split 7")
             add(templateButton("rate(1/min)"), "grow 0")
+            add(templateButton("concurrency(100)"), "grow 0")
             add(templateButton("random_arrivals(10 min)"), "grow 0")
             add(templateButton("pause(1 min)"), "grow 0")
             add(templateButton("/* comment */"), "grow 0")
