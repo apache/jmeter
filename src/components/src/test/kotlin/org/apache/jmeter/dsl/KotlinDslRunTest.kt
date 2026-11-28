@@ -25,17 +25,25 @@ import org.apache.jmeter.testelement.TestPlan
 import org.apache.jmeter.threads.openmodel.OpenModelThreadGroup
 import org.apache.jmeter.treebuilder.dsl.testTree
 import org.apache.jorphan.test.JMeterSerialTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.nio.file.Files
+import java.nio.file.Path
 import java.time.Duration
 
 class KotlinDslRunTest : JMeterTestCase(), JMeterSerialTest {
+    @TempDir
+    lateinit var tempDir: Path
 
     @Test
     fun `run Kotlin DSL plan and write results`() {
+        val jtlFile = tempDir.resolve("results.jtl")
+
         val tree = testTree {
             TestPlan::class {
                 ResultCollector::class {
-                    filename = "target/results.jtl"
+                    filename = jtlFile.toString()
                 }
                 OpenModelThreadGroup::class {
                     name = "Thread Group"
@@ -52,5 +60,11 @@ class KotlinDslRunTest : JMeterTestCase(), JMeterSerialTest {
             runTest()
             awaitTermination(Duration.ofSeconds(10))
         }
+
+        assertEquals(
+            5,
+            Files.readAllLines(jtlFile).count { it.contains("Kotlin DSL sample") },
+            "The JTL file should contain the 5 samples"
+        )
     }
 }
